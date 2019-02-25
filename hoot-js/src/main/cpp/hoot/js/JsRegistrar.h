@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
@@ -58,24 +58,25 @@ template<class T>
 class ClassInitializerTemplate : public ClassInitializer
 {
 public:
+
   ClassInitializerTemplate()
   {
   }
 
   virtual ~ClassInitializerTemplate() { }
 
-  virtual void Init(v8::Handle<v8::Object> exports)
+  virtual void Init(v8::Handle<v8::Object> exports) override
   {
     T::Init(exports);
   }
-
-private:
 };
 
+/**
+ * (Singleton)
+ */
 class JsRegistrar
 {
 public:
-  JsRegistrar();
 
   static JsRegistrar& getInstance();
 
@@ -89,6 +90,8 @@ private:
 
   std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
   static boost::shared_ptr<JsRegistrar> _theInstance;
+
+  JsRegistrar();
 };
 
 template<class T>

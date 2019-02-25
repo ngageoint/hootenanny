@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -31,15 +31,15 @@
 
 // hoot
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveEmptyAreasVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyAreasVisitor)
 
 RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
 {
@@ -62,13 +62,14 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
     _ec.reset(new ElementConverter(_map->shared_from_this()));
   }
 
-  if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
+  if (AreaCriterion().isSatisfied(e))
   {
     boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
 
     if (g->getArea() == 0.0)
     {
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+      _numAffected++;
     }
   }
 }

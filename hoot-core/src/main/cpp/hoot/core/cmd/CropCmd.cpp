@@ -31,7 +31,7 @@
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/IoUtils.h>
 
 // Qt
@@ -53,7 +53,7 @@ public:
 
   virtual QString getName() const { return "crop"; }
 
-  virtual QString getDescription() const { return "Crops a map to the given geospatial bounds"; }
+  virtual QString getDescription() const { return "Crops a map to a geospatial bounds"; }
 
   int runSimple(QStringList args)
   {

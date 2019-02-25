@@ -22,29 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataConverter.h"
 
-#include <hoot/core/util/Log.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/IoUtils.h>
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementCacheLRU.h>
-#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <../hoot-js/src/main/cpp/hoot/js/v8Engine.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/js/v8Engine.h>
 
 // std
 #include <vector>
@@ -97,7 +97,7 @@ void elementTranslatorThread::run()
   }
 
   LOG_INFO("Done Translating");
-} // end run
+}
 
 void ogrWriterThread::run()
 {
@@ -114,7 +114,8 @@ void ogrWriterThread::run()
   v8::Locker v8Lock(threadIsolate);
 
   bool done = false;
-  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+  std::pair<boost::shared_ptr<geos::geom::Geometry>,
+    std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
 
   // Setup writer
   boost::shared_ptr<OgrWriter> ogrWriter;
@@ -160,7 +161,7 @@ void ogrWriterThread::run()
   ogrWriter->close();
 
   LOG_INFO("Done Writing Features");
-} // end run
+}
 
 unsigned int DataConverter::logWarnCount = 0;
 
@@ -184,12 +185,11 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output) && !_translation.isEmpty())
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) && !_translation.isEmpty())
   {
     _convertToOgr(inputs.at(0), output);
   }
   /* We require that a translation be present when converting from OGR.
-   * Also, converting to OGR is the only situation where we support multiple inputs.
    * Would like to be absorb some or all of this logic into _convert but not sure its feasible.
    */
   else if (inputs.size() >= 1 && !_translation.isEmpty() &&
@@ -199,14 +199,9 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   }
   //If this wasn't a to/from OGR conversion OR no translation was specified, just call the general
   //convert routine (a translation will be applied to non-OGR inputs, if present).
-  else if (inputs.size() == 1)
-  {
-    _convert(inputs.at(0), output);
-  }
   else
   {
-    //shouldn't ever get here
-    throw HootException("Invalid input arguments.");
+    _convert(inputs, output);
   }
 }
 
@@ -278,7 +273,7 @@ void DataConverter::_fillElementCache(QString inputUrl,
 {
   // Setup reader
   boost::shared_ptr<OsmMapReader> reader =
-    OsmMapReaderFactory::getInstance().createReader(inputUrl);
+    OsmMapReaderFactory::createReader(inputUrl);
   reader->open(inputUrl);
   boost::shared_ptr<ElementInputStream> streamReader =
     boost::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -324,7 +319,7 @@ void DataConverter::_transToOgrMT(QString input,
   bool finishedTranslating = false;
 
   // Read all elements
-  // TODO: We should figure out a way to make this not-memory bound in the future
+  // We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
   LOG_INFO("Element Cache Filled");
 
@@ -368,9 +363,8 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   //translations is done.  Currently, it depends that a translation script is set directly on it
   //(vs using a translation visitor).  See #2416.
 
-  OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
-  if (readerFactory.hasElementInputStream(input) &&
-      //TODO: this ops restriction needs to be removed and the ops applied during streaming.
+  if (OsmMapReaderFactory::hasElementInputStream(input) &&
+      // This ops restriction needs to be removed and the ops applied during streaming.
       _convertOps.size() == 0 &&
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
@@ -492,16 +486,13 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      if (Log::getInstance().getLevel() == Log::Info)
-      {
-        std::cout << ".";
-        std::cout.flush();
-      }
+      PROGRESS_INFO("Read layer " << i + 1 << " of " << layers.size());
       LOG_VART(input);
       LOG_VART(layers[i]);
       progress.setTaskWeight(progressWeights[i]);
       reader.read(input, layers[i], map, progress);
     }
+    LOG_INFO("Read layer " << layers.size() << " of " << layers.size());
   }
 
   if (map->getNodes().size() == 0)
@@ -528,14 +519,14 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   progress.set(1.0, "Successful", true, "Finished successfully.");
 }
 
-void DataConverter::_convert(const QString input, const QString output)
+void DataConverter::_convert(const QStringList inputs, const QString output)
 {
   LOG_TRACE("general convert");
 
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  LOG_VART(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+  //LOG_VART(OsmMapReaderFactory::hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
@@ -553,25 +544,30 @@ void DataConverter::_convert(const QString input, const QString output)
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
 
-  //try to stream the i/o
-  if (ElementStreamer::isStreamableIo(input, output) &&
-      ElementStreamer::areValidStreamingOps(_convertOps))
+  //check to see if all of the i/o can be streamed
+  const bool isStreamable =
+    ElementStreamer::areValidStreamingOps(_convertOps) &&
+    ElementStreamer::areStreamableIo(inputs, output);
+  if (isStreamable)
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
     assert(!_colsArgSpecified);
 
-    ElementStreamer::stream(input, output);
+    //stream the i/o
+    ElementStreamer::stream(inputs, output);
   }
-  //can't stream the i/o
   else
   {
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(
-      map, input, ConfigOptions().getReaderUseDataSourceIds(),
-      Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      IoUtils::loadMap(
+        map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    }
 
-    LOG_INFO("Applying conversion operations...");
+    LOG_DEBUG("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
     MapProjector::projectToWgs84(map);
 
@@ -595,7 +591,7 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
                                            OsmMapPtr map)
 {
   boost::shared_ptr<OsmMapWriter> writer =
-    OsmMapWriterFactory::getInstance().createWriter(output);
+    OsmMapWriterFactory::createWriter(output);
   boost::shared_ptr<ShapefileWriter> shapeFileWriter =
     boost::dynamic_pointer_cast<ShapefileWriter>(writer);
   //currently only one shape file writer, and this is it

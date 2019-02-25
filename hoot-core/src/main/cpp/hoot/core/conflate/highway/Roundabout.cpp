@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Roundabout.h"
@@ -32,11 +32,11 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 
 namespace hoot
@@ -47,7 +47,6 @@ typedef boost::shared_ptr<geos::geom::Geometry> GeomPtr;
 Roundabout::Roundabout():
   _status(Status::Invalid)
 {
-  // Blank
 }
 
 void Roundabout::setRoundaboutWay (WayPtr pWay)
@@ -292,7 +291,6 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
   }
 }
 
-
 /*
  * Go through our nodes... if they are still there, check location.
  * If they are in the same place, fine. Otherwise, add nodes back as new.
@@ -305,12 +303,11 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
  *
  * MAYBE: our roundabout nodes might need to be copies, so they don't get moved
  * around during conflation & merging
- *
  */
 void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
 {
   // Re-add roundabout from the ref dataset, but not secondary dataset
-  if(_status == Status::Unknown1)
+  if (_status == Status::Unknown1)
   {
     std::vector<ConstNodePtr> wayNodes;
     for (size_t i = 0; i < _roundaboutNodes.size(); i++)
@@ -363,4 +360,4 @@ void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
     RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
 }
 
-} // namespace
+}

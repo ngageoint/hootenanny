@@ -28,7 +28,7 @@
 #define REMOVEELEMENTSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
@@ -39,11 +39,8 @@ namespace hoot
 /**
  * Removes any elements where that satisfy a criterion
  */
-class RemoveElementsVisitor :
-    public ConstElementVisitor,
-    public ConstOsmMapConsumer,
-    public ElementCriterionConsumer,
-    public Configurable
+class RemoveElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
+    public ElementCriterionConsumer, public Configurable
 {
 public:
 
@@ -63,7 +60,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  virtual void setOsmMap(OsmMap* map);
 
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 

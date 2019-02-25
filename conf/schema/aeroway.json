@@ -173,6 +173,17 @@
     },
     {
         "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "aeroway",
+        "name": "aeroway=stopway",
+        "objectType": "tag",
+        "tagInfoCount": 584,
+        "tagInfoDescription": "Stopway of an airfield"
+    },
+    {
+        "geometries": [
             "node",
             "area"
         ],

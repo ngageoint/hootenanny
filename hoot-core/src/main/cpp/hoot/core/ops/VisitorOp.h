@@ -42,27 +42,20 @@ class ConstElementVisitor;
 
 /**
  * Given a visitor this operation applies the visitor to the map as a read/write operation.
- *
- * Yes, it is that simple.
  */
-class VisitorOp :
-  public OsmMapOperation,
-  public ElementVisitorConsumer
+class VisitorOp : public OsmMapOperation, public ElementVisitorConsumer
 {
 public:
 
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-
   VisitorOp(const boost::shared_ptr<ConstElementVisitor>& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.
    */
   VisitorOp(ConstElementVisitor* v) { _visitor.reset(v); }
-
-  virtual ~VisitorOp() {}
 
   virtual void addVisitor(const ConstElementVisitorPtr& e);
 

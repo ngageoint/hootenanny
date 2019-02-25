@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTOR_JS_H
 #define FEATUREEXTRACTOR_JS_H
 
 // hoot
-#include <hoot/core/conflate/extractors/FeatureExtractor.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 
 // node.js
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/SystemNodeJs.h>
 
 // Qt

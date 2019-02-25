@@ -29,7 +29,7 @@
 #define GRAPHCOMPARATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/scoring/BaseComparator.h>
 
 namespace hoot

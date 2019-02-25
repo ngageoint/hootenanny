@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
+import java.util.HashMap;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
@@ -35,12 +37,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,17 +48,15 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.models.db.Users;
 
 
 @Controller
 @Path("/conflation")
 @Transactional
 public class ConflateResource {
-    private static final Logger logger = LoggerFactory.getLogger(ConflateResource.class);
-
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -66,33 +64,25 @@ public class ConflateResource {
     private ConflateCommandFactory conflateCommandFactory;
 
     @Autowired
-    private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
-
-    @Autowired
     private UpdateTagsCommandFactory updateTagsCommandFactory;
 
 
     /**
      * Conflate service operates like a standard ETL service. The conflate
-     * service specifies the input files, conflation type, match threshold, miss
-     * threshold, and output file name. The conflation type can be specified as
-     * the average of the two input datasets or based on a single input file
-     * that is intended to be the reference dataset. It has two fronts, WPS and
-     * standard rest end point.
-     *
-     * that is intended to be the reference dataset.
+     * service specifies the input files, conflation type, options
+     * and output file name.
      *
      * POST hoot-services/conflation/execute
      *
      * @param params
      *            parameters in json format :
      *
-     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
+     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB]
      *     INPUT2_TYPE: Conflation input type [OSM] | [OGR] | [DB]
      *     INPUT1: Conflation input 1
      *     INPUT2: Conflation input 2
      *     OUTPUT_NAME: Conflation operation output name
-     *     CONFLATION_TYPE: [Average] | [Reference]
+     *     CONFLATION_TYPE: [Horizontal] | [Reference]
      *     REFERENCE_LAYER:
      *         The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
      *         tags will be dominant with layer 1 as geometry snap layer.
@@ -111,17 +101,20 @@ public class ConflateResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflate(ConflateParams params,
+    public Response conflate(ConflateParams params, @Context HttpServletRequest request,
                              @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+        Users user = null;
+        if(request != null) {
+            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        }
 
         String jobId = UUID.randomUUID().toString();
 
         try {
-            ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass());
+            ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
             InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
-            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { conflateCommand, updateTagsCommand, exportRenderDBCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }
@@ -133,9 +126,8 @@ public class ConflateResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject json = new JSONObject();
-        json.put("jobid", jobId);
-
-        return Response.ok(json.toJSONString()).build();
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+        return Response.ok().entity(ret).build();
     }
 }

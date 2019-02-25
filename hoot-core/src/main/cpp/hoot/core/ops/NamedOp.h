@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEDOP_H
 #define NAMEDOP_H
 
 // hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "OsmMapOperation.h"
 
 // Qt
 #include <QStringList>
@@ -51,13 +50,11 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual ~NamedOp() {}
-
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const override { return ""; }
 
 private:
 

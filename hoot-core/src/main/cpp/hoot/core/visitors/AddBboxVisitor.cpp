@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddBboxVisitor.h"
 
@@ -31,12 +31,12 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, AddBboxVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, AddBboxVisitor)
 
 AddBboxVisitor::AddBboxVisitor()
 {
@@ -46,22 +46,21 @@ void AddBboxVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getTags().getNonDebugCount() > 0)
   {
-
-    // Skip nodes.
+    // Skip nodes
     if (e->getElementType() != ElementType::Node)
     {
       boost::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
 
       if (bounds)
       {
-        e->getTags()["hoot:bbox"] = QString("%1,%2,%3,%4").arg(QString::number(bounds->getMinX(), 'g', 10))
+        e->getTags()["hoot:bbox"] =
+          QString("%1,%2,%3,%4").arg(QString::number(bounds->getMinX(), 'g', 10))
             .arg(QString::number(bounds->getMinY(), 'g', 10))
             .arg(QString::number(bounds->getMaxX(), 'g', 10))
             .arg(QString::number(bounds->getMaxY(), 'g', 10));
       }
     }
   }
-
 }
 
 }

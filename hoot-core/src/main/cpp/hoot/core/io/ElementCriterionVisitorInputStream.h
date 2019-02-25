@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
@@ -48,6 +48,17 @@ class ElementCriterionVisitorInputStream : public ElementInputStream
 public:
 
   /**
+   *
+   *
+   * @param elementSource
+   * @param criterion
+   * @param visitor
+   */
+  ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                                     const ElementCriterionPtr& criterion,
+                                     const ElementVisitorPtr& visitor);
+
+  /**
    * @brief ElementCriterionInputStream
    * @param elementSource The stream used to read elements from
    * @param criterion If this criterion is satisfied then the element is included, otherwise the
@@ -58,6 +69,7 @@ public:
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,
                                      const QList<ElementVisitorPtr>& visitors);
+
   virtual ~ElementCriterionVisitorInputStream();
 
   /**
@@ -69,7 +81,7 @@ public:
   /**
    * Returns the source's projection.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements
@@ -82,7 +94,7 @@ public:
    * @return Pointer to an elemement that is read from elementSource and is satisfied by the
    *    criterion.
    */
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
   long getNumFeaturesTotal() const { return _numFeaturesTotal; }
 
@@ -92,10 +104,11 @@ private:
 
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
-  QList<ElementVisitorPtr> _visitors;
 
   long _numFeaturesTotal;
   long _numFeaturesPassingCriterion;
+
+  QList<ElementVisitorPtr> _visitors;
 };
 
 }

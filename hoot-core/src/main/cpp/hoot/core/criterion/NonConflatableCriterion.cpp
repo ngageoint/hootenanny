@@ -22,16 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NonConflatableCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
@@ -39,32 +45,27 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
 // Return true if not conflatable
-bool NonConflatableCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   //See if our type is known conflatable - return false
-  if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
+  // This could probably be made cleaner by adding a "conflatable" property to criterion. - #2941
+  if (HighwayCriterion().isSatisfied(e))
       return false;
-  else if (OsmSchema::getInstance().isLinearWaterway(*e))
+  else if (LinearWaterwayCriterion().isSatisfied(e))
     return false;
-  else if (OsmSchema::getInstance().isPoi(*e))
+  else if (PoiCriterion().isSatisfied(e))
     return false;
-  else if (OsmSchema::getInstance().isBuilding(e))
+  else if (BuildingCriterion().isSatisfied(e))
     return false;
-  else if (OsmSchema::getInstance().isRailway(*e))
+  else if (RailwayCriterion().isSatisfied(e))
     return false;
-  else if (OsmSchema::getInstance().isPowerLine(*e))
+  else if (PowerLineCriterion().isSatisfied(e))
     return false;
-  else if (OsmSchema::getInstance().isArea(e))
+  else if (AreaCriterion().isSatisfied(e))
     return false;
 
   // It is not something we can conflate
   return true;
 }
 
-void NonConflatableCriterion::setConfiguration(const Settings& conf)
-{
-  (void) conf;
-  // Blank for now
 }
-
-} // namespace hoot

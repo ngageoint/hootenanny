@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IMPLIEDDIVIDEDMARKER_H
@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -49,9 +50,11 @@ class Way;
 /**
  * Locates sections that implicitly appear to be divided highways. Primarily this is bridges and
  * tunnels that are divided before and after the bridge/tunnel, but not tagged appropriately in
- * the tunnel.
+ * the tunnel. If two roads implicitly should be marked as divided based on the surrounding roads,
+ * mark it as such. This is primarily caused by the FACC+ spec which does not allow bridges to
+ * be marked as divided.
  */
-class ImpliedDividedMarker : public OsmMapOperation
+class ImpliedDividedMarker : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -70,10 +73,16 @@ public:
 
   boost::shared_ptr<OsmMap> markDivided();
 
-  virtual QString getDescription() const
-  { return "Locates sections that implicitly appear to be divided highways"; }
+  virtual QString getInitStatusMessage() const
+  { return "Marking road sections that appear to be divided highways..."; }
 
-protected:
+  virtual QString getCompletedStatusMessage() const
+  { return "Marked " + QString::number(_numAffected) + " road sections as divided highways"; }
+
+  virtual QString getDescription() const
+  { return "Marks road sections that implicitly appear to be divided highways"; }
+
+private:
 
   boost::shared_ptr<const OsmMap> _inputMap;
   boost::shared_ptr<OsmMap> _result;

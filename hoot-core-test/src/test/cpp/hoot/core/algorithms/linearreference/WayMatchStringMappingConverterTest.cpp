@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -78,12 +78,12 @@ public:
 
     //LOG_VAR(TestUtils::toQuotedString(hoot::toString(wsms)));
     HOOT_STR_EQUALS("matches:\n"
-      "subline 1: start: way: -1 index: 0 fraction: 0 end: way: -1 index: 1 fraction: 0\n"
-      "subline 2: start: way: -3 index: 0 fraction: 0 end: way: -3 index: 0 fraction: 0.7\n"
-      "subline 1: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 0 fraction: 0.428571428571429\n"
-      "subline 2: start: way: -3 index: 0 fraction: 0.7 end: way: -3 index: 1 fraction: 0\n"
-      "reversed, subline 1: start: way: -2 index: 0 fraction: 0.428571428571429 end: way: -2 index: 1 fraction: 0\n"
-      "subline 2: start: way: -4 index: 0 fraction: 0 end: way: -4 index: 1 fraction: 0",
+      "subline 1: start: way(-1) index: 0 fraction: 0 end: way(-1) index: 1 fraction: 0\n"
+      "subline 2: start: way(-3) index: 0 fraction: 0 end: way(-3) index: 0 fraction: 0.7\n"
+      "subline 1: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 0 fraction: 0.428571428571429\n"
+      "subline 2: start: way(-3) index: 0 fraction: 0.7 end: way(-3) index: 1 fraction: 0\n"
+      "reversed, subline 1: start: way(-2) index: 0 fraction: 0.428571428571429 end: way(-2) index: 1 fraction: 0\n"
+      "subline 2: start: way(-4) index: 0 fraction: 0 end: way(-4) index: 1 fraction: 0",
       wsms);
   }
 

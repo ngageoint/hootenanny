@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGE_H
 #define MERGE_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
 
 // Standard
@@ -43,6 +43,7 @@ namespace hoot
 class Merger
 {
 public:
+
   virtual ~Merger() {}
 
   /**
@@ -60,13 +61,6 @@ public:
    * Returns all the element ids that are impacted by this merger operation.
    */
   virtual std::set<ElementId> getImpactedElementIds() const = 0;
-
-  /**
-   * @brief Returns the IDs of all Unknown1 elements that were replaced by Unknown2 elements
-   * during merging.
-   * @return a collection of unknown1/unknown2 element ID pairs
-   */
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
 
   /**
    * Returns true if this merge can be applied to the specified map.

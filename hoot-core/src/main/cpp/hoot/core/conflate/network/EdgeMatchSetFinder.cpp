@@ -22,18 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeMatchSetFinder.h"
 
-#include "EdgeMatch.h"
-#include "EdgeSublineMatch.h"
-
 // hoot
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/EdgeSublineMatch.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
+
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_KEY = "01-similar";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY =
+  "03-similar-first-reversed";
+const QString EdgeMatchSetFinder::EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY =
+  "02-similar-second-reversed";
 
 EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMatchSetPtr matchSet,
     ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2) :
@@ -42,8 +47,20 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
   _includePartialMatches(false),
   _matchSet(matchSet),
   _n1(n1),
-  _n2(n2)
+  _n2(n2),
+  _numSimilarEdgeMatches(0)
 {
+  _resetEdgeMatchSimilarities();
+}
+
+void EdgeMatchSetFinder::_resetEdgeMatchSimilarities()
+{
+  _edgeMatchSimilarities.clear();
+  // purposefully mantaining this order (may not end up needing to actually having to keep it,
+  // though)
+  _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_KEY] = EdgeMatchSimilarity();
+  _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY] = EdgeMatchSimilarity();
+  _edgeMatchSimilarities[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] = EdgeMatchSimilarity();
 }
 
 void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
@@ -92,7 +109,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   bool toMatch = _isCandidateMatch(to1, to2);
   bool foundSolution = false;
 
-  if (_steps > 20) //TODO: make this configurable
+  if (_steps > 20) // make this configurable - #2913
   {
     LOG_VART(_steps);
     return false;
@@ -101,8 +118,8 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   LOG_VART(fromMatch);
   LOG_VART(toMatch);
 
-  /// @todo Possibly continue to evaluate matches even if we find an end point. This may make
-  /// the search space very large, but would avoid missing matches.
+  // Possibly continue to evaluate matches even if we find an end point. This may make
+  // the search space very large, but would avoid missing matches. - #2939
   if (fromMatch && toMatch)
   {
     foundSolution = _recordMatch(em);
@@ -158,9 +175,6 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   // if we couldn't find a whole string solution and we're supposed to include partial matches
   if (foundSolution == false && _includePartialMatches)
   {
-    // keep the best partial matches at each end and add it to the edge match
-    //foundSolution = _addPartialMatch(em);
-
     foundSolution = _recordMatch(em);
   }
 
@@ -284,76 +298,6 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   return foundSolution;
 }
 
-//TODO: not currently being used from _addEdgeMatches
-bool EdgeMatchSetFinder::_addPartialMatch(ConstEdgeMatchPtr em)
-{
-  LOG_TRACE("Adding partial match...");
-  LOG_VART(em);
-
-  ConstEdgeLocationPtr from1 = em->getString1()->getFrom();
-  ConstEdgeLocationPtr from2 = em->getString2()->getFrom();
-  ConstEdgeLocationPtr to1 = em->getString1()->getTo();
-  ConstEdgeLocationPtr to2 = em->getString2()->getTo();
-  bool fromMatch = _isCandidateMatch(from1, from2);
-  bool toMatch = _isCandidateMatch(to1, to2);
-
-  /// @todo There is a horribly unlikely edge case that could pop up here.
-  ///
-  ///       ,-----,
-  /// +-----'     `-------+-------------+
-  ///     +--------------------+----+
-  ///     ^^^     ^^^^^^^^^^^^^^^^^^^
-  ///
-  /// In the above case there should be two matches created, but there will likely only be the
-  /// second match. Fixing this should just be a matter of adding a bunch more if statements.
-
-  bool result = false;
-  EdgeMatchPtr newEm;
-
-  // if this is a partial match in the middle of a line.
-  if (em->getString1()->getMembers().size() == 1 && em->getString2()->getMembers().size() == 1)
-  {
-    newEm = em->clone();
-  }
-  else
-  {
-    newEm = em->clone();
-    // trim the ends off the match so you get a partial match
-    if (fromMatch == false)
-    {
-      newEm = _trimFromEdge(newEm);
-      if (!newEm)
-      {
-        return false;
-      }
-    }
-
-    if (toMatch == false)
-    {
-      newEm = _trimToEdge(newEm);
-      if (!newEm)
-      {
-        return false;
-      }
-    }
-  }
-
-  if (newEm)
-  {
-    double score = _scoreMatch(newEm);
-    LOG_VART(newEm);
-    LOG_VART(score);
-    if (score > 0)
-    {
-      _matchSet->addEdgeMatch(newEm, score);
-      result = true;
-    }
-  }
-
-  LOG_VART(result);
-  return result;
-}
-
 void EdgeMatchSetFinder::_appendMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
                                       ConstNetworkEdgePtr e2) const
 {
@@ -429,12 +373,73 @@ void EdgeMatchSetFinder::_prependMatch(EdgeMatchPtr em, ConstNetworkEdgePtr e1,
 
 bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
 {
-  bool result = false;
-  double score = _scoreMatch(em);
+  LOG_TRACE("Recording match: " << em);
+
+  const double score = _scoreMatch(em);
   LOG_VART(score);
   if (score > 0)
   {
-    LOG_TRACE("Recording match: " << em);
+    // We want to avoid adding matches that are very similar to ones we've already found and have
+    // lower score than they do (see EdgeMatch::isVerySimilarTo).  Otherwise we'll have to remove
+    // them before calculating match relationships, which can be very expensive.
+
+    QMap<QString, QString> similarityValuesToIterate;
+    similarityValuesToIterate[EDGE_MATCH_SIMILAR_KEY] = em->getSimilarityString();
+    similarityValuesToIterate[EDGE_MATCH_SIMILAR_SECOND_REVERSED_KEY] =
+      em->getSecondReversedSimilarityString();
+    similarityValuesToIterate[EDGE_MATCH_SIMILAR_FIRST_REVERSED_KEY] =
+      em->getFirstReversedSimilarityString();
+    EdgeMatchScore existingSimilarMatch;
+    QMap<QString, QString>::iterator similarityValsItr;
+    // This will iterate over the similarity indexes in the order we want.
+    for (similarityValsItr = similarityValuesToIterate.begin();
+         similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
+    {
+      existingSimilarMatch =
+        _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()];
+      if (existingSimilarMatch.score != -1.0)
+      {
+        break;
+      }
+    }
+
+    // An EdgeMatchScore returned with a score == -1.0 means that no similar match was found.
+    if (existingSimilarMatch.score != -1.0)
+    {
+      // If we already have an edge with a higher score that is very similar to this edge, then
+      // don't add it.
+      if (existingSimilarMatch.score >= score)
+      {
+        LOG_TRACE(
+          "Found edge match: " << em << " similar to existing match: " <<
+          existingSimilarMatch.match << " and with lower score: " << score <<
+          ".  Skipping match...");
+        _numSimilarEdgeMatches++;
+        // Returning success here is slightly counterintuitive but is the correct thing to do for
+        // the match alg.
+        return true;
+      }
+      // Otherwise, remove the existing match, since the new one has a higher score.
+      else
+      {
+        LOG_TRACE(
+          "Removing similar edge match: " << existingSimilarMatch.match << " with lower score: " <<
+          score << " than found edge match: " << em << "...");;
+        _matchSet->removeEdgeMatch(existingSimilarMatch.match);
+      }
+    }
+
+    // similarity index our new match (overwrites the index of any existing matches)
+    EdgeMatchScore newMatch;
+    newMatch.match = em;
+    newMatch.score = score;
+    for (similarityValsItr = similarityValuesToIterate.begin();
+         similarityValsItr != similarityValuesToIterate.end(); ++similarityValsItr)
+    {
+      _edgeMatchSimilarities[similarityValsItr.key()][similarityValsItr.value()] = newMatch;
+    }
+
+    // add our new match
 
     // if exactly one string is a stub
     if (em->getString1()->isStub() != em->getString2()->isStub())
@@ -443,20 +448,26 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
       if (_bidirectionalStubs)
       {
         // add it in both directions. In some matchers we don't know which is better.
-        EdgeStringPtr rev1 = em->getString1()->clone();
-        rev1->reverse();
-        EdgeMatchPtr em2(new EdgeMatch(rev1, em->getString2()));
-        _matchSet->addEdgeMatch(em2, score);
+        _addReverseMatch(em, score);
       }
     }
     else
     {
       _matchSet->addEdgeMatch(em, score);
     }
-    result = true;
+
+    return true;
   }
 
-  return result;
+  return false;
+}
+
+void EdgeMatchSetFinder::_addReverseMatch(ConstEdgeMatchPtr edgeMatch, const double score)
+{
+  EdgeStringPtr rev1 = edgeMatch->getString1()->clone();
+  rev1->reverse();
+  EdgeMatchPtr em2(new EdgeMatch(rev1, edgeMatch->getString2()));
+  _matchSet->addEdgeMatch(em2, score);
 }
 
 double EdgeMatchSetFinder::_scoreMatch(ConstEdgeMatchPtr em) const

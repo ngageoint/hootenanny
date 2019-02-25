@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialNetworkMerger.h"
 
@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -90,7 +90,7 @@ void PartialNetworkMerger::apply(const OsmMapPtr& map,
 
 void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const
 {
-  LOG_INFO("Applying PartialNetworkMerger...");
+  LOG_DEBUG("Applying PartialNetworkMerger...");
 
   // we changed the sublines so we must update the indices.
   merger->updateSublineMapping();
@@ -123,8 +123,8 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
     }
   }
 
-  /// @todo this will need to replace one scrap with possibly multiple keeper elements
-  /// - think about the case when the way is part of an interstate or bus relation
+  // TODO: this will need to replace one scrap with possibly multiple keeper elements
+  // - think about the case when the way is part of an interstate or bus relation
   // remove the duplicate element.
   merger->replaceScraps();
 }
@@ -208,10 +208,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
     // split the ways in such a way that the mappings are updated appropriately.
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
-    std::set< std::pair<ElementId, ElementId> > splitUnknown1Replacements =
-      splitter.getUnknown1Replacements();
-    _unknown1Replacements.insert(splitUnknown1Replacements.begin(), splitUnknown1Replacements.end());
-    LOG_VART(_unknown1Replacements.size());
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");
@@ -279,7 +275,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
-    /// @todo add more logic in the match creator that handles this in a more elegant way.
+    // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
@@ -310,7 +306,7 @@ void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString PartialNetworkMerger::toString() const
 {
-  QString s = hoot::toString(getPairs());
+  QString s = hoot::toString(_getPairs());
   return QString("PartialNetworkMerger %1").arg(s);
 }
 

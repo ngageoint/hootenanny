@@ -4,25 +4,53 @@
 #
 # format: ISO-639-1\tISO-639-2\tname
 #
-# listed alphabetically by ISO-639-1
+# List alphabetically by ISO-639-1.  If a language has no ISO-639-1, then use "N/A" in place of a code.
 #
-# Last updated: 8/8/18
+# TODO: found Tika's lang config file at: 
+#
+# https://github.com/apache/tika/blob/master/tika-core/src/main/resources/org/apache/tika/language/tika.language.properties
+#
+# So, that file could just be used instead.
 
+be	bel	Belarusian
+ca	cat	Catalan
 da	dan	Danish
 de	deu	German
 el	ell	Greek
 en	eng	English
+eo	epo	Esperanto
 es	spa	Spanish
 et	est	Estonian
+fa	fas	Persian
 fi	fin	Finnish
 fr	fra	French
+gl	glg	Galician
 hu	hun	Hungarian
 is	isl	Icelandic
 it	ita	Italian
+lt	lit	Lithuanian
 nl	nld	Dutch
 no	nor	Norwegian
 pl	pol	Polish
 pt	por	Portuguese
+ro	ron	Romanian
 ru	rus	Russian
+sk	slk	Slovakian
+sl	slv	Slovakian
 sv	swe	Swedish
 th	tha	Thai
+uk	ukr	Ukranian
+
+# These aren't in the Tika config but are popping up in detections...confused...
+an	arg	Aragonese
+N/A	ast	Asturian
+br	bre	Breton
+cy	cym	Welsh
+eu	eus	Basque
+ga	gle	Irish
+id	ind	Indonesian
+ms	msa	Malay
+oc	oci	Occitan
+so	som	Somali
+sw	swa	Swahili
+tl	tgl	Tagalog

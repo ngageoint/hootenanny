@@ -70,11 +70,14 @@ public:
   virtual const char* what() const throw() { _tmp = _what.toAscii(); return _tmp.constData(); }
 
 private:
+
   QString _what;
   mutable QByteArray _tmp;
 };
 
 /**
+ * (Singleton)
+ *
  * Cliff Notes for adding an exception:
  * 1. Add a HOOT_DEFINE_EXCEPTION[_STR] in your .h (possibly here).
  * 2. Add a HOOT_REGISTER_EXCEPTION in your .cpp (possibly HootException.cpp).
@@ -100,6 +103,9 @@ private:
 class HootExceptionThrower
 {
 public:
+
+  HootExceptionThrower() {}
+
   typedef void (*ThrowMethod)(HootException* e);
 
   static HootExceptionThrower& getInstance();
@@ -117,6 +123,7 @@ public:
   void rethrowPointer(HootException* e);
 
 private:
+
   QVector<ThrowMethod> _throwMethods;
   static HootExceptionThrower* _theInstance;
 };
@@ -129,6 +136,7 @@ template<class T>
 class AutoRegisterException
 {
 public:
+
   AutoRegisterException()
   {
     HootExceptionThrower::getInstance().registerException(tryThrow);

@@ -22,17 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
 import org.springframework.stereotype.Component;
 
+import hoot.services.models.db.Users;
+
 
 @Component
 class ConflateCommandFactory {
 
+    ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
+        return new ConflateCommand(jobId, params, debugLevel, caller, user);
+    }
     ConflateCommand build(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
-        return new ConflateCommand(jobId, params, debugLevel, caller);
+        return build(jobId, params, debugLevel, caller, null);
     }
 }

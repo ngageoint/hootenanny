@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_DATA_H__
 #define __ELEMENT_WAY_DATA_H__
 
 // Local
-#include "ElementData.h"
+#include <hoot/core/elements/ElementData.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -73,7 +73,6 @@ protected:
 
   /** Parent ID, i.e. the ID of the way that this way was split from or created from */
   long _pid;
-
 };
 
 }

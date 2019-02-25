@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -40,7 +40,7 @@
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/criterion/WaterwayCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
@@ -60,7 +60,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/DataProducer.h>
+#include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
@@ -94,11 +94,11 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
 }
 
 boost::shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-    const vector< boost::shared_ptr<MatchCreator> > &matchCreators,
-    const QString &matchCreatorName,
-    CreatorDescription::BaseFeatureType &featureType)
+    const vector<boost::shared_ptr<MatchCreator>>& matchCreators,
+    const QString& matchCreatorName,
+    CreatorDescription::BaseFeatureType& featureType)
 {
-  for (vector< boost::shared_ptr<MatchCreator> >::const_iterator matchIt = matchCreators.begin();
+  for (vector<boost::shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
   {
     vector<CreatorDescription> desc = (*matchIt)->getAllCreators();
@@ -347,7 +347,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               constMap,
               //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
               //instead of FeatureCountVisitor
-              FilteredVisitor(PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
+              FilteredVisitor(
+                PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
         _stats.append(
           SingleStat(
@@ -402,7 +403,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _applyVisitor(constMap, &v2);
     _stats.append(SingleStat("Longest Tag", v2.getStat()));
 
-    //TODO: this should be moved into _generateFeatureStats
+    // TODO: this should be moved into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -427,7 +428,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
-        _applyVisitor(constMap, FilteredVisitor(WaterwayCriterion(),
+        _applyVisitor(constMap, FilteredVisitor(LinearWaterwayCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Polygon Conflatable POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiPolygonPoiCriterion(),
@@ -569,7 +570,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
                                              const long poisMergedIntoPolys)
 {
   LOG_VARD(poisMergedIntoPolys);
-  const QString description = CreatorDescription::BaseFeatureTypeToString(featureType);
+  const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
 
   double totalFeatures = 0.0;

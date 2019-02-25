@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Tags.h"
@@ -33,7 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/UuidHelper.h>
 
@@ -146,7 +146,7 @@ bool Tags::hasInformationTag() const
   for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
-    LOG_VART(key);
+    //LOG_VART(key);
     if (OsmSchema::getInstance().isMetaData(key, it.value()) == false &&
         it.value() != "")
     {
@@ -379,6 +379,30 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
   return result;
 }
 
+bool Tags::hasName() const
+{
+  return !getName().isEmpty();
+}
+
+bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2)
+{
+  const QStringList tag1Names = tags1.getNames();
+  const QStringList tag2Names = tags2.getNames();
+  for (int i = 0; i < tag1Names.size(); i++)
+  {
+    const QString tag1Name = tag1Names[i];
+    for (int j = 0; j < tag2Names.size(); j++)
+    {
+      const QString tag2Name = tag2Names[j];
+      if (tag1Name.compare(tag2Name, Qt::CaseInsensitive) == 0)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 QStringList Tags::getNames() const
 {
   QStringList result;
@@ -399,6 +423,29 @@ QStringList Tags::getNames() const
   return result;
 }
 
+QString Tags::getName() const
+{
+  QString name = get("name").trimmed();
+  if (!name.isEmpty())
+  {
+    return name;
+  }
+  else
+  {
+    QStringList names = getNames();
+    for (int i = 0; i < names.size(); i++)
+    {
+      name = names.at(i).trimmed();
+      //arbitrarily returning the first name here
+      if (!name.isEmpty())
+      {
+        return name;
+      }
+    }
+  }
+  return "";
+}
+
 const QStringList& Tags::getNameKeys()
 {
   // getting the name tags can be a bit expensive so we'll just do it once.
@@ -415,6 +462,21 @@ const QStringList& Tags::getNameKeys()
   }
 
   return _nameKeys;
+}
+
+QStringList Tags::getNameKeys(const Tags& tags)
+{
+  QStringList nameKeysInTags;
+  const QStringList globalNameKeys = getNameKeys();
+  for (int i = 0; i < globalNameKeys.size(); i++)
+  {
+    const QString nameKey = globalNameKeys.at(i);
+    if (tags.contains(nameKey))
+    {
+      nameKeysInTags.append(nameKey);
+    }
+  }
+  return nameKeysInTags;
 }
 
 int Tags::getNonDebugCount() const
@@ -671,7 +733,8 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
 {
   QRegExp nRegExp("(\\d+(\\.\\d+)?)");
   int pos = 0;
-  while ((pos = nRegExp.indexIn(str,pos)) != -1){
+  while ((pos = nRegExp.indexIn(str,pos)) != -1)
+  {
     num = nRegExp.cap(1).trimmed();
     pos += nRegExp.matchedLength();
   }
@@ -707,6 +770,38 @@ bool Tags::hasAnyKvp(const QStringList kvps) const
     }
   }
   return false;
+}
+
+Tags Tags::kvpListToTags(const QStringList kvps)
+{
+  Tags tagsToReturn;
+  for (int i = 0; i < kvps.size(); i++)
+  {
+    const QString tagStr = kvps.at(i);
+    if (!tagStr.contains("="))
+    {
+      throw IllegalArgumentException("Invalid tag: " + tagStr);
+    }
+    const QStringList tagStrParts = tagStr.split("=");
+    if (!tagStrParts.size() == 2)
+    {
+      throw IllegalArgumentException("Invalid tag: " + tagStr);
+    }
+    tagsToReturn.appendValue(tagStrParts[0], tagStrParts[1]);
+  }
+  return tagsToReturn;
+}
+
+Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
+{
+  Tags tags;
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    const SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 }

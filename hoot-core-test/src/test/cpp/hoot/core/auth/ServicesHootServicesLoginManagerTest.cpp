@@ -75,7 +75,7 @@ public:
     HootServicesLoginManager uut;
     boost::shared_ptr<HootNetworkCookieJar> cookies =
       ServicesDbTestUtils::getTestSessionCookie(
-        "testSessionId", ConfigOptions().getHootServicesAuthRequestTokenEndpoint());
+        "testSessionId", HootServicesLoginManager::_getRequestTokenUrl());
     uut._cookies = cookies;
 
     QUrl loginUrl;

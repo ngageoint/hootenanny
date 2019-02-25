@@ -8,7 +8,7 @@ This document provides background on how to use Hootenanny in a number of common
 [[Installation]]
 == Installation
 
-Hootenanny can be installed on both CentOS/RHEL 6.5 and Ubuntu 12.04/14.04 operating systems.  See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
+See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
 
 [[OldDocsConflation]]
 == Conflation
@@ -63,7 +63,9 @@ The approach described above generally provides good results. There is no gettin
 [[PoiToPolygonConflation]]
 === POI to Polygon Conflation
  
-Hootenanny conflates POIs with both building and area polygons.  It uses the distance between the two features, name similarity, type similarity, and address similarity as the criteria for matching the features.  See <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
+Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between 
+the two features, name similarity, type similarity, address similarity, and phone number similarity.  See 
+<<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
@@ -78,7 +80,7 @@ different definition than those conflatable with other POIs, which is less stric
 <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
 [[AreaToAreaConflation]]
-== Area to Area Conflation
+=== Area to Area Conflation
 
 Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny 
 defines an area as a non-building polygon that possesses the OSM "area=yes" tag or equivalent.  Examples: parks, parking lots.  

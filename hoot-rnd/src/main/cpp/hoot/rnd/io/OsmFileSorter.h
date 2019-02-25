@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMFILESORTER_H
 #define OSMFILESORTER_H
@@ -45,7 +45,7 @@ namespace hoot
  * for sorting OGR inputs.  Those inputs must be converted to an OSM format before sorting, which
  * unfortunately roughly doubles the input parsing time.
  *
- * TODO: This class can be eliminated by swapping its use in MultiaryIngester for
+ * This class can be eliminated by swapping its use in MultiaryIngester for
  * ExternalMergeElementSorter.  See #2622
  */
 class OsmFileSorter

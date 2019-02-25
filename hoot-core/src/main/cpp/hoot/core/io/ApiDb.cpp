@@ -22,28 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/SqlBulkInsert.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/algorithms/zindex/ZValue.h>
-#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
 #include <hoot/core/algorithms/zindex/BBox.h>
-#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/algorithms/zindex/Range.h>
+#include <hoot/core/algorithms/zindex/ZCurveRanger.h>
+#include <hoot/core/algorithms/zindex/ZValue.h>
+#include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/io/InternalIdReserver.h>
+#include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // qt
 #include <QStringList>
@@ -61,7 +62,6 @@
 // tgs
 #include <tgs/System/Time.h>
 
-#include "InternalIdReserver.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -382,6 +382,8 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
 
 long ApiDb::insertUser(const QString email, const QString displayName)
 {
+  LOG_TRACE("Inserting user with email: " << email << " and displayName: " << displayName);
+
   long id = -1;
 
   if (_insertUser == 0)
@@ -494,8 +496,6 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString 
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
-  //TODO: this is likely redundant with other code
-
   /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
    *  classes that should enable the regex below that has both greedy matching
    *  and lazy matching in the same regex.  The QRegExp class doesn't allow this

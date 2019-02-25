@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -40,25 +40,12 @@ namespace hoot
 class ExternalMergeElementSorterTest : public HootTestFixture
 {
     CPPUNIT_TEST_SUITE(ExternalMergeElementSorterTest);
-    CPPUNIT_TEST(runXmlTempTest);
-    CPPUNIT_TEST(runPbfTempTest);
+    CPPUNIT_TEST(runTest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runXmlTempTest()
-  {
-    _runTest("osm");
-  }
-
-  void runPbfTempTest()
-  {
-    _runTest("pbf");
-  }
-
-private:
-
-  void _runTest(const QString format)
+  void runTest()
   {
     //Since ExternalMergeElementSorter writes chunks of maps, it naturally sets off some of the
     //incomplete map warnings which we don't want to see.
@@ -69,25 +56,32 @@ private:
 
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(input));
+        OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     reader->initializePartial();
 
     ExternalMergeElementSorter elementSorter;
     elementSorter.setMaxElementsPerFile(5);
-    elementSorter.setTempFormat(format);
     //only enable this for debugging
     //elementSorter.setRetainTempFiles(true);
     elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
 
     int index = 0;
+    long lastId = 0;
+    ElementType lastElementType = ElementType::Node;
+
     while (elementSorter.hasMoreElements())
     {
       ElementPtr element = elementSorter.readNextElement();
+
       LOG_TRACE(element->toString());
       LOG_VART(index);
-      //elements should be returned in the order nodes, ways, then relations
+      LOG_VART(element->getElementId().getId());
+      LOG_VART(lastId);
+
+      //elements should be returned in the order nodes, ways, then relations; ids should always be
+      //increasing within each element type
       if (index >= 0 && index <=15)
       {
         CPPUNIT_ASSERT(element->getElementType() == ElementType::Node);
@@ -100,6 +94,13 @@ private:
       {
         CPPUNIT_ASSERT(element->getElementType() == ElementType::Relation);
       }
+      if (lastId != 0 && lastElementType == element->getElementType().getEnum())
+      {
+        CPPUNIT_ASSERT(element->getElementId().getId() > lastId);
+      }
+
+      lastId = element->getElementId().getId();
+      lastElementType = element->getElementType();
       index++;
     }
     CPPUNIT_ASSERT_EQUAL(29, index);

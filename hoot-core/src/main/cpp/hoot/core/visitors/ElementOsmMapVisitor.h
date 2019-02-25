@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -45,7 +45,6 @@ class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsu
 public:
 
   ElementOsmMapVisitor() {}
-
   virtual ~ElementOsmMapVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }

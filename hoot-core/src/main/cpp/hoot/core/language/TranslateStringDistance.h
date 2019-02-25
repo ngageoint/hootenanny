@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATESTRINGDISTANCE_H
 #define TRANSLATESTRINGDISTANCE_H
 
 // hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
 
@@ -62,14 +62,17 @@ public:
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
    * two strings.
    */
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString toString() const { return "Translate " + _d->toString(); }
+  virtual QString toString() const override { return "Translate " + _d->toString(); }
 
   void setTokenize(bool tokenize) { _tokenize = tokenize; }
   void setTranslateAll(bool translateAll) { _translateAll = translateAll; }
+
+  virtual QString getDescription() const override
+  { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
 
 private:
 

@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef QUANTILEAGGREGATOR_H
 #define QUANTILEAGGREGATOR_H
 
 // Hoot
+#include <hoot/core/algorithms/aggregator/ValueAggregator.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "ValueAggregator.h"
 
 namespace hoot
 {
@@ -48,11 +47,13 @@ public:
    */
   QuantileAggregator(double quantile);
 
-  virtual double aggregate(std::vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString toString() const { return QString("QuantileAggregator %1").arg(_quantile); }
+  virtual QString toString() const override { return QString("QuantileAggregator %1").arg(_quantile); }
+
+  virtual QString getDescription() const override { return "Aggregates data based on the quantile value"; }
 
 private:
 

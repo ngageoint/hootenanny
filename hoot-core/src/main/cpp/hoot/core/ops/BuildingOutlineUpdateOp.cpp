@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -38,14 +38,14 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -60,6 +60,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 class NodeIdVisitor : public ConstElementVisitor
 {
 public:
+
   set<long>& allNodes;
 
   NodeIdVisitor(set<long>& nodes) : allNodes(nodes) {}
@@ -78,6 +79,7 @@ public:
 class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
+
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
   {}
 
@@ -115,6 +117,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
+
   const map<long, long>& _fromTo;
   OsmMap& _map;
 };
@@ -133,7 +136,7 @@ void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
   {
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
-    if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))
+    if (BuildingCriterion().isSatisfied(r))
     {
       _createOutline(r);
     }
@@ -165,7 +168,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
       const QString errMsg =
         QString("Element with uncleanable topology.  Error occurred during union ") +
         QString("operation of element: ") + buildingMember->getElementId().toString();
-      //TODO: if _unionOutline gets activated, make a ReviewMaker mem var to use for this
+      // If _unionOutline gets activated, make a ReviewMaker mem var to use for this
       ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -239,7 +242,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
           }
 
           {
-            //TODO: There are some strange scoping/casting issues going on here, where if I try
+            // There are some strange scoping/casting issues going on here, where if I try
             //to consolidate the unioning code for ways and relations into this method, the
             //resulting output differs significantly.  I believe the casting going on in
             //GeometryConverter is related to the cause.  If that's solved, then the duplicated

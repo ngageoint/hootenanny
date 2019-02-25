@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSUBLINEMATCHSTRING_H
 #define WAYSUBLINEMATCHSTRING_H
 
 
 // Hoot
-#include <hoot/core/OsmMap.h>
-#include "WaySublineMatch.h"
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 
 // Std
 #include <string>
@@ -50,6 +50,7 @@ class WaySublineCollection;
 class WaySublineMatchString
 {
 public:
+
   static std::string className() { return "hoot::WaySublineMatchString"; }
 
   typedef std::vector<WaySublineMatch> MatchCollection;
@@ -86,7 +87,7 @@ public:
 
   const MatchCollection& getMatches() const { return _matches; }
 
-  /// @todo move reverse vector into the way subline string, but keep the interface identical
+  // TODO: move reverse vector into the way subline string, but keep the interface identical
   std::vector<bool> getReverseVector1() const;
   std::vector<bool> getReverseVector2() const;
 
@@ -124,6 +125,7 @@ public:
   QString toString() const;
 
 private:
+
   MatchCollection _matches;
 };
 

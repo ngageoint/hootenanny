@@ -28,14 +28,13 @@
 #define REPLACEELEMENTOP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 // Standard
 #include <set>
-
-#include "ConstOsmMapOperation.h"
 
 namespace hoot
 {
@@ -74,8 +73,6 @@ public:
    * must be called exactly two times.
    */
   ReplaceElementOp();
-
-  virtual ~ReplaceElementOp() {}
 
   /**
    * If the elements aren't specified in the constructor this must be called exactly two times. Once

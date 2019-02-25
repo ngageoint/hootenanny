@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayDiscretizer.h"
@@ -33,20 +33,19 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/ElementConverter.h>
 
 // Standard
 #include <iostream>
 using namespace std;
 
-#include "Distance.h"
-
 namespace hoot
 {
 
-WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, ConstWayPtr way) :
+WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map)
 {
   _way = way;
@@ -54,6 +53,10 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, ConstWayPtr way) :
   // Go through all the nodes
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
+  if (nodeIds.size() == 0)
+  {
+    throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
+  }
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {

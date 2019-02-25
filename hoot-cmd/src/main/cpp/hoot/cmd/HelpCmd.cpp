@@ -26,13 +26,14 @@
  */
 
 // Hoot
-#include <hoot/core/Version.h>
+#include <hoot/core/info/Version.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringList>
+#include <QVector>
 
 using namespace std;
 
@@ -42,15 +43,24 @@ namespace hoot
 class HelpCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::HelpCmd"; }
 
-  HelpCmd() {}
+  HelpCmd()
+  {
+    _forceToRndList.append("build-model");
+  }
 
   static bool commandCompare(const std::string& n1, const std::string& n2)
   {
     boost::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
     boost::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
 
+    return c1->getName() < c2->getName();
+  }
+
+  static bool commandCompare2(boost::shared_ptr<Command> c1, boost::shared_ptr<Command> c2)
+  {
     return c1->getName() < c2->getName();
   }
 
@@ -75,6 +85,10 @@ public:
   }
 
 private:
+
+  // display names of commands that we want to appear in the advanced rnd list despite the fact
+  // they are part of core
+  QStringList _forceToRndList;
 
   int _printDetails(const QString& command)
   {
@@ -105,7 +119,30 @@ private:
 
   int _printSummary()
   {
-    vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    const vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    vector<boost::shared_ptr<Command>> coreCmds;
+    vector<boost::shared_ptr<Command>> rndCmds;
+    for (size_t i = 0; i < cmds.size(); i++)
+    {
+      const string cmdClassName = cmds[i];
+      boost::shared_ptr<Command> command(
+        Factory::getInstance().constructObject<Command>(cmdClassName));
+      if (command->displayInHelp())
+      {
+        const QString commandName = command->getName();
+        if (command->getType() == "core" && !_forceToRndList.contains(commandName))
+        {
+          coreCmds.push_back(command);
+        }
+        else if (command->getType() == "rnd" || _forceToRndList.contains(commandName))
+        {
+          rndCmds.push_back(command);
+        }
+      }
+
+    }
+    sort(coreCmds.begin(), coreCmds.end(), commandCompare2);
+    sort(rndCmds.begin(), rndCmds.end(), commandCompare2);
 
     // Please update the asciidoc user documentation if you change this usage.
     cout << "usage: hoot <command> [--trace] [--debug] [--warn] [-D name=value] [--conf <path>] "
@@ -113,20 +150,23 @@ private:
     cout << endl;
     cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";
-    sort(cmds.begin(), cmds.end(), commandCompare);
-    for (size_t i = 0; i < cmds.size(); i++)
-    {
-      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
-      if (c->displayInHelp())
-      {
-        //spacing here is roughly the size of the longest command name plus a small buffer
-        const int spaceSize = 30 - c->getName().size();
-        const QString line = c->getName() + QString(spaceSize, ' ') + c->getDescription();
-        cout << "  " << line << endl;
-      }
-    }
+    _printCommands(coreCmds);
+    cout << endl << "Advanced:" << endl << endl;
+    _printCommands(rndCmds);
 
     return 0;
+  }
+
+  void _printCommands(const vector<boost::shared_ptr<Command>>& cmds)
+  {
+    for (size_t i = 0; i < cmds.size(); i++)
+    {
+      boost::shared_ptr<Command> command = cmds[i];
+      //spacing here is roughly the size of the longest command name plus a small buffer
+      const int spaceSize = 30 - command->getName().size();
+      const QString line = command->getName() + QString(spaceSize, ' ') + command->getDescription();
+      cout << "  " << line << endl;
+    }
   }
 
   int _printVerbose()

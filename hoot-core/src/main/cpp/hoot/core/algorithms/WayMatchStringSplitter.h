@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHSTRINGSPLITTER_H
 #define WAYMATCHSTRINGSPLITTER_H
 
-#include "WayMatchStringMerger.h"
+#include <hoot/core/algorithms/WayMatchStringMerger.h>
 
 namespace hoot
 {
@@ -41,19 +41,14 @@ public:
   /**
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
    * place.
+   * Throws NeedsReviewException
    */
   void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException);
-
-  std::set< std::pair<ElementId, ElementId> > getUnknown1Replacements()
-  { return _unknown1Replacements; }
+    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
 private:
 
   static QString _overlyAggressiveMergeReviewText;
-
-  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;

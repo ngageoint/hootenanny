@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONREVIEWREDUCER_H
 #define POIPOLYGONREVIEWREDUCER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -52,12 +54,15 @@ class PoiPolygonReviewReducer
 
 public:
 
-  //TODO: encapsulate all these params in a class...this is nasty
+  // encapsulate all these params in a class...this is nasty
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
-                          bool typeMatch, double matchDistanceThreshold, bool addressMatch);
+                          bool typeMatch, double matchDistanceThreshold, bool addressMatch,
+                          bool addressParsingEnabled);
+
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or
@@ -66,7 +71,7 @@ public:
    * @param poi the POI feature to be examined
    * @param poly the polygon feature to be examined
    * @return return true if the features trigger a review reduction rule; false otherwise
-   * @todo this desperately needs to be broken up into more modular pieces
+   * @note this needs to be broken up into more modular pieces
    */
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
 
@@ -94,6 +99,9 @@ private:
 
   bool _keepClosestMatchesOnly;
 
+  bool _addressParsingEnabled;
+  AddressParser _addressParser;
+
   bool _nonDistanceSimilaritiesPresent() const;
 
   /*
@@ -102,6 +110,8 @@ private:
    * is increased.
    */
   bool _poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi, ConstElementPtr poly);
+
+  bool _polyContainsPoiAsMember(ConstElementPtr poly, ConstElementPtr poi) const;
 };
 
 }

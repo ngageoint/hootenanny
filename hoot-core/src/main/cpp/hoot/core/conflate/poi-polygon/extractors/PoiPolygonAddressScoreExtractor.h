@@ -28,26 +28,26 @@
 #define POIPOLYGONADDRESSSCOREEXTRACTOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/extractors/FeatureExtractorBase.h>
-#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-
-// Qt
-#include <QMultiMap>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 namespace hoot
 {
 
-class PoiPolygonAddress;
+class Address;
 
 /**
  * Calculates the address similarity score of two features involved in POI/Polygon conflation.
- * Only exact string matches yield a positive score.  This can translate addresses, but doesn't
- * handle abbreviations.
+ * Only exact string matches yield a positive score.
  *
- * @todo libaddressinput and libpostal may be able to clean up logic in this class quite a bit
+ * Some effort was spent in validating addresses with libaddressinput
+ * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the
+ * features we are comparing are geographically close, don't need higher level address info
+ * (state, city, etc.), and we basically assume feature address are valid anyway...we're just trying
+ * to match them to each other.
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
@@ -72,58 +72,22 @@ public:
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;
 
-  /**
-   * Determines if a node has an address
-   *
-   * @param node the node to examine for an address
-   * @return true if the node has an address; false otherwise
-   */
-  static bool nodeHasAddress(const Node& node);
-
-  /**
-   * Determines if an element has an address
-   *
-   * @param element the element to examine for an address
-   * @param map map the element being examined belongs to
-   * @return true if the element has an address; false otherwise
-   */
-  static bool elementHasAddress(const ConstElementPtr& element, const OsmMap& map);
-
   virtual QString getDescription() const
   { return "Scores address similarity for POI/Polygon conflation"; }
 
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
-
-  static QString getAddressTagValue(const Tags& tags, const QString addressTagType);
+  void setAllowLenientHouseNumberMatching(bool allow)
+  { _addressParser.setAllowLenientHouseNumberMatching(allow); }
 
 private:
 
   friend class PoiPolygonAddressScoreExtractorTest;
 
-  //when enabled, will attempt to translate address tags to English
-  bool _translateTagValuesToEnglish;
-  // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
 
-  static QMultiMap<QString, QString> _addressTypeToTagKeys;
-
-  void _collectAddressesFromElement(const Element& element,
-                                    QList<PoiPolygonAddress>& addresses) const;
-  void _collectAddressesFromWayNodes(const Way& way, QList<PoiPolygonAddress>& addresses,
-                                     const OsmMap& map) const;
-  void _collectAddressesFromRelationMembers(const Relation& relation,
-                                            QList<PoiPolygonAddress>& addresses,
-                                            const OsmMap& map) const;
-  void _parseAddressesAsRange(const QString houseNum, const QString street,
-                              QList<PoiPolygonAddress>& addresses) const;
-  void _parseAddressesInAltFormat(const Tags& tags, QList<PoiPolygonAddress>& addresses) const;
-
-  void _translateAddressToEnglish(QString& address) const;
-
-  static void _readAddressTagKeys(const QString configFile);
+  AddressParser _addressParser;
 };
 
 }

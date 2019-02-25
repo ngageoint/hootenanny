@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RAILWAYCRITERION_H
 #define RAILWAYCRITERION_H
 
 // hoot
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -45,7 +45,7 @@ public:
 
   RailwayCriterion();
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RailwayCriterion()); }

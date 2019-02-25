@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
@@ -59,7 +59,7 @@ public:
   void runToyTest1()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);
@@ -88,7 +88,7 @@ public:
   void runToyTest2()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);

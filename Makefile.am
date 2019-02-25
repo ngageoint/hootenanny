@@ -71,14 +71,15 @@ help:
 	@echo "services-clean          - If configured '--with-services', then cleans just the web services binaries. This will not modify the DB."
 	@echo "services-clean-coverage - If configured '--with-services', then removes just the web services test code coverage report output."
 	@echo "services-coverage       - If configured '--with-services' and '--with-coverage', then creates just the web services coverage report."
-	@echo "services-docs           - If configure '--with-services', then builds just the web services documentation."
-	@echo "services-test           - If configure '--with-services', then runs the web services slow tests.  Should take five to ten minutes."
-	@echo "services-test-all       - If configure '--with-services', then runs the web services glacial tests.  Should take five to ten minutes."
+	@echo "services-docs           - If configured '--with-services', then builds just the web services documentation."
+	@echo "services-test           - If configured '--with-services', then runs the web services slow tests.  Should take five to ten minutes."
+	@echo "services-test-all       - If configured '--with-services', then runs the web services glacial tests.  Should take five to ten minutes."
 	@echo "test                    - Run slow tests.  Should take no more than five to ten minutes."
 	@echo "test-all                - Run all tests.  Could take more than ten minutes."
 	@echo "test-quick              - Run quick tests.  Should take less than five minutes."
 	@echo "ui-build                - Build the web UI js/css dist.  Must enable --with-services configuration options."
 	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
+	@echo "ui2x-test               - Run user interface tests on ui2x.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
 	@echo "ui2x-build              - Build the web UI 2.0 js/css dist.  Must enable --with-services configuration options."
@@ -109,6 +110,9 @@ ui-build:
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-test
+	
+ui2x-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-test
 
 ui-coverage:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui-coverage
@@ -148,7 +152,7 @@ install-other:
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
 	mkdir -p $(docdir)
-	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
+	cp LICENSE README.md docs/*.pdf $(docdir)
 	mkdir -p $(sysconfdir)/profile.d/
 	mkdir -p $(sysconfdir)/asciidoc/filters/
 	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/

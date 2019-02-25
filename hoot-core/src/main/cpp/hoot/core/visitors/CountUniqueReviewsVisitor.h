@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTUNIQUEREVIEWSVISITOR_H
 #define COUNTUNIQUEREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -43,8 +41,7 @@ class OsmMap;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 
 public:
@@ -53,22 +50,16 @@ public:
 
   CountUniqueReviewsVisitor() {}
 
-  virtual ~CountUniqueReviewsVisitor() {}
-
   double getStat() const { return _reviews.size(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 
 private:
 
-  const OsmMap* _map;
   std::set<ReviewMarker::ReviewUid> _reviews;
   ReviewMarker _reviewMarker;
-
 };
 
 }

@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementsVisitor.h"
 
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveElementsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 
 RemoveElementsVisitor::RemoveElementsVisitor():
 _count(0),
@@ -78,6 +78,15 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   LOG_VART(_recursive);
 }
 
+void RemoveElementsVisitor::setOsmMap(OsmMap* map)
+{
+  _map = map;
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(_criterion.get());
+  if (consumer != 0)
+    consumer->setOsmMap(map);
+}
+
+
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 {
   if (!_negateCriterion)
@@ -95,13 +104,11 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_criterion);
   ElementType type = e->getElementType();
   long id = e->getId();
-  LOG_VART(id);
+  //LOG_VART(e->getElementId());
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_criterion->isSatisfied(ee))
   {
-    LOG_TRACE("RemoveElementsVisitor criterion satisfied");
-    LOG_VART(_recursive);
     _count++;
     if (_recursive)
     {
@@ -115,7 +122,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 }
 
 void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
-                       const boost::shared_ptr<ElementCriterion>& pCrit)
+                                       const boost::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v(pCrit);
   pMap->visitWaysRw(v);

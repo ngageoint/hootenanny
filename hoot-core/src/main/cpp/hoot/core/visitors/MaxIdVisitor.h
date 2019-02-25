@@ -30,11 +30,10 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 // Standard
 #include <limits>
-
-#include "SingleStatistic.h"
 
 namespace hoot
 {
@@ -46,8 +45,6 @@ public:
   static std::string className() { return "hoot::MaxIdVisitor"; }
 
   MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
-
-  virtual ~MaxIdVisitor() {}
 
   long getMinId() const { return _maxId; }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineRemoveOp.h"
 
@@ -38,7 +38,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
 
@@ -53,6 +53,7 @@ BuildingOutlineRemoveOp::BuildingOutlineRemoveOp()
 
 void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
   _map = map;
 
   // go through all the relations
@@ -77,6 +78,7 @@ void BuildingOutlineRemoveOp::_removeOutline(const boost::shared_ptr<Relation> &
     {
       building->removeElement(entries[i].role, entries[i].getElementId());
       RecursiveElementRemover(entries[i].getElementId()).apply(_map);
+      _numAffected++;
     }
   }
 }

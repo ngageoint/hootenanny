@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "StringUtils.h"
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QLocale>
@@ -79,6 +80,18 @@ bool StringUtils::hasAlphabeticCharacter(const QString input)
   return false;
 }
 
+bool StringUtils::hasDigit(const QString input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    if (input.at(i).isDigit())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool StringUtils::isNumber(const QString input)
 {
   bool isNumber = false;
@@ -106,6 +119,24 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
   return jsonObj;
+}
+
+boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+  const QStringList stringList)
+{
+  boost::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  for (int i = 0; i < stringList.size(); i++)
+  {
+    boost::property_tree::ptree str;
+    str.put("", stringList.at(i).toStdString());
+    strArr->push_back(std::make_pair("", str));
+  }
+  return strArr;
+}
+
+QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
+{
+  return QString("%1").arg(number, padSize, 10, QChar('0'));
 }
 
 }

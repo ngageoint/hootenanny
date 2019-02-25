@@ -57,11 +57,6 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
-exportRenderDBScript=exportrenderdb.sh
-
-# Enable access to a single OSM API database configured by DatabaseConfig.sh.
-osmApiDbEnabled=true
-
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
 
@@ -114,7 +109,7 @@ advOptRefOverride=conf/services/conflationRefOps.json
 advOptHorizontalOverride=conf/services/conflationHorizontalOps.json
 
 # Advanced options horizontal override
-advOptAverageOverride=conf/services/conflationAverageOps.json
+advOptAttributeOverride=conf/services/conflationAttributeOps.json
 
 # Element merge Node Server port
 ElementMergeServerPort=8096

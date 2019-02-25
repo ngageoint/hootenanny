@@ -22,46 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONTAINSNODECRITERION_H
 #define CONTAINSNODECRITERION_H
 
-#include "ElementCriterion.h"
-
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that determines if an element contains the given nodeId
+ * A criterion that determines if an element contains the given node ID
  */
-class ContainsNodeCriterion : public ElementCriterion
+class ContainsNodeCriterion : public ElementCriterion, public Configurable
 {
-
 public:
 
-  ContainsNodeCriterion() {}
+  ContainsNodeCriterion();
 
   static std::string className() { return "hoot::ContainsNodeCriterion"; }
 
-  explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
-  {
-    // This space intentionally left blank
-  }
+  explicit ContainsNodeCriterion(long nodeId);
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ContainsNodeCriterion(_nodeId)); }
 
   virtual QString getDescription() const
   { return "Determines if an element contains the given node ID"; }
 
+  virtual void setConfiguration(const Settings& s);
+
 private:
 
   long _nodeId;
-
 };
 
 }

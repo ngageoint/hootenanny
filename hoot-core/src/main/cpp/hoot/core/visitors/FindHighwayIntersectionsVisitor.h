@@ -28,7 +28,7 @@
 #define FINDHIGHWAYINTERSECTIONSVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindHighwayIntersectionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class FindHighwayIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
@@ -53,7 +53,7 @@ public:
 
   std::vector<long>& getIntersections() { return _ids; }
 
-  virtual QString getDescription() const { return "Identifies intersections"; }
+  virtual QString getDescription() const { return "Identifies road intersections"; }
 
 private:
 

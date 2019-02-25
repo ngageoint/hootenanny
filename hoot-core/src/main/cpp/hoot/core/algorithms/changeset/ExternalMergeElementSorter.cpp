@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ExternalMergeElementSorter.h"
@@ -44,25 +44,11 @@ _maxElementsPerFile(ConfigOptions().getElementSorterElementBufferSize()),
 _retainTempFiles(false),
 _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
-  setTempFormat(ConfigOptions().getElementSorterExternalTempFormat());
 }
 
 ExternalMergeElementSorter::~ExternalMergeElementSorter()
 {
   close();
-}
-
-void ExternalMergeElementSorter::setTempFormat(QString format)
-{
-  _tempFormat = format.toLower();
-  if (!_tempFormat.endsWith("osm") && !_tempFormat.endsWith("pbf"))
-  {
-    throw IllegalArgumentException("Invalid external sort temporary format: " + format);
-  }
-  if (_tempFormat.toLower() == "pbf")
-  {
-    _tempFormat = "osm.pbf";
-  }
 }
 
 void ExternalMergeElementSorter::close()
@@ -97,7 +83,6 @@ ElementPtr ExternalMergeElementSorter::readNextElement()
 
 void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 {
-  LOG_VART(_tempFormat);
   LOG_VART(_maxElementsPerFile);
 
   if (_maxElementsPerFile < 1)
@@ -131,7 +116,7 @@ void ExternalMergeElementSorter::_initElementStream()
 
   boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(_sortFinalOutput->fileName()));
+      OsmMapReaderFactory::createReader(_sortFinalOutput->fileName()));
   sortedElementsReader->setUseDataSourceIds(true);
   sortedElementsReader->open(_sortFinalOutput->fileName());
   sortedElementsReader->initializePartial();
@@ -177,7 +162,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       boost::shared_ptr<QTemporaryFile> tempOutputFile(
         new QTemporaryFile(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
-          "." + _tempFormat));
+          ".osm"));
       tempOutputFile->setAutoRemove(!_retainTempFiles);
       if (!tempOutputFile->open())
       {
@@ -191,7 +176,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       boost::shared_ptr<PartialOsmMapWriter> writer =
         boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-          OsmMapWriterFactory::getInstance().createWriter(tempOutputFile->fileName()));
+          OsmMapWriterFactory::createWriter(tempOutputFile->fileName()));
       writer->open(tempOutputFile->fileName());
       writer->initializePartial();
       for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin();
@@ -331,10 +316,9 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
 {
   LOG_DEBUG("Initializing final output...");
 
-  _sortFinalOutput.reset(
-    new QTemporaryFile(
-      ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + "." +
-      _tempFormat));
+  const QString tempFile =
+    ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME + ".osm";
+  _sortFinalOutput.reset(new QTemporaryFile(tempFile));
   _sortFinalOutput->setAutoRemove(!_retainTempFiles);
   if (!_sortFinalOutput->open())
   {
@@ -347,7 +331,7 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
   }
   boost::shared_ptr<PartialOsmMapWriter> writer =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::getInstance().createWriter(_sortFinalOutput->fileName()));
+      OsmMapWriterFactory::createWriter(_sortFinalOutput->fileName()));
   writer->open(_sortFinalOutput->fileName());
   writer->initializePartial();
 
@@ -367,7 +351,7 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
     LOG_VART(fileName);
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(fileName));
+        OsmMapReaderFactory::createReader(fileName));
 
     //By default, OsmXmlReader will not add child references (node ref, elements members) to parent
     //elements if those elements are not present in the data.  For external sorting, where partial

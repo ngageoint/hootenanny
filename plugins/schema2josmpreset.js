@@ -86,12 +86,12 @@ Object.keys(objs).forEach(s => {
             //Build de-duped map of unique enumerations (list entry),
             //combo and text elements keyed by hash
             i.columns.forEach(col => {
-                let colHash = crypto.createHash('md5').update(JSON.stringify(col)).digest('hex');
+                let colHash = 'hash' + crypto.createHash('md5').update(JSON.stringify(col)).digest('hex').replace(/[0-9]/g, '');
                 items[i.desc].hashes.push(colHash);
 
                 if (col.type === 'enumeration') {
 
-                    let key = crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex');
+                    let key = 'hash' + crypto.createHash('md5').update(JSON.stringify(col.enumerations)).digest('hex').replace(/[0-9]/g, '');
 
                     if (!listEntries[key])
                         listEntries[key] = col.enumerations;

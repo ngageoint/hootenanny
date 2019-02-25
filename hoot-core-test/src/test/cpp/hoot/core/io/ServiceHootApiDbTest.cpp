@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -37,7 +37,7 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 //  Qt
 #include <QTextCodec>
@@ -225,7 +225,7 @@ public:
     const long relationId = ids->at(4);
 
     vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
-    HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
+    HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way(1), Entry: role: noderole, eid: Node(1)}",
                     members);
   }
 
@@ -281,7 +281,7 @@ public:
     {
       HOOT_STR_EQUALS(relationId, relationResultIterator->value(0).toLongLong());
       vector<RelationData::Entry> members = database.selectMembersForRelation(relationId);
-      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way:1, Entry: role: noderole, eid: Node:1}",
+      HOOT_STR_EQUALS("[2]{Entry: role: wayrole, eid: Way(1), Entry: role: noderole, eid: Node(1)}",
                       members);
       HOOT_STR_EQUALS("type = multistuff\n",
                       ApiDb::unescapeTags(relationResultIterator->value(5)));
@@ -443,7 +443,7 @@ public:
     QList<long> ids;
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
 
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
 
     database.setMapId(mapId);
@@ -485,7 +485,7 @@ public:
 
     QList<long> ids;
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
     database.setMapId(mapId);
     database.beginChangeset();
@@ -540,7 +540,7 @@ public:
     QList<long> ids;
     database.transaction();
     database.setUserId(database.getOrCreateUser(userEmail(), userName()));
-    mapId = database.insertMap(testName, true);
+    mapId = database.insertMap(testName);
     ids.append(mapId);
     database.setMapId(mapId);
     database.beginChangeset();

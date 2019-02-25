@@ -133,6 +133,30 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"remove_duplicate_relation_members_visitor",
+                "elem_type":"checkbox",
+                "description":"Remove all duplicate relation members in a relation.",
+                "name":"Remove Duplicate Relation Members",
+                "hoot_val":"hoot::RemoveDuplicateRelationMembersVisitor",
+                "defaultvalue":"true"
+            },
+            {
+                "id":"relation_circular_ref_remover",
+                "elem_type":"checkbox",
+                "description":"Remove all circular references within relations.",
+                "name":"Remove Relation Circular References",
+                "hoot_val":"hoot::RelationCircularRefRemover",
+                "defaultvalue":"true"
+            },
+            {
+                "id":"remove_empty_relations",
+                "elem_type":"checkbox",
+                "description":"Remove all relations with no members.",
+                "name":"Remove Empty Relations",
+                "hoot_val":"hoot::RemoveEmptyRelationsOp",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"remove_duplicate_area_visitor",
                 "elem_type":"checkbox",
                 "description":"Remove any area elements that are essentially the same.",
@@ -228,7 +252,17 @@
                 "name":"Minimum Ties Required",
                 "defaultvalue":"4",
                 "hoot_key":"rubber.sheet.minimum.ties"
-            } 
+            },
+            {
+                "id":"rubber_sheet_max_interpolator_iterations",
+                "minvalue":"1",
+                "elem_type":"int",
+                "description":"The maximum number of interpolation optimization iterations, per optimization loop, an interpolator is allowed to run during rubber sheeting.  Use -1 for no iteration limit.  Not supported by all interpolators.  Can prevent runaway optimizations with some interpolators.  Lower values may result in the selection of a suboptimal interpolator.",
+                "maxvalue":"",
+                "name":"Max Interpolator Iterations",
+                "defaultvalue":"200",
+                "hoot_key":"rubber.sheet.max.interpolator.iterations"
+            }
         ]
     },
     {
@@ -522,11 +556,19 @@
                                 "description":"List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                                 "name":"Merger Creator",
                                 "required":"true",
-                                "defaultvalue":"hoot::HighwaySnapMergerCreator",
+                                "defaultvalue":"hoot::HighwayMergerCreator",
                                 "override":{
-                                    "defaultvalue":"hoot::HighwaySnapMergerCreator"
+                                    "defaultvalue":"hoot::HighwayMergerCreator"
                                 },
                                 "hoot_key":"merger.creators"
+                            },
+                            {
+            	              "id":"highway_merge_tags_only",
+                              "elem_type":"bool",
+                              "defaultvalue":"false",
+                              "description":"If true, road conflation will merge tags only and not geometries.",
+                              "name":"Merge Road Tags Only",
+                              "hoot_key":"highway.merge.tags.only"
                             },
                             {
                                 "id":"highway_matcher_heading_delta",
@@ -647,6 +689,30 @@
                 "hoot_key":"merger.creators",
                 "required":"true"
             }
+        ]
+    },
+    {
+        "id":"hoot_attribute_options",
+        "elem_type":"group",
+        "description":"Hootenanny Attribute Conflation options",
+        "name":"Attribute Conflation Options",
+        "members":[
+            {
+                "id":"hoot_enable_attribute_options",
+                "elem_type":"checkbox",
+                "description":"Enable area options",
+                "name":"Enabled",
+                "defaultvalue":"true",
+                "onchange":"true"
+            },
+            {
+        	"id":"attribute_allow_bridge_ref_geometry_change",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
+        	"name":"Allow Reference Layer Geometry Changes For Bridges",
+        	"hoot_key":"attribute.conflation.allow.ref.geometry.changes.for.bridges"
+    	    }
         ]
     },
     {
@@ -820,12 +886,29 @@
                 "hoot_key":"merger.creators"
             },
             {
+        	"id":"poipolygon_address_additional_tag_keys",
+        	"elem_type":"string",
+        	"description":"By default, POI/Polygon conflation examines standard OSM tags for address comparisons (see the addressTagKeys file).  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"name":"Address Additional Tag Keys",
+        	"defaultvalue":"",
+        	"hoot_key":"address.additional.tag.keys",
+        	"onchange":"true"
+    	    },
+            {
         	"id":"poipolygon_address_match_enabled",
         	"elem_type":"bool",
         	"defaultvalue":"true",
         	"description":"If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
         	"name":"Address Match Enabled",
         	"hoot_key":"poi.polygon.address.match.enabled"
+    	    },
+            {
+        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
+		"name":"Merge Many POI to Single Polygon Matches",
+        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
     	    },
             {
         	"id":"poipolygon_disable_same_source_conflation",
@@ -872,14 +955,6 @@
         	"hoot_key":"poi.polygon.match.evidence.threshold"
     	    },
             {
-        	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",
-        	"elem_type":"bool",
-        	"defaultvalue":"false",
-        	"description":"If true, instances where multiple POIs were matched to a single polygon will result in all of those POIs being automatically merged into the polygon.  If false, then each matched POI will generate a review against the polygon instead.",
-		"name":"Merge Many POI to Single Polygon Matches",
-        	"hoot_key":"poi.polygon.auto.merge.many.poi.to.one.poly.matches"
-    	    },
-            {
             	"id":"poipolygon_name_score_threshold",
                 "elem_type":"double",
                 "description":"The minimum similarity the name scores of two features can have and be considered a name match, with 0.0 being the least similar and 1.0 being the most similar (-1.0 if there are no names present (null).",
@@ -889,6 +964,40 @@
                 "maxvalue":"1.0",
                 "hoot_key":"poi.polygon.name.score.threshold"
             },
+            {
+        	"id":"poipolygon_phone_number_additional_tag_keys",
+        	"elem_type":"string",
+        	"description":"By default, POI/Polygon conflation examines all tags with keys containing the text 'phone' for phone number comparisons.  You can expand the tag keys searched by populating this list. From the command line, separate list items with a semicolon and surround the entire list in double quotes.",
+        	"name":"Phone Number Additional Tag Keys",
+        	"defaultvalue":"",
+        	"hoot_key":"phone.number.additional.tag.keys",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_match_enabled",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, POI/Polygon conflation will compare phone number as one of the criteria for matching features.  If the data being conflated is known to have poor telephone number data, disabling this option may speed up conflation runtime performance.",
+        	"name":"Phone Number Match Enabled",
+        	"hoot_key":"poi.polygon.phone.number.match.enabled"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_region_code",
+        	"elem_type":"string",
+        	"description":"Optional geographical region code used when comparing phone numbers.   See: http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html  Specifying a region code, if known for the input data, may increase phone number matching accuracy but may also have runtime performance implications.",
+        	"name":"Phone Number Region Code",
+        	"defaultvalue":"",
+        	"hoot_key":"phone.number.region.code",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"poipolygon_phone_number_search_in_text",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If true, POI/Polygon conflation will attempt to search for phone numbers within tag value text that may contain things other than phone numbers.  If false, the conflation will assume the tag value is a phone number and will not search within it.  phone.number.region.code must be set to a valid region code when enabling this option.  Enabling this option may have runtime performance implications.",
+        	"name":"Phone Number Search In Text",
+        	"hoot_key":"phone.number.search.in.text"
+    	    },
             {
         	"id":"poipolygon_promote_points_with_addresses_to_pois",
         	"elem_type":"bool",

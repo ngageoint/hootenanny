@@ -27,7 +27,7 @@
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
 
-#include "OsmMapOperation.h"
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
@@ -45,7 +45,8 @@ public:
 
   virtual ~ConstOsmMapOperation() {}
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) { apply((const boost::shared_ptr<OsmMap>&)map); }
+  virtual void apply(boost::shared_ptr<OsmMap>& map)
+  { apply((const boost::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may

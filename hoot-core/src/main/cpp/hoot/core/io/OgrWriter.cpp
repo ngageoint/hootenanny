@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrWriter.h"
 
@@ -35,18 +35,21 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/elements/RelationData.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationData.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
@@ -58,16 +61,11 @@
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/ElementProvider.h>
-
-#include "OgrOptions.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -220,8 +218,8 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f
 
   //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
   poFeature->SetFID(-1);
-  errCode = layer->CreateFeature(poFeature);
 
+  errCode = layer->CreateFeature(poFeature);
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
@@ -296,7 +294,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   }
 
   QString layerName = _prependLayerName + layer->getName();
-  poLayer = _getLayerByName(layerName);
+  poLayer = _ds->GetLayerByName(layerName.toStdString().c_str());
 
   // We only want to add to a layer IFF the config option "ogr.append.data" set
   if (poLayer != NULL && _appendData)
@@ -306,8 +304,9 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-
     boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+
+
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
@@ -329,7 +328,6 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   else
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
-    // Layer does not exist
     poLayer = _ds->CreateLayer(layerName.toAscii(),
                   MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
@@ -367,29 +365,6 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
       }
     }
   } // End layer does not exist
-}
-
-// If we upgrade to GDAL 2.3, we could lookup layer by name, instead of
-// iterating through all of them. Of course, layerCount should always be pretty
-// small... like < 100?
-OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
-{
-  // Check if the layer exists in the output.
-  int layerCount = _ds->GetLayerCount();
-
-  for (int i = 0; i < layerCount; i++)
-  {
-    OGRLayer* layer = _ds->GetLayer(i+1);
-    if (layer != NULL)
-    {
-      QString tmpLayerName = QString(layer->GetName());
-      if (tmpLayerName == layerName)
-      {
-        return layer;
-      }
-    }
-  }
-  return NULL;
 }
 
 OGRLayer* OgrWriter::_getLayer(const QString& layerName)
@@ -448,7 +423,7 @@ void OgrWriter::createAllLayers()
 {
   if (_createAllLayers)
   {
-    LOG_INFO("Creating layers...");
+    LOG_INFO("Creating all layers...");
     for (size_t i = 0; i < _schema->getLayerCount(); ++i)
     {
       _createLayer(_schema->getLayer(i));
@@ -496,7 +471,6 @@ void OgrWriter::setConfiguration(const Settings& conf)
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();
-
   QString strictStr = configOptions.getOgrStrictChecking();
   if (strictStr == "on")
   {
@@ -677,6 +651,7 @@ void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)
   {
+    LOG_TRACE("Writing feature " + QString::number(i) + "  to " + QString(tf[i].tableName));
     OGRLayer* layer = _getLayer(tf[i].tableName);
     if (layer != 0)
     {
@@ -695,7 +670,6 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
 
 void OgrWriter::finalizePartial()
 {
-  /// @todo implement
 }
 
 void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)

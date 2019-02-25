@@ -28,7 +28,6 @@
 #define COUNTMANUALMATCHESVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
@@ -40,8 +39,7 @@ class OsmMap;
 /**
  * Counts matches made with ref tags by a manual matcher
  */
-class CountManualMatchesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class CountManualMatchesVisitor : public ConstElementVisitor, public SingleStatistic
 {
 
 public:
@@ -54,17 +52,13 @@ public:
 
   double getStat() const { return _numManualMatches; }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
-
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Counts the number of manual matches"; }
+  virtual QString getDescription() const { return "Counts manual matches"; }
 
 private:
 
-  const OsmMap* _map;
   long _numManualMatches;
-
 };
 
 }

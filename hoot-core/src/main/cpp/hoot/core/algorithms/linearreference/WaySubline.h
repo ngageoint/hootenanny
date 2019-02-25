@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSUBLINE_H
 #define WAYSUBLINE_H
 
-#include "WayLocation.h"
-
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/GeometryConverter.h>
 
 namespace hoot
@@ -46,14 +45,11 @@ class ConstElementVisitor;
 class WaySubline
 {
 public:
+
   WaySubline();
-
   WaySubline(const WayLocation& start, const WayLocation& end);
-
   WaySubline(const WaySubline& from);
-
   WaySubline(const WaySubline& from, const ConstOsmMapPtr &newMap);
-
   WaySubline& operator=(const WaySubline& from);
 
   Meters calculateLength() const;
@@ -147,7 +143,6 @@ private:
 };
 
 bool operator==(const WaySubline& a, const WaySubline& b);
-
 
 }
 

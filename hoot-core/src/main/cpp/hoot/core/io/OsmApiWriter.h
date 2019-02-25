@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -123,6 +123,17 @@ public:
 
 private:
   /**
+   * @brief The OsmApiFailureInfo struct
+   */
+  struct OsmApiFailureInfo
+  {
+    OsmApiFailureInfo() : success(false), status(0), response("") { }
+    bool success;
+    int status;
+    QString response;
+  };
+  typedef boost::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
+  /**
    * @brief _createChangeset Request a changeset ID from the API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
    * @param request - Network request object initialized with OSM API URL
@@ -143,9 +154,9 @@ private:
    * @param request - Network request object initialized with OSM API URL
    * @param id - ID of the changeset to upload the data to
    * @param changeset - Atomic changeset to upload
-   * @return true if the changeset was uploaded correctly
+   * @return Failure info status, success, HTTP status and response indicating if the changeset was uploaded correctly
    */
-  bool _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
+  OsmApiFailureInfoPtr _uploadChangeset(HootNetworkRequestPtr request, long id, const QString& changeset);
   /**
    * @brief _parseCapabilities Parse the OSM API capabilities
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
@@ -195,6 +206,13 @@ private:
    *  if necessary
    */
   void _changesetThreadFunc();
+  /**
+   * @brief createNetworkRequest Create a network request object
+   * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
+   *    if present, to be passed to the network request object
+   * @return smart pointer to network request object
+   */
+  HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false);
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
   /** Queue for producer/consumer work model */
@@ -223,6 +241,14 @@ private:
   QList<SingleStat> _stats;
   /** Progress flag */
   bool _showProgress;
+  /** OAuth 1.0 consumer key registered with OpenstreetMap */
+  QString _consumerKey;
+  /** OAuth 1.0 consumer secred registered with OpenstreetMap */
+  QString _consumerSecret;
+  /** OAuth 1.0 access token granted through OAuth authorization */
+  QString _accessToken;
+  /** OAuth 1.0 secret token granted through OAuth authorization */
+  QString _secretToken;
   /** Default constructor for testing purposes only */
   OsmApiWriter() {}
   /** For white box testing */

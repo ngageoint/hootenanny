@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/SearchRadiusCalculator.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit
@@ -56,7 +56,7 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
-  //TODO: temp disabling this
+  // TODO: temp disabling this
   //CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);
@@ -96,7 +96,7 @@ public:
   void runBadPreOpTest()
   {
     Settings testSettings = conf();
-    testSettings.set("unify.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
+    testSettings.set("conflate.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
     SearchRadiusCalculator searchRadiusCalculator;
 
     QString exceptionMsg("");

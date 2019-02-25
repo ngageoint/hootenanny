@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -74,7 +74,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     // This output includes two reviews instead of the expected 1 review. See ticket #7043 for
-    // an idea to clean this up.
+    // an idea to clean this up (need to port issue to github).
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
     HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm",

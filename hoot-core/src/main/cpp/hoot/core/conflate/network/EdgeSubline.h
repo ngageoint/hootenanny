@@ -27,7 +27,7 @@
 #ifndef EDGESUBLINE_H
 #define EDGESUBLINE_H
 
-#include "EdgeLocation.h"
+#include <hoot/core/conflate/network/EdgeLocation.h>
 
 namespace hoot
 {

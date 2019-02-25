@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -68,7 +68,7 @@ public:
     visitor.setNegateCriterion(false);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runRemoveTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -87,7 +87,7 @@ public:
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runFilterTest.osm");
 
     HOOT_FILE_EQUALS(
@@ -106,7 +106,7 @@ public:
     visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/visitors/RemoveTagsVisitorTest-runNegatedFilterTest.osm");
 
     HOOT_FILE_EQUALS(

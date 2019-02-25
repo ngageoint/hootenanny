@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SystemInfo.h"
@@ -43,7 +43,7 @@
 #include <string>
 #include <sstream>
 
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
 
 namespace Tgs
 {
@@ -145,13 +145,8 @@ namespace Tgs
     long rss;
     getMemoryUsage(vm, rss);
 
-    ss << "Memory usage, vm: " << humanReadable(vm) << " rss: " << humanReadable(rss);
+    ss << "Memory usage, vm:\t" << humanReadable(vm) << "\trss:\t" << humanReadable(rss);
 
     return ss.str();
-  }
-
-  void SystemInfo::printMemoryUsage()
-  {
-    std::cout << getMemoryUsageString() << std::endl;
   }
 }

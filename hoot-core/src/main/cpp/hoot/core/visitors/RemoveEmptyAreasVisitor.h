@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEEMPTYAREASVISITOR_H
 #define REMOVEEMPTYAREASVISITOR_H
@@ -30,7 +30,8 @@
 // Standard
 #include <memory>
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ class ElementConverter;
 /**
  * Removes all "area" elements that have an area of zero.
  */
-class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
+class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -50,6 +51,11 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual void visit(const boost::shared_ptr<Element>& e);
+
+  virtual QString getInitStatusMessage() const { return "Removing empty areas..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " empty areas"; }
 
   virtual QString getDescription() const { return "Removes empty areas"; }
 

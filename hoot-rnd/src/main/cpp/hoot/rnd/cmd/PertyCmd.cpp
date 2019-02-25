@@ -31,7 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/rnd/perty/PertyMatchScorer.h>
 #include <hoot/rnd/scoring/MapMatchScoringUtils.h>
@@ -53,7 +53,9 @@ public:
 
   virtual QString getName() const { return "perty"; }
 
-  virtual QString getDescription() const { return "Perturbs map data using PERTY"; }
+  virtual QString getDescription() const { return "Perturbs a map using PERTY"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList args)
   {

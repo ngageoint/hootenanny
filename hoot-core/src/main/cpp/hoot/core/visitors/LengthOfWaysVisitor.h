@@ -22,17 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LENGTHOFWAYSVISITOR_H
 #define LENGTHOFWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/OsmMap.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -43,8 +40,7 @@ class OsmMap;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first projected into meters.
  */
-class LengthOfWaysVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
-  public SingleStatistic
+class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
 
@@ -52,23 +48,18 @@ public:
 
   LengthOfWaysVisitor() : _total(0) {}
 
-  virtual ~LengthOfWaysVisitor() {}
-
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 
   Meters getLengthOfWays() const { return _total; }
 
   double getStat() const { return getLengthOfWays(); }
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  virtual void visit(const ConstElementPtr& e) override;
 
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const { return "Sums the length of all the ways"; }
+  virtual QString getDescription() const { return "Calculates the length of all ways"; }
 
 private:
 
-  const OsmMap* _map;
   Meters _total;
 };
 

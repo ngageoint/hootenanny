@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_ELEMENT_H
@@ -65,15 +65,37 @@ public:
    */
   XmlElement(const XmlObject& object, ElementIdToIdMap* idMap);
   /**
+   * @brief XmlElement copy constructor
+   * @param element XmlElement object to copy
+   */
+  XmlElement(const XmlElement& element);
+  /**
    * @brief addTag  Add a tag to the element
    * @param tag XML tag with key and value attributes
    */
   void addTag(const XmlObject& tag);
   /**
+   * @brief getTagK/V
+   * @param index
+   * @return
+   */
+  QString getTagKey(int index);
+  QString getTagValue(int index);
+  /**
+   * @brief getTagCount
+   * @return Number of tags in this element
+   */
+  int getTagCount() { return _tags.size(); }
+  /**
    * @brief id Get the element ID
    * @return Element ID
    */
   long id() { return _id; }
+  /**
+   * @brief changeId Change the ID of the element
+   * @param id ID to change to
+   */
+  void changeId(long id) { _id = id; }
   /**
    * @brief getType Get the element type
    * @return Element type (node/way/relation)
@@ -153,6 +175,11 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlNode(const XmlObject& node, ElementIdToIdMap* idMap);
+  /**
+   * @brief XmlNode copy constructor
+   * @param node XmlNode object to copy
+   */
+  XmlNode(const XmlNode& node);
   /** Virtual destructor */
   virtual ~XmlNode() { }
   /**
@@ -162,6 +189,8 @@ public:
    */
   virtual QString toString(long changesetId) const;
 };
+/** Handy typedef for node shared pointer */
+typedef boost::shared_ptr<XmlNode> XmlNodePtr;
 
 /** Simplified changeset way abstraction */
 class XmlWay : public XmlElement
@@ -173,6 +202,11 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlWay(const XmlObject& way, ElementIdToIdMap* idMap);
+  /**
+   * @brief XmlWay copy constructor
+   * @param way XmlWay object to copy
+   */
+  XmlWay(const XmlWay& way);
   /** Virtual destructor */
   virtual ~XmlWay() { }
   /**
@@ -186,6 +220,12 @@ public:
    * @return Node ID
    */
   long getNode(int index) { return _nodes[index]; }
+  /**
+   * @brief removeNodes
+   * @param position
+   * @param count
+   */
+  void removeNodes(int position, int count = -1);
   /**
    * @brief getNodeCount Get the number of nodes in the way
    * @return number of nodes
@@ -202,6 +242,8 @@ private:
   /** Vector of node ID in the way */
   QVector<long> _nodes;
 };
+/** Handy typedef for way shared pointer */
+typedef boost::shared_ptr<XmlWay> XmlWayPtr;
 
 /** Simplified changeset relation member abstraction */
 class XmlMember
@@ -262,6 +304,11 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   XmlRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
+  /**
+   * @brief XmlRelation copy constructor
+   * @param relation XmlRelation object to copy
+   */
+  XmlRelation(const XmlRelation& relation);
   /** Virtual destructor */
   virtual ~XmlRelation() { }
   /**
@@ -281,6 +328,13 @@ public:
    */
   int getMemberCount() { return _members.size(); }
   /**
+   * @brief hasMember Search the relation for a specific element type with the given ID
+   * @param type Element type to search for (node/way/relation)
+   * @param id ID of the element to search for
+   * @return True if the given element is a member of this relation
+   */
+  bool hasMember(ElementType::Type type, long id);
+  /**
    * @brief toString Get the XML string equivalent for the relation
    * @param changesetId ID of the changeset to insert into the relation
    * @return XML string
@@ -291,6 +345,8 @@ private:
   /** List of relation members */
   QList<XmlMember> _members;
 };
+/** Handy typedef for relation shared pointer */
+typedef boost::shared_ptr<XmlRelation> XmlRelationPtr;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
 class osm_id_sort

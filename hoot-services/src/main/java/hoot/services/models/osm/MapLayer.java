@@ -22,12 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -39,6 +42,10 @@ public class MapLayer {
     private Timestamp date;
     private String lastAccessed;
     private boolean canExportToOsmApiDb;
+    private Boolean isPublic;
+    private long userId;
+
+    @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public MapLayer() {}
@@ -57,6 +64,14 @@ public class MapLayer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getDate() {
@@ -81,5 +96,12 @@ public class MapLayer {
 
     public void setLastAccessed(String lastAccessed) {
         this.lastAccessed = lastAccessed;
+    }
+    @JsonProperty("public")
+    public Boolean getPublicCol() {
+        return this.isPublic;
+    }
+    public void setPublicCol(Boolean publicCol) {
+        this.isPublic = publicCol;
     }
 }

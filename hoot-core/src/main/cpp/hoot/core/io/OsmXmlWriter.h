@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -36,8 +36,8 @@
 // Qt
 #include <QFile>
 #include <QHash>
+#include <QString>
 #include <QXmlDefaultHandler>
-class QString;
 class QXmlStreamWriter;
 
 // Standard
@@ -105,11 +105,11 @@ public:
    */
   void write(ConstOsmMapPtr map, const QString& path);
 
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(ConstOsmMapPtr map) override;
 
-  virtual void writePartial(const ConstNodePtr& node);
-  virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void writePartial(const ConstNodePtr& node) override;
+  virtual void writePartial(const ConstWayPtr& way) override;
+  virtual void writePartial(const ConstRelationPtr& relation) override;
   virtual void finalizePartial();
 
   bool getFormatXml() const { return _formatXml; }

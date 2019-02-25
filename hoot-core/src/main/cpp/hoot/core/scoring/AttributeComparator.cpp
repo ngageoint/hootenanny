@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AttributeComparator.h"
@@ -31,7 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -47,7 +47,8 @@ using namespace Tgs;
 namespace hoot
 {
 
-AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
+AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1,
+                                         boost::shared_ptr<OsmMap> map2) :
   BaseComparator(map1, map2),
   _iterations(10),
   _median(0.0),
@@ -146,20 +147,10 @@ double AttributeComparator::compareMaps()
       _ci = zalpha * _s / sqrt(scores.size());
     }
 
-
-    if (Log::getInstance().isInfoEnabled())
-    {
-      cout << i << " / " << _iterations << " mean: " << _mean << "   \r";
-      cout.flush();
-    }
+    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
   }
 
-  //cout << "Score count: " << scores.size() << endl;
-
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << "                                   \r";
-  }
+  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
 
   OsmSchema::getInstance().setIsACost(oldIsACost);
 

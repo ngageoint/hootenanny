@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef AREACRITERION_H
 #define AREACRITERION_H
 
 // hoot
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -44,7 +44,9 @@ public:
 
   AreaCriterion();
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
 

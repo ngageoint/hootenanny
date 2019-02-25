@@ -32,12 +32,12 @@ using namespace boost;
 // Hoot
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
@@ -227,7 +227,11 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      _writeTag(it.key(), it.value(), firstTag);
+      QString key = it.key();
+      QString value = it.value();
+      if (key == "uuid")
+        value = value.replace("{", "").replace("}", "");
+      _writeTag(key, value, firstTag);
     }
   }
 

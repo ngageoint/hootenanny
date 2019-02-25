@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 #define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
-#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
-#include <hoot/core/algorithms/StringDistance.h>
+#include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/core/algorithms/string/StringDistance.h>
 
 namespace hoot
 {
@@ -48,18 +48,19 @@ public:
 
   ToEnglishTranslationComparisonVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const
-  { return "Scores selected tag value English translations against known translated tags"; }
+  virtual QString getDescription() const override
+  { return "Translates selected tags to English and scores them against known translations"; }
 
 private:
 
   //scores the similarity of the pre-translated and translated texts
   StringDistancePtr _translationScorer;
 
+  QStringList _tagKeysAsList;
   QStringList _preTranslatedTagKeys;
   QString _preTranslatedVal;
 };

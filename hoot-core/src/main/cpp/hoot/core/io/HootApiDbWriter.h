@@ -22,16 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
 
-#include "PartialOsmMapWriter.h"
-#include "HootApiDb.h"
-#include "OsmChangeWriter.h"
-
 // hoot
+#include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
 
 // Tgs
@@ -82,6 +81,8 @@ public:
 
   void setUserEmail(QString email) { _userEmail = email; }
 
+  void setJobId(const QString id) { _jobId = id; }
+
   virtual void writePartial(const ConstNodePtr& n);
 
   virtual void writePartial(const ConstWayPtr& w);
@@ -99,6 +100,27 @@ public:
   virtual QString supportedFormats() { return "hootapidb://"; }
 
 protected:
+
+  typedef Tgs::BigMap<long, long> IdRemap;
+  IdRemap _nodeRemap;
+  IdRemap _relationRemap;
+  IdRemap _wayRemap;
+
+  std::set<long> _sourceNodeIds;
+  std::set<long> _sourceWayIds;
+  std::set<long> _sourceRelationIds;
+
+  QString _outputMappingFile;
+
+  HootApiDb _hootdb;
+
+  unsigned long _nodesWritten;
+  unsigned long _waysWritten;
+  unsigned long _relationsWritten;
+
+  bool _remapIds;
+
+  bool _includeDebug;
 
   void _createElement(ConstElementPtr element);
   void _modifyElement(ConstElementPtr element);
@@ -123,27 +145,6 @@ protected:
    */
   void _countChange();
 
-  typedef Tgs::BigMap<long, long> IdRemap;
-  IdRemap _nodeRemap;
-  IdRemap _relationRemap;
-  IdRemap _wayRemap;
-
-  std::set<long> _sourceNodeIds;
-  std::set<long> _sourceWayIds;
-  std::set<long> _sourceRelationIds;
-
-  QString _outputMappingFile;
-
-  HootApiDb _hootdb;
-
-  unsigned long _nodesWritten;
-  unsigned long _waysWritten;
-  unsigned long _relationsWritten;
-
-  bool _remapIds;
-
-  bool _includeDebug;
-
 private:
 
   bool _createUserIfNotFound;
@@ -152,19 +153,19 @@ private:
   bool _includeIds;
   bool _textStatus;
   bool _includeCircularError;
+  QString _jobId;
 
   bool _open;
 
   bool _copyBulkInsertActivated;
 
-  std::set<long> _openDb(QString& urlStr);
-
-  void _overwriteMaps(const QString& mapName, const std::set<long>& mapIds);
-
   /**
    * Close the current changeset and start a new one.
    */
   void _startNewChangeSet();
+
+  long _openDb(const QString urlStr/*, const bool forDelete = false*/);
+  QString _getMapNameFromUrl(const QString urlStr) const;
 };
 
 }

@@ -30,7 +30,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -157,12 +157,12 @@ private:
   // The temp ways that we add
   std::vector<ConstWayPtr> _tempWays;
 
-}; // class Roundabout
+};
 
 // For convenience
 typedef boost::shared_ptr<Roundabout> RoundaboutPtr;
 typedef boost::shared_ptr<const Roundabout> ConstRoundaboutPtr;
 
-} // namespace hoot
+}
 
 #endif //ROUNDABOUT_H

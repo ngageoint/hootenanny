@@ -54,21 +54,68 @@ if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
     sudo yum install -y yum-plugin-versionlock
 else
-    # Remove any NodeJS version locks to allow upgrading to $NODE_VERSION.
-    sudo yum versionlock delete nodejs nodejs-devel
+    # Remove any version locks to allow upgrading when versions have changed.
+    sudo yum versionlock delete \
+         geos \
+         geos-devel \
+         glpk \
+         glpk-devel \
+         hoot-gdal \
+         hoot-gdal-devel \
+         hoot-gdal-python \
+         liboauthcpp \
+         liboauthcpp-devel \
+         libphonenumber \
+         libphonenumber-devel \
+         nodejs \
+         nodejs-devel \
+         stxxl \
+         stxxl-devel
+
 fi
 
-echo "### Installing NodeJS ${NODE_VERSION}"
-sudo yum install -y nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+echo "### Installing libraries with locked versions"
+sudo yum install -y \
+     geos-$GEOS_VERSION \
+     geos-devel-$GEOS_VERSION \
+     glpk-$GLPK_VERSION \
+     glpk-devel-$GLPK_VERSION \
+     hoot-gdal-$GDAL_VERSION \
+     hoot-gdal-devel-$GDAL_VERSION \
+     hoot-gdal-python-$GDAL_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     liboauthcpp-$LIBOAUTHCPP_VERSION \
+     liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     nodejs-$NODE_VERSION \
+     nodejs-devel-$NODE_VERSION \
+     stxxl-$STXXL_VERSION \
+     stxxl-devel-$STXXL_VERSION
 
-echo "### Locking version of NodeJS"
-sudo yum versionlock add nodejs-$NODE_VERSION nodejs-devel-$NODE_VERSION
+echo "### Locking versions of libraries"
+sudo yum versionlock add \
+     geos-$GEOS_VERSION \
+     geos-devel-$GEOS_VERSION \
+     glpk-$GLPK_VERSION \
+     glpk-devel-$GLPK_VERSION \
+     hoot-gdal-$GDAL_VERSION \
+     hoot-gdal-devel-$GDAL_VERSION \
+     hoot-gdal-python-$GDAL_VERSION \
+     libphonenumber-$LIBPHONENUMBER_VERSION \
+     libphonenumber-devel-$LIBPHONENUMBER_VERSION \
+     liboauthcpp-$LIBOAUTHCPP_VERSION \
+     liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
+     nodejs-$NODE_VERSION \
+     nodejs-devel-$NODE_VERSION \
+     stxxl-$STXXL_VERSION \
+     stxxl-devel-$STXXL_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
     asciidoc \
     autoconf \
+    autoconf-archive \
     automake \
     bc \
     boost-devel \
@@ -81,16 +128,9 @@ sudo yum -y install \
     gcc \
     gcc-c++ \
     gdb \
-    geos \
-    geos-devel \
     git \
     git-core \
-    glpk \
-    glpk-devel \
     gnuplot \
-    hoot-gdal \
-    hoot-gdal-devel \
-    hoot-gdal-python \
     lcov \
     libicu-devel \
     libpng-devel \
@@ -106,6 +146,8 @@ sudo yum -y install \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
     hoot-postgis24_95 \
+    libpostal-data \
+    libpostal-devel \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
@@ -126,8 +168,6 @@ sudo yum -y install \
     qtwebkit \
     qtwebkit-devel \
     redhat-lsb-core \
-    stxxl \
-    stxxl-devel \
     swig \
     tex-fonts-hebrew \
     texlive \
@@ -246,12 +286,16 @@ fi
 
 # Check for a hoot Db
 if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
-    echo "### Creating Services Database..."
+    echo "### Creating Main Services Database..."
     sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
     sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
+fi
+
+if ! sudo -u postgres psql -lqt | grep -iw --quiet $WFS_DB_NAME; then
+    echo "### Creating WFS Services Database..."
+    sudo -u postgres createdb $WFS_DB_NAME --owner=$DB_USER
+    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='$WFS_DB_NAME'" > /dev/null
+    sudo -u postgres psql -d $WFS_DB_NAME -c 'create extension postgis;' > /dev/null
 fi
 
 # configure Postgres settings
@@ -322,19 +366,6 @@ fi
 
 # Making sure we know where we are
 cd ~
-
-##### These two are next to do.
-echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
-sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-mapnik.service
-sudo sed -i "s|HOOT_HOME|$HOOT_HOME|g" /etc/systemd/system/node-mapnik.service
-# Make sure all npm modules are installed
-cd $HOOT_HOME/node-mapnik-server
-#NOTE: Re-enable once installation works
-#npm install --silent
-# Clean up after the npm install
-rm -rf ~/tmp
-
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 sudo sed -i "s|SERVICE_USER|$VMUSER|g" /etc/systemd/system/node-export.service

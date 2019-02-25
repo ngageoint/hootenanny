@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGPARTMERGEOP_H
 #define BUILDINGPARTMERGEOP_H
@@ -31,7 +31,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -87,7 +87,7 @@ public:
 
   BuildingPartMergeOp();
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -98,7 +98,7 @@ public:
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Implicitly merges individual building parts into a single part"; }
 
 private:

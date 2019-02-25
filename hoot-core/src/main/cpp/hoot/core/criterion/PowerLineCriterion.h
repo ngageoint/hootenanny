@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POWERLINECRITERION_H
 #define POWERLINECRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ public:
 
   PowerLineCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PowerLineCriterion()); }
 

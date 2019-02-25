@@ -9,6 +9,7 @@ import re
 import sys
 import json
 import textwrap
+import datetime
 
 if (len(sys.argv) != 4):
     print "Usage:"
@@ -43,7 +44,7 @@ notice = """/*
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012-{XXXX} DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 ////
@@ -51,6 +52,8 @@ notice = """/*
 // directly.
 ////
 """
+
+notice = notice.replace("{XXXX}", datetime.date.today().strftime("%Y"));
 
 def escapeString(s):
     return s.encode('string-escape').replace("\"", "\\\"");
@@ -233,7 +236,7 @@ def createHeader(c):
 #ifndef __CONFIG_OPTIONS_H__
 #define __CONFIG_OPTIONS_H__
 
-#include "Settings.h"
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {

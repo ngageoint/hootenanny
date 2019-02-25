@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYDUPLICATEPOIOP_H
 #define PERTYDUPLICATEPOIOP_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
 
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
@@ -44,7 +44,7 @@ namespace hoot
  * Duplicates a POI with some random error.
  * This is not part of the original Perty paper.
  *
- * @todo This should really change the node after it has been duplicated.
+ * This should really change the node after it has been duplicated.
  */
 class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer
 {
@@ -82,11 +82,6 @@ public:
   void setProbability(double p) { _p = p; }
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
-
-  /**
-    @see OsmMapOperation
-    */
-  QString toString();
 
   virtual QString getDescription() const
   { return "Duplicates a POI with some random error"; }

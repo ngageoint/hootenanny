@@ -22,18 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMergerCreator.h"
 
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-
-#include "MarkForReviewMerger.h"
 
 using namespace std;
 
@@ -51,7 +49,7 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
 
   bool result = false;
 
-  set< pair<ElementId, ElementId> > eids;
+  set<pair<ElementId, ElementId>> eids;
 
   int reviewCount = 0;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ImplicitTagRulesSqliteReader.h"
@@ -35,9 +35,10 @@
 #include <tgs/System/Time.h>
 
 // Qt
-#include <QSqlError>
-#include <QVariant>
 #include <QSet>
+#include <QSqlError>
+#include <QTextStream>
+#include <QVariant>
 
 namespace hoot
 {
@@ -205,7 +206,7 @@ long ImplicitTagRulesSqliteReader::getRuleCount()
   return _ruleCountQuery.value(0).toLongLong();
 }
 
-void ImplicitTagRulesSqliteReader::printStats()
+QString ImplicitTagRulesSqliteReader::getStats()
 {
   LOG_DEBUG("Printing stats...");
 
@@ -233,10 +234,14 @@ void ImplicitTagRulesSqliteReader::printStats()
   _wordCountQuery.next();
   const long wordCount = _wordCountQuery.value(0).toLongLong();
 
-  std::cout << "Implicit tag rules database summary:" << std::endl;
-  std::cout << "\tWord count: " << wordCount << std::endl;
-  std::cout << "\tTag count: " << tagCount << std::endl;
-  std::cout << "\tRule count: " << ruleCount << std::endl;
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+  ts << "Implicit tag rules database summary:" << endl;
+  ts << "\tWord count: " << wordCount << endl;
+  ts << "\tTag count: " << tagCount << endl;
+  ts << "\tRule count: " << ruleCount << endl;
+  return ts.readAll();
 }
 
 void ImplicitTagRulesSqliteReader::_prepareQueries()
@@ -377,8 +382,8 @@ void ImplicitTagRulesSqliteReader::_cacheTags(const QSet<QString>& words, const 
 
 void ImplicitTagRulesSqliteReader::_modifyWordIdsForMultipleRules(QSet<long>& queriedWordIds)
 {
-  //TODO: I'm not sure this is doing what's intended.  Since we're not allowing multiple rule
-  //involvement by default, its not a problem for now.
+  // I'm not sure this is doing what's intended.  Since we're not allowing multiple rule
+  // involvement by default, its not a problem for now.
 
   long wordIdWithHighestTagOccurrenceCount = -1;
   long highestTagOccurrenceCount = -1;
@@ -436,7 +441,6 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
           .arg(_tagsForWordIdsQuery.lastError().text()));
     }
 
-    //TODO: need to explain this logic better
     Tags tags2;
     while (_tagsForWordIdsQuery.next())
     {
@@ -489,8 +493,6 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
 
 void ImplicitTagRulesSqliteReader::_removeTagsWithDuplicatedValues(Tags& tags)
 {
-  //TODO: need to explain this logic better
-
   QStringList tagValues;
   QStringList tagKeysWithDuplicatedValues;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)

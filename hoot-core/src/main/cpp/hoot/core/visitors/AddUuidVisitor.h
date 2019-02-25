@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDUUIDVISITOR_H
 #define ADDUUIDVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -38,16 +39,14 @@ namespace hoot
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
  * into FilteredVisitor.
  */
-class AddUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class AddUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::AddUuidVisitor"; }
 
-  AddUuidVisitor() {}
+  AddUuidVisitor();
   AddUuidVisitor(QString key);
-
-  virtual ~AddUuidVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -61,7 +60,9 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Adds UUID tags"; }
+  virtual QString getDescription() const { return "Adds unique ID tags"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 

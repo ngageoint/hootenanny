@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SYSTEM_INFO_H__
 #define __SYSTEM_INFO_H__
@@ -30,7 +30,7 @@
 // Standard
 #include <string>
 
-#include "../TgsExport.h"
+#include <tgs/TgsExport.h>
 
 namespace Tgs
 {
@@ -44,7 +44,6 @@ namespace Tgs
     static long getPhysicalMemoryUsage() { long v; long rss; getMemoryUsage(v, rss); return rss; }
     static long getVirtualMemoryUsage() { long v; long rss; getMemoryUsage(v, rss); return v; }
 
-    static void printMemoryUsage();
     static std::string getMemoryUsageString();
     static std::string humanReadable(long bytes);
   };

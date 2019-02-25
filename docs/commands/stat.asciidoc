@@ -4,14 +4,14 @@
 
 The +stat+ command displays a statistic calculated from the features in a map.
 
-* +inputs+  - One or more OSM data inputs; specify multiple inputs by separating them with a semicolon and surrounding them with quotes
-* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ConstElementVisitor and 
-              supports the SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
+* +input+  -  An OSM data input
+* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the 
+              SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
 
 === Usage
 
 --------------------------------------
-hoot stat (input(s)) (visitor)
+hoot stat (input) (visitor)
 --------------------------------------
 
 === Examples

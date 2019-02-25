@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -30,17 +30,17 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonDistanceExtractor.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include "PoiPolygonDistance.h"
-#include "PoiPolygonAdvancedMatcher.h"
-#include "PoiPolygonDistanceTruthRecorder.h"
-#include "extractors/PoiPolygonDistanceExtractor.h"
-#include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
-#include "PoiPolygonTagIgnoreListReader.h"
-#include "PoiPolygonReviewReducer.h"
+#include <hoot/core/criterion/MultiUseBuildingCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -60,6 +60,9 @@ long PoiPolygonMatch::nameMatchCandidates = 0;
 long PoiPolygonMatch::addressesProcessed = 0;
 long PoiPolygonMatch::addressMatches = 0;
 long PoiPolygonMatch::addressMatchCandidates = 0;
+long PoiPolygonMatch::phoneNumberMatches = 0;
+long PoiPolygonMatch::phoneNumbersProcesed = 0;
+long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
@@ -81,7 +84,10 @@ _reviewIfMatchedTypes(QStringList()),
 _nameScore(-1.0),
 _nameScoreThreshold(-1.0),
 _addressScore(-1.0),
-_addressMatchEnabled(true),
+//leaving this false by default due to libpostals startup time
+_addressMatchEnabled(false),
+_phoneNumberScore(-1.0),
+_phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _enableAdvancedMatching(false),
@@ -212,6 +218,11 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
   _typeScorer.setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
+  _phoneNumberMatchEnabled = config.getPoiPolygonPhoneNumberMatchEnabled();
+  if (_phoneNumberMatchEnabled)
+  {
+    _phoneNumberScorer.setConfiguration(conf);
+  }
 }
 
 void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
@@ -228,19 +239,13 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags());
 
   _e1IsPoi = false;
-  if (OsmSchema::getInstance().isPoiPolygonPoi(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+  if (_poiCrit.isSatisfied(e1) && _polyCrit.isSatisfied(e2))
   {
     _poi = e1;
     _poly = e2;
     _e1IsPoi = true;
   }
-  else if (OsmSchema::getInstance().isPoiPolygonPoi(
-             e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) &&
-           OsmSchema::getInstance().isPoiPolygonPoly(
-             e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()))
+  else if (_poiCrit.isSatisfied(e2) && _polyCrit.isSatisfied(e1))
   {
     _poi = e2;
     _poly = e1;
@@ -382,11 +387,13 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
-      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0);
+      _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
+      _addressMatchEnabled);
+    reviewReducer.setConfiguration(conf());
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
-      //TODO: b/c this is a miss, don't think it will get added to the output anywhere...
+      // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
   }
@@ -397,9 +404,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     if (!foundReviewIfMatchedType)
     {
       LOG_VART(_reviewMultiUseBuildings);
-      LOG_VART(OsmSchema::getInstance().isMultiUseBuilding(*_poly));
+      LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
-      if (_reviewMultiUseBuildings && OsmSchema::getInstance().isMultiUseBuilding(*_poly))
+      if (_reviewMultiUseBuildings && MultiUseBuildingCriterion().isSatisfied(_poly))
       {
         _class.setReview();
         _explainText = "Match involves a multi-use building.";
@@ -423,7 +430,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
     if (_explainText.isEmpty())
     {
-      //TODO: move this somewhere else?...or start values out at 0.0?
+      // TODO: move this somewhere else?...or start values out at 0.0?
       if (_typeScore < 0.0)
       {
         _typeScore = 0.0;
@@ -440,7 +447,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString nameMatchStr = _nameScore >= _nameScoreThreshold ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
-      //TODO: these score contributions are hardcoded
+      // TODO: these score contributions are hardcoded
       _explainText =
         QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2/2), type: %5 (score: %6/1), name: %7 (score: %8/1), address: %9 (score: %10/1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
           .arg(evidence)
@@ -608,8 +615,28 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
   return addressMatch ? 1u : 0u;
 }
 
+unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
+{
+  _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
+  const bool phoneNumberMatch = _phoneNumberScore == 1.0;
+  LOG_VART(phoneNumberMatch);
+  if (phoneNumberMatch)
+  {
+    phoneNumberMatches++;
+  }
+  phoneNumbersProcesed += _phoneNumberScorer.getPhoneNumbersProcessed();
+  if (_phoneNumberScorer.getMatchAttemptMade())
+  {
+    phoneNumberMatchCandidates++;
+  }
+  return phoneNumberMatch ? 1u : 0u;
+}
+
 unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  //LOG_VART(poi);
+  //LOG_VART(poly);
+
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -635,6 +662,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     evidence += _getAddressEvidence(poi, poly);
   }
+  if (_phoneNumberMatchEnabled)
+  {
+    evidence += _getPhoneNumberEvidence(poi, poly);
+  }
 
   //We only want to run this if the previous match distance calculation was too large.
   //Tightening up the requirements for running the convex poly calculation here to improve
@@ -644,7 +675,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //removing it scores dropped for other datasets.  So, more investigation needs to be done to
   //clean the school restriction up (see #1173).
   if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      OsmSchema::getInstance().isBuilding(poly))
+      BuildingCriterion().isSatisfied(poly))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= _matchEvidenceThreshold)
@@ -658,6 +689,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   {
     PoiPolygonAdvancedMatcher advancedMatcher(
       _map, _polyNeighborIds, _poiNeighborIds, _distance);
+    advancedMatcher.setConfiguration(conf());
     if (advancedMatcher.triggersRule(_poi, _poly))
     {
       evidence++;

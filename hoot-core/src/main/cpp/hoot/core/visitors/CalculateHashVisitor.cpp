@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateHashVisitor.h"
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -41,11 +41,6 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
 
 CalculateHashVisitor::CalculateHashVisitor()
-{
-
-}
-
-CalculateHashVisitor::~CalculateHashVisitor()
 {
 }
 
@@ -76,7 +71,7 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     ConfigOptions().getNodeComparisonCircularErrorSensitivity();
   if (n->getRawCircularError() >= 0)
   {
-    infoTags["error:circular"] =
+    infoTags[MetadataTags::ErrorCircular()] =
       QString::number(n->getRawCircularError(), 'g', circularErrorComparisonSensitivity);
   }
 

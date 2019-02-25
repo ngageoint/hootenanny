@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OptimalConstrainedMatches.h"
 
@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr &map) :
+OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map) :
   ConstrainedMatches(map)
 {
   _score = -1;
@@ -54,13 +54,12 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating optimal match conflicts...");
   _calculateMatchConflicts();
-  LOG_DEBUG("Done calculating optimal match conflicts");
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)
   {
+    LOG_DEBUG("No match conflicts found.");
     return _matches;
   }
 
@@ -72,6 +71,7 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     solver.setTimeLimit(_timeLimit);
   }
 
+  LOG_INFO("Calculating optimal match conflicts with an Integer Programming solution...");
   // solve the Integer Programming problem.
   solver.solve();
   _score = solver.getObjectiveValue();
@@ -86,6 +86,10 @@ vector<const Match *> OptimalConstrainedMatches::calculateSubset()
     {
       // it is a keeper
       result.push_back(_matches[i]);
+    }
+    else
+    {
+      LOG_TRACE("Removing match: " << _matches[i]);
     }
   }
 

@@ -28,10 +28,9 @@
 #define BUILDINGCRITERION_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-
-#include "ElementCriterion.h"
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -45,12 +44,14 @@ public:
 
   static std::string className() { return "hoot::BuildingCriterion"; }
 
-  BuildingCriterion() {}
-  BuildingCriterion(ConstOsmMapPtr map) : _map(map) {}
+  BuildingCriterion();
+  BuildingCriterion(ConstOsmMapPtr map);
 
   bool isParentABuilding(ElementId eid) const;
 
-  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
+
+  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
@@ -61,6 +62,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  mutable bool _checkParent;
 };
 
 }

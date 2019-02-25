@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -146,10 +146,10 @@ public:
     CPPUNIT_ASSERT(hashString == QString(hashBytes.toHex()));
   }
 
-  //@TODO: Create a test that applies commands to a map
+  // TODO: Create a test that applies commands to a map
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryReviewCommandTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryReviewCommandTest, "glacial");
 
 }

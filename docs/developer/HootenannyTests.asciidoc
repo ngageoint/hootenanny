@@ -14,15 +14,16 @@ Tests are divided into the following groups: current, quick, slow, and glacial.
 in this directory.
 * **quick** - Individual tests that each run in less than 1 sec.
 * **slow** - Individual tests that each run in less than 30 sec.
-* **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.
+* **glacial** - Individual tests that each run in less than 15 min.  You shouldn't need unit tests that take longer than 15min.  If you're writing a regression test that uses large input data and runs longer than 15min, then put it with the regression tests, not the unit tests.  Also, hoot-rnd tests usually get placed in this suite, since they employ non-production based functionality that changes less frequently than
+code in hoot-core.
 
 If you want to run the tests for all codebases at the same time, first configure as described in a
 previous section, then run one of the following commands:
 
 -------------------
-make -sj($nproc) test-quick # quick tests
-make -sj($nproc) test       # slow tests
-make -sj($nproc) test-all   # glacial tests
+make -sj$(nproc) test-quick # quick tests
+make -sj$(nproc) test       # slow tests
+make -sj$(nproc) test-all   # glacial tests
 ------------------
 
 "quick" is a subset of the "slow" suite, and "quick" and "slow" are subsets of the "glacial" suite.
@@ -261,7 +262,9 @@ test routines. At this time the micro tests run as part of _quick_ and up.
 ==== Running Core Unit Tests in Parallel
 
 Hootenanny can run certain unit tests in parallel.  This is accomplished by `--parallel [n]` flag
-where `[n]` specifies the number of worker processes to spawn.
+where the optional `[n]` specifies the number of worker processes to spawn.  Leaving off the `[n]`
+parameter makes an implicit call to the operating system to get the total number of online processing units.
+(The same as +$(nproc)+ )
 
 --------------
 # Runs quick tests serially
@@ -272,10 +275,12 @@ HootTest --quick --parallel 2
 
 # Runs quick tests in parallel with one process per processing unit
 HootTest --quick --parallel $(nproc)
+# Or implicit call to nproc
+HootTest --quick --parallel
 --------------
 
-Initial testing shows using `$(nproc)` is the optimal setting for speed as any more than that causes
-processes to wait for significantly longer for CPU time and give no real benefit.
+Initial testing shows using `$(nproc)` or leaving the parameter empty is the optimal setting for speed
+as any more than that causes processes to wait for significantly longer for CPU time and give no real benefit.
 
 These worker processes are QProcess objects that spawn `HootTest --listen`.  This "listening" process
 accepts single unit test names (similar to `--single`) from standard in, runs the test and then sends
@@ -312,7 +317,7 @@ The Plugins Test test various translation related operations.  They may be invok
 --------------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure
-make -sj($nproc) plugins-test
+make -sj$(nproc) plugins-test
 --------------
 
 They run by default in the slow test suite.
@@ -340,7 +345,7 @@ To run web services unit tests:
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
-make -sj($nproc) test
+make -sj$(nproc) test
 -----------
 
 To run both web services unit and integration tests:
@@ -348,7 +353,7 @@ To run both web services unit and integration tests:
 ---------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
-make -sj($nproc) test-all
+make -sj$(nproc) test-all
 -----------
 
 The above commands will run the corresponding Core Tests immediately after the web services test
@@ -440,9 +445,9 @@ To run the User Interface tests with all other glacial tests:
 cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
-make -sj($nproc)
+make -sj$(nproc)
 sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
-make -sj($nproc) test-all
+make -sj$(nproc) test-all
 -----------------------
 
 To run the User Interface Tests by themselves:
@@ -451,9 +456,9 @@ To run the User Interface Tests by themselves:
 cd $HOOT_HOME
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure --with-services --with-uitests
-make -sj($nproc)
+make -sj$(nproc)
 sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
-make -sj($nproc) ui-test
+make -sj$(nproc) ui-test
 -----------------------
 
 You have to add the --with-services option since the UI tests rely on the services to be deployed before they're run.  The tests will fail with an error message otherwise.

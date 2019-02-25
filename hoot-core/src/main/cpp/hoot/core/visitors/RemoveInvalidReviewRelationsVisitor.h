@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 #define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 
-#include "ElementOsmMapVisitor.h"
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -35,7 +36,7 @@ namespace hoot
 /**
  * Remove all empty review relations
  */
-class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
+class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -44,6 +45,12 @@ public:
   RemoveInvalidReviewRelationsVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  virtual QString getInitStatusMessage() const
+  { return "Removing review relations with no members..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " empty review relations"; }
 
   virtual QString getDescription() const { return "Removes empty review relations"; }
 };

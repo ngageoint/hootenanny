@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OgrUtilities.h"
 
@@ -31,14 +31,13 @@
 #include <gdal_priv.h>
 
 // hoot
+#include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringList>
-
-#include "OgrOptions.h"
 
 using namespace std;
 
@@ -79,6 +78,7 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo("MySQL:",    "MySQL",          false,    true,   GDAL_OF_ALL));
   _drivers.push_back(OgrDriverInfo("CouchDB:",  "CouchDB",        false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("GFT:",      "GFT",            false,    true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo("gltp:",     "OGR_OGDI",       false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("MSSQL:",    "MSSQLSpatial",   false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("ODBC:",     "ODBC",           false,    true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo("OCI:",      "OCI",            false,    true,   GDAL_OF_ALL));
@@ -181,10 +181,18 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
    * loaded which has been known to cause issues.
    */
   OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
+
+  // With GDALOpenEx, we need to specify the GDAL_OF_UPDATE option or the dataset will get opened
+  // Read Only.
+  if (! readonly)
+  {
+    driverInfo._driverType = driverInfo._driverType | GDAL_OF_UPDATE;
+  }
   LOG_VART(driverInfo._driverName);
   LOG_VART(driverInfo._driverType);
-  const char* drivers[2] = { driverInfo._driverName, NULL };
   LOG_VART(url.toUtf8().data());
+
+  const char* drivers[2] = { driverInfo._driverName, NULL };
 
   // Setup read options for various file types
   OgrOptions options;
@@ -194,6 +202,14 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
     options["Y_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvLatfield();
 //    options["Z_POSSIBLE_NAMES"] = ConfigOptions().getOgrReaderCsvZfield();
     options["KEEP_GEOM_COLUMNS"] = ConfigOptions().getOgrReaderCsvKeepGeomFields();
+  }
+  if (QString(driverInfo._driverName) == "OGR_OGDI")
+  {
+    // From the GDAL docs:
+    // From GDAL/OGR 1.8.0, setting the OGR_OGDI_LAUNDER_LAYER_NAMES configuration option
+    // (or environment variable) to YES causes the layer names to be simplified.
+    // For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_line'
+    options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
   }
 
   boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),

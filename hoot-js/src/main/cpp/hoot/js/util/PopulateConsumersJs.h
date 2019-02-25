@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POPULATECONSUMERSJS_H
 #define POPULATECONSUMERSJS_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregatorConsumer.h>
 #include <hoot/core/elements/ElementConsumer.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
@@ -37,19 +37,18 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/js/OsmMapJs.h>
-#include <hoot/js/algorithms/StringDistanceJs.h>
-#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/algorithms/string/StringDistanceJs.h>
+#include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
 #include <hoot/js/criterion/JsFunctionCriterion.h>
+#include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
+#include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
-#include <hoot/js/algorithms/aggregator/ValueAggregatorJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-
-#include "StringUtilsJs.h"
 
 namespace hoot
 {
@@ -86,7 +85,7 @@ public:
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ConstElementVisitor::className()))
+        else if (str(obj->Get(baseClass())) == QString::fromStdString(ElementVisitor::className()))
         {
           populateVisitorConsumer<T>(consumer, v);
         }

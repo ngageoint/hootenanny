@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SCHEMA_VERTEX_H__
 #define __SCHEMA_VERTEX_H__
@@ -73,6 +73,7 @@ enum TagValueType
 class SchemaVertex
 {
 public:
+
   typedef enum VertexType
   {
     UnknownVertexType,
@@ -155,6 +156,7 @@ public:
   uint16_t geometries;
 
 private:
+
   VertexType _type;
   CompoundRuleList _compoundRules;
 };

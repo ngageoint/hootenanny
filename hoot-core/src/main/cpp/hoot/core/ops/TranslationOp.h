@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATIONOP_H
 #define TRANSLATIONOP_H
 
-#include "OsmMapOperation.h"
-
 // hoot
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 
@@ -38,7 +37,6 @@
 
 namespace hoot
 {
-class ScriptTranslator;
 
 /**
  * Applies a translation to the given map.
@@ -51,9 +49,7 @@ public:
 
   TranslationOp();
 
-  virtual ~TranslationOp() {}
-
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf);
 
@@ -62,7 +58,7 @@ public:
    */
   void setPath(QString path) { _translator.setPath(path); }
 
-  virtual QString getDescription() const { return "Translates features in a map"; }
+  virtual QString getDescription() const override { return "Translates features to a schema"; }
 
 private:
 

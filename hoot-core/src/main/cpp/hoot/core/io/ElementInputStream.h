@@ -53,7 +53,7 @@ public:
   /**
    * @brief ~ElementInputStream
    *
-   * If the stream is open when the destructor is called, closeStream must be called in the destructor
+   * If the stream is open when the destructor is called, close must be called in the destructor
    */
   virtual ~ElementInputStream() {}
 

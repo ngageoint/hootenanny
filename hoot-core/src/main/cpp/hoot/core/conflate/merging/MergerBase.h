@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGERBASE_H
 #define MERGERBASE_H
@@ -38,30 +38,23 @@ public:
 
   static std::string className() { return "hoot::MergerBase"; }
 
-  typedef std::set< std::pair<ElementId, ElementId> > PairsSet;
+  typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 
   MergerBase() {}
 
   virtual ~MergerBase() {}
 
-  virtual std::set<ElementId> getImpactedElementIds() const;
-
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  { return _unknown1Replacements; }
+  virtual std::set<ElementId> getImpactedElementIds() const override;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 
-  virtual QString toString() const { return QString("Unimplemented toString()"); }
-
 protected:
 
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
-
-  virtual PairsSet& getPairs() = 0;
-  virtual const PairsSet& getPairs() const = 0;
-
+  // TODO: Is any inheriting class actually implementing this in a custom fashion?
+  virtual PairsSet& _getPairs() = 0;
+  virtual const PairsSet& _getPairs() const = 0;
 };
 
 }

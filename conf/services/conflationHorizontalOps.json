@@ -4,32 +4,7 @@
 	"description": "Cookie Cutter and Horizontal conflation options.",
 	"name": "Cookie Cutter & Horizontal Options",
 	"members": [
-      {
-        "id": "reference_override_conflate_enable_old_roads",
-        "elem_type": "bool",
-		"override":{
-					"elem_type":"bool"
-				},
-        "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command. By default the `--conflate` command will first conflate roads using the circa 2012 conflation algorithm and then conflate using the newer (circa 2014) unifying algorithm. If the unifying algorithm has road conflation enable then the results could get interesting.",
-        "name": "Conflate Enable Old Roads",
-        "defaultvalue": "false",
-        "hoot_key": "conflate.enable.old.roads",
-				"required":"true",
-        "members": [
-          {
-            "isDefault": "false",
-            "description": "Enable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "true",
-            "hoot_val": "true"
-          },
-          {
-            "isDefault": "true",
-            "description": "Disable the old road conflation. This is only necessary when using the `--conflate` command. See the _Command Line Reference_ for details on the `--conflate` command",
-            "name": "false",
-            "hoot_val": "false"
-          }
-        ]
-      },
+    
       {
         "id": "reference_override_conflate_match_highway_classifier",
         "elem_type": "string",
@@ -56,11 +31,11 @@
         "elem_type": "string",
         "description": "List of MergerCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
         "name": "Merger Creator",
-        "defaultvalue": "hoot::HighwaySnapMergerCreator",
+        "defaultvalue": "hoot::HighwayMergerCreator",
         "hoot_key": "merger.creators",
 				"required":"true",
 	"override":{
-						"defaultvalue": "hoot::HighwaySnapMergerCreator"
+						"defaultvalue": "hoot::HighwayMergerCreator"
 					}
       },
       {
@@ -106,12 +81,12 @@
         "hoot_key": "small.way.merger.threshold"
       },
 			{
-				"id":"horizontal_unify_pre_ops",
+				"id":"horizontal_conflate_pre_ops",
 				"elem_type":"string",
-				"description":"Unify pre ops",
-				"name":"Unify Pre Ops",
+				"description":"Conflate pre ops",
+				"name":"Conflate Pre Ops",
 				"defaultvalue":"hoot::CookieCutterOp",
-				"hoot_key":"unify.pre.ops",
+				"hoot_key":"conflate.pre.ops",
 				"required":"true"
 			},
 			{

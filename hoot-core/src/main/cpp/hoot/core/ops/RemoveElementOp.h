@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTOP_H
 #define REMOVEELEMENTOP_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -76,7 +76,7 @@ public:
    * @brief apply performs the removal operation
    * @param map to operate on
    */
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @brief getClassName gest the name of the class
@@ -113,7 +113,7 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
-  virtual QString getDescription() const { return "Removes an element from a map"; }
+  virtual QString getDescription() const override { return "Removes a single element"; }
 
 private:
 

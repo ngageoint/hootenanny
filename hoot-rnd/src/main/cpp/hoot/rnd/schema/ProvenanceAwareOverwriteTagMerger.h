@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
 #define PROVENANCEAWAREOVERWRITETAGMERGER_H
@@ -45,12 +45,10 @@ public:
 
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 
-  virtual ~ProvenanceAwareOverwriteTagMerger() {}
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
-
-  virtual QString getDescription()
-  { return "Overwrites tags in the secondary feature with tags from the reference feature and maintains a provenance tag"; }
+  virtual QString getDescription() const
+  { return "Overwrites tags secondary feature tags with reference tags while maintaining provenance (experimental)"; }
 };
 
 }

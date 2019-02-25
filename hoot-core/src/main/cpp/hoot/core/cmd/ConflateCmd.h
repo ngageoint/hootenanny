@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATECMD_H
@@ -30,8 +30,7 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Standard
 #include <fstream>
@@ -57,14 +56,7 @@ public:
 
   void printStats(const QList<SingleStat>& stats);
 
-  virtual int runSimple(QStringList args);
-
-private:
-
-  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
-
-  ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
-
+  virtual int runSimple(QStringList args) override;
 };
 
 }

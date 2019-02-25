@@ -22,17 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,14 +52,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
-import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -61,7 +65,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.HootProperties;
 import hoot.services.UnitTest;
-import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
@@ -78,9 +81,6 @@ import hoot.services.utils.MapUtils;
 public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
     private static String originalTEMP_OUTPUT_PATH;
-
-    @Autowired
-    private ExternalCommandManager externalCommandInterface;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -142,39 +142,9 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test
     @Category(UnitTest.class)
-    public void testExportOSCResource() throws Exception {
-        long userId = MapUtils.insertUser();
-        long mapId = MapUtils.insertMap(userId);
-        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
-
-        ExportParams exportParams = new ExportParams();
-        exportParams.setOutputType("osc");
-        exportParams.setInput(Long.toString(mapId));
-        exportParams.setOutputName("output");
-        exportParams.setAppend(false);
-        exportParams.setTextStatus(false);
-        exportParams.setInputType("file");
-        exportParams.setBounds(aoi);
-        exportParams.setUserId(String.valueOf(userId));
-
-        String responseData = target("export/execute")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
-
-        assertNotNull(responseData);
-
-        Job job = super.getSubmittedJob();
-
-        assertNotNull(job);
-        assertEquals(1, job.getCommands().length);
-        assertSame(DeriveChangesetCommand.class, job.getCommands()[0].getClass());
-    }
-    
-    @Test
-    @Category(UnitTest.class)
     public void testExportTilesResource() throws Exception {
         long userId = MapUtils.insertUser();
-        long mapId = MapUtils.insertMap(userId);
+        MapUtils.insertMap(userId);
         String aoi = "-104.8192,38.8162,-104.6926,38.9181";
 
         ExportParams jobParams = new ExportParams();
@@ -200,42 +170,6 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         assertNotNull(job);
         assertEquals(1, job.getCommands().length);
         assertSame(CalculateTilesCommand.class, job.getCommands()[0].getClass());
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testExportOSMAPIDBResource() throws Exception {
-        long userId = MapUtils.insertUser();
-        long mapId = MapUtils.insertMap(userId);
-        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
-
-        ExportParams exportParams = new ExportParams();
-        exportParams.setOutputType("osm_api_db");
-        exportParams.setInput(Long.toString(mapId));
-        exportParams.setOutputName("output");
-        exportParams.setAppend(false);
-        exportParams.setTextStatus(false);
-        exportParams.setInputType("file");
-        exportParams.setBounds(aoi);
-        exportParams.setUserId(String.valueOf(userId));
-
-        String conflictTimestamp = "2017-04-18 14:00:01.234";
-        Map<String, String> tags = new HashMap<>();
-        tags.put("osm_api_db_export_time", conflictTimestamp);
-        DbUtils.updateMapsTableTags(tags, mapId);
-
-        String responseData = target("export/execute")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
-
-        assertNotNull(responseData);
-
-        Job job = super.getSubmittedJob();
-
-        assertNotNull(job);
-        assertEquals(2, job.getCommands().length);
-        assertSame(DeriveChangesetCommand.class, job.getCommands()[0].getClass());
-        assertSame(ApplyChangesetCommand.class, job.getCommands()[1].getClass());
     }
 
     @Test
@@ -302,105 +236,26 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
             transExtPath = TRANSLATION_EXT_PATH;
         }
 
-        String expected = "";
+        List<java.util.Map<String, Object>> expectedObject = new ArrayList<java.util.Map<String, Object>>();
+        java.util.Map<String, Object> obj = new HashMap<String, Object>();
+        obj.put("name", "TDS");
+        obj.put("description", "LTDS 4.0");
+        expectedObject.add(obj);
+
+        obj = new HashMap<String, Object>();
+        obj.put("name", "MGCP");
+        obj.put("description", "MGCP");
+        expectedObject.add(obj);
+
         File file = new File(transExtPath);
         if (file.exists() && file.isDirectory()) {
-            expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"}," +
-                        "{\"description\":\"MGCP\",\"name\":\"MGCP\"}," +
-                        "{\"description\":\"UTP\",\"name\":\"UTP\"}]";
+            obj = new HashMap<String, Object>();
+            obj.put("name", "UTP");
+            obj.put("description", "UTP");
+            expectedObject.add(obj);
         }
-        else {
-            expected = "[{\"description\":\"LTDS 4.0\",\"name\":\"TDS\"},{\"description\":\"MGCP\",\"name\":\"MGCP\"}]";
-        }
+        String expected = expectedObject.toString();
 
-        JSONParser parser = new JSONParser();
-        assertEquals(parser.parse(expected), parser.parse(result));
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testGetExportedXmlFile() throws Exception {
-        // read a dummy changeset file
-        String changesetText = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("hoot/services/controllers/export/ExportJobResourceTestChangesetInput.osc").getPath()),
-                "UTF-8");
-
-        // write the contents of the dummy file to a new output file; mimic how
-        // ExportJobResource::process would write it
-        String jobId = UUID.randomUUID().toString();
-        File changesetFile = new File(HootProperties.TEMP_OUTPUT_PATH + "/" + jobId + "/" + jobId + ".osc");
-        changesetFile.deleteOnExit(); //remove this if removeCache is enabled
-        FileUtils.writeStringToFile(changesetFile, changesetText, "UTF-8");
-
-        ExportResource spy = Mockito.spy(new ExportResource());
-        Response response = spy.getXmlOutput(jobId,  "osc");
-        DOMSource test = (DOMSource) response.getEntity();
-
-        // parse out the returned xml and verify its what was originally written
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        String changesetXml;
-        try (StringWriter writer = new StringWriter()) {
-            transformer.transform(test, new StreamResult(writer));
-            changesetXml = writer.getBuffer().toString();
-        }
-
-        assertEquals(changesetText, changesetXml);
-        //assertTrue(!changesetFile.exists()); //enable this if removeCache is enabled
-    }
-
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
-    public void testGetXmlOutputInvalidJobId() throws Exception {
-        try {
-            // try to retrieve a changeset file with a non-existent changeset
-            // id; should fail with a 404
-            (new ExportResource()).getXmlOutput("blah", "osc");
-        }
-        catch (WebApplicationException e) {
-            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("Missing output file"));
-            throw e;
-        }
-    }
-
-    // Choosing not to handle changesets here that go over the max allowed size for now, as they will be
-    // stored as separate changesets in multiple files.  The logic for it could be added in the future, 
-    // if necessary.  Regardless, a more specific error message could still be desired here right now anyway.
-    @Test(expected = WebApplicationException.class)
-    @Category(UnitTest.class)
-    public void testGetXmlOutputMultipleFiles() throws Exception {
-        File changesetDir = null;
-        try {
-            // read a dummy changeset file
-            String changesetText = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader()
-                    .getResource("hoot/services/controllers/export/ExportJobResourceTestChangesetInput.osc").getPath()),
-                    "UTF-8");
-
-            // write the contents of the dummy file to multiple new output
-            // files; mimic how ExportJobResource::process would write it and how changeset-derive would handle a
-            // changeset larger than the max allowable size (move multiple changeset files to their
-            // own new folder; see OsmChangesetXmlWriter)
-            String jobId = UUID.randomUUID().toString();
-            changesetDir = new File(HootProperties.TEMP_OUTPUT_PATH + "/" + jobId + "/" + jobId);
-            File changesetFile1 = new File(changesetDir + "/" + jobId + "-001.osc");
-            changesetFile1.deleteOnExit();
-            FileUtils.writeStringToFile(changesetFile1, changesetText, "UTF-8");
-            File changesetFile2 = new File(changesetDir + "/" + jobId + "-002.osc");
-            changesetFile2.deleteOnExit();
-            FileUtils.writeStringToFile(changesetFile2, changesetText, "UTF-8");
-
-            ExportResource spy = Mockito.spy(new ExportResource());
-            /* Response response = */spy.getXmlOutput(jobId, "osc");
-        }
-        catch (WebApplicationException e) {
-            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
-            assertTrue(e.getResponse().getEntity().toString().contains("Missing output file"));
-            throw e;
-        }
-        finally {
-            FileUtils.deleteQuietly(changesetDir);
-            assertTrue(!changesetDir.exists());
-        }
+        assertEquals(expected, result);
     }
 }

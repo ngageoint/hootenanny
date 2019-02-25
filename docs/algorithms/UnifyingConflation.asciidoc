@@ -3,14 +3,10 @@
 [[UnifyingConflation]]
 == Unifying Conflation
 
-There are two conflation designs built into Hootenanny. The original, from the
-initial software design stage (circa 2012) uses a custom approach built upon a greedy
-optimization method. This approach is still available using the `conflate`
-method in conjunction with the `conflate.enable.old.roads` configuration option.
-However, the legacy approach only deals with roads and does not flag 
-questionable situations as reviews.
+There have been two conflation designs built into Hootenanny over the course of its development for all feature types and three for road features. The original design, from the initial software design stage (circa 2012) uses a custom approach built upon a greedy optimization method.  
+However, this legacy approach only dealt with roads and did not flag questionable situations as reviews.  This approach is no longer available.
 
-Unifying conflation is the newer conflation approach initially developed under
+Unifying conflation is the newer conflation approach for all feature types initially developed under
 subsequent efforts with the following design goals:
 
 * Process the <<RoadConflation,road>>, <<BuildingConflation,building>> and
@@ -44,10 +40,11 @@ In <<unifying-conflation-flow>> the high level conflation data flow is
 presented. Each of these steps will be discussed in more detail in the following
 sections.
 
+A third conflation type for road exists, named Network Conflation, described later in this document.
+
 See also:
 
 * `conflate` command, <<hootuser>>
-* `conflate.enable.old.roads` configuration option, <<hootuser>>
 
 === Ingest & Clean
 

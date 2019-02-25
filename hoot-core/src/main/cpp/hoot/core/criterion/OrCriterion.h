@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ORCRITERION_H
 #define ORCRITERION_H
 
-#include "ChainCriterion.h"
+#include <hoot/core/criterion/ChainCriterion.h>
 
 namespace hoot
 {
@@ -51,14 +51,12 @@ public:
   {
   }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone())); }
 
-  virtual QString getDescription() const
-  { return "Allows for combining criterion with the logical OR operation"; }
-
+  virtual QString getDescription() const { return "Allows for combining criteria (logical OR )"; }
 };
 
 }

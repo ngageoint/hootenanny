@@ -22,16 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMERGER_H
 #define NETWORKMERGER_H
 
 // hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
-
-#include "EdgeMatch.h"
-#include "NetworkDetails.h"
+#include <hoot/core/conflate/network/EdgeMatch.h>
+#include <hoot/core/conflate/network/NetworkDetails.h>
 
 namespace hoot
 {
@@ -40,7 +39,7 @@ namespace hoot
  * Merges whole network pairs (no partials).
  *
  * In the case of network matches we're guaranteed there is no overlap between matches so we can
- * use some of the functions in HighwaySnapMerger, but others are too complex/imprecise.
+ * use some of the functions in HighwayMerger, but others are too complex/imprecise.
  */
 class NetworkMerger : public MergerBase
 {
@@ -50,21 +49,21 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  NetworkMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
+  NetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, ConstEdgeMatchPtr edgeMatch,
     ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
   ConstEdgeMatchPtr _edgeMatch;
   ConstNetworkDetailsPtr _details;
 };

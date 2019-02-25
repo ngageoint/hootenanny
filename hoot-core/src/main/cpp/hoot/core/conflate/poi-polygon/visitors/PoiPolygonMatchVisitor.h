@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCHVISITOR_H
 #define POIPOLYGONMATCHVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -49,8 +51,11 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 public:
 
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold,
-                         boost::shared_ptr<PoiPolygonRfClassifier> rf);
+                         boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                         ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
   /**
@@ -61,7 +66,11 @@ public:
    */
   virtual void visit(const ConstElementPtr& e);
 
+  bool isMatchCandidate(ConstElementPtr element);
+
   virtual QString getDescription() const { return ""; }
+
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
 private:
 
@@ -95,12 +104,14 @@ private:
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
 
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
+  ElementCriterionPtr _filter;
+
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e);
   Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
-
-  static bool _isMatchCandidate(ConstElementPtr element);
 
   boost::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
   boost::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();

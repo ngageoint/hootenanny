@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
 
-#include "ElementCriterion.h"
-#include "ElementCriterionConsumer.h"
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -39,18 +39,16 @@ public:
 
   static std::string className() { return "hoot::NotCriterion"; }
 
-  NotCriterion() {}
-  NotCriterion(ElementCriterion* c) : _child(c) {}
-  NotCriterion(ElementCriterionPtr c) : _child(c) {}
-
-  virtual ~NotCriterion() {}
+  NotCriterion();
+  NotCriterion(ElementCriterion* c);
+  NotCriterion(ElementCriterionPtr c);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }

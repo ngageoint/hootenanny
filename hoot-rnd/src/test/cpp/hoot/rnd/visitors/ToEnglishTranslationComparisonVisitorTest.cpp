@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/rnd/visitors/ToEnglishTranslationComparisonVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -76,7 +76,7 @@ public:
     map->visitRw(visitor);
 
     const QString outputFile = testOutputRoot + "/runTest.osm";
-    OsmMapWriterFactory::getInstance().write(map, outputFile);
+    OsmMapWriterFactory::write(map, outputFile);
 
     HOOT_FILE_EQUALS(goldInputRoot + "/runTest-gold.osm", outputFile);
   }
@@ -134,8 +134,8 @@ private:
   {
     Settings conf;
 
-    conf.set("language.translation.skip.words.in.english.dictionary", true);
-    conf.set("language.translation.skip.pre.translated.tags", false);
+    conf.set("language.skip.words.in.english.dictionary", true);
+    conf.set("language.ignore.pre.translated.tags", false);
     QStringList sourceLangs;
     sourceLangs.append("de");
     conf.set("language.translation.source.languages", sourceLangs);
@@ -146,9 +146,9 @@ private:
     QStringList toTranslateTagKeys;
     toTranslateTagKeys.append("name");
     toTranslateTagKeys.append("alt_name");
-    conf.set("language.translation.to.translate.tag.keys", toTranslateTagKeys);
+    conf.set("language.tag.keys", toTranslateTagKeys);
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorMockClient");
-    conf.set("language.translation.info.provider", "hoot::HootServicesTranslationInfoMockClient");
+    conf.set("language.info.provider", "hoot::HootServicesLanguageInfoMockClient");
     conf.set("hoot.services.auth.user.name", "ToEnglishTranslationComparisonVisitorTest");
     conf.set("hoot.services.auth.access.token", "testAccessToken");
     conf.set("hoot.services.auth.access.token.secret", "testAccessTokenSecret");

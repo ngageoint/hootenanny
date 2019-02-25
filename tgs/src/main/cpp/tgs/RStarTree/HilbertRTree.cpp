@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -34,15 +34,13 @@
 #include <iostream>
 using namespace std;
 
-#include "HilbertCurve.h"
-#include "PageStore.h"
-#include "RTreeNode.h"
-
-using namespace Tgs;
-
 // Tgs
+#include <tgs/RStarTree/HilbertCurve.h>
+#include <tgs/RStarTree/PageStore.h>
+#include <tgs/RStarTree/RTreeNode.h>
 #include <tgs/Statistics/Random.h>
 
+using namespace Tgs;
 
 HilbertRTree::HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions) :
   RStarTree(ps, dimensions)
@@ -167,7 +165,7 @@ double HilbertRTree::_calculatePairwiseOverlap(int parentId, std::vector<double>
     {
       if (i != j)
       {
-        /// @todo remove toBox and implement overlap calculation for BoxInternal
+        // TODO: remove toBox and implement overlap calculation for BoxInternal
         double o = parent->getChildEnvelope(j).calculateOverlap(
           parent->getChildEnvelope(i).toBox());
         overlaps[i] += o;
@@ -277,12 +275,10 @@ void HilbertRTree::_greedyShuffle(int parentId)
   // swap children two levels down
   if (parent->getChildCount() >= 2)
   {
-    double netImprovement = 0.0;
     // randomly choose child based on overlap weight
     for (int i = 0; i < _shuffleSize; i++)
     {
-      double improvement = _swapGrandChildNodes(parentId, overlaps);
-      netImprovement += improvement;
+      _swapGrandChildNodes(parentId, overlaps);
     }
   }
 }

@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -37,6 +38,15 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
+
+BuildingCriterion::BuildingCriterion()
+{
+}
+
+BuildingCriterion::BuildingCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
 
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
@@ -48,7 +58,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     ++it)
   {
     ConstElementPtr e = _map->getRelation(*it);
-    if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
+    if (isSatisfied(e))
     {
       result = true;
     }
@@ -61,27 +71,36 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
   return result;
 }
 
-bool BuildingCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
-  if (!_map)
-  {
-    throw HootException("You must set the map before calling BuildingCriterion");
-  }
-
   // if it is a building
-  if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))
+  if ((e->getElementType() != ElementType::Node) &&
+      (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
-    // see ticket #5952. If the building has a parent relation that is also a building then this
-    // is really a building part, not a building.
-    if (isParentABuilding(e->getElementId()) == false)
+    // If a map was set, then we assume the parent is to be checked as well.  This is a little
+    // messy but reflects how the logic worked before moving OsmSchema feature type method logic
+    // out to criterion.  Another option could be to make two separate criteria, one that checks
+    // the parent and one that doesn't.
+    if (!_map || isParentABuilding(e->getElementId()) == false)
     {
+      // see ticket #5952. If the building has a parent relation that is also a building then this
+      // is really a building part, not a building.
       result = true;
     }
   }
 
   return result;
+}
+
+bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& elementType) const
+{
+  // There's no option to check the parent in this method, since doing so would require an element
+  // ID and callers call this method, because they don't have it in certain circumstances.
+  return
+    elementType != ElementType::Node &&
+    OsmSchema::getInstance().hasCategory(tags, "building") == true;
 }
 
 }

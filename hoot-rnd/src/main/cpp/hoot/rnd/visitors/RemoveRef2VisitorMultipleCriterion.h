@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVEREF2VISITORMULTIPLECRITERION_H
 #define REMOVEREF2VISITORMULTIPLECRITERION_H
 
-#include "RemoveRef2Visitor.h"
+#include <hoot/rnd/visitors/RemoveRef2Visitor.h>
 
 namespace hoot
 {
@@ -49,15 +49,15 @@ public:
   RemoveRef2VisitorMultipleCriterion();
   virtual ~RemoveRef2VisitorMultipleCriterion() {}
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  virtual void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
-  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
-  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;
+  virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
+  virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;
 
-  virtual QString getDescription() const
-  { return "Removes REF2 tags when multiple criterion are met for REF1 and REF2 elements"; }
+  virtual QString getDescription() const override
+  { return "Removes REF2 tags when multiple criteria are met for both REF1 and REF2 elements"; }
 
 private:
 

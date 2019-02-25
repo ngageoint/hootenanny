@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
 
 // Local
-#include "WayData.h"
-#include "Element.h"
+#include <hoot/core/elements/WayData.h>
+#include <hoot/core/elements/Element.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -46,15 +46,14 @@
 namespace hoot
 {
 
-class Node;
-
 class Way : public Element
 {
 public:
 
   static std::string className() { return "hoot::Way"; }
 
-  Way(Status s, long id, Meters circularError, long changeset = ElementData::CHANGESET_EMPTY,
+  Way(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
+      long changeset = ElementData::CHANGESET_EMPTY,
       long version = ElementData::VERSION_EMPTY,
       quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
       QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
@@ -156,6 +155,12 @@ public:
    * contains two or more nodes. If way has zero or one nodes, returns false
    */
   bool isFirstLastNodeIdentical() const;
+
+  /**
+   * Returns true if there are more than 3 nodes and the first and last nodes in the Way are the
+   * same.  Otherwise returns false
+   */
+  bool isClosedArea() const;
 
   /**
    * Remove all instances of the node with the specified id. If the node isn't in this way then

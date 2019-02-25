@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITORJS_H
 #define VISITORJS_H
@@ -40,16 +40,17 @@ namespace hoot
 {
 
 class ConstElementVisitor;
-class OsmMapOperation;
 
 class ElementVisitorJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   boost::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
 
 private:
+
   ElementVisitorJs(ConstElementVisitor* v) : _v(v) {}
   ElementVisitorJs() {}
   ~ElementVisitorJs() {}

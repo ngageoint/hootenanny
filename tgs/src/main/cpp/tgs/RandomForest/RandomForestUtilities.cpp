@@ -34,8 +34,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "RandomForestManager.h"
-#include "../TgsException.h"
+#include <tgs/TgsException.h>
+#include <tgs/RandomForest/RandomForestManager.h>
 
 namespace Tgs
 {

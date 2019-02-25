@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -38,19 +39,16 @@ namespace hoot
  * Interface for merging two sets of tags into one set of tags. This is most useful when conflating
  * two different features into a single feature.
  */
-class TagMerger
+class TagMerger : public ApiEntityInfo
 {
 public:
 
   static std::string className() { return "hoot::TagMerger"; }
 
   TagMerger() {}
-
   virtual ~TagMerger() {}
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
-
-  virtual QString getDescription() = 0;
 };
 
 typedef boost::shared_ptr<TagMerger> TagMergerPtr;

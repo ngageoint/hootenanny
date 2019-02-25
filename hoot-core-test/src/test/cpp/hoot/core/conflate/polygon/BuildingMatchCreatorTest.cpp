@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
@@ -36,7 +36,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit

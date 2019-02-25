@@ -28,8 +28,8 @@
 #define MATCH_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include "MatchMembers.h"
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/MatchMembers.h>
 
 // Standard
 #include <set>

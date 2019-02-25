@@ -30,11 +30,12 @@
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-class MultiVisitor : public ElementOsmMapVisitor
+class MultiVisitor : public ElementVisitor
 {
 public:
 
@@ -46,7 +47,7 @@ public:
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 
-  virtual QString getDescription() const { return "Allows for iterating over multiple visitors"; }
+  virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
 
 private:
 

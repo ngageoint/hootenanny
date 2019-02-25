@@ -22,24 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonPhoneNumberScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
-#include "PoiPolygonRfClassifier.h"
-#include "extractors/PoiPolygonTypeScoreExtractor.h"
-#include "extractors/PoiPolygonNameScoreExtractor.h"
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -48,7 +51,7 @@ namespace hoot
  * This is an additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  *
- * @todo This could use some refactoring.
+ * This class could use some refactoring.
  */
 class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
@@ -110,6 +113,7 @@ public:
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
   void setSourceTagKey(const QString key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
+  void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
   //summary of match types found; assumes one invocation of this class per executed process; would
   //like to handle these in a different way
@@ -123,6 +127,9 @@ public:
   static long addressMatches;
   static long addressesProcessed;
   static long addressMatchCandidates;
+  static long phoneNumberMatches;
+  static long phoneNumbersProcesed;
+  static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
 
 private:
@@ -156,7 +163,7 @@ private:
   //requirement for matching
   bool _closeDistanceMatch;
 
-  //TODO: should be able to shrink some of this scorer code down with some abstraction
+  // should be able to shrink some of this scorer code down with some abstraction
 
   PoiPolygonTypeScoreExtractor _typeScorer;
   double _typeScore;
@@ -170,6 +177,10 @@ private:
   PoiPolygonAddressScoreExtractor _addressScorer;
   double _addressScore;
   bool _addressMatchEnabled;
+
+  PoiPolygonPhoneNumberScoreExtractor _phoneNumberScorer;
+  double _phoneNumberScore;
+  bool _phoneNumberMatchEnabled;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   std::set<ElementId> _polyNeighborIds;
@@ -192,6 +203,9 @@ private:
 
   static boost::shared_ptr<ToEnglishTranslator> _translator;
 
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
+
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 
   bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;
@@ -202,6 +216,7 @@ private:
   unsigned int _getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
+  unsigned int _getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 

@@ -28,7 +28,7 @@
 #define MATCH_SCORING_MAP_PREPARER_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {

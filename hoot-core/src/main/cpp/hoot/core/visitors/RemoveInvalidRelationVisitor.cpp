@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidRelationVisitor.h"
 
 //  hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 //  Standard library
 #include <unordered_map>
@@ -44,9 +44,10 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidRelationVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidRelationVisitor)
 
-RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor()
+RemoveInvalidRelationVisitor::RemoveInvalidRelationVisitor() :
+_numMembersRemoved(0)
 {
 }
 
@@ -59,13 +60,15 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
     assert(r != 0);
 
     LOG_VART(r->getId());
+    //LOG_VART(r);
     //  Only multilinestring or review relations
     if (r->getType() == MetadataTags::RelationReview())
       _removeDuplicates(r);
     else if (r->getType() == MetadataTags::RelationMultilineString())
     {
       _removeDuplicates(r);
-      //  Any multilinestring that doesn't have 2 or more linestrings, isn't a multilinestring, remove it
+      //  Any multilinestring that doesn't have 2 or more linestrings, isn't a multilinestring,
+      //  remove it
       vector<RelationData::Entry> members = r->getMembers();
       if (members.size() < 2)
       {
@@ -74,11 +77,14 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
         {
           //  Merge the relation tags back on to the single way before deleting the relation
           ElementPtr element = _map->getElement(members[0].getElementId());
-          Tags merged = TagMergerFactory::getInstance().mergeTags(element->getTags(), r->getTags(), ElementType::Relation);
+          Tags merged =
+            TagMergerFactory::getInstance().mergeTags(
+              element->getTags(), r->getTags(), ElementType::Relation);
           element->setTags(merged);
         }
         //  Delete the relation
         RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        _numAffected++;
       }
     }
   }
@@ -107,12 +113,14 @@ void RemoveInvalidRelationVisitor::_removeDuplicates(const RelationPtr& r)
       r->removeElement(eid);
       if (membersMap.find(id) == membersMap.end())
         membersMap[id] = *it;
+      _numMembersRemoved++;
     }
   }
   //  Reinsert the members that were duplicates but all instances were deleted
   if (membersMap.size() > 0)
   {
-    for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin(); it != membersMap.end(); ++it)
+    for (unordered_map<long, RelationData::Entry>::iterator it = membersMap.begin();
+         it != membersMap.end(); ++it)
       r->addElement(it->second.getRole(), it->second.getElementId());
     //  Update the number of review members if we removed some of them
     if (r->getTags().contains(MetadataTags::HootReviewMembers()))

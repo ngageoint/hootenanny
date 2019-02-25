@@ -29,9 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -44,16 +42,13 @@ public:
 
   LongestTagVisitor() : _longestTag() {}
 
-  virtual ~LongestTagVisitor() {}
-
   double getStat() const { return _longestTag; }
 
   QString getLongestTag() const { return _tag; }
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const
-  { return "Finds the tag with the longest value character size"; }
+  virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
 
 private:
 

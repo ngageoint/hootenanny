@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementComparer.h"
 
@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -44,7 +44,7 @@ _threshold(threshold)
 void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 {
   tags.remove(MetadataTags::HootStatus());
-  //TODO: not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
+  // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
   tags.remove("status");
   //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
   //carry along the hoot:id tag for consistency's sake when that is desired

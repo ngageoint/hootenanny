@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayData.h"
 
-#include "Way.h"
+#include <hoot/core/elements/Way.h>
 
 // Boost
 using namespace boost;
@@ -38,15 +38,16 @@ long WayData::PID_EMPTY = 0;
 
 WayData::WayData(long id, long changeset, long version, unsigned int timestamp, QString user,
                  long uid, bool visible, long pid)
-  : ElementData(id, Tags(), -1, changeset, version, timestamp, user, uid, visible),
+  : ElementData(id, Tags(), ElementData::CIRCULAR_ERROR_EMPTY, changeset, version, timestamp, user, uid, visible),
     _pid(pid)
 {
 }
 
 WayData::WayData(const WayData& from)
-  : ElementData(from.getId(), from.getTags(), from.getCircularError(), from.getChangeset(),
-                from.getVersion(), from.getTimestamp(), from.getUser(), from.getUid(),
-                from.getVisible()),
+  : ElementData(from.getId(), from.getTags(),
+                (from.hasCircularError() ? from.getCircularError() : ElementData::CIRCULAR_ERROR_EMPTY),
+                from.getChangeset(), from.getVersion(), from.getTimestamp(), from.getUser(),
+                from.getUid(), from.getVisible()),
     _nodes(from._nodes),
     _pid(from._pid)
 {

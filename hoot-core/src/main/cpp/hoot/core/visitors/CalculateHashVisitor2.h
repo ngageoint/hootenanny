@@ -43,13 +43,10 @@ public:
 
   static std::string className() { return "hoot::CalculateHashVisitor2"; }
 
-  virtual ~CalculateHashVisitor2();
-
   virtual void visit(const ElementPtr& e);
 
-  virtual QString toString() { return "hoot::CalculateHashVisitor2"; }
-
-  virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
+  virtual QString getDescription() const
+  { return "Calculates unique hash values for elements used by the multiary ingester"; }
 };
 
 }

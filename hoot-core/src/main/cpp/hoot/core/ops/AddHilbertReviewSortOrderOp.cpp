@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Tgs
@@ -75,6 +75,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     return;
   }
 
+  _numAffected = 0;
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
@@ -115,6 +116,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
     RelationPtr r = map->getRelation(reviewOrder[i].first.getId());
 
     r->getTags().set(MetadataTags::HootReviewSortOrder(), (long)i);
+    _numAffected++;
   }
 }
 

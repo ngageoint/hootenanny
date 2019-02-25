@@ -33,7 +33,7 @@ environment variable uses the same syntax as the command line. For example:
 -----
 export HOOT_OPTIONS="-D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar"
-hoot test-files/io/SampleTranslation.osm \
+hoot convert test-files/io/SampleTranslation.osm \
   PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 -----
 
@@ -57,6 +57,35 @@ hoot convert \
 ------
 
 The +$HOOT_HOME/conf/hoot.json+ configuration file is used with all commands without specifying the configuration on the command line.
+
+For +List+ type options, additional options can be appended to the list of defaults by using the ++=+ operator. E.g.
+
+-----
+hoot conflate \
+  -D conflate.post.ops+="hoot::RemoveUnknown2Visitor" \
+  test-files/ToyTestA.osm test-files/ToyTestB.osm \
+  test-output/ToyTestRemoveUnknown2.osm
+-----
+
+This example adds the +RemoveUnknown2Visitor+ operation to the end of the post conflate operations list. The same is true for removing options from lists with the +-=+ operator. E.g.
+
+-----
+hoot conflate \
+  -D conflate.post.ops-="hoot::ReplaceRoundabouts" \
+  test-files/ToyTestA.osm test-files/ToyTestB.osm \
+  test-output/ToyTestRemoveUnknown2.osm
+-----
+
+This example will not replace roundabouts in the post conflation operations because it is explicitly removed from the default list of post conflate operations.
+
+-----
+hoot conflate \
+  -D conflate.post.ops++="hoot::RemoveUnknown2Visitor" \
+  test-files/ToyTestA.osm test-files/ToyTestB.osm \
+  test-output/ToyTestRemoveUnknown2.osm
+-----
+
+This example prepends the +RemoveUnknown2Visitor+ operation to the post conflate operations list using +++=+ operator.
 
 [[Conflation-Configuration]]
 === Conflation Configuration

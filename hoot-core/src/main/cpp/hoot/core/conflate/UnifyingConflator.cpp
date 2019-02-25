@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
@@ -101,14 +101,18 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
     {
       const Match* m = matches[i];
       const MatchClassification& mc = m->getClassification();
-      set< pair<ElementId, ElementId> > pairs = m->getMatchPairs();
-      for (set< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
+      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
            it != pairs.end(); ++it)
       {
         if (mc.getReviewP() > 0.0)
         {
           ElementPtr e1 = map->getElement(it->first);
           ElementPtr e2 = map->getElement(it->second);
+
+          LOG_TRACE(
+            "Adding review tags to " << e1->getElementId() << " and " << e2->getElementId() <<
+            "...");
 
           _addScoreTags(e1, mc);
           _addScoreTags(e2, mc);
@@ -125,9 +129,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
 
-  LOG_INFO("Applying pre-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPreOps()).apply(map);
-
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
@@ -135,6 +136,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
+  OsmMapWriterFactory::writeDebugMap(map, "before-matching");
   // find all the matches in this map
   if (_matchThreshold.get())
   {
@@ -149,28 +151,29 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Match count: " << _matches.size());
   LOG_TRACE(SystemInfo::getMemoryUsageString());
+  OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
-  _stats.append(SingleStat("Number of Matches Found per Second",
-    (double)_matches.size() / findMatchesTime));
+  _stats.append(
+    SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 
   vector<const Match*> allMatches = _matches;
 
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
-  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
 
+  LOG_DEBUG("Pre-constraining match count: " << allMatches.size());
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
   LOG_DEBUG("Number of Matches Before Whole Groups: " << _matches.size());
-
   // If there are groups of matches that should not be optimized, remove them before optimization.
   MatchSetVector matchSets;
   _removeWholeGroups(_matches, matchSets, map);
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
   LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -180,9 +183,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
     {
       cm.addMatches(_matches.begin(), _matches.end());
-
       cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
-
       double cmStart = Time::getTime();
       try
       {
@@ -207,46 +208,46 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     if (gm.getScore() > cm.getScore())
     {
       _matches = gmMatches;
+      LOG_DEBUG("Using greedy matches with a higher score of: " << gm.getScore());
     }
     else
     {
       _matches = cmMatches;
+      LOG_DEBUG(
+        "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
+        cm.getScore());
     }
   }
-
   double optimizeMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
   _stats.append(SingleStat("Number of Optimized Matches", _matches.size()));
   _stats.append(SingleStat("Number of Matches Optimized per Second",
     (double)allMatches.size() / optimizeMatchesTime));
-
   LOG_TRACE(SystemInfo::getMemoryUsageString());
-
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
-
-  //TODO: this isn't right for network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
-  LOG_INFO("Match count: " << _matches.size());
+  // TODO: this stat isn't right for Network
+  LOG_INFO("Post constraining match count: " << _matches.size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
-    vector< set<const Match*, MatchPtrComparator> > tmpMatchSets = mg.findSubgraphs(map);
+    vector<set<const Match*, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
-
   LOG_DEBUG("Match sets count: " << matchSets.size());
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
-  /// @todo would it help to sort the matches so the biggest or best ones get merged first?
+  OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
 
-  // convert all the match sets into mergers.
-  LOG_INFO("Creating mergers...");
+  // Would it help to sort the matches so the biggest or best ones get merged first?
+  // convert all the match sets into mergers - #2912
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
+    PROGRESS_INFO(
+      "Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 
@@ -261,31 +262,27 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  LOG_INFO("Applying " << _mergers.size() << " mergers...");
-  vector< pair<ElementId, ElementId> > replaced;
+  vector<pair<ElementId, ElementId>> replaced;
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
-    if (i % _taskStatusUpdateInterval == 0)
+    if (i % 10 == 0)
     {
-      PROGRESS_INFO(
-        "Applying merger: " << i + 1 << " / " << _mergers.size() << " - " <<
-        _mergers[i]->toString());
+      PROGRESS_INFO("Applying merger: " << i + 1 << " / " << _mergers.size());
     }
     _mergers[i]->apply(map, replaced);
+    LOG_VART(replaced);
 
     // update any mergers that reference the replaced values
     _replaceElementIds(replaced);
     replaced.clear();
-  }
-  if (Log::getInstance().getLevel() == Log::Debug)
-  {
-    cout << endl;
-  }
 
-  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
-  {
-    _mapUnknown1IdsBackToModifiedElements(map);
+    // Enabling this can result in a lot of files being generated.
+//    if (i % 10 == 0)
+//    {
+//      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
+//    }
   }
+  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();
@@ -296,66 +293,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  LOG_INFO("Applying post-unifying conflation operations...");
-  NamedOp(ConfigOptions().getUnifyPostOps()).apply(map);
-
-  _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
                           const pair<ElementId, ElementId>& pair2)
 {
   return pair1.first.getId() > pair2.first.getId();
-}
-
-void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
-{ 
-  LOG_TRACE("Mapping unknown 1 IDs back to modified elements...");
-
-  for (size_t i = 0; i < _mergers.size(); ++i)
-  {
-    set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =
-      _mergers[i]->getImpactedUnknown1ElementIds();
-    //convert to list for sorting (can't sort a set); not sure why the std::sort with std::list
-    //isn't working here...using qt classes instead
-    list< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList(
-      impactedUnknown1ElementIds.begin(), impactedUnknown1ElementIds.end());
-    QList< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList2 =
-      QList <pair<ElementId, ElementId> >::fromStdList(impactedUnknown1ElementIdsAsList);
-    LOG_VART(impactedUnknown1ElementIdsAsList2);
-    if (ConfigOptions().getIdGenerator() == "hoot::PositiveIdGenerator")
-    {
-      //sort from highest to lowest element id keys, since when using the positive id generator,
-      //later elements created by the conflation may have been replaced more than once
-      qSort(impactedUnknown1ElementIdsAsList2.begin(), impactedUnknown1ElementIdsAsList2.end(),
-            elementIdPairCompare);
-    }
-    LOG_VART(impactedUnknown1ElementIdsAsList2);
-    for (QList< pair<ElementId, ElementId> >::const_iterator it =
-         impactedUnknown1ElementIdsAsList2.begin();
-         it != impactedUnknown1ElementIdsAsList2.end(); ++it)
-    {
-      ElementId eid1 = it->first;
-      ElementId eid2 = it->second;
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-
-      if (eid1.getType() == eid2.getType())
-      {
-        LOG_TRACE(
-          "Retaining reference ID by setting: " << eid1 << " on " << eid2 <<
-          " and setting status to conflated...");
-        ElementPtr replacementElement = map->getElement(eid2);
-        LOG_VART(replacementElement.get());
-        LOG_VART(replacementElement->getElementId().getType());
-        ElementPtr newUnknown1Element(replacementElement->clone());
-        newUnknown1Element->setId(eid1.getId());
-        newUnknown1Element->setStatus(Status::Conflated);
-        map->replace(replacementElement, newUnknown1Element);
-      }
-    }
-  }
 }
 
 void UnifyingConflator::_mapElementIdsToMergers()
@@ -371,9 +314,30 @@ void UnifyingConflator::_mapElementIdsToMergers()
   }
 }
 
-void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
-  MatchSetVector &matchSets, const OsmMapPtr &map)
+QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
 {
+  QString str;
+  for (std::set<const Match*, MatchPtrComparator>::const_iterator itr = matchSet.begin();
+       itr != matchSet.end(); ++itr)
+  {
+    const Match* match = *itr;
+    set<pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+    for (std::set<pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
+         itr2 != matchPairs.end(); ++itr2)
+    {
+       pair<ElementId, ElementId> elementIdPair = *itr2;
+       str += elementIdPair.first.toString() + " " + elementIdPair.second.toString() + ", ";
+    }
+  }
+  str.chop(2);
+  return str;
+}
+
+void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
+  MatchSetVector& matchSets, const OsmMapPtr& map)
+{
+  LOG_INFO("Removing whole group matches...");
+
   // search the matches for groups (subgraphs) of matches. In other words, groups where all the
   // matches are interrelated by element id
   MatchGraph mg;
@@ -387,8 +351,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   for (size_t i = 0; i < tmpMatchSets.size(); i++)
   {
     bool wholeGroup = false;
-    for (MatchSet::const_iterator it = tmpMatchSets[i].begin();
-         it != tmpMatchSets[i].end(); ++it)
+    for (MatchSet::const_iterator it = tmpMatchSets[i].begin(); it != tmpMatchSets[i].end(); ++it)
     {
       if ((*it)->isWholeGroup())
       {
@@ -398,6 +361,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
 
     if (wholeGroup)
     {
+      LOG_TRACE("Removing whole group: " << _matchSetToString(tmpMatchSets[i]));
       matchSets.push_back(tmpMatchSets[i]);
     }
     else
@@ -409,7 +373,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   matches = leftovers;
 }
 
-void UnifyingConflator::_replaceElementIds(const vector< pair<ElementId, ElementId> >& replaced)
+void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementId>>& replaced)
 {
   for (size_t i = 0; i < replaced.size(); ++i)
   {
@@ -463,9 +427,9 @@ void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
     {
       if (i < j && MergerFactory::getInstance().isConflicting(map, matches[i], matches[j]))
       {
-        LOG_DEBUG("Conflict");
-        LOG_DEBUG(matches[i]->toString());
-        LOG_DEBUG(matches[j]->toString());
+        LOG_TRACE("Conflict");
+        LOG_TRACE(matches[i]->toString());
+        LOG_TRACE(matches[j]->toString());
       }
     }
   }

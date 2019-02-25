@@ -22,26 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkDetails.h"
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/MaximalSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/EuclideanDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -336,7 +336,7 @@ double NetworkDetails::calculateStringLocation(ConstEdgeStringPtr es, ConstEdgeL
 
   // if el1 is not part of this string, but shares a vertex with the first edge then we can
   // still calculate and return the distance.
-  if (el->isExtreme() && el->getVertex() == edgeStartVertex)
+  if (el->isExtreme() && el->getVertex() == edgeEndVertex)
   {
     return beginningD;
   }
@@ -991,7 +991,7 @@ bool NetworkDetails::isReversed(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2)
   return result;
 }
 
-///@todo can this be combined with the other isStringCandidates? Or call it?
+// TODO: can this be combined with the other isStringCandidates? Or call it?
 bool NetworkDetails::isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const
 {
   bool result = false;

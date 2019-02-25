@@ -46,6 +46,24 @@ echo ""
 hoot info --formats --output | grep ".shp"
 echo ""
 
+# LANGUAGES
+echo "Listing detectable languages..."
+echo ""
+hoot info -D language.info.provider=hoot::HootServicesLanguageInfoMockClient --languages --detectable
+echo ""
+echo "Listing translatable languages..."
+echo ""
+hoot info -D language.info.provider=hoot::HootServicesLanguageInfoMockClient --languages --translatable
+echo ""
+echo "Listing available language detectors..."
+echo ""
+hoot info -D language.info.provider=hoot::HootServicesLanguageInfoMockClient --languages --detectors
+echo ""
+echo "Listing available to English language translators..."
+echo ""
+hoot info -D language.info.provider=hoot::HootServicesLanguageInfoMockClient --languages --translators
+echo ""
+
 # MATCHERS
 echo "Listing a match creator..."
 echo ""
@@ -84,4 +102,34 @@ echo ""
 echo "Listing a tag merger..."
 echo ""
 hoot info --tag-mergers | grep "AverageTagMerger"
+echo ""
+
+# CLEANING OPS
+echo "Listing cleaning operations..."
+echo ""
+hoot info --cleaning-operations | grep "DuplicateWayRemover"
+echo ""
+
+# SUBLINE MATCHERS
+echo "Listing subline matchers..."
+echo ""
+hoot info --subline-matchers | grep "FrechetSublineMatcher"
+echo ""
+
+# SUBLINE STRING MATCHERS
+echo "Listing subline string matchers..."
+echo ""
+hoot info --subline-string-matchers | grep "MaximalSublineStringMatcher"
+echo ""
+
+# CONFLATE PRE OPS
+echo "Listing pre-conflation operations..."
+echo ""
+hoot info --conflate-pre-operations | grep "MapCleaner"
+echo ""
+
+# CONFLATE POST OPS
+echo "Listing post-conflation operations..."
+echo ""
+hoot info --conflate-post-operations | grep "SuperfluousNodeRemover"
 echo ""

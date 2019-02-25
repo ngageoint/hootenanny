@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCRITERION_H
 #define TAGCRITERION_H
@@ -49,7 +49,7 @@ public:
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   void setConfiguration(const Settings& s);
 
@@ -58,7 +58,7 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
   virtual QString getDescription() const
-  { return "Filters elements based on whether they contain any specified tag key/value pair"; }
+  { return "Identifies elements containing a specified tag key/value combination"; }
 
 private:
 

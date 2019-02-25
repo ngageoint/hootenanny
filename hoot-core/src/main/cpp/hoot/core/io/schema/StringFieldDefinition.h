@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGFIELDDEFINITION_H
 #define STRINGFIELDDEFINITION_H
 
-#include "FieldDefinition.h"
+#include <hoot/core/io/schema/FieldDefinition.h>
 
 namespace hoot
 {
@@ -37,11 +37,11 @@ class StringFieldDefinition : public FieldDefinition
 public:
   StringFieldDefinition();
 
-  virtual QVariant::Type getType() const { return QVariant::String; }
+  virtual QVariant::Type getType() const override { return QVariant::String; }
 
-  virtual void validate(const QVariant& v, StrictChecking strict) const;
+  virtual void validate(const QVariant& v, StrictChecking strict) const override;
 
-  virtual QVariant getDefaultValue() const;
+  virtual QVariant getDefaultValue() const override;
 
   virtual bool hasDefaultValue() const;
 

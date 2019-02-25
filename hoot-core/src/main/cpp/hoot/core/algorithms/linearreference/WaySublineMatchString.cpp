@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatchString.h"
 
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
-#include "WaySublineCollection.h"
 
 using namespace std;
 
@@ -49,8 +49,8 @@ WaySublineMatchString::WaySublineMatchString(const MatchCollection& m)
       if (i != j && m[i].overlaps(m[j]))
       {
         LOG_VART(m);
-        throw OverlappingMatchesException(QString("The match collection must not contain "
-          "overlapping matches."));
+        throw OverlappingMatchesException(
+          "The match collection must not contain overlapping matches.");
       }
     }
   }

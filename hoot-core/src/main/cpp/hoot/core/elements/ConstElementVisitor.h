@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONSTELEMENTVISITOR_H
 #define CONSTELEMENTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -40,31 +40,21 @@ namespace hoot
  *
  * This is also used by hoot::VisitorOp and hoot::NamedOp.
  */
-class ConstElementVisitor
+class ConstElementVisitor : public ElementVisitor
 {
 public:
 
+  ConstElementVisitor() {}
   virtual ~ConstElementVisitor() {}
 
   static std::string className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 
-  /**
-    Returns a string representation of the visitor
-    */
-  virtual QString toString() { return ""; }
-
-  /**
-   * Returns a one sentence description for the visitor.
-   *
-   * Keep this as short as possible, capitalize the first letter, and check to see that it stays
-   * on one line when displayed with the 'operators' command.
-   *
-   * To prevent a visitor from being displayed by the 'operators' command, this may be
-   * implemented as returning an empty string.
-   */
-  virtual QString getDescription() const = 0;
+  virtual void visit(const ElementPtr& e) override
+  {
+    visit(boost::dynamic_pointer_cast<const Element>(e));
+  }
 };
 
 typedef boost::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;

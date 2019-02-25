@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -35,7 +35,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
@@ -92,7 +92,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-1L, nodeIds.at(0));
@@ -104,11 +104,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(50.0, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(0);
-    HOOT_STR_EQUALS("Way:-1", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.5), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(50.0, subline.getLength());
-    HOOT_STR_EQUALS("Way:-1", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getWay()->getElementId());
   }
 
   void runMultipleWaysWayLocationOnFirstWayTest()
@@ -135,7 +135,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-1L, nodeIds.at(0));
@@ -145,11 +145,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(50.0, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(0);
-    HOOT_STR_EQUALS("Way:-1", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way1, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way1, 0, 0.5), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(50.0, subline.getLength());
-    HOOT_STR_EQUALS("Way:-1", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getWay()->getElementId());
   }
 
   void runMultipleWaysWayLocationOnLastWayTest()
@@ -176,7 +176,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 10), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(0));
@@ -186,11 +186,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(150.0, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(1);
-    HOOT_STR_EQUALS("Way:-2", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-2)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.5), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(50.0, subline.getLength());
-    HOOT_STR_EQUALS("Way:-2", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", subline.getWay()->getElementId());
   }
 
   void runMultipleWaysWayLocationOnMiddleWayTest()
@@ -221,7 +221,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 7.5), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-3L, nodeIds.at(0));
@@ -231,11 +231,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)2, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(102.5, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(1);
-    HOOT_STR_EQUALS("Way:-2", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-2)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way2, 0, 0.5), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(2.5, subline.getLength());
-    HOOT_STR_EQUALS("Way:-2", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-2)", subline.getWay()->getElementId());
   }
 
   void runWayLocationAtBeginningOfWayTest()
@@ -259,7 +259,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-1L, nodeIds.at(0));
@@ -271,11 +271,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(0.0, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(0);
-    HOOT_STR_EQUALS("Way:-1", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(0.0, subline.getLength());
-    HOOT_STR_EQUALS("Way:-1", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getWay()->getElementId());
   }
 
   void runWayLocationAtEndOfWayTest()
@@ -299,7 +299,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 0), wayLocation.getCoordinate());
     const ConstWayPtr wayLocationWay = wayLocation.getWay();
-    HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
     CPPUNIT_ASSERT_EQUAL(-1L, nodeIds.at(0));
@@ -311,11 +311,11 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, waySublineCollection.getSublines().size());
     CPPUNIT_ASSERT_EQUAL(100.0, waySublineCollection.getLength());
     WaySubline subline = waySublineCollection.getSublines().at(0);
-    HOOT_STR_EQUALS("Way:-1", subline.getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getElementId());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 0.0), subline.getStart());
     CPPUNIT_ASSERT_EQUAL(WayLocation(map, way, 0, 1.0), subline.getEnd());
     CPPUNIT_ASSERT_EQUAL(100.0, subline.getLength());
-    HOOT_STR_EQUALS("Way:-1", subline.getWay()->getElementId());
+    HOOT_STR_EQUALS("Way(-1)", subline.getWay()->getElementId());
   }
 
   void runRelationHasNoWaysTest()
@@ -428,7 +428,7 @@ public:
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("Feature at way index: 0 does not match way assigned to way location: Way:-1")
+      QString("Feature at way index: 0 does not match way assigned to way location: Way(-1)")
         .toStdString(),
       exceptionMsg.toStdString());
   }

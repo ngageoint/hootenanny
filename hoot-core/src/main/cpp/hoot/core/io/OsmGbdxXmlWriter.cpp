@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmGbdxXmlWriter.h"
 
@@ -30,7 +30,7 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
@@ -41,10 +41,11 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -381,7 +382,7 @@ void OsmGbdxXmlWriter::_writeWays(ConstOsmMapPtr map)
     // Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (OsmSchema::getInstance().isArea(w))
+    if (AreaCriterion().isSatisfied(w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
@@ -488,19 +489,16 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
   // POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))
   // POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
 
-  QString featureGeometry;
   QString endBracket;
 
   const vector<long>& nodes = w->getNodeIds();
-  if (OsmSchema::getInstance().isArea(w) || nodes[0] == nodes[nodes.size() - 1])
+  if (AreaCriterion().isSatisfied(w) || nodes[0] == nodes[nodes.size() - 1])
   {
-    featureGeometry = "Polygon";
     endBracket = "))";
     _writer->writeCharacters(QString("POLYGON (("));
   }
   else
   {
-    featureGeometry = "Linestring";
     endBracket = ")";
     _writer->writeCharacters(QString("LINESTRING ("));
   }
@@ -521,20 +519,12 @@ void OsmGbdxXmlWriter::_writeWayWithPoints(const ConstWayPtr& w, ConstOsmMapPtr 
 
   _writer->writeEndElement(); // WKT
 
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters(featureGeometry);
-//  _writer->writeEndElement();
-
   _writer->writeEndElement(); // geometry
 
   // Add the Det_id from the Tag
   _writer->writeStartElement("id");
   _writer->writeCharacters(w->getTags()["Det_id"]);
   _writer->writeEndElement();
-
-//  _writer->writeStartElement("type");
-//  _writer->writeCharacters("Feature");
-//  _writer->writeEndElement();
 
   _writer->writeEndElement(); // features
 

@@ -28,8 +28,8 @@
 #define INDEXELEMENTVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 // TGS
@@ -54,9 +54,7 @@ namespace hoot
  */
 class ElementCriterion;
 
-class IndexElementsVisitor :
-    public ConstElementVisitor,
-    public ElementCriterionConsumer
+class IndexElementsVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer
 {
 public:
 
@@ -83,7 +81,6 @@ public:
 
 private:
 
-  ConstOsmMapPtr _pMap;
   boost::shared_ptr<ElementCriterion> _criterion;
   boost::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
 

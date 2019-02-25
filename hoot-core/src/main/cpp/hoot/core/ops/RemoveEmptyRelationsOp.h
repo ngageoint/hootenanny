@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __REMOVE_EMPTY_RELATIONS_OP_H__
 #define __REMOVE_EMPTY_RELATIONS_OP_H__
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,7 @@ namespace hoot
  * Removes all relations that have no members.  This needs to be an op, rather than a visitor, so
  * that we can delete relations that are children of other relations.
  */
-class RemoveEmptyRelationsOp : public OsmMapOperation
+class RemoveEmptyRelationsOp : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -50,16 +51,18 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  long getNumRemoved() const { return _numRemoved; }
+  long getNumRemoved() const { return _numAffected; }
 
-  virtual QString getDescription() const { return "Removes empty relations"; }
+  virtual QString getInitStatusMessage() const { return "Removing empty relations..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " empty relations"; }
+
+  virtual QString getDescription() const { return "Removes relations with no members"; }
 
 private:
 
-  long _numRemoved;
-
   void _deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder);
-
 };
 
 }

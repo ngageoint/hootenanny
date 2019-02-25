@@ -39,9 +39,9 @@ NodeCriterion::NodeCriterion()
 {
 }
 
-bool NodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool NodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return boost::dynamic_pointer_cast<const Node>(e) != 0;
+  return e->getElementType() == ElementType::Node;
 }
 
 }

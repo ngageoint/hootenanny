@@ -22,29 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATEWAYREMOVER_H
 #define DUPLICATEWAYREMOVER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 /**
  * Searches for multiple ways that share two or more consecutive nodes if they are found, then
- * it attempts to remove the duplicate bits of the longer way. There may be some scenarios that
- * this is destructive, but in most cases it is probably useful. This routine also doesn't handle
- * the case where two ways have multiple overlapping sections. In that case only the longest
- * duplicate section will be removed.
+ * it attempts to remove the duplicate bits of the longer way. If the lines partially overlap with
+ * exactly the same geometry then only the partial overlap is removed from the more complex
+ * geometry. There may be some scenarios that this is destructive, but in most cases it is probably
+ * useful. This routine also doesn't handle the case where two ways have multiple overlapping
+ * sections. In that case only the longest duplicate section will be removed.
  *
  * Area ways will be ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation
+class DuplicateWayRemover : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -72,7 +74,13 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
-  virtual QString getDescription() const { return "Removes duplicated way from a map"; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate ways..."; }
+
+  // finish; wasn't obvious how to count the total affected - #2933
+  virtual QString getCompletedStatusMessage() const
+  { return ""; }
+
+  virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 
 protected:
 

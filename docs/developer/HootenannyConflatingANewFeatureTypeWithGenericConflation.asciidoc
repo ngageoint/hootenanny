@@ -148,19 +148,21 @@ type.  In this example, the type is "waterway".
 ==== C++ Code Changes Required
 
 The following code C++ code changes are required to add a new schema for a feature type:
-* OsmSchema - You will need to add a method here which helps the conflation to uniquely recognize the
-feature type you want conflate.  This primarily involves deriving the feature's type given the 
-attributes (tags) it possesses.  Here is an example from the river conflation:
+
+* You will need to create a class that implemented ElementCriterion for your feature type, if it does not already exist.
+Doing so helps the conflation to uniquely recognize the feature type you want conflate.  This primarily involves deriving the 
+feature's type given the attributes (tags) it possesses.  Here is an example from the river conflation:
 ----------------
-bool OsmSchema::isLinearWaterway(const Element& e)
+bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Way || e->getElementType() == ElementType::Relation)
   {
-    const Tags& tags = e.getTags();
+    const Tags& tags = e->getTags();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
-      if (it.key() == "waterway" || isAncestor(it.key(), "waterway") ||
-          (it.key() == "type" && isAncestor("waterway=" + it.value(), "waterway")))
+      if (it.key() == "waterway" || OsmSchema::getInstance().isAncestor(it.key(), "waterway") ||
+          (it.key() == "type" &&
+           OsmSchema::getInstance().isAncestor("waterway=" + it.value(), "waterway")))
       {
         return true;
       }
@@ -172,37 +174,28 @@ bool OsmSchema::isLinearWaterway(const Element& e)
 * OsmSchemaJs - You will need to wrap the method entry made in OsmSchema in the classes that expose
 the Javascript interface.  River example:
 -----------------
-Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) {
+Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) 
+{
   HandleScope scope;
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  return scope.Close(Boolean::New(OsmSchema::getInstance().isLinearWaterway(*e)));
+  return scope.Close(Boolean::New(LinearWaterwayCriterion().isSatisfied(e)));
 }
 -----------------
 * NodeMatcher::calculateAngles - To make map cleaning work for your feature type, you may have to 
 include your new feature type here.  example:
 -------------
 ...
-if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
-        OsmSchema::getInstance().isLinearWaterway(*w) == false)
+if (HighwayCriterion().isSatisfied(w) == false &&
+    LinearWaterwayCriterion().isSatisfied(w) == false &&
+    PowerLineCriterion().isSatisfied(w) == false)
 {
-  // if this isn't a highway or waterway, then don't consider it.
-  //LOG_DEBUG("calculateAngles skipping feature");
+  // If this isn't a feature type we're interested in, then don't consider it.
 }
 ...
 -------------
-* IntersectionSplitter::_mapNodesToWays - To make map cleaning work for your feature type, you may 
-have to include your new feature type here.  example:
--------------
-...
-if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) ||
-        OsmSchema::getInstance().isLinearWaterway(*w))
-{ 
-  _mapNodesToWay(w);
-}
-...
----------------
+* IntersectionSplitter::_mapNodesToWays - You'll need to make a change similar to the previous one in this method.
 
 ==== Javascript Code Changes Required
 

@@ -22,30 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENTS_NODE_H_
 #define _ELEMENTS_NODE_H_
 
-#include "Element.h"
-#include "NodeData.h"
-
 // GEOS
 #include <geos/geom/Coordinate.h>
-namespace geos {
-  namespace geom {
-    class Envelope;
-    class Point;
-  }
-}
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Point.h>
 
 // hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/NodeData.h>
 #include <hoot/core/util/SharedPtrPool.h>
 
 namespace hoot
 {
-
-class NodeData;
 
 class Node : public Element
 {
@@ -55,9 +48,9 @@ public:
 
   Node(const Node& from);
 
-  Node(Status s, long id, const geos::geom::Coordinate& c, Meters circularError);
+  Node(Status s, long id, const geos::geom::Coordinate& c, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
-  Node(Status s, long id, double x, double y, Meters circularError,
+  Node(Status s, long id, double x, double y, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
        unsigned int timestamp = ElementData::TIMESTAMP_EMPTY,
        QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
@@ -81,7 +74,7 @@ public:
    * @return A newly allocated and initialized Node shared pointer.
    */
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y,
-    Meters circularError);
+    Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
                                        long changeset, long version, quint64 timestamp,
@@ -146,7 +139,6 @@ protected:
   virtual ElementData& _getElementData() { return _nodeData; }
 
   virtual const ElementData& _getElementData() const { return _nodeData; }
-
 };
 
 typedef boost::shared_ptr<Node> NodePtr;

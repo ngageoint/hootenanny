@@ -27,14 +27,14 @@
 #ifndef V8ENGINE_H
 #define V8ENGINE_H
 
-#include "HootJsStable.h"
+#include <hoot/js/HootJsStable.h>
 
 namespace hoot
 {
 
 /**
- * A singleton to initialize v8 JavaScript library. You should call getInstance() on this before any other
- * use of v8Engine. You can call getInstance multiple times without any ill effects.
+ * A singleton to initialize v8 JavaScript library. You should call getInstance() on this before
+ * any other use of v8Engine. You can call getInstance multiple times without any ill effects.
  */
 class v8Engine
 {

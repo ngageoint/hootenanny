@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGUTILS_H
 #define STRINGUTILS_H
 
 // Qt
-#include <QString>
+#include <QStringList>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -71,6 +71,14 @@ public:
   static bool hasAlphabeticCharacter(const QString input);
 
   /**
+   * Determines whether a string contains a number
+   *
+   * @param input string to examine
+   * @return true if the input has at least one number; false otherwise
+   */
+  static bool hasDigit(const QString input);
+
+  /**
    * Converts a JSON string to a Boost property tree
    *
    * @param jsonStr the string to convert
@@ -79,13 +87,31 @@ public:
   static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 
   /**
+   * Creates a JSON array from a list of strings
+   *
+   * @param stringList a list of strings
+   * @return a Boost JSON property tree containing a string array
+   */
+  static boost::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+    const QStringList stringList);
+
+  /**
    * Determines if text is a number
    *
    * @param input text to examine
    * @return true if the input is a number; false otherwise
-   * @todo only implemented for long int
+   * @note only implemented for long int
    */
   static bool isNumber(const QString input);
+
+  /**
+   *
+   *
+   * @param number
+   * @param padSize
+   * @return
+   */
+  static QString getNumberStringPaddedWithZeroes(const int number, const int padSize);
 };
 
 }

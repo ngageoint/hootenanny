@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DISTANCENODECRITERION_H
@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,22 +44,24 @@ class Element;
 /**
  * isSatisfied returns true if an element is within the specified distance of the given center
  */
-class DistanceNodeCriterion : public ElementCriterion
+class DistanceNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
-  DistanceNodeCriterion() {}
+  DistanceNodeCriterion();
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DistanceNodeCriterion(_center, _distance)); }
 
   virtual QString getDescription() const
-  { return "Returns true if an element is within the specified distance of the given center"; }
+  { return "Determines if an element is within the specified distance of a point"; }
+
+  virtual void setConfiguration(const Settings& s);
 
 private:
 

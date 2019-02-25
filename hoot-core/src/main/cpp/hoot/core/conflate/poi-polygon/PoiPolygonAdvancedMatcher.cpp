@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAdvancedMatcher.h"
 
@@ -33,12 +33,11 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-
-#include "extractors/PoiPolygonNameScoreExtractor.h"
-#include "extractors/PoiPolygonAddressScoreExtractor.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -56,18 +55,11 @@ _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _badGeomCount(0)
 {
-  //TODO: can probably get rid of this list and make the logic work against all landuse
-  _genericLandUseTagVals.append("cemetery");
-  _genericLandUseTagVals.append("commercial");
-  _genericLandUseTagVals.append("construction");
-  _genericLandUseTagVals.append("farm");
-  _genericLandUseTagVals.append("forest");
-  _genericLandUseTagVals.append("grass");
-  _genericLandUseTagVals.append("industrial");
-  _genericLandUseTagVals.append("meadow");
-  _genericLandUseTagVals.append("residential");
-  _genericLandUseTagVals.append("retail");
-  _genericLandUseTagVals.append("village_green");
+}
+
+void PoiPolygonAdvancedMatcher::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
 }
 
 bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
@@ -83,7 +75,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   }
 
   const QString poiAddress =
-    PoiPolygonAddressScoreExtractor::getAddressTagValue(poi->getTags(), "full_address");
+    AddressTagKeys::getInstance()->getAddressTagValue(poi->getTags(), "full_address");
   if (poiAddress.isEmpty())
   {
     return false;
@@ -96,7 +88,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
     {
       try
       {
-        const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(poiNeighbor);
+        const QString poiNeighborName = poiNeighbor->getTags().getName();
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
           boost::shared_ptr<Geometry> poiNeighborGeom =

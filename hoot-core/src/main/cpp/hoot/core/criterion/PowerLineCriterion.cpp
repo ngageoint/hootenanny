@@ -35,9 +35,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
 
-bool PowerLineCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return OsmSchema::getInstance().isPowerLine(*e.get());
+  if (e->getElementType() == ElementType::Way)
+  {
+    const Tags& tags = e->getTags();
+    const QString powerVal = tags.get("power").toLower().trimmed();
+    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 }

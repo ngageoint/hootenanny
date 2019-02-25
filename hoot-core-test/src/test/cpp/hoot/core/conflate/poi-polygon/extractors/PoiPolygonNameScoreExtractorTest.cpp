@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
@@ -49,7 +49,6 @@ class PoiPolygonNameScoreExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
   CPPUNIT_TEST(scoreTest);
-  CPPUNIT_TEST(elementNameTest);
   CPPUNIT_TEST(translateTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -71,24 +70,13 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.10669, uut.extract(*map, node1, way2), 0.001);
   }
 
-  void elementNameTest()
-  {
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    HOOT_STR_EQUALS("blah", PoiPolygonNameScoreExtractor::getElementName(node1));
-
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    HOOT_STR_EQUALS("", PoiPolygonNameScoreExtractor::getElementName(node2));
-  }
-
   void translateTest()
   {
     PoiPolygonNameScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.translate.names.to.english", "true");
+    settings.set("poi.polygon.name.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     uut.setConfiguration(settings);
     boost::shared_ptr<DictionaryTranslator> dictTranslator =
@@ -104,7 +92,7 @@ public:
     way1->getTags().set("name", "KFC");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
 
-    settings.set("poi.polygon.translate.names.to.english", "false");
+    settings.set("poi.polygon.name.translate.to.english", "false");
     uut.setConfiguration(settings);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.203, uut.extract(*map, node1, way1), 0.001);
   }

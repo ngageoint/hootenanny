@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_H
 #define TAGS_H
 
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
 #include <QHash>
@@ -126,9 +127,24 @@ public:
   static const QStringList& getNameKeys();
 
   /**
+   * Get name keys for a set of tags
+   *
+   * @param tags tags to parse name keys from
+   * @return a list of name keys
+   */
+  static QStringList getNameKeys(const Tags& tags);
+
+  /**
    * Return all the names for the current feature.
    */
   QStringList getNames() const;
+
+  /**
+   * Returns a name given tags
+   *
+   * @return the first name found, if one is present
+   */
+  QString getName() const;
 
   /**
    * Returns the speed in standard units (m/s).
@@ -255,6 +271,38 @@ public:
    * @return true if tags contain at least one kvp; false otherwise
    */
   bool hasAnyKvp(const QStringList kvps) const;
+
+  /**
+   * Converts a list of KVPs into tags
+   *
+   * @param kvps kvps to convert
+   * @return a set of tags
+   */
+  static Tags kvpListToTags(const QStringList kvps);
+
+  /**
+   * Converts a collection of schema vertices to tags
+   *
+   * @param vertices schema vertices to convert
+   * @return a set of tags
+   */
+  static Tags schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices);
+
+  /**
+   * Determines if two set of tags have a matching name
+   *
+   * @param tags1 first set of tags to examine
+   * @param tags2 second set of tags to examine
+   * @return true if the tags have at least one matching name; false otherwise
+   */
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2);
+
+  /**
+   * Determines whether a name exists in the set of tag
+   *
+   * @return true if at least one name exists; false otherwise
+   */
+  bool hasName() const;
 
 private:
 

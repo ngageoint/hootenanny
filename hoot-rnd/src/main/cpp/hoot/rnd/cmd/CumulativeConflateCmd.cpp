@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -47,11 +47,13 @@ public:
   virtual QString getName() const { return "conflate-cumulative"; }
 
   virtual QString getDescription() const
-  { return "(experimental) Conflates three or more maps into a single map"; }
+  { return "Conflates three or more maps into a single map, retaining feature provenance (experimental)"; }
 
-  virtual int runSimple(QStringList args)
+  virtual QString getType() const { return "rnd"; }
+
+  virtual int runSimple(QStringList args) override
   {
-    //TODO: make this work with stats
+    // doesn't work with stats yet
     if (args.contains("--stats"))
     {
       throw HootException("Multi-conflation does not work with the --stats option.");
@@ -76,8 +78,7 @@ public:
   }
 };
 
-//This hasn't seen much use but don't want to remove it just yet.
-//HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
+HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 

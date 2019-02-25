@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHLOCATION_H
 #define WAYMATCHLOCATION_H
 
-#include "WaySubline.h"
+#include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 namespace hoot
 {
@@ -37,6 +37,7 @@ class WaySublineCollection;
 class WaySublineMatch
 {
 public:
+
   WaySublineMatch();
 
   WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr &newMap);
@@ -68,6 +69,7 @@ public:
   QString toString() const;
 
 private:
+
   WaySubline _ws1, _ws2;
   bool _reversed;
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -59,7 +59,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
     virtual QString getName() const { return "node-density-plot"; }
 
-    virtual QString getDescription() const { return "Creates a node density plot"; }
+    virtual QString getDescription() const { return "Creates a node density plot for a map"; }
 
     Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {
@@ -210,7 +210,7 @@ class NodeDensityPlotCmd : public BaseCommand
       }
 
       boost::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::getInstance().createReader(input, true);
+        OsmMapReaderFactory::createReader(input, true);
       reader->open(input);
       Envelope e = getEnvelope(reader);
       LOG_DEBUG("Envelope: " << GeometryUtils::toString(e));
@@ -225,7 +225,7 @@ class NodeDensityPlotCmd : public BaseCommand
         pixelSize = e.getHeight() / maxSize;
       }
 
-      reader = OsmMapReaderFactory::getInstance().createReader(input, true);
+      reader = OsmMapReaderFactory::createReader(input, true);
       reader->open(input);
       cv::Mat mat = calculateDensity(e, pixelSize, reader);
       Envelope imageEnvelope(e.getMinX(), e.getMinX() + pixelSize * mat.size().width,

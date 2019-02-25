@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -32,7 +32,7 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -595,10 +595,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     count++;
   }
-  if (Log::getInstance().isInfoEnabled())
-  {
-    cout << endl;
-  }
+  LOG_DEBUG("Reprojecting " << nodes.size() << " / " << nodes.size());
 
   map->setProjection(ref);
 

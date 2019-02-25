@@ -28,10 +28,10 @@
 #define NEEDSREVIEWCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -46,10 +46,9 @@ public:
   static std::string className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() {}
-
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NeedsReviewCriterion(_map)); }
@@ -62,7 +61,6 @@ private:
 
   ConstOsmMapPtr _map;
   ReviewMarker _reviewMarker;
-
 };
 
 }

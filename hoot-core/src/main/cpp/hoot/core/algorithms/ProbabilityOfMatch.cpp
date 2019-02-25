@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbabilityOfMatch.h"
@@ -34,17 +34,17 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
+#include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/criterion/ParallelWayCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/Way.h>
-
+#include <hoot/core/criterion/OneWayCriterion.h>
 // Standard
 #include <vector>
 using namespace std;
@@ -53,8 +53,6 @@ using namespace std;
 #include <tgs/StreamUtils.h>
 #include <tgs/Statistics/Normal.h>
 using namespace Tgs;
-
-#include "WayDiscretizer.h"
 
 namespace hoot
 {
@@ -73,7 +71,8 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
   double score = 1.0;
 
   score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
-  if (OsmSchema::getInstance().isOneWay(*w1) && OsmSchema::getInstance().isOneWay(*w2))
+  OneWayCriterion oneWayCrit;
+  if (oneWayCrit.isSatisfied(w1) && oneWayCrit.isSatisfied(w2))
   {
     if (DirectionFinder::isSimilarDirection(map, w1, w2) == false)
     {
@@ -111,7 +110,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
     Point* point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
     if (debug)
     {
-      cout << "distance " << ls2->distance(point) << endl;
+      LOG_INFO("distance " << ls2->distance(point));
     }
     double d = ls2->distance(point);
     distanceSum += d;
@@ -123,7 +122,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   Meters distanceMean = distanceSum / v.size();
 
-  /// @todo Make me better.
+  // TODO: Make me better.
   // E.g. if s1 = 50 & s2 = 50, then sigma = 70.
   // This is a placeholder for the probability. Mike Porter will help me out w/ a better
   // approximation later.
@@ -136,8 +135,8 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 
   if (debug)
   {
-    LOG_INFO("" << "distanceMean: " << distanceMean);
-    LOG_INFO("" << "  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
+    LOG_INFO("distanceMean: " << distanceMean);
+    LOG_INFO("  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
   }
 
   return p;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONEWAYCRITERION_H
@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Keeps all the one-way elements
+ * Identifies one-way streets
  */
 class OneWayCriterion : public ElementCriterion
 {
@@ -43,11 +43,11 @@ public:
 
   static std::string className() { return "hoot::OneWayCriterion"; }
 
-  OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
+  OneWayCriterion(bool isOneWay = true);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies one way streets"; }
 

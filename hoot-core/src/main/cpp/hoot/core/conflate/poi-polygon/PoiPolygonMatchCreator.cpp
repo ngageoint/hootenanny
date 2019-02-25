@@ -22,21 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-
-#include "PoiPolygonMatch.h"
-#include "visitors/PoiPolygonMatchVisitor.h"
-#include "PoiPolygonTagIgnoreListReader.h"
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -57,17 +54,8 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
 
-    const bool foundPoi =
-      OsmSchema::getInstance().isPoiPolygonPoi(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
-      OsmSchema::getInstance().isPoiPolygonPoi(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList());
-    const bool foundPoly =
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e1, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()) ||
-      OsmSchema::getInstance().isPoiPolygonPoly(
-        e2, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList());
-
+    const bool foundPoi = _poiCrit.isSatisfied(e1) || _poiCrit.isSatisfied(e2);
+    const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
       result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
@@ -83,32 +71,37 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
   map->visitRo(v);
+  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " POI to Polygon match candidates.");
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }
-  LOG_INFO(
+  LOG_DEBUG(
     "POI/Polygon total match pair candidates processed: " << PoiPolygonMatch::matchesProcessed);
-  LOG_INFO("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
-  LOG_INFO("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
-  LOG_INFO("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
-  LOG_INFO(
+  LOG_DEBUG("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
+  LOG_DEBUG("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
+  LOG_DEBUG("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
+  LOG_DEBUG(
     "POI/Polygon name matches: " << PoiPolygonMatch::nameMatches << " / " <<
     PoiPolygonMatch::nameMatchCandidates << " match candidates.  " <<
     PoiPolygonMatch::namesProcessed << " total names processed.");
-  LOG_INFO(
+  LOG_DEBUG(
     "POI/Polygon address matches: " << PoiPolygonMatch::addressMatches << " / " <<
      PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
      PoiPolygonMatch::addressesProcessed << " total addresses processed.");
-  LOG_INFO(
+  LOG_DEBUG(
+    "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
+    PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
+    PoiPolygonMatch::phoneNumbersProcesed << " total phone numbers processed.");
+  LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
 }
 
@@ -118,7 +111,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   result.push_back(
     CreatorDescription(
       className(),
-      "matches POIs to polygons",
+      "Matches POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
       //input types
@@ -130,11 +123,8 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
 bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
                                               const ConstOsmMapPtr& /*map*/)
 {
-  return element->isUnknown() &&
-    (OsmSchema::getInstance().isPoiPolygonPoi(
-       element, PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList()) ||
-     OsmSchema::getInstance().isPoiPolygonPoly(
-       element, PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList()));
+  return
+    element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));
 }
 
 boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()

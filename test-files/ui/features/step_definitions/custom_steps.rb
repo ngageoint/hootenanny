@@ -224,13 +224,7 @@ end
 When(/^I expand the "([^"]*)" folder$/) do |folder|
   text = page.find('text',:text=>folder, :match => :prefer_exact)
   parent = text.find(:xpath,"..")
-  begin
-    el = parent.find('.folder')
-  rescue Capybara::ElementNotFound
-    # In Capybara 0.4+ #find_field raises an error instead of returning nil
-    el = nil
-  end
-  parent.find('rect').click unless el.nil?
+  parent.find('rect').click
 end
 
 When(/^I click the "([^"]*)" Dataset and the "([^"]*)" Dataset$/) do |d1, d2|
@@ -588,7 +582,7 @@ When(/^I change the reference layer color to ([^"]*)$/) do |color|
   swatch = page.first('a[data-color="' + color + '"')
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
-  expect(page.first('path.stroke.tag-hoot').native.css_value('stroke')).to eq(rgb)
+  expect(page.first('path.way.line.stroke').native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I change the secondary layer color to ([^"]*)$/) do |color|
@@ -596,7 +590,7 @@ When(/^I change the secondary layer color to ([^"]*)$/) do |color|
   swatch = page.all('a[data-color="' + color + '"').last
   rgb = swatch.native.css_value('background').split(")").first + ')'
   swatch.click
-  expect(page.all('path.stroke.tag-hoot').last.native.css_value('stroke')).to eq(rgb)
+  expect(page.all('path.way.line.stroke').last.native.css_value('stroke')).to eq(rgb)
 end
 
 When(/^I scroll element into view and press "([^"]*)"$/) do |id|

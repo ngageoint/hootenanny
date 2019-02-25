@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
@@ -220,7 +220,7 @@ public:
 
     // Try to create a waystring with sublines with different ways that are not
     // consecutive
-    //TODO: re-enable this as part of #1312
+    // re-enable this as part of #1312
 //    exThrown = false;
 //    try
 //    {
@@ -287,7 +287,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 
@@ -323,7 +323,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 
@@ -367,7 +367,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 1",
+                    "circular error: 1\n",
                     wayCopy);
   }
 };

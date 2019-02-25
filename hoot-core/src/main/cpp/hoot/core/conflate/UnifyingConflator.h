@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
@@ -49,14 +49,12 @@ class MatchFactory;
 class MatchThreshold;
 class Merger;
 class MergerFactory;
-class Settings;
 class ElementId;
 
 /**
- * A different form of conflation from the standard greedy conflation. This is a work in progress
- * see the developer documentation for details and #2376 and #2452 for details.
+ * A different form of conflation from the standard greedy conflation.
  *
- * This is named unifying because it unifies the building conflation and road conflation approaches.
+ * This is named Unifying because it unifies the building conflation and road conflation approaches.
  *
  * Re-entrant but not thread safe.
  *
@@ -72,7 +70,6 @@ public:
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
-
   UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
 
   ~UnifyingConflator();
@@ -110,7 +107,7 @@ private:
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, std::vector<Merger*> > _e2m;
+  HashMap<ElementId, std::vector<Merger*>> _e2m;
   std::vector<const Match*> _matches;
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
@@ -154,12 +151,7 @@ private:
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
-
-  /*
-   * This method is required for the preserve.unknown1.element.id.when.modifying.features setting
-   * to work.  It is run after conflation to prevent ID's of unknown1 features from being lost.
-   */
-  void _mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map);
+  QString _matchSetToString(const MatchSet& matchSet) const;
 };
 
 }

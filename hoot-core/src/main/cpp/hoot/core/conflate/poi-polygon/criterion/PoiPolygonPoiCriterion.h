@@ -22,19 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONPOICRITERION_H
-#define POIPOLYGONPOICRITERION_H
+#ifndef POI_POLYGON_POI_CRITERION_H
+#define POI_POLYGON_POI_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/conflate/address/AddressParser.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * A criterion that will keep poi features, as defined by PoiPolygonMatch.
+ * Identifies POIs for use with POI/Polygon conflation
  */
 class PoiPolygonPoiCriterion : public ElementCriterion
 {
@@ -44,14 +48,18 @@ public:
 
   PoiPolygonPoiCriterion();
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 
-  virtual QString getDescription() const
-  { return "Identifies POIs as defined by POI/Polygon conflation"; }
+  virtual QString getDescription() const { return ""; }
+
+private:
+
+  QStringList _tagIgnoreList;
+  AddressParser _addressParser;
 };
 
 }
 
-#endif // POIPOLYGONPOICRITERION_H
+#endif // POI_POLYGON_POI_CRITERION_H

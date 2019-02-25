@@ -32,7 +32,7 @@
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 
 // Boost

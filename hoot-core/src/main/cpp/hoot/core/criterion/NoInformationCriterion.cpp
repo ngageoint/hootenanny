@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NoInformationCriterion.h"
 
@@ -38,14 +38,15 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
-bool NoInformationCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool NoInformationCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags tags = e->getTags();
   const int informationCount = tags.getInformationCount();
   const int reviewTagCount =
     tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
 
-  LOG_VART(e);
+  //LOG_VART(e);
+  LOG_VART(e->getElementId());
   LOG_VART(informationCount);
   LOG_VART(_treatReviewTagsAsMetadata);
   LOG_VART(reviewTagCount);
@@ -62,7 +63,6 @@ bool NoInformationCriterion::isSatisfied(const boost::shared_ptr<const Element> 
 void NoInformationCriterion::setConfiguration(const Settings& conf)
 {
   _treatReviewTagsAsMetadata = ConfigOptions(conf).getWriterCleanReviewTags();
-  //LOG_VART(_treatReviewTagsAsMetadata);
 }
 
 }

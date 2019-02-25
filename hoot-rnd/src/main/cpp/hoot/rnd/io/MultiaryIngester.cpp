@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngester.h"
 
@@ -70,7 +70,7 @@ void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QStri
                                              const QString referenceOutput,
                                              const QString changesetOutput)
 {
-  if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
+  if (!OsmMapReaderFactory::hasElementInputStream(newInput))
   {
     throw IllegalArgumentException(
       QString("Multiary ingest only supports streamable input formats.") +
@@ -197,7 +197,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
 {
   boost::shared_ptr<PartialOsmMapReader> newInputReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(sortedNewInput));
+      OsmMapReaderFactory::createReader(sortedNewInput));
   newInputReader->setUseDataSourceIds(true);
   newInputReader->open(sortedNewInput);
   boost::shared_ptr<ElementInputStream> inputStream =
@@ -235,7 +235,7 @@ void MultiaryIngester::_writeNewReferenceData(
   conf().set(ConfigOptions::getHootapiDbWriterCopyBulkInsertKey(), true);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
+      OsmMapWriterFactory::createWriter(referenceOutput));
   referenceWriter->open(referenceOutput);
 
   boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
@@ -296,7 +296,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
   boost::shared_ptr<PartialOsmMapReader> referenceReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(referenceInput));
+      OsmMapReaderFactory::createReader(referenceInput));
   referenceReader->open(referenceInput);
   LOG_DEBUG("Opened reference reader.");
 
@@ -413,7 +413,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   conf().set(ConfigOptions::getHootapiDbWriterCopyBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-      OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
+      OsmMapWriterFactory::createWriter(referenceOutput));
   referenceWriter->initializePartial();
   boost::shared_ptr<OsmChangeWriter> referenceChangeWriter =
     boost::dynamic_pointer_cast<OsmChangeWriter>(referenceWriter);
@@ -422,7 +422,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
 
   //this spark changeset reader will read in the element payload as xml (see comment in
   //_deriveAndWriteChangesToChangeset)
-  //TODO: add a ChangesetProviderFactory or an OsmChangeReaderFactory to get rid of this
+  // add a ChangesetProviderFactory or an OsmChangeReaderFactory to get rid of this
   //SparkChangesetReader dependency?
   MultiaryIngestChangesetReader changesetFileReader;
   changesetFileReader.open(changesetOutput);

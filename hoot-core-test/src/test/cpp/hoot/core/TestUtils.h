@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -35,7 +35,7 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -93,11 +93,18 @@ namespace hoot
 class TestUtils
 {
 public:
+
   class RegisteredReset
   {
   public:
+
     virtual void reset() = 0;
   };
+
+  static const QString HOUSE_NUMBER_TAG_NAME;
+  static const QString STREET_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME;
+  static const QString FULL_ADDRESS_TAG_NAME_2;
 
   TestUtils();
 
@@ -110,17 +117,17 @@ public:
   static bool compareMaps(const QString& map1, const QString map2);
 
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
-    double circularError = 15.0, Tags tags = Tags());
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[], Meters ce = 15,
-                          const QString& note = "");
+  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[],
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, const QString& note = "");
 
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = 15, Tags tags = Tags());
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = 15);
+    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT);
 
   static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
 
@@ -173,6 +180,7 @@ public:
   static bool mkpath(const QString& path);
 
 private:
+
   QList<RegisteredReset*> _resets;
 
   static boost::shared_ptr<TestUtils> _theInstance;
@@ -185,6 +193,7 @@ template<class T>
 class AutoRegisterResetInstance : public TestUtils::RegisteredReset
 {
 public:
+
   AutoRegisterResetInstance()
   {
     TestUtils::getInstance()->registerReset(this);
@@ -199,10 +208,10 @@ public:
 #define TEST_UTILS_REGISTER_RESET(ClassName)      \
   static hoot::AutoRegisterResetInstance<ClassName> ClassName##AutoRegisterReset;
 
-
 class HootTestFixture : public CppUnit::TestFixture
 {
 protected:
+
   enum HootTestReset
   {
     ResetNone,
@@ -220,6 +229,7 @@ protected:
   void setResetType(HootTestReset reset) { _reset = reset; }
 
 public:
+
   /**
    * @brief setUp Overload of the CppUnit::TextFixture::setUp() to reset Hootenanny environment
    */
@@ -232,6 +242,7 @@ public:
   }
 
 private:
+
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };

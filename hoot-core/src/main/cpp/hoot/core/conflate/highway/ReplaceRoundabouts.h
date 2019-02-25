@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEROUNDABOUTS_H
@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/conflate/highway/Roundabout.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiHash>
@@ -50,7 +51,7 @@ class Way;
  * replace them with simple intersections. Post conflation, if the roundabout
  * is in the reference data, it will be put back.
  */
-class ReplaceRoundabouts : public OsmMapOperation
+class ReplaceRoundabouts : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -69,7 +70,7 @@ public:
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  void apply(boost::shared_ptr<OsmMap>& pMap);
+  void apply(boost::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -79,8 +80,15 @@ public:
    */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
-  virtual QString getDescription() const
-  { return "Replaces roundabouts in road data with simple intersections"; }
+  virtual QString getInitStatusMessage() const
+  { return "Replacing roundabouts with simple intersections..."; }
+
+  // finish; wasn't obvious how to count the total affected - #2933
+  virtual QString getCompletedStatusMessage() const
+  { return ""; }
+
+  virtual QString getDescription() const override
+  { return "Replaces road roundabouts with simple intersections"; }
 
 private:
 

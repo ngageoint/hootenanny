@@ -22,19 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYPOIMERGECACHE_H
 #define MULTIARYPOIMERGECACHE_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/rnd/conflate/multiary/MultiaryCluster.h>
 
 // Qt
 #include <QSet>
-
-#include "MultiaryCluster.h"
 
 namespace hoot
 {

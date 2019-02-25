@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_GEOJSON_WRITER_H
 #define OSM_GEOJSON_WRITER_H
@@ -36,7 +36,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Qt
-class QString;
+#include <QString>
 
 namespace hoot
 {
@@ -65,7 +65,7 @@ public:
    * @param url Filename ending in ".geojson"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".geojson"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".geojson"); }
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
@@ -73,7 +73,7 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString supportedFormats() { return ".geojson"; }
+  virtual QString supportedFormats() override { return ".geojson"; }
 
 protected:
 
@@ -81,7 +81,7 @@ protected:
    * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeNodes();
+  virtual void _writeNodes();
 
   /**
    * @brief _writeNode Writes a single node; metadata, tags, and geometry
@@ -93,7 +93,7 @@ protected:
    * @brief _writeWays Iterates all ways that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeWays();
+  virtual void _writeWays();
 
   /**
    * @brief _writeWay Writes a single way; metadata, tags, and geometry
@@ -105,7 +105,7 @@ protected:
    * @brief _writeRelations Iterates all relations that aren't part of another element and writes
    *   them out to the GeoJSON file
    */
-  void _writeRelations();
+  virtual void _writeRelations();
 
   /**
    * @brief _writeRelationInfo Writes relation specific information, relation-type and roles

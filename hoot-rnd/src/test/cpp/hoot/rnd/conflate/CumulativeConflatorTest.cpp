@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -36,7 +36,6 @@ class CumulativeConflatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CumulativeConflatorTest);
   CPPUNIT_TEST(basicTest);
-  //TODO: more error handling tests
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -67,6 +66,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CumulativeConflatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CumulativeConflatorTest, "glacial");
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingPartMergeOp.h"
 
@@ -37,10 +37,11 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // tgs
 #include <tgs/StreamUtils.h>
@@ -60,7 +61,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 BuildingPartMergeOp::BuildingPartMergeOp()
 {
   vector<SchemaVertex> buildingPartTags =
-      OsmSchema::getInstance().getAssociatedTags(MetadataTags::BuildingPart() + "=yes");
+    OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
   for (size_t i = 0; i < buildingPartTags.size(); i++)
   {
     _buildingPartTagNames.insert(buildingPartTags[i].name.split("=")[0]);
@@ -166,10 +167,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
+    if (i % 1000 == 0)
     {
-      cout << "Ways: " << i << " / " << ways.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Ways: " << i << " / " << ways.size() << "        ");
     }
     const WayPtr& w = it->second;
     // add the way to a building group if appropriate
@@ -182,11 +182,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Ways: " << ways.size() << " / " << ways.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_DEBUG("Ways: " << ways.size() << " / " << ways.size() << "        ");
 
   i = 0;
   // go through all the relations
@@ -195,8 +191,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   {
     if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)
     {
-      cout << "Relations: " << i << " / " << relations.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Relations: " << i << " / " << relations.size() << "        ");
     }
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
@@ -206,11 +201,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Relations: " << relations.size() << " / " << relations.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_DEBUG("Relations: " << relations.size() << " / " << relations.size() << "        ");
 
   ////
   /// Time to start making changes to the map.
@@ -224,8 +215,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   {
     if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
     {
-      cout << "Combining Parts: " << i << " / " << groups.size() << "        \r";
-      cout << flush;
+      PROGRESS_INFO("Combining Parts: " << i << " / " << groups.size() << "        ");
     }
     // combine the group of building parts into a relation.
     const vector< boost::shared_ptr<Element> >& parts = it->second;
@@ -235,11 +225,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
     i++;
   }
-  if (Log::getInstance().getLevel() <= Log::Info)
-  {
-    cout << "Combining Parts: " << groups.size() << " / " << groups.size() << "        \r";
-    cout << endl << flush;
-  }
+  LOG_DEBUG("Combining Parts: " << groups.size() << " / " << groups.size() << "        ");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
@@ -298,7 +284,7 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
     new Relation(
       parts[0]->getStatus(),
       map->createNextRelationId(),
-      -1,
+      ElementData::CIRCULAR_ERROR_EMPTY,
       MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();
@@ -410,7 +396,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 {
   bool result = false;
-  if (OsmSchema::getInstance().isBuilding(w->getTags(), w->getElementType()))
+  if (BuildingCriterion().isSatisfied(w))
   {
     result = true;
   }
@@ -420,7 +406,7 @@ bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 bool BuildingPartMergeOp::_isBuildingPart(const RelationPtr& r)
 {
   bool result = false;
-  if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))
+  if (BuildingCriterion().isSatisfied(r))
   {
     result = true;
   }

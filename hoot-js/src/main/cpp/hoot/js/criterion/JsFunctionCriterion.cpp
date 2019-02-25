@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsFunctionCriterion.h"
 
@@ -31,7 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 using namespace v8;
 
@@ -40,7 +40,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, JsFunctionCriterion)
 
-bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
+bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
@@ -59,7 +59,8 @@ bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e)
   jsArgs[argc++] = elementObj;
 
   TryCatch trycatch;
-  Handle<Value> funcResult = ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
+  Handle<Value> funcResult =
+    ToLocal(&_func)->Call(current->GetCallingContext()->Global(), argc, jsArgs);
   // avoids a warning, the default value of false should never be used.
   bool result = false;
 

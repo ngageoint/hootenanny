@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MapCropper.h"
@@ -37,16 +37,16 @@
 #include <geos/util/GEOSException.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/FindNodesInWayFactory.h>
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
@@ -130,8 +130,8 @@ void MapCropper::apply(OsmMapPtr& map)
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
 
-  /// @todo visit the elements from the most senior (e.g. relation that has no parents) to the
-  /// most junior (nodes).
+  // Try visiting the elements from the most senior (e.g. relation that has no parents) to the
+  // most junior (nodes)?
 
   // go through all the ways
   long wayCtr = 0;
@@ -248,44 +248,37 @@ void MapCropper::crop(OsmMapPtr map, const boost::shared_ptr<const Geometry>& g,
 
 void MapCropper::_cropWay(OsmMapPtr map, long wid)
 {
+  LOG_TRACE("Cropping way: " << wid << "...");
+
   boost::shared_ptr<Way> way = map->getWay(wid);
 
   boost::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
 
   // perform the intersection with the geometry
   boost::shared_ptr<Geometry> g;
-  if (_invert == false)
+  try
   {
-    try
-    {
+    if (_invert)
+      g.reset(fg->difference(_envelopeG.get()));
+    else
       g.reset(fg->intersection(_envelopeG.get()));
-    }
-    catch (const geos::util::GEOSException&)
-    {
-      // try cleaning up the geometry and try again.
-      fg.reset(GeometryUtils::validateGeometry(fg.get()));
-      g.reset(fg->intersection(_envelopeG.get()));
-    }
   }
-  else
+  catch (const geos::util::GEOSException&)
   {
-    try
-    {
+    // try cleaning up the geometry and try again.
+    fg.reset(GeometryUtils::validateGeometry(fg.get()));
+    if (_invert)
       g.reset(fg->difference(_envelopeG.get()));
-    }
-    catch (const geos::util::GEOSException&)
-    {
-      // try cleaning up the geometry and try again.
-      fg.reset(GeometryUtils::validateGeometry(fg.get()));
-      g.reset(fg->difference(_envelopeG.get()));
-    }
+    else
+      g.reset(fg->intersection(_envelopeG.get()));
   }
 
   boost::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
   GeometryConverter gc(map);
   gc.setNodeFactory(nodeFactory);
-  boost::shared_ptr<Element> e = gc.convertGeometryToElement(g.get(), way->getStatus(),
-    way->getCircularError());
+  boost::shared_ptr<Element> e =
+    gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
+  LOG_VART(e.get());
 
   if (e == 0)
   {
@@ -293,6 +286,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
   }
   else
   {
+    LOG_TRACE("Replacing way: " << way->getId() << "...");
     e->setTags(way->getTags());
     map->replace(way, e);
   }

@@ -22,26 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
 // hoot
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingPartCriterion.h>
 
 using namespace std;
 
@@ -55,7 +56,7 @@ public:
 
   DeletableBuildingCriterion() {}
 
-  bool isSatisfied(const boost::shared_ptr<const Element>& e) const
+  virtual bool isSatisfied(const ConstElementPtr& e) const
   {
     bool result = false;
 
@@ -65,8 +66,7 @@ public:
     }
     else if (e->getElementType() != ElementType::Node)
     {
-      if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()) ||
-          OsmSchema::getInstance().isBuildingPart(e->getTags(), e->getElementType()))
+      if (_buildingCrit.isSatisfied(e) || _buildingPartCrit.isSatisfied(e))
       {
         result = true;
       }
@@ -79,6 +79,11 @@ public:
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
+
+private:
+
+  BuildingCriterion _buildingCrit;
+  BuildingPartCriterion _buildingPartCrit;
 };
 
 unsigned int BuildingMerger::logWarnCount = 0;
@@ -241,8 +246,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     LOG_VART(keeper->getElementId());
     LOG_VART(scrap->getElementId());
-    const ElementId scrapId = scrap->getElementId();
-    const Status scrapStatus = scrap->getStatus();
 
     //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
     //relation members, need to be removed as well.
@@ -260,16 +263,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
          it != multiPolyMemberIds.end(); ++it)
     {
       RecursiveElementRemover(*it).apply(map);
-    }
-
-    // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (scrapStatus == Status::Unknown1 &&
-        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
-    {
-      LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 ID: " << scrapId << " to ID: " <<
-        keeper->getElementId() << "...");
-      _unknown1Replacements.insert(pair<ElementId, ElementId>(scrapId, keeper->getElementId()));
     }
 
     set< pair<ElementId, ElementId> > replacedSet;
@@ -437,11 +430,13 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
   int buildingsMerged = 0;
 
+  BuildingCriterion buildingCrit;
+
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const ConstWayPtr& way = wayItr->second;
-    if (way->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(way))
+    if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
       LOG_VART(way);
       std::set<std::pair<ElementId, ElementId> > pairs;
@@ -458,7 +453,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
   for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
   {
     const ConstRelationPtr& relation = relItr->second;
-    if (relation->getElementId() != mergeTargetId && OsmSchema::getInstance().isBuilding(relation))
+    if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
       LOG_VART(relation);
       std::set<std::pair<ElementId, ElementId> > pairs;
@@ -476,7 +471,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  QString s = hoot::toString(getPairs());
+  QString s = hoot::toString(_getPairs());
   return QString("BuildingMerger %1").arg(s);
 }
 

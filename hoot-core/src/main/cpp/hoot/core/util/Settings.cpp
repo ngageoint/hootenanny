@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Settings.h"
@@ -135,6 +135,16 @@ Settings::Settings() :
   _staticRegex("\\$\\(([\\w\\.]+)\\)")
 {
 
+}
+
+void Settings::prepend(const QString& key, const QStringList& values)
+{
+  QStringList l = getList(key, QStringList());
+  for (int i = values.size() - 1; i == 0; i--)
+  {
+    l.prepend(values.at(i));
+  }
+  set(key, l);
 }
 
 void Settings::append(const QString& key, const QStringList& values)
@@ -455,6 +465,11 @@ void Settings::parseCommonArguments(QStringList& args)
   hootTestCmdsIgnore.append("--names");
   hootTestCmdsIgnore.append("--all-names");
   hootTestCmdsIgnore.append("--diff");
+  hootTestCmdsIgnore.append("--include");
+  hootTestCmdsIgnore.append("--exclude");
+
+  const QString optionInputFormatErrorMsg =
+    "define must takes the form key=value (or key+=value, key++=value, or key-=value).";
 
   while (args.size() > 0 && foundOne)
   {
@@ -504,8 +519,7 @@ void Settings::parseCommonArguments(QStringList& args)
       args = args.mid(1);
     }
     //HootTest settings have already been parsed by this point
-    else if (hootTestCmdsIgnore.contains(args[0]) || args[0].contains("--include") ||
-             args[0].contains("--exclude"))
+    else if (hootTestCmdsIgnore.contains(args[0]))
     {
       args = args.mid(1);
     }
@@ -513,12 +527,27 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException("--define or -D must be followed by key=value.");
+        throw HootException(optionInputFormatErrorMsg);
       }
       QString kv = args[1];
-      QStringList kvl = kv.split("+=");
-      bool append = true;
+      QStringList kvl = kv.split("++=");
+      bool append = false;
       bool remove = false;
+      bool prepend = true;
+      if (kvl.size() != 2)
+      {
+        // split on the first '+='
+        int sep = kv.indexOf("+=");
+        kvl.clear();
+        if (sep != -1)
+        {
+          kvl << kv.mid(0, sep);
+          kvl << kv.mid(sep + 2);
+        }
+        append = true;
+        remove = false;
+        prepend = false;
+      }
       if (kvl.size() != 2)
       {
         // split on the first '-='
@@ -531,6 +560,7 @@ void Settings::parseCommonArguments(QStringList& args)
         }
         append = false;
         remove = true;
+        prepend = false;
       }
       if (kvl.size() != 2)
       {
@@ -544,10 +574,11 @@ void Settings::parseCommonArguments(QStringList& args)
         }
         append = false;
         remove = false;
+        prepend = false;
       }
       if (kvl.size() != 2)
       {
-        throw HootException("define must take the form key=value.");
+        throw HootException(optionInputFormatErrorMsg);
       }
       if (!conf().hasKey(kvl[0]))
       {
@@ -564,9 +595,18 @@ void Settings::parseCommonArguments(QStringList& args)
         foreach (QString v, values)
         {
           QStringList newList = conf().getList(kvl[0]);
+          if (!newList.contains(v))
+          {
+            throw HootException("Unknown default value: (" + v + ")");
+          }
           newList.removeAll(v);
           conf().set(kvl[0], newList);
         }
+      }
+      else if (prepend)
+      {
+        QStringList values = kvl[1].split(";", QString::SkipEmptyParts);
+        conf().prepend(kvl[0], values);
       }
       else
       {

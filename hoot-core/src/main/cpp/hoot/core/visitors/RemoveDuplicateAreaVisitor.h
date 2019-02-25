@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEDUPLICATEAREAVISITOR_H
 #define REMOVEDUPLICATEAREAVISITOR_H
 
 // Hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -52,7 +53,7 @@ class TagDifferencer;
  *
  * RecursiveElementRemover is used to remove the element.
  */
-class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
+class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -61,21 +62,23 @@ public:
   RemoveDuplicateAreaVisitor();
 
   virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const boost::shared_ptr<Element>& e1) override;
 
-  virtual void visit(const boost::shared_ptr<Element>& e1);
+  virtual QString getInitStatusMessage() const { return "Removing duplicate areas..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
   virtual QString getDescription() const { return "Removes duplicate areas"; }
 
 private:
 
-  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
-
-  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
-
-  void _removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2);
-
   boost::shared_ptr<TagDifferencer> _diff;
   QHash<ElementId, boost::shared_ptr<geos::geom::Geometry> > _geoms;
+
+  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
+  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
+  void _removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2);
 };
 
 }

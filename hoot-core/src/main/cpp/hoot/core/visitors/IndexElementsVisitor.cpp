@@ -48,14 +48,13 @@ IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& inde
                                            deque<ElementId>& indexToEid,
                                            const boost::shared_ptr<ElementCriterion>& criterion,
                                            boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
-                                           ConstOsmMapPtr pMap):
-  _pMap(pMap),
+                                           ConstOsmMapPtr pMap) :
   _criterion(criterion),
   _getSearchRadius(getSearchRadius),
   _index(index),
   _indexToEid(indexToEid)
 {
-  // This space intentionally left blank
+  _map = pMap.get();
 }
 
 void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -78,7 +77,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
-    boost::shared_ptr<Envelope> env(e->getEnvelope(_pMap));
+    boost::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     env->expandBy(searchRadius);
     b.setBounds(0, env->getMinX(), env->getMaxX());
     b.setBounds(1, env->getMinY(), env->getMaxY());

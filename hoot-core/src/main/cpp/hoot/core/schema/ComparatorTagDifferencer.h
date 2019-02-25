@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COMPARATORTAGDIFFERENCER_H
 #define COMPARATORTAGDIFFERENCER_H
 
-#include "TagDifferencer.h"
+#include <hoot/core/schema/TagDifferencer.h>
 
 namespace hoot
 {
@@ -42,7 +42,7 @@ public:
   static std::string className() { return "hoot::ComparatorTagDifferencer"; }
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const;
+    const ConstElementPtr& e2) const override;
 };
 
 }

@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, TagKeyCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, TagKeyCountVisitor)
 
 TagKeyCountVisitor::TagKeyCountVisitor() :
 _keyCount(0)

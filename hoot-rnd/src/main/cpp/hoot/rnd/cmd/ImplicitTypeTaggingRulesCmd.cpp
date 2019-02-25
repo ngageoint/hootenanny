@@ -41,10 +41,12 @@ public:
 
   static std::string className() { return "hoot::ImplicitTypeTaggingRulesCmd"; }
 
-  virtual QString getName() const { return "implicit-type-tagging-rules"; }
+  virtual QString getName() const { return "type-tagger-rules"; }
 
   virtual QString getDescription() const
-  { return "Creates rules for adding missing type tags to map data"; }
+  { return "Creates rules for adding missing type tags to a map"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList args)
   {
@@ -89,7 +91,7 @@ public:
 
       ImplicitTagRulesSqliteReader dbReader;
       dbReader.open(args[0].trimmed());
-      dbReader.printStats();
+      std::cout << dbReader.getStats();
       dbReader.close();
     }
     else

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerFactory.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -69,6 +69,8 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
 {
   for (size_t i = 0; i < _creators.size(); i++)
   {
+    PROGRESS_DEBUG("Creating merger " << i + 1 << " / " << _creators.size() << "...");
+
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i]);
 
     if (omc)
@@ -87,10 +89,9 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     }
   }
 
-  //TODO: In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which
-  //ultimately causes the exception below to be thrown.  For now, attempting to bypass and only
-  //log a warning.  This also required additional error handling in ScriptMerger (see
-  //ScriptMerger::_applyMergePair).
+  // In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which ultimately causes
+  // the exception below to be thrown.  For now, attempting to bypass and only log a warning.  This
+  // also required additional error handling in ScriptMerger (see ScriptMerger::_applyMergePair).
   if (logWarnCount < Log::getWarnMessageLimit())
   {
     LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
@@ -101,7 +102,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
   }
   logWarnCount++;
-
   //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
@@ -126,7 +126,7 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   return result;
 }
 
-MergerFactory &MergerFactory::getInstance()
+MergerFactory& MergerFactory::getInstance()
 {
   if (!_theInstance.get())
   {
@@ -148,10 +148,9 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {
-    LOG_VART(_creators[i]);
     if (_creators[i]->isConflicting(map, m1, m2))
     {
-      LOG_TRACE("conflicting");
+      LOG_TRACE("Conflicting matches: " << m1 << ", " << m2);
       return true;
     }
   }
@@ -160,7 +159,7 @@ bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, co
 
 void MergerFactory::registerDefaultCreators()
 {  
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(mergerCreators);
   for (int i = 0; i < mergerCreators.size(); i++)
   {
@@ -170,8 +169,7 @@ void MergerFactory::registerDefaultCreators()
     if (className.length() > 0)
     {
       args.removeFirst();
-      MergerCreator* mc =
-        Factory::getInstance().constructObject<MergerCreator>(className);
+      MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(className);
       registerCreator(mc);
 
       if (args.size() > 0)

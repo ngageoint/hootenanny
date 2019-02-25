@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -175,7 +175,7 @@ public:
 
 //  void passingUnicodeConversionTest()
 //  {
-//    //TODO: to use this you have to comment out the line:
+//    // to use this you have to comment out the line:
       //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
       //in SparkChangesetWriter
 
@@ -216,7 +216,7 @@ public:
 //  //this reproduces #1772
 //  void failingUnicodeConversionTest()
 //  {
-//    //TODO: to use this you have to comment out the line:
+//    // to use this you have to comment out the line:
 //    //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
 //    //in SparkChangesetWriter
 
@@ -256,6 +256,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SparkChangesetWriterTest, "glacial");
 
 }

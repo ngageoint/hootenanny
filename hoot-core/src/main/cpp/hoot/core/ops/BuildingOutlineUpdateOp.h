@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEUPDATEOP_H
 #define BUILDINGOUTLINEUPDATEOP_H
@@ -31,7 +31,8 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/conflate/ReviewMarker.h>
+#include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -44,7 +45,8 @@ class OsmMap;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
+class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -54,7 +56,7 @@ public:
 
   BuildingOutlineUpdateOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -62,8 +64,15 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getDescription() const
-  { return "Updates the outline of buildings by taking the union of all the parts"; }
+  virtual QString getInitStatusMessage() const
+  { return "Updating building outlines that changed during conflation..."; }
+
+  // finish; wasn't obvious how to count the total affected - #2933
+  virtual QString getCompletedStatusMessage() const
+  { return ""; }
+
+  virtual QString getDescription() const override
+  { return "Updates any multi-part building outlines that changed during conflation"; }
 
 private:
 

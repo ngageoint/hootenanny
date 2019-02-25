@@ -36,9 +36,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>

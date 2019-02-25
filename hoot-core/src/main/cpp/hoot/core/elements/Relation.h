@@ -22,32 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
 
 #include <tgs/SharedPtr.h>
 
-#include "Element.h"
-#include "RelationData.h"
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/RelationData.h>
 
 // hoot
-#include <hoot/core/util/MetadataTags.h>
-
-namespace geos
-{
-  namespace geom
-  {
-    class Geometry;
-    class LinearRing;
-  }
-}
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
-
-class Way;
 
 /**
  * This is not a complete implementation of a Relation, but it should be enough to do basic multi-
@@ -67,8 +56,8 @@ public:
 
   explicit Relation(const Relation& from);
 
-  Relation(Status s, long id, Meters circularError, QString type = "",
-           long changeset = ElementData::CHANGESET_EMPTY,
+  Relation(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
+           QString type = "", long changeset = ElementData::CHANGESET_EMPTY,
            long version = ElementData::VERSION_EMPTY,
            quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
            QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
@@ -93,11 +82,22 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  /**
+   * Returns the number of member elements with the given relation role
+   *
+   * @param role role by which to examine elements
+   * @return the number of member elements with the specified role
+   */
+  int numElementsByRole(const QString role) const;
 
-  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  const std::vector<RelationData::Entry>& getMembers() const
+  { return _relationData->getElements(); }
 
-  geos::geom::Envelope getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(
+    const boost::shared_ptr<const ElementProvider>& ep) const;
+
+  geos::geom::Envelope getEnvelopeInternal(
+    const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
 
@@ -107,14 +107,16 @@ public:
    * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
    * is valid.
    */
-  bool isMultiPolygon() const { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
+  bool isMultiPolygon() const
+  { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
 
   /**
    * Returns true if this is a review.
    */
   bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
-  bool isRestriction() const { return _relationData->getType() == MetadataTags::RelationRestriction(); }
+  bool isRestriction() const
+  { return _relationData->getType() == MetadataTags::RelationRestriction(); }
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
@@ -128,7 +130,8 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<const Element>& to);
+  void replaceElement(const boost::shared_ptr<const Element>& from,
+                      const boost::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**
@@ -174,9 +177,8 @@ private:
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations) const;
 
-  void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
+  void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
-
 };
 
 template<typename IT>

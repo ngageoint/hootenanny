@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
@@ -83,22 +83,30 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Extracting networks...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(threshold);
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  ElementCriterionPtr c1(new ChainCriterion(
-                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
-                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c1(new ChainCriterion(
+                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+                                         _userCriterion));
+  if (_filter)
+  {
+    c1->addCriterion(_filter);
+  }
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  ElementCriterionPtr c2(new ChainCriterion(
-                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c2(new ChainCriterion(
+                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+                                         _userCriterion));
+  if (_filter)
+  {
+    c2->addCriterion(_filter);
+  }
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
   LOG_TRACE("Extracted Network 2: " << n2->toString());
@@ -131,10 +139,11 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
         matcher->getAllEdgeScores(), matcher->getAllVertexScores());
 
       MapProjector::projectToWgs84(copy);
-      conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+      conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+      // TODO: use config opt for debug file path
       QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
       LOG_INFO("Writing debug map: " << name);
-      OsmMapWriterFactory::getInstance().write(copy, name);
+      OsmMapWriterFactory::write(copy, name);
     }
   }
 
@@ -149,10 +158,10 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
       matcher->getAllEdgeScores(), matcher->getAllVertexScores());
 
     MapProjector::projectToWgs84(copy);
-    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     QString name = QString("tmp/debug-final.osm");
     LOG_INFO("Writing debug map: " << name);
-    OsmMapWriterFactory::getInstance().write(copy, name);
+    OsmMapWriterFactory::write(copy, name);
   }
 
   LOG_DEBUG("Retrieving edge scores...");
@@ -168,11 +177,12 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
-      LOG_TRACE("is match");
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }
+
+  LOG_INFO("Found " << matches.size() << " highway match candidates.");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
@@ -180,13 +190,17 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "matches roads with the network algorithm",
+      className(), "Matches roads with the network algorithm",
       CreatorDescription::BaseFeatureType::Highway, false));
   return result;
 }
 
 bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
+  if (_filter && !_filter->isSatisfied(element))
+  {
+    return false;
+  }
   return _userCriterion->isSatisfied(element);
 }
 

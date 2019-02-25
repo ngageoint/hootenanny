@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepTagsVisitor.h"
 
@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepTagsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, KeepTagsVisitor)
 
 KeepTagsVisitor::KeepTagsVisitor()
 {

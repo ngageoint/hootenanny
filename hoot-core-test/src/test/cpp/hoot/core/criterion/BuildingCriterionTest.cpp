@@ -22,12 +22,8 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-// Boost
-#include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/filter/bzip2.hpp>
 
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -48,7 +44,7 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, "test-files/criterion/ComplexBuildings.osm");
+    OsmMapReaderFactory::read(map, "test-files/criterion/ComplexBuildings.osm");
 
     BuildingCriterion uut;
     uut.setOsmMap(map.get());

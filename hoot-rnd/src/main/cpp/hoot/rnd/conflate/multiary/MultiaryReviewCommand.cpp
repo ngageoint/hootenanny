@@ -22,15 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MultiaryReviewCommand.h"
+
+//  Std
 #include <sstream>
-#include "hoot/core/io/OsmJsonWriter.h"
-#include "hoot/core/io/OsmJsonReader.h"
-#include "hoot/core/util/Log.h"
-#include "hoot/core/visitors/CalculateHashVisitor.h"
+
+//  Hoot
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -238,7 +242,7 @@ bool MultiaryReviewCommand::operator==(const MultiaryReviewCommand& rhs) const
 
 bool MultiaryReviewCommand::applyToMap(OsmMapPtr pMap) const
 {
-  // @TODO: Implement this!
+  // TODO: Implement this!
   (void) pMap;
   return false;
 }

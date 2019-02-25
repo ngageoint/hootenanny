@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGS_JS_H
 #define TAGS_JS_H
@@ -31,18 +31,13 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/DataConvertJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
-
-class OsmMapOperation;
 
 /**
  * This wraps the tags object. Unlike most of the other wrappers there is no smart pointer to the
@@ -53,6 +48,7 @@ class OsmMapOperation;
 class TagsJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   Tags& getTags() { return _tags; }
@@ -60,6 +56,7 @@ public:
   static v8::Handle<v8::Object> New(const Tags& t);
 
 private:
+
   TagsJs(ConstNodePtr n);
   TagsJs();
   ~TagsJs();

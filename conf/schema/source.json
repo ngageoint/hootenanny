@@ -6,11 +6,6 @@
     },
     {
         "dataType": "text",
-        "geometries": [
-            "node",
-            "way",
-            "relation"
-        ],
         "influence": 1,
         "isA": "metadata",
         "name": "source",

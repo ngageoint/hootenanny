@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 #define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
@@ -45,7 +45,7 @@ public:
 
   ImplicitTagEligiblePoiPolyCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ImplicitTagEligiblePoiPolyCriterion()); }
@@ -56,7 +56,7 @@ public:
    * @param tags tags to examine
    * @return a list of key/value pairs (key=value)
    */
-  virtual QStringList getEligibleKvps(const Tags& tags) const;
+  virtual QStringList getEligibleKvps(const Tags& tags) const override;
 
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
@@ -65,10 +65,10 @@ public:
    * @param tags tags to examine
    * @return true if any eligible tags are present; false otherwise
    */
-  virtual bool hasEligibleKvp(const Tags& tags) const;
+  virtual bool hasEligibleKvp(const Tags& tags) const override;
 
   virtual QString getDescription() const
-  { return "Returns true if a POI or polygon is eligible for type tag addition"; }
+  { return "Identifies POIs and polygons eligible for type tag addition"; }
 };
 
 }

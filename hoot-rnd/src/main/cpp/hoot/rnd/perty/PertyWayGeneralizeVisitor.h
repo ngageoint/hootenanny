@@ -28,16 +28,14 @@
 #define PERTY_WAY_GENERALIZE_VISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "RngConsumer.h"
+#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
   class Way;
-  class Node;
   class RdpWayGeneralizer;
 
 /**
@@ -93,11 +91,6 @@ public:
     @see RdpWayGeneralizer::setEpsilon
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
-
-  /**
-    @see ConstElementVisitor
-    */
-  virtual QString toString();
 
   virtual QString getDescription() const { return "Randomly generalizes ways"; }
 

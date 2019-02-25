@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DUPLICATEREVIEWSOP_H
 #define DUPLICATEREVIEWSOP_H
@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -41,7 +42,8 @@ class OsmMap;
 /**
  * Goes through all relations and check if there are any duplicate reviews.
  */
-class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
+class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -49,7 +51,7 @@ public:
 
   RemoveDuplicateReviewsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -57,7 +59,13 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getDescription() const { return "Removes duplicate reviews"; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate review relations..."; }
+
+  // finish; wasn't obvious how to count the total affected - #2933
+  virtual QString getCompletedStatusMessage() const
+  { return ""; }
+
+  virtual QString getDescription() const override { return "Removes duplicate reviews"; }
 
 private:
 

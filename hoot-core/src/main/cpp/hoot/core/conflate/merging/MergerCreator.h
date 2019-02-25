@@ -28,9 +28,9 @@
 #define MERGECREATOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
-#include <hoot/core/conflate/CreatorDescription.h>
+#include <hoot/core/info/CreatorDescription.h>
 
 // Standard
 #include <set>

@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRef2Visitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
 
 unsigned int RemoveRef2Visitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveRef2Visitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2Visitor)
 
 QStringList RemoveRef2Visitor::_ref2Keys;
 QMutex RemoveRef2Visitor::_mutex;
@@ -45,7 +45,7 @@ QMutex RemoveRef2Visitor::_mutex;
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class Ref1ToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class Ref1ToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -54,8 +54,6 @@ public:
   virtual ~Ref1ToEidVisitor() {}
 
   const RemoveRef2Visitor::Ref1ToEid& getRef1ToEid() const { return _ref1ToEid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -69,7 +67,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
-  const OsmMap* _map;
+
   RemoveRef2Visitor::Ref1ToEid _ref1ToEid;
 };
 
@@ -119,7 +117,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     if (eid.isNull())
     {
       const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
-      //TODO: make _errorOnMissingRef1 configurable from nodejs - see #1175
+      // make _errorOnMissingRef1 configurable from nodejs - see #1175
       //if (_errorOnMissingRef1)
       //{
         //throw IllegalArgumentException(errMsg);

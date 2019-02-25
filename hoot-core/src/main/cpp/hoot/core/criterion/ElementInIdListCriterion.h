@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
  
 #ifndef ELEMENTINIDLISTCRITERION_H
 #define ELEMENTINIDLISTCRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Std
 #include <set>
@@ -48,12 +48,12 @@ public:
   ElementInIdListCriterion() {}
   explicit ElementInIdListCriterion(const std::vector<long>& ids);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementInIdListCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies elements in a list of IDs"; }
+  virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
 
 private:
 

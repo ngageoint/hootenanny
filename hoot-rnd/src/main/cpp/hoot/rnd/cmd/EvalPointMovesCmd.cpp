@@ -68,7 +68,9 @@ public:
   virtual QString getName() const { return "evaluate-point-moves"; }
 
   virtual QString getDescription() const
-  { return "Calculates the error introduced by various operations on random points"; }
+  { return "Calculates the error introduced by various operations on random map points"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   struct Comparison
   {

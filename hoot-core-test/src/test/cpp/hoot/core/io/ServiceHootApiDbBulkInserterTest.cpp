@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -56,9 +56,9 @@ class ServiceHootApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  static QString userEmail() { return "ServiceHootApiDbBulkInserterTest@hoottestcpp.org"; }
-
-  long mapId;
+  QString userEmail()
+  { return QString("%1.ServiceHootApiDbBulkInserterTest@hoottestcpp.org").arg(_testName); }
+  QString userName()  { return QString("%1.ServiceHootApiDbBulkInserterTest").arg(_testName); }
 
   ServiceHootApiDbBulkInserterTest()
   {
@@ -66,15 +66,15 @@ public:
     TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
-  virtual void setUp()
+  void setUpTest(const QString testName)
   {
-    HootTestFixture::setUp();
-    mapId = -1;
+    _mapId = -1;
+    _testName = testName;
     ServicesDbTestUtils::deleteUser(userEmail());
-
     HootApiDb database;
+
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), "ServiceHootApiDbBulkInserterTest");
+    database.getOrCreateUser(userEmail(), userName());
     database.close();
   }
 
@@ -82,18 +82,18 @@ public:
   {
     ServicesDbTestUtils::deleteUser(userEmail());
 
-    if (mapId != -1)
+    if (_mapId != -1)
     {
       HootApiDb database;
-      database.open(ServicesDbTestUtils::getDbModifyUrl());
-      database.deleteMap(mapId);
+      database.open(ServicesDbTestUtils::getDbModifyUrl().toString());
+      database.deleteMap(_mapId);
       database.close();
     }
   }
 
   void runPsqlDbOfflineTest()
   {
-    QString testName = "runPsqlDbOfflineTest";
+    setUpTest("runPsqlDbOfflineTest");
     const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;
@@ -109,35 +109,36 @@ public:
     writer.setUserEmail(userEmail());
     writer.setCopyBulkInsertActivated(true);
 
-    writer.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
-    mapId = writer.getMapId();
-    LOG_VARD(mapId);
+    _mapId = writer.getMapId();
+    LOG_VARD(_mapId);
 
     HootApiDbReader reader;
     OsmMapPtr actualMap(new OsmMap());
     reader.setUserEmail(userEmail());
-    reader.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
+    reader.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
     boost::shared_ptr<OsmMapWriter> actualMapWriter =
-      OsmMapWriterFactory::getInstance().createWriter(actualOutputFile);
+      OsmMapWriterFactory::createWriter(actualOutputFile);
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
 
     //Should be 4 changesets, but its 8.
     HootApiDb database;
-    database.open(ServicesDbTestUtils::getDbModifyUrl(testName).toString());
-    database.setMapId(mapId);
+    database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    database.setMapId(_mapId);
     database.setCreateIndexesOnClose(false);
     database.setFlushOnClose(false);
     const long numChangesets = database.numChangesets();
+    database.close();
     LOG_VARD(numChangesets);
     CPPUNIT_ASSERT_EQUAL(8L, numChangesets);
 
-    //TODO: This needs to be enabled (or some check similar to it), but doing so will require
+    // TODO: This needs to be enabled (or some check similar to it), but doing so will require
     //ignoring the map and changeset ID's in the file that will change with each test run.
 //    TestUtils::verifyStdMatchesOutputIgnoreDate(
 //      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",
@@ -145,6 +146,11 @@ public:
     HOOT_FILE_EQUALS(
       "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
   }
+
+private:
+
+  long _mapId;
+  QString _testName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbBulkInserterTest, "slow");

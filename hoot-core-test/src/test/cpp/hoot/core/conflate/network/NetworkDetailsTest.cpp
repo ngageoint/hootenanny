@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -54,6 +54,7 @@ class NetworkDetailsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
   NetworkEdgePtr _e1ab, _e1bc, _e1cd, _e1df;
   NetworkEdgePtr _e2ab, _e2bc;
 
@@ -178,11 +179,11 @@ public:
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0))));
     HOOT_STR_EQUALS(toRadians(45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.1))));
-    HOOT_STR_EQUALS(toRadians(90),
+    HOOT_STR_EQUALS(toRadians(0),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.5))));
-    HOOT_STR_EQUALS(toRadians(135),
+    HOOT_STR_EQUALS(toRadians(-45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.75))));
-    HOOT_STR_EQUALS(toRadians(135),
+    HOOT_STR_EQUALS(toRadians(-45),
       details->calculateHeading(ConstEdgeLocationPtr(new EdgeLocation(_e1df, 1.0))));
   }
 
@@ -206,8 +207,8 @@ public:
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.1)),
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.2)))),
       elStr, elSub);
-    HOOT_STR_EQUALS("{ _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.4 }", elStr);
-    HOOT_STR_EQUALS("{ _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0.2 }", elSub);
+    HOOT_STR_EQUALS("{ _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0.4 }", elStr);
+    HOOT_STR_EQUALS("{ _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0.2 }", elSub);
 
     details->calculateNearestLocation(str,
       ConstEdgeSublinePtr(new EdgeSubline(
@@ -268,32 +269,32 @@ public:
         ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)),
         ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.3)))),
       elStr, elSub);
-    HOOT_STR_EQUALS("{ _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 1 }", elStr);
-    HOOT_STR_EQUALS("{ _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 1 }", elSub);
+    HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elStr);
+    HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elSub);
 
     details->calculateNearestLocation(str2,
       ConstEdgeSublinePtr(new EdgeSubline(
         ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.6)),
         ConstEdgeLocationPtr(new EdgeLocation(_e1df, 0.0)))),
       elStr, elSub);
-    HOOT_STR_EQUALS("{ _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 1 }", elStr);
-    HOOT_STR_EQUALS("{ _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 1 }", elSub);
+    HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elStr);
+    HOOT_STR_EQUALS("{ _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }", elSub);
 
     details->calculateNearestLocation(str2,
       ConstEdgeSublinePtr(new EdgeSubline(
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.6)),
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)))),
       elStr, elSub);
-    HOOT_STR_EQUALS("{ _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }", elStr);
-    HOOT_STR_EQUALS("{ _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }", elSub);
+    HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elStr);
+    HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elSub);
 
     details->calculateNearestLocation(str2,
       ConstEdgeSublinePtr(new EdgeSubline(
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 1.0)),
         ConstEdgeLocationPtr(new EdgeLocation(_e1ab, 0.0)))),
       elStr, elSub);
-    HOOT_STR_EQUALS("{ _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }", elStr);
-    HOOT_STR_EQUALS("{ _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }", elSub);
+    HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elStr);
+    HOOT_STR_EQUALS("{ _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }", elSub);
 
   }
 
@@ -350,7 +351,7 @@ public:
 
     result = details->extendEdgeMatch(em, _e1ab, _e2ab);
 
-    HOOT_STR_EQUALS("s1: [2]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0.5 } }} s2: [2]{{ _start: { _e: (6) Node:-7 -- Way:-5 -- (7) Node:-8, _portion: 0.333333 }, _end: { _e: (6) Node:-7 -- Way:-5 -- (7) Node:-8, _portion: 1 } }, { _start: { _e: (7) Node:-8 -- Way:-6 -- (8) Node:-9, _portion: 0 }, _end: { _e: (7) Node:-8 -- Way:-6 -- (8) Node:-9, _portion: 0.33 } }}",
+    HOOT_STR_EQUALS("s1: [2]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0.5 } }} s2: [2]{{ _start: { _e: (6) Node(-7) -- Way(-5) -- (7) Node(-8), _portion: 0.333333 }, _end: { _e: (6) Node(-7) -- Way(-5) -- (7) Node(-8), _portion: 1 } }, { _start: { _e: (7) Node(-8) -- Way(-6) -- (8) Node(-9), _portion: 0 }, _end: { _e: (7) Node(-8) -- Way(-6) -- (8) Node(-9), _portion: 0.33 } }}",
       result);
 
     ///                      *
@@ -372,7 +373,7 @@ public:
 
     result = details->extendEdgeMatch(em, _e1bc, _e2bc);
 
-    HOOT_STR_EQUALS("s1: [2]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 } }} s2: [2]{{ _start: { _e: (6) Node:-7 -- Way:-5 -- (7) Node:-8, _portion: 0.33 }, _end: { _e: (6) Node:-7 -- Way:-5 -- (7) Node:-8, _portion: 1 } }, { _start: { _e: (7) Node:-8 -- Way:-6 -- (8) Node:-9, _portion: 0 }, _end: { _e: (7) Node:-8 -- Way:-6 -- (8) Node:-9, _portion: 0.666667 } }}",
+    HOOT_STR_EQUALS("s1: [2]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 1 } }} s2: [2]{{ _start: { _e: (6) Node(-7) -- Way(-5) -- (7) Node(-8), _portion: 0.33 }, _end: { _e: (6) Node(-7) -- Way(-5) -- (7) Node(-8), _portion: 1 } }, { _start: { _e: (7) Node(-8) -- Way(-6) -- (8) Node(-9), _portion: 0 }, _end: { _e: (7) Node(-8) -- Way(-6) -- (8) Node(-9), _portion: 0.666667 } }}",
       result);
 
     result = details->extendEdgeMatch(result, _e1cd, _e2bc);
@@ -390,9 +391,9 @@ public:
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.6)))));
 
     details->extendEdgeString(str, _e1ab);
-    HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0.6 } }}", str);
+    HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0.6 } }}", str);
     details->extendEdgeString(str, _e1bc);
-    HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 } }}", str);
+    HOOT_STR_EQUALS("[2]{{ _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 1 } }}", str);
     CPPUNIT_ASSERT_THROW(details->extendEdgeString(str, _e1df), IllegalArgumentException);
 
     // try again, but start with a backwards edge
@@ -402,12 +403,12 @@ public:
       ConstEdgeLocationPtr(new EdgeLocation(_e1bc, 0.4)))));
 
     details->extendEdgeString(str, _e1ab);
-    HOOT_STR_EQUALS("[2]{{ _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0.6 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 } }, { _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 } }}", str);
+    HOOT_STR_EQUALS("[2]{{ _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0.6 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 } }, { _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 } }}", str);
     details->extendEdgeString(str, _e1bc);
-    HOOT_STR_EQUALS("[2]{{ _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 } }, { _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 } }}", str);
+    HOOT_STR_EQUALS("[2]{{ _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 1 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 } }, { _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 } }}", str);
     CPPUNIT_ASSERT_THROW(details->extendEdgeString(str, _e1df), IllegalArgumentException);
     details->extendEdgeString(str, _e1cd);
-    HOOT_STR_EQUALS("[3]{{ _start: { _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 1 }, _end: { _e: (2) Node:-3 -- Way:-3 -- (3) Node:-4, _portion: 0 } }, { _start: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 1 }, _end: { _e: (1) Node:-2 -- Way:-2 -- (2) Node:-3, _portion: 0 } }, { _start: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 1 }, _end: { _e: (0) Node:-1 -- Way:-1 -- (1) Node:-2, _portion: 0 } }}", str);
+    HOOT_STR_EQUALS("[3]{{ _start: { _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 1 }, _end: { _e: (2) Node(-3) -- Way(-3) -- (3) Node(-4), _portion: 0 } }, { _start: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 1 }, _end: { _e: (1) Node(-2) -- Way(-2) -- (2) Node(-3), _portion: 0 } }, { _start: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 1 }, _end: { _e: (0) Node(-1) -- Way(-1) -- (1) Node(-2), _portion: 0 } }}", str);
   }
 };
 

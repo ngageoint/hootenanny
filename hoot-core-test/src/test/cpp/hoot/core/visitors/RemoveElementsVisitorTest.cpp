@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
@@ -59,7 +59,7 @@ public:
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
@@ -78,7 +78,7 @@ public:
   void runRecursiveTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
@@ -97,7 +97,7 @@ public:
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
@@ -115,7 +115,7 @@ public:
   void runReviewRelationTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(
+    OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorTest-reviewRelationTest.osm");
 
     boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());

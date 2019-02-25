@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Status.h"
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
 
@@ -98,8 +98,8 @@ QString Status::toString() const
 {
   if (_type > EnumEnd)
   {
-      int inputNum = _type - EnumEnd + 2;
-      return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
+    int inputNum = _type - EnumEnd + 2;
+    return QString("Input%1").arg(inputNum, 3, 10, QChar('0'));
   }
   else
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -44,6 +44,7 @@ using namespace boost;
 // Hoot
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Node.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/OsmSchemaLoaderFactory.h>
 #include <hoot/core/util/ConfPath.h>
@@ -53,7 +54,7 @@ using namespace boost;
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
 #include <QDomDocument>
@@ -197,21 +198,18 @@ OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList &s)
   return result;
 }
 
-uint16_t OsmGeometries::fromString(const QString& s)
+OsmGeometries::Type OsmGeometries::fromString(const QString& s)
 {
-  uint16_t result = 0;
+  Type result = Empty;
 
-  // breaking coding convention for the sake of readability/brevity.
-  if (s == "node") result = Node;
-  else if (s == "area") result = Area;
+  if (s == "node")            result = Node;
+  else if (s == "area")       result = Area;
   else if (s == "linestring") result = LineString;
-  else if (s == "closedway") result = ClosedWay;
-  else if (s == "way") result = Way;
-  else if (s == "relation") result = Relation;
+  else if (s == "closedway")  result = ClosedWay;
+  else if (s == "way")        result = Way;
+  else if (s == "relation")   result = Relation;
   else
-  {
     throw HootException("Unexpected enumerated type when parsing OsmGeometries: " + s);
-  }
 
   return result;
 }
@@ -935,13 +933,11 @@ private:
 
     if (_isAncestor(vid1, vid2))
     {
-      //cout << _graph[vid1].name.toStdString() << " descendant of " << _graph[vid2].name.toStdString() << endl;
       score = 1;
       return vid1;
     }
     else if (_isAncestor(vid2, vid1))
     {
-      //cout << _graph[vid2].name.toStdString() << " descendant of " << _graph[vid1].name.toStdString() << endl;
       score = 1;
       return vid2;
     }
@@ -1443,7 +1439,32 @@ bool OsmSchema::hasTagKey(const QString key)
   return getAllTagKeys().contains(key);
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTags(QString name)
+Tags OsmSchema::getAssociatedTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getAssociatedTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      QString val = childTagItr.value().trimmed();
+      // Associated tags are just returned as keys, so this is being added to the value to alleviate
+      // callers that expect non-empty values.
+      if (val.isEmpty())
+      {
+        val = "*";
+      }
+      tagsToReturn.appendValue(childTagItr.key(), val);
+    }
+  }
+  return tagsToReturn;
+}
+
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(QString name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1483,9 +1504,40 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTags(QString name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(QString name)
 {
   return d->getChildTags(name);
+}
+
+Tags OsmSchema::getChildTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  for (Tags::const_iterator inputTagItr = tags.constBegin(); inputTagItr != tags.constEnd();
+       ++inputTagItr)
+  {
+    const Tags childTags =
+      Tags::schemaVerticesToTags(
+        getChildTagsAsVertices(inputTagItr.key() + "=" + inputTagItr.value()));
+    for (Tags::const_iterator childTagItr = childTags.constBegin();
+         childTagItr != childTags.constEnd(); ++childTagItr)
+    {
+      tagsToReturn.appendValue(childTagItr.key(), childTagItr.value());
+    }
+  }
+  return tagsToReturn;
+}
+
+Tags OsmSchema::getAliasTags(const Tags& tags)
+{
+  Tags tagsToReturn;
+  const std::vector<SchemaVertex> schemaVertices = d->getSchemaVertices(tags);
+  for (std::vector<SchemaVertex>::const_iterator itr = schemaVertices.begin();
+       itr != schemaVertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tagsToReturn.addTags(Tags::kvpListToTags(vertex.aliases));
+  }
+  return tagsToReturn;
 }
 
 const SchemaVertex& OsmSchema::getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
@@ -1536,13 +1588,26 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTags(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
     throw IllegalArgumentException("minimumScore must be > 0");
   }
   return d->getSimilarTags(name, minimumScore);
+}
+
+Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
+{
+  Tags tags;
+  const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
+  for (std::vector<SchemaVertex>::const_iterator itr = vertices.begin();
+       itr != vertices.end(); ++itr)
+  {
+    SchemaVertex vertex = *itr;
+    tags.appendValue(vertex.key, vertex.value);
+  }
+  return tags;
 }
 
 vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
@@ -1592,40 +1657,6 @@ bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
   return d->isAncestor(childKvp, parentKvp);
 }
 
-bool OsmSchema::isArea(const Tags& t, const ElementType& type) const
-{
-  bool result = false;
-
-  // don't process if a node
-  if (type == ElementType::Node)
-  {
-    return false;
-  }
-
-  //LOG_VART(t.toString());
-
-  result |= isBuilding(t, type);
-  result |= t.isTrue(MetadataTags::BuildingPart());
-  result |= t.isTrue("area");
-
-  // if at least one of the tags is marked as an area, but not a linestring tag then we consider
-  // this to be an area feature.
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-  {
-    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
-    if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
-    {
-      //LOG_VERBOSE("Area: " << it.key() << "=" << it.value());
-      result = true;
-      break;
-    }
-  }
-  //LOG_VART(result);
-
-  return result;
-} 
-
 bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
 {
   //LOG_VART(tagList.size());
@@ -1644,366 +1675,34 @@ bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList)
   return false;
 }
 
-bool OsmSchema::isPoiPolygonPoly(const ConstElementPtr& e, const QStringList tagIgnoreList) const
+bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
+                          OsmGeometries::Type geometries)
 {
-  const Tags& tags = e->getTags();
-
-//  if (isLinearHighway(tags, e->getElementType()))
-//  {
-//    return false;
-//  }
-  //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
-  //category and not a linestring category, which still gives us some features we don't want to
-  //conflate with poi/poly.
-  if (tags.contains("highway"))
-  {
+  //  Empty tags shouldn't allow for anything
+  if (t.size() == 0)
     return false;
-  }
-
-  //types we don't care about at all - see #1172 as to why this can't be handled in the schema
-  //files
-  if (containsTagFromList(tags, tagIgnoreList))
-  {
-    LOG_TRACE("Contains tag from tag ignore list");
-    return false;
-  }
-  LOG_TRACE("Does not contain tag from tag ignore list");
-
-  //TODO: should use be added as a category here?
-  const bool inABuildingOrPoiCategory =
-    getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  //isArea includes building too
-  const bool isPoly =
-    isArea(tags, e->getElementType()) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-
-  //LOG_VART(e);
-  //LOG_VART(isPoly);
-  return isPoly;
-}
-
-bool OsmSchema::isPoiPolygonPoi(const ConstElementPtr& e, const QStringList tagIgnoreList) const
-{
-  const Tags& tags = e->getTags();
-
-  //see note in isPoiPolygonPoly
-  if (containsTagFromList(tags, tagIgnoreList))
-  {
-    LOG_TRACE("Contains tag from tag ignore list");
-    return false;
-  }
-  LOG_TRACE("Does not contain tag from tag ignore list");
-
-  const bool isNode = e->getElementType() == ElementType::Node;
-  if (!isNode)
-  {
-    return false;
-  }
-
-  //TODO: should use be added as a category here?
-  const bool inABuildingOrPoiCategory =
-    getCategories(tags).intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-  LOG_VART(inABuildingOrPoiCategory);
-  LOG_VART(tags.get("uuid"));
-  LOG_VART(tags.getNames());
-  LOG_VART(isPoi);
-
-  if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois() &&
-      PoiPolygonAddressScoreExtractor::nodeHasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
-  {
-    isPoi = true;
-  }
-
-  //LOG_VART(e);
-  //LOG_VART(isPoi);
-  return isPoi;
-}
-
-bool OsmSchema::isArea(const ConstElementPtr& e) const
-{
-  return isArea(e->getTags(), e->getElementType());
-}
-
-bool OsmSchema::isNonBuildingArea(const ConstElementPtr& e) const
-{
-  return isArea(e) && !isBuilding(e);
-}
-
-bool OsmSchema::isAreaForStats(const Tags& t, const ElementType& type) const
-{
-  bool result = false;
-
-  // don't process if a node
-  if (type == ElementType::Node)
-  {
-    return false;
-  }
-
-  // don't process if a building part
-  if (t.isTrue(MetadataTags::BuildingPart()))
-  {
-    return false;
-  }
-
-  // don't process if a relation
-  if (type == ElementType::Relation)
-  {
-    return false;
-  }
-
-  result |= isBuilding(t, type);
-  result |= t.isTrue("area");
-
-  // if at least one of the tags is marked as an area, but not a linestring tag then we consider
-  // this to be an area feature.
+  int usableTags = 0;
+  OsmGeometries::Type value = OsmGeometries::All;
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
-    if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
+    //  Unknown vertex types aren't usable tags
+    if (tv.getType() != SchemaVertex::UnknownVertexType && tv.geometries != OsmGeometries::Empty)
     {
-      result = true;
-      break;
+      value = static_cast<OsmGeometries::Type>(value & tv.geometries);
+      usableTags++;
     }
   }
-
-  return result;
-}
-
-bool OsmSchema::isAreaForStats(const ConstElementPtr& e) const
-{
-  return isAreaForStats(e->getTags(), e->getElementType());
-}
-
-bool OsmSchema::isBuilding(const Tags& t, const ElementType& type) const
-{
-  bool result = false;
-  if ((type != ElementType::Node) && (hasCategory(t, "building") == true))
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmSchema::isBuilding(const ConstElementPtr& e) const
-{
-  return isBuilding(e->getTags(), e->getElementType());
-}
-
-bool OsmSchema::isBuildingPart(const Tags& t, const ElementType& type) const
-{
-  bool result = false;
-  if (type != ElementType::Node && t.isTrue(MetadataTags::BuildingPart()))
-  {
-    result = true;
-  }
-  return result;
-}
-
-bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
-{
-  return isBuildingPart(e->getTags(), e->getElementType());
-}
-
-bool OsmSchema::isMultiUseBuilding(const Element& e) const
-{
-  const OsmSchema& osmSchema = OsmSchema::getInstance();
-  const ElementType elementType = e.getElementType();
-  LOG_VART(elementType);
-  const Tags& tags = e.getTags();
-  LOG_VART(tags);
-  LOG_VART(osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()));
-  LOG_VART(tags.contains("amenity"));
-  LOG_VART(osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
-
-  //(element is in a building category OR is an amenity) AND
-  //(element has a multi-purpose building tag OR is in a multi-use category)
-  return
-    (osmSchema.getCategories(e.getTags()).intersects(OsmSchemaCategory::building()) ||
-      tags.contains("amenity")) &&
-    (tags.get("building:use") == "multipurpose" ||
-     osmSchema.getCategories(tags).intersects(OsmSchemaCategory::multiUse()));
-}
-
-bool OsmSchema::isMultiUse(const Element& e) const
-{
-  return
-    OsmSchema::getInstance().getCategories(e.getTags()).intersects(OsmSchemaCategory::multiUse());
-}
-
-bool OsmSchema::isCollection(const Element& e) const
-{
-  bool result = false;
-
-  if (e.getElementType() == ElementType::Relation)
-  {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-
-    // This list could get HUGE.
-    if (r.getType() == MetadataTags::RelationWaterway() ||
-        r.getType() == MetadataTags::RelationNetwork() ||
-        r.getType() == MetadataTags::RelationRouteMaster() ||
-        r.getType() == MetadataTags::RelationSuperRoute() ||
-        r.getType() == MetadataTags::RelationRoute())
-    {
-      result = true;
-    }
-  }
-
-  return result;
-}
-
-bool OsmSchema::isHgisPoi(const Element& e) const
-{
-  bool result = false;
-
-  // See ticket #6853 for a definition of a "HGIS POI"
-  if (e.getElementType() == ElementType::Node)
-  {
-    result = hasCategory(e.getTags(), OsmSchemaCategory::hgisPoi().toString());
-  }
-
-  return result;
-}
-
-bool OsmSchema::isLinearHighway(const Tags& t, const ElementType& type) const
-{
-//  if (t.contains("name"))
-//  {
-//    LOG_VART(t.get("name"));
-//  }
-
-  bool result = false;
-  Tags::const_iterator it = t.find("highway");
-  QString key;
-
-  // Is it a legit highway?
-  if ((type == ElementType::Way || type == ElementType::Relation) &&
-      it != t.end() && it.value() != "")
-  {
-    result = true;
-    key = it.key();
-  }
-
-  // Maybe it's a way with nothing but a time tag...
-  it = t.find("source:datetime");
-  if (type == ElementType::Way && t.keys().size() < 2 && it != t.end())
-  {
-    // We can treat it like a highway
-    result = true;
-    key = it.key();
-  }
-
-  // Make sure this isn't an area highway section!
-  if (result)
-  {
-    result = !isArea(t, type);
-    LOG_VART(result);
-  }
-  LOG_VART(result);
-
-  if (Log::getInstance().getLevel() <= Log::Trace && result)
-  {
-    LOG_TRACE("isLinearHighway; key: " << key);
-    if (t.contains("name"))
-    {
-      LOG_VART(t.get("name"));
-    }
-  }
-
-  return result;
-}
-
-bool OsmSchema::isLinear(const Element& e) const
-{
-  bool result = false;
-
-  if (e.getElementType() == ElementType::Node)
-  {
+  //  Unusable tags shouldn't allow for anything
+  if (usableTags == 0)
     return false;
-  }
-
-  const Tags& t = e.getTags();
-
-  if (e.getElementType() == ElementType::Relation)
-  {
-    const Relation& r = dynamic_cast<const Relation&>(e);
-    result |= r.getType() == MetadataTags::RelationMultilineString();
-    result |= r.getType() == MetadataTags::RelationRoute();
-    result |= r.getType() == MetadataTags::RelationBoundary();
-  }
-
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-  {
-    const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
-    uint16_t g = tv.geometries;
-    if (g & (OsmGeometries::LineString | OsmGeometries::ClosedWay) && !(g & OsmGeometries::Area))
-    {
-      result = true;
-      break;
-    }
-  }
-
-  return result;
+  //  Check geometries against usable tags
+  return (value & geometries) != OsmGeometries::Empty;
 }
 
-bool OsmSchema::isLinearWaterway(const Element& e)
+bool OsmSchema::allowsFor(const ConstElementPtr& e, OsmGeometries::Type geometries)
 {
-  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
-  {
-    const Tags& tags = e.getTags();
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-    {
-      if (it.key() == "waterway" || isAncestor(it.key(), "waterway") ||
-          //TODO: Likely this condition needs to be removed and instead the affected data should
-          //be properly translated into OSM before conflation.
-          (it.key() == "type" && isAncestor("waterway=" + it.value(), "waterway")))
-      {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-bool OsmSchema::isPowerLine(const Element& e) const
-{
-  if (e.getElementType() == ElementType::Way)
-  {
-    const Tags& tags = e.getTags();
-    const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool OsmSchema::isRoundabout(const Tags& tags, const ElementType& type) const
-{
-  // If it's not a highway, it's not a roundabout
-  if (!isLinearHighway(tags, type))
-  {
-    return false;
-  }
-
-  // Now check some details...
-  bool result = false;
-  Tags::const_iterator tagIt = tags.find("junction");
-
-  if (tagIt != tags.end() && tagIt.value().toLower() == "roundabout")
-  {
-    result = true;
-  }
-
-  if (result)
-  {
-    LOG_TRACE("isRoundabout; key: " << tagIt.key());
-  }
-
-  return result;
+  return allowsFor(e->getTags(), e->getElementType(), geometries);
 }
 
 bool OsmSchema::isList(const QString& /*key*/, const QString& value) const
@@ -2032,78 +1731,6 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 
     return metadata;
   }
-}
-
-bool OsmSchema::isMultiLineString(const Relation& r) const
-{
-  return r.getType() == MetadataTags::RelationMultilineString();
-}
-
-bool OsmSchema::isOneWay(const Element& e) const
-{
-  bool result = false;
-  QString oneway = e.getTags()["oneway"].toLower();
-  if (e.getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
-  {
-    result = true;
-  }
-  return result;
-}
-
-bool OsmSchema::hasName(const Element& element) const
-{
-  const QStringList names = element.getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
-  {
-    if (!element.getTags().get("name").trimmed().isEmpty())
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool OsmSchema::isPoi(const Element& e) const
-{
-  bool result = false;
-
-  // we consider all point features with a name, or part of the explicitly defined point category
-  // to be POIs.
-  if (e.getElementType() == ElementType::Node)
-  {
-    result = hasCategory(e.getTags(), "poi") || e.getTags().getNames().size() > 0;
-  }
-
-  return result;
-}
-
-bool OsmSchema::isRailway(const Element& e)
-{
-  if (e.getElementType() == ElementType::Way || e.getElementType() == ElementType::Relation)
-  {
-    const Tags& tags = e.getTags();
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-    {
-      //TODO: I think we may want to narrow down to a more specific set of railway values here
-      //at some point.
-      if (it.key() == "railway" || isAncestor(it.key(), "railway"))
-      {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-bool OsmSchema::isReversed(const Element& e) const
-{
-  bool result = false;
-  QString oneway = e.getTags()["oneway"].toLower();
-  if (oneway == "-1" || oneway == "reverse")
-  {
-    result = true;
-  }
-  return result;
 }
 
 void OsmSchema::loadDefault()
@@ -2163,6 +1790,22 @@ void OsmSchema::update()
 void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
 {
   d->updateOrCreateVertex(tv);
+}
+
+QString OsmSchema::getParentKvp(const QString kvp1, const QString kvp2)
+{
+  if (isAncestor(kvp1, kvp2))
+  {
+    return kvp2;
+  }
+  else if (isAncestor(kvp2, kvp1))
+  {
+    return kvp1;
+  }
+  else
+  {
+    return kvp1;
+  }
 }
 
 }

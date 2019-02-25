@@ -27,21 +27,20 @@
 
 #include "OsmPbfWriter.h"
 
-#include <arpa/inet.h>
-
 // Hoot Includes
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 //  Version must be included last
-#include <hoot/core/Version.h>
-#include <hoot/core/VersionDefines.h>
+#include <hoot/core/info/Version.h>
+#include <hoot/core/info/VersionDefines.h>
 
 using namespace hoot::pb;
 
@@ -54,7 +53,8 @@ using namespace hoot::pb;
 // ZLib Includes
 #include <zlib.h>
 
-#include "PbfConstants.h"
+//  htonl
+#include <arpa/inet.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -208,6 +208,7 @@ void OsmPbfWriter::_initBlob()
 
 void OsmPbfWriter::initializePartial(ostream* strm)
 {
+  LOG_DEBUG("Initializing partial...");
   _out = strm;
   _writeOsmHeader(false, false);
   _initBlob();
@@ -284,6 +285,8 @@ void OsmPbfWriter::write(ConstOsmMapPtr map)
 
 void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
 {
+  LOG_DEBUG("Writing stream...");
+
   _out = strm;
   _map = map;
 
@@ -315,6 +318,8 @@ void OsmPbfWriter::write(ConstOsmMapPtr map, const QString& path)
 
 void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
 {
+  LOG_DEBUG("Writing header...");
+
   _out = strm;
 
   _rawSize = 0;
@@ -590,6 +595,8 @@ void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
 {
   LOG_TRACE("Writing the OSM header...");
+  LOG_VART(includeBounds);
+  LOG_VART(sorted);
 
   // create the header block
   _d->headerBlock.Clear();

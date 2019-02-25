@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
 
-#include "HighwayClassifier.h"
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
@@ -48,10 +48,10 @@ public:
   HighwayRfClassifier();
 
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) override;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
-    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
+    ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const override;
 
 private:
   // these are mutable because we do a lazy load.

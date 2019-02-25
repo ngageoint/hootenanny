@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmPbfReader.h"
@@ -30,17 +30,18 @@
 #include <arpa/inet.h>
 
 // Hoot Includes
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/PbfConstants.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/elements/Element.h>
-#include "ElementInputStream.h"
-#include <hoot/core/OsmMap.h>
 
 using namespace hoot::pb;
 
@@ -61,8 +62,6 @@ using namespace hoot::pb;
 
 // ZLib Includes
 #include <zlib.h>
-
-#include "PbfConstants.h"
 
 using namespace geos::geom;
 using namespace std;
@@ -633,23 +632,23 @@ vector<OsmPbfReader::BlobLocation> OsmPbfReader::loadOsmDataBlobOffsets(istream&
     if (Log::getInstance().getLevel() <= Log::Info && t - start > 5 && t - last >= 2)
     {
       long pos = _in->tellg();
-      printf("%.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, length / 1.0e6,
-        ((_in->tellg() - lastPos) / (t - last)) / 1.0e6);
-      cout.flush();
+      PROGRESS_INFO(QString("%1 / %2 - %3 MB/s                  ")
+                    .arg(pos / 1.0e6, 0, 'g', 1)
+                    .arg(length / 1.0e6, 0, 'g', 1)
+                    .arg(((_in->tellg() - lastPos) / (t - last)) / 1.0e6, 0, 'g', 2));
       last = t;
       lastPos = _in->tellg();
     }
   }
 
   t = Tgs::Time::getTime();
-  if (Log::getInstance().getLevel() <= Log::Info && t - start > 5)
+  if (t - start > 5)
   {
     // print the final summary
-    printf("%.1f / %.1f - %.2f MB/s                  \n",
-      length / 1.0e6, length / 1.0e6,
-      ((length) / (t - start)) / 1.0e6);
-    cout.flush();
+    LOG_INFO(QString("%1 / %2 - %3 MB/s                  ")
+             .arg(length / 1.0e6, 0, 'g', 1)
+             .arg(length / 1.0e6, 0, 'g', 1)
+             .arg((length / (t - start)) / 1.0e6, 0, 'g', 2));
   }
 
   return result;
@@ -1136,7 +1135,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
   }
 }
 
-/// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
+// TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void OsmPbfReader::read(QString path, OsmMapPtr map)
 {
   if (_status == Status::Invalid)
@@ -1191,7 +1190,7 @@ void OsmPbfReader::read(OsmMapPtr map)
   map->visitRw(v);
 }
 
-/// @todo make the partial reader handle dir inputs?
+// TODO: make the partial reader handle dir inputs?
 bool OsmPbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);
@@ -1336,10 +1335,10 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     if (t - _startReadTime > 5 && diff > 2)
     {
       long pos = _in->tellg();
-      printf("Reading .osm.pbf %.1f / %.1f - %.2f MB/s                  \r",
-        pos / 1.0e6, _fileLength / 1.0e6,
-        ((pos - _lastPosition) / (t - _lastReadTime)) / 1.0e6);
-      cout.flush();
+      PROGRESS_DEBUG(QString("Reading .osm.pbf %1 / %2 - %3 MB/s                  ")
+                     .arg(pos / 1.0e6, 0, 'g', 1)
+                     .arg(_fileLength / 1.0e6, 0, 'g', 1)
+                     .arg(((pos - _lastPosition) / (t - _lastReadTime)) / 1.0e6, 0, 'g', 2));
       _lastReadTime = t;
       _lastPosition = pos;
     }
@@ -1374,7 +1373,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   assert(element.get());
   _elementsRead++;
 
-  LOG_TRACE("Read " << element->getElementId());
+  //LOG_TRACE("Read " << element->getElementId());
   return element;
 }
 

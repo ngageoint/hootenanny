@@ -53,6 +53,14 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
+     <filter>
+         <filter-name>exceptionFilter</filter-name>
+         <filter-class>hoot.services.ExceptionFilter</filter-class>
+     </filter>
+     <filter-mapping>
+     <filter-name>exceptionFilter</filter-name>
+         <url-pattern>/*</url-pattern>
+     </filter-mapping>
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

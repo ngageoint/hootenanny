@@ -237,20 +237,20 @@ gifd.rules = {
        'AIA':'raw:AIA', // Airspace Identification Attribute
        'AKY':'aeroway:key', // Airport Key ## Check
        'BEN':'be_number', // Basic Encyclopedia Number
-       'BER':'raw:BER', // Berth Identifier
+       'BER':'berth_identifier', // Berth Identifier
        'BRN':'bridge:reference', // Bridge Reference Number
        'BRR':'raw:BRR', // Bearing and Reciprocal Category
        'CAP':'raw:CAP', // Capacity
        'CCR':'raw:CCR', // Color Code Remarks
        'CDV':'calendar:date_value', // Calendar Date Value
        'CHL':'raw:CHL', // Channel Number
-       'COL':'raw:COL', // Character of Light
+       'COL':'seamark:light:character', // Character of Light
        'COMMENTS':'source:comments', // Comments
        'COMM_CPYRT_NOTICE':'source:copyright', // Commercial Copyright Notice
        'COMM_LIC_TIER_NOTICE':'source:commercial_distribution_restriction', // Distribution of Commercial Data
        'CREATION_DATE':'source:creation_date', // Feature Creation Date
-       'DAN':'raw:DAN', // Description of Aids to Navigation
-       'DRP':'raw:DRP', // Description of Reference Point
+       'DAN':'navigationaid:description', // Description of Aids to Navigation
+       'DRP':'reference_point:description', // Description of Reference Point
        'EHI':'raw:EHI', // Extracted Runway High Identifier
        'ELI':'raw:ELI', // Extracted Runway Low Identifier
        // 'F_CODE':'raw:F_CODE', // Feature Code
@@ -265,7 +265,7 @@ gifd.rules = {
        'MCA':'raw:MCA', // Morse Code Attribute
        'MDU':'raw:MDU', // Maximum Demonstrated Usage
        'MEA':'raw:MEA', // Minimum Enroute Altitude
-       'MLR':'raw:MLR', // Multiple Light Ranges
+       'MLR':'seamark:light:ranges', // Multiple Light Ranges
        'M_ACP_9D066':'raw:M_ACP_9D066', // Hierarchy 9D066 Annotation Category Primary
        'M_AKY_1P030':'raw:M_AKY_1P030', // Hierarchy 1P030 AKY
        'M_AKY_1U030':'raw:M_AKY_1U030', // Hierarchy 1P030 AKY
@@ -384,10 +384,10 @@ gifd.rules = {
        'BHL':'waterway:bank1:height', // Bank Height Left
        'BHR':'waterway:bank2:height', // Bank Height Right
        'BNF':'building:levels', // Building Number of Floors
-       'BR2':'raw:BR2', // Broadcast Frequency (2)
-       'BRF':'navigation_aid:broadcast_freq', // Broadcast Frequency
-       'BRG':'raw:BRG', // Bearing of Object
-       'BRS':'raw:BRS', // Bearing From Seaward
+       'BR2':'seamark:radio_station:frequency:2', // Broadcast Frequency (2)
+       'BRF':'seamark:radio_station:frequency', // Broadcast Frequency
+       'BRG':'bearing:to_object', // Bearing of Object
+       'BRS':'bearing:from_seaward', // Bearing From Seaward
        'C01':'raw:C01', // Fuel Containers Capacity Each
        'C60':'raw:C60', // Rate of Current (IHO)
        'C61':'raw:C61', // Rate of Current (1) (IHO)
@@ -403,13 +403,13 @@ gifd.rules = {
        'C71':'raw:C71', // Rate of Current (11) (IHO)
        'CDL':'covered_drain:length', // Covered Drain Length
        'CFD':'raw:CFD', // Cultural Feature Density
-       'CRN':'raw:CRN', // Current Rate Minimum
-       'CRV':'ele:max', // Depth Curve or Contour Value
-       'CRX':'raw:CRX', // Current Rate Maximum
+       'CRN':'water:current:speed:min', // Current Rate Minimum
+       'CRV':'depth:value', // Depth Curve or Contour Value
+       'CRX':'water:current:speed:max', // Current Rate Maximum
        'CSD':'raw:CSD', // Crane Support Distance
        'CTL':'railway:track:length', // Cumulative Track Length
-       'CVH':'raw:CVH', // Depth Curve or Contour Value High
-       'CVL':'raw:CVL', // Depth Curve or Contour Value Low
+       'CVH':'depth:value:max', // Depth Curve or Contour Value - High
+       'CVL':'depth:value:min', // Depth Curve or Contour Value - Low
        'D60':'raw:D60', // Direction of Current (IHO)
        'D61':'raw:D61', // Direction of Current (1) (IHO)
        'D62':'raw:D62', // Direction of Current (2) (IHO)
@@ -424,10 +424,10 @@ gifd.rules = {
        'D71':'raw:D71', // Direction of Current (11) (IHO)
        'DDM':'raw:DDM', // Ship's Draft
        'DEP':'depth:max', // Depth Below Surface Level
-       'DF1':'raw:DF1', // Direction of Traffic - 1
-       'DF2':'raw:DF2', // Direction of Traffic - 2
-       'DF3':'raw:DF3', // Direction of Traffic - 3
-       'DF4':'raw:DF4', // Direction of Traffic - 4
+       'DF1':'seamark:calling-in_point:traffic_flow:direction:1', // Direction of Traffic - 1
+       'DF2':'seamark:calling-in_point:traffic_flow:direction:2', // Direction of Traffic - 2
+       'DF3':'seamark:calling-in_point:traffic_flow:direction:3', // Direction of Traffic - 3
+       'DF4':'seamark:calling-in_point:traffic_flow:direction:4', // Direction of Traffic - 4
        'DMB':'undergrowth:density', // Density Measure (Brush/Undergrowth)
        'DMF':'feature_count', // Density Measure (Feature Count)
        'DMK':'raw:DMK', // Density Measure (% of Kelp Cover)
@@ -468,19 +468,19 @@ gifd.rules = {
        'LC2':'bridge:load_class4', // Load Class Type 2
        'LC3':'bridge:load_class4', // Load Class Type 3
        'LC4':'bridge:load_class4', // Load Class Type 4
-       'LEG':'bridge:length', // Length/Diameter in Meters With Greater Precision
+       'LEG':'length', // Length/Diameter in Meters With Greater Precision
        'LEN_':'length', // Length/Diameter
        'LNU':'length:interior_useable', // Useable Length
        'LOG':'gradient:length', // Length of Gradient
        'LRP':'raw:LRP', // Length of Range With greater than 1 NM resolution
-       'LSA':'raw:LSA', // Light Sector Angle
+       'LSA':'seamark:light:sector:angle', // Light Sector Angle
        'LSI':'raw:LSI', // Light Sector Angle Initial
        'LST':'raw:LST', // Light Sector Angle Terminal
        'LTN':'lanes', // Track/Lane Number
-       'LVN':'raw:LVN', // Light Range, Nominal
+       'LVN':'seamark:light:radius', // Light Range, Nominal
        'MAG':'magnetic_variation', // Magnetic Variation
        'MTN':'raw:MTN', // Mine Track Number
-       'MVC':'max_clearance', // Maximum Vertical Clearance ## Check
+       'MVC':'bridge:under_clearance', // Maximum Vertical Clearance ## Check
        'MWG':'divider:width', // Median Width with greater than 1 meter resolution
        'M_ACE_1P020':'raw:M_ACE_1P020', // Absolute Circular Error of Feature Position
        'M_ACE_1P030':'source:accuracy:horizontal', // Absolute Circular Error of Feature Position
@@ -532,9 +532,9 @@ gifd.rules = {
        'NSN':'raw:NSN', // Navigation System Name
        'OHB':'height', // Overall Height of Bridge
        'OHC':'max_clearance', // Overhead Clearance Category
-       'OR2':'raw:OR2', // Operating Range Category (2)
-       'ORC':'raw:ORC', // Operating Range Category
-       'PER':'raw:PER', // Period of Light
+       'OR2':'seamark:radio_station:range:2', // Operating Range Category (2)
+       'ORC':'seamark:radio_station:range', // Operating Range Category
+       'PER':'seamark:light:period', // Period of Light
        'PFE':'depth:predominant', // Predominant Feature Depth With greater than 1 meter resolution
        'PFG':'height:predominant', // Predominant Feature Height With greater than 1 meter resolution
        'PHT':'height', // Predominant Height
@@ -550,7 +550,7 @@ gifd.rules = {
        'SIZE_':'raw:SIZE_', // Font Size
        'SPD':'maxspeed', // Speed Limit (MPH)
        'SSI':'raw:SSI', // Sounding Source ID
-       'TIM':'raw:TIM', // Time Attribute
+       'TIM':'activity_duration', // Time Attribute
        'TNG':'raw:TNG', // Tonnage
        'TSD':'raw:TSD', // Tree Spacing With greater than 1 meter resolution
        'UBC':'bridge:under_clearance', // Underbridge Clearance Category
@@ -558,7 +558,7 @@ gifd.rules = {
        'UID_':'uuid', // Feature Identification Number
        'USI':'raw:USI', // BAD Sounding Identifier
        'VAL':'value', // Value
-       'VAV':'raw:VAV', // Variation Anomaly Value
+       'VAV':'magnetic_variation', // Variation Anomaly Value
        'VC3':'safe_clearance:vertical', // Vertical Clearance, Safe With greater than 1 meter resolution
        'WD1':'width:minimum_traveled_way', // Minimum Traveled Way Width
        'WD2':'width:total_usable', // Total Usable Width
@@ -652,11 +652,12 @@ gifd.rules = {
        ['AGD','3','raw:AGD','bi-directional'], // Bi-directional
        ['AGD','997',undefined,undefined], // Unpopulated
 
-       // AHC - Associated Hydrographic Category
-       ['AHC','0','raw:AHC','unknown'], // Unknown
-       ['AHC','1','raw:AHC','perennial'], // Perennial
-       ['AHC','2','raw:AHC','intermittent'], // Intermittent
-       ['AHC','3','raw:AHC','ephemeral'], // Ephemeral
+       // AHC - Associated Hydrographic Category 
+       // NOTE: Deconflict with HYC 
+       ['AHC','0','hydrographic_category:2','unknown'], // Unknown
+       ['AHC','1','hydrographic_category:2','perennial'], // Perennial
+       ['AHC','2','hydrographic_category:2','intermittent'], // Intermittent
+       ['AHC','3','hydrographic_category:2','ephemeral'], // Ephemeral
        ['AHC','997',undefined,undefined], // Unpopulated
 
        // ALE_EVAL_METHOD_CD - Absolute Linear Error Evaluation Method
@@ -684,14 +685,14 @@ gifd.rules = {
 
        // APT - Airfield Type
        ['APT','0',undefined,undefined], // Unknown
-       ['APT','1','aeroway:airfield:type','major'], // Major Airfield
-       ['APT','2','aeroway:airfield:type','minor'], // Minor Airfield
-       ['APT','9','aeroway:airfield:type','heliport'], // Heliport
-       ['APT','11','aeroway:airfield:type','heliport_at_hospitals'], // Heliport at Hospitals
-       ['APT','14','aeroway:airfield:type','airport/airfield'], // Airport/Airfield
-       ['APT','15','aeroway:airfield:type','undefined_landing_area'], // Undefined Landing Area
+       ['APT','1','aeroway:use','major_airfield'], // Major Airfield
+       ['APT','2','aeroway:use','minor_airfield'], // Minor Airfield
+       ['APT','9','aeroway','heliport'], // Heliport
+       ['APT','11','aeroway:use','heliport_at_hospitals'], // Heliport at Hospitals
+       ['APT','14','aeroway:use','airport/airfield'], // Airport/Airfield
+       ['APT','15','aeroway:use','undefined_landing_area'], // Undefined Landing Area
        ['APT','997',undefined,undefined], // Unpopulated
-       ['APT','999','aeroway:airfield:type','other'], // Other
+       ['APT','999','aeroway:use','other'], // Other
 
        // ARC - Artifact Code
        ['ARC','1','raw:ARC','source_material_adverse_area'], // Source Material Adverse Area
@@ -1136,29 +1137,30 @@ gifd.rules = {
        ['BUD','998','raw:BUD','not_applicable'], // Not Applicable
 
        // BUT - Buoy Type Category
-       ['BUT','0','raw:BUT','unknown'], // Unknown
-       ['BUT','1','raw:BUT','cardinal'], // Cardinal
-       ['BUT','2','raw:BUT','float'], // Float
-       ['BUT','3','raw:BUT','isolated_danger'], // Isolated Danger
-       ['BUT','4','raw:BUT','large_navigational_buoy_(lanby)'], // Large Navigational Buoy (LANBY)
-       ['BUT','5','raw:BUT','lateral'], // Lateral
-       ['BUT','6','raw:BUT','light_float'], // Light Float
-       ['BUT','7','raw:BUT','mooring'], // Mooring
-       ['BUT','10','raw:BUT','ocean_data_acquisition_system_(odas)'], // Ocean Data Acquisition System (ODAS)
-       ['BUT','17','raw:BUT','tanker'], // Tanker
-       ['BUT','35','raw:BUT','articulated_lights'], // Articulated Lights
-       ['BUT','39','raw:BUT','trot'], // Trot
-       ['BUT','84','raw:BUT','apex_(arc)_buoy'], // APEX (ARC) Buoy
-       ['BUT','95','raw:BUT','cardinal_west_mark'], // Cardinal West Mark
-       ['BUT','96','raw:BUT','cardinal_south_mark'], // Cardinal South Mark
-       ['BUT','97','raw:BUT','cardinal_east_mark'], // Cardinal East Mark
-       ['BUT','98','raw:BUT','cardinal_north_mark'], // Cardinal North Mark
-       ['BUT','99','raw:BUT','installation'], // Installation
-       ['BUT','100','raw:BUT','waverider'], // Waverider
-       ['BUT','101','raw:BUT','wave_meter'], // Wave Meter
-       // ['BUT','998',undefined,undefined], // Not Applicable
-       ['BUT','998','raw:BUT','not_applicable'], // Not Applicable
-       ['BUT','999','raw:BUT','other'], // Other
+       ['BTC','0','seamark:buoy:type','unknown'], // Unknown
+       ['BTC','1','seamark:type','buoy_cardinal'], // Cardinal
+       ['BTC','2','seamark:buoy:type','float'], // Float
+       ['BTC','3','seamark:buoy_special_purpose:category','buoy_isolated_danger'], // Isolated Danger
+       ['BTC','4','seamark:buoy_special_purpose:category','lanby'], // Large Navigational Buoy (LANBY)
+       ['BTC','6','seamark:type','light_float'], // Light Float
+       ['BTC','7','seamark:mooring:category','buoy'], // Mooring
+       ['BTC','5','seamark:type','buoy_lateral'], // Lateral
+       ['BTC','10','seamark:buoy_special_purpose:category','odas'], // Ocean Data Acquisition System (ODAS)
+       ['BTC','17','seamark:buoy:type','tanker'], // Tanker
+       ['BTC','35','seamark:type','articulated_lights'], // Articulated Lights
+       ['BTC','39','seamark:buoy:type','trot'], // Trot
+       ['BTC','84','seamark:buoy:type','apex_(arc)'], // APEX (ARC) Buoy
+       ['BTC','95','seamark:buoy_cardinal:category','west'], // Cardinal West Mark
+       ['BTC','96','seamark:buoy_cardinal:category','south'], // Cardinal South Mark
+       ['BTC','97','seamark:buoy_cardinal:category','east'], // Cardinal East Mark
+       ['BTC','98','seamark:buoy_cardinal:category','north'], // Cardinal North Mark
+       ['BTC','99','seamark:buoy:type','installation'], // Installation
+       ['BTC','100','seamark:buoy:type','waverider'], // Waverider
+       ['BTC','101','seamark:buoy:type','wave_meter'], // Wave Meter
+       // ['BTC','998',undefined,undefined], // Not Applicable
+       ['BTC','998','seamark:buoy:type','not_applicable'], // Not Applicable
+       ['BTC','999','seamark:buoy:type','other'], // Other
+
 
        // BVL - Bank Vegetation Left
        ['BVL','0','raw:BVL','unknown'], // Unknown
@@ -1195,52 +1197,52 @@ gifd.rules = {
        ['CCA','999','raw:CCA','other'], // Other
 
        // CCC - Color Code Category
-       ['CCC','0','raw:CCC','unknown'], // Unknown
-       ['CCC','1','raw:CCC','black'], // Black
-       ['CCC','2','raw:CCC','blue'], // Blue
-       ['CCC','3','raw:CCC','brown'], // Brown
-       ['CCC','4','raw:CCC','gray'], // Gray
-       ['CCC','5','raw:CCC','green'], // Green
-       ['CCC','7','raw:CCC','chocolate'], // Chocolate
-       ['CCC','9','raw:CCC','orange'], // Orange
-       ['CCC','12','raw:CCC','red'], // Red
-       ['CCC','14','raw:CCC','violet'], // Violet
-       ['CCC','15','raw:CCC','white'], // White
-       ['CCC','19','raw:CCC','yellow'], // Yellow
-       ['CCC','20','raw:CCC','red_&_white_(rw)'], // Red & White (RW)
-       ['CCC','21','raw:CCC','red_&_green_(rg)'], // Red & Green (RG)
-       ['CCC','22','raw:CCC','red_&_black_(rb)'], // Red & Black (RB)
-       ['CCC','23','raw:CCC','red-green-red_(rgr)'], // Red-Green-Red (RGR)
-       ['CCC','24','raw:CCC','green_&_white_(gw)'], // Green & White (GW)
-       ['CCC','25','raw:CCC','green_&_red_(gr)'], // Green & Red (GR)
-       ['CCC','26','raw:CCC','green_&_black_(gb)'], // Green & Black (GB)
-       ['CCC','27','raw:CCC','green-red-green_(grg)'], // Green-Red-Green (GRG)
-       ['CCC','28','raw:CCC','green-yellow-black_(gyb)'], // Green-Yellow-Black (GYB)
-       ['CCC','29','raw:CCC','yellow_&_black_(yb)'], // Yellow & Black (YB)
-       ['CCC','30','raw:CCC','yellow-black-yellow_(yby)'], // Yellow-Black-Yellow (YBY)
-       ['CCC','31','raw:CCC','yellow_&_red_(yr)'], // Yellow & Red (YR)
-       ['CCC','32','raw:CCC','yellow_&_green_(yg)'], // Yellow & Green (YG)
-       ['CCC','33','raw:CCC','yellow-red-white_(yrw)'], // Yellow-Red-White (YRW)
-       ['CCC','34','raw:CCC','black_&_yellow_(by)'], // Black & Yellow (BY)
-       ['CCC','35','raw:CCC','black-yellow-black_(byb)'], // Black-Yellow-Black (BYB)
-       ['CCC','36','raw:CCC','black-red-black_(brb)'], // Black-Red-Black (BRB)
-       ['CCC','37','raw:CCC','black_&_white_(bw)'], // Black & White (BW)
-       ['CCC','38','raw:CCC','black_&_red_(br)'], // Black & Red (BR)
-       ['CCC','39','raw:CCC','black_&_green_(bg)'], // Black & Green (BG)
-       ['CCC','40','raw:CCC','white_&_red_(wr)'], // White & Red (WR)
-       ['CCC','41','raw:CCC','white_&_orange_(wor)'], // White & Orange (WOr)
-       ['CCC','42','raw:CCC','white_&_green_(wg)'], // White & Green (WG)
-       ['CCC','43','raw:CCC','white_&_black_(wb)'], // White & Black (WB)
-       ['CCC','44','raw:CCC','white_&_yellow_(wy)'], // White & Yellow (WY)
-       ['CCC','45','raw:CCC','white-red-green_(wrg)'], // White-Red-Green (WRG)
-       ['CCC','46','raw:CCC','white-green-white_(wgw)'], // White-Green-White (WGW)
-       ['CCC','47','raw:CCC','magenta'], // Magenta
-       ['CCC','48','raw:CCC','amber'], // Amber
-       ['CCC','49','raw:CCC','buff'], // Buff
-       ['CCC','50','raw:CCC','nautical_purple'], // Nautical Purple
-       ['CCC','51','raw:CCC','pink'], // Pink
+       ['CCC','0','seamark:buoy:colour','unknown'], // Unknown
+       ['CCC','1','seamark:buoy:colour','black'], // Black
+       ['CCC','2','seamark:buoy:colour','blue'], // Blue
+       ['CCC','3','seamark:buoy:colour','brown'], // Brown
+       ['CCC','4','seamark:buoy:colour','gray'], // Gray
+       ['CCC','5','seamark:buoy:colour','green'], // Green
+       ['CCC','7','seamark:buoy:colour','chocolate'], // Chocolate
+       ['CCC','9','seamark:buoy:colour','orange'], // Orange
+       ['CCC','12','seamark:buoy:colour','red'], // Red
+       ['CCC','14','seamark:buoy:colour','violet'], // Violet
+       ['CCC','15','seamark:buoy:colour','white'], // White
+       ['CCC','19','seamark:buoy:colour','yellow'], // Yellow
+       ['CCC','20','seamark:buoy:colour','red_and_white_(rw)'], // Red & White (RW)
+       ['CCC','21','seamark:buoy:colour','red_and_green_(rg)'], // Red & Green (RG)
+       ['CCC','22','seamark:buoy:colour','red_and_black_(rb)'], // Red & Black (RB)
+       ['CCC','23','seamark:buoy:colour','red-green-red_(rgr)'], // Red-Green-Red (RGR)
+       ['CCC','24','seamark:buoy:colour','green_and_white_(gw)'], // Green & White (GW)
+       ['CCC','25','seamark:buoy:colour','green_and_red_(gr)'], // Green & Red (GR)
+       ['CCC','26','seamark:buoy:colour','green_and_black_(gb)'], // Green & Black (GB)
+       ['CCC','27','seamark:buoy:colour','green-red-green_(grg)'], // Green-Red-Green (GRG)
+       ['CCC','28','seamark:buoy:colour','green-yellow-black_(gyb)'], // Green-Yellow-Black (GYB)
+       ['CCC','29','seamark:buoy:colour','yellow_and_black_(yb)'], // Yellow & Black (YB)
+       ['CCC','30','seamark:buoy:colour','yellow-black-yellow_(yby)'], // Yellow-Black-Yellow (YBY)
+       ['CCC','31','seamark:buoy:colour','yellow_and_red_(yr)'], // Yellow & Red (YR)
+       ['CCC','32','seamark:buoy:colour','yellow_and_green_(yg)'], // Yellow & Green (YG)
+       ['CCC','33','seamark:buoy:colour','yellow-red-white_(yrw)'], // Yellow-Red-White (YRW)
+       ['CCC','34','seamark:buoy:colour','black_and_yellow_(by)'], // Black & Yellow (BY)
+       ['CCC','35','seamark:buoy:colour','black-yellow-black_(byb)'], // Black-Yellow-Black (BYB)
+       ['CCC','36','seamark:buoy:colour','black-red-black_(brb)'], // Black-Red-Black (BRB)
+       ['CCC','37','seamark:buoy:colour','black_and_white_(bw)'], // Black & White (BW)
+       ['CCC','38','seamark:buoy:colour','black_and_red_(br)'], // Black & Red (BR)
+       ['CCC','39','seamark:buoy:colour','black_and_green_(bg)'], // Black & Green (BG)
+       ['CCC','40','seamark:buoy:colour','white_and_red_(wr)'], // White & Red (WR)
+       ['CCC','41','seamark:buoy:colour','white_and_orange_(wor)'], // White & Orange (WOr)
+       ['CCC','42','seamark:buoy:colour','white_and_green_(wg)'], // White & Green (WG)
+       ['CCC','43','seamark:buoy:colour','white_and_black_(wb)'], // White & Black (WB)
+       ['CCC','44','seamark:buoy:colour','white_and_yellow_(wy)'], // White & Yellow (WY)
+       ['CCC','45','seamark:buoy:colour','white-red-green_(wrg)'], // White-Red-Green (WRG)
+       ['CCC','46','seamark:buoy:colour','white-green-white_(wgw)'], // White-Green-White (WGW)
+       ['CCC','47','seamark:buoy:colour','magenta'], // Magenta
+       ['CCC','48','seamark:buoy:colour','amber'], // Amber
+       ['CCC','49','seamark:buoy:colour','buff'], // Buff
+       ['CCC','50','seamark:buoy:colour','nautical_purple'], // Nautical Purple
+       ['CCC','51','seamark:buoy:colour','pink'], // Pink
        ['CCC','997',undefined,undefined], // Unpopulated
-       ['CCC','999','raw:CCC','other'], // Other
+       ['CCC','999','seamark:buoy:colour','other'], // Other
 
        // CDA - Covered Drain Attribute
        ['CDA','0','raw:CDA','unknown'], // Unknown
@@ -1409,31 +1411,31 @@ gifd.rules = {
        ['CSC','4','raw:CSC','no_control_or_warning_signs.'], // No control or warning signs.
 
        // CSM - Secondary Material Characteristics
-       ['CSM','0','raw:CSM','unknown'], // Unknown
-       ['CSM','1','raw:CSM','broken'], // Broken
-       ['CSM','2','raw:CSM','coarse'], // Coarse
-       ['CSM','3','raw:CSM','decayed'], // Decayed
-       ['CSM','4','raw:CSM','fine,_minute_particles'], // Fine, Minute Particles
-       ['CSM','5','raw:CSM','gritty'], // Gritty
-       ['CSM','6','raw:CSM','hard'], // Hard
-       ['CSM','7','raw:CSM','rotten'], // Rotten
-       ['CSM','8','raw:CSM','soft'], // Soft
-       ['CSM','9','raw:CSM','sticky'], // Sticky
-       ['CSM','10','raw:CSM','stiff'], // Stiff
-       ['CSM','11','raw:CSM','streaky'], // Streaky
-       ['CSM','12','raw:CSM','tenacious'], // Tenacious
-       ['CSM','13','raw:CSM','uneven'], // Uneven
-       ['CSM','17','raw:CSM','calcareous'], // Calcareous
-       ['CSM','18','raw:CSM','flinty'], // Flinty
-       ['CSM','19','raw:CSM','glacial'], // Glacial
-       ['CSM','20','raw:CSM','ground'], // Ground
-       ['CSM','21','raw:CSM','large'], // Large
-       ['CSM','22','raw:CSM','rocky'], // Rocky
-       ['CSM','23','raw:CSM','small'], // Small
-       ['CSM','24','raw:CSM','speckled'], // Speckled
-       ['CSM','25','raw:CSM','varied'], // Varied
-       ['CSM','26','raw:CSM','volcanic'], // Volcanic
-       ['CSM','27','raw:CSM','medium'], // Medium
+       ['CSM','0','material:characteristic','unknown'], // Unknown
+       ['CSM','1','material:characteristic','broken'], // Broken
+       ['CSM','2','material:characteristic','coarse'], // Coarse
+       ['CSM','3','material:characteristic','decayed'], // Decayed
+       ['CSM','4','material:characteristic','fine,_minute_particles'], // Fine, Minute Particles
+       ['CSM','5','material:characteristic','gritty'], // Gritty
+       ['CSM','6','material:characteristic','hard'], // Hard
+       ['CSM','7','material:characteristic','rotten'], // Rotten
+       ['CSM','8','material:characteristic','soft'], // Soft
+       ['CSM','9','material:characteristic','sticky'], // Sticky
+       ['CSM','10','material:characteristic','stiff'], // Stiff
+       ['CSM','11','material:characteristic','streaky'], // Streaky
+       ['CSM','12','material:characteristic','tenacious'], // Tenacious
+       ['CSM','13','material:characteristic','uneven'], // Uneven
+       ['CSM','17','material:characteristic','calcareous'], // Calcareous
+       ['CSM','18','material:characteristic','flinty'], // Flinty
+       ['CSM','19','material:characteristic','glacial'], // Glacial
+       ['CSM','20','material:characteristic','ground'], // Ground
+       ['CSM','21','material:characteristic','large'], // Large
+       ['CSM','22','material:characteristic','rocky'], // Rocky
+       ['CSM','23','material:characteristic','small'], // Small
+       ['CSM','24','material:characteristic','speckled'], // Speckled
+       ['CSM','25','material:characteristic','varied'], // Varied
+       ['CSM','26','material:characteristic','volcanic'], // Volcanic
+       ['CSM','27','material:characteristic','medium'], // Medium
        ['CSM','997',undefined,undefined], // Unpopulated
 
        // CTC - Culvert Type Category
@@ -1653,7 +1655,7 @@ gifd.rules = {
 
        // FTC - Farming Type Category
        ['FTC','0','raw:FTC','unknown'], // Unknown
-       ['FTC','1','raw:FTC','slash_&_burn-shifting_cultivation'], // Slash & Burn-Shifting cultivation
+       ['FTC','1','raw:FTC','slash_and_burn-shifting_cultivation'], // Slash & Burn-Shifting cultivation
        ['FTC','3','raw:FTC','terraced'], // Terraced
        ['FTC','4','raw:FTC','ditch_irrigation'], // Ditch Irrigation
        ['FTC','8','raw:FTC','crop_rotation'], // Crop Rotation
@@ -1775,14 +1777,14 @@ gifd.rules = {
        ['HCC','2','horizontal:clearance:code','unlimited'], // Unlimited
 
        // HDI - Hydrographic Depth/Height Information
-       ['HDI','9','raw:HDI','depth_known_by_other_than_wire_drag'], // Depth Known by Other Than Wire Drag
-       ['HDI','10','raw:HDI','depth_known_by_wire_drag'], // Depth Known by Wire Drag
-       ['HDI','11','raw:HDI','depth_unknown_but_safe_to_depth_shown'], // Depth Unknown But Safe to Depth Shown
-       ['HDI','12','raw:HDI','depth_unknown'], // Depth Unknown
-       ['HDI','13','raw:HDI','uncovering_height_known'], // Uncovering Height Known
-       ['HDI','14','raw:HDI','uncovering_height_unknown'], // Uncovering Height Unknown
+       ['HDI','9','depth:hydrographic:information','depth_known_by_other_than_wire_drag'], // Depth Known by Other Than Wire Drag
+       ['HDI','10','depth:hydrographic:information','depth_known_by_wire_drag'], // Depth Known by Wire Drag
+       ['HDI','11','depth:hydrographic:information','depth_unknown_but_safe_to_depth_shown'], // Depth Unknown But Safe to Depth Shown
+       ['HDI','12','depth:hydrographic:information','depth_unknown'], // Depth Unknown
+       ['HDI','13','depth:hydrographic:information','uncovering_height_known'], // Uncovering Height Known
+       ['HDI','14','depth:hydrographic:information','uncovering_height_unknown'], // Uncovering Height Unknown
        // ['HDI','15',undefined,undefined], // Not Applicable
-       ['HDI','15','raw:HDI','not_applicable'], // Not Applicable
+       ['HDI','15','depth:hydrographic:information','not_applicable'], // Not Applicable
        ['HDI','997',undefined,undefined], // Unpopulated
 
        // HFC - Hydrological Form Category
@@ -1816,14 +1818,14 @@ gifd.rules = {
        ['HL3','7','raw:HL3','>5.0'], // >5.0
 
        // HLT - Hydrographic Light Type
-       ['HLT','0','raw:HLT','unknown'], // Unknown
-       ['HLT','1','raw:HLT','sectored_light'], // Sectored Light
-       ['HLT','3','raw:HLT','moir_effect_light'], // Moir Effect Light
-       ['HLT','4','raw:HLT','strip_light'], // Strip Light
-       ['HLT','6','raw:HLT','lighted_beacon'], // Lighted Beacon
-       ['HLT','7','raw:HLT','directional_light'], // Directional Light
+       ['HLT','0','seamark:light:category','unknown'], // Unknown
+       ['HLT','1','seamark:light:category','sectored_light'], // Sectored Light
+       ['HLT','3','seamark:light:category','moire'], // Moir Effect Light
+       ['HLT','4','seamark:light:category','strip_light'], // Strip Light
+       ['HLT','6','seamark:light:category','lighted_beacon'], // Lighted Beacon
+       ['HLT','7','seamark:light:category','directional'], // Directional Light
        ['HLT','997',undefined,undefined], // Unpopulated
-       ['HLT','999','raw:HLT','other'], // Other
+       ['HLT','999','seamark:light:category','other'], // Other
 
        // HOC - Hydrographic Origin Category
        ['HOC','0','raw:HOC','unknown'], // Unknown
@@ -1833,20 +1835,20 @@ gifd.rules = {
        ['HOC','997',undefined,undefined], // Unpopulated
 
        // HQC - Hypsography Portrayal Category
-       ['HQC','0','raw:HQC','unknown'], // Unknown
-       ['HQC','1','raw:HQC','index'], // Index
-       ['HQC','2','raw:HQC','intermediate'], // Intermediate
-       ['HQC','3','raw:HQC','supplementary_(1/2)'], // Supplementary (1/2)
-       ['HQC','4','raw:HQC','form_lines'], // Form Lines
-       ['HQC','5','raw:HQC','depression_index'], // Depression Index
-       ['HQC','6','raw:HQC','depression_intermediate'], // Depression Intermediate
-       ['HQC','8','raw:HQC','mound_index'], // Mound Index
-       ['HQC','9','raw:HQC','mound_intermediate'], // Mound Intermediate
-       ['HQC','14','raw:HQC','supplementary_(1/4)'], // Supplementary (1/4)
-       ['HQC','19','raw:HQC','carrying_contour_(coincident_contours)'], // Carrying Contour (coincident contours)
-       ['HQC','20','raw:HQC','supplemental_carrying_contour'], // Supplemental Carrying Contour
-       ['HQC','21','raw:HQC','carrying_contour'], // Carrying Contour
-       ['HQC','22','raw:HQC','supplemental_depression'], // Supplemental Depression
+       ['HQC','0','contour:type','unknown'], // Unknown
+       ['HQC','1','contour:type','index_contour'], // Index Contour
+       ['HQC','2','contour:type','intermediate_contour'], // Intermediate Contour
+       ['HQC','3','contour:type','half_auxiliary_contour'], // Half Auxiliary Contour
+       ['HQC','4','contour:type','form_line'], // Form Line
+       ['HQC','5','contour:type','depression_index_contour'], // Depression Index Contour
+       ['HQC','6','contour:type','depression_intermediate_contour'], // Depression Intermediate Contour
+       ['HQC','8','contour:type','mound_index_contour'], // Mound Index Contour
+       ['HQC','9','contour:type','mound_intermediate_contour'], // Mound Intermediate Contour
+       ['HQC','14','contour:type','quarter_auxiliary_contour'], // Quarter Auxiliary Contour
+       ['HQC','19','contour:type','intermediate_carrying_contour'], // Intermediate Carrying Contour
+       ['HQC','20','contour:type','auxiliary_carrying_contour'], // Auxiliary Carrying Contour
+       ['HQC','21','contour:type','index_carrying_contour'], // Index Carrying Contour
+       ['HQC','22','contour:type','depression_auxiliary_contour'], // Depression Auxiliary Contour
        ['HQC','997',undefined,undefined], // Unpopulated
 
        // HR1 - Bank Height Right (1)
@@ -1869,33 +1871,33 @@ gifd.rules = {
 
        // HS1 - Current Information (1)
        ['HS1','0',undefined,undefined], // Unknown/Not Applicable
-       ['HS1','1','raw:HS1','jan'], // Jan
-       ['HS1','2','raw:HS1','feb'], // Feb
-       ['HS1','3','raw:HS1','mar'], // Mar
-       ['HS1','4','raw:HS1','apr'], // Apr
-       ['HS1','5','raw:HS1','may'], // May
-       ['HS1','6','raw:HS1','jun'], // Jun
-       ['HS1','7','raw:HS1','jul'], // Jul
-       ['HS1','8','raw:HS1','aug'], // Aug
-       ['HS1','9','raw:HS1','sep'], // Sep
-       ['HS1','10','raw:HS1','oct'], // Oct
-       ['HS1','11','raw:HS1','nov'], // Nov
-       ['HS1','12','raw:HS1','dec'], // Dec
+       ['HS1','1','water:current:appearance','jan'], // Jan
+       ['HS1','2','water:current:appearance','feb'], // Feb
+       ['HS1','3','water:current:appearance','mar'], // Mar
+       ['HS1','4','water:current:appearance','apr'], // Apr
+       ['HS1','5','water:current:appearance','may'], // May
+       ['HS1','6','water:current:appearance','jun'], // Jun
+       ['HS1','7','water:current:appearance','jul'], // Jul
+       ['HS1','8','water:current:appearance','aug'], // Aug
+       ['HS1','9','water:current:appearance','sep'], // Sep
+       ['HS1','10','water:current:appearance','oct'], // Oct
+       ['HS1','11','water:current:appearance','nov'], // Nov
+       ['HS1','12','water:current:appearance','dec'], // Dec
 
        // HS2 - Current Information (2)
        ['HS2','0',undefined,undefined], // Unknown/Not Applicable
-       ['HS2','1','raw:HS2','jan'], // Jan
-       ['HS2','2','raw:HS2','feb'], // Feb
-       ['HS2','3','raw:HS2','mar'], // Mar
-       ['HS2','4','raw:HS2','apr'], // Apr
-       ['HS2','5','raw:HS2','may'], // May
-       ['HS2','6','raw:HS2','jun'], // Jun
-       ['HS2','7','raw:HS2','jul'], // Jul
-       ['HS2','8','raw:HS2','aug'], // Aug
-       ['HS2','9','raw:HS2','sep'], // Sep
-       ['HS2','10','raw:HS2','oct'], // Oct
-       ['HS2','11','raw:HS2','nov'], // Nov
-       ['HS2','12','raw:HS2','dec'], // Dec
+       ['HS2','1','water:current:disappearance','jan'], // Jan
+       ['HS2','2','water:current:disappearance','feb'], // Feb
+       ['HS2','3','water:current:disappearance','mar'], // Mar
+       ['HS2','4','water:current:disappearance','apr'], // Apr
+       ['HS2','5','water:current:disappearance','may'], // May
+       ['HS2','6','water:current:disappearance','jun'], // Jun
+       ['HS2','7','water:current:disappearance','jul'], // Jul
+       ['HS2','8','water:current:disappearance','aug'], // Aug
+       ['HS2','9','water:current:disappearance','sep'], // Sep
+       ['HS2','10','water:current:disappearance','oct'], // Oct
+       ['HS2','11','water:current:disappearance','nov'], // Nov
+       ['HS2','12','water:current:disappearance','dec'], // Dec
 
        // HTC - Hull Integrity Test Site Characteristics
        ['HTC','0','raw:HTC','unknown'], // Unknown
@@ -1966,14 +1968,14 @@ gifd.rules = {
        ['HWT','998','building:religious','not_applicable'], // Not Applicable
 
        // HYC - Hydrological Category
-       ['HYC','0','raw:HYC','unknown'], // Unknown
+       ['HYC','0','intermittent','unknown'], // Unknown
        // ['HYC','2',undefined,undefined], // Not Applicable
-       ['HYC','2','raw:HYC','not_applicable'], // Not Applicable
-       ['HYC','3','raw:HYC','dry'], // Dry
-       ['HYC','6','raw:HYC','non-perennial/intermittent/fluctuating'], // Non-Perennial/Intermittent/Fluctuating
-       ['HYC','8','raw:HYC','perennial/permanent'], // Perennial/Permanent
+       ['HYC','2','intermittent','not_applicable'], // Not Applicable
+       ['HYC','3','intermittent','dry'], // Dry
+       ['HYC','6','intermittent','yes'], // Non-Perennial/Intermittent/Fluctuating
+       ['HYC','8','intermittent','no'], // Perennial/Permanent
        ['HYC','997',undefined,undefined], // Unpopulated
-       ['HYC','999','raw:HYC','other'], // Other
+       ['HYC','999','intermittent','other'], // Other
 
        // HZD - Horizontal Datum
        ['HZD','0','source:datum:geodetic','unknown'], // Unknown
@@ -1981,15 +1983,15 @@ gifd.rules = {
        ['HZD','999','source:datum:geodetic','other'], // Other
 
        // IAC - IALA Aid Category
-       ['IAC','0','raw:IAC','unknown'], // Unknown
-       ['IAC','1','raw:IAC','non-iala_aid'], // Non-IALA Aid
-       ['IAC','3','raw:IAC','iala_aid_-_region_a'], // IALA Aid - Region A
-       ['IAC','4','raw:IAC','iala_aid_-_region_b'], // IALA Aid - Region B
+       ['IAC','0','iala_navigation_aid','unknown'], // Unknown
+       ['IAC','1','iala_navigation_aid','no'], // Non-IALA Aid
+       ['IAC','3','iala_navigation_aid','region_a'], // IALA Aid - Region A
+       ['IAC','4','iala_navigation_aid','region_b'], // IALA Aid - Region B
        ['IAC','997',undefined,undefined], // Unpopulated
 
        // IAS - IMO Adoption Status
-       ['IAS','1','raw:IAS','adopted'], // Adopted
-       ['IAS','2','raw:IAS','not_adopted'], // Not Adopted
+       ['IAS','1','imo_adopted','yes'], // Adopted
+       ['IAS','2','imo_adopted','no'], // Not Adopted
 
        // IBC - Installation Buoy Classification
        ['IBC','0','raw:IBC','undefined'], // Undefined
@@ -2249,8 +2251,8 @@ gifd.rules = {
 
        // MAS - Maintenance Status
        ['MAS','0','maintained','unknown'], // Unknown
-       ['MAS','1','maintained','maintained'], // Maintained
-       ['MAS','2','maintained','not_maintained'], // Not Maintained
+       ['MAS','1','maintained','yes'], // Maintained
+       ['MAS','2','maintained','no'], // Not Maintained
        ['MAS','997',undefined,undefined], // Unpopulated
        // ['MAS','998',undefined,undefined], // Not Applicable
        ['MAS','998','maintenance_status','not_applicable'], // Not Applicable
@@ -2386,7 +2388,7 @@ gifd.rules = {
        ['MCS','79','material:2','pumice'], // Pumice
        ['MCS','80','material:2','quartz'], // Quartz
        ['MCS','81','material:2','radiolaria'], // Radiolaria
-       ['MCS','84','material:2','rock/rocky'], // Rock/Rocky
+       ['MCS','84','material:2','rock'], // Rock/Rocky
        ['MCS','88','material:2','sand'], // Sand
        ['MCS','90','material:2','schist'], // Schist
        ['MCS','92','material:2','scoria'], // Scoria
@@ -2405,53 +2407,53 @@ gifd.rules = {
        ['MCS','999','material:2','other'], // Other
 
        // MCU - Material Composition Underlying
-       ['MCU','0','raw:MCU','unknown'], // Unknown
-       ['MCU','4','raw:MCU','ash'], // Ash
-       ['MCU','8','raw:MCU','boulders'], // Boulders
-       ['MCU','12','raw:MCU','chalk'], // Chalk
-       ['MCU','14','raw:MCU','cinders'], // Cinders
-       ['MCU','15','raw:MCU','cirripedia'], // Cirripedia
-       ['MCU','16','raw:MCU','clay'], // Clay
-       ['MCU','18','raw:MCU','cobble'], // Cobble
-       ['MCU','24','raw:MCU','coral'], // Coral
-       ['MCU','25','raw:MCU','coral_head'], // Coral Head
-       ['MCU','28','raw:MCU','diatoms'], // Diatoms
-       ['MCU','36','raw:MCU','foraminifera'], // Foraminifera
-       ['MCU','37','raw:MCU','fucus'], // Fucus
-       ['MCU','41','raw:MCU','globigerina'], // Globigerina
-       ['MCU','45','raw:MCU','grass/thatch'], // Grass/Thatch
-       ['MCU','46','raw:MCU','gravel'], // Gravel
-       ['MCU','48','raw:MCU','ground'], // Ground
-       ['MCU','52','raw:MCU','lava'], // Lava
-       ['MCU','58','raw:MCU','madrepores'], // Madrepores
-       ['MCU','59','raw:MCU','manganese'], // Manganese
-       ['MCU','61','raw:MCU','marl'], // Marl
-       ['MCU','63','raw:MCU','mattes'], // Mattes
-       ['MCU','65','raw:MCU','mud'], // Mud
-       ['MCU','66','raw:MCU','mussels'], // Mussels
-       ['MCU','69','raw:MCU','ooze'], // Ooze
-       ['MCU','70','raw:MCU','oysters'], // Oysters
-       ['MCU','73','raw:MCU','pebbles'], // Pebbles
-       ['MCU','75','raw:MCU','polyzoa'], // Polyzoa
-       ['MCU','78','raw:MCU','pteropods'], // Pteropods
-       ['MCU','79','raw:MCU','pumice'], // Pumice
-       ['MCU','80','raw:MCU','quartz'], // Quartz
-       ['MCU','81','raw:MCU','radiolaria'], // Radiolaria
-       ['MCU','84','raw:MCU','rock/rocky'], // Rock/Rocky
-       ['MCU','88','raw:MCU','sand'], // Sand
-       ['MCU','90','raw:MCU','schist'], // Schist
-       ['MCU','92','raw:MCU','scoria'], // Scoria
-       ['MCU','93','raw:MCU','sea_tangle'], // Sea Tangle
-       ['MCU','94','raw:MCU','seaweed'], // Seaweed
-       ['MCU','96','raw:MCU','shells'], // Shells
-       ['MCU','98','raw:MCU','shingle'], // Shingle
-       ['MCU','99','raw:MCU','silt'], // Silt
-       ['MCU','105','raw:MCU','spicules'], // Spicules
-       ['MCU','106','raw:MCU','sponge'], // Sponge
-       ['MCU','108','raw:MCU','stone'], // Stone
-       ['MCU','111','raw:MCU','tufa'], // Tufa
+       ['MCU','0','material:underlying','unknown'], // Unknown
+       ['MCU','4','material:underlying','ash'], // Ash
+       ['MCU','8','material:underlying','boulders'], // Boulders
+       ['MCU','12','material:underlying','chalk'], // Chalk
+       ['MCU','14','material:underlying','cinders'], // Cinders
+       ['MCU','15','material:underlying','cirripedia'], // Cirripedia
+       ['MCU','16','material:underlying','clay'], // Clay
+       ['MCU','18','material:underlying','cobble'], // Cobble
+       ['MCU','24','material:underlying','coral'], // Coral
+       ['MCU','25','material:underlying','coral_head'], // Coral Head
+       ['MCU','28','material:underlying','diatoms'], // Diatoms
+       ['MCU','36','material:underlying','foraminifera'], // Foraminifera
+       ['MCU','37','material:underlying','fucus'], // Fucus
+       ['MCU','41','material:underlying','globigerina'], // Globigerina
+       ['MCU','45','material:underlying','grass/thatch'], // Grass/Thatch
+       ['MCU','46','material:underlying','gravel'], // Gravel
+       ['MCU','48','material:underlying','ground'], // Ground
+       ['MCU','52','material:underlying','lava'], // Lava
+       ['MCU','58','material:underlying','madrepores'], // Madrepores
+       ['MCU','59','material:underlying','manganese'], // Manganese
+       ['MCU','61','material:underlying','marl'], // Marl
+       ['MCU','63','material:underlying','mattes'], // Mattes
+       ['MCU','65','material:underlying','mud'], // Mud
+       ['MCU','66','material:underlying','mussels'], // Mussels
+       ['MCU','69','material:underlying','ooze'], // Ooze
+       ['MCU','70','material:underlying','oysters'], // Oysters
+       ['MCU','73','material:underlying','pebbles'], // Pebbles
+       ['MCU','75','material:underlying','polyzoa'], // Polyzoa
+       ['MCU','78','material:underlying','pteropods'], // Pteropods
+       ['MCU','79','material:underlying','pumice'], // Pumice
+       ['MCU','80','material:underlying','quartz'], // Quartz
+       ['MCU','81','material:underlying','radiolaria'], // Radiolaria
+       ['MCU','84','material:underlying','rock'], // Rock/Rocky
+       ['MCU','88','material:underlying','sand'], // Sand
+       ['MCU','90','material:underlying','schist'], // Schist
+       ['MCU','92','material:underlying','scoria'], // Scoria
+       ['MCU','93','material:underlying','sea_tangle'], // Sea Tangle
+       ['MCU','94','material:underlying','seaweed'], // Seaweed
+       ['MCU','96','material:underlying','shells'], // Shells
+       ['MCU','98','material:underlying','shingle'], // Shingle
+       ['MCU','99','material:underlying','silt'], // Silt
+       ['MCU','105','material:underlying','spicules'], // Spicules
+       ['MCU','106','material:underlying','sponge'], // Sponge
+       ['MCU','108','material:underlying','stone'], // Stone
+       ['MCU','111','material:underlying','tufa'], // Tufa
        ['MCU','997',undefined,undefined], // Unpopulated
-       ['MCU','999','raw:MCU','other'], // Other
+       ['MCU','999','material:underlying','other'], // Other
 
        // MED - Median Category
        ['MED','0',undefined,undefined], // Unknown
@@ -2874,79 +2876,79 @@ gifd.rules = {
        ['NAS','997',undefined,undefined], // Unpopulated
 
        // NS2 - Navigation System Types (2)
-       ['NS2','0','raw:NS2','unknown'], // Unknown
-       ['NS2','1','raw:NS2','circular_radio_beacon'], // Circular Radio Beacon
-       ['NS2','2','raw:NS2','consol'], // CONSOL
-       ['NS2','4','raw:NS2','radio_direction_finding'], // Radio Direction Finding
-       ['NS2','5','raw:NS2','directional_radio_beacon'], // Directional Radio Beacon
-       ['NS2','10','raw:NS2','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
-       ['NS2','17','raw:NS2','non-directional_radio_beacon_(ndb)'], // Non-Directional Radio Beacon (NDB)
-       ['NS2','40','raw:NS2','radio_beacon'], // Radio Beacon
-       ['NS2','41','raw:NS2','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
-       ['NS2','45','raw:NS2','radar_station'], // Radar Station
-       ['NS2','51','raw:NS2','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
-       ['NS2','52','raw:NS2','none'], // None
-       ['NS2','53','raw:NS2','qtg_station_(r)'], // QTG Station (R)
-       ['NS2','54','raw:NS2','ramark_(ramark)'], // Ramark (Ramark)
+       ['NS2','0','seamark:radio_station:category:2','unknown'], // Unknown
+       ['NS2','1','seamark:radio_station:category:2','circular_radio_beacon'], // Circular Radio Beacon
+       ['NS2','2','seamark:radio_station:category:2','consol'], // CONSOL
+       ['NS2','4','seamark:radio_station:category:2','radio_direction_finding'], // Radio Direction Finding
+       ['NS2','5','seamark:radio_station:category:2','directional_radio_beacon'], // Directional Radio Beacon
+       ['NS2','10','seamark:radio_station:category:2','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+       ['NS2','17','seamark:radio_station:category:2','non-directional_radio_beacon_(ndb)'], // Non-Directional Radio Beacon (NDB)
+       ['NS2','40','seamark:radio_station:category:2','radio_beacon'], // Radio Beacon
+       ['NS2','41','seamark:radio_station:category:2','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
+       ['NS2','45','seamark:radio_station:category:2','radar_station'], // Radar Station
+       ['NS2','51','seamark:radio_station:category:2','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+       ['NS2','52','seamark:radio_station:category:2','none'], // None
+       ['NS2','53','seamark:radio_station:category:2','qtg_station_(r)'], // QTG Station (R)
+       ['NS2','54','seamark:radio_station:category:2','ramark_(ramark)'], // Ramark (Ramark)
        ['NS2','997',undefined,undefined], // Unpopulated
 
        // NST - Navigation System Types
-       ['NST','0','beacon:type','unknown'], // Unknown
-       ['NST','1','beacon:type','circular_radio_beacon'], // Circular Radio Beacon
-       ['NST','2','beacon:type','consol'], // CONSOL
-       ['NST','3','beacon:type','decca'], // DECCA
-       ['NST','4','beacon:type','radio_direction_finding'], // Radio Direction Finding
-       ['NST','5','beacon:type','directional_radio_beacon'], // Directional Radio Beacon
-       ['NST','7','beacon:type','loran'], // Long Range Air Navigation System (LORAN)
-       ['NST','8','beacon:type','omega'], // OMEGA
-       ['NST','10','beacon:type','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
-       ['NST','11','beacon:type','radar'], // Radar
-       ['NST','12','beacon:type','radio'], // Radio
-       ['NST','13','beacon:type','radio_telephone'], // Radio Telephone
-       ['NST','15','beacon:type','television'], // TV
-       ['NST','16','beacon:type','microwave'], // Microwave
-       ['NST','17','beacon:type','ndb'], // Non-Directional Radio Beacon (NDB)
-       ['NST','18','beacon:type','non-directional_radio_beacon/distance_measuring_equipment'], // NDB/Distance Measuring Equipment (NDB/DME)
-       ['NST','19','beacon:type','radio_range'], // Radio Range (RNG)
-       ['NST','20','beacon:type','vor'], // VHF Omni Directional Radio Range (VOR)
-       ['NST','21','beacon:type','vor-dme'], // VHF Omni Directional Radio Range/Distance Measuring Equipment (VOR/DME)
-       ['NST','22','beacon:type','vortac'], // VHF Omni Directional Radio Range and TACAN (VORTAC)
-       ['NST','23','beacon:type','tacan'], // Tactical Air Navigation Equipment (TACAN)
-       ['NST','24','beacon:type','ils'], // Instrument Landing System (ILS)
-       ['NST','25','beacon:type','ils-dme'], // Instrument Landing System/Distance Measuring Equipment (ILS/DME)
-       ['NST','26','beacon:type','localizer'], // Localizer (LOC)
-       ['NST','27','beacon:type','localizer/distance_measuring_equipment'], // Localizer/Distance Measuring Equipment (LOC/DME)
-       ['NST','30','beacon:type','microwave_landing_system'], // Microwave Landing System (MLS)
-       ['NST','31','beacon:type','fan_marker'], // Fan Marker
-       ['NST','32','beacon:type','bone_marker'], // Bone Marker
-       ['NST','33','beacon:type','radio_telegraph'], // Radio Telegraph
-       ['NST','35','beacon:type','radar_antenna'], // Radar Antenna
-       ['NST','37','beacon:type','precision_approach_radar'], // Precision Approach Radar (PAR)
-       ['NST','38','beacon:type','aeronautical_radio'], // Aeronautical Radio
-       ['NST','40','beacon:type','radio_beacon'], // Radio Beacon
-       ['NST','41','beacon:type','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
-       ['NST','42','beacon:type','visual_flight_rules_test_signal_maker'], // Visual Flight Rules (VFR) Test Signal Maker
-       ['NST','45','beacon:type','radar_station'], // Radar Station
-       ['NST','46','beacon:type','aeronautical_radio_range'], // Aeronautical Radio Range
-       ['NST','51','beacon:type','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
-       ['NST','52','beacon:type','none'], // None
-       ['NST','53','beacon:type','qtg_station_(r)'], // QTG Station (R)
-       ['NST','54','beacon:type','ramark_(ramark)'], // Ramark (Ramark)
-       ['NST','55','beacon:type','radar_reflector'], // Radar reflector
-       ['NST','58','beacon:type','dme'], // DME (Distance Measuring Equipment)
-       ['NST','74','beacon:type','ils_back_course'], // Ils Back Course
-       ['NST','75','beacon:type','loc_back_course'], // Loc Back Course
-       ['NST','76','beacon:type','marker'], // Marker
-       ['NST','77','beacon:type','fm_-_fan_marker'], // Fm - Fan Marker
-       ['NST','78','beacon:type','outer_marker'], // Om - Outer Marker
-       ['NST','79','beacon:type','middle_marker'], // Mm - Middle Marker
-       ['NST','80','beacon:type','locator_outer_marker'], // Lom - Locator Outer Marker
-       ['NST','81','beacon:type','locator_middle_marker'], // Lmm - Locator Middle Marker
-       ['NST','82','beacon:type','rotating_beacon_light'], // Rotating Beacon Light
+       ['NST','0','seamark:radio_station:category','unknown'], // Unknown
+       ['NST','1','seamark:radio_station:category','circular_radio_beacon'], // Circular Radio Beacon
+       ['NST','2','seamark:radio_station:category','consol'], // CONSOL
+       ['NST','3','seamark:radio_station:category','decca'], // DECCA
+       ['NST','4','seamark:radio_station:category','radio_direction_finding'], // Radio Direction Finding
+       ['NST','5','seamark:radio_station:category','directional_radio_beacon'], // Directional Radio Beacon
+       ['NST','7','seamark:radio_station:category','loran'], // Long Range Air Navigation System (LORAN)
+       ['NST','8','seamark:radio_station:category','omega'], // OMEGA
+       ['NST','10','seamark:radio_station:category','radar_responder_beacon_(racon)'], // Radar Responder Beacon (RACON)
+       ['NST','11','seamark:radio_station:category','radar'], // Radar
+       ['NST','12','seamark:radio_station:category','radio'], // Radio
+       ['NST','13','seamark:radio_station:category','radio_telephone'], // Radio Telephone
+       ['NST','15','seamark:radio_station:category','television'], // TV
+       ['NST','16','seamark:radio_station:category','microwave'], // Microwave
+       ['NST','17','seamark:radio_station:category','ndb'], // Non-Directional Radio Beacon (NDB)
+       ['NST','18','seamark:radio_station:category','non-directional_radio_beacon/distance_measuring_equipment'], // NDB/Distance Measuring Equipment (NDB/DME)
+       ['NST','19','seamark:radio_station:category','radio_range'], // Radio Range (RNG)
+       ['NST','20','seamark:radio_station:category','vor'], // VHF Omni Directional Radio Range (VOR)
+       ['NST','21','seamark:radio_station:category','vor-dme'], // VHF Omni Directional Radio Range/Distance Measuring Equipment (VOR/DME)
+       ['NST','22','seamark:radio_station:category','vortac'], // VHF Omni Directional Radio Range and TACAN (VORTAC)
+       ['NST','23','seamark:radio_station:category','tacan'], // Tactical Air Navigation Equipment (TACAN)
+       ['NST','24','seamark:radio_station:category','ils'], // Instrument Landing System (ILS)
+       ['NST','25','seamark:radio_station:category','ils-dme'], // Instrument Landing System/Distance Measuring Equipment (ILS/DME)
+       ['NST','26','seamark:radio_station:category','localizer'], // Localizer (LOC)
+       ['NST','27','seamark:radio_station:category','localizer/distance_measuring_equipment'], // Localizer/Distance Measuring Equipment (LOC/DME)
+       ['NST','30','seamark:radio_station:category','microwave_landing_system'], // Microwave Landing System (MLS)
+       ['NST','31','seamark:radio_station:category','fan_marker'], // Fan Marker
+       ['NST','32','seamark:radio_station:category','bone_marker'], // Bone Marker
+       ['NST','33','seamark:radio_station:category','radio_telegraph'], // Radio Telegraph
+       ['NST','35','seamark:radio_station:category','radar_antenna'], // Radar Antenna
+       ['NST','37','seamark:radio_station:category','precision_approach_radar'], // Precision Approach Radar (PAR)
+       ['NST','38','seamark:radio_station:category','aeronautical_radio'], // Aeronautical Radio
+       ['NST','40','seamark:radio_station:category','radio_beacon'], // Radio Beacon
+       ['NST','41','seamark:radio_station:category','rotating_loop_radio_beacon'], // Rotating Loop Radio Beacon
+       ['NST','42','seamark:radio_station:category','visual_flight_rules_test_signal_maker'], // Visual Flight Rules (VFR) Test Signal Maker
+       ['NST','45','seamark:radio_station:category','radar_station'], // Radar Station
+       ['NST','46','seamark:radio_station:category','aeronautical_radio_range'], // Aeronautical Radio Range
+       ['NST','51','seamark:radio_station:category','radiobeacon,_type_unknown'], // Radiobeacon, Type Unknown
+       ['NST','52','seamark:radio_station:category','none'], // None
+       ['NST','53','seamark:radio_station:category','qtg_station_(r)'], // QTG Station (R)
+       ['NST','54','seamark:radio_station:category','ramark_(ramark)'], // Ramark (Ramark)
+       ['NST','55','seamark:radio_station:category','radar_reflector'], // Radar reflector
+       ['NST','58','seamark:radio_station:category','dme'], // DME (Distance Measuring Equipment)
+       ['NST','74','seamark:radio_station:category','ils_back_course'], // Ils Back Course
+       ['NST','75','seamark:radio_station:category','loc_back_course'], // Loc Back Course
+       ['NST','76','seamark:radio_station:category','marker'], // Marker
+       ['NST','77','seamark:radio_station:category','fm_-_fan_marker'], // Fm - Fan Marker
+       ['NST','78','seamark:radio_station:category','outer_marker'], // Om - Outer Marker
+       ['NST','79','seamark:radio_station:category','middle_marker'], // Mm - Middle Marker
+       ['NST','80','seamark:radio_station:category','locator_outer_marker'], // Lom - Locator Outer Marker
+       ['NST','81','seamark:radio_station:category','locator_middle_marker'], // Lmm - Locator Middle Marker
+       ['NST','82','seamark:radio_station:category','rotating_beacon_light'], // Rotating Beacon Light
        ['NST','997',undefined,undefined], // Unpopulated
        // ['NST','998',undefined,undefined], // Not Applicable
-       ['NST','998','beacon:type','not_applicable'], // Not Applicable
-       ['NST','999','beacon:type','other'], // Other
+       ['NST','998','seamark:radio_station:category','not_applicable'], // Not Applicable
+       ['NST','999','seamark:radio_station:category','other'], // Other
 
        // OAC - Ordnance Area Construction Activity
        ['OAC','0','raw:OAC','unknown'], // Unknown
@@ -2979,9 +2981,9 @@ gifd.rules = {
        ['OHD','5','raw:OHD','>40.0'], // >40.0
 
        // OLQ - Obstruction Light Quality
-       ['OLQ','0','raw:OLQ','unknown'], // Unknown
-       ['OLQ','1','raw:OLQ','one_light_present'], // One Light Present
-       ['OLQ','2','raw:OLQ','multiple_lights_present'], // Multiple Lights Present
+       ['OLQ','0','obstruction_light','unknown'], // Unknown
+       ['OLQ','1','obstruction_light','one_light'], // One Light Present
+       ['OLQ','2','obstruction_light','multiple_lights'], // Multiple Lights Present
        ['OLQ','997',undefined,undefined], // Unpopulated
 
        // OOC - Overhead Obstruction Category
@@ -3009,12 +3011,12 @@ gifd.rules = {
        ['OPC','999','offshore_construction','other'], // Other
 
        // OPS - Operational Status
-       ['OPS','0','raw:OPS','unknown'], // Unknown
-       ['OPS','1','raw:OPS','operational'], // Operational
-       ['OPS','2','raw:OPS','non-operational'], // Non-Operational
+       ['OPS','0','operational_status','unknown'], // Unknown
+       ['OPS','1','operational_status','operational'], // Operational
+       ['OPS','2','operational_status','non-operational'], // Non-Operational
        ['OPS','997',undefined,undefined], // Unpopulated
        // ['OPS','998',undefined,undefined], // Not Applicable
-       ['OPS','998','raw:OPS','not_applicable'], // Not Applicable
+       ['OPS','998','operational_status','not_applicable'], // Not Applicable
 
        // ORD - Ordinal Category
        ['ORD','0','raw:ORD','unknown'], // Unknown
@@ -3113,12 +3115,12 @@ gifd.rules = {
        ['PAT','999','raw:PAT','other'], // Other
 
        // PBV - Pilot Boarding Vehicle
-       ['PBV','0','raw:PBV','unknown'], // Unknown
-       ['PBV','1','raw:PBV','by_boat'], // By Boat
-       ['PBV','2','raw:PBV','by_helicopter'], // By Helicopter
+       ['PBV','0','pilot_boarding_vehicle','unknown'], // Unknown
+       ['PBV','1','pilot_boarding_vehicle','boat'], // By Boat
+       ['PBV','2','pilot_boarding_vehicle','helicopter'], // By Helicopter
        ['PBV','997',undefined,undefined], // Unpopulated
        // ['PBV','998',undefined,undefined], // Not Applicable
-       ['PBV','998','raw:PBV','not_applicable'], // Not Applicable
+       ['PBV','998','pilot_boarding_vehicle','not_applicable'], // Not Applicable
 
        // PCI - Point of Change Identifier
        ['PCI','0','raw:PCI','unknown'], // Unknown
@@ -3252,89 +3254,89 @@ gifd.rules = {
        ['PRM','999','raw:PRM','other'], // Other
 
        // PRO - Product Category
-       ['PRO','0','raw:PRO','unknown'], // Unknown
-       ['PRO','1','raw:PRO','aircraft'], // Aircraft
-       ['PRO','2','raw:PRO','aluminum'], // Aluminum
-       ['PRO','3','raw:PRO','ammunition'], // Ammunition
-       ['PRO','5','raw:PRO','asphalt'], // Asphalt
-       ['PRO','9','raw:PRO','brick'], // Brick
-       ['PRO','11','raw:PRO','cement'], // Cement
-       ['PRO','12','raw:PRO','chalk'], // Chalk
-       ['PRO','13','raw:PRO','chemical'], // Chemical
-       ['PRO','16','raw:PRO','clay'], // Clay
-       ['PRO','17','raw:PRO','coal'], // Coal
-       ['PRO','19','raw:PRO','coke'], // Coke
-       ['PRO','20','raw:PRO','composition'], // Composition
-       ['PRO','21','raw:PRO','concrete'], // Concrete
-       ['PRO','23','raw:PRO','copper'], // Copper
-       ['PRO','26','raw:PRO','desalinated_water'], // Desalinated Water
-       ['PRO','27','raw:PRO','diamonds'], // Diamonds
-       ['PRO','29','raw:PRO','dolomite'], // Dolomite
-       ['PRO','31','raw:PRO','electric'], // Electric
-       ['PRO','33','raw:PRO','explosives'], // Explosives
-       ['PRO','35','raw:PRO','food'], // Food
-       ['PRO','38','raw:PRO','gas'], // Gas
-       ['PRO','39','raw:PRO','gasoline'], // Gasoline
-       ['PRO','40','raw:PRO','glass'], // Glass
-       ['PRO','42','raw:PRO','gold'], // Gold
-       ['PRO','43','raw:PRO','granite'], // Granite
-       ['PRO','46','raw:PRO','gravel'], // Gravel
-       ['PRO','50','raw:PRO','heat'], // Heat
-       ['PRO','51','raw:PRO','iron'], // Iron
-       ['PRO','54','raw:PRO','lead'], // Lead
-       ['PRO','56','raw:PRO','lumber'], // Lumber
-       ['PRO','57','raw:PRO','macadam'], // Macadam
-       ['PRO','59','raw:PRO','manganese'], // Manganese
-       ['PRO','60','raw:PRO','marble'], // Marble
-       ['PRO','64','raw:PRO','metal'], // Metal
-       ['PRO','67','raw:PRO','oil'], // Oil
-       ['PRO','71','raw:PRO','paper'], // Paper
-       ['PRO','72','raw:PRO','part_metal'], // Part Metal
-       ['PRO','74','raw:PRO','plastic'], // Plastic
-       ['PRO','80','raw:PRO','quartz'], // Quartz
-       ['PRO','82','raw:PRO','radioactive_material'], // Radioactive Material
-       ['PRO','84','raw:PRO','rock/rocky'], // Rock/Rocky
-       ['PRO','85','raw:PRO','rubber'], // Rubber
-       ['PRO','87','raw:PRO','salt'], // Salt
-       ['PRO','88','raw:PRO','sand'], // Sand
-       ['PRO','89','raw:PRO','sandstone'], // Sandstone
-       ['PRO','95','raw:PRO','sewage'], // Sewage
-       ['PRO','100','raw:PRO','silver'], // Silver
-       ['PRO','101','raw:PRO','slag'], // Slag
-       ['PRO','103','raw:PRO','snow/ice'], // Snow/Ice
-       ['PRO','107','raw:PRO','steel'], // Steel
-       ['PRO','108','raw:PRO','stone'], // Stone
-       ['PRO','109','raw:PRO','sugar'], // Sugar
-       ['PRO','110','raw:PRO','travertine'], // Travertine
-       ['PRO','112','raw:PRO','uranium'], // Uranium
-       ['PRO','113','raw:PRO','vegetation_products'], // Vegetation Products
-       ['PRO','116','raw:PRO','water'], // Water
-       ['PRO','117','raw:PRO','wood'], // Wood
-       ['PRO','118','raw:PRO','zinc'], // Zinc
-       ['PRO','119','raw:PRO','bauxite'], // Bauxite
-       ['PRO','120','raw:PRO','bananas'], // Bananas
-       ['PRO','121','raw:PRO','cotton'], // Cotton
-       ['PRO','122','raw:PRO','bamboo'], // Bamboo
-       ['PRO','123','raw:PRO','coffee'], // Coffee
-       ['PRO','124','raw:PRO','common_fruit_and/or_nuts'], // Common fruit and/or nuts
-       ['PRO','125','raw:PRO','palms'], // Palms
-       ['PRO','126','raw:PRO','palmetto'], // Palmetto
-       ['PRO','127','raw:PRO','tailings'], // Tailings
-       ['PRO','128','raw:PRO','refuse'], // Refuse
-       ['PRO','129','raw:PRO','tobacco'], // Tobacco
-       ['PRO','130','raw:PRO','none'], // None
-       ['PRO','131','raw:PRO','personnel'], // Personnel
-       ['PRO','133','raw:PRO','telecommunications'], // Telecommunications
-       ['PRO','134','raw:PRO','fish'], // Fish
-       ['PRO','135','raw:PRO','textile'], // Textile
-       ['PRO','137','raw:PRO','automobiles_and_trucks'], // Automobiles and Trucks
-       ['PRO','140','raw:PRO','ore'], // Ore
-       ['PRO','148','raw:PRO','grain'], // Grain
+       ['PRO','0','product','unknown'], // Unknown
+       ['PRO','1','product','aircraft'], // Aircraft
+       ['PRO','2','product','aluminum'], // Aluminum
+       ['PRO','3','product','ammunition'], // Ammunition
+       ['PRO','5','product','asphalt'], // Asphalt
+       ['PRO','9','product','brick'], // Brick
+       ['PRO','11','product','cement'], // Cement
+       ['PRO','12','product','chalk'], // Chalk
+       ['PRO','13','product','chemical'], // Chemical
+       ['PRO','16','product','clay'], // Clay
+       ['PRO','17','product','coal'], // Coal
+       ['PRO','19','product','coke'], // Coke
+       ['PRO','20','product','composition'], // Composition
+       ['PRO','21','product','concrete'], // Concrete
+       ['PRO','23','product','copper'], // Copper
+       ['PRO','26','product','desalinated_water'], // Desalinated Water
+       ['PRO','27','product','diamonds'], // Diamonds
+       ['PRO','29','product','dolomite'], // Dolomite
+       ['PRO','31','product','electric'], // Electric
+       ['PRO','33','product','explosives'], // Explosives
+       ['PRO','35','product','food'], // Food
+       ['PRO','38','product','gas'], // Gas
+       ['PRO','39','product','gasoline'], // Gasoline
+       ['PRO','40','product','glass'], // Glass
+       ['PRO','42','product','gold'], // Gold
+       ['PRO','43','product','granite'], // Granite
+       ['PRO','46','product','gravel'], // Gravel
+       ['PRO','50','product','heat'], // Heat
+       ['PRO','51','product','iron'], // Iron
+       ['PRO','54','product','lead'], // Lead
+       ['PRO','56','product','lumber'], // Lumber
+       ['PRO','57','product','macadam'], // Macadam
+       ['PRO','59','product','manganese'], // Manganese
+       ['PRO','60','product','marble'], // Marble
+       ['PRO','64','product','metal'], // Metal
+       ['PRO','67','product','oil'], // Oil
+       ['PRO','71','product','paper'], // Paper
+       ['PRO','72','product','part_metal'], // Part Metal
+       ['PRO','74','product','plastic'], // Plastic
+       ['PRO','80','product','quartz'], // Quartz
+       ['PRO','82','product','radioactive_material'], // Radioactive Material
+       ['PRO','84','product','rock/rocky'], // Rock/Rocky
+       ['PRO','85','product','rubber'], // Rubber
+       ['PRO','87','product','salt'], // Salt
+       ['PRO','88','product','sand'], // Sand
+       ['PRO','89','product','sandstone'], // Sandstone
+       ['PRO','95','product','sewage'], // Sewage
+       ['PRO','100','product','silver'], // Silver
+       ['PRO','101','product','slag'], // Slag
+       ['PRO','103','product','snow/ice'], // Snow/Ice
+       ['PRO','107','product','steel'], // Steel
+       ['PRO','108','product','stone'], // Stone
+       ['PRO','109','product','sugar'], // Sugar
+       ['PRO','110','product','travertine'], // Travertine
+       ['PRO','112','product','uranium'], // Uranium
+       ['PRO','113','product','vegetation_products'], // Vegetation Products
+       ['PRO','116','product','water'], // Water
+       ['PRO','117','product','wood'], // Wood
+       ['PRO','118','product','zinc'], // Zinc
+       ['PRO','119','product','bauxite'], // Bauxite
+       ['PRO','120','product','bananas'], // Bananas
+       ['PRO','121','product','cotton'], // Cotton
+       ['PRO','122','product','bamboo'], // Bamboo
+       ['PRO','123','product','coffee'], // Coffee
+       ['PRO','124','product','common_fruit_and/or_nuts'], // Common fruit and/or nuts
+       ['PRO','125','product','palms'], // Palms
+       ['PRO','126','product','palmetto'], // Palmetto
+       ['PRO','127','product','tailings'], // Tailings
+       ['PRO','128','product','refuse'], // Refuse
+       ['PRO','129','product','tobacco'], // Tobacco
+       ['PRO','130','product','none'], // None
+       ['PRO','131','product','personnel'], // Personnel
+       ['PRO','133','product','telecommunications'], // Telecommunications
+       ['PRO','134','product','fish'], // Fish
+       ['PRO','135','product','textile'], // Textile
+       ['PRO','137','product','automobiles_and_trucks'], // Automobiles and Trucks
+       ['PRO','140','product','ore'], // Ore
+       ['PRO','148','product','grain'], // Grain
        ['PRO','996',undefined,undefined], // Unpopulated
        // ['PRO','997',undefined,undefined], // Not Applicable
-       ['PRO','997','raw:PRO','not_applicable'], // Not Applicable
-       ['PRO','998','raw:PRO','multiple'], // Multiple
-       ['PRO','999','raw:PRO','other'], // Other
+       ['PRO','997','product','not_applicable'], // Not Applicable
+       ['PRO','998','product','multiple'], // Multiple
+       ['PRO','999','product','other'], // Other
 
        // PRT - Power Line Category
        ['PRT','1','raw:PRT','aa_-_feature_is_metal_construction,_height_>_149'], // Aa - Feature Is Metal Construction, Height > 149
@@ -3348,33 +3350,33 @@ gifd.rules = {
        ['PRT','9','raw:PRT','cc_-_feature_is_wood_construction,_height_<_100.'], // Cc - Feature Is Wood Construction, Height < 100.
 
        // PSC - Physical Surface Characteristics
-       ['PSC','0','raw:PSC','unknown'], // Unknown
-       ['PSC','1','raw:PSC','broken'], // Broken
-       ['PSC','2','raw:PSC','coarse'], // Coarse
-       ['PSC','3','raw:PSC','decayed'], // Decayed
-       ['PSC','4','raw:PSC','fine,_minute_particles'], // Fine, minute particles
-       ['PSC','5','raw:PSC','gritty'], // Gritty
-       ['PSC','6','raw:PSC','hard'], // Hard
-       ['PSC','7','raw:PSC','rotten'], // Rotten
-       ['PSC','8','raw:PSC','soft'], // Soft
-       ['PSC','9','raw:PSC','sticky'], // Sticky
-       ['PSC','10','raw:PSC','stiff'], // Stiff
-       ['PSC','11','raw:PSC','streaky'], // Streaky
-       ['PSC','12','raw:PSC','tenacious'], // Tenacious
-       ['PSC','13','raw:PSC','uneven'], // Uneven
-       ['PSC','17','raw:PSC','calcareous'], // Calcareous
-       ['PSC','18','raw:PSC','flinty'], // Flinty
-       ['PSC','19','raw:PSC','glacial'], // Glacial
-       ['PSC','20','raw:PSC','ground'], // Ground
-       ['PSC','21','raw:PSC','large'], // Large
-       ['PSC','22','raw:PSC','rocky'], // Rocky
-       ['PSC','23','raw:PSC','small'], // Small
-       ['PSC','24','raw:PSC','speckled'], // Speckled
-       ['PSC','25','raw:PSC','varied'], // Varied
-       ['PSC','26','raw:PSC','volcanic'], // Volcanic
-       ['PSC','27','raw:PSC','medium'], // Medium
-       ['PSC','28','raw:PSC','springs_in_seabed'], // Springs in Seabed
-       ['PSC','29','raw:PSC','mobile_bottom'], // Mobile Bottom
+       ['PSC','0','physical:characteristic','unknown'], // Unknown
+       ['PSC','1','physical:characteristic','broken'], // Broken
+       ['PSC','2','physical:characteristic','coarse'], // Coarse
+       ['PSC','3','physical:characteristic','decayed'], // Decayed
+       ['PSC','4','physical:characteristic','fine'], // Fine, minute particles
+       ['PSC','5','physical:characteristic','gritty'], // Gritty
+       ['PSC','6','physical:characteristic','hard'], // Hard
+       ['PSC','7','physical:characteristic','rotten'], // Rotten
+       ['PSC','8','physical:characteristic','soft'], // Soft
+       ['PSC','9','physical:characteristic','sticky'], // Sticky
+       ['PSC','10','physical:characteristic','stiff'], // Stiff
+       ['PSC','11','physical:characteristic','streaky'], // Streaky
+       ['PSC','12','physical:characteristic','tenacious'], // Tenacious
+       ['PSC','13','physical:characteristic','uneven'], // Uneven
+       ['PSC','17','physical:characteristic','calcareous'], // Calcareous
+       ['PSC','18','physical:characteristic','flinty'], // Flinty
+       ['PSC','19','physical:characteristic','glacial'], // Glacial
+       ['PSC','20','physical:characteristic','ground'], // Ground
+       ['PSC','21','physical:characteristic','large'], // Large
+       ['PSC','22','physical:characteristic','rocky'], // Rocky
+       ['PSC','23','physical:characteristic','small'], // Small
+       ['PSC','24','physical:characteristic','speckled'], // Speckled
+       ['PSC','25','physical:characteristic','varied'], // Varied
+       ['PSC','26','physical:characteristic','volcanic'], // Volcanic
+       ['PSC','27','physical:characteristic','medium'], // Medium
+       ['PSC','28','physical:characteristic','springs_in_seabed'], // Springs in Seabed
+       ['PSC','29','physical:characteristic','mobile_bottom'], // Mobile Bottom
        ['PSC','997',undefined,undefined], // Unpopulated
 
        // PWC - Pier/Wharf /Quay Classification
@@ -3395,7 +3397,7 @@ gifd.rules = {
        ['RAG','3','raw:RAG','casualty_report'], // Casualty Report
        ['RAG','4','raw:RAG','action_report'], // Action Report
        ['RAG','5','raw:RAG','photograph_report'], // Photograph Report
-       ['RAG','6','raw:RAG','us_coast_&_geodetic_survey/national_ocean_service_report'], // US Coast & Geodetic Survey/National Ocean Service Report
+       ['RAG','6','raw:RAG','us_coast_and_geodetic_survey/national_ocean_service_report'], // US Coast & Geodetic Survey/National Ocean Service Report
        ['RAG','7','raw:RAG','us_naval_headquarters/commands_report'], // US Naval Headquarters/Commands Report
        ['RAG','8','raw:RAG','hydrographic/admiralty_office'], // Hydrographic/Admiralty Office
        ['RAG','9','raw:RAG','wreck_list'], // Wreck List
@@ -3446,8 +3448,8 @@ gifd.rules = {
        ['RCL','997',undefined,undefined], // Unpopulated
 
        // REF_ - Radar Reflector Attribute
-       ['REF_','1','raw:REF_','radar_reflector_present'], // Radar Reflector Present
-       ['REF_','2','raw:REF_','radar_reflector_absent'], // Radar Reflector Absent
+       ['REF_','1','radar_reflector','radar_reflector_present'], // Radar Reflector Present
+       ['REF_','2','radar_reflector','radar_reflector_absent'], // Radar Reflector Absent
        ['REF_','997',undefined,undefined], // Unpopulated
 
        // REL - Religious Denomination
@@ -3593,20 +3595,20 @@ gifd.rules = {
        ['RTP','2','reservoir:type','back-up_water_impounded_by_a_dam'], // Back-up Water Impounded by a Dam
 
        // RTT - Route Intended Use
-       ['RTT','0','raw:RTT','unknown'], // Unknown
-       ['RTT','2','raw:RTT','recommended_track_for_other_than_deep_draft_vessels'], // Recommended Track for Other Than Deep Draft Vessels
-       ['RTT','3','raw:RTT','recommended_track_for_deep_draft_vessels'], // Recommended Track for Deep Draft Vessels
-       ['RTT','4','raw:RTT','deep_water_route'], // Deep Water Route
-       ['RTT','5','raw:RTT','transit_route'], // Transit Route
-       ['RTT','11','raw:RTT','two-way_route'], // Two-way Route
-       ['RTT','13','raw:RTT','recommended_direction_of_traffic_flow'], // Recommended Direction of Traffic Flow
+       ['RTT','0','seamark:route','unknown'], // Unknown
+       ['RTT','2','seamark:route','recommended_track_for_other_than_deep_draft_vessels'], // Recommended Track for Other Than Deep Draft Vessels
+       ['RTT','3','seamark:route','recommended_track_for_deep_draft_vessels'], // Recommended Track for Deep Draft Vessels
+       ['RTT','4','seamark:route','deep_water_route'], // Deep Water Route
+       ['RTT','5','seamark:route','transit_route'], // Transit Route
+       ['RTT','11','seamark:route','two-way_route'], // Two-way Route
+       ['RTT','13','seamark:route','recommended_direction_of_traffic_flow'], // Recommended Direction of Traffic Flow
        ['RTT','14','highway','primary'], // Primary Route
        ['RTT','15','highway','secondary'], // Secondary Route
        ['RTT','16','highway','motorway'], // Limited Access Route (e.g. Motorway/Autobahn/Interstate)
-       ['RTT','17','raw:RTT','q-route'], // Q-Route
-       ['RTT','18','raw:RTT','recommended_route'], // Recommended Route
+       ['RTT','17','seamark:route','q-route'], // Q-Route
+       ['RTT','18','seamark:route','recommended_route'], // Recommended Route
        ['RTT','997',undefined,undefined], // Unpopulated
-       ['RTT','999','raw:RTT','other'], // Other
+       ['RTT','999','seamark:route','other'], // Other
 
        // SBC - Shelter Belt Condition
        ['SBC','0','shelter_belt','unknown'], // Unknown
@@ -3711,18 +3713,18 @@ gifd.rules = {
        ['SEP','2','is_divided','yes'], // Separated
 
        // SFC - Sea Floor Feature Category
-       ['SFC','0','raw:SFC','unknown_(obstruction)'], // Unknown (Obstruction)
-       ['SFC','3','raw:SFC','fish_haven'], // Fish Haven
-       ['SFC','4','raw:SFC','well'], // Well
-       ['SFC','5','raw:SFC','submerged_production_platform'], // Submerged Production Platform
-       ['SFC','6','raw:SFC','wreckage'], // Wreckage
-       ['SFC','7','raw:SFC','shoaling'], // Shoaling
-       ['SFC','8','raw:SFC','less_water_reported'], // Less Water Reported
-       ['SFC','9','raw:SFC','unexploded_ordnance'], // Unexploded Ordnance
-       ['SFC','10','raw:SFC','unspecified_non-submarine_contact'], // Unspecified Non-submarine Contact
-       ['SFC','11','raw:SFC','pinnacle'], // Pinnacle
+       ['SFC','0','sea_floor_category','unknown_(obstruction)'], // Unknown (Obstruction)
+       ['SFC','3','sea_floor_category','fish_haven'], // Fish Haven
+       ['SFC','4','sea_floor_category','well'], // Well
+       ['SFC','5','sea_floor_category','submerged_production_platform'], // Submerged Production Platform
+       ['SFC','6','sea_floor_category','wreckage'], // Wreckage
+       ['SFC','7','sea_floor_category','shoaling'], // Shoaling
+       ['SFC','8','sea_floor_category','less_water_reported'], // Less Water Reported
+       ['SFC','9','sea_floor_category','unexploded_ordnance'], // Unexploded Ordnance
+       ['SFC','10','sea_floor_category','unspecified_non-submarine_contact'], // Unspecified Non-submarine Contact
+       ['SFC','11','sea_floor_category','pinnacle'], // Pinnacle
        ['SFC','997',undefined,undefined], // Unpopulated
-       ['SFC','999','raw:SFC','other'], // Other
+       ['SFC','999','sea_floor_category','other'], // Other
 
        // SHA - Sounding Horizontal Accuracy Code
        ['SHA','0','raw:SHA','0_-_unknown'], // 0 - Unknown
@@ -3774,9 +3776,9 @@ gifd.rules = {
        ['SHR','999','raw:SHR','other'], // Other
 
        // SIC - Snow/Ice Category
-       ['SIC','0','raw:SIC','unknown'], // Unknown
-       ['SIC','1','raw:SIC','snow'], // Snow
-       ['SIC','2','raw:SIC','ice'], // Ice
+       ['SIC','0','landcover','unknown'], // Unknown
+       ['SIC','1','landcover','snowfield'], // Snow
+       ['SIC','2','landcover','ice-field'], // Ice
 
        // SL1 - Slope Gradient Left (1)
        ['SL1','0','raw:SL1','unknown'], // Unknown
@@ -3787,15 +3789,15 @@ gifd.rules = {
        ['SL1','997',undefined,undefined], // Unpopulated
 
        // SLT - Shoreline Type Category
-       ['SLT','0','raw:SLT','unknown'], // Unknown
-       ['SLT','6','raw:SLT','mangrove/nipa'], // Mangrove/Nipa
-       ['SLT','8','raw:SLT','marsh,_swamp'], // Marsh, Swamp
-       ['SLT','10','raw:SLT','rocky'], // Rocky
-       ['SLT','11','raw:SLT','rubble'], // Rubble
-       ['SLT','13','raw:SLT','sandy'], // Sandy
-       ['SLT','14','raw:SLT','stony,_shingly'], // Stony, Shingly
+       ['SLT','0','shoreline:type','unknown'], // Unknown
+       ['SLT','6','shoreline:type','mangrove'], // Mangrove/Nipa
+       ['SLT','8','shoreline:type','marsh'], // Marsh, Swamp
+       ['SLT','10','shoreline:type','stony'], // Rocky
+       ['SLT','11','shoreline:type','building_rubble'], // Rubble
+       ['SLT','13','shoreline:type','sandy'], // Sandy
+       ['SLT','14','shoreline:type','shingly'], // Stony, Shingly
        ['SLT','997',undefined,undefined], // Unpopulated
-       ['SLT','999','raw:SLT','other'], // Other
+       ['SLT','999','shoreline:type','other'], // Other
 
        // SM1 - Surficial Material Depth Category
        ['SM1','0','raw:SM1','unknown'], // Unknown
@@ -3910,18 +3912,18 @@ gifd.rules = {
        ['SMC','999','surface','other'], // Other
 
        // SND - Sounding Category
-       ['SND','1','raw:SND','drying_heights'], // Drying Heights
-       ['SND','2','raw:SND','no_bottom_found'], // No Bottom Found
-       ['SND','13','raw:SND','normal_(iho)'], // Normal (IHO)
-       ['SND','14','raw:SND','hairline_(iho)'], // Hairline (IHO)
-       ['SND','93','raw:SND','doubtful_sounding'], // Doubtful Sounding
-       ['SND','96','raw:SND','least_depth_unknown,_safe_clearance_at_value_shown'], // Least depth unknown, safe clearance at value shown
+       ['SND','1','sounding:type','drying_heights'], // Drying Heights
+       ['SND','2','sounding:type','no_bottom_found'], // No Bottom Found
+       ['SND','13','sounding:type','normal'], // Normal (IHO)
+       ['SND','14','sounding:type','hairline'], // Hairline (IHO)
+       ['SND','93','sounding:type','doubtful'], // Doubtful Sounding
+       ['SND','96','sounding:type','least_depth_unknown,_safe_clearance_at_value_shown'], // Least depth unknown, safe clearance at value shown
        ['SND','997',undefined,undefined], // Unpopulated
        ['SND','999','raw:SND','other'], // Other
 
        // SOH - Severity of Hazard
-       ['SOH','1','raw:SOH','dangerous'], // Dangerous
-       ['SOH','2','raw:SOH','non-dangerous'], // Non-Dangerous
+       ['SOH','1','hazard:severity','dangerous'], // Dangerous
+       ['SOH','2','hazard:severity','non_dangerous'], // Non-Dangerous
        ['SOH','997',undefined,undefined], // Unpopulated
 
        // SOU - Exposition of Sounding
@@ -4080,90 +4082,90 @@ gifd.rules = {
        ['SRD','999','raw:SRD','other'], // Other
 
        // SSC - Structure Shape Category
-       ['SSC','0','raw:SSC','unknown'], // Unknown
-       ['SSC','1','raw:SSC','barrel,_ton'], // Barrel, Ton
-       ['SSC','2','raw:SSC','blimp'], // Blimp
-       ['SSC','4','raw:SSC','bullet'], // Bullet
-       ['SSC','6','raw:SSC','conical/peaked/nun'], // Conical/Peaked/NUN
-       ['SSC','7','raw:SSC','cylindrical_(upright)/can'], // Cylindrical (Upright)/CAN
-       ['SSC','10','raw:SSC','pillar/spindle'], // Pillar/Spindle
-       ['SSC','12','raw:SSC','pyramid'], // Pyramid
-       ['SSC','15','raw:SSC','solid/filled'], // Solid/filled
-       ['SSC','16','raw:SSC','spar'], // Spar
-       ['SSC','17','raw:SSC','spherical_(hemispherical)'], // Spherical (Hemispherical)
-       ['SSC','18','raw:SSC','truss'], // Truss
-       ['SSC','21','raw:SSC','artificial_mountain'], // Artificial Mountain
-       ['SSC','22','raw:SSC','crescent'], // Crescent
-       ['SSC','23','raw:SSC','ferris_wheel'], // Ferris Wheel
-       ['SSC','24','raw:SSC','enclosed'], // Enclosed
-       ['SSC','25','raw:SSC','roller_coaster'], // Roller Coaster
-       ['SSC','26','raw:SSC','lateral'], // Lateral
-       ['SSC','27','raw:SSC','mounds'], // Mounds
-       ['SSC','28','raw:SSC','ripple'], // Ripple
-       ['SSC','29','raw:SSC','star'], // Star
-       ['SSC','30','raw:SSC','transverse'], // Transverse
-       ['SSC','46','raw:SSC','open'], // Open
-       ['SSC','52','raw:SSC','a_frame'], // A Frame
-       ['SSC','53','raw:SSC','h_frame'], // H Frame
-       ['SSC','54','raw:SSC','i_frame'], // I Frame
-       ['SSC','56','raw:SSC','y_frame'], // Y Frame
-       ['SSC','59','raw:SSC','telescoping_gasholder_(gasometer)'], // Telescoping Gasholder (Gasometer)
-       ['SSC','60','raw:SSC','mast'], // Mast
-       ['SSC','65','raw:SSC','cylindrical_with_flat_top'], // Cylindrical with flat top
-       ['SSC','66','raw:SSC','cylindrical_with_domed_top'], // Cylindrical with domed top
-       ['SSC','71','raw:SSC','cylindrical/peaked'], // Cylindrical/Peaked
-       ['SSC','73','raw:SSC','superbuoy'], // Superbuoy
-       ['SSC','74','raw:SSC','t_frame'], // T Frame
-       ['SSC','76','raw:SSC','funnel'], // Funnel
-       ['SSC','77','raw:SSC','arch'], // Arch
-       ['SSC','79','raw:SSC','round'], // Round
-       ['SSC','80','raw:SSC','rectangular'], // Rectangular
-       ['SSC','83','raw:SSC','square'], // Square
-       ['SSC','84','raw:SSC','irregular'], // Irregular
-       ['SSC','87','raw:SSC','dome'], // Dome
-       ['SSC','88','raw:SSC','spherical_with_column_support'], // Spherical with Column Support
-       ['SSC','107','raw:SSC','tower'], // Tower
-       ['SSC','108','raw:SSC','scanner'], // Scanner
-       ['SSC','109','raw:SSC','obelisk'], // Obelisk
-       ['SSC','110','raw:SSC','radome,_tower_mounted'], // Radome, Tower Mounted
+       ['SSC','0','shape','unknown'], // Unknown
+       ['SSC','1','shape','barrel,_ton'], // Barrel, Ton
+       ['SSC','2','shape','blimp'], // Blimp
+       ['SSC','4','shape','bullet'], // Bullet
+       ['SSC','6','shape','conical/peaked/nun'], // Conical/Peaked/NUN
+       ['SSC','7','shape','cylindrical_(upright)/can'], // Cylindrical (Upright)/CAN
+       ['SSC','10','shape','pillar/spindle'], // Pillar/Spindle
+       ['SSC','12','shape','pyramid'], // Pyramid
+       ['SSC','15','shape','solid/filled'], // Solid/filled
+       ['SSC','16','shape','spar'], // Spar
+       ['SSC','17','shape','spherical_(hemispherical)'], // Spherical (Hemispherical)
+       ['SSC','18','shape','truss'], // Truss
+       ['SSC','21','attraction','artificial_mountain'], // Artificial Mountain
+       ['SSC','22','shape','crescent'], // Crescent
+       ['SSC','23','attraction','big_wheel'], // Ferris Wheel
+       ['SSC','24','shape','enclosed'], // Enclosed
+       ['SSC','25','attraction','roller_coaster'], // Roller Coaster
+       ['SSC','26','shape','lateral'], // Lateral
+       ['SSC','27','shape','mounds'], // Mounds
+       ['SSC','28','shape','ripple'], // Ripple
+       ['SSC','29','shape','star'], // Star
+       ['SSC','30','shape','transverse'], // Transverse
+       ['SSC','46','shape','open'], // Open
+       ['SSC','52','shape','a_frame'], // A Frame
+       ['SSC','53','shape','h_frame'], // H Frame
+       ['SSC','54','shape','i_frame'], // I Frame
+       ['SSC','56','shape','y_frame'], // Y Frame
+       ['SSC','59','shape','telescoping_gasholder_(gasometer)'], // Telescoping Gasholder (Gasometer)
+       ['SSC','60','shape','mast'], // Mast
+       ['SSC','65','shape','cylindrical_with_flat_top'], // Cylindrical with flat top
+       ['SSC','66','shape','cylindrical_with_domed_top'], // Cylindrical with domed top
+       ['SSC','71','shape','cylindrical/peaked'], // Cylindrical/Peaked
+       ['SSC','73','shape','superbuoy'], // Superbuoy
+       ['SSC','74','shape','t_frame'], // T Frame
+       ['SSC','76','shape','funnel'], // Funnel
+       ['SSC','77','shape','arch'], // Arch
+       ['SSC','79','shape','round'], // Round
+       ['SSC','80','shape','rectangular'], // Rectangular
+       ['SSC','83','shape','square'], // Square
+       ['SSC','84','shape','irregular'], // Irregular
+       ['SSC','87','shape','dome'], // Dome
+       ['SSC','88','shape','spherical_with_column_support'], // Spherical with Column Support
+       ['SSC','107','shape','tower'], // Tower
+       ['SSC','108','shape','scanner'], // Scanner
+       ['SSC','109','shape','obelisk'], // Obelisk
+       ['SSC','110','shape','radome,_tower_mounted'], // Radome, Tower Mounted
        ['SSC','997',undefined,undefined], // Unpopulated
-       ['SSC','999','raw:SSC','other'], // Other
+       ['SSC','999','shape','other'], // Other
 
        // SSR - Structure Shape of Roof
-       ['SSR','0','raw:SSR','unknown'], // Unknown
-       ['SSR','6','raw:SSR','conical/peaked/nun'], // Conical/Peaked/NUN
-       ['SSR','38','raw:SSR','curved/round_(quonset)'], // Curved/Round (Quonset)
-       ['SSR','40','raw:SSR','dome'], // Dome
-       ['SSR','41','raw:SSR','flat'], // Flat
-       ['SSR','42','raw:SSR','gable_(pitched)'], // Gable (Pitched)
-       ['SSR','47','raw:SSR','sawtooth'], // Sawtooth
-       ['SSR','50','raw:SSR','with_monitor'], // With Monitor
-       ['SSR','51','raw:SSR','with_steeple'], // With Steeple
-       ['SSR','55','raw:SSR','flat_with_monitor'], // Flat with Monitor
-       ['SSR','64','raw:SSR','gable_with_monitor'], // Gable with Monitor
-       ['SSR','77','raw:SSR','with_cupola'], // With Cupola
-       ['SSR','78','raw:SSR','with_turret'], // With Turret
-       ['SSR','79','raw:SSR','with_tower'], // With Tower
-       ['SSR','80','raw:SSR','with_minaret'], // With Minaret
+       ['SSR','0','building:roof_shape','unknown'], // Unknown
+       ['SSR','6','building:roof_shape','conical/peaked/nun'], // Conical/Peaked/NUN
+       ['SSR','38','building:roof_shape','curved/round_(quonset)'], // Curved/Round (Quonset)
+       ['SSR','40','building:roof_shape','dome'], // Dome
+       ['SSR','41','building:roof_shape','flat'], // Flat
+       ['SSR','42','building:roof_shape','gable_(pitched)'], // Gable (Pitched)
+       ['SSR','47','building:roof_shape','sawtooth'], // Sawtooth
+       ['SSR','50','building:roof_shape','with_monitor'], // With Monitor
+       ['SSR','51','building:roof_shape','with_steeple'], // With Steeple
+       ['SSR','55','building:roof_shape','flat_with_monitor'], // Flat with Monitor
+       ['SSR','64','building:roof_shape','gable_with_monitor'], // Gable with Monitor
+       ['SSR','77','building:roof_shape','with_cupola'], // With Cupola
+       ['SSR','78','building:roof_shape','with_turret'], // With Turret
+       ['SSR','79','building:roof_shape','with_tower'], // With Tower
+       ['SSR','80','building:roof_shape','with_minaret'], // With Minaret
        ['SSR','997',undefined,undefined], // Unpopulated
        // ['SSR','998',undefined,undefined], // Not Applicable
-       ['SSR','998','raw:SSR','not_applicable'], // Not Applicable
-       ['SSR','999','raw:SSR','other'], // Other
+       ['SSR','998','building:roof_shape','not_applicable'], // Not Applicable
+       ['SSR','999','building:roof_shape','other'], // Other
 
        // SST - Sound Signal Type
-       ['SST','0','raw:SST','unknown'], // Unknown
-       ['SST','1','raw:SST','bell'], // Bell
-       ['SST','2','raw:SST','diaphone'], // Diaphone
-       ['SST','3','raw:SST','explosive_fog_signal'], // Explosive Fog Signal
-       ['SST','4','raw:SST','gong'], // Gong
-       ['SST','6','raw:SST','horn'], // Horn
-       ['SST','7','raw:SST','nautophone'], // Nautophone
-       ['SST','9','raw:SST','siren'], // Siren
-       ['SST','14','raw:SST','whistle'], // Whistle
-       ['SST','15','raw:SST','reed'], // Reed
-       ['SST','16','raw:SST','none'], // None
+       ['SST','0','sound_signal','unknown'], // Unknown
+       ['SST','1','sound_signal','bell'], // Bell
+       ['SST','2','sound_signal','diaphone'], // Diaphone
+       ['SST','3','sound_signal','explosive'], // Explosive Fog Signal
+       ['SST','4','sound_signal','gong'], // Gong
+       ['SST','6','sound_signal','horn'], // Horn
+       ['SST','7','sound_signal','nautophone'], // Nautophone
+       ['SST','9','sound_signal','siren'], // Siren
+       ['SST','14','sound_signal','whistle'], // Whistle
+       ['SST','15','sound_signal','reed'], // Reed
+       ['SST','16','sound_signal','none'], // None
        ['SST','997',undefined,undefined], // Unpopulated
-       ['SST','999','raw:SST','other'], // Other
+       ['SST','999','sound_signal','other'], // Other
 
        // STA - Station Type Category (Maritime)
        ['STA','0','seamark:signal_station','unknown'], // Unknown
@@ -4288,12 +4290,12 @@ gifd.rules = {
        ['SV1','997',undefined,undefined], // Unpopulated
 
        // SVC - Sounding Velocity
-       ['SVC','0','raw:SVC','unknown'], // Unknown
-       ['SVC','1','raw:SVC','echo_sounder_calibrated_at_4800_ft/sec_uncorrected'], // Echo Sounder Calibrated at 4800 ft/sec Uncorrected
-       ['SVC','2','raw:SVC','echo_sounder_calibrated_at_1500_m/sec_uncorrected'], // Echo Sounder Calibrated at 1500 m/sec Uncorrected
-       ['SVC','3','raw:SVC','mathews_tables_(np_139)_corrected'], // Mathews Tables (NP 139) Corrected
-       ['SVC','4','raw:SVC','sound_velocity_meter_(svm)_corrected'], // Sound Velocity Meter (SVM) Corrected
-       ['SVC','5','raw:SVC','corrected_by_other_means_of_calibration'], // Corrected by other means of calibration
+       ['SVC','0','sounding:correction','unknown'], // Unknown
+       ['SVC','1','sounding:correction','echo_sounder_calibrated_at_4800_ft/sec_uncorrected'], // Echo Sounder Calibrated at 4800 ft/sec Uncorrected
+       ['SVC','2','sounding:correction','echo_sounder_calibrated_at_1500_m/sec_uncorrected'], // Echo Sounder Calibrated at 1500 m/sec Uncorrected
+       ['SVC','3','sounding:correction','mathews_tables_(np_139)_corrected'], // Mathews Tables (NP 139) Corrected
+       ['SVC','4','sounding:correction','sound_velocity_meter_(svm)_corrected'], // Sound Velocity Meter (SVM) Corrected
+       ['SVC','5','sounding:correction','corrected_by_other_means_of_calibration'], // Corrected by other means of calibration
 
        // SWC - Soil Wetness Condition
        ['SWC','0','raw:SWC','unknown'], // Unknown
@@ -4348,45 +4350,45 @@ gifd.rules = {
        ['TLA','997',undefined,undefined], // Unpopulated
 
        // TMC - Top Mark Characteristic
-       ['TMC','0','raw:TMC','unknown'], // Unknown
-       ['TMC','1','raw:TMC','east_mark_(2_cones_-_base_together)'], // East Mark (2 cones - base together)
-       ['TMC','2','raw:TMC','isolated_danger_(2_balls)'], // Isolated Danger (2 balls)
-       ['TMC','3','raw:TMC','north_mark_(2_cones_-_pointing_up)'], // North Mark (2 cones - pointing up)
-       ['TMC','4','raw:TMC','port_hand_(can_or_cylinder)'], // Port Hand (can or cylinder)
-       ['TMC','5','raw:TMC','safe_water_(1_ball)'], // Safe Water (1 ball)
-       ['TMC','6','raw:TMC','special_(x)'], // Special (X)
-       ['TMC','7','raw:TMC','starboard_hand_(1_cone_-_pointing_up)'], // Starboard Hand (1 cone - pointing up)
-       ['TMC','8','raw:TMC','south_mark_(2_cones_-_pointing_down)'], // South Mark (2 cones - pointing down)
-       ['TMC','9','raw:TMC','west_mark_(2_cones_-_points_together)'], // West Mark (2 cones - points together)
-       ['TMC','10','raw:TMC','nun'], // Nun
-       ['TMC','12','raw:TMC','ball'], // Ball
-       ['TMC','13','raw:TMC','can'], // Can
-       ['TMC','14','raw:TMC','st._andrews_cross'], // St. Andrews Cross
-       ['TMC','15','raw:TMC','ball_over_cone'], // Ball Over Cone
-       ['TMC','16','raw:TMC','cone_over_ball'], // Cone Over Ball
-       ['TMC','17','raw:TMC','broom_point_up'], // Broom Point Up
-       ['TMC','18','raw:TMC','perch'], // Perch
-       ['TMC','19','raw:TMC','diamond'], // Diamond
-       ['TMC','20','raw:TMC','broom_point_down'], // Broom Point Down
-       ['TMC','21','raw:TMC','cone_(point_upwards)'], // Cone (Point Upwards)
-       ['TMC','22','raw:TMC','cone_(point_downwards)'], // Cone (Point Downwards)
-       ['TMC','23','raw:TMC','upright_cross'], // Upright Cross
-       ['TMC','24','raw:TMC','optical_reflector'], // Optical Reflector
-       ['TMC','25','raw:TMC','can_(open)'], // Can (Open)
-       ['TMC','26','raw:TMC','can_(filled)'], // Can (Filled)
-       ['TMC','27','raw:TMC','ball_(open)'], // Ball (Open)
-       ['TMC','28','raw:TMC','ball_(filled)'], // Ball (Filled)
-       ['TMC','29','raw:TMC','can_over_ball_(open)'], // Can Over Ball (Open)
-       ['TMC','30','raw:TMC','cross_over_ball_(filled)'], // Cross Over Ball (Filled)
-       ['TMC','31','raw:TMC','diamond_over_ball_(filled)'], // Diamond Over Ball (Filled)
-       ['TMC','32','raw:TMC','double_cone,_points_apart_(open)'], // Double Cone, Points Apart (Open)
-       ['TMC','33','raw:TMC','none'], // None
-       ['TMC','35','raw:TMC','t_shape'], // T Shape
-       ['TMC','36','raw:TMC','cross_over_ball_(open)'], // Cross Over Ball (Open)
-       ['TMC','37','raw:TMC','double_ball_(open)'], // Double ball (Open)
-       ['TMC','40','raw:TMC','square'], // Square
+       ['TMC','0','seamark:topmark:shape','unknown'], // Unknown
+       ['TMC','1','seamark:topmark:shape','east_mark_(2_cones_-_base_together)'], // East Mark (2 cones - base together)
+       ['TMC','2','seamark:topmark:shape','isolated_danger_(2_balls)'], // Isolated Danger (2 balls)
+       ['TMC','3','seamark:topmark:shape','north_mark_(2_cones_-_pointing_up)'], // North Mark (2 cones - pointing up)
+       ['TMC','4','seamark:topmark:shape','port_hand_(can_or_cylinder)'], // Port Hand (can or cylinder)
+       ['TMC','5','seamark:topmark:shape','safe_water_(1_ball)'], // Safe Water (1 ball)
+       ['TMC','6','seamark:topmark:shape','special_(x)'], // Special (X)
+       ['TMC','7','seamark:topmark:shape','starboard_hand_(1_cone_-_pointing_up)'], // Starboard Hand (1 cone - pointing up)
+       ['TMC','8','seamark:topmark:shape','south_mark_(2_cones_-_pointing_down)'], // South Mark (2 cones - pointing down)
+       ['TMC','9','seamark:topmark:shape','west_mark_(2_cones_-_points_together)'], // West Mark (2 cones - points together)
+       ['TMC','10','seamark:topmark:shape','nun'], // Nun
+       ['TMC','12','seamark:topmark:shape','ball'], // Ball
+       ['TMC','13','seamark:topmark:shape','can'], // Can
+       ['TMC','14','seamark:topmark:shape','st_andrews_cross'], // St. Andrews Cross
+       ['TMC','15','seamark:topmark:shape','ball_over_cone'], // Ball Over Cone
+       ['TMC','16','seamark:topmark:shape','cone_over_ball'], // Cone Over Ball
+       ['TMC','17','seamark:topmark:shape','broom_point_up'], // Broom Point Up
+       ['TMC','18','seamark:topmark:shape','perch'], // Perch
+       ['TMC','19','seamark:topmark:shape','diamond'], // Diamond
+       ['TMC','20','seamark:topmark:shape','broom_point_down'], // Broom Point Down
+       ['TMC','21','seamark:topmark:shape','cone,_point_up'], // Cone (Point Upwards)
+       ['TMC','22','seamark:topmark:shape','cone,_point_down'], // Cone (Point Downwards)
+       ['TMC','23','seamark:topmark:shape','cross'], // Upright Cross
+       ['TMC','24','seamark:topmark:shape','optical_reflector'], // Optical Reflector
+       ['TMC','25','seamark:topmark:shape','can_(open)'], // Can (Open)
+       ['TMC','26','seamark:topmark:shape','can_(filled)'], // Can (Filled)
+       ['TMC','27','seamark:topmark:shape','ball_(open)'], // Ball (Open)
+       ['TMC','28','seamark:topmark:shape','ball_(filled)'], // Ball (Filled)
+       ['TMC','29','seamark:topmark:shape','can_over_ball_(open)'], // Can Over Ball (Open)
+       ['TMC','30','seamark:topmark:shape','cross_over_ball_(filled)'], // Cross Over Ball (Filled)
+       ['TMC','31','seamark:topmark:shape','diamond_over_ball_(filled)'], // Diamond Over Ball (Filled)
+       ['TMC','32','seamark:topmark:shape','double_cone,_points_apart_(open)'], // Double Cone, Points Apart (Open)
+       ['TMC','33','seamark:topmark:shape','none'], // None
+       ['TMC','35','seamark:topmark:shape','t_shape'], // T Shape
+       ['TMC','36','seamark:topmark:shape','cross_over_ball_(open)'], // Cross Over Ball (Open)
+       ['TMC','37','seamark:topmark:shape','double_ball_(open)'], // Double ball (Open)
+       ['TMC','40','seamark:topmark:shape','square'], // Square
        ['TMC','997',undefined,undefined], // Unpopulated
-       ['TMC','999','raw:TMC','other'], // Other
+       ['TMC','999','seamark:topmark:shape','other'], // Other
 
        // TRA - Traversability
        ['TRA','0','foot','unknown'], // Unknown
@@ -4394,10 +4396,10 @@ gifd.rules = {
        ['TRA','2','foot','no'], // Non-Traversable
 
        // TRE - Tree Type Category
-       ['TRE','0','raw:TRE','unknown'], // Unknown
-       ['TRE','1','raw:TRE','deciduous'], // Deciduous
-       ['TRE','2','raw:TRE','evergreen'], // Evergreen
-       ['TRE','3','raw:TRE','mixed'], // Mixed
+       ['TRE','0','wood','unknown'], // Unknown
+       ['TRE','1','wood','deciduous'], // Deciduous
+       ['TRE','2','wood','evergreen'], // Evergreen
+       ['TRE','3','wood','mixed'], // Mixed
        ['TRE','997',undefined,undefined], // Unpopulated
 
        // TRF - Traffic Flow
@@ -4527,31 +4529,31 @@ gifd.rules = {
        ['TXP','997',undefined,undefined], // Unpopulated
 
        // UMC - Underlying Material Characteristics
-       ['UMC','0','raw:UMC','unknown'], // Unknown
-       ['UMC','1','raw:UMC','broken'], // Broken
-       ['UMC','2','raw:UMC','coarse'], // Coarse
-       ['UMC','3','raw:UMC','decayed'], // Decayed
-       ['UMC','4','raw:UMC','fine,_minute_particles'], // Fine, Minute Particles
-       ['UMC','5','raw:UMC','gritty'], // Gritty
-       ['UMC','6','raw:UMC','hard'], // Hard
-       ['UMC','7','raw:UMC','rotten'], // Rotten
-       ['UMC','8','raw:UMC','soft'], // Soft
-       ['UMC','9','raw:UMC','sticky'], // Sticky
-       ['UMC','10','raw:UMC','stiff'], // Stiff
-       ['UMC','11','raw:UMC','streaky'], // Streaky
-       ['UMC','12','raw:UMC','tenacious'], // Tenacious
-       ['UMC','13','raw:UMC','uneven'], // Uneven
-       ['UMC','17','raw:UMC','calcareous'], // Calcareous
-       ['UMC','18','raw:UMC','flinty'], // Flinty
-       ['UMC','19','raw:UMC','glacial'], // Glacial
-       ['UMC','20','raw:UMC','ground'], // Ground
-       ['UMC','21','raw:UMC','large'], // Large
-       ['UMC','22','raw:UMC','rocky'], // Rocky
-       ['UMC','23','raw:UMC','small'], // Small
-       ['UMC','24','raw:UMC','speckled'], // Speckled
-       ['UMC','25','raw:UMC','varied'], // Varied
-       ['UMC','26','raw:UMC','volcanic'], // Volcanic
-       ['UMC','27','raw:UMC','medium'], // Medium
+       ['UMC','0','underlying:characteristic','unknown'], // Unknown
+       ['UMC','1','underlying:characteristic','broken'], // Broken
+       ['UMC','2','underlying:characteristic','coarse'], // Coarse
+       ['UMC','3','underlying:characteristic','decayed'], // Decayed
+       ['UMC','4','underlying:characteristic','fine'], // Fine, Minute Particles
+       ['UMC','5','underlying:characteristic','gritty'], // Gritty
+       ['UMC','6','underlying:characteristic','hard'], // Hard
+       ['UMC','7','underlying:characteristic','rotten'], // Rotten
+       ['UMC','8','underlying:characteristic','soft'], // Soft
+       ['UMC','9','underlying:characteristic','sticky'], // Sticky
+       ['UMC','10','underlying:characteristic','stiff'], // Stiff
+       ['UMC','11','underlying:characteristic','streaky'], // Streaky
+       ['UMC','12','underlying:characteristic','tenacious'], // Tenacious
+       ['UMC','13','underlying:characteristic','uneven'], // Uneven
+       ['UMC','17','underlying:characteristic','calcareous'], // Calcareous
+       ['UMC','18','underlying:characteristic','flinty'], // Flinty
+       ['UMC','19','underlying:characteristic','glacial'], // Glacial
+       ['UMC','20','underlying:characteristic','ground'], // Ground
+       ['UMC','21','underlying:characteristic','large'], // Large
+       ['UMC','22','underlying:characteristic','rocky'], // Rocky
+       ['UMC','23','underlying:characteristic','small'], // Small
+       ['UMC','24','underlying:characteristic','speckled'], // Speckled
+       ['UMC','25','underlying:characteristic','varied'], // Varied
+       ['UMC','26','underlying:characteristic','volcanic'], // Volcanic
+       ['UMC','27','underlying:characteristic','medium'], // Medium
        ['UMC','997',undefined,undefined], // Unpopulated
 
        // UNI - Units
@@ -4820,37 +4822,37 @@ gifd.rules = {
        ['VDC','999','source:datum:sounding','other'], // Other
 
        // VEG - Vegetation Characteristics
-       ['VEG','0','raw:VEG','unknown'], // Unknown
-       ['VEG','1','raw:VEG','dry_crops'], // Dry Crops
-       ['VEG','4','raw:VEG','rice_paddies'], // Rice Paddies
-       ['VEG','5','raw:VEG','agriculture_with_scattered_forests_or_rows_of_trees'], // Agriculture with scattered forests or rows of trees
-       ['VEG','6','raw:VEG','cranberry'], // Cranberry
-       ['VEG','7','raw:VEG','peat'], // Peat
-       ['VEG','8','raw:VEG','pasture,_meadow,_steppe'], // Pasture, meadow, steppe
-       ['VEG','9','raw:VEG','grassland_with_scattered_trees'], // Grassland with scattered trees
-       ['VEG','11','raw:VEG','casuarina'], // Casuarina
-       ['VEG','12','raw:VEG','coniferous'], // Coniferous
-       ['VEG','16','raw:VEG','nipa_palm'], // Nipa Palm
-       ['VEG','17','raw:VEG','palm'], // Palm
-       ['VEG','18','raw:VEG','filao'], // Filao
-       ['VEG','19','raw:VEG','mangrove'], // Mangrove
-       ['VEG','24','raw:VEG','deciduous'], // Deciduous
-       ['VEG','25','raw:VEG','evergreen'], // Evergreen
-       ['VEG','29','raw:VEG','eucalyptus'], // Eucalyptus
-       ['VEG','32','raw:VEG','walnut'], // Walnut
-       ['VEG','36','raw:VEG','chestnut'], // Chestnut
-       ['VEG','38','raw:VEG','cypress'], // Cypress
-       ['VEG','39','raw:VEG','peach'], // Peach
-       ['VEG','40','raw:VEG','apple'], // Apple
-       ['VEG','41','raw:VEG','carob'], // Carob
-       ['VEG','42','raw:VEG','almond'], // Almond
-       ['VEG','43','raw:VEG','citrus'], // Citrus
-       ['VEG','50','raw:VEG','mixed_trees'], // Mixed Trees
-       ['VEG','52','raw:VEG','forest_clearing'], // Forest Clearing
-       ['VEG','56','raw:VEG','without_trees'], // Without Trees
-       ['VEG','57','raw:VEG','agriculture_with_scattered_trees_or_rows_of_trees'], // Agriculture with scattered trees or rows of trees
+       ['VEG','0','vegetation:type','unknown'], // Unknown
+       ['VEG','1','vegetation:type','dry_crops'], // Dry Crops
+       ['VEG','4','vegetation:type','rice_paddies'], // Rice Paddies
+       ['VEG','5','vegetation:type','agriculture_with_scattered_forests_or_rows_of_trees'], // Agriculture with scattered forests or rows of trees
+       ['VEG','6','vegetation:type','cranberry'], // Cranberry
+       ['VEG','7','vegetation:type','peat'], // Peat
+       ['VEG','8','vegetation:type','pasture,_meadow,_steppe'], // Pasture, meadow, steppe
+       ['VEG','9','vegetation:type','grassland_with_scattered_trees'], // Grassland with scattered trees
+       ['VEG','11','vegetation:type','casuarina'], // Casuarina
+       ['VEG','12','vegetation:type','coniferous'], // Coniferous
+       ['VEG','16','vegetation:type','nipa'], // Nipa Palm
+       ['VEG','17','vegetation:type','palm'], // Palm
+       ['VEG','18','vegetation:type','filao'], // Filao
+       ['VEG','19','vegetation:type','mangrove'], // Mangrove
+       ['VEG','24','vegetation:type','deciduous'], // Deciduous
+       ['VEG','25','vegetation:type','evergreen'], // Evergreen
+       ['VEG','29','vegetation:type','eucalyptus'], // Eucalyptus
+       ['VEG','32','vegetation:type','walnut'], // Walnut
+       ['VEG','36','vegetation:type','chestnut'], // Chestnut
+       ['VEG','38','vegetation:type','cypress'], // Cypress
+       ['VEG','39','vegetation:type','peach'], // Peach
+       ['VEG','40','vegetation:type','apple'], // Apple
+       ['VEG','41','vegetation:type','carob'], // Carob
+       ['VEG','42','vegetation:type','almond'], // Almond
+       ['VEG','43','vegetation:type','citrus'], // Citrus
+       ['VEG','50','vegetation:type','mixed_trees'], // Mixed Trees
+       ['VEG','52','vegetation:type','forest_clearing'], // Forest Clearing
+       ['VEG','56','vegetation:type','without_trees'], // Without Trees
+       ['VEG','57','vegetation:type','agriculture_with_scattered_trees_or_rows_of_trees'], // Agriculture with scattered trees or rows of trees
        ['VEG','997',undefined,undefined], // Unpopulated
-       ['VEG','999','raw:VEG','other'], // Other
+       ['VEG','999','vegetation:type','other'], // Other
 
        // VGT - Volcanic Geologic Type
        ['VGT','1','raw:VGT','volcano'], // Volcano
@@ -4930,13 +4932,13 @@ gifd.rules = {
        ['VRC','22','raw:VRC','not_evaluated_area_where_development_has_precluded_evaluation_of_soil'], // Not evaluated area where development has precluded evaluation of soil
 
        // VRR - Vertical Reference Category
-       ['VRR','0','raw:VRR','unknown'], // Unknown
-       ['VRR','1','raw:VRR','above_surface/does_not_cover_(at_high_water)'], // Above Surface/Does Not Cover (at High Water)
-       ['VRR','2','raw:VRR','awash_at_sounding_datum'], // Awash at Sounding Datum
-       ['VRR','4','raw:VRR','below_surface/submerged'], // Below Surface/Submerged
-       ['VRR','8','raw:VRR','covers_and_uncovers'], // Covers and Uncovers
+       ['VRR','0',undefined,undefined], // Unknown
+       ['VRR','1','hydrographic_vertical_position','always_dry'], // Above Surface/Does Not Cover (at High Water)
+       ['VRR','2','hydrographic_vertical_position','awash_at_chart_datum'], // Awash at Sounding Datum
+       ['VRR','4','hydrographic_vertical_position','always_submerged'], // Below Surface/Submerged
+       ['VRR','8','hydrographic_vertical_position','covers_and_uncovers'], // Covers and Uncovers
        // ['VRR','9',undefined,undefined], // Not Applicable
-       ['VRR','9','raw:VRR','not_applicable'], // Not Applicable
+       ['VRR','9','hydrographic_vertical_position','not_applicable'], // Not Applicable
        ['VRR','997',undefined,undefined], // Unpopulated
 
        // VSH - Runway High End VASI Lights
@@ -5022,9 +5024,9 @@ gifd.rules = {
        ['WKT','999','raw:WKT','other'], // Other
 
        // WPC - Work in Progress Category
-       ['WPC','0','raw:WPC','unknown'], // Unknown
-       ['WPC','1','raw:WPC','land_reclamation'], // Land Reclamation
-       ['WPC','2','raw:WPC','construction_of_structures'], // Construction of Structures
+       ['WPC','0','work:type','unknown'], // Unknown
+       ['WPC','1','work:type','land_reclamation'], // Land Reclamation
+       ['WPC','2','work:type','construction_of_structures'], // Construction of Structures
        ['WPC','997',undefined,undefined], // Unpopulated
 
        // WPT - Waypoint Description Code

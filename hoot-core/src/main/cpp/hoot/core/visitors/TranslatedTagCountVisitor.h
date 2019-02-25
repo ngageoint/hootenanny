@@ -28,13 +28,13 @@
 #define TRANSLATEDTAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
+
 class Feature;
 class ScriptToOgrTranslator;
 class ScriptTranslator;
@@ -49,8 +49,6 @@ public:
 
   TranslatedTagCountVisitor() {}
   TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);
-
-  virtual ~TranslatedTagCountVisitor() {}
 
   long getPopulatedCount() const { return _populatedCount; }
 
@@ -68,7 +66,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Counts the number of tags that were able to be translated"; }
+  { return "Counts the number of tags translated to a schema"; }
 
 private:
 

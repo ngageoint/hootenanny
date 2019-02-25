@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayHeading.h"
 
 // Hoot
-#include "WayDiscretizer.h"
-#include "linearreference/WayLocation.h"
+#include <hoot/core/algorithms/WayDiscretizer.h>
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
 
 // Standard
 #include <math.h>
@@ -43,12 +43,12 @@ Radians WayHeading::calculateHeading(const WayLocation& loc, Meters delta)
 {
   Coordinate v = calculateVector(loc, delta);
 
-  return atan2(v.x, v.y);
+  return atan2(v.y, v.x);
 }
 
 Radians WayHeading::calculateHeading(const Coordinate& c1, const Coordinate& c2)
 {
-  return atan2(c2.x - c1.x, c2.y - c1.y);
+  return atan2(c2.y - c1.y, c2.x - c1.x);
 }
 
 Coordinate WayHeading::calculateVector(const WayLocation& loc, Meters delta)

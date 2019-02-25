@@ -28,7 +28,7 @@
 #define DATACONVERTER_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementCache.h>
@@ -47,29 +47,31 @@ class elementTranslatorThread : public QThread
   Q_OBJECT
   void run();
 
-  public:
-    QString _translation;
-    QQueue<ElementPtr> * _pElementQ;
-    QMutex * _pTransFeaturesQMutex;
-    QMutex * _pInitMutex;
-    QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-    bool * _pFinishedTranslating;
-    ElementCachePtr _pElementCache;
-}; // end class
+public:
+
+  QString _translation;
+  QQueue<ElementPtr> * _pElementQ;
+  QMutex * _pTransFeaturesQMutex;
+  QMutex * _pInitMutex;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
+  bool * _pFinishedTranslating;
+  ElementCachePtr _pElementCache;
+};
 
 class ogrWriterThread : public QThread
 {
   Q_OBJECT
   void run();
 
-  public:
-    QString _translation;
-    QString _output;
-    QMutex * _pTransFeaturesQMutex;
-    QMutex * _pInitMutex;
-    QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-    bool * _pFinishedTranslating;
-}; // end class
+public:
+
+  QString _translation;
+  QString _output;
+  QMutex * _pTransFeaturesQMutex;
+  QMutex * _pInitMutex;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
+  bool * _pFinishedTranslating;
+};
 
 
 /**
@@ -106,7 +108,7 @@ private:
 
   void _convertToOgr(const QString input, const QString output);
   void _convertFromOgr(const QStringList inputs, const QString output);
-  void _convert(const QString input, const QString output);
+  void _convert(const QStringList inputs, const QString output);
   void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
 
   void _fillElementCache(QString inputUrl,

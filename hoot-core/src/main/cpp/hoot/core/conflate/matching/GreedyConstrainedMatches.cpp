@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GreedyConstrainedMatches.h"
 
@@ -45,6 +45,7 @@ GreedyConstrainedMatches::GreedyConstrainedMatches(const ConstOsmMapPtr &map) :
 class MatchComparator
 {
 public:
+
   MatchComparator(const vector<const Match*>& matches) : _matches(matches) {}
 
   bool operator()(size_t i, size_t j)
@@ -53,23 +54,24 @@ public:
   }
 
 private:
+
   const vector<const Match*>& _matches;
 };
 
-vector<const Match *> GreedyConstrainedMatches::calculateSubset()
+vector<const Match*> GreedyConstrainedMatches::calculateSubset()
 {
   _score = -1;
   vector<const Match*> result;
 
   if (_matches.size() == 0)
   {
+    LOG_DEBUG("No match conflicts found.");
     return result;
   }
 
   // figure out all the pairs of matches that conflict.
-  LOG_INFO("Calculating greedy match conflicts...");
+  LOG_INFO("Calculating match conflicts using a greedy algorithm...");
   _calculateMatchConflicts();
-  LOG_DEBUG("Done calculating greedy match conflicts");
 
   // if there are no conflicts, then there is nothing to solve.
   if (_conflicts.size() == 0)
@@ -107,7 +109,8 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
     size_t mi = matchOrder[i];
 
     // see if any of our conflicting matches are already being kept
-    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi); it != cm.end() && it.key() == mi; ++it)
+    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi);
+         it != cm.end() && it.key() == mi; ++it)
     {
       if (keepers.count(it.value()))
       {
@@ -122,6 +125,10 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
       // while adding EPSILON isn't strictly necessary here it does give consistent scores when
       // comparing between optimal and greedy.
       _score += _matches[mi]->getScore() + EPSILON;
+    }
+    else
+    {
+      LOG_TRACE("Removing match: " << _matches[mi]);
     }
   }
 

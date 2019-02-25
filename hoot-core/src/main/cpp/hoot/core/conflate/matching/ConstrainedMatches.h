@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTRAINEDMATCHES_H
 #define CONSTRAINEDMATCHES_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchConflicts.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -40,7 +40,6 @@
 namespace hoot
 {
 
-class IntegerProgrammingSolver;
 class Match;
 
 /**
@@ -85,6 +84,7 @@ public:
   void setTimeLimit(double limit) { _timeLimit = limit; }
 
 protected:
+
   const ConstOsmMapPtr& _map;
   std::vector<const Match*> _matches;
 

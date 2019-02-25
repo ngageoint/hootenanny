@@ -28,7 +28,7 @@
 #define __ITERATIVE_EDGE_MATCHER_H__
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>

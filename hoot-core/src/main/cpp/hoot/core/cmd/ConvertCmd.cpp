@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,10 +50,9 @@ public:
 
   virtual QString getName() const { return "convert"; }
 
-  virtual QString getDescription() const
-  { return "Converts map data from one input format to another"; }
+  virtual QString getDescription() const { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     if (args.size() < 2)
     {

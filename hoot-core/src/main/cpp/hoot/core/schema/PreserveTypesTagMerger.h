@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {
@@ -47,13 +47,10 @@ public:
 
   PreserveTypesTagMerger();
 
-  virtual ~PreserveTypesTagMerger() {}
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
-
-  //TODO: verify this is accurate
-  virtual QString getDescription()
-  { return "Keeps tags from both reference and secondary features and preserves overlapping type tags"; }
+  virtual QString getDescription() const
+  { return "Keeps tags from both features and preserves overlapping type tags"; }
 
 private:
 

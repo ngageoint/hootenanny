@@ -22,15 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWRELATIONCRITERION_H
 #define REVIEWRELATIONCRITERION_H
 
 // Hoot
-#include "ElementCriterion.h"
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +36,7 @@ namespace hoot
 /**
  * Matches conflation review relations
  */
-class ReviewRelationCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class ReviewRelationCriterion : public ElementCriterion
 {
 public:
 
@@ -46,22 +44,13 @@ public:
 
   ReviewRelationCriterion() {}
 
-  explicit ReviewRelationCriterion(ConstOsmMapPtr& map) : _map(map) { }
-
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new ReviewRelationCriterion(_map)); }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  { return ElementCriterionPtr(new ReviewRelationCriterion()); }
 
   virtual QString getDescription() const
   { return "Identifies review relations created during conflation"; }
-
-private:
-
-  ConstOsmMapPtr _map;
-
 };
 
 }

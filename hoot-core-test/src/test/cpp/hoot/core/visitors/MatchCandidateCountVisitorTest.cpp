@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/elements/Way.h>
@@ -54,6 +54,8 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runScriptMatchCreatorTest);
   CPPUNIT_TEST(runMultipleScriptMatchCreatorTest);
   CPPUNIT_TEST(runDualPoiScriptMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredPoiMatchCreatorTest);
+  CPPUNIT_TEST(runFilteredMultipleMatchCreatorTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -143,11 +145,12 @@ public:
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
-  //Script match creators are handled a little differently during match candidate count creation than
-  //regular match creators.  This test is specifically checking that the match creators used by the
-  //visitor are the correct ones that were specified in the configuration.
   void runScriptMatchCreatorTest()
   {
+    // Script match creators are handled a little differently during match candidate count creation
+    // than regular match creators.  This test specifically checks that the match creators
+    // used by the visitor are the correct ones that were specified in the configuration.
+
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -222,9 +225,99 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       (long)21, matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"]);
   }
+
+  void runFilteredPoiMatchCreatorTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, 1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    NodePtr node2(new Node(Status::Unknown2, 2, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node1->getTags().clear();
+    node1->getTags().set("poi", "yes");
+    map->addNode(node1);
+
+    node2->getTags().clear();
+    node2->getTags().set("poi", "yes");
+    map->addNode(node2);
+
+    MapProjector::projectToPlanar(map);
+
+    QStringList matchCreators;
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+    const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter(poiTagFilter);
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
+
+    const QString restaurantTagFilter = "{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }";
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter(restaurantTagFilter);
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    node1->getTags().set("amenity", "restaurant");
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)1, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter(restaurantTagFilter);
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    node2->getTags().set("amenity", "restaurant");
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)2, (int)uut->getStat());
+  }
+
+  void runFilteredMultipleMatchCreatorTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    QStringList matchCreators;
+    matchCreators.append("hoot::BuildingMatchCreator");
+    matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
+    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)39, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"building=yes\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)17, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"poi=yes\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut->getStat());
+
+    MatchFactory::getInstance().reset();
+    MatchFactory::_setTagFilter("{ \"must\": [ { \"tag\": \"name=Starbucks\" } ] }");
+    MatchFactory::_setMatchCreators(matchCreators);
+    uut.reset(new MatchCandidateCountVisitor(MatchFactory::getInstance().getCreators()));
+    map->visitRo(*uut);
+    CPPUNIT_ASSERT_EQUAL((int)12, (int)uut->getStat());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchCandidateCountVisitorTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MatchCandidateCountVisitorTest, "current");
 
 }

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IOUTILS_H
 #define IOUTILS_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
@@ -62,13 +62,6 @@ public:
    */
   static bool isSupportedOgrFormat(const QString input, const bool allowDir = false);
 
-  /**
-   *
-   *
-   * @param inputs
-   * @param allowDir
-   * @return
-   */
   static bool areSupportedOgrFormats(const QStringList inputs, const bool allowDir = false);
 
   /**
@@ -79,8 +72,6 @@ public:
     @param useFileId if true, uses the element ID's in the map file; otherwise, generates new
     element ID's
     @param defaultStatus the hoot status to assign to all elements
-    @todo This was copied from BaseCommand.  Point all references to BaseCommand::loadMap to this
-    instead.
     */
   static void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
                       Status defaultStatus = Status::Invalid);
@@ -90,8 +81,6 @@ public:
 
     @param map the map object to save
     @param path the file path to save the map to
-    @todo This was copied from BaseCommand.  Point all references to BaseCommand::saveMap to this
-    instead.
     */
   static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
 };

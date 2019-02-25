@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_H
 #define HOOT_H
@@ -42,7 +42,7 @@ namespace hoot
 {
 
 /**
- * A singleton to initialize hootenanny. You should call getInstance() on this before any other
+ * A Singleton to initialize hootenanny. You should call getInstance() on this before any other
  * use of hoot. You can call getInstance multiple times without any ill effects.
  */
 class Hoot
@@ -59,7 +59,7 @@ public:
   /**
    * Load the specified library if it exists using QLibrary.
    */
-  void loadLibrary(QString name);
+  void loadLibrary(const QString& name);
 
   /**
    * Reinitialize hootenanny based on configuration changes.
@@ -67,6 +67,7 @@ public:
   void reinit();
 
 private:
+
   static boost::shared_ptr<Hoot> _theInstance;
 
   Hoot();

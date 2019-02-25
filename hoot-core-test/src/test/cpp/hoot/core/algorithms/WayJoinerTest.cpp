@@ -22,15 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/algorithms/WayJoiner1.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/conflate/splitter/CornerSplitter.h>
-#include <hoot/core/conflate/splitter/IntersectionSplitter.h>
+#include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -65,7 +65,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -84,7 +84,7 @@ public:
 
     CornerSplitter::splitCorners(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -103,7 +103,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner::join(map);
+    WayJoiner1::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);

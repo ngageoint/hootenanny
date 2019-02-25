@@ -81,7 +81,7 @@ public class JoshuaServicesInitializer
 
   public void init() throws Exception
   {
-    logger.debug("Initializing Joshua services...");
+    logger.info("Initializing Joshua services...");
 
     //read the services configuration file
     services = readServicesConfig();
@@ -93,7 +93,7 @@ public class JoshuaServicesInitializer
     {
       JoshuaServiceInfo serviceInfo = serverEntry.getValue();
       ctr++;
-      logger.debug(
+      logger.info(
         "Launching language translation service " + ctr + " / " + services.size() + " for lang code: " + 
         serviceInfo.getLanguageCode() + " from path: " + serviceInfo.getLanguagePackPath() + 
         " to port: " + serviceInfo.getPort() + "...");
@@ -101,7 +101,7 @@ public class JoshuaServicesInitializer
       convertConfigFileModelPathsToAbsolute(configPath, serviceInfo.getLanguagePackPath());
       launchService(serviceInfo, configPath);
     }
-    logger.debug(
+    logger.info(
       "Finished launching Joshua translation services for " + ctr + " language packs.  The services " + 
       "may take up to several minutes to finish initializing.");
   }

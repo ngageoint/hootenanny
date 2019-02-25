@@ -22,22 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/algorithms/string/MostEnglishName.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-
-#include "PoiPolygonNameScoreExtractor.h"
-#include "PoiPolygonAddressScoreExtractor.h"
-#include "../PoiPolygonDistanceTruthRecorder.h"
-
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 // Qt
 #include <QSet>
 
@@ -62,9 +60,11 @@ _translateTagValuesToEnglish(false)
 void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
   setPrintMatchDistanceTruth(config.getPoiPolygonPrintMatchDistanceTruth());
-  _translateTagValuesToEnglish = config.getPoiPolygonTranslateTypesToEnglish();
+
+  _translateTagValuesToEnglish = config.getPoiPolygonTypeTranslateToEnglish();
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
@@ -183,7 +183,7 @@ void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QStr
   }
 
   //If the tag key is already OSM, then no need to translate it.
-  //TODO: Should this also have use and/or building categories be added here?
+  // TODO: Should this also have use and/or building categories be added here?
   if (_getTagValueTokens("poi").contains(tagValue))
   {
     LOG_TRACE("Input tag value to translate: " << tagValue << " is already a poi tag value.");
@@ -221,6 +221,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
   if (poiTagList.size() == 0 || polyTagList.size() == 0)
   {
     _noTypeFound = true;
+    LOG_TRACE("No valid type found when comparing: " << poi << " to: " << poly);
     return 0.0;
   }
 
@@ -388,8 +389,7 @@ bool PoiPolygonTypeScoreExtractor::isSpecificSchool(ConstElementPtr element)
   {
     return false;
   }
-  return
-    _typeHasName("amenity=school", PoiPolygonNameScoreExtractor::getElementName(element).toLower());
+  return _typeHasName("amenity=school", element->getTags().getName().toLower());
 }
 
 bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
@@ -397,8 +397,8 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
   {
-    const QString name1 = PoiPolygonNameScoreExtractor::getElementName(element1).toLower();
-    const QString name2 = PoiPolygonNameScoreExtractor::getElementName(element2).toLower();
+    const QString name1 = element1->getTags().getName().toLower();
+    const QString name2 = element2->getTags().getName().toLower();
     if (_haveMatchingTypeNames("amenity=school", name1, name2))
     {
       return true;
@@ -409,13 +409,13 @@ bool PoiPolygonTypeScoreExtractor::specificSchoolMatch(ConstElementPtr element1,
 
 bool PoiPolygonTypeScoreExtractor::isPark(ConstElementPtr element)
 {
-  return !OsmSchema::getInstance().isBuilding(element) &&
+  return !BuildingCriterion().isSatisfied(element) &&
          (element->getTags().get("leisure") == "park");
 }
 
 bool PoiPolygonTypeScoreExtractor::isParkish(ConstElementPtr element)
 {
-  if (OsmSchema::getInstance().isBuilding(element))
+  if (BuildingCriterion().isSatisfied(element))
   {
     return false;
   }
@@ -462,7 +462,7 @@ bool PoiPolygonTypeScoreExtractor::isReligion(const Tags& tags)
   return tags.get("amenity").toLower() == "place_of_worship" ||
          tags.get("building").toLower() == "church" ||
          tags.get("building").toLower() == "mosque" ||
-         //TODO: this one is an alias of building=mosque, so we should be getting it from there
+         // TODO: this one is an alias of building=mosque, so we should be getting it from there
          //instead
          tags.get("amenity").toLower() == "mosque" ||
          tags.get("building").toLower() == "synagogue";
@@ -535,6 +535,11 @@ bool PoiPolygonTypeScoreExtractor::isRestaurant(ConstElementPtr element)
 bool PoiPolygonTypeScoreExtractor::isRestaurant(const Tags& tags)
 {
   return tags.get("amenity") == "restaurant" || tags.get("amenity") == "fast_food";
+}
+
+bool PoiPolygonTypeScoreExtractor::isNatural(ConstElementPtr element)
+{
+  return element->getTags().contains("natural");
 }
 
 bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString tagKey, const Tags& t1,

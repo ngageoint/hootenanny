@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MemChangesetProvider.h"
 
@@ -34,12 +34,10 @@ namespace hoot
 MemChangesetProvider::MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection):
   _projection(pProjection)
 {
-  // empty
 }
 
 MemChangesetProvider::~MemChangesetProvider()
 {
-  // empty
 }
 
 void MemChangesetProvider::close()
@@ -76,7 +74,6 @@ size_t MemChangesetProvider::getNumChanges()
 
 // "premature optimization is the root of all evil" - Donald Knuth
 // Possibly use a hash or something here, if this is taking too much time
-// TODO: make this faster if needed
 bool MemChangesetProvider::containsChange(ElementId eID)
 {
   for (std::list<Change>::iterator it = _changes.begin(); it != _changes.end(); ++it)
@@ -91,4 +88,4 @@ bool MemChangesetProvider::containsChange(ElementId eID)
   return false;
 }
 
-} // namespace hoot
+}

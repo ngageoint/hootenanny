@@ -28,13 +28,13 @@
 #include "RemoveMissingElementsVisitor.h"
 
 //hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveMissingElementsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
 
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 {
@@ -44,6 +44,7 @@ RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)
 {
   _v->visit(e);
+  _numAffected = _v->getMissingCount();
 }
 
 }

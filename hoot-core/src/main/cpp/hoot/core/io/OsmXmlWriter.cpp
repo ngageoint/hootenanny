@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlWriter.h"
 
@@ -30,7 +30,7 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
@@ -39,8 +39,8 @@ using namespace boost;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -197,7 +197,7 @@ void OsmXmlWriter::_initWriter()
 
   _writer->writeStartElement("osm");
   _writer->writeAttribute("version", "0.6");
-  _writer->writeAttribute("generator", "hootenanny");
+  _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
 void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
@@ -220,8 +220,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _initWriter();
   }
 
-  //TODO: The coord sys and schema entries don't get written to streamed output b/c we don't have
-  //the map object to read the coord sys from.
+  // The coord sys and schema entries don't get written to streamed output b/c we don't have
+  // the map object to read the coord sys from.
 
   int epsg = map->getProjection()->GetEPSGGeogCS();
   if (epsg > -1)

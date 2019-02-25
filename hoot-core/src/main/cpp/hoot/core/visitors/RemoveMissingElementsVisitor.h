@@ -22,28 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
 
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include "ReportMissingElementsVisitor.h"
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class ReportMissingElementsVisitor;
-
-class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+/**
+ * Removes non-existent element references from relations or ways with negative IDs.
+ */
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
+  public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
-
-  virtual ~RemoveMissingElementsVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 
@@ -52,8 +53,14 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  virtual QString getInitStatusMessage() const
+  { return "Removing references to elements that do not exist..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " missing elements"; }
+
   virtual QString getDescription() const
-  { return "Removes references to any elements that do not exist in a map"; }
+  { return "Removes references to any elements that do not exist"; }
 
 private:
 

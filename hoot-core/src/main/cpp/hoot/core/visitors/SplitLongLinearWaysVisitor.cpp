@@ -39,18 +39,18 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
 
 unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
-  _maxNodesPerWay(0)
+_maxNodesPerWay(0)
 {
   _map = NULL;
 
@@ -58,7 +58,7 @@ SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
   ConfigOptions configOptions;
   _maxNodesPerWay = configOptions.getWayMaxNodesPerWay();
 
-  if ( _maxNodesPerWay < 2 )
+  if (_maxNodesPerWay < 2)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -79,7 +79,7 @@ SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element)
 {
   // If not a way, ignore
-  if ( element->getElementType() != ElementType::Way)
+  if (element->getElementType() != ElementType::Way)
   {
     return;
   }
@@ -88,14 +88,14 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   WayPtr way = boost::dynamic_pointer_cast<Way>(element);
   WayPtr emptyWay;
 
-  if ( way == emptyWay )
+  if (way == emptyWay)
   {
     LOG_TRACE("SplitLongLinearWaysVisitor::visit: element is not a way, ignoring");
     return;
   }
 
   bool printInfo = false;
-  if ( way->getNodeCount() > getMaxNumberOfNodes() )
+  if (way->getNodeCount() > getMaxNumberOfNodes())
   {
     LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
     printInfo = true;
@@ -104,15 +104,15 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   // Make sure we've got highway tag
   Tags myTags = way->getTags();
 
-  if ( myTags.contains("road") )
+  if (myTags.contains("road"))
   {
-    LOG_TRACE("Way has road tag with value " << myTags.get("road")  );
+    LOG_TRACE("Way has road tag with value " << myTags.get("road"));
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
-  if ( OsmSchema::getInstance().isLinear(*way) == false )
+  if (LinearCriterion().isSatisfied(way) == false)
   {
-    if ( printInfo == true )
+    if (printInfo == true)
     {
       LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
         " is not linear, ignoring");
@@ -121,7 +121,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Does way exceed max number of nodes?
-  if ( way->getNodeCount() <= getMaxNumberOfNodes() )
+  if (way->getNodeCount() <= getMaxNumberOfNodes())
   {
     LOG_TRACE("SplitLongLinearWaysVisitor::visit: way " << way->getId() <<
       " has " << way->getNodeCount() << " nodes which is <= than"
@@ -136,14 +136,15 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   unsigned int nodesRemaining = way->getNodeCount();
 
   unsigned int masterNodeIndex = 0;
-  while ( nodesRemaining > 0 )
+  while (nodesRemaining > 0)
   {
     unsigned int nodesThisTime = std::min(nodesRemaining, getMaxNumberOfNodes());
 
     // If there's only one node, this is a no-op as it's last node in previous way, don't add
-    if ( nodesThisTime == 1 )
+    if (nodesThisTime == 1)
     {
-      LOG_TRACE("No need to add new way, there's only one node left over and it's stored in previous way");
+      LOG_TRACE(
+        "No need to add new way, there's only one node left over and it's stored in previous way");
       break;
     }
 
@@ -151,18 +152,24 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     long way_id = way->getId();
     if (masterNodeIndex > 0)
       way_id = _map->createNextWayId();
-    WayPtr newWay( new Way(Status::Unknown1, way_id, way->getRawCircularError() ) );
+    WayPtr newWay(new Way(Status::Unknown1, way_id, way->getRawCircularError()));
     newWay->setPid(way->getPid());
-    LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
-    for ( unsigned int i = 0; i < nodesThisTime; ++i )
+    LOG_TRACE(
+      "Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime <<
+      " nodes");
+    for (unsigned int i = 0; i < nodesThisTime; ++i)
     {
-      if ( i == 0 )
+      if (i == 0)
       {
-        LOG_TRACE("Adding first node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
+        LOG_TRACE(
+          "Adding first node to way " << newWay->getId() << " with master index " <<
+          (masterNodeIndex + i));
       }
-      else if ( i == nodesThisTime - 1)
+      else if (i == nodesThisTime - 1)
       {
-        LOG_TRACE("Adding last node to way " << newWay->getId() << " with master index " << (masterNodeIndex + i));
+        LOG_TRACE(
+          "Adding last node to way " << newWay->getId() << " with master index " <<
+          (masterNodeIndex + i));
       }
 
       newWay->addNode(way->getNodeId(masterNodeIndex + i));
@@ -172,7 +179,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     _map->addWay(newWay);
 
     // If we copied less than max nodes, that means we're done
-    if ( nodesThisTime < getMaxNumberOfNodes() )
+    if (nodesThisTime < getMaxNumberOfNodes())
     {
       break;
     }
@@ -185,12 +192,5 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     }
   }
 }
-
-
-void SplitLongLinearWaysVisitor::setConfiguration(const Settings& )
-{
-  ;
-}
-
 
 }

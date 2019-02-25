@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayAverager.h"
@@ -36,14 +36,14 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -77,7 +77,7 @@ WayPtr WayAverager::average()
 
   if (DirectionFinder::isSimilarDirection(_map.shared_from_this(), _w1, _w2) == false)
   {
-    if (OsmSchema::getInstance().isOneWay(*_w1) == true)
+    if (OneWayCriterion().isSatisfied(_w1) == true)
     {
       _w2->reverseOrder();
     }

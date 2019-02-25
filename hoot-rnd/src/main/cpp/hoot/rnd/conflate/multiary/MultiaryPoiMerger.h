@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MULTIARY_POI_MERGER_H__
 #define __MULTIARY_POI_MERGER_H__
@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/merging/MergerBase.h>
-
-#include "MultiaryClusterAlgorithm.h"
+#include <hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.h>
 
 namespace hoot
 {
@@ -61,15 +60,15 @@ public:
 
 protected:
 
-  virtual PairsSet& getPairs() { return _pairs; }
-  virtual const PairsSet& getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() { return _pairs; }
+  virtual const PairsSet& _getPairs() const { return _pairs; }
 
 private:
 
   boost::shared_ptr<MatchCreator> _matchCreator;
   boost::shared_ptr<MergerCreator> _mergerCreator;
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   /**
    * @brief _createReviews Create review entries for each cluster review in the review list.

@@ -33,7 +33,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/conflate/AlphaShapeGenerator.h>
+#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 
@@ -52,7 +52,9 @@ public:
   virtual QString getName() const { return "generate-alpha-shape"; }
 
   virtual QString getDescription() const
-  { return "Generates a concave hull for a set of points"; }
+  { return "Generates a concave hull for a set of points; useful in cookie cutting"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   int runSimple(QStringList args)
   {

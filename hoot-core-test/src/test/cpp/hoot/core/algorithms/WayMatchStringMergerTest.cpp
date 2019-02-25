@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -91,7 +91,7 @@ public:
   OsmMapPtr createTestMap(QString path = "test-files/algorithms/WayMatchStringMergerTest.osm")
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::getInstance().read(map, path);
+    OsmMapReaderFactory::read(map, path);
 
     MapProjector::projectToPlanar(map);
 
@@ -189,7 +189,7 @@ public:
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::getInstance().write(map,
+    OsmMapWriterFactory::write(map,
       "test-output/algorithms/WayMatchStringMergerTestSplit.osm");
 
     HOOT_FILE_EQUALS("test-files/algorithms/WayMatchStringMergerTestSplitExpected.osm",

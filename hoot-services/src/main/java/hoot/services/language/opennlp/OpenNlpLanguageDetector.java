@@ -45,6 +45,7 @@ import hoot.services.language.SupportedLanguageConsumer;
 import hoot.services.language.LanguageAppInfo;
 import hoot.services.language.SupportedLanguagesConfigReader;
 import hoot.services.language.SupportedLanguage;
+import hoot.services.language.LanguageUtils;
 
 /**
  * Detects languages using OpenNLP
@@ -146,7 +147,6 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
    */
   public SupportedLanguage[] getSupportedLanguages() throws CloneNotSupportedException
   {
-    //return langsConfigReader.getSupportedLanguages().clone();
     return SupportedLanguage.cloneArray(langsConfigReader.getSupportedLanguages());
   }
 
@@ -178,6 +178,12 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   }
 
   /**
+   * @see LanguageDetector
+   */
+  public LanguageUtils.DetectionConfidence getConfidence() 
+  { return LanguageUtils.DetectionConfidence.NONE_AVAILABLE; }
+
+  /**
    * Detects the language of the provided text
    *
    * @param text text for which to detect a language
@@ -186,12 +192,16 @@ public final class OpenNlpLanguageDetector implements LanguageDetector, Supporte
   {
     long startTime = System.currentTimeMillis();
 
-    logger.debug("Detecting language with " + getClass().getName() + "; " + text + "...");
+    logger.trace("Detecting language with " + getClass().getName() + "; " + text + "...");
     String detectedLang = detector.predictLanguage(text).getLang();
     if (!detectedLang.isEmpty())
     {
-      logger.debug(
+      logger.trace(
         getClass().getName() + " detected language: " + detectedLang + " for text: " + text);
+    }
+    else
+    {
+      logger.trace("No language detection found for: " + text + " with TikaLanguageDetector.");
     }
 
     logger.trace("Detection took {} seconds", (System.currentTimeMillis() - startTime) / 1000); 

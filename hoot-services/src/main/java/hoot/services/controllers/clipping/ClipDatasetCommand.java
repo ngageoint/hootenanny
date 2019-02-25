@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -33,21 +33,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hoot.services.command.ExternalCommand;
+import hoot.services.models.db.Users;
 
 
 class ClipDatasetCommand extends ExternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetCommand.class);
-
-    ClipDatasetCommand(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller) {
+    ClipDatasetCommand(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId);
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("api.db.email=test@test.com");
+        options.add("hootapi.db.writer.job.id=" + jobId);
+        if(user == null) {
+            options.add("api.db.email=test@test.com");
+        } else {
+            options.add("api.db.email=" + user.getEmail());
+        }
 
         List<String> hootOptions = toHootOptions(options);
 

@@ -22,34 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyMatchScorer.h"
 
 // hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/RubberSheet.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/TagCountVisitor.h>
 #include <hoot/core/visitors/TagRenameKeyVisitor.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/rnd/perty/PertyOp.h>
+#include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 
 // Qt
 #include <QFileInfo>
 #include <QDir>
-
-#include "PertyOp.h"
 
 namespace hoot
 {
@@ -59,8 +57,7 @@ _settings(conf())
 {
   ConfigOptions configOptions;
   setSearchDistance(configOptions.getPertySearchDistance());
-  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet") ||
-      ConfigOptions().getUnifyPreOps().contains("hoot::RubberSheet"))
+  if (ConfigOptions().getConflatePreOps().contains("hoot::RubberSheet"))
   {
     setApplyRubberSheet(false);
   }
@@ -180,7 +177,6 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
 
   PertyOp pertyOp;
   pertyOp.setConfiguration(_settings);
-  LOG_DEBUG("Details: " << pertyOp.toString());
   pertyOp.apply(perturbedMap);
   LOG_VARD(perturbedMap->getNodes().size());
   LOG_VARD(perturbedMap->getWays().size());
@@ -279,16 +275,6 @@ boost::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   boost::shared_ptr<MatchComparator> comparator(new MatchComparator());
   //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
-
-  ConfigOptions configOptions(_settings);
-  if (configOptions.getConflateEnableOldRoads())
-  {
-    // call the old road conflation routine
-    Conflator conflator;
-    conflator.loadSource(conflationCopy);
-    conflator.conflate();
-    conflationCopy.reset(new OsmMap(conflator.getBestMap()));
-  }
 
   UnifyingConflator conflator/*(matchThreshold)*/;
   conflator.setConfiguration(_settings);

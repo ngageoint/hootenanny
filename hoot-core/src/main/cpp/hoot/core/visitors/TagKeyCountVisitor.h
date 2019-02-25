@@ -30,8 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-
-#include "SingleStatistic.h"
+#include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
@@ -49,14 +48,12 @@ public:
   TagKeyCountVisitor(const QString key);
   explicit TagKeyCountVisitor(const QStringList keys);
 
-  virtual ~TagKeyCountVisitor() {}
-
   virtual void visit(const ConstElementPtr& e);
 
   virtual double getStat() const { return _keyCount; }
 
   virtual QString getDescription() const
-  { return "Counts the number of tags in all elements with the given keys"; }
+  { return "Counts the number of tags with the given keys"; }
 
   virtual void setConfiguration(const Settings& conf);
 

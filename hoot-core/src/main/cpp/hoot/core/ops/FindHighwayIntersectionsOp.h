@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDHIGHWAYINTERSECTIONSOP_H
 #define FINDHIGHWAYINTERSECTIONSOP_H
@@ -50,11 +50,9 @@ public:
 
   FindHighwayIntersectionsOp();
 
-  virtual ~FindHighwayIntersectionsOp() {}
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
-
-  virtual QString getDescription() const { return "Identifies road intersections"; }
+  virtual QString getDescription() const override { return "Identifies road intersections"; }
 };
 
 }

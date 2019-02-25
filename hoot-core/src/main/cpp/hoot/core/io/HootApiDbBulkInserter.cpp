@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootApiDbBulkInserter.h"
@@ -59,7 +59,7 @@ HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
   setConfiguration(conf());
 
   _changesetTags["bot"] = "yes";
-  _changesetTags["created_by"] = "hootenanny";
+  _changesetTags["created_by"] = HOOT_PACKAGE_NAME;
 }
 
 HootApiDbBulkInserter::~HootApiDbBulkInserter()
@@ -106,6 +106,9 @@ void HootApiDbBulkInserter::open(QString url)
 
 void HootApiDbBulkInserter::_getOrCreateMap()
 {
+  // There's a lot of overlap between this and similar code in HootApiDbWriter that needs
+  // merging.
+
   if (_userEmail.isEmpty())
   {
     throw HootException("Please set the user's email address via the '" +
@@ -123,38 +126,41 @@ void HootApiDbBulkInserter::_getOrCreateMap()
   }
   _changesetData.changesetUserId = _database.getUserId(_userEmail, true);
 
-  QStringList pList = QUrl(_outputUrl).path().split("/");
-  QString mapName = pList[2];
-  std::set<long> mapIds = _database.selectMapIds(mapName);
-  if (mapIds.size() > 0)
+  // URL must have name in it
+  const QStringList pList = QUrl(_outputUrl).path().split("/");
+  const QString mapName = pList[2];
+  LOG_VARD(mapName);
+
+//  LOG_VARD(_overwriteMap);
+//  if (!_overwriteMap && _database.currentUserHasMapWithName(mapName))
+//  {
+//    throw HootException(
+//      "User with ID: " + QString::number(_database.getCurrentUserId()) +
+//      " already has map with name: " + mapName);
+//  }
+
+  const long mapId = _database.getMapIdByNameForCurrentUser(mapName);
+  LOG_VART(mapId);
+
+  if (mapId != -1)
   {
     if (_overwriteMap) // delete map and overwrite it
     {
-      for (std::set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
-      {
-        LOG_DEBUG("Removing map with ID: " << *it << "...");
-        _database.deleteMap(*it);
-        LOG_DEBUG("Finished removing map with ID: " << *it);
-      }
-
-      _database.setMapId(_database.insertMap(mapName, true));
-    }
-    else if (mapIds.size() > 1)
-    {
-      LOG_ERROR("There are multiple maps with this name. Consider using "
-                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+      _database.verifyCurrentUserMapUse(mapId, true);
+      _database.deleteMap(mapId);
+      _database.setMapId(_database.insertMap(mapName));
     }
     else
     {
-      std::set<long>::const_iterator idItr = mapIds.begin();
-      _database.setMapId(*idItr);
+      _database.verifyCurrentUserMapUse(mapId, true);
+      _database.setMapId(mapId);
       LOG_DEBUG("Updating map with ID: " << _database.getMapId() << "...");
     }
   }
-  else if (mapIds.size() == 0)
+  else// if (mapIds.size() == 0)
   {
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
-    _database.setMapId(_database.insertMap(mapName, true));
+    _database.setMapId(_database.insertMap(mapName));
   }
 }
 
@@ -239,8 +245,7 @@ void HootApiDbBulkInserter::_writeDataToDb()
 
   //hoot api db starts with no indexes at all, since a brand new databas is created for each layer,
   //so let's create it now
-  //TODO: This causes SQL exceptions with certain datasets, so disabling index creation for now. -
-  //#2216
+  // This causes SQL exceptions with certain datasets, so disabling index creation for now. - #2216
   //_database.createPendingMapIndexes();
 }
 
@@ -389,7 +394,7 @@ void HootApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   LOG_VART(node);
 
-  //TODO: See #1451.  This changeset bounds calculation actually won't work when ways or relations
+  //See #1451.  This changeset bounds calculation actually won't work when ways or relations
   //are written in separate changesets than the nodes they reference.  Since we're streaming the
   //elements, there's no way to get back to the bounds information.  This bug has always been here,
   //but just recently noticed.
@@ -645,7 +650,7 @@ void HootApiDbBulkInserter::_incrementChangesInChangeset()
   //To stay in sync with how HootApiDb assigns changeset ID's, we'll get the initial changeset ID
   //if this is the first record being writen.  Changeset ID's will then be retrieved with each call
   //to _writeChangeset.
-  //TODO: This seems to be writing double the amount of changesets needed with every other changeset
+  //This seems to be writing double the amount of changesets needed with every other changeset
   //being empty. - #2217
   if (_changesetData.changesInChangeset ==/*>*/ 0)
   {

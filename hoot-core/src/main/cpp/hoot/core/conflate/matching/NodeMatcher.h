@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEMATCHER_H
@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -37,6 +38,9 @@
 // Std
 #include <vector>
 #include <set>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
@@ -82,16 +86,25 @@ public:
   static std::vector<Radians> calculateAngles(const OsmMap* map, long nid,
                                               const std::set<long>& wids, Meters delta = 0.001);
 
+  /**
+   * Identifies network feature types (linear feature types that can have certain operations
+   * performed on them)
+   *
+   * @param element the element to examine
+   * @return true if the element is a network type; false otherwise
+   */
+  static bool isNetworkFeatureType(ConstElementPtr element);
+
 private:
 
   boost::shared_ptr<const OsmMap> _map;
-
   double _strictness;
-
   double _delta;
+  static QList<boost::shared_ptr<ElementCriterion>> _networkFeatureTypeCriterion;
 
-  double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
-    std::vector<bool>& exclude, size_t depth, bool debug = false);
+  double _calculateAngleScore(const std::vector<Radians>& theta1,
+                              const std::vector<Radians>& theta2, std::vector<bool>& exclude,
+                              size_t depth, bool debug = false);
 };
 
 typedef boost::shared_ptr<NodeMatcher> NodeMatcherPtr;

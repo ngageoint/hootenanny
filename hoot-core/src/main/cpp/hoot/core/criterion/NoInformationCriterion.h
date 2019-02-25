@@ -22,19 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOINFORMATIONCRITERION_H
 #define NOINFORMATIONCRITERION_H
 
 // hoot
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/elements/Element.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/MetadataTags.h>
-
-#include "ElementCriterion.h"
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -52,7 +49,7 @@ public:
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
     _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MINSUMWORDSETDISTANCE_H
 #define MINSUMWORDSETDISTANCE_H
 
 // Hoot
-#include <hoot/core/algorithms/StringDistanceConsumer.h>
+#include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
 // Tgs
@@ -44,6 +44,7 @@ class MinSumWordSetDistance : public StringDistance, public StringDistanceConsum
   public Configurable
 {
 public:
+
   /**
    * @param d Takes ownership of d.
    */
@@ -53,15 +54,20 @@ public:
 
   static std::string className() { return "hoot::MinSumWordSetDistance"; }
 
-  virtual double compare(const QString& s1, const QString& s2) const;
+  virtual double compare(const QString& s1, const QString& s2) const override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
 
-  virtual QString toString() const { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
+  virtual QString toString() const override
+  { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
+
+  virtual QString getDescription() const override
+  { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 
 private:
+
   StringDistancePtr _d;
   StringTokenizer _tokenizer;
   double _p;

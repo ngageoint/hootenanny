@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVERELATIONOP_H
 #define REMOVERELATIONOP_H
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -78,7 +78,7 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
-  virtual QString getDescription() const { return "Removes relations from a map"; }
+  virtual QString getDescription() const { return "Removes a single relation by ID"; }
 
 private:
 

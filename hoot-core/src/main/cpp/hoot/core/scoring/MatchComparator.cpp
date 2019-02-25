@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchComparator.h"
 
 // hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -36,7 +35,7 @@
 #include <hoot/core/criterion/TagContainsCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetTagValuesVisitor.h>
@@ -57,7 +56,7 @@ unsigned int MatchComparator::logWarnCount = 0;
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
  */
-class GetRefUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -68,8 +67,6 @@ public:
   virtual ~GetRefUuidVisitor() {}
 
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual QString getDescription() const { return ""; }
 
@@ -108,7 +105,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   RefToUuid _ref2Uuid;
 };
@@ -116,7 +112,7 @@ private:
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class UuidToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class UuidToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -125,8 +121,6 @@ public:
   virtual ~UuidToEidVisitor() {}
 
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual QString getDescription() const { return ""; }
 
@@ -155,7 +149,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   MatchComparator::UuidToEid _uuidToEid;
 };
@@ -242,8 +235,8 @@ bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapP
     LOG_INFO("Miss:");
     for (set<ElementId>::const_iterator it = s.begin(); it != s.end(); ++it)
     {
-      cout << "#############" << endl;
-      cout << in->getElement(*it)->getTags().toString() << endl;
+      LOG_INFO("#############");
+      LOG_INFO(in->getElement(*it)->getTags().toString());
     }
   }
 
@@ -379,7 +372,6 @@ double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPt
       //in the same conflation job (e.g. poi to poi AND poi to poly), due to the fact that in
       //those cases multiple actual/expected states can exist and this logic only records one
       //of them.
-      //@todo The expected miss/actual review tags are sometimes inaccurate.
       const MatchType expectedMatchType(expectedIndex);
       const MatchType actualMatchType(actualIndex);
       _tagTestOutcome(
@@ -723,8 +715,6 @@ void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
 QString MatchComparator::toString() const
 {
   QString result;
-  int total = 0;
-  int correct = 0;
 
   QString left[3];
   // weird markup makes a pretty table in redmine.
@@ -745,11 +735,6 @@ QString MatchComparator::toString() const
       else
       {
         result += QString(" |%1").arg(_confusion[i][j], 6, 10);
-      }
-      total += _confusion[i][j];
-      if (i == j)
-      {
-        correct += _confusion[i][j];
       }
     }
     result += "  |\n";

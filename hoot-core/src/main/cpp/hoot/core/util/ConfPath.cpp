@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConfPath.h"
 
 // hoot
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 
 // Qt
@@ -38,10 +40,6 @@
 
 // Standard
 #include <stdlib.h>
-
-#include "HootException.h"
-
-#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -84,7 +82,6 @@ QStringList ConfPath::_find(QStringList filters, QString path)
 
 QString ConfPath::getHootHome()
 {
-  /// @todo Future us can figure this out. There is a circular reference here.
   QString hootHome;
   if (conf().hasKey("HOOT_HOME"))
   {

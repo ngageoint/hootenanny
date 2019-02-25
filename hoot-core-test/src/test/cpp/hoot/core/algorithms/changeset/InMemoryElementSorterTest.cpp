@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

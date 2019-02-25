@@ -1,0 +1,828 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+#include "OsmMap.h"
+
+// Boost
+using namespace boost;
+
+// GEOS
+#include <geos/geom/LineString.h>
+
+// Hoot
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/OsmMapListener.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/SignalCatcher.h>
+#include <hoot/core/util/Validate.h>
+#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/ElementId.h>
+using namespace hoot::elements;
+
+// Qt
+#include <QDebug>
+
+using namespace std;
+
+namespace hoot
+{
+
+boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
+
+OsmMap::OsmMap()
+{
+  if (!_wgs84)
+  {
+    _wgs84 = MapProjector::createWgs84Projection();
+  }
+
+  setIdGenerator(IdGenerator::getInstance());
+  _index.reset(new OsmMapIndex(*this));
+  _srs = _wgs84;
+}
+
+OsmMap::OsmMap(ConstOsmMapPtr map)
+{
+  _copy(map);
+}
+
+OsmMap::OsmMap(OsmMapPtr map)
+{
+  _copy(map);
+}
+
+OsmMap::OsmMap(boost::shared_ptr<OGRSpatialReference> srs)
+{
+  setIdGenerator(IdGenerator::getInstance());
+  _index.reset(new OsmMapIndex(*this));
+  _srs = srs;
+}
+
+OsmMap::OsmMap(ConstOsmMapPtr map, boost::shared_ptr<OGRSpatialReference> srs)
+{
+  _copy(map);
+  _srs = srs;
+}
+
+OsmMap::~OsmMap()
+{
+}
+
+void OsmMap::append(ConstOsmMapPtr appendFromMap)
+{
+  if (this == appendFromMap.get())
+  {
+    throw HootException("Can't append to the same map.");
+  }
+  if (!getProjection()->IsSame(appendFromMap->getProjection().get()))
+  {
+    char* wkt1 = 0;
+    getProjection()->exportToPrettyWkt(&wkt1);
+    QString proj1 = QString::fromAscii(wkt1);
+    char* wkt2 = 0;
+    appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
+    QString proj2 = QString::fromAscii(wkt2);
+    throw HootException(
+      "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
+      "\nMap being appended from has projection:\n" + proj2);
+  }
+  _srs = appendFromMap->getProjection();
+
+  const RelationMap& allRelations = appendFromMap->getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    RelationPtr relation = it->second;
+    if (containsElement(ElementId(relation->getElementId())))
+    {
+      throw HootException("Map already contains this relation: " + relation->toString());
+    }
+    RelationPtr r = RelationPtr(new Relation(*relation));
+    addRelation(r);
+  }
+
+  WayMap::const_iterator it = appendFromMap->_ways.begin();
+  while (it != appendFromMap->_ways.end())
+  {
+    WayPtr way = it->second;
+    if (containsElement(ElementId(way->getElementId())))
+    {
+      throw HootException("Map already contains this way: " + way->toString());
+    }
+    WayPtr w = WayPtr(new Way(*way));
+    addWay(w);
+    ++it;
+  }
+
+  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
+  while (itn != appendFromMap->_nodes.end())
+  {
+    NodePtr node = itn->second;
+    if (containsElement(ElementId(node->getElementId())))
+    {
+      throw HootException("Map already contains this node: " + node->toString());
+    }
+    NodePtr n = NodePtr(new Node(*node));
+    addNode(n);
+    ++itn;
+  }
+
+  for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
+  {
+    boost::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
+    _listeners.push_back(l->clone());
+  }
+}
+
+void OsmMap::addElement(const boost::shared_ptr<Element>& e)
+{
+  switch(e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    addNode(boost::dynamic_pointer_cast<Node>(e));
+    break;
+  case ElementType::Way:
+    addWay(boost::dynamic_pointer_cast<Way>(e));
+    break;
+  case ElementType::Relation:
+    addRelation(boost::dynamic_pointer_cast<Relation>(e));
+    break;
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
+  }
+}
+
+void OsmMap::addNode(const NodePtr& n)
+{
+  _idGen->ensureNodeBounds(n->getId());
+  _nodes[n->getId()] = n;
+  n->registerListener(_index.get());
+  _index->addNode(n);
+}
+
+void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
+{
+  if (nodes.size() > 0)
+  {
+    long minId = nodes[0]->getId();
+    long maxId = minId;
+
+    // this seemed like a clever optimization. However, this impacts the BigPertyCmd.sh test b/c
+    // it modifies the order in which the elements are written to the output. Which presumably (?)
+    // impacts the ID when reading the file with re-numbering. Sad.
+//    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
+//    if (_nodes.bucket_count() < minBuckets)
+//    {
+//      _nodes.resize(minBuckets);
+//    }
+
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+      long id = nodes[i]->getId();
+      _nodes[id] = nodes[i];
+      nodes[i]->registerListener(_index.get());
+      _index->addNode(nodes[i]);
+      maxId = std::max(id, maxId);
+      minId = std::min(id, minId);
+    }
+
+    _idGen->ensureNodeBounds(maxId);
+    _idGen->ensureNodeBounds(minId);
+  }
+}
+
+void OsmMap::addRelation(const RelationPtr& r)
+{
+  VALIDATE(validate());
+  _idGen->ensureRelationBounds(r->getId());
+  _relations[r->getId()] = r;
+  r->registerListener(_index.get());
+  _index->addRelation(r);
+  VALIDATE(validate());
+}
+
+void OsmMap::addWay(const WayPtr& w)
+{
+  _idGen->ensureWayBounds(w->getId());
+  _ways[w->getId()] = w;
+  w->registerListener(_index.get());
+  _index->addWay(w);
+  //_wayCounter = std::min(w->getId() - 1, _wayCounter);
+
+  // this is a bit too strict, especially when dealing with MapReduce
+//# ifdef DEBUG
+//    for (int i = 0; i < w->getNodeCount(); i++)
+//    {
+//      assert(_nodes.contains(w->getNodeId(i)));
+//    }
+//# endif
+}
+
+void OsmMap::clear()
+{
+  _srs = MapProjector::createWgs84Projection();
+
+  _nodes.clear();
+  _ways.clear();
+  _relations.clear();
+
+  _index->reset();
+  _listeners.clear();
+}
+
+bool OsmMap::containsElement(const ElementId& eid) const
+{
+  return containsElement(eid.getType(), eid.getId());
+}
+
+bool OsmMap::containsElement(ElementType type, long id) const
+{
+  switch (type.getEnum())
+  {
+  case ElementType::Node:
+    return containsNode(id);
+  case ElementType::Way:
+    return containsWay(id);
+  case ElementType::Relation:
+    return containsRelation(id);
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(type.toString()));
+  }
+}
+
+bool OsmMap::containsElement(const boost::shared_ptr<const Element>& e) const
+{
+  return containsElement(e->getElementType(), e->getId());
+}
+
+void OsmMap::_copy(ConstOsmMapPtr from)
+{
+  _idGen = from->_idGen;
+  _idGenSp = from->_idGenSp;
+  _index.reset(new OsmMapIndex(*this));
+  _srs = from->getProjection();
+  _roundabouts = from->getRoundabouts();
+
+  int i = 0;
+  const RelationMap& allRelations = from->getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    RelationPtr r = RelationPtr(new Relation(*(it->second)));
+    r->registerListener(_index.get());
+    _relations[it->first] = r;
+    // no need to add it to the index b/c the index is created in a lazy fashion.
+    i++;
+  }
+
+  WayMap::const_iterator it = from->_ways.begin();
+  while (it != from->_ways.end())
+  {
+    WayPtr w = WayPtr(new Way(*(it->second)));
+    w->registerListener(_index.get());
+    _ways[it->first] = w;
+    // no need to add it to the index b/c the index is created in a lazy fashion.
+    ++it;
+  }
+
+  NodeMap::const_iterator itn = from->_nodes.begin();
+  while (itn != from->_nodes.end())
+  {
+    _nodes[itn->first] = NodePtr(new Node(*itn->second));
+    // no need to add it to the index b/c the index is created in a lazy fashion.
+    ++itn;
+  }
+
+  for (size_t i = 0; i < from->getListeners().size(); i++)
+  {
+    boost::shared_ptr<OsmMapListener> l = from->getListeners()[i];
+    _listeners.push_back(l->clone());
+  }
+}
+
+ConstElementPtr OsmMap::getElement(const ElementId& eid) const
+{
+  return getElement(eid.getType(), eid.getId());
+}
+
+ElementPtr OsmMap::getElement(const ElementId& eid)
+{
+  return getElement(eid.getType(), eid.getId());
+}
+
+ConstElementPtr OsmMap::getElement(ElementType type, long id) const
+{
+  switch (type.getEnum())
+  {
+  case ElementType::Node:
+    return getNode(id);
+  case ElementType::Way:
+    return getWay(id);
+  case ElementType::Relation:
+    return getRelation(id);
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(type.toString()));
+  }
+}
+
+ElementPtr OsmMap::getElement(ElementType type, long id)
+{
+  switch (type.getEnum())
+  {
+  case ElementType::Node:
+    return getNode(id);
+  case ElementType::Way:
+    return getWay(id);
+  case ElementType::Relation:
+    return getRelation(id);
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(type.toString()));
+  }
+}
+
+size_t OsmMap::getElementCount() const
+{
+  return getNodes().size() + getWays().size() + getRelations().size();
+}
+
+set<ElementId> OsmMap::getParents(ElementId eid) const
+{
+  return getIndex().getParents(eid);
+}
+
+bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
+{
+  for (int i = 0; i < l.size(); ++i)
+  {
+    if (l[i]->getElementType() == ElementType::Node)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void OsmMap::replace(const boost::shared_ptr<const Element>& from,
+                     const boost::shared_ptr<Element>& to)
+{
+  LOG_TRACE("Replacing: " << from->getElementId() << " with: " << to->getElementId() << "...");
+
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+
+  // do some error checking before we add the new element.
+  if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
+  {
+    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    {
+      throw HootException("Trying to replace a node with a non-node when the node is part of a "
+        "way.");
+    }
+  }
+
+  if (from->getElementType() == ElementType::Node && to->getElementType() == ElementType::Node)
+  {
+    replaceNode(from->getId(), to->getId());
+  }
+  else
+  {
+    if (!containsElement(to))
+    {
+      addElement(to);
+    }
+
+    // create a copy of the set b/c we may modify it with replace commands.
+    const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
+    {
+      const RelationPtr& r = getRelation(*it);
+      r->replaceElement(from, to);
+    }
+
+    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+  }
+}
+
+void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
+{
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+
+  // do some error checking before we add the new element.
+  if (from->getElementType() == ElementType::Node &&
+    (_listContainsNode(to) == false || to.size() > 1))
+  {
+    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    {
+      throw HootException("Trying to replace a node with multiple nodes or a non-node when the "
+        "node is part of a way.");
+    }
+  }
+
+  if (from->getElementType() == ElementType::Node && to.size() == 1 &&
+    to[0]->getElementType() == ElementType::Node)
+  {
+    replaceNode(from->getId(), to[0]->getId());
+  }
+  else
+  {
+    QList<long> elem;
+    for (int i = 0; i < to.size(); ++i)
+    {
+      elem.append(to[i]->getId());
+      if (!containsElement(to[i]))
+      {
+        addElement(to[i]);
+      }
+    }
+
+    // create a copy of the set b/c we may modify it with replace commands.
+    const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
+    {
+      const RelationPtr& r = getRelation(*it);
+      r->replaceElement(from, to);
+    }
+
+    //  Don't remove the element if it is being replaced by itself
+    if (!elem.contains(from->getId()))
+      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+  }
+}
+
+void OsmMap::replaceNode(long oldId, long newId)
+{
+  // nothing to do
+  if (oldId == newId)
+  {
+    return;
+  }
+
+  for (size_t i = 0; i < _listeners.size(); i++)
+  {
+    _listeners[i]->replaceNodePre(oldId, newId);
+  }
+
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+
+  // get a copy of the ways so our changes below don't modify the working set.
+  const set<long> ways = n2w->getWaysByNode(oldId);
+
+  VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
+
+  for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    const WayPtr& w = getWay(*it);
+
+#   ifdef DEBUG
+      if (w.get() == NULL)
+      {
+        LOG_WARN("Way for way id: " << *it << " is null.");
+      }
+#   endif
+
+    w->replaceNode(oldId, newId);
+  }
+
+  // Replace node in any relations it exists in
+  _replaceNodeInRelations(oldId, newId);
+
+  if (containsNode(oldId))
+  {
+    RemoveNodeOp::removeNodeNoCheck(shared_from_this(), oldId);
+  }
+
+  VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
+}
+
+void OsmMap::setProjection(boost::shared_ptr<OGRSpatialReference> srs)
+{
+  _srs = srs;
+  _index->reset();
+}
+
+bool OsmMap::validate(bool strict) const
+{
+  bool result = true;
+  result &= getIndex().getNodeToWayMap()->validate(*this);
+
+  const WayMap& allWays = (*this).getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    const ConstWayPtr& way = it->second;
+
+    const vector<long>& nids = way->getNodeIds();
+    vector<long> missingNodes;
+    bool badWay = false;
+    for (size_t i = 0; i < nids.size(); i++)
+    {
+      if (containsNode(nids[i]) == false)
+      {
+        badWay = true;
+        result = false;
+        missingNodes.push_back(nids[i]);
+      }
+    }
+
+    if (badWay)
+    {
+      LOG_WARN("Way failed validation. Way: " << way->toString());
+      LOG_WARN("  missing nodes: " << missingNodes);
+    }
+  }
+
+  const RelationMap& allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    const ConstRelationPtr& relation = it->second;
+
+    const vector<RelationData::Entry>& members = relation->getMembers();
+    vector<RelationData::Entry> missingElements;
+    bool badRelation = false;
+    for (size_t i = 0; i < members.size(); i++)
+    {
+      if (containsElement(members[i].getElementId()) == false)
+      {
+        badRelation = true;
+        result = false;
+        missingElements.push_back(members[i]);
+      }
+    }
+
+    if (badRelation)
+    {
+      LOG_WARN("Relation failed validation. Relation: " << relation->toString());
+      LOG_WARN("  missing members: " << missingElements);
+    }
+  }
+
+  if (strict)
+  {
+    result &= _index->validate();
+  }
+
+  if (strict && result == false)
+  {
+    throw HootException("OsmMap validation failed. See log for details.");
+  }
+
+  if (result == false)
+  {
+    LOG_WARN("OsmMap is invalid.");
+  }
+
+  return result;
+}
+
+void OsmMap::visitRo(ConstElementVisitor& visitor) const
+{
+  visitNodesRo(visitor);
+  visitWaysRo(visitor);
+  visitRelationsRo(visitor);
+}
+
+void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
+{
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap& allNodes = getNodes();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
+{
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap& allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
+{
+  ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap& allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
+void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+    }
+  }
+}
+
+void OsmMap::_replaceNodeInRelations(long oldId, long newId)
+{
+  RelationMap allRelations = getRelations();
+  const ElementId oldNodeId = ElementId::node(oldId);
+
+  LOG_TRACE("Replace node in relations: replace " << oldId << " with " << newId );
+
+  NodeMap::iterator it;
+
+  // Make sure both nodes exist; calling getNode on non-existent IDs causes failed assert
+
+  it = _nodes.find(oldId);
+  if (it == _nodes.end())
+  {
+    LOG_TRACE("Tried to replace a non-existent node " << oldId );
+    return;
+  }
+
+  it = _nodes.find(newId);
+  if ( it == _nodes.end() )
+  {
+    LOG_TRACE("Replacement node " << newId << "does not exist");
+    return;
+  }
+
+  ConstElementPtr oldNode = getNode(oldId);
+  ConstElementPtr newNode = getNode(newId);
+
+  for ( RelationMap::iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    RelationPtr currRelation = it->second;
+
+    if ( currRelation->contains(oldNodeId) == true )
+    {
+      LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
+                newNode->getId() << " in relation " << currRelation->getId());
+
+      currRelation->replaceElement(oldNode, newNode);
+    }
+  }
+}
+
+}

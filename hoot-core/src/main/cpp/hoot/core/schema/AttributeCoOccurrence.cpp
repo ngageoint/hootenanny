@@ -28,17 +28,17 @@
 #include "AttributeCoOccurrence.h"
 
 // Hoot
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/language/DictionaryTranslator.h>
 
 // tgs
@@ -52,7 +52,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+class RefToEidVisitor : public ConstElementVisitor
 {
 public:
 
@@ -63,8 +63,6 @@ public:
   virtual ~RefToEidVisitor() {}
 
   const RefToEid& getRefToEid() const { return _ref2Eid; }
-
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -89,7 +87,6 @@ public:
 
 private:
 
-  const OsmMap* _map;
   QString _ref;
   RefToEid _ref2Eid;
 };
@@ -129,10 +126,12 @@ public:
         if (refId != _refSet.end())
         {
           // Loop through the element Id's in REF2
-          for (set<ElementId>::const_iterator eid = refId->second.begin(); eid != refId->second.end(); ++eid)
+          for (set<ElementId>::const_iterator eid = refId->second.begin();
+               eid != refId->second.end(); ++eid)
           {
             // Loop through the Tags in REF1
-            for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end(); ++tag1 )
+            for (Tags::const_iterator tag1 = e->getTags().begin(); tag1 != e->getTags().end();
+                 ++tag1)
             {
               QString kvp1 = OsmSchema::getInstance().toKvp(tag1.key(),tag1.value());
 
@@ -140,12 +139,14 @@ public:
               if (OsmSchema::getInstance().getTagVertex(kvp1).valueType == hoot::Enumeration)
               {
                 // Get the value from the corresponding tag in REF2
-                QString kvp2 = OsmSchema::getInstance().toKvp(tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
+                QString kvp2 =
+                  OsmSchema::getInstance().toKvp(
+                    tag1.key(), _map->getElement(*eid)->getTags()[tag1.key()]);
 
                 // LOG_INFO("Got Tags:" + kvp1 + " " + kvp2);
                 _coOccurrence[kvp1][kvp2]++;
               }
-            } // End for REF1 tag list
+            }
 
             // now loop through the REF2 tag list and fill in any missing tags.
             for (Tags::const_iterator tag2 = _map->getElement(*eid)->getTags().begin();
@@ -165,15 +166,15 @@ public:
                 _coOccurrence[kvp1][kvp2]++;
               }
 
-            } // End for REF2 tag list
+            }
 
             // now try matching up the "name" fields
             QString name1 = e->getTags()["name"];
             QString name2 = _map->getElement(*eid)->getTags()["name"];
 
-            QString kvpNull = OsmSchema::getInstance().toKvp("name","<NULL>");
-            QString kvpNonNull = OsmSchema::getInstance().toKvp("name","<NON NULL>");
-            QString kvpSame = OsmSchema::getInstance().toKvp("name","<SIMILAR>");
+            QString kvpNull = OsmSchema::toKvp("name","<NULL>");
+            QString kvpNonNull = OsmSchema::toKvp("name","<NON NULL>");
+            QString kvpSame = OsmSchema::toKvp("name","<SIMILAR>");
 
             if (name1 == "")
             {
@@ -205,16 +206,11 @@ public:
                 _coOccurrence[kvpNonNull][kvpNonNull]++;
               }
             }
-
-          } // End for ref2 Element ID's
-
-        } // End refId != End
-
-      } // End refs > 0
-
-    } // End contains "REF1"
-
-  } // End Visit
+          }
+        }
+      }
+    }
+  }
 
 private:
 

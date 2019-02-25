@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEREMOVEOP_H
 #define BUILDINGOUTLINEREMOVEOP_H
@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -43,7 +44,8 @@ class Relation;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
+class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable,
+  public OperationStatusInfo
 {
 public:
 
@@ -51,7 +53,7 @@ public:
 
   BuildingOutlineRemoveOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap> &map);
+  virtual void apply(boost::shared_ptr<OsmMap> &map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -59,15 +61,18 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getDescription() const
-  { return "Updates the outline of buildings by taking the union of all the parts"; }
+  virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " building outlines"; }
+
+  virtual QString getDescription() const override { return "Removes the outline around buildings"; }
 
 private:
 
   boost::shared_ptr<OsmMap> _map;
 
   void _removeOutline(const boost::shared_ptr<Relation>& building);
-
 };
 
 }

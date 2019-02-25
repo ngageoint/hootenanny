@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -117,10 +117,10 @@ public:
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-4), ElementId::node(-5)));
       MultiaryClusterAlgorithm::ClusterList clusters = uut.calculateClusters(map, pairs);
 
-      HOOT_STR_EQUALS("[3]{{ 'merged': Node:-5, 'members': [Node:-5] }, { 'merged': Node:-1, 'members': [Node:-2, Node:-1] }, { 'merged': Node:-3, 'members': [Node:-4, Node:-3] }}",
+      HOOT_STR_EQUALS("[3]{{ 'merged': Node(-5), 'members': [Node(-5)] }, { 'merged': Node(-1), 'members': [Node(-2), Node(-1)] }, { 'merged': Node(-3), 'members': [Node(-4), Node(-3)] }}",
         clusters);
 
-      HOOT_STR_EQUALS("[1]{{ 'score': match: 0.542857 miss: 0.457143 review: 0, 'a': { 'merged': Node:-3, 'members': [Node:-4, Node:-3] }, 'b': { 'merged': Node:-1, 'members': [Node:-2, Node:-1] }, 'explainText': 'Somewhat similar (12m) - very close together, similar POI type'}}",
+      HOOT_STR_EQUALS("[1]{{ 'score': match: 0.542857 miss: 0.457143 review: 0, 'a': { 'merged': Node(-3), 'members': [Node(-4), Node(-3)] }, 'b': { 'merged': Node(-1), 'members': [Node(-2), Node(-1)] }, 'explainText': 'Somewhat similar (12m) - very close together, similar POI type'}}",
         uut.takeReviews());
     }
 
@@ -130,6 +130,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryHierarchicalClusterAlgorithmTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryHierarchicalClusterAlgorithmTest, "glacial");
 
 }

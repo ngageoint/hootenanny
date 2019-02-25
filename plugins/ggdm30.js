@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,11 +36,11 @@
 */
 
 ggdm30 = {
-    // getDbSchema - Load the standard schema or modify it into the Thematic structure.
+    // getDbSchema - Load the standard schema or modify it into the Thematic structure
     getDbSchema: function() {
         layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
         ggdmAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
-        
+
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         ggdm30.rawSchema = ggdm30.schema.getDbSchema();
 
@@ -110,7 +110,7 @@ ggdm30 = {
             newSchema.push({ name: layerName,
                           desc: layerName,
                           geom: geomType,
-                          columns:[] 
+                          columns:[]
                         });
         } // End fc loop
 
@@ -122,7 +122,7 @@ ggdm30 = {
             // 'PGB230':'AeronauticPnt', // AircraftHangar
             // 'AGB230':'AeronauticSrf', // AircraftHangar
             // 'AGB015':'AeronauticSrf', // Apron
-            // .... 
+            // ....
             // So we add the geometry to the FCODE
 
             fCode = ggdm30.rawSchema[os].geom.charAt(0) + ggdm30.rawSchema[os].fcode;
@@ -130,7 +130,7 @@ ggdm30 = {
 
             // Loop through the new schema and find the right layer
             for (var ns = 0; ns < newSchemaLen; ns++)
-            { 
+            {
                 // If we find the layer, populate it
                 if (newSchema[ns].name == layerName)
                 {
@@ -165,7 +165,7 @@ ggdm30 = {
                                         }
                                     } // End nen loop
                                     // if the enumerated value isn't in the new list, add it
-                                    if (!esame) 
+                                    if (!esame)
                                     {
                                         newSchema[ns].columns[cns].enumerations.push(ggdm30.rawSchema[os].columns[cos].enumerations[oen]);
                                     }
@@ -174,7 +174,7 @@ ggdm30 = {
                         } // End nsc loop
 
                         // if the attr isn't in the new schema, add it
-                        if (!same) 
+                        if (!same)
                         {
                             // Remove the Default Value so we get all Null values on export
                             // delete ggdm30.rawSchema[os].columns[cos].defValue;
@@ -186,7 +186,7 @@ ggdm30 = {
                 } // End if layerName
             } // End newSchema loop
         } // end ggdm30.rawSchema loop
-        
+
         // Create a lookup table of TDS like structures attributes. Note this is <GLOBAL>
         ggdmThematicLookup = translate.makeTdsAttrLookup(newSchema);
 
@@ -201,7 +201,7 @@ ggdm30 = {
         // Now add the o2s feature to the ggdm30.rawSchema
         // We can drop features but this is a nice way to see what we would drop
         // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
-        // DON'T get put under the Feature Dataset in the output.
+        // DON'T get put under the Feature Dataset in the output
         newSchema = translate.addEmptyFeature(newSchema);
 
         // Add the empty Review layers
@@ -217,10 +217,10 @@ ggdm30 = {
     }, // End getDbSchema
 
     // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
-    //                feature, checking values and populateing the OTH field.
+    //                feature, checking values and populateing the OTH field
     validateAttrs: function(geometryType,attrs) {
 
-        // First, use the lookup table to quickly drop all attributes that are not part of the feature.
+        // First, use the lookup table to quickly drop all attributes that are not part of the feature
         // This is quicker than going through the Schema due to the way the Schema is arranged
         var attrList = ggdmAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
@@ -270,7 +270,7 @@ ggdm30 = {
                             else
                             {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
@@ -282,7 +282,7 @@ ggdm30 = {
             }
             else
             {
-        	    for (var val in attrs) 
+        	    for (var val in attrs)
         	    {
             	    if (attrList.indexOf(val) == -1)
                     {
@@ -314,7 +314,7 @@ ggdm30 = {
                             else
                             {
                                 hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
+                                // Still too long. Chop to the maximum length
                                 attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
                             }
                         } // End text attr length > max length
@@ -369,12 +369,12 @@ ggdm30 = {
             for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
 
             // If we DONT have the value in the list, add it to the OTH or MEMO field
-            if (enumValueList.indexOf(attrValue) == -1) 
+            if (enumValueList.indexOf(attrValue) == -1)
             {
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
                 // No "Other" value. Push to the Memo field
-                if (enumValueList.indexOf('999') == -1) 
+                if (enumValueList.indexOf('999') == -1)
                 {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
@@ -413,8 +413,8 @@ ggdm30 = {
     }, // End validateTDSAttrs
 
 
-    // Sort out if we need to return more than one feature.
-    // This is generally for Roads, Railways, bridges, tunnels etc.
+    // Sort out if we need to return more than one feature
+    // This is generally for Roads, Railways, bridges, tunnels etc
     manyFeatures: function(geometryType, tags, attrs)
     {
 
@@ -541,7 +541,7 @@ ggdm30 = {
             delete nTags.embankment;
         }
 
-        // Loop through the new features and process them.
+        // Loop through the new features and process them
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
@@ -641,10 +641,10 @@ ggdm30 = {
 
         } // End in attrs loop
 
-        // Drop all of the XXX Closure default values IFF the associated attributes are 
-        // not set.
+        // Drop all of the XXX Closure default values IFF the associated attributes are
+        // not set
         // Doing this after the main cleaning loop so all of the -999999 values are
-        // already gone and we can just check for existance.
+        // already gone and we can just check for existance
         for (var i in ggdm30.rules.closureList)
         {
             if (attrs[i])
@@ -760,14 +760,14 @@ ggdm30 = {
         // Add the LayerName to the source
         if ((! tags.source) && layerName !== '') tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
-        // If we have a UFI, store it.
+        // If we have a UFI, store it
         if (attrs.UFI)
         {
             tags.uuid = '{' + attrs['UFI'].toString().toLowerCase() + '}';
         }
         else
         {
-            tags.uuid = createUuid(); 
+            if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
 
@@ -927,8 +927,8 @@ ggdm30 = {
         }
 
 
-        // Fix up lifestyle tags.
-        // This needs to be expanded to handle all of the options.
+        // Fix up lifestyle tags
+        // This needs to be expanded to handle all of the options
 //      ['PCF','1','condition','construction'], // Construction
 //      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
 //      ['PCF','3','condition','abandoned'], // Unmaintained in spec
@@ -964,7 +964,7 @@ ggdm30 = {
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
 
-        // Not sure about adding a Highway tag to this.
+        // Not sure about adding a Highway tag to this
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
         // Denominations without religions - from ZI037_REL which has some denominations as religions
@@ -996,6 +996,17 @@ ggdm30 = {
         // Fords and Roads
         if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+
+        // AK030 - Amusement Parks
+        // F_CODE translation == tourism but FFN translation could be leisure
+        // E.g. water parks
+        if (attrs.F_CODE == 'AK030')
+        {
+            if (tags.leisure && tags.tourism)
+            {
+                delete tags.tourism;
+            }
+        }
 
         // Unpack the MEMO field
         if (tags.note)
@@ -1043,7 +1054,7 @@ ggdm30 = {
         } // End for GE4 loop
 
     }, // End of applyToOsmPostProcessing
-  
+
     // ##### End of the xxToOsmxx Block #####
 
 // #####################################################################################################
@@ -1083,11 +1094,11 @@ ggdm30 = {
 
         if (ggdm30.preRules == undefined)
         {
-        // See ToOsmPostProcessing for more details about rulesList.
+        // See ToOsmPostProcessing for more details about rulesList
             var rulesList = [
             ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1137,7 +1148,7 @@ ggdm30 = {
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
+            // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
@@ -1151,7 +1162,7 @@ ggdm30 = {
             ggdm30.tdsPreRules = translate.buildComplexRules(rulesList);
         }
 
-        // Apply the rulesList.
+        // Apply the rulesList
         //translate.applyComplexRules(tags,attrs,ggdm30.tdsPreRules);
         // Pulling this out of translate
         for (var i = 0, rLen = ggdm30.tdsPreRules.length; i < rLen; i++)
@@ -1166,16 +1177,16 @@ ggdm30 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so.
+        // Some tags imply that they are buildings but don't actually say so
         // Most of these are taken from raw OSM and the OSM Wiki
-        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that 
-        // are not buildings.
+        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // are not buildings
         // Taking "place_of_worship" out of this and making it a building
         // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
         var notBuildingList = [
             'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
             'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','marketplace','post_box',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
             'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
@@ -1183,7 +1194,7 @@ ggdm30 = {
             'trailer_park','game_feeding','fuel', 'ferry_terminal'
             ]; // End notBuildingList
 
-        if (tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1201,21 +1212,27 @@ ggdm30 = {
             }
             else
             {
-                attrs.F_CODE = 'AL013'; // Building
+                // Make sure we don't turn point facilities into buildings
+                if (!(tags.facility = 'yes'))
+                {
+                    // Debug
+                    // print('Making a building: ' + tags.facility);
+                    attrs.F_CODE = 'AL013'; // Building
+                }
             }
 
-            // If we don't have a Feature Function then assign one.
+            // If we don't have a Feature Function then assign one
             if (!(attrs.FFN))
             {
-                attrs.FFN = facilityList[tags.amenity];
+                // attrs.FFN = facilityList[tags.amenity];
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
             }
         }
 
-        // Adding a custom rule for malls to override the rules above.
-        // All of the other "shops" are buildings 
+        // Adding a custom rule for malls to override the rules above
+        // All of the other "shops" are buildings
         if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
 
         // Churches etc
@@ -1237,7 +1254,7 @@ ggdm30 = {
         }
 
         // Fix up water features from OSM
-        if (tags.natural == 'water' && !(tags.water)) 
+        if (tags.natural == 'water' && !(tags.water))
         {
             if (geometryType =='Line')
             {
@@ -1272,9 +1289,9 @@ ggdm30 = {
                 delete tags.highway;
             }
             else
-            { 
+            {
                 // Drop the cutline/cleared way
-                delete tags.man_made; 
+                delete tags.man_made;
 
                 if (tags.memo)
                 {
@@ -1300,7 +1317,7 @@ ggdm30 = {
                     if (geometryType == 'Point')
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;                        
+                        delete tags.place;
                     }
                     break;
 
@@ -1353,8 +1370,8 @@ ggdm30 = {
             } // End switch
         }
 
-        // Bridges & Roads.  If we have an area or a line everything is fine.
-        // If we have a point, we need to make sure that it becomes a bridge, not a road.
+        // Bridges & Roads.  If we have an area or a line everything is fine
+        // If we have a point, we need to make sure that it becomes a bridge, not a road
         if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
 
@@ -1384,7 +1401,7 @@ ggdm30 = {
           tags.note = translate.appendValue(tags.note,'Viaduct',';');
         }
 
-        // Fix road junctions.
+        // Fix road junctions
         // TDS has junctions as points. If we can make the feature into a road, railway or bridge then we will
         // If not, it should go to the o2s layer
         if (tags.junction && geometryType !== 'Point')
@@ -1402,7 +1419,7 @@ ggdm30 = {
             tags.cable = 'yes';
             tags.location = 'underwater';
         }
-    
+
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
         if (!(attrs.F_CODE) && ggdm30.fcodeLookup)
@@ -1426,9 +1443,9 @@ ggdm30 = {
         // If we still don't have an FCODE, try looking for individual elements
         if (!attrs.F_CODE)
         {
-            var fcodeMap = { 
-                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070', 
-                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010', 
+            var fcodeMap = {
+                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
+                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
                 'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
                 'mine:access':'AA010'
                            };
@@ -1450,12 +1467,12 @@ ggdm30 = {
 
         if (tags.material)
         {
-            if (pymList.indexOf(attrs.F_CODE) !== -1) 
+            if (pymList.indexOf(attrs.F_CODE) !== -1)
             {
                 tags['tower:material'] = tags.material;
                 delete tags.material;
             }
-            else if (vcmList.indexOf(attrs.F_CODE) !== -1) 
+            else if (vcmList.indexOf(attrs.F_CODE) !== -1)
             {
                 tags['material:vertical'] = tags.material;
                 delete tags.material;
@@ -1667,7 +1684,7 @@ ggdm30 = {
         }
         else
         {
-            attrs.UFI = createUuid().replace('{','').replace('}','');
+            if (ggdm30.config.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
@@ -1699,7 +1716,7 @@ ggdm30 = {
                     break;
             }
 
-            // Use the road surface to possibly override the classification.
+            // Use the road surface to possibly override the classification
             // We are assumeing that unpaved roads are Fair Weather only
             switch (attrs.ZI016_ROC)
             {
@@ -1734,7 +1751,7 @@ ggdm30 = {
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
             // If we havent fixed up the road type/class, have a go with the
-            // highway tag.
+            // highway tag
             if (!attrs.RTY && !attrs.RIN_ROI)
             {
                 switch (tags.highway)
@@ -1781,7 +1798,7 @@ ggdm30 = {
                         attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
                         attrs.RTY = '-999999'; // No Information
                 } // End tags.highway switch
-                
+
             } // End ROI & RIN_ROI
 
             // Use the Width to populate the Minimum Travelled Way Width - Customer requested
@@ -1790,7 +1807,7 @@ ggdm30 = {
                 attrs.ZI016_WD1 = attrs.WID;
                 delete attrs.WID;
             }
-            
+
             // Private Access roads - Customer requested
             if (tags.access == 'private' && !(attrs.CAA))
             {
@@ -1807,8 +1824,8 @@ ggdm30 = {
 
         }
 
-        // RLE vs LOC: Need to deconflict this for various features.
-        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
+        // RLE vs LOC: Need to deconflict this for various features
+        // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead
         if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
         {
             attrs.RLE = '2'; // Raised above surface
@@ -1832,13 +1849,13 @@ ggdm30 = {
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
-        // we concatenate the tag values for this field.
+        // we concatenate the tag values for this field
         // We are getting guidance from the customer on what value they would like in this field:
         // * The earliest date/time,
         // * The first on in the list
         // * etc
         //
-        // Until we get an answer, we are going to take the first value in the list.
+        // Until we get an answer, we are going to take the first value in the list
         if (attrs.ZI001_SDV)
         {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
@@ -1863,28 +1880,20 @@ ggdm30 = {
             }
         } // End for GE4 loop
 
-       // Fix ZI001_SDV
-        // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-        if (tags['source:imagery:datetime'])
-        {
-            attrs.ZI001_SDV = tags['source:imagery:datetime'];
-            // delete notUsedTags['source:imagery:datetime'];
-        }
-
-        // Now try using tags from Taginfo
+        //Map alternate source date tags to ZI001_SDV in order of precedence
+        //default is 'source:datetime'
         if (! attrs.ZI001_SDV)
-        {
-            if (tags['source:date']) 
-            {
-                attrs.ZI001_SDV = tags['source:date'];
-                // delete notUsedTags['source:date'];
-            }
-            else if (tags['source:geometry:date'])
-            {
-                attrs.ZI001_SDV = tags['source:geometry:date'];
-                // delete notUsedTags['source:geometry:date'];
-            }
-        }
+            attrs.ZI001_SDV = tags['source:imagery:datetime']
+                || tags['source:date']
+                || tags['source:geometry:date']
+                || '';
+
+        //Map alternate source tags to ZI001_SDP in order of precedence
+        //default is 'source'
+        if (! attrs.ZI001_SDP)
+            attrs.ZI001_SDP = tags['source:imagery']
+                || tags['source:description']
+                || '';
 
         // Wetlands
         // Normally, these go to Marsh
@@ -1917,6 +1926,8 @@ ggdm30 = {
             ggdm30.config = {};
             ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
             ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
+
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
             ggdm30.toChange = hoot.Settings.get("translation.override");
@@ -1930,13 +1941,17 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
-        // See if we have an o2s_X layer and try to unpack it.
+        // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
         {
             tags = translate.parseO2S(attrs);
 
             // Add some metadata
-            if (! tags.uuid) tags.uuid = createUuid();
+            if (! tags.uuid)
+            {
+                if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
+            }
+
             if (! tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
             // Debug:
@@ -1967,7 +1982,7 @@ ggdm30 = {
         if (ggdm30.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
-            // other tables are not set either.
+            // other tables are not set either
 
             // Support Import Only attributes
             ggdm30.rules.one2one.push.apply(ggdm30.rules.one2one,ggdm30.rules.one2oneIn);
@@ -1978,7 +1993,7 @@ ggdm30 = {
         // pre processing
         ggdm30.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
-        // Use the FCODE to add some tags.
+        // Use the FCODE to add some tags
         if (attrs.F_CODE)
         {
             var ftag = ggdm30.fcodeLookup['F_CODE'][attrs.F_CODE];
@@ -1995,13 +2010,13 @@ ggdm30 = {
         }
 
         // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
-        // isn't used in the translation - this should end up empty.
+        // isn't used in the translation - this should end up empty
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
-        delete notUsedAttrs.F_CODE; // Not needed since we have it in attrs.
+        delete notUsedAttrs.F_CODE; // Not needed since we have it in attrs
 
         // apply the simple number and text biased rules
-        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
+        // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
         translate.applySimpleNumBiased(notUsedAttrs, tags, ggdm30.rules.numBiased, 'forward',[]);
         translate.applySimpleTxtBiased(notUsedAttrs, tags, ggdm30.rules.txtBiased, 'forward');
 
@@ -2021,6 +2036,9 @@ ggdm30 = {
         // Debug: Add the FCODE to the tags
         if (ggdm30.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
+        // Override tag values if appropriate
+        translate.overrideValues(tags,ggdm30.toChange);
+
         // Debug:
         if (ggdm30.config.OgrDebugDumptags == 'true')
         {
@@ -2030,9 +2048,6 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
         }
-
-        // Override tag values if appropriate
-        translate.overrideValues(tags,ggdm30.toChange);
 
         return tags;
     }, // End of toOsm
@@ -2060,6 +2075,7 @@ ggdm30 = {
             ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
             ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
             ggdm30.config.OgrThrowError = config.getOgrThrowError();
+            ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2075,8 +2091,8 @@ ggdm30 = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line.
-        // There is no way we can translate these to a single GGDM30 feature.
+        // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line
+        // There is no way we can translate these to a single GGDM30 feature
         if (geometryType == 'Collection') return null;
 
         // Start processing here
@@ -2118,7 +2134,7 @@ ggdm30 = {
             ggdm30.lookup = translate.createBackwardsLookup(ggdm30.rules.one2one);
             // Debug
             //translate.dumpOne2OneLookup(ggdm30.lookup);
-            
+
             // Make the fuzzy lookup table
             ggdm30.fuzzy = schemaTools.generateToOgrTable(ggdm30.rules.fuzzyTable);
 
@@ -2139,7 +2155,7 @@ ggdm30 = {
         ggdm30.applyToOgrPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
-        // the not used tags.
+        // the not used tags
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -2165,8 +2181,8 @@ ggdm30 = {
         // NOTE: This deletes tags as they are used
         translate.applyTdsOne2One(notUsedTags, attrs, ggdm30.lookup, ggdm30.fcodeLookup);
 
-        // Post Processing.
-        // We send the original list of tags and the list of tags we haven't used yet.
+        // Post Processing
+        // We send the original list of tags and the list of tags we haven't used yet
         // ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType);
         ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
@@ -2177,7 +2193,7 @@ ggdm30 = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
-        // If we have unused tags, add them to the memo field.
+        // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
@@ -2185,7 +2201,7 @@ ggdm30 = {
         }
 
         // Now check for invalid feature geometry
-        // E.g. If the spec says a runway is a polygon and we have a line, throw error and 
+        // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
@@ -2230,8 +2246,8 @@ ggdm30 = {
             // var str = JSON.stringify(tags);
             var str = JSON.stringify(tags,Object.keys(tags).sort());
 
-            // Shapefiles can't handle fields > 254 chars.
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
             // A nicer thing would be to arrange the tags until they fit neatly
             if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
             {
@@ -2248,7 +2264,7 @@ ggdm30 = {
                 }
 
                 // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253), 
+                attrs = {tag1:str.substring(0,253),
                          tag2:str.substring(253,506),
                          tag3:str.substring(506,759),
                          tag4:str.substring(759,1012)};
@@ -2258,25 +2274,25 @@ ggdm30 = {
         }
         else // We have a feature
         {
-            // Check if we need to make more features.
+            // Check if we need to make more features
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = ggdm30.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
             //returnData.push({attrs: attrs, tableName: ''});
 
-            // Now go through the features and clean them up.
+            // Now go through the features and clean them up
             var gType = geometryType.toString().charAt(0);
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                
+
                 if (ggdmAttrLookup[gFcode.toUpperCase()])
                 {
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     ggdm30.validateAttrs(geometryType,returnData[i]['attrs']);
 
-                    // Now set the FCSubtype.
+                    // Now set the FCSubtype
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
                     if (ggdm30.config.OgrEsriFcsubtype == 'true')
                     {
@@ -2299,7 +2315,7 @@ ggdm30 = {
                     // If the feature is not valid, just drop it
                     // Debug
                     // print('## Skipping: ' + gFcode);
-                    returnData.splice(i,1);                    
+                    returnData.splice(i,1);
                 }
             } // End returnData loop
 
@@ -2339,7 +2355,7 @@ ggdm30 = {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
                 //for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
                 var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) 
+                for (var j = 0, kLen = kList.length; j < kLen; j++)
                     if (returnData[i]['attrs'][kList[j]]) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
             }
             print('');

@@ -28,7 +28,9 @@ package hoot.services.controllers.export;
 
 
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -55,7 +57,7 @@ public class ExportCommandTest {
         exportParams.setInputType("file");
         exportParams.setOutputType("shp");
 
-        ExportCommand exportCommand = new ExportCommand(jobId, exportParams, debugLevel, caller);
+        ExportCommand exportCommand = new ExportCommand(jobId, exportParams, debugLevel, caller, null);
 
         List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();

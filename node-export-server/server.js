@@ -1,7 +1,7 @@
 /*Define dependencies.*/
 var express = require('express');
 var app = express();
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 var fs = require('fs');
 var archiver = require("archiver");
 var exec = require('child_process').exec;

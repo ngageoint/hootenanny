@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STATSAREACRITERION_H
 #define STATSAREACRITERION_H
 
-#include "ElementCriterion.h"
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -39,15 +39,16 @@ namespace hoot
 class StatsAreaCriterion : public ElementCriterion
 {
 public:
+
   static std::string className() { return "hoot::StatsAreaCriterion"; }
 
   StatsAreaCriterion() {}
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies areas for use by stats"; }
+  virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
 };
 
 }

@@ -22,19 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslationOp.h"
 
 // hoot
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 

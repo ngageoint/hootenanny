@@ -61,7 +61,6 @@ protected:
   void _dumpImage(cv::Mat& image);
 
   void _renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& result);
-
 };
 
 }

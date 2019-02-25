@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYBUFFERCRITERION_H
@@ -32,7 +32,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
@@ -71,12 +71,12 @@ public:
                      Meters circularError,
                      double matchPercent);
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent)); }
 
-  virtual QString getDescription() const { return "Allows for operation on ways with buffers"; }
+  virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }
 
 private:
 

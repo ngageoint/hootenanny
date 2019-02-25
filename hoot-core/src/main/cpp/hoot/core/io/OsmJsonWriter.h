@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -37,8 +37,8 @@
 // Qt
 #include <QFile>
 #include <QHash>
+#include <QString>
 #include <QXmlDefaultHandler>
-class QString;
 class QXmlStreamWriter;
 
 // Standard
@@ -67,14 +67,14 @@ public:
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
+  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".json"); }
 
   /**
    * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
    */
   static QString markupString(const QString& str);
 
-  virtual void open(QString url);
+  virtual void open(QString url) override;
 
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
@@ -99,7 +99,7 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
-  virtual QString supportedFormats() { return ".json"; }
+  virtual QString supportedFormats() override { return ".json"; }
 
 protected:
 
@@ -115,9 +115,9 @@ protected:
 
   static QString _typeName(ElementType e);
 
-  void _writeNodes();
-  void _writeWays();
-  void _writeRelations();
+  virtual void _writeNodes();
+  virtual void _writeWays();
+  virtual void _writeRelations();
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }

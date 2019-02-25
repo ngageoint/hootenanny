@@ -28,7 +28,7 @@
 #define BUILDINGMATCH_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -36,11 +36,6 @@
 
 // tgs
 #include <tgs/SharedPtr.h>
-
-namespace Tgs
-{
-  class RandomForest;
-}
 
 namespace hoot
 {

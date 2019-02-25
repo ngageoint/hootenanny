@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -30,7 +30,11 @@ import static hoot.services.HootProperties.MAX_QUERY_NODES;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.net.URLDecoder;
 import java.sql.Timestamp;
@@ -40,6 +44,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -73,7 +78,6 @@ import hoot.services.utils.XmlUtils;
 
 
 public class MapResourceTest extends OSMResourceTestAbstract {
-
     private void getMap(String idOrName, String multiLayerUniqueElementIdsStr,
         boolean useMultiLayerUniqueElementIdsParameter) throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -126,17 +130,13 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         // nodes, one of the ways, and one of the relations should be returned.
         Document responseData = null;
         if (useMultiLayerUniqueElementIdsParameter) {
-            responseData = target("api/0.6/map")
-                    .queryParam("mapId", idOrName)
-                    .queryParam("bbox", queryBounds.toServicesString())
+            responseData = target("api/0.6/map/" + idOrName + "/" + queryBounds.toServicesString())
                     .queryParam("multiLayerUniqueElementIds", multiLayerUniqueElementIdsStr)
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         else {
-            responseData = target("api/0.6/map")
-                    .queryParam("mapId", idOrName)
-                    .queryParam("bbox", queryBounds.toServicesString())
+            responseData = target("api/0.6/map/" + idOrName + "/" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
@@ -369,9 +369,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         BoundingBox queryBounds = OSMTestUtils.createTestQueryBounds();
 
         // Query an empty map. No elements should be returned.
-        Document responseData = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
+        Document responseData = target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
 
@@ -420,9 +418,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
 
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and one of the relations should be returned.
-        Document responseData = target("api/0.6/map")
-                .queryParam("mapId", String.valueOf(mapId))
-                .queryParam("bbox", queryBounds.toServicesString())
+        Document responseData = target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
                 .request(MediaType.TEXT_XML)
                 .get(Document.class);
 
@@ -535,10 +531,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and
         // one of the relations should be returned.
-        Document responseData = target()
-                    .path("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", queryBounds.toServicesString())
+        Document responseData = target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
 
@@ -637,9 +630,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
 
         // Query the elements back out geospatially. All but one of the
         // nodes, one of the ways, and one of the relations should be returned.
-        Document responseData = target("api/0.6/map")
-                .queryParam("mapId", String.valueOf(mapId))
-                .queryParam("bbox", queryBounds.toServicesString())
+        Document responseData = target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
                 .request(MediaType.TEXT_XML)
                 .get(Document.class);
 
@@ -766,9 +757,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
 
         // Query the elements back out geospatially and ensure the invisible
         // node and way do not come back in the results.
-        Document responseData = target("api/0.6/map")
-                .queryParam("mapId", String.valueOf(mapId))
-                .queryParam("bbox", queryBounds.toServicesString())
+        Document responseData = target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
                 .request(MediaType.TEXT_XML)
                 .get(Document.class);
 
@@ -845,22 +834,20 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     .from(currentNodes)
                     .fetchCount());
 
+            final String expectedErrorMsg = "The maximum number of nodes that may be returned in a map query is "
+                    + maxQueryNumberOfNodes + ". This query returned " + (maxQueryNumberOfNodes + 1)
+                    + " nodes. Please " + "execute a query which returns fewer nodes.";
             try {
                 // try to run a query that returns more than the maximum allowed
                 // results size
-                target("api/0.6/map")
-                        .queryParam("mapId", String.valueOf(mapId))
-                        .queryParam("bbox", queryBounds.toServicesString())
-                        .request(MediaType.TEXT_XML)
-                        .get(Document.class);
+                target("api/0.6/map/" + String.valueOf(mapId) + "/" + queryBounds.toServicesString())
+                        .request(MediaType.TEXT_XML).get(Document.class);
             }
             catch (BadRequestException e) {
                 Response r = e.getResponse();
                 assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-                assertTrue(r.readEntity(String.class)
-                        .contains("The maximum number of nodes that may be returned in a map query is "
-                                + maxQueryNumberOfNodes + ".  This query returned " + (maxQueryNumberOfNodes + 1)
-                                + " nodes.  Please " + "execute a query which returns fewer nodes."));
+                assertEquals(r.readEntity(String.class), expectedErrorMsg);
+
                 OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
                 throw e;
             }
@@ -873,52 +860,26 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapInvalidMap() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         BoundingBox queryBounds = OSMTestUtils.createTestQueryBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
         try {
             // try to query nodes from a map that doesn't exist
-            target("api/0.6/map")
-                    .queryParam("mapId", "-2") //-1 is now a valid id for an osm api db layer
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
+            target("api/0.6/map/-2/" + queryBounds.toServicesString()).request(MediaType.TEXT_XML).get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("No map exists"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
-    }
+            assertEquals(r.readEntity(String.class), "No map with that id exists");
 
-    @Test(expected = NotFoundException.class)
-    @Category(UnitTest.class)
-    public void testGetMapMissingMapParam() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
-        BoundingBox queryBounds = OSMTestUtils.createTestQueryBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
-        try {
-            // try to query nodes from a map that doesn't exist
-            target("api/0.6/map")
-                    .queryParam("bbox", queryBounds.toServicesString())
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
-        }
-        catch (NotFoundException e) {
-            Response r = e.getResponse();
-            assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("No map exists with ID: null"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            // Map::query() throws an exception because there is no map "table"
+            // by that name corrupting the current transaction it is not
+            // possible to execute any additional queries without a rollback.
+            //
+            // A rollback would undo any changes anyway. This test should be
+            // added to a successful map fetch =>
+            // testGetMapWithInvisibleElements() does this for us.
+            //
+            // OSMTestUtils.verifyTestDataUnmodified(originalBounds,
+            // changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
@@ -926,31 +887,38 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Test(expected = NotFoundException.class)
     @Category(UnitTest.class)
     public void testGetMapEmptyMapId() throws Exception {
-        BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         BoundingBox queryBounds = OSMTestUtils.createTestQueryBounds();
-        long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
-
         try {
             // try to query nodes from a map that doesn't exist
-            target("api/0.6/map")
-                    .queryParam("mapId", "")
-                    .queryParam("bbox", queryBounds.toServicesString())
+            //
+            // 2018-10-04: with the change from query params to path params
+            // and double slash URIs being rejected by spring security
+            // this response has changed to a 404 due to the invalid
+            // URI.
+            // https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#request-matching
+            target("api/0.6/map//" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
         catch (NotFoundException e) {
             Response r = e.getResponse();
             assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("No map exists with ID:"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
+            assertEquals(r.readEntity(String.class), "");
+            // Map::query() throws an exception because there is no map "table"
+            // by that name corrupting the current transaction it is not
+            // possible to execute any additional queries without a rollback.
+            //
+            // A rollback would undo any changes anyway. This test should be
+            // added to a successful map fetch =>
+            // testGetMapWithInvisibleElements() does this for us.
+            //
+            // OSMTestUtils.verifyTestDataUnmodified(originalBounds,
+            // changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = BadRequestException.class)
     @Category(UnitTest.class)
     public void testGetMapByNonUniqueName() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -975,25 +943,26 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         map.setUserId(userId);
 
         createQuery(mapId).insert(maps).populate(map).execute();
-
+        final String expectedErrorMsg = "Multiple records exist with NAME = " + duplicatedMapName
+                + " in 'maps' table. Please specify a single, valid record.";
         try {
             // try to query nodes from a map name that is linked to multiple map IDs
-            target("api/0.6/map")
-                    .queryParam("mapId", duplicatedMapName)
-                    .queryParam("bbox", queryBounds.toServicesString())
+            target("api/0.6/map/" + duplicatedMapName + "/" + queryBounds.toServicesString())
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (NotFoundException e) {
+        catch (BadRequestException e) {
             Response r = e.getResponse();
-            assertEquals(404, r.getStatus());
-            assertTrue(r.readEntity(String.class).contains("Multiple maps exist"));
+            assertEquals(400, r.getStatus());
+            assertEquals(r.readEntity(String.class), expectedErrorMsg);
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
     }
 
-    @Test(expected = BadRequestException.class)
+    // 10/09/2018 Since the introduction of HTTP VERBS, when
+    // paths collide, you get NotAllowed instead of NotFound
+    @Test(expected = NotAllowedException.class)
     @Category(UnitTest.class)
     public void testGetMapMissingBounds() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
@@ -1004,16 +973,13 @@ public class MapResourceTest extends OSMResourceTestAbstract {
 
         try {
             // try to query nodes without specifying a bounds
-            target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", "")
+            target("api/0.6/map/" + String.valueOf(mapId) + "/")
                     .request(MediaType.TEXT_XML)
                     .get(Document.class);
         }
-        catch (BadRequestException e) {
+        catch (NotAllowedException e) {
             Response r = e.getResponse();
-            assertEquals(Response.Status.BAD_REQUEST, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("Error parsing bounding box from bbox param"));
+            assertEquals(Response.Status.METHOD_NOT_ALLOWED, Response.Status.fromStatusCode(r.getStatus()));
             OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
             throw e;
         }
@@ -1026,11 +992,8 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMapBoundsOutsideWorld() throws Exception {
         // Try to query nodes with invalid bounds.
-        Document doc = target("api/0.6/map")
-                    .queryParam("mapId", String.valueOf(mapId))
-                    .queryParam("bbox", "-181,-90,180,90")
-                    .request(MediaType.TEXT_XML)
-                    .get(Document.class);
+        target("api/0.6/map/" + String.valueOf(mapId) + "/-181,-90,180,90").request(MediaType.TEXT_XML)
+                .get(Document.class);
     }
 
     @Test

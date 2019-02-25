@@ -31,8 +31,8 @@
 #include <boost/shared_ptr.hpp>
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
@@ -48,7 +48,6 @@ public:
   static std::string className() { return "hoot::ElementConstOsmMapVisitor"; }
 
   ElementConstOsmMapVisitor() {}
-
   virtual ~ElementConstOsmMapVisitor() {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }

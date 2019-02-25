@@ -22,25 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
-#include "BuildingRfClassifier.h"
 
 // Standard
 #include <fstream>
@@ -72,17 +71,27 @@ using namespace Tgs;
 class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
+
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+                       ElementCriterionPtr filter = ElementCriterionPtr()) :
+  _map(map),
+  _result(result),
+  _filter(filter)
+  {
+  }
+
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
-    ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid,
-    bool reviewMatchesOtherThanOneToOne = false) :
+    ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
+    Status matchStatus = Status::Invalid, bool reviewMatchesOtherThanOneToOne = false) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
+    _filter(filter),
     _matchStatus(matchStatus),
     _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
   {
@@ -97,8 +106,8 @@ public:
 
   ~BuildingMatchVisitor()
   {
-    LOG_DEBUG("neighbor counts, max: " << _neighborCountMax << " mean: " <<
-             (double)_neighborCountSum / (double)_elementsEvaluated);
+    LOG_TRACE("neighbor counts, max: " << _neighborCountMax << " mean: " <<
+              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
   virtual QString getDescription() const { return ""; }
@@ -176,10 +185,9 @@ public:
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
   {
-    if (e1->getStatus() != e2->getStatus() &&
-        e1->isUnknown() && e2->isUnknown() &&
-        OsmSchema::getInstance().isBuilding(e1->getTags(), e1->getElementType()) &&
-        OsmSchema::getInstance().isBuilding(e2->getTags(), e2->getElementType()))
+    BuildingCriterion buildingCrit(false);
+    if (e1->getStatus() != e2->getStatus() && e1->isUnknown() && e2->isUnknown() &&
+        buildingCrit.isSatisfied(e1) && buildingCrit.isSatisfied(e2))
     {
       return true;
     }
@@ -218,9 +226,13 @@ public:
     }
   }
 
-  static bool isMatchCandidate(ConstElementPtr element)
+  bool isMatchCandidate(ConstElementPtr element)
   {
-    return OsmSchema::getInstance().isBuilding(element->getTags(), element->getElementType());
+    if (_filter && !_filter->isSatisfied(element))
+    {
+      return false;
+    }
+    return BuildingCriterion().isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -233,7 +245,8 @@ public:
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that isMatchCandidate(e)
-      boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
+      boost::function<bool (ConstElementPtr e)> f =
+        boost::bind(&BuildingMatchVisitor::isMatchCandidate, this, _1);
       boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
@@ -252,6 +265,8 @@ public:
 
   ConstOsmMapPtr getMap() { return _map; }
 
+  long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
+
 private:
 
   const ConstOsmMapPtr& _map;
@@ -259,6 +274,7 @@ private:
   std::set<ElementId> _empty;
   boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
+  ElementCriterionPtr _filter;
   Status _matchStatus;
   bool _reviewMatchesOtherThanOneToOne;
   int _neighborCountMax;
@@ -307,19 +323,20 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(
-    map, matches, _getRf(), threshold, Status::Unknown1,
+    map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
+  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " building match candidates.");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "matches buildings", CreatorDescription::Building, false));
+    CreatorDescription(className(), "Matches buildings", CreatorDescription::Building, false));
   return result;
 }
 
@@ -352,9 +369,10 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   return _rf;
 }
 
-bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  return BuildingMatchVisitor::isMatchCandidate(element);
+  std::vector<const Match*> matches;
+  return BuildingMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()

@@ -55,7 +55,7 @@ go
 hoot-cmd/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
-hoot-core/src/main/cpp/hoot/core/VersionDefines.h
+hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
 hoot-core/src/main/cpp/hoot/core/proto/*.pb.h
@@ -92,7 +92,13 @@ missing
 Output.osm
 /output.osm
 /output.pgm
-plugins/*_schema.js
+plugins/ggdm30_schema.js
+plugins/tds40_full_schema.js
+plugins/tds61_full_schema.js
+plugins/ggdm30_full_schema.js
+plugins/mgcp_schema.js
+plugins/tds40_schema.js
+plugins/tds61_schema.js
 plugins/etds*_rules.js
 plugins/emgcp*_rules.js
 plugins/eggdm*_rules.js

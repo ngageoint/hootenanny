@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
 
-#include "ElementType.h"
+#include <hoot/core/elements/ElementType.h>
 
 // Standard
 #include <limits>
@@ -49,6 +49,7 @@ namespace hoot
 class ElementId
 {
 public:
+
   static std::string className() { return "ElementId"; }
 
   ElementId() : _type(ElementType::Unknown), _id(-std::numeric_limits<int>::max()) {}
@@ -85,7 +86,12 @@ public:
 
   QString toString() const
   {
-    return getType().toString() + ":" + QString::number(getId());
+    // Now printing element ids as "(id)" rather than ":id" as they used to be. This makes it easier
+    // to trace the events of a single feature when searching through log output w/o having to look
+    // at features that you don't want. e.g. Searching through text for "Way:-1" in the past would
+    // give you "Way:-1", "Way:-12".  Now, you can search for "Way(-1)" instead and not return
+    // results for "Way(-12)".
+    return getType().toString() + "(" + QString::number(getId()) + ")";
   }
 
   QString toString()
@@ -109,6 +115,7 @@ public:
   static ElementId way(long wid) { return ElementId(ElementType::Way, wid); }
 
 private:
+
   ElementType _type;
   long _id;
 };

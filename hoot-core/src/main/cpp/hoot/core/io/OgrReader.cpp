@@ -39,29 +39,26 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/io/PythonTranslator.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-
-// #include "JavaScriptTranslator.h"
-#include "PythonTranslator.h"
 
 using namespace std;
 
@@ -736,10 +733,11 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
+  AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
     WayPtr outer = _createWay(p->getExteriorRing(), circularError);
-    if (OsmSchema::getInstance().isArea(t, ElementType::Way) == false)
+    if (areaCrit.isSatisfied(t, ElementType::Way) == false)
     {
       t.setArea(true);
     }
@@ -750,7 +748,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   {
     RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
       MetadataTags::RelationMultiPolygon()));
-    if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
+    if (areaCrit.isSatisfied(t, ElementType::Relation) == false)
     {
       t.setArea(true);
     }
@@ -881,7 +879,7 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     }
 
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
+    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
     boost::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
@@ -934,11 +932,6 @@ void OgrReaderInternal::open(const QString path, QString layer)
     _pendingLayers = getLayersWithGeometry(path);
   }
   LOG_VART(_pendingLayers);
-  if (Log::getInstance().getLevel() == Log::Info)
-  {
-    std::cout << ".";
-    std::cout.flush();
-  }
 }
 
 void OgrReaderInternal::_openLayer(QString path, QString layer)

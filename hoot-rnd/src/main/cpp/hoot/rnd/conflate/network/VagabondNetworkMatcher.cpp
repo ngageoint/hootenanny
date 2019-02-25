@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VagabondNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/conflate/extractors/HausdorffDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
@@ -93,20 +93,17 @@ void VagabondNetworkMatcher::iteratePageRank()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
   // add this weight to all edges at the end.
   double allWeight = (1 - _dampen) / _pr->getSize();
 
-  /// @todo this is much less efficient then some iterator approaches, but it is easy to write &
-  /// read. if this works and it is a bottle neck, please fix it.
+  // this is much less efficient then some iterator approaches, but it is easy to write &
+  // read. if this works and it is a bottle neck, please fix it.
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
@@ -139,8 +136,7 @@ void VagabondNetworkMatcher::iteratePageRank()
 
 void VagabondNetworkMatcher::iteratePageRankBleeding()
 {
-  /// @todo
-  throw NotImplementedException("@todo assign half the weight to one end of the way and half to "
+  throw NotImplementedException("assign half the weight to one end of the way and half to "
     "the other. If an end connects to nothing then distribute the weight evenly across the graph."
     "Another possible option is to store weights in two directions (inbound & outbound). The "
     "weights can only be applied to one side or the other.");
@@ -156,20 +152,17 @@ void VagabondNetworkMatcher::iteratePageRankBleeding()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 
   // add this weight to all edges at the end.
   double allWeight = (1 - _dampen) / _pr->getSize();
 
-  /// @todo this is much less efficient then some iterator approaches, but it is easy to write &
-  /// read. if this works and it is a bottle neck, please fix it.
+  // this is much less efficient then some iterator approaches, but it is easy to write &
+  // read. if this works and it is a bottle neck, please fix it.
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
@@ -214,12 +207,9 @@ void VagabondNetworkMatcher::iterateVoting()
 
   IndexedEdgeMatchSetPtr newHash = _pr->clone();
 
-  double sum = 0.0;
-
   for (IndexedEdgeMatchSet::MatchHash::iterator it = newHash->getAllMatches().begin();
     it != newHash->getAllMatches().end(); ++it)
   {
-    sum += it.value();
     it.value() = 0;
   }
 

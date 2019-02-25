@@ -29,7 +29,7 @@
 
 // hackish, I know.
 #define BigMap BigMapStxxl
-#include "BigMapStxxl.h"
+#include <tgs/BigContainers/BigMapStxxl.h>
 #undef BigMap
 
 // Standard

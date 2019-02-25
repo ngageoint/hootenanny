@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
@@ -32,6 +32,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
 
 //Qt
 #include <QString>
@@ -50,10 +51,14 @@ MatchFactory::~MatchFactory()
 
 MatchFactory::MatchFactory()
 {
+  setConfiguration(conf());
 }
 
 Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
 {
+  LOG_VART(eid1);
+  LOG_VART(eid2);
+
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     Match* m = _creators[i]->createMatch(map, eid1, eid2);
@@ -72,7 +77,7 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    LOG_INFO("Launching match creator " << i +1 << " / " << _creators.size() << "...");
+    LOG_DEBUG("Launching match creator " << i +1 << " / " << _creators.size() << "...");
     boost::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
@@ -132,6 +137,15 @@ void MatchFactory::registerCreator(QString c)
     args.removeFirst();
     boost::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
+
+    if (!_tagFilter.trimmed().isEmpty())
+    {
+      // We're specifically checking for an option to feed this tag criterion.  Additional combined
+      // criteria can be added to this match creator if needed.
+      boost::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
+      mc->setCriterion(filter);
+    }
+
     _theInstance->registerCreator(mc);
 
     if (args.size() > 0)
@@ -153,16 +167,16 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 void MatchFactory::_tempFixDefaults()
 {
-  QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
+  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
+    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
+    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
+    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
   }
 
   //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
@@ -183,7 +197,7 @@ void MatchFactory::_tempFixDefaults()
       }
       else if (matchCreator == "hoot::HighwayMatchCreator")
       {
-        fixedMergerCreators.append("hoot::HighwaySnapMergerCreator");
+        fixedMergerCreators.append("hoot::HighwayMergerCreator");
       }
       else if (matchCreator == "hoot::NetworkMatchCreator")
       {
@@ -227,7 +241,7 @@ void MatchFactory::_tempFixDefaults()
            ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
   {
     LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier ");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
   LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
 
@@ -252,9 +266,14 @@ void MatchFactory::_tempFixDefaults()
   LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
+void MatchFactory::setConfiguration(const Settings& s)
+{
+  _tagFilter = ConfigOptions(s).getConflateTagFilter();
+}
+
 MatchFactory& MatchFactory::getInstance()
 {
-  /* TODO: remove this hack after the following UI issues are fixed:
+  /* remove this hack after the following UI issues are fixed:
    *
    * https://github.com/ngageoint/hootenanny-ui/issues/969
    * https://github.com/ngageoint/hootenanny-ui/issues/970
@@ -266,20 +285,10 @@ MatchFactory& MatchFactory::getInstance()
     MatchFactory::_tempFixDefaults();
   }
 
-  const QStringList matchCreators = ConfigOptions().getMatchCreators().split(";");
-  const QStringList mergerCreators = ConfigOptions().getMergerCreators().split(";");
+  const QStringList matchCreators = ConfigOptions().getMatchCreators();
+  const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
   LOG_VARD(mergerCreators);
-
-  //ConflateAverageTest is configured with old roads and specifies empty strings for both matchers
-  //and mergers.  I don't completely understand why it explicitly needs to specify an empty config
-  //strings for those, though.  The old roads option will be removed in #2133.
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0) &&
-      !ConfigOptions().getConflateEnableOldRoads())
-  {
-    throw HootException(
-      "Empty match/merger creators only allowed when conflate.enable.old.roads is enabled.");
-  }
 
   if (matchCreators.size() != mergerCreators.size())
   {
@@ -316,6 +325,12 @@ MatchFactory& MatchFactory::getInstance()
     _setMatchCreators(matchCreators);
   }
   return *_theInstance;
+}
+
+void MatchFactory::reset()
+{
+  _creators.clear();
+  _tagFilter = "";
 }
 
 }

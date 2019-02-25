@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayRfClassifier.h"
 
@@ -32,26 +32,26 @@
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
-#include <hoot/core/algorithms/ExactStringDistance.h>
-#include <hoot/core/algorithms/MaxWordSetDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/Soundex.h>
+#include <hoot/core/algorithms/string/ExactStringDistance.h>
+#include <hoot/core/algorithms/string/MaxWordSetDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/Soundex.h>
 #include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/conflate/extractors/AttributeScoreExtractor.h>
-#include <hoot/core/conflate/extractors/DistanceScoreExtractor.h>
-#include <hoot/core/conflate/extractors/LengthScoreExtractor.h>
-#include <hoot/core/conflate/extractors/WeightedMetricDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/WeightedShapeDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/BufferedOverlapExtractor.h>
-#include <hoot/core/conflate/extractors/CentroidDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/CompactnessExtractor.h>
-#include <hoot/core/conflate/extractors/EdgeDistanceExtractor.h>
-#include <hoot/core/conflate/extractors/NameExtractor.h>
-#include <hoot/core/conflate/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/extractors/SmallerOverlapExtractor.h>
-#include <hoot/core/conflate/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/AttributeScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/DistanceScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/LengthScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/WeightedMetricDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/WeightedShapeDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/BufferedOverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/CentroidDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/CompactnessExtractor.h>
+#include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
@@ -312,7 +312,7 @@ void HighwayRfClassifier::_init() const
     }
 
     vector<string> factorLabels = _rf->getFactorLabels();
-    LOG_VARD(factorLabels);
+    LOG_VART(factorLabels);
 
     QStringList extractorNames;
     for (size_t i = 0; i < _extractors.size(); i++)
@@ -331,9 +331,9 @@ void HighwayRfClassifier::_init() const
       }
       _rfFactorLabels.append(fn);
     }
-    LOG_VARD(extractorNames);
-    LOG_VARD(missingExtractors);
-    LOG_VARD(_rfFactorLabels);
+    LOG_VART(extractorNames);
+    LOG_VART(missingExtractors);
+    LOG_VART(_rfFactorLabels);
 
     if (missingExtractors.size() > 0)
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -81,8 +81,8 @@ public:
     ntwrk.addEdge(pEdge2);
 
     // toString
-    HOOT_STR_EQUALS("(0) Node:-100 -- Way:-1000 --> (1) Node:-200\n"
-                    "(2) Node:-300 -- Way:-1001 --> (3) Node:-400",
+    HOOT_STR_EQUALS("(0) Node(-100) -- Way(-1000) --> (1) Node(-200)\n"
+                    "(2) Node(-300) -- Way(-1001) --> (3) Node(-400)",
                     ntwrk.toString());
 
     // getEdgesFromVertex

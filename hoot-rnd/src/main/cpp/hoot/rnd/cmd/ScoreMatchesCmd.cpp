@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,10 +37,11 @@
 #include <hoot/rnd/scoring/MatchScoringMapPreparer.h>
 #include <hoot/rnd/scoring/MapScoringStatusAndRefTagValidator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/rnd/visitors/CountManualMatchesVisitor.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -62,22 +63,27 @@ public:
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
                             boost::shared_ptr<MatchThreshold> mt, bool showConfusion,
-                            double& score/*, long numManualMatches*/)
+                            double& score)
   {
     MatchComparator comparator;
 
     QString result;
 
+    long numManualMatches = 0;
     for (size_t i = 0; i < maps.size(); i++)
     {
       OsmMapPtr copy(new OsmMap(maps[i]));
 
-      // Apply any user specified operations.
+      boost::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
+        new CountManualMatchesVisitor());
+      maps[i]->visitRo(*manualMatchVisitor);
+      numManualMatches += manualMatchVisitor->getStat();
+      LOG_VARD(numManualMatches);
+
       LOG_INFO("Applying pre conflation operations...");
       LOG_VART(ConfigOptions().getConflatePreOps());
       NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
       UnifyingConflator(mt).apply(copy);
-      // Apply any user specified operations.
       LOG_INFO("Applying post conflation operations...");
       NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
 
@@ -91,17 +97,15 @@ public:
       }
     }
 
+    LOG_VARD(showConfusion);
     if (showConfusion)
     {
       if (mt)
       {
         cout << "Threshold: " << mt->toString() << endl;
       }
-      cout << comparator.toString() /*<< endl*/;
-//      if (numManualMatches != -1)
-//      {
-//        cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << endl;
-//      }
+      cout << comparator.toString();
+      cout << QString("number of manual matches made: %1\n").arg(numManualMatches) << endl;
     }
     QString line = QString("%1,%2,%3,%4\n").arg(-1)
         .arg(comparator.getPercentCorrect())
@@ -118,7 +122,9 @@ public:
   virtual QString getName() const { return "score-matches"; }
 
   virtual QString getDescription() const
-  { return "Scores conflation performance against manually matched data"; }
+  { return "Scores conflation performance against a manually matched map"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {
@@ -127,7 +133,7 @@ public:
     {
       double score;
       boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
-      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score/*, -1*/);
+      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
       return score;
     }
 
@@ -193,10 +199,7 @@ public:
 
     vector<OsmMapPtr> maps;
     QString output = args.last();
-    //for calculating the actual number of manual matches made
-    //OsmMapPtr ref2Map(new OsmMap());
-
-    for (int i = 0; i < args.size() - 1; i+=2)
+    for (int i = 0; i < args.size() - 1; i += 2)
     {
       OsmMapPtr map(new OsmMap());
       IoUtils::loadMap(map, args[i], false, Status::Unknown1);
@@ -219,14 +222,8 @@ public:
       MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
     }
-
-    //This logic is oddly affecting some test scores.  Since this isn't a critical feature,
-    //disabling it for now.  #1185 created to fix it.
-    //boost::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
-    //ref2Map->visitRo(*manualMatchVisitor);
-    //const long numManualMatches = manualMatchVisitor->getStat();
-
     LOG_VARD(maps.size());
+
     //for debugging
 //    OsmMapPtr mapCopy(maps[0]);
 //    MapProjector::projectToWgs84(mapCopy);
@@ -240,7 +237,7 @@ public:
     {
       double score;
       boost::shared_ptr<MatchThreshold> mt;
-      QString result = evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
+      const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
 
       cout << result;
     }

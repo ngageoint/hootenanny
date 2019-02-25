@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COMMAND_H
@@ -84,6 +84,13 @@ public:
    * BaseCommand for an example implementation.
    */
   virtual int run(char* argv[], int argc) = 0;
+
+  /**
+   * The 'type' of command; e.g. 'core' or 'rnd'
+   *
+   * @return the command typedef
+   */
+  virtual QString getType() const { return "core"; }
 };
 
 typedef boost::shared_ptr<Command> CommandPtr;

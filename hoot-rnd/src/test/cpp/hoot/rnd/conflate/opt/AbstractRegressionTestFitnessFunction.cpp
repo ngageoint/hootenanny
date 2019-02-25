@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AbstractRegressionTestFitnessFunction.h"
@@ -31,8 +31,8 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Settings.h>
-#include "RegressionTestSuite.h"
-#include "AbstractRegressionTest.h"
+#include <hoot/rnd/conflate/opt/RegressionTestSuite.h>
+#include <hoot/rnd/conflate/opt/AbstractRegressionTest.h>
 
 // Qt
 #include <QFileInfo>
@@ -62,7 +62,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   //Instead, we need to manually add those settings in.
 
   //add the default network settings to the test settings
-  //TODO: starting from conf() makes the config files huge, when I only want to see the ones
+  // starting from conf() makes the config files huge, when I only want to see the ones
   //in _configFile plus those in testSettings, but if I don't start from an existing config (or
   //call loadDefaults) then the config parser errors out...
   Settings updatedSettings = conf();

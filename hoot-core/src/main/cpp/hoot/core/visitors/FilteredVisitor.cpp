@@ -28,15 +28,15 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, FilteredVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor& visitor) :
   _criterion(&criterion),

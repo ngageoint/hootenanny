@@ -55,6 +55,8 @@ using namespace geos::geom;
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/v8Engine.h>
+#include <hoot/test/ProcessPool.h>
+#include <hoot/test/ScriptTestSuite.h>
 using namespace hoot;
 
 // Qt
@@ -65,14 +67,12 @@ using namespace hoot;
 
 // Standard
 #include <iostream>
+#include <unistd.h>
 #include <vector>
 using namespace std;
 
 // Tgs
 #include <tgs/System/Time.h>
-
-#include "ScriptTestSuite.h"
-#include "ProcessPool.h"
 
 typedef boost::shared_ptr<CppUnit::Test> TestPtr;
 
@@ -573,16 +573,18 @@ int main(int argc, char *argv[])
     {
       double start = Tgs::Time::getTime();
 
+      int nproc = 1;
+      //  With no number after --parallel use the number of online processors
+      int nprocs_available = sysconf(_SC_NPROCESSORS_ONLN);
       int i = args.indexOf("--parallel") + 1;
       if (i >= args.size())
+        nproc = nprocs_available;
+      else
       {
-        throw HootException("Expected integer after --parallel.");
-      }
-      bool ok = false;
-      int nproc = args[i].toInt(&ok);
-      if (!ok || nproc < 1)
-      {
-        throw HootException("Expected integer after --parallel");
+        bool ok = false;
+        nproc = args[i].toInt(&ok);
+        if (!ok || nproc < 1)
+          nproc = nprocs_available;
       }
       ProcessPool pool(nproc, listener->getTestTimeout(),
                        (bool)args.contains("--names"),

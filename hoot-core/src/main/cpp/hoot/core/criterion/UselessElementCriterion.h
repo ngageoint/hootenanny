@@ -28,9 +28,9 @@
 #define USELESSELEMENTCRITERION_H
 
 // hoot
-#include "ElementCriterion.h"
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -53,11 +53,11 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UselessElementCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies useless elements"; }
+  virtual QString getDescription() const { return "Identifies elements that have no use"; }
 
 private:
 

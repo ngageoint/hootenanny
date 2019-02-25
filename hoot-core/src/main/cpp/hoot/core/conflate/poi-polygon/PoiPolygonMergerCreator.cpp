@@ -27,20 +27,19 @@
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <typeinfo>
-
-#include "PoiPolygonMatch.h"
-#include "PoiPolygonMerger.h"
 
 using namespace std;
 
@@ -50,9 +49,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
+_map(0),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
-  _map = 0;
 }
 
 Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
@@ -140,7 +139,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "merges POIs into polygons", false));
+  result.push_back(CreatorDescription(className(), "Merges POIs into polygons", false));
   return result;
 }
 
@@ -221,9 +220,9 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     //not passing the tag ignore list here, since it would have already be used when calling
     //these methods from PoiPolygonMatch
     if (_autoMergeManyPoiToOnePolyMatches &&
-        OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o1)) &&
-        OsmSchema::getInstance().isPoiPolygonPoi(map->getElement(o2)) &&
-        OsmSchema::getInstance().isPoiPolygonPoly(map->getElement(sharedEid)))
+        _poiCrit.isSatisfied(map->getElement(o1)) &&
+        _poiCrit.isSatisfied(map->getElement(o2)) &&
+        _polyCrit.isSatisfied(map->getElement(sharedEid)))
     {
       LOG_TRACE("Automatically merging pois: " << o1 << ", " << o2 << " into poly: " << sharedEid);
       return false;

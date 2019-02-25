@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OPTIMALCONSTRAINEDMATCHES_H
 #define OPTIMALCONSTRAINEDMATCHES_H
@@ -32,6 +32,8 @@
 
 namespace hoot
 {
+
+class IntegerProgrammingSolver;
 
 /**
  * A class for determining a subset of matches that meet a set of constraints (isConflicting) and
@@ -43,6 +45,7 @@ namespace hoot
 class OptimalConstrainedMatches : public ConstrainedMatches
 {
 public:
+
   OptimalConstrainedMatches(const ConstOsmMapPtr& map);
 
   /**
@@ -50,7 +53,7 @@ public:
    * scores. All matches will be considered so if you don't want matches below a threshold included
    * then don't add them.
    */
-  virtual std::vector<const Match*> calculateSubset();
+  virtual std::vector<const Match*> calculateSubset() override;
 
 private:
 

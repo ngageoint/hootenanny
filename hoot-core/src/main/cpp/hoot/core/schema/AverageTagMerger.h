@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef AVERAGETAGMERGER_H
 #define AVERAGETAGMERGER_H
 
-#include "TagMerger.h"
+#include <hoot/core/schema/TagMerger.h>
 
 namespace hoot
 {
@@ -40,13 +40,10 @@ public:
 
   AverageTagMerger();
 
-  virtual ~AverageTagMerger() {}
+  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const;
-
-  //TODO: verify this is accurate and explain averaging better
-  virtual QString getDescription()
-  { return "Keeps tags from both reference and secondary features.  Overlapping tags are averaged together"; }
+  virtual QString getDescription() const
+  { return "Keeps tags from both features; overlapping tags are averaged together"; }
 };
 
 }

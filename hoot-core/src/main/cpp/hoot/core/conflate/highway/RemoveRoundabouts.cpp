@@ -30,13 +30,13 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -50,16 +50,15 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveRoundabouts)
 
 RemoveRoundabouts::RemoveRoundabouts()
 {
-  // blank
 }
 
 void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 {
   // Get a list of roundabouts in the map
+  RoundaboutCriterion roundaboutCrit;
   for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
   {
-    if (OsmSchema::getInstance().isRoundabout(it->second->getTags(),
-                                              it->second->getElementType()))
+    if (roundaboutCrit.isSatisfied(it->second))
     {
       _todoWays.push_back(it->first);
     }

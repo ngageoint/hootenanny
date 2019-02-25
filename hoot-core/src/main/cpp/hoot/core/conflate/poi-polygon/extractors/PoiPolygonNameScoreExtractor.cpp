@@ -27,8 +27,8 @@
 #include "PoiPolygonNameScoreExtractor.h"
 
 // hoot
-#include <hoot/core/algorithms/LevenshteinDistance.h>
-#include <hoot/core/algorithms/MeanWordSetDistance.h>
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/language/TranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
@@ -51,9 +51,11 @@ _matchAttemptMade(false)
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setLevDist(config.getLevenshteinDistanceAlpha());
-  setTranslateTagValuesToEnglish(config.getPoiPolygonTranslateNamesToEnglish());
+
+  setTranslateTagValuesToEnglish(config.getPoiPolygonNameTranslateToEnglish());
   if (_translateTagValuesToEnglish && !_translator)
   {
     _translator.reset(
@@ -109,29 +111,6 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
   }
   LOG_VART(nameScore);
   return nameScore;
-}
-
-QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
-{
-  QString name = element->getTags().get("name").toLower().trimmed();
-  if (!name.isEmpty())
-  {
-    return name;
-  }
-  else
-  {
-    QStringList names = element->getTags().getNames();
-    for (int i = 0; i < names.size(); i++)
-    {
-      name = names.at(i).toLower().trimmed();
-      //arbitrarily returning the first name here
-      if (!name.isEmpty())
-      {
-        return name;
-      }
-    }
-  }
-  return "";
 }
 
 }

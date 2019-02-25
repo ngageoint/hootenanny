@@ -27,11 +27,10 @@
 #include "BuildingMergerCreator.h"
 
 // hoot
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/conflate/polygon/BuildingMerger.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-
-#include "BuildingMatch.h"
-#include "BuildingMerger.h"
 
 using namespace std;
 
@@ -87,7 +86,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
 vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "merges buildings together", false));
+  result.push_back(CreatorDescription(className(), "Merges buildings together", false));
   return result;
 }
 

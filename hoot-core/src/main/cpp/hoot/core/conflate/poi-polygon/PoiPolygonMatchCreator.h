@@ -28,11 +28,12 @@
 #define POIPOLYGONMATCHCREATOR_H
 
 // hoot
-#include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-
-#include "PoiPolygonRfClassifier.h"
+#include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -74,6 +75,8 @@ private:
 
   boost::shared_ptr<PoiPolygonRfClassifier> _rf;
 
+  PoiPolygonPoiCriterion _poiCrit;
+  PoiPolygonPolyCriterion _polyCrit;
 };
 
 }

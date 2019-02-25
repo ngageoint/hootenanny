@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLELWAYCRITERION_H
@@ -32,7 +32,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
@@ -51,16 +51,15 @@ public:
   ParallelWayCriterion(const ConstOsmMapPtr& map,
                        ConstWayPtr baseWay,
                        bool isParallel = true);
-
   virtual ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  ElementCriterionPtr clone()
+  virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ParallelWayCriterion(_map, _baseWay, _isParallel)); }
 
   virtual QString getDescription() const
