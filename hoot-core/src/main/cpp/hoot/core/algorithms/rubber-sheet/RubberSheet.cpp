@@ -265,8 +265,8 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   for (size_t i = 0; i < candidates.size(); i++)
   {
     PROGRESS_INFO(
-      "Running interpolator: " << candidates[i] << " (" << (i + 1) << " / " <<
-      candidates.size() << ")...");
+      "Running interpolator: (" << (i + 1) << " / " <<
+      candidates.size() << "): " << candidates[i] << "...");
     boost::shared_ptr<Interpolator> candidate(
       Factory::getInstance().constructObject<Interpolator>(candidates[i]));
     // Setting this upper limit prevents some runaway optimizations.  Those conditions should be
