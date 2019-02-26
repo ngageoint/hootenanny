@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESETDERIVER_H
 #define CHANGESETDERIVER_H
@@ -48,7 +48,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~ChangesetDeriver();
 
@@ -65,7 +65,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange();
+  virtual Change readNextChange() override;
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }

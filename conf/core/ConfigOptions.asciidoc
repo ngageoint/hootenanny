@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== add.uuid.visitor.key
+
+* Data Type: string
+* Default Value: ``
+
+Tag key used by AddUuidVisitor for adding custom unique ID's to data.
+
 === address.additional.tag.keys
 
 * Data Type: list
@@ -210,6 +217,24 @@ setting may cause writing to an OSM API database to occur more slowly.
 * Default Value: `17`
 
 The precision of numeric values written to Attribute-Relation (.arff) files.
+
+=== attribute.conflation.aggressive.highway.joining
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
+highway attribution into those with less specific highway attribution and no names.  Enabling this
+option may result in some false positive road joining.
+
+=== attribute.conflation.allow.ref.geometry.changes.for.bridges
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
+bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
+reference dataset will be lost.
 
 === attribute.score.extractor.use.weight
 
@@ -684,6 +709,14 @@ case also matches.  If false, cleaning and conflation merge operations will cons
 the same text but differing case as the same with each other.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
+
+=== duplicate.name.preserve.original.name
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
+will treat name and alternate name tags equally.
 
 === duplicate.way.remover.strict.tag.matching
 
@@ -3842,6 +3875,21 @@ databases are capped at 2000 nodes per way.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
+
+=== way.remover.bounds
+
+* Data Type: string
+* Default Value: ``
+
+Bounds used by the RemoveWaysByBoundsOp when removing ways, of the form: minx,miny,maxx,maxy
+
+=== way.remover.invert.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the RemoveWaysByBoundsOp will remove ways outside of the bounds specified by
+way.remover.bounds.  Otherwise it will remove ways within the specified bounds.
 
 === way.splitter.max.length
 

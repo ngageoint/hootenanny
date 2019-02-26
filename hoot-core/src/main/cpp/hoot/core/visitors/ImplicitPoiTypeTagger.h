@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITPOITYPETAGGER_H
 #define IMPLICITPOITYPETAGGER_H
@@ -45,7 +45,7 @@ public:
   ImplicitPoiTypeTagger();
   ImplicitPoiTypeTagger(const QString databasePath);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
 protected:

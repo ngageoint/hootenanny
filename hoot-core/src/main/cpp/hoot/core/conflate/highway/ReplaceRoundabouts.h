@@ -70,7 +70,7 @@ public:
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  void apply(boost::shared_ptr<OsmMap>& pMap);
+  void apply(boost::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -80,14 +80,14 @@ public:
    */
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Replacing roundabouts with simple intersections..."; }
 
   // finish; wasn't obvious how to count the total affected - #2933
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return ""; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }
 
 private:

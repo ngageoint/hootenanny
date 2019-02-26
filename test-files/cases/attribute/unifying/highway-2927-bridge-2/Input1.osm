@@ -1,0 +1,1476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="7.6988" minlon="-72.36539999999999" maxlat="7.703" maxlon="-72.3584"/>
+    <node visible="true" id="-599486" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3587182734695205"/>
+    <node visible="true" id="-599485" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7014734418771251" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599484" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999766979966910" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599483" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007453994199002" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599482" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024697672642954" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599481" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3643537384355255"/>
+    <node visible="true" id="-599480" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3629401351312538"/>
+    <node visible="true" id="-599479" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3592806677495304"/>
+    <node visible="true" id="-599478" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024584100726941" lon="-72.3653999999999940"/>
+    <node visible="true" id="-599477" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029956433356537" lon="-72.3653999999999940"/>
+    <node visible="true" id="-599476" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3609894875373527"/>
+    <node visible="true" id="-599475" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007915076878319" lon="-72.3653999999999940"/>
+    <node visible="true" id="-599474" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3637694387719250"/>
+    <node visible="true" id="-599473" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019046245402638" lon="-72.3653999999999940"/>
+    <node visible="true" id="-599472" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3604333847607819"/>
+    <node visible="true" id="-599471" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3595948439905925"/>
+    <node visible="true" id="-599470" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6993110867921262" lon="-72.3653999999999940"/>
+    <node visible="true" id="-599469" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3648749865446348"/>
+    <node visible="true" id="-599468" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3587000267866642"/>
+    <node visible="true" id="-599467" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992284381644618" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599466" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6991389118199258" lon="-72.3584000000000032"/>
+    <node visible="true" id="-599465" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3644779235235234"/>
+    <node visible="true" id="-519038" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7003252868600001" lon="-72.3645614283999947">
+        <tag k="bdw-id" v="{2b1399b5-2753-4066-bc56-b8e3aefe90e7}"/>
+    </node>
+    <node visible="true" id="-519036" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000524529499996" lon="-72.3646327131999954">
+        <tag k="bdw-id" v="{3d83ceeb-0418-4a95-b4ab-5fc7705850f7}"/>
+    </node>
+    <node visible="true" id="-519034" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999384750299997" lon="-72.3646676866299998">
+        <tag k="bdw-id" v="{c4a1cf21-416f-414f-b333-94cc84807c1c}"/>
+    </node>
+    <node visible="true" id="-519032" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997367568100001" lon="-72.3647365293199982">
+        <tag k="bdw-id" v="{3bafbefa-9894-45a8-a7cb-69912c23d12c}"/>
+    </node>
+    <node visible="true" id="-519030" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996960073500000" lon="-72.3647552536900065">
+        <tag k="bdw-id" v="{15f50f45-3907-4fb8-907a-bc3bc30b02ee}"/>
+    </node>
+    <node visible="true" id="-519028" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996632180000004" lon="-72.3647774958599967">
+        <tag k="bdw-id" v="{9058c10d-26e0-4c35-ad74-e9aaed0ea42b}"/>
+    </node>
+    <node visible="true" id="-519026" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996182300299996" lon="-72.3648208084500055">
+        <tag k="bdw-id" v="{fd69d246-ec48-48f9-9317-26fae1eae0fe}"/>
+    </node>
+    <node visible="true" id="-519024" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995737206600001" lon="-72.3648786283799978">
+        <tag k="bdw-id" v="{575d3611-dc51-40ab-b2d8-c2561e00890b}"/>
+    </node>
+    <node visible="true" id="-519022" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995612977999999" lon="-72.3648866791999978">
+        <tag k="bdw-id" v="{06bf1610-0e90-49fc-9114-36b379c4660a}"/>
+    </node>
+    <node visible="true" id="-519020" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995468363599997" lon="-72.3648901012099941">
+        <tag k="bdw-id" v="{4132d23d-4212-4639-a6b3-e5b6935de61c}"/>
+    </node>
+    <node visible="true" id="-519018" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995300524400001" lon="-72.3648891177899998">
+        <tag k="bdw-id" v="{083899ed-ba61-47ce-8baf-6616ec0677ec}"/>
+    </node>
+    <node visible="true" id="-519016" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6994883816500002" lon="-72.3648748282899987">
+        <tag k="bdw-id" v="{b778ee8d-262a-40b4-aa1d-4e2b3ff58d14}"/>
+    </node>
+    <node visible="true" id="-519014" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6994340143300004" lon="-72.3648455978899960">
+        <tag k="bdw-id" v="{f354a4b8-acc1-4762-bfe4-1cdc0422cb72}"/>
+    </node>
+    <node visible="true" id="-519012" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988897343599998" lon="-72.3645093670400001">
+        <tag k="bdw-id" v="{517b3307-09b5-4b3a-b497-e5bf7adf0d64}"/>
+    </node>
+    <node visible="true" id="-519010" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988550299999998" lon="-72.3644932968399957">
+        <tag k="bdw-id" v="{62350f3f-463b-42fb-8b9e-e32eb8a3b174}"/>
+    </node>
+    <node visible="true" id="-519008" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988183784600004" lon="-72.3644868463200055">
+        <tag k="bdw-id" v="{347874d6-7887-4085-9a1a-24efd90a2479}"/>
+    </node>
+    <node visible="true" id="-518896" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992412347999997" lon="-72.3593826898599985">
+        <tag k="bdw-id" v="{66fa7879-ad20-47e4-9140-c3c7de8a9f52}"/>
+    </node>
+    <node visible="true" id="-518894" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992564190600001" lon="-72.3594277203900020">
+        <tag k="bdw-id" v="{a0f095b9-7fbc-4361-b994-d85f4e67855b}"/>
+    </node>
+    <node visible="true" id="-518892" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992779188700000" lon="-72.3594700869700063">
+        <tag k="bdw-id" v="{de4ac387-e204-40b6-a872-bac62a736235}"/>
+    </node>
+    <node visible="true" id="-518890" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6993052853000004" lon="-72.3595089049200055">
+        <tag k="bdw-id" v="{9893a976-8d41-4fa8-8b7f-7784f22cb53f}"/>
+    </node>
+    <node visible="true" id="-518888" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995335028499996" lon="-72.3597741646800046">
+        <tag k="bdw-id" v="{26a7a9c4-a267-4a2a-8720-d176d5fa1034}"/>
+    </node>
+    <node visible="true" id="-518884" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6991559975200001" lon="-72.3588277695599942">
+        <tag k="bdw-id" v="{a05ed439-4959-4ec7-a534-1e3cb1be92fc}"/>
+    </node>
+    <node visible="true" id="-518878" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992473837100004" lon="-72.3588367156799990">
+        <tag k="bdw-id" v="{d51893a6-3df0-4d94-ae99-a0291cf1f8b2}"/>
+    </node>
+    <node visible="true" id="-518876" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013304654399999" lon="-72.3649230197300000">
+        <tag k="bdw-id" v="{dd91b33a-be42-4891-bc91-2be90c51b853}"/>
+    </node>
+    <node visible="true" id="-518874" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013324558300003" lon="-72.3648735912399985">
+        <tag k="bdw-id" v="{9d22553e-4320-44c6-a1b3-e20179af825f}"/>
+    </node>
+    <node visible="true" id="-518872" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013292813499996" lon="-72.3648242249600031">
+        <tag k="bdw-id" v="{98c4d4ed-44cc-405e-972f-de5696f366be}"/>
+    </node>
+    <node visible="true" id="-518870" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6991501087799996" lon="-72.3586803331299961">
+        <tag k="bdw-id" v="{3e41468b-4ec7-41ce-a48d-39b762301e90}"/>
+    </node>
+    <node visible="true" id="-518864" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992193064799999" lon="-72.3588999086399980">
+        <tag k="bdw-id" v="{bbac7ebe-6c98-42a8-ae6e-b09b73364b98}"/>
+    </node>
+    <node visible="true" id="-518808" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026958136300001" lon="-72.3650447362499989">
+        <tag k="bdw-id" v="{ddd4701d-ab0c-42dc-8c75-900e0dc3af5e}"/>
+    </node>
+    <node visible="true" id="-518804" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021796015300001" lon="-72.3645015413899984">
+        <tag k="bdw-id" v="{8746ed36-9f0b-4eb7-9558-3fae339f6750}"/>
+    </node>
+    <node visible="true" id="-518802" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7022252799000004" lon="-72.3645673879100002">
+        <tag k="bdw-id" v="{133a2d8b-e32e-4e50-ad73-c4854fcc925b}"/>
+    </node>
+    <node visible="true" id="-518800" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025182392699998" lon="-72.3649374931300002">
+        <tag k="bdw-id" v="{f6efc0ea-6a32-4bce-b27b-56022d012add}"/>
+    </node>
+    <node visible="true" id="-518798" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025805898900002" lon="-72.3650112703899993">
+        <tag k="bdw-id" v="{12c8cfe5-2c80-4416-a6c6-7dd032a41850}"/>
+    </node>
+    <node visible="true" id="-518796" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008919916799998" lon="-72.3622094409199974">
+        <tag k="bdw-id" v="{85994d76-029a-4614-9df7-7b500fa1d7f1}"/>
+    </node>
+    <node visible="true" id="-518794" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013730528800002" lon="-72.3620810506500050">
+        <tag k="bdw-id" v="{a7735e22-4c30-4d65-a692-ff1ed1f9376f}"/>
+    </node>
+    <node visible="true" id="-518788" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024048346500003" lon="-72.3623002673199949">
+        <tag k="bdw-id" v="{1b331fd7-7f67-4919-90e4-05086bf62cbf}"/>
+    </node>
+    <node visible="true" id="-518786" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025861574699999" lon="-72.3629225343800044">
+        <tag k="bdw-id" v="{cc54749b-a8ec-4890-85c3-09a892963506}"/>
+    </node>
+    <node visible="true" id="-518784" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001798178699996" lon="-72.3636234875300062">
+        <tag k="bdw-id" v="{ec320852-50a3-4e2c-aeda-0fd3e6195a7c}"/>
+    </node>
+    <node visible="true" id="-518782" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001675363100004" lon="-72.3635159822700018">
+        <tag k="bdw-id" v="{105fc6d8-94f1-4ef4-ba69-3046dff39d16}"/>
+    </node>
+    <node visible="true" id="-518780" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001659247900003" lon="-72.3634536496399932">
+        <tag k="bdw-id" v="{39843252-90f8-4328-a1f2-80fab8e6b8b6}"/>
+    </node>
+    <node visible="true" id="-518778" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001738660600001" lon="-72.3633648031100023">
+        <tag k="bdw-id" v="{0767e414-fe2f-4e87-86b1-83c5065f4304}"/>
+    </node>
+    <node visible="true" id="-518776" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002263687200001" lon="-72.3630515204099964">
+        <tag k="bdw-id" v="{7931c590-92d0-45e3-9827-de3955aed059}"/>
+    </node>
+    <node visible="true" id="-518774" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002326456699999" lon="-72.3629951913199960">
+        <tag k="bdw-id" v="{90fcd827-fbd0-48ae-a4d6-09673f960de9}"/>
+    </node>
+    <node visible="true" id="-518772" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002263536499997" lon="-72.3629389733600021">
+        <tag k="bdw-id" v="{c626b399-6782-461d-917a-0cf0996b1fdb}"/>
+    </node>
+    <node visible="true" id="-518770" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001300551699998" lon="-72.3624071531999959">
+        <tag k="bdw-id" v="{c64c8768-ce14-47a8-9c38-8ace6941987b}"/>
+    </node>
+    <node visible="true" id="-518768" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002421877699998" lon="-72.3623841271899977">
+        <tag k="bdw-id" v="{0489272e-8d70-46b9-b3a7-bc232913d425}"/>
+    </node>
+    <node visible="true" id="-518766" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7004419767799996" lon="-72.3623265571600029">
+        <tag k="bdw-id" v="{2e997e60-15a4-40d4-b464-f033b5e1e192}"/>
+    </node>
+    <node visible="true" id="-518764" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005950625799997" lon="-72.3622759602600070">
+        <tag k="bdw-id" v="{dbc43ee4-a923-4289-afe8-1459523ab536}"/>
+    </node>
+    <node visible="true" id="-518744" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6994617585000000" lon="-72.3653356666000036">
+        <tag k="bdw-id" v="{b6be1c87-29d1-4959-9da4-9d17d7e664b8}"/>
+    </node>
+    <node visible="true" id="-518742" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996794169599996" lon="-72.3652826818200055">
+        <tag k="bdw-id" v="{12b490fd-a953-4a29-858b-871368ccd8ba}"/>
+    </node>
+    <node visible="true" id="-518740" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7003987303299999" lon="-72.3651280253599936">
+        <tag k="bdw-id" v="{de968008-487e-45f7-b75d-cc6a7e3c3b02}"/>
+    </node>
+    <node visible="true" id="-518738" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005030098100002" lon="-72.3651013186299963">
+        <tag k="bdw-id" v="{b42fe56c-6b69-4eb8-9dc8-4cc15abf7100}"/>
+    </node>
+    <node visible="true" id="-518736" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025063127399997" lon="-72.3607880166299964">
+        <tag k="bdw-id" v="{0f9afdde-b63b-4bc1-9563-1baa4b85e28c}"/>
+    </node>
+    <node visible="true" id="-518734" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025429482899996" lon="-72.3619990111400000">
+        <tag k="bdw-id" v="{628254ce-ddf5-4a6d-8e2b-604d49b8740c}"/>
+    </node>
+    <node visible="true" id="-518730" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996463546499996" lon="-72.3638948664100070">
+        <tag k="bdw-id" v="{022159b5-d615-40cd-8e0b-7e15a2f3fffd}"/>
+    </node>
+    <node visible="true" id="-518728" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997060737399998" lon="-72.3638749536900008">
+        <tag k="bdw-id" v="{249b4a4c-a063-4402-a9c1-dc9b0daf2923}"/>
+    </node>
+    <node visible="true" id="-518726" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997781354999999" lon="-72.3638605285700010">
+        <tag k="bdw-id" v="{119ff15b-1a2e-4924-a6b3-d30e2cf7f7a0}"/>
+    </node>
+    <node visible="true" id="-518724" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000669276700000" lon="-72.3637773729799960">
+        <tag k="bdw-id" v="{698ee339-549a-4414-833d-70c41bf96aa3}"/>
+    </node>
+    <node visible="true" id="-518716" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996897282200001" lon="-72.3599654490700033">
+        <tag k="bdw-id" v="{e030d272-c409-4fc0-9339-9554f98ca67d}"/>
+    </node>
+    <node visible="true" id="-518714" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997747674000001" lon="-72.3600422314799943">
+        <tag k="bdw-id" v="{59ba072e-e835-424e-9638-3a46a515d8f3}"/>
+    </node>
+    <node visible="true" id="-518712" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998361407499996" lon="-72.3600846000900049">
+        <tag k="bdw-id" v="{af319fcf-ad29-45dc-8031-c484298dc8ab}"/>
+    </node>
+    <node visible="true" id="-518710" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999463079100003" lon="-72.3601460936800009">
+        <tag k="bdw-id" v="{caee4c3f-bf77-40c2-b541-e49caf11c2fe}"/>
+    </node>
+    <node visible="true" id="-518708" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7004424406699998" lon="-72.3603875287600005">
+        <tag k="bdw-id" v="{00d30ebe-52c8-45c5-bc86-5b1dc30bbe06}"/>
+    </node>
+    <node visible="true" id="-518706" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007356230099999" lon="-72.3605422724999983">
+        <tag k="bdw-id" v="{22806f5a-e73a-4ba9-af2e-160f454900fe}"/>
+    </node>
+    <node visible="true" id="-518704" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007832028000003" lon="-72.3605486476500062">
+        <tag k="bdw-id" v="{138c095d-54fd-445b-90c5-923650b541e3}"/>
+    </node>
+    <node visible="true" id="-518702" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008241934799999" lon="-72.3605447727200044">
+        <tag k="bdw-id" v="{9967ecd7-f1a3-4fc8-914e-e2f78db509fc}"/>
+    </node>
+    <node visible="true" id="-518700" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005803708500000" lon="-72.3645073528099942">
+        <tag k="bdw-id" v="{eb14e619-d0c3-4d9a-979f-ccbb797c6951}"/>
+    </node>
+    <node visible="true" id="-518698" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007024150600003" lon="-72.3644763970700069">
+        <tag k="bdw-id" v="{3f4b8bd2-df1c-4138-b4fd-3260d8fe0ec3}"/>
+    </node>
+    <node visible="true" id="-518696" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7009478563300000" lon="-72.3643993500499931">
+        <tag k="bdw-id" v="{0c5f531f-dc9d-4838-be76-22f347450aa0}"/>
+    </node>
+    <node visible="true" id="-518694" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7027208787900001" lon="-72.3596191073200004">
+        <tag k="bdw-id" v="{3eeb7ede-2b3d-4c29-9e44-9d07960fa336}"/>
+    </node>
+    <node visible="true" id="-518690" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008914643399997" lon="-72.3605619019400024">
+        <tag k="bdw-id" v="{d8cb4c59-7766-4836-be2c-e8c19fba607f}"/>
+    </node>
+    <node visible="true" id="-518688" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7010350738800000" lon="-72.3606303437099996">
+        <tag k="bdw-id" v="{c3670158-c9c6-4ff0-8a58-c1b76a1ec4e5}"/>
+    </node>
+    <node visible="true" id="-518686" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011314008299996" lon="-72.3606690550100069">
+        <tag k="bdw-id" v="{0fdb3dcf-8b32-41f0-90be-c389007acb55}"/>
+    </node>
+    <node visible="true" id="-518684" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011480890200001" lon="-72.3597396552600003">
+        <tag k="bdw-id" v="{1f08e79d-65f6-4645-9193-d71b5f53fc5d}"/>
+    </node>
+    <node visible="true" id="-518682" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7014684370099999" lon="-72.3607199184299930">
+        <tag k="bdw-id" v="{d24f3529-f6f0-414e-8d8e-60da4d196983}"/>
+    </node>
+    <node visible="true" id="-518680" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008414641999998" lon="-72.3603488479899966">
+        <tag k="bdw-id" v="{f58efa1d-1534-4d88-a24a-65f0e8a8b94c}"/>
+    </node>
+    <node visible="true" id="-518678" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008388564899999" lon="-72.3604372371499949">
+        <tag k="bdw-id" v="{83b1e61c-ba23-4c55-968d-955604dab858}"/>
+    </node>
+    <node visible="true" id="-518668" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7020204485399999" lon="-72.3645026282299995">
+        <tag k="bdw-id" v="{6d7b17e4-660a-4bad-bd27-3f9ac8c26f45}"/>
+    </node>
+    <node visible="true" id="-518666" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026129862400001" lon="-72.3604632380500021">
+        <tag k="bdw-id" v="{824ffa86-73f5-400e-849e-67fa91014a0f}"/>
+    </node>
+    <node visible="true" id="-518662" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021015211100003" lon="-72.3643231872499939">
+        <tag k="bdw-id" v="{5a9206d5-800f-4011-965d-f301a8d427eb}"/>
+    </node>
+    <node visible="true" id="-518660" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021206720000004" lon="-72.3643814086800035">
+        <tag k="bdw-id" v="{4d5d8d79-a11f-4de2-b6dc-15547a6d7cbd}"/>
+    </node>
+    <node visible="true" id="-518658" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021432854500000" lon="-72.3644346259099933">
+        <tag k="bdw-id" v="{ff09ca3d-4dc3-47a8-8646-aa0fa7e82936}"/>
+    </node>
+    <node visible="true" id="-518656" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006174317799996" lon="-72.3616800898000037">
+        <tag k="bdw-id" v="{a0dccbbc-e9eb-46d7-b79b-120abe29eded}"/>
+    </node>
+    <node visible="true" id="-518654" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006146625999996" lon="-72.3617239950699940">
+        <tag k="bdw-id" v="{65842328-7e41-408d-a5ae-934a30e075e0}"/>
+    </node>
+    <node visible="true" id="-518652" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006200294399996" lon="-72.3618202711599992">
+        <tag k="bdw-id" v="{f5a74281-96eb-4f5e-b481-651edb664c2b}"/>
+    </node>
+    <node visible="true" id="-518650" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006166110400001" lon="-72.3620127005400064">
+        <tag k="bdw-id" v="{3236cbd6-48d9-454d-a8c4-1371a982eaf6}"/>
+    </node>
+    <node visible="true" id="-518648" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006222338299999" lon="-72.3620713771800013">
+        <tag k="bdw-id" v="{29b4e035-bf6f-4c0a-8ea4-3d453ca11958}"/>
+    </node>
+    <node visible="true" id="-518646" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012565179400001" lon="-72.3599581959600044">
+        <tag k="bdw-id" v="{10a8a646-89e4-4325-a1c0-0bba91edd235}"/>
+    </node>
+    <node visible="true" id="-518644" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012677290699996" lon="-72.3606008227500013">
+        <tag k="bdw-id" v="{e4fbe1ff-f723-431b-96fb-40f240a591ea}"/>
+    </node>
+    <node visible="true" id="-518642" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7014893720300002" lon="-72.3597033407099985">
+        <tag k="bdw-id" v="{f32070c6-9028-4e04-b9b2-6e6a295d1ee3}"/>
+    </node>
+    <node visible="true" id="-518640" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7023699280500004" lon="-72.3596330036399991">
+        <tag k="bdw-id" v="{f8906d8b-524d-4fc9-a16b-2f3c32d399d8}"/>
+    </node>
+    <node visible="true" id="-518632" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005029935499998" lon="-72.3647064545200038">
+        <tag k="bdw-id" v="{efbcf4d1-45de-4f80-a7f3-200b90b4f26b}"/>
+    </node>
+    <node visible="true" id="-518630" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005652468600001" lon="-72.3649338501799946">
+        <tag k="bdw-id" v="{ce494fa3-d0a3-4cd6-9cca-b5bef17f4acc}"/>
+    </node>
+    <node visible="true" id="-518622" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017322410100002" lon="-72.3647497908099950">
+        <tag k="bdw-id" v="{52724a1d-a920-4605-b298-1cd4bca5d8e5}"/>
+    </node>
+    <node visible="true" id="-518620" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017121249400002" lon="-72.3648359878300056">
+        <tag k="bdw-id" v="{e7e8ea7e-62f1-461a-9f9e-cdb3307f77dd}"/>
+    </node>
+    <node visible="true" id="-518618" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017029639099999" lon="-72.3648606462199950">
+        <tag k="bdw-id" v="{e813d633-c35d-4d36-af1b-170d39b085e7}"/>
+    </node>
+    <node visible="true" id="-518592" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008460567699997" lon="-72.3607534871500064">
+        <tag k="bdw-id" v="{27b64afd-85ec-4d9e-889c-96f38249e170}"/>
+    </node>
+    <node visible="true" id="-518590" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008923923800001" lon="-72.3607497208700039">
+        <tag k="bdw-id" v="{00282eb6-07d9-4490-a60e-d8541a07ec51}"/>
+    </node>
+    <node visible="true" id="-518588" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006060287500002" lon="-72.3650699608899970">
+        <tag k="bdw-id" v="{ee9ae638-b3fc-41a5-886d-82cc4f355eb9}"/>
+    </node>
+    <node visible="true" id="-518586" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012374695599997" lon="-72.3648322397200019">
+        <tag k="bdw-id" v="{f567cdc7-60ea-4580-85d9-914239eddac4}"/>
+    </node>
+    <node visible="true" id="-518584" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012823693800003" lon="-72.3648179282999990">
+        <tag k="bdw-id" v="{aa207c4c-6123-4b19-9124-f867b4665a24}"/>
+    </node>
+    <node visible="true" id="-518574" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017530332900002" lon="-72.3649325465199951">
+        <tag k="bdw-id" v="{7f41aff8-101a-456d-85b7-4d65109fab2c}"/>
+    </node>
+    <node visible="true" id="-518572" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017855075300004" lon="-72.3649637669900017">
+        <tag k="bdw-id" v="{73f1a3d4-f061-477d-aa78-0167bc45d078}"/>
+    </node>
+    <node visible="true" id="-518570" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018368800700001" lon="-72.3650283159600036">
+        <tag k="bdw-id" v="{0a8b03e8-8cf1-4cb4-a6c6-743c9423e16f}"/>
+    </node>
+    <node visible="true" id="-518568" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018695399999997" lon="-72.3650857263500029">
+        <tag k="bdw-id" v="{1ebc0ac8-8992-4d6b-8c91-b6bc962193b5}"/>
+    </node>
+    <node visible="true" id="-518566" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018988007800004" lon="-72.3651629165800045">
+        <tag k="bdw-id" v="{00eae29a-18ee-4083-9d9b-6ce3beb4ebcb}"/>
+    </node>
+    <node visible="true" id="-518564" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019098487599997" lon="-72.3652112486099952">
+        <tag k="bdw-id" v="{65abc668-4648-4d8f-8f0e-0ff31c7651b3}"/>
+    </node>
+    <node visible="true" id="-518562" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019170361200002" lon="-72.3652935094499981">
+        <tag k="bdw-id" v="{953fa01d-77bb-40e9-b414-c9276745c00a}"/>
+    </node>
+    <node visible="true" id="-518560" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019125718900003" lon="-72.3653594478400066">
+        <tag k="bdw-id" v="{53fe45e8-12b6-4cd8-a776-1b0f38d075aa}"/>
+    </node>
+    <node visible="true" id="-518558" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015033074300003" lon="-72.3647676287800010">
+        <tag k="bdw-id" v="{47cef29e-8cb0-4bcb-bd96-f32e89861003}"/>
+    </node>
+    <node visible="true" id="-518556" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016925778500003" lon="-72.3647298860600046">
+        <tag k="bdw-id" v="{43170a0b-5530-4103-a1db-21ce1da0f13b}"/>
+    </node>
+    <node visible="true" id="-518554" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017613183100000" lon="-72.3646789551700067">
+        <tag k="bdw-id" v="{9d2e75b8-7b3e-4212-a6d3-13ffce9bd5b5}"/>
+    </node>
+    <node visible="true" id="-518552" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017943246199998" lon="-72.3646545002600021">
+        <tag k="bdw-id" v="{e75e3182-39f4-4a2e-9000-b3da70366cc8}"/>
+    </node>
+    <node visible="true" id="-518550" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019855596399998" lon="-72.3638471517800070">
+        <tag k="bdw-id" v="{c01ea5a7-6169-48b2-a547-8e3cf0c6d9d0}"/>
+    </node>
+    <node visible="true" id="-518548" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7020382077800003" lon="-72.3640629748000066">
+        <tag k="bdw-id" v="{a02de9d0-d7c1-4d80-82a5-f52744f735dc}"/>
+    </node>
+    <node visible="true" id="-518546" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021681667799999" lon="-72.3640271775699944">
+        <tag k="bdw-id" v="{a0749bc5-4981-4e42-a91f-cd65c6101338}"/>
+    </node>
+    <node visible="true" id="-518544" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026376566000003" lon="-72.3638784585599950">
+        <tag k="bdw-id" v="{8aff790a-de78-4972-a6c7-8256771bcd55}"/>
+    </node>
+    <node visible="true" id="-518534" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7027048353199996" lon="-72.3632830014399957">
+        <tag k="bdw-id" v="{9f9d7e20-ae6a-4b64-8731-6efbe69b7694}"/>
+    </node>
+    <node visible="true" id="-518532" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028380173500004" lon="-72.3637438608899970">
+        <tag k="bdw-id" v="{c1b24ce7-377f-46f7-8fbe-d64e60a15d3c}"/>
+    </node>
+    <node visible="true" id="-518492" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008676288800002" lon="-72.3630775018600048">
+        <tag k="bdw-id" v="{763e8292-46a2-4045-b10a-601f81a4f3e3}"/>
+    </node>
+    <node visible="true" id="-518490" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7009115960300001" lon="-72.3632323317799973">
+        <tag k="bdw-id" v="{f02672bc-5098-44cc-8aae-7d17fab617bf}"/>
+    </node>
+    <node visible="true" id="-518488" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7009705876999996" lon="-72.3634189647799957">
+        <tag k="bdw-id" v="{bb8d560b-afba-41f3-a550-e4782b5e6a0c}"/>
+    </node>
+    <node visible="true" id="-518482" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025134469500003" lon="-72.3602217308900038">
+        <tag k="bdw-id" v="{4449e8a9-e837-44f4-93de-a2d440f3c7c5}"/>
+    </node>
+    <node visible="true" id="-518480" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025105688900002" lon="-72.3604663040100036">
+        <tag k="bdw-id" v="{ef317431-bd4b-4aae-9cbb-efec060dbbba}"/>
+    </node>
+    <node visible="true" id="-518478" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7004169135099998" lon="-72.3636700057400049">
+        <tag k="bdw-id" v="{c1643b44-18b1-4a64-aad9-6987e1964038}"/>
+    </node>
+    <node visible="true" id="-518476" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008073074299999" lon="-72.3635727247900036">
+        <tag k="bdw-id" v="{7bc2131a-998c-4eb2-8327-308a3fc6230b}"/>
+    </node>
+    <node visible="true" id="-518464" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996323785099996" lon="-72.3598990515200029">
+        <tag k="bdw-id" v="{a8fbb3ef-0ecc-4426-b7a3-ef431231e0b5}"/>
+    </node>
+    <node visible="true" id="-518462" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996722981100003" lon="-72.3598742513199937">
+        <tag k="bdw-id" v="{fce33577-9e74-4dcb-bc0d-ee698213e37a}"/>
+    </node>
+    <node visible="true" id="-518460" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997171014200001" lon="-72.3598605828299952">
+        <tag k="bdw-id" v="{547715c1-5fd7-4c84-83e9-07a34d33e514}"/>
+    </node>
+    <node visible="true" id="-518458" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999122416799999" lon="-72.3598398665299953">
+        <tag k="bdw-id" v="{97da5ee2-a050-49e1-9ee1-1c25fb1d5df0}"/>
+    </node>
+    <node visible="true" id="-518430" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016739074900000" lon="-72.3641703957000004">
+        <tag k="bdw-id" v="{44a846b4-3b66-4ef8-8469-38289351ef3b}"/>
+    </node>
+    <node visible="true" id="-518428" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017914866500004" lon="-72.3643983965900048">
+        <tag k="bdw-id" v="{b9d5b900-227f-45d6-b75f-91d3f7d503b0}"/>
+    </node>
+    <node visible="true" id="-518426" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018131116899999" lon="-72.3644459178999995">
+        <tag k="bdw-id" v="{a4804903-408d-443e-b664-1640d62563ff}"/>
+    </node>
+    <node visible="true" id="-518424" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018431562299998" lon="-72.3645263168699984">
+        <tag k="bdw-id" v="{9232806a-aae7-4c76-b722-c73c118779cd}"/>
+    </node>
+    <node visible="true" id="-518422" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018605171900001" lon="-72.3645600612099997">
+        <tag k="bdw-id" v="{cbf15011-67eb-4a89-855a-e2ab76c6cf69}"/>
+    </node>
+    <node visible="true" id="-518420" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018812826899996" lon="-72.3645933403099946">
+        <tag k="bdw-id" v="{2ac6ec6d-b9b4-42f3-b016-843d4db288c8}"/>
+    </node>
+    <node visible="true" id="-518418" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012490775000000" lon="-72.3645015987799951">
+        <tag k="bdw-id" v="{18fe3d45-f033-4b11-beb4-2979965f70dc}"/>
+    </node>
+    <node visible="true" id="-518416" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013010982400001" lon="-72.3646917833000032">
+        <tag k="bdw-id" v="{49a05c15-a62c-4777-9905-b53a030e1b2c}"/>
+    </node>
+    <node visible="true" id="-518414" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013270798200004" lon="-72.3648078769700049">
+        <tag k="bdw-id" v="{5c313c81-5777-4a62-9640-7d07b261562b}"/>
+    </node>
+    <node visible="true" id="-518412" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6995928115399996" lon="-72.3620593355500006">
+        <tag k="bdw-id" v="{44c82af0-db6a-470f-90c0-69a4450fa828}"/>
+    </node>
+    <node visible="true" id="-518410" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6997383847399998" lon="-72.3620026328199941">
+        <tag k="bdw-id" v="{64c29c0a-72de-4ae5-982e-675d405758a0}"/>
+    </node>
+    <node visible="true" id="-518408" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998032185799996" lon="-72.3619853627400005">
+        <tag k="bdw-id" v="{a8c1b1d5-6513-4514-ab87-8cf7b65c72b7}"/>
+    </node>
+    <node visible="true" id="-518406" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998794510700002" lon="-72.3619774456099947">
+        <tag k="bdw-id" v="{0813dba4-e3d7-4fdb-a9a6-eb05878ba17c}"/>
+    </node>
+    <node visible="true" id="-518404" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000151722999997" lon="-72.3619831066999950">
+        <tag k="bdw-id" v="{607c8fb3-2d66-428a-8421-ca69d4fd6b36}"/>
+    </node>
+    <node visible="true" id="-518402" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7001765405100002" lon="-72.3620098119699975">
+        <tag k="bdw-id" v="{a43e29c7-5c4b-49ec-a12e-3fb954ce9b1e}"/>
+    </node>
+    <node visible="true" id="-518400" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002851133799997" lon="-72.3620377767099967">
+        <tag k="bdw-id" v="{ab8bb983-17c8-4cc2-8d8a-50cdb7f5b830}"/>
+    </node>
+    <node visible="true" id="-518398" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7003910035800001" lon="-72.3620746576300036">
+        <tag k="bdw-id" v="{bb1529f2-de86-427b-b4fb-cda4954c891d}"/>
+    </node>
+    <node visible="true" id="-518396" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005495876500003" lon="-72.3621442957399950">
+        <tag k="bdw-id" v="{6a4cec9f-62ae-4a45-bd74-fc3b5336cc88}"/>
+    </node>
+    <node visible="true" id="-518394" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005910945100000" lon="-72.3621499434400022">
+        <tag k="bdw-id" v="{7db3022e-6731-4b4e-8f6d-da72dced98aa}"/>
+    </node>
+    <node visible="true" id="-518392" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006126074400001" lon="-72.3621489709500025">
+        <tag k="bdw-id" v="{4aa38a15-1d1a-496d-a6ac-c11d125801f3}"/>
+    </node>
+    <node visible="true" id="-518376" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011985683099997" lon="-72.3651106152599937">
+        <tag k="bdw-id" v="{a3f0b378-1bf3-4e44-8e81-3b81b47a55b6}"/>
+    </node>
+    <node visible="true" id="-518374" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013116965700004" lon="-72.3650257533199976">
+        <tag k="bdw-id" v="{39f5b7b6-9133-4b66-8695-b27845493733}"/>
+    </node>
+    <node visible="true" id="-518372" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013769878999998" lon="-72.3649754676700070">
+        <tag k="bdw-id" v="{2cb73e9b-5dc9-4d46-aeae-75de34976546}"/>
+    </node>
+    <node visible="true" id="-518370" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015020998499999" lon="-72.3648431532299981">
+        <tag k="bdw-id" v="{b54181d4-a211-41c1-984f-3812a57be74d}"/>
+    </node>
+    <node visible="true" id="-518368" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015320594699999" lon="-72.3648214196999930">
+        <tag k="bdw-id" v="{048ace9f-5506-4de2-bdd3-9523b46c6c6a}"/>
+    </node>
+    <node visible="true" id="-518366" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015621251499997" lon="-72.3648169241400012">
+        <tag k="bdw-id" v="{52359d05-ecca-42e8-9d49-0f9dc18d7e03}"/>
+    </node>
+    <node visible="true" id="-518364" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016019476800004" lon="-72.3648422017000001">
+        <tag k="bdw-id" v="{7b21e8df-b452-4ed2-a820-a45834862a9c}"/>
+    </node>
+    <node visible="true" id="-518362" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016640244400003" lon="-72.3648701313099991">
+        <tag k="bdw-id" v="{d5d0a69d-76e9-4e17-8b74-0e4b84b56812}"/>
+    </node>
+    <node visible="true" id="-518360" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016897398499999" lon="-72.3648851958499932">
+        <tag k="bdw-id" v="{aaa495db-bb2c-4d14-b6f1-852d77945dd2}"/>
+    </node>
+    <node visible="true" id="-518358" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024966756600000" lon="-72.3608927498199961">
+        <tag k="bdw-id" v="{ac868205-8c68-42e5-8503-34adf8ed90ef}"/>
+    </node>
+    <node visible="true" id="-518356" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7027073002500002" lon="-72.3609297702300012">
+        <tag k="bdw-id" v="{c00c4d6e-18cf-4014-b189-c7a024821a61}"/>
+    </node>
+    <node visible="true" id="-518346" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028264479299997" lon="-72.3652641111099939">
+        <tag k="bdw-id" v="{fad979c8-3563-4e4d-b0f2-0922deb597f3}"/>
+    </node>
+    <node visible="true" id="-518344" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028953822400004" lon="-72.3653253606699991">
+        <tag k="bdw-id" v="{bfe364dd-a50a-4f35-9324-8004397ffda9}"/>
+    </node>
+    <node visible="true" id="-518342" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029593477100002" lon="-72.3653755295199943">
+        <tag k="bdw-id" v="{24bd8d78-8ac7-40b4-bf34-f2f1e0e9d174}"/>
+    </node>
+    <node visible="true" id="-518228" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024978803100002" lon="-72.3653636431100011">
+        <tag k="bdw-id" v="{19a73972-2edb-44b8-93d7-dd70ec0ba05a}"/>
+    </node>
+    <node visible="true" id="-518226" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011867500899998" lon="-72.3607269335499979">
+        <tag k="bdw-id" v="{2517d848-fc83-4184-bcb5-145f8998d9fa}"/>
+    </node>
+    <node visible="true" id="-518224" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011854733399998" lon="-72.3607682998599984">
+        <tag k="bdw-id" v="{7a8e8f48-a3ad-43f4-bf37-a7bfffa4fd47}"/>
+    </node>
+    <node visible="true" id="-518222" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012058795199998" lon="-72.3609601674999965">
+        <tag k="bdw-id" v="{2bfac72f-c5eb-4eda-bccb-39ae86bd1547}"/>
+    </node>
+    <node visible="true" id="-518220" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012185099100003" lon="-72.3610281801099973">
+        <tag k="bdw-id" v="{2b58dd51-6a6c-4991-85d8-8310d90aee65}"/>
+    </node>
+    <node visible="true" id="-518218" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7014475595600000" lon="-72.3618958642800010">
+        <tag k="bdw-id" v="{e47c790e-aaa7-4699-85b1-9b13c9e0afeb}"/>
+    </node>
+    <node visible="true" id="-518200" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7009986579199996" lon="-72.3635211022599947">
+        <tag k="bdw-id" v="{3ba124af-3a0a-4357-9ec0-5daabdd54dbc}"/>
+    </node>
+    <node visible="true" id="-518198" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011570231600004" lon="-72.3641177542399987">
+        <tag k="bdw-id" v="{cfcd1c0a-050e-451a-a572-2ee9d49b3056}"/>
+    </node>
+    <node visible="true" id="-518196" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012088752899999" lon="-72.3643351878800019">
+        <tag k="bdw-id" v="{3e643060-ed6a-432f-a653-e20e3752bc77}"/>
+    </node>
+    <node visible="true" id="-518194" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7016327996199996" lon="-72.3625044378700011">
+        <tag k="bdw-id" v="{250c22dd-780b-44a5-aec3-5840c98bc7af}"/>
+    </node>
+    <node visible="true" id="-518192" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017758671700003" lon="-72.3630599810399957">
+        <tag k="bdw-id" v="{5bd7ddcc-49c6-469a-93b5-c427377cdbff}"/>
+    </node>
+    <node visible="true" id="-518190" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021745098799999" lon="-72.3615513291699983">
+        <tag k="bdw-id" v="{83013c28-fe21-4143-8c06-afe4273fdddd}"/>
+    </node>
+    <node visible="true" id="-518188" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021926759500001" lon="-72.3616215999099950">
+        <tag k="bdw-id" v="{4c39a9b8-0abd-466f-9c60-14f8c579e90d}"/>
+    </node>
+    <node visible="true" id="-518186" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7023333015700004" lon="-72.3620129969399954">
+        <tag k="bdw-id" v="{8702c164-0903-496a-9f7e-740ab9d4a563}"/>
+    </node>
+    <node visible="true" id="-518176" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6990490502900002" lon="-72.3592864234800004">
+        <tag k="bdw-id" v="{fe3e54f6-c119-410b-9817-24a70ed71ab2}"/>
+    </node>
+    <node visible="true" id="-518174" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7014912199300003" lon="-72.3620477259700010">
+        <tag k="bdw-id" v="{63b9dec9-ca0b-4526-bc31-f702d4954e13}"/>
+    </node>
+    <node visible="true" id="-518172" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015378417999996" lon="-72.3622036787599967">
+        <tag k="bdw-id" v="{0622996b-12af-4779-8f5b-e824949ed7be}"/>
+    </node>
+    <node visible="true" id="-518126" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026454572700001" lon="-72.3650829173700032">
+        <tag k="bdw-id" v="{9ba2c828-3cb0-4e23-978e-175a5f9c0a1a}"/>
+    </node>
+    <node visible="true" id="-518124" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7027090382500001" lon="-72.3651492070899991">
+        <tag k="bdw-id" v="{6cb57a87-35bb-4b55-b541-8d3f38dcd8c5}"/>
+    </node>
+    <node visible="true" id="-518112" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028236705099999" lon="-72.3629831259799943">
+        <tag k="bdw-id" v="{8b69cf3d-0c67-4afe-b55e-3484e5a211bc}"/>
+    </node>
+    <node visible="true" id="-518110" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029272476499999" lon="-72.3629551069300021">
+        <tag k="bdw-id" v="{d3544fd0-7f36-4db6-9b3c-8d55a20ede05}"/>
+    </node>
+    <node visible="true" id="-518106" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028559585299998" lon="-72.3638136811500061">
+        <tag k="bdw-id" v="{294a16bf-825f-4ab1-9c0f-1092f547b442}"/>
+    </node>
+    <node visible="true" id="-518104" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7028743568799998" lon="-72.3639080177500063">
+        <tag k="bdw-id" v="{6014bb75-2061-4041-9614-32caeff0fc5e}"/>
+    </node>
+    <node visible="true" id="-518102" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029000823100002" lon="-72.3640872884299995">
+        <tag k="bdw-id" v="{cd4862c7-97ce-4b2f-a312-0a4c70ac5bd2}"/>
+    </node>
+    <node visible="true" id="-518100" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029194344200000" lon="-72.3641647013199929">
+        <tag k="bdw-id" v="{15646cdf-f8f5-454a-93c9-f60c215d85a6}"/>
+    </node>
+    <node visible="true" id="-518098" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029451957799999" lon="-72.3642402141099979">
+        <tag k="bdw-id" v="{572b05ea-e0fe-4344-bd1a-79aba66e0e23}"/>
+    </node>
+    <node visible="true" id="-518096" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7029913144300002" lon="-72.3643388391599984">
+        <tag k="bdw-id" v="{2dd1952f-5b09-4c08-b7a7-5950135e532a}"/>
+    </node>
+    <node visible="true" id="-518092" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007972569599996" lon="-72.3607473959300052">
+        <tag k="bdw-id" v="{f14d1506-471f-4379-bef7-6d82fd126994}"/>
+    </node>
+    <node visible="true" id="-518090" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008253843899999" lon="-72.3605705059400037">
+        <tag k="bdw-id" v="{5acf5d01-cea8-4d8c-b07e-c72cd816b073}"/>
+    </node>
+    <node visible="true" id="-518088" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008287734999996" lon="-72.3605437910899951">
+        <tag k="bdw-id" v="{bb318626-0651-4678-a706-d458a0f7b740}"/>
+    </node>
+    <node visible="true" id="-518086" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002040256299997" lon="-72.3637306485599936">
+        <tag k="bdw-id" v="{6207ef23-ff4b-4311-84d3-74d3590cb32c}"/>
+    </node>
+    <node visible="true" id="-518084" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002798132799999" lon="-72.3639517346500014">
+        <tag k="bdw-id" v="{7e1534df-0a76-4e7d-8e5c-796c313781c8}"/>
+    </node>
+    <node visible="true" id="-518082" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7003871811100000" lon="-72.3643266931999989">
+        <tag k="bdw-id" v="{08681d5f-a5b7-4611-8ea3-c77d6be244b9}"/>
+    </node>
+    <node visible="true" id="-518080" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7004508032499999" lon="-72.3645342810900019">
+        <tag k="bdw-id" v="{cb9f5bc1-0820-48e2-b355-32c68cd4a795}"/>
+    </node>
+    <node visible="true" id="-518050" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7005899704200003" lon="-72.3597828621900021">
+        <tag k="bdw-id" v="{d6ff1f49-845e-4e4c-85dd-c807cb229f24}"/>
+    </node>
+    <node visible="true" id="-518014" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011946802500004" lon="-72.3606873789299954">
+        <tag k="bdw-id" v="{367c6198-a706-4f2c-aadd-a40ae8bd028f}"/>
+    </node>
+    <node visible="true" id="-518012" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012264768899996" lon="-72.3606929453199967">
+        <tag k="bdw-id" v="{03691619-b190-44e5-af12-0b718693aec9}"/>
+    </node>
+    <node visible="true" id="-518010" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012623905600002" lon="-72.3606986641199939">
+        <tag k="bdw-id" v="{c989a443-e7b0-4ec3-a5d4-a1d8d467b90d}"/>
+    </node>
+    <node visible="true" id="-518008" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015651482700003" lon="-72.3622890368200018">
+        <tag k="bdw-id" v="{81f5baf5-2787-49b8-90d4-2e796f47325d}"/>
+    </node>
+    <node visible="true" id="-518006" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7021065329700003" lon="-72.3621256362999929">
+        <tag k="bdw-id" v="{3731555f-5c69-4a2f-a2a2-19c139166164}"/>
+    </node>
+    <node visible="true" id="-518004" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7023457846800003" lon="-72.3620573045100031">
+        <tag k="bdw-id" v="{6185f7cc-d893-4348-9535-873732391681}"/>
+    </node>
+    <node visible="true" id="-518002" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018343149700002" lon="-72.3632777502100026">
+        <tag k="bdw-id" v="{78838ae7-12eb-4638-87ae-9d20c4a63f20}"/>
+    </node>
+    <node visible="true" id="-518000" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024136314199998" lon="-72.3631098588599997">
+        <tag k="bdw-id" v="{06556a1e-4599-48a4-9954-80c574157f42}"/>
+    </node>
+    <node visible="true" id="-517998" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026271959599999" lon="-72.3630450196699968">
+        <tag k="bdw-id" v="{118a81bb-a69f-4d92-bbfd-bb1495693a02}"/>
+    </node>
+    <node visible="true" id="-517978" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006359377100004" lon="-72.3621451826700053">
+        <tag k="bdw-id" v="{45a42602-0a92-4eaa-baff-690cf431b96e}"/>
+    </node>
+    <node visible="true" id="-517976" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006467123900002" lon="-72.3621917521900002">
+        <tag k="bdw-id" v="{e822a229-32f9-49bf-8259-92e7209883c7}"/>
+    </node>
+    <node visible="true" id="-517974" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006631927899996" lon="-72.3622576000999942">
+        <tag k="bdw-id" v="{abb89eaa-f7e1-48ef-a20d-daccb382e6dc}"/>
+    </node>
+    <node visible="true" id="-517960" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7002443052200000" lon="-72.3589490580300065">
+        <tag k="bdw-id" v="{24e16643-fab4-4920-b770-536a667b00ad}"/>
+    </node>
+    <node visible="true" id="-517938" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025058843299998" lon="-72.3593829638100061">
+        <tag k="bdw-id" v="{ee9280ea-54c9-41bc-a529-72f3cb065e4c}"/>
+    </node>
+    <node visible="true" id="-517936" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025112673000002" lon="-72.3596282107299942">
+        <tag k="bdw-id" v="{89d1fec9-de0d-4d6f-97ef-e76e45e3dd77}"/>
+    </node>
+    <node visible="true" id="-517906" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024746729500002" lon="-72.3585429223900007">
+        <tag k="bdw-id" v="{018aab14-7edd-44c8-9742-cc31146db1e6}"/>
+    </node>
+    <node visible="true" id="-517720" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007611580699997" lon="-72.3586901564100060">
+        <tag k="bdw-id" v="{5b1dbf2f-e2b5-4f49-8a5b-2b5f78982efb}"/>
+    </node>
+    <node visible="true" id="-517652" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7011678514400002" lon="-72.3588790485100048">
+        <tag k="bdw-id" v="{85c81f2a-f885-4316-8bf4-ab29e166b691}"/>
+    </node>
+    <node visible="true" id="-517382" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7017087688199997" lon="-72.3588288453800033">
+        <tag k="bdw-id" v="{a3014fe8-999a-4e77-b0ed-3b1300b319bf}"/>
+    </node>
+    <node visible="true" id="-517380" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7019420064600004" lon="-72.3587949213199977">
+        <tag k="bdw-id" v="{8f039b12-3202-400f-8ad6-c1fb64585b9a}"/>
+    </node>
+    <node visible="true" id="-517378" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7022753596499998" lon="-72.3587660034399960">
+        <tag k="bdw-id" v="{b87fd95b-9069-4b25-9acd-8bfd2e7b30f4}"/>
+    </node>
+    <node visible="true" id="-517376" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024430316399997" lon="-72.3587628416200062">
+        <tag k="bdw-id" v="{0d532bc7-5901-49fb-9af5-7ac26f155bfe}"/>
+    </node>
+    <node visible="true" id="-517360" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000550239600001" lon="-72.3596615684899973">
+        <tag k="bdw-id" v="{41cda987-2dcd-4cec-979d-e87cd45307d6}"/>
+    </node>
+    <node visible="true" id="-517358" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000668045399996" lon="-72.3598254307700017">
+        <tag k="bdw-id" v="{395dc79e-32f0-49da-873f-d02e840a4e85}"/>
+    </node>
+    <node visible="true" id="-517318" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999971438300001" lon="-72.3587579203200022">
+        <tag k="bdw-id" v="{5b351244-e61f-4d90-8a3f-2976296fa5ad}"/>
+    </node>
+    <node visible="true" id="-517294" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013077781100003" lon="-72.3589521360100036">
+        <tag k="bdw-id" v="{dc8d2fd1-3c53-4243-8404-cbc639cdf774}"/>
+    </node>
+    <node visible="true" id="-517292" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012955818400002" lon="-72.3590066044900055">
+        <tag k="bdw-id" v="{ea76cb0d-0e1b-4a77-87ab-3c3b89b6bc3f}"/>
+    </node>
+    <node visible="true" id="-517290" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012764845500001" lon="-72.3593171985600065">
+        <tag k="bdw-id" v="{981feaca-838d-4552-ac59-a3e1d3d37557}"/>
+    </node>
+    <node visible="true" id="-517288" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012598976400000" lon="-72.3597289086799975">
+        <tag k="bdw-id" v="{6b071116-3bdb-4a14-b0c9-4bf96b96d606}"/>
+    </node>
+    <node visible="true" id="-517250" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007744741800002" lon="-72.3589044947500071">
+        <tag k="bdw-id" v="{c753f0f7-9ac3-4325-a21d-790d48100f62}"/>
+    </node>
+    <node visible="true" id="-517248" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008092709699998" lon="-72.3595223599700006">
+        <tag k="bdw-id" v="{c9817e93-2182-4fc8-8a78-f81830bca66d}"/>
+    </node>
+    <node visible="true" id="-517246" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008197799199998" lon="-72.3597623706800022">
+        <tag k="bdw-id" v="{41ee920a-d2ed-432d-b3c9-163eac3b363b}"/>
+    </node>
+    <node visible="true" id="-517204" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013424454899999" lon="-72.3588624947000056">
+        <tag k="bdw-id" v="{95d2cd0d-d83b-426c-9b37-ca2f145adcf2}"/>
+    </node>
+    <node visible="true" id="-517202" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013714084200000" lon="-72.3587790233400057">
+        <tag k="bdw-id" v="{8c4823d6-673d-4fc6-8cb2-2c7f7c7065b4}"/>
+    </node>
+    <node visible="true" id="-517184" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024847145999997" lon="-72.3587602470999940">
+        <tag k="bdw-id" v="{ecbb75b5-d097-4d8f-b9ac-aa4c466078cb}"/>
+    </node>
+    <node visible="true" id="-517182" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7026718036500004" lon="-72.3587359608799972">
+        <tag k="bdw-id" v="{f337b438-01a8-4916-98a0-8a020ef93866}"/>
+    </node>
+    <node visible="true" id="-517150" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992334148500001" lon="-72.3592847030199948">
+        <tag k="bdw-id" v="{c57bf62d-ad47-4dc7-86f6-693e6617d0dc}"/>
+    </node>
+    <node visible="true" id="-517148" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992300854400000" lon="-72.3591403953499963">
+        <tag k="bdw-id" v="{a30fc37c-8163-4d47-ac10-a8e469983153}"/>
+    </node>
+    <node visible="true" id="-517146" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992321979699998" lon="-72.3590979001800036">
+        <tag k="bdw-id" v="{616e8c64-a870-4dba-94b4-e98da5cf92d1}"/>
+    </node>
+    <node visible="true" id="-517144" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992385942999997" lon="-72.3590730195799949">
+        <tag k="bdw-id" v="{09df298a-2d0b-401c-9907-eb8dc9e19397}"/>
+    </node>
+    <node visible="true" id="-517142" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992585775000002" lon="-72.3590461502100055">
+        <tag k="bdw-id" v="{1a6777ee-9fa9-4ac4-915b-98ee76819e3d}"/>
+    </node>
+    <node visible="true" id="-517140" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6992909182700000" lon="-72.3590288738100043">
+        <tag k="bdw-id" v="{398ad070-2704-4c96-9344-0d30bd3aeea5}"/>
+    </node>
+    <node visible="true" id="-517138" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6993151479200002" lon="-72.3590223339899978">
+        <tag k="bdw-id" v="{b34ba694-1b12-433b-85a2-120cfe899e15}"/>
+    </node>
+    <node visible="true" id="-517136" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6993994747499999" lon="-72.3590126697099976">
+        <tag k="bdw-id" v="{960765e7-e8e7-424b-bb72-93a6897bb679}"/>
+    </node>
+    <node visible="true" id="-517134" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998106361499996" lon="-72.3589917918399976">
+        <tag k="bdw-id" v="{af37fca5-b78d-4cda-a388-95b1ddc59266}"/>
+    </node>
+    <node visible="true" id="-517132" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998995600400004" lon="-72.3589844938999960">
+        <tag k="bdw-id" v="{ee7f5868-82c8-4f17-b42c-7ce7c75afca2}"/>
+    </node>
+    <node visible="true" id="-517130" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000125445999998" lon="-72.3589731062100014">
+        <tag k="bdw-id" v="{982630d9-e726-433a-bcd7-a33ef723c34f}"/>
+    </node>
+    <way visible="true" id="-620552" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599486"/>
+        <nd ref="-517182"/>
+        <nd ref="-517184"/>
+        <tag k="bdw-id" v="{42eb6daa-6395-488d-8595-44e678672966}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620551" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599485"/>
+        <nd ref="-517202"/>
+        <nd ref="-517204"/>
+        <tag k="bdw-id" v="{00169db1-b6cb-4a6b-9868-66178e9784b5}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620550" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517130"/>
+        <nd ref="-517318"/>
+        <nd ref="-599484"/>
+        <tag k="bdw-id" v="{6a820181-93f1-4997-b3dd-30cb0f90ca89}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620549" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517250"/>
+        <nd ref="-517720"/>
+        <nd ref="-599483"/>
+        <tag k="bdw-id" v="{7a275f7b-4057-4ea1-a06d-f4f722a2a74d}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620548" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517184"/>
+        <nd ref="-517906"/>
+        <nd ref="-599482"/>
+        <tag k="bdw-id" v="{c9aedc5b-80a1-4cce-818d-34cdc65943ad}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620547" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599481"/>
+        <nd ref="-518096"/>
+        <nd ref="-518098"/>
+        <nd ref="-518100"/>
+        <nd ref="-518102"/>
+        <nd ref="-518104"/>
+        <nd ref="-518106"/>
+        <tag k="bdw-id" v="{e73d4e09-958c-4338-956b-f2dea5010d94}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620546" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599480"/>
+        <nd ref="-518110"/>
+        <nd ref="-518112"/>
+        <nd ref="-517998"/>
+        <tag k="bdw-id" v="{2320f668-b6cc-4db0-8929-c1948a886a91}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620545" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517150"/>
+        <nd ref="-518176"/>
+        <nd ref="-599479"/>
+        <tag k="bdw-id" v="{cb036aa1-89a7-4a00-970c-19b9b0375fc7}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620544" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518124"/>
+        <nd ref="-518228"/>
+        <nd ref="-599478"/>
+        <tag k="bdw-id" v="{5f55a12e-965a-4ddd-b738-29c2ae710c20}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620543" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599477"/>
+        <nd ref="-518342"/>
+        <nd ref="-518344"/>
+        <nd ref="-518346"/>
+        <nd ref="-518124"/>
+        <tag k="bdw-id" v="{cc9eb053-fa05-41e0-a648-9eb1746a269c}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620542" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599476"/>
+        <nd ref="-518356"/>
+        <nd ref="-518358"/>
+        <tag k="bdw-id" v="{a52d3120-0675-477d-b04c-f30e9a5f901e}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620541" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518360"/>
+        <nd ref="-518362"/>
+        <nd ref="-518364"/>
+        <nd ref="-518366"/>
+        <nd ref="-518368"/>
+        <nd ref="-518370"/>
+        <nd ref="-518372"/>
+        <nd ref="-518374"/>
+        <nd ref="-518376"/>
+        <nd ref="-599475"/>
+        <tag k="bdw-id" v="{d10d130a-9d51-4d3d-aa02-d8b6fe71410a}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620540" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599474"/>
+        <nd ref="-518106"/>
+        <tag k="bdw-id" v="{3387eb2a-6400-492e-9f7d-758af44c6e70}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620539" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599473"/>
+        <nd ref="-518560"/>
+        <nd ref="-518562"/>
+        <nd ref="-518564"/>
+        <nd ref="-518566"/>
+        <nd ref="-518568"/>
+        <nd ref="-518570"/>
+        <nd ref="-518572"/>
+        <nd ref="-518574"/>
+        <nd ref="-518360"/>
+        <tag k="bdw-id" v="{649e8e97-3fe9-40f1-b09e-bed9942bb8e7}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620538" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599472"/>
+        <nd ref="-518666"/>
+        <nd ref="-518480"/>
+        <tag k="bdw-id" v="{7597d772-e36c-4a8b-9fdc-a2f100792fcb}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620537" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599471"/>
+        <nd ref="-518694"/>
+        <nd ref="-517936"/>
+        <tag k="bdw-id" v="{088f5cb5-1578-4761-873a-0490bbc90f1b}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620536" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518588"/>
+        <nd ref="-518738"/>
+        <nd ref="-518740"/>
+        <nd ref="-518742"/>
+        <nd ref="-518744"/>
+        <nd ref="-599470"/>
+        <tag k="bdw-id" v="{44fd20b6-c773-4190-bc67-95b2ea5042fd}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620535" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599469"/>
+        <nd ref="-518808"/>
+        <nd ref="-518126"/>
+        <tag k="bdw-id" v="{08b09ca2-8df7-40ed-880e-aca1e5188e81}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620534" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599468"/>
+        <nd ref="-518870"/>
+        <tag k="bdw-id" v="{884401ea-eef1-4473-8d86-36dbb1647e76}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620533" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518864"/>
+        <nd ref="-518878"/>
+        <nd ref="-599467"/>
+        <tag k="bdw-id" v="{9fdaf6f4-33ce-40e5-af2c-0caea4d28a31}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620532" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599466"/>
+        <nd ref="-518870"/>
+        <nd ref="-518884"/>
+        <nd ref="-518864"/>
+        <tag k="bdw-id" v="{97de30bd-cf94-4781-9242-24a38ad7d345}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-620531" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-599465"/>
+        <nd ref="-519008"/>
+        <nd ref="-519010"/>
+        <nd ref="-519012"/>
+        <nd ref="-519014"/>
+        <nd ref="-519016"/>
+        <nd ref="-519018"/>
+        <nd ref="-519020"/>
+        <nd ref="-519022"/>
+        <nd ref="-519024"/>
+        <nd ref="-519026"/>
+        <nd ref="-519028"/>
+        <nd ref="-519030"/>
+        <nd ref="-519032"/>
+        <nd ref="-519034"/>
+        <nd ref="-519036"/>
+        <nd ref="-519038"/>
+        <nd ref="-518080"/>
+        <tag k="bdw-id" v="{66448b34-f787-4860-b53c-6ecbc59dbf35}"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-610062" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518366"/>
+        <nd ref="-518558"/>
+        <tag k="bdw-id" v="{94c9cf4a-94e3-4fc4-9d48-0d3b7c7055e3}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610050" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518464"/>
+        <nd ref="-518888"/>
+        <nd ref="-518890"/>
+        <nd ref="-518892"/>
+        <nd ref="-518894"/>
+        <nd ref="-518896"/>
+        <nd ref="-517150"/>
+        <tag k="bdw-id" v="{fe508d66-a37b-493a-823f-e729052402c8}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610036" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518414"/>
+        <nd ref="-518872"/>
+        <nd ref="-518874"/>
+        <nd ref="-518876"/>
+        <nd ref="-518374"/>
+        <tag k="bdw-id" v="{c26ba960-9b9a-4d52-86f1-e02a29b72387}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610032" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517146"/>
+        <nd ref="-518864"/>
+        <tag k="bdw-id" v="{e6122ade-d584-425f-9850-b807617af7c9}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610014" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518126"/>
+        <nd ref="-518798"/>
+        <nd ref="-518800"/>
+        <nd ref="-518802"/>
+        <nd ref="-518804"/>
+        <nd ref="-518658"/>
+        <tag k="bdw-id" v="{f54a9381-2c45-4952-b10c-66100520f51a}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610012" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518174"/>
+        <nd ref="-518794"/>
+        <nd ref="-518796"/>
+        <nd ref="-517974"/>
+        <tag k="bdw-id" v="{2b770049-9fce-4c27-af2e-15046264efa5}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610008" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517998"/>
+        <nd ref="-518786"/>
+        <nd ref="-518788"/>
+        <nd ref="-518004"/>
+        <tag k="bdw-id" v="{2141e900-a24e-465e-b36b-838a7b640153}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610006" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517974"/>
+        <nd ref="-518764"/>
+        <nd ref="-518766"/>
+        <nd ref="-518768"/>
+        <nd ref="-518770"/>
+        <nd ref="-518772"/>
+        <nd ref="-518774"/>
+        <nd ref="-518776"/>
+        <nd ref="-518778"/>
+        <nd ref="-518780"/>
+        <nd ref="-518782"/>
+        <nd ref="-518784"/>
+        <nd ref="-518086"/>
+        <tag k="bdw-id" v="{16716789-7c76-4860-b11e-56fc89dc6130}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-610000" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518358"/>
+        <nd ref="-518736"/>
+        <nd ref="-518480"/>
+        <tag k="bdw-id" v="{3aae370e-c9a0-4d54-b2ec-21fa874775ae}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609998" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518734"/>
+        <nd ref="-518004"/>
+        <tag k="bdw-id" v="{0960eee7-2323-45b4-9d55-ff8c611e36ad}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609994" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518086"/>
+        <nd ref="-518724"/>
+        <nd ref="-518726"/>
+        <nd ref="-518728"/>
+        <nd ref="-518730"/>
+        <tag k="bdw-id" v="{98798496-81b7-43f3-a567-39057f512678}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609990" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518088"/>
+        <nd ref="-518702"/>
+        <nd ref="-518704"/>
+        <nd ref="-518706"/>
+        <nd ref="-518708"/>
+        <nd ref="-518710"/>
+        <nd ref="-518712"/>
+        <nd ref="-518714"/>
+        <nd ref="-518716"/>
+        <nd ref="-518464"/>
+        <tag k="bdw-id" v="{2a5eda98-9c99-4586-801b-822bc3fbda49}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609988" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518196"/>
+        <nd ref="-518696"/>
+        <nd ref="-518698"/>
+        <nd ref="-518700"/>
+        <nd ref="-518080"/>
+        <tag k="bdw-id" v="{cab9880e-4c86-48f3-91d3-88f53bcb432e}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609984" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518014"/>
+        <nd ref="-518686"/>
+        <nd ref="-518688"/>
+        <nd ref="-518690"/>
+        <nd ref="-518088"/>
+        <tag k="bdw-id" v="{84dc6dfb-67f6-438a-b0af-e52cd140c233}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609982" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517288"/>
+        <nd ref="-518684"/>
+        <nd ref="-517246"/>
+        <tag k="bdw-id" v="{3e1a407a-c686-4580-a4ed-c0023561b292}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609980" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518358"/>
+        <nd ref="-518682"/>
+        <nd ref="-518010"/>
+        <tag k="bdw-id" v="{e9559a58-8018-4fd2-b64a-ebd8707580ad}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609978" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518088"/>
+        <nd ref="-518678"/>
+        <nd ref="-518680"/>
+        <nd ref="-517246"/>
+        <tag k="bdw-id" v="{2375fa1a-0708-440d-987e-85e2e48ab409}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609974" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518658"/>
+        <nd ref="-518668"/>
+        <nd ref="-518420"/>
+        <tag k="bdw-id" v="{0474118a-9fae-4de8-8ff4-be0418930f7b}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609970" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518658"/>
+        <nd ref="-518660"/>
+        <nd ref="-518662"/>
+        <nd ref="-518548"/>
+        <tag k="bdw-id" v="{681e0e27-e332-4053-943b-94b30ec130f9}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609968" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517978"/>
+        <nd ref="-518648"/>
+        <nd ref="-518650"/>
+        <nd ref="-518652"/>
+        <nd ref="-518654"/>
+        <nd ref="-518656"/>
+        <nd ref="-518092"/>
+        <tag k="bdw-id" v="{3c8b12ce-06cd-476e-9cf1-1c6396381daa}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609966" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518010"/>
+        <nd ref="-518644"/>
+        <nd ref="-518646"/>
+        <nd ref="-517288"/>
+        <tag k="bdw-id" v="{0fe0512b-5a16-4920-a073-4716a243e022}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609964" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517936"/>
+        <nd ref="-518640"/>
+        <nd ref="-518642"/>
+        <nd ref="-517288"/>
+        <tag k="bdw-id" v="{76f14c7d-9bc9-4cf3-816d-a5f130f820f3}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609958" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518588"/>
+        <nd ref="-518630"/>
+        <nd ref="-518632"/>
+        <nd ref="-518080"/>
+        <tag k="bdw-id" v="{80f5a14f-823e-42c7-a6c5-3f178776a3a2}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609952" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518360"/>
+        <nd ref="-518618"/>
+        <nd ref="-518620"/>
+        <nd ref="-518622"/>
+        <nd ref="-518554"/>
+        <tag k="bdw-id" v="{06fdfdf2-6ac0-45a9-8895-42ee0c3a20d1}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609944" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518014"/>
+        <nd ref="-518590"/>
+        <nd ref="-518592"/>
+        <nd ref="-518092"/>
+        <tag k="bdw-id" v="{c91c4172-8563-4743-bdbd-b3d049f3e5bc}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609942" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518414"/>
+        <nd ref="-518584"/>
+        <nd ref="-518586"/>
+        <nd ref="-518588"/>
+        <tag k="bdw-id" v="{0fa10c05-ad5d-4e25-a242-967145050711}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609936" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518420"/>
+        <nd ref="-518552"/>
+        <nd ref="-518554"/>
+        <nd ref="-518556"/>
+        <nd ref="-518558"/>
+        <nd ref="-518414"/>
+        <tag k="bdw-id" v="{0a68d40f-2c8f-4b72-9443-cbca29557097}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609934" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518548"/>
+        <nd ref="-518550"/>
+        <nd ref="-518002"/>
+        <tag k="bdw-id" v="{969541b5-a766-4c1e-b736-e5582c37a1b0}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609932" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518106"/>
+        <nd ref="-518544"/>
+        <nd ref="-518546"/>
+        <nd ref="-518548"/>
+        <tag k="bdw-id" v="{65bcaeec-32fb-4700-9c4d-1788c0566420}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609924" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518106"/>
+        <nd ref="-518532"/>
+        <nd ref="-518534"/>
+        <nd ref="-517998"/>
+        <tag k="bdw-id" v="{dc86e418-65fb-4254-b7cd-5fd37a0eab33}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609920" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518002"/>
+        <nd ref="-518200"/>
+        <tag k="bdw-id" v="{1d9a78cb-80b9-4003-a53e-3183e728296a}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609914" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518200"/>
+        <nd ref="-518488"/>
+        <nd ref="-518490"/>
+        <nd ref="-518492"/>
+        <nd ref="-517974"/>
+        <tag k="bdw-id" v="{79051344-1086-4056-9340-b059e0bbb17d}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609910" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518480"/>
+        <nd ref="-518482"/>
+        <nd ref="-517936"/>
+        <tag k="bdw-id" v="{82978ee7-8223-44d0-96da-73ab68af4710}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609908" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518200"/>
+        <nd ref="-518476"/>
+        <nd ref="-518478"/>
+        <nd ref="-518086"/>
+        <tag k="bdw-id" v="{6bd1727d-4d01-4542-9509-b6b69063f28b}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609900" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517358"/>
+        <nd ref="-518458"/>
+        <nd ref="-518460"/>
+        <nd ref="-518462"/>
+        <nd ref="-518464"/>
+        <tag k="bdw-id" v="{b0911cb5-5981-47a6-8abd-68ff37cc1cb1}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609890" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518420"/>
+        <nd ref="-518422"/>
+        <nd ref="-518424"/>
+        <nd ref="-518426"/>
+        <nd ref="-518428"/>
+        <nd ref="-518430"/>
+        <tag k="bdw-id" v="{6aa81513-dca3-45e8-9132-c60073bb31b1}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609888" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518414"/>
+        <nd ref="-518416"/>
+        <nd ref="-518418"/>
+        <nd ref="-518196"/>
+        <tag k="bdw-id" v="{413e6c7e-e47d-49ea-abe8-1660316a2121}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517978"/>
+        <nd ref="-518392"/>
+        <nd ref="-518394"/>
+        <nd ref="-518396"/>
+        <nd ref="-518398"/>
+        <nd ref="-518400"/>
+        <nd ref="-518402"/>
+        <nd ref="-518404"/>
+        <nd ref="-518406"/>
+        <nd ref="-518408"/>
+        <nd ref="-518410"/>
+        <nd ref="-518412"/>
+        <tag k="bdw-id" v="{9c192799-5f44-49b2-b6f0-f1a54682a611}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609874" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518174"/>
+        <nd ref="-518218"/>
+        <nd ref="-518220"/>
+        <nd ref="-518222"/>
+        <nd ref="-518224"/>
+        <nd ref="-518226"/>
+        <nd ref="-518014"/>
+        <tag k="bdw-id" v="{45d56705-d483-4ecb-bd38-9864b2a0cb03}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609868" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518196"/>
+        <nd ref="-518198"/>
+        <nd ref="-518200"/>
+        <tag k="bdw-id" v="{b33b9082-fa0e-4267-89ca-14dc5f739d76}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609866" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518002"/>
+        <nd ref="-518192"/>
+        <nd ref="-518194"/>
+        <nd ref="-518008"/>
+        <tag k="bdw-id" v="{60c60668-a27b-405d-8b6b-d4178e4b66e5}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609864" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518004"/>
+        <nd ref="-518186"/>
+        <nd ref="-518188"/>
+        <nd ref="-518190"/>
+        <tag k="bdw-id" v="{e474c64d-3d13-491a-9a4c-09c6c2eca4ee}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609860" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518008"/>
+        <nd ref="-518172"/>
+        <nd ref="-518174"/>
+        <tag k="bdw-id" v="{787a4da6-c219-40b7-abff-ba3213e6cb6b}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609848" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518124"/>
+        <nd ref="-518126"/>
+        <tag k="bdw-id" v="{3d1cfad1-425d-4a7f-bc0f-6fc40561df5a}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609838" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518088"/>
+        <nd ref="-518090"/>
+        <nd ref="-518092"/>
+        <tag k="bdw-id" v="{0042927c-c707-4f09-84d6-2609689242d0}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609836" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518080"/>
+        <nd ref="-518082"/>
+        <nd ref="-518084"/>
+        <nd ref="-518086"/>
+        <tag k="bdw-id" v="{dbd047a3-0173-4d8b-ad2e-732aace81cfa}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609826" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517246"/>
+        <nd ref="-518050"/>
+        <nd ref="-517358"/>
+        <tag k="bdw-id" v="{5150f31e-e557-4c8f-b41a-c52b17fbfa5a}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609816" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518010"/>
+        <nd ref="-518012"/>
+        <nd ref="-518014"/>
+        <tag k="bdw-id" v="{29fe2e53-5664-42a5-bfb8-544dc57e00ac}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609814" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-518004"/>
+        <nd ref="-518006"/>
+        <nd ref="-518008"/>
+        <tag k="bdw-id" v="{9cbc6adc-20c7-4565-a103-a9cc523d8c95}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609812" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517998"/>
+        <nd ref="-518000"/>
+        <nd ref="-518002"/>
+        <tag k="bdw-id" v="{d3d63f12-9e93-4a30-9f83-b012a9088a90}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609804" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517974"/>
+        <nd ref="-517976"/>
+        <nd ref="-517978"/>
+        <tag k="bdw-id" v="{537c0976-006b-4203-a95e-03026a59dfa7}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609798" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517250"/>
+        <nd ref="-517960"/>
+        <nd ref="-517130"/>
+        <tag k="bdw-id" v="{3d16b011-7309-4e17-acd0-7d2a19c021bc}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609786" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517936"/>
+        <nd ref="-517938"/>
+        <nd ref="-517184"/>
+        <tag k="bdw-id" v="{a787e1ef-2476-41a1-8ac4-958adf4a2b2b}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609656" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517204"/>
+        <nd ref="-517652"/>
+        <nd ref="-517250"/>
+        <tag k="bdw-id" v="{704950af-4ced-44e5-bca9-7ba6c29fcdba}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609554" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517184"/>
+        <nd ref="-517376"/>
+        <nd ref="-517378"/>
+        <nd ref="-517380"/>
+        <nd ref="-517382"/>
+        <nd ref="-517204"/>
+        <tag k="bdw-id" v="{efb71c27-eddd-4609-b7eb-53692d9c3753}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609546" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517358"/>
+        <nd ref="-517360"/>
+        <nd ref="-517130"/>
+        <tag k="bdw-id" v="{da99e83f-84ff-4f1c-9340-0e19f7bb84fe}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609526" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517288"/>
+        <nd ref="-517290"/>
+        <nd ref="-517292"/>
+        <nd ref="-517294"/>
+        <nd ref="-517204"/>
+        <tag k="bdw-id" v="{aed60419-7b0d-49cd-a5b1-9d98612b8a0e}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609512" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517246"/>
+        <nd ref="-517248"/>
+        <nd ref="-517250"/>
+        <tag k="bdw-id" v="{80a7df80-e7aa-4bc4-a0d0-804adc6d2712}"/>
+        <tag k="highway" v="road"/>
+    </way>
+    <way visible="true" id="-609478" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-517130"/>
+        <nd ref="-517132"/>
+        <nd ref="-517134"/>
+        <nd ref="-517136"/>
+        <nd ref="-517138"/>
+        <nd ref="-517140"/>
+        <nd ref="-517142"/>
+        <nd ref="-517144"/>
+        <nd ref="-517146"/>
+        <nd ref="-517148"/>
+        <nd ref="-517150"/>
+        <tag k="bdw-id" v="{101de745-7cc3-4b3f-868a-45ce7da20236}"/>
+        <tag k="highway" v="road"/>
+    </way>
+</osm>

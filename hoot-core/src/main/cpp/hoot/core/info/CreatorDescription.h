@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CREATOR_DESCRIPTON_H
@@ -73,9 +73,7 @@ public:
   };
 
   CreatorDescription();
-
   CreatorDescription(std::string className, QString description, bool experimental);
-
   CreatorDescription(std::string className, QString description, BaseFeatureType featureType,
                      bool experimental);
 
@@ -84,9 +82,9 @@ public:
   QString description;
   BaseFeatureType baseFeatureType;
 
-  static QString BaseFeatureTypeToString(BaseFeatureType t);
+  static QString baseFeatureTypeToString(BaseFeatureType t);
 
-  static BaseFeatureType StringToBaseFeatureType(QString s);
+  static BaseFeatureType stringToBaseFeatureType(QString s);
 
   /* These two functions, getFeatureCalcType & getElementCriterion could be pushed down into the
    * classes that are derived from MatchCreator, and that would seem logical and clean - BUT

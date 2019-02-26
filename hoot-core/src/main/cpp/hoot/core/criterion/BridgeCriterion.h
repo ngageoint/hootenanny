@@ -22,53 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OUTSIDEBOUNDSREMOVER_H
-#define OUTSIDEBOUNDSREMOVER_H
+#ifndef BRIDGE_CRITERION_H
+#define BRIDGE_CRITERION_H
 
-// GEOS
-#include <geos/geom/Envelope.h>
-
-// Standard
-#include <set>
-
-// TGS
-#include <tgs/SharedPtr.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class OsmMap;
-
 /**
- * Remove all ways outside the given bounds.
- *
- * @todo make this a map op - #2936
+ * Identifies bridges
  */
-class OutsideBoundsRemover
+class BridgeCriterion : public ElementCriterion
 {
 public:
 
-  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
-                       bool inverse = false);
+  static std::string className() { return "hoot::BridgeCriterion"; }
 
-  /**
-   * Removes ways completely outside the given envelope.
-   */
-  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e,
-                         bool inverse = false);
+  BridgeCriterion();
 
-  void removeWays();
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-protected:
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
 
-  boost::shared_ptr<OsmMap> _inputMap;
-  geos::geom::Envelope _envelope;
-  bool _inverse;
+  virtual QString getDescription() const { return "Identifies bridges"; }
 };
 
 }
 
-#endif // OUTSIDEBOUNDSREMOVER_H
+#endif // BRIDGE_CRITERION_H

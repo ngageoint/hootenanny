@@ -41,13 +41,13 @@ public:
   MaximalNearestSublineMatcher();
 
   virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
-    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const;
+    const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const override;
 
-  virtual void setMaxRelevantAngle(Radians r) { _maxRelevantAngle = r; }
+  virtual void setMaxRelevantAngle(Radians r) override { _maxRelevantAngle = r; }
 
-  virtual void setMinSplitSize(Meters minSplitSize) { _minSplitSize = minSplitSize; }
+  virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
 
-  virtual void setHeadingDelta(Meters headingDelta) { _headingDelta = headingDelta; }
+  virtual void setHeadingDelta(Meters headingDelta) override { _headingDelta = headingDelta; }
 
   virtual QString getDescription() const
   { return "Matches lines based on the maximal nearest subline found"; }

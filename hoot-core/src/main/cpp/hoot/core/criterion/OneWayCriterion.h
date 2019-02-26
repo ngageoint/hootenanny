@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * Keeps all the one-way streets
+ * Identifies one-way streets
  */
 class OneWayCriterion : public ElementCriterion
 {
@@ -45,9 +45,9 @@ public:
 
   OneWayCriterion(bool isOneWay = true);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies one way streets"; }
 

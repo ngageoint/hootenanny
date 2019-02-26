@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUALWAYSPLITTER_H
@@ -75,12 +75,12 @@ public:
   static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map,
                                             DrivingSide drivingSide, Meters defaultSplitSize);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Splitting divided highways into two one way streets..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " divided highways"; }
 
   virtual QString getDescription() const

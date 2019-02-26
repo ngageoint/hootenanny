@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNKNOWNCRITERION_H
@@ -45,9 +45,9 @@ public:
 
   static std::string className() { return "hoot::UnknownCriterion"; }
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new UnknownCriterion()); }
 
   virtual QString getDescription() const
   { return "Identifies elements which have not been conflated"; }

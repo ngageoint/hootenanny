@@ -110,6 +110,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       }
       else
       {
+        // TODO: We need to allow for HighwayTagOnlyMerger to spawn off PartialNetworkMerger here,
+        // I guess...but that's kind of nasty... (applies to the rest of the calls to
+        // HighwayTagOnlyMerger in this class as well).
         mergers.push_back(new HighwayTagOnlyMerger(pairs));
       }
     }
