@@ -152,7 +152,7 @@ install-other:
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar
 	mkdir -p $(docdir)
-	cp INSTALL LICENSE AUTHORS COPYING GPLv3 README* docs/*.pdf $(docdir)
+	cp LICENSE README.md docs/*.pdf $(docdir)
 	mkdir -p $(sysconfdir)/profile.d/
 	mkdir -p $(sysconfdir)/asciidoc/filters/
 	cp -R docs/filters/* $(sysconfdir)/asciidoc/filters/
