@@ -4138,8 +4138,8 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
         <tag k="name" v="Av. Oeste 4"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -4208,8 +4208,8 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
         <tag k="name" v="Av. Oeste 4"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -4485,11 +4485,11 @@
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2014-04-25T15:37:21.000Z;2019-01-17T19:50:06Z;2014-05-19T20:36:26.000Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2014-04-25T15:37:21.000Z;2019-01-17T19:50:06Z;2014-05-19T20:36:26.000Z"/>
         <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
-        <tag k="bicycle" v="yes"/>
         <tag k="motor_vehicle" v="permissive"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
@@ -4876,9 +4876,10 @@
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2015-06-12T14:51:44.000Z;2019-01-17T19:50:06Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-06-12T14:51:44.000Z;2019-01-17T19:50:06Z"/>
         <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
+        <tag k="motor_vehicle" v="permissive"/>
         <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>

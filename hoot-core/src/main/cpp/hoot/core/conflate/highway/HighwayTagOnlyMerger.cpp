@@ -43,6 +43,7 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
 HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(false)
 {
+  _removeTagsFromWayMembers = false;
 }
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(
@@ -51,6 +52,8 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(true)
 {
+  _removeTagsFromWayMembers = false;
+
   // Merging geometries for bridges is governed both by a config option and whether a subline
   // matcher gets passed in, since not all calling merger creators have a subline matcher available
   // to pass in at this point.
@@ -235,7 +238,10 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
       ElementPtr member = map->getElement(relationMembers[i].getElementId());
       if (member && member->getElementType() == ElementType::Way)
       {
-        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);;
+        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);
+        LOG_TRACE(
+          "Copying tags from: " << relation->getElementId() << " to member: " <<
+          wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
       }
