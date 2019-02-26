@@ -69,7 +69,7 @@ endif
 clean:
 	#Remove test datasets from db
 	@if [[ `PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='maps');"` = 't' ]]; then \
-		PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
+		PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%' or user_id = -1541432234" \
 		| while read mapname; do \
 			echo hoot delete-db-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 		done; \
@@ -77,7 +77,7 @@ clean:
 	fi
 
 	# Remove test user and faux-session data from db
-	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where email='test@test.com' or id=-1541432234" 2>/dev/null $(PSQL_QUIET) || true
+	# PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c "DELETE FROM users where email='test@test.com' or id=-1541432234" 2>/dev/null $(PSQL_QUIET) || true
 
 	# Cleaning up proxy node modules...
 	rm -rf $(HOOT_HOME)/test-files/ui/node_modules >/dev/null 2>&1 || true

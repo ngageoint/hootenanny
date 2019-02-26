@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SMALLWAYMERGER_H
@@ -77,9 +77,9 @@ public:
    */
   static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
-  virtual QString getInitStatusMessage() { return "Merging very small ways..."; }
+  virtual QString getInitStatusMessage() const { return "Merging very small ways..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Merged " + QString::number(_numAffected) + " very small ways"; }
 
   virtual QString getDescription() const { return "Merges very small ways"; }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -68,9 +68,9 @@ public:
    */
   static void removeIntersections(boost::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() { return "Removing unlikely intersections..."; }
+  virtual QString getInitStatusMessage() const { return "Removing unlikely intersections..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
 
   virtual QString getDescription() const

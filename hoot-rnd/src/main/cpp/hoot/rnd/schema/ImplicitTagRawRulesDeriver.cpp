@@ -409,10 +409,10 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   const QString cmd =
     "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
     " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
-    "sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
+    "sed -e 's/^ *//;s/ /\\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Unable to sort file.");
+    throw HootException("Unable to sort file.\n----------\n" + cmd + "\n----------\n");
   }
   LOG_INFO(
     "Wrote " <<
@@ -625,7 +625,7 @@ void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> i
 
   //sort by word, then by tag
   const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
+    "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
      input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {

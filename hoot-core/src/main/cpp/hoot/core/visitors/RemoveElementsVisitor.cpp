@@ -122,7 +122,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 }
 
 void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
-                       const boost::shared_ptr<ElementCriterion>& pCrit)
+                                       const boost::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v(pCrit);
   pMap->visitWaysRw(v);

@@ -1,0 +1,1256 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <way id='28206624' timestamp='2016-02-03T06:08:44Z' visible='true' version='1' changeset='63987'>
+    <nd ref='105130569' />
+    <nd ref='105130572' />
+    <nd ref='104965161' />
+    <nd ref='772363746' />
+    <nd ref='105130576' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN' v='(2)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='4abc0ad5-336f-47bd-b134-ae3c1243e4fa' />
+    <tag k='ZI005_FNA' v='North 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='39452467' timestamp='2016-02-03T06:18:54Z' visible='true' version='1' changeset='64149'>
+    <nd ref='105190579' />
+    <nd ref='105267413' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='bff8e831-3662-4c0a-b77e-d49f8d4b55c9' />
+    <tag k='ZI005_FNA' v='South Ocean Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;Ocean&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11755624' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190579' />
+    <nd ref='105253765' />
+    <nd ref='105173362' />
+    <nd ref='104965141' />
+    <nd ref='772363736' />
+    <nd ref='105035220' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='b3e7e680-8be0-4686-abe2-82304f65b9fc' />
+    <tag k='ZI005_FNA' v='North 2nd Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;2nd&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='54905447' timestamp='2016-02-03T06:31:21Z' visible='true' version='1' changeset='64338'>
+    <nd ref='104867947' />
+    <nd ref='105068508' />
+    <nd ref='772353737' />
+    <nd ref='104895440' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='3b5ea151-e811-4ab6-b697-95eca04e46f3' />
+    <tag k='ZI005_FNA' v='West 8th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;8th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11753098' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190600' />
+    <nd ref='105231730' />
+    <nd ref='105173384' />
+    <nd ref='105071665' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='015f4d22-a025-45cb-a9ad-61f940ea57be' />
+    <tag k='ZI005_FNA' v='20th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 20th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;20th&quot;,&quot;tiger:name_base&quot;:&quot;20th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11716638' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104891396' />
+    <nd ref='104891400' />
+    <nd ref='104891402' />
+    <nd ref='105258208' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='a488ea90-ccdb-4448-b6bc-12662918b537' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203818201&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A63&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11745950' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='104987162' />
+    <nd ref='105172476' />
+    <nd ref='105080407' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='a404f83c-357d-4110-8253-8e6da7f84a46' />
+    <tag k='ZI005_FNA' v='Railroad Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08050&quot;,&quot;tiger:name_base&quot;:&quot;Railroad&quot;,&quot;tiger:zip_right&quot;:&quot;08050&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11738419' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105102203' />
+    <nd ref='104956954' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='6bb1e15d-2ed8-48c7-8792-ed51e4cbfa9c' />
+    <tag k='ZI005_FNA' v='East 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11731073' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105117334' />
+    <nd ref='105030197' />
+    <nd ref='105030199' />
+    <nd ref='105030204' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='08c04674-8237-463b-9d64-90d61dbc1a15' />
+    <tag k='ZI005_FNA' v='West 17th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;17th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11758843' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105033706' />
+    <nd ref='105282076' />
+    <nd ref='105282077' />
+    <nd ref='105002373' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='6eb7339f-e7d1-46a0-8599-2886697c523c' />
+    <tag k='ZI005_FNA' v='Ocean Terrace' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Ocean&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ter&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741410' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105128255' />
+    <nd ref='105128257' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='fdd8a96b-e800-4e25-88d2-6a964d99637a' />
+    <tag k='ZI005_FNA' v='East 14th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:zip_right_1&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;14th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:zip_left_1&quot;:&quot;08008&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='50873802' timestamp='2016-02-03T06:29:00Z' visible='true' version='1' changeset='64295'>
+    <nd ref='358726343' />
+    <nd ref='2732866804' />
+    <nd ref='358726345' />
+    <nd ref='358726346' />
+    <nd ref='358726347' />
+    <nd ref='358726349' />
+    <nd ref='105188760' />
+    <nd ref='105198848' />
+    <nd ref='105153444' />
+    <nd ref='105198850' />
+    <nd ref='105198852' />
+    <nd ref='105198854' />
+    <nd ref='104876860' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='24fa9b7b-f1fe-4db3-ab80-f6a7968c328c' />
+    <tag k='ZI005_FNA' v='Circle Drive' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08050&quot;,&quot;tiger:name_base&quot;:&quot;Circle&quot;,&quot;tiger:zip_right&quot;:&quot;08050&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Dr&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11745072' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105165121' />
+    <nd ref='105165124' />
+    <nd ref='105165127' />
+    <nd ref='105129298' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='6b5cffc6-fa28-494e-b650-750ec2d82c95' />
+    <tag k='ZI005_FNA' v='23rd Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 23rd Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;23rd&quot;,&quot;tiger:name_base&quot;:&quot;23rd&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741547' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105129287' />
+    <nd ref='105129291' />
+    <nd ref='105129295' />
+    <nd ref='105129298' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='a1e1492b-546b-4f33-bee9-94714461aa70' />
+    <tag k='ZI005_FNA' v='Bayfront' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203852109&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:separated&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;Bayfront&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11748694' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105128257' />
+    <nd ref='105194107' />
+    <nd ref='105068492' />
+    <nd ref='105103266' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='98fd5ef9-6086-4dba-b3bd-7478bd6e91d5' />
+    <tag k='ZI005_FNA' v='West 14th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;14th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='39452601' timestamp='2016-02-03T06:18:54Z' visible='true' version='1' changeset='64149'>
+    <nd ref='104852113' />
+    <nd ref='472509637' />
+    <nd ref='472509639' />
+    <nd ref='472512536' />
+    <nd ref='472512355' />
+    <nd ref='472512501' />
+    <nd ref='472512340' />
+    <nd ref='3060765816' />
+    <nd ref='472509640' />
+    <nd ref='472509641' />
+    <nd ref='472511508' />
+    <nd ref='472509642' />
+    <nd ref='472509644' />
+    <nd ref='472509645' />
+    <nd ref='472509646' />
+    <nd ref='472510997' />
+    <nd ref='472511034' />
+    <nd ref='472509647' />
+    <nd ref='472510084' />
+    <nd ref='105007464' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='(607)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='0cf31fb5-a562-4c90-9899-909306fb6fb8' />
+    <tag k='ZI005_FNA' v='Long Beach Blvd' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;hgv&quot;:&quot;designated&quot;,&quot;old_ref&quot;:&quot;CR 7&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:old_ref&quot;:&quot;1951 map http://mapmaker.rutgers.edu/Ocean/OldOceanCounty.html (labeled 1971)&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11725818' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104982242' />
+    <nd ref='104982245' />
+    <nd ref='104982246' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='023df921-1667-42c3-9c86-a3a402186bbc' />
+    <tag k='ZI005_FNA' v='Shallow Shore Road' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Shallow Shore&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Rd&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11732583' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104972316' />
+    <nd ref='105044282' />
+    <nd ref='105044285' />
+    <nd ref='105044289' />
+    <nd ref='105044291' />
+    <nd ref='772363594' />
+    <nd ref='105044293' />
+    <nd ref='105044295' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='7b97053f-f428-4ec3-9725-cf940ee8858f' />
+    <tag k='ZI005_FNA' v='South 2nd Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;2nd&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11728140' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105004071' />
+    <nd ref='105004075' />
+    <nd ref='105004078' />
+    <nd ref='104965168' />
+    <nd ref='772363743' />
+    <nd ref='105004080' />
+    <nd ref='105004083' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='7737d5ed-5ca9-4adb-bdc9-14f00caf94db' />
+    <tag k='ZI005_FNA' v='North 12th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;12th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11752468' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='104992272' />
+    <nd ref='105142825' />
+    <nd ref='105194611' />
+    <nd ref='105068512' />
+    <nd ref='104942927' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='4160c006-d73d-4b2d-9a2d-11dd48bb2808' />
+    <tag k='ZI005_FNA' v='West 5th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;5th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11734778' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105066369' />
+    <nd ref='472505605' />
+    <nd ref='105066372' />
+    <nd ref='105066374' />
+    <nd ref='104933014' />
+    <nd ref='104965154' />
+    <nd ref='772363748' />
+    <nd ref='105066379' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='945b2301-4354-4b03-94a9-4d6b6c2f2007' />
+    <tag k='ZI005_FNA' v='North 7th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;7th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11731448' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105033696' />
+    <nd ref='105033698' />
+    <nd ref='105033701' />
+    <nd ref='105033703' />
+    <nd ref='105033706' />
+    <nd ref='105033709' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='836b396e-e537-4f76-92e6-9d4154869fa9' />
+    <tag k='ZI005_FNA' v='21st Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 21st Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base_1&quot;:&quot;21st&quot;,&quot;tiger:name_base&quot;:&quot;21st&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='116541038' timestamp='2016-02-03T07:23:06Z' visible='true' version='1' changeset='65320'>
+    <nd ref='772353741' />
+    <nd ref='104867947' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72;CR 607' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='20864d1e-8055-4fd4-b443-74f3114386cd' />
+    <tag k='ZI005_FNA' v='West 8th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;8th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11749795' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105194608' />
+    <nd ref='105189565' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='(2)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='2c81fd12-747e-4e82-b3c3-e9d820070a14' />
+    <tag k='ZI005_FNA' v='West 11th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;11th&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11759731' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190584' />
+    <nd ref='472505606' />
+    <nd ref='105286114' />
+    <nd ref='105142847' />
+    <nd ref='105173367' />
+    <nd ref='104965152' />
+    <nd ref='772363749' />
+    <nd ref='105129277' />
+    <nd ref='772364121' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='30520296-3e24-4315-968d-91fa09ddaed1' />
+    <tag k='ZI005_FNA' v='North 6th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;6th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11737277' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104913278' />
+    <nd ref='105090383' />
+    <nd ref='105068510' />
+    <nd ref='104942934' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='a690c5a5-1206-4648-9da6-be04a7b313c3' />
+    <tag k='ZI005_FNA' v='West 7th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;7th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11720836' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104933014' />
+    <nd ref='104933018' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='791d1fdb-6b71-476d-933c-8902c1b85b3d' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203706954&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:separated&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11754802' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105068518' />
+    <nd ref='772363684' />
+    <nd ref='105246609' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='e54a570a-086f-4c1a-a709-80f6286eab8b' />
+    <tag k='ZI005_FNA' v='West 4th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;4th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741539' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105129245' />
+    <nd ref='105129250' />
+    <nd ref='105004080' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='23157daa-71e1-4ab2-924f-e80755be67c6' />
+    <tag k='ZI005_FNA' v='Bayfront' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203756748&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:separated&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Bayfront&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741807' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105132077' />
+    <nd ref='105132079' />
+    <nd ref='105124057' />
+    <nd ref='105132083' />
+    <nd ref='104991414' />
+    <nd ref='104966281' />
+    <nd ref='105088422' />
+    <nd ref='105132087' />
+    <nd ref='105071662' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='3765cd61-f98c-4e45-893a-3af6285f0f8d' />
+    <tag k='ZI005_FNA' v='Sunset Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Sunset&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='28206614' timestamp='2016-02-03T06:08:44Z' visible='true' version='1' changeset='63987'>
+    <nd ref='105194608' />
+    <nd ref='105068500' />
+    <nd ref='104942961' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='3cacaabf-68e8-47dc-9659-053efde8b150' />
+    <tag k='ZI005_FNA' v='West 11th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;11th&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11754799' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105045815' />
+    <nd ref='105142822' />
+    <nd ref='105194615' />
+    <nd ref='472505249' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='e7e4ab41-7534-46f3-b344-e9d3fe8dae42' />
+    <tag k='ZI005_FNA' v='West 4th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;4th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11736265' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105080390' />
+    <nd ref='104860175' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='95f1aade-3ce0-412c-89df-46e1a2156f70' />
+    <tag k='ZI005_FNA' v='Manning Drive' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;Manning&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Dr&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='54905429' timestamp='2016-02-03T06:31:21Z' visible='true' version='1' changeset='64338'>
+    <nd ref='104895906' />
+    <nd ref='104956954' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='0bb80fe5-2126-4025-9ac2-f56b23c7293d' />
+    <tag k='ZI005_FNA' v='West 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='71237686' timestamp='2016-02-03T06:43:38Z' visible='true' version='1' changeset='64573'>
+    <nd ref='104906424' />
+    <nd ref='847974249' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LOC' v='44' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RLE' v='1' />
+    <tag k='RTN' v='NJ 72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='SBB' v='1001' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='db5b45f8-0dd6-41d2-9e41-49c1e2e3bc53' />
+    <tag k='ZI005_FNA' v='Barnegat Road East' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_type&quot;:&quot;Rd&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;tiger:name_base_1&quot;:&quot;State Route 72&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:name_direction_suffix&quot;:&quot;E&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;Barnegat&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A35&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11757910' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='1089753354' />
+    <nd ref='105189565' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='86652aee-ee15-431f-b65d-7980e1d4b245' />
+    <tag k='ZI005_FNA' v='East 11th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;11th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:zip_left_1&quot;:&quot;08008&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='32000437' timestamp='2016-02-03T06:11:59Z' visible='true' version='1' changeset='64043'>
+    <nd ref='105057564' />
+    <nd ref='105057566' />
+    <nd ref='105057568' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='3e31e218-82ad-47c8-8398-013faf4d25b4' />
+    <tag k='ZI005_FNA' v='South 3rd Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;East 3rd Street&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base_1&quot;:&quot;3rd&quot;,&quot;tiger:name_base&quot;:&quot;3rd&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;E&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11717045' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='772353752' />
+    <nd ref='772353753' />
+    <nd ref='772353754' />
+    <nd ref='2732438013' />
+    <nd ref='772353736' />
+    <nd ref='772353755' />
+    <nd ref='2732438014' />
+    <nd ref='104895424' />
+    <nd ref='104895422' />
+    <nd ref='2732438016' />
+    <nd ref='104895419' />
+    <nd ref='648743439' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='aa3fbf3e-d4b3-4b4d-adaf-6fc147faf32a' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A63&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11759046' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='104972318' />
+    <nd ref='105088965' />
+    <nd ref='105189579' />
+    <nd ref='105270563' />
+    <nd ref='105281427' />
+    <nd ref='772363739' />
+    <nd ref='772363593' />
+    <nd ref='772363592' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='3d3c4bbf-1dcf-4bfe-8d81-2fb7cefda640' />
+    <tag k='ZI005_FNA' v='South 1st Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;1st&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11735013' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105155885' />
+    <nd ref='105068267' />
+    <nd ref='105068269' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='16d39a4e-84d5-40d8-8f61-212ebb4b5bb9' />
+    <tag k='ZI005_FNA' v='West 13th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:zip_left_3&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;13th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:zip_left_1&quot;:&quot;08008&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;tiger:zip_left_2&quot;:&quot;08008&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11724157' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104966275' />
+    <nd ref='104966278' />
+    <nd ref='104966280' />
+    <nd ref='104966281' />
+    <nd ref='104966286' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='ca355a5b-b1f4-4516-b693-066949cd3b3f' />
+    <tag k='ZI005_FNA' v='18th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 18th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;18th&quot;,&quot;tiger:name_base&quot;:&quot;18th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11733074' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104987155' />
+    <nd ref='104860175' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='94103923-bcb4-47b3-9e67-4c0141e452b7' />
+    <tag k='ZI005_FNA' v='1st Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08050&quot;,&quot;tiger:name_base&quot;:&quot;1st&quot;,&quot;tiger:zip_right&quot;:&quot;08050&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:zip_left_1&quot;:&quot;08050&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;,&quot;tiger:zip_left_2&quot;:&quot;08050&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11748758' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105194589' />
+    <nd ref='104964409' />
+    <nd ref='104958603' />
+    <nd ref='105194591' />
+    <nd ref='105096248' />
+    <nd ref='104974317' />
+    <nd ref='104970769' />
+    <nd ref='105193741' />
+    <nd ref='105194595' />
+    <nd ref='105040262' />
+    <nd ref='105194597' />
+    <nd ref='105154037' />
+    <nd ref='105030197' />
+    <nd ref='105194600' />
+    <nd ref='105194604' />
+    <nd ref='105194107' />
+    <nd ref='105068267' />
+    <nd ref='105194606' />
+    <nd ref='105194608' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN' v='(89)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='b90d67f3-29f8-460f-afb8-23707b0aed8e' />
+    <tag k='ZI005_FNA' v='Central Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Central&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11727905' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105001928' />
+    <nd ref='105001930' />
+    <nd ref='105001932' />
+    <nd ref='105001935' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='7b5eb66f-1a93-455f-9386-f6243076f9fa' />
+    <tag k='ZI005_FNA' v='East Bay Terrace' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Bay&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ter&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='28206616' timestamp='2016-02-03T06:08:44Z' visible='true' version='1' changeset='63987'>
+    <nd ref='105068508' />
+    <nd ref='105068510' />
+    <nd ref='104970075' />
+    <nd ref='105068512' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='ba332657-c166-4dcf-8645-51720ef9cb16' />
+    <tag k='ZI005_FNA' v='Barnegat Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Barnegat&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11726778' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104991405' />
+    <nd ref='104991407' />
+    <nd ref='104991409' />
+    <nd ref='104991414' />
+    <nd ref='104965187' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='0ef7d742-c9d8-4f64-95f6-6b85d12b1848' />
+    <tag k='ZI005_FNA' v='17th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 17th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;17th&quot;,&quot;tiger:name_base&quot;:&quot;17th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11732730' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105045811' />
+    <nd ref='105045813' />
+    <nd ref='105045815' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='2f2e1ff1-9672-4982-b92e-292498a94a78' />
+    <tag k='ZI005_FNA' v='East 4th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;4th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='27639077' timestamp='2016-02-03T06:08:23Z' visible='true' version='1' changeset='63980'>
+    <nd ref='104913278' />
+    <nd ref='104970067' />
+    <nd ref='104992272' />
+    <nd ref='105045815' />
+    <nd ref='105057564' />
+    <nd ref='105044285' />
+    <nd ref='105189579' />
+    <nd ref='105189581' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN' v='(607)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='8decc098-f5f2-4a43-a1b8-c7c20ddc3980' />
+    <tag k='ZI005_FNA' v='Long Beach Boulevard' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;Long Beach&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Blvd&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='71237688' timestamp='2016-02-03T06:43:38Z' visible='true' version='1' changeset='64573'>
+    <nd ref='847974249' />
+    <nd ref='104891396' />
+    <nd ref='104912258' />
+    <nd ref='105188750' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='93674ed2-1859-4cb0-a4f7-4f3fce14f120' />
+    <tag k='ZI005_FNA' v='Barnegat Road East' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;Rd&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;tiger:name_base_1&quot;:&quot;State Route 72&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:name_direction_suffix&quot;:&quot;E&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;Barnegat&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A35&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='61952733' timestamp='2016-02-03T06:36:37Z' visible='true' version='1' changeset='64423'>
+    <nd ref='104942936' />
+    <nd ref='2732438018' />
+    <nd ref='648743612' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1000' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='f6e9683e-df39-4c44-840e-7ea90abe2184' />
+    <tag k='ZI005_FNA' v='Shore Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;Shore Road&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base_1&quot;:&quot;Shore&quot;,&quot;tiger:name_base&quot;:&quot;Shore&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;Rd&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11722018' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104942927' />
+    <nd ref='772363464' />
+    <nd ref='772363465' />
+    <nd ref='104942931' />
+    <nd ref='104942934' />
+    <nd ref='104942936' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='47d5df88-9dcf-4ce6-8f10-afdfad6ef82c' />
+    <tag k='ZI005_FNA' v='Shore Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;Shore Road&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base_1&quot;:&quot;Shore&quot;,&quot;tiger:name_base&quot;:&quot;Shore&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;Rd&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11713069' timestamp='2016-02-03T05:49:22Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104852110' />
+    <nd ref='104852113' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='0a01ad5a-5f81-4000-848b-a595bbdd98a8' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203706793&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:separated&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='54905416' timestamp='2016-02-03T06:31:21Z' visible='true' version='1' changeset='64338'>
+    <nd ref='104867947' />
+    <nd ref='772353739' />
+    <nd ref='104956960' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='(89);(607)' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='eb8b177d-3ccd-43d1-bd8a-c7337de16726' />
+    <tag k='ZI005_FNA' v='Central Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;hgv&quot;:&quot;designated&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Central&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11718029' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='772353728' />
+    <nd ref='104906419' />
+    <nd ref='104906422' />
+    <nd ref='648743437' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='9084886f-1798-4f57-a845-e91bd08a3abd' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203761502&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A63&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11751459' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='104981933' />
+    <nd ref='104913261' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='7ae79e54-abe9-46fd-9e52-b4bf6675dc63' />
+    <tag k='ZI005_FNA' v='West 8th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;8th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='71237685' timestamp='2016-02-03T06:43:38Z' visible='true' version='1' changeset='64573'>
+    <nd ref='105258365' />
+    <nd ref='105258370' />
+    <nd ref='105258373' />
+    <nd ref='104942948' />
+    <nd ref='104930974' />
+    <nd ref='105258385' />
+    <nd ref='648743439' />
+    <nd ref='104895414' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='5b494a26-8424-4e23-b309-b6f30045a413' />
+    <tag k='ZI005_FNA' v='East Bay Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;tiger:name_base_1&quot;:&quot;State Route 72&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;Bay&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A35&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11728790' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105009663' />
+    <nd ref='472505603' />
+    <nd ref='105009666' />
+    <nd ref='105009668' />
+    <nd ref='104933018' />
+    <nd ref='104965156' />
+    <nd ref='772363747' />
+    <nd ref='105009670' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='c071297d-022d-4092-8897-57eedcf2cb48' />
+    <tag k='ZI005_FNA' v='North 8th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;8th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11758025' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190612' />
+    <nd ref='105273995' />
+    <nd ref='472509637' />
+    <nd ref='105273997' />
+    <nd ref='105173386' />
+    <nd ref='105119460' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='b07ecd8f-690f-43a4-8df2-1f9a1636e352' />
+    <tag k='ZI005_FNA' v='25th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 25th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;25th&quot;,&quot;tiger:name_base&quot;:&quot;25th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11737112' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105044282' />
+    <nd ref='105088965' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='OTH' v='(RTN_ROI:living_street)' />
+    <tag k='RTN_ROI' v='999' />
+    <tag k='UFI' v='c0788b2c-8424-474b-95be-2a52f00b190e' />
+    <tag k='ZI005_FNA' v='South Ocean Terrace' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Ocean&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ter&quot;}&lt;/OSM&gt;' />
+  </way>
+  <way id='11742058' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105134162' />
+    <nd ref='105134166' />
+    <nd ref='105134170' />
+    <nd ref='104965164' />
+    <nd ref='772363745' />
+    <nd ref='105134174' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='4090d35e-66db-4777-8efa-98fb23381e10' />
+    <tag k='ZI005_FNA' v='North 10th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;10th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11742925' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105142842' />
+    <nd ref='105142847' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='416c835a-a681-4fd6-b019-3fcf864ab30d' />
+    <tag k='ZI005_FNA' v='Drexel Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;Drexel&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='61952745' timestamp='2016-02-03T06:36:37Z' visible='true' version='1' changeset='64423'>
+    <nd ref='772353738' />
+    <nd ref='772353739' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='a58473d9-7d4f-4f65-b40b-700ee046979a' />
+  </way>
+  <way id='11754404' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105242452' />
+    <nd ref='105242455' />
+    <nd ref='105173380' />
+    <nd ref='105132083' />
+    <nd ref='104965180' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='d7a34e27-cfec-4f90-becc-f5d3b1840eff' />
+    <tag k='ZI005_FNA' v='16th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 16th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;16th&quot;,&quot;tiger:name_base&quot;:&quot;16th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11735849' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='105076463' />
+    <nd ref='472505608' />
+    <nd ref='105076465' />
+    <nd ref='105076466' />
+    <nd ref='104965147' />
+    <nd ref='772363734' />
+    <nd ref='105035224' />
+    <nd ref='772364613' />
+    <nd ref='772364615' />
+    <nd ref='772364617' />
+    <nd ref='772364618' />
+    <nd ref='772364619' />
+    <nd ref='772364620' />
+    <nd ref='772364621' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='e770b623-f8b0-41cf-a699-75d6765c9a94' />
+    <tag k='ZI005_FNA' v='North 4th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;4th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11718078' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='104906855' />
+    <nd ref='104906853' />
+    <nd ref='104906850' />
+    <nd ref='104906847' />
+    <nd ref='104906843' />
+    <nd ref='104906841' />
+    <nd ref='104906835' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='974305ab-2c9f-41ed-986e-fd1f8fa33fe4' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203818201&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:cfcc&quot;:&quot;A63&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11723328' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='1089753023' />
+    <nd ref='2732438009' />
+    <nd ref='104895414' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='ceb2c83a-2127-4db6-97bb-51b30594bc22' />
+    <tag k='ZI005_FNA' v='West 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11759351' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='104906855' />
+    <nd ref='105198852' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='e4e2df26-5de9-4ee4-8ae6-ae04a385bfb7' />
+    <tag k='ZI005_FNA' v='3rd Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_base&quot;:&quot;3rd&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11754908' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105191066' />
+    <nd ref='105189559' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='0a3b95dc-52b6-4e43-8015-c64776651fa6' />
+    <tag k='ZI005_FNA' v='East 15th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:zip_left_3&quot;:&quot;08008&quot;,&quot;tiger:zip_right_1&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;E&quot;,&quot;tiger:zip_right_2&quot;:&quot;08008&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;15th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:zip_left_1&quot;:&quot;08008&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;tiger:zip_left_2&quot;:&quot;08008&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='50873822' timestamp='2016-02-03T06:29:00Z' visible='true' version='1' changeset='64295'>
+    <nd ref='648743611' />
+    <nd ref='648743612' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='d36f3520-6f22-4288-af4d-79f737023a91' />
+    <tag k='ZI005_FNA' v='Bay Ave' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11754509' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190593' />
+    <nd ref='105243451' />
+    <nd ref='105243454' />
+    <nd ref='105173376' />
+    <nd ref='105132079' />
+    <nd ref='104965174' />
+    <nd ref='772363741' />
+    <nd ref='105129253' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='57708215-7b02-42c6-88b0-c55ebf5e121c' />
+    <tag k='ZI005_FNA' v='North 14th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;14th Street&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;14th&quot;,&quot;tiger:name_base&quot;:&quot;14th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11758729' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105068512' />
+    <nd ref='772363730' />
+    <nd ref='105068518' />
+    <nd ref='105057592' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='666348ee-8ea9-4a3d-b800-64b8c575c7bf' />
+    <tag k='ZI005_FNA' v='S Barnegat Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S; N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Barnegat&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11755659' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105190586' />
+    <nd ref='105254042' />
+    <nd ref='105173369' />
+    <nd ref='104965165' />
+    <nd ref='772363744' />
+    <nd ref='472506077' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='98b58c86-dda7-46e2-b016-b15d4bcdda02' />
+    <tag k='ZI005_FNA' v='North 11th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;11th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='54905431' timestamp='2016-02-03T06:31:21Z' visible='true' version='1' changeset='64338'>
+    <nd ref='104956960' />
+    <nd ref='104895906' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN' v='NJ 72;CR 607' />
+    <tag k='RTN_ROI' v='3' />
+    <tag k='TYP' v='47' />
+    <tag k='UFI' v='5d7b3d88-3a72-4c43-a1ba-58ec67c0d0c2' />
+    <tag k='ZI005_FNA' v='West 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;,&quot;NHS&quot;:&quot;yes&quot;,&quot;HFCS&quot;:&quot;Urban Principal Arterial&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;hgv&quot;:&quot;designated&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;hgv:state_network&quot;:&quot;yes&quot;,&quot;source:hgv:state_network&quot;:&quot;NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf&quot;,&quot;NJDOT_SRI&quot;:&quot;00000072&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='39452642' timestamp='2016-02-03T06:18:54Z' visible='true' version='1' changeset='64149'>
+    <nd ref='104852113' />
+    <nd ref='472510645' />
+    <nd ref='472510648' />
+    <nd ref='472510649' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='1' />
+    <tag k='UFI' v='d1d27b91-4e79-4eac-b39f-e804cbf99d8f' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11745598' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105169760' />
+    <nd ref='105169762' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='28461084-d873-4488-af25-ddae5fa770b6' />
+    <tag k='ZI005_FNA' v='24th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;North 24th Street&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;24th&quot;,&quot;tiger:name_base&quot;:&quot;24th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;St&quot;,&quot;tiger:name_direction_prefix_1&quot;:&quot;N&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11740371' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105119456' />
+    <nd ref='105119460' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='eb7d853c-eff6-4b41-872f-1c0c65a0b8f7' />
+    <tag k='ZI005_FNA' v='Schneider Lane' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Schneider&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ln&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11742920' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105057566' />
+    <nd ref='105142822' />
+    <nd ref='105142825' />
+    <nd ref='104970069' />
+    <nd ref='105142828' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='6f830a07-6a16-4b2d-a6c6-bab61611e2bc' />
+    <tag k='ZI005_FNA' v='Drexel Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;Drexel Road&quot;,&quot;tiger:zip_right_1&quot;:&quot;08008&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;Drexel&quot;,&quot;tiger:name_base&quot;:&quot;Drexel&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;Rd&quot;,&quot;tiger:zip_left_1&quot;:&quot;08008&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741663' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105130565' />
+    <nd ref='472505602' />
+    <nd ref='105130569' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='a9744533-4c15-4526-a85a-75d79ff012eb' />
+    <tag k='ZI005_FNA' v='North 9th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;N&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;9th&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11741544' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='772364110' />
+    <nd ref='105066379' />
+    <nd ref='105129277' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='d54321c2-d8fc-4388-9576-0b65d2c81c2e' />
+    <tag k='ZI005_FNA' v='Bayfront' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:source&quot;:&quot;tiger_import_dch_v0.6_20070828&quot;,&quot;tiger:tlid&quot;:&quot;203756750:203756751&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:upload_uuid&quot;:&quot;bulk_upload.pl-8d2865be-ef41-4601-94c5-579405b4da48&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:separated&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Bayfront&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11759920' timestamp='2016-02-03T05:49:24Z' visible='true' version='1' changeset='63729'>
+    <nd ref='105068497' />
+    <nd ref='1072173796' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='fb32eb1a-ec57-41bf-8f66-c1321981cf7b' />
+    <tag k='ZI005_FNA' v='West 12th Street' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;W&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;12th&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;St&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='61955212' timestamp='2016-02-03T06:36:37Z' visible='true' version='1' changeset='64423'>
+    <nd ref='772364105' />
+    <nd ref='772364107' />
+    <nd ref='772363741' />
+    <nd ref='772363742' />
+    <nd ref='772363743' />
+    <nd ref='772363744' />
+    <nd ref='772363745' />
+    <nd ref='772363746' />
+    <nd ref='772363747' />
+    <nd ref='772363748' />
+    <nd ref='772363749' />
+    <nd ref='105201123' />
+    <nd ref='772363734' />
+    <nd ref='772363735' />
+    <nd ref='772363736' />
+    <nd ref='772363737' />
+    <nd ref='772363738' />
+    <nd ref='772363739' />
+    <nd ref='772363594' />
+    <nd ref='772363683' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='ONE' v='1001' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='02087657-1767-471a-9506-55244dd3a8d4' />
+    <tag k='ZI005_FNA' v='N Barnegat Avenue' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;tiger:name_direction_prefix&quot;:&quot;S&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base&quot;:&quot;Barnegat&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type&quot;:&quot;Ave&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+  <way id='11731609' timestamp='2016-02-03T05:49:23Z' visible='true' version='1' changeset='63728'>
+    <nd ref='772363472' />
+    <nd ref='105035213' />
+    <nd ref='105035220' />
+    <nd ref='105035222' />
+    <nd ref='105035224' />
+    <nd ref='105035228' />
+    <tag k='F_CODE' v='AP030' />
+    <tag k='LTN' v='3' />
+    <tag k='RTN_ROI' v='5' />
+    <tag k='TYP' v='33' />
+    <tag k='UFI' v='bf9705d8-e6b7-44eb-ab81-aae67cdfae88' />
+    <tag k='ZI005_FNA' v='Shore Road' />
+    <tag k='ZI006_MEM' v='&lt;OSM&gt;{&quot;name_1&quot;:&quot;Shore Avenue&quot;,&quot;tiger:county&quot;:&quot;Ocean, NJ&quot;,&quot;tiger:reviewed&quot;:&quot;no&quot;,&quot;tiger:zip_left&quot;:&quot;08008&quot;,&quot;tiger:name_base_1&quot;:&quot;Shore&quot;,&quot;tiger:name_base&quot;:&quot;Shore&quot;,&quot;tiger:zip_right&quot;:&quot;08008&quot;,&quot;tiger:cfcc&quot;:&quot;A41&quot;,&quot;tiger:name_type_1&quot;:&quot;Ave&quot;,&quot;tiger:name_type&quot;:&quot;Rd&quot;}&lt;/OSM&gt;' />
+    <tag k='ZI016_WTC' v='1' />
+  </way>
+</osm>
+

@@ -111,7 +111,7 @@ class ConflateCommand extends ExternalCommand {
         if (params.getHoot2() != null) { // hoot 2
         	String conflationType = ConflationConfs.get(params.getConflationType());
         	conflationType = conflationType == null ? "" : conflationType + ".conf";
-        	substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
+        	substitutionMap.put("CONFLATION_TYPE", conflationType);
         }
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);

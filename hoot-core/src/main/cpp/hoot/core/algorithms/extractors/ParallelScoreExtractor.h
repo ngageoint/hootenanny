@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARALLELSCOREEXTRACTOR_H
 #define PARALLELSCOREEXTRACTOR_H
@@ -43,14 +43,14 @@ public:
 
   ParallelScoreExtractor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates how parallel ways are with each other"; }
 
 protected:
 
-  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
+  double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 };
 
 }

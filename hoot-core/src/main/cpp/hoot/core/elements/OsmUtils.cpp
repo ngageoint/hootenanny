@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
 #include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 //Qt
 #include <QDateTime>
@@ -124,109 +125,94 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-bool OsmUtils::containsTwoOrMorePois(ConstOsmMapPtr map)
+QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  return poiCount >= 2;
+  return relation->toString() + getRelationMembersDetailedString(relation, map);
 }
 
-bool OsmUtils::containsTwoOrMoreBuildings(ConstOsmMapPtr map)
+QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
+                                                   const ConstOsmMapPtr& map)
 {
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount >= 2;
-}
-
-bool OsmUtils::containsTwoOrMoreAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount >= 2;
-}
-
-bool OsmUtils::containsOnePolygonAndOnePoi(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(poiCount);
-  LOG_VART(polyCount);
-  return poiCount == 1 && polyCount == 1;
-}
-
-bool OsmUtils::containsPoiPolyPolys(ConstOsmMapPtr map)
-{
-  const long polyCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiPolygonPolyCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(polyCount);
-  return polyCount > 0;
-}
-
-bool OsmUtils::containsAreas(ConstOsmMapPtr map)
-{
-  const long areaCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new NonBuildingAreaCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(areaCount);
-  return areaCount > 0;
-}
-
-bool OsmUtils::containsBuildings(ConstOsmMapPtr map)
-{
-  const long buildingCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new BuildingCriterion(map)),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(buildingCount);
-  return buildingCount > 0;
-}
-
-bool OsmUtils::containsPois(ConstOsmMapPtr map)
-{
-  const long poiCount =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new PoiCriterion()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  return poiCount > 0;
-}
-
-QString OsmUtils::getDetailedRelationString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
-{
-  QString str = relation->toString() + "\nMember Detail:\n";
+  QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
+    str += "Member #" + QString::number(i + 1) + ":\n\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    str += member->toString() + "\n";
+    str += member->toString() + "\n\n";
   }
   return str;
+}
+
+long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map)
+{
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  QSet<long> wayMemberIds;
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member->getElementType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member->getId());
+    }
+  }
+  LOG_VART(wayMemberIds);
+  if (wayMemberIds.size() > 0)
+  {
+    return wayMemberIds.toList().at(0);
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
+                                const Log::WarningLevel& logLevel, const QString message)
+{
+  if (Log::getInstance().getLevel() <= logLevel)
+  {
+    LOG_VAR(message);
+    LOG_VAR(element);
+    if (element->getElementType() == ElementType::Relation)
+    {
+      ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+      LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
+    }
+  }
+}
+
+bool OsmUtils::oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  // Technically, this should also take into account reverse one ways and check direction.  Since
+  // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
+  // now.
+  OneWayCriterion isAOneWayStreet;
+  return
+    (isAOneWayStreet.isSatisfied(element1) && explicitlyNotAOneWayStreet(element2)) ||
+    (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
+}
+
+bool OsmUtils::explicitlyNotAOneWayStreet(ConstElementPtr element)
+{
+  // TODO: use Tags::isFalse here instead
+  return element->getTags().get("oneway") == "no";
+}
+
+bool OsmUtils::nameConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  return
+    element1->getTags().hasName() && element2->getTags().hasName() &&
+      !Tags::haveMatchingName(element1->getTags(), element2->getTags());
+}
+
+bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+{
+  const QString element1HighwayVal = element1->getTags().get("highway");
+  const QString element2HighwayVal = element2->getTags().get("highway");
+  return
+    element1HighwayVal != "road" && element2HighwayVal != "road" &&
+    element1HighwayVal != element2HighwayVal;
 }
 
 }

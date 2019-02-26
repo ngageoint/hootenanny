@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ANGLE_HISTOGRAM_EXTRACTOR_H
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -58,14 +58,14 @@ public:
 
   static std::string className() { return "hoot::AngleHistogramExtractor"; }
 
-  virtual std::string getClassName() const { return AngleHistogramExtractor::className(); }
+  virtual std::string getClassName() const override { return AngleHistogramExtractor::className(); }
 
-  virtual std::string getName() const;
+  virtual std::string getName() const override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& candidate) const override;
 
   void setSmoothing(Radians sigma) { _smoothing = sigma; }
 

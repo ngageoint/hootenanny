@@ -42,13 +42,15 @@ _isOneWay(isOneWay)
 
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  bool result = false;
-  const QString oneway = e->getTags()["oneway"].toLower();
-  if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+  if (e->getElementType() == ElementType::Way)
   {
-    result = true;
+    const QString oneway = e->getTags()["oneway"].toLower();
+    if (e->getTags().isTrue("oneway") || oneway == "-1" || oneway == "reverse")
+    {
+      return true;
+    }
   }
-  return result;
+  return false;
 }
 
 }

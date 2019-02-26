@@ -57,11 +57,11 @@ class NoInformationElementRemover : public OsmMapOperation, public OperationStat
     */
     void apply(boost::shared_ptr<OsmMap>& map);
 
-    virtual QString getInitStatusMessage()
+    virtual QString getInitStatusMessage() const
     { return "Removing elements with no information tags..."; }
 
     // finish; wasn't obvious how to count the total affected - #2933
-    virtual QString getCompletedStatusMessage()
+    virtual QString getCompletedStatusMessage() const
     { return ""; }
 
     virtual QString getDescription() const

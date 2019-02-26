@@ -1,1 +1,1 @@
-Hootenanny needs this empty file in order for configure to work.  See ChangeLog.md for the actual change log file.
+Even though this file is not used, it is needed to conform to the autconf specification.

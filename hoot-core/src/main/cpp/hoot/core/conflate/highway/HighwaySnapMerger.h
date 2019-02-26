@@ -30,11 +30,11 @@
 // Hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
 
-class SublineStringMatcher;
 class WaySublineCollection;
 
 /**
@@ -58,7 +58,7 @@ public:
 protected:
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector< std::pair<ElementId, ElementId> >& replaced);
+                          std::vector<std::pair<ElementId, ElementId>>& replaced);
 
 private:
 
@@ -88,12 +88,10 @@ private:
    */
   void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
                      const std::vector<bool>& reverse,
-                     std::vector< std::pair<ElementId, ElementId> >& replaced,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced,
                      const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
-
-  long _getFirstWayIdFromRelation(RelationPtr relation, const OsmMapPtr& map) const;
 
   // for white box testing.
   friend class HighwaySnapMergerTest;

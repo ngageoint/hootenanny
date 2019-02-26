@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.4953" minlon="-66.90266" maxlat="10.4986" maxlon="-66.897947"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.8986199799774965"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4960143042766152" lon="-66.9026599999999974"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4980395936842079" lon="-66.9026599999999974"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4972259356554893" lon="-66.9026599999999974"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.9014472851183797"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.9013342081037905"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4959453995328751" lon="-66.9026599999999974"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4953000000000003" lon="-66.9008668057377065"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4957480196723889" lon="-66.9026599999999974"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4979237964076066" lon="-66.9026599999999974"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4964122643558593" lon="-66.9026599999999974"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.8992799590928939"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.8991499142422299"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.8990877752127489"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4975744286550103" lon="-66.9026599999999974"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999997" lon="-66.8988761068508779"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4953000000000003" lon="-66.9022936052166841"/>
+    <node visible="true" id="19" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4965883000000009" lon="-66.8983400999999986"/>
+    <node visible="true" id="20" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4965799000000004" lon="-66.8989324000000067"/>
+    <node visible="true" id="21" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966234000000007" lon="-66.8996709000000038"/>
+    <node visible="true" id="22" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966726999999995" lon="-66.9004172000000068"/>
+    <node visible="true" id="23" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966726999999995" lon="-66.9009149999999977"/>
+    <node visible="true" id="24" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966557999999992" lon="-66.9013613999999990"/>
+    <node visible="true" id="25" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4965630000000001" lon="-66.9018934999999999"/>
+    <node visible="true" id="74" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4977988999999994" lon="-66.8982512999999983"/>
+    <node visible="true" id="75" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4981881000000001" lon="-66.8987393999999966"/>
+    <node visible="true" id="76" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4980644000000005" lon="-66.8982594000000006"/>
+    <node visible="true" id="77" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4983292000000006" lon="-66.8984825999999941"/>
+    <node visible="true" id="80" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976023000000005" lon="-66.8984856000000008"/>
+    <node visible="true" id="81" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974176999999997" lon="-66.8981961000000069"/>
+    <node visible="true" id="82" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4980800999999992" lon="-66.8987563999999963"/>
+    <node visible="true" id="83" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974521000000003" lon="-66.8981318999999957"/>
+    <node visible="true" id="84" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4971294999999998" lon="-66.8988255999999950"/>
+    <node visible="true" id="85" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4969736000000005" lon="-66.8980815000000035"/>
+    <node visible="true" id="86" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4972832999999994" lon="-66.8991108000000025"/>
+    <node visible="true" id="87" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976638999999992" lon="-66.8989810000000062"/>
+    <node visible="true" id="89" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4964967999999992" lon="-66.8983317000000000"/>
+    <node visible="true" id="90" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4963966000000006" lon="-66.8992305000000016"/>
+    <node visible="true" id="91" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4962938999999995" lon="-66.9005647999999979"/>
+    <node visible="true" id="92" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4962240999999992" lon="-66.9014137000000062"/>
+    <node visible="true" id="280" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4979195000000001" lon="-66.9026343000000026"/>
+    <node visible="true" id="287" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966486999999997" lon="-66.8999146999999965">
+        <tag k="ref" v="19-A"/>
+        <tag k="name" v="San Agustín del Norte"/>
+        <tag k="highway" v="motorway_junction"/>
+        <tag k="source:datetime" v="2014-09-06T19:28:51.000Z"/>
+    </node>
+    <node visible="true" id="288" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4967412000000007" lon="-66.9002926999999943"/>
+    <node visible="true" id="437" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4966591343300006" lon="-66.8979470000000020"/>
+    <node visible="true" id="445" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4965653683499998" lon="-66.8979470000000020"/>
+    <node visible="true" id="509" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4972743937500006" lon="-66.8979470000000020"/>
+    <node visible="true" id="510" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4975640082700004" lon="-66.8979470000000020"/>
+    <node visible="true" id="511" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4971749585200005" lon="-66.8979470000000020"/>
+    <node visible="true" id="547" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4978205059099992" lon="-66.8979470000000020"/>
+    <node visible="true" id="548" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4969275966800009" lon="-66.8979470000000020"/>
+    <node visible="true" id="549" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4977118340499995" lon="-66.8979470000000020"/>
+    <node visible="true" id="550" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973502311000004" lon="-66.8979470000000020"/>
+    <node visible="true" id="664" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4954277999999999" lon="-66.9021635999999944"/>
+    <node visible="true" id="665" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4958211000000006" lon="-66.9021749000000057"/>
+    <node visible="true" id="670" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973039999999997" lon="-66.9003359999999958">
+        <tag k="fee" v="yes"/>
+        <tag k="parking" v="multi-storey"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="park_ride" v="no"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="capacity" v="100"/>
+        <tag k="name" v="Full Chola Parque Central"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="supervised" v="yes"/>
+        <tag k="source:datetime" v="2015-05-09T04:23:07.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="679" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4970143000000000" lon="-66.9015138000000036"/>
+    <node visible="true" id="680" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4967299999999994" lon="-66.9015708999999958"/>
+    <node visible="true" id="681" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4958346999999996" lon="-66.9014727999999934"/>
+    <node visible="true" id="701" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4971560999999998" lon="-66.8982685000000004"/>
+    <node visible="true" id="709" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4983540000000009" lon="-66.8987706000000060"/>
+    <node visible="true" id="715" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4985721000000005" lon="-66.8992405000000048"/>
+    <node visible="true" id="722" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4978368999999994" lon="-66.8981574999999964"/>
+    <node visible="true" id="723" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4979330999999991" lon="-66.8987697000000026"/>
+    <node visible="true" id="724" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4960977000000000" lon="-66.9008881000000031"/>
+    <node visible="true" id="725" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4963607999999997" lon="-66.8996161999999970"/>
+    <node visible="true" id="978" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973039000000004" lon="-66.8985952000000026"/>
+    <node visible="true" id="979" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973829999999992" lon="-66.8989358000000038"/>
+    <node visible="true" id="980" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976465000000001" lon="-66.8989834000000059"/>
+    <node visible="true" id="981" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973252000000006" lon="-66.8988875999999948"/>
+    <node visible="true" id="982" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4975573000000004" lon="-66.8989762000000070"/>
+    <node visible="true" id="983" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974620999999999" lon="-66.8989626000000044"/>
+    <node visible="true" id="984" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4975141000000001" lon="-66.8984834999999975"/>
+    <node visible="true" id="985" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4972960000000004" lon="-66.8988257999999973"/>
+    <node visible="true" id="986" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974612000000000" lon="-66.8984906000000024"/>
+    <node visible="true" id="987" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4972774999999992" lon="-66.8987534000000039"/>
+    <node visible="true" id="988" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973486999999999" lon="-66.8985495999999955"/>
+    <node visible="true" id="989" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974168999999993" lon="-66.8985104000000064"/>
+    <node visible="true" id="990" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4972774999999992" lon="-66.8986594999999937"/>
+    <node visible="true" id="1056" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4975774000000008" lon="-66.8979723000000064"/>
+    <node visible="true" id="1057" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976801999999996" lon="-66.8981090999999992"/>
+    <node visible="true" id="1067" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4978297999999999" lon="-66.9015189999999933">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:19.000Z"/>
+        <tag k="crossing" v="zebra"/>
+    </node>
+    <node visible="true" id="1068" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4983903000000005" lon="-66.9014739999999932"/>
+    <node visible="true" id="1099" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4960485000000006" lon="-66.9019880999999970"/>
+    <node visible="true" id="1101" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4960559999999994" lon="-66.9010818999999941"/>
+    <node visible="true" id="1102" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4954497999999994" lon="-66.9009017999999998"/>
+    <node visible="true" id="1103" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4961590999999999" lon="-66.9011114000000049"/>
+    <node visible="true" id="1104" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4957715999999994" lon="-66.9009420000000006"/>
+    <node visible="true" id="1193" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976994999999995" lon="-66.9002423000000022"/>
+    <node visible="true" id="1202" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973855999999994" lon="-66.9002822000000066"/>
+    <node visible="true" id="1205" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4970318000000002" lon="-66.9016165999999970"/>
+    <node visible="true" id="1207" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4975280000000009" lon="-66.9002770999999967"/>
+    <node visible="true" id="1209" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4980159000000004" lon="-66.9020876000000015">
+        <tag k="barrier" v="lift_gate"/>
+        <tag k="source:datetime" v="2013-07-27T03:19:52.000Z"/>
+    </node>
+    <node visible="true" id="1211" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4973513000000001" lon="-66.9002392999999955"/>
+    <node visible="true" id="1213" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4979922999999999" lon="-66.9021807000000024"/>
+    <node visible="true" id="1214" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974764000000000" lon="-66.9013017000000048">
+        <tag k="brand" v="BP"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="operator" v="PDVSA"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:19.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="1223" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4980028000000001" lon="-66.9019964000000016">
+        <tag k="addr:full" v="Complejo Parque Central"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="name" v="Parque Central"/>
+        <tag k="amenity" v="parking_entrance"/>
+        <tag k="source:datetime" v="2014-06-22T17:29:20.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="1375" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4974808999999993" lon="-66.9003189000000020"/>
+    <node visible="true" id="1376" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4976926000000006" lon="-66.9015377999999998">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:19.000Z"/>
+    </node>
+    <node visible="true" id="1521" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4977681000000000" lon="-66.9009128000000004"/>
+    <node visible="true" id="1522" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4975397000000008" lon="-66.9006926999999934"/>
+    <node visible="true" id="1523" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4979724999999995" lon="-66.9018516000000005"/>
+    <node visible="true" id="1524" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4978102999999994" lon="-66.9009771999999998"/>
+    <node visible="true" id="2359" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4964502999999993" lon="-66.8987319999999954"/>
+    <node visible="true" id="2360" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4964180999999996" lon="-66.8989940000000018"/>
+    <node visible="true" id="2389" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4977426000000005" lon="-66.9017738999999949"/>
+    <node visible="true" id="2390" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4976216000000004" lon="-66.9011273999999929"/>
+    <node visible="true" id="2391" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4973586999999995" lon="-66.9015722000000039">
+        <tag k="brand" v="BP"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="operator" v="PDVSA"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:16.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="2392" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4973551000000000" lon="-66.8979704000000055"/>
+    <node visible="true" id="2444" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4972154000000000" lon="-66.8990419000000003"/>
+    <node visible="true" id="2445" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4974900000000009" lon="-66.8983676999999943"/>
+    <node visible="true" id="2446" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4983439000000001" lon="-66.8991012999999981"/>
+    <node visible="true" id="2447" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4984590999999998" lon="-66.8991888000000046"/>
+    <node visible="true" id="2507" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4974685999999995" lon="-66.9016397000000040"/>
+    <node visible="true" id="2532" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4980346000000004" lon="-66.9026362000000034">
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="fee" v="yes"/>
+        <tag k="vending" v="public_transport_tickets"/>
+        <tag k="opening_hours" v="Mo-Su 05:30-23:00"/>
+        <tag k="railway" v="subway_entrance"/>
+        <tag k="name" v="Salida: Complejo Parque Central - Parque Central ❷ (A-B)"/>
+        <tag k="platforms" v="1"/>
+        <tag k="payment:credit_cards" v="no"/>
+        <tag k="website" v="http://www.metrodecaracas.com.ve/"/>
+        <tag k="station" v="subway"/>
+        <tag k="subway" v="yes"/>
+        <tag k="image" v="https://commons.wikimedia.org/wiki/File:Trenes_linea_2.jpg"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="payment:debit_cards" v="no"/>
+        <tag k="email" v="sugerencias@metrodecaracas.gob.ve"/>
+        <tag k="phone" v="+58-212-5074298"/>
+        <tag k="smoking" v="no"/>
+        <tag k="network" v="Red Local Metropolitana de Caracas"/>
+        <tag k="fee:(Mo-Su)" v="BsF4.00"/>
+        <tag k="public_transport" v="station"/>
+        <tag k="start_date" v="10/04/1987"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="addr:postcode" v="1010"/>
+        <tag k="payment:cash" v="yes"/>
+        <tag k="source:datetime" v="2015-06-16T18:20:09.000Z"/>
+        <tag k="wikipedia" v="es:Parque Central (metro de Caracas)"/>
+        <tag k="height" v="5"/>
+        <tag k="operator" v="Metro de Caracas C.A"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="covered" v="yes"/>
+    </node>
+    <node visible="true" id="2533" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4975106000000000" lon="-66.9016217000000069"/>
+    <node visible="true" id="2534" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4975337000000000" lon="-66.9015885999999966">
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="fee" v="yes"/>
+        <tag k="vending" v="public_transport_tickets"/>
+        <tag k="opening_hours" v="Mo-Su 05:30-23:00"/>
+        <tag k="railway" v="subway_entrance"/>
+        <tag k="name" v="Salida: Av. Lecuna - Parque Central ❷ (A-B)"/>
+        <tag k="platforms" v="1"/>
+        <tag k="payment:credit_cards" v="no"/>
+        <tag k="website" v="http://www.metrodecaracas.com.ve/"/>
+        <tag k="station" v="subway"/>
+        <tag k="subway" v="yes"/>
+        <tag k="image" v="https://commons.wikimedia.org/wiki/File:Trenes_linea_2.jpg"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="payment:debit_cards" v="no"/>
+        <tag k="email" v="sugerencias@metrodecaracas.gob.ve"/>
+        <tag k="phone" v="+58-212-5074298"/>
+        <tag k="smoking" v="no"/>
+        <tag k="network" v="Red Local Metropolitana de Caracas"/>
+        <tag k="fee:(Mo-Su)" v="BsF4.00"/>
+        <tag k="public_transport" v="station"/>
+        <tag k="start_date" v="10/04/1987"/>
+        <tag k="addr:street" v="Av. Lecuna"/>
+        <tag k="addr:postcode" v="1010"/>
+        <tag k="payment:cash" v="yes"/>
+        <tag k="source:datetime" v="2015-06-16T18:20:12.000Z"/>
+        <tag k="wikipedia" v="es:Parque Central (metro de Caracas)"/>
+        <tag k="height" v="5"/>
+        <tag k="operator" v="Metro de Caracas C.A"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="covered" v="yes"/>
+    </node>
+    <node visible="true" id="2535" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4975979000000006" lon="-66.9019897999999955"/>
+    <node visible="true" id="2557" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4975620000000003" lon="-66.9017896999999948">
+        <tag k="wheelchair" v="yes"/>
+        <tag k="access" v="yes"/>
+        <tag k="entrance" v="main"/>
+        <tag k="source:datetime" v="2015-06-01T23:54:37.000Z"/>
+    </node>
+    <node visible="true" id="2559" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4980385999999992" lon="-66.9026541000000066">
+        <tag k="wheelchair" v="yes"/>
+        <tag k="access" v="yes"/>
+        <tag k="entrance" v="main"/>
+        <tag k="source:datetime" v="2015-06-01T23:54:37.000Z"/>
+    </node>
+    <node visible="true" id="2573" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4972657999999992" lon="-66.9016582999999940"/>
+    <node visible="true" id="2574" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.4970452999999999" lon="-66.9016893999999951"/>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="547"/>
+        <nd ref="76"/>
+        <nd ref="77"/>
+        <nd ref="-17"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2015-06-24T22:17:54.000Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="92"/>
+        <nd ref="91"/>
+        <nd ref="725"/>
+        <nd ref="90"/>
+        <nd ref="2360"/>
+        <nd ref="2359"/>
+        <nd ref="89"/>
+        <nd ref="445"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="lanes" v="4"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:53.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="2559"/>
+        <nd ref="-15"/>
+        <tag k="lit" v="yes"/>
+        <tag k="width" v="1.5"/>
+        <tag k="oneway" v="no"/>
+        <tag k="handrail" v="yes"/>
+        <tag k="source:datetime" v="2015-06-01T23:54:37.000Z"/>
+        <tag k="highway" v="steps"/>
+        <tag k="incline" v="down"/>
+        <tag k="step_count" v="30"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="679"/>
+        <nd ref="1205"/>
+        <nd ref="2574"/>
+        <nd ref="-14"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Este 10 bis"/>
+        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1067"/>
+        <nd ref="1068"/>
+        <nd ref="-13"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Av. Sur 21"/>
+        <tag k="source:datetime" v="2013-08-02T20:39:44.000Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1067"/>
+        <nd ref="-12"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Av. Sur 21"/>
+        <tag k="source:datetime" v="2015-08-18T16:11:08.000Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="1099"/>
+        <nd ref="1103"/>
+        <tag k="lit" v="yes"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="maxspeed:conditional" v="40 @ (22:00-06:00)"/>
+        <tag k="minspeed" v="20"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="toll" v="no"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="foot" v="no"/>
+        <tag k="source:datetime" v="2015-10-28T00:37:05.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1103"/>
+        <nd ref="1101"/>
+        <nd ref="1104"/>
+        <nd ref="1102"/>
+        <nd ref="-10"/>
+        <tag k="oneway" v="no"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source:datetime" v="2013-12-10T14:05:24.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="665"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Leonardo Ruíz Pineda"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-11-11T16:52:07.000Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="4"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="280"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-05-11T17:20:13.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="287"/>
+        <nd ref="22"/>
+        <nd ref="23"/>
+        <nd ref="24"/>
+        <nd ref="25"/>
+        <nd ref="-7"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="lanes" v="4"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="715"/>
+        <tag k="destination:lanes" v="UCV;Chuao;Los Ruices;Petare;La Urbina|UCV;Chuao;Los Ruices;Petare;La Urbina;Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="layer" v="-1"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Bolívar"/>
+        <tag k="turn:lanes" v="through|through;slight_right|slight_right"/>
+        <tag k="foot" v="no"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:47.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="75"/>
+        <nd ref="-5"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="layer" v="-1"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="lanes" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709"/>
+        <nd ref="-4"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="layer" v="-1"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="280"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur 19"/>
+        <tag k="source:datetime" v="2015-09-08T18:26:40.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="86"/>
+        <nd ref="980"/>
+        <nd ref="87"/>
+        <nd ref="-2"/>
+        <tag k="lit" v="yes"/>
+        <tag k="destination:lanes" v="Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio;San Bernardino"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="left"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur 25"/>
+        <tag k="turn:lanes" v="through|through|through;slight_right"/>
+        <tag k="source:datetime" v="2014-12-07T00:24:04.000Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="664"/>
+        <nd ref="665"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2009-01-17T18:10:43.000Z"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="5" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="715"/>
+        <nd ref="82"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="layer" v="-1"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="source:datetime" v="2014-09-05T04:44:06.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="6" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="80"/>
+        <nd ref="984"/>
+        <nd ref="986"/>
+        <nd ref="989"/>
+        <nd ref="988"/>
+        <nd ref="978"/>
+        <nd ref="990"/>
+        <nd ref="987"/>
+        <nd ref="985"/>
+        <nd ref="981"/>
+        <nd ref="979"/>
+        <nd ref="983"/>
+        <nd ref="982"/>
+        <nd ref="980"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="9" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="86"/>
+        <nd ref="2444"/>
+        <nd ref="84"/>
+        <nd ref="85"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="source:datetime" v="2014-11-30T21:06:28.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="10" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="715"/>
+        <nd ref="2447"/>
+        <nd ref="2446"/>
+        <nd ref="723"/>
+        <nd ref="80"/>
+        <tag k="destination:lanes" v="Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Bellas Artes;San Bernardino"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="layer" v="-1"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="turn:lanes" v="through|through;slight_right"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way visible="true" id="36" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="287"/>
+        <nd ref="288"/>
+        <nd ref="679"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
+        <tag k="lanes" v="2"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="50|30"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="hgv:lanes" v="no|yes"/>
+        <tag k="incline" v="10%"/>
+        <tag k="bus:lanes" v="no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="destination" v="San Agustín del Norte"/>
+    </way>
+    <way visible="true" id="114" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="681"/>
+        <nd ref="680"/>
+        <nd ref="679"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="layer" v="4"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="name" v="Pasarela San Agustín"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-10-02T13:39:21.000Z"/>
+        <tag k="highway" v="footway"/>
+    </way>
+    <way visible="true" id="141" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="82"/>
+        <nd ref="83"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="145" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="20"/>
+        <nd ref="21"/>
+        <nd ref="287"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="lanes" v="4"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:57.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="bicycle" v="no"/>
+    </way>
+    <way visible="true" id="266" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1205"/>
+        <nd ref="2391"/>
+        <nd ref="1376"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Av. Sur 21"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way visible="true" id="300" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1103"/>
+        <nd ref="725"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="minspeed" v="20"/>
+        <tag k="toll" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="lanes" v="1"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="40 @ (22:00-06:00)"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="foot" v="no"/>
+        <tag k="source:datetime" v="2015-10-28T00:49:21.000Z"/>
+        <tag k="destination:ref" v="L-07"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+    </way>
+    <way visible="true" id="333" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1211"/>
+        <nd ref="1202"/>
+        <nd ref="1207"/>
+        <nd ref="1193"/>
+        <tag k="addr:street" v="Avenida Lecuna"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="layer" v="3"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="name" v="Pasarela Parque Central"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-09-20T00:19:06.000Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="addr:postcode" v="1010"/>
+    </way>
+    <way visible="true" id="335" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="280"/>
+        <nd ref="1213"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="339" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="280"/>
+        <nd ref="2389"/>
+        <nd ref="1376"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="6"/>
+    </way>
+    <way visible="true" id="402" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1375"/>
+        <nd ref="670"/>
+        <tag k="oneway" v="no"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Full Chola Parque Central"/>
+        <tag k="source:datetime" v="2013-09-17T22:37:39.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way visible="true" id="403" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1376"/>
+        <nd ref="2390"/>
+        <nd ref="1522"/>
+        <nd ref="1375"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="6"/>
+    </way>
+    <way visible="true" id="404" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1375"/>
+        <nd ref="86"/>
+        <tag k="destination:lanes" v="Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Chuao;Los Ruices|Chuao;Los Ruices"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-12-01T08:26:38.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="405" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1376"/>
+        <nd ref="1214"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="1"/>
+    </way>
+    <way visible="true" id="439" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1521"/>
+        <nd ref="1522"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Acceso Parque Central"/>
+        <tag k="source:datetime" v="2013-12-19T21:02:00.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="440" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1213"/>
+        <nd ref="1209"/>
+        <nd ref="1223"/>
+        <nd ref="1523"/>
+        <nd ref="1524"/>
+        <nd ref="1521"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="layer" v="-3"/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Acceso Parque Central"/>
+        <tag k="source:datetime" v="2013-12-19T21:02:00.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="3"/>
+    </way>
+    <way visible="true" id="579" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2391"/>
+        <nd ref="1214"/>
+        <nd ref="2390"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:18.000Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="lanes" v="1"/>
+    </way>
+    <way visible="true" id="580" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="1376"/>
+        <nd ref="1067"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Av. Sur 21"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:18.000Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way visible="true" id="586" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="665"/>
+        <nd ref="1101"/>
+        <nd ref="724"/>
+        <nd ref="725"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
+        <tag k="lanes" v="2"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="50|30"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="hgv:lanes" v="no|yes"/>
+        <tag k="incline" v="10%"/>
+        <tag k="bus:lanes" v="no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="destination:ref" v="L-07"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+    </way>
+    <way visible="true" id="618" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2534"/>
+        <nd ref="2533"/>
+        <nd ref="2507"/>
+        <nd ref="2573"/>
+        <nd ref="2574"/>
+        <tag k="lit" v="yes"/>
+        <tag k="name" v="Transferencia Metro-MetroCable"/>
+        <tag k="source:datetime" v="2015-06-10T00:02:16.000Z"/>
+        <tag k="highway" v="path"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="625" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2534"/>
+        <nd ref="2557"/>
+        <tag k="lit" v="yes"/>
+        <tag k="width" v="1.5"/>
+        <tag k="oneway" v="no"/>
+        <tag k="handrail" v="yes"/>
+        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z"/>
+        <tag k="highway" v="path"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="626" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2532"/>
+        <nd ref="2559"/>
+        <tag k="lit" v="yes"/>
+        <tag k="width" v="1.5"/>
+        <tag k="oneway" v="no"/>
+        <tag k="handrail" v="yes"/>
+        <tag k="source:datetime" v="2015-06-01T23:54:38.000Z"/>
+        <tag k="highway" v="path"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="641" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2557"/>
+        <nd ref="2535"/>
+        <tag k="lit" v="yes"/>
+        <tag k="width" v="1.5"/>
+        <tag k="oneway" v="no"/>
+        <tag k="handrail" v="yes"/>
+        <tag k="source:datetime" v="2015-06-01T23:54:37.000Z"/>
+        <tag k="highway" v="steps"/>
+        <tag k="incline" v="down"/>
+        <tag k="step_count" v="30"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="682" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="437"/>
+        <nd ref="19"/>
+        <nd ref="20"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="toll" v="no"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="lanes" v="4"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="lit" v="yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:58.000Z"/>
+        <tag k="foot" v="no"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="748" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="83"/>
+        <nd ref="509"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="layer" v="2"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="749" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="510"/>
+        <nd ref="1056"/>
+        <nd ref="1057"/>
+        <nd ref="74"/>
+        <nd ref="75"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="lanes" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="750" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="86"/>
+        <nd ref="701"/>
+        <nd ref="511"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="788" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="85"/>
+        <nd ref="548"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="layer" v="2"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="lanes" v="3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="789" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="549"/>
+        <nd ref="722"/>
+        <nd ref="709"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Centro"/>
+        <tag k="layer" v="-1"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="destination:symbol" v="centre"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="790" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="80"/>
+        <nd ref="2445"/>
+        <nd ref="81"/>
+        <nd ref="2392"/>
+        <nd ref="550"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela"/>
+        <tag k="layer" v="-1"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

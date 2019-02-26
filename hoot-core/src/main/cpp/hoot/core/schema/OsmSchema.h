@@ -442,6 +442,16 @@ public:
    */
   Tags getAliasTags(const Tags& tags);
 
+  /**
+   * Determine the ancestor between two tags
+   *
+   * @param kvp1 first tag to examine
+   * @param kvp2 second tag to examine
+   * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
+   * each other
+   */
+  QString getParentKvp(const QString kvp1, const QString kvp2);
+
 private:
 
   friend class OsmSchemaTest;
