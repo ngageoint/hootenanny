@@ -81,7 +81,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -113,6 +113,7 @@ public class ConflateCommandTest {
     	String jobId = UUID.randomUUID().toString();
 
     	ConflateParams conflateParams = new ConflateParams();
+    	conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
         conflateParams.setInputType2("DB");
@@ -121,7 +122,7 @@ public class ConflateCommandTest {
         conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
-        conflateParams.setHoot2Commands("");
+        conflateParams.setHoot2(true);
         conflateParams.setConflationType("Attribute");
 
         String debugLevel = "error";
@@ -134,11 +135,11 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
-        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("-C Attribute.conf"));
+        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("Attribute.conf"));
 
     }
 }
