@@ -49,6 +49,14 @@ import hoot.services.models.db.Users;
 class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
+    private static final Map<String, String> conflationConf = new HashMap(){{
+    	put("Attribute", "Attribute");
+    	put("Differential", "Diff");
+    	put("Network", "Network");
+    	put("Reference", "Reference");
+    	put("Cookie Cutter & Horizontal", "Horizontal");
+    }};
+
 
     ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
         super(jobId);
@@ -109,7 +117,7 @@ class ConflateCommand extends ExternalCommand {
         }
 
         if (params.getHoot2() != null) { // hoot 2
-        	String conflationType = ConflationConfs.get(params.getConflationType());
+        	String conflationType = conflationConf.get(params.getConflationType());
         	conflationType = conflationType == null ? "" : conflationType + ".conf";
         	substitutionMap.put("CONFLATION_TYPE", conflationType);
         }
