@@ -1,5 +1,6 @@
 hoot-services/src/main/resources/conf/local.conf
 plugins/config.js
+conf/core/ConfigOptions.json
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
 *.pyc
@@ -17,7 +18,7 @@ BuildDate.txt
 bin/
 bw-output/
 callgrind.*
-conf/database/DatabaseConfigLocal.sh
+confedatabase/DatabaseConfigLocal.sh
 conf/LocalHoot.json
 conf/dictionary/words*.sqlite
 conf/dictionary/WordsAbridged.sqlite
