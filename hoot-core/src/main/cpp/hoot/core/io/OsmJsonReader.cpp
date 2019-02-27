@@ -126,10 +126,15 @@ void OsmJsonReader::open(QString url)
 
     // Handle files or URLs
     _url = QUrl(url);
-    if (_url.isRelative() || _url.isLocalFile())
+
+    bool isRelativeUrl = _url.isRelative();
+    bool isLocalFile =  _url.isLocalFile();
+
+    if (isRelativeUrl || isLocalFile)
     {
+      QString filename = isRelativeUrl ? _url.toString() : _url.toLocalFile();
       _isFile = true;
-      _file.setFileName(_url.toLocalFile());
+      _file.setFileName(filename);
       _file.open(QFile::ReadOnly | QFile::Text);
     }
     else
