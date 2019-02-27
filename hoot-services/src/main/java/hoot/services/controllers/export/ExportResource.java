@@ -29,13 +29,14 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
-
+import static hoot.services.models.db.QMaps.maps;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -60,17 +61,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Maps;
+import com.querydsl.core.Tuple;
+
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
+import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 
 @Controller
 @Path("/export")
@@ -83,6 +90,23 @@ public class ExportResource {
     private UserAwareExportCommandFactory userAwareExportCommandFactory;
 
     public ExportResource() {}
+
+    private Class<? extends ExportCommand> getCommand(String outputType) {
+    	Class<? extends ExportCommand> exportCommand = null;
+    	if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
+    		exportCommand = ExportOSMCommand.class;
+    	} else if (outputType.equals("tiles")) {
+    		exportCommand = CalculateTilesCommand.class;
+    	} else {
+    		exportCommand = ExportCommand.class;
+    	}
+    	return exportCommand;
+    }
+
+    private ExportCommand getCommand(Users user, String jobId, ExportParams params, String debugLevel) {
+        return userAwareExportCommandFactory.build(jobId, params, debugLevel,
+                getCommand(params.getOutputType()), this.getClass(), user);
+    }
 
     /**
      * Asynchronous export service.
@@ -121,6 +145,7 @@ public class ExportResource {
         }
 
         try {
+        	String inputType = params.getInputType();
             String outputType = params.getOutputType();
             String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
@@ -131,39 +156,21 @@ public class ExportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            if (outputType.equalsIgnoreCase("osm")) {
-                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass(), user);
-
-                workflow.add(exportOSMCommand);
-
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
-                }
-            }
-            else if (outputType.equalsIgnoreCase("osm.pbf")) {
-                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass(), user);
-
-                workflow.add(exportOSMCommand);
-            }
-            else if (outputType.startsWith("tiles")) {
-                ExternalCommand calculateTilesCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, CalculateTilesCommand.class, this.getClass(), user);
-
-                workflow.add(calculateTilesCommand);
-            }
-            else { //else Shape/FGDB
-                ExternalCommand exportCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, ExportCommand.class, this.getClass(), user);
-
-                workflow.add(exportCommand);
-
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
-                }
+            if (inputType.equalsIgnoreCase("folder")) {
+            	Long folder_id = Long.parseLong(params.getInput());
+            	for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) {
+                	params.setInput(Long.toString(mapInfo.get(maps.id)));
+                	params.setOutputName(mapInfo.get(maps.displayName));
+            		workflow.add(getCommand(user, jobId, params, debugLevel));
+            	}
+            	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), outputType);
+            	workflow.add(zipCommand);
+            } else if (inputType.equalsIgnoreCase("files")) {
+            	workflow.add(getCommand(user, jobId, params, debugLevel));
+            	if (outputType.matches("osm|shp|fgd")) {
+                	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                	workflow.add(zipCommand);
+            	}
             }
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
