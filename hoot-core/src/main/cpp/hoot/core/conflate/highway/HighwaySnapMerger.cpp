@@ -181,8 +181,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_VART(e1->getStatus());
-  //LOG_VART(e2->getStatus());
   OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwaySnapMerger: e1");
   OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwaySnapMerger: e2");
 
