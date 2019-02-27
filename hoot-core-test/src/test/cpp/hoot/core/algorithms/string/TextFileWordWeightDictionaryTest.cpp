@@ -47,7 +47,7 @@ public:
   void runTest()
   {
     TextFileWordWeightDictionary uut("test-files/algorithms/string/WordWeight.tsv");
-    HOOT_STR_EQUALS("[7]{(street, 100), (foo, 1), (fou, 1), (baar, 1), (road, 50), (lane, 25), (bar, 3)}", uut._weights);
+    HOOT_STR_EQUALS("[7]{(bar, 3), (baar, 1), (foo, 1), (fou, 1), (road, 50), (street, 100), (lane, 25)}", uut._weights);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0055, uut.getWeight("foo"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0166, uut.getWeight("bar"), 0.0001);
   }

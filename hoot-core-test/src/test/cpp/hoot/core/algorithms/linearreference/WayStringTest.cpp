@@ -281,8 +281,8 @@ public:
     WayPtr wayCopy = ws->copySimplifiedWayIntoMap(*map, map);
     HOOT_STR_EQUALS("way(-3)\n"
                     "nodes: [6]{-1, -2, -3, -6, -5, -4}\n"
-                    "tags: alt_name = w2\n"
-                    "name = w1\n"
+                    "tags: name = w1\n"
+                    "alt_name = w2\n"
                     "cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
@@ -361,8 +361,8 @@ public:
 
     HOOT_STR_EQUALS("way(-3)\n"
                     "nodes: [4]{-1, -2, -3, -4}\n"
-                    "tags: alt_name = w2\n"
-                    "name = w1\n"
+                    "tags: name = w1\n"
+                    "alt_name = w2\n"
                     "cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
