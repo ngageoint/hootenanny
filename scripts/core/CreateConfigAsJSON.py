@@ -200,10 +200,7 @@ def createJSON(c):
 
         cc = toCamelCase(k)
 
-        # tmpString = """ "%s":{"key":"%s","type":"%s","default":"%s" """ % (cc,k,v['type'],escapeString(valueString))
         result += """ "%s":{"key":"%s","type":"%s","default":"%s" """ % (cc,k,v['type'],escapeString(valueString))
-
-        # print('cc: %s\nk: %s \nvType: %s \nvalueString: %s\ndescription: %s\n') % (cc,k,v['type'],valueString,v['description'])
 
         # If there's are both max/min values for this value, expose those 
         if ( ('minimum' in v) and ('maximum') in v ):
