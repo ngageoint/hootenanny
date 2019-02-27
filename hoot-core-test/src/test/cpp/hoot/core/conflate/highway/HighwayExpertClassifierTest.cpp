@@ -162,7 +162,7 @@ public:
 
     MatchClassification result = classifier->classify(map, match);
 
-    HOOT_STR_EQUALS("match: 6.75908e-06 miss: 0.999993 review: 0", result.toString());
+    HOOT_STR_EQUALS("match: 6.75908e-6 miss: 0.999993 review: 0", result.toString());
   }
 
 };
