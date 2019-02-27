@@ -68,6 +68,7 @@ unsigned int HighwaySnapMerger::logWarnCount = 0;
 HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+_removeTagsFromWayMembers(true),
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
@@ -541,13 +542,13 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     RelationPtr r;
     if (!scrap || scrap->getElementType() == ElementType::Way)
     {
-      LOG_TRACE("multilinestring: scrap relation");
       r.reset(new Relation(splitee->getStatus(), map->createNextRelationId(),
                            splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       if (scrap)
       {
         r->addElement("", scrap);
       }
+      LOG_DEBUG("Created scrap relation: " << r->getElementId());
       scrap = r;
       map->addElement(r);
     }
@@ -597,12 +598,11 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
         scrap->getElementType() == ElementType::Way)
     {
       // create a new relation to contain this single way (footway relation)
-      LOG_TRACE("multilinestring: footway relation");
       RelationPtr r(new Relation(splitee->getStatus(), map->createNextRelationId(),
         splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       r->addElement("", scrap->getElementId());
       scrap = r;
-      LOG_VART(r->getElementId());
+      LOG_TRACE("Created multilinestring relation for footway: " << r->getElementId());
       map->addElement(r);
     }
     /*
@@ -618,14 +618,16 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
      *    /           \
      * x----x-w1;w2-x----x
      */
-    else if (splitee->getElementType() == ElementType::Way &&
+    else if (_removeTagsFromWayMembers && splitee->getElementType() == ElementType::Way &&
              scrap->getElementType() == ElementType::Relation)
     {
-      LOG_TRACE("multilinestring: moving tags...");
       RelationPtr r = boost::dynamic_pointer_cast<Relation>(scrap);
       // make sure none of the child ways have tags.
       for (size_t i = 0; i < r->getMembers().size(); i++)
       {
+        LOG_TRACE(
+          "multilinestring: removing member tags from: " << r->getMembers()[i].getElementId() <<
+          " belonging to : " << r->getElementId() << "...");
         map->getElement(r->getMembers()[i].getElementId())->getTags().clear();
       }
     }

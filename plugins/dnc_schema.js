@@ -165,6 +165,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Chemical",value:"13" },
                            { name:"Coal",value:"17" },
@@ -241,6 +242,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Major",value:"1" },
                            { name:"Minor",value:"2" },
                            { name:"Seaplane Base",value:"4" },
@@ -298,6 +300,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Roller Coaster",value:"25" }
                         ]
@@ -458,6 +461,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Major Airfield", value:"1" },
                            { name:"Minor Airfield", value:"2" }
                         ]
@@ -482,6 +486,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"28",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Operational",value:"28" },
                            { name:"Continuous Operation",value:"42" }
                         ]
@@ -505,6 +510,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"NOB (Non-directional Beacon)",value:"17" },
                            { name:"RNG (Radio Range)",value:"19" }
@@ -516,6 +522,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"One light present",value:"1" },
                            { name:"Multiple lights present",value:"2" }
@@ -625,7 +632,8 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
-                           { name:"Unknown",value:"28" },
+                           { name:"Null",value:"-32768" },
+                           { name:"Unknown",value:"0" },
                            { name:"Under Construction",value:"5" },
                            { name:"Abandoned / Disused",value:"6" },
                            { name:"Destroyed",value:"7" },
@@ -666,6 +674,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"No Information", value:"0" },
                            { name:"Dome", value:"40" },
                            { name:"With Steeple", value:"51" },
@@ -680,6 +689,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"-32768",
                        enumerations:[
+                           { name:"Null", value:"-32768" },
                            { name:"Unknown", value:"0" },
                            { name:"Bell", value:"1" },
                            { name:"Diaphone", value:"2" },
@@ -696,8 +706,9 @@ getDbSchema: function()
                        desc:"Station Type",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"-32768",
+                       defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown", value:"0" },
                            { name:"Coast Guard", value:"1" },
                            { name:"Fireboat", value:"2" },
@@ -752,7 +763,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"COMPP",
+        { name:"COMMP",
           fcode:"",
           desc:"Communications Point",
           geom:"Point",
@@ -850,6 +861,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"8",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"On ground surface",value:"8" },
                            { name:"Off Shore",value:"22" },
                         ]
@@ -866,6 +878,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Electric",value:"31" },
                            { name:"Other",value:"999" },
@@ -877,6 +890,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Pyramid",value:"12" },
                            { name:"Spherical (Hemispherical)",value:"17" },
@@ -897,6 +911,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown", value:"0" },
                            { name:"Both Road and Railroad", value:"1" },
                            { name:"Railroad", value:"3" },
@@ -912,6 +927,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"132",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Container",value:"132" },
                            { name:"Other",value:"999" }
                         ]
@@ -1003,7 +1019,7 @@ getDbSchema: function()
                        desc:"Material Composition Category",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Boulders", value:"8" },
@@ -1020,7 +1036,7 @@ getDbSchema: function()
                        desc:"Material Compsition Secondary",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Gravel", value:"46" },
@@ -1154,7 +1170,7 @@ getDbSchema: function()
                            { name:"Rubble", value:"11" },
                            { name:"Sandy", value:"13" },
                            { name:"Stony, Shingly", value:"14" },
-                           { name:"Other", value:"999" },
+                           { name:"Other", value:"15" },
                         ]
                      },
                     ]
@@ -1189,7 +1205,7 @@ getDbSchema: function()
                        desc:"Material Composition Category",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Boulders", value:"8" },
@@ -1206,7 +1222,7 @@ getDbSchema: function()
                        desc:"Material Compsition Secondary",
                        optional:"R",
                        type:"enumeration",
-                       defValue:"1",
+                       defValue:"0",
                        enumerations:[
                            { name:"Unknown", value:"0" },
                            { name:"Gravel", value:"46" },
@@ -2086,6 +2102,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"8",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Perennial/Permanent",value:"8" }
                         ]
                      },
@@ -2101,6 +2118,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Access Required",value:"1" },
                            { name:"Access Not Required",value:"2" }
@@ -2126,6 +2144,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Natural",value:"45" },
                            { name:"Man-made",value:"46" }
@@ -2248,6 +2267,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Feature crosses navigable water",value:"1" },
                         ]
                      }
@@ -2271,6 +2291,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"50",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Non-Tidal",value:"50" }
                         ]
                      },
@@ -2367,6 +2388,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" }
                         ]
@@ -2377,6 +2399,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Perennial",value:"1" },
                            { name:"Intermittent",value:"2" }
                         ]
@@ -2387,6 +2410,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"8",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Non-Perennial/Intermittent/Fluctuating",value:"6" },
                            { name:"Perennial/Permanent",value:"8" }
                         ]
@@ -2403,6 +2427,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Mangrove/Nipa",value:"6" },
                            { name:"Marsh,Swamp",value:"8" },
@@ -2433,6 +2458,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"51",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Tidal/Tidal Fluctuation",value:"51" }
                         ]
                      },
@@ -2442,6 +2468,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"as a Causeway",value:"127" }
                         ]
@@ -2452,6 +2479,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Above surface / Does Not Cover (At High Water)",value:"1" },
                            { name:"Covers and Uncovers",value:"8" },
                            { name:"Not Applicable",value:"9" }
@@ -2491,6 +2519,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Snow",value:"1" },
                            { name:"Ice",value:"2" }
@@ -2829,6 +2858,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Ammunition",value:"3" },
                            { name:"Chemical",value:"13" },
@@ -2907,7 +2937,7 @@ getDbSchema: function()
                        optional:"R",
                        length:"255",
                        type:"String",
-                       defValue:"N/A"
+                       defValue:"UNK"
                      },
                      { name:"DAT",
                        desc:"Date",
@@ -3074,6 +3104,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Approved",value:"1" },
                            { name:"Not Approved",value:"2" }
                         ]
@@ -3176,6 +3207,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Metres",value:"1" },
                            { name:"Nautical Miles",value:"11" },
@@ -3253,6 +3285,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"46",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Natural",value:"45" },
                            { name:"Man-made",value:"46" }
                         ]
@@ -3668,6 +3701,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Approved",value:"1" },
                            { name:"Not Approved",value:"2" }
                         ]
@@ -4278,6 +4312,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"16",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown", value:"0" },
                            { name:"Bell", value:"1" },
                            { name:"Diaphone", value:"2" },
@@ -4857,6 +4892,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"1",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Accurate",value:"1" },
                            { name:"Approximate",value:"2" },
                            { name:"Doubtful",value:"3" }
@@ -5401,6 +5437,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown",value:"0" },
                            { name:"Telegraph",value:"51" },
                            { name:"Telephone",value:"52" },
@@ -5409,7 +5446,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"PIPLINL",
+        { name:"PIPELINL",
           fcode:"",
           desc:"Pipeline Line",
           geom:"Line",
@@ -5539,6 +5576,7 @@ getDbSchema: function()
                        type:"enumeration",
                        defValue:"0",
                        enumerations:[
+                           { name:"Null",value:"-32768" },
                            { name:"Unknown", value:"0" },
                            { name:"Both Road and Railroad", value:"1" },
                            { name:"Railroad", value:"3" },
@@ -5630,7 +5668,7 @@ getDbSchema: function()
                      }
                     ]
           },
-        { name:"HAZARDA",
+        { name:"HAZARDP",
           fcode:"",
           desc:"Hazard Point",
           geom:"Point",
@@ -6349,7 +6387,7 @@ getDbSchema: function()
                        desc:"Name",
                        optional:"R",
                        type:"String",
-                       defValue:"UNK"
+                       defValue:"N/A"
                      }
                     ]
           },
@@ -6384,6 +6422,91 @@ getDbSchema: function()
                        optional:"R",
                        type:"String",
                        defValue:"UNK"
+                     },
+                    ]
+          },
+        { name:"DQYAREA",
+          fcode:"",
+          desc:"Data Quality Area",
+          geom:"Area",
+          columns:[
+                     { name:"SOURCE_ID",
+                       desc:"Chart identifier",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"NAME",
+                       desc:"Name",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"COMP_DATE",
+                       desc:"Name",
+                       optional:"R",
+                       length:"20",
+                       type:"String",
+                       defValue:"N/A"
+                     },
+                     { name:"EDITION",
+                       desc:"Edition",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"PRINT_DATE",
+                       desc:"Chart Edition Date",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"SCALE",
+                       desc:"Scale",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"REF_LAT",
+                       desc:"Reference Latitude",
+                       optional:"R",
+                       type:"Real",
+                       defValue:""
+                     },
+                     { name:"ABS_HORIZ_ACC",
+                       desc:"Absolute Horizontal Accuracy",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"ABS_VERT_ACC",
+                       desc:"Absolute Vertical Accuracy",
+                       optional:"R",
+                       type:"Integer",
+                       defValue:""
+                     },
+                     { name:"DATUM",
+                       desc:"Datum",
+                       optional:"R",
+                       length:"40",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"LINEAGE",
+                       desc:"Linage",
+                       optional:"R",
+                       length:"100",
+                       type:"String",
+                       defValue:""
+                     },
+                     { name:"SOURCE_INFO",
+                       desc:"Source Information",
+                       optional:"R",
+                       length:"100",
+                       type:"String",
+                       defValue:""
                      },
                     ]
           }
