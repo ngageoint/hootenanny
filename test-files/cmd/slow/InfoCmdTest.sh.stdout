@@ -3673,7 +3673,7 @@ URL: N/A
 
 Listing a match creator...
 
-  HighwayMatchCreator                             Matches roads with the non-greedy algorithm
+  HighwayMatchCreator                             Matches roads with the 2nd generation algorithm
 
 Listing a script match creator...
 
