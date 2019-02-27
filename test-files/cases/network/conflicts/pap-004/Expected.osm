@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.546063" minlon="-72.323514" maxlat="18.553024" maxlon="-72.3164799"/>
-    <node visible="true" id="-959" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5486976693356986" lon="-72.3207641242250503">
+    <node visible="true" id="-957" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5486976693356986" lon="-72.3207641242250503">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-959"/>
+        <tag k="hoot:id" v="-957"/>
     </node>
     <node visible="true" id="-536" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5490267214600024" lon="-72.3208411239100002">
         <tag k="hoot:status" v="2"/>
@@ -1931,7 +1931,7 @@
         <nd ref="-117"/>
         <nd ref="-536"/>
         <nd ref="-535"/>
-        <nd ref="-959"/>
+        <nd ref="-957"/>
         <tag k="width:minimum_traveled_way" v="5"/>
         <tag k="source" v="mgcp"/>
         <tag k="condition" v="functional"/>
@@ -1952,10 +1952,10 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-1059"/>
     </way>
-    <way visible="true" id="-1042" timestamp="2017-06-07T14:42:50Z" version="1">
+    <way visible="true" id="-1041" timestamp="2017-06-07T14:42:50Z" version="1">
         <nd ref="-436"/>
         <nd ref="-102"/>
-        <nd ref="-959"/>
+        <nd ref="-957"/>
         <nd ref="-101"/>
         <nd ref="-100"/>
         <nd ref="-99"/>
@@ -1995,7 +1995,7 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1042"/>
+        <tag k="hoot:id" v="-1041"/>
     </way>
     <way visible="true" id="-152" timestamp="2017-06-07T14:42:50Z" version="1">
         <nd ref="-334"/>
@@ -2904,14 +2904,14 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-60"/>
     </way>
-    <way visible="true" id="-59" timestamp="2017-06-07T14:42:50Z" version="1">
+    <way visible="true" id="-59" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113">
         <nd ref="-336"/>
         <nd ref="-335"/>
         <nd ref="-334"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google Aerial; Bing;osm"/>
+        <tag k="source" v="Google Aerial; Bing;osm;osm"/>
         <tag k="uuid" v="{cd4fe70f-ddb9-4da5-9dbc-055d279b0807}"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="attribution" v="osm;osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="pedestrian"/>
         <tag k="hoot:status" v="1"/>

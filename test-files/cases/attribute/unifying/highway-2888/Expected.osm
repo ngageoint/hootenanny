@@ -4709,41 +4709,11 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1000" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-111"/>
-        <nd ref="-109"/>
-        <nd ref="-108"/>
-        <nd ref="-107"/>
-        <nd ref="-135"/>
-        <nd ref="-1035"/>
-        <tag k="length" v="141.8"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-1000"/>
-    </way>
-    <way visible="true" id="-984" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1107"/>
-        <nd ref="-1106"/>
-        <tag k="length" v="54.3"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-984"/>
-    </way>
-    <way visible="true" id="-982" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1093"/>
-        <nd ref="-1050"/>
-        <tag k="length" v="279.6"/>
-        <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-982"/>
-    </way>
     <way visible="true" id="-979" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-840"/>
         <nd ref="-824"/>
         <nd ref="-823"/>
+        <nd ref="-749"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="length" v="300.2"/>
@@ -4804,7 +4774,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-917"/>
     </way>
-    <way visible="true" id="-876" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-878" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-930"/>
         <nd ref="-929"/>
         <nd ref="-928"/>
@@ -4857,7 +4827,7 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="highway" v="primary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-876"/>
+        <tag k="hoot:id" v="-878"/>
     </way>
     <way visible="true" id="-862" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-891"/>
@@ -5044,7 +5014,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1015.2"/>
+        <tag k="length" v="761.4"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Maaveyo Magu"/>
@@ -5153,6 +5123,7 @@
         <nd ref="-1128"/>
         <nd ref="-1124"/>
         <nd ref="-1093"/>
+        <nd ref="-1050"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
@@ -5395,6 +5366,7 @@
         <nd ref="-1110"/>
         <nd ref="-1108"/>
         <nd ref="-1107"/>
+        <nd ref="-1106"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
@@ -5476,7 +5448,7 @@
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="oneway" v="yes"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="1018"/>
+        <tag k="length" v="643.5"/>
         <tag k="maxspeed" v="30"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="fiЯas 16042011"/>
@@ -6513,7 +6485,6 @@
         <tag k="hoot:id" v="-119"/>
     </way>
     <way visible="true" id="-117" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
-        <nd ref="-823"/>
         <nd ref="-749"/>
         <nd ref="-748"/>
         <nd ref="-747"/>
@@ -6525,7 +6496,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="source:imagery:sensor" v="WV03_VNIR"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="length" v="600.4"/>
+        <tag k="length" v="195.7"/>
         <tag k="source:imagery" v="DigitalGlobe"/>
         <tag k="source" v="Bing"/>
         <tag k="name" v="Muiveyo Magu"/>
@@ -8308,7 +8279,12 @@
         <nd ref="-120"/>
         <nd ref="-112"/>
         <nd ref="-111"/>
-        <tag k="length" v="141.8"/>
+        <nd ref="-109"/>
+        <nd ref="-108"/>
+        <nd ref="-107"/>
+        <nd ref="-135"/>
+        <nd ref="-1035"/>
+        <tag k="length" v="283.6"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
