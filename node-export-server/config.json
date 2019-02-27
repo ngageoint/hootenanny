@@ -23,6 +23,9 @@
     "DNC": "translations/DNC.js",
     "GGDMv30": "translations/GGDMv30.js"
   },
+  "schema_options": {
+    "DNC": "ogr.strict.checking=off",
+  },
   "tagOverrides": {
     "attribution":"",
     "security:resource_owner":"",
