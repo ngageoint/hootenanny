@@ -154,7 +154,7 @@ gifd.rules = {
         ['F_CODE','EC030','landuse','forest'], // Trees
         ['F_CODE','EE000','raw:F_CODE','EE000'], // Miscellaneous Vegetation
         ['F_CODE','EE020','raw:F_CODE','EE020'], // Land devoid of vegetation
-        ['F_CODE','FA001','raw:F_CODE','FA001'], // Administrative Area
+        ['F_CODE','FA001','boundary','administrative'], // Administrative Area
         ['F_CODE','FA005','raw:F_CODE','FA005'], // Access Zone
         ['F_CODE','FA041','raw:F_CODE','FA041'], // Contact Zone
         ['F_CODE','FA090','raw:F_CODE','FA090'], // Geophysical Prospecting Grid
