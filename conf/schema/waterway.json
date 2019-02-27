@@ -60,6 +60,14 @@
         "objectType": "tag"
     },
     {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "waterway",
+        "name": "waterway=flow_control",
+        "objectType": "tag"
+    },
+    {
         "categories": [
             "poi"
         ],

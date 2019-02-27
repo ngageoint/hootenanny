@@ -12,10 +12,10 @@ changeset can then be applied directly to dataset A, without generating any
 review items.
 
 This algorithm is still under development. Currently it works best if you use 
-the Network Conflation conflicts matcher (see conf/core/Network.conf), but if
-you are in a situation where you need to process a lot of data quickly, using
-the unifying-conflation HighwayMatchCreator produces acceptable results, in a
-shorter timeframe. Please note that the differential conflation algorithm
+the Network Conflation conflicts matcher (see conf/core/NetworkAlgorithm.conf),
+but if you are in a situation where you need to process a lot of data quickly,
+using the unifying-conflation HighwayMatchCreator produces acceptable results,
+in a shorter timeframe. Please note that the differential conflation algorithm
 isn't limited to roads: it will use any matcher specified in hootenanny when
 doing the conflation. Thus, waterways, railways, powerlines, POIs, areas, etc.
 will be included in the conflation operation.
