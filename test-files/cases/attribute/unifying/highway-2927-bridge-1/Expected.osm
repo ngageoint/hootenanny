@@ -4138,8 +4138,8 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
         <tag k="name" v="Av. Oeste 4"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -4208,8 +4208,8 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
         <tag k="name" v="Av. Oeste 4"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -4363,69 +4363,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-391"/>
     </way>
-    <way visible="true" id="-384" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-464"/>
-        <nd ref="-465"/>
-        <nd ref="-466"/>
-        <nd ref="-467"/>
-        <nd ref="-468"/>
-        <nd ref="-469"/>
-        <nd ref="-470"/>
-        <nd ref="-471"/>
-        <nd ref="-472"/>
-        <nd ref="-473"/>
-        <nd ref="-474"/>
-        <nd ref="-475"/>
-        <nd ref="-476"/>
-        <nd ref="-477"/>
-        <nd ref="-478"/>
-        <nd ref="-479"/>
-        <nd ref="-480"/>
-        <nd ref="-481"/>
-        <nd ref="-482"/>
-        <nd ref="-483"/>
-        <nd ref="-484"/>
-        <nd ref="-485"/>
-        <nd ref="-486"/>
-        <nd ref="-487"/>
-        <nd ref="-488"/>
-        <nd ref="-489"/>
-        <nd ref="-490"/>
-        <nd ref="-491"/>
-        <nd ref="-492"/>
-        <nd ref="-493"/>
-        <nd ref="-494"/>
-        <nd ref="-495"/>
-        <nd ref="-496"/>
-        <nd ref="-497"/>
-        <nd ref="-498"/>
-        <nd ref="-499"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="name" v="Av. San Martín"/>
-        <tag k="lanes" v="3"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
-        <tag k="lit" v="yes"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2014-09-04T14:24:33.000Z;2014-04-21T23:52:43.000Z;2014-12-24T02:39:20.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="foot" v="yes"/>
-        <tag k="uuid" v="{6f44fd8f-d8fd-4e57-b362-afb57ca0c781}"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="destination" v="Catia"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-384"/>
-    </way>
     <way visible="true" id="-372" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-214"/>
         <nd ref="-685"/>
@@ -4469,63 +4406,6 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-372"/>
     </way>
-    <way visible="true" id="-366" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-164"/>
-        <nd ref="-165"/>
-        <nd ref="-166"/>
-        <nd ref="-167"/>
-        <nd ref="-168"/>
-        <nd ref="-169"/>
-        <nd ref="-170"/>
-        <nd ref="-171"/>
-        <nd ref="-172"/>
-        <nd ref="-173"/>
-        <nd ref="-174"/>
-        <nd ref="-175"/>
-        <nd ref="-176"/>
-        <nd ref="-177"/>
-        <nd ref="-178"/>
-        <nd ref="-179"/>
-        <nd ref="-180"/>
-        <nd ref="-181"/>
-        <nd ref="-182"/>
-        <nd ref="-183"/>
-        <nd ref="-184"/>
-        <nd ref="-185"/>
-        <nd ref="-186"/>
-        <nd ref="-187"/>
-        <nd ref="-188"/>
-        <nd ref="-189"/>
-        <nd ref="-190"/>
-        <nd ref="-191"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="name" v="Av. Bolívar"/>
-        <tag k="lanes" v="2"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="layer" v="-2"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="maxspeed" v="60"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.677Z"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="highway" v="primary"/>
-        <tag k="addr:street" v="Av. Baralt"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2014-05-12T20:05:38.000Z;2014-09-04T14:24:33.000Z;2014-09-04T14:24:34.000Z;2019-01-17T19:50:06Z;2014-12-24T02:49:57.000Z"/>
-        <tag k="uuid" v="{aec76311-ef7c-458d-b5dc-495745461b2f}"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="tunnel" v="yes"/>
-        <tag k="destination" v="Catia;San Martín"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-366"/>
-    </way>
     <way visible="true" id="-365" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-5193"/>
         <nd ref="-700"/>
@@ -4560,11 +4440,11 @@
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2014-04-25T15:37:21.000Z;2019-01-17T19:50:06Z;2014-05-19T20:36:26.000Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2014-04-25T15:37:21.000Z;2019-01-17T19:50:06Z;2014-05-19T20:36:26.000Z"/>
         <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
-        <tag k="bicycle" v="yes"/>
         <tag k="motor_vehicle" v="permissive"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
@@ -4703,6 +4583,33 @@
         <tag k="hoot:id" v="-104"/>
     </way>
     <way visible="true" id="-103" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-164"/>
+        <nd ref="-165"/>
+        <nd ref="-166"/>
+        <nd ref="-167"/>
+        <nd ref="-168"/>
+        <nd ref="-169"/>
+        <nd ref="-170"/>
+        <nd ref="-171"/>
+        <nd ref="-172"/>
+        <nd ref="-173"/>
+        <nd ref="-174"/>
+        <nd ref="-175"/>
+        <nd ref="-176"/>
+        <nd ref="-177"/>
+        <nd ref="-178"/>
+        <nd ref="-179"/>
+        <nd ref="-180"/>
+        <nd ref="-181"/>
+        <nd ref="-182"/>
+        <nd ref="-183"/>
+        <nd ref="-184"/>
+        <nd ref="-185"/>
+        <nd ref="-186"/>
+        <nd ref="-187"/>
+        <nd ref="-188"/>
+        <nd ref="-189"/>
+        <nd ref="-190"/>
         <nd ref="-191"/>
         <nd ref="-192"/>
         <nd ref="-193"/>
@@ -4741,7 +4648,7 @@
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary_link"/>
         <tag k="foot" v="no"/>
-        <tag k="source:datetime" v="2014-09-04T14:24:34.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:datetime" v="2014-09-04T14:24:34.000Z;2019-01-17T19:50:06Z;2014-12-24T02:49:57.000Z"/>
         <tag k="uuid" v="{aec76311-ef7c-458d-b5dc-495745461b2f}"/>
         <tag k="destination" v="San Martín"/>
         <tag k="osm_id" v="-999999"/>
@@ -4924,9 +4831,10 @@
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
+        <tag k="source:datetime" v="2015-06-12T14:51:44.000Z;2019-01-17T19:50:06Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z"/>
         <tag k="foot" v="yes"/>
-        <tag k="source:datetime" v="2015-06-12T14:51:44.000Z;2019-01-17T19:50:06Z"/>
         <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
+        <tag k="motor_vehicle" v="permissive"/>
         <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -5041,12 +4949,11 @@
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.662Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
-        <tag k="source:datetime" v="2015-06-12T14:47:33.000Z;2019-01-17T19:50:06Z;2014-04-25T15:59:54.000Z"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:33.000Z;2019-01-17T19:50:06Z"/>
         <tag k="foot" v="yes"/>
         <tag k="uuid" v="{ae210ee0-b440-4ebc-87d9-91e9d194b8ed}"/>
         <tag k="motor_vehicle" v="yes"/>
         <tag k="bicycle" v="yes"/>
-        <tag k="tunnel" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
@@ -5659,6 +5566,41 @@
         <nd ref="-456"/>
         <nd ref="-500"/>
         <nd ref="-499"/>
+        <nd ref="-498"/>
+        <nd ref="-497"/>
+        <nd ref="-496"/>
+        <nd ref="-495"/>
+        <nd ref="-494"/>
+        <nd ref="-493"/>
+        <nd ref="-492"/>
+        <nd ref="-491"/>
+        <nd ref="-490"/>
+        <nd ref="-489"/>
+        <nd ref="-488"/>
+        <nd ref="-487"/>
+        <nd ref="-486"/>
+        <nd ref="-485"/>
+        <nd ref="-484"/>
+        <nd ref="-483"/>
+        <nd ref="-482"/>
+        <nd ref="-481"/>
+        <nd ref="-480"/>
+        <nd ref="-479"/>
+        <nd ref="-478"/>
+        <nd ref="-477"/>
+        <nd ref="-476"/>
+        <nd ref="-475"/>
+        <nd ref="-474"/>
+        <nd ref="-473"/>
+        <nd ref="-472"/>
+        <nd ref="-471"/>
+        <nd ref="-470"/>
+        <nd ref="-469"/>
+        <nd ref="-468"/>
+        <nd ref="-467"/>
+        <nd ref="-466"/>
+        <nd ref="-465"/>
+        <nd ref="-464"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="way_area" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -5675,7 +5617,7 @@
         <tag k="lit" v="yes"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="primary"/>
-        <tag k="source:datetime" v="2015-10-15T16:12:11.000Z;2019-01-17T19:50:06Z;2014-04-21T23:52:41.000Z;2015-10-15T16:12:12.000Z"/>
+        <tag k="source:datetime" v="2015-10-15T16:12:11.000Z;2019-01-17T19:50:06Z;2014-04-21T23:52:41.000Z;2014-04-21T23:52:43.000Z;2014-12-24T02:39:20.000Z;2015-10-15T16:12:12.000Z"/>
         <tag k="foot" v="yes"/>
         <tag k="uuid" v="{6f44fd8f-d8fd-4e57-b362-afb57ca0c781};{78aeebde-818c-45c7-9246-3000f001c09a}"/>
         <tag k="bicycle" v="yes"/>

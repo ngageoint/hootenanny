@@ -464,6 +464,22 @@
         ]
     },
     {
+        "id":"hoot_attribute_conflation_options",
+        "elem_type":"group",
+        "description":"Hootenanny Attribute Conflation options",
+        "name":"Attribute Conflation Options",
+        "members":[
+            {
+              "id": "attribute_aggressive_highway_joining",
+              "elem_type": "bool",
+              "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
+              "name": "Aggressively Join Unmerged Roads",
+              "defaultvalue": "true",
+              "hoot_key": "attribute.conflation.aggressive.highway.joining",
+            }
+        ]
+    },
+    {
         "id":"hoot_road_options",
         "elem_type":"group",
         "description":"Hootenanny road options",

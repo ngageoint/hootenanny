@@ -43,6 +43,7 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
 HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(false)
 {
+  _removeTagsFromWayMembers = false;
 }
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(
@@ -51,6 +52,8 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(true)
 {
+  _removeTagsFromWayMembers = false;
+
   // Merging geometries for bridges is governed both by a config option and whether a subline
   // matcher gets passed in, since not all calling merger creators have a subline matcher available
   // to pass in at this point.
@@ -157,9 +160,9 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     //LOG_VART(elementWithTagsToKeep->getElementId());
     //LOG_VART(elementWithTagsToRemove->getElementId());
     OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
     OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Debug, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
     return
       _mergeWays(
@@ -235,7 +238,10 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
       ElementPtr member = map->getElement(relationMembers[i].getElementId());
       if (member && member->getElementType() == ElementType::Way)
       {
-        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);;
+        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);
+        LOG_TRACE(
+          "Copying tags from: " << relation->getElementId() << " to member: " <<
+          wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
       }
@@ -257,6 +263,13 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
   if (OsmUtils::oneWayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
     LOG_TRACE("Conflicting one way street tags.  Skipping merge.");
+    return true;
+  }
+
+  // If two roads disagree in highway type and aren't generic, don't merge.
+  if (OsmUtils::nonGenericHighwayConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
+  {
+    LOG_TRACE("Conflicting highway type tags.  Skipping join.")
     return true;
   }
 

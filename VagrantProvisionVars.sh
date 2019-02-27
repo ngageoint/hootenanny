@@ -22,7 +22,7 @@ export FGDB_VERSION=1.5.1
 export FGDB_URL=https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/
 
 # Ruby versions and locations.
-export BUNDLER_VERSION=1.16.1
+export BUNDLER_VERSION=2.0.1
 export RUBY_BASE_URL=https://s3.amazonaws.com/hoot-ruby
 export RUBY_GEMS_URL="${RUBY_BASE_URL}/gems"
 export RUBY_VERSION_HOOT=2.3.7
