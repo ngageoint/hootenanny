@@ -1,4 +1,5 @@
 
+[[RubberSheeting]]
 == Rubber Sheeting
 
 An option while conflating two data sets is to use rubber sheeting (See

@@ -35,3 +35,7 @@ build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
 --------------------------------------
 build-model (input.arff) (output.rf)
 --------------------------------------
+
+See also:
+
+* <<RegenerateRandomForestModels>> 

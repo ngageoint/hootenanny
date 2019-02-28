@@ -69,3 +69,9 @@ type-tagger-rules --db-stats (input)
 --------------------------------------
 hoot type-tagger-rules --db-stats implicitTagRules.sqlite
 --------------------------------------
+
+=== See Also
+
+* <<ImplicitTypeTaggingUser>>
+* <<ImplicitTypeTaggingAlg>>
+* <<ImplicitTagRulesDatabaseGeneration>>

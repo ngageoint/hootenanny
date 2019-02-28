@@ -35,9 +35,9 @@ Additional feature types can be made conflatable via custom script by using Hoot
 
 # Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specifc region in map A that should not be modified at all and stitch in data from map B around it.
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specific region in map A that should not be modified at all and stitch in data from map B around it.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
-* **Attribute Conflation** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
+* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
 
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
 available to customize the conflation workflows.
@@ -46,7 +46,7 @@ available to customize the conflation workflows.
 In addition to conflating maps together, Hootenanny can also:
 * Add [missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features
 * [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/rubber-sheet.asciidoc) two maps with each other
-* Apply data transformation operations to a map
+* Apply [data transformation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) operations to a map
 * Calculate the [geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
 * [Clean](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc) map data
 * [Compare](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/diff.asciidoc) maps with each other
@@ -55,12 +55,12 @@ In addition to conflating maps together, Hootenanny can also:
 * [Crop](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) a map to a geospatial extent
 * [Derive](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) large changesets between maps and [apply](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) the changesets to external OSM data stores with automatic conflict resolution
 * [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data
-* Explore tag data
+* [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
 * Filter features by bounding box
 * [Filter](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) features based on tag content and schema relationships
 * Gather [statistics](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stats.asciidoc) from a map
-* Identify road intersections in a map
-* Locate phone numbers geographically
+* [Identify](https://github.com/ngageoint/hootenanny/blob/master/docs/user/IdentifyRoadIntersections.asciidoc) road intersections in a map
+* [Locate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) phone numbers geographically
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
 * Plot [node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-plot.asciidoc)
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data

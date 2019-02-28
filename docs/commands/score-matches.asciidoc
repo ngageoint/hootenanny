@@ -18,3 +18,7 @@ REF2 tags or the second input file contains any REF1 tags.
 score-matches [--confusion] [--optimize] (input1 input2) [input1 input2 ...] (output)
 --------------------------------------
 
+=== See Also
+
+* <<HootenannyManualConflation>>
+

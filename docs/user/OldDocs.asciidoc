@@ -11,7 +11,7 @@ This document provides background on how to use Hootenanny in a number of common
 See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
 
 [[OldDocsConflation]]
-== Conflation
+== Conflation Supported Feature Types
 
 [[PoiToPoi]]
 === POI Conflation
@@ -158,6 +158,16 @@ are listed the possible solutions where Hootenanny may request a manual review f
 | No valid matching subline found. | When conflating two linear inputs, Hootenanny could not find a corresponding matching subline part in one of the inputs. | Review this feature manually, as Hootenanny can not determine automatically whether it matches any feature in the opposite input dataset.
 | When matching sublines expected a multilinestring relation not a <osm feature type>. | When conflating linear features, Hootenanny expects all relations to be of the type multilinestring. | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated.
 |======
+
+== Conflation Road Algorithms
+
+=== 2nd Generation (aka Unifying)
+
+<<UnifyingConflation>>
+
+=== Network
+
+<<NetworkConflation>>
 
 [[Translation]]
 == Translation

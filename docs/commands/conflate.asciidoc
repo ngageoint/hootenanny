@@ -79,4 +79,6 @@ hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 
 
 * _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 * _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Attribute Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 
