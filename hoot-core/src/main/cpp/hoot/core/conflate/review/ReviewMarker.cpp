@@ -159,13 +159,16 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
+// TODO: consolidate the duplicate code in these mark methods, if possible
+
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
-  const QString& note, const QString &reviewType, double score, vector<QString> choices)
+  const QString& note, const QString& reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review...");
 
   LOG_VART(reviewType);
   LOG_VART(note);
+  LOG_VART(score);
 
   if (note.isEmpty())
   {
@@ -206,13 +209,14 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   map->addElement(r);
 }
 
-void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString& note,
+void ReviewMarker::mark(const OsmMapPtr& map, set<ElementId> ids, const QString& note,
    const QString& reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review...");
 
   LOG_VART(reviewType);
   LOG_VART(note);
+  LOG_VART(score);
 
   if (note.isEmpty())
   {
@@ -256,12 +260,13 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 }
 
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
-  const QString &reviewType, double score, vector<QString> choices)
+  const QString& reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review with note: " << note);
 
   LOG_VART(reviewType);
   LOG_VART(note);
+  LOG_VART(score);
 
   if (note.isEmpty())
   {

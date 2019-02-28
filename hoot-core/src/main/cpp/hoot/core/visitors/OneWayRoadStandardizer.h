@@ -49,10 +49,10 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 
-  virtual QString getInitStatusMessage()
+  virtual QString getInitStatusMessage() const
   { return "Standardizing one way roads..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Standardized " + QString::number(_numAffected) + " one way roads."; }
 
   virtual QString getDescription() const

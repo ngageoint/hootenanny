@@ -1,0 +1,14 @@
+
+[[LocatePhoneNumbers]]
+== Locate Phone Numbers
+
+Hootenanny can attempt to determine the geographic location of a phone number using 
+"libphonenumber":https://github.com/googlei18n/libphonenumber.
+
+example:
+
+--------------
+# Add admin boundary level location tags associated with element phone numbers
+hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
+-------------
+

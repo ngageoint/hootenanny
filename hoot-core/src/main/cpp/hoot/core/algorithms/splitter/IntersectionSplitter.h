@@ -66,9 +66,9 @@ public:
 
   void splitIntersections();
 
-  virtual QString getInitStatusMessage() { return "Splitting road intersections..."; }
+  virtual QString getInitStatusMessage() const { return "Splitting road intersections..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " road intersections"; }
 
   virtual QString getDescription() const override

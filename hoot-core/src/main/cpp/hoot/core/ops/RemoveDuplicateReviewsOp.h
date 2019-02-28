@@ -59,10 +59,10 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getInitStatusMessage() { return "Removing duplicate review relations..."; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate review relations..."; }
 
   // finish; wasn't obvious how to count the total affected - #2933
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return ""; }
 
   virtual QString getDescription() const override { return "Removes duplicate reviews"; }

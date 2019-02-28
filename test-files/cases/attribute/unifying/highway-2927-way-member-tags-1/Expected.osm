@@ -1410,6 +1410,41 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-3150"/>
     </way>
+    <way visible="true" id="-92" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-99"/>
+        <nd ref="-103"/>
+        <nd ref="-83"/>
+        <nd ref="-85"/>
+        <nd ref="-102"/>
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-80"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="lanes" v="3"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="destination:lanes" v="Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Chuao;Los Ruices|Chuao;Los Ruices"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="highway" v="primary"/>
+        <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-12-01T08:26:38.000Z;2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="uuid" v="{9c369f56-06a5-41c8-8f12-a57e98565cfc}"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-92"/>
+    </way>
     <way visible="true" id="-89" timestamp="2019-01-10T17:16:06Z" version="1">
         <nd ref="-112"/>
         <nd ref="-111"/>
@@ -1459,14 +1494,7 @@
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-89"/>
     </way>
-    <way visible="true" id="-86" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-99"/>
-        <nd ref="-103"/>
-        <nd ref="-83"/>
-        <nd ref="-85"/>
-        <nd ref="-102"/>
-        <nd ref="-101"/>
-        <nd ref="-100"/>
+    <way visible="true" id="-31" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-80"/>
         <nd ref="-247"/>
         <nd ref="-246"/>
@@ -1479,38 +1507,26 @@
         <nd ref="-239"/>
         <nd ref="-238"/>
         <nd ref="-237"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="name" v="Av. Lecuna"/>
-        <tag k="lanes" v="6"/>
-        <tag k="destination:lanes" v="Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Chuao;Los Ruices|Chuao;Los Ruices"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.712Z"/>
-        <tag k="service" v="drive-through"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="highway" v="primary"/>
-        <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>
-        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z;2014-12-01T08:26:38.000Z;2014-10-17T04:22:36.000Z"/>
-        <tag k="foot" v="yes"/>
-        <tag k="uuid" v="{9c369f56-06a5-41c8-8f12-a57e98565cfc};{d6f907cb-cc8a-41be-87c4-2fb2d0482594}"/>
-        <tag k="bicycle" v="yes"/>
         <tag k="destination" v="Plaza Venezuela"/>
-        <tag k="osm_id" v="-999999"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="uuid" v="{d6f907cb-cc8a-41be-87c4-2fb2d0482594}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="lanes" v="2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-86"/>
+        <tag k="hoot:id" v="-31"/>
     </way>
     <way visible="true" id="-30" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-82"/>
-        <nd ref="-150"/>
-        <nd ref="-151"/>
-        <nd ref="-149"/>
         <nd ref="-63"/>
         <nd ref="-199"/>
         <nd ref="-200"/>
@@ -1529,24 +1545,22 @@
         <nd ref="-213"/>
         <nd ref="-214"/>
         <nd ref="-215"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="destination:lanes" v="Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Bellas Artes;San Bernardino"/>
+        <tag k="destination" v="Plaza Venezuela"/>
         <tag k="layer" v="-1"/>
-        <tag k="maxspeed" v="60"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="turn:lanes" v="through|through;slight_right"/>
-        <tag k="highway" v="secondary"/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="uuid" v="{d2585762-bf3c-4d4e-841e-a614bc878dde}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="uuid" v="{93cc50db-b0c3-4ae9-9dcb-a6a5eb211f78};{a704fbf2-494e-4894-a205-2c5e007a4dbd};{d2585762-bf3c-4d4e-841e-a614bc878dde}"/>
-        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros;Plaza Venezuela"/>
-        <tag k="osm_id" v="-999999"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="lanes" v="2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-30"/>
@@ -1621,6 +1635,33 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-28"/>
     </way>
+    <way visible="true" id="-24" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-82"/>
+        <nd ref="-150"/>
+        <nd ref="-151"/>
+        <nd ref="-149"/>
+        <nd ref="-63"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="destination:lanes" v="Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Bellas Artes;San Bernardino"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="layer" v="-1"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="uuid" v="{93cc50db-b0c3-4ae9-9dcb-a6a5eb211f78};{a704fbf2-494e-4894-a205-2c5e007a4dbd}"/>
+        <tag k="turn:lanes" v="through|through;slight_right"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="lanes" v="2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-24"/>
+    </way>
     <way visible="true" id="-23" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-105"/>
         <nd ref="-116"/>
@@ -1663,19 +1704,20 @@
         <tag k="hoot:id" v="-22"/>
     </way>
     <way visible="true" id="-20" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-12"/>
         <nd ref="-98"/>
         <nd ref="-99"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677}"/>
+        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677};{91e682fc-aab4-4f57-9433-93fc6aba65a7}"/>
         <tag k="name" v="Av. Sur 19"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-09-08T18:26:40.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="residential"/>
         <tag k="lanes" v="2"/>
@@ -1688,14 +1730,15 @@
         <nd ref="-96"/>
         <nd ref="-97"/>
         <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <nd ref="-13"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38};{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
         <tag k="name" v="Av. Este 10 bis"/>
         <tag k="attribution" v="osm"/>
         <tag k="way_area" v="-999999"/>
@@ -1890,42 +1933,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-14"/>
-    </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.652Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="uuid" v="{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-13"/>
-    </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-98"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.652Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="uuid" v="{91e682fc-aab4-4f57-9433-93fc6aba65a7}"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-12"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>

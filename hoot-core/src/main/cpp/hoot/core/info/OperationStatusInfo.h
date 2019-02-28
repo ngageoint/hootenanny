@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OPERATION_STATUS_INFO_H
 #define OPERATION_STATUS_INFO_H
@@ -49,14 +49,14 @@ public:
 
     e.g. "Removing duplicate ways..."
     */
-  virtual QString getInitStatusMessage() = 0;
+  virtual QString getInitStatusMessage() const = 0;
 
   /**
     Returns a user friendly message indicating a summary of the work performed by the visitor
 
     e.g. "Removed 20 duplicate ways"
     */
-  virtual QString getCompletedStatusMessage() = 0;
+  virtual QString getCompletedStatusMessage() const = 0;
 };
 
 }

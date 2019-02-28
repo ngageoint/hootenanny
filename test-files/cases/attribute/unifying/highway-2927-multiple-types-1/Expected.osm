@@ -920,7 +920,6 @@
         <nd ref="-183"/>
         <nd ref="-184"/>
         <nd ref="-111"/>
-        <nd ref="-110"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="way_area" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -932,12 +931,12 @@
         <tag k="sidewalk" v="left"/>
         <tag k="maxspeed" v="20"/>
         <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.683Z;2019-01-17T19:50:05.699Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.683Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="secondary"/>
         <tag k="source:datetime" v="2015-08-19T15:26:01.000Z;2019-01-17T19:50:06Z"/>
         <tag k="foot" v="yes"/>
-        <tag k="uuid" v="{5ee48c4d-213f-4ef9-84c5-9de9189b059d};{e6345511-b279-4ad6-b6a3-a74e013e4a31}"/>
+        <tag k="uuid" v="{5ee48c4d-213f-4ef9-84c5-9de9189b059d}"/>
         <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -1035,24 +1034,6 @@
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-28"/>
-    </way>
-    <way visible="true" id="-22" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-59"/>
-        <nd ref="-110"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="uuid" v="{92b34cef-2a96-4143-8222-83a6836ecbe4}"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-22"/>
     </way>
     <way visible="true" id="-20" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-74"/>
@@ -1370,6 +1351,7 @@
         <nd ref="-10"/>
         <nd ref="-60"/>
         <nd ref="-59"/>
+        <nd ref="-110"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="way_area" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
@@ -1381,12 +1363,12 @@
         <tag k="sidewalk" v="both"/>
         <tag k="maxspeed" v="40"/>
         <tag k="attribution" v="osm"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.705Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.705Z;2019-01-17T19:50:05.698Z"/>
         <tag k="z_order" v="-999999"/>
         <tag k="highway" v="secondary"/>
-        <tag k="foot" v="yes"/>
         <tag k="source:datetime" v="2015-10-16T14:01:17.000Z;2013-11-15T19:16:15.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="uuid" v="{faf5da74-68a5-4e0c-b0a8-16eeaddc10ba}"/>
+        <tag k="foot" v="yes"/>
+        <tag k="uuid" v="{faf5da74-68a5-4e0c-b0a8-16eeaddc10ba};{92b34cef-2a96-4143-8222-83a6836ecbe4}"/>
         <tag k="bicycle" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -1594,19 +1576,20 @@
         <tag k="hoot:id" v="-4"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-110"/>
         <nd ref="-111"/>
         <nd ref="-109"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.683Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.683Z;2019-01-17T19:50:05.699Z"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="oneway" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="z_order" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="uuid" v="{5ee48c4d-213f-4ef9-84c5-9de9189b059d}"/>
+        <tag k="uuid" v="{5ee48c4d-213f-4ef9-84c5-9de9189b059d};{e6345511-b279-4ad6-b6a3-a74e013e4a31}"/>
         <tag k="name" v="Av. del Parque"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="source:datetime" v="2015-07-08T17:49:21.000Z;2019-01-17T19:50:06Z"/>
         <tag k="highway" v="tertiary"/>
         <tag k="lanes" v="2"/>

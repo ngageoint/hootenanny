@@ -464,6 +464,66 @@
         ]
     },
     {
+        "id":"hoot_attribute_conflation_options",
+        "elem_type":"group",
+        "description":"Hootenanny Attribute Conflation options",
+        "name":"Attribute Conflation Options",
+        "members":[
+            {
+        	"id":"attribute_allow_bridge_ref_geometry_change",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
+        	"name":"Allow Reference Layer Geometry Changes For Bridges",
+        	"hoot_key":"attribute.conflation.allow.ref.geometry.changes.for.bridges"
+    	    },
+            {
+              "id": "attribute_aggressive_highway_joining",
+              "elem_type": "bool",
+              "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
+              "name": "Aggressively Join Unmerged Roads",
+              "defaultvalue": "false",
+              "hoot_key": "attribute.conflation.aggressive.highway.joining",
+            },
+            {
+              "id": "attribute_allow_reviews_by_score",
+              "elem_type": "bool",
+              "description": "If true, all reviews outside of the score range established by the configuration options review.score.criterion.max/min.threshold will be removed.",
+              "name": "Allow Reviews By Score",
+              "defaultvalue": "false",
+              "hoot_key": "attribute.conflation.allow.reviews.by.score",
+            },
+            {
+              "id":"review_score_max_threshold",
+              "elem_type":"double",
+              "description":"The score threshold above which reviews will not pass the filter.  A value of 1.0 signifies no maximum score threshold.  This currently works with Attribute Conflation only and can be enabled with attribute.conflation.allow.reviews.by.score.",
+              "name":"Review Score Maximum Threshold",
+              "defaultvalue":"0.99",
+              "minvalue":"0.0",
+              "maxvalue":"1.0",
+              "hoot_key":"review.score.criterion.max.threshold"
+            },
+            {
+              "id":"review_score_min_threshold",
+              "elem_type":"double",
+              "description":"The score threshold above which reviews will not pass the filter.  A value of 1.0 signifies no maximum score threshold.  This currently works with Attribute Conflation only and can be enabled with attribute.conflation.allow.reviews.by.score.",
+              "name":"Review Score Minimum Threshold",
+              "defaultvalue":"0.35",
+              "minvalue":"0.0",
+              "maxvalue":"1.0",
+              "hoot_key":"review.score.criterion.min.threshold"
+            },
+            {
+              "id": "review_score_invert_thresholding",
+              "elem_type": "bool",
+              "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
+              "name": "Invert Review Score Thresholding",
+              "defaultvalue": "true",
+              "hoot_key": "review.score.criterion.invert.thresholding",
+            }
+        ]
+    },
+    {
         "id":"hoot_road_options",
         "elem_type":"group",
         "description":"Hootenanny road options",
@@ -673,30 +733,6 @@
                 "hoot_key":"merger.creators",
                 "required":"true"
             }
-        ]
-    },
-    {
-        "id":"hoot_attribute_options",
-        "elem_type":"group",
-        "description":"Hootenanny Attribute Conflation options",
-        "name":"Attribute Conflation Options",
-        "members":[
-            {
-                "id":"hoot_enable_attribute_options",
-                "elem_type":"checkbox",
-                "description":"Enable area options",
-                "name":"Enabled",
-                "defaultvalue":"true",
-                "onchange":"true"
-            },
-            {
-        	"id":"attribute_allow_bridge_ref_geometry_change",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
-        	"name":"Allow Reference Layer Geometry Changes For Bridges",
-        	"hoot_key":"attribute.conflation.allow.ref.geometry.changes.for.bridges"
-    	    }
         ]
     },
     {

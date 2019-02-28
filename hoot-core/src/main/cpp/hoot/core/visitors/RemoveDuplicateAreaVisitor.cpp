@@ -198,7 +198,8 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.
-      if (e2 != 0 && areaCrit.isSatisfied(e2) && _equals(e1, e2))
+      // run _equals() first as it is much faster than isSatisfied() (which ends up doing lots of regex matching)
+      if (e2 != 0 && _equals(e1, e2) && areaCrit.isSatisfied(e2) )
       {
         LOG_TRACE("e2 is area and e1/e2 equal.");
         // remove the crummier one.

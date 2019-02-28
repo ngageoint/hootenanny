@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMap.h"
@@ -189,7 +189,6 @@ void OsmMap::addNode(const NodePtr& n)
   _nodes[n->getId()] = n;
   n->registerListener(_index.get());
   _index->addNode(n);
-  //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
 }
 
 void OsmMap::addNodes(const std::vector<NodePtr>& nodes)

@@ -3,7 +3,7 @@
         "dataType": "enumeration",
         "geometries": [
             "node",
-            "way",
+            "linestring",
             "relation"
         ],
         "influence": 1,

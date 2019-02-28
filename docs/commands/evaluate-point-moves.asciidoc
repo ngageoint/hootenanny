@@ -1,3 +1,4 @@
+[[evaluate-point-moves]]
 == evaluate-point-moves
 
 === Description
