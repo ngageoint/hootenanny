@@ -1412,24 +1412,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-188" timestamp="2017-06-07T14:56:00Z" version="1">
-        <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-96"/>
-        <nd ref="-95"/>
-        <nd ref="-94"/>
-        <nd ref="-93"/>
-        <nd ref="-188"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google 2010-01-17;osm"/>
-        <tag k="uuid" v="{bbccbd18-998b-416e-8bd1-8715a824acbd}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-188"/>
-    </way>
     <way visible="true" id="-100" timestamp="2017-06-07T14:55:59Z" version="1" changeset="114">
         <nd ref="-29"/>
         <nd ref="-406"/>
@@ -2878,6 +2860,24 @@
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-27"/>
+    </way>
+    <way visible="true" id="-26" timestamp="2017-06-07T14:56:00Z" version="1">
+        <nd ref="-98"/>
+        <nd ref="-97"/>
+        <nd ref="-96"/>
+        <nd ref="-95"/>
+        <nd ref="-94"/>
+        <nd ref="-93"/>
+        <nd ref="-188"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="Google 2010-01-17;osm"/>
+        <tag k="uuid" v="{bbccbd18-998b-416e-8bd1-8715a824acbd}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-26"/>
     </way>
     <way visible="true" id="-25" timestamp="2017-06-07T14:56:00Z" version="1" changeset="115">
         <nd ref="-92"/>

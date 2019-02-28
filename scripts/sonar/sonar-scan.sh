@@ -91,7 +91,7 @@ fi
 # Optional scan parameters based off parameters passed into script
 if [ -n "$SONAR_LOGIN" ]; then
     # This is the hoot sonarcloud project key, requried to pass scan results to
-    # sever for analysis and display
+    # server for analysis and display
     OPTIONS=(
         "${OPTIONS[@]}"
         "-Dsonar.login=$SONAR_LOGIN"
@@ -110,7 +110,6 @@ if [ -n "$SONAR_GITHUB_PULL" ]; then
     OPTIONS=(
         "${OPTIONS[@]}"
         "-Dsonar.github.pullRequest=$SONAR_GITHUB_PULL"
-        "-Dsonar.analysis.mode=preview"
     )
 fi
 

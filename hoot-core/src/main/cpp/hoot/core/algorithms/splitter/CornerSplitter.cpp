@@ -38,6 +38,12 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
 
+#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/GeometryFactory.h>
+using namespace geos::geom;
+#include <hoot/core/elements/ElementConverter.h>
+
 // Qt
 #include <QDebug>
 #include <QTextStream>
@@ -97,7 +103,7 @@ void CornerSplitter::splitCorners()
     {
       // Look until we find a split, or get to the end
       bool split = false;
-      for (size_t nodeIdx = 1; nodeIdx < nodeCount-1 && !split; nodeIdx++)
+      for (size_t nodeIdx = 1; nodeIdx < nodeCount - 1 && !split; nodeIdx++)
       {
         WayLocation prev(_map, pWay, nodeIdx-1, 0.0);
         WayLocation current(_map, pWay, nodeIdx, 0.0);
@@ -119,8 +125,7 @@ void CornerSplitter::splitCorners()
         if (delta > threshold)
         {
           LOG_TRACE("splitting way with delta: " << delta);
-          _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
-          split = true;
+          split = _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
         }
       }
     }
@@ -201,7 +206,7 @@ void CornerSplitter::_splitRoundedCorners()
           //  Split the way once the cumulative heading delta exceeds the midpoint delta value
           if (fabs(total) > fabs(mid_point))
           {
-            _splitWay(pWay->getId(), index + 1, pWay->getNodeId(index + 1));
+            _splitWay(pWay->getId(), index + 1, pWay->getNodeId(index + 1), false);
             break;
           }
         }
@@ -223,15 +228,41 @@ void CornerSplitter::_splitRoundedCorners()
   }
 }
 
-void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
+bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner)
 {
   WayPtr pWay = _map->getWay(wayId);
   if (!pWay)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
-    return;
+    return false;
   }
-
+  //  For sharp corners, some small
+  if (sharpCorner)
+  {
+    GeometryFactory::unique_ptr factory = GeometryFactory::create();
+    //  Check the previous segment to ensure it is larger than the circular error before splitting
+    if (nodeIdx == 1)
+    {
+      boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      CoordinateArraySequence* subline = new CoordinateArraySequence();
+      subline->add(0, ls->getCoordinateN(nodeIdx), false);
+      subline->add(1, ls->getCoordinateN(nodeIdx - 1), false);
+      boost::shared_ptr<LineString> sub(factory->createLineString(subline));
+      if (sub->getLength() <= pWay->getCircularError())
+        return false;
+    }
+    //  Check the next segment to ensure it is larger than the circular error before splitting
+    if (nodeIdx == (long)(pWay->getNodeCount() - 2))
+    {
+      boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      CoordinateArraySequence* subline = new CoordinateArraySequence();
+      subline->add(0, ls->getCoordinateN(nodeIdx), false);
+      subline->add(1, ls->getCoordinateN(nodeIdx + 1), false);
+      boost::shared_ptr<LineString> sub(factory->createLineString(subline));
+      if (sub->getLength() <= pWay->getCircularError())
+        return false;
+    }
+  }
   LOG_TRACE("Splitting way: " << pWay->getElementId() << " at node: " <<
             ElementId(ElementType::Node, nodeId));
 
@@ -261,7 +292,12 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     _todoWays.push_back(splits[1]->getId());
 
     LOG_VART(_map->containsElement(splitWayId));
+
+    //  Split was successful
+    return true;
   }
+  //  No splits were made
+  return false;
 }
 
 void CornerSplitter::apply(boost::shared_ptr<OsmMap> &map)

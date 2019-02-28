@@ -1761,7 +1761,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-8741" timestamp="2017-06-07T15:19:30Z" version="1">
+    <way visible="true" id="-8739" timestamp="2017-06-07T15:19:30Z" version="1">
         <nd ref="-133"/>
         <nd ref="-132"/>
         <nd ref="-131"/>
@@ -1797,9 +1797,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8741"/>
+        <tag k="hoot:id" v="-8739"/>
     </way>
-    <way visible="true" id="-8740" timestamp="2017-06-07T15:19:29Z" version="1">
+    <way visible="true" id="-8738" timestamp="2017-06-07T15:19:29Z" version="1">
         <nd ref="-345"/>
         <nd ref="-392"/>
         <nd ref="-391"/>
@@ -1845,9 +1845,9 @@
         <tag k="location" v="surface"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8740"/>
+        <tag k="hoot:id" v="-8738"/>
     </way>
-    <way visible="true" id="-8702" timestamp="2017-06-07T15:19:29Z" version="1">
+    <way visible="true" id="-8700" timestamp="2017-06-07T15:19:29Z" version="1">
         <nd ref="-361"/>
         <nd ref="-458"/>
         <nd ref="-457"/>
@@ -1872,28 +1872,7 @@
         <tag k="surface" v="paved"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-8702"/>
-    </way>
-    <way visible="true" id="-218" timestamp="2017-06-07T15:19:30Z" version="1">
-        <nd ref="-83"/>
-        <nd ref="-82"/>
-        <nd ref="-81"/>
-        <nd ref="-80"/>
-        <nd ref="-79"/>
-        <nd ref="-78"/>
-        <nd ref="-77"/>
-        <nd ref="-76"/>
-        <nd ref="-75"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="access" v="private"/>
-        <tag k="source" v="Bing; Google, 2010-01-17;osm"/>
-        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-218"/>
+        <tag k="hoot:id" v="-8700"/>
     </way>
     <way visible="true" id="-112" timestamp="2017-06-07T15:19:29Z" version="1">
         <nd ref="-460"/>
@@ -2962,7 +2941,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-60"/>
     </way>
-    <way visible="true" id="-59" timestamp="2017-06-07T15:19:30Z" version="1">
+    <way visible="true" id="-59" timestamp="2017-06-07T15:19:30Z" version="1" changeset="121">
         <nd ref="-251"/>
         <nd ref="-250"/>
         <nd ref="-249"/>
@@ -2970,9 +2949,9 @@
         <nd ref="-247"/>
         <nd ref="-246"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="survey;osm"/>
+        <tag k="source" v="survey;osm;osm"/>
         <tag k="uuid" v="{94871729-193f-44fa-8cc2-55423914bbdd}"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="attribution" v="osm;osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="path"/>
         <tag k="hoot:status" v="1"/>
@@ -3780,6 +3759,27 @@
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-18"/>
+    </way>
+    <way visible="true" id="-17" timestamp="2017-06-07T15:19:30Z" version="1">
+        <nd ref="-83"/>
+        <nd ref="-82"/>
+        <nd ref="-81"/>
+        <nd ref="-80"/>
+        <nd ref="-79"/>
+        <nd ref="-78"/>
+        <nd ref="-77"/>
+        <nd ref="-76"/>
+        <nd ref="-75"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="access" v="private"/>
+        <tag k="source" v="Bing; Google, 2010-01-17;osm"/>
+        <tag k="uuid" v="{16691048-5a85-4146-9401-dc48324a0eee}"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-17"/>
     </way>
     <way visible="true" id="-16" timestamp="2017-06-07T15:19:30Z" version="1" changeset="121">
         <nd ref="-74"/>

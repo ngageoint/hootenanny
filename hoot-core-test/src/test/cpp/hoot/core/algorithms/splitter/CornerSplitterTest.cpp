@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,6 +48,7 @@ class CornerSplitterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(CornerSplitterTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runRoundedTest);
+  CPPUNIT_TEST(runDogLegTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -66,10 +67,11 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/splitter/CornerSplitter.osm", map);
 
-    MapProjector::projectToWgs84(map);
+    MapProjector::projectToPlanar(map);
 
     CornerSplitter::splitCorners(map);
 
+    MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -87,7 +89,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/splitter/CornerSplitter.osm", map);
 
-    MapProjector::projectToWgs84(map);
+    MapProjector::projectToPlanar(map);
 
     Settings s;
     //  Turn on the rounded corner splitting
@@ -99,12 +101,36 @@ public:
     splitter.setConfiguration(s);
     splitter.splitCorners();
 
+    MapProjector::projectToWgs84(map);
+
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, "test-output/conflate/splitter/CornerSplitterRoundedOut.osm");
 
     HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterRoundedOut.osm",
                      "test-files/conflate/splitter/CornerSplitterRoundedExpected.osm");
+  }
+
+  void runDogLegTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/conflate/splitter/CornerSplitterDogLeg.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    CornerSplitter::splitCorners(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, "test-output/conflate/splitter/CornerSplitterDogLegOut.osm");
+
+    HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterDogLegOut.osm",
+                     "test-files/conflate/splitter/CornerSplitterDogLegExpected.osm");
   }
 
 };

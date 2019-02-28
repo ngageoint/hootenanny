@@ -45,9 +45,9 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap, ways are split at sharp corners. This can help when conflating data
- * that is mostly major roads with data that contains a lot of neighborhood - level data.
- *
+ * Given an OsmMap, ways are split at sharp (or rounded if desired) corners. This can help
+ * when conflating data that is mostly major roads with data that contains a lot of
+ * neighborhood-level data.
  */
 class CornerSplitter : public OsmMapOperation, Configurable
 {
@@ -81,19 +81,21 @@ private:
    * @param wayId Index of way to split
    * @param nodeIdx Index of node to split at
    * @param nodeId ID of the node to split at
+   * @param sharpCorner True if being called from the sharp corner splitting code
+   * @return True if the way was actually split
    */
-  void _splitWay(long wayId, long nodeIdx, long nodeId);
-  /** */
+  bool _splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner = true);
+  /** Pointer to the OsmMap */
   boost::shared_ptr<OsmMap> _map;
-  /** */
+  /** Vector of ways that are yet to be processed */
   std::vector<long> _todoWays;
-  /** */
+  /** Threshold in degrees for splitting sharp corners */
   double _cornerThreshold;
-  /** */
+  /** Flag to turn on/off rounded corner splitting */
   bool _splitRounded;
-  /** */
+  /** Threshold in degrees for splitting rounded corners */
   double _roundedThreshold;
-  /** */
+  /** Maximum number of nodes to consider while checking for a rounded corner*/
   int _roundedMaxNodeCount;
 };
 
