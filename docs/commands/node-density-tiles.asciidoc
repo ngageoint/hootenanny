@@ -1,3 +1,4 @@
+[[node-density-tiles]]
 == node-density-tiles 
 
 === Description

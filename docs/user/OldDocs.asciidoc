@@ -163,11 +163,11 @@ are listed the possible solutions where Hootenanny may request a manual review f
 
 === 2nd Generation (aka Unifying)
 
-<<UnifyingConflation>>
+<<hootalgo, UnifyingConflation>>
 
 === Network
 
-<<NetworkConflation>>
+<<hootalgo, NetworkConflation>>
 
 [[Translation]]
 == Translation

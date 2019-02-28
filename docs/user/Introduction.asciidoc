@@ -180,7 +180,7 @@ To use, pass +DifferentialConflation.asciidoc+ to the conflate command.
 
 e.g. 'hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm
 
-More details: <<DifferentialConflation>>
+More details: <<hootalgo, DifferentialConflation>>
 
 ===== Attribute Conflation
 
@@ -188,7 +188,7 @@ To use, pass +AttributeConflation.asciidoc+ to the conflate command.
 
 e.g. 'hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 
-More details: <<AttributeConflation>>
+More details: <<hootalgo, AttributeConflation>>
 
 ==== Review Conflated Results
 

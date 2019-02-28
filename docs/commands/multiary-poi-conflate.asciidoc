@@ -22,4 +22,4 @@ hoot multiary-poi-conflate input1.osm input2.osm input3.osm output.osm
 
 === See Also
 
-* <<ManualMultiaryConflation>>
+* <<hootDevGuide, ManualMultiaryConflation>>

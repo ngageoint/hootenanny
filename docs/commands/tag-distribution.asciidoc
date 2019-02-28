@@ -1,3 +1,4 @@
+[[tag-distribution]]
 == tag-distribution
 
 === Description

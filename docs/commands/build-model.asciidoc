@@ -1,3 +1,4 @@
+[[build-model]]
 == build-model
 
 === Description
@@ -38,4 +39,4 @@ build-model (input.arff) (output.rf)
 
 See also:
 
-* <<RegenerateRandomForestModels>> 
+* <<hootDevGuide, RegenerateRandomForestModels>> 

@@ -1,3 +1,4 @@
+[[tag-info]]
 == tag-info
 
 === Description

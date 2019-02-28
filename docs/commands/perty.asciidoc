@@ -1,3 +1,4 @@
+[[perty]]
 == perty
 
 === Description

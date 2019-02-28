@@ -1,3 +1,4 @@
+[[optimize-network-conf]]
 == optimize-network-conf
 
 === Description
@@ -34,5 +35,5 @@ will work with this settings optimizer.
 
 === See Also
 
-* <<NetworkConflation>>
+* <<hootalgo, NetworkConflation>>
 

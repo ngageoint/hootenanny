@@ -2,7 +2,8 @@
 [[LocatePhoneNumbers]]
 == Locate Phone Numbers
 
-Hootenanny can attempt to determine the geographic location of a phone number using "libphonenumber":https://github.com/googlei18n/libphonenumber.
+Hootenanny can attempt to determine the geographic location of a phone number using 
+"libphonenumber":https://github.com/googlei18n/libphonenumber.
 
 example:
 

@@ -1,3 +1,4 @@
+[[login]]
 == login
 
 The +login+ command logs a user into the Hootenanny application, authenticating via the Hootenanny Web Services, and returns Hootenanny 

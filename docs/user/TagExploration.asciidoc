@@ -4,7 +4,7 @@
 
 The following commands provide feature tag data exploration capabilities:
 
-* [tag-compare](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/tag-compare.asciidoc) - Compares tags between two maps
-* [tag-distribution](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/tag-distribution.asciidoc) - Calculates the distribution of values for specified tags in a map
-* [tag-info](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/tag-info.asciidoc) - Displays tag information for a map
+* <<hootuser, tag-compare>> - Compares tags between two maps
+* <<hootuser, tag-distribution>> - Calculates the distribution of values for specified tags in a map
+* <<hootuser, tag-info>> - Displays tag information for a map
 

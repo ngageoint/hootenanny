@@ -25,5 +25,5 @@ hoot clean JustHighways.osm Cleaned.osm
 
 * `map.cleaner.transforms` configuration option
 * `convert` command
-* <<IngestAndClean>>
+* <<hootalgo, IngestAndClean>>
 
