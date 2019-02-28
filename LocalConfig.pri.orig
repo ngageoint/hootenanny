@@ -1,0 +1,53 @@
+
+CONFIG += release 
+CONFIG -= debug
+
+#CONFIG += debug
+#CONFIG -= release
+
+debug {
+  DEFINES += DEBUG
+
+  # Runs expensive validation on several data structures to make sure everything is in sync.
+  #DEFINES += VALIDATE_ON
+}
+
+release {
+  DEFINES -= DEBUG
+}
+
+# Configure based on whether you optionally run ccache/distcc
+QMAKE_CXX=g++
+#QMAKE_CXX=ccache g++
+#QMAKE_CXX=ccache distcc g++
+
+# Warn about uninitialized variables
+QMAKE_CXXFLAGS+=-Wuninitialized 
+
+# If the g++ version is 4.0 to 4.4, then don't use maybe-uninitialized.
+# I couldn't find the exact version maybe-unintialized was introduced, but
+# I know it works in g++ 4.8.4 -JRS
+system( g++ --version | grep -q -e " 4.[0-7]" ) {
+  # pass
+} else {
+  QMAKE_CXXFLAGS+=-Wmaybe-uninitialized
+}
+
+# Enable the gold linker for faster build times
+QMAKE_LFLAGS=-fuse-ld=gold
+
+# Set all uninitialized variables to their default values                                                      
+#QMAKE_CXXFLAGS+=-fno-common 
+
+# Initialize values in BSS to zero                  
+#QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
+
+# Show more warnings
+#QMAKE_CXXFLAGS+=-Wextra
+#QMAKE_CXXFLAGS+=-Wall
+
+# Turn warnings into errors
+QMAKE_CXXFLAGS+=-Werror
+                         
+# Use this with valgrind
+#QMAKE_CXXFLAGS+=-g -O1 
