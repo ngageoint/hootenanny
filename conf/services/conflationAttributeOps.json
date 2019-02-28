@@ -119,7 +119,7 @@
         "defaultvalue":"0.35",
         "minvalue":"0.0",
         "maxvalue":"1.0",
-        "hoot_key":"review.score.criterion..min.threshold"
+        "hoot_key":"review.score.criterion.min.threshold"
       },
       {
         "id": "review_score_invert_thresholding",
