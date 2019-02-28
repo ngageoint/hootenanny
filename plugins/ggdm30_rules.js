@@ -1187,98 +1187,98 @@ ggdm30.rules = {
 
     // BUT - Buoy Type
     // ['BUT','-999999',undefined,undefined], // No Information
-    ['BUT','3','seamark:buoy','isolated_danger'], // Isolated Danger
-    ['BUT','4','seamark:buoy','large_automatic_navigation_buoy'], // Large Automatic Navigation Buoy
-    ['BUT','6','seamark:buoy','light_float'], // Light Float
-    ['BUT','7','seamark:buoy','mooring'], // Mooring
-    ['BUT','10','seamark:buoy','ocean_data_acquisition_system_(odas)_buoy'], // Ocean Data Acquisition System (ODAS) Buoy
-    ['BUT','11','seamark:buoy','landfall'], // Landfall
-    ['BUT','15','seamark:buoy','special'], // Special
-    ['BUT','18','seamark:buoy','safe_water'], // Safe Water
-    ['BUT','19','seamark:buoy','anchorage'], // Anchorage
-    ['BUT','20','seamark:buoy','fairway'], // Fairway
-    ['BUT','21','seamark:buoy','mid-channel'], // Mid-Channel
-    ['BUT','22','seamark:buoy','bifurcation'], // Bifurcation
-    ['BUT','23','seamark:buoy','junction'], // Junction
-    ['BUT','24','seamark:buoy','wreck'], // Wreck
-    ['BUT','25','seamark:buoy','obstruction'], // Obstruction
-    ['BUT','26','seamark:buoy','telegraph_cable'], // Telegraph Cable
-    ['BUT','27','seamark:buoy','warping'], // Warping
-    ['BUT','28','seamark:buoy','quarantine'], // Quarantine
-    ['BUT','29','seamark:buoy','exercise_area'], // Exercise Area
-    ['BUT','30','seamark:buoy','explosive_anchorage'], // Explosive Anchorage
-    ['BUT','31','seamark:buoy','aeronautical_anchorage'], // Aeronautical Anchorage
-    ['BUT','32','seamark:buoy','compass_adjustment'], // Compass Adjustment
-    ['BUT','33','seamark:buoy','fish_trap'], // Fish Trap
-    ['BUT','34','seamark:buoy','spoil_ground'], // Spoil Ground
-    ['BUT','35','seamark:buoy','articulated_light'], // Articulated Light
-    ['BUT','39','seamark:buoy','trot'], // Trot
-    ['BUT','81','seamark:buoy','diving'], // Diving
-    ['BUT','82','seamark:buoy','notice'], // Notice
-    ['BUT','84','seamark:buoy','apex_float'], // APEX Float
-    ['BUT','85','seamark:buoy','general_warning'], // General Warning
-    ['BUT','86','seamark:buoy','private'], // Private
-    ['BUT','87','seamark:buoy','swim'], // Swim
-    ['BUT','88','seamark:buoy','control'], // Control
-    ['BUT','89','seamark:buoy','entry_prohibited'], // Entry Prohibited
-    ['BUT','91','seamark:buoy','preferred_channel_to_port'], // Preferred Channel to Port
-    ['BUT','92','seamark:buoy','preferred_channel_to_starboard'], // Preferred Channel to Starboard
-    ['BUT','93','seamark:buoy','starboard-hand_edge'], // Starboard-hand Edge
-    ['BUT','94','seamark:buoy','port-hand_edge'], // Port-hand Edge
-    ['BUT','95','seamark:buoy','west_cardinal'], // West Cardinal
-    ['BUT','96','seamark:buoy','south_cardinal'], // South Cardinal
-    ['BUT','97','seamark:buoy','east_cardinal'], // East Cardinal
-    ['BUT','98','seamark:buoy','north_cardinal'], // North Cardinal
-    ['BUT','99','seamark:buoy','installation'], // Installation
-    ['BUT','100','seamark:buoy','accelerometer'], // Accelerometer
-    ['BUT','101','seamark:buoy','wavemeter'], // Wavemeter
-    ['BUT','102','seamark:buoy','navigation,_communication_and_control_buoy_(nccb)'], // Navigation, communication and control buoy (NCCB)
-    ['BUT','103','seamark:buoy','ice_buoy'], // Ice Buoy
-    ['BUT','104','seamark:buoy','firing_danger_area'], // Firing Danger Area
-    ['BUT','105','seamark:buoy','target'], // Target
-    ['BUT','106','seamark:buoy','marker_ship'], // Marker Ship
-    ['BUT','107','seamark:buoy','degaussing_range'], // Degaussing Range
-    ['BUT','108','seamark:buoy','barge'], // Barge
-    ['BUT','109','seamark:buoy','cable'], // Cable
-    ['BUT','110','seamark:buoy','outfall'], // Outfall
-    ['BUT','111','seamark:buoy','recording'], // Recording
-    ['BUT','112','seamark:buoy','recreation_zone'], // Recreation Zone
-    ['BUT','113','seamark:buoy','leading_line'], // Leading Line
-    ['BUT','114','seamark:buoy','measured_distance'], // Measured Distance
-    ['BUT','115','seamark:buoy','tss'], // TSS
-    ['BUT','116','seamark:buoy','anchoring_prohibited'], // Anchoring Prohibited
-    ['BUT','117','seamark:buoy','berthing_prohibited'], // Berthing Prohibited
-    ['BUT','118','seamark:buoy','overtaking_prohibited'], // Overtaking Prohibited
-    ['BUT','119','seamark:buoy','two-way_traffic_prohibited'], // Two-Way Traffic Prohibited
-    ['BUT','120','seamark:buoy','reduced_wake'], // Reduced Wake
-    ['BUT','121','seamark:buoy','speed_limit'], // Speed Limit
-    ['BUT','122','seamark:buoy','stop'], // Stop
-    ['BUT','123','seamark:buoy','sound_ship"s_siren'], // Sound Ship"s Siren
-    ['BUT','124','seamark:buoy','restricted_vertical_clearance'], // Restricted Vertical Clearance
-    ['BUT','125','seamark:buoy','maximum_vessel"s_draft'], // Maximum Vessel"s Draft
-    ['BUT','126','seamark:buoy','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
-    ['BUT','127','seamark:buoy','strong_current_warning'], // Strong Current Warning
-    ['BUT','128','seamark:buoy','berthing_permitted'], // Berthing Permitted
-    ['BUT','129','seamark:buoy','overhead_power_cable'], // Overhead Power Cable
-    ['BUT','130','seamark:buoy','channel_edge_gradient'], // Channel Edge Gradient
-    ['BUT','131','seamark:buoy','telephone'], // Telephone
-    ['BUT','132','seamark:buoy','ferry_crossing'], // Ferry Crossing
-    ['BUT','133','seamark:buoy','pipeline'], // Pipeline
-    ['BUT','134','seamark:buoy','clearing_line'], // Clearing Line
-    ['BUT','135','seamark:buoy','refuge'], // Refuge
-    ['BUT','136','seamark:buoy','foul_ground'], // Foul Ground
-    ['BUT','137','seamark:buoy','yachting'], // Yachting
-    ['BUT','138','seamark:buoy','heliport'], // Heliport
-    ['BUT','139','seamark:buoy','gps_mark'], // GPS Mark
-    ['BUT','140','seamark:buoy','work_in_progress'], // Work In Progress
-    ['BUT','141','seamark:buoy','artificial_reef'], // Artificial Reef
-    ['BUT','142','seamark:buoy','marine_farm'], // Marine Farm
-    ['BUT','143','seamark:buoy','seaplane_landing'], // Seaplane Landing
-    ['BUT','144','seamark:buoy','wellhead'], // Wellhead
-    ['BUT','145','seamark:buoy','water_column_sensor'], // Water Column Sensor
-    ['BUT','149','seamark:buoy','emergency_wreck'], // Emergency Wreck
-    ['BUT','150','seamark:buoy','mark_of_unknown_intent'], // Mark of Unknown Intent
-    ['BUT','999','seamark:buoy','other'], // Other
+    ['BUT','3','seamark:buoy:type','isolated_danger'], // Isolated Danger
+    ['BUT','4','seamark:buoy:type','large_automatic_navigation_buoy'], // Large Automatic Navigation Buoy
+    ['BUT','6','seamark:type','light_float'], // Light Float
+    ['BUT','7','seamark:buoy:type','mooring'], // Mooring
+    ['BUT','10','seamark:buoy:type','ocean_data_acquisition_system_(odas)_buoy'], // Ocean Data Acquisition System (ODAS) Buoy
+    ['BUT','11','seamark:buoy:type','landfall'], // Landfall
+    ['BUT','15','seamark:buoy:type','special'], // Special
+    ['BUT','18','seamark:buoy:type','safe_water'], // Safe Water
+    ['BUT','19','seamark:buoy:type','anchorage'], // Anchorage
+    ['BUT','20','seamark:buoy:type','fairway'], // Fairway
+    ['BUT','21','seamark:buoy:type','mid-channel'], // Mid-Channel
+    ['BUT','22','seamark:buoy:type','bifurcation'], // Bifurcation
+    ['BUT','23','seamark:buoy:type','junction'], // Junction
+    ['BUT','24','seamark:buoy:type','wreck'], // Wreck
+    ['BUT','25','seamark:buoy:type','obstruction'], // Obstruction
+    ['BUT','26','seamark:buoy:type','telegraph_cable'], // Telegraph Cable
+    ['BUT','27','seamark:buoy:type','warping'], // Warping
+    ['BUT','28','seamark:buoy:type','quarantine'], // Quarantine
+    ['BUT','29','seamark:buoy:type','exercise_area'], // Exercise Area
+    ['BUT','30','seamark:buoy:type','explosive_anchorage'], // Explosive Anchorage
+    ['BUT','31','seamark:buoy:type','aeronautical_anchorage'], // Aeronautical Anchorage
+    ['BUT','32','seamark:buoy:type','compass_adjustment'], // Compass Adjustment
+    ['BUT','33','seamark:buoy:type','fish_trap'], // Fish Trap
+    ['BUT','34','seamark:buoy:type','spoil_ground'], // Spoil Ground
+    ['BUT','35','seamark:buoy:type','articulated_light'], // Articulated Light
+    ['BUT','39','seamark:buoy:type','trot'], // Trot
+    ['BUT','81','seamark:buoy:type','diving'], // Diving
+    ['BUT','82','seamark:buoy:type','notice'], // Notice
+    ['BUT','84','seamark:buoy:type','apex_float'], // APEX Float
+    ['BUT','85','seamark:buoy:type','general_warning'], // General Warning
+    ['BUT','86','seamark:buoy:type','private'], // Private
+    ['BUT','87','seamark:buoy:type','swim'], // Swim
+    ['BUT','88','seamark:buoy:type','control'], // Control
+    ['BUT','89','seamark:buoy:type','entry_prohibited'], // Entry Prohibited
+    ['BUT','91','seamark:buoy:type','preferred_channel_to_port'], // Preferred Channel to Port
+    ['BUT','92','seamark:buoy:type','preferred_channel_to_starboard'], // Preferred Channel to Starboard
+    ['BUT','93','seamark:buoy:type','starboard-hand_edge'], // Starboard-hand Edge
+    ['BUT','94','seamark:buoy:type','port-hand_edge'], // Port-hand Edge
+    ['BUT','95','seamark:buoy_cardinal:category','west'], // West Cardinal
+    ['BUT','96','seamark:buoy_cardinal:category','south'], // South Cardinal
+    ['BUT','97','seamark:buoy_cardinal:category','east'], // East Cardinal
+    ['BUT','98','seamark:buoy_cardinal:category','north'], // North Cardinal
+    ['BUT','99','seamark:buoy:type','installation'], // Installation
+    ['BUT','100','seamark:buoy:type','accelerometer'], // Accelerometer
+    ['BUT','101','seamark:buoy:type','wavemeter'], // Wavemeter
+    ['BUT','102','seamark:buoy:type','navigation,_communication_and_control_buoy_(nccb)'], // Navigation, communication and control buoy (NCCB)
+    ['BUT','103','seamark:buoy:type','ice_buoy'], // Ice Buoy
+    ['BUT','104','seamark:buoy:type','firing_danger_area'], // Firing Danger Area
+    ['BUT','105','seamark:buoy:type','target'], // Target
+    ['BUT','106','seamark:buoy:type','marker_ship'], // Marker Ship
+    ['BUT','107','seamark:buoy:type','degaussing_range'], // Degaussing Range
+    ['BUT','108','seamark:buoy:type','barge'], // Barge
+    ['BUT','109','seamark:buoy:type','cable'], // Cable
+    ['BUT','110','seamark:buoy:type','outfall'], // Outfall
+    ['BUT','111','seamark:buoy:type','recording'], // Recording
+    ['BUT','112','seamark:buoy:type','recreation_zone'], // Recreation Zone
+    ['BUT','113','seamark:buoy:type','leading_line'], // Leading Line
+    ['BUT','114','seamark:buoy:type','measured_distance'], // Measured Distance
+    ['BUT','115','seamark:buoy:type','tss'], // TSS
+    ['BUT','116','seamark:buoy:type','anchoring_prohibited'], // Anchoring Prohibited
+    ['BUT','117','seamark:buoy:type','berthing_prohibited'], // Berthing Prohibited
+    ['BUT','118','seamark:buoy:type','overtaking_prohibited'], // Overtaking Prohibited
+    ['BUT','119','seamark:buoy:type','two-way_traffic_prohibited'], // Two-Way Traffic Prohibited
+    ['BUT','120','seamark:buoy:type','reduced_wake'], // Reduced Wake
+    ['BUT','121','seamark:buoy:type','speed_limit'], // Speed Limit
+    ['BUT','122','seamark:buoy:type','stop'], // Stop
+    ['BUT','123','seamark:buoy:type','sound_ship"s_siren'], // Sound Ship"s Siren
+    ['BUT','124','seamark:buoy:type','restricted_vertical_clearance'], // Restricted Vertical Clearance
+    ['BUT','125','seamark:buoy:type','maximum_vessel"s_draft'], // Maximum Vessel"s Draft
+    ['BUT','126','seamark:buoy:type','restricted_horizontal_clearance'], // Restricted Horizontal Clearance
+    ['BUT','127','seamark:buoy:type','strong_current_warning'], // Strong Current Warning
+    ['BUT','128','seamark:buoy:type','berthing_permitted'], // Berthing Permitted
+    ['BUT','129','seamark:buoy:type','overhead_power_cable'], // Overhead Power Cable
+    ['BUT','130','seamark:buoy:type','channel_edge_gradient'], // Channel Edge Gradient
+    ['BUT','131','seamark:buoy:type','telephone'], // Telephone
+    ['BUT','132','seamark:buoy:type','ferry_crossing'], // Ferry Crossing
+    ['BUT','133','seamark:buoy:type','pipeline'], // Pipeline
+    ['BUT','134','seamark:buoy:type','clearing_line'], // Clearing Line
+    ['BUT','135','seamark:buoy:type','refuge'], // Refuge
+    ['BUT','136','seamark:buoy:type','foul_ground'], // Foul Ground
+    ['BUT','137','seamark:buoy:type','yachting'], // Yachting
+    ['BUT','138','seamark:buoy:type','heliport'], // Heliport
+    ['BUT','139','seamark:buoy:type','gps_mark'], // GPS Mark
+    ['BUT','140','seamark:buoy:type','work_in_progress'], // Work In Progress
+    ['BUT','141','seamark:buoy:type','artificial_reef'], // Artificial Reef
+    ['BUT','142','seamark:buoy:type','marine_farm'], // Marine Farm
+    ['BUT','143','seamark:buoy:type','seaplane_landing'], // Seaplane Landing
+    ['BUT','144','seamark:buoy:type','wellhead'], // Wellhead
+    ['BUT','145','seamark:buoy:type','water_column_sensor'], // Water Column Sensor
+    ['BUT','149','seamark:buoy:type','emergency_wreck'], // Emergency Wreck
+    ['BUT','150','seamark:buoy:type','mark_of_unknown_intent'], // Mark of Unknown Intent
+    ['BUT','999','seamark:buoy:type','other'], // Other
 
     // BWVCAC - Wtrbdy Bank : Wtrbdy Bank Veg Cover (first bank) <interval closure>
     ['BWVCAC','2','waterway:bank1:cover:closure','open_interval'], // Open Interval
