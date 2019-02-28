@@ -1,3 +1,4 @@
+[[help]]
 == help
 
 === Description
