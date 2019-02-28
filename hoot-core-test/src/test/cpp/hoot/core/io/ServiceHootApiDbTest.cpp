@@ -352,8 +352,8 @@ public:
           HOOT_STR_EQUALS(nodeId1, nodeResultIterator->value(0).toLongLong());
           HOOT_STR_EQUALS(38.0, nodeResultIterator->value(ApiDb::NODES_LATITUDE).toDouble());
           HOOT_STR_EQUALS(-104.0, nodeResultIterator->value(ApiDb::NODES_LONGITUDE).toDouble());
-          HOOT_STR_EQUALS(MetadataTags::Accuracy() + " = 20.0\n" +
-                          MetadataTags::HootStatus() + " = " + MetadataTags::Unknown1() + "\n",
+          HOOT_STR_EQUALS(MetadataTags::HootStatus() + " = " + MetadataTags::Unknown1() + "\n" +
+                          MetadataTags::Accuracy() + " = 20.0\n",
                           ApiDb::unescapeTags(nodeResultIterator->value(8)));
         }
         break;
@@ -432,8 +432,24 @@ public:
     //  this example isn't a Latin string but a UTF-8 string, change the codec temporarily
     QTextCodec* oldCodec = QTextCodec::codecForLocale();
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    HOOT_STR_EQUALS("network = DB\nroute = train\n" + MetadataTags::ErrorCircular() + " = 15\ninterval = 120\nservice = high_speed\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\noperator = DB Fernverkehr AG\n" + MetadataTags::HootStatus() + " = 1\nfrom = Berlin Ostbahnhof\nalt_name = ICE11 München\npublic_transport:version = 2\ntype = route\nto = München Hbf\nref = ICE11\nname = ICE 11: Berlin => Frankfurt => München\n",
-          HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\", \"public_transport:version\"=>\"2\""));
+    HOOT_STR_EQUALS("type = route"
+                    "\nto = München Hbf"
+                    "\n" + MetadataTags::HootStatus() + " = 1"
+                    "\nfrom = Berlin Ostbahnhof"
+                    "\nservice = high_speed"
+                    "\nroute = train"
+                     "\nname = ICE 11: Berlin => Frankfurt => München"
+                    "\npublic_transport:version = 2"
+                    "\nref = ICE11"
+                    "\nalt_name = ICE11 München"
+                    "\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart"
+                    "\nnetwork = DB"
+                    "\noperator = DB Fernverkehr AG"
+                    "\ninterval = 120"
+                    "\n" + MetadataTags::ErrorCircular() + " = 15"
+                    "\n",
+                    HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\", \"public_transport:version\"=>\"2\""));
+
     QTextCodec::setCodecForLocale(oldCodec);
   }
 
