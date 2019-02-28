@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExportParams {
-	
+
     @JsonProperty("outputtype")
     private String outputType;
 
@@ -67,12 +67,15 @@ public class ExportParams {
     @JsonProperty("append")
     private Boolean append;
 
+    @JsonProperty("hoot2")
+    private Boolean hoot2;
+
     @JsonProperty("USER_EMAIL")
     private String userEmail;
-    
+
     @JsonProperty("MAX_NODE_COUNT_PER_TILE")
     private long maxNodeCountPerTile = -1;
-    
+
     @JsonProperty("PIXEL_SIZE")
     private double pixelSize = -1.0;
 
@@ -171,7 +174,7 @@ public class ExportParams {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
-    
+
     public long getMaxNodeCountPerTile() {
         return maxNodeCountPerTile;
     }
@@ -179,7 +182,7 @@ public class ExportParams {
     public void setMaxNodeCountPerTile(long maxNodeCountPerTile) {
         this.maxNodeCountPerTile = maxNodeCountPerTile;
     }
-    
+
     public double getPixelSize() {
         return pixelSize;
     }
@@ -187,6 +190,14 @@ public class ExportParams {
     public void setPixelSize(double pixelSize) {
         this.pixelSize = pixelSize;
     }
+
+    public void setHoot2(boolean hoot2) {
+    	this.hoot2 = hoot2;
+    }
+
+    public Boolean getHoot2() {
+		return hoot2;
+	}
 
     @Override
     public String toString() {
@@ -206,4 +217,5 @@ public class ExportParams {
                 ", pixelSize='" + pixelSize + '\'' +
                 '}';
     }
+
 }

@@ -1,0 +1,9 @@
+{
+  "building.keep.more.complex.geometry.when.auto.merging": "false",
+  "conflate.post.ops": "$(conflate.post.ops);hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor",
+  "highway.merge.tags.only": "true",
+  "remove.elements.visitor.element.criterion": "hoot::ReviewRelationCriterion",
+  "remove.elements.visitor.recursive": "false",
+  "tag.merger.default": "hoot::OverwriteTag1Merger",
+  "#": "end"
+}

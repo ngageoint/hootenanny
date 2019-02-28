@@ -548,7 +548,7 @@ public class FolderResource {
     			.select(maps.id, maps.displayName)
     			.from(maps)
     			.innerJoin(folderMapMappings)
-    			.on(maps.id.eq(folderMapMappings.folderId))
+    			.on(maps.id.eq(folderMapMappings.mapId))
     			.where(folderMapMappings.folderId.eq(folder_id))
     			.fetch();
 

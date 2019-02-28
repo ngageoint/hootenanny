@@ -156,22 +156,29 @@ public class ExportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            if (inputType.equalsIgnoreCase("folder")) {
-            	Long folder_id = Long.parseLong(params.getInput());
-            	for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) {
-                	params.setInput(Long.toString(mapInfo.get(maps.id)));
-                	params.setOutputName(mapInfo.get(maps.displayName));
-            		workflow.add(getCommand(user, jobId, params, debugLevel));
-            	}
-            	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), outputType);
-            	workflow.add(zipCommand);
-            } else if (inputType.equalsIgnoreCase("files")) {
-            	workflow.add(getCommand(user, jobId, params, debugLevel));
-            	if (outputType.matches("osm|shp|fgd")) {
-                	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                	workflow.add(zipCommand);
-            	}
-            }
+            if (params.getHoot2() != null) {
+	            if (inputType.equalsIgnoreCase("folder")) {
+	            	Long folder_id = Long.parseLong(params.getInput());
+	            	params.setInputType("db");
+
+	            	for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) {
+	                	params.setInput(Long.toString(mapInfo.get(maps.id)));
+	                	params.setOutputName(mapInfo.get(maps.displayName));
+	            		workflow.add(getCommand(user, jobId, params, debugLevel));
+	            	}
+	            	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
+	            	workflow.add(zipCommand);
+
+	            	params.setInputType("folder");
+	            } else if (inputType.equalsIgnoreCase("db")) {
+	            	workflow.add(getCommand(user, jobId, params, debugLevel));
+	            	if (outputType.matches("osm|shp|fgd")) {
+	                	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+	                	workflow.add(zipCommand);
+	            	}
+	            }
+
+            } else {}
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
@@ -368,15 +375,14 @@ public class ExportResource {
     private Command getZIPCommand(File workDir, String outputName, String outputType) {
         File targetZIP = new File(workDir, outputName + ".zip");
 
-        if (outputType.equalsIgnoreCase("SHP")) {
+        if (outputType.equalsIgnoreCase("FOLDER") || outputType.equalsIgnoreCase("GDB")) {
+            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        } else if (outputType.equalsIgnoreCase("SHP")) {
             return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
         }
         else if (outputType.equalsIgnoreCase("OSM")) {
             String fileToCompress = outputName + "." + outputType;
             return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
-        }
-        else if (outputType.equalsIgnoreCase("GDB")) {
-            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
         }
         else {
             return null;
