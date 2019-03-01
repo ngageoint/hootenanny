@@ -97,26 +97,26 @@ Users are also able to define their own [custom translations](https://github.com
 * or [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
 * or in the Hootenanny VM look for PDF's in 'hoot/docs' 
 
-# Support
-* [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
-* If you have any support questions, please create an issue in this repository.
-
-## Web User Interface
+# Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
-## Web Services API
+# Web Services API
 Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) in the 'docs' folder.  
 
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
-## Command Line Interface
+# Command Line Interface
 [Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  
 
 [Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
-## Programming Language Bindings
+# Programming Language Bindings
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
+
+# Support
+* [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+* If you have any support questions, please create an issue in this repository.
 
 # [Contributing](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
 
