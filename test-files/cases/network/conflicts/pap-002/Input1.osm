@@ -480,12 +480,12 @@
     <nd ref='3' />
     <nd ref='2' />
     <nd ref='1' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Delorme' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:name' v='DMA Topo Map 1994' />
     <tag k='uuid' v='{d5b9a558-8fe3-4b7b-8c5c-2534169882e5}' />
@@ -498,22 +498,22 @@
     <nd ref='15' />
     <nd ref='14' />
     <nd ref='232' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{99f038b1-72dc-4877-8537-7c9e772e5b5f}' />
   </way>
   <way id='3' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='20' />
     <nd ref='65' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2232350a-ebde-4a78-83e5-7290f58ca3ee}' />
   </way>
@@ -522,11 +522,11 @@
     <nd ref='22' />
     <nd ref='21' />
     <nd ref='263' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17; Bing;osm;osm' />
+    <tag k='source' v='Google 2010-01-17; Bing;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{13f1660d-a5c5-4aba-81ad-6eab217fa755}' />
   </way>
@@ -535,22 +535,22 @@
     <nd ref='33' />
     <nd ref='30' />
     <nd ref='53' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{b0b75ed1-8e9e-4732-96cd-7303f4d5f51e}' />
   </way>
   <way id='6' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='33' />
     <nd ref='32' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{81277b50-099b-4d81-8e3e-4b1af9761c44}' />
   </way>
@@ -558,7 +558,7 @@
     <nd ref='35' />
     <nd ref='34' />
     <nd ref='324' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -567,7 +567,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:name' v='DMA Topo Map' />
     <tag k='surface' v='paved' />
@@ -577,19 +577,19 @@
     <nd ref='325' />
     <nd ref='36' />
     <nd ref='35' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Rue Barthélemy' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{9b40ca8b-2188-4ad8-a956-40a78a7863bb}' />
   </way>
   <way id='9' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -598,7 +598,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{5da8f5eb-49b5-41d3-8bb6-ddd1119d1754}' />
@@ -607,22 +607,22 @@
     <nd ref='229' />
     <nd ref='54' />
     <nd ref='53' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{34c4fb35-d250-4d5d-a744-d9059abad3d2}' />
   </way>
   <way id='11' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='231' />
     <nd ref='55' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{7ae14b9f-cbd3-4371-aed8-0eedcb52a277}' />
   </way>
@@ -634,11 +634,11 @@
     <nd ref='57' />
     <nd ref='56' />
     <nd ref='211' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{bbccbd18-998b-416e-8bd1-8715a824acbd}' />
   </way>
@@ -646,18 +646,18 @@
     <nd ref='394' />
     <nd ref='62' />
     <nd ref='351' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{0a1fb2af-63fd-4f33-a90f-069c6de26135}' />
   </way>
   <way id='14' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='383' />
     <nd ref='289' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -666,7 +666,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{b92cb432-a8e8-48c4-ab3d-7b2a3aa6a628}' />
@@ -674,11 +674,11 @@
   <way id='15' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='63' />
     <nd ref='86' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google, 2010-01-17;osm;osm' />
+    <tag k='source' v='Google, 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1ef3df59-c563-4e02-820b-ab8f6893ba58}' />
   </way>
@@ -686,7 +686,7 @@
     <nd ref='396' />
     <nd ref='65' />
     <nd ref='64' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -695,7 +695,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{31a25c7a-b913-4ed0-8e6b-d98241c60eaf}' />
@@ -706,23 +706,23 @@
     <nd ref='68' />
     <nd ref='67' />
     <nd ref='201' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{02c14e7d-c83f-44ac-b271-9871bdf50290}' />
   </way>
   <way id='18' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='74' />
     <nd ref='71' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='service' v='destination' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{8ceeb991-47b3-4207-a419-4b8de46763b4}' />
   </way>
@@ -732,7 +732,7 @@
     <nd ref='74' />
     <nd ref='82' />
     <nd ref='73' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -741,7 +741,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='GPS/Walking Papers;osm;osm' />
+    <tag k='source' v='GPS/Walking Papers;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{879ce865-900d-4618-82de-bd1fe886746b}' />
@@ -754,19 +754,19 @@
     <nd ref='78' />
     <nd ref='77' />
     <nd ref='76' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='service' v='destination' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1118d45e-2b7e-47f7-8849-5ca1b630cee3}' />
   </way>
   <way id='21' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='292' />
     <nd ref='286' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='incline' v='yes' />
@@ -776,7 +776,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{76f5203e-d401-428b-a55c-6926d8bd87bb}' />
@@ -788,12 +788,12 @@
     <nd ref='85' />
     <nd ref='84' />
     <nd ref='83' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Impasse Sureau' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{78386e91-cce6-40db-acb0-59c3b94e471a}' />
   </way>
@@ -803,19 +803,19 @@
     <nd ref='89' />
     <nd ref='88' />
     <nd ref='127' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Impasse Mazaire' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{ef90948c-3fe5-4772-84ec-250bec9e08f2}' />
   </way>
   <way id='24' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='92' />
     <nd ref='91' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -824,7 +824,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{3fe42eec-3d05-499e-be05-68b43d1ba0b1}' />
@@ -836,7 +836,7 @@
     <nd ref='94' />
     <nd ref='93' />
     <nd ref='384' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -845,7 +845,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{d2fe39a8-097a-4a05-9107-c3c85d79cd12}' />
@@ -855,7 +855,7 @@
     <nd ref='98' />
     <nd ref='97' />
     <nd ref='385' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -864,7 +864,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{f5182f9d-4347-43e6-81ef-cdfb1970b1e0}' />
@@ -874,12 +874,12 @@
     <nd ref='99' />
     <nd ref='412' />
     <nd ref='5' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Quisqueya' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{4ff0fc75-6418-4f85-afdc-fdf8906eb3ed}' />
   </way>
@@ -889,7 +889,7 @@
     <nd ref='101' />
     <nd ref='115' />
     <nd ref='100' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -898,7 +898,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{5b0bcd6b-204f-4e0e-bb5d-c540b9f1bf55}' />
@@ -916,12 +916,12 @@
     <nd ref='107' />
     <nd ref='12' />
     <nd ref='106' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Oreste' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{3febf4de-9902-4e92-a2f0-6a6812c45a29}' />
   </way>
@@ -939,33 +939,33 @@
     <nd ref='118' />
     <nd ref='117' />
     <nd ref='224' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google, 2010-01-17;osm;osm' />
+    <tag k='source' v='Google, 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{ae9974c7-5d7e-4278-b9f8-6dcc90df6711}' />
   </way>
   <way id='31' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='135' />
     <nd ref='134' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{6d5bec77-bd49-41e4-affa-0ea5706a70fc}' />
   </way>
   <way id='32' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='267' />
     <nd ref='220' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{7a2ef99f-899b-49c5-a3b5-69fbe3768b30}' />
   </way>
@@ -974,7 +974,7 @@
     <nd ref='138' />
     <nd ref='269' />
     <nd ref='217' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -983,7 +983,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{5494e606-2981-4133-a8e8-a2ba653da7c7}' />
@@ -993,7 +993,7 @@
     <nd ref='141' />
     <nd ref='140' />
     <nd ref='383' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1002,7 +1002,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{9a380b54-7d0e-44d0-b069-f6c4138b6130}' />
@@ -1015,7 +1015,7 @@
     <nd ref='185' />
     <nd ref='302' />
     <nd ref='291' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1024,7 +1024,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{639d0492-91a5-4770-a6f6-291f6e3dcc1f}' />
@@ -1033,7 +1033,7 @@
     <nd ref='158' />
     <nd ref='152' />
     <nd ref='179' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1042,7 +1042,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='gravel' />
     <tag k='uuid' v='{99dc88d7-6608-4611-ae96-e8f7e38bc83c}' />
@@ -1050,51 +1050,51 @@
   <way id='37' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='234' />
     <nd ref='363' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{290423c8-6036-4d21-a5a5-32c689a2ac1a}' />
   </way>
   <way id='38' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='236' />
     <nd ref='362' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{8a61dbf4-99f1-4156-94fc-02e009fd3532}' />
   </way>
   <way id='39' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='318' />
     <nd ref='153' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Impasse Aupont' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{698a9aa1-600b-4523-8c89-5c65b3425e6f}' />
   </way>
   <way id='40' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='238' />
     <nd ref='366' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{ad418308-bd52-49ac-97a1-03d64e25f9e5}' />
   </way>
@@ -1113,7 +1113,7 @@
     <nd ref='162' />
     <nd ref='161' />
     <nd ref='292' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1122,7 +1122,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='light_truck_less_than_10mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{b64c2cf0-bb3c-4bdb-8dac-53adc48b67ba}' />
@@ -1133,12 +1133,12 @@
     <nd ref='191' />
     <nd ref='190' />
     <nd ref='13' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Bergeaud' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:name' v='DMA Topo Map' />
     <tag k='uuid' v='{bab8f8ce-74df-4d0e-bd0a-e08c8894f272}' />
@@ -1150,7 +1150,7 @@
     <nd ref='195' />
     <nd ref='194' />
     <nd ref='193' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1159,7 +1159,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{66651207-1f8e-4b1f-be91-38a05fbb4a21}' />
@@ -1167,11 +1167,11 @@
   <way id='44' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='208' />
     <nd ref='393' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{788c8e7d-89fb-4ef7-8b01-cf61fa71b275}' />
   </way>
@@ -1180,11 +1180,11 @@
     <nd ref='210' />
     <nd ref='209' />
     <nd ref='392' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{5cae3703-1a2f-4861-86fc-b1c2fa49b96d}' />
   </way>
@@ -1192,91 +1192,91 @@
     <nd ref='392' />
     <nd ref='215' />
     <nd ref='351' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{bbda911c-e77f-4356-9a08-3c837fd88050}' />
   </way>
   <way id='47' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='304' />
     <nd ref='298' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{aa330091-6313-4759-b909-1852be6e491a}' />
   </way>
   <way id='48' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='217' />
     <nd ref='216' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Delmas 4' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{8c19f6b5-0a0e-4f20-80dd-0c2b051ab13b}' />
   </way>
   <way id='49' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='243' />
     <nd ref='218' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{b4e0cca5-5fe3-443b-9ac4-4d9164216888}' />
   </way>
   <way id='50' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='220' />
     <nd ref='219' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{65da41d2-4f9f-41f3-9319-1515681a454d}' />
   </way>
   <way id='51' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='274' />
     <nd ref='303' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{bf30b300-ba5e-489e-9d50-498901ea39fb}' />
   </way>
   <way id='52' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='280' />
     <nd ref='299' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Rue Péan' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:haiti' v='CNIGS and CartONG' />
     <tag k='source:name' v='DMA Topo Map' />
@@ -1292,7 +1292,7 @@
     <nd ref='223' />
     <nd ref='222' />
     <nd ref='221' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1301,7 +1301,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt;heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{72b3a1be-3d8d-47b1-8ffc-ba5679ba8534}' />
@@ -1312,7 +1312,7 @@
     <nd ref='262' />
     <nd ref='230' />
     <nd ref='229' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1321,7 +1321,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{e6808ec1-b9e6-4245-bda7-6994b3c2bedc}' />
@@ -1329,44 +1329,44 @@
   <way id='55' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='233' />
     <nd ref='245' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{8cb761fc-e604-4d48-b3b7-15e273298316}' />
   </way>
   <way id='56' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='235' />
     <nd ref='234' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{0e3c3e54-76e6-4239-ae7e-3e4d9f07952c}' />
   </way>
   <way id='57' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='237' />
     <nd ref='236' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{27276783-dfd2-423f-ac7e-d7992e72a931}' />
   </way>
   <way id='58' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='239' />
     <nd ref='238' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{14c54b52-99ce-4026-8942-ccb1cec87b91}' />
   </way>
@@ -1375,60 +1375,60 @@
     <nd ref='242' />
     <nd ref='241' />
     <nd ref='240' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Bing; Yahoo hires;osm;osm' />
+    <tag k='source' v='Bing; Yahoo hires;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{60ff6b05-b376-4150-ac1a-a7136dffd4f6}' />
   </way>
   <way id='60' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='265' />
     <nd ref='243' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{a0d2de4d-dc67-42d5-b8ec-205d8eda4747}' />
   </way>
   <way id='61' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='277' />
     <nd ref='244' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{baeee9fa-8494-4553-84ca-69e7f2d30cde}' />
   </way>
   <way id='62' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='245' />
     <nd ref='369' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{63737810-dc35-4908-af84-c09964d81021}' />
   </way>
   <way id='63' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='328' />
     <nd ref='252' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Oriol' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1c05c86f-c201-4acf-b6e9-6ce9ef9dc457}' />
   </way>
@@ -1440,7 +1440,7 @@
     <nd ref='248' />
     <nd ref='247' />
     <nd ref='246' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1449,7 +1449,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{a4b9db37-efb4-4a48-93e5-47888d691e3e}' />
@@ -1467,7 +1467,7 @@
     <nd ref='255' />
     <nd ref='254' />
     <nd ref='253' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1476,7 +1476,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{78825b50-cd82-4b74-9686-902427c6c924}' />
@@ -1487,7 +1487,7 @@
     <nd ref='277' />
     <nd ref='276' />
     <nd ref='275' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1496,7 +1496,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{6008200c-4a45-4aca-9ee8-4d0ca27248d0}' />
@@ -1506,12 +1506,12 @@
     <nd ref='282' />
     <nd ref='281' />
     <nd ref='280' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Rue Péan' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:haiti' v='CNIGS and CartONG' />
     <tag k='source:name' v='DMA Topo Map' />
@@ -1522,66 +1522,66 @@
     <nd ref='291' />
     <nd ref='290' />
     <nd ref='301' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Maillart' />
-    <tag k='source' v='Haiti DMA Topo;osm;osm' />
+    <tag k='source' v='Haiti DMA Topo;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{82eacbfe-0b6a-4e77-ab49-a421fb1ee0e6}' />
   </way>
   <way id='69' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='300' />
     <nd ref='296' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Maillart' />
-    <tag k='source' v='Haiti DMA Topo;osm;osm' />
+    <tag k='source' v='Haiti DMA Topo;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{da70f6e6-db75-4966-8eb8-2265a92571a2}' />
   </way>
   <way id='70' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='298' />
     <nd ref='297' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{01be8558-e00d-4e99-808e-87ab4ba25d1d}' />
   </way>
   <way id='71' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='303' />
     <nd ref='299' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{021473f4-0d74-43d3-b3a3-89166d396342}' />
   </way>
   <way id='72' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='301' />
     <nd ref='300' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='bridge' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='layer' v='1' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{639ad743-39ef-44cc-8813-09cf092304f8}' />
   </way>
   <way id='73' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='303' />
     <nd ref='302' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1590,7 +1590,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{5ac16f28-bc0b-4e47-b976-e2e69d6284b7}' />
@@ -1601,11 +1601,11 @@
     <nd ref='306' />
     <nd ref='305' />
     <nd ref='304' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{9e68c530-08c8-4727-a851-d2c55703f730}' />
   </way>
@@ -1613,11 +1613,11 @@
     <nd ref='327' />
     <nd ref='318' />
     <nd ref='317' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{837e3f8b-d1d7-4d60-89d0-d597a6a65a96}' />
   </way>
@@ -1625,12 +1625,12 @@
     <nd ref='327' />
     <nd ref='326' />
     <nd ref='325' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Rue Barthélemy' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{f531e2d6-17bd-459b-a197-7bb65e2627be}' />
   </way>
@@ -1638,12 +1638,12 @@
     <nd ref='330' />
     <nd ref='329' />
     <nd ref='328' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Oriol' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2f0cf7c6-df23-48d7-a38b-d66c689a8f7f}' />
   </way>
@@ -1651,11 +1651,11 @@
     <nd ref='346' />
     <nd ref='345' />
     <nd ref='344' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{d1776f15-958b-4646-a9ae-2689bdcc59f8}' />
   </way>
@@ -1665,11 +1665,11 @@
     <nd ref='349' />
     <nd ref='348' />
     <nd ref='347' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2fec3dd7-1ed3-4cea-bcde-36da8e5c52e1}' />
   </way>
@@ -1683,11 +1683,11 @@
     <nd ref='354' />
     <nd ref='353' />
     <nd ref='352' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1fae3a50-0b69-49ec-bb3d-c2fe9b5551cf}' />
   </way>
@@ -1707,22 +1707,22 @@
     <nd ref='366' />
     <nd ref='365' />
     <nd ref='364' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{9fc89c3f-941c-4c5e-b9e2-14987f90b7be}' />
   </way>
   <way id='82' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='380' />
     <nd ref='379' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2ea730cc-211a-40f2-9260-b5dd3398ac9f}' />
   </way>
@@ -1733,7 +1733,7 @@
     <nd ref='383' />
     <nd ref='382' />
     <nd ref='381' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1742,7 +1742,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{90315b9f-3e39-43ba-bb6b-fe7d8e337dd1}' />
@@ -1751,34 +1751,34 @@
     <nd ref='389' />
     <nd ref='388' />
     <nd ref='387' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Bing;osm;osm' />
+    <tag k='source' v='Bing;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{235997e3-40c8-43f9-aae3-b68caa1ac3fb}' />
   </way>
   <way id='85' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='395' />
     <nd ref='390' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{50a793d0-8c19-4553-bfc1-7372f9257e23}' />
   </way>
   <way id='86' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='409' />
     <nd ref='408' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Impasse Puceron' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{14d3ee62-19f2-4ad9-bb4e-6c7fe1badaa2}' />
   </way>
@@ -1786,24 +1786,24 @@
     <nd ref='412' />
     <nd ref='411' />
     <nd ref='410' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Dartigue' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{7623bf4f-b098-45b5-964a-f675a261b30d}' />
   </way>
   <way id='88' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='464' />
     <nd ref='463' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Impasse Centrope' />
-    <tag k='source' v='World Bank, 2010/01/21-2010-01/22;osm;osm' />
+    <tag k='source' v='World Bank, 2010/01/21-2010-01/22;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2a89da7e-0ff3-4acd-99df-b09e2423ec30}' />
   </way>
@@ -1812,11 +1812,11 @@
     <nd ref='465' />
     <nd ref='413' />
     <tag k='FIXME' v='survey; does this path(?) exist (as earlier version implies)?' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='road' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{73186aae-48ce-4c64-95f0-096ce05a2e1a}' />
   </way>
@@ -1827,7 +1827,7 @@
     <nd ref='404' />
     <nd ref='403' />
     <nd ref='414' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1836,13 +1836,13 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='light_truck_less_than_10mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='hot_iom_cosmha;osm;osm' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{10254ed5-2235-4a32-9868-af53e5221888}' />
   </way>
   <way id='91' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1851,7 +1851,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{c9748a55-4ab7-4b21-b0a4-c92cccc145e0}' />
@@ -1868,7 +1868,7 @@
     <nd ref='393' />
     <nd ref='392' />
     <nd ref='391' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1877,7 +1877,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{9e55208f-84e2-418f-b60e-a36008ed6a25}' />
@@ -1888,11 +1888,11 @@
     <nd ref='362' />
     <nd ref='361' />
     <nd ref='360' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1a0aa43f-ada4-4abf-8384-069f05eef531}' />
   </way>
@@ -1907,7 +1907,7 @@
     <nd ref='336' />
     <nd ref='335' />
     <nd ref='419' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1915,7 +1915,7 @@
     <tag k='operational_status' v='restricted' />
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{25e6fc70-05a2-49ee-8a0d-8b4c858a6bca}' />
@@ -1926,7 +1926,7 @@
     <nd ref='332' />
     <nd ref='331' />
     <nd ref='420' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1935,7 +1935,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paving_stones' />
     <tag k='uuid' v='{fa56296b-7fab-48ac-bbb7-cbb53ab10895}' />
@@ -1948,7 +1948,7 @@
     <nd ref='320' />
     <nd ref='319' />
     <nd ref='421' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1957,13 +1957,13 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{e0a606ff-0818-447c-989c-bf47de6d9ee8}' />
   </way>
   <way id='97' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1972,13 +1972,13 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS; Bing;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS; Bing;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{e63572ec-e16e-4487-9f92-d57b997778e9}' />
   </way>
   <way id='98' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -1987,7 +1987,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS; Bing;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS; Bing;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{dac9e508-9e54-4bf3-81b0-e22b4d132154}' />
@@ -1995,7 +1995,7 @@
   <way id='99' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='314' />
     <nd ref='424' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2004,7 +2004,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{29cfc953-f2fd-49f1-8a08-ecebc36f2f7a}' />
@@ -2017,7 +2017,7 @@
     <nd ref='310' />
     <nd ref='309' />
     <nd ref='425' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2026,7 +2026,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{9f74b973-40c4-4f6a-9060-813d801536ea}' />
@@ -2037,12 +2037,12 @@
     <nd ref='294' />
     <nd ref='293' />
     <nd ref='292' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Ruelle Souchet' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:name' v='DMA Topo Map' />
     <tag k='uuid' v='{6929f1f6-8ac5-4ca3-9298-a46e64e266f7}' />
@@ -2052,7 +2052,7 @@
     <nd ref='288' />
     <nd ref='287' />
     <nd ref='427' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2061,7 +2061,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='non_motorized' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{6f82e6a2-c42b-440a-874c-b97b86e3a671}' />
@@ -2069,7 +2069,7 @@
   <way id='103' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='286' />
     <nd ref='428' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2078,7 +2078,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{2a606bed-d7fb-4b39-8e34-ca7721793c1e}' />
@@ -2086,7 +2086,7 @@
   <way id='104' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='429' />
     <nd ref='285' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2095,7 +2095,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{a8e21ed1-86ce-4d58-ba52-7929dfa45f44}' />
@@ -2104,11 +2104,11 @@
     <nd ref='294' />
     <nd ref='284' />
     <nd ref='430' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{2120b94c-56b2-4c46-b28e-ec5510b8eca7}' />
   </way>
@@ -2116,7 +2116,7 @@
     <nd ref='293' />
     <nd ref='283' />
     <nd ref='431' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2124,7 +2124,7 @@
     <tag k='operational_status' v='restricted' />
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='non_motorized' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{b918de5a-9e80-4290-ba3d-4ef81595458d}' />
@@ -2145,7 +2145,7 @@
     <nd ref='266' />
     <nd ref='265' />
     <nd ref='432' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2154,7 +2154,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='GPS/Walkinp Papers;osm;osm' />
+    <tag k='source' v='GPS/Walkinp Papers;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{2ddc35d7-9362-4d11-9fa5-7dd5bae2069a}' />
@@ -2164,11 +2164,11 @@
     <nd ref='264' />
     <nd ref='263' />
     <nd ref='285' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='GeoEye;osm;osm' />
+    <tag k='source' v='GeoEye;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{5396099a-46e4-4d7b-809b-f584e1da9569}' />
   </way>
@@ -2177,11 +2177,11 @@
     <nd ref='228' />
     <nd ref='227' />
     <nd ref='434' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='track' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='gravel' />
     <tag k='uuid' v='{53e20f55-180e-46e3-9988-4d06d58c6bbf}' />
@@ -2190,20 +2190,20 @@
     <nd ref='435' />
     <nd ref='214' />
     <nd ref='213' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{6d44d8ab-5715-4dc9-9a54-231042ce2ea1}' />
   </way>
   <way id='111' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{b84f8b92-b866-440a-94ac-11428d5f8c4d}' />
   </way>
@@ -2221,7 +2221,7 @@
     <nd ref='198' />
     <nd ref='244' />
     <nd ref='437' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2230,7 +2230,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{c6532000-c00a-4aff-b3e0-a81ef0811750}' />
@@ -2261,7 +2261,7 @@
     <nd ref='171' />
     <nd ref='170' />
     <nd ref='438' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2270,7 +2270,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{a67e60b8-1307-4b63-b666-5cf10646bae6}' />
@@ -2285,7 +2285,7 @@
     <nd ref='155' />
     <nd ref='154' />
     <nd ref='439' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2294,7 +2294,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='non_motorized' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{91e07870-1293-499f-b25d-1a02e8d867cb}' />
@@ -2313,7 +2313,7 @@
     <nd ref='237' />
     <nd ref='235' />
     <nd ref='440' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2322,7 +2322,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{a174da76-3835-4b15-b5e3-24f8881f8b8d}' />
@@ -2333,7 +2333,7 @@
     <nd ref='407' />
     <nd ref='136' />
     <nd ref='441' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2342,7 +2342,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='light_truck_less_than_10mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{38fd557f-d925-4866-aff5-d0fcca353252}' />
@@ -2353,11 +2353,11 @@
     <nd ref='131' />
     <nd ref='130' />
     <nd ref='442' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Bing;osm;osm' />
+    <tag k='source' v='Bing;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{dc1e9e76-0edd-40d1-9b00-0e8accc75398}' />
   </way>
@@ -2366,7 +2366,7 @@
     <nd ref='129' />
     <nd ref='128' />
     <nd ref='443' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2375,7 +2375,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='Dirt/Sand;Paved' />
     <tag k='uuid' v='{8d924eb5-43c7-4df7-ada7-486bc772ebb8}' />
@@ -2384,7 +2384,7 @@
     <nd ref='128' />
     <nd ref='116' />
     <nd ref='444' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2393,7 +2393,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='motorbike' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{e9f701f8-0ae3-46ab-86c8-a3eabcd7566c}' />
@@ -2405,7 +2405,7 @@
     <nd ref='103' />
     <nd ref='102' />
     <nd ref='445' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2414,33 +2414,33 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='Mission de Terrain;osm;osm' />
+    <tag k='source' v='Mission de Terrain;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{70819a7a-553e-4c77-a59b-38fac9045119}' />
   </way>
   <way id='121' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{109bb8c7-f83f-4b06-89a4-e827315d3e08}' />
   </way>
   <way id='122' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='footway' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{6f068f65-ac69-4383-b41a-325c245ef465}' />
   </way>
   <way id='123' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='448' />
     <nd ref='136' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2449,7 +2449,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='hot_iom_cosmha;osm;osm' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{c232e687-b348-4683-b677-481353d7c911}' />
@@ -2457,12 +2457,12 @@
   <way id='124' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='198' />
     <nd ref='449' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='impassable' v='yes' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{1796747e-b438-4477-a75c-2636745937c6}' />
   </way>
@@ -2474,7 +2474,7 @@
     <nd ref='49' />
     <nd ref='48' />
     <nd ref='450' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2483,7 +2483,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{c399a02d-cdb3-4a04-9457-d7dd0c1d8235}' />
@@ -2498,7 +2498,7 @@
     <nd ref='386' />
     <nd ref='466' />
     <nd ref='451' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2507,7 +2507,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{f66df444-9d4f-48e2-b350-289a87660b6f}' />
@@ -2515,7 +2515,7 @@
   <way id='127' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='452' />
     <nd ref='289' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2523,7 +2523,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='truck_+_trailer_greater_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/ FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/ FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{70295410-508b-4269-8fb2-98f418cb1d16}' />
@@ -2536,7 +2536,7 @@
     <nd ref='38' />
     <nd ref='37' />
     <nd ref='173' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2545,13 +2545,13 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='OIM/GIS/DTM;osm;osm' />
+    <tag k='source' v='OIM/GIS/DTM;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{aab8f400-e603-4d66-97bd-53bebcd74fce}' />
   </way>
   <way id='129' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2560,7 +2560,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='4wd_less_than_3.5mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='dirt' />
     <tag k='uuid' v='{219be75f-6d21-448a-bf5f-0ec0f2945ee7}' />
@@ -2568,11 +2568,11 @@
   <way id='130' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='295' />
     <nd ref='455' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google Aerial;osm;osm' />
+    <tag k='source' v='Google Aerial;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{5592f286-b80b-4427-b195-454dfaa7308c}' />
   </way>
@@ -2594,7 +2594,7 @@
     <nd ref='330' />
     <nd ref='193' />
     <nd ref='327' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2603,7 +2603,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='hot_iom_cosmha;osm;osm' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{5d46ab10-06fc-4dba-aa87-7efa0239be7e}' />
@@ -2611,22 +2611,22 @@
   <way id='132' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='264' />
     <nd ref='457' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{535b3090-a469-4646-a891-55131f446adc}' />
   </way>
   <way id='133' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
     <nd ref='458' />
     <nd ref='22' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='path' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{873284c5-b599-4271-9652-7a706d48531f}' />
   </way>
@@ -2637,17 +2637,17 @@
     <nd ref='83' />
     <nd ref='100' />
     <nd ref='459' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Rue Dartiguenave' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{7cf8d5bc-547b-4888-9222-33e4040b58a1}' />
   </way>
   <way id='135' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='unclassified' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2656,17 +2656,17 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{f71bbe4d-93b3-4503-bba8-f576f484fd88}' />
   </way>
   <way id='136' action='delete' timestamp='2017-06-07T14:36:37Z' visible='true' version='1' changeset='109'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='Google 2010-01-17;osm;osm' />
+    <tag k='source' v='Google 2010-01-17;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{7a66ade3-92df-4425-b7ce-3387d0f181db}' />
   </way>
@@ -2675,7 +2675,7 @@
     <nd ref='213' />
     <nd ref='135' />
     <nd ref='398' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -2684,7 +2684,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='bad' />
-    <tag k='source' v='hot_iom_cosmha;osm;osm' />
+    <tag k='source' v='hot_iom_cosmha;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{3ac67b36-f2c7-4c6c-8c88-5372228a3d72}' />
