@@ -1,3 +1,4 @@
+[[stats]]
 == stats
 
 === Description

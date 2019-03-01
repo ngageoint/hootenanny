@@ -1,3 +1,4 @@
+[[node-density-plot]]
 == node-density-plot 
 
 === Description

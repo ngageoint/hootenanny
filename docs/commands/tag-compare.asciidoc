@@ -1,3 +1,4 @@
+[[tag-compare]]
 == tag-compare
 
 === Description
