@@ -92,14 +92,14 @@ Users are also able to define their own [custom translations](https://github.com
 * If you have any support questions, please create an issue in this repository.
 
 # Documentation
-* [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
-* or locally look for PDF's in 'hoot/docs' 
-* or online:
+* Online:
   * [User Interface Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUI.asciidoc)
   * [User Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.asciidoc)
   * [Algorithms Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyAlgorithms.asciidoc)
   * [Algorithm Detail Slides](https://github.com/ngageoint/hootenanny/wiki/Slides)
   * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
+* or [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
+* or in the Hootenanny VM look for PDF's in 'hoot/docs' 
 
 ## Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
