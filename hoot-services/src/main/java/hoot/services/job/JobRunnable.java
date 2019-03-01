@@ -42,11 +42,13 @@ class JobRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(JobRunnable.class);
 
     private final Job job;
+    private final Long userId;
     private final JobStatusManager jobStatusManager;
 
 
-    JobRunnable(Job job, JobStatusManager jobStatusManager) {
+    JobRunnable(Job job, Long userId, JobStatusManager jobStatusManager) {
         this.job = job;
+        this.userId = userId;
         this.jobStatusManager = jobStatusManager;
     }
 
