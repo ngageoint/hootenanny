@@ -67,9 +67,31 @@ available to customize the conflation workflows.
 * Utility polylines (power lines)
 * Waterway polylines
 
-# Road Matching Algorithms
+# Conflation Algorithms
+## Area
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#area-to-area-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AreaToAreaConflation.asciidoc)
+## Building
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#building-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/BuildingConflation.asciidoc)
+## POI
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#poi-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/PoiToPoiConflation.asciidoc)
+## POI to Polygon
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#poi-to-polygon-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/PoiToPolygonConflation.asciidoc)
+## Power Line
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/GenericLineConflation.asciidoc#power-line-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#power-line-conflation)
+## Railway
+**TODO**
+## Road
+* [Overview](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#road-conflation)
 * **[2nd Generation (aka Unifying)](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc)** - This algorithm uses machine learning techniques based on manually matched training data to match roads.
 * **[Network](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)** - This algorithm uses a graph theory based approach to match roads.
+## Waterway
+* [Usage](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/GenericLineConflation.asciidoc#river-conflation)
+* [Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#river-conflation)
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
