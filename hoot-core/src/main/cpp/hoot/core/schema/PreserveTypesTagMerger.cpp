@@ -115,7 +115,14 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         }
         else
         {
-          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
+          if(it.key() == ALT_TYPES_TAG_KEY)
+          {
+            result[ALT_TYPES_TAG_KEY] = t2Copy[it.key()];
+          }
+          else
+          {
+            result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
+          }
         }
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
