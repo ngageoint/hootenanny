@@ -62,6 +62,9 @@ public class ConflateParams {
     @JsonProperty("CONFLATION_TYPE")
     private String conflationType;
 
+    @JsonProperty("CONFLATION_ALGORITHM")
+    private String conflateAlgorithm;
+
     @JsonProperty("GENERATE_REPORT")
     private String generateReport;
 
@@ -206,6 +209,15 @@ public class ConflateParams {
 
 	public Boolean getHoot2() {
 		return this.hoot2;
+	}
+
+	public String getConflateAlgorithm() {
+		return this.conflateAlgorithm;
+	}
+
+
+	public void setConflateAlgorithm(String algorithm) {
+		this.conflateAlgorithm = algorithm;
 	}
 
     @Override

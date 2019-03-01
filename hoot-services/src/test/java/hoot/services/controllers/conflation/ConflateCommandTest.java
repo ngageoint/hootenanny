@@ -81,7 +81,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -112,6 +112,8 @@ public class ConflateCommandTest {
     public void testCreateConflateCommandHoot2() {
     	String jobId = UUID.randomUUID().toString();
 
+    	// captures expectation for attribute, reference, horizontal...
+
     	ConflateParams conflateParams = new ConflateParams();
     	conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
@@ -139,7 +141,61 @@ public class ConflateCommandTest {
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
-        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("Attribute.conf"));
+        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_TYPE").toString().equals("AttributeConflation.conf"));
+
+        // handles case for network...
+        jobId = UUID.randomUUID().toString();
+    	conflateParams = new ConflateParams();
+    	conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setUserEmail("test@test.com");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflateAlgorithm("Network");
+        debugLevel = "error";
+        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATE_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        assertEquals(expectedCommand, conflateCommand.getCommand());
+
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATE_ALGORITHM"));
+        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATE_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    @Category(UnitTest.class)
+    public void testHoot2Exceptions() {
+    	// illustrates command will not be executed if alg or conflate type are not valid...
+
+    	String jobId = UUID.randomUUID().toString();
+
+    	ConflateParams conflateParams = new ConflateParams();
+    	conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setUserEmail("test@test.com");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Network");
+
+        String debugLevel = "error";
+
+        new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        conflateParams.setConflationCommand(null);
+        conflateParams.setConflationType("Attribute");
+
+        new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
     }
 }
