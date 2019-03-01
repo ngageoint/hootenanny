@@ -190,7 +190,7 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Matches roads with the network algorithm",
+      className(), "Matches roads with the 3rd generation network based algorithm",
       CreatorDescription::BaseFeatureType::Highway, false));
   return result;
 }

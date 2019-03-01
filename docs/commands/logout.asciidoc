@@ -1,3 +1,4 @@
+[[logout]]
 == logout
 
 The +logout+ command logs a user out of the Hootenanny Web Services.  It requires the OAuth credentials of the user be passed in as 
