@@ -23,25 +23,6 @@ Hootenanny is developed under the open source General Public License (GPL) and m
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# Conflatable Feature Types
-* Area polygons
-* Building polygons
-* Points of Interest (POIs)
-* Transportation polylines (roads and railways)
-* Utility polylines (power lines)
-* Waterway polylines
-
-Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-
-# Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specific region in map A that should not be modified at all and stitch in data from map B around it.
-* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
-* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
-
-There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
-available to customize the conflation workflows.
-
 # Feature Summary
 In addition to conflating maps together, Hootenanny can also:
 * Add [missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features
@@ -66,6 +47,29 @@ In addition to conflating maps together, Hootenanny can also:
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
 * Translate feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
+
+Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
+
+# Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specific region in map A that should not be modified at all and stitch in data from map B around it.
+* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
+* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
+
+There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
+available to customize the conflation workflows.
+
+# Road Matching Algorithms
+* **[2nd Generation (aka Unifying)](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc)** - This algorithm uses machine learning techniques based on manually matched training data to match roads.
+* **[Network](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)** - This algorithm uses a graph theory based approach to match roads.
+
+# Supported Feature Types
+* Area polygons
+* Building polygons
+* Points of Interest (POIs)
+* Transportation polylines (roads and railways)
+* Utility polylines (power lines)
+* Waterway polylines
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
