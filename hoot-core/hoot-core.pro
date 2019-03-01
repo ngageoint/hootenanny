@@ -41,7 +41,7 @@ OTHER_FILES = \
     ../conf/core/*Conflation.conf \
     ../conf/core/*Algorithm.conf \
     ../scripts/jenkins/Jenkinsfile
-    
+
 include(../Configure.pri)
 
 LIBS += -L../lib/ -lTgs -ltbs
