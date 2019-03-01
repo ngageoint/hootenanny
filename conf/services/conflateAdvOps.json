@@ -32,6 +32,14 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"one_way_road_standardizer",
+                "elem_type":"checkbox",
+                "description":"Standardize one way street tags.",
+                "name":"One Way Road Standardizer",
+                "hoot_val":"hoot::OneWayRoadStandardizer",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"duplicate_way_remover",
                 "elem_type":"checkplus",
                 "override":{

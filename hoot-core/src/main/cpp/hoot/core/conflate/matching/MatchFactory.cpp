@@ -252,7 +252,8 @@ void MatchFactory::_tempFixDefaults()
       (mapCleanerTransforms.contains("hoot::CornerSplitter") ||
        mapCleanerTransforms.contains("hoot::RubberSheet")))
   {
-    if (mapCleanerTransforms.contains("hoot::CornerSplitter"))
+    if (mapCleanerTransforms.contains("hoot::CornerSplitter") &&
+        !ConfigOptions().getHighwayMergeTagsOnly())
     {
       mapCleanerTransforms.removeAll("hoot::CornerSplitter");
     }
