@@ -512,14 +512,6 @@
               "minvalue":"0.0",
               "maxvalue":"1.0",
               "hoot_key":"review.score.criterion.min.threshold"
-            },
-            {
-              "id": "review_score_invert_thresholding",
-              "elem_type": "bool",
-              "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
-              "name": "Invert Review Score Thresholding",
-              "defaultvalue": "true",
-              "hoot_key": "review.score.criterion.invert.thresholding",
             }
         ]
     },
