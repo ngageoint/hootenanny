@@ -51,7 +51,7 @@ In addition to conflating maps together, Hootenanny can also:
 Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
 # Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A.
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A, favoring map A's data.
 * **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specific region in map A that should not be modified at all and stitch in data from map B around it.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A.  Optionally, you can configure to overwrite tags in A from B even when there is overlap.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - Conflate map A with B where only tags are transferred from B to A and no changes are made to A's geometry (with some configurable exceptions).
