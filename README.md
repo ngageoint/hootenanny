@@ -17,7 +17,7 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 
 Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
 
-# Project Goals
+# Goals
 * Automatically combine geospatial features for decision making
 * Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
 * Maintain geometry and attribute provenance for combined features
@@ -59,10 +59,6 @@ Additional feature types can be made conflatable via custom script by using Hoot
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
 available to customize the conflation workflows.
 
-# Road Matching Algorithms
-* **[2nd Generation (aka Unifying)](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc)** - This algorithm uses machine learning techniques based on manually matched training data to match roads.
-* **[Network](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)** - This algorithm uses a graph theory based approach to match roads.
-
 # Supported Feature Types
 * Area polygons
 * Building polygons
@@ -70,6 +66,10 @@ available to customize the conflation workflows.
 * Transportation polylines (roads and railways)
 * Utility polylines (power lines)
 * Waterway polylines
+
+# Road Matching Algorithms
+* **[2nd Generation (aka Unifying)](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc)** - This algorithm uses machine learning techniques based on manually matched training data to match roads.
+* **[Network](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc)** - This algorithm uses a graph theory based approach to match roads.
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
