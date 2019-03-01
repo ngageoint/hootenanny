@@ -87,10 +87,6 @@ Users are also able to define their own [custom translations](https://github.com
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md) to launch a virtual machine
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation
 
-# Support
-* [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
-* If you have any support questions, please create an issue in this repository.
-
 # Documentation
 * Online:
   * [User Interface Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUI.asciidoc)
@@ -100,6 +96,10 @@ Users are also able to define their own [custom translations](https://github.com
   * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
 * or [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
 * or in the Hootenanny VM look for PDF's in 'hoot/docs' 
+
+# Support
+* [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
+* If you have any support questions, please create an issue in this repository.
 
 ## Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
