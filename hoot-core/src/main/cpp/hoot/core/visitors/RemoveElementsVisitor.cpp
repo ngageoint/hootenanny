@@ -67,12 +67,16 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   LOG_VART(_negateCriterion);
   const QString critName = configOptions.getRemoveElementsVisitorElementCriterion();
   LOG_VART(critName);
-  if (critName.isEmpty() == false)
+  if (!critName.isEmpty())
   {
-    LOG_VART(critName);
     addCriterion(
       boost::shared_ptr<ElementCriterion>(
         Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed())));
+    Configurable* c = dynamic_cast<Configurable*>(_criterion.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf);
+    }
   }
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
   LOG_VART(_recursive);

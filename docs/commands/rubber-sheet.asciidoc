@@ -1,3 +1,4 @@
+[[rubber-sheet]]
 == rubber-sheet
 
 === Description
@@ -75,3 +76,7 @@ rubber-sheet --apply (transform.rs) (input) (output)
 --------------------------------------
 hoot rubber-sheet --apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
 --------------------------------------
+
+=== See Also
+
+* <<hootalgo, RubberSheeting>>

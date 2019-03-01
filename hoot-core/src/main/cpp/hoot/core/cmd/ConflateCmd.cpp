@@ -247,6 +247,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Apply any user specified operations.
   LOG_INFO("Applying post-conflation operations...");
+  LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
 
   OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
