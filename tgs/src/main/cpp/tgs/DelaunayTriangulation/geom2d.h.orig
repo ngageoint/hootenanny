@@ -1,0 +1,66 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#ifndef GEOM2D_H
+#define GEOM2D_H
+
+#include <math.h>
+#include <iostream>
+
+#ifndef ABS
+#define ABS(a)	((a) >= 0 ? (a) : -(a))
+#endif
+
+#ifndef MAX
+#define MAX(a, b)	((a) >= (b) ? (a) : (b))
+#define MIN(a, b)	((a) <= (b) ? (a) : (b))
+#endif
+
+#ifndef TRUE
+#define FALSE 0
+#define TRUE  1
+#endif
+
+#define EPS 1e-6
+
+typedef double	Real;
+
+class Vector2d {
+public:
+        Real x, y;
+        Vector2d()					{ x = 0; y = 0; }
+        Vector2d(Real a, Real b)	{ x = a; y = b; }
+        Real norm() const;
+        void normalize();
+        Vector2d operator+(const Vector2d&) const;
+        Vector2d operator-(const Vector2d&) const;
+        friend Vector2d operator*(Real, const Vector2d&);
+        friend Real dot(const Vector2d&, const Vector2d&);
+        friend std::istream& operator>>(std::istream&, Vector2d&);
+        friend std::ostream& operator<<(std::ostream&, const Vector2d&);
+};
+
+class Point2d {
+public:
+        Real x, y;
+        Point2d()					{ x = 0; y = 0; }
+        Point2d(Real a, Real b)		{ x = a; y = b; }
+        Point2d(const Point2d& p)	{ *this = p; }
+        Point2d operator+(const Vector2d&) const;
+        Vector2d operator-(const Point2d&) const;
+        int operator==(const Point2d&) const;
+        friend std::istream& operator>>(std::istream&, Point2d&);
+        friend std::ostream& operator<<(std::ostream&, const Point2d&);
