@@ -51,3 +51,4 @@ QMAKE_CXXFLAGS+=-Werror
                          
 # Use this with valgrind
 #QMAKE_CXXFLAGS+=-g -O1
+#
