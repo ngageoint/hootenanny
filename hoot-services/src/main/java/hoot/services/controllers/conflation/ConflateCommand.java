@@ -50,7 +50,19 @@ class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
 
-    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) {
+    private static final List<String> conflationTypes = Arrays.asList(
+    	"HorizontalConflation",
+    	"AttributeConflation",
+    	"ReferenceConflation",
+    	"DifferentialConflation"
+    );
+
+    private static final List<String> conflationAlgorithms = Arrays.asList("NetworkAlgorithm");
+
+    private String conflationType = null;
+    private String conflationAlgorithm = null;
+
+    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) throws IllegalArgumentException {
         super(jobId);
         this.conflateParams = params;
 
@@ -74,17 +86,6 @@ class ConflateCommand extends ExternalCommand {
 
         String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
-        if (params.getAdvancedOptions() != null) {
-            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
-            Arrays.stream(advOptions).forEach((option) -> {
-                if (!option.isEmpty()) {
-                    options.add(option.trim());
-                };
-            });
-        }
-
-        List<String> hootOptions = toHootOptions(options);
-
         String stats = "";
         if (params.getCollectStats()) {
             // Don't include non-error log messages in stdout because we are redirecting to file
@@ -93,6 +94,8 @@ class ConflateCommand extends ExternalCommand {
             //Hootenanny map statistics such as node and way count
             stats = "--stats";
         }
+
+        Map<String, Object> substitutionMap = new HashMap<>();
 
         // Detect Differential Conflation
         String conflationCommand = params.getConflationCommand();
@@ -108,11 +111,25 @@ class ConflateCommand extends ExternalCommand {
           differential = "--differential";
         }
 
+        if (params.getAdvancedOptions() != null && !params.getAdvancedOptions().isEmpty()) { // hoot 1
+            substitutionMap.put("CONFLATION_TYPE", "");
+        	Arrays.stream(toOptionsList(params.getAdvancedOptions())).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+            });
+        }
 
-        Map<String, Object> substitutionMap = new HashMap<>();
+        if (params.getHoot2() != null) { // hoot 2
+        	conflationType = params.getConflationType();
+        	conflationType = conflationType == null ? "" : conflationType + "Conflation";
+        	conflationAlgorithm = params.getConflateAlgorithm();
+        	conflationAlgorithm = conflationAlgorithm == null ? "" : conflationAlgorithm + "Algorithm";
+        }
+
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
-        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("INPUT1", input1);
         substitutionMap.put("INPUT2", input2);
         substitutionMap.put("OUTPUT", output);
@@ -120,8 +137,34 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("DIFF_TAGS", diffTags);
         substitutionMap.put("STATS", stats);
 
-        String command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String command = null;
+        if (params.getHoot2() == null) { // hoot1
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        } else if (conflationType.isEmpty()) {
+        	if (conflationAlgorithms.stream().noneMatch(a -> a.equals(conflationAlgorithm))) {
+        		throw new IllegalArgumentException(String.format("Conflation Algorithm \"%s\" is not valid.", conflationAlgorithm));
+        	}
+
+        	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        } else if (conflationAlgorithm.isEmpty()) {
+        	if (conflationTypes.stream().noneMatch(t -> t.equals(conflationType))) {
+        		throw new IllegalArgumentException(String.format("Conflation Type \"%s\" is not valid.", conflationType));
+        	}
+
+        	substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        } else {
+        	substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
+          	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        }
+
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private String[] toOptionsList(String optionsString) {
+    	return optionsString.trim().split("-D ");
     }
 
     @Override

@@ -333,7 +333,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-157" timestamp="2017-06-07T15:24:11Z" version="1">
         <nd ref="-30"/>
         <nd ref="-28"/>
         <nd ref="-27"/>
@@ -483,7 +483,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-4"/>
     </way>
-    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-3" timestamp="2017-06-07T15:24:11Z" version="1">
         <nd ref="-57"/>
         <nd ref="-29"/>
         <nd ref="-54"/>
@@ -524,10 +524,10 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="operational_status" v="open"/>
         <tag k="practicability" v="heavy_truck_less_than_20mt"/>
-        <tag k="source" v="survey; CNIGS/OIM/FOCS;osm;osm"/>
+        <tag k="source" v="survey; CNIGS/OIM/FOCS;osm"/>
         <tag k="uuid" v="{b3412275-50ba-41b5-9baf-3a0ef9200f57}"/>
         <tag k="name" v="Rue Théodule"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="smoothness" v="intermediate"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
@@ -573,7 +573,7 @@
         <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
         <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.111Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="highway" v="tertiary"/>

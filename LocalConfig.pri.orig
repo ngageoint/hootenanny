@@ -50,5 +50,5 @@ QMAKE_LFLAGS=-fuse-ld=gold
 QMAKE_CXXFLAGS+=-Werror
                          
 # Use this with valgrind
-#QMAKE_CXXFLAGS+=-g -O1 
+#QMAKE_CXXFLAGS+=-g -O1
 
