@@ -26,42 +26,28 @@
  */
 package hoot.services.controllers.grail;
 
-// import static hoot.services.HootProperties.*;
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.models.db.QFolders.folders;
-import static hoot.services.models.db.QMaps.maps;
-import static hoot.services.utils.DbUtils.createQuery;
-
-import java.io.File;
-import java.net.URL;
-import java.net.SocketException;
-import java.util.List;
-import java.time.LocalDateTime;
-
-import org.apache.commons.io.FileUtils;
+import com.querydsl.core.types.dsl.Expressions;
+import hoot.services.command.CommandResult;
+import hoot.services.command.InternalCommand;
+import hoot.services.models.db.Maps;
+import hoot.services.models.osm.Map;
+import hoot.services.models.osm.MapLayer;
+import hoot.services.models.osm.MapLayers;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.command.CommandResult;
-import hoot.services.command.InternalCommand;
-
-import java.sql.Timestamp;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.sql.SQLQuery;
-import hoot.services.models.osm.Map;
-import hoot.services.models.osm.MapLayer;
-import hoot.services.models.osm.MapLayers;
-import hoot.services.utils.DbUtils;
-import hoot.services.models.db.FolderMapMappings;
-import hoot.services.models.db.Folders;
-import hoot.services.models.db.Maps;
-
-
-
-import javax.ws.rs.core.Response;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.net.SocketException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
 
 
 class UpdateDbCommand implements InternalCommand {
@@ -75,8 +61,6 @@ class UpdateDbCommand implements InternalCommand {
         this.params = params;
         this.jobId = jobId;
         this.caller = caller;
-
-        // logger.info("Params: "+ params.toString());
     }
 
     @Override
@@ -111,7 +95,8 @@ class UpdateDbCommand implements InternalCommand {
 
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            long userId = 1;
+            long userId = (params.getUser() != null) ? params.getUser().getId() : 1;
+
             createQuery().insert(folders)
                     .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                             folders.parentId)
@@ -134,19 +119,19 @@ class UpdateDbCommand implements InternalCommand {
 
         Long apiMapId = findMapId(mapLayers, params.getInput1());
         if (apiMapId == -1) {
-                throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput1());
-            }
+            throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput1());
+        }
 
-        updateFolder(apiMapId,folderId);
+        updateFolder(apiMapId, folderId);
 
         Long overpassMapId = findMapId(mapLayers, params.getInput2());
         if (overpassMapId == -1) {
-                throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput2());
-            }
-        updateFolder(overpassMapId,folderId);
-    } 
+            throw new IllegalArgumentException("Cannot find a mapId for " + params.getInput2());
+        }
+        updateFolder(overpassMapId, folderId);
+    }
 
-    private Long findMapId (MapLayers mapLayers, String layerName) {
+    private Long findMapId(MapLayers mapLayers, String layerName) {
         Long mapId = -1L;
 
         for (MapLayer tLayer : mapLayers.getLayers()) {
@@ -159,7 +144,7 @@ class UpdateDbCommand implements InternalCommand {
         return mapId;
     }
 
-    private void updateFolder (Long mapId, Long folderId) {
+    private void updateFolder(Long mapId, Long folderId) {
         try {
             // Delete any existing to avoid duplicate entries
             createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
@@ -175,13 +160,12 @@ class UpdateDbCommand implements InternalCommand {
                     .execute();
         }
         catch (Exception e) {
-            handleError(e, null, null);
+            handleError(e, mapId, null);
         }
     }
 
-
     // Taken directly from MapResource.java
-    private static void handleError(Exception e, String mapId, String requestSnippet) {
+    private static void handleError(Exception e, Long mapId, String requestSnippet) {
         if ((e instanceof SocketException) && e.getMessage().toLowerCase().contains("broken pipe")) {
             // This occurs when iD aborts a tile request before it is finished.
             // This happens quite frequently but is acceptable, so let's catch this and just logger as

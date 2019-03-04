@@ -36,23 +36,23 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommand;
-
 
 class PushToDbCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(PushToDbCommand.class);
 
     PushToDbCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
-        super(jobId,params);
+        super(jobId, params);
 
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-        //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.create.user=true");
-        options.add("api.db.email=test@test.com");
+        if (params.getUser() != null) {
+            options.add("api.db.email=" + params.getUser().getEmail());
+        }
+        else {
+            options.add("api.db.email=test@test.com");
+        }
 
         List<String> hootOptions = toHootOptions(options);
 

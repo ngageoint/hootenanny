@@ -29,6 +29,8 @@ package hoot.services.controllers.grail;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import hoot.services.models.db.Users;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GrailParams {
@@ -36,8 +38,8 @@ public class GrailParams {
     @JsonProperty("BBOX")
     private String bounds;
 
-    @JsonProperty("USER_ID")
-    private String userId;
+    @JsonProperty("user")
+    private Users user;
 
     @JsonProperty("input1")
     private String input1;
@@ -60,10 +62,6 @@ public class GrailParams {
     @JsonProperty("maxBBoxSize")
     private Double maxSize;
 
-    @JsonProperty("capabilitiesUrl")
-    private String capabilitiesUrl;
-
-
     public String getBounds() {
         return bounds;
     }
@@ -72,12 +70,12 @@ public class GrailParams {
         this.bounds = bounds;
     }
 
-    public String getUserId() {
-        return (this.userId == null) ? "Hootenanny" : userId;
+    public Users getUser() {
+        return (user == null) ? null : user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     public String getInput1() {
@@ -136,27 +134,17 @@ public class GrailParams {
         this.maxSize = maxSize;
     }
 
-    public String getCapabilitiesUrl() {
-        return capabilitiesUrl;
-    }
-
-    public void setCapabilitiesUrl(String capabilitiesUrl) {
-        this.capabilitiesUrl = capabilitiesUrl;
-    }
-
-
     @Override
     public String toString() {
         return "GrailParams{" +
                 "BBOX='" + bounds + '\'' +
-                ", USER_ID='" + userId + '\'' +
+                ", USER_ID='" + user.getDisplayName() + '\'' +
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
                 ", output='" + output + '\'' +
                 ", folder='" + folder + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
-                ", capabilitiesUrl='" + capabilitiesUrl + '\'' +
                 ", maxBBoxSize='" + maxSize + '\'' +
                 '}';
     }

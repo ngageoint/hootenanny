@@ -30,15 +30,12 @@ import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import javax.ws.rs.Consumes;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -47,24 +44,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,11 +72,9 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 
-import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-
-import hoot.services.geo.BoundingBox;
+import hoot.services.models.db.Users;
 
 
 @Controller
@@ -104,7 +98,6 @@ public class GrailResource {
     @Autowired
     private UpdateDbCommandFactory updateDbCommandFactory;
 
-
     public GrailResource() {}
 
     /**
@@ -116,11 +109,11 @@ public class GrailResource {
      * Return anything that cannot be pushed to the user as an osc file.
      *
      * POST hoot-services/grail/everythingbybox?BBOX=left,bottom,right,top&user_name=JSmith&DEBUG_LEVEL=<error,info,debug,verbose,trace>
-     *        left is the longitude of the left (west) side of the bounding box  
-     *        bottom is the latitude of the bottom (south) side of the bounding box  
-     *        right is the longitude of the right (east) side of the bounding box  
-     *        top is the latitude of the top (north) side of the bounding box  
-     *        left is the longitude of the left (west) side of the bounding box  
+     *        left is the longitude of the left (west) side of the bounding box
+     *        bottom is the latitude of the bottom (south) side of the bounding box
+     *        right is the longitude of the right (east) side of the bounding box
+     *        top is the latitude of the top (north) side of the bounding box
+     *        left is the longitude of the left (west) side of the bounding box
      *
      * @param params
      *
@@ -129,10 +122,12 @@ public class GrailResource {
     @POST
     @Path("/everythingbybox")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response everythingByBox(@QueryParam("BBOX") String bbox,
-                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
-                        @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
-                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response everythingByBox(@Context HttpServletRequest request,
+            @QueryParam("BBOX") String bbox,
+            @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
@@ -143,8 +138,8 @@ public class GrailResource {
 
         GrailParams params = new GrailParams();
         params.setBounds(bbox);
-        params.setUserId(userId);
-        
+        params.setUser(user);
+
         File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
         try {
             FileUtils.forceMkdir(workDir);
@@ -160,18 +155,18 @@ public class GrailResource {
             // This is turned off since we are using Overpass
             // APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
             // logger.info("EverythingByBox: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
-            // if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
+            // if (mainOsmApiCapabilities.getApiStatus().equals("offline") | mainOsmApiCapabilities.getApiStatus() == null) {
             //     return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The main OSM API server is offline. Try again later").build();
             // }
 
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("EverythingByBox: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-            if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+            if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
             }
 
             // Pull OSM data from the local OSM API Db
-            File localOSMFile = new File(workDir,"local.osm");
+            File localOSMFile = new File(workDir, "local.osm");
             if (localOSMFile.exists()) localOSMFile.delete();
 
             GrailParams apiParams = new GrailParams();
@@ -183,12 +178,11 @@ public class GrailResource {
             String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
             json.put("jobid:LocalOSM", jobId);
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
             workflow.add(getLocalOSM);
 
-
             // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir,"internet.osm");
+            File internetOSMFile = new File(workDir, "internet.osm");
             if (internetOSMFile.exists()) internetOSMFile.delete();
 
             GrailParams overpassParams = new GrailParams();
@@ -199,33 +193,32 @@ public class GrailResource {
 
             jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
             json.put("jobid:InternetOSM", jobId);
-            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
 
-
             // Run the diff command.
-            // TODO: We could possibly use ConflateCommand.java for this. If we setup the params for it - especially the 35 bazillion Hoot Options 
+            // TODO: We could possibly use ConflateCommand.java for this. If we setup the params for it - especially the 35 bazillion Hoot Options
             params.setInput1(localOSMFile.getAbsolutePath());
             params.setInput2(internetOSMFile.getAbsolutePath());
 
-            File geomDiffFile = new File(workDir,"diff.osc");
+            File geomDiffFile = new File(workDir, "diff.osc");
             if (geomDiffFile.exists()) geomDiffFile.delete();
             params.setOutput(geomDiffFile.getAbsolutePath());
-            
-            ExternalCommand makeDiff = grailCommandFactory.build(mainJobId,params,debugLevel,RunDiffCommand.class,this.getClass());
+
+            ExternalCommand makeDiff = grailCommandFactory.build(mainJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
             workflow.add(makeDiff);
 
             // Push to the local OSM API Db
-            // TODO: The export/ApplyChangesetCommand.java command is hardcoded to push to OSMAPI_DB_URL. We could refactor it to 
+            // TODO: The export/ApplyChangesetCommand.java command is hardcoded to push to OSMAPI_DB_URL. We could refactor it to
             // take the DB URL as a parameter.
             params.setPushUrl(RAILSPORT_PUSH_URL);
-            ExternalCommand applyGeomChange = grailCommandFactory.build(mainJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+            ExternalCommand applyGeomChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
             workflow.add(applyGeomChange);
 
             if (applyTags) {
-                File tagDiffFile = new File(workDir,"diff.tags.osc");
+                File tagDiffFile = new File(workDir, "diff.tags.osc");
                 params.setOutput(tagDiffFile.getAbsolutePath());
-                ExternalCommand applyTagChange = grailCommandFactory.build(mainJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+                ExternalCommand applyTagChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
                 workflow.add(applyTagChange);
             }
 
@@ -248,24 +241,25 @@ public class GrailResource {
 
     @POST
     @Path("/everythingtest")
-    // @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response everythingTest(@QueryParam("BBOX") String bbox,
-                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
-                        @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
-                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response everythingTest(@Context HttpServletRequest request,
+            @QueryParam("BBOX") String bbox,
+            @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        String userName = (user == null) ? null : user.getDisplayName();
 
         json.put("jobid", jobId);
         json.put("BBox", bbox);
-        json.put("User_ID", userId);
+        json.put("User_ID", userName);
         json.put("Debug", debugLevel);
 
-
         logger.info("BBOX:" + bbox);
-        logger.info("User:" + userId);
+        logger.info("User:" + userName);
         logger.info("applyTags:" + applyTags);
         logger.info("Debug_Level:" + debugLevel);
         logger.info("json:" + json.toJSONString());
@@ -273,14 +267,15 @@ public class GrailResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-
     @POST
     @Path("/conflatepush")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflatePush(@QueryParam("INPUT1") String input1,
-                        @QueryParam("INPUT2") String input2,
-                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
-                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response conflatePush(@Context HttpServletRequest request,
+            @QueryParam("INPUT1") String input1,
+            @QueryParam("INPUT2") String input2,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -298,22 +293,23 @@ public class GrailResource {
         }
 
         GrailParams params = new GrailParams();
-        params.setUserId(userId);
+        params.setUser(user);
 
         try {
             // Run changeset-derive
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
             params.setInput2(HOOTAPI_DB_URL + "/" + input2);
 
-            File changeSet = new File(workDir,"diff.osc");
-            if (changeSet.exists()) changeSet.delete();
+            File changeSet = new File(workDir, "diff.osc");
+            if (changeSet.exists())
+                changeSet.delete();
             params.setOutput(changeSet.getAbsolutePath());
-            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId,params,debugLevel,DeriveChangesetCommand.class,this.getClass());
+            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
 
             // Apply changeset
             params.setPushUrl(RAILSPORT_PUSH_URL);
-            ExternalCommand applyChange = grailCommandFactory.build(mainJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+            ExternalCommand applyChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
             workflow.add(applyChange);
 
             // Now roll the dice and run everything.....
@@ -333,26 +329,27 @@ public class GrailResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-
     @POST
     @Path("/conflatetest")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflateTest(@QueryParam("INPUT1") String input1,
-                        @QueryParam("INPUT2") String input2,
-                        @QueryParam("USER_ID") @DefaultValue("Hootenanny") String userId,
-                        @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response conflateTest(@Context HttpServletRequest request,
+            @QueryParam("INPUT1") String input1,
+            @QueryParam("INPUT2") String input2,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         JSONObject json = new JSONObject();
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
+        Users user = Users.fromRequest(request);
+        String userName = (user == null) ? null : user.getDisplayName();
+
         json.put("jobid", jobId);
         json.put("Input1", input1);
         json.put("Input2", input2);
-        json.put("User_ID", userId);
+        json.put("User_ID", userName);
         json.put("Debug", debugLevel);
 
-
-        logger.info("User:" + userId);
+        logger.info("User:" + userName);
         logger.info("Input1:" + input1);
         logger.info("Input2:" + input2);
         logger.info("Debug_Level:" + debugLevel);
@@ -365,21 +362,20 @@ public class GrailResource {
      * Pull the OSM data for a bounding box.
      *
      * POST hoot-services/grail/pullosm?BBOX=left,bottom,right,top&DEBUG_LEVEL=<error,info,debug,verbose,trace>
-     *        left is the longitude of the left (west) side of the bounding box  
-     *        bottom is the latitude of the bottom (south) side of the bounding box  
-     *        right is the longitude of the right (east) side of the bounding box  
-     *        top is the latitude of the top (north) side of the bounding box  
+     *        left is the longitude of the left (west) side of the bounding box
+     *        bottom is the latitude of the bottom (south) side of the bounding box
+     *        right is the longitude of the right (east) side of the bounding box
+     *        top is the latitude of the top (north) side of the bounding box
      *
      * @param params
      *
-     * @return Job ID
-     *            Internally, this is the directory that the files are kept in
+     * @return Job ID Internally, this is the directory that the files are kept in
      */
     @POST
     @Path("/pullosm")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOsm(@QueryParam("BBOX") String bbox,
-                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
@@ -395,7 +391,7 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
-        // Not sure how to check if the main Overpass server is alive. 
+        // Not sure how to check if the main Overpass server is alive.
         // APICapabilities mainOsmApiCapabilities = getCapabilities(MAIN_OSMAPI_CAPABILITIES_URL);
         // logger.info("PullOSM: mainOSMAPI status = " + mainOsmApiCapabilities.getApiStatus());
         // if (mainOsmApiCapabilities.getApiStatus() == "offline" | mainOsmApiCapabilities.getApiStatus() == null) {
@@ -404,7 +400,7 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
@@ -423,12 +419,12 @@ public class GrailResource {
 
         try {
             // Pull data from the local OSM API Db
-            File localOSMFile = new File(workDir,"local.osm");
+            File localOSMFile = new File(workDir, "local.osm");
             if (localOSMFile.exists()) localOSMFile.delete();
 
             apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
             workflow.add(getLocalOSM);
 
             // Pull OSM data from the real, internet, OSM Db using overpass
@@ -437,7 +433,7 @@ public class GrailResource {
 
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
 
-            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
@@ -457,7 +453,6 @@ public class GrailResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-
     /**
      * Push OSM files to the Hoot DB
      *
@@ -473,17 +468,20 @@ public class GrailResource {
     @POST
     @Path("/pushtodb/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response pushtodb(@PathParam("jobId") String jobDir,
-                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response pushtodb(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Response response;
         JSONObject json = new JSONObject();
 
+        Users user = Users.fromRequest(request);
+
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
-        File localOSMFile = new File(workDir,"local.osm");
-        File internetOSMFile = new File(workDir,"internet.osm");
+        File localOSMFile = new File(workDir, "local.osm");
+        File internetOSMFile = new File(workDir, "internet.osm");
 
         // the first 10 digits of a random UUID _should_ be unique....
-        String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""),10);
+        String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""), 10);
         String localDbFile = "local" + randomString;
         String internetDbFile = "internet" + randomString;
 
@@ -500,34 +498,35 @@ public class GrailResource {
             if (!workDir.exists()) {
                 logger.error("PushToDb: jobDir {} does not exist.", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
-                }
-    
+            }
+
             if (!localOSMFile.exists() || !internetOSMFile.exists()) {
                 logger.error("PushToDb: Missing OSM files in {} ", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Missing OSM files in " + jobDir + ". Did you run pullosm?").build();
             }
 
             // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
-            // Till I figure out a better way to do this, we will use our version. 
-            apiParams.setInput1(localOSMFile.getAbsolutePath()); 
+            // Till I figure out a better way to do this, we will use our version.
+            apiParams.setUser(user);
+            apiParams.setInput1(localOSMFile.getAbsolutePath());
             apiParams.setOutput(localDbFile);
-            ExternalCommand pushApi = grailCommandFactory.build(mainJobId,apiParams,debugLevel,PushToDbCommand.class,this.getClass());
+            ExternalCommand pushApi = grailCommandFactory.build(mainJobId, apiParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushApi);
 
             overpassParams.setInput1(internetOSMFile.getAbsolutePath());
             overpassParams.setOutput(internetDbFile);
-            ExternalCommand pushOverpass = grailCommandFactory.build(mainJobId,overpassParams,debugLevel,PushToDbCommand.class,this.getClass());
+            ExternalCommand pushOverpass = grailCommandFactory.build(mainJobId, overpassParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushOverpass);
 
             // Now create a folder and link the uploaded layers to it
             linkParams.setFolder(jobDir);
             linkParams.setInput1(localDbFile);
             linkParams.setInput2(internetDbFile);
-            InternalCommand updateDb = updateDbCommandFactory.build(mainJobId,linkParams,this.getClass());
+            InternalCommand updateDb = updateDbCommandFactory.build(mainJobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
             jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
-        
+
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
         }
@@ -550,10 +549,10 @@ public class GrailResource {
      * This is not good but it works for a proof of concept
      *
      * POST hoot-services/grail/pullosmtodb?BBOX=left,bottom,right,top&DEBUG_LEVEL=<error,info,debug,verbose,trace>
-     *        left is the longitude of the left (west) side of the bounding box  
-     *        bottom is the latitude of the bottom (south) side of the bounding box  
-     *        right is the longitude of the right (east) side of the bounding box  
-     *        top is the latitude of the top (north) side of the bounding box  
+     *        left is the longitude of the left (west) side of the bounding box
+     *        bottom is the latitude of the bottom (south) side of the bounding box
+     *        right is the longitude of the right (east) side of the bounding box
+     *        top is the latitude of the top (north) side of the bounding box
      *
      * @param params
      *
@@ -563,8 +562,11 @@ public class GrailResource {
     @POST
     @Path("/pullosmtodb")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response pullOsmToDb(@QueryParam("BBOX") String bbox,
-                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response pullOsmToDb(@Context HttpServletRequest request,
+            @QueryParam("BBOX") String bbox,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
@@ -584,12 +586,14 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline" | railsPortCapabilities.getApiStatus() == null) {
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
         GrailParams apiParams = new GrailParams();
         GrailParams overpassParams = new GrailParams();
+        apiParams.setUser(user);
+        overpassParams.setUser(user);
 
         apiParams.setBounds(bbox);
         apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
@@ -603,12 +607,12 @@ public class GrailResource {
 
         try {
             // Pull data from the local OSM API Db
-            File localOSMFile = new File(workDir,"local.osm");
+            File localOSMFile = new File(workDir, "local.osm");
             if (localOSMFile.exists()) localOSMFile.delete();
 
             apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId,apiParams,this.getClass());
+            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
             workflow.add(getLocalOSM);
 
             // Pull OSM data from the real, internet, OSM Db using overpass
@@ -617,12 +621,12 @@ public class GrailResource {
 
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
 
-            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId,overpassParams,this.getClass());
+            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
 
             // Now we paste in the "pushtodb"
             // the first 10 digits of a random UUID _should_ be unique....
-            String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""),10);
+            String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""), 10);
             String localDbFile = "local" + randomString;
             String internetDbFile = "internet" + randomString;
 
@@ -630,27 +634,31 @@ public class GrailResource {
             GrailParams overpassPushParams = new GrailParams();
             GrailParams linkParams = new GrailParams();
 
+            apiPushParams.setUser(user);
+            overpassPushParams.setUser(user);
+            linkParams.setUser(user);
+
             // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
-            // Till I figure out a better way to do this, we will use our version. 
-            apiPushParams.setInput1(localOSMFile.getAbsolutePath()); 
+            // Till I figure out a better way to do this, we will use our version.
+            apiPushParams.setInput1(localOSMFile.getAbsolutePath());
             apiPushParams.setOutput(localDbFile);
-            ExternalCommand pushApi = grailCommandFactory.build(jobId,apiPushParams,debugLevel,PushToDbCommand.class,this.getClass());
+            ExternalCommand pushApi = grailCommandFactory.build(jobId, apiPushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushApi);
 
             overpassPushParams.setInput1(internetOSMFile.getAbsolutePath());
             overpassPushParams.setOutput(internetDbFile);
-            ExternalCommand pushOverpass = grailCommandFactory.build(jobId,overpassPushParams,debugLevel,PushToDbCommand.class,this.getClass());
+            ExternalCommand pushOverpass = grailCommandFactory.build(jobId, overpassPushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushOverpass);
 
             // Now create a folder and link the uploaded layers to it
             linkParams.setFolder(jobId);
             linkParams.setInput1(localDbFile);
             linkParams.setInput2(internetDbFile);
-            InternalCommand updateDb = updateDbCommandFactory.build(jobId,linkParams,this.getClass());
+            InternalCommand updateDb = updateDbCommandFactory.build(jobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
-        
+
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
         }
@@ -666,7 +674,6 @@ public class GrailResource {
 
         return response;
     }
-
 
     /**
      * Run Hootenanny differential conflation
@@ -683,21 +690,24 @@ public class GrailResource {
     @POST
     @Path("/rundiff/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runDiff(@PathParam("jobId") String jobDir,
-                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response runDiff(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Response response;
         JSONObject json = new JSONObject();
 
+        Users user = Users.fromRequest(request);
+
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
-        File localOSMFile = new File(workDir,"local.osm");
-        File internetOSMFile = new File(workDir,"internet.osm");
+        File localOSMFile = new File(workDir, "local.osm");
+        File internetOSMFile = new File(workDir, "internet.osm");
 
         try {
             if (!workDir.exists()) {
                 logger.error("RunDiff: jobDir {} does not exist.", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
-                }
-    
+            }
+
             if (!localOSMFile.exists() || !internetOSMFile.exists()) {
                 logger.error("RunDiff: Missing OSM files in {} ", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Missing OSM files in " + jobDir + ". Did you run pullosm?").build();
@@ -706,19 +716,20 @@ public class GrailResource {
             String newJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
             GrailParams params = new GrailParams();
 
-            File diffFile = new File(workDir,"diff.osc");
+            File diffFile = new File(workDir, "diff.osc");
             if (diffFile.exists()) diffFile.delete();
 
+            params.setUser(user);
             params.setOutput(diffFile.getAbsolutePath());
-            params.setInput1(localOSMFile.getAbsolutePath()); 
+            params.setInput1(localOSMFile.getAbsolutePath());
             params.setInput2(internetOSMFile.getAbsolutePath());
 
-            ExternalCommand makeDiff = grailCommandFactory.build(newJobId,params,debugLevel,RunDiffCommand.class,this.getClass());
+            ExternalCommand makeDiff = grailCommandFactory.build(newJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
 
             Command[] workflow = { makeDiff };
 
             jobProcessor.submitAsync(new Job(newJobId, workflow));
-        
+
             json.put("jobId", newJobId);
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
@@ -735,7 +746,6 @@ public class GrailResource {
 
         return response;
     }
-
 
     /**
      * Apply changesets to the OSM API Db
@@ -758,10 +768,12 @@ public class GrailResource {
     @POST
     @Path("/applydiff/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runApply(@PathParam("jobId") String jobDir,
-                                @QueryParam("USER_ID") String userId,
-                                @DefaultValue("false") @QueryParam("APPLY_TAGS") Boolean applyTags,
-                                @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+    public Response runApply(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @DefaultValue("false") @QueryParam("APPLY_TAGS") Boolean applyTags,
+            @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
@@ -773,27 +785,58 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline"  | railsPortCapabilities.getApiStatus() == null) {
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
-        params.setUserId(userId);
+        params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
 
-        File geomDiffFile = new File(workDir,"diff.osc");
-        
+        File geomDiffFile = new File(workDir, "diff.osc");
+
         if (geomDiffFile.exists()) {
             params.setOutput(geomDiffFile.getAbsolutePath());
 
             try {
-                    String geomJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-                    json.put("jobid:geometryapply",geomJobId);
+                String geomJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+                json.put("jobid:geometryapply", geomJobId);
 
-                    ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+                ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
-                    Command[] workflow = { applyGeomChange };
-                    jobProcessor.submitAsync(new Job(geomJobId, workflow));
+                Command[] workflow = { applyGeomChange };
+                jobProcessor.submitAsync(new Job(geomJobId, workflow));
+            }
+            catch (WebApplicationException wae) {
+                throw wae;
+            }
+            catch (IllegalArgumentException iae) {
+                throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+            }
+            catch (Exception e) {
+                String msg = "Error during apply geometry diff! Params: " + params;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
+        } // End GeomDiff
+        else {
+            logger.error("RunApply: No diff.osc file in {}.", workDir.getAbsolutePath());
+            json.put("geometryapply", "No geometry diff file (diff.osc) in " + jobDir);
+        }
+
+        File tagDiffFile = new File(workDir, "diff.tags.osc");
+
+        if (applyTags) {
+            if (tagDiffFile.exists()) {
+                params.setOutput(tagDiffFile.getAbsolutePath());
+
+                try {
+                    String tagJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+                    json.put("jobid:tagapply", tagJobId);
+
+                    ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
+
+                    Command[] workflow = { applyTagChange };
+                    jobProcessor.submitAsync(new Job(tagJobId, workflow));
                 }
                 catch (WebApplicationException wae) {
                     throw wae;
@@ -802,46 +845,15 @@ public class GrailResource {
                     throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
                 }
                 catch (Exception e) {
-                    String msg = "Error during apply geometry diff! Params: " + params;
+                    String msg = "Error during apply tag diff! Params: " + params;
                     throw new WebApplicationException(e, Response.serverError().entity(msg).build());
                 }
-        } // End GeomDiff
-        else {
-                logger.error("RunApply: No diff.osc file in {}.", workDir.getAbsolutePath());
-                json.put("geometryapply","No geometry diff file (diff.osc) in " + jobDir);
-        }
-
-        File tagDiffFile = new File(workDir,"diff.tags.osc");
-
-        if (applyTags) {
-            if (tagDiffFile.exists()) {
-                params.setOutput(tagDiffFile.getAbsolutePath());
-
-                try {
-                        String tagJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-                        json.put("jobid:tagapply",tagJobId);
-
-                        ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
-
-                        Command[] workflow = { applyTagChange };
-                        jobProcessor.submitAsync(new Job(tagJobId, workflow));
-                    }
-                    catch (WebApplicationException wae) {
-                        throw wae;
-                    }
-                    catch (IllegalArgumentException iae) {
-                        throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-                    }
-                    catch (Exception e) {
-                        String msg = "Error during apply tag diff! Params: " + params;
-                        throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-                    }
             }
             else {
-                    logger.error("RunApply: Requested APPLY_TAGS but no diff.tags.osc file in {}.", workDir.getAbsolutePath());
-                    json.put("tagapply","Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
+                logger.error("RunApply: Requested APPLY_TAGS but no diff.tags.osc file in {}.", workDir.getAbsolutePath());
+                json.put("tagapply", "Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
             }
-        } 
+        }
 
         return Response.ok(json.toJSONString()).build();
     }
@@ -864,9 +876,11 @@ public class GrailResource {
     @POST
     @Path("/applygeomdiff/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runApplyGeom(@PathParam("jobId") String jobDir,
-                                @QueryParam("USER_ID") String userId,
-                                @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+    public Response runApplyGeom(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
@@ -878,47 +892,46 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("RunGeomApply: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline"  | railsPortCapabilities.getApiStatus() == null) {
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
-        params.setUserId(userId);
+        params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
 
-        File geomDiffFile = new File(workDir,"diff.osc");
-        
+        File geomDiffFile = new File(workDir, "diff.osc");
+
         if (geomDiffFile.exists()) {
             params.setOutput(geomDiffFile.getAbsolutePath());
 
             try {
-                    String geomJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-                    json.put("jobid",geomJobId);
+                String geomJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+                json.put("jobid", geomJobId);
 
-                    ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+                ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
-                    Command[] workflow = { applyGeomChange };
-                    jobProcessor.submitAsync(new Job(geomJobId, workflow));
-                }
-                catch (WebApplicationException wae) {
-                    throw wae;
-                }
-                catch (IllegalArgumentException iae) {
-                    throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-                }
-                catch (Exception e) {
-                    String msg = "Error during apply geometry diff! Params: " + params;
-                    throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-                }
+                Command[] workflow = { applyGeomChange };
+                jobProcessor.submitAsync(new Job(geomJobId, workflow));
+            }
+            catch (WebApplicationException wae) {
+                throw wae;
+            }
+            catch (IllegalArgumentException iae) {
+                throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+            }
+            catch (Exception e) {
+                String msg = "Error during apply geometry diff! Params: " + params;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
         } // End GeomDiff
         else {
-                logger.error("ApplyGeomDiff: No diff.osc file in {}.", workDir.getAbsolutePath());
-                json.put("error","No geometry diff file (diff.osc) in " + jobDir);
+            logger.error("ApplyGeomDiff: No diff.osc file in {}.", workDir.getAbsolutePath());
+            json.put("error", "No geometry diff file (diff.osc) in " + jobDir);
         }
 
         return Response.ok(json.toJSONString()).build();
     }
-
 
     /**
      * Apply just the tag diff to the OSM API Db
@@ -938,9 +951,11 @@ public class GrailResource {
     @POST
     @Path("/applytagdiff/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runApplyTag(@PathParam("jobId") String jobDir,
-                                @QueryParam("USER_ID") String userId,
-                                @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+    public Response runApplyTag(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @DefaultValue("info") @QueryParam("DEBUG_LEVEL") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
@@ -952,47 +967,46 @@ public class GrailResource {
 
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("ApplyTagDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == "offline"  | railsPortCapabilities.getApiStatus() == null) {
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
-        params.setUserId(userId);
+        params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
 
-        File tagDiffFile = new File(workDir,"diff.tags.osc");
+        File tagDiffFile = new File(workDir, "diff.tags.osc");
 
         if (tagDiffFile.exists()) {
             params.setOutput(tagDiffFile.getAbsolutePath());
 
             try {
-                    String tagJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-                    json.put("jobid:",tagJobId);
+                String tagJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+                json.put("jobid:", tagJobId);
 
-                    ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId,params,debugLevel,ApplyChangesetCommand.class,this.getClass());
+                ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
-                    Command[] workflow = { applyTagChange };
-                    jobProcessor.submitAsync(new Job(tagJobId, workflow));
-                }
-                catch (WebApplicationException wae) {
-                    throw wae;
-                }
-                catch (IllegalArgumentException iae) {
-                    throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-                }
-                catch (Exception e) {
-                    String msg = "Error during apply tag diff! Params: " + params;
-                    throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-                }
+                Command[] workflow = { applyTagChange };
+                jobProcessor.submitAsync(new Job(tagJobId, workflow));
+            }
+            catch (WebApplicationException wae) {
+                throw wae;
+            }
+            catch (IllegalArgumentException iae) {
+                throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+            }
+            catch (Exception e) {
+                String msg = "Error during apply tag diff! Params: " + params;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
         }
         else {
-                logger.error("RunApply: Requested APPLY_TAGS but no diff.tags.osc file in {}.", workDir.getAbsolutePath());
-                json.put("tagapply","Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
+            logger.error("RunApply: Requested APPLY_TAGS but no diff.tags.osc file in {}.", workDir.getAbsolutePath());
+            json.put("tagapply", "Requested APPLY_TAGS but no tag diff file (diff.tags.osc) in " + jobDir);
         }
 
         return Response.ok(json.toJSONString()).build();
     }
-
 
     /**
      * Get the geometry diff file from job.
@@ -1032,7 +1046,6 @@ public class GrailResource {
         return response;
     }
 
-
     /**
      * Get the tag diff file from job.
      *
@@ -1071,9 +1084,8 @@ public class GrailResource {
         return response;
     }
 
-
     /**
-     * To retrieve the tag error diff  file from job make a GET request.
+     * To retrieve the tag error diff file from job make a GET request.
      *
      * GET hoot-services/grail/tagdifferrror/[job id from export job]
      *
@@ -1111,7 +1123,6 @@ public class GrailResource {
 
         return response;
     }
-
 
     /**
      * To retrieve the geometry error diff file from job make a GET request.
@@ -1153,7 +1164,6 @@ public class GrailResource {
         return response;
     }
 
-
     // Get a file if it exists
     private static File getFile(String jobId, String outputName, String fileExt) {
         File tmpFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
@@ -1164,7 +1174,6 @@ public class GrailResource {
 
         return tmpFile;
     }
-
 
     // Get Capabilities from an OSM API Db
     private static APICapabilities getCapabilities(String capabilitiesUrl) {
@@ -1181,59 +1190,52 @@ public class GrailResource {
 
             if (nl != null && nl.getLength() > 0) {
                 Node nNode = nl.item(0);
-                
+
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                   Element eElement = (Element) nNode;
+                    Element eElement = (Element) nNode;
 
-                   // OK. this is ugly. Apparently there is some way to parse XML to POJO
-                   NodeList tList = eElement.getElementsByTagName("version");
-                   String tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
-                   params.setMaxVersion(Double.parseDouble(tValue));
+                    // OK. this is ugly. Apparently there is some way to parse XML to POJO
+                    NodeList tList = eElement.getElementsByTagName("version");
+                    String tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
+                    params.setMaxVersion(Double.parseDouble(tValue));
 
-                   tValue = tList.item(0).getAttributes().getNamedItem("minimum").getNodeValue();
-                   params.setMinVersion(Double.parseDouble(tValue));
+                    tValue = tList.item(0).getAttributes().getNamedItem("minimum").getNodeValue();
+                    params.setMinVersion(Double.parseDouble(tValue));
 
-                   tList = eElement.getElementsByTagName("area");
-                   tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
-                   params.setMaxArea(Double.parseDouble(tValue));
+                    tList = eElement.getElementsByTagName("area");
+                    tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
+                    params.setMaxArea(Double.parseDouble(tValue));
 
-                   tList = eElement.getElementsByTagName("waynodes");
-                   tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
-                   params.setWaynodes(Long.parseLong(tValue));
+                    tList = eElement.getElementsByTagName("waynodes");
+                    tValue = tList.item(0).getAttributes().getNamedItem("maximum").getNodeValue();
+                    params.setWaynodes(Long.parseLong(tValue));
 
-                   tList = eElement.getElementsByTagName("changesets");
-                   tValue = tList.item(0).getAttributes().getNamedItem("maximum_elements").getNodeValue();
-                   params.setChangesets(Long.parseLong(tValue));
+                    tList = eElement.getElementsByTagName("changesets");
+                    tValue = tList.item(0).getAttributes().getNamedItem("maximum_elements").getNodeValue();
+                    params.setChangesets(Long.parseLong(tValue));
 
-                   tList = eElement.getElementsByTagName("timeout");
-                   tValue = tList.item(0).getAttributes().getNamedItem("seconds").getNodeValue();
-                   params.setTimeout(Long.parseLong(tValue));
+                    tList = eElement.getElementsByTagName("timeout");
+                    tValue = tList.item(0).getAttributes().getNamedItem("seconds").getNodeValue();
+                    params.setTimeout(Long.parseLong(tValue));
 
-                   tList = eElement.getElementsByTagName("status");
-                   tValue = tList.item(0).getAttributes().getNamedItem("database").getNodeValue();
-                   params.setDatabaseStatus(tValue);
+                    tList = eElement.getElementsByTagName("status");
+                    tValue = tList.item(0).getAttributes().getNamedItem("database").getNodeValue();
+                    params.setDatabaseStatus(tValue);
 
-                   tValue = tList.item(0).getAttributes().getNamedItem("api").getNodeValue();
-                   params.setApiStatus(tValue);
+                    tValue = tList.item(0).getAttributes().getNamedItem("api").getNodeValue();
+                    params.setApiStatus(tValue);
 
-                   tValue = tList.item(0).getAttributes().getNamedItem("gpx").getNodeValue();
-                   params.setGpxStatus(tValue);
+                    tValue = tList.item(0).getAttributes().getNamedItem("gpx").getNodeValue();
+                    params.setGpxStatus(tValue);
                 }
             }
         }
-        catch (IOException ioe)
-        {
+        catch (Exception e) {
             // throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
-            // ioe.printStackTrace();
-        }
-        catch (ParserConfigurationException e) {
-        }
-        catch (SAXException se)
-        {
-            se.printStackTrace();
+             e.printStackTrace();
         }
 
-    return params;
+        return params;
     }
 
 }
