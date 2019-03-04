@@ -120,7 +120,6 @@ private:
   std::deque<ConstWayPtr> _orderWaysForRing(const std::vector<ConstWayPtr>& partials) const;
 
   geos::geom::LinearRing* _toLinearRing(const ConstWayPtr& w) const;
-
 };
 
 }

@@ -57,6 +57,10 @@ public:
   void printStats(const QList<SingleStat>& stats);
 
   virtual int runSimple(QStringList args) override;
+
+private:
+
+  void _updateConfigOptionsForAttributeConflation();
 };
 
 }
