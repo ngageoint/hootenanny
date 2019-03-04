@@ -122,11 +122,10 @@ class ConflateCommand extends ExternalCommand {
 
         if (params.getHoot2() != null) { // hoot 2
         	conflationType = params.getConflationType();
-        	conflationType = conflationType == null ? "" : conflationType + "Conflation.conf";
+        	conflationType = conflationType == null ? "" : conflationType + "Conflation";
         	conflationAlgorithm = params.getConflateAlgorithm();
-        	conflationAlgorithm = conflationAlgorithm == null ? "" : conflationAlgorithm + "Algorithm.conf";
+        	conflationAlgorithm = conflationAlgorithm == null ? "" : conflationAlgorithm + "Algorithm";
         }
-
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
@@ -139,25 +138,25 @@ class ConflateCommand extends ExternalCommand {
         substitutionMap.put("STATS", stats);
 
         String command = null;
-        if (conflationAlgorithm == null && conflationType == null) {
+        if (params.getHoot2() == null) { // hoot1
             command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else if (conflationType.isEmpty()) {
         	if (conflationAlgorithms.stream().noneMatch(a -> a.equals(conflationAlgorithm))) {
-        		throw new IllegalArgumentException("Conflation Algorithm is not valid");
+        		throw new IllegalArgumentException(String.format("Conflation Algorithm \"%s\" is not valid.", conflationAlgorithm));
         	}
 
-        	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm);
+        	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
             command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else if (conflationAlgorithm.isEmpty()) {
         	if (conflationTypes.stream().noneMatch(t -> t.equals(conflationType))) {
-        		throw new IllegalArgumentException("ConflationAlgorithm is not valid");
+        		throw new IllegalArgumentException(String.format("Conflation Type \"%s\" is not valid.", conflationType));
         	}
 
-        	substitutionMap.put("CONFLATION_TYPE", conflationType);
+        	substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
             command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else {
-        	substitutionMap.put("CONFLATION_TYPE", conflationType);
-          	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm);
+        	substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
+          	substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
             command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         }
 

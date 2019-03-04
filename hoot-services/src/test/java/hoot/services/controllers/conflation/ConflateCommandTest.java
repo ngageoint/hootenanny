@@ -160,11 +160,11 @@ public class ConflateCommandTest {
         debugLevel = "error";
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATE_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
-        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATE_ALGORITHM"));
-        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATE_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_ALGORITHM"));
+        assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
 
     }
 
