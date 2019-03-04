@@ -180,7 +180,7 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 
 First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
 SQL file.  Must be a positive number.  Use this when working with an offline database and know the
-ID range you want to assign to relation records.  If writing to an OSM API databse, this option is
+ID range you want to assign to relation records.  If writing to an OSM API database, this option is
 ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
 === apidb.bulk.inserter.stxxl.map.min.size
@@ -235,6 +235,14 @@ option may result in some false positive road joining.
 If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
 bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
 reference dataset will be lost.
+
+=== attribute.conflation.allow.reviews.by.score
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all reviews outside of the score range established by the configuration options
+review.score.criterion.max/min.threshold will be removed.
 
 === attribute.score.extractor.use.weight
 
@@ -3197,7 +3205,7 @@ Use this class for calculating the difference between element tags. If the diffe
 * Default Value: ``
 
 The plugin name of an element criterion used to select elements to delete.  To pass in complex
-nested criterion, use the Hootenanny Javascript interface instead.
+nested criteria, use the Hootenanny Javascript interface instead.
 
 === remove.elements.visitor.recursive
 
@@ -3236,6 +3244,32 @@ The tag the ReplaceTagVisitor replaces, of the form key=value.
 * Default Value: ``
 
 The tag the ReplaceTagVisitor uses as a replacement tag; of the form key=value.
+
+=== review.score.criterion.invert.thresholding
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold
+will pass the filter.
+
+=== review.score.criterion.max.threshold
+
+* Data Type: double
+* Default Value: `1.0`
+
+The score threshold above which reviews will not pass the filter.  A value of 1.0 signifies no
+maximum score threshold.  This currently works with Attribute Conflation only and can be enabled
+with attribute.conflation.allow.reviews.by.score.
+
+=== review.score.criterion.min.threshold
+
+* Data Type: double
+* Default Value: `0.0`
+
+The score threshold below which reviews will not pass the filter.  A value of 0.0 signifies no
+minimum score threshold.  This currently works with Attribute Conflation only and can be enabled
+with attribute.conflation.allow.reviews.by.score.
 
 === rubber.sheet.debug
 
@@ -3375,7 +3409,7 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Default Value: ``
 
 The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
-in complex nested criterion, use the Hootenanny Javascript interface instead.
+in complex nested criteria, use the Hootenanny Javascript interface instead.
 
 === set.tag.value.visitor.key
 
@@ -3945,7 +3979,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 

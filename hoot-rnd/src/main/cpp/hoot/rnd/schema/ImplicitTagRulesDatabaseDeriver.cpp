@@ -157,6 +157,10 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
   {
     LOG_WARN("Keeping temp file: " << _thresholdedCountFile->fileName());
   }
+  if (!QFile(input).exists())
+  {
+    throw HootException("Unable to clean file; file doesn't exist.");
+  }
 
   //This removes lines with occurrence counts below the specified threshold; not exactly sure why
   //one needs to be subtracted from the min occurrences here, though, for the result to be correct
@@ -166,7 +170,7 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
   LOG_DEBUG(cmd);
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Unable to sort input file.");
+    throw HootException("Unable to clean input file.");
   }
   _thresholdedCountFile->close();
 }

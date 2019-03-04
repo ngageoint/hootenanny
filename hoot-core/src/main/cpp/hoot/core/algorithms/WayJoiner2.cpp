@@ -70,15 +70,19 @@ void WayJoiner2::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-1");
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-siblings");
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-2");
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
 
   //  Clear out any remaining unjoined parent ids
   _resetParents();
@@ -88,9 +92,21 @@ void WayJoiner2::join(const OsmMapPtr& map)
   if (ConfigOptions().getAttributeConflationAggressiveHighwayJoining())
   {
     _joinUnsplitWaysAtNode();
+    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
   }
 
-  // Remove all the relations created during conflation.
+  // A bit of a hack, but we will assume WayJoiner2 is always used with Attribute Conflation for now
+  // and swap out the element remover that removes all reviews with the one that removes them based
+  // on score thresholding.
+  // TODO: move this logic somewhere else
+  if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+  {
+    conf().set(
+      ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
+  }
+  LOG_VART(conf().get(ConfigOptions::getRemoveElementsVisitorElementCriterionKey()));
+
+  // Remove all the multilinestring relations created during conflation.
 
   // This isn't the best place to do this, but Attribute Conflation is already using
   // RemoveElementsVisitor with another criterion in its config and RemoveElementsVisitor doesn't
@@ -99,9 +115,9 @@ void WayJoiner2::join(const OsmMapPtr& map)
   // think about it more before rushing something.  Also negative about this, is that it assumes
   // we're always using Attribute Conflation with WayJoiner2, which is currently the case, but
   // really too tightly coupled of a relationship regardless.
+  // TODO: move this logic somewhere else
   _removeHootCreatedMultiLineStringRelations(map);
-
-  OsmMapWriterFactory::writeDebugMap(map);
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-multilinestring-relations");
 }
 
 void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
@@ -240,47 +256,51 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
            endpointItr != endpoints.end(); ++endpointItr)
       {
         const set<long>& connectedWaysIds = nodeToWayMap->getWaysByNode(*endpointItr);
-        for (set<long>::const_iterator connectedItr = connectedWaysIds.begin();
-             connectedItr != connectedWaysIds.end(); ++connectedItr)
-        {
-          WayPtr connectedWay = _map->getWay(*connectedItr);
-          // Not sure how the connected way could be empty...
-          if (connectedWay && highwayCrit.isSatisfied(connectedWay))
+        LOG_VART(connectedWaysIds);
+        //if (connectedWaysIds.size() < 3) // This is too restrictive.
+        //{
+          for (set<long>::const_iterator connectedItr = connectedWaysIds.begin();
+               connectedItr != connectedWaysIds.end(); ++connectedItr)
           {
-            LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
-            LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
-            const QString roadVal = connectedWay->getTags().get("highway").trimmed();
-
-            // Since this is basically an unmarked, non-oneway road, let's check both the regular
-            // and reversed versions of the way we want to join.
-            WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
-            reversedWayToJoinCopy->reverseOrder();
-
-            if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
-                (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
-                 DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
+            WayPtr connectedWay = _map->getWay(*connectedItr);
+            // Not sure how the connected way could be empty...
+            if (connectedWay && highwayCrit.isSatisfied(connectedWay))
             {
-              LOG_TRACE(
-                "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
-                " and connected way: " << connectedWay->getElementId() << "...");
-              joinAttempts++;
-              if (_joinWays(connectedWay, wayToJoin))
+              LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
+              LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
+              const QString roadVal = connectedWay->getTags().get("highway").trimmed();
+
+              // Since this is basically an unmarked, non-oneway road, let's check both the regular
+              // and reversed versions of the way we want to join.
+              WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
+              reversedWayToJoinCopy->reverseOrder();
+
+              if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
+                  (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
+                   DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
               {
-                successfulJoins++;
                 LOG_TRACE(
-                  "Successfully joined unsplit way: " << wayToJoin->getElementId() <<
-                  " and connected way: " << connectedWay->getElementId());
-                break;
-              }
-              else
-              {
-                LOG_TRACE(
-                  "Unable to join unsplit way: " << wayToJoin->getElementId() <<
-                  " and connected way: " << connectedWay->getElementId());
+                  "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
+                  " and connected way: " << connectedWay->getElementId() << "...");
+                joinAttempts++;
+                if (_joinWays(connectedWay, wayToJoin))
+                {
+                  successfulJoins++;
+                  LOG_TRACE(
+                    "Successfully joined unsplit way: " << wayToJoin->getElementId() <<
+                    " and connected way: " << connectedWay->getElementId());
+                  break;
+                }
+                else
+                {
+                  LOG_TRACE(
+                    "Unable to join unsplit way: " << wayToJoin->getElementId() <<
+                    " and connected way: " << connectedWay->getElementId());
+                }
               }
             }
           }
-        }
+        //}
       }
     }
   }
@@ -758,7 +778,9 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   //  Keep the conflated status in the parent if the child being merged is conflated
-  if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
+  if ((parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated) ||
+      (parent->getStatus() == Status::Unknown1 && child->getStatus() == Status::Unknown2) ||
+      (parent->getStatus() == Status::Unknown2 && child->getStatus() == Status::Unknown1))
     parent->setStatus(Status::Conflated);
 
   //  Update any relations that contain the child to use the parent and remove the child.
@@ -766,7 +788,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
-  LOG_VART(parent);
+  LOG_TRACE("Keeper way: " << parent);
 
   _numJoined++;
 

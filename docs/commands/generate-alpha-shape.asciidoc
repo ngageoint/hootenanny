@@ -46,3 +46,8 @@ Calculate an alpha shape using the points in CapitalHeightsBuildings.shp:
 hoot generate-alpha-shape CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
 --------------------------------------
 
+=== See Also
+
+* `cookie.cutter.*` configuration options
+* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+

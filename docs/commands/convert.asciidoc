@@ -37,6 +37,13 @@ convert "(input1[;layer]) [input2[;layer]]" (output) [--trans translation] [--li
 If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before 
 writing the result to the output.
 
+example:
+--------------------------------------
+# Remove relations from a map
+hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \ 
+  -D remove.elements.visitor.element.criterion="hoot::RelationCriterion" input.osm output.osm
+--------------------------------------
+
 Use the following configuration options to control the size of the element memory cache (valid only when converting OSM to an OGR format).  This
 can prevent memory issues:
 * `element.cache.size.node`

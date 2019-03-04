@@ -57,6 +57,10 @@ public:
 
 protected:
 
+  // When roads are split and the pieces stored in multilinestring relations, this decides if the
+  // tags get removed from the constituent way members.
+  bool _removeTagsFromWayMembers;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 

@@ -1,3 +1,4 @@
+[[multiary-score-poi-matches]]
 == multiary-score-poi-matches
 
 === Description
@@ -19,3 +20,6 @@ TODO: this doc needs verification
 multiary-score-poi-matches [--confusion] (input1 input2) [input1 input2 ...] (output)
 --------------------------------------
 
+=== See Also
+
+* <<hootDevGuide, ManualMultiaryConflation>>
