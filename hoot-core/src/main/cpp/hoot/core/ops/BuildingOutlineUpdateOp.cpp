@@ -291,16 +291,15 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     const boost::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
-    LOG_VART(outlineElement);
     _mergeNodes(outlineElement, building);
-    LOG_VART(outlineElement);
-    outlineElement->setTags(building->getTags());
-    LOG_VART(outlineElement);
+    outlineElement->setTags(building->getTags());;
     // We don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
     LOG_VART(outlineElement);
-
-    //_buildingRelationIds.insert(building->getElementId());
+    if (!_removeBuildingRelations)
+    {
+      building->addElement(MetadataTags::RoleOutline(), outlineElement);
+    }
   }
 
   LOG_VART(building);
