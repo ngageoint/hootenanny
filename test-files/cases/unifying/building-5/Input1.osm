@@ -52,9 +52,9 @@
         <tag k="height" v="21"/>
         <tag k="length" v="70"/>
         <tag k="building" v="yes"/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{da9dfa18-a887-40d7-8750-475a63cd14a4}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -73,9 +73,9 @@
         <tag k="height" v="20"/>
         <tag k="length" v="75"/>
         <tag k="building" v="yes"/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{824d0dbe-ec1e-4a8f-bcbb-23ff49fe548a}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -86,9 +86,9 @@
         <nd ref="4532"/>
         <nd ref="4529"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{6739b3ac-bc84-4018-b100-3d77e61254a9}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
     </way>
     <way visible="true" id="751" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
@@ -106,9 +106,9 @@
         <nd ref="4556"/>
         <nd ref="4545"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{ac7a8da6-b829-4f96-86f0-bd05ee6d0446}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
     </way>
     <way visible="true" id="1020" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
@@ -123,9 +123,9 @@
         <tag k="height" v="18"/>
         <tag k="length" v="82"/>
         <tag k="building" v="yes"/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{95d410fa-03c8-43ec-be57-d7b8a9b77a5c}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
     </way>
     <way visible="true" id="1021" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
@@ -140,9 +140,9 @@
         <tag k="height" v="31"/>
         <tag k="length" v="76"/>
         <tag k="building" v="yes"/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{57627fc4-6008-4286-9a3a-8467af381fd9}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
     </way>
     <way visible="true" id="1172" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
@@ -157,9 +157,9 @@
         <tag k="height" v="20"/>
         <tag k="length" v="66"/>
         <tag k="building" v="yes"/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{2ed42705-af19-4a1b-a4cc-dadd1426ea99}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z"/>
     </way>
     <relation visible="true" id="-369575" timestamp="1970-01-01T00:00:00Z" version="1">
