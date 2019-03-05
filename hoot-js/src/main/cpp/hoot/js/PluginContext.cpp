@@ -47,6 +47,8 @@ const double PluginContext::UNSPECIFIED_DEFAULT = -999999e9;
 
 PluginContext::PluginContext()
 {
+  qSetGlobalQHashSeed(0);
+
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
 
