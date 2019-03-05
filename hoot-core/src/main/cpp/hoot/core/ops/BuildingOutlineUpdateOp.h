@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <set>
@@ -46,7 +47,7 @@ class OsmMap;
  * of all the building parts.
  */
 class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo
+  public OperationStatusInfo, public Configurable
 {
 public:
 
@@ -74,10 +75,16 @@ public:
   virtual QString getDescription() const override
   { return "Updates any multi-part building outlines that changed during conflation"; }
 
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
   boost::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;
+  // If enabled, this will remove all building relations that were used as a source for creating
+  // the outline multipoly relations by this class.
+  bool _removeBuildingRelations;
+  std::set<ElementId> _buildingRelationIds;
 
   void _createOutline(const RelationPtr& building);
 
@@ -90,9 +97,7 @@ private:
   void _mergeNodes(const boost::shared_ptr<Element>& changed,
     const RelationPtr& reference);
 
-  void _unionOutline(const RelationPtr& building, boost::shared_ptr<geos::geom::Geometry> outline,
-                     ElementPtr buildingMember);
-
+  void _deleteBuildingRelations();
 };
 
 }
