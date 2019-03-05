@@ -66,7 +66,7 @@ public:
    * @param way the way to be cleaned
    * @param map the map owning the way to be cleaned
    */
-  static void cleanWay(WayPtr way, const ConstOsmMapPtr& map);
+  static void cleanWay(WayPtr way, const OsmMapPtr& map);
 
   /**
    * Cleans an unmodifiable way by removing duplicate nodes and coordinate from a copy of it
@@ -77,7 +77,7 @@ public:
    * @return an unmodifiable cleaned way
    * @see cleanWay
    */
-  static ConstWayPtr cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map);
+  static ConstWayPtr cleanWay(ConstWayPtr way, const OsmMapPtr& map);
 
   /**
    * Cleans unmodifiable ways by removing duplicate nodes and coordinate from copies of them and
@@ -91,7 +91,7 @@ public:
    * @return a collection of unmodifiable cleaned ways
    */
   static std::vector<ConstWayPtr> cleanWays(const std::vector<ConstWayPtr>& ways,
-                                            const ConstOsmMapPtr& map);
+                                            const OsmMapPtr& map);
 
 private:
 
