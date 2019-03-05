@@ -70,7 +70,8 @@ std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
   d.className = className();
-  d.description = "identifies clusters within a match set and merges each cluster.";
+  d.description =
+    "Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.";
   d.experimental = true;
   vector<CreatorDescription> result;
   result.push_back(d);

@@ -39,11 +39,19 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, PartialNetworkMerger)
+
+PartialNetworkMerger::PartialNetworkMerger() :
+MergerBase()
+{
+}
 
 PartialNetworkMerger::PartialNetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   QSet<ConstEdgeMatchPtr> edgeMatches,

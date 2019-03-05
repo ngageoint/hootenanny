@@ -35,6 +35,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/core/util/Factory.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -46,7 +47,14 @@ using namespace v8;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
+
 unsigned int ScriptMerger::logWarnCount = 0;
+
+ScriptMerger::ScriptMerger() :
+MergerBase()
+{
+}
 
 ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :

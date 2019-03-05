@@ -29,11 +29,18 @@
 // hoot
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, MarkForReviewMerger)
+
+MarkForReviewMerger::MarkForReviewMerger()
+{
+}
 
 MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs,
                                          QString note, QString reviewType, double score) :

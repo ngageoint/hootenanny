@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDateTime>
@@ -43,7 +44,14 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Match, BuildingMatch)
+
 QString BuildingMatch::_matchName = "Building";
+
+BuildingMatch::BuildingMatch() :
+Match()
+{
+}
 
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
                              boost::shared_ptr<const BuildingRfClassifier> rf,

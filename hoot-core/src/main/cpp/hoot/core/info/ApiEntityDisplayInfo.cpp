@@ -44,6 +44,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/merging/Merger.h>
 
 //  Qt
 #include <QTextStream>
@@ -71,10 +73,10 @@ static const int MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
 QString getApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
-                      const bool displayType,
-                      //the size of the longest names plus a 3 space buffer; the value passed in
-                      //here by callers may have to be adjusted over time for some entity types
-                      const int maxNameSize)
+                       const bool displayType,
+                       //the size of the longest names plus a 3 space buffer; the value passed in
+                       //here by callers may have to be adjusted over time for some entity types
+                       const int maxNameSize)
 {
   LOG_VARD(apiEntityBaseClassName);
   std::vector<std::string> classNames =
@@ -135,8 +137,8 @@ QString getApiEntities(const std::string& apiEntityBaseClassName, const QString 
   return ts.readAll();
 }
 
-//matchers/mergers have a more roundabout way to get at the description, so we'll create a new
-//display method for them
+// match/merger creators have a more roundabout way to get at the description, so we'll create a new
+// display method for them
 template<typename ApiEntity>
 QString getApiEntities2(const std::string& apiEntityClassName)
 {
@@ -303,14 +305,30 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
   else if (apiEntityType == "matchers")
   {
     msg += "):";
-    msg.prepend("Conflate Matchers");
+    msg.prepend("Matchers");
     ts << msg << endl;
-    ts << getApiEntities2<MatchCreator>(MatchCreator::className());
+    ts << getApiEntities<Match>(
+      Match::className(), "matcher", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "mergers")
   {
     msg += "):";
-    msg.prepend("Conflate Mergers");
+    msg.prepend("Mergers");
+    ts << msg << endl;
+    ts << getApiEntities<Merger>(
+      Merger::className(), "merger", false, MAX_NAME_SIZE);
+  }
+  else if (apiEntityType == "match-creators")
+  {
+    msg += "):";
+    msg.prepend("Conflate Match Creators");
+    ts << msg << endl;
+    ts << getApiEntities2<MatchCreator>(MatchCreator::className());
+  }
+  else if (apiEntityType == "merger-creators")
+  {
+    msg += "):";
+    msg.prepend("Conflate Merger Creators");
     ts << msg << endl;
     ts << getApiEntities2<MergerCreator>(MergerCreator::className());
   }

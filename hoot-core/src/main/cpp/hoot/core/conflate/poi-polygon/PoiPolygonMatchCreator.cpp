@@ -111,7 +111,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   result.push_back(
     CreatorDescription(
       className(),
-      "Matches POIs to polygons",
+      "Generates matchers that match POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
       //input types

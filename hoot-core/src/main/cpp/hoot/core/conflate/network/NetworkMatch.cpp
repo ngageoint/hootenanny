@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Standard
 #include <math.h>
@@ -36,6 +37,13 @@ using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Match, NetworkMatch)
+
+NetworkMatch::NetworkMatch() :
+Match()
+{
+}
 
 NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatchPtr edgeMatch,
   double score,

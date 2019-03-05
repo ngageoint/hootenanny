@@ -43,11 +43,14 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, BuildingMerger)
 
 class DeletableBuildingCriterion : public ElementCriterion
 {
@@ -87,6 +90,11 @@ private:
 };
 
 unsigned int BuildingMerger::logWarnCount = 0;
+
+BuildingMerger::BuildingMerger() :
+MergerBase()
+{
+}
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 _pairs(pairs),

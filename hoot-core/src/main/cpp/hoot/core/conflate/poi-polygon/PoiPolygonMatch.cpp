@@ -47,6 +47,8 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Match, PoiPolygonMatch)
+
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
 boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
@@ -64,6 +66,11 @@ long PoiPolygonMatch::phoneNumberMatches = 0;
 long PoiPolygonMatch::phoneNumbersProcesed = 0;
 long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
+
+PoiPolygonMatch::PoiPolygonMatch() :
+Match()
+{
+}
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,

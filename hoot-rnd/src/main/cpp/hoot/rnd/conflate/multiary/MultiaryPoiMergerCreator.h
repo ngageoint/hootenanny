@@ -50,6 +50,7 @@ namespace hoot
  * between elements. These reviews are a relevant aspect of the clustering.
  *
  * @sa MultiaryPoiMerger
+ * @todo Should this inherit from MergerBase instead?
  */
 class MultiaryPoiMergerCreator : public MergerCreator
 {

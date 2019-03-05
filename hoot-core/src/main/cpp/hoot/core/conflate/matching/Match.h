@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchMembers.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Standard
 #include <set>
@@ -48,10 +49,13 @@ class MatchClassification;
  *
  * This class is not re-entrant or thread safe.
  */
-class Match
+class Match : public ApiEntityInfo
 {
 public:
 
+  static std::string className() { return "hoot::Match"; }
+
+  Match();
   virtual ~Match();
 
   virtual QString explain() const;
@@ -133,6 +137,8 @@ public:
    * @return a match type
    */
   virtual MatchType getType() const;
+
+  virtual QString getDescription() const = 0;
 
 protected:
 

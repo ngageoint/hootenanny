@@ -58,6 +58,9 @@ class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 
 public:
 
+  static std::string className() { return "hoot::PoiPolygonMatch"; }
+
+  PoiPolygonMatch();
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
@@ -97,6 +100,8 @@ public:
   static void resetMatchDistanceInfo();
 
   virtual QString explain() const { return _explainText; }
+
+  virtual QString getDescription() const { return "Matches POIs with polygons"; }
 
   void setMatchDistanceThreshold(const double distance);
   void setReviewDistanceThreshold(const double distance);

@@ -17,7 +17,9 @@ Only one of the following options can be passed to the command:
 * +--formats+                  - Displays supported data input/output formats
 * +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
+* +--match-creators+           - Displays available feature match creators used during conflation
 * +--mergers+                  - Displays available feature mergers used during conflation
+* +--merger-creators+          - Displays available feature merger creators used during conflation
 * +--operators+                - Displays available inline operators that can be applied to map datasets
 * +--string-comparators+       - Displays available string comparators
 * +--subline-matchers+         - Displays available subline matchers
@@ -236,7 +238,8 @@ hoot info --languages --translatable
 
 === Matchers
 
-The +--matchers+ option prints out available conflate matchers that may be applied when conflating data.
+The +--matchers+ option prints out available conflate matchers that may be applied when conflating data.  Matchers contain the criteria to match
+a specific pair of features
 
 ==== Usage
 
@@ -250,9 +253,27 @@ info --matchers
 hoot info --matchers
 --------------------------------------
 
+=== Match Creators
+
+The +--match-creators+ option prints out available conflate match creators that may be applied when conflating data.  Match Creators are
+responsible for spawning matchers.
+
+==== Usage
+
+--------------------------------------
+info --match-creators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --match-creators
+--------------------------------------
+
 === Mergers
 
-The +--mergers+ option prints out available conflate mergers that may be applied when conflating data.
+The +--mergers+ option prints out available conflate mergers that may be applied when conflating data.  Mergers are created to merge a feature
+pair supported by a corresponding matcher.
 
 ==== Usage
 
@@ -264,6 +285,23 @@ info --mergers
 
 --------------------------------------
 hoot info --mergers
+--------------------------------------
+
+=== Merger Creators
+
+The +--merger-creators+ option prints out available conflate merger creators that may be applied when conflating data.  Merger Creators are
+responsible for spawning mergers.
+
+==== Usage
+
+--------------------------------------
+info --merger-creators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --merger-creators
 --------------------------------------
 
 === Operators

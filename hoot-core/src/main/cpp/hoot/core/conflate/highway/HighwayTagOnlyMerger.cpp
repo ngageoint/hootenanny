@@ -35,9 +35,17 @@
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, HighwayTagOnlyMerger)
+
+HighwayTagOnlyMerger::HighwayTagOnlyMerger() :
+HighwaySnapMerger()
+{
+}
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
 HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
