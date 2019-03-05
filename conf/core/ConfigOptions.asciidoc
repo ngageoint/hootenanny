@@ -312,6 +312,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.outline.update.op.remove.building.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when building outlines are updated the updater will remove the source building relations
+used to create the outline multipolygon relation.  If false, both source building relations and
+outline multipolygon relations will remain.
+
 === building.review.if.secondary.newer
 
 * Data Type: bool

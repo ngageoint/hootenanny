@@ -1,5 +1,5 @@
 
-[[implicit-type-tagging]]
+[[ImplicitTypeTaggingAlg]]
 == Implicit Type Tagging Based On Name
 
 Hootenanny has the capability to derive type tag information automatically for features based solely on the contents of their name tags.  

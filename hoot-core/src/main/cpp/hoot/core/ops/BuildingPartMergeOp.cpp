@@ -272,9 +272,9 @@ void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Ele
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< boost::shared_ptr<Element> >& parts)
 {
-  LOG_TRACE("Combining building parts...");
+  LOG_DEBUG("Combining building parts...");
 
-  LOG_VART(parts.size());
+  LOG_VARD(parts.size());
   if (parts.size() == 0)
   {
     throw IllegalArgumentException("No building parts passed to BuildingPartMergeOp::combineParts.");

@@ -246,6 +246,7 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   // Apply any user specified operations.
+  _updateConfigOptionsForAttributeConflation();
   LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
@@ -346,6 +347,49 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Conflation job completed.");
 
   return 0;
+}
+
+void ConflateCmd::_updateConfigOptionsForAttributeConflation()
+{
+  // These are some custom adjustments to config opts that must be done for Attribute Conflation.
+  // There may be a way to eliminate these by adding more custom behavior to the UI.
+
+  // This option only gets used with Attribute Conflation for now, so we'll use it as the sole
+  // identifier for it.  This could change in the future, but hopefully if that happens, by then
+  // we have a better solution for changing these opts in place.
+  if (ConfigOptions().getHighwayMergeTagsOnly())
+  {
+    // If we're running Attribute Conflation and removing building relations, we need to remove them
+    // after the review relations have been removed or some building relations may still remain that
+    // are involved in reviews.
+
+    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+    // Currently, all these things will be true if we're running Attribute Conflation, but I'm
+    // specifying them anyway to harden this a bit.
+    if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
+        postConflateOps.contains("hoot::RemoveElementsVisitor") &&
+        ConfigOptions().getRemoveElementsVisitorElementCriterion() == "hoot::ReviewRelationCriterion" &&
+        postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
+    {
+      const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
+      const int buildingOutlineOpIndex = postConflateOps.indexOf("hoot::BuildingOutlineUpdateOp");
+      if (removeElementsVisIndex > buildingOutlineOpIndex)
+      {
+        postConflateOps.removeAll("hoot::BuildingOutlineUpdateOp");
+        postConflateOps.append("hoot::BuildingOutlineUpdateOp");
+        conf().set("conflate.post.ops", postConflateOps);
+      }
+    }
+
+    // This swaps the logic that removes all reviews with the logic that removes them based on score
+    // thresholding.
+    if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+    {
+      conf().set(
+        ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
+    }
+    LOG_VARD(conf().get(ConfigOptions::getRemoveElementsVisitorElementCriterionKey()));
+  }
 }
 
 }

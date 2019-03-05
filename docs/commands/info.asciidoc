@@ -1,3 +1,4 @@
+[[info]]
 == info
 
 The +info+ command displays information about Hootenanny capabilities.  

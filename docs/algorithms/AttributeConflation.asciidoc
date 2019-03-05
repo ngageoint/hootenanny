@@ -1,0 +1,50 @@
+
+
+[[AttributeConflation]]
+== Attribute Conflation
+
+Attribute Conflation allows for transferring only tags from one dataset to another dataset whose geometries are changed as little as possible.  
+This conflation workflow can be used when you nearly absolute confidence in your input reference dataset geometry, its tags are lacking detail,
+and your secondary dataset has good tag attribution.  Attribute Conflation is still experimental as has primarily been tested against road data
+up to this point.
+
+=== One Way Streets
+
+Attribute Conflation strives to preserve the correct one way direction for one way streets.  This can be difficult if the reference
+data is poorly attributed regarding one way streets and incorrect one way direction tag transfers may sometimes occur.
+
+=== Road Type Conflicts
+
+If roads between the two input datasets have conflicting type tags, other then the generic highway=road tag, Hootenanny Attribute Conflation will
+not conflate the road pair together, so as not to lose road type accuracy.
+
+=== Bridges
+
+If the secondary layer being conflated has bridges connecting two road segments together and the reference data does not have those bridges,
+Attribute Conflation will need to make geometry change to the reference data to properly conflate the bridges.  If you wish to make
+no geometry changes to your reference dataset under any circumstance, you can disable the configuration option, 
++attribute.conflation.allow.ref.geometry.changes.for.bridges+.
+
+=== Aggressive Road Joining
+
+Another option for Attribute Conflation, disabled by default, is to enable aggressive road joining.  Generally, with this option disabled 
+you will end up with more road type and name tag transfers from the secondary layer to the reference layer for some road segements.  
+Generally, with the option enabled you will end up with more road type and name tag transfers from the secondary layer to the reference 
+layer for some road segements but at the cost of some incorrect tag transfers.  To use this feature, enable the configuration option 
++attribute.conflation.aggressive.highway.joining+.
+
+=== Buildings
+
+As of 3/5/19, Attribute Conflation handles conflating buildings slightly differently than other conflation types.  The default building 
+conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation
+added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings.
+
+=== Reviews
+
+Attribute Conflation also allows for manual review of features that Hootenanny was unable to conflate and flagged for review.  However, this
+option is disabled by default.  To use this feature, enable the +attribute.conflation.allow.reviews.by.score+ configuration option.  You also
+have the ability to threshold reviews by review score, in a range of 0.0 to 1.0 (1.0 being the strongest case for feature pair to be reviewed), 
+in order to reduce the number of reviews you are presented with.  See the configuration options +review.score.criterion.min.threshold+ and 
++review.score.criterion.max.threshold+.  Hootenanny will often return reviews with a score of 1.0 when it has no idea how to conflate a particular
+pair of features or those feature exhibit some unusual properties.  Therefore counterintuitively, setting a maximum threshold below 1.0 may
+reduce the number of reviews you see even further in the conflated output.

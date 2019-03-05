@@ -1,3 +1,4 @@
+[[write-name-counts]]
 == write-name-counts
 
 === Description

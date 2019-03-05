@@ -1,4 +1,5 @@
 
+[[SchemaFiles]]
 == Schema Files
 
 Internally Hootenanny stores all data in the OSM schema (plus some additional
