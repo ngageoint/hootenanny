@@ -57,7 +57,7 @@ In addition to conflating maps together, Hootenanny can also:
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
 available to customize the conflation workflows.
 
-# Supported Feature Types
+# Conflatable Feature Types
 * Area polygons
 * Building polygons
 * Points of Interest (POIs)
@@ -96,7 +96,7 @@ Users are also able to define their own [custom translations](https://github.com
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
 # Web Services API
-Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients.  The API documentation can be found in each [release](https://github.com/ngageoint/hootenanny/releases) in the 'docs' folder.  
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients. 
 
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
@@ -109,14 +109,14 @@ The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
 
 # Documentation
+* [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
 * Online:
   * [User Interface Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUI.asciidoc)
   * [User Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.asciidoc)
   * [Algorithms Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyAlgorithms.asciidoc)
   * [Algorithm Detail Slides](https://github.com/ngageoint/hootenanny/wiki/Slides)
   * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
-* or [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
-* or in the Hootenanny VM look for PDF's in 'hoot/docs' 
+* When running the Hootenanny VM look for the PDF documentation included in 'hoot/docs' 
 
 # Installation
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md) to launch a virtual machine
