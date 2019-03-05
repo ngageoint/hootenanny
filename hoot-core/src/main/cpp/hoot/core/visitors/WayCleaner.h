@@ -106,7 +106,7 @@ private:
    * @param logDetails if true, details about the duplicate coordinates are logged
    * @return true if the way has coordinates; false otherwise
    */
-  bool _hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bool logDetails = false) const;
+  static bool _hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bool logDetails = false);
 
   /**
    * Determines whether a way has more than one node with the same coordinate (nodes with
@@ -116,7 +116,7 @@ private:
    * @param logDetails if true, details about the duplicate nodes are logged
    * @return true if the way has duplicate nodes; false otherwise
    */
-  bool _hasDuplicateNodes(ConstWayPtr way, const bool logDetails = false) const;
+  static bool _hasDuplicateNodes(ConstWayPtr way, const bool logDetails = false);
 
   /**
    * Determines whether a way is of zero length
@@ -127,7 +127,7 @@ private:
    * @param map the map owning the way to be examined
    * @return true if the way is of zero length; false otherwise
    */
-  bool _isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map) const;
+  static bool _isZeroLengthWay(ConstWayPtr way, const OsmMap& map);
 };
 
 }

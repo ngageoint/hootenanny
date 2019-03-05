@@ -62,27 +62,27 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/WayCleanerTest/DuplicateNodesTest.osm", map);
+    reader.read("test-files/visitors/WayCleanerTest/DuplicateNodesTest.osm", map);
 
     WayPtr cleanedWay(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateNodes(cleanedWay));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateNodes(cleanedWay));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateNodes(cleanedWay));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateNodes(cleanedWay));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateNodes(cleanedWay));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "5")[0]).get()));
@@ -103,22 +103,22 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/WayCleanerTest/DuplicateCoordsTest.osm", map);
+    reader.read("test-files/visitors/WayCleanerTest/DuplicateCoordsTest.osm", map);
 
     WayPtr cleanedWay(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateCoords(cleanedWay, *map));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateCoords(cleanedWay, *map));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]).get()));
     WayCleaner::cleanWay(cleanedWay, map);
-    CPPUNIT_ASSERT(!WayCleaner::hasDuplicateCoords(cleanedWay, *map));
+    CPPUNIT_ASSERT(!WayCleaner::_hasDuplicateCoords(cleanedWay, *map));
 
     cleanedWay.reset(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]).get()));

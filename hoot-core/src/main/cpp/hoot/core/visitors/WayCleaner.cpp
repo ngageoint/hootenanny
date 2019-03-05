@@ -45,7 +45,7 @@ void WayCleaner::visit(const boost::shared_ptr<Element>& e)
   WayPtr way = boost::dynamic_pointer_cast<Way>(e);
   const vector<long> nodeIds = way->getNodeIds();
 
-  if (_isZeroLengthWay(way, _map))
+  if (_isZeroLengthWay(way, *_map))
   {
     throw HootException("Cannot clean zero length way.");
   }
@@ -102,7 +102,7 @@ void WayCleaner::visit(const boost::shared_ptr<Element>& e)
 }
 
 bool WayCleaner::_hasDuplicateCoords(ConstWayPtr way, const OsmMap& map,
-                                     const bool logDetails) const
+                                     const bool logDetails)
 {
   const vector<long> nodeIds = way->getNodeIds();
 
@@ -176,7 +176,7 @@ bool WayCleaner::_hasDuplicateCoords(ConstWayPtr way, const OsmMap& map,
   return found;
 }
 
-bool WayCleaner::_hasDuplicateNodes(ConstWayPtr way, const bool logDetails) const
+bool WayCleaner::_hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
 {
   const vector<long> nodeIds = way->getNodeIds();
 
@@ -245,15 +245,16 @@ bool WayCleaner::_hasDuplicateNodes(ConstWayPtr way, const bool logDetails) cons
   return found;
 }
 
-bool WayCleaner::_isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map) const
+bool WayCleaner::_isZeroLengthWay(ConstWayPtr way, const OsmMap& map)
 {
-  return way->getNodeCount() == 2 && (hasDuplicateNodes(way) || hasDuplicateCoords(way, *map));
+  return way->getNodeCount() == 2 && (_hasDuplicateNodes(way) || _hasDuplicateCoords(way, map));
 }
 
 void WayCleaner::cleanWay(WayPtr way, const ConstOsmMapPtr& map)
 {
-  _map = map;
-  visit(way);
+  WayCleaner wayCleaner;
+  wayCleaner.setOsmMap(map.get());
+  wayCleaner.visit(way);
 }
 
 ConstWayPtr WayCleaner::cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map)
@@ -270,7 +271,7 @@ vector<ConstWayPtr> WayCleaner::cleanWays(const vector<ConstWayPtr>& ways,
   for (vector<ConstWayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr way = *it;
-    if (!isZeroLengthWay(way, map))
+    if (!_isZeroLengthWay(way, *map.get()))
     {
       cleanedWays.push_back(cleanWay(way, map));
     }
