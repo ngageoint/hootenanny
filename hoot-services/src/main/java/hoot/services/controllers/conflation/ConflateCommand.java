@@ -26,12 +26,18 @@
  */
 package hoot.services.controllers.conflation;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.REF_OVERRIDE_PATH;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
+import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,6 +45,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
@@ -49,8 +61,9 @@ import hoot.services.models.db.Users;
 class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
+    private static Map<String, Map<String, String>> conflationFeatures = null;
 
-    private static final List<String> conflationTypes = Arrays.asList(
+    private static List<String> conflationTypes = Arrays.asList(
     	"HorizontalConflation",
     	"AttributeConflation",
     	"ReferenceConflation",
@@ -61,6 +74,18 @@ class ConflateCommand extends ExternalCommand {
 
     private String conflationType = null;
     private String conflationAlgorithm = null;
+
+    static {
+    	try {
+    		JSONParser parser = new JSONParser();
+			String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFLATION_TYPES_PATH), Charset.defaultCharset());
+			ObjectMapper mapper = new ObjectMapper();
+			TypeReference schema = new TypeReference<Map<String, Map<String, String>>>(){};
+			conflationFeatures = mapper.readValue(file, schema);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
     ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) throws IllegalArgumentException {
         super(jobId);
@@ -125,6 +150,22 @@ class ConflateCommand extends ExternalCommand {
         	conflationType = conflationType == null ? "" : conflationType + "Conflation";
         	conflationAlgorithm = params.getConflateAlgorithm();
         	conflationAlgorithm = conflationAlgorithm == null ? "" : conflationAlgorithm + "Algorithm";
+
+        	List<String> disabledFeatures = params.getDisabledFeatures();
+
+        	if (disabledFeatures != null && !disabledFeatures.isEmpty()) {
+        		List<String> matchers = new ArrayList<>();
+        		List<String> mergers = new ArrayList<>();
+
+        		for (String feature: conflationFeatures.keySet()) {
+        			if (!disabledFeatures.contains(feature)) {
+        				matchers.add(conflationFeatures.get(feature).get("matcher"));
+        				mergers.add(conflationFeatures.get(feature).get("merger"));
+        			}
+        		}
+        		options.add("match.creators=" + String.join(";", matchers));
+        		options.add("merger.creators=" + String.join(";", mergers));
+        	}
         }
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);

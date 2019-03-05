@@ -1,0 +1,38 @@
+{
+    "Roads": {
+      "matcher": "hoot::HighwayMatchCreator",
+      "merger": "hoot::HighwayMergerCreator"
+    },
+    "RoadsNetwork": {
+      "matcher": "hoot::NetworkMatchCreator",
+      "merger": "hoot::NetworkMergerCreator"
+    },
+    "Buildings": {
+      "matcher": "hoot::BuildingMatchCreator",
+      "merger": "hoot::BuildingMergerCreator"
+    },
+    "Pois": {
+      "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
+      "merger": "hoot::ScriptMergerCreator"
+    },
+    "PoiPolygon": {
+      "matcher": "hoot::PoiPolygonMatchCreator",
+      "merger": "hoot::PoiPolygonMergerCreator"
+    },
+    "Areas": {
+      "matcher": "hoot::ScriptMatchCreator,Area.js",
+      "merger": "hoot::ScriptMergerCreator"
+    },
+    "Railways": {
+      "matcher": "hoot::ScriptMatchCreator,Railway.js",
+      "merger": "hoot::ScriptMergerCreator"
+    },
+    "Powerlines": {
+      "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
+      "merger": "hoot::ScriptMergerCreator"
+    },
+    "Waterways": {
+      "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
+      "merger": "hoot::ScriptMergerCreator"
+    }
+  }

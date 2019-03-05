@@ -49,6 +49,7 @@ public final class HootProperties {
     public static final String REF_OVERRIDE_PATH;
     public static final String HORZ_OVERRIDE_PATH;
     public static final String ATT_OVERRIDE_PATH;
+    public static final String CONFLATION_TYPES_PATH;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
     public static final String BASEMAPS_TILES_FOLDER;
@@ -168,6 +169,7 @@ public final class HootProperties {
         REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
         ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");
+        CONFLATION_TYPES_PATH = getProperty("conflationTypes");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
         DEFAULT_TRANSLATIONS_CONFIG = getProperty("defaultTranslationsConfig");

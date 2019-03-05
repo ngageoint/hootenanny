@@ -27,6 +27,8 @@
 package hoot.services.controllers.conflation;
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -82,6 +84,9 @@ public class ConflateParams {
 
     @JsonProperty("HOOT_2")
     private Boolean hoot2;
+
+    @JsonProperty("DISABLED_FEATURES")
+    private List<String> disabledFeatures;
 
     public String getInputType1() {
         return inputType1;
@@ -218,6 +223,14 @@ public class ConflateParams {
 
 	public void setConflateAlgorithm(String algorithm) {
 		this.conflateAlgorithm = algorithm;
+	}
+
+	public List<String> getDisabledFeatures() {
+		return this.disabledFeatures;
+	}
+
+	public void setDisabledFeatures(List<String> disabledFeatures) {
+		this.disabledFeatures = disabledFeatures;
 	}
 
     @Override

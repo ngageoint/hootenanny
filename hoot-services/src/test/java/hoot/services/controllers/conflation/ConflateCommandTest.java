@@ -28,6 +28,7 @@ package hoot.services.controllers.conflation;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -166,6 +167,25 @@ public class ConflateCommandTest {
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_ALGORITHM"));
         assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
 
+        // handles disabled features...
+    	conflateParams = new ConflateParams();
+    	conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setUserEmail("test@test.com");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflateAlgorithm("Network");
+        conflateParams.setDisabledFeatures(Arrays.asList("Roads", "Pois"));
+        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+        assertTrue(options.contains("match"));
+        assertTrue(options.contains("merger"));
     }
 
     @Test(expected = IllegalArgumentException.class)
