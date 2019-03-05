@@ -33,6 +33,12 @@ Generally, with the option enabled you will end up with more road type and name 
 layer for some road segements but at the cost of some incorrect tag transfers.  To use this feature, enable the configuration option 
 +attribute.conflation.aggressive.highway.joining+.
 
+=== Buildings
+
+As of 3/5/19, Attribute Conflation handles conflating buildings slightly differently than other conflation types.  The default building 
+conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation
+added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings.
+
 === Reviews
 
 Attribute Conflation also allows for manual review of features that Hootenanny was unable to conflate and flagged for review.  However, this

@@ -83,7 +83,6 @@ public:
 private:
 
   long _rIdToRemove;
-
 };
 
 }

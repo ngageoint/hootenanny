@@ -95,17 +95,6 @@ void WayJoiner2::join(const OsmMapPtr& map)
     OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
   }
 
-  // A bit of a hack, but we will assume WayJoiner2 is always used with Attribute Conflation for now
-  // and swap out the element remover that removes all reviews with the one that removes them based
-  // on score thresholding.
-  // TODO: move this logic somewhere else
-  if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
-  {
-    conf().set(
-      ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
-  }
-  LOG_VART(conf().get(ConfigOptions::getRemoveElementsVisitorElementCriterionKey()));
-
   // Remove all the multilinestring relations created during conflation.
 
   // This isn't the best place to do this, but Attribute Conflation is already using
@@ -123,7 +112,11 @@ void WayJoiner2::join(const OsmMapPtr& map)
 void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
 {
   LOG_TRACE("Removing multilinestring relations created during conflation...");
-  // This may be a little dangerous, but will have to do for now...
+  // I don't think this is quite right, b/c if there are any multilinestring relations in the input
+  // data that end up getting conflated with something else, they're going to be dropped and
+  // shouldn't be.  What we really want to do is only drop multilinestring relations created
+  // specifically by hoot during conflation (Attribute Conflation specific).
+  // TODO: #3025
   ElementCriterionPtr crit(
     new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));
   RemoveElementsVisitor vis(crit);
