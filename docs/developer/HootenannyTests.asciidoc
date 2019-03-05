@@ -322,6 +322,12 @@ make -sj$(nproc) plugins-test
 
 They run by default in the slow test suite.
 
+To run an individual test:
+--------------
+cd $HOOT_HOME/plugins/test
+mocha <test name>.js
+--------------
+
 === Web Services Tests
 
 The Web Services tests test the Hootenanny web services interface.  There are two types of

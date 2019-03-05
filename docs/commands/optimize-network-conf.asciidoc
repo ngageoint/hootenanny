@@ -1,3 +1,4 @@
+[[optimize-network-conf]]
 == optimize-network-conf
 
 === Description
@@ -31,4 +32,8 @@ hoot optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case sett
 NOTE: To use tests of type 'release' or 'perty' you must have access to the Hootenanny regression tests, which are
 not supplied with Hootenanny by default.  Also, currently only the Network Conflation versions of those tests
 will work with this settings optimizer.
+
+=== See Also
+
+* <<hootalgo, NetworkConflation>>
 

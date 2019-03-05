@@ -32,6 +32,14 @@
                 "defaultvalue":"true"
             },
             {
+                "id":"one_way_road_standardizer",
+                "elem_type":"checkbox",
+                "description":"Standardize one way street tags.",
+                "name":"One Way Road Standardizer",
+                "hoot_val":"hoot::OneWayRoadStandardizer",
+                "defaultvalue":"true"
+            },
+            {
                 "id":"duplicate_way_remover",
                 "elem_type":"checkplus",
                 "override":{
@@ -464,22 +472,6 @@
         ]
     },
     {
-        "id":"hoot_attribute_conflation_options",
-        "elem_type":"group",
-        "description":"Hootenanny Attribute Conflation options",
-        "name":"Attribute Conflation Options",
-        "members":[
-            {
-              "id": "attribute_aggressive_highway_joining",
-              "elem_type": "bool",
-              "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
-              "name": "Aggressively Join Unmerged Roads",
-              "defaultvalue": "true",
-              "hoot_key": "attribute.conflation.aggressive.highway.joining",
-            }
-        ]
-    },
-    {
         "id":"hoot_road_options",
         "elem_type":"group",
         "description":"Hootenanny road options",
@@ -689,30 +681,6 @@
                 "hoot_key":"merger.creators",
                 "required":"true"
             }
-        ]
-    },
-    {
-        "id":"hoot_attribute_options",
-        "elem_type":"group",
-        "description":"Hootenanny Attribute Conflation options",
-        "name":"Attribute Conflation Options",
-        "members":[
-            {
-                "id":"hoot_enable_attribute_options",
-                "elem_type":"checkbox",
-                "description":"Enable area options",
-                "name":"Enabled",
-                "defaultvalue":"true",
-                "onchange":"true"
-            },
-            {
-        	"id":"attribute_allow_bridge_ref_geometry_change",
-        	"elem_type":"bool",
-        	"defaultvalue":"true",
-        	"description":"If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate bridge features.  If false, any bridge features represented in the secondary dataset, but not in the reference dataset will be lost.",
-        	"name":"Allow Reference Layer Geometry Changes For Bridges",
-        	"hoot_key":"attribute.conflation.allow.ref.geometry.changes.for.bridges"
-    	    }
         ]
     },
     {

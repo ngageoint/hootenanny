@@ -481,7 +481,6 @@
         <tag k="uuid" v="{2ed42705-af19-4a1b-a4cc-dadd1426ea99};{684a005b-6502-4da3-ad3e-2ac65fd38b4f}"/>
         <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z;2014-06-28T07:48:10.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
         <nd ref="-30"/>
@@ -499,7 +498,6 @@
         <tag k="uuid" v="{57627fc4-6008-4286-9a3a-8467af381fd9};{482cc2f0-ca65-492d-82b7-5ec566710974}"/>
         <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z;2011-04-10T20:41:16.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
         <nd ref="-26"/>
@@ -517,7 +515,6 @@
         <tag k="uuid" v="{95d410fa-03c8-43ec-be57-d7b8a9b77a5c};{dd6777ab-6799-4de9-83bb-91cf06e03851}"/>
         <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:27Z;2011-04-10T20:41:18.000Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
         <nd ref="-9"/>
@@ -534,9 +531,9 @@
         <nd ref="-20"/>
         <nd ref="-9"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{ac7a8da6-b829-4f96-86f0-bd05ee6d0446}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
     </way>
     <way visible="true" id="-3" timestamp="2018-01-10T18:15:58Z" version="1" changeset="14855">
@@ -546,9 +543,9 @@
         <nd ref="-8"/>
         <nd ref="-5"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{6739b3ac-bc84-4018-b100-3d77e61254a9}"/>
-        <tag k="attribution" v="osm;osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2017-11-30T17:17:28Z"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -612,6 +609,5 @@
         <tag k="source:datetime" v="2015-05-14T11:24:43.000Z"/>
         <tag k="name:en" v="Cinematography Science Research"/>
         <tag k="type" v="multipolygon"/>
-        <tag k="error:circular" v="15"/>
     </relation>
 </osm>

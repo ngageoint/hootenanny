@@ -335,7 +335,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Matches roads with the non-greedy algorithm", CreatorDescription::Highway,
+      className(), "Matches roads with the 2nd generation algorithm", CreatorDescription::Highway,
       false));
   return result;
 }
