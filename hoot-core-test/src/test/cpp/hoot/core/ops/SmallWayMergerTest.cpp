@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/merging/SmallWayMerger.h>
+#include <hoot/core/ops/SmallWayMerger.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
@@ -62,14 +62,14 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
+    reader.read("test-files/ops/SmallWayMerger/SmallWayMergerInput1.osm", map);
 
     MapProjector::projectToPlanar(map);
     SmallWayMerger::mergeWays(map, 15.0);
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
+    writer.write(map, "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
 
   }
 

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
