@@ -34,7 +34,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 // Standard
 #include <iostream>

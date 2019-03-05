@@ -30,7 +30,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
+#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>

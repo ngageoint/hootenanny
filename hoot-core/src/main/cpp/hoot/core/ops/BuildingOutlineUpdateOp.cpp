@@ -36,7 +36,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/elements/ElementConverter.h>

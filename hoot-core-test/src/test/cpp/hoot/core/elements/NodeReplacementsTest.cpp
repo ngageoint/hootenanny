@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/NodeReplacements.h>
+#include <hoot/core/elements/NodeReplacements.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -63,10 +63,10 @@ public:
     m[1] = 2;
     m[2] = 3;
 
-    uut.write("test-output/conflate/Node.replacements");
+    uut.write("test-output/elements/Node.replacements");
 
     NodeReplacements uut2;
-    uut2.read("test-output/conflate/Node.replacements");
+    uut2.read("test-output/elements/Node.replacements");
 
     CPPUNIT_ASSERT_EQUAL(std::string("0 : 3\n1 : 3\n2 : 3\n"), uut2.toString().toStdString());
   }

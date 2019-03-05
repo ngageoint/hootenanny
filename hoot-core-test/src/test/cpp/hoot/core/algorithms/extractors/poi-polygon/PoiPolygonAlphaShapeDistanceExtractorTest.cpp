@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractor.h>
+#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
@@ -55,12 +55,12 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
+      "test-files/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
       false,
       Status::Unknown1);
     OsmMapReaderFactory::read(
       map,
-      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
+      "est-files/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
       false,
       Status::Unknown2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(

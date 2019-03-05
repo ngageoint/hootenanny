@@ -35,7 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 // Standard
 #include <iostream>
