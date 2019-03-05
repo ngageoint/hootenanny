@@ -51,7 +51,7 @@ public:
 
   NodeReplacementsTest()
   {
-    TestUtils::mkpath("test-output/conflate");
+    TestUtils::mkpath("test-output/elements");
   }
 
   void runIoTest()

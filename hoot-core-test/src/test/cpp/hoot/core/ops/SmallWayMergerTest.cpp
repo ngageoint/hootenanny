@@ -53,7 +53,8 @@ public:
 
   SmallWayMergerTest()
   {
-    TestUtils::mkpath("test-output/conflate");
+    setResetType(ResetBasic);
+    TestUtils::mkpath("test-output/ops/SmallWayMerger");
   }
 
   void runBasicTest()
@@ -70,7 +71,8 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
-
+    HOOT_FILE_EQUALS("test-files/ops/SmallWayMerger/SmallWayMergerOutput1.osm",
+                     "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
   }
 
 };

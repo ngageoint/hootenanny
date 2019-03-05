@@ -55,12 +55,12 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
+      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
       false,
       Status::Unknown1);
     OsmMapReaderFactory::read(
       map,
-      "est-files/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
+      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
       false,
       Status::Unknown2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
