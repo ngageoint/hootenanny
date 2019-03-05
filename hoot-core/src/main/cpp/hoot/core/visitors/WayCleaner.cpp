@@ -36,7 +36,73 @@ namespace hoot
 
 unsigned int WayCleaner::logWarnCount = 0;
 
-bool WayCleaner::hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bool logDetails)
+WayCleaner::WayCleaner()
+{
+}
+
+void WayCleaner::visit(const boost::shared_ptr<Element>& e)
+{
+  WayPtr way = boost::dynamic_pointer_cast<Way>(e);
+  const vector<long> nodeIds = way->getNodeIds();
+
+  if (_isZeroLengthWay(way, _map))
+  {
+    throw HootException("Cannot clean zero length way.");
+  }
+
+  QList<long> modifiedNodeIds = QVector<long>::fromStdVector(nodeIds).toList();
+  QList<long> nodeIdsTemp;
+  QList<Coordinate> coords;
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    bool found = false;
+    if (nodeIdsTemp.contains(nodeIds[i]))
+    {
+      //the only duplicated nodes allowed are the first and last for a closed way
+      if (i == (nodeIds.size() - 1) && nodeIds[0] == nodeIds[i])
+      {
+      }
+      else
+      {
+        found = true;
+      }
+    }
+    else
+    {
+      nodeIdsTemp.append(nodeIds[i]);
+    }
+
+    const Coordinate coord = _map->getNode(nodeIds[i])->toCoordinate();
+    if (coords.contains(coord))
+    {
+      //the only duplicated coords allowed are the first and last for a closed way, if the node ID's
+      //match
+      if (i == (nodeIds.size() - 1) && nodeIds[0] == nodeIds[i])
+      {
+      }
+      else
+      {
+        found = true;
+      }
+    }
+    else
+    {
+      coords.append(coord);
+    }
+
+    if (found)
+    {
+      modifiedNodeIds.removeAt(i);
+    }
+  }
+
+  way->setNodes(modifiedNodeIds.toVector().toStdVector());
+
+  _numAffected++;
+}
+
+bool WayCleaner::_hasDuplicateCoords(ConstWayPtr way, const OsmMap& map,
+                                     const bool logDetails) const
 {
   const vector<long> nodeIds = way->getNodeIds();
 
@@ -110,7 +176,7 @@ bool WayCleaner::hasDuplicateCoords(ConstWayPtr way, const OsmMap& map, const bo
   return found;
 }
 
-bool WayCleaner::hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
+bool WayCleaner::_hasDuplicateNodes(ConstWayPtr way, const bool logDetails) const
 {
   const vector<long> nodeIds = way->getNodeIds();
 
@@ -179,67 +245,15 @@ bool WayCleaner::hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
   return found;
 }
 
-bool WayCleaner::isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map)
+bool WayCleaner::_isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map) const
 {
   return way->getNodeCount() == 2 && (hasDuplicateNodes(way) || hasDuplicateCoords(way, *map));
 }
 
 void WayCleaner::cleanWay(WayPtr way, const ConstOsmMapPtr& map)
 {
-  const vector<long> nodeIds = way->getNodeIds();
-
-  if (isZeroLengthWay(way, map))
-  {
-    throw HootException("Cannot clean zero length way.");
-  }
-
-  QList<long> modifiedNodeIds = QVector<long>::fromStdVector(nodeIds).toList();
-  QList<long> nodeIdsTemp;
-  QList<Coordinate> coords;
-  for (size_t i = 0; i < nodeIds.size(); i++)
-  {
-    bool found = false;
-    if (nodeIdsTemp.contains(nodeIds[i]))
-    {
-      //the only duplicated nodes allowed are the first and last for a closed way
-      if (i == (nodeIds.size() - 1) && nodeIds[0] == nodeIds[i])
-      {
-      }
-      else
-      {
-        found = true;
-      }
-    }
-    else
-    {
-      nodeIdsTemp.append(nodeIds[i]);
-    }
-
-    const Coordinate coord = map->getNode(nodeIds[i])->toCoordinate();
-    if (coords.contains(coord))
-    {
-      //the only duplicated coords allowed are the first and last for a closed way, if the node ID's
-      //match
-      if (i == (nodeIds.size() - 1) && nodeIds[0] == nodeIds[i])
-      {
-      }
-      else
-      {
-        found = true;
-      }
-    }
-    else
-    {
-      coords.append(coord);
-    }
-
-    if (found)
-    {
-      modifiedNodeIds.removeAt(i);
-    }
-  }
-
-  way->setNodes(modifiedNodeIds.toVector().toStdVector());
+  _map = map;
+  visit(way);
 }
 
 ConstWayPtr WayCleaner::cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map)
@@ -249,7 +263,8 @@ ConstWayPtr WayCleaner::cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map)
   return cleanedWay;
 }
 
-vector<ConstWayPtr> WayCleaner::cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map)
+vector<ConstWayPtr> WayCleaner::cleanWays(const vector<ConstWayPtr>& ways,
+                                          const ConstOsmMapPtr& map)
 {
   vector<ConstWayPtr> cleanedWays;
   for (vector<ConstWayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)
