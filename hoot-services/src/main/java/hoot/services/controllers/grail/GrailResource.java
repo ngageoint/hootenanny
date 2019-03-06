@@ -170,6 +170,7 @@ public class GrailResource {
             if (localOSMFile.exists()) localOSMFile.delete();
 
             GrailParams apiParams = new GrailParams();
+            apiParams.setUser(user);
             apiParams.setBounds(bbox);
             apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
             apiParams.setOutput(localOSMFile.getAbsolutePath());
@@ -186,6 +187,7 @@ public class GrailResource {
             if (internetOSMFile.exists()) internetOSMFile.delete();
 
             GrailParams overpassParams = new GrailParams();
+            overpassParams.setUser(user);
             overpassParams.setBounds(bbox);
             overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
@@ -513,12 +515,14 @@ public class GrailResource {
             ExternalCommand pushApi = grailCommandFactory.build(mainJobId, apiParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushApi);
 
+            overpassParams.setUser(user);
             overpassParams.setInput1(internetOSMFile.getAbsolutePath());
             overpassParams.setOutput(internetDbFile);
             ExternalCommand pushOverpass = grailCommandFactory.build(mainJobId, overpassParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushOverpass);
 
             // Now create a folder and link the uploaded layers to it
+            linkParams.setUser(user);
             linkParams.setFolder(jobDir);
             linkParams.setInput1(localDbFile);
             linkParams.setInput2(internetDbFile);

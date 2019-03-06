@@ -119,7 +119,7 @@ public final class HootProperties {
 
     public static final String MAIN_OSMAPI_PULL_URL;
     public static final String MAIN_OSMAPI_CAPABILITIES_URL;
-    
+
     public static final String MAIN_OVERPASS_URL;
 
     public static final String RAILSPORT_PUSH_URL;

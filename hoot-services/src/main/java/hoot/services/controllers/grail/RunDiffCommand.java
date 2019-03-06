@@ -60,7 +60,7 @@ class RunDiffCommand extends GrailCommand {
         options.add("reader.conflate.use.data.source.ids.1=true");
         options.add("reader.conflate.use.data.source.ids.2=false");
         options.add("way.subline.matcher=hoot::MaximalSublineMatcher");
-        options.add("unify.pre.ops=hoot::CornerSplitter;");
+        options.add("conflate.pre.ops=hoot::CornerSplitter;");
 
         List<String> hootOptions = toHootOptions(options);
 
