@@ -435,12 +435,6 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
   }
   else
   {
-    if (n->getId() < 1)
-    {
-      throw HootException("Writing non-positive IDs without remap is not supported by "
-                          "HootApiDbWriter.");
-    }
-
     LOG_VART(n->getId());
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags);
   }
@@ -473,10 +467,6 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
     {
       _hootdb.insertWay(wayId, tags);
     }
-  }
-  else if (w->getId() < 1)
-  {
-    throw HootException("Non-positive IDs are not supported by HootApiDbWriter.");
   }
   else
   {
@@ -520,11 +510,6 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   }
   else
   {
-    if (r->getId() < 1)
-    {
-      throw HootException("Non-positive IDs are not supported by HootApiDbWriter without remapping");
-    }
-
     _hootdb.insertRelation(r->getId(), tags);
     relationId = r->getId();
   }
