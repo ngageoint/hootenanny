@@ -51,13 +51,14 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
+import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
+import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -97,6 +98,9 @@ public class GrailResource {
 
     @Autowired
     private UpdateDbCommandFactory updateDbCommandFactory;
+
+    @Autowired
+    private OAuthRestTemplate oauthRestTemplate;
 
     public GrailResource() {}
 
@@ -298,6 +302,11 @@ public class GrailResource {
         params.setUser(user);
 
         try {
+
+            ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+            params.setConsumerKey(oauthInfo.getConsumerKey());
+            params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+
             // Run changeset-derive
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
             params.setInput2(HOOTAPI_DB_URL + "/" + input2);

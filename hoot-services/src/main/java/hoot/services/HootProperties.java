@@ -293,11 +293,11 @@ public final class HootProperties {
         // Some sites don't need a port number
         // This _should_ goto https at some stage
         if (replaceSensitiveData(RAILSPORT_PORT).equals("XXX")) {
-            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_USER + ":" + RAILSPORT_PWORD + "@"  + RAILSPORT_HOST;
+            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_HOST;
             RAILSPORT_PULL_URL = "http://" + RAILSPORT_HOST + "/api/" + RAILSPORT_API_VERSION;
             RAILSPORT_CAPABILITIES_URL = "http://" + RAILSPORT_HOST + "/api/capabilities";
         } else {
-            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_USER + ":" + RAILSPORT_PWORD + "@"  + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
+            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
             RAILSPORT_PULL_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/" + RAILSPORT_API_VERSION;
             RAILSPORT_CAPABILITIES_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
         }

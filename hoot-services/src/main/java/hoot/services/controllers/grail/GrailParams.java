@@ -62,6 +62,10 @@ public class GrailParams {
     @JsonProperty("maxBBoxSize")
     private Double maxSize;
 
+    private String consumerKey;
+
+    private String consumerSecret;
+
     public String getBounds() {
         return bounds;
     }
@@ -132,6 +136,22 @@ public class GrailParams {
 
     public void setMaxBBoxSize(Double maxSize) {
         this.maxSize = maxSize;
+    }
+
+    public void setConsumerKey(String key) {
+        consumerKey = key;
+    }
+
+    public String getConsumerKey() {
+        return consumerKey;
+    }
+
+    public void setConsumerSecret(String secret) {
+        consumerSecret = secret;
+    }
+
+    public String getConsumerSecret() {
+        return consumerSecret;
     }
 
     @Override
