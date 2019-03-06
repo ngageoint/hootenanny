@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
@@ -88,7 +89,7 @@ class ConflateCommand extends ExternalCommand {
     }
 
     ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) throws IllegalArgumentException {
-        super(jobId);
+    	super(jobId);
         this.conflateParams = params;
 
         List<String> options = new LinkedList<>();
@@ -157,7 +158,10 @@ class ConflateCommand extends ExternalCommand {
         		List<String> matchers = new ArrayList<>();
         		List<String> mergers = new ArrayList<>();
 
+        		String roadType = conflationAlgorithm.equals("NetworkAlgorithm") ? "Roads" : "RoadsNetwork";
         		for (String feature: conflationFeatures.keySet()) {
+        			// ignore the road matcher/mergers not relevant conflation type/algorithm confs...
+        			if (feature.equals(roadType)) continue;
         			if (!disabledFeatures.contains(feature)) {
         				matchers.add(conflationFeatures.get(feature).get("matcher"));
         				mergers.add(conflationFeatures.get(feature).get("merger"));
