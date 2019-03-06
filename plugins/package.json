@@ -6,7 +6,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "4.17.11"
+  },
   "devDependencies": {
     "artillery": "^1.6.0-22",
     "istanbul": "~0.4.5",
