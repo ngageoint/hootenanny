@@ -35,9 +35,9 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonAddressScoreExtractor.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
-#include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>

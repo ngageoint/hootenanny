@@ -560,9 +560,6 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   map->visitRo(v);
-//  LOG_INFO(
-//    "Found " << v.getNumMatchCandidatesFound() << " " <<
-//    scriptFileInfo.fileName().replace(".js", "") << " match candidates.");
   LOG_INFO(
     "Found " << v.getNumMatchCandidatesFound() << " " <<
     CreatorDescription::baseFeatureTypeToString(

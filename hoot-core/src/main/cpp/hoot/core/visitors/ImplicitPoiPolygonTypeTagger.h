@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 #define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 
 // hoot
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {

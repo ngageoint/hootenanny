@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>

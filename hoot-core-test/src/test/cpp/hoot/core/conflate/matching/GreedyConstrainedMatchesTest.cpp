@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -57,8 +57,8 @@ namespace hoot
 class ConstrainedFakeMatch : public Match
 {
 public:
-  ConstrainedFakeMatch() : Match(MatchThresholdPtr()) {}
 
+  ConstrainedFakeMatch() : Match(MatchThresholdPtr()) {}
   ConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
     ConstMatchThresholdPtr threshold) :
     Match(threshold),
@@ -98,9 +98,9 @@ public:
     }
   }
 
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const
+  virtual set<pair<ElementId, ElementId>> getMatchPairs() const
   {
-    set< pair<ElementId, ElementId> > result;
+    set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
     return result;
   }
@@ -123,6 +123,8 @@ public:
   }
 
   MatchType getType() const { return _threshold->getType(*this); }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
 

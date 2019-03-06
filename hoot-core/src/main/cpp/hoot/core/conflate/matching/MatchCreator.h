@@ -87,7 +87,7 @@ public:
    */
   virtual void setArguments(QStringList /*args*/)
   {
-    throw HootException("This match creator takes no argument.");
+    throw HootException("This match creator takes no arguments.");
   }
 
   /*

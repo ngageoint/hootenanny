@@ -37,7 +37,7 @@ using namespace boost;
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMapListener.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/OsmMapIndex.h>

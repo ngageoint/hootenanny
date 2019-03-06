@@ -36,6 +36,7 @@
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <qnumeric.h>
@@ -50,7 +51,14 @@ using namespace v8;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Match, ScriptMatch)
+
 unsigned int ScriptMatch::logWarnCount = 0;
+
+ScriptMatch::ScriptMatch() :
+Match()
+{
+}
 
 ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, const Persistent<Object>& plugin,
   const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
