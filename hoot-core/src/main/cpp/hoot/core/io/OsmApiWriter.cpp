@@ -51,7 +51,7 @@ namespace hoot
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
+    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
     _showProgress(false)
@@ -65,7 +65,7 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
+    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
     _showProgress(false),
@@ -317,7 +317,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _description = options.getChangesetDescription();
-  _maxChangesetSize = options.getChangesetApidbMaxSize();
+  _maxChangesetSize = options.getChangesetApidbSizeMax();
   _maxWriters = options.getChangesetApidbWritersMax();
   _throttleWriters = options.getChangesetApidbWritersThrottle();
   _throttleTime = options.getChangesetApidbWritersThrottleTime();
