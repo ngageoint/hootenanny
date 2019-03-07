@@ -46,6 +46,7 @@ public final class HootProperties {
     public static final String HOME_FOLDER;
     public static final String ASCIIDOC_PATH;
     public static final String TEMPLATE_PATH;
+    public static final String HOOT2_OVERRIDE_PATH;
     public static final String REF_OVERRIDE_PATH;
     public static final String HORZ_OVERRIDE_PATH;
     public static final String ATT_OVERRIDE_PATH;
@@ -166,6 +167,7 @@ public final class HootProperties {
         HOME_FOLDER = getProperty("homeFolder");
         ASCIIDOC_PATH = getProperty("configAsciidocPath");
         TEMPLATE_PATH = getProperty("advOptTemplate");
+        HOOT2_OVERRIDE_PATH = getProperty("advOptHoot2Override");
         REF_OVERRIDE_PATH = getProperty("advOptRefOverride");
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
         ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");

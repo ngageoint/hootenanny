@@ -41,6 +41,7 @@ def toInput(optionType):
  # on command key back into conflationTypesMap. Outputs as ConflationTypesGroups.json
 def createUiJSON(groups, options):
     try:
+        uiGroupsArray = []
         configMembers = [{'key': key, 'member': member} for key, member in options.items()]
         for conflateType, conflateConfig in groups.items():
             members = []
@@ -67,10 +68,10 @@ def createUiJSON(groups, options):
             if (conflateType == 'Roads'):
                 members = groupDefaults[conflateType] + members
 
-            groups[conflateType] = members
+            uiGroupsArray.append({ 'name': conflateType, 'members': members  })
     except:
         print 'failed to load %s' % fn2
     finally:
-        return json.dumps(groups)
+        return json.dumps(uiGroupsArray)
 
 open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))

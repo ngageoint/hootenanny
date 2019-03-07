@@ -3,8 +3,8 @@
 maxRecordBatchSize=2000
 
 # For the case where hoot home can not be obtained
-homeFolder=$(HOOT_HOME)
-
+# homeFolder=$(HOOT_HOME)
+homeFolder=/home/max/Desktop/github/dg/hootenanny
 # If true, will seed the randomness used in sql queries; for testing purposes only.
 seedRandomQueries=false
 
@@ -101,6 +101,9 @@ configAsciidocPath=conf/core/ConfigOptions.asciidoc
 
 # Advanced options template
 advOptTemplate=conf/services/conflateAdvOps.json
+
+# Advanced options hoot2 template
+advOptHoot2Override=conf/services/conflationHoot2Ops.json
 
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json

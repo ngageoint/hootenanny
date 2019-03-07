@@ -65,9 +65,11 @@ public class AdvancedConflationOptionsResource {
     private JSONArray referenceTemplate;
     private JSONArray horizontalTemplate;
     private JSONArray attributeTemplate;
+    private JSONArray hoot2Template;
     private JSONObject referenceOverride;
     private JSONObject horizontalOverride;
     private JSONObject attributeOverride;
+    private JSONObject hoot2Override;
 
     public AdvancedConflationOptionsResource() {}
 
@@ -89,7 +91,14 @@ public class AdvancedConflationOptionsResource {
 
             JSONParser parser = new JSONParser();
 
-            if (confType.equalsIgnoreCase("reference")) {
+            if (confType.equalsIgnoreCase("hoot2")) {
+                if ((hoot2Template == null) || doForce) {
+                    hoot2Template = new JSONArray();
+                    hoot2Template.add(hoot2Override);
+                }
+                template = hoot2Template;
+            }
+            else if (confType.equalsIgnoreCase("reference")) {
                 if ((referenceTemplate == null) || doForce) {
                     referenceTemplate = new JSONArray();
                     referenceTemplate.add(referenceOverride);
@@ -131,6 +140,10 @@ public class AdvancedConflationOptionsResource {
     private void getOverrides(Boolean doForce) throws IOException, ParseException {
         if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
             JSONParser parser = new JSONParser();
+
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))){
+                hoot2Override = (JSONObject) parser.parse(fileReader);
+            }
 
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))){
                 referenceOverride = (JSONObject) parser.parse(fileReader);
