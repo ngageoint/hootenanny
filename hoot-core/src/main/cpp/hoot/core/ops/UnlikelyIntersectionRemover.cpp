@@ -66,7 +66,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // scenarios this should be just fine.
 
   // create two groups for the ways
-  vector< boost::shared_ptr<Way> > g1, g2;
+  vector<boost::shared_ptr<Way>> g1, g2;
 
   // put the first way in the first group
   g1.push_back(_result->getWay(*wayIds.begin()));

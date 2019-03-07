@@ -367,11 +367,12 @@ int ConflateCmd::runSimple(QStringList args)
 void ConflateCmd::_removeUnneededMatchAndMergerCreators(ConstOsmMapPtr map)
 {
   MatchCandidateCountVisitor matchCandidateCounter(MatchFactory::getInstance().getCreators());
-  LOG_INFO(matchCandidateCounter.getInitStatusMessage());
+  //LOG_INFO(matchCandidateCounter.getInitStatusMessage());
   map->visitRo(matchCandidateCounter);
   const QMap<QString, long> candidateCounts =
     boost::any_cast<QMap<QString, long>>(matchCandidateCounter.getData());
   LOG_INFO(matchCandidateCounter.getCompletedStatusMessage());
+  LOG_DEBUG("Feature match candidates: " << candidateCounts);
 
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   LOG_DEBUG("Match creators before candidate count checking: " << matchCreators);
@@ -381,11 +382,11 @@ void ConflateCmd::_removeUnneededMatchAndMergerCreators(ConstOsmMapPtr map)
   for (QMap<QString, long>::const_iterator itr = candidateCounts.begin();
        itr != candidateCounts.end(); ++itr)
   {
-    if (candidateCounts[itr.key()] == 0)
+    if (!matchCreators.contains(itr.key()))
     {
       LOG_INFO(
         "Removing match creator: " << itr.key() << ", as input data contains no candidate " <<
-        "features of the corresponding type.")
+        "features for the corresponding type.")
       const int index = matchCreators.indexOf(itr.key());
       assert(index >= 0);
       matchCreators.removeAt(index);

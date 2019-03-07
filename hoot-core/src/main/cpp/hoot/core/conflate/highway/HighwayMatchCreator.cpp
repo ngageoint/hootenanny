@@ -47,6 +47,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -222,7 +223,8 @@ public:
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
     }
   }
 
@@ -327,7 +329,9 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
   map->visitRo(v);
-  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " highway match candidates.");
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    " highway match candidates.");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const

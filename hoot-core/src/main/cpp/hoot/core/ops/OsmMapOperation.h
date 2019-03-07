@@ -57,7 +57,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() : _numAffected(0) {}
+  OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
   virtual ~OsmMapOperation() {}
 
   /**
@@ -76,8 +76,9 @@ public:
 
 protected:
 
-  // This will only be used by those implementing OperationStatusInfo.
-  long _numAffected;
+  // These will only be used by those implementing OperationStatusInfo.
+  long _numAffected;    // how many elements the operation actually counted or did something to
+  long _numProcessed;   // how many elements the operation processed total
 };
 
 }

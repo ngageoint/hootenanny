@@ -40,6 +40,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -213,8 +214,9 @@ public:
       if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-          _map->getElementCount() << " total elements.");
+          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
+          " total elements.");
       }
     }
 
@@ -222,7 +224,8 @@ public:
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
     }
   }
 
@@ -329,7 +332,9 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
     map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
-  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " building match candidates.");
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    " building match candidates.");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const

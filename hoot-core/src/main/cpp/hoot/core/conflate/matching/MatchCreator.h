@@ -97,6 +97,8 @@ public:
    */
   QString getDescription() const { return _description; }
 
+  void setAllowSearchRadiusCalc(const bool allow) { _allowSearchRadiusCalc = allow; }
+
 protected:
 
   QString _description;
@@ -106,6 +108,11 @@ protected:
   // isMatchCandidate method).  Couldn't find any clean way to add that to this base class, given
   // the way that each match creator calls into a visitor to parse potential matches
   ElementCriterionPtr _filter;
+
+  // Sometimes you may not want to go through the expense of search radius calc...like when just
+  // counting features. Currently, only Generic Conflation with ScriptMatchCreator can perform
+  // auto search radius calc.
+  bool _allowSearchRadiusCalc;
 };
 
 typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;

@@ -136,6 +136,7 @@ void MatchFactory::registerCreator(QString c)
     args.removeFirst();
     boost::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
+    mc->setAllowSearchRadiusCalc(true);
 
     if (!_tagFilter.trimmed().isEmpty())
     {

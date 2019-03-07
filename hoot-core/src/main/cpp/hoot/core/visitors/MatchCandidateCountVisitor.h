@@ -32,6 +32,7 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -63,7 +64,9 @@ public:
   virtual QString getInitStatusMessage() const { return "Counting match candidates..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Counted " + QString::number(_totalCandidateCount) + " match candidates."; }
+  {
+    return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
+  }
 
 private:
 

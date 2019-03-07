@@ -44,6 +44,7 @@
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -432,16 +433,17 @@ public:
       if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-          getMap()->getElementCount() << " total elements.");
+          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          " match candidates / " << StringUtils::formatLargeNumber(getMap()->getElementCount()) <<
+          " total elements.");
       }
     }
     _numElementsVisited++;
     if (_numElementsVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " <<
-        getMap()->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(getMap()->getElementCount()) << " elements.");
     }
   }
 
@@ -540,7 +542,7 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
   return 0;
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
+void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*> &matches,
                                        ConstMatchThresholdPtr threshold)
 {
   if (!_script)
@@ -550,7 +552,10 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  v.calculateSearchRadius();
+  if (_allowSearchRadiusCalc)
+  {
+    v.calculateSearchRadius();
+  }
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
@@ -561,7 +566,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   LOG_VARD(*threshold);
   map->visitRo(v);
   LOG_INFO(
-    "Found " << v.getNumMatchCandidatesFound() << " " <<
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(
       _getScriptDescription(_scriptPath).baseFeatureType) << " match candidates.");
 }
@@ -625,7 +630,10 @@ boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
     if (!_cachedCustomSearchRadii.contains(scriptPath))
     {
-      _cachedScriptVisitor->calculateSearchRadius();
+      if (_allowSearchRadiusCalc)
+      {
+        _cachedScriptVisitor->calculateSearchRadius();
+      }
     }
     else
     {

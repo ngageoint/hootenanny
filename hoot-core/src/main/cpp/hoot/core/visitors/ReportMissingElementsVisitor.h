@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -42,7 +43,7 @@ namespace hoot
  * shouldn't contain missing references.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-    public Configurable
+    public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -65,6 +66,11 @@ public:
 
   virtual QString getDescription() const
   { return "Reports references to missing elements in a map"; }
+
+  virtual QString getInitStatusMessage() const { return "Reporting missing elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Reported " + QString::number(_missingCount) + " missing elements."; }
 
 protected:
 

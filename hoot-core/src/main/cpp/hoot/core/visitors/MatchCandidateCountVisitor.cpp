@@ -60,6 +60,10 @@ void MatchCandidateCountVisitor::_setupCreators(
       matchCreatorName = matchCreatorDescription;
     }
     LOG_VART(matchCreatorName);
+
+    // We want to skip the expense of auto search radius calc, as its not necessary when counting.
+    matchCreator->setAllowSearchRadiusCalc(false);
+
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
   }
   LOG_VART(_matchCreatorsByName.size());
@@ -129,9 +133,11 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
   }
 
   _numAffected++;
-  if (_numAffected % 1000 == 0)
+  if (_numAffected % 10000 == 0)
   {
-    PROGRESS_INFO("Checked " << _numAffected << " features for match candidates.");
+    PROGRESS_INFO(
+      "Checked " << StringUtils::formatLargeNumber(_numAffected) <<
+      " features for match candidates.");
   }
 }
 
