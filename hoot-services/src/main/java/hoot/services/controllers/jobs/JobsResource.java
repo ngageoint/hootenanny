@@ -28,32 +28,29 @@ package hoot.services.controllers.jobs;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.job.JobStatusManager;
 import hoot.services.jobs.JobsStatusesManager;
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Users;
 
 @Controller
 @Path("")
 @Transactional
 public class JobsResource {
-    private static final Logger logger = LoggerFactory.getLogger(JobsResource.class);
     private static final int MAX_SIZE = 10;
 
     @Autowired
     private JobsStatusesManager jobsStatusesManager;
-    @Autowired
-    private JobStatusManager jobStatusManager;
 
 
     public JobsResource() {}
@@ -68,8 +65,9 @@ public class JobsResource {
     @GET
     @Path("/recent")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<JobStatus> getJobStatus() {
-        return this.jobsStatusesManager.getRecentJobs(MAX_SIZE);
+    public List<JobStatus> getJobStatus(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        return this.jobsStatusesManager.getRecentJobs(user, MAX_SIZE);
     }
 
 }

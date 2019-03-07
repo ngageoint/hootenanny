@@ -62,18 +62,21 @@ public class JobCancellationResource {
 
     /**
      * Cancel job.
-     * 
+     *
      * @param params
      *            - json containing following parameters jobid: Target job id; mapid: Target map id.
-     * 
+     *
      *            Example: {"jobid":"123", "mapid":"45"}
-     * 
+     *
      * @return json containing cancel job id Example: {"jobid":"321"}
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response process(JobCancellationParams params) {
+
+        //TODO: make sure user owns job and map
+
         String jobIdToCancel = null;
 
         try {

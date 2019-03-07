@@ -51,12 +51,12 @@ public class JobStatusManagerImpl implements JobStatusManager {
     public JobStatusManagerImpl() {}
 
     @Override
-    public void addJob(String jobId) {
+    public void addJob(Job job) {
         try {
-            this.updateJob(jobId, RUNNING, "PROCESSING", 0.0);
+            this.updateJobStatus(job.getJobId(), RUNNING, "PROCESSING", 0.0, job.getUserId());
         }
         catch (Exception e) {
-            logger.error("Error adding a new job with ID = {} ", jobId, e);
+            logger.error("Error adding a new job with ID = {} ", job.getJobId(), e);
             throw e;
         }
     }
@@ -141,7 +141,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
      */
     private void updateJob(String jobId, JobStatus jobStatus, String statusDetail, Double percentComplete) {
         try {
-            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete);
+            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete, null);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -155,7 +155,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
      * @param jobId
      * @param newStatus
      */
-    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Double percentComplete) {
+    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Double percentComplete, Long userId) {
         hoot.services.models.db.JobStatus currentJobStatus = createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
 
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
@@ -178,6 +178,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
         else if (currentJobStatus == null) {
             currentJobStatus = new hoot.services.models.db.JobStatus();
             currentJobStatus.setJobId(jobId);
+            currentJobStatus.setUserId(userId);
             currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {

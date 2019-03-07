@@ -116,7 +116,7 @@ public class ConflateResource {
 
             Command[] workflow = { conflateCommand, updateTagsCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

@@ -567,6 +567,8 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        Users user = Users.fromRequest(request);
+
         // handles some ACL logic for us...
         getMapForRequest(request, mapId, false, true);
 
@@ -579,7 +581,7 @@ public class MapResource {
                 }
             };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;

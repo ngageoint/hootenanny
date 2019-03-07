@@ -33,20 +33,19 @@ import static hoot.services.utils.DbUtils.createQuery;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Users;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 public class JobsStatusesManagerImpl implements JobsStatusesManager {
     public JobsStatusesManagerImpl() {}
     @Override
-    public List<JobStatus> getRecentJobs(int limit) {
+    public List<JobStatus> getRecentJobs(Users user, int limit) {
         long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
         List<JobStatus> recentJobs = createQuery()
                 .select(jobStatus)

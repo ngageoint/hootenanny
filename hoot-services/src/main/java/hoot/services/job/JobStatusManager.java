@@ -36,7 +36,7 @@ import hoot.services.models.db.JobStatus;
 
 @Service
 public interface JobStatusManager {
-    void addJob(String jobId);
+    void addJob(Job job);
 
     void updateJob(String jobId, String statusDetail, Double percentComplete);
 

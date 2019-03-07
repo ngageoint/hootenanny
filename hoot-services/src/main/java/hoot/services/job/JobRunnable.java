@@ -42,13 +42,11 @@ class JobRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(JobRunnable.class);
 
     private final Job job;
-    private final Long userId;
     private final JobStatusManager jobStatusManager;
 
 
-    JobRunnable(Job job, Long userId, JobStatusManager jobStatusManager) {
+    JobRunnable(Job job, JobStatusManager jobStatusManager) {
         this.job = job;
-        this.userId = userId;
         this.jobStatusManager = jobStatusManager;
     }
 
@@ -75,7 +73,7 @@ class JobRunnable implements Runnable {
         logger.debug("Start processing chain Job with jobId = {}", job.getJobId());
 
         try {
-            jobStatusManager.addJob(job.getJobId());
+            jobStatusManager.addJob(job);
 
             int commandCounter = 0;
             for (Command command : job.getCommands()) {

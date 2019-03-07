@@ -31,8 +31,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Users;
 
 @Service
 public interface JobsStatusesManager {
-	List<JobStatus> getRecentJobs(int limit);
+    List<JobStatus> getRecentJobs(Users user, int limit);
 }

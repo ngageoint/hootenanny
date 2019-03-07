@@ -32,10 +32,12 @@ import hoot.services.command.Command;
 
 public class Job {
     private String jobId;
+    private Long userId;
     private Command[] commands;
 
-    public Job(String jobId, Command[] commands) {
+    public Job(String jobId, Long userId, Command[] commands) {
         this.jobId = jobId;
+        this.setUserId(userId);
         this.commands = commands;
     }
 
@@ -58,4 +60,12 @@ public class Job {
     public void setCommands(Command[] commands) {
         this.commands = commands;
     }
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 }

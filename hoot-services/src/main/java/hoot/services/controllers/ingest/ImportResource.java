@@ -207,7 +207,7 @@ public class ImportResource {
 
             Command[] workflow = { importCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
 
             Map<String, Object> res = new HashMap<String, Object>();
             res.put("jobid", jobId);

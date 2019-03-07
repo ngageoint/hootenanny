@@ -166,7 +166,7 @@ public class ExportResource {
                 }
             }
 
-            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;
