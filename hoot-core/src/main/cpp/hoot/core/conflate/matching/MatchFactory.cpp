@@ -62,7 +62,6 @@ Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, Elem
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     Match* m = _creators[i]->createMatch(map, eid1, eid2);
-
     if (m)
     {
       return m;
@@ -155,116 +154,13 @@ void MatchFactory::registerCreator(QString c)
   }
 }
 
-void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
+void MatchFactory::setMatchCreators(const QStringList matchCreatorsList)
 {
   LOG_DEBUG("MatchFactory creators: " << matchCreatorsList);
-
   for (int i = 0; i < matchCreatorsList.size(); i++)
   {
     _theInstance->registerCreator(matchCreatorsList[i]);
   }
-}
-
-void MatchFactory::_tempFixDefaults()
-{
-  QStringList matchCreators = ConfigOptions().getMatchCreators();
-  QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
-
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
-  {
-    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
-    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
-    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
-  }
-
-  //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
-  if (matchCreators.size() != mergerCreators.size())
-  {
-    //going to make the mergers match whatever the matchers are
-    QStringList fixedMergerCreators;
-    for (int i = 0; i < matchCreators.size(); i++)
-    {
-      const QString matchCreator = matchCreators.at(i);
-      if (matchCreator == "hoot::BuildingMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::BuildingMergerCreator");
-      }
-      else if (matchCreator.contains("hoot::ScriptMatchCreator"))
-      {
-        fixedMergerCreators.append("hoot::ScriptMergerCreator");
-      }
-      else if (matchCreator == "hoot::HighwayMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::HighwayMergerCreator");
-      }
-      else if (matchCreator == "hoot::NetworkMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::NetworkMergerCreator");
-      }
-      else if (matchCreator == "hoot::PoiPolygonMatchCreator")
-      {
-        fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
-      }
-    }
-    LOG_DEBUG("Temp fixing merger.creators...");
-    conf().set("merger.creators", fixedMergerCreators.join(";"));
-  }
-  LOG_VARD(mergerCreators);
-
-  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-      ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
-  {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
-  }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
-           ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
-  {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
-    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
-  }
-  LOG_VARD(ConfigOptions().getWaySublineMatcher());
-
-  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
-  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
-      ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
-  {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
-  }
-  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-           ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
-  {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
-    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
-  }
-  LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
-
-  //fix use of rubber sheeting and corner splitter - default value coming in from UI with network
-  //will be correct, so just fix for unifying - https://github.com/ngageoint/hootenanny-ui/issues/969
-  QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
-  if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-      (mapCleanerTransforms.contains("hoot::CornerSplitter") ||
-       mapCleanerTransforms.contains("hoot::RubberSheet")))
-  {
-    if (mapCleanerTransforms.contains("hoot::CornerSplitter") &&
-        !ConfigOptions().getHighwayMergeTagsOnly())
-    {
-      mapCleanerTransforms.removeAll("hoot::CornerSplitter");
-    }
-    if (mapCleanerTransforms.contains("hoot::RubberSheet"))
-    {
-      mapCleanerTransforms.removeAll("hoot::RubberSheet");
-    }
-    LOG_DEBUG("Temp fixing map.cleaner.transforms...");
-    conf().set("map.cleaner.transforms", mapCleanerTransforms.join(";"));
-  }
-  LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
 void MatchFactory::setConfiguration(const Settings& s)
@@ -274,18 +170,6 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* remove this hack after the following UI issues are fixed:
-   *
-   * https://github.com/ngageoint/hootenanny-ui/issues/969
-   * https://github.com/ngageoint/hootenanny-ui/issues/970
-   * https://github.com/ngageoint/hootenanny-ui/issues/971
-   * https://github.com/ngageoint/hootenanny-ui/issues/972
-   * */
-  if (ConfigOptions().getAutocorrectOptions())
-  {
-    MatchFactory::_tempFixDefaults();
-  }
-
   const QStringList matchCreators = ConfigOptions().getMatchCreators();
   const QStringList mergerCreators = ConfigOptions().getMergerCreators();
   LOG_VARD(matchCreators);
@@ -323,7 +207,7 @@ MatchFactory& MatchFactory::getInstance()
   if (_theInstance->_creators.size() == 0)
   {
     //only get the match creators that are specified in the config
-    _setMatchCreators(matchCreators);
+    setMatchCreators(matchCreators);
   }
   return *_theInstance;
 }

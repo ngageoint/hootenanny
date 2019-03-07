@@ -69,7 +69,7 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
 {
   _totalCandidateCount = 0;
 
-  for (QMap<QString, boost::shared_ptr<MatchCreator> >::const_iterator iterator =
+  for (QMap<QString, boost::shared_ptr<MatchCreator>>::const_iterator iterator =
        _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
@@ -126,6 +126,12 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
   else
   {
     _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"];
+  }
+
+  _numAffected++;
+  if (_numAffected % 1000 == 0)
+  {
+    PROGRESS_INFO("Checked " << _numAffected << " features for match candidates.");
   }
 }
 

@@ -49,6 +49,8 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/MatchCandidateCountVisitor.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 
 // Standard
 #include <fstream>
@@ -154,7 +156,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   QString msg =
     "Conflating " + input1.right(50) + " with " + input2.right(50) + " and writing the output to " +
-     output.right(50);
+    output.right(50);
   if (isDiffConflate)
   {
     msg = msg.prepend("Differentially ");
@@ -215,14 +217,28 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
+
+  /* Remove this hack after the following UI issues are fixed (should be fixed by hoot ui v2):
+   *
+   * https://github.com/ngageoint/hootenanny-ui/issues/969
+   * https://github.com/ngageoint/hootenanny-ui/issues/970
+   * https://github.com/ngageoint/hootenanny-ui/issues/971
+   * https://github.com/ngageoint/hootenanny-ui/issues/972
+   * */
+  // should rename this to auto.correct.conflate.options now
+  if (ConfigOptions().getAutocorrectOptions())
+  {
+    _tempFixDefaults();
+  }
+
+  // Let's see if we can get rid of any matchers and save some job run time.
+  _removeUnneededMatchAndMergerCreators(map);
 
   OsmMapPtr result = map;
 
@@ -250,7 +266,6 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
-
   OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
 
   // doing this after the conflate post ops, since some invalid reviews are removed by them
@@ -349,6 +364,49 @@ int ConflateCmd::runSimple(QStringList args)
   return 0;
 }
 
+void ConflateCmd::_removeUnneededMatchAndMergerCreators(ConstOsmMapPtr map)
+{
+  MatchCandidateCountVisitor matchCandidateCounter(MatchFactory::getInstance().getCreators());
+  LOG_INFO(matchCandidateCounter.getInitStatusMessage());
+  map->visitRo(matchCandidateCounter);
+  const QMap<QString, long> candidateCounts =
+    boost::any_cast<QMap<QString, long>>(matchCandidateCounter.getData());
+  LOG_INFO(matchCandidateCounter.getCompletedStatusMessage());
+
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  LOG_DEBUG("Match creators before candidate count checking: " << matchCreators);
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
+  LOG_DEBUG("Merger creators before candidate count checking: " << matchCreators);
+  bool anyRemoved = false;
+  for (QMap<QString, long>::const_iterator itr = candidateCounts.begin();
+       itr != candidateCounts.end(); ++itr)
+  {
+    if (candidateCounts[itr.key()] == 0)
+    {
+      LOG_INFO(
+        "Removing match creator: " << itr.key() << ", as input data contains no candidate " <<
+        "features of the corresponding type.")
+      const int index = matchCreators.indexOf(itr.key());
+      assert(index >= 0);
+      matchCreators.removeAt(index);
+      mergerCreators.removeAt(index);
+      anyRemoved = true;
+    }
+  }
+  if (anyRemoved)
+  {
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators);
+    MatchFactory::setMatchCreators(matchCreators);
+    conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators);
+  }
+  LOG_DEBUG(
+    "Match creators after match candidate count checking: " <<
+    conf().get(ConfigOptions::getMatchCreatorsKey()));
+  LOG_DEBUG(
+    "Merger creators after match candidate count checking: " <<
+    conf().get(ConfigOptions::getMergerCreatorsKey()));
+}
+
 void ConflateCmd::_updateConfigOptionsForAttributeConflation()
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
@@ -395,6 +453,108 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
       "Post conflate ops after Attribute Conflation adjustment: " <<
       conf().get("conflate.post.ops").toStringList());
   }
+}
+
+void ConflateCmd::_tempFixDefaults()
+{
+  QStringList matchCreators = ConfigOptions().getMatchCreators();
+  QStringList mergerCreators = ConfigOptions().getMergerCreators();
+  LOG_VARD(matchCreators);
+  LOG_VARD(mergerCreators);
+
+  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
+  {
+    LOG_WARN("Match or merger creators empty.  Setting to defaults.");
+    matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();
+    mergerCreators = ConfigOptions::getMergerCreatorsDefaultValue();
+  }
+
+  //fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972
+  if (matchCreators.size() != mergerCreators.size())
+  {
+    //going to make the mergers match whatever the matchers are
+    QStringList fixedMergerCreators;
+    for (int i = 0; i < matchCreators.size(); i++)
+    {
+      const QString matchCreator = matchCreators.at(i);
+      if (matchCreator == "hoot::BuildingMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::BuildingMergerCreator");
+      }
+      else if (matchCreator.contains("hoot::ScriptMatchCreator"))
+      {
+        fixedMergerCreators.append("hoot::ScriptMergerCreator");
+      }
+      else if (matchCreator == "hoot::HighwayMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::HighwayMergerCreator");
+      }
+      else if (matchCreator == "hoot::NetworkMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::NetworkMergerCreator");
+      }
+      else if (matchCreator == "hoot::PoiPolygonMatchCreator")
+      {
+        fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
+      }
+    }
+    LOG_DEBUG("Temp fixing merger.creators...");
+    conf().set("merger.creators", fixedMergerCreators.join(";"));
+  }
+  LOG_VARD(mergerCreators);
+
+  //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
+  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
+      ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+      ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
+  {
+    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
+  }
+  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
+           ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
+           ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
+  {
+    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
+  }
+  LOG_VARD(ConfigOptions().getWaySublineMatcher());
+
+  //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
+  if (matchCreators.contains("hoot::NetworkMatchCreator") &&
+      ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
+  {
+    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
+  }
+  else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
+           ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
+  {
+    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
+  }
+  LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
+
+  //fix use of rubber sheeting and corner splitter - default value coming in from UI with network
+  //will be correct, so just fix for unifying - https://github.com/ngageoint/hootenanny-ui/issues/969
+  QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
+  if (matchCreators.contains("hoot::HighwayMatchCreator") &&
+      (mapCleanerTransforms.contains("hoot::CornerSplitter") ||
+       mapCleanerTransforms.contains("hoot::RubberSheet")))
+  {
+    if (mapCleanerTransforms.contains("hoot::CornerSplitter") &&
+        !ConfigOptions().getHighwayMergeTagsOnly())
+    {
+      mapCleanerTransforms.removeAll("hoot::CornerSplitter");
+    }
+    if (mapCleanerTransforms.contains("hoot::RubberSheet"))
+    {
+      mapCleanerTransforms.removeAll("hoot::RubberSheet");
+    }
+    LOG_DEBUG("Temp fixing map.cleaner.transforms...");
+    conf().set("map.cleaner.transforms", mapCleanerTransforms.join(";"));
+  }
+  LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
 }

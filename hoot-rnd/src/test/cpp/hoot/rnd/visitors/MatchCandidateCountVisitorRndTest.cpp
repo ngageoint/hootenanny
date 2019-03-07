@@ -72,7 +72,7 @@ public:
     matchCreators.clear();
     matchCreators.append("hoot::PoiPolygonMatchCreator");
     MatchFactory::getInstance().reset();
-    MatchFactory::_setMatchCreators(matchCreators);
+    conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators);
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)36, (int)uut.getStat());
