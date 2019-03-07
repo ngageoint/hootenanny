@@ -103,6 +103,7 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
 vector<CreatorDescription> MarkForReviewMergerCreator::getAllCreators() const
 {
   // don't provide this as an option in the UI. This will be added automatically in the right place.
+  // TODO: How do we get a description back for this one?
   return vector<CreatorDescription>();
 }
 

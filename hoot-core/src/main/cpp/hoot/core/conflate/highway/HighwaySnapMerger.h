@@ -49,6 +49,7 @@ public:
 
   static unsigned int logWarnCount;
 
+  HighwaySnapMerger();
   HighwaySnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
@@ -63,6 +64,8 @@ protected:
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
+
+  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
 
 private:
 

@@ -573,7 +573,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-53" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="-178"/>
         <nd ref="-158"/>
         <nd ref="-4"/>
@@ -597,7 +597,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-53"/>
     </way>
-    <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-39" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-138"/>
         <nd ref="-4"/>
         <nd ref="-3"/>
@@ -620,7 +620,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-39"/>
     </way>
-    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-38" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-59"/>
         <nd ref="-87"/>
         <nd ref="-137"/>
@@ -657,17 +657,17 @@
         <nd ref="-136"/>
         <nd ref="-88"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{3ba8056c-2b4e-4105-a2ad-5809a6047816}"/>
         <tag k="name" v="Rue Courbe"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-37"/>
     </way>
-    <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-36" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-135"/>
         <nd ref="-7"/>
         <nd ref="-58"/>
@@ -706,7 +706,7 @@
         <tag k="source:haiti" v="CNIGS and CartONG"/>
         <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="operational_status" v="open"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.133Z"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="fixme" v="survey if oneway continues one/both directions"/>
@@ -721,7 +721,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-35"/>
     </way>
-    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-34" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-4"/>
         <nd ref="-79"/>
         <nd ref="-133"/>
@@ -752,7 +752,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-34"/>
     </way>
-    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-33" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-22"/>
         <nd ref="-63"/>
         <nd ref="-110"/>
@@ -786,7 +786,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-33"/>
     </way>
-    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-32" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-89"/>
@@ -808,7 +808,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-32"/>
     </way>
-    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-31" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-130"/>
         <nd ref="-83"/>
         <nd ref="-59"/>
@@ -841,7 +841,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-31"/>
     </way>
-    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-30" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-129"/>
         <nd ref="-48"/>
         <nd ref="-57"/>
@@ -859,7 +859,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-30"/>
     </way>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-29" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-128"/>
         <nd ref="-35"/>
         <nd ref="-34"/>
@@ -881,7 +881,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-29"/>
     </way>
-    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-28" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-44"/>
         <nd ref="-47"/>
         <nd ref="-43"/>
@@ -898,7 +898,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-28"/>
     </way>
-    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-27" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-98"/>
         <nd ref="-54"/>
         <nd ref="-53"/>
@@ -918,7 +918,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-27"/>
     </way>
-    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-26" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-124"/>
         <nd ref="-81"/>
         <nd ref="-74"/>
@@ -949,7 +949,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-26"/>
     </way>
-    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-25" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-123"/>
         <nd ref="-86"/>
         <nd ref="-76"/>
@@ -973,7 +973,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-25"/>
     </way>
-    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-24" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-121"/>
         <nd ref="-79"/>
         <nd ref="-78"/>
@@ -995,7 +995,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-24"/>
     </way>
-    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-23" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-119"/>
         <nd ref="-85"/>
         <nd ref="-80"/>
@@ -1015,7 +1015,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-23"/>
     </way>
-    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-100"/>
         <nd ref="-83"/>
         <nd ref="-82"/>
@@ -1051,7 +1051,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-22"/>
     </way>
-    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-21" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-117"/>
         <nd ref="-102"/>
         <nd ref="-88"/>
@@ -1076,7 +1076,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-21"/>
     </way>
-    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-20" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-115"/>
         <nd ref="-92"/>
         <nd ref="-91"/>
@@ -1094,7 +1094,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-20"/>
     </way>
-    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-19" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-114"/>
         <nd ref="-102"/>
         <nd ref="-101"/>
@@ -1116,7 +1116,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-19"/>
     </way>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-18" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-112"/>
         <nd ref="-109"/>
         <nd ref="-108"/>
@@ -1150,7 +1150,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-18"/>
     </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-17" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-142"/>
         <nd ref="-141"/>
         <nd ref="-140"/>
@@ -1184,16 +1184,16 @@
         <nd ref="-3"/>
         <nd ref="-110"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="geoeye;osm;osm"/>
+        <tag k="source" v="geoeye;osm"/>
         <tag k="uuid" v="{cdea7081-4c1c-4220-9bc9-50b3cf92b5d9}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="secondary_link"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-16"/>
     </way>
-    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-15" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-108"/>
         <nd ref="-99"/>
         <nd ref="-98"/>
@@ -1226,16 +1226,16 @@
         <nd ref="-64"/>
         <nd ref="-63"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{4007d710-d32a-4585-8483-8c2e146ebfdf}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-13"/>
     </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-12" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-96"/>
         <nd ref="-62"/>
         <nd ref="-61"/>
@@ -1250,7 +1250,7 @@
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-12"/>
     </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-11" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-74"/>
         <nd ref="-80"/>
         <nd ref="-76"/>
@@ -1295,9 +1295,9 @@
         <nd ref="-55"/>
         <nd ref="-97"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{83455e56-898e-4fa5-8e16-7b62ddefa087}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
@@ -1310,16 +1310,16 @@
         <nd ref="-45"/>
         <nd ref="-94"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{9095d65f-b9d2-425b-a4e0-fb8b61eada23}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-9"/>
     </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-8" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-95"/>
         <nd ref="-40"/>
         <nd ref="-44"/>
@@ -1342,9 +1342,9 @@
         <nd ref="-32"/>
         <nd ref="-35"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{83dbfc5a-f894-4fe3-9d14-63fdb4425af6}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="footway"/>
         <tag k="hoot:status" v="1"/>
@@ -1373,9 +1373,9 @@
         <nd ref="-31"/>
         <tag k="junction" v="roundabout"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="GeoEye;osm;osm"/>
+        <tag k="source" v="GeoEye;osm"/>
         <tag k="uuid" v="{6d02aaea-648c-4b09-8acf-8cf0b4fd4124}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="1"/>
@@ -1386,9 +1386,9 @@
         <nd ref="-89"/>
         <nd ref="-104"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;osm"/>
+        <tag k="source" v="osm"/>
         <tag k="uuid" v="{4aa747a3-768b-43c2-a7c2-188ce187a200}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="secondary_link"/>
         <tag k="hoot:status" v="1"/>
@@ -1402,9 +1402,9 @@
         <nd ref="-10"/>
         <nd ref="-9"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="geoeye;osm;osm"/>
+        <tag k="source" v="geoeye;osm"/>
         <tag k="uuid" v="{c7acd2eb-accb-4b34-ae66-4463e5c8f664}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:status" v="1"/>
@@ -1415,9 +1415,9 @@
         <nd ref="-141"/>
         <nd ref="-8"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
         <tag k="uuid" v="{80416c3c-d608-4d6a-a59a-346ada5f1e6d}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
@@ -1428,16 +1428,16 @@
         <nd ref="-139"/>
         <nd ref="-7"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="survey; OSM-adjusted Bing;osm;osm"/>
+        <tag k="source" v="survey; OSM-adjusted Bing;osm"/>
         <tag k="uuid" v="{19d7e8e8-2ddf-4aaf-ba23-d79480c07ed0}"/>
-        <tag k="attribution" v="osm;osm"/>
+        <tag k="attribution" v="osm"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-2"/>
     </way>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="-18"/>
         <nd ref="-6"/>
         <nd ref="-5"/>

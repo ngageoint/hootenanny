@@ -1,13 +1,13 @@
 {
   "datasources": {
-    "RenderDb": {
-      "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
-    },
     "API": {
       "conn": "http://192.168.33.12:3000/api/0.6/map"
     },
     "APIDB": {
       "conn": "osmapidb://vagrant:vagrant!@192.168.33.12:5432/openstreetmap"
+    },
+    "RenderDb": {
+      "conn": "PG:dbname='osmhaiti' host='192.168.33.12' port='5432' user='vagrant' password=''"
     }
   },
   "formats": {
@@ -24,7 +24,7 @@
     "GGDMv30": "translations/GGDMv30.js"
   },
   "schema_options": {
-    "DNC": "ogr.strict.checking=off",
+    "DNC": "ogr.strict.checking=off"
   },
   "tagOverrides": {
     "attribution":"",

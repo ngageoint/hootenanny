@@ -34,7 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -272,9 +272,9 @@ void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Ele
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   const vector< boost::shared_ptr<Element> >& parts)
 {
-  LOG_TRACE("Combining building parts...");
+  LOG_DEBUG("Combining building parts...");
 
-  LOG_VART(parts.size());
+  LOG_VARD(parts.size());
   if (parts.size() == 0)
   {
     throw IllegalArgumentException("No building parts passed to BuildingPartMergeOp::combineParts.");

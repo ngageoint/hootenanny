@@ -35,7 +35,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/KnnWayIterator.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>

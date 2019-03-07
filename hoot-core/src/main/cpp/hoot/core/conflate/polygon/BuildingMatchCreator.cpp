@@ -336,7 +336,8 @@ std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "Matches buildings", CreatorDescription::Building, false));
+    CreatorDescription(
+      className(), "Generates matchers that match buildings", CreatorDescription::Building, false));
   return result;
 }
 

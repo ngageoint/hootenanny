@@ -335,8 +335,9 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Matches roads with the 2nd generation algorithm", CreatorDescription::Highway,
-      false));
+      className(),
+      "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
+      CreatorDescription::Highway, false));
   return result;
 }
 

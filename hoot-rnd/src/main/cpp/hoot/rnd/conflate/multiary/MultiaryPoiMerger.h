@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Merger operation for idenifying clusters of elements within the provided pairs and only merging
+ * Merger operation for identifying clusters of elements within the provided pairs and only merging
  * the clustered elements. This is most useful when conflating large numbers of input sources or
  * intradataset conflation where there could be n-elements that represent the same object.
  */
@@ -44,6 +44,9 @@ class MultiaryPoiMerger : public MergerBase
 {
 public:
 
+  static std::string className() { return "hoot::MultiaryPoiMerger"; }
+
+  MultiaryPoiMerger();
   /**
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
@@ -57,6 +60,9 @@ public:
     std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   virtual QString toString() const { return "MultiaryPoiMerger"; }
+
+  virtual QString getDescription() const
+  { return "Merges POIs matched with Multiary Conflation (experimental)"; }
 
 protected:
 

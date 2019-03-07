@@ -2,7 +2,7 @@
 [[CommandLineExamples]]
 == Command Line Examples
 
-See the User Guide for more detail.
+See the User Guide for more details on command usage.
 
 === Basic
 
@@ -17,7 +17,7 @@ See the User Guide for more detail.
 ==== Conflation
 
 -----
-    # Conflate two maps into a single map (Reference Conflation)
+    # Conflate two maps into a single map
     hoot conflate input1.osm input2.osm output.osm
     
     # Conflate, adding data from the second map to output that does not conflict with data in 
@@ -26,7 +26,7 @@ See the User Guide for more detail.
     
     # Conflate only tags from a second map into a first map without changing the first map's 
     # geometry
-    hoot conflate -C Attribute.conf input1.osm input2.osm output.osm
+    hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 
     # Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples)
     hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
@@ -171,6 +171,10 @@ See the User Guide for more detail.
 ==== Conflation
     
 -----
+    # Conflate two maps into a single map using Reference Conflation and the Network road 
+    # matching algorithm
+    hoot conflate -C NetworkAlgorithm.conf input1.osm input2.osm output.osm
+
     # Conflate, adding geometry data from the second map to output that does not conflict 
     # with data in the first map (Differential Tag Only Conflation; tags may be overwritten)
     hoot conflate --differential --include-tags input1.osm input2.osm output.osm
@@ -477,18 +481,6 @@ Requires language translation server installation.  See the Hootenanny Install G
     # List all available feature extractors
     hoot info --feature-extractors
     
-    # List all available feature matchers
-    hoot info --matchers
-    
-    # List all available feature mergers
-    hoot info --mergers
-    
-    # List all available data operators
-    hoot info --operators
-      
-    # List all available tag mergers
-    hoot info --tag-mergers
-    
     # List all available language detectors
     hoot info --languages --detectors
     
@@ -501,6 +493,21 @@ Requires language translation server installation.  See the Hootenanny Install G
     # List all translatable languages
     hoot info --languages --translatable
 
+    # List all available feature matchers
+    hoot info --matchers
+
+    # List all available feature match creators
+    hoot info --match-creators
+    
+    # List all available feature mergers
+    hoot info --mergers
+
+    # List all available feature merger creators
+    hoot info --merger-creators
+
+    # List all available data operators
+    hoot info --operators
+
     # List all available string comparators
     hoot info --string-comparators
 
@@ -512,5 +519,8 @@ Requires language translation server installation.  See the Hootenanny Install G
     
     # List all available subline string matchers
     hoot info --subline-string-matchers
+
+    # List all available tag mergers
+    hoot info --tag-mergers
 -----
 
