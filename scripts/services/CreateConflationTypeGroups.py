@@ -51,7 +51,7 @@ def createUiJSON(groups, options):
                     None
                 )
                 if match != None:
-                    memberConfig = { 'label': typeMembers[flag], 'id': flag }
+                    memberConfig = { 'label': typeMembers[flag], 'id': match }
                     memberConfig.update(configOptions[match])
                     del memberConfig['key']
                     templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
