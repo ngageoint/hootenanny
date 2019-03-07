@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 
 using namespace std;
 
@@ -137,7 +138,8 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title)
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title,
+                                        NetworkMatcherPtr matcher)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
@@ -158,6 +160,14 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     }
     LOG_DEBUG("Writing debug output to " << debugMapFileName);
     OsmMapPtr copy(new OsmMap(map));
+
+    if (matcher)
+    {
+      DebugNetworkMapCreator(
+        matcher->getMatchThreshold()).addDebugElements(
+          copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+    }
+
     MapProjector::projectToWgs84(copy);
     write(copy, debugMapFileName, true);
     _debugMapCount++;

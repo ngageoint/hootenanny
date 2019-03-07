@@ -42,7 +42,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/conflate/network/NetworkMatch.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
@@ -97,7 +96,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
-  LOG_TRACE("Extracted Network 1: " << n1->toString());
+  LOG_DEBUG("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
   boost::shared_ptr<ChainCriterion> c2(new ChainCriterion(
@@ -109,7 +108,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
-  LOG_TRACE("Extracted Network 2: " << n2->toString());
+  LOG_DEBUG("Extracted Network 2: " << n2->toString());
 
   LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
@@ -132,52 +131,28 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     matcher->iterate();
     LOG_INFO("Optimization iteration: " << i + 1 << "/" << numIterations << " complete.");
 
-    if (ConfigOptions().getNetworkMatchWriteDebugMaps())
-    {
-      OsmMapPtr copy(new OsmMap(map));
-      DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
-        matcher->getAllEdgeScores(), matcher->getAllVertexScores());
-
-      MapProjector::projectToWgs84(copy);
-      conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
-      // TODO: use config opt for debug file path
-      QString name = QString("tmp/debug-%1.osm").arg(i, 3, 10, QLatin1Char('0'));
-      LOG_INFO("Writing debug map: " << name);
-      OsmMapWriterFactory::write(copy, name);
-    }
+    OsmMapWriterFactory::writeDebugMap(map, "network-match-iteration-" + QString::number(i + 1));
   }
 
   // Finalize
   matcher->finalize();
 
-  // Write final debug map
-  if (ConfigOptions().getNetworkMatchWriteDebugMaps())
-  {
-    OsmMapPtr copy(new OsmMap(map));
-    DebugNetworkMapCreator(matcher->getMatchThreshold()).addDebugElements(copy,
-      matcher->getAllEdgeScores(), matcher->getAllVertexScores());
-
-    MapProjector::projectToWgs84(copy);
-    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
-    QString name = QString("tmp/debug-final.osm");
-    LOG_INFO("Writing debug map: " << name);
-    OsmMapWriterFactory::write(copy, name);
-  }
+  OsmMapWriterFactory::writeDebugMap(map, "network-match-after-final-iteration", matcher);
 
   LOG_DEBUG("Retrieving edge scores...");
   // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
-  LOG_VART(matcher->getMatchThreshold());
+  LOG_VARD(matcher->getMatchThreshold());
   for (int i = 0; i < edgeMatch.size(); i++)
   {
-    LOG_VART(edgeMatch[i]->getUid());
-    LOG_VART(edgeMatch[i]->getScore());
-    LOG_VART(edgeMatch[i]->getEdgeMatch());
+    LOG_VARD(edgeMatch[i]->getUid());
+    LOG_VARD(edgeMatch[i]->getScore());
+    LOG_VARD(edgeMatch[i]->getEdgeMatch());
 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
-      LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
+      LOG_VARD(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }

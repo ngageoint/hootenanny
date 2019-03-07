@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
 
 // Qt
 #include <QString>
@@ -58,7 +59,8 @@ public:
 
   static bool isSupportedFormat(const QString url);
 
-  static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "");
+  static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "",
+                            NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
 private:
 

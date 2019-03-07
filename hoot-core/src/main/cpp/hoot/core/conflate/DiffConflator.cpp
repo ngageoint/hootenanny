@@ -128,7 +128,6 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
-  LOG_TRACE(SystemInfo::getMemoryUsageString());
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -148,9 +147,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   // with the differential that we want.
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set< std::pair<ElementId, ElementId> > pairs = (*mit)->getMatchPairs();
+    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
 
-    for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
+    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
       RecursiveElementRemover(pit->first).apply(_pMap);

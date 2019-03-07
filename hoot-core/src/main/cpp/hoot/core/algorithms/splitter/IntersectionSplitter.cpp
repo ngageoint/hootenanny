@@ -147,7 +147,7 @@ void IntersectionSplitter::splitIntersections()
     if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 &&
         _todoNodes.size() > 0)
     {
-      PROGRESS_INFO("  Intersection splitter todo: " << _todoNodes.size() << "       ");
+      PROGRESS_DEBUG("  Intersection splitter todo: " << _todoNodes.size() << "       ");
       todoLogged = true;
     }
     // if the node is part of two or more ways

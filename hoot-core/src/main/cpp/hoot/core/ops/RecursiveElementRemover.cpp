@@ -128,7 +128,7 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     return;
   }
 
-  LOG_TRACE("Removing: " << eid << "...");
+  LOG_DEBUG("Removing: " << eid << "...");
 
   if (eid.getType() == ElementType::Relation)
   {
