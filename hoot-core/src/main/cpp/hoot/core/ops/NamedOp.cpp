@@ -70,21 +70,21 @@ void NamedOp::apply(OsmMapPtr& map)
     }
 
     timer.restart();
-    LOG_DEBUG(
-      "Element count before operation " << s << ": " <<
-      StringUtils::formatLargeNumber(map->getElementCount()));
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
-      LOG_INFO("Applying operation: " << s);
+      LOG_INFO("\tApplying operation: " << s << "...");
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO("\t" << statusInfo->getInitStatusMessage());
+        LOG_INFO("\t\t" << statusInfo->getInitStatusMessage());
       }
+      LOG_DEBUG(
+        "\t\tElement count before operation " << s << ": " <<
+        StringUtils::formatLargeNumber(map->getElementCount()));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -97,7 +97,7 @@ void NamedOp::apply(OsmMapPtr& map)
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
+          "\t\t" << statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
@@ -106,12 +106,12 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
-      LOG_INFO("Applying operation: " << s);
+      LOG_INFO("\tApplying operation: " << s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO("\t" << statusInfo->getInitStatusMessage());
+        LOG_INFO("\t\t" << statusInfo->getInitStatusMessage());
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -125,7 +125,7 @@ void NamedOp::apply(OsmMapPtr& map)
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
+          "\t\t" << statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
@@ -134,8 +134,8 @@ void NamedOp::apply(OsmMapPtr& map)
       throw HootException("Unexpected named operation: " + s);
     }
 
-    LOG_INFO(
-      "\tElement count after operation " << s << ": " <<
+    LOG_DEBUG(
+      "\t\tElement count after operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
 
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));

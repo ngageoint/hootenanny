@@ -61,9 +61,6 @@ void MatchCandidateCountVisitor::_setupCreators(
     }
     LOG_VART(matchCreatorName);
 
-    // We want to skip the expense of auto search radius calc, as its not necessary when counting.
-    matchCreator->setAllowSearchRadiusCalc(false);
-
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
   }
   LOG_VART(_matchCreatorsByName.size());

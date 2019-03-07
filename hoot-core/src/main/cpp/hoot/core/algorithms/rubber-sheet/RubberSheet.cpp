@@ -38,6 +38,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -347,7 +348,8 @@ void RubberSheet::_findTies()
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed intersections for " << ctr << " / " << n2w->size() << " nodes...");
+        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(n2w->size()) << " nodes...");
     }
   }
 
@@ -374,7 +376,8 @@ void RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed paired intersections for " << ctr << " / " << _matches.size() << " matches...");
+        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(_matches.size()) << " matches...");
     }
   }
 
@@ -431,7 +434,8 @@ void RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Potential tie points processed: " << ctr << " / " << _finalPairs.size());
+        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }
 

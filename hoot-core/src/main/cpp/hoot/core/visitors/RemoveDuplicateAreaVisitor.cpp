@@ -172,7 +172,7 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
   if (_numProcessed % 10000 == 0)
   {
     PROGRESS_INFO(
-      "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
+      "\t\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
       " elements for duplicate area removal.");
   }
 }

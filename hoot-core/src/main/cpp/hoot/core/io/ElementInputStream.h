@@ -64,14 +64,8 @@ public:
    */
   virtual void close() = 0;
 
-  /**
-   *
-   */
   virtual bool hasMoreElements() = 0;
 
-  /**
-   *
-   */
   virtual ElementPtr readNextElement() = 0;
 };
 

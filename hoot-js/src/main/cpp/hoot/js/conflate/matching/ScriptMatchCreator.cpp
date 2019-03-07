@@ -552,10 +552,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  if (_allowSearchRadiusCalc)
-  {
-    v.calculateSearchRadius();
-  }
+  v.calculateSearchRadius();
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
@@ -630,10 +627,7 @@ boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
     if (!_cachedCustomSearchRadii.contains(scriptPath))
     {
-      if (_allowSearchRadiusCalc)
-      {
-        _cachedScriptVisitor->calculateSearchRadius();
-      }
+      _cachedScriptVisitor->calculateSearchRadius();
     }
     else
     {

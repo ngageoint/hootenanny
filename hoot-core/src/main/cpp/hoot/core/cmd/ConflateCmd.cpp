@@ -49,8 +49,6 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 
 // Standard
 #include <fstream>
@@ -237,9 +235,6 @@ int ConflateCmd::runSimple(QStringList args)
     _tempFixDefaults();
   }
 
-  // Let's see if we can get rid of any matchers and save some job run time.
-  _removeUnneededMatchAndMergerCreators(map);
-
   OsmMapPtr result = map;
 
   if (isDiffConflate)
@@ -362,50 +357,6 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Conflation job completed.");
 
   return 0;
-}
-
-void ConflateCmd::_removeUnneededMatchAndMergerCreators(ConstOsmMapPtr map)
-{
-  MatchCandidateCountVisitor matchCandidateCounter(MatchFactory::getInstance().getCreators());
-  //LOG_INFO(matchCandidateCounter.getInitStatusMessage());
-  map->visitRo(matchCandidateCounter);
-  const QMap<QString, long> candidateCounts =
-    boost::any_cast<QMap<QString, long>>(matchCandidateCounter.getData());
-  LOG_INFO(matchCandidateCounter.getCompletedStatusMessage());
-  LOG_DEBUG("Feature match candidates: " << candidateCounts);
-
-  QStringList matchCreators = ConfigOptions().getMatchCreators();
-  LOG_DEBUG("Match creators before candidate count checking: " << matchCreators);
-  QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_DEBUG("Merger creators before candidate count checking: " << matchCreators);
-  bool anyRemoved = false;
-  for (QMap<QString, long>::const_iterator itr = candidateCounts.begin();
-       itr != candidateCounts.end(); ++itr)
-  {
-    if (!matchCreators.contains(itr.key()))
-    {
-      LOG_INFO(
-        "Removing match creator: " << itr.key() << ", as input data contains no candidate " <<
-        "features for the corresponding type.")
-      const int index = matchCreators.indexOf(itr.key());
-      assert(index >= 0);
-      matchCreators.removeAt(index);
-      mergerCreators.removeAt(index);
-      anyRemoved = true;
-    }
-  }
-  if (anyRemoved)
-  {
-    conf().set(ConfigOptions::getMatchCreatorsKey(), matchCreators);
-    MatchFactory::setMatchCreators(matchCreators);
-    conf().set(ConfigOptions::getMergerCreatorsKey(), mergerCreators);
-  }
-  LOG_DEBUG(
-    "Match creators after match candidate count checking: " <<
-    conf().get(ConfigOptions::getMatchCreatorsKey()));
-  LOG_DEBUG(
-    "Merger creators after match candidate count checking: " <<
-    conf().get(ConfigOptions::getMergerCreatorsKey()));
 }
 
 void ConflateCmd::_updateConfigOptionsForAttributeConflation()

@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Boost
 #include <boost/bind.hpp>
@@ -206,8 +207,9 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_DEBUG(
-        "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-        _map->getElementCount() << " total elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+        " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
+        " total elements.");
     }
   }
 
@@ -215,7 +217,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
   }
 }
 

@@ -63,8 +63,6 @@ private:
   void _updateConfigOptionsForAttributeConflation();
 
   static void _tempFixDefaults();
-
-  void _removeUnneededMatchAndMergerCreators(ConstOsmMapPtr map);
 };
 
 }
