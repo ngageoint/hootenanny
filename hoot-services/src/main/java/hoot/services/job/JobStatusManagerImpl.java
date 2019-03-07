@@ -26,7 +26,10 @@
  */
 package hoot.services.job;
 
-import static hoot.services.job.JobStatus.*;
+import static hoot.services.job.JobStatus.CANCELLED;
+import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.job.JobStatus.FAILED;
+import static hoot.services.job.JobStatus.RUNNING;
 import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -116,6 +119,27 @@ public class JobStatusManagerImpl implements JobStatusManager {
     public hoot.services.models.db.JobStatus getJobStatusObj(String jobId) {
         try {
             return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
+        }
+        catch (Exception e) {
+            logger.error("{} failed to fetch job status.", jobId, e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a job status record by ID and User
+     *
+     * @param jobId
+     *            ID of the job to retrieve the status for
+     * @param userId
+     *            user to compare to job owner
+     * @return a job status record
+     */
+    @Override
+    public hoot.services.models.db.JobStatus getJobStatusObj(String jobId, Long userId) {
+        try {
+            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);

@@ -50,11 +50,15 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
         List<JobStatus> recentJobs = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
-                .where((jobStatus.start.after(new Timestamp(past12))).or(jobStatus.status.eq(RUNNING.ordinal())))
+                .where((jobStatus.start.after(new Timestamp(past12)).and(jobStatus.userId.eq(user.getId())))
+                        .or(jobStatus.status.eq(RUNNING.ordinal())))
                 .orderBy(jobStatus.start.desc())
                 .fetch();
         if(recentJobs.size() < limit) {
-            recentJobs = createQuery().select(jobStatus).from(jobStatus).orderBy(jobStatus.start.desc()).limit(limit).fetch();
+            recentJobs = createQuery().select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.userId.eq(user.getId()))
+                    .orderBy(jobStatus.start.desc()).limit(limit).fetch();
         }
         return recentJobs;
     }

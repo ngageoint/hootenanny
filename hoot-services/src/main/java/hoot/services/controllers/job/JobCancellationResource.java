@@ -26,11 +26,14 @@
  */
 package hoot.services.controllers.job;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -43,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.db.Users;
 
 
 @Controller
@@ -73,22 +77,24 @@ public class JobCancellationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(JobCancellationParams params) {
+    public Response process(@Context HttpServletRequest request, JobCancellationParams params) {
 
-        //TODO: make sure user owns job and map
+        Users user = Users.fromRequest(request);
 
-        String jobIdToCancel = null;
+        String jobIdToCancel = params.getJobId();
+        String mapDisplayName = params.getMapId(); //not sure why we'd need this
+        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobIdToCancel, user.getId());
 
-        try {
-            jobIdToCancel = params.getJobId();
-            String mapDisplayName = params.getMapId();
-
-            this.externalCommandInterface.terminate(jobIdToCancel);
-            this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
-        }
-        catch (Exception e) {
-            String msg = "Error cancelling job with ID = " + jobIdToCancel;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        if (jobStatus == null) {
+            throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        } else {
+            try {
+                this.externalCommandInterface.terminate(jobIdToCancel);
+                this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
+            } catch (Exception e) {
+                String msg = "Error cancelling job with ID = " + jobIdToCancel;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
         }
 
         JSONObject json = new JSONObject();

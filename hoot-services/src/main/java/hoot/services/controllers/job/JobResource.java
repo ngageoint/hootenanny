@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -47,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.CommandStatus;
+import hoot.services.models.db.Users;
 
 
 @Controller
@@ -80,13 +82,16 @@ public class JobResource {
     public JobStatusResponse getJobStatus(@Context HttpServletRequest request, @PathParam("jobId") String jobId,
             @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
 
-        // Users user = (Users)
-        // request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = Users.fromRequest(request);
+
         JobStatusResponse response = new JobStatusResponse();
 
         hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
+            if (jobStatus.getUserId() != user.getId()) {
+                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+            }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
             response.setStatusDetail(jobStatus.getStatusDetail());
