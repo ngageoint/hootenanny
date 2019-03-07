@@ -89,7 +89,7 @@ public class JobResource {
         hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
-            if (jobStatus.getUserId() != user.getId()) {
+            if (!jobStatus.getUserId().equals(user.getId())) {
                 throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
             }
             response.setJobId(jobId);
