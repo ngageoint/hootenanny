@@ -12,7 +12,7 @@ exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
-exports.matchCandidateCriterion = "hoot::PoiCriterion";
+//exports.matchCandidateCriterion = "hoot::PoiCriterion";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -126,10 +126,11 @@ exports.getSearchRadius = function(e) {
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
  */
-/*exports.isMatchCandidate = function(map, e)
+exports.isMatchCandidate = function(map, e)
 {
-  return true;
-};*/
+  //return true;
+  return isPoi(e);
+};
 
 /**
  * If this function returns true then all overlapping matches will be treated

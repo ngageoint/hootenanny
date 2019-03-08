@@ -8,7 +8,7 @@ exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
 exports.experimental = false;
-exports.matchCandidateCriterion = "hoot::BuildingCriterion";
+//exports.matchCandidateCriterion = "hoot::BuildingCriterion";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -18,10 +18,11 @@ exports.matchCandidateCriterion = "hoot::BuildingCriterion";
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
  */
-/*exports.isMatchCandidate = function(map, e)
+exports.isMatchCandidate = function(map, e)
 {
-  return true;
-};*/
+  //return true;
+  return isBuilding(e);
+};
 
 /**
  * If this function returns true then all overlapping matches will be treated

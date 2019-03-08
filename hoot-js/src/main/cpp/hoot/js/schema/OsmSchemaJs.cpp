@@ -31,6 +31,15 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/HgisPoiCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/PoiCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/HasNameCriterion.h>
 
 using namespace v8;
@@ -66,8 +75,26 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, getTagVertex)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isAncestor"),
               FunctionTemplate::New(current, isAncestor)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isArea"),
+              FunctionTemplate::New(current, isArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isBuilding"),
+              FunctionTemplate::New(current, isBuilding)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isHgisPoi"),
+              FunctionTemplate::New(current, isHgisPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinear"),
+              FunctionTemplate::New(current, isLinear)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
+              FunctionTemplate::New(current, isLinearWaterway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPowerLine"),
+              FunctionTemplate::New(current, isPowerLine)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isMetaData"),
               FunctionTemplate::New(current, isMetaData)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoi"),
+              FunctionTemplate::New(current, isPoi)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isRailway"),
+              FunctionTemplate::New(current, isRailway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isLinearHighway"),
+              FunctionTemplate::New(current, isLinearHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
@@ -143,6 +170,66 @@ void OsmSchemaJs::isAncestor(const FunctionCallbackInfo<Value>& args)
     Boolean::New(current, OsmSchema::getInstance().isAncestor(childKvp, parentKvp)));
 }
 
+void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, HgisPoiCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, LinearWaterwayCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isPowerLine(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, PowerLineCriterion().isSatisfied(e)));
+}
+
 void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -154,6 +241,26 @@ void OsmSchemaJs::isMetaData(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, OsmSchema::getInstance().isMetaData(key, value)));
 }
 
+void OsmSchemaJs::isPoi(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, PoiCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
+}
+
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -162,6 +269,16 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)

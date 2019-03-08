@@ -52,10 +52,11 @@ exports.calculateSearchRadius = function(map)
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
  */
-/*exports.isMatchCandidate = function(map, e)
+exports.isMatchCandidate = function(map, e)
 {
-  return true;
-};*/
+  //return true;
+  return isLinearWaterway(e);
+};
 
 /**
  * If this function returns true then all overlapping matches will be treated
@@ -67,7 +68,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isWholeGroup = function()
 {
-    return false;
+  return false;
 };
 
 /**

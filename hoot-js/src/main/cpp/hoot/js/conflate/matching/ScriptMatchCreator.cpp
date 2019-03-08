@@ -408,38 +408,38 @@ public:
     bool result = false;
 
     // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
-    Handle<String> matchCandidateCriterionStrHandle =
-      String::NewFromUtf8(current, "matchCandidateCriterion");
-    QString matchCandidateCriterionStr;
-    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
-    {
-      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
-      matchCandidateCriterionStr = toCpp<QString>(value);
-    }
-    LOG_VART(matchCandidateCriterionStr);
+    // TODO: this is crashing
+//    Handle<String> matchCandidateCriterionStrHandle =
+//      String::NewFromUtf8(current, "matchCandidateCriterion");
+//    QString matchCandidateCriterionStr;
+//    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
+//    {
+//      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
+//      matchCandidateCriterionStr = toCpp<QString>(value);
+//    }
+//    matchCandidateCriterionStr = matchCandidateCriterionStr.trimmed();
+//    LOG_VART(matchCandidateCriterionStr);
 
-    if (!matchCandidateCriterionStr.trimmed().isEmpty())
-    {
-      boost::shared_ptr<ElementCriterion> matchCandidateCriterion;
-      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
-      {
-        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
-        matchCandidateCriterion =
-          _matchCandidateCriterionCache[matchCandidateCriterionStr.trimmed()];
-      }
-      else
-      {
-        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
-        matchCandidateCriterion.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(
-            matchCandidateCriterionStr.trimmed()));
-        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
-      }
-      result = matchCandidateCriterion->isSatisfied(e);
-      LOG_VART(result);
-    }
-    else
-    {
+//    if (!matchCandidateCriterionStr.isEmpty())
+//    {
+//      boost::shared_ptr<ElementCriterion> matchCandidateCriterion;
+//      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
+//      {
+//        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
+//        matchCandidateCriterion = _matchCandidateCriterionCache[matchCandidateCriterionStr];
+//      }
+//      else
+//      {
+//        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
+//        matchCandidateCriterion.reset(
+//          Factory::getInstance().constructObject<ElementCriterion>(matchCandidateCriterionStr));
+//        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
+//      }
+//      result = matchCandidateCriterion->isSatisfied(e);
+//      LOG_VART(result);
+//    }
+//    else
+//    {
       Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
       if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
       {
@@ -461,7 +461,7 @@ public:
 
       result = f->BooleanValue();
       LOG_VART(result);
-    }
+    //}
 
     _matchCandidateCache[e->getElementId()] = result;
     return result;

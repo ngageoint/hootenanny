@@ -55,7 +55,18 @@ private:
   static void getTagVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
 
+  // Even though all of the logic for these methods have been moved from OsmSchema to criterion,
+  // decided to leave this interface intact, as it will be simpler to access from js.
+  static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHgisPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinearHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);

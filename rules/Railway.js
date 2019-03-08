@@ -8,7 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("railway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("railway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("railway.review.threshold"));
-exports.matchCandidateCriterion = "hoot::RailwayCriterion";
+//exports.matchCandidateCriterion = "hoot::RailwayCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -48,10 +48,11 @@ exports.calculateSearchRadius = function(map)
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
  */
-/*exports.isMatchCandidate = function(map, e)
+exports.isMatchCandidate = function(map, e)
 {
-  return true;
-};*/
+  //return true;
+  return isRailway(e);
+};
 
 /**
  * If this function returns true then all overlapping matches will be treated
@@ -63,7 +64,7 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isWholeGroup = function()
 {
-    return false;
+  return false;
 };
 
 /**

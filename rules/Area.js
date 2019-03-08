@@ -8,7 +8,7 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
-exports.matchCandidateCriterion = "hoot::NonBuildingAreaCriterion";
+//exports.matchCandidateCriterion = "hoot::NonBuildingAreaCriterion";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
@@ -27,10 +27,11 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
  */
-/*exports.isMatchCandidate = function(map, e)
+exports.isMatchCandidate = function(map, e)
 {
-  return true;
-};*/
+  //return true;
+  return isArea(e) && !isBuilding(e);
+};
 
 /**
  * If this function returns true then all overlapping matches will be treated
