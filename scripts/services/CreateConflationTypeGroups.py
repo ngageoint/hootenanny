@@ -72,6 +72,6 @@ def createUiJSON(groups, options):
     except:
         print 'failed to load %s' % fn2
     finally:
-        return json.dumps(uiGroupsArray)
+        return json.dumps({ 'hoot2': uiGroupsArray })
 
 open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))

@@ -94,7 +94,7 @@ public class AdvancedConflationOptionsResource {
             if (confType.equalsIgnoreCase("hoot2")) {
                 if ((hoot2Template == null) || doForce) {
                     hoot2Template = new JSONArray();
-                    hoot2Template.add(hoot2Override);
+                    hoot2Template = (JSONArray) hoot2Override.get("hoot2");
                 }
                 template = hoot2Template;
             }

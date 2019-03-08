@@ -52,7 +52,7 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
     				.get();
 
     	String jsonStr = responseData.readEntity(String.class);
-    	assertThat(jsonStr, CoreMatchers.containsString("Roads"));
+     	assertThat(jsonStr, CoreMatchers.containsString("Roads"));
     }
 
     @Test
