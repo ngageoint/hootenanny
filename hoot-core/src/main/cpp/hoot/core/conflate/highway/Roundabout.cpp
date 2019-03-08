@@ -85,7 +85,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   NodePtr pNewNode(new Node(_status,
                    pMap->createNextNodeId(),
                    lon, lat, 15));
-  pNewNode->setTag("hoot:special", "RoundaboutCenter");
+  pNewNode->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
 
   return pNewNode;
 }
@@ -194,7 +194,7 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
                                   15));
               pWay->addNode(pCenterNode->getId());
               pWay->setTag("highway", "unclassified");
-              pWay->setTag("hoot:special", "roundabout_connector");
+              pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
 
               // Take the new way. Whichever is closest, first node or last,
               // connect it to our center point.
@@ -284,7 +284,7 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
     pWay->setTag("highway", "unclassified");
 
     // Add special hoot tag
-    pWay->setTag("hoot:special", "roundabout_connector");
+    pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
 
     pMap->addWay(pWay);
     _tempWays.push_back(pWay);
