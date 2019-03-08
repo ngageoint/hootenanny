@@ -373,6 +373,8 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
 
 int main(int argc, char *argv[])
 {
+  // set the Qt hash seed to 0 for consistent test results
+  conf().set(ConfigOptions().getHashSeedZeroKey(), true);
   qSetGlobalQHashSeed(0);
 
   if (argc == 1)
