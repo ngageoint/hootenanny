@@ -92,7 +92,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   // If a match candidate criterion was specified, filter out elements that don't fit the criterion.
   // If no match candidate criterion was specified, then we'll use elements of all types.
   // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
-  // isMatchCandidate function. - see #3047
+  // isMatchCandidate function. - see #3048
   if (!_elementCriterion.isEmpty())
   {
     LOG_DEBUG(
