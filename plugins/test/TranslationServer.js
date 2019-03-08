@@ -5,7 +5,8 @@ var assert = require('assert'),
     httpMocks = require('node-mocks-http'),
     osmtogeojson = require('osmtogeojson'),
     DOMParser = new require('xmldom').DOMParser
-    parser = new DOMParser();
+    parser = new DOMParser(),
+    hashseedzero = true;
 
 var server = require('../TranslationServer.js');
 

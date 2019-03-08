@@ -47,7 +47,11 @@ const double PluginContext::UNSPECIFIED_DEFAULT = -999999e9;
 
 PluginContext::PluginContext()
 {
-  qSetGlobalQHashSeed(0);
+  if (ConfigOptions().getHashSeedZero())
+  {
+    qSetGlobalQHashSeed(0);
+    LOG_TRACE("Qt hash seed set to 0 for plugin");
+  }
 
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
