@@ -8,17 +8,20 @@ exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
 exports.experimental = false;
-exports.searchRadiusAutoCalculated = false;
+exports.matchCandidateCriterion = "hoot::BuildingCriterion";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precendence over this function and must
+ * be commented out before using it.
  */
-exports.isMatchCandidate = function(map, e)
+/*exports.isMatchCandidate = function(map, e)
 {
-    return isBuilding(e);
-};
+  return true;
+};*/
 
 /**
  * If this function returns true then all overlapping matches will be treated

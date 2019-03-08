@@ -191,6 +191,8 @@ void OsmMapReaderFactory::_read(boost::shared_ptr<OsmMap> map,
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));
+  LOG_INFO(
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements from input.");
 }
 
 }

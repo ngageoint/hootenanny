@@ -24,14 +24,6 @@ function testAdd(v1, v2)
 }
 
 /**
- * Returns true if the specified element is a building.
- */
-function isBuilding(e)
-{
-    return hoot.OsmSchema.isBuilding(e);
-}
-
-/**
  * Wrapper for createUuid for backward compatibility.
  */
 function createUuid()
@@ -182,76 +174,6 @@ function print(e)
 }
 
 /**
- * Returns true if the specified element is an area element. The approach used
- * to determine area vs. linear is quite complex, but some example are below.
- * - building=yes
- * - area=yes
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Key:area
- */
-function isArea(e)
-{
-    return hoot.OsmSchema.isArea(e);
-}
-
-/**
- * Returns true if the specified element is an linear element. The approach used
- * to determine area vs. linear is quite complex, but some example are below.
- * - highway=road
- * - waterway=river
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Key:area
- */
-function isLinear(e)
-{
-    return hoot.OsmSchema.isLinear(e);
-}
-
-/**
- * Returns true if the specified element is an linear waterway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/River
- */
-function isLinearWaterway(e)
-{
-    return hoot.OsmSchema.isLinearWaterway(e);
-}
-
-/**
- * Returns true if the specified element is in the poi category in `schema.json` and the element is
- * a node type.
- */
-function isPoi(e)
-{
-    return hoot.OsmSchema.isPoi(e);
-}
-
-/**
- * Returns true if the specified element is an railway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Railway
- */
-function isRailway(e)
-{
-    return hoot.OsmSchema.isRailway(e);
-}
-
-/**
- * Returns true if the specified element is an power line.
- *
- * See the OSM wiki for more information:
- * https://wiki.openstreetmap.org/wiki/Power
- */
-function isPowerLine(e)
-{
-    return hoot.OsmSchema.isPowerLine(e);
-}
-
-/**
  * Returns true if the specified element has a name
  */
 function hasName(e)
@@ -358,11 +280,13 @@ function snapWays(sublineMatcher, map, pairs, replaced)
  * the rubber sheeting required to automatically calculate the search radius.
  * @param rubberSheetMinTies The minimum number of tie points that need to be found during rubber
  * sheeting for the automatic search radius calculation to occur.
+ * @param matchCandidateCriterion todo
  */
-function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies)
+function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberSheetMinTies, matchCandidateCriterion)
 {
   return new hoot.SearchRadiusCalculator(
       { "rubber.sheet.ref" : rubberSheetRef },
-      { "rubber.sheet.minimum.ties" : rubberSheetMinTies })
+      { "rubber.sheet.minimum.ties" : rubberSheetMinTies },
+      { "search.radius.calculator.element.criterion" : matchCandidateCriterion })
       .applyAndGetResult(map);
 }

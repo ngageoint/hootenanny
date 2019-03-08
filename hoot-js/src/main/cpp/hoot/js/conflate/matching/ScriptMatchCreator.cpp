@@ -69,8 +69,6 @@ using namespace v8;
 namespace hoot
 {
 
-double ScriptMatchCreator::_autoCalculatedSearchRadius = 0.0;
-
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
 
 /**
@@ -142,6 +140,7 @@ public:
 
     // create an envlope around the e plus the search radius.
     boost::shared_ptr<Envelope> env(e->getEnvelope(map));
+    LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);
     env->expandBy(searchRadius);
 
@@ -155,6 +154,7 @@ public:
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
+      LOG_VART(e2.get());
       if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
@@ -165,7 +165,7 @@ public:
           delete m;
         }
         else
-        {
+        {;
           _result.push_back(m);
         }
       }
@@ -404,26 +404,65 @@ public:
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
     Persistent<Object> plugin(current, getPlugin(_script));
-    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+
+    bool result = false;
+
+    // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
+    Handle<String> matchCandidateCriterionStrHandle =
+      String::NewFromUtf8(current, "matchCandidateCriterion");
+    QString matchCandidateCriterionStr;
+    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
     {
-      throw HootException("Error finding 'isMatchCandidate' function.");
+      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
+      matchCandidateCriterionStr = toCpp<QString>(value);
     }
-    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
-    if (value->IsFunction() == false)
+    LOG_VART(matchCandidateCriterionStr);
+
+    if (!matchCandidateCriterionStr.trimmed().isEmpty())
     {
-      throw HootException("isMatchCandidate is not a function.");
+      boost::shared_ptr<ElementCriterion> matchCandidateCriterion;
+      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
+      {
+        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
+        matchCandidateCriterion =
+          _matchCandidateCriterionCache[matchCandidateCriterionStr.trimmed()];
+      }
+      else
+      {
+        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
+        matchCandidateCriterion.reset(
+          Factory::getInstance().constructObject<ElementCriterion>(
+            matchCandidateCriterionStr.trimmed()));
+        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
+      }
+      result = matchCandidateCriterion->isSatisfied(e);
+      LOG_VART(result);
     }
-    Handle<Function> func = Handle<Function>::Cast(value);
-    Handle<Value> jsArgs[2];
+    else
+    {
+      Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+      if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+      {
+        throw HootException("Error finding 'isMatchCandidate' function.");
+      }
+      Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+      if (value->IsFunction() == false)
+      {
+        throw HootException("isMatchCandidate is not a function.");
+      }
+      Handle<Function> func = Handle<Function>::Cast(value);
+      Handle<Value> jsArgs[2];
 
-    int argc = 0;
-    jsArgs[argc++] = getOsmMapJs();
-    jsArgs[argc++] = ElementJs::New(e);
+      int argc = 0;
+      jsArgs[argc++] = getOsmMapJs();
+      jsArgs[argc++] = ElementJs::New(e);
 
-    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+      Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
-    bool result = f->BooleanValue();
+      result = f->BooleanValue();
+      LOG_VART(result);
+    }
+
     _matchCandidateCache[e->getElementId()] = result;
     return result;
   }
@@ -479,6 +518,7 @@ private:
 
   QHash<ElementId, bool> _matchCandidateCache;
   QHash<ElementId, double> _searchRadiusCache;
+  QMap<QString, ElementCriterionPtr> _matchCandidateCriterionCache;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
@@ -559,26 +599,8 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
 
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  // For any script using an auto-calculated search radius, the same search radius will be reused
-  // after the first time it is auto-calculated.
-  LOG_VARD(_scriptPath);
-  LOG_VARD(scriptInfo.searchRadiusAutoCalculated);
-  LOG_VARD(_autoCalculatedSearchRadius);
-  if (scriptInfo.searchRadiusAutoCalculated && _autoCalculatedSearchRadius != 0.0)
-  {
-    LOG_DEBUG(
-      "Setting custom search radius: " << _autoCalculatedSearchRadius << " on: " << _scriptPath);
-    v.setCustomSearchRadius(_autoCalculatedSearchRadius);
-  }
-  else
-  {
-    v.calculateSearchRadius();
-    if (scriptInfo.searchRadiusAutoCalculated)
-    {
-      _autoCalculatedSearchRadius = v.getCustomSearchRadius();
-    }
-  }
-  LOG_VARD(_autoCalculatedSearchRadius);
+  v.calculateSearchRadius();
+
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
@@ -694,13 +716,6 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
     result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
-  }
-  Handle<String> searchRadiusAutoCalculatedStr =
-    String::NewFromUtf8(current, "searchRadiusAutoCalculated");
-  if (ToLocal(&plugin)->Has(searchRadiusAutoCalculatedStr))
-  {
-    Handle<Value> value = ToLocal(&plugin)->Get(searchRadiusAutoCalculatedStr);
-    result.searchRadiusAutoCalculated = toCpp<bool>(value);
   }
 
   QFileInfo fi(path);

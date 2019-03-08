@@ -7,7 +7,7 @@ exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-exports.searchRadiusAutoCalculated = false;
+exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -21,10 +21,14 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precendence over this function and must
+ * be commented out before using it.
  */
-exports.isMatchCandidate = function(map, e) {
-    return isLinear(e);
-};
+/*exports.isMatchCandidate = function(map, e)
+{
+  return true;
+};*/
 
 /**
  * If this function returns true then all overlapping matches will be treated
@@ -78,16 +82,6 @@ exports.matchScore = function(map, e1, e2) {
 
     return result;
 };
-
-/*exports.mergePair = function(map, e1, e2)
-{
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
-
-    removeElement(map, e2);
-
-    return e1;
-};*/
 
 /**
  * The internals of geometry merging can become quite complex. Typically this 

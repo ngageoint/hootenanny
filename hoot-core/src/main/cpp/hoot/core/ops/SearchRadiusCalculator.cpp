@@ -57,6 +57,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   setRubberSheetRef(config.getRubberSheetRef());
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
   setPrecision(config.getWriterPrecision());
+  _elementCriterion = config.getSearchRadiusCalculatorElementCriterion().trimmed();
 }
 
 void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
@@ -64,12 +65,55 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   //make a copy of the map with previously conflated data removed, as the rubber sheeting can't
   //use it
   boost::shared_ptr<OsmMap> mapWithOnlyUnknown1And2(new OsmMap(map));
+
+  LOG_VARD(map->getElementCount());
+  LOG_DEBUG(
+    "Element count before search radius calculation filtering: " <<
+    mapWithOnlyUnknown1And2->getElementCount());
+
+  // don't care about conflated data and invalid data
+  LOG_DEBUG("Removing invalid and previously conflated data for search radius calculation...");
+  size_t elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
   RemoveElementsVisitor elementRemover1(ElementCriterionPtr(new StatusCriterion(Status::Conflated)));
   elementRemover1.setRecursive(true);
   mapWithOnlyUnknown1And2->visitRw(elementRemover1);
   RemoveElementsVisitor elementRemover2(ElementCriterionPtr(new StatusCriterion(Status::Invalid)));
   elementRemover2.setRecursive(true);
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
+  if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
+  {
+    LOG_DEBUG(
+      "Filtered out: " <<
+      elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
+      " invalid or conflated elements.");
+    elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
+  }
+
+  // If a match candidate criterion was specified, filter out elements that don't fit the criterion.
+  // If no match candidate criterion was specified, then we'll use elements of all types.
+  // TODO: This logic doesn't support Generic Conflation calling scripts who implement the
+  // isMatchCandidate function. - see #?
+  if (!_elementCriterion.isEmpty())
+  {
+    LOG_DEBUG(
+      "Removing elements not satisfying: " << _elementCriterion <<
+      " for search radius calculation...");
+    boost::shared_ptr<ElementCriterion> candidateCriterion(
+      Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
+    RemoveElementsVisitor elementRemover3(candidateCriterion, true);
+    elementRemover3.setRecursive(true);
+    mapWithOnlyUnknown1And2->visitRw(elementRemover3);
+  }
+
+  LOG_VARD(map->getElementCount());
+  if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
+  {
+    LOG_DEBUG(
+      "Filtered out: " <<
+      elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
+      " elements not satisfying candidate criterion.");
+  }
+
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())
   {
     //should this be a warning?
@@ -82,11 +126,14 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   {
     _result = _circularError;
     LOG_INFO(
-      "Unable to automatically calculate search radius.  All features have already been " <<
-      "conflated or have an invalid status.\n Using default search radius value = " <<
-      QString::number(_result));
+      "Unable to automatically calculate search radius.  All input features have been " <<
+      "filtered out. Using default search radius value = " << _result);
     return;
   }
+
+  LOG_DEBUG(
+    "Element count after search radius calculation filtering: " <<
+    mapWithOnlyUnknown1And2->getElementCount());
 
   boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);

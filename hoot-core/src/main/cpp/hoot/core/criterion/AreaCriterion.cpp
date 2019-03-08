@@ -73,7 +73,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
       break;
     }
   }
-  //LOG_VART(result);
+  LOG_VART(result);
 
   return result;
 }

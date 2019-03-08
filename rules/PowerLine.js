@@ -8,7 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
-exports.searchRadiusAutoCalculated = hoot.get("power.line.auto.calc.search.radius") === 'true';
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -29,7 +29,8 @@ var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
  */
 exports.calculateSearchRadius = function(map)
 {
-  if (exports.searchRadiusAutoCalculated)
+  var autoCalcSearchRadius = (hoot.get("power.line.auto.calc.search.radius") === 'true');
+  if (autoCalcSearchRadius)
   {
     hoot.log("Calculating search radius for power line conflation...");
     exports.searchRadius =
@@ -37,7 +38,8 @@ exports.calculateSearchRadius = function(map)
         calculateSearchRadiusUsingRubberSheeting(
           map,
           hoot.get("rubber.sheet.ref"),
-          hoot.get("rubber.sheet.minimum.ties")));
+          hoot.get("rubber.sheet.minimum.ties"),
+          exports.matchCandidateCriterion));
   }
   else
   {
@@ -50,11 +52,14 @@ exports.calculateSearchRadius = function(map)
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precendence over this function and must
+ * be commented out before using it.
  */
-exports.isMatchCandidate = function(map, e)
+/*exports.isMatchCandidate = function(map, e)
 {
-  return isPowerLine(e);
-};
+  return true;
+};*/
 
 /**
  * If this function returns true then all overlapping matches will be treated

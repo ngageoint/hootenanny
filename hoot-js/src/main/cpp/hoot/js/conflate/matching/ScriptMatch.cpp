@@ -352,6 +352,9 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> mapOb
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid1));
   jsArgs[argc++] = ElementJs::New(map->getElement(_eid2));
 
+  LOG_VART(map->getElement(_eid1).get());
+  LOG_VART(map->getElement(_eid2).get());
+
   TryCatch trycatch;
   Handle<Value> result = func->Call(plugin, argc, jsArgs);
   HootExceptionJs::checkV8Exception(result, trycatch);

@@ -153,6 +153,8 @@ Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider>& 
 
 Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const
 {
+  LOG_VART(ep.get());
+
   Envelope result;
   result.init();
 
@@ -166,15 +168,18 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
     // if any of the elements don't exist then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
+      LOG_TRACE(m.getElementId() << " missing.  Returning empty envelope...");
       result.setToNull();
       return result;
     }
 
     const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
+    LOG_VART(e.get())
     boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())
     {
+      LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
       result.setToNull();
       return result;
     }
@@ -182,6 +187,7 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
     result.expandToInclude(childEnvelope.get());
   }
 
+  LOG_VART(result);
   return result;
 }
 
