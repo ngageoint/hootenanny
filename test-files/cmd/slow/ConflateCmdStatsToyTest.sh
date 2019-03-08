@@ -5,7 +5,7 @@ mkdir -p test-output/cmd/ConflateCmdStatsTest
 STATS_OUT=test-output/cmd/ConflateCmdStatsTest/toy-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-HOOT_OPTS="-D writer.include.debug.tags=true"
+HOOT_OPTS="-D hash.seed.zero=true -D writer.include.debug.tags=true"
 
 hoot conflate $HOOT_OPTS test-files/ToyTestA.osm test-files/ToyTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 
