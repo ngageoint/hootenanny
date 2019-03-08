@@ -7,7 +7,6 @@ exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.experimental = false;
-//exports.matchCandidateCriterion = "hoot::AreaCriterion";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -19,7 +18,6 @@ exports.experimental = false;
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isArea(e);
 };
 

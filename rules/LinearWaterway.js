@@ -8,6 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
+// See #3047
 exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 var sublineMatcher =
@@ -51,6 +52,8 @@ exports.calculateSearchRadius = function(map)
  *
  * exports.matchCandidateCriterion takes precendence over this function and must
  * be commented out before using it.
+ * 
+ * @todo This must be left enabled for now despite exports.matchCandidateCriterion being enabled.  See #3047.
  */
 exports.isMatchCandidate = function(map, e)
 {

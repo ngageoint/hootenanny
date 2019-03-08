@@ -13,7 +13,6 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
-//exports.matchCandidateCriterion = "hoot::BuildingCriterion";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -25,7 +24,6 @@ exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isBuilding(e);
 };
 

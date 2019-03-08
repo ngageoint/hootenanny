@@ -11,8 +11,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
-exports.searchRadius = -1.0;
-//exports.matchCandidateCriterion = "hoot::PoiCriterion";
+exports.searchRadius = -1.0;;
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -128,7 +127,6 @@ exports.getSearchRadius = function(e) {
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isPoi(e);
 };
 

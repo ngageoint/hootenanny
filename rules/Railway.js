@@ -8,7 +8,6 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("railway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("railway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("railway.review.threshold"));
-//exports.matchCandidateCriterion = "hoot::RailwayCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -50,7 +49,6 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isRailway(e);
 };
 

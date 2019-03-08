@@ -24,14 +24,6 @@ function testAdd(v1, v2)
 }
 
 /**
- * Returns true if the specified element is a building.
- */
-function isBuilding(e)
-{
-    return hoot.OsmSchema.isBuilding(e);
-}
-
-/**
  * Wrapper for createUuid for backward compatibility.
  */
 function createUuid()
@@ -162,7 +154,7 @@ function getTagDistance(commonKvp, t1, t2) {
  */
 function logWarn(e)
 {
-    return hoot.logWarn(e);
+  return hoot.logWarn(e);
 }
 
 /**
@@ -170,7 +162,7 @@ function logWarn(e)
  */
 function logError(e)
 {
-    return hoot.logError(e);
+  return hoot.logError(e);
 }
 
 /**
@@ -178,77 +170,7 @@ function logError(e)
  */
 function print(e)
 {
-    hoot.print(e);
-}
-
-/**
- * Returns true if the specified element is an area element. The approach used
- * to determine area vs. linear is quite complex, but some example are below.
- * - building=yes
- * - area=yes
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Key:area
- */
-function isArea(e)
-{
-    return hoot.OsmSchema.isArea(e);
-}
-
-/**
- * Returns true if the specified element is an linear element. The approach used
- * to determine area vs. linear is quite complex, but some example are below.
- * - highway=road
- * - waterway=river
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Key:area
- */
-function isLinear(e)
-{
-    return hoot.OsmSchema.isLinear(e);
-}
-
-/**
- * Returns true if the specified element is an linear waterway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/River
- */
-function isLinearWaterway(e)
-{
-    return hoot.OsmSchema.isLinearWaterway(e);
-}
-
-/**
- * Returns true if the specified element is in the poi category in `schema.json` and the element is
- * a node type.
- */
-function isPoi(e)
-{
-    return hoot.OsmSchema.isPoi(e);
-}
-
-/**
- * Returns true if the specified element is an railway element.
- *
- * See the OSM wiki for more information:
- * http://wiki.openstreetmap.org/wiki/Railway
- */
-function isRailway(e)
-{
-    return hoot.OsmSchema.isRailway(e);
-}
-
-/**
- * Returns true if the specified element is an power line.
- *
- * See the OSM wiki for more information:
- * https://wiki.openstreetmap.org/wiki/Power
- */
-function isPowerLine(e)
-{
-    return hoot.OsmSchema.isPowerLine(e);
+  hoot.print(e);
 }
 
 /**
@@ -256,7 +178,7 @@ function isPowerLine(e)
  */
 function hasName(e)
 {
-    return hoot.OsmSchema.hasName(e);
+  return hoot.OsmSchema.hasName(e);
 }
 
 /**
@@ -267,7 +189,7 @@ function hasName(e)
  */
 function log(s)
 {
-    hoot.log(s);
+  hoot.log(s);
 }
 
 /**
@@ -278,7 +200,7 @@ function log(s)
  */
 function debug(s)
 {
-    hoot.debug(s);
+  hoot.debug(s);
 }
 
 /**
@@ -291,7 +213,7 @@ function debug(s)
  */
 function mergeTags(e1, e2)
 {
-    return hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
+  return hoot.TagMergerFactory.mergeTags(e1.getTags(), e2.getTags());
 }
 
 /**
@@ -305,7 +227,7 @@ function mergeTags(e1, e2)
  */
 function calculatePercentOverlap(map, e1, e2)
 {
-    return new hoot.OverlapExtractor().extract(map, e1, e2);
+  return new hoot.OverlapExtractor().extract(map, e1, e2);
 }
 
 /**
@@ -337,7 +259,7 @@ function mergeElements(map, e1, e2)
  */
 function removeElement(map, e)
 {
-    new hoot.RecursiveElementRemover(e).apply(map);
+  new hoot.RecursiveElementRemover(e).apply(map);
 }
 
 /**
@@ -346,7 +268,7 @@ function removeElement(map, e)
  */
 function snapWays(sublineMatcher, map, pairs, replaced)
 {
-    return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced);
+  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced);
 }
 
 /**
@@ -367,4 +289,84 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       { "rubber.sheet.minimum.ties" : rubberSheetMinTies },
       { "search.radius.calculator.element.criterion" : matchCandidateCriterion })
       .applyAndGetResult(map);
+}
+
+// TODO: All of these is* methods can go away if #3047 is completed.
+
+/**
+ * Returns true if the specified element is an area element. The approach used
+ * to determine area vs. linear is quite complex, but some example are below.
+ * - building=yes
+ * - area=yes
+ *
+ * See the OSM wiki for more information:
+ * http://wiki.openstreetmap.org/wiki/Key:area
+ */
+function isArea(e)
+{
+  return hoot.OsmSchema.isArea(e);
+}
+
+/**
+ * Returns true if the specified element is a building.
+ */
+function isBuilding(e)
+{
+  return hoot.OsmSchema.isBuilding(e);
+}
+
+/**
+ * Returns true if the specified element is an linear element. The approach used
+ * to determine area vs. linear is quite complex, but some example are below.
+ * - highway=road
+ * - waterway=river
+ *
+ * See the OSM wiki for more information:
+ * http://wiki.openstreetmap.org/wiki/Key:area
+ */
+function isLinear(e)
+{
+  return hoot.OsmSchema.isLinear(e);
+}
+
+/**
+ * Returns true if the specified element is an linear waterway element.
+ *
+ * See the OSM wiki for more information:
+ * http://wiki.openstreetmap.org/wiki/River
+ */
+function isLinearWaterway(e)
+{
+  return hoot.OsmSchema.isLinearWaterway(e);
+}
+
+/**
+ * Returns true if the specified element is in the poi category in `schema.json` and the element is
+ * a node type.
+ */
+function isPoi(e)
+{
+  return hoot.OsmSchema.isPoi(e);
+}
+
+/**
+ * Returns true if the specified element is an railway element.
+ *
+ * See the OSM wiki for more information:
+ * http://wiki.openstreetmap.org/wiki/Railway
+ */
+function isRailway(e)
+{
+  return hoot.OsmSchema.isRailway(e);
+}
+
+/**
+ * Returns true if the specified element is an power line.
+ *
+ * See the OSM wiki for more information:
+ * https://wiki.openstreetmap.org/wiki/Power
+ */
+function isPowerLine(e)
+{
+  return hoot.OsmSchema.isPowerLine(e);
 }

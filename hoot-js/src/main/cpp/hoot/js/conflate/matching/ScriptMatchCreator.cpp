@@ -408,7 +408,7 @@ public:
     bool result = false;
 
     // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
-    // TODO: this is crashing
+    // TODO: this is crashing; see #3047
 //    Handle<String> matchCandidateCriterionStrHandle =
 //      String::NewFromUtf8(current, "matchCandidateCriterion");
 //    QString matchCandidateCriterionStr;

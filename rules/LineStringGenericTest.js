@@ -6,7 +6,6 @@ exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-//exports.matchCandidateCriterion = "hoot::LinearCriterion";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -24,7 +23,6 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isLinear(e);
 };
 

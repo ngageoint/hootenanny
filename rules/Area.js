@@ -8,7 +8,6 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
-//exports.matchCandidateCriterion = "hoot::NonBuildingAreaCriterion";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
@@ -29,7 +28,6 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isArea(e) && !isBuilding(e);
 };
 

@@ -8,7 +8,6 @@ exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
 exports.experimental = false;
-//exports.matchCandidateCriterion = "hoot::BuildingCriterion";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -20,7 +19,6 @@ exports.experimental = false;
  */
 exports.isMatchCandidate = function(map, e)
 {
-  //return true;
   return isBuilding(e);
 };
 
@@ -34,7 +32,7 @@ exports.isMatchCandidate = function(map, e)
  */
 exports.isWholeGroup = function()
 {
-    return true;
+  return true;
 };
 
 /**
