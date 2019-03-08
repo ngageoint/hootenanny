@@ -50,10 +50,8 @@ namespace hoot
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
-    _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
-    _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
-    _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
+    _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
     _showProgress(false)
 {
   _changesets.push_back(changeset);
@@ -64,10 +62,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
-    _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
-    _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
-    _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
+    _maxWriters(ConfigOptions().getChangesetApidbMaxWriters()),
+    _maxChangesetSize(ConfigOptions().getChangesetApidbMaxSize()),
     _showProgress(false),
     _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
@@ -242,9 +238,6 @@ void OsmApiWriter::_changesetThreadFunc()
         _closeChangeset(request, id);
         //  Signal for a new changeset id
         id = -1;
-        //  Throttle the input rate if desired
-        if (_throttleWriters && !_changeset.isDone())
-          this_thread::sleep_for(chrono::seconds(_throttleTime));
       }
       else
       {
@@ -317,10 +310,8 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _description = options.getChangesetDescription();
-  _maxChangesetSize = options.getChangesetApidbSizeMax();
-  _maxWriters = options.getChangesetApidbWritersMax();
-  _throttleWriters = options.getChangesetApidbWritersThrottle();
-  _throttleTime = options.getChangesetApidbWritersThrottleTime();
+  _maxChangesetSize = options.getChangesetApidbMaxSize();
+  _maxWriters = options.getChangesetApidbMaxWriters();
   _consumerKey = options.getHootOsmAuthConsumerKey();
   _consumerSecret = options.getHootOsmAuthConsumerSecret();
   _accessToken = options.getHootOsmAuthAccessToken();

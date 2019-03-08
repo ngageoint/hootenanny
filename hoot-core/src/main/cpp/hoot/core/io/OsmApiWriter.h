@@ -235,10 +235,6 @@ private:
    *  the entirety of a way or relation, loaded with 'changeset.apidb.max.size' option
    */
   long _maxChangesetSize;
-  /** Flag to turn on OSM API writer throttling */
-  bool _throttleWriters;
-  /** Number of seconds for a writer thread to wait after a successful API writer before continuing, if enabled */
-  int _throttleTime;
   /** Queried capabilities from the target OSM API */
   OsmApiCapabilites _capabilities;
   /** Actual statistics */
