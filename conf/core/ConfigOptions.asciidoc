@@ -358,14 +358,7 @@ If true, changesets derived can issue delete statements for the reference datase
 passed to the changeset deriver).  If false, no delete statements will be issued for the reference
 dataset.
 
-=== changeset.apidb.max.writers
-
-* Data Type: long
-* Default Value: `10`
-
-The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
-
-=== changeset.apidb.max.size
+=== changeset.apidb.size.max
 
 * Data Type: long
 * Default Value: `1000`
@@ -375,6 +368,29 @@ is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
+
+=== changeset.apidb.writers.max
+
+* Data Type: long
+* Default Value: `10`
+
+The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
+
+=== changeset.apidb.writers.throttle
+
+* Data Type: bool
+* Default Value: `false`
+
+Flag to turn on throttling for OSM API changeset writes.  When turned on, each processing thread
+will wait `changeset.api.writers.throttle.time` seconds after a successful write before submitting
+another changeset to the OSM API.
+
+=== changeset.apidb.writers.throttle.time
+
+* Data Type: long
+* Default Value: `30`
+
+The number of seconds after a successful write before submitting another changeset to the OSM API.
 
 === changeset.buffer
 
