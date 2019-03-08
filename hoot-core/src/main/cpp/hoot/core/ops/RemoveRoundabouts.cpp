@@ -91,6 +91,10 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
       removed[i]->handleCrossingWays(_pMap);
   }
 
+  //  Catch the case where there is only one way to "remove", mangle it
+  if (removed.size() == 1)
+    removed[0]->handleCrossingWays(_pMap);
+
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)
     removed[i]->removeRoundabout(_pMap);
