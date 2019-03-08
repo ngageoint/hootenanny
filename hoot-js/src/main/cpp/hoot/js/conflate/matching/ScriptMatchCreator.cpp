@@ -69,6 +69,8 @@ using namespace v8;
 namespace hoot
 {
 
+double ScriptMatchCreator::_autoCalculatedSearchRadius = 0.0;
+
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
 
 /**
@@ -296,6 +298,8 @@ public:
       return;
     }
 
+    LOG_DEBUG("Calculating search radius for: " << _scriptPath << "...");
+
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
     int argc = 0;
@@ -308,10 +312,11 @@ public:
 
     //this is meant to have been set externally in a js rules file
     _customSearchRadius = getNumber(ToLocal(&plugin), "searchRadius", -1.0, 15.0);
-    LOG_VART(_customSearchRadius);
 
     QFileInfo scriptFileInfo(_scriptPath);
-    LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
+    LOG_DEBUG(
+      "Search radius of: " << _customSearchRadius << " to be used for: " <<
+      scriptFileInfo.fileName());
   }
 
   void cleanMapCache()
@@ -430,7 +435,7 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
           "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -439,7 +444,7 @@ public:
       }
     }
     _numElementsVisited++;
-    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
@@ -550,9 +555,30 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
+  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
+
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
-  v.calculateSearchRadius();
+  // For any script using an auto-calculated search radius, the same search radius will be reused
+  // after the first time it is auto-calculated.
+  LOG_VARD(_scriptPath);
+  LOG_VARD(scriptInfo.searchRadiusAutoCalculated);
+  LOG_VARD(_autoCalculatedSearchRadius);
+  if (scriptInfo.searchRadiusAutoCalculated && _autoCalculatedSearchRadius != 0.0)
+  {
+    LOG_DEBUG(
+      "Setting custom search radius: " << _autoCalculatedSearchRadius << " on: " << _scriptPath);
+    v.setCustomSearchRadius(_autoCalculatedSearchRadius);
+  }
+  else
+  {
+    v.calculateSearchRadius();
+    if (scriptInfo.searchRadiusAutoCalculated)
+    {
+      _autoCalculatedSearchRadius = v.getCustomSearchRadius();
+    }
+  }
+  LOG_VARD(_autoCalculatedSearchRadius);
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
@@ -564,8 +590,8 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-    CreatorDescription::baseFeatureTypeToString(
-      _getScriptDescription(_scriptPath).baseFeatureType) << " match candidates.");
+    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
+    " match candidates.");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
@@ -668,6 +694,13 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
     result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+  }
+  Handle<String> searchRadiusAutoCalculatedStr =
+    String::NewFromUtf8(current, "searchRadiusAutoCalculated");
+  if (ToLocal(&plugin)->Has(searchRadiusAutoCalculatedStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(searchRadiusAutoCalculatedStr);
+    result.searchRadiusAutoCalculated = toCpp<bool>(value);
   }
 
   QFileInfo fi(path);

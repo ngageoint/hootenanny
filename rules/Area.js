@@ -8,6 +8,7 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
+exports.searchRadiusAutoCalculated = false;
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 

@@ -8,6 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
+exports.searchRadiusAutoCalculated = hoot.get("power.line.auto.calc.search.radius") === 'true';
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -28,8 +29,7 @@ var distanceScoreExtractor = new hoot.DistanceScoreExtractor();
  */
 exports.calculateSearchRadius = function(map)
 {
-  var autoCalcSearchRadius = (hoot.get("power.line.auto.calc.search.radius") === 'true');
-  if (autoCalcSearchRadius)
+  if (exports.searchRadiusAutoCalculated)
   {
     hoot.log("Calculating search radius for power line conflation...");
     exports.searchRadius =

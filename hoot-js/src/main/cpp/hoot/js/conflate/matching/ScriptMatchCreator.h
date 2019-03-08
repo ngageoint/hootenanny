@@ -89,6 +89,9 @@ private:
 
   CreatorDescription _getScriptDescription(QString path) const;
 
+  // Only one auto-calculated search radius need be done per conflation job, since it will always
+  // be based on the same input dta.
+  static double _autoCalculatedSearchRadius;
   boost::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;

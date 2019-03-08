@@ -32,13 +32,13 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>

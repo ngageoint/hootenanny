@@ -8,6 +8,7 @@ exports.matchThreshold = parseFloat(hoot.get("building.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("building.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
 exports.experimental = false;
+exports.searchRadiusAutoCalculated = false;
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is

@@ -40,6 +40,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QTime>
@@ -91,7 +92,7 @@ void OsmMapIndex::_buildNodeTree() const
 {
   QTime t;
   t.start();
-  LOG_DEBUG("Building node R-Tree index");
+  LOG_INFO("Building node R-Tree index...");
   // 10 children - 368
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _nodeTree.reset(new HilbertRTree(mps, 2));
@@ -120,27 +121,25 @@ void OsmMapIndex::_buildNodeTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  building node R-Tree count: " << count << " / " << nodes.size() << "       ");
+      PROGRESS_INFO("  Node R-Tree count: " << count << " / " << nodes.size() << "       ");
     }
   }
-
-  LOG_DEBUG("  building node R-Tree count: " << count << " / " << nodes.size() << "       ");
 
   _pendingNodeInsert.clear();
   _pendingNodeRemoval.clear();
 
-  LOG_DEBUG("  Doing bulk insert.");
+  LOG_INFO("  Bulk inserting Node R-Tree...");
 
   _nodeTree->bulkInsert(boxes, ids);
 
-  LOG_DEBUG("  Done. Time elapsed: " << t.elapsed() << "ms");
+  LOG_INFO("  Node R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
 }
 
 void OsmMapIndex::_buildWayTree() const
 {
   QTime t;
   t.start();
-  LOG_DEBUG("Building way R-Tree index");
+  LOG_INFO("Building way R-Tree index...");
   // 10 children - 368
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
@@ -161,7 +160,8 @@ void OsmMapIndex::_buildWayTree() const
   {
     ConstWayPtr w = it->second;
 
-    boost::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+    boost::shared_ptr<LineString> ls =
+      ElementConverter(_map.shared_from_this()).convertToLineString(w);
     const Envelope* e = ls->getEnvelopeInternal();
 
     Meters a = w->getCircularError();
@@ -171,22 +171,20 @@ void OsmMapIndex::_buildWayTree() const
     boxes.push_back(b);
     ids.push_back(_createTreeWid(w->getId()));
 
-    if (Log::getInstance().isDebugEnabled() && count % 1000 == 0)
+    if (/*Log::getInstance().isDebugEnabled() &&*/ count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  building way R-Tree count: " << count << " / " << ways.size() << "       ");
+      PROGRESS_INFO("  Way R-Tree Index: " << count << " / " << ways.size() << "       ");
     }
   }
-
-  LOG_DEBUG("  building way R-Tree count: " << count << " / " << ways.size() << "       ");
 
   _pendingWayInsert.clear();
   _pendingWayRemoval.clear();
 
-  LOG_DEBUG("  Doing bulk insert.");
+  LOG_DEBUG("  Bulk inserting Way R-Tree...");
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_DEBUG("  Done. Time elapsed: " << t.elapsed() << "ms");
+  LOG_INFO("  Way R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const
@@ -230,7 +228,6 @@ vector<long> OsmMapIndex::findNodes(const Coordinate& from, Meters maxDistance) 
   Box b(2);
   b.setBounds(0, from.x - maxDistance, from.x + maxDistance);
   b.setBounds(1, from.y - maxDistance, from.y + maxDistance);
-  //KnnIterator it(getNodeTree().get(), from.x, from.y, b);
   KnnIterator it(getNodeTree().get(), from.x, from.y);
 
   while (it.hasNext() && it.getDistance() <= maxDistance)

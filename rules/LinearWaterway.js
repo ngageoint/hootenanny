@@ -8,6 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
+exports.searchRadiusAutoCalculated = hoot.get("waterway.auto.calc.search.radius") === 'true';
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -24,8 +25,9 @@ var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
  */
 exports.calculateSearchRadius = function(map)
 {
-  var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
-  if (autoCalcSearchRadius)
+  //var autoCalcSearchRadius = (hoot.get("waterway.auto.calc.search.radius") === 'true');
+  //if (autoCalcSearchRadius)
+  if (exports.searchRadiusAutoCalculated)
   {
     hoot.log("Calculating search radius for waterway conflation...");
     exports.searchRadius =

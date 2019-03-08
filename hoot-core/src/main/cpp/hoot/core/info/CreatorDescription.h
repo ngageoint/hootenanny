@@ -81,6 +81,7 @@ public:
   std::string className;
   QString description;
   BaseFeatureType baseFeatureType;
+  bool searchRadiusAutoCalculated;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 

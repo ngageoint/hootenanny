@@ -8,6 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("railway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("railway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("railway.review.threshold"));
+exports.searchRadiusAutoCalculated = false;
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
