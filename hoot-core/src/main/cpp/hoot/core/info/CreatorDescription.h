@@ -80,8 +80,7 @@ public:
   bool experimental;
   std::string className;
   QString description;
-  BaseFeatureType baseFeatureType;
-  bool searchRadiusAutoCalculated;
+  BaseFeatureType baseFeatureType;;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 
