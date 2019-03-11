@@ -107,6 +107,7 @@ void HootApiDbWriter::finalizePartial()
     _hootdb.endChangeset();
     if (_hootdb.inTransaction())
       _hootdb.commit();
+    _hootdb.updateImportSequences();
     if (_hootdb.isOpen())
       _hootdb.close();
     _open = false;

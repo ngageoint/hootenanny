@@ -108,6 +108,11 @@ void HootApiDb::_init()
   _currChangesetId = -1;
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
+
+  //  Set the max node/way/relation IDs to negative for updating sequences after inserts
+  _maxInsertNodeId = -1;
+  _maxInsertWayId = -1;
+  _maxInsertRelationId = -1;
 }
 
 Envelope HootApiDb::calculateEnvelope() const
@@ -830,6 +835,9 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   LOG_VART(QString::number(lat, 'g', _precision))
   LOG_VART(QString::number(lon, 'g', _precision));
 
+  //  Update the max node id
+  _maxInsertNodeId = max(_maxInsertNodeId, id);
+
   return true;
 }
 
@@ -909,6 +917,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
   _lazyFlushBulkInsert();
 
   LOG_TRACE("Inserted relation: " << ElementId(ElementType::Relation, relationId));
+
+  //  Update the max relation id
+  _maxInsertRelationId = max(_maxInsertRelationId, relationId);
 
   return true;
 }
@@ -1152,6 +1163,8 @@ void HootApiDb::_resetQueries()
   _wayNodeBulkInsert.reset();
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
+
+  _updateIdSequence.reset();
 }
 
 long HootApiDb::getMapIdFromUrl(const QUrl& url)
@@ -2175,6 +2188,9 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
   LOG_TRACE("Inserted way: " << ElementId(ElementType::Way, wayId));
   LOG_TRACE(tags);
 
+  //  Update the max way id
+  _maxInsertWayId = max(_maxInsertWayId, wayId);
+
   return true;
 }
 
@@ -2398,6 +2414,35 @@ void HootApiDb::_deleteJob(const QString id)
     throw HootException(err);
   }
   _deleteJobById->finish();
+}
+
+void HootApiDb::updateImportSequences()
+{
+  if (_maxInsertNodeId > 0)
+    _updateImportSequence(_maxInsertNodeId, getCurrentNodesSequenceName(_currMapId));
+  if (_maxInsertWayId > 0)
+    _updateImportSequence(_maxInsertWayId, getCurrentWaysSequenceName(_currMapId));
+  if (_maxInsertRelationId > 0)
+    _updateImportSequence(_maxInsertRelationId, getCurrentRelationsSequenceName(_currMapId));
+}
+
+void HootApiDb::_updateImportSequence(long max, const QString& sequence)
+{
+  LOG_TRACE("Updating sequence " << sequence);
+  if(!_updateIdSequence)
+  {
+    _updateIdSequence.reset(new QSqlQuery(_db));
+  }
+  if (!_updateIdSequence->exec(QString("ALTER SEQUENCE %1 RESTART %2").arg(sequence).arg(max + 1)))
+  {
+    const QString err =
+      QString("Error executing query: %1 (%2)")
+        .arg(_updateIdSequence->executedQuery())
+        .arg(_updateIdSequence->lastError().text());
+    LOG_TRACE(err);
+    throw HootException(err);
+  }
+  _updateIdSequence->finish();
 }
 
 }
