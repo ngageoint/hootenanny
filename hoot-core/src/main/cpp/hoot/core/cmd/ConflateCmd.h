@@ -61,8 +61,6 @@ public:
 private:
 
   void _updateConfigOptionsForAttributeConflation();
-
-  static void _tempFixDefaults();
 };
 
 }

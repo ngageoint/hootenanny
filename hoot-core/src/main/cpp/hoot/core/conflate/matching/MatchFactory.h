@@ -96,13 +96,6 @@ public:
 
   void reset();
 
-  /**
-   * todo
-   *
-   * @param matchCreatorsList
-   */
-  static void setMatchCreators(const QStringList matchCreatorsList);
-
 private:
 
   // allows for matching a subset of the input data
@@ -112,7 +105,10 @@ private:
 
   void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                    const geos::geom::Envelope& bounds) const;
+  static void _setMatchCreators(QStringList matchCreatorsList);
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
+
+  static void _tempFixDefaults();
 
   static boost::shared_ptr<MatchFactory> _theInstance;
 
