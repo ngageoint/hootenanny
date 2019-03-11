@@ -4,7 +4,7 @@ set -e
 mkdir -p test-output/NonDestructiveTest/
 
 # First run the Congo network conflation
-hoot conflate -D hash.seed.zero=true -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
+hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
  -D reader.conflate.use.data.source.ids.1=true \
  -D writer.include.debug.tags=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
@@ -13,7 +13,7 @@ hoot conflate -D hash.seed.zero=true -C ReferenceConflation.conf -C NetworkAlgor
 
 
 # Derive the changeset for the Congo conflation
-hoot changeset-derive -D hash.seed.zero=true --stats \
+hoot changeset-derive -C Testing.conf --stats \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-output/NonDestructiveTest/output.osm \
  test-output/NonDestructiveTest/changeset.osc

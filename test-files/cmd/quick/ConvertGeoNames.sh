@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-hoot convert -D hash.seed.zero=true -D osm.map.writer.factory.writer=hoot::OsmXmlWriter -D convert.ops=hoot::TranslationOp -D translation.script=$HOOT_HOME/translations/GeoNames.js test-files/cmd/quick/ConvertGeoNames.geonames /dev/stdout
+hoot convert -C Testing.conf -D osm.map.writer.factory.writer=hoot::OsmXmlWriter -D convert.ops=hoot::TranslationOp -D translation.script=$HOOT_HOME/translations/GeoNames.js test-files/cmd/quick/ConvertGeoNames.geonames /dev/stdout

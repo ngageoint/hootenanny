@@ -5,7 +5,7 @@ mkdir -p test-output/cmd/ConflateCmdStatsTest
 STATS_OUT=test-output/cmd/ConflateCmdStatsTest/toy-buildings-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-hoot conflate -D hash.seed.zero=true -D writer.include.debug.tags=true -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" test-files/ToyBuildingsTestA.osm test-files/ToyBuildingsTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
+hoot conflate -C Testing.conf -D writer.include.debug.tags=true -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" test-files/ToyBuildingsTestA.osm test-files/ToyBuildingsTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""

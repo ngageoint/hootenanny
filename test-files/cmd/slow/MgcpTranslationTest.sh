@@ -4,11 +4,11 @@ set -e
 mkdir -p test-output/translation/
 
 function compareFiles {
-    hoot diff -D hash.seed.zero=true $1 $2 || diff $1 $2
+    hoot diff -C Testing.conf $1 $2 || diff $1 $2
 }
 
-hoot convert -D hash.seed.zero=true test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp --cols "LTN,WTC,HCT,UID"
-hoot convert -D hash.seed.zero=true --warn test-output/translation/MgcpTestLines.shp test-output/translation/MgcpTranslated.osm --trans translations/MgcpTest.js
+hoot convert -C Testing.conf test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp --cols "LTN,WTC,HCT,UID"
+hoot convert -C Testing.conf --warn test-output/translation/MgcpTestLines.shp test-output/translation/MgcpTranslated.osm --trans translations/MgcpTest.js
 
 # Un-comment this to update the OSM file
 #cp test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
@@ -23,7 +23,7 @@ compareFiles test-output/translation/MgcpTranslated.osm test-files/translation/M
 function checkMgcpV3 {
     OUT=test-output/translation/Mgcpv3_$1.osm
     IN=test-files/MGCPv3/$1.shp
-    hoot convert -D hash.seed.zero=true --warn $IN $OUT --trans translations/MgcpTest.js
+    hoot convert -C Testing.conf --warn $IN $OUT --trans translations/MgcpTest.js
     #echo $IN  $OUT
     compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Uncomment this to update what we compare with.
@@ -31,7 +31,7 @@ function checkMgcpV3 {
     # Export as TRDv4
     OUT4=test-output/translation/$1
     rm -rf $OUT4
-    hoot convert -D hash.seed.zero=true --debug $OUT $OUT4.shp --trans translations/MGCP_TRD4.js
+    hoot convert -C Testing.conf --debug $OUT $OUT4.shp --trans translations/MGCP_TRD4.js
 }
 
 # Building Areas
