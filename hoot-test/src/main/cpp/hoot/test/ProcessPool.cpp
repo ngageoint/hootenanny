@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ProcessPool.h"
 
@@ -161,7 +161,7 @@ void ProcessThread::processJobs(JobQueue* queue)
           {
             _proc.reset(createProcess());
             _outMutex->lock();
-            cout << test.toStdString() << " failed, requeued." << endl;
+            cout << test.toStdString() << " failed to launch, requeued." << endl;
             _outMutex->unlock();
             output.clear();
           }
