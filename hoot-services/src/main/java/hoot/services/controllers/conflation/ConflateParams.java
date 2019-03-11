@@ -28,6 +28,7 @@ package hoot.services.controllers.conflation;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -79,8 +80,8 @@ public class ConflateParams {
     @JsonProperty("CONFLATION_COMMAND")
     private String conflationCommand;
 
-    @JsonProperty("HOOT_2_COMMANDS")
-	private String hoot2Commands;
+    @JsonProperty("HOOT2_ADV_OPTIONS")
+	private Map<String, String> hoot2AdvOptions;
 
     @JsonProperty("HOOT_2")
     private Boolean hoot2;
@@ -200,12 +201,12 @@ public class ConflateParams {
         this.conflationCommand = conflationCommand;
     }
 
-	public String getHoot2Commands() {
-		return this.hoot2Commands;
+	public Map<String, String> getHoot2AdvOptions() {
+		return this.hoot2AdvOptions;
 	}
 
-	public void setHoot2Commands(String hoot2Commands) {
-		this.hoot2Commands = hoot2Commands;
+	public void setHoot2AdvOptions(Map<String, String> hoot2AdvOptions) {
+		this.hoot2AdvOptions = hoot2AdvOptions;
 	}
 
 	public void setHoot2(boolean hoot2) {

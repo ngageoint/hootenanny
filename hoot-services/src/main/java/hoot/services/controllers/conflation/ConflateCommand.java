@@ -26,11 +26,12 @@
  */
 package hoot.services.controllers.conflation;
 
+import static hoot.services.HootProperties.CONFIG_OPTIONS;
+import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.REF_OVERRIDE_PATH;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
-import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +44,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
@@ -62,7 +64,6 @@ import hoot.services.models.db.Users;
 class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
-    private static Map<String, Map<String, String>> conflationFeatures = null;
 
     private static List<String> conflationTypes = Arrays.asList(
     	"HorizontalConflation",
@@ -76,17 +77,30 @@ class ConflateCommand extends ExternalCommand {
     private String conflationType = null;
     private String conflationAlgorithm = null;
 
+    private static Map<String, Map<String, String>> conflationFeatures = null;
+    private static Map<String, Map<String, String>> configOptions = null;
+
     static {
     	try {
+    		// get map of conflation type - merger matchers ...
     		JSONParser parser = new JSONParser();
 			String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFLATION_TYPES_PATH), Charset.defaultCharset());
 			ObjectMapper mapper = new ObjectMapper();
-			TypeReference schema = new TypeReference<Map<String, Map<String, String>>>(){};
+			TypeReference schema = new TypeReference<Map<String, Map<String, Object>>>(){};
 			conflationFeatures = mapper.readValue(file, schema);
+
+			// get json of all config options...
+			schema = new TypeReference<Map<String, Map<String, String>>>(){};
+			file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
+			configOptions = mapper.readValue(file, schema);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
+
+
+
 
     ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) throws IllegalArgumentException {
     	super(jobId);
@@ -170,6 +184,24 @@ class ConflateCommand extends ExternalCommand {
         		options.add("match.creators=" + String.join(";", matchers));
         		options.add("merger.creators=" + String.join(";", mergers));
         	}
+
+        	Map<String, String> hoot2AdvOptions = params.getHoot2AdvOptions();
+
+        	if (hoot2AdvOptions != null && !hoot2AdvOptions.isEmpty()) {
+        		for (Entry<String, String> option: hoot2AdvOptions.entrySet()) {
+        			if (configOptions.containsKey(option.getKey())) { // if option key in possible values, add new option command
+        				Map<String, String> optionConfig = configOptions.get(option.getKey());
+        				String optionValue = option.getValue();
+
+        				if (optionConfig.get("type").toLowerCase().equals("list")) {
+        					optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
+        				}
+
+        				options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+        			}
+        		}
+        	}
+
         }
 
         substitutionMap.put("CONFLATION_COMMAND", conflationCommand);

@@ -29,8 +29,10 @@ package hoot.services.controllers.conflation;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -186,6 +188,18 @@ public class ConflateCommandTest {
         String options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
         assertTrue(options.contains("match"));
         assertTrue(options.contains("merger"));
+
+
+        Map<String, String> hoot2Opts = new HashMap<>();
+
+        hoot2Opts.put("HighwayMergeTagsOnly", "true");
+        hoot2Opts.put("AddressAdditionalTagKeys", "[foo=bar,blim=blam]");
+        conflateParams.setHoot2AdvOptions(hoot2Opts);
+
+        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+        options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+        assertTrue(options.contains("\"address.additional.tag.keys=true\""));
+        assertTrue(options.contains("\"highway.merge.tags.only=foo=bar;blim=blam\""));
     }
 
     @Test(expected = IllegalArgumentException.class)

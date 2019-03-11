@@ -4,12 +4,10 @@
         "merger": "hoot::HighwayMergerCreator",
         "members": {
             "search.radius.highway": "Highway search radius",
-            "conflate.match.highway.classifier": "Match classifier",
-            "highway.merge.tags.only": "'Merge tags only",
+            "highway.merge.tags.only": "Merge tags only",
             "highway.matcher.heading.delta": "Matcher heading delta",
             "highway.matcher.max.angle": "Matcher max angle",
-            "highway.max.enum.diff": "Maximum enumerated types difference",
-            "network.matcher": "Network matcher"
+            "highway.max.enum.diff": "Maximum enumerated types difference"
         }
     },
     "RoadsNetwork": {

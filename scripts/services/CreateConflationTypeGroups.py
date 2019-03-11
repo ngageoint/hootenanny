@@ -9,6 +9,8 @@ import json
 import os
 import re
 
+from collections import OrderedDict
+
 if (len(sys.argv) != 5):
     print "Usage:"
     print sys.argv[0] + " (config file) (output file)"
@@ -19,7 +21,7 @@ parent = sys.argv[2]
 defaults = sys.argv[3]
 headerFn = sys.argv[4]
 
-uiGroups = json.loads("".join(open(fn).readlines()))
+uiGroups = json.loads("".join(open(fn).readlines()), object_pairs_hook=OrderedDict)
 configOptions = json.loads("".join(open(parent).readlines()))
 groupDefaults = json.loads("".join(open(defaults).readlines()))
 
@@ -37,6 +39,10 @@ def toInput(optionType):
             break;
     return matchingInput
 
+
+def toLabel(conflateType):
+    return 'Poi to Polygon' if conflateType == 'PoiPolygon' else conflateType;
+
  # merges matches between ConfigOptions.json and conflationTypesMap.json
  # on command key back into conflationTypesMap. Outputs as ConflationTypesGroups.json
 def createUiJSON(groups, options):
@@ -44,6 +50,7 @@ def createUiJSON(groups, options):
         uiGroupsArray = []
         configMembers = [{'key': key, 'member': member} for key, member in options.items()]
         for conflateType, conflateConfig in groups.items():
+            if conflateType == 'RoadsNetwork': continue;
             members = []
             typeMembers = conflateConfig['members']
             for flag in typeMembers.keys():
@@ -68,7 +75,7 @@ def createUiJSON(groups, options):
             if (conflateType == 'Roads'):
                 members = groupDefaults[conflateType] + members
 
-            uiGroupsArray.append({ 'name': conflateType, 'members': members  })
+            uiGroupsArray.append({ 'name': conflateType, 'label': toLabel(conflateType), 'members': members  })
     except:
         print 'failed to load %s' % fn2
     finally:
