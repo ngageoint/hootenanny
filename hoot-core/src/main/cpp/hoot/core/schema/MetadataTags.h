@@ -115,6 +115,8 @@ public:
   inline static const QString HootSource()              { return "hoot:source"; }
 
   inline static const QString HootSpecial()             { return "hoot:special"; }
+  inline static const QString RoundaboutCenter()        { return "roundabout_center"; }
+  inline static const QString RoundaboutConnector()     { return "roundabout_connector"; }
 
   inline static const QString HootSplitParentId()       { return "hoot:split_parent_id"; }
 
