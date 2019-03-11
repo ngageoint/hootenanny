@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-0.3616716205538067" minlon="42.55135990104369" maxlat="-0.3614845364747481" maxlon="42.55153441226798"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616647473931919" lon="42.5514026487499279">
+    <node visible="true" id="-1149303" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616647473931919" lon="42.5514026487499279">
         <tag k="man_made" v="tower"/>
         <tag k="uuid" v="B"/>
-        <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616687794012057" lon="42.5514807085668139"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616624004603039" lon="42.5513599010436891"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616716205538067" lon="42.5515246892602761"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614935889301875" lon="42.5515344122679835"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614845364747481" lon="42.5513694564133402"/>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <nd ref="-5"/>
-        <nd ref="-4"/>
-        <nd ref="-1"/>
+    <node visible="true" id="-1149299" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614845364747481" lon="42.5513694564133402"/>
+    <node visible="true" id="-1149297" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3614935889301875" lon="42.5515344122679835"/>
+    <node visible="true" id="-1149295" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616716205538067" lon="42.5515246892602761"/>
+    <node visible="true" id="-1149293" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616624004603039" lon="42.5513599010436891"/>
+    <node visible="true" id="-1149291" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3616687794012057" lon="42.5514807085668139"/>
+    <way visible="true" id="-1149301" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1149299"/>
+        <nd ref="-1149297"/>
+        <nd ref="-1149295"/>
+        <nd ref="-1149291"/>
+        <nd ref="-1149293"/>
+        <nd ref="-1149299"/>
         <tag k="building" v="mosque"/>
         <tag k="uuid" v="A;C"/>
         <tag k="amenity" v="place_of_worship"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-9" role="reviewee"/>
-        <member type="way" ref="-1" role="reviewee"/>
+        <member type="node" ref="-1149303" role="reviewee"/>
+        <member type="way" ref="-1149301" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>

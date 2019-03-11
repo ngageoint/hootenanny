@@ -74,11 +74,11 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 
   // Mangle (in a good way) ways that may cross our roundabouts, provided there
   // is no 'sibling' roundabout in the secondary dataset
-  for (size_t i = 0; i < removed.size(); i++)
+  for (size_t i = 0; i < removed.size() - 1; i++)
   {
     geos::geom::Coordinate c1 = removed[i]->getCenter()->toCoordinate();
     bool hasSibling = false;
-    for (size_t j = i+1; j < removed.size() && !hasSibling; j++)
+    for (size_t j = i + 1; j < removed.size() && !hasSibling; j++)
     {
       geos::geom::Coordinate c2 = removed[j]->getCenter()->toCoordinate();
       double distance = c1.distance(c2);

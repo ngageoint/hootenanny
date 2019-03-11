@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412800019" lon="-104.7869287551600053">
-        <tag k="place" v="city"/>
-        <tag k="poi" v="yes"/>
-        <tag k="uuid" v="{f6224e55-cfa6-5364-bb78-e482e2d6e1c5};{b18057ff-736d-5d20-b873-837f0c172e33}"/>
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="error:circular" v="20000"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295800116" lon="-104.7179399970199967">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.85805124128" minlon="-104.78692875516" maxlat="38.87519552958001" maxlon="-104.71793999702"/>
+    <node visible="true" id="-2232983" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955295800116" lon="-104.7179399970199967">
         <tag k="note" v="1-d"/>
         <tag k="poi" v="yes"/>
         <tag k="uuid" v="{87f8a061-d9f1-5bc9-ac28-27f07c8febae}"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-2232982" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512412800019" lon="-104.7869287551600053">
+        <tag k="place" v="city"/>
+        <tag k="poi" v="yes"/>
+        <tag k="uuid" v="{f6224e55-cfa6-5364-bb78-e482e2d6e1c5};{b18057ff-736d-5d20-b873-837f0c172e33}"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="error:circular" v="20000"/>
     </node>
 </osm>
