@@ -91,8 +91,9 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
     {
       boost::shared_ptr<Way> w = it->second;
 
-      // if the way is smaller than the threshold
+      // if the way is smaller than the threshold, that isn't a `hoot:special` way
       if (highwayCrit.isSatisfied(w) &&
+          !w->getTags().contains(MetadataTags::HootSpecial()) &&
           ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
