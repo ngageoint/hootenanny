@@ -43,9 +43,8 @@
 #include <boost/foreach.hpp>
 
 // Qt
-#include <qnetworkcookie.h>
-#include <qurl.h>
-#include <qurlquery.h>
+#include <QUrl>
+#include <QUrlQuery>
 
 namespace hoot
 {

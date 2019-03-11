@@ -32,9 +32,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/HootApiDb.h>
 
-// Qt
-#include <QNetworkCookie>
-
 namespace hoot
 {
 

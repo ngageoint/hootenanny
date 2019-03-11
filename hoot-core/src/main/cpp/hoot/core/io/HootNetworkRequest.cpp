@@ -37,7 +37,6 @@
 #include <QEventLoop>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
-#include <QtNetwork/QNetworkCookie>
 
 //  LibOAuthCpp
 #include <liboauthcpp/liboauthcpp.h>

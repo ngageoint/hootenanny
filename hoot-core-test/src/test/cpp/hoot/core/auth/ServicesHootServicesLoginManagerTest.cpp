@@ -39,9 +39,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// Qt
-#include <QNetworkCookie>
-
 namespace hoot
 {
 

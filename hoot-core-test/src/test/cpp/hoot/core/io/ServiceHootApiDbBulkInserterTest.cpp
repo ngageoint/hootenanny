@@ -39,9 +39,6 @@
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/FileUtils.h>
 
-// Qt
-#include <QNetworkCookie>
-
 namespace hoot
 {
 

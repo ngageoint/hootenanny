@@ -41,7 +41,6 @@
 
 //  Qt
 #include <QTextCodec>
-#include <QNetworkCookie>
 
 using namespace std;
 

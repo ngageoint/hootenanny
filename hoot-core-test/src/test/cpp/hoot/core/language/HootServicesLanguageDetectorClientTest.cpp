@@ -41,9 +41,6 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/language/LanguageDetectionConfidenceLevel.h>
 
-// Qt
-#include <QNetworkCookie>
-
 namespace hoot
 {
 
