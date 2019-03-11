@@ -80,7 +80,7 @@ public:
   bool experimental;
   std::string className;
   QString description;
-  BaseFeatureType baseFeatureType;;
+  BaseFeatureType baseFeatureType;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 

@@ -54,7 +54,7 @@ exports.calculateSearchRadius = function(map)
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
  *
- * exports.matchCandidateCriterion takes precendence over this function and must
+ * exports.matchCandidateCriterion takes precedence over this function and must
  * be commented out before using it.
  * 
  * @todo This must be left enabled for now despite exports.matchCandidateCriterion being enabled.  See #3047.

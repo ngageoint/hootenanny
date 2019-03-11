@@ -3363,7 +3363,9 @@ debugging tests which may hang on a remote build server.
 * Data Type: string
 * Default Value: ``
 
-Element criterion class which determines which feature are used for search radius calculation.
+Element criterion class which determines which input features are used for search radius
+calculation.  An empty value specifies that all input features are to be used.  Conflation routines
+making use of automatic search radius calculation should set this value appropriately.
 
 === search.radius.default
 
