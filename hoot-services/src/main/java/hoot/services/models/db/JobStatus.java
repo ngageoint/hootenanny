@@ -55,6 +55,8 @@ public class JobStatus {
 
     private Long userId;
 
+    private Integer jobType;
+
     public java.sql.Timestamp getEnd() {
         return end;
     }
@@ -132,6 +134,14 @@ public class JobStatus {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Integer getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(Integer jobType) {
+        this.jobType = jobType;
     }
 
 }

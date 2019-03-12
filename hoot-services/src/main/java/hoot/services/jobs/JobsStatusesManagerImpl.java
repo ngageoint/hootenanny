@@ -32,11 +32,14 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.job.JobType;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Users;
 
@@ -45,7 +48,7 @@ import hoot.services.models.db.Users;
 public class JobsStatusesManagerImpl implements JobsStatusesManager {
     public JobsStatusesManagerImpl() {}
     @Override
-    public List<JobStatus> getRecentJobs(Users user, int limit) {
+    public List<JobStatusResponse> getRecentJobs(Users user, int limit) {
         long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
         List<JobStatus> recentJobs = createQuery()
                 .select(jobStatus)
@@ -61,7 +64,24 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                             .or(jobStatus.status.eq(RUNNING.ordinal())))
                     .orderBy(jobStatus.start.desc()).limit(limit).fetch();
         }
-        return recentJobs;
+
+
+        //format jobs
+        return recentJobs.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setUserId(j.getUserId());
+            response.setMapId(j.getResourceId());
+            response.setStart(j.getStart().getTime());
+            response.setEnd(j.getEnd().getTime());
+            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+            response.setPercentComplete(j.getPercentComplete());
+
+            return response;
+        }).collect(Collectors.toList());
     }
 
 }

@@ -33,12 +33,23 @@ import hoot.services.command.Command;
 public class Job {
     private String jobId;
     private Long userId;
+    private Long mapId;
     private Command[] commands;
+    private JobType jobType;
 
-    public Job(String jobId, Long userId, Command[] commands) {
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
         this.jobId = jobId;
         this.setUserId(userId);
         this.commands = commands;
+        this.jobType = jobType;
+        this.mapId = mapId;
+    }
+
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
+        this.jobId = jobId;
+        this.setUserId(userId);
+        this.commands = commands;
+        this.jobType = jobType;
     }
 
     public Job(String jobId) {
@@ -61,11 +72,27 @@ public class Job {
         this.commands = commands;
     }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public JobType getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JobType jobType) {
+        this.jobType = jobType;
+    }
+
+    public Long getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(Long mapId) {
+        this.mapId = mapId;
+    }
 }

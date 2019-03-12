@@ -96,6 +96,7 @@ import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -581,7 +582,7 @@ public class MapResource {
                 }
             };
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE, DbUtils.getMapIdFromRef(mapId)));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;

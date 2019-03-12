@@ -67,6 +67,7 @@ import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -166,7 +167,8 @@ public class ExportResource {
                 }
             }
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
+                    DbUtils.getMapIdFromRef(params.getInput())));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -184,7 +186,7 @@ public class ExportResource {
 
         //Update last accessed timestamp for db datasets on export
         if (params.getInputType().equalsIgnoreCase("db")) {
-            Long mapid = DbUtils.getMapIdByName(params.getInput());
+            Long mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
             MapResource.updateLastAccessed(mapid);
         }
 

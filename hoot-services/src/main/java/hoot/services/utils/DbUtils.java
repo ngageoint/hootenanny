@@ -162,8 +162,40 @@ public final class DbUtils {
         return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName)).fetchOne();
     }
 
+    public static Long getMapIdByName(String mapName, Long userId) {
+        return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName).and(maps.userId.eq(userId))).fetchOne();
+    }
+
     public static String getDisplayNameById(long mapId) {
         return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId)).fetchOne();
+    }
+
+    public static Long getMapIdFromRef(String mapRef, Long userId) {
+        Long mapId;
+        try {
+            mapId = Long.parseLong(mapRef);
+        }
+        catch (NumberFormatException ignored) {
+            mapId = getMapIdByName(mapRef, userId);
+        }
+        if(mapId == null) {
+            throw new IllegalArgumentException(mapRef + " doesn't have a corresponding map ID associated with it!");
+        }
+        return mapId;
+    }
+
+    public static Long getMapIdFromRef(String mapRef) {
+        Long mapId;
+        try {
+            mapId = Long.parseLong(mapRef);
+        }
+        catch (NumberFormatException ignored) {
+            mapId = getMapIdByName(mapRef);
+        }
+        if(mapId == null) {
+            throw new IllegalArgumentException(mapRef + " doesn't have a corresponding map ID associated with it!");
+        }
+        return mapId;
     }
 
     /**

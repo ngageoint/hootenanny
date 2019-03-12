@@ -39,6 +39,21 @@ public class JobStatusResponse {
     @JsonProperty("jobId")
     private String jobId;
 
+    @JsonProperty("jobType")
+    private String jobType;
+
+    @JsonProperty("userId")
+    private Long userId;
+
+    @JsonProperty("mapId")
+    private Long mapId;
+
+    @JsonProperty("start")
+    private Long start;
+
+    @JsonProperty("end")
+    private Long end;
+
     @JsonProperty("status")
     private String status;
 
@@ -60,6 +75,46 @@ public class JobStatusResponse {
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(Long mapId) {
+        this.mapId = mapId;
+    }
+
+    public Long getStart() {
+        return start;
+    }
+
+    public void setStart(Long start) {
+        this.start = start;
+    }
+
+    public Long getEnd() {
+        return end;
+    }
+
+    public void setEnd(Long end) {
+        this.end = end;
     }
 
     public String getStatus() {

@@ -39,8 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.job.JobStatusResponse;
 import hoot.services.jobs.JobsStatusesManager;
-import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Users;
 
 @Controller
@@ -65,7 +65,7 @@ public class JobsResource {
     @GET
     @Path("/recent")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<JobStatus> getJobStatus(@Context HttpServletRequest request) {
+    public List<JobStatusResponse> getJobStatus(@Context HttpServletRequest request) {
         Users user = Users.fromRequest(request);
         return this.jobsStatusesManager.getRecentJobs(user, MAX_SIZE);
     }

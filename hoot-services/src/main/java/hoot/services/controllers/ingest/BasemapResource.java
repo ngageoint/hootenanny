@@ -26,7 +26,10 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.BASEMAPS_FOLDER;
+import static hoot.services.HootProperties.BASEMAPS_TILES_FOLDER;
+import static hoot.services.HootProperties.BASEMAP_RASTER_EXTENSIONS;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -73,6 +76,7 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.JsonUtils;
 import hoot.services.utils.MultipartSerializer;
@@ -152,7 +156,7 @@ public class BasemapResource {
 
             Command[] workflow = { ingestBasemapCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.BASEMAP));
 
             JSONObject response = new JSONObject();
             response.put("jobid", jobId);

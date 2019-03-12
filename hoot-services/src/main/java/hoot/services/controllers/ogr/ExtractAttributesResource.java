@@ -67,6 +67,7 @@ import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.MultipartSerializer;
 
@@ -115,7 +116,7 @@ public class ExtractAttributesResource {
 
             Command[] workflow = { getAttributesCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.ATTRIBUTES));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

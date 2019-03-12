@@ -56,7 +56,21 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public void addJob(Job job) {
         try {
-            this.updateJobStatus(job.getJobId(), RUNNING, "PROCESSING", 0.0, job.getUserId());
+//            this.updateJobStatus(job.getJobId(), RUNNING, "PROCESSING", 0.0, job.getUserId());
+
+            hoot.services.models.db.JobStatus newJobStatus = new hoot.services.models.db.JobStatus();
+            newJobStatus.setJobId(job.getJobId());
+            newJobStatus.setUserId(job.getUserId());
+            newJobStatus.setJobType(job.getJobType().ordinal());
+            newJobStatus.setStatus(RUNNING.ordinal());
+            newJobStatus.setStatusDetail("PROCESSING");
+            newJobStatus.setPercentComplete(0.0);
+            newJobStatus.setResourceId(job.getMapId());
+            Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
+            newJobStatus.setStart(ts);
+
+            createQuery().insert(jobStatus).populate(newJobStatus).execute();
+
         }
         catch (Exception e) {
             logger.error("Error adding a new job with ID = {} ", job.getJobId(), e);
@@ -139,7 +153,10 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public hoot.services.models.db.JobStatus getJobStatusObj(String jobId, Long userId) {
         try {
-            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).fetchOne();
+            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(
+                        jobStatus.userId.eq(userId).or(jobStatus.status.eq(RUNNING.ordinal()))
+                    )
+                ).fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);

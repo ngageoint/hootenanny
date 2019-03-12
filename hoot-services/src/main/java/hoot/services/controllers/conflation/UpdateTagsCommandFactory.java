@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 class UpdateTagsCommandFactory {
 
-    UpdateMapTagsCommand build(String jobId, ConflateParams params, Class<?> caller) {
-        return new UpdateMapTagsCommand(params, jobId, caller);
+    UpdateMapTagsCommand build(String jobId, Long userId, ConflateParams params, Class<?> caller) {
+        return new UpdateMapTagsCommand(params, jobId, userId, caller);
     }
 }
