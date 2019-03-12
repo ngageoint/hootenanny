@@ -39,7 +39,10 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveUnknown2Visitor)
 void RemoveUnknownVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getStatus() == _status)
+  {
     RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
+    _numAffected++;
+  }
 }
 
 }

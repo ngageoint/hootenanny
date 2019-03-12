@@ -33,6 +33,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -47,7 +48,8 @@ class OsmMap;
  *
  * The input map can be in either a planar or geographic projection.
  */
-class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable
+class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable,
+  public OperationStatusInfo
 {
 public:
 
@@ -70,6 +72,11 @@ public:
   virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Merges nearby nodes together"; }
+
+  virtual QString getInitStatusMessage() const { return "Merging nearby nodes..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Merged " + QString::number(_numAffected) + " nearby nodes."; }
 
 protected:
 

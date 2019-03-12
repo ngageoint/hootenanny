@@ -72,7 +72,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
     mapWithOnlyUnknown1And2->getElementCount());
 
   // don't care about conflated data and invalid data
-  LOG_DEBUG("Removing invalid and previously conflated data for search radius calculation...");
+  LOG_INFO("Removing invalid and previously conflated data for search radius calculation...");
   size_t elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
   RemoveElementsVisitor elementRemover1(ElementCriterionPtr(new StatusCriterion(Status::Conflated)));
   elementRemover1.setRecursive(true);
@@ -82,7 +82,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
   {
-    LOG_DEBUG(
+    LOG_INFO(
       "Filtered out: " <<
       elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
       " invalid or conflated elements.");
@@ -95,7 +95,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   // isMatchCandidate function. - see #3048
   if (!_elementCriterion.isEmpty())
   {
-    LOG_DEBUG(
+    LOG_INFO(
       "Removing elements not satisfying: " << _elementCriterion <<
       " for search radius calculation...");
     boost::shared_ptr<ElementCriterion> candidateCriterion(
@@ -108,7 +108,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   LOG_VARD(map->getElementCount());
   if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
   {
-    LOG_DEBUG(
+    LOG_INFO(
       "Filtered out: " <<
       elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
       " elements not satisfying candidate criterion.");

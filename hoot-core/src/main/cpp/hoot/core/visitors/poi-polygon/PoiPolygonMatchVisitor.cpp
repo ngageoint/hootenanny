@@ -194,8 +194,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
   if (isMatchCandidate(e))
   {
-    //Technically, the density based density matches depends on this data too, but since that
-    //code has been disabled, this check is good enough.
+    // Technically, the density based matches depends on this data too, but since that code has
+    // been disabled, this check is good enough.
     if (_enableAdvancedMatching || _enableReviewReduction)
     {
       _collectSurroundingPolyIds(e);
@@ -204,7 +204,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -214,7 +214,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 
   _numElementsVisited++;
-  if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<

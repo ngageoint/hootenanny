@@ -75,8 +75,6 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 
 void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("MergeNearbyNodes start");
-
   QTime time;
   time.start();
 
@@ -109,7 +107,6 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 
-  int mergeCount = 0;
   int count = 0;
 
   cph.resetIterator();
@@ -149,7 +146,7 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
             if (replace)
             {
               map->replaceNode(v[j], v[i]);
-              mergeCount++;
+              _numAffected++;
             }
           }
         }
@@ -158,12 +155,10 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
     if (count % 1000 == 0)
     {
-      PROGRESS_INFO("MergeNearbyNodes " << count << " " << mergeCount << "    ");
+      PROGRESS_INFO("Merged " << _numAffected << " / " << count << " nearby nodes.");
     }
     count++;
   }
-
-  LOG_INFO("MergeNearbyNodes " << nodes.size() << " elapsed: " << time.elapsed() << "ms        ");
 }
 
 void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)
