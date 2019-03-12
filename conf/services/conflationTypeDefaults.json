@@ -3,7 +3,7 @@
         {
             "label": "Road engines",
             "id": "RoadEngines",
-            "input": "combo",
+            "input": "combobox",
             "data": [ "Unify", "Network" ],
             "default": "Unify"
         }

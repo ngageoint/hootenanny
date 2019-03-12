@@ -27,8 +27,8 @@ groupDefaults = json.loads("".join(open(defaults).readlines()))
 
 optionTypesMap = {
     'text': ['double', 'int', 'string', 'long'],
-    'combo': ['list'],
-    'check': ['bool']
+    'combobox': ['list'],
+    'checkbox': ['bool']
 }
 
 def toInput(optionType):
