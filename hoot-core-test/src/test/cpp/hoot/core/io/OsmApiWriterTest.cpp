@@ -28,6 +28,7 @@
 //  hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmApiWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
 //  Qt
@@ -46,6 +47,7 @@ class OsmApiWriterTest : public HootTestFixture
   /* These tests are for local testing and require additional resources to complete */
 //  CPPUNIT_TEST(runPermissionsTest);
 //  CPPUNIT_TEST(runChangesetTest);
+//  CPPUNIT_TEST(runChangesetTrottleTest);
 //  CPPUNIT_TEST(runChangesetConflictTest);
 //  CPPUNIT_TEST(oauthTest);
   CPPUNIT_TEST_SUITE_END();
@@ -158,8 +160,29 @@ public:
     OsmApiWriter writer(osm, changesets);
 
     Settings s;
-    s.set("changeset.apidb.max.writers", 2);
-    s.set("changeset.apidb.max.size", 10);
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 2);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 10);
+    writer.setConfiguration(s);
+
+    writer.apply();
+  }
+
+  void runChangesetTrottleTest()
+  {
+    QUrl osm;
+    osm.setUrl(ME_API_URL);
+    osm.setUserInfo("test01:hoottest");
+
+    QList<QString> changesets;
+    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+
+    OsmApiWriter writer(osm, changesets);
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 2);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 2);
+    s.set(ConfigOptions::getChangesetApidbWritersThrottleKey(), true);
+    s.set(ConfigOptions::getChangesetApidbWritersThrottleTimeKey(), 2);
     writer.setConfiguration(s);
 
     writer.apply();
@@ -180,8 +203,8 @@ public:
 
       Settings s;
       //  Force the changeset to give consistent results with no parallelism
-      s.set("changeset.apidb.max.writers", 1);
-      s.set("changeset.apidb.max.size", 1000);
+      s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+      s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 1000);
       writer.setConfiguration(s);
 
       writer.apply();
@@ -195,8 +218,8 @@ public:
       OsmApiWriter writer(osm, changesets);
 
       Settings s;
-      s.set("changeset.apidb.max.writers", 1);
-      s.set("changeset.apidb.max.size", 10);
+      s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+      s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 10);
       writer.setConfiguration(s);
 
       writer.apply();
@@ -227,12 +250,12 @@ public:
     OsmApiWriter writer(osm, changesets);
 
     Settings s;
-    s.set("changeset.apidb.max.writers",        2);
-    s.set("changeset.apidb.max.size",           10);
-    s.set("hoot.osm.auth.consumer.key",         "<consumer_key_here>");
-    s.set("hoot.osm.auth.consumer.secret",      "<consumer_secret_here>");
-    s.set("hoot.osm.auth.access.token",         "<access_token_here>");
-    s.set("hoot.osm.auth.access.token.secret",  "<access_secret_here>");
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(),      2);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(),         10);
+    s.set(ConfigOptions::getHootOsmAuthConsumerKeyKey(),        "<consumer_key_here>");
+    s.set(ConfigOptions::getHootOsmAuthConsumerSecretKey(),     "<consumer_secret_here>");
+    s.set(ConfigOptions::getHootOsmAuthAccessTokenKey(),        "<access_token_here>");
+    s.set(ConfigOptions::getHootOsmAuthAccessTokenSecretKey(),  "<access_secret_here>");
 
     writer.setConfiguration(s);
 
