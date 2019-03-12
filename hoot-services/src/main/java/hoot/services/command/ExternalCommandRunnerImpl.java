@@ -98,7 +98,11 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     .collect(Collectors.joining(" "));
 
             // Sensitive params obfuscated
-            obfuscatedCommand = Arrays.stream(quoteArgsWithSpaces(parse(commandTemplate, substitutionMap).toStrings()))
+            obfuscatedCommand = Arrays.stream(
+//                    quoteArgsWithSpaces(
+                            parse(commandTemplate, substitutionMap).toStrings()
+//                        )
+                    )
                     .collect(Collectors.joining(" "));
 
             LocalDateTime start = null;
@@ -110,7 +114,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
 
-                exitCode = executor.execute(cmdLine);
+                exitCode = executor.execute(cmdLine); //TODO: should be made async
             }
             catch (Exception e) {
                 exitCode = CommandResult.FAILURE;
