@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,7 +39,7 @@ public class GrailParams {
     @JsonProperty("BBOX")
     private String bounds;
 
-    @JsonProperty("user")
+    @JsonIgnore
     private Users user;
 
     @JsonProperty("input1")
@@ -75,7 +76,7 @@ public class GrailParams {
     }
 
     public Users getUser() {
-        return (user == null) ? null : user;
+        return user;
     }
 
     public void setUser(Users user) {

@@ -36,14 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -574,9 +567,10 @@ public class GrailResource {
      */
     @POST
     @Path("/pullosmtodb")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOsmToDb(@Context HttpServletRequest request,
-            @QueryParam("BBOX") String bbox,
+            GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -605,14 +599,14 @@ public class GrailResource {
 
         GrailParams apiParams = new GrailParams();
         GrailParams overpassParams = new GrailParams();
-        apiParams.setUser(user);
-        overpassParams.setUser(user);
 
-        apiParams.setBounds(bbox);
+        apiParams.setUser(user);
+        apiParams.setBounds(reqParams.getBounds());
         apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
         apiParams.setPullUrl(RAILSPORT_PULL_URL);
 
-        overpassParams.setBounds(bbox);
+        overpassParams.setUser(user);
+        overpassParams.setBounds(reqParams.getBounds());
         overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
         overpassParams.setPullUrl(MAIN_OVERPASS_URL);
 
