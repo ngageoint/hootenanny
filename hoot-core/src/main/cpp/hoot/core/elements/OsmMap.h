@@ -50,10 +50,10 @@
 
 namespace hoot
 {
-    namespace elements
-    {
-        class Tags;
-    }
+  namespace elements
+  {
+    class Tags;
+  }
 }
 
 // Standard
@@ -318,11 +318,11 @@ protected:
   mutable NodeMap::const_iterator _tmpNodeMapIt;
   RelationMap::iterator _tmpRelationIt;
   mutable WayMap::const_iterator _tmpWayIt;
-  std::vector< boost::shared_ptr<OsmMapListener> > _listeners;
+  std::vector<boost::shared_ptr<OsmMapListener>> _listeners;
 
-  std::vector< boost::shared_ptr<Element> > _replaceTmpArray;
+  std::vector<boost::shared_ptr<Element>> _replaceTmpArray;
 
-  std::vector< boost::shared_ptr<Roundabout> > _roundabouts;
+  std::vector<boost::shared_ptr<Roundabout>> _roundabouts;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
 
@@ -332,7 +332,6 @@ protected:
   bool _listContainsNode(const QList<ElementPtr> l) const;
 
   void _replaceNodeInRelations(long oldId, long newId);
-
 };
 
 typedef boost::shared_ptr<OsmMap> OsmMapPtr;

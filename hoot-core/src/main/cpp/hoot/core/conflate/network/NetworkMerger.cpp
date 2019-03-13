@@ -126,7 +126,6 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
 
     LOG_DEBUG("Merging tags in keeper segments...");
-
     // merge the tags in the keeper segments
     merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
     merger->mergeTags();
@@ -135,7 +134,6 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     merger->setKeeperStatus(Status::Conflated);
 
     LOG_DEBUG("Parsing scrap nodes...");
-
     // go through all the nodes in the scrap
     QList<ConstNodePtr> scrapNodeList;
     ExtractNodesVisitor extractVisitor(scrapNodeList);

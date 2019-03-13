@@ -58,8 +58,6 @@ void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 
 void SuperfluousWayRemover::removeWays()
 {
-  LOG_DEBUG("Removing superfluous ways...");
-
   _numAffected = 0;
   boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 

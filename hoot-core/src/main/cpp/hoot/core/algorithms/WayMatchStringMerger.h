@@ -97,6 +97,7 @@ public:
   class SublineMappingLessThan
   {
   public:
+
     SublineMappingLessThan(WayNumber way) { _way = way; }
 
     inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
@@ -105,6 +106,7 @@ public:
         return std::min(t1->getStart(_way), t1->getEnd(_way)) < std::min(t2->getStart(_way), t2->getEnd(_way));
     }
   private:
+
     WayNumber _way;
   };
 

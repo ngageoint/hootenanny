@@ -46,8 +46,8 @@ namespace hoot
 class NetworkEdge
 {
 public:
-  NetworkEdge();
 
+  NetworkEdge();
   NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed = false,
     ConstElementPtr member = ConstElementPtr());
 
@@ -78,6 +78,7 @@ public:
   QString toString() const;
 
 private:
+
   ConstNetworkVertexPtr _from, _to;
   bool _directed;
   QList<ConstElementPtr> _members;

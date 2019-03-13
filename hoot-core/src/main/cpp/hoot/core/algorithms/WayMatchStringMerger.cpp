@@ -201,9 +201,8 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
 
 void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 {
-  LOG_TRACE("Merging intersection...");
+  LOG_TRACE("Merging intersection for scrap: " << scrapNodeId << "...");
 
-  LOG_VART(scrapNodeId);
   ConstNodePtr scrapNode = _map->getNode(scrapNodeId);
   LOG_VART(scrapNode->getElementId());
   LOG_VART(scrapNode->getX());
@@ -250,9 +249,8 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
 void WayMatchStringMerger::mergeNode(ElementId scrapNode)
 {
-  LOG_TRACE("Merging node...");
+  LOG_TRACE("Merging node for scrap: " << scrapNode << "...");
 
-  LOG_VART(scrapNode);
   LOG_VART(_map->getNode(scrapNode));
   // find the first instance of scrapNode in way 2
   WayLocation wl2 = _findNodeLocation2(_mapping->getWayString2(), scrapNode);

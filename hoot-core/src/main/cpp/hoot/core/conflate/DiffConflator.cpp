@@ -55,6 +55,7 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/ops/SnapUnconnectedRoads.h>
 
 // standard
 #include <algorithm>
@@ -110,15 +111,16 @@ void DiffConflator::apply(OsmMapPtr& map)
   LOG_INFO("Discarding non-conflatable elements...");
   NonConflatableElementRemover nonConflateRemover;
   nonConflateRemover.apply(_pMap);
-  _stats.append(SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(
+    SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
 
   // Will reproject if necessary.
-  LOG_INFO("Projecting to planar...");
+  LOG_DEBUG("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
   // find all the matches in this _pMap
-  LOG_INFO("Finding matches...");
+  //LOG_INFO("Finding matches...");
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
@@ -141,10 +143,22 @@ void DiffConflator::apply(OsmMapPtr& map)
   MapProjector::projectToWgs84(_pMap);
   _calcAndStoreTagChanges();
 
+  // Let's try to snap disconnected roads back to other roads.  Probably some time should be
+  // spent trying to correct this problem in the conflation routines, but we'll go with this for
+  // now.  This could also be applied in areas other than Differential Conflation eventually.
+  // TODO: Not sure if this should be run before or after the matches are deleted.  Also, need to
+  // create an option for enabling/disabling.
+  SnapUnconnectedRoads roadSnapper;
+  LOG_INFO(roadSnapper.getInitStatusMessage());
+  roadSnapper.apply(_pMap);
+  LOG_INFO(roadSnapper.getCompletedStatusMessage());
+
   // We have matches. Here's what we are going to do: because our _pMap contains
   // all of input1 and input2, we are going to delete everthing that belongs to
   // a match pair. Then we will delete all remaining input1 items... leaving us
   // with the differential that we want.
+
+  LOG_INFO("Deleting match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
@@ -152,12 +166,15 @@ void DiffConflator::apply(OsmMapPtr& map)
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
+      LOG_VARD(pit->first);
+      LOG_VARD(pit->second);
       RecursiveElementRemover(pit->first).apply(_pMap);
       RecursiveElementRemover(pit->second).apply(_pMap);
     }
-  }
+  }  
 
   // Now remove input1 elements
+  LOG_INFO("Removing input1 elements...");
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
@@ -248,6 +265,8 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
+  LOG_DEBUG("Storing tag changes...");
+
   // Make sure we have a container for our changes
   if (!_pTagChanges)
   {

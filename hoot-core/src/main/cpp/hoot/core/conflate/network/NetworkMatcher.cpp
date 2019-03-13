@@ -56,7 +56,7 @@ void NetworkMatcher::_createEdge2Index()
   LOG_DEBUG("Creating edge index...");
 
   // TODO: No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes
+  // 10 children = 368 bytes - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _edge2Index.reset(new HilbertRTree(mps, 2));
 
@@ -105,7 +105,7 @@ IntersectionIterator NetworkMatcher::_createIterator(Envelope env, HilbertRTreeP
 void NetworkMatcher::_createVertex2Index()
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
-  // 10 children = 368 bytes
+  // 10 children = 368 bytes - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _vertex2Index.reset(new HilbertRTree(mps, 2));
 

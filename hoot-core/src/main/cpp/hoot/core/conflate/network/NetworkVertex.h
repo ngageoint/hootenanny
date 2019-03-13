@@ -45,6 +45,7 @@ namespace hoot
 class NetworkVertex
 {
 public:
+
   NetworkVertex(ConstElementPtr e);
 
   ConstElementPtr getElement() const { return _e; }
@@ -61,6 +62,7 @@ public:
   geos::geom::Coordinate getCentroid() const;
 
 private:
+
   ConstElementPtr _e;
   int _uid;
   static int uidCount;

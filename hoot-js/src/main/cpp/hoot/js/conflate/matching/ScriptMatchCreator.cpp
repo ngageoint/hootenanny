@@ -323,7 +323,7 @@ public:
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
+      // 10 children - 368 - see #3054
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 

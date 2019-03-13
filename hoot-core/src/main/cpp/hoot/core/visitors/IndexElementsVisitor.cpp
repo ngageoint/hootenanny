@@ -47,7 +47,7 @@ namespace hoot
 IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& index,
                                            deque<ElementId>& indexToEid,
                                            const boost::shared_ptr<ElementCriterion>& criterion,
-                                           boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                                 boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                            ConstOsmMapPtr pMap) :
   _criterion(criterion),
   _getSearchRadius(getSearchRadius),

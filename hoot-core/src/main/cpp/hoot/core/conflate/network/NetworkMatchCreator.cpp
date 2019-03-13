@@ -69,7 +69,6 @@ Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId
   ElementId /*eid2*/)
 {
   Match* result = 0;
-
   return result;
 }
 
@@ -87,9 +86,9 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  boost::shared_ptr<ChainCriterion> c1(new ChainCriterion(
-                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
-                                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c1(
+    new ChainCriterion(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), _userCriterion));
   if (_filter)
   {
     c1->addCriterion(_filter);
@@ -99,9 +98,9 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   LOG_DEBUG("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  boost::shared_ptr<ChainCriterion> c2(new ChainCriterion(
-                                         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-                                         _userCriterion));
+  boost::shared_ptr<ChainCriterion> c2(
+    new ChainCriterion(
+      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), _userCriterion));
   if (_filter)
   {
     c2->addCriterion(_filter);

@@ -92,7 +92,7 @@ void OsmMapIndex::_buildNodeTree() const
   QTime t;
   t.start();
   LOG_DEBUG("Building node R-Tree index");
-  // 10 children - 368
+  // 10 children - 368 - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _nodeTree.reset(new HilbertRTree(mps, 2));
 
@@ -141,7 +141,7 @@ void OsmMapIndex::_buildWayTree() const
   QTime t;
   t.start();
   LOG_DEBUG("Building way R-Tree index");
-  // 10 children - 368
+  // 10 children - 368 - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
 

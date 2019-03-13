@@ -90,7 +90,7 @@ boost::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
 {
-  LOG_DEBUG("Creating stub edges...");
+  LOG_TRACE("Creating stub edges...");
 
   if (na == _n1)
   {
@@ -282,7 +282,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     // a case test pass at the expense of no other case tests failing and no decrease
     // in regression performance.  However, this seems like an important piece of logic, so we need
     // to keep in mind that this change may have to be reverted if we encounter a situation where
-    // having it disabled causes problems.
+    // having it disabled causes problems. - #3052
     //conflict += touches;
 
     LOG_VART(conflict.size());
@@ -310,8 +310,11 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       }
     }
 
-    foreach (ConstEdgeMatchPtr aSupport, support) LOG_VART(aSupport);
-    foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VART(aConflict);
+    if (Log::getInstance().getLevel() <= Log::Trace)
+    {
+      foreach (ConstEdgeMatchPtr aSupport, support) LOG_VART(aSupport);
+      foreach (ConstEdgeMatchPtr aConflict, conflict) LOG_VART(aConflict);
+    }
 
     _scores[em] = 1.0;
     _weights[em] = 1.0;
@@ -466,7 +469,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
 
   // go through all matches
   const int total = _scores.keys().size();
-  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     double handicap = pow(partialHandicap, em->countPartialMatches());
     LOG_VART(em);
@@ -499,9 +502,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
       // if r contains at least one line in em and em doesn't contain an edge string in r
       // (overlapping, but not completely contained)
       if ((r->getEdge()->getString1()->contains(em->getString1()) ||
-        r->getEdge()->getString2()->contains(em->getString2())) &&
-        !(em->getString1()->contains(r->getEdge()->getString1()) ||
-        em->getString2()->contains(r->getEdge()->getString2())))
+           r->getEdge()->getString2()->contains(em->getString2())) &&
+          !(em->getString1()->contains(r->getEdge()->getString1()) ||
+            em->getString2()->contains(r->getEdge()->getString2())))
       {
         childHandicap *= 1.5;
         LOG_VART(childHandicap);
@@ -705,48 +708,47 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
         finder.getNumSimilarEdgeMatches() << " duplicate edge matches removed.");
     }
   }
-  LOG_TRACE("Removed " << finder.getNumSimilarEdgeMatches() << " duplicate edge matches.");
 
-  if (Log::getInstance().getLevel() <= Log::Trace)
-  {
-    _printEdgeMatches();
-  }
+  _printEdgeMatches();
 }
 
 void ConflictsNetworkMatcher::_printEdgeMatches()
 {
-  stringstream ss;
-  foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
-    foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
+    stringstream ss;
+    foreach (ConstEdgeMatchPtr em, _edgeMatches->getAllMatches().keys())
     {
-      foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+      foreach (EdgeString::EdgeEntry edge, em->getString1()->getAllEdges())
       {
-        if (elmnt->getElementType() == ElementType::Way)
+        foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
         {
-          ss << "(way:" << elmnt->getId() << ")";
+          if (elmnt->getElementType() == ElementType::Way)
+          {
+            ss << "(way:" << elmnt->getId() << ")";
+          }
         }
       }
-    }
 
-    ss << " <<matches>> ";
-    foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
-    {
-      foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
+      ss << " <<matches>> ";
+      foreach (EdgeString::EdgeEntry edge, em->getString2()->getAllEdges())
       {
-        if (elmnt->getElementType() == ElementType::Way)
+        foreach (ConstElementPtr elmnt, edge.getSubline()->getStart()->getEdge()->getMembers())
         {
-          ss << "(way:" << elmnt->getId() << ")";
+          if (elmnt->getElementType() == ElementType::Way)
+          {
+            ss << "(way:" << elmnt->getId() << ")";
+          }
         }
       }
+
+      ss << std::endl;
+
+      int i = 0;
+      i++;
     }
-
-    ss << std::endl;
-
-    int i = 0;
-    i++;
+    LOG_TRACE(ss.str());
   }
-  LOG_INFO(ss.str());
 }
 
 }
