@@ -55,6 +55,7 @@ public:
 
   static unsigned int logWarnCount;
 
+  PoiPolygonMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -74,6 +75,8 @@ public:
    * @return the ID of the element that was merged into
    */
   static ElementId mergePoiAndPolygon(OsmMapPtr map);
+
+  virtual QString getDescription() const { return "Merges POIs into polygons"; }
 
 protected:
 

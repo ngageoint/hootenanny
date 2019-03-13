@@ -481,18 +481,6 @@ Requires language translation server installation.  See the Hootenanny Install G
     # List all available feature extractors
     hoot info --feature-extractors
     
-    # List all available feature matchers
-    hoot info --matchers
-    
-    # List all available feature mergers
-    hoot info --mergers
-    
-    # List all available data operators
-    hoot info --operators
-      
-    # List all available tag mergers
-    hoot info --tag-mergers
-    
     # List all available language detectors
     hoot info --languages --detectors
     
@@ -505,6 +493,21 @@ Requires language translation server installation.  See the Hootenanny Install G
     # List all translatable languages
     hoot info --languages --translatable
 
+    # List all available feature matchers
+    hoot info --matchers
+
+    # List all available feature match creators
+    hoot info --match-creators
+    
+    # List all available feature mergers
+    hoot info --mergers
+
+    # List all available feature merger creators
+    hoot info --merger-creators
+
+    # List all available data operators
+    hoot info --operators
+
     # List all available string comparators
     hoot info --string-comparators
 
@@ -516,5 +519,8 @@ Requires language translation server installation.  See the Hootenanny Install G
     
     # List all available subline string matchers
     hoot info --subline-string-matchers
+
+    # List all available tag mergers
+    hoot info --tag-mergers
 -----
 

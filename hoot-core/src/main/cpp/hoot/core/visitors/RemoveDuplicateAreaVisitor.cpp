@@ -44,6 +44,7 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -165,6 +166,14 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
   {
     boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
+  }
+
+  _numProcessed++;
+  if (_numProcessed % 10000 == 0)
+  {
+    PROGRESS_INFO(
+      "\t\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
+      " elements for duplicate area removal.");
   }
 }
 

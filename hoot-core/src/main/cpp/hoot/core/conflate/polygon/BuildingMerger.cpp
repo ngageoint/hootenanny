@@ -43,11 +43,14 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, BuildingMerger)
 
 class DeletableBuildingCriterion : public ElementCriterion
 {
@@ -87,6 +90,11 @@ private:
 };
 
 unsigned int BuildingMerger::logWarnCount = 0;
+
+BuildingMerger::BuildingMerger() :
+MergerBase()
+{
+}
 
 BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 _pairs(pairs),
@@ -164,19 +172,19 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
           LOG_WARN("One or more of the buildings to merge are empty.  Skipping merge...");
           if (e1.get())
           {
-            LOG_VARD(e1->getElementId());
+            LOG_VART(e1->getElementId());
           }
           else
           {
-            LOG_DEBUG("Building one null.");
+            LOG_TRACE("Building one null.");
           }
           if (e2.get())
           {
-            LOG_VARD(e2->getElementId());
+            LOG_VART(e2->getElementId());
           }
           else
           {
-            LOG_DEBUG("Building two null.");
+            LOG_TRACE("Building two null.");
           }
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
@@ -323,8 +331,8 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
   else
   {
-    vector< boost::shared_ptr<Element> > parts;
-    vector< ElementId > toRemove;
+    vector<boost::shared_ptr<Element>> parts;
+    vector<ElementId> toRemove;
     parts.reserve(eid.size());
     for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
     {
@@ -348,7 +356,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
             if (m[i].getRole() == MetadataTags::RolePart())
             {
               boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
-              // push any non-conflicting tags in the parent relation down into the building part.
+              // Push any non-conflicting tags in the parent relation down into the building part.
               em->setTags(
                 OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(), em->getElementType()));
               parts.push_back(em);
@@ -370,7 +378,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
     LOG_VART(result);
 
-    // likely create a crit that only matches buildings and building parts and pass that to the
+    // likely create a crit that only matches buildings and building parts and pass that
     DeletableBuildingCriterion crit;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
@@ -392,7 +400,7 @@ boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map)
 {
   set<ElementId> e;
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     e.insert(it->first);
@@ -405,7 +413,7 @@ boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map)
 {
   set<ElementId> e;
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     e.insert(it->second);

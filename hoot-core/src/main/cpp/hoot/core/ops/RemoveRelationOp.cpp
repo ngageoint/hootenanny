@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
 
 using namespace std;
@@ -51,7 +51,6 @@ _rIdToRemove(rId)
 
 void RemoveRelationOp::apply(OsmMapPtr& map)
 {
-  LOG_VART(_rIdToRemove);
   if (_rIdToRemove == -std::numeric_limits<int>::max())
   {
     throw IllegalArgumentException("No relation ID specified for RemoveRelationOp.");
@@ -64,7 +63,6 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
     const set<long> rids =
       map->_index->getElementToRelationMap()->getRelationByElement(
         ElementId::relation(_rIdToRemove));
-    LOG_VART(rids);
 
     // remove this relation from all other parent relations.
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
@@ -82,7 +80,6 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
 
 void RemoveRelationOp::removeRelation(OsmMapPtr map, long rId)
 {
-  LOG_VART(rId);
   RemoveRelationOp relationRemover(rId);
   relationRemover.apply(map);
 }

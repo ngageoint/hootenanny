@@ -64,24 +64,44 @@ echo ""
 hoot info -D language.info.provider=hoot::HootServicesLanguageInfoMockClient --languages --translators
 echo ""
 
-# MATCHERS
+# MATCH CREATORS
 echo "Listing a match creator..."
 echo ""
-hoot info --matchers | grep "HighwayMatchCreator"
+hoot info --match-creators | grep "HighwayMatchCreator"
 echo ""
 echo "Listing a script match creator..."
 echo ""
-hoot info --matchers | grep "ScriptMatchCreator,PoiGeneric.js"
+hoot info --match-creators | grep "ScriptMatchCreator,PoiGeneric.js"
+echo ""
+
+# MERGER CREATORS
+echo "Listing a merger creator..."
+echo ""
+hoot info --merger-creators | grep "PoiPolygonMergerCreator"
+echo ""
+echo "Listing a script merger creator..."
+echo ""
+hoot info --merger-creators | grep "ScriptMergerCreator"
+echo ""
+
+# MATCHERS
+echo "Listing a matcher..."
+echo ""
+hoot info --matchers | grep "HighwayMatch"
+echo ""
+echo "Listing a script matcher..."
+echo ""
+hoot info --matchers | grep "ScriptMatch"
 echo ""
 
 # MERGERS
 echo "Listing a merger..."
 echo ""
-hoot info --mergers | grep "PoiPolygonMergerCreator"
+hoot info --mergers | grep "PoiPolygonMerger"
 echo ""
 echo "Listing a script merger..."
 echo ""
-hoot info --mergers | grep "ScriptMergerCreator"
+hoot info --mergers | grep "ScriptMerger"
 echo ""
 
 # OPERATORS

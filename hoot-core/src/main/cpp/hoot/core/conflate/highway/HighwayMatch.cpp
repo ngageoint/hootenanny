@@ -47,14 +47,21 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Match, HighwayMatch)
+
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 QString HighwayMatch::_matchName = "Highway";
+
+HighwayMatch::HighwayMatch() : Match()
+{
+}
 
 HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
   const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,

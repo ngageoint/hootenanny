@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Standard
 #include <vector>
@@ -40,9 +41,11 @@ namespace hoot
 /**
  * Mergers are created by the MergerFactory.
  */
-class Merger
+class Merger : public ApiEntityInfo
 {
 public:
+
+  static std::string className() { return "hoot::Merger"; }
 
   virtual ~Merger() {}
 
@@ -74,6 +77,8 @@ public:
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
 
   virtual QString toString() const = 0;
+
+  virtual QString getDescription() const = 0;
 };
 
 typedef boost::shared_ptr<Merger> MergerPtr;

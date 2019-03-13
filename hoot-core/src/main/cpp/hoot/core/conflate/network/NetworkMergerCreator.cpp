@@ -207,7 +207,9 @@ vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "Merges roads conflated with the network algorithm", false));
+    CreatorDescription(
+      className(), "Generates mergers that merge roads conflated with the Network Algorithm",
+      false));
   return result;
 }
 
@@ -233,7 +235,7 @@ bool NetworkMergerCreator::_containsOverlap(const MatchSet& matches) const
           LOG_VART(*it);
           LOG_VART(*jt);
           throw UnsupportedException(
-                "If one match is a network match they should all be network matches.");
+            "If one match is a network match they should all be network matches.");
         }
 
         if (nmi->getEdgeMatch()->overlaps(nmj->getEdgeMatch()))

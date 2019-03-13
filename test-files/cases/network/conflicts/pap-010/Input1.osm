@@ -7,11 +7,11 @@
   <node id='5' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5370973' lon='-72.3122117' />
   <node id='6' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5370178' lon='-72.3121214' />
   <node id='7' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5369097' lon='-72.311918'>
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='barrier' v='gate' />
     <tag k='error:circular' v='15' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='survey;osm;osm' />
+    <tag k='source' v='survey;osm' />
     <tag k='uuid' v='{1ee32bed-f687-482a-b253-c04584c47d72}' />
   </node>
   <node id='8' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5323713' lon='-72.3033022' />
@@ -88,12 +88,12 @@
   <node id='79' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537361' lon='-72.3120629' />
   <way id='1' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
     <tag k='access' v='private' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Entrée BID' />
-    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{419a2b2f-8fa7-4cfc-bb00-2022dbaf2ff1}' />
   </way>
@@ -120,7 +120,7 @@
     <nd ref='39' />
     <nd ref='38' />
     <nd ref='37' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='tertiary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -129,38 +129,38 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{ba5b4659-0214-467f-8a2d-e2c26069d0ac}' />
   </way>
   <way id='3' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
     <tag k='access' v='private' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{ff2f5705-3a7b-4730-be4e-fce1481afaf4}' />
   </way>
   <way id='4' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
     <tag k='access' v='private' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{757e77a3-f2f0-4f34-a36c-d567d35666fb}' />
   </way>
   <way id='5' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
     <tag k='access' v='private' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='service' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
-    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='uuid' v='{fa8c1fde-561b-4905-9666-9610948c288c}' />
   </way>
@@ -169,7 +169,7 @@
     <nd ref='60' />
     <nd ref='59' />
     <nd ref='64' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='highway' v='residential' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
@@ -178,7 +178,7 @@
     <tag k='operational_status_quality' v='confirmed' />
     <tag k='practicability' v='heavy_truck_less_than_20mt' />
     <tag k='smoothness' v='intermediate' />
-    <tag k='source' v='survey; CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source' v='survey; CNIGS/OIM/FOCS;osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='surface' v='paved' />
     <tag k='uuid' v='{b3412275-50ba-41b5-9baf-3a0ef9200f57}' />
@@ -218,13 +218,13 @@
     <nd ref='8' />
     <nd ref='65' />
     <tag k='alt_name' v='Route de Bourdon' />
-    <tag k='attribution' v='osm;osm' />
+    <tag k='attribution' v='osm' />
     <tag k='error:circular' v='15' />
     <tag k='fixme' v='find out what part of Ave. John brown is Lalue?' />
     <tag k='highway' v='secondary' />
     <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
     <tag k='name' v='Avenue John Brown' />
-    <tag k='source' v='osm;osm' />
+    <tag k='source' v='osm' />
     <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
     <tag k='source:haiti' v='CNIGS and CartONG' />
     <tag k='type:haiti' v='Autre Route' />
