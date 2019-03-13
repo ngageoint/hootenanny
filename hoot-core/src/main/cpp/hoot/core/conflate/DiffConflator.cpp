@@ -107,20 +107,22 @@ void DiffConflator::apply(OsmMapPtr& map)
   RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
   _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(map, "after-discarding-relations");
 
   LOG_INFO("Discarding non-conflatable elements...");
   NonConflatableElementRemover nonConflateRemover;
   nonConflateRemover.apply(_pMap);
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(map, "after-removing non-conflatable");
 
   // Will reproject if necessary.
   LOG_DEBUG("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(map, "after-projecting-to-planar");
 
   // find all the matches in this _pMap
-  //LOG_INFO("Finding matches...");
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
@@ -129,39 +131,40 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  LOG_DEBUG("Match count: " << _matches.size());
-
+  LOG_INFO("Differential match count: " << _matches.size());
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
+  OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-  // Let's try to snap disconnected roads back to other roads.  Probably some time should be
-  // spent trying to correct this problem in the conflation routines, but we'll go with this for
-  // now.  This could also be applied in areas other than Differential Conflation eventually.
-  // TODO: Not sure if this should be run before or after the matches are deleted.  Also, need to
-  // create an option for enabling/disabling.
+  // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
+  // dumping the matches or the roads we need to snap to may not be there anymore.  Probably some
+  // time should be spent trying to correct this problem in the conflation routines, but we'll go
+  // with this for now.  This could also be applied in areas other than Differential Conflation
+  // if desired eventually.
+  // TODO: need to create an option for enabling/disabling snapping
   SnapUnconnectedRoads roadSnapper;
   LOG_INFO(roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO(roadSnapper.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(map, "after-road-snapping");
 
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
-  //MapProjector::projectToWgs84(_pMap);    // TODO: put back
+  //MapProjector::projectToWgs84(_pMap);    // TODO: re-enable this?
   _calcAndStoreTagChanges();
+  OsmMapWriterFactory::writeDebugMap(map, "after-storing-tag-changes");
 
-  // _pMap contains all of input1 and input2, we are going to delete eveyrthing that belongs to
+  // _pMap contains all of input1 and input2, we are going to delete everything that belongs to
   // a match pair. Then we will delete all remaining input1 items... leaving us with the
   // differential that we want.
-
   LOG_INFO("Deleting match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
-
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
@@ -171,17 +174,15 @@ void DiffConflator::apply(OsmMapPtr& map)
       RecursiveElementRemover(pit->second).apply(_pMap);
     }
   }
-
-//  LOG_INFO(roadSnapper.getInitStatusMessage());
-//  roadSnapper.apply(_pMap);
-//  LOG_INFO(roadSnapper.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(map, "after-removing-matches");
 
   // Now remove input1 elements
-  LOG_INFO("Removing input1 elements...");
+  LOG_INFO("Removing reference elements...");
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
+  OsmMapWriterFactory::writeDebugMap(map, "after-removing-ref-elements");
 }
 
 void DiffConflator::setConfiguration(const Settings &conf)

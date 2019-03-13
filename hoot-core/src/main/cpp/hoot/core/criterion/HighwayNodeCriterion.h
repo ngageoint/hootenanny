@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 namespace hoot
 {
@@ -54,6 +55,7 @@ public:
 private:
 
   ConstOsmMapPtr _map;
+  //boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
 };
 
 }
