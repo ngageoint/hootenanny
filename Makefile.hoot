@@ -272,7 +272,7 @@ qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootC
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-services-build:	HOOT_VERSION_FILE
+services-build:	HOOT_VERSION_FILE conf/services/conflationHoot2Ops.json
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
