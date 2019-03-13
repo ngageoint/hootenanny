@@ -147,8 +147,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      // TODO: Aren't we already filtering by poly when we create the index?  Check this.  Also
-      // maybe could make the unknown part of the criteria
+      // TODO: Aren't we already filtering by poly when we create the index?  Check this.  Also,
+      // maybe could make the unknown part of the criteria to being with.
       if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         _surroundingPolyIds.insert(*it);
@@ -176,8 +176,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
-      // TODO: Aren't we already filtering by poi when we create the index?  Check this.  Also
-      // maybe could make the unknown part of the criteria
+      // TODO: Aren't we already filtering by poi when we create the index?  Check this.  Also,
+      // maybe could make the unknown part of the criteria to begin with.
       if (n->isUnknown() && _poiCrit.isSatisfied(n))
       {
         _surroundingPoiIds.insert(*it);

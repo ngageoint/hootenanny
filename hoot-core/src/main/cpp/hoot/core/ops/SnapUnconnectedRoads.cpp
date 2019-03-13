@@ -25,7 +25,7 @@ SnapUnconnectedRoads::SnapUnconnectedRoads()
 
 Meters SnapUnconnectedRoads::_getSearchRadius(const boost::shared_ptr<const Element>& e) const
 {
-  return e->getCircularError(); //??
+  return e->getCircularError()/*5.0*/;  // TODO: make configurable
 }
 
 void SnapUnconnectedRoads::apply(OsmMapPtr& map)
@@ -45,8 +45,11 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
   std::deque<ElementId> indexToEid;
   IndexElementsVisitor v(
     index, indexToEid, crit, boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
+  LOG_DEBUG(v.getInitStatusMessage());
   map->visitNodesRo(v);
   v.finalizeIndex();
+  LOG_DEBUG(v.getCompletedStatusMessage());
+  LOG_VARD(indexToEid.size());
 
   HighwayCriterion highwayCrit;
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -99,22 +102,30 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
 
       // If only one road is connected, then we have one unconnected end road node.
       long unconnectedRoadId = 0;
-      if (roadsContainingFirstEndNode.size() == 1 && roadsContainingSecondEndNode.size() == 0)
+      if (roadsContainingFirstEndNode.size() == 1 && roadsContainingSecondEndNode.size() > 1)
       {
         unconnectedRoadId = firstRoadEndNodeId;
       }
-      else if (roadsContainingFirstEndNode.size() == 0 &&
+      else if (roadsContainingFirstEndNode.size() > 1 &&
                roadsContainingSecondEndNode.size() == 1)
       {
         unconnectedRoadId = secondRoadEndNodeId;
       }
+      else if (roadsContainingFirstEndNode.size() == 1 &&
+               roadsContainingSecondEndNode.size() == 1)
+      {
+        LOG_DEBUG("Both end road nodes connected to one road (?).  Skipping snap...");
+      }
       LOG_VARD(unconnectedRoadId);
 
-      if (unconnectedRoadId != 0)
+      LOG_VARD(_snappedRoadNodes.contains(unconnectedRoadId));
+      if (unconnectedRoadId != 0 && !_snappedRoadNodes.contains(unconnectedRoadId))
       {
         // find all road nodes near this unconnected node that don't belong to the same way the
         // unconnected road node is already on
         NodePtr roadNode = map->getNode(unconnectedRoadId);
+        LOG_VARD(roadNode->getId());
+        assert(roadNode->getId() == unconnectedRoadId);
         boost::shared_ptr<geos::geom::Envelope> env(roadNode->getEnvelope(map));
         env->expandBy(_getSearchRadius(roadNode));
         const std::set<ElementId> neighbors =
@@ -124,29 +135,48 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
         // TODO: Are these already sorted by distance?
         const std::set<long>& waysContainingUnconnectedRoadNode =
           nodeToWayMap->getWaysByNode(unconnectedRoadId);
+        LOG_VARD(waysContainingUnconnectedRoadNode);
+
         for (std::set<ElementId>::const_iterator neighborsItr = neighbors.begin();
              neighborsItr != neighbors.end(); ++neighborsItr)
         {
-          const std::set<long> waysContainingNeighbor =
-            nodeToWayMap->getWaysByNode((*neighborsItr).getId());
-          LOG_VARD(waysContainingNeighbor);
+          const long neighborId = (*neighborsItr).getId();
+          LOG_VARD(neighborId);
 
-          std::set<long> intersection;
-          std::set_intersection(
-            waysContainingUnconnectedRoadNode.begin(), waysContainingUnconnectedRoadNode.end(),
-            waysContainingNeighbor.begin(), waysContainingNeighbor.end(),
-            std::inserter(intersection, intersection.begin()));
-          LOG_VARD(intersection);
-          if (intersection.size() == 0) //if they don't contain any of the same values
+          if (neighborId != unconnectedRoadId)
           {
-            // snap the unconnected road node to the nearest road node
-            NodePtr neighborRoadNode = map->getNode((*neighborsItr).getId());
-            LOG_DEBUG(
-              "Snapping road node: " << roadNode->getElementId() << " to road node: " <<
-              neighborRoadNode->getElementId());
-            roadNode->setX(neighborRoadNode->getX());
-            roadNode->setY(neighborRoadNode->getY());
-            _numAffected++;
+            const std::set<long> waysContainingNeighbor = nodeToWayMap->getWaysByNode(neighborId);
+            LOG_VARD(waysContainingNeighbor);
+
+            std::set<long> intersection;
+            std::set_intersection(
+              waysContainingUnconnectedRoadNode.begin(), waysContainingUnconnectedRoadNode.end(),
+              waysContainingNeighbor.begin(), waysContainingNeighbor.end(),
+              std::inserter(intersection, intersection.begin()));
+            LOG_VARD(intersection);
+            if (intersection.size() == 0) //if they don't contain any of the same values
+            {
+              // snap the unconnected road node to the nearest road node
+              const long neighborId = (*neighborsItr).getId();
+              LOG_VARD(neighborId);
+              NodePtr neighborRoadNode = map->getNode(neighborId);
+              assert(neighborRoadNode->getId() == neighborId);
+              LOG_VARD(neighborRoadNode->getId());
+              LOG_VARD(_snappedToRoadNodes.contains(neighborRoadNode->getId()));
+              if (neighborRoadNode->getId() != roadNode->getId() &&
+                  // I don't think this is necessary.
+                  !_snappedToRoadNodes.contains(neighborRoadNode->getId()))
+              {
+                LOG_DEBUG(
+                  "Snapping road node: " << roadNode->getElementId() << " to road node: " <<
+                  neighborRoadNode->getElementId());
+                roadNode->setX(neighborRoadNode->getX());
+                roadNode->setY(neighborRoadNode->getY());
+                _snappedToRoadNodes.append(neighborRoadNode->getId());
+                _snappedRoadNodes.append(roadNode->getId());
+                _numAffected++;
+              }
+            }
           }
         }
       }

@@ -87,7 +87,6 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Indexed " + QString::number(_numAffected) + " elements."; }
 
-
 private:
 
   boost::shared_ptr<ElementCriterion> _criterion;

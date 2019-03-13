@@ -59,6 +59,7 @@ namespace Tgs
     class UserBoxHolder
     {
     public:
+
       const Box* box;
       int fid;
       int hilbertValue;

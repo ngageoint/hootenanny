@@ -33,6 +33,9 @@ public:
 
 private:
 
+  QList<long> _snappedRoadNodes;
+  QList<long> _snappedToRoadNodes;
+
   Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
 };
 
