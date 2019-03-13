@@ -74,9 +74,9 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
   _classification.setMatchP(p);
   _classification.setMissP(1.0 - p);
 
-  LOG_VARD(edgeMatch);
-  LOG_VARD(score);
-  LOG_VARD(p);
+  LOG_VART(edgeMatch);
+  LOG_VART(score);
+  LOG_VART(p);
 
   // find all the match pairs
   _discoverWayPairs(details->getMap(), edgeMatch);
@@ -84,7 +84,7 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
 
 void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeMatch)
 {
-  LOG_DEBUG("Discovering way pairs...");
+  LOG_TRACE("Discovering way pairs...");
 
   // traverse the match and determine all the match pairs.
   ConstEdgeStringPtr string1 = edgeMatch->getString1();
@@ -128,7 +128,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
       ));
   }
 
-  LOG_VARD(_pairs);
+  LOG_VART(_pairs);
 }
 
 bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
@@ -148,7 +148,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
       if (ip.first == jp.first  || ip.first == jp.second ||
           ip.second == jp.first || ip.second == jp.second)
       {
-        LOG_DEBUG("conflicting: " << other);
+        LOG_TRACE("conflicting: " << other);
         return true;
       }
     }
@@ -159,7 +159,7 @@ bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map
 
 QString NetworkMatch::toString() const
 {
-  LOG_VARD(_threshold->toString());
+  LOG_VART(_threshold->toString());
   return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
     arg(hoot::toString(_pairs)).arg(getScore());
 }

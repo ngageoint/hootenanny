@@ -82,7 +82,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   ConstMatchThresholdPtr threshold)
 {
   LOG_DEBUG("Creating matches with: " << className() << "...");
-  LOG_VARD(threshold);
+  LOG_VART(threshold);
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
@@ -95,7 +95,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   e1.setCriterion(c1);
   OsmNetworkPtr n1 = e1.extractNetwork(map);
-  LOG_DEBUG("Extracted Network 1: " << n1->toString());
+  LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
   boost::shared_ptr<ChainCriterion> c2(
@@ -107,7 +107,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
   e2.setCriterion(c2);
   OsmNetworkPtr n2 = e2.extractNetwork(map);
-  LOG_DEBUG("Extracted Network 2: " << n2->toString());
+  LOG_TRACE("Extracted Network 2: " << n2->toString());
 
   LOG_INFO("Matching networks...");
   // call class to derive final graph node and graph edge matches
@@ -145,13 +145,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   LOG_VARD(matcher->getMatchThreshold());
   for (int i = 0; i < edgeMatch.size(); i++)
   {
-    LOG_VARD(edgeMatch[i]->getUid());
-    LOG_VARD(edgeMatch[i]->getScore());
-    LOG_VARD(edgeMatch[i]->getEdgeMatch());
+    LOG_VART(edgeMatch[i]->getUid());
+    LOG_VART(edgeMatch[i]->getScore());
+    LOG_VART(edgeMatch[i]->getEdgeMatch());
 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
-      LOG_VARD(edgeMatch[i]->getEdgeMatch()->getUid());
+      LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
       matches.push_back(_createMatch(details, edgeMatch[i], threshold));
     }
   }

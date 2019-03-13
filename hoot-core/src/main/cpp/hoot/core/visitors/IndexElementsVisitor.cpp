@@ -49,10 +49,10 @@ IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& inde
                                            const boost::shared_ptr<ElementCriterion>& criterion,
                                  boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                            ConstOsmMapPtr pMap) :
-  _criterion(criterion),
-  _getSearchRadius(getSearchRadius),
-  _index(index),
-  _indexToEid(indexToEid)
+_criterion(criterion),
+_getSearchRadius(getSearchRadius),
+_index(index),
+_indexToEid(indexToEid)
 {
   _map = pMap.get();
 }
@@ -65,6 +65,7 @@ void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 
 void IndexElementsVisitor::finalizeIndex()
 {
+  LOG_DEBUG("Finalizing index...");
   _index->bulkInsert(_boxes, _fids);
 }
 
@@ -80,9 +81,11 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     env->expandBy(searchRadius);
     b.setBounds(0, env->getMinX(), env->getMaxX());
-    b.setBounds(1, env->getMinY(), env->getMaxY());
+    b.setBounds(1, env->getMinY(), env->getMaxY());;
 
     _boxes.push_back(b);
+
+    _numAffected++;
   }
 }
 
@@ -91,7 +94,10 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
                                                    const deque<ElementId>& indexToEid,
                                                    ConstOsmMapPtr pMap)
 {
+  LOG_DEBUG("Finding neighbors within env: " << env << "...");
+
   const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
+  LOG_VARD(e2r.size());
 
   set<ElementId> result;
   vector<double> min(2), max(2);
@@ -116,6 +122,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
     }
   }
 
+  LOG_VARD(result.size());
   return result;
 }
 

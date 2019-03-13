@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -54,7 +55,8 @@ namespace hoot
  */
 class ElementCriterion;
 
-class IndexElementsVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer
+class IndexElementsVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
+  public OperationStatusInfo
 {
 public:
 
@@ -78,6 +80,13 @@ public:
                                            ConstOsmMapPtr pMap);
 
   virtual QString getDescription() const { return "Build an index of input elements"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Indexing elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Indexed " + QString::number(_numAffected) + " elements."; }
+
 
 private:
 

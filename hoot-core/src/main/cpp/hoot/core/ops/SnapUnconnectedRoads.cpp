@@ -33,18 +33,18 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
   _numAffected = 0;
 
   const WayMap ways = map->getWays();   //copy
+  LOG_VARD(ways.size());
   boost::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap(); //copy
+  LOG_VARD(nodeToWayMap->size());
 
   // TODO: tune this? - see #3054
   boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   boost::shared_ptr<Tgs::HilbertRTree> index(new Tgs::HilbertRTree(mps, 2));
   boost::shared_ptr<HighwayNodeCriterion> crit(new HighwayNodeCriterion());
+  crit->setOsmMap(map.get());
   std::deque<ElementId> indexToEid;
-  IndexElementsVisitor v(index,
-                         indexToEid,
-                         crit,
-                         boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1),
-                         map);
+  IndexElementsVisitor v(
+    index, indexToEid, crit, boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
   map->visitNodesRo(v);
   v.finalizeIndex();
 
@@ -52,7 +52,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const ConstWayPtr& way = wayItr->second;
-    LOG_VARD(way->getElementId());
+    LOG_VART(way->getElementId());
 
     // for all roads
     if (highwayCrit.isSatisfied(way))
@@ -61,17 +61,19 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
 
       // get the roads nodes
       const std::vector<long>& roadNodeIds = way->getNodeIds();
-      LOG_VARD(roadNodeIds);
+      LOG_VART(roadNodeIds);
 
       // find all ways that contain both end points
       const long firstRoadEndNodeId = roadNodeIds.at(0);
+      LOG_VARD(firstRoadEndNodeId);
       const std::set<long>& waysContainingFirstEndNode =
         nodeToWayMap->getWaysByNode(firstRoadEndNodeId);
-      LOG_VARD(waysContainingFirstEndNode);
+      LOG_VART(waysContainingFirstEndNode);
       const long secondRoadEndNodeId = roadNodeIds.at(roadNodeIds.size() - 1);
+      LOG_VARD(secondRoadEndNodeId);
       const std::set<long>& waysContainingSecondEndNode =
         nodeToWayMap->getWaysByNode(secondRoadEndNodeId);
-      LOG_VARD(waysContainingFirstEndNode);
+      LOG_VART(waysContainingFirstEndNode);
 
       // filter the connected ways down to roads
       std::set<long> roadsContainingFirstEndNode;
@@ -139,7 +141,9 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
           {
             // snap the unconnected road node to the nearest road node
             NodePtr neighborRoadNode = map->getNode((*neighborsItr).getId());
-            LOG_VARD(neighborRoadNode);
+            LOG_DEBUG(
+              "Snapping road node: " << roadNode->getElementId() << " to road node: " <<
+              neighborRoadNode->getElementId());
             roadNode->setX(neighborRoadNode->getX());
             roadNode->setY(neighborRoadNode->getY());
             _numAffected++;

@@ -42,6 +42,7 @@ class BoxInternalData;
 class TGS_EXPORT Box
 {
 public:
+
   static const int MAX_DIMENSIONS = 4;
 
   Box();
@@ -89,6 +90,7 @@ public:
   bool isContained(const Box& b);
 
 private:
+
   double _lowerBound[MAX_DIMENSIONS];
   double _upperBound[MAX_DIMENSIONS];
   bool _valid;

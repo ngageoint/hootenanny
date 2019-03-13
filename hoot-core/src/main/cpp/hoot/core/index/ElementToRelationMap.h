@@ -53,6 +53,7 @@ class Element;
 class ElementToRelationMap
 {
 public:
+
   ElementToRelationMap();
 
   /**
@@ -83,10 +84,12 @@ public:
    */
   bool validate(const OsmMap& map) const;
 
+  size_t size() const { return _mapping.size(); }
+
 private:
 
   std::set<long> _emptySet;
-  HashMap< ElementId, std::set<long> > _mapping;
+  HashMap<ElementId, std::set<long>> _mapping;
 };
 
 }

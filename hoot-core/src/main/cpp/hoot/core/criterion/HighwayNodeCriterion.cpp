@@ -48,13 +48,15 @@ bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() == ElementType::Node)
   {
     boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
-    const std::set<long>& connectedWays = nodeToWayMap->getWaysByNode(e->getId());
-    std::set<long> connectedRoads;
-    for (std::set<long>::const_iterator connectedWaysItr = connectedWays.begin();
-         connectedWaysItr != connectedWays.end(); ++connectedWaysItr)
+    LOG_VART(nodeToWayMap->size());
+    const std::set<long>& containingWays = nodeToWayMap->getWaysByNode(e->getId());
+    LOG_VART(containingWays);
+    for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
+         containingWaysItr != containingWays.end(); ++containingWaysItr)
     {
-      if (highwayCrit.isSatisfied(_map->getWay(*connectedWaysItr)))
+      if (highwayCrit.isSatisfied(_map->getWay(*containingWaysItr)))
       {
+        LOG_TRACE("Road node: " << e->getElementId() << " found in way: " << *containingWaysItr);
         return true;
       }
     }
