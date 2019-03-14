@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 
 import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.job.JobStatus.FAILED;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -198,4 +199,44 @@ public class JobResourceTest extends HootServicesJerseyTestAbstract {
             createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.eq(jobId)).execute();
         }
     }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testJobError() throws Exception {
+        JobResource jobResource = new JobResource();
+        String jobId = UUID.randomUUID().toString();
+
+        JobStatus jobStatus = new JobStatus();
+        jobStatus.setJobId(jobId);
+        jobStatus.setStatus(FAILED.ordinal());
+        jobStatus.setStatusDetail("JOB FAILED");
+        jobStatus.setPercentComplete(0.0);
+
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        jobStatus.setStart(ts);
+        jobStatus.setEnd(new Timestamp(System.currentTimeMillis() + 1000));
+
+        createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+
+        CommandStatus listCommandStatus = new CommandStatus();
+        listCommandStatus.setCommand("hoot foo");
+        listCommandStatus.setExitCode(0);
+        listCommandStatus.setStart(new Timestamp(System.currentTimeMillis()));
+        listCommandStatus.setFinish(new Timestamp(System.currentTimeMillis() + 1000));
+        listCommandStatus.setJobId(jobId);
+        listCommandStatus.setStderr("The command returned an error.\nCommand not found.");
+        listCommandStatus.setStdout("Running command hoot foo...");
+
+        createQuery().insert(QCommandStatus.commandStatus).populate(listCommandStatus).execute();
+
+        Response response = target("/error/" + jobId)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+
+        String expectedResult = "{\"errors\":[\"The command returned an error.\nCommand not found.\"]}";
+        String actualResult = response.readEntity(String.class);
+
+        assertEquals(expectedResult, actualResult);
+    }
+
 }

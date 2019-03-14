@@ -36,6 +36,7 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,6 +176,31 @@ public class JobStatusManagerImpl implements JobStatusManager {
      * @return a job status record
      */
     @Override
+    public List<String> getJobErrors(String jobId, Long userId) {
+        try {
+            List<CommandStatus> commands =  getCommandDetail(jobId, userId);
+
+            return commands.stream().map(comm -> comm.getStderr())
+                    .filter(error -> !error.isEmpty())
+                    .collect(Collectors.toList());
+        }
+        catch (Exception e) {
+            logger.error("{} failed to fetch job status.", jobId, e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a job status record by ID and User
+     *
+     * @param jobId
+     *            ID of the job to retrieve the status for
+     * @param userId
+     *            user to compare to job owner
+     * @return a job status record
+     */
+    @Override
     public hoot.services.models.db.JobStatus getJobStatusObj(String jobId, Long userId) {
         try {
             return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(
@@ -190,9 +216,11 @@ public class JobStatusManagerImpl implements JobStatusManager {
     }
 
     @Override
-    public List<CommandStatus> getCommandDetail(String jobId) {
+    public List<CommandStatus> getCommandDetail(String jobId, Long userId) {
         try {
-            return createQuery().select(commandStatus).from(commandStatus).where(commandStatus.jobId.eq(jobId)).fetch();
+            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(jobStatus.jobId.eq(jobId)
+                    .and(jobStatus.userId.eq(userId)
+                    .and(jobStatus.jobId.eq(commandStatus.jobId)))).fetch();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch command status(es) for job with ID = {}", jobId, e);

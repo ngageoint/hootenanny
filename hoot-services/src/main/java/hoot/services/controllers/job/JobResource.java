@@ -104,7 +104,7 @@ public class JobResource {
             response.setLastText(jobStatus.getStatusDetail());
 
             if (includeCommandDetail) {
-                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
+                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId, user.getId());
                 response.setCommandDetail(commandDetail);
             }
 
@@ -134,7 +134,7 @@ public class JobResource {
     @Path("/{jobId}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteLayers(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+    public Response deleteJob(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
         Users user = Users.fromRequest(request);
         try {
             this.jobStatusManager.deleteJob(jobId, user.getId());
@@ -146,6 +146,37 @@ public class JobResource {
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("jobid", jobId);
+
+        return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Gets error message for a job
+     *
+     * GET hoot-services/job/error/{id}
+     *
+     *
+     * @param jobId
+     *            ID of job record get error
+     * @return error message of job commands
+     */
+    @GET
+    @Path("/error/{jobId}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJobErrors(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+        Users user = Users.fromRequest(request);
+        List<String> errors;
+        try {
+            errors = this.jobStatusManager.getJobErrors(jobId, user.getId());
+        }
+        catch (Exception e) {
+            String msg = "Error getting error for job with id =  " + jobId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("errors", errors);
 
         return Response.ok().entity(ret).build();
     }

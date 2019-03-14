@@ -52,5 +52,7 @@ public interface JobStatusManager {
 
     JobStatus getJobStatusObj(String jobId, Long userId);
 
-    List<CommandStatus> getCommandDetail(String jobId);
+    List<String> getJobErrors(String jobId, Long userId);
+
+    List<CommandStatus> getCommandDetail(String jobId, Long userId);
 }
