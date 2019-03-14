@@ -11,7 +11,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
-exports.searchRadius = -1.0;
+exports.searchRadius = -1.0;;
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -121,9 +121,13 @@ exports.getSearchRadius = function(e) {
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precedence over this function and must
+ * be commented out before using it.
  */
-exports.isMatchCandidate = function(map, e) {
-    return isPoi(e);
+exports.isMatchCandidate = function(map, e)
+{
+  return isPoi(e);
 };
 
 /**

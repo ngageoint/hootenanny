@@ -113,7 +113,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (args.contains("--differential"))
   {
     isDiffConflate = true;
-    args.removeAt(args.indexOf("--differential"));    
+    args.removeAt(args.indexOf("--differential"));
 
     // Check for tags argument "--Include-Tags"
 
