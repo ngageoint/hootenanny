@@ -79,12 +79,11 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
     snapToRoadIndex, snapToRoadIndexToEid, roadToSnapToCrit,
     boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
   LOG_DEBUG(v2.getInitStatusMessage());  // TODO: add crit to this status message?
-  map->visitNodesRo(v2);
+  map->visitWaysRo(v2);
   v2.finalizeIndex();
   LOG_DEBUG(v2.getCompletedStatusMessage());
   LOG_VARD(snapToRoadIndexToEid.size());
 
-  //HighwayCriterion highwayCrit;
   boost::shared_ptr<ChainCriterion> roadToSnapCrit(
     new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -93,7 +92,6 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
     LOG_VARD(way->getElementId());
 
     // for all roads
-    //if (highwayCrit.isSatisfied(way))
     if (roadToSnapCrit->isSatisfied(way))
     {
       // if the road's end node isn't shared with another road
@@ -121,7 +119,6 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
            containingWaysItr1 != waysContainingFirstEndNode.end(); ++containingWaysItr1)
       {
         const long containingWayId = *containingWaysItr1;
-        //if (highwayCrit.isSatisfied(map->getWay(containingWayId)))
         if (roadToSnapCrit->isSatisfied(map->getWay(containingWayId)))
         {
           roadsContainingFirstEndNode.insert(containingWayId);
@@ -133,7 +130,6 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
            containingWaysItr2 != waysContainingSecondEndNode.end(); ++containingWaysItr2)
       {
         const long containingWayId = *containingWaysItr2;
-        //if (highwayCrit.isSatisfied(map->getWay(containingWayId)))
         if (roadToSnapCrit->isSatisfied(map->getWay(containingWayId)))
         {
           roadsContainingSecondEndNode.insert(containingWayId);
@@ -176,7 +172,6 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
             *env, snapToRoadNodeIndex, snapToRoadNodeIndexToEid, map);
         LOG_VARD(neighbors);
 
-
         if (neighbors.size() > 0)
         {
           // If there were any road node neighbors, let's try snapping to the first one that we can.
@@ -199,7 +194,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
               const std::set<long> waysContainingNeighbor =
                 /*nodeToWayMap*/map->getIndex().getNodeToWayMap()->getWaysByNode(neighborId);
               LOG_VARD(waysContainingNeighbor);
-              // TODO: check way for status = 1
+              // TODO: check way for status = 1?
 
               std::set<long> intersection;
               std::set_intersection(
@@ -259,6 +254,10 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
             const std::vector<long>& roadToSnapToNodeIds = roadToSnapTo->getNodeIds();
             LOG_VARD(roadToSnapToNodeIds);
 
+//            const QList<long> roadToSnapNodeToIdsList =
+//              QList<long>::fromVector(QVector<long>::fromStdVector(roadToSnapToNodeIds));
+//            LOG_VARD(roadToSnapNodeToIdsList);
+
             //if (!roadToSnapTo->getNodeIds().contains(unconnectedRoadId))
             LOG_VARD(std::find(
                        roadToSnapToNodeIds.begin(), roadToSnapToNodeIds.end(), unconnectedRoadId) ==
@@ -266,6 +265,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
             if (std::find(
                   roadToSnapToNodeIds.begin(), roadToSnapToNodeIds.end(), unconnectedRoadId) ==
                   roadToSnapToNodeIds.end())
+            //if (!roadToSnapNodeToIdsList.contains(unconnectedRoadId))
             {
               WayDiscretizer wd1(map, roadToSnapTo);
               std::vector<geos::geom::Coordinate> cs1;
@@ -293,9 +293,8 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                 map->addNode(roadNode);
                 _snappedRoadNodes.append(roadNode->getId());
 
-                // TODO: Is there a better way to do this using WayLocation?
-
                 // Find the closest node to our new node on the snap to road.
+                // TODO: Is there a better way to do this using WayLocation?
                 shortestDistance = DBL_MAX;
                 long closestNodeId = 0;
                 for (size_t i = 0; i < roadToSnapToNodeIds.size(); i++)
@@ -331,14 +330,20 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                 else
                 {
                   // try both the one before and after to see which is closer
-                  const int nodeBeforeIndex = roadToSnapTo->getNodeIndex(closestNodeId - 1);
+                  const int nodeBeforeIndex = closestWayNodeIndex - 1;
                   LOG_VARD(nodeBeforeIndex);
                   const long nodeBeforeId = roadToSnapTo->getNodeId(nodeBeforeIndex);
                   LOG_VARD(nodeBeforeId);
-                  const int nodeAfterIndex = roadToSnapTo->getNodeIndex(closestNodeId + 1);
+                  const int nodeAfterIndex = closestWayNodeIndex + 1;
                   LOG_VARD(nodeAfterIndex);
                   const long nodeAfterId = roadToSnapTo->getNodeId(nodeAfterIndex);
                   LOG_VARD(nodeAfterId);
+
+                  assert(map->containsNode(nodeBeforeId));
+                  assert(map->containsNode(nodeAfterId));
+                  //LOG_VARD(map->containsNode(nodeBeforeId));
+                  //LOG_VARD(map->containsNode(nodeAfterId));
+
                   LOG_VARD(
                     Distance::euclidean(
                       map->getNode(nodeBeforeId)->toCoordinate(), roadNode->toCoordinate()));

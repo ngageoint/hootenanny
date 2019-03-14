@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 namespace hoot
 {
@@ -39,7 +40,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayNodeCriterion)
 
 HighwayNodeCriterion::HighwayNodeCriterion()
 {
-  //_nodeToWayMap = _map->getIndex().getNodeToWayMap();
 }
 
 bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -49,15 +49,15 @@ bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
     const std::set<long>& containingWays = nodeToWayMap->getWaysByNode(e->getId());
-    LOG_VARD(containingWays);
+    LOG_VART(containingWays);
     for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
          containingWaysItr != containingWays.end(); ++containingWaysItr)
     {
       const long containingWayId = *containingWaysItr;
-      LOG_VARD(containingWayId);
+      LOG_VART(containingWayId);
       if (highwayCrit.isSatisfied(_map->getWay(containingWayId)))
       {
-        LOG_DEBUG("Road node: " << e->getElementId() << " found in way: " << containingWayId);
+        LOG_TRACE("Road node: " << e->getElementId() << " found in way: " << containingWayId);
         return true;
       }
     }
