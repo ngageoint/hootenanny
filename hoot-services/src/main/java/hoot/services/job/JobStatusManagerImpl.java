@@ -78,6 +78,30 @@ public class JobStatusManagerImpl implements JobStatusManager {
         }
     }
 
+
+    @Override
+    public void deleteJob(String jobId, Long userId) {
+        try {
+            hoot.services.models.db.JobStatus js = createQuery().select(jobStatus).from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).fetchFirst();
+            //hack to check that user owns this job before deleting commands
+            //no cascade delete in querydsl
+            if (js != null) {
+
+                createQuery().delete(commandStatus)
+                    .where(commandStatus.jobId.eq(jobId)).execute();
+
+                createQuery().delete(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).execute();
+            }
+
+        }
+        catch (Exception e) {
+            logger.error("Error deleting job with ID = {} ", jobId, e);
+            throw e;
+        }
+    }
+
     @Override
     public void updateJob(String jobId, String statusDetail, Double percentComplete) {
         try {

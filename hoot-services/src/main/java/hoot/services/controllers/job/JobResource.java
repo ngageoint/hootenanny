@@ -26,9 +26,12 @@
  */
 package hoot.services.controllers.job;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
@@ -36,8 +39,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +107,9 @@ public class JobResource {
                 List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
                 response.setCommandDetail(commandDetail);
             }
+
+            //Do we clean up uninteresting jobs here?
+            //Do we remove job statuses referencing a deleted map?
         }
         else {
             logger.debug(String.format("getJobStatus(): failed to find job with id: %s", jobId));
@@ -111,4 +119,35 @@ public class JobResource {
 
         return response;
     }
+
+    /**
+     * Deletes a job status record
+     *
+     * DELETE hoot-services/job/{id}
+     *
+     *
+     * @param jobId
+     *            ID of job record to be deleted
+     * @return id of the deleted job
+     */
+    @DELETE
+    @Path("/{jobId}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteLayers(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+        Users user = Users.fromRequest(request);
+        try {
+            this.jobStatusManager.deleteJob(jobId, user.getId());
+        }
+        catch (Exception e) {
+            String msg = "Error submitting delete job request for job with id =  " + jobId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+
+        return Response.ok().entity(ret).build();
+    }
+
 }

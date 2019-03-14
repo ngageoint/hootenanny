@@ -47,6 +47,7 @@ import hoot.services.models.db.Users;
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 public class JobsStatusesManagerImpl implements JobsStatusesManager {
     public JobsStatusesManagerImpl() {}
+
     @Override
     public List<JobStatusResponse> getRecentJobs(Users user, int limit) {
         long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
@@ -78,6 +79,55 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
             response.setStart(j.getStart().getTime());
             response.setEnd(j.getEnd().getTime());
             response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+            response.setPercentComplete(j.getPercentComplete());
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<JobStatusResponse> getJobsHistory(Users user) {
+        List<JobStatus> jobsHistory = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.userId.eq(user.getId()))
+                .orderBy(jobStatus.start.desc())
+                .fetch();
+
+
+        //format jobs
+        return jobsHistory.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setMapId(j.getResourceId());
+            response.setStart(j.getStart().getTime());
+            response.setEnd(j.getEnd().getTime());
+            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+    @Override
+    public List<JobStatusResponse> getRunningJobs() {
+        List<JobStatus> runningJobs = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.status.eq(RUNNING.ordinal()))
+                .orderBy(jobStatus.start.desc())
+                .fetch();
+
+        //format jobs
+        return runningJobs.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setUserId(j.getUserId());
+            response.setStart(j.getStart().getTime());
             response.setPercentComplete(j.getPercentComplete());
 
             return response;

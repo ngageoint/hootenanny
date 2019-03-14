@@ -38,6 +38,8 @@ import hoot.services.models.db.JobStatus;
 public interface JobStatusManager {
     void addJob(Job job);
 
+    void deleteJob(String jobId, Long userId);
+
     void updateJob(String jobId, String statusDetail, Double percentComplete);
 
     void setCancelled(String jobId, String reason);
