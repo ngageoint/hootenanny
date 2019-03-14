@@ -6,10 +6,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "lodash": "4.17.11"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "lodash": "4.17.11"
     "artillery": "^1.6.0-22",
     "istanbul": "~0.4.5",
     "node-mocks-http": "^1.7.0",
