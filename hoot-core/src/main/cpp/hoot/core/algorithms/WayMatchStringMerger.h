@@ -60,11 +60,13 @@ public:
 
     WayPtr getNewWay1() const { return _newWay1; }
     WayPtr getNewWay2() const { return _newWay2; }
-    WayPtr getNewWay(WayNumber way) { return (way == WayNumber::Way1) ? getNewWay1() : getNewWay2(); }
+    WayPtr getNewWay(WayNumber way)
+    { return (way == WayNumber::Way1) ? getNewWay1() : getNewWay2(); }
 
     WayLocation getStart1() const { return _start; }
     WayLocation getStart2() const { return _subline2.getStart(); }
-    WayLocation getStart(WayNumber way) const { return (way == WayNumber::Way1) ? getStart1() : getStart2(); }
+    WayLocation getStart(WayNumber way) const
+    { return (way == WayNumber::Way1) ? getStart1() : getStart2(); }
     /**
      * This is only valid if start and end are part of the same way which is not guaranteed.
      */
@@ -74,7 +76,8 @@ public:
 
     void setNewWay1(WayPtr newWay1) { _newWay1 = newWay1; }
     void setNewWay2(WayPtr newWay2) { _newWay2 = newWay2; }
-    void setNewWay(WayNumber way, WayPtr newWay) { (way == WayNumber::Way1) ? setNewWay1(newWay) : setNewWay2(newWay); }
+    void setNewWay(WayNumber way, WayPtr newWay)
+    { (way == WayNumber::Way1) ? setNewWay1(newWay) : setNewWay2(newWay); }
 
     void setStart1(WayLocation start) { _start = start; }
     void setEnd1(WayLocation end) { _end = end; }
@@ -101,10 +104,13 @@ public:
     SublineMappingLessThan(WayNumber way) { _way = way; }
 
     inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
-      const WayMatchStringMerger::SublineMappingPtr &t2) const
+                           const WayMatchStringMerger::SublineMappingPtr &t2) const
     {
-        return std::min(t1->getStart(_way), t1->getEnd(_way)) < std::min(t2->getStart(_way), t2->getEnd(_way));
+        return
+          std::min(t1->getStart(_way), t1->getEnd(_way)) <
+          std::min(t2->getStart(_way), t2->getEnd(_way));
     }
+
   private:
 
     WayNumber _way;
@@ -158,7 +164,8 @@ public:
    * This must be called if any of the SublineMappingPtr values are changed. (e.g.
    * WayMatchStringSplitter)
    */
-  void updateSublineMapping() { _rebuildWayString(WayNumber::Way1); _rebuildWayString(WayNumber::Way2); }
+  void updateSublineMapping()
+  { _rebuildWayString(WayNumber::Way1); _rebuildWayString(WayNumber::Way2); }
 
 private:
 

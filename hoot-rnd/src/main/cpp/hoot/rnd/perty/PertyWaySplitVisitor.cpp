@@ -151,7 +151,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     {
       vector<WayPtr> newWaysAfterSplit =
         WaySplitter::split(_map->shared_from_this(),
-        boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
+          boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
       for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
       {
         newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));
@@ -214,9 +214,9 @@ WayLocation PertyWaySplitVisitor::_calcSplitPoint(ConstWayPtr way) const
   //create a way location that is the minimum node spacing distance from the beginning of the way
   WayLocation splitWayStart(_map->shared_from_this(), way, _minNodeSpacing);
   //create a way location that is the minimum node spacing from the end of the way
-  WayLocation splitWayEnd = WayLocation::createAtEndOfWay(_map->shared_from_this(), way).
-      move(-1 * _minNodeSpacing);
-  //if the length between the way locations is greater than zero, then then a way location can be
+  WayLocation splitWayEnd =
+    WayLocation::createAtEndOfWay(_map->shared_from_this(), way).move(-1 * _minNodeSpacing);
+  //if the length between the way locations is greater than zero, then a way location can be
   //selected that doesn't violate the min node spacing
   const double splitWayLength =
     splitWayEnd.calculateDistanceOnWay() - splitWayStart.calculateDistanceOnWay();

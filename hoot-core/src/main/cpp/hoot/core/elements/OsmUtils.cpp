@@ -52,7 +52,7 @@ namespace hoot
 void OsmUtils::printNodes(const QString nodeCollectionName,
                           const QList<boost::shared_ptr<const Node> >& nodes)
 {
-  if (Log::getInstance().getLevel() == Log::Debug)
+  if (Log::getInstance().getLevel() == Log::Trace)
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());

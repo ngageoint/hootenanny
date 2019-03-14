@@ -116,7 +116,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-removing non-conflatable");
 
-  // Will reproject if necessary.
+  // will reproject only if necessary
   LOG_DEBUG("Projecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
@@ -145,6 +145,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // with this for now.  This could also be applied in areas other than Differential Conflation
   // if desired eventually.
   // TODO: need to create an option for enabling/disabling snapping
+  // TODO: THIS SOMEHOW NEEDS TO BE DONE AFTER MATCHES ARE REMOVED BUT WITH STATUS=1 LEFT INTACT
   SnapUnconnectedRoads roadSnapper;
   LOG_INFO(roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
@@ -159,7 +160,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-storing-tag-changes");
 
   // _pMap contains all of input1 and input2, we are going to delete everything that belongs to
-  // a match pair. Then we will delete all remaining input1 items... leaving us with the
+  // a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
   LOG_INFO("Deleting match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)

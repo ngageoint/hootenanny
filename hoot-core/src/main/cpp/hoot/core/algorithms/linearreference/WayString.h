@@ -64,8 +64,8 @@ public:
 
   Meters calculateLength() const;
 
-  WayLocation calculateLocationFromStart(Meters distance,
-    ElementId preferredEid = ElementId()) const;
+  WayLocation calculateLocationFromStart(
+    Meters distance, ElementId preferredEid = ElementId()) const;
 
   /**
    * Simplifies this WayString from a complex collection of sublines into a single simple way. The

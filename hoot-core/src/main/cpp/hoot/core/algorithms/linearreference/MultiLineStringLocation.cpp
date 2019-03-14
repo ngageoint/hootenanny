@@ -39,10 +39,8 @@ using namespace std;
 namespace hoot
 {
 
-MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map,
-                                                 ConstRelationPtr relation,
-                                                 const int wayIndex,
-                                                 const WayLocation& wayLocation)
+MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation,
+                                                 const int wayIndex, const WayLocation& wayLocation)
 {
   if (relation->getMembers().size() == 0)
   {

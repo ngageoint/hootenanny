@@ -93,8 +93,8 @@ void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
-  NodePtr newNode(new Node(n->getStatus(), map->createNextNodeId(), x, y,
-    n->getCircularError()));
+  NodePtr newNode(
+    new Node(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError()));
 
   map->addNode(newNode);
 }

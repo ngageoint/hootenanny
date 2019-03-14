@@ -43,44 +43,44 @@ class OsmMap;
  */
 class MultiLineStringLocation
 {
-  public:
+public:
 
-    //I don't like having a default constructor here, but its needed by PertyWaySplitVisitor
-    //for now.
-    MultiLineStringLocation(){}
+  //I don't like having a default constructor here, but its needed by PertyWaySplitVisitor
+  //for now.
+  MultiLineStringLocation(){}
 
-    /**
-     * Creates a location along the multi-line string
-     *
-     * @param map map containing the multi-line string data
-     * @param relation a multi-line string relation containing only ways; will throw if relation
-     *        contains feature types other than ways
-     * @param wayIndex the index of the way in the collection of ways in @a relation
-     * @param wayLocation the location along the way at @a wayIndex where the multi-line string
-     *        location resides
-     */
-    MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation,
-                            const int wayIndex, const WayLocation& wayLocation);
+  /**
+   * Creates a location along the multi-line string
+   *
+   * @param map map containing the multi-line string data
+   * @param relation a multi-line string relation containing only ways; will throw if relation
+   *        contains feature types other than ways
+   * @param wayIndex the index of the way in the collection of ways in @a relation
+   * @param wayLocation the location along the way at @a wayIndex where the multi-line string
+   *        location resides
+   */
+  MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation, const int wayIndex,
+                          const WayLocation& wayLocation);
 
-    /**
-     * Returns the collection of way sublines up to and including _wayLocation
-     */
-    WaySublineCollection getWaySublineString() const { return _waySublineString; }
+  /**
+   * Returns the collection of way sublines up to and including _wayLocation
+   */
+  WaySublineCollection getWaySublineString() const { return _waySublineString; }
 
-    /**
-     * Returns the location along the selected way in the multi-line string
-     */
-    WayLocation getWayLocation() const { return _wayLocation; }
+  /**
+   * Returns the location along the selected way in the multi-line string
+   */
+  WayLocation getWayLocation() const { return _wayLocation; }
 
-    /**
-     * Determines whether the location is valid
-     */
-    bool isValid() const { return _wayLocation.getSegmentIndex() != -1; }
+  /**
+   * Determines whether the location is valid
+   */
+  bool isValid() const { return _wayLocation.getSegmentIndex() != -1; }
 
-  private:
+private:
 
-    WayLocation _wayLocation;
-    WaySublineCollection _waySublineString;
+  WayLocation _wayLocation;
+  WaySublineCollection _waySublineString;
 };
 
 }

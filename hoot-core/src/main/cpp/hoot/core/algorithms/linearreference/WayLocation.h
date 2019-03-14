@@ -87,11 +87,11 @@ public:
                                    int segmentIndex1, double segmentFraction1);
 
   /**
-   *  Compares this object with the specified object for order.
+   * Compares this object with the specified object for order.
    *
-   *@param  other The WayLocation with which this WayLocation is being compared
-   *@return a negative integer, zero, or a positive integer as this WayLocation
-   *      is less than, equal to, or greater than the specified WayLocation.
+   * @param other The WayLocation with which this WayLocation is being compared
+   * @return a negative integer, zero, or a positive integer as this WayLocation is less than,
+   * equal to, or greater than the specified WayLocation.
    */
   int compareTo(const WayLocation& other) const;
 
@@ -101,11 +101,9 @@ public:
   static WayLocation createAtEndOfWay(const ConstOsmMapPtr &map, const ConstWayPtr way);
 
   /**
-   * Computes the location of a point a given length along a line segment.
-   * If the length exceeds the length of the line segment the last
-   * point of the segment is returned.
-   * If the length is negative the first point
-   * of the segment is returned.
+   * Computes the location of a point a given length along a line segment.  If the length exceeds
+   * the length of the line segment, the last point of the segment is returned.  If the length is
+   * negative, the first point of the segment is returned.
    *
    * @param p0 the first point of the line segment
    * @param p1 the last point of the line segment
@@ -121,7 +119,7 @@ public:
   const ConstWayPtr& getWay() const { return _way; }
 
   /**
-   * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.
+   * Returns the node at this WayLocation. If isNode() returns false, this will thrown an exception.
    */
   ConstNodePtr getNode(double epsilon = 0.0) const;
 
@@ -134,14 +132,16 @@ public:
    */
   bool isExtreme(double epsilon = 0.0) const { return isFirst(epsilon) || isLast(epsilon); }
 
-  bool isFirst(double epsilon = 0.0) const { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
+  bool isFirst(double epsilon = 0.0) const
+  { return _segmentIndex == 0 && _segmentFraction <= epsilon; }
 
   bool isLast(double epsilon = 0.0) const;
 
   /**
    * If this is effectively on a node.
    */
-  bool isNode(double epsilon = 0.0) const { return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon; }
+  bool isNode(double epsilon = 0.0) const
+  { return _segmentFraction <= epsilon || _segmentFraction >= 1.0 - epsilon; }
 
   bool isValid() const { return _segmentIndex != -1; }
 
@@ -162,7 +162,6 @@ protected:
   ConstWayPtr _way;
   int _segmentIndex;
   double _segmentFraction;
-
 };
 
 inline bool operator==(const WayLocation& a, const WayLocation& b)

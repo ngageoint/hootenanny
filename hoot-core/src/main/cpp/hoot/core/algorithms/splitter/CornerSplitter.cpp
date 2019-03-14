@@ -106,7 +106,6 @@ void CornerSplitter::splitCorners()
         if (delta > M_PI)
           delta = twopi - delta;
 
-
         // If we make enough of a turn, split the way
         if (delta > threshold)
         {
@@ -133,7 +132,7 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 
   // split the way and remove it from the map
   WayLocation wayLoc(_map, pWay, nodeIdx, 0.0);
-  vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, pWay, wayLoc);
+  vector<boost::shared_ptr<Way>> splits = WaySplitter::split(_map, pWay, wayLoc);
 
   // Process splits
   if (splits.size() > 1)
@@ -152,8 +151,7 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 
     _map->replace(pWay, newWays);
 
-    // Need to process the "right-hand-side" of the split, looking for more
-    // corners
+    // Need to process the "right-hand-side" of the split, looking for more corners
     _todoWays.push_back(splits[1]->getId());
 
     LOG_VART(_map->containsElement(splitWayId));

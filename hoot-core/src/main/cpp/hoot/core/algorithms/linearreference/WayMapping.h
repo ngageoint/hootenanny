@@ -38,6 +38,7 @@ namespace hoot
 class WayMapping
 {
 public:
+
   virtual ~WayMapping();
 
   /**
@@ -49,7 +50,6 @@ public:
    * Given a point on subline string 2, return the corresponding point on subline string 1.
    */
   virtual WayLocationPtr map2to1(ConstWayLocationPtr wl1) const = 0;
-
 };
 
 }

@@ -82,6 +82,7 @@ public:
   geos::geom::Coordinate interpolate(double d);
 
 protected:
+
   ConstOsmMapPtr _map;
   boost::shared_ptr<const hoot::Way> _way;
   // The distance from the beginning of the way to each node that makes up the way.

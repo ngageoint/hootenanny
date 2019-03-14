@@ -115,8 +115,6 @@ int ConflateCmd::runSimple(QStringList args)
     isDiffConflate = true;
     args.removeAt(args.indexOf("--differential"));
 
-    // Check for tags argument "--Include-Tags"
-
     if (args.contains("--include-tags"))
     {
       diffConflator.enableTags();
@@ -182,9 +180,8 @@ int ConflateCmd::runSimple(QStringList args)
   // read input 2
   if (!input2.isEmpty())
   {
-    IoUtils::loadMap(map, input2,
-                     ConfigOptions().getReaderConflateUseDataSourceIds2(),
-                     Status::Unknown2);
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
@@ -215,13 +212,11 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
 
   OsmMapPtr result = map;
@@ -250,7 +245,6 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
-
   OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
 
   // doing this after the conflate post ops, since some invalid reviews are removed by them
