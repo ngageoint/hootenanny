@@ -70,4 +70,33 @@ public class JobsResource {
         return this.jobsStatusesManager.getRecentJobs(user, MAX_SIZE);
     }
 
+    /**
+     * This service allows for tracking the status of running Hootenanny jobs launched all users.
+     *
+     * GET hoot-services/jobs/running
+     *
+     * @return job status JSON
+     */
+    @GET
+    @Path("/running")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<JobStatusResponse> getRunningJobs() {
+        return this.jobsStatusesManager.getRunningJobs();
+    }
+
+    /**
+     * This service allows for tracking the status of a users Hootenanny job history.
+     *
+     * GET hoot-services/jobs/history
+     *
+     * @return job status JSON
+     */
+    @GET
+    @Path("/history")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<JobStatusResponse> getHistoryJobs(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        return this.jobsStatusesManager.getJobsHistory(user);
+    }
+
 }
