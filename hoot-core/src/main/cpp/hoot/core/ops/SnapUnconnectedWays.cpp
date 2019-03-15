@@ -37,9 +37,9 @@ _snappedRoadsTagKey("")
   setConfiguration(conf());
 }
 
-void SnapUnconnectedWays::setConfiguration(const Settings& conf)
+void SnapUnconnectedWays::setConfiguration(const Settings& /*conf*/)
 {
-  ConfigOptions confOpts = ConfigOptions(conf);
+  //ConfigOptions confOpts = ConfigOptions(conf);
   /*
   //snap.unconnected.ways.snap.to.way.criterion
   //snap.unconnected.ways.snap.to.way.node.criterion
@@ -49,16 +49,16 @@ void SnapUnconnectedWays::setConfiguration(const Settings& conf)
   ElementCriterionPtr _wayToSnapToCriterion;
   ElementCriterionPtr _wayNodeToSnapToCriterion;
    */
-  if (confOpts.getUnconnectedWaysReuseWayNodes())
-  {
-    _maxNodeReuseDistance = confOpts.getSnapUnconnectedWaysWayNodeReuseTolerance();
-  }
-  else
-  {
-    _maxNodeReuseDistance = 0.0;
-  }
-  _maxSnapDistance = confOpts.getSnapUnconnectedWaysSnapTolerance();
-  _snappedRoadsTagKey = confOpts.getSnapUnconnectedWaysTagKey();
+//  if (confOpts.getUnconnectedWaysReuseWayNodes())
+//  {
+//    _maxNodeReuseDistance = confOpts.getSnapUnconnectedWaysWayNodeReuseTolerance();
+//  }
+//  else
+//  {
+//    _maxNodeReuseDistance = 0.0;
+//  }
+//  _maxSnapDistance = confOpts.getSnapUnconnectedWaysSnapTolerance();
+//  _snappedRoadsTagKey = confOpts.getSnapUnconnectedWaysTagKey();
 
 //  boost::shared_ptr<HighwayNodeCriterion> highwayNodeCrit(new HighwayNodeCriterion());
 //  highwayNodeCrit->setOsmMap(map.get());

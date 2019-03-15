@@ -52,7 +52,7 @@ public:
   const QString inputPath = "test-files/ops/SnapUnconnectedWaysTest/";
   const QString outputPath = "test-output/ops/SnapUnconnectedWaysTest/";
 
-  BuildingOutlineRemoveOpTest()
+  SnapUnconnectedWaysTest()
   {
     setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
@@ -62,7 +62,6 @@ public:
   {
 
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SnapUnconnectedWaysTest, "quick");

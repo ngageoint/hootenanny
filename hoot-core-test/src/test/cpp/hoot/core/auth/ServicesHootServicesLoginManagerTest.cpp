@@ -42,6 +42,9 @@
 namespace hoot
 {
 
+/**
+ * Parts of this test will fail if Tomcat is running.
+ */
 class ServicesHootServicesLoginManagerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServicesHootServicesLoginManagerTest);
