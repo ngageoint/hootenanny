@@ -8,7 +8,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
-#include <hoot/core/criterion/HighwayNodeCriterion.h>
+//#include <hoot/core/criterion/HighwayNodeCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
@@ -49,23 +49,26 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
   // TODO: tune these indexes? - see #3054
   // TODO: make these index creations into a generic method?
 
-  // snap to road way node index
-  boost::shared_ptr<Tgs::MemoryPageStore> mps1(new Tgs::MemoryPageStore(728));
-  boost::shared_ptr<Tgs::HilbertRTree> snapToRoadNodeIndex(new Tgs::HilbertRTree(mps1, 2));
-  // TODO: make the status part of these crits configurable?
-  boost::shared_ptr<HighwayNodeCriterion> highwayNodeCrit(new HighwayNodeCriterion());
-  highwayNodeCrit->setOsmMap(map.get());
-  boost::shared_ptr<ChainCriterion> roadNodeToSnapToCrit(
-    new ChainCriterion(new StatusCriterion(Status::Unknown1), highwayNodeCrit));
-  std::deque<ElementId> snapToRoadNodeIndexToEid;
-  IndexElementsVisitor v1(
-    snapToRoadNodeIndex, snapToRoadNodeIndexToEid, roadNodeToSnapToCrit,
-    boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
-  LOG_DEBUG(v1.getInitStatusMessage());
-  map->visitNodesRo(v1);
-  v1.finalizeIndex();
-  LOG_DEBUG(v1.getCompletedStatusMessage());
-  LOG_VARD(snapToRoadNodeIndexToEid.size());
+  // TODO: we may be better either not snapping to road nodes or all or only snapping to them when
+  // they are as close or closer to the nearest ref road
+
+//  // snap to road way node index
+//  boost::shared_ptr<Tgs::MemoryPageStore> mps1(new Tgs::MemoryPageStore(728));
+//  boost::shared_ptr<Tgs::HilbertRTree> snapToRoadNodeIndex(new Tgs::HilbertRTree(mps1, 2));
+//  // TODO: make the status part of these crits configurable?
+//  boost::shared_ptr<HighwayNodeCriterion> highwayNodeCrit(new HighwayNodeCriterion());
+//  highwayNodeCrit->setOsmMap(map.get());
+//  boost::shared_ptr<ChainCriterion> roadNodeToSnapToCrit(
+//    new ChainCriterion(new StatusCriterion(Status::Unknown1), highwayNodeCrit));
+//  std::deque<ElementId> snapToRoadNodeIndexToEid;
+//  IndexElementsVisitor v1(
+//    snapToRoadNodeIndex, snapToRoadNodeIndexToEid, roadNodeToSnapToCrit,
+//    boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
+//  LOG_DEBUG(v1.getInitStatusMessage());
+//  map->visitNodesRo(v1);
+//  v1.finalizeIndex();
+//  LOG_DEBUG(v1.getCompletedStatusMessage());
+//  LOG_VARD(snapToRoadNodeIndexToEid.size());
 
   // snap to road way index
   boost::shared_ptr<Tgs::MemoryPageStore> mps2(new Tgs::MemoryPageStore(728));
@@ -159,77 +162,77 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
       LOG_VARD(_snappedRoadNodes.contains(unconnectedRoadId));
       if (unconnectedRoadId != 0 && !_snappedRoadNodes.contains(unconnectedRoadId))
       {
-        // Find all road nodes near this unconnected node that don't belong to the same way the
-        // unconnected road node is already on.
-        NodePtr roadNode = map->getNode(unconnectedRoadId);
-        assert(roadNode->getStatus() == Status::Unknown2);
-        LOG_VARD(roadNode->getId());
-        assert(roadNode->getId() == unconnectedRoadId);
-        boost::shared_ptr<geos::geom::Envelope> env(roadNode->getEnvelope(map));
-        env->expandBy(_getSearchRadius(roadNode));
-        const std::set<ElementId> neighbors =
-          IndexElementsVisitor::findNeighbors(
-            *env, snapToRoadNodeIndex, snapToRoadNodeIndexToEid, map);
-        LOG_VARD(neighbors);
+//        // Find all road nodes near this unconnected node that don't belong to the same way the
+//        // unconnected road node is already on.
+//        NodePtr roadNode = map->getNode(unconnectedRoadId);
+//        assert(roadNode->getStatus() == Status::Unknown2);
+//        LOG_VARD(roadNode->getId());
+//        assert(roadNode->getId() == unconnectedRoadId);
+//        boost::shared_ptr<geos::geom::Envelope> env(roadNode->getEnvelope(map));
+//        env->expandBy(_getSearchRadius(roadNode));
+//        const std::set<ElementId> neighbors =
+//          IndexElementsVisitor::findNeighbors(
+//            *env, snapToRoadNodeIndex, snapToRoadNodeIndexToEid, map);
+//        LOG_VARD(neighbors);
 
-        if (neighbors.size() > 0)
-        {
-          // If there were any road node neighbors, let's try snapping to the first one that we can.
-          // This avoid creating any unnecessary new road nodes.
+//        if (neighbors.size() > 0)
+//        {
+//          // If there were any road node neighbors, let's try snapping to the first one that we can.
+//          // This avoid creating any unnecessary new road nodes.
 
-          // TODO: Are these already sorted by distance?
-          const std::set<long>& waysContainingUnconnectedRoadNode =
-            /*nodeToWayMap*/map->getIndex().getNodeToWayMap()->getWaysByNode(unconnectedRoadId);
-          LOG_VARD(waysContainingUnconnectedRoadNode);
+//          // TODO: Are these already sorted by distance?
+//          const std::set<long>& waysContainingUnconnectedRoadNode =
+//            /*nodeToWayMap*/map->getIndex().getNodeToWayMap()->getWaysByNode(unconnectedRoadId);
+//          LOG_VARD(waysContainingUnconnectedRoadNode);
 
-          for (std::set<ElementId>::const_iterator neighborsItr = neighbors.begin();
-               neighborsItr != neighbors.end(); ++neighborsItr)
-          {
-            const long neighborId = (*neighborsItr).getId();
-            LOG_VARD(neighborId);
+//          for (std::set<ElementId>::const_iterator neighborsItr = neighbors.begin();
+//               neighborsItr != neighbors.end(); ++neighborsItr)
+//          {
+//            const long neighborId = (*neighborsItr).getId();
+//            LOG_VARD(neighborId);
 
-            // Don't try to snap a road to itself.
-            if (neighborId != unconnectedRoadId)
-            {
-              const std::set<long> waysContainingNeighbor =
-                /*nodeToWayMap*/map->getIndex().getNodeToWayMap()->getWaysByNode(neighborId);
-              LOG_VARD(waysContainingNeighbor);
-              // TODO: check way for status = 1?
+//            // Don't try to snap a road to itself.
+//            if (neighborId != unconnectedRoadId)
+//            {
+//              const std::set<long> waysContainingNeighbor =
+//                /*nodeToWayMap*/map->getIndex().getNodeToWayMap()->getWaysByNode(neighborId);
+//              LOG_VARD(waysContainingNeighbor);
+//              // TODO: check way for status = 1?
 
-              std::set<long> intersection;
-              std::set_intersection(
-                waysContainingUnconnectedRoadNode.begin(), waysContainingUnconnectedRoadNode.end(),
-                waysContainingNeighbor.begin(), waysContainingNeighbor.end(),
-                std::inserter(intersection, intersection.begin()));
-              LOG_VARD(intersection);
-              // Don't try to snap a way to itself.
-              if (intersection.size() == 0) // if they don't contain any of the same values
-              {
-                // snap the unconnected road node to the nearest road node
-                NodePtr neighborRoadNode = map->getNode(neighborId);
-                assert(neighborRoadNode->getId() == neighborId);
-                assert(neighborRoadNode->getStatus() == Status::Unknown1);
-                LOG_VARD(neighborRoadNode->getId());
-                LOG_VARD(_snappedToRoadNodes.contains(neighborRoadNode->getId()));
-                if (neighborRoadNode->getId() != roadNode->getId() /*&&
-                    // I don't think this is necessary.
-                    !_snappedToRoadNodes.contains(neighborRoadNode->getId())*/)
-                {
-                  LOG_DEBUG(
-                    "Snapping road node: " << roadNode->getElementId() << " to road node: " <<
-                    neighborRoadNode->getElementId());
-                  roadNode->setX(neighborRoadNode->getX());
-                  roadNode->setY(neighborRoadNode->getY());
-                  _snappedToRoadNodes.append(neighborRoadNode->getId());
-                  _snappedRoadNodes.append(roadNode->getId());
-                  _numAffected++;
-                }
-              }
-            }
-          }
-        }
-        else
-        {
+//              std::set<long> intersection;
+//              std::set_intersection(
+//                waysContainingUnconnectedRoadNode.begin(), waysContainingUnconnectedRoadNode.end(),
+//                waysContainingNeighbor.begin(), waysContainingNeighbor.end(),
+//                std::inserter(intersection, intersection.begin()));
+//              LOG_VARD(intersection);
+//              // Don't try to snap a way to itself.
+//              if (intersection.size() == 0) // if they don't contain any of the same values
+//              {
+//                // snap the unconnected road node to the nearest road node
+//                NodePtr neighborRoadNode = map->getNode(neighborId);
+//                assert(neighborRoadNode->getId() == neighborId);
+//                assert(neighborRoadNode->getStatus() == Status::Unknown1);
+//                LOG_VARD(neighborRoadNode->getId());
+//                LOG_VARD(_snappedToRoadNodes.contains(neighborRoadNode->getId()));
+//                if (neighborRoadNode->getId() != roadNode->getId() /*&&
+//                    // I don't think this is necessary.
+//                    !_snappedToRoadNodes.contains(neighborRoadNode->getId())*/)
+//                {
+//                  LOG_DEBUG(
+//                    "Snapping road node: " << roadNode->getElementId() << " to road node: " <<
+//                    neighborRoadNode->getElementId());
+//                  roadNode->setX(neighborRoadNode->getX());
+//                  roadNode->setY(neighborRoadNode->getY());
+//                  _snappedToRoadNodes.append(neighborRoadNode->getId());
+//                  _snappedRoadNodes.append(roadNode->getId());
+//                  _numAffected++;
+//                }
+//              }
+//            }
+//          }
+//        }
+        //else
+        //{
           // If no nearby road nodes were found, we're going to try to find nearby roads, then
           // snap into to the closest location on the neighboring road.
 
@@ -246,42 +249,50 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
           for (std::set<ElementId>::const_iterator neighborsItr = neighbors.begin();
                neighborsItr != neighbors.end(); ++neighborsItr)
           {
+            // We're arbitrarily snapping to the first neighbor road (for now?).
+
             const long neighborId = (*neighborsItr).getId();
             LOG_VARD(neighborId);
             WayPtr roadToSnapTo = map->getWay(neighborId);
             assert(highwayCrit->isSatisfied(way));
             assert(roadToSnapTo->getId() == neighborId);
+            LOG_VARD(roadToSnapTo);
             const std::vector<long>& roadToSnapToNodeIds = roadToSnapTo->getNodeIds();
             LOG_VARD(roadToSnapToNodeIds);
 
-//            const QList<long> roadToSnapNodeToIdsList =
-//              QList<long>::fromVector(QVector<long>::fromStdVector(roadToSnapToNodeIds));
-//            LOG_VARD(roadToSnapNodeToIdsList);
-
-            //if (!roadToSnapTo->getNodeIds().contains(unconnectedRoadId))
-            LOG_VARD(std::find(
-                       roadToSnapToNodeIds.begin(), roadToSnapToNodeIds.end(), unconnectedRoadId) ==
-                       roadToSnapToNodeIds.end());
+            LOG_VARD(
+              std::find(
+                roadToSnapToNodeIds.begin(), roadToSnapToNodeIds.end(), unconnectedRoadId) ==
+                roadToSnapToNodeIds.end());
             if (std::find(
                   roadToSnapToNodeIds.begin(), roadToSnapToNodeIds.end(), unconnectedRoadId) ==
                   roadToSnapToNodeIds.end())
-            //if (!roadToSnapNodeToIdsList.contains(unconnectedRoadId))
             {
               WayDiscretizer wd1(map, roadToSnapTo);
               std::vector<geos::geom::Coordinate> cs1;
               wd1.discretize(1.0, cs1);
               geos::geom::Coordinate closestCoordinate;
               double shortestDistance = DBL_MAX;
+              cs1.push_back(map->getNode(roadToSnapTo->getNodeId(0))->toCoordinate());
+              cs1.push_back(
+                map->getNode(
+                  roadToSnapTo->getNodeId(roadToSnapTo->getNodeIds().size() - 1))->toCoordinate());
+              LOG_VARD(cs1);
               for (size_t i = 0; i < cs1.size(); i++)
               {
                 geos::geom::Coordinate coord = cs1[i];
+                LOG_VARD(coord);
                 const double distanceToRoadNode = coord.distance(roadNode->toCoordinate());
+                LOG_VARD(distanceToRoadNode);
+                // TODO: This *may* be able to be optimized to skip out once the distance values
+                // start getting larger.
                 if (distanceToRoadNode < shortestDistance)
                 {
                   closestCoordinate = coord;
                   shortestDistance = distanceToRoadNode;
                 }
               }
+              LOG_VARD(shortestDistance);
 
               if (shortestDistance != DBL_MAX)
               {
@@ -300,8 +311,10 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                 for (size_t i = 0; i < roadToSnapToNodeIds.size(); i++)
                 {
                   boost::shared_ptr<Node> snapToRoadNode = map->getNode(roadToSnapToNodeIds[i]);
+                  LOG_VARD(snapToRoadNode);
                   const double distanceToSnapToRoadNode =
                     Distance::euclidean(roadNode->toCoordinate(), snapToRoadNode->toCoordinate());
+                  LOG_VARD(distanceToSnapToRoadNode);
                   if (distanceToSnapToRoadNode < shortestDistance)
                   {
                     shortestDistance = distanceToSnapToRoadNode;
@@ -379,15 +392,20 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                 // Add the new snapped node as a way node on the snapped to road.
                 QList<long> newRoadToSnapToNodeIds =
                   QList<long>::fromVector(QVector<long>::fromStdVector(roadToSnapToNodeIds));
+                LOG_VARD(newRoadToSnapToNodeIds);
                 newRoadToSnapToNodeIds.insert(insertIndex, roadNode->getId());
+                LOG_VARD(newRoadToSnapToNodeIds);
                 roadToSnapTo->setNodes(newRoadToSnapToNodeIds.toVector().toStdVector());
                 LOG_VARD(roadToSnapTo->getNodeIds());
 
                 _numAffected++;
+
+                // Kick out of the neighbors loop, as we don't want to snap the road more than once.
+                break;
               }
             }
           }
-        }
+        //}
       }
     }
   }

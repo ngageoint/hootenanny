@@ -157,7 +157,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     {
       if (!pit->first.isNull())
       {
-        LOG_VARD(pit->first);
+        LOG_VART(pit->first);
         ElementPtr e = _pMap->getElement(pit->first);
         if (e && e->getStatus() == Status::Unknown2)
         {
@@ -166,7 +166,7 @@ void DiffConflator::apply(OsmMapPtr& map)
       }
       if (!pit->second.isNull())
       {
-        LOG_VARD(pit->second);
+        LOG_VART(pit->second);
         ElementPtr e = _pMap->getElement(pit->second);
         if (e && e->getStatus() == Status::Unknown2)
         {
@@ -201,7 +201,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     {
       if (!pit->first.isNull())
       {
-        LOG_VARD(pit->first);
+        LOG_VART(pit->first);
         ElementPtr e = _pMap->getElement(pit->first);
         if (e && e->getStatus() == Status::Unknown1)
         {
@@ -210,7 +210,7 @@ void DiffConflator::apply(OsmMapPtr& map)
       }
       if (!pit->second.isNull())
       {
-        LOG_VARD(pit->second);
+        LOG_VART(pit->second);
         ElementPtr e = _pMap->getElement(pit->second);
         if (e && e->getStatus() == Status::Unknown1)
         {
