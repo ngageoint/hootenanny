@@ -80,7 +80,7 @@ QUuid UuidHelper::createUuid5(QString string, QUuid ns)
 
 QByteArray UuidHelper::toByteArray(const QUuid& uuid)
 {
-  return QByteArray::fromHex(uuid.toString().toAscii().replace("-", "").replace("{", "").
+  return QByteArray::fromHex(uuid.toString().toLatin1().replace("-", "").replace("{", "").
                              replace("}", ""));
 }
 

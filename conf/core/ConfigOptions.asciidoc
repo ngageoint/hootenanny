@@ -903,6 +903,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== hash.seed.zero
+
+* Data Type: bool
+* Default Value: `false`
+
+Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
+is required for unit tests, but shouldn't be used in normal operation.
+
 === highway.match.threshold
 
 * Data Type: double

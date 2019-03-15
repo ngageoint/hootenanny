@@ -5,7 +5,8 @@ var assert = require('assert'),
     httpMocks = require('node-mocks-http'),
     osmtogeojson = require('osmtogeojson'),
     DOMParser = new require('xmldom').DOMParser
-    parser = new DOMParser();
+    parser = new DOMParser(),
+    hashseedzero = true;
 
 var server = require('../TranslationServer.js');
 
@@ -265,10 +266,10 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "MGCP");
-                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AL015");
-                assert.equal(result.osm.way[0].tag[0].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[0].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AL015");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
             });
         });
 
@@ -360,11 +361,10 @@ describe('TranslationServer', function () {
                 xml2js.parseString(osm_xml, function(err, result) {
                     if (err) console.error(err);
 
-                    assert.equal(result.osm.way[0].tag[0].$.k, 'natural')
-                    assert.equal(result.osm.way[0].tag[0].$.v, 'coastline')
-                    assert.equal(result.osm.way[0].tag[1].$.k, 'shoreline:type')
-                    assert.equal(result.osm.way[0].tag[1].$.v, 'mangrove')
-
+                    assert.equal(result.osm.way[0].tag[0].$.k, 'shoreline:type')
+                    assert.equal(result.osm.way[0].tag[0].$.v, 'mangrove')
+                    assert.equal(result.osm.way[0].tag[1].$.k, 'natural')
+                    assert.equal(result.osm.way[0].tag[1].$.v, 'coastline')
                 })
 
                 var tds_xml = server.handleInputs({
@@ -376,10 +376,10 @@ describe('TranslationServer', function () {
 
                 xml2js.parseString(tds_xml, function(err, result) {
                     if (err) console.error(err);
-                    assert.equal(result.osm.way[0].tag[0].$.k, 'F_CODE')
-                    assert.equal(result.osm.way[0].tag[0].$.v, 'BA010')
-                    assert.equal(result.osm.way[0].tag[1].$.k, 'SLT')
-                    assert.equal(result.osm.way[0].tag[1].$.v, '6')
+                    assert.equal(result.osm.way[0].tag[0].$.k, 'SLT')
+                    assert.equal(result.osm.way[0].tag[0].$.v, '6')
+                    assert.equal(result.osm.way[0].tag[1].$.k, 'F_CODE')
+                    assert.equal(result.osm.way[0].tag[1].$.v, 'BA010')
                 })
         })
 
@@ -393,10 +393,10 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "MGCP");
-                assert.equal(result.osm.way[0].tag[0].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[0].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AT030");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AT030");
             });
         });
 
@@ -410,12 +410,12 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "TDSv40");
-                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[0].$.v, "2");
-                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[1].$.v, "2");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
             });
         });
 
@@ -429,12 +429,12 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "TDSv61");
-                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[0].$.v, "2");
-                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[1].$.v, "2");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
             });
         });
 
@@ -450,12 +450,12 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "GGDMv30");
-                assert.equal(result.osm.way[0].tag[0].$.k, "CAB");
-                assert.equal(result.osm.way[0].tag[0].$.v, "2");
-                assert.equal(result.osm.way[0].tag[1].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[1].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
-                assert.equal(result.osm.way[0].tag[2].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[2].$.v, "AT005");
+                assert.equal(result.osm.way[0].tag[1].$.k, "CAB");
+                assert.equal(result.osm.way[0].tag[1].$.v, "2");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AT005");
             });
         });
 
@@ -470,14 +470,14 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "MGCP");
-                assert.equal(result.osm.way[0].tag[4].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[4].$.v, "AP030");
-                assert.equal(result.osm.way[0].tag[3].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[3].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
-                assert.equal(result.osm.way[0].tag[2].$.k, "HCT");
-                assert.equal(result.osm.way[0].tag[2].$.v, "0");
-                assert.equal(result.osm.way[0].tag[0].$.k, "WD1");
-                assert.equal(result.osm.way[0].tag[0].$.v, "20");
+                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AP030");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "HCT");
+                assert.equal(result.osm.way[0].tag[3].$.v, "0");
+                assert.equal(result.osm.way[0].tag[4].$.k, "WD1");
+                assert.equal(result.osm.way[0].tag[4].$.v, "20");
                 assert.equal(result.osm.way[0].tag[1].$.k, "LTN");
                 assert.equal(result.osm.way[0].tag[1].$.v, "2");
             });
@@ -495,16 +495,16 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.$.schema, "GGDMv30");
                 assert.equal(result.osm.way[0].tag[0].$.k, "LTN");
                 assert.equal(result.osm.way[0].tag[0].$.v, "2");
-                assert.equal(result.osm.way[0].tag[1].$.k, "RTY");
-                assert.equal(result.osm.way[0].tag[1].$.v, "-999999");
-                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
-                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[4].$.k, "RTY");
+                assert.equal(result.osm.way[0].tag[4].$.v, "-999999");
+                assert.equal(result.osm.way[0].tag[5].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[5].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
                 assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
                 assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
-                assert.equal(result.osm.way[0].tag[4].$.k, "ZI016_WD1");
-                assert.equal(result.osm.way[0].tag[4].$.v, "20");
-                assert.equal(result.osm.way[0].tag[5].$.k, "RIN_ROI");
-                assert.equal(result.osm.way[0].tag[5].$.v, "5");
+                assert.equal(result.osm.way[0].tag[1].$.k, "ZI016_WD1");
+                assert.equal(result.osm.way[0].tag[1].$.v, "20");
+                assert.equal(result.osm.way[0].tag[2].$.k, "RIN_ROI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "5");
             });
         });
 
@@ -517,10 +517,10 @@ describe('TranslationServer', function () {
             });
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "UID");
-                assert.equal(result.osm.way[0].tag[0].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
-                assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AL010");
+                assert.equal(result.osm.way[0].tag[1].$.k, "UID");
+                assert.equal(result.osm.way[0].tag[1].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
+                assert.equal(result.osm.way[0].tag[0].$.k, "FCODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AL010");
             });
         });
 
@@ -622,14 +622,14 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.log(err)
                 // road
-                assert.equal(result.osm.way[0].tag[2].$.k, 'F_CODE')
-                assert.equal(result.osm.way[0].tag[2].$.v, 'AP030')
-                assert.equal(result.osm.way[0].tag[1].$.k, 'RTY')
-                assert.equal(result.osm.way[0].tag[1].$.v, '3')
-                assert.equal(result.osm.way[0].tag[0].$.k, 'ZI016_WTC')
-                assert.equal(result.osm.way[0].tag[0].$.v, '1')
-                assert.equal(result.osm.way[0].tag[3].$.k, 'RIN_ROI')
-                assert.equal(result.osm.way[0].tag[3].$.v, '5')
+                assert.equal(result.osm.way[0].tag[1].$.k, 'F_CODE')
+                assert.equal(result.osm.way[0].tag[1].$.v, 'AP030')
+                assert.equal(result.osm.way[0].tag[3].$.k, 'RTY')
+                assert.equal(result.osm.way[0].tag[3].$.v, '3')
+                assert.equal(result.osm.way[0].tag[2].$.k, 'ZI016_WTC')
+                assert.equal(result.osm.way[0].tag[2].$.v, '1')
+                assert.equal(result.osm.way[0].tag[0].$.k, 'RIN_ROI')
+                assert.equal(result.osm.way[0].tag[0].$.v, '5')
                 // buildings
                 assert.equal(result.osm.way[1].tag[0].$.k, 'F_CODE')
                 assert.equal(result.osm.way[1].tag[0].$.v, 'AL013')
@@ -713,10 +713,10 @@ describe('TranslationServer', function () {
             });
             var output = xml2js.parseString(trans2osm, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "uuid");
-                assert.equal(result.osm.way[0].tag[0].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[1].$.k, "power");
-                assert.equal(result.osm.way[0].tag[1].$.v, "line");
+                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[0].$.k, "power");
+                assert.equal(result.osm.way[0].tag[0].$.v, "line");
             });
         });
         it('should handle tdstoosm POST of power line feature', function() {
@@ -728,10 +728,10 @@ describe('TranslationServer', function () {
             });
             var output = xml2js.parseString(trans2osm, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.way[0].tag[0].$.k, "uuid");
-                assert.equal(result.osm.way[0].tag[0].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[1].$.k, "power");
-                assert.equal(result.osm.way[0].tag[1].$.v, "line");
+                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[0].$.k, "power");
+                assert.equal(result.osm.way[0].tag[0].$.v, "line");
             });
         });
 
@@ -746,12 +746,12 @@ describe('TranslationServer', function () {
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "source");
                 assert.equal(result.osm.way[0].tag[0].$.v, "D");
-                assert.equal(result.osm.way[0].tag[1].$.k, "uuid");
-                assert.equal(result.osm.way[0].tag[1].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
-                assert.equal(result.osm.way[0].tag[2].$.k, "facility");
-                assert.equal(result.osm.way[0].tag[2].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[3].$.k, "area");
+                assert.equal(result.osm.way[0].tag[2].$.k, "uuid");
+                assert.equal(result.osm.way[0].tag[2].$.v, "{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}");
+                assert.equal(result.osm.way[0].tag[3].$.k, "facility");
                 assert.equal(result.osm.way[0].tag[3].$.v, "yes");
+                assert.equal(result.osm.way[0].tag[1].$.k, "area");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
             });
         });
 
@@ -792,20 +792,20 @@ describe('TranslationServer', function () {
 
             var output = xml2js.parseString(trans2osm, function(err, result) {
                 if (err) console.error(err);
-                assert.equal(result.osm.node[0].tag[0].$.k, "use");
-                assert.equal(result.osm.node[0].tag[0].$.v, "other");
-                assert.equal(result.osm.node[0].tag[1].$.k, "place");
-                assert.equal(result.osm.node[0].tag[1].$.v, "yes");
-                assert.equal(result.osm.node[0].tag[2].$.k, "poi");
-                assert.equal(result.osm.node[0].tag[2].$.v, "yes");
+                assert.equal(result.osm.node[0].tag[4].$.k, "use");
+                assert.equal(result.osm.node[0].tag[4].$.v, "other");
+                assert.equal(result.osm.node[0].tag[6].$.k, "place");
+                assert.equal(result.osm.node[0].tag[6].$.v, "yes");
+                assert.equal(result.osm.node[0].tag[5].$.k, "poi");
+                assert.equal(result.osm.node[0].tag[5].$.v, "yes");
                 assert.equal(result.osm.node[0].tag[3].$.k, "uuid");
                 assert.equal(result.osm.node[0].tag[3].$.v, "{c6df0618-ce96-483c-8d6a-afa33541646c}");
-                assert.equal(result.osm.node[0].tag[4].$.k, "name");
-                assert.equal(result.osm.node[0].tag[4].$.v, "Manitou Springs");
-                assert.equal(result.osm.node[0].tag[5].$.k, "landuse");
-                assert.equal(result.osm.node[0].tag[5].$.v, "built_up_area");
-                assert.equal(result.osm.node[0].tag[6].$.k, "source:accuracy:horizontal:category");
-                assert.equal(result.osm.node[0].tag[6].$.v, "accurate");
+                assert.equal(result.osm.node[0].tag[2].$.k, "name");
+                assert.equal(result.osm.node[0].tag[2].$.v, "Manitou Springs");
+                assert.equal(result.osm.node[0].tag[1].$.k, "landuse");
+                assert.equal(result.osm.node[0].tag[1].$.v, "built_up_area");
+                assert.equal(result.osm.node[0].tag[0].$.k, "source:accuracy:horizontal:category");
+                assert.equal(result.osm.node[0].tag[0].$.v, "accurate");
             });
         });
 

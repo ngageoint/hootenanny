@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLoginManager.h"
@@ -41,6 +41,10 @@
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+
+// Qt
+#include <QUrl>
+#include <QUrlQuery>
 
 namespace hoot
 {
@@ -100,7 +104,7 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
   LOG_VART(_cookies->size());
   LOG_VART(_cookies->toString());
   const QUrl authUrl(requestTokenRequest.getResponseContent());
-  const QString requestToken = authUrl.queryItemValue("oauth_token");
+  const QString requestToken = QUrlQuery(authUrl).queryItemValue("oauth_token");
   LOG_VARD(requestToken);
   authUrlStr = authUrl.toString();
 
@@ -165,8 +169,10 @@ HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requ
   LOG_VART(_getVerifyUrl());
 
   loginUrl.setUrl(_getVerifyUrl());
-  loginUrl.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
-  loginUrl.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
+  QUrlQuery loginUrlQuery(loginUrl);
+  loginUrlQuery.addQueryItem("oauth_token", QString(QUrl::toPercentEncoding(requestToken)));
+  loginUrlQuery.addQueryItem("oauth_verifier", QString(QUrl::toPercentEncoding(verifier)));
+  loginUrl.setQuery(loginUrlQuery);
   LOG_VART(loginUrl.toString());
 
   return loginRequest;

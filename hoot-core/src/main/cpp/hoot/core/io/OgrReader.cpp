@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -1075,7 +1075,7 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     f = 0;
     if (_count % 1000 == 0 && Log::getInstance().isInfoEnabled())
     {
-      LOG_DEBUG("Loading " << _path.toUtf8().data() << " " << _layerName.toAscii().data() << " " <<
+      LOG_DEBUG("Loading " << _path.toUtf8().data() << " " << _layerName.toLatin1().data() << " " <<
                 _count << " / " << _featureCount);
     }
     _count++;

@@ -235,8 +235,8 @@ cd ~
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
-    if hash qmake-qt4 >/dev/null 2>&1 ; then
-      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt4 500
+    if hash qmake-qt5 >/dev/null 2>&1 ; then
+      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt5 500
     else
       echo "##### No qmake! #####"
     fi
