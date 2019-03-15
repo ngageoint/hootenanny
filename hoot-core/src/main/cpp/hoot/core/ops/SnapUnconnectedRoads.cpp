@@ -13,6 +13,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -28,7 +29,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SnapUnconnectedRoads)
 
-SnapUnconnectedRoads::SnapUnconnectedRoads()
+SnapUnconnectedRoads::SnapUnconnectedRoads() :
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -92,6 +94,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
 
   boost::shared_ptr<ChainCriterion> roadToSnapCrit(
     new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+  long waysProcessed = 0;
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const ConstWayPtr& way = wayItr->second;
@@ -161,7 +164,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
       {
           const long unconnectedRoadId = *unconnectedRoadIdItr;
           LOG_VARD(_snappedRoadNodes.contains(unconnectedRoadId));
-          if (/*unconnectedRoadId != 0 && */!_snappedRoadNodes.contains(unconnectedRoadId))
+          if (!_snappedRoadNodes.contains(unconnectedRoadId))
           {
     //        // Find all road nodes near this unconnected node that don't belong to the same way the
     //        // unconnected road node is already on.
@@ -302,14 +305,6 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                   // distances than they should be.
                   if (/*shortestDistance != DBL_MAX &&*/ shortestDistance <= 5.0)
                   {
-                    LOG_DEBUG(
-                      "Snapping road node: " << roadNode->getElementId() << " to coord: " <<
-                      closestCoordinate.toString());
-                    roadNode->setX(closestCoordinate.x);
-                    roadNode->setY(closestCoordinate.y);
-                    map->addNode(roadNode);
-                    _snappedRoadNodes.append(roadNode->getId());
-
                     // Find the closest node to our new node on the snap to road.
                     // TODO: Is there a better way to do this using WayLocation?
                     shortestDistance = DBL_MAX;
@@ -357,11 +352,8 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                       LOG_VARD(nodeAfterIndex);
                       const long nodeAfterId = roadToSnapTo->getNodeId(nodeAfterIndex);
                       LOG_VARD(nodeAfterId);
-
                       assert(map->containsNode(nodeBeforeId));
                       assert(map->containsNode(nodeAfterId));
-                      //LOG_VARD(map->containsNode(nodeBeforeId));
-                      //LOG_VARD(map->containsNode(nodeAfterId));
 
                       LOG_VARD(
                         Distance::euclidean(
@@ -395,6 +387,14 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                     }
                     LOG_VARD(insertIndex);
 
+                    LOG_DEBUG(
+                      "Snapping road node: " << roadNode->getElementId() << " to coord: " <<
+                      closestCoordinate.toString());
+                    roadNode->setX(closestCoordinate.x);
+                    roadNode->setY(closestCoordinate.y);
+                    map->addNode(roadNode);
+                    _snappedRoadNodes.append(roadNode->getId());
+
                     // Add the new snapped node as a way node on the snapped to road.
                     QList<long> newRoadToSnapToNodeIds =
                       QList<long>::fromVector(QVector<long>::fromStdVector(roadToSnapToNodeIds));
@@ -405,6 +405,12 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
                     LOG_VARD(roadToSnapTo->getNodeIds());
 
                     _numAffected++;
+                    if (_numAffected % _taskStatusUpdateInterval == 0)
+                    {
+                      PROGRESS_INFO(
+                        "Snapped " << StringUtils::formatLargeNumber(_numAffected) <<
+                        " road nodes.");
+                    }
 
                     // Kick out of the neighbors loop, as we don't want to snap the road more than once.
                     break;
@@ -414,6 +420,14 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
             //}
           }
       }
+    }
+
+    waysProcessed++;
+    if (waysProcessed % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " / " <<
+        StringUtils::formatLargeNumber(ways.size()) << " ways for road snapping.");
     }
   }
 }

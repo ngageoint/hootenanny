@@ -97,7 +97,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   LOG_DEBUG("Finding neighbors within env: " << env << "...");
 
   const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
-  LOG_VARD(e2r.size());
+  LOG_VART(e2r.size());
 
   set<ElementId> result;
   vector<double> min(2), max(2);
@@ -122,7 +122,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
     }
   }
 
-  LOG_VARD(result.size());
+  LOG_VART(result.size());
   return result;
 }
 

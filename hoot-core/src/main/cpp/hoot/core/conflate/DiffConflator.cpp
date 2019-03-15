@@ -56,6 +56,7 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/ops/SnapUnconnectedRoads.h>
+#include <hoot/core/util/StringUtils.h>
 
 // standard
 #include <algorithm>
@@ -96,20 +97,22 @@ DiffConflator::~DiffConflator()
 
 void DiffConflator::apply(OsmMapPtr& map)
 {
+  LOG_INFO("Calculating differential output...");
+
   Timer timer;
   _reset();
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
 
-  LOG_INFO("Discarding relations...");
+  LOG_DEBUG("Discarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
   RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
   _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-discarding-relations");
 
-  LOG_INFO("Discarding non-conflatable elements...");
+  LOG_DEBUG("Discarding unconflatable elements...");
   NonConflatableElementRemover nonConflateRemover;
   nonConflateRemover.apply(_pMap);
   _stats.append(
@@ -131,7 +134,8 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
-  LOG_INFO("Differential match count: " << _matches.size());
+  LOG_INFO(
+    "Differential Conflation match count: " << StringUtils::formatLargeNumber(_matches.size()));
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
@@ -148,7 +152,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
-  LOG_INFO("Deleting secondary match elements...");
+  LOG_DEBUG("Deleting secondary match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
@@ -192,7 +196,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // _pMap at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  LOG_INFO("Deleting ref match elements...");
+  LOG_DEBUG("Removing reference match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
@@ -222,7 +226,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-removing-ref-matches");
 
   // Now remove input1 elements
-  LOG_INFO("Removing reference elements...");
+  LOG_DEBUG("Removing all reference elements...");
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);

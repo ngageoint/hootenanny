@@ -36,6 +36,8 @@ private:
   QList<long> _snappedRoadNodes;
   QList<long> _snappedToRoadNodes;
 
+  int _taskStatusUpdateInterval;
+
   Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
 };
 
