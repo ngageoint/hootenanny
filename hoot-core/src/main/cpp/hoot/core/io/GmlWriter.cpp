@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GmlWriter.h"
@@ -69,7 +69,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -79,7 +79,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toAscii(),
+  poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, NULL );
   if( poLayer == NULL )
   {
@@ -90,7 +90,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
 
   for (int i = 0; i < _columns.size(); i++)
   {
-    OGRFieldDefn oField(_columns[i].toAscii(), OFTString);
+    OGRFieldDefn oField(_columns[i].toLatin1(), OFTString);
 
     oField.SetWidth(64);
 
@@ -124,8 +124,8 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
       {
         if (node->getTags().contains(_columns[i]))
         {
-          QByteArray c = shpColumns[i].toAscii();
-          QByteArray v = node->getTags()[_columns[i]].toAscii();
+          QByteArray c = shpColumns[i].toLatin1();
+          QByteArray v = node->getTags()[_columns[i]].toLatin1();
           poFeature->SetField(c.constData(), v.constData());
         }
       }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Soundex.h"
 
@@ -115,7 +115,7 @@ QString Soundex::encode(QString s)
 
 QString Soundex::toDigit(QChar c)
 {
-  char a = c.toAscii();
+  char a = c.toLatin1();
   switch (a)
   {
   case 'B':

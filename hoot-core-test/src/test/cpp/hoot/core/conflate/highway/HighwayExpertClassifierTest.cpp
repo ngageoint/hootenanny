@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -162,7 +162,7 @@ public:
 
     MatchClassification result = classifier->classify(map, match);
 
-    HOOT_STR_EQUALS("match: 6.75908e-06 miss: 0.999993 review: 0", result.toString());
+    HOOT_STR_EQUALS("match: 6.75908e-6 miss: 0.999993 review: 0", result.toString());
   }
 
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOTEXCEPTION_H
@@ -67,7 +67,7 @@ public:
 
   const QString& getWhat() const { return _what; }
 
-  virtual const char* what() const throw() { _tmp = _what.toAscii(); return _tmp.constData(); }
+  virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
 
