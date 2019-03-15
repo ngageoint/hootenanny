@@ -1,13 +1,21 @@
 {
+    "Cleaning": {
+        "members": {
+            "hoot::RemoveRoundabouts": "Handle Roundabouts",
+            "DualWaySplitter": "Split Dual Way"
+        }
+    },
+    "General": {
+        "members": {
+            "add.review.tags.to.features": "Add review tags to individual features"
+        }
+    },
     "Roads": {
         "matcher": "hoot::HighwayMatchCreator",
         "merger": "hoot::HighwayMergerCreator",
         "members": {
             "search.radius.highway": "Highway search radius",
-            "highway.merge.tags.only": "Merge tags only",
-            "highway.matcher.heading.delta": "Matcher heading delta",
-            "highway.matcher.max.angle": "Matcher max angle",
-            "highway.max.enum.diff": "Maximum enumerated types difference"
+            "highway.merge.tags.only": "Merge tags only"
         }
     },
     "RoadsNetwork": {
@@ -36,21 +44,15 @@
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
             "poi.polygon.address.match.enabled": "Enable address matching",
-            "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Automatically merge all pois that match single polygon",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
             "poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only": "Match key prefix only if same source conflation disabled",
-            "poi.polygon.keep.closest.matches.only": "Keep closest matches only",
             "poi.polygon.match.distance.threshold" : "Match distance threshold",
             "poi.polygon.match.evidence.threshold": "Match evidence threshold",
             "poi.polygon.name.score.threshold": "Name score threshold",
-            "poi.polygon.phone.number.match.enabled": "Enable phone number matching",
-            "phone.number.region.code": "Phone number regional code",
-            "phone.number.search.in.text": "Search for phone number in text",
-            "poi.polygon.promote.points.with.addresses.to.pois": "Treat points with address tags as pois",
             "poi.polygon.review.distance.threshold": "Review distance threshold",
             "poi.polygon.review.evidence.threshold": "Review evidence threshold",
-            "poi.polygon.review.multiuse.buildings": "Always mark multiuse buildings for review",
-            "poi.polygon.source.tag.key": "Disable same source conflation 'source' tag",
+            "poi.polygon.review.if.matched.types": "Tags used to flag reviews",
+            "poi.polygon.source.tag.key": "Source key used when disabling same source conflation",
             "poi.polygon.type.score.threshold": "Type score threshold"
         }
     },

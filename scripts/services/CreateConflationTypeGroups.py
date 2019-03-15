@@ -39,7 +39,6 @@ def toInput(optionType):
             break;
     return matchingInput
 
-
 def toLabel(conflateType):
     return 'Poi to Polygon' if conflateType == 'PoiPolygon' else conflateType;
 
@@ -53,24 +52,34 @@ def createUiJSON(groups, options):
             if conflateType == 'RoadsNetwork': continue;
             members = []
             typeMembers = conflateConfig['members']
+            isCleaning = conflateType == 'Cleaning'
             for flag in typeMembers.keys():
-                match = next(
-                    (m['key'] for m in configMembers if m['member']['key'] == flag), 
-                    None
-                )
-                if match != None:
-                    memberConfig = { 'label': typeMembers[flag], 'id': match }
-                    memberConfig.update(configOptions[match])
-                    del memberConfig['key']
-                    templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
-                    if len(templateDefault) == 1:
-                        defaultKey = templateDefault[0]
-                        memberConfig['default'] = next(
-                            (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
-                            ''
-                        )
-                    memberConfig['input'] = toInput(memberConfig['type'])
-                    members.append(memberConfig)
+                if isCleaning:
+                    members.append({
+                        'label': typeMembers[flag],
+                        'id': flag.replace('::', ''),
+                        'input': 'checkbox'
+                    })
+                else:
+                    match = next(
+                        (m['key'] for m in configMembers if m['member']['key'] == flag), 
+                        None
+                    )
+                    if match != None:
+                        memberConfig = { 'label': typeMembers[flag], 'id': match }
+                        memberConfig.update(configOptions[match])
+                        del memberConfig['key']
+                        templateDefault = re.findall(r'(?<=\${).*(?=})', memberConfig['default'])
+                        if len(templateDefault) == 1:
+                            defaultKey = templateDefault[0]
+                            memberConfig['default'] = next(
+                                (m['member']['default'] for m in configMembers if m['member']['key'] == defaultKey),
+                                ''
+                            )
+                        memberConfig['input'] = toInput(memberConfig['type'])
+                        members.append(memberConfig)
+
+
 
             if (conflateType == 'Roads'):
                 members = groupDefaults[conflateType] + members
