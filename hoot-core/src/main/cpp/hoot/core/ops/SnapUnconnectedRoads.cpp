@@ -49,8 +49,11 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
   // TODO: tune these indexes? - see #3054
   // TODO: make these index creations into a generic method?
 
-  // TODO: we may be better either not snapping to road nodes or all or only snapping to them when
-  // they are as close or closer to the nearest ref road
+  // TODO: Given the disabled code below, we're snapping to the closest part of the closest road.
+  // We may be better snapping to a road node on that road instead to avoid creating extra road
+  // nodes, but only if it is within a very small tolerance of the selected road part.
+
+  // TODO: optionally, flag snapped road nodes for review?
 
 //  // snap to road way node index
 //  boost::shared_ptr<Tgs::MemoryPageStore> mps1(new Tgs::MemoryPageStore(728));
@@ -170,6 +173,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
 //        assert(roadNode->getId() == unconnectedRoadId);
 //        boost::shared_ptr<geos::geom::Envelope> env(roadNode->getEnvelope(map));
 //        env->expandBy(_getSearchRadius(roadNode));
+//        // TODO: These are not sorted by distance.
 //        const std::set<ElementId> neighbors =
 //          IndexElementsVisitor::findNeighbors(
 //            *env, snapToRoadNodeIndex, snapToRoadNodeIndexToEid, map);
@@ -242,6 +246,7 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
           assert(roadNode->getId() == unconnectedRoadId);
           boost::shared_ptr<geos::geom::Envelope> env(roadNode->getEnvelope(map));
           env->expandBy(_getSearchRadius(roadNode));
+          // TODO: These are not sorted by distance.
           const std::set<ElementId> neighbors =
             IndexElementsVisitor::findNeighbors(*env, snapToRoadIndex, snapToRoadIndexToEid, map);
           LOG_VARD(neighbors);
@@ -294,7 +299,10 @@ void SnapUnconnectedRoads::apply(OsmMapPtr& map)
               }
               LOG_VARD(shortestDistance);
 
-              if (shortestDistance != DBL_MAX)
+              // This check of less than the allowed snap distance should not be necessary.  For
+              // some reason I don't understand yet, neighbors are being returned at longer
+              // distances than they should be.
+              if (/*shortestDistance != DBL_MAX &&*/ shortestDistance <= 5.0)
               {
                 LOG_DEBUG(
                   "Snapping road node: " << roadNode->getElementId() << " to coord: " <<
