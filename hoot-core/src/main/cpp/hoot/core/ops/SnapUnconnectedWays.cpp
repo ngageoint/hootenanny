@@ -101,7 +101,7 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
 //  std::deque<ElementId> snapToRoadNodeIndexToEid;
 //  IndexElementsVisitor v1(
 //    snapToRoadNodeIndex, snapToRoadNodeIndexToEid, roadNodeToSnapToCrit,
-//    boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
+//    boost::bind(&SnapUnconnectedWays::_getSearchRadius, this, _1), map);
 //  LOG_DEBUG(v1.getInitStatusMessage());
 //  map->visitNodesRo(v1);
 //  v1.finalizeIndex();
@@ -118,7 +118,7 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
   std::deque<ElementId> snapToRoadIndexToEid;
   IndexElementsVisitor v2(
     snapToRoadIndex, snapToRoadIndexToEid, roadToSnapToCrit,
-    boost::bind(&SnapUnconnectedRoads::_getSearchRadius, this, _1), map);
+    boost::bind(&SnapUnconnectedWays::_getSearchRadius, this, _1), map);
   LOG_DEBUG(v2.getInitStatusMessage());  // TODO: add crit to this status message?
   map->visitWaysRo(v2);
   v2.finalizeIndex();
