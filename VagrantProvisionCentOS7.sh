@@ -117,7 +117,6 @@ sudo yum -y install \
     autoconf \
     autoconf-archive \
     automake \
-    bc \
     boost-devel \
     bzip2 \
     ccache \
