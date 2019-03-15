@@ -677,6 +677,50 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== differential.snap.unconnected.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Differential Conflation will snap unconnected secondary road endpoint nodes to the nearest
+reference road.
+
+=== differential.snap.unconnected.roads.node.reuse.tolerance
+
+* Data Type: double
+* Default Value: `0.5`
+
+Maximum distance used by Differential Conflation, in meters, allowed between an unconnected
+secondary road endpoint node and neighboring reference road node for the secondary road endpoint
+node to be snapped directly to the existing reference road node instead of adding the secondary
+road endpoint node as a new road node on the reference road.
+
+=== differential.snap.unconnected.roads.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by Differential Conflation, in meters, allowed between an unconnected
+secondary road endpoint node and neighboring reference road for the secondary road endpoint node to
+be snapped to the closest section of the reference road.
+
+=== differential.snap.unconnected.roads.reuse.reference.road.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when Differential Conflation snaps secondary road endpoint nodes to reference roads, it
+will attempt to reuse existing road nodes on the reference road being snapped to instead of adding
+the secondary road endpoint node to the reference road.
+
+=== differential.snap.unconnected.roads.tag.key
+
+* Data Type: string
+* Default Value: ``
+
+If specified, when Differential Conflation snaps secondary road endpoint nodes to reference roads,
+it will tag them with the specified tag key.
+
 === differential.tag.ignore.list
 
 * Data Type: list

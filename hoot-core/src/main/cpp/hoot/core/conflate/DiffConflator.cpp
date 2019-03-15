@@ -55,7 +55,7 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/ops/SnapUnconnectedRoads.h>
+#include <hoot/core/ops/SnapUnconnectedWays.h>
 #include <hoot/core/util/StringUtils.h>
 
 // standard
@@ -105,14 +105,14 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Store the map - we might need it for tag diff later.
   _pMap = map;
 
-  LOG_DEBUG("Discarding relations...");
+  LOG_DEBUG("\tDiscarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
   RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
   _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-discarding-relations");
 
-  LOG_DEBUG("Discarding unconflatable elements...");
+  LOG_DEBUG("\tDiscarding unconflatable elements...");
   NonConflatableElementRemover nonConflateRemover;
   nonConflateRemover.apply(_pMap);
   _stats.append(
@@ -120,7 +120,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-removing non-conflatable");
 
   // will reproject only if necessary
-  LOG_DEBUG("Projecting to planar...");
+  LOG_DEBUG("\tProjecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-projecting-to-planar");
@@ -135,7 +135,8 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_INFO(
-    "Differential Conflation match count: " << StringUtils::formatLargeNumber(_matches.size()));
+    "\tFound: " << StringUtils::formatLargeNumber(_matches.size()) <<
+    " Differential Conflation matches.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
@@ -152,7 +153,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
-  LOG_DEBUG("Deleting secondary match elements...");
+  LOG_DEBUG("\tDeleting secondary match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
@@ -187,16 +188,16 @@ void DiffConflator::apply(OsmMapPtr& map)
   // routines, but we'll go with this for now.  This could also be applied in areas other than
   // Differential Conflation if desired eventually.
   // TODO: need to create an option for enabling/disabling snapping
-  SnapUnconnectedRoads roadSnapper;
-  LOG_INFO(roadSnapper.getInitStatusMessage());
+  SnapUnconnectedWays roadSnapper;
+  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
-  LOG_INFO(roadSnapper.getCompletedStatusMessage());
+  LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(map, "after-road-snapping");
 
   // _pMap at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  LOG_DEBUG("Removing reference match elements...");
+  LOG_DEBUG("\tRemoving reference match elements...");
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
@@ -226,7 +227,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-removing-ref-matches");
 
   // Now remove input1 elements
-  LOG_DEBUG("Removing all reference elements...");
+  LOG_DEBUG("\tRemoving all reference elements...");
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);

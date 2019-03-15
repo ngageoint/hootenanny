@@ -1,5 +1,5 @@
 
-#include "SnapUnconnectedRoads.h"
+#include "SnapUnconnectedWays.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -27,19 +27,39 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, SnapUnconnectedRoads)
+HOOT_FACTORY_REGISTER(OsmMapOperation, SnapUnconnectedWays)
 
-SnapUnconnectedRoads::SnapUnconnectedRoads() :
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+SnapUnconnectedWays::SnapUnconnectedWays(ElementCriterionPtr wayToSnapCriterion,
+                                         ElementCriterionPtr wayToSnapToCriterion,
+                                         ElementCriterionPtr wayNodeToSnapToCriterion) :
+_wayToSnapCriterion(wayToSnapCriterion),
+_wayToSnapToCriterion(wayToSnapToCriterion),
+_wayNodeToSnapToCriterion(wayNodeToSnapToCriterion),
+_maxNodeReuseDistance(0.0),
+_maxSnapDistance(5.0),
+_snappedRoadsTagKey("")
 {
+  setConfiguration(conf());
 }
 
-Meters SnapUnconnectedRoads::_getSearchRadius(const boost::shared_ptr<const Element>& /*e*/) const
+void SnapUnconnectedWays::setConfiguration(const Settings& conf)
+{
+  //_quantile = ConfigOptions(conf).getQuantileAggregatorQuantile();
+  //differential.snap.unconnected.roads
+  //differential.snap.unconnected.roads.node.reuse.tolerance
+  //differential.snap.unconnected.roads.snap.tolerance
+  //differential.snap.unconnected.roads.reuse.reference.road.nodes
+  //differential.snap.unconnected.roads.tag.key
+  //_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+
+}
+
+Meters SnapUnconnectedWays::_getSearchRadius(const boost::shared_ptr<const Element>& /*e*/) const
 {
   return /*e->getCircularError()*/5.0;  // TODO: make configurable
 }
 
-void SnapUnconnectedRoads::apply(OsmMapPtr& map)
+void SnapUnconnectedWays::apply(OsmMapPtr& map)
 {  
   _numAffected = 0;
 
