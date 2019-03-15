@@ -103,7 +103,6 @@ sudo yum -y install \
     asciidoc \
     autoconf \
     automake \
-    bc \
     boost-devel \
     ccache \
     cmake \
