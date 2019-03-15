@@ -53,6 +53,7 @@
 #include <QtSql/QSqlRecord>
 #include <QSet>
 #include <QFile>
+#include <QRegularExpression>
 
 // Standard
 #include <math.h>
@@ -496,43 +497,25 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString 
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
-  /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
-   *  classes that should enable the regex below that has both greedy matching
-   *  and lazy matching in the same regex.  The QRegExp class doesn't allow this
-   *  that is why there are two regex objects in this function.
-   *
-   *  Replace it with this:
-   *    QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
-   */
   assert(v.type() == QVariant::String);
   QString str = v.toString();
 
   Tags result;
-  QRegExp rxKey("\"(.*)\"=>\"");
-  QRegExp rxValue("((?:(?!\",).)*)\"(?:, )?");
-  //  The key regex needs to be minimal should be (.*?) but that doesn't work
-  //  while the value regex needs to be maximal to consume quotes within the value
-  rxKey.setMinimal(true);
-  rxValue.setMinimal(false);
-  int pos = 0;
-  //  Match the key first
-  while ((pos = rxKey.indexIn(str, pos)) != -1)
-  {
-    pos += rxKey.matchedLength();
-    //  Then match the value, ignoring any key/value pairs that don't match
-    if ((pos = rxValue.indexIn(str, pos)) != -1)
-    {
-      QString key = rxKey.cap(1);
-      QString value = rxValue.cap(1).trimmed();
-      if (!value.isEmpty())
-      {
-        // Unescape the actual key/value pairs
-        _unescapeString(key);
-        _unescapeString(value);
-        result.insert(key, value);
-      }
+  QRegularExpression rxKeyValue("\"(.*?)\"=>\"((?:(?!\",).)*)\"(?:, )?");
+  QRegularExpressionMatchIterator matches = rxKeyValue.globalMatch(str);
 
-      pos += rxValue.matchedLength();
+  while(matches.hasNext())
+  {
+    QRegularExpressionMatch match = matches.next();
+    QString key = match.captured(1);
+    QString value = match.captured(2).trimmed();
+
+    if (!value.isEmpty())
+    {
+      // Unescape the actual key/value pairs
+      _unescapeString(key);
+      _unescapeString(value);
+      result.insert(key, value);
     }
   }
 
