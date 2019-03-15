@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OgrReader.h"
@@ -74,6 +74,10 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
 class OgrReaderInternal
 {
 public:
+
+  static std::string className() { return "hoot::OgrReaderInternal"; }
+
+  static unsigned int logWarnCount;
 
   OgrReaderInternal();
 
@@ -205,6 +209,7 @@ protected:
   void populateElementMap();
 
   QString _toWkt(OGRSpatialReference* srs);
+  QString _toWkt(OGRGeometry* geom);
 };
 
 class OgrElementIterator : public ElementIterator
@@ -490,6 +495,8 @@ Progress OgrReader::streamGetProgress() const
   return _d->streamGetProgress();
 }
 
+unsigned int OgrReaderInternal::logWarnCount = 0;
+
 OgrReaderInternal::OgrReaderInternal()
 {
   _map = OsmMapPtr(new OsmMap());
@@ -736,13 +743,29 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   AreaCriterion areaCrit;
   if (p->getNumInteriorRings() == 0)
   {
-    WayPtr outer = _createWay(p->getExteriorRing(), circularError);
-    if (areaCrit.isSatisfied(t, ElementType::Way) == false)
+    OGRLinearRing* exteriorRing = p->getExteriorRing();
+    if (exteriorRing != 0)
     {
-      t.setArea(true);
+      WayPtr outer = _createWay(p->getExteriorRing(), circularError);
+      if (areaCrit.isSatisfied(t, ElementType::Way) == false)
+      {
+        t.setArea(true);
+      }
+      outer->setTags(t);
+      _map->addWay(outer);
     }
-    outer->setTags(t);
-    _map->addWay(outer);
+    else
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Skipping polygon with empty exterior ring: " << _toWkt(p).left(100));
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
   }
   else
   {
@@ -756,6 +779,15 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
     _addPolygon(p, r, circularError);
     _map->addRelation(r);
   }
+}
+
+QString OgrReaderInternal::_toWkt(OGRGeometry* geom)
+{
+  char* buffer;
+  geom->exportToWkt(&buffer);
+  QString result = QString::fromUtf8(buffer);
+  delete buffer;
+  return result;
 }
 
 void OgrReaderInternal::_addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError)
@@ -900,7 +932,6 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
 
   return result;
 }
-
 
 void OgrReaderInternal::_initTranslate()
 {
@@ -1312,6 +1343,5 @@ QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
   delete buffer;
   return result;
 }
-
 
 }
