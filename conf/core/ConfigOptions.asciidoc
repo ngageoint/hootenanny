@@ -682,44 +682,8 @@ significantly.
 * Data Type: bool
 * Default Value: `false`
 
-If true, Differential Conflation will snap unconnected secondary road endpoint nodes to the nearest
-reference road.
-
-=== differential.snap.unconnected.roads.node.reuse.tolerance
-
-* Data Type: double
-* Default Value: `0.5`
-
-Maximum distance used by Differential Conflation, in meters, allowed between an unconnected
-secondary road endpoint node and neighboring reference road node for the secondary road endpoint
-node to be snapped directly to the existing reference road node instead of adding the secondary
-road endpoint node as a new road node on the reference road.
-
-=== differential.snap.unconnected.roads.snap.tolerance
-
-* Data Type: double
-* Default Value: `5.0`
-
-Maximum distance used by Differential Conflation, in meters, allowed between an unconnected
-secondary road endpoint node and neighboring reference road for the secondary road endpoint node to
-be snapped to the closest section of the reference road.
-
-=== differential.snap.unconnected.roads.reuse.reference.road.nodes
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, when Differential Conflation snaps secondary road endpoint nodes to reference roads, it
-will attempt to reuse existing road nodes on the reference road being snapped to instead of adding
-the secondary road endpoint node to the reference road.
-
-=== differential.snap.unconnected.roads.tag.key
-
-* Data Type: string
-* Default Value: ``
-
-If specified, when Differential Conflation snaps secondary road endpoint nodes to reference roads,
-it will tag them with the specified tag key.
+If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
+secondary road endpoint nodes to the nearest reference road.
 
 === differential.tag.ignore.list
 
@@ -3521,6 +3485,77 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
+
+=== snap.unconnected.ways.way.node.reuse.tolerance
+
+* Data Type: double
+* Default Value: `0.5`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
+the existing way node instead of adding the way endpoint node as a new way node on the way.  A
+value of 0.0 or less indicates no node reuse will occur.
+
+=== snap.unconnected.ways.reuse.way.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will attempt to reuse existing way nodes on the way being snapped to instead of adding
+the endpoint way node to the way.
+
+=== snap.unconnected.ways.snap.to.way.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Optional criterion class to filter the types of ways being snapped to.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+way snapping.
+
+=== snap.unconnected.ways.snap.to.way.node.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
+hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
+for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+
+=== snap.unconnected.ways.snap.way.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Optional criterion class to filter the types of ways being snapped.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+way snapping.
+
+=== snap.unconnected.ways.snap.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
+snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference ways.
+
+=== snap.unconnected.ways.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
+section of the neighboring way.  A value of 0.0 or less indicates no snapping will occur.
+
+=== snap.unconnected.ways.tag.key
+
+* Data Type: string
+* Default Value: ``
+
+If specified, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will tag them with the specified tag key.
 
 === spark.changeset.writer.element.payload.format
 

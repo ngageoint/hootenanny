@@ -182,17 +182,17 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-removing-sec-matches");
 
-  // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
-  // dumping the ref elements in matches or the roads we need to snap to may not be there anymore.
-  // Probably some time should be spent trying to correct this snapping problem in the conflation
-  // routines, but we'll go with this for now.  This could also be applied in areas other than
-  // Differential Conflation if desired eventually.
-  // TODO: need to create an option for enabling/disabling snapping
-  SnapUnconnectedWays roadSnapper;
-  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-  roadSnapper.apply(_pMap);
-  LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(map, "after-road-snapping");
+  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+  {
+    // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
+    // dumping the ref elements in matches or the roads we need to snap to may not be there anymore.
+    // See additional notes in SnapUnconnectedWays.
+    SnapUnconnectedWays roadSnapper;
+    LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
+    roadSnapper.apply(_pMap);
+    LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(map, "after-road-snapping");
+  }
 
   // _pMap at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the

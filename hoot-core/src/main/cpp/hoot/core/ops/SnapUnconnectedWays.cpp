@@ -29,13 +29,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SnapUnconnectedWays)
 
-SnapUnconnectedWays::SnapUnconnectedWays(ElementCriterionPtr wayToSnapCriterion,
-                                         ElementCriterionPtr wayToSnapToCriterion,
-                                         ElementCriterionPtr wayNodeToSnapToCriterion) :
-_wayToSnapCriterion(wayToSnapCriterion),
-_wayToSnapToCriterion(wayToSnapToCriterion),
-_wayNodeToSnapToCriterion(wayNodeToSnapToCriterion),
-_maxNodeReuseDistance(0.0),
+SnapUnconnectedWays::SnapUnconnectedWays() :
+_maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
 _snappedRoadsTagKey("")
 {
@@ -44,13 +39,31 @@ _snappedRoadsTagKey("")
 
 void SnapUnconnectedWays::setConfiguration(const Settings& conf)
 {
-  //_quantile = ConfigOptions(conf).getQuantileAggregatorQuantile();
-  //differential.snap.unconnected.roads
-  //differential.snap.unconnected.roads.node.reuse.tolerance
-  //differential.snap.unconnected.roads.snap.tolerance
-  //differential.snap.unconnected.roads.reuse.reference.road.nodes
-  //differential.snap.unconnected.roads.tag.key
-  //_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  ConfigOptions confOpts = ConfigOptions(conf);
+  /*
+  //snap.unconnected.ways.snap.to.way.criterion
+  //snap.unconnected.ways.snap.to.way.node.criterion
+  //snap.unconnected.ways.snap.way.criterion
+  //snap.unconnected.ways.snap.way.status
+  ElementCriterionPtr _wayToSnapCriterion;
+  ElementCriterionPtr _wayToSnapToCriterion;
+  ElementCriterionPtr _wayNodeToSnapToCriterion;
+   */
+  if (confOpts.getUnconnectedWaysReuseWayNodes())
+  {
+    _maxNodeReuseDistance = confOpts.getSnapUnconnectedWaysWayNodeReuseTolerance();
+  }
+  else
+  {
+    _maxNodeReuseDistance = 0.0;
+  }
+  _maxSnapDistance = confOpts.getSnapUnconnectedWaysSnapTolerance();
+  _snappedRoadsTagKey = confOpts.getSnapUnconnectedWaysTagKey();
+
+//  boost::shared_ptr<HighwayNodeCriterion> highwayNodeCrit(new HighwayNodeCriterion());
+//  highwayNodeCrit->setOsmMap(map.get());
+//    boost::shared_ptr<ChainCriterion> roadNodeToSnapToCrit(
+//      new ChainCriterion(new StatusCriterion(Status::Unknown1), highwayNodeCrit));
 
 }
 

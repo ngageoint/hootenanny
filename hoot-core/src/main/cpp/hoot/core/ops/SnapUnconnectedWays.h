@@ -17,10 +17,11 @@ namespace hoot
  * the input criteria to determine which types of ways to snap.  As of 3/15/19, this has only ever
  * been tested with roads, however.
  *
- * The main impetus of this class was to fix the output of Differential Conflation using the
- * Network Algorithm, although it could be used as a cleanup op after any conflation.  Future
- * efforts, however, should focus on trying to fix the lack of snapping in the conflation routines
- * themselves if possible.
+ * The main impetus of this class was to make the output of Differential Conflation using the
+ * Network Algorithm better by cleaning up unconnected roads.  However, this could be used as a
+ * cleanup op after any conflation.  Future efforts, however if possible, should focus on trying to
+ * fix the lack of snapping in the conflation routines themselves if possible rather than using this
+ * as a cleanup utility.
  */
 class SnapUnconnectedWays : public OsmMapOperation, public OperationStatusInfo, public Configurable
 {
@@ -28,17 +29,7 @@ public:
 
   static std::string className() { return "hoot::SnapUnconnectedWays"; }
 
-  // This parameterized constructor constricts this op to being used in code only vs being
-  // specified from the command line, which is fine for now.  If it is to be used from the
-  // command line, it will need an empty constructor, setters for the criterion, and possibly
-  // some way to handle multiple criterion (maybe just AND together a criterion list passed in?).
-  // JS can handle combined criterion, but the command line doesn't have any specified way to do
-  // that yet.
-  SnapUnconnectedWays(ElementCriterionPtr wayToSnapCriterion,
-                      ElementCriterionPtr wayToSnapToCriterion,
-                      // The snap to way node is optional.  If its not specified, we'll not allow
-                      // reuse of reference way nodes.
-                      ElementCriterionPtr wayNodeToSnapToCriterion = ElementCriterionPtr());
+  SnapUnconnectedWays();
 
   virtual void apply(OsmMapPtr& map);
 
@@ -51,19 +42,18 @@ public:
   { return "Snapped " + QString::number(_numAffected) + " ways."; }
 
   virtual QString getDescription() const
-  { return "Snaps unconnected way end points to the nearest way."; }
+  { return "Snaps unconnected way endpoints to the nearest way."; }
 
   virtual void setConfiguration(const Settings& conf);
 
 private:
 
-  ElementCriterionPtr _wayToSnapCriterion;
-  ElementCriterionPtr _wayToSnapToCriterion;
-  ElementCriterionPtr _wayNodeToSnapToCriterion;
-
   double _maxNodeReuseDistance;
   double _maxSnapDistance;
   QString _snappedRoadsTagKey;
+  ElementCriterionPtr _wayToSnapCriterion;
+  ElementCriterionPtr _wayToSnapToCriterion;
+  ElementCriterionPtr _wayNodeToSnapToCriterion;
 
   QList<long> _snappedRoadNodes;
   QList<long> _snappedToRoadNodes;
