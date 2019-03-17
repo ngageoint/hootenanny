@@ -39,6 +39,9 @@ public class GrailParams {
     @JsonProperty("BBOX")
     private String bounds;
 
+    @JsonProperty("APPLY_TAGS")
+    private Boolean applyTags = false;
+
     @JsonIgnore
     private Users user;
 
@@ -73,6 +76,14 @@ public class GrailParams {
 
     public void setBounds(String bounds) {
         this.bounds = bounds;
+    }
+
+    public Boolean getApplyTags() {
+        return applyTags;
+    }
+
+    public void setApplyTags(Boolean applyTags) {
+        this.applyTags = applyTags;
     }
 
     public Users getUser() {

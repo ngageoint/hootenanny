@@ -112,16 +112,16 @@ public class GrailResource {
      *        top is the latitude of the top (north) side of the bounding box
      *        left is the longitude of the left (west) side of the bounding box
      *
-     * @param params
+     * @param reqParams json data object
      *
      * @return Job ID
      */
     @POST
     @Path("/everythingbybox")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response everythingByBox(@Context HttpServletRequest request,
-            @QueryParam("BBOX") String bbox,
-            @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
+            GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -132,10 +132,16 @@ public class GrailResource {
         json.put("jobid", mainJobId);
 
         List<Command> workflow = new LinkedList<>();
+        String bbox = reqParams.getBounds();
 
         GrailParams params = new GrailParams();
         params.setBounds(bbox);
         params.setUser(user);
+
+        // oauth credentials used for apply changeset
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        params.setConsumerKey(oauthInfo.getConsumerKey());
+        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
         try {
@@ -214,7 +220,7 @@ public class GrailResource {
             ExternalCommand applyGeomChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
             workflow.add(applyGeomChange);
 
-            if (applyTags) {
+            if (reqParams.getApplyTags()) {
                 File tagDiffFile = new File(workDir, "diff.tags.osc");
                 params.setOutput(tagDiffFile.getAbsolutePath());
                 ExternalCommand applyTagChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
@@ -242,11 +248,12 @@ public class GrailResource {
     @Path("/everythingtest")
     @Produces(MediaType.APPLICATION_JSON)
     public Response everythingTest(@Context HttpServletRequest request,
-            @QueryParam("BBOX") String bbox,
+            GrailParams reqParams,
             @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+        String bbox = reqParams.getBounds();
 
         JSONObject json = new JSONObject();
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -268,13 +275,16 @@ public class GrailResource {
 
     @POST
     @Path("/conflatepush")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response conflatePush(@Context HttpServletRequest request,
-            @QueryParam("INPUT1") String input1,
-            @QueryParam("INPUT2") String input2,
+            GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+
+        String input1 = reqParams.getInput1();
+        String input2 = reqParams.getInput2();
 
         JSONObject json = new JSONObject();
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -305,8 +315,7 @@ public class GrailResource {
             params.setInput2(HOOTAPI_DB_URL + "/" + input2);
 
             File changeSet = new File(workDir, "diff.osc");
-            if (changeSet.exists())
-                changeSet.delete();
+            if (changeSet.exists()) { changeSet.delete(); }
             params.setOutput(changeSet.getAbsolutePath());
             ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
@@ -371,7 +380,7 @@ public class GrailResource {
      *        right is the longitude of the right (east) side of the bounding box
      *        top is the latitude of the top (north) side of the bounding box
      *
-     * @param params
+     * @param bbox string off bbox region we will pull from osm
      *
      * @return Job ID Internally, this is the directory that the files are kept in
      */
@@ -424,7 +433,7 @@ public class GrailResource {
         try {
             // Pull data from the local OSM API Db
             File localOSMFile = new File(workDir, "local.osm");
-            if (localOSMFile.exists()) localOSMFile.delete();
+            if (localOSMFile.exists()) { localOSMFile.delete(); }
 
             apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
@@ -432,8 +441,8 @@ public class GrailResource {
             workflow.add(getLocalOSM);
 
             // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir,"internet.osm");
-            if (internetOSMFile.exists()) internetOSMFile.delete();
+            File internetOSMFile = new File(workDir, "internet.osm");
+            if (internetOSMFile.exists()) { internetOSMFile.delete(); }
 
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
 
@@ -462,7 +471,7 @@ public class GrailResource {
      *
      * POST hoot-services/grail/pushtodb/[JobId]?DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
-     * @param jobId
+     * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
      *            has local.osm & internet.osm files to run the diff with.
      *
@@ -560,7 +569,7 @@ public class GrailResource {
      *        right is the longitude of the right (east) side of the bounding box
      *        top is the latitude of the top (north) side of the bounding box
      *
-     * @param params
+     * @param
      *
      * @return Job ID
      *            Internally, this is the directory that the files are kept in
@@ -615,7 +624,7 @@ public class GrailResource {
         try {
             // Pull data from the local OSM API Db
             File localOSMFile = new File(workDir, "local.osm");
-            if (localOSMFile.exists()) localOSMFile.delete();
+            if (localOSMFile.exists()) { localOSMFile.delete(); }
 
             apiParams.setOutput(localOSMFile.getAbsolutePath());
             // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
@@ -623,8 +632,8 @@ public class GrailResource {
             workflow.add(getLocalOSM);
 
             // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir,"internet.osm");
-            if (internetOSMFile.exists()) internetOSMFile.delete();
+            File internetOSMFile = new File(workDir, "internet.osm");
+            if (internetOSMFile.exists()) { internetOSMFile.delete(); }
 
             overpassParams.setOutput(internetOSMFile.getAbsolutePath());
 
@@ -687,7 +696,7 @@ public class GrailResource {
      *
      * POST hoot-services/grail/rundiff/[JobId]?DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
-     * @param jobId
+     * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
      *            has local.osm & internet.osm files to run the diff with.
      *
@@ -724,7 +733,7 @@ public class GrailResource {
             GrailParams params = new GrailParams();
 
             File diffFile = new File(workDir, "diff.osc");
-            if (diffFile.exists()) diffFile.delete();
+            if (diffFile.exists()) { diffFile.delete(); }
 
             params.setUser(user);
             params.setOutput(diffFile.getAbsolutePath());
@@ -759,14 +768,11 @@ public class GrailResource {
      *
      * POST hoot-services/grail/applydiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
-     * @param jobId
+     * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
      *            has a diff.osc file and possibly a diff.tags.osc file.
      *
-     * @param USER_ID
-     *            A user ID string that gets added to the changeset comment.
-     *
-     * @param APPLY_TAGS
+     * @param applyTags
      *            If we have a diff.tags.osc file, apply that as well.
      *
      * @return  jobid:geomapply, jobid:tagapply or status text
@@ -799,6 +805,10 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        params.setConsumerKey(oauthInfo.getConsumerKey());
+        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         File geomDiffFile = new File(workDir, "diff.osc");
 
@@ -870,12 +880,9 @@ public class GrailResource {
      *
      * POST hoot-services/grail/applygeomdiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
-     * @param jobId
+     * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
      *            has a diff.osc file and possibly a diff.tags.osc file.
-     *
-     * @param USER_ID
-     *            A user ID string that gets added to the changeset comment.
      *
      * @return   jobid or status text
      *            The id for the processing jobs. NOT the directory that the data is stored in.
@@ -906,6 +913,10 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        params.setConsumerKey(oauthInfo.getConsumerKey());
+        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         File geomDiffFile = new File(workDir, "diff.osc");
 
@@ -945,12 +956,9 @@ public class GrailResource {
      *
      * POST hoot-services/grail/applytagdiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
-     * @param jobId
+     * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
      *            has a diff.osc file and possibly a diff.tags.osc file.
-     *
-     * @param USER_ID
-     *            A user ID string that gets added to the changeset comment.
      *
      * @return  jobid or status text
      *            The id for the processing job. NOT the directory that the data is stored in.
@@ -981,6 +989,10 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        params.setConsumerKey(oauthInfo.getConsumerKey());
+        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
 
         File tagDiffFile = new File(workDir, "diff.tags.osc");
 
@@ -1239,7 +1251,7 @@ public class GrailResource {
         }
         catch (Exception e) {
             // throw new WebApplicationException(ioe, Response.status(Response.Status.BAD_REQUEST).entity(ioe.getMessage()).build());
-             e.printStackTrace();
+            e.printStackTrace();
         }
 
         return params;
