@@ -185,8 +185,8 @@ void DiffConflator::apply(OsmMapPtr& map)
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
-    // dumping the ref elements in matches or the roads we need to snap to may not be there anymore.
-    // See additional notes in SnapUnconnectedWays.
+    // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
+    // anymore. See additional notes in SnapUnconnectedWays.
     SnapUnconnectedWays roadSnapper;
     LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
     roadSnapper.apply(_pMap);

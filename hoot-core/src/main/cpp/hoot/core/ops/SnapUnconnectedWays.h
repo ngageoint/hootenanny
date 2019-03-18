@@ -13,15 +13,16 @@ namespace hoot
 {
 
 /**
- * This class is set up to generically snap an unconnected way endpoint node to another way, using
- * the input criteria to determine which types of ways to snap.  As of 3/15/19, this has only ever
+ * This class is set up to snap an unconnected way endpoint node to another way, using the element
+ * input criteria to determine which types of ways to snap.  As of 3/15/19, this has only ever
  * been tested with roads, however.
  *
- * The main impetus of this class was to make the output of Differential Conflation using the
- * Network Algorithm better by cleaning up unconnected roads.  However, this could be used as a
- * cleanup op after any conflation.  Future efforts, however if possible, should focus on trying to
- * fix the lack of snapping in the conflation routines themselves if possible rather than using this
- * as a cleanup utility.
+ * The main impetus of this class was to specifically make the road output of Differential
+ * Conflation using the Network Algorithm (with rubber sheeting as a pre conflate op) better by
+ * cleaning up unconnected roads.  However, this could also be used as a cleanup op after other
+ * types of conflation.  Future efforts, however if possible, should focus on trying to fix the
+ * lack of snapping in the conflation routines themselves if possible rather than using this as an
+ * after the fact cleanup utility.
  */
 class SnapUnconnectedWays : public OsmMapOperation, public OperationStatusInfo, public Configurable
 {
