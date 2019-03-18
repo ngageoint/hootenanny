@@ -37,6 +37,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QTime>
@@ -153,9 +154,12 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       }
     }
 
-    if (count % 1000 == 0)
+    if (count % 10000 == 0)
     {
-      PROGRESS_INFO("Merged " << _numAffected << " / " << count << " nearby nodes.");
+      PROGRESS_INFO(
+        "Merged " << StringUtils::formatLargeNumber(_numAffected) << " nearby nodes / " <<
+        StringUtils::formatLargeNumber(count) << " nodes processed. Nodes remaining: " <<
+        (StringUtils::formatLargeNumber((int)nodes.size() - count)));
     }
     count++;
   }
