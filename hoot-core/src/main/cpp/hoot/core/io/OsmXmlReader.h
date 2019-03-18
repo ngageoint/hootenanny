@@ -162,6 +162,9 @@ private:
   //adds child refs to elements when they aren't present in the source data
   bool _addChildRefsWhenMissing;
 
+  long _numRead;
+  long _statusUpdateInterval;
+
   void _createNode(const QXmlAttributes &attributes);
   void _createWay(const QXmlAttributes &attributes);
   void _createRelation(const QXmlAttributes &attributes);

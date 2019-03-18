@@ -97,7 +97,7 @@ int ProcessThread::getFailures()
 void ProcessThread::resetProcess()
 {
   //  Kill the process
-  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
+  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
   //  Start a new process
   _proc.reset(createProcess());
@@ -126,7 +126,7 @@ void ProcessThread::run()
   }
   processJobs(_parallelJobs);
 
-  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
+  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toLatin1());
   _proc->waitForFinished();
 }
 
@@ -144,7 +144,7 @@ void ProcessThread::processJobs(JobQueue* queue)
       //  Empty strings can be ignored
       if (test.isEmpty())
         continue;
-      _proc->write(QString("%1\n").arg(test).toAscii());
+      _proc->write(QString("%1\n").arg(test).toLatin1());
       //  Read all of the output
       QString output;
       _proc->waitForReadyRead(READ_TIMEOUT);

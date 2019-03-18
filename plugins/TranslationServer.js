@@ -27,6 +27,9 @@ if (typeof hoot === 'undefined') {
     hoot.Settings.set({"ogr.esri.fcsubtype": "false"});
     hoot.Settings.set({"ogr.note.extra": "attribute"});
     hoot.Settings.set({"reader.add.source.datetime": "false"});
+
+    //Tests should set hashseedzero to true for consistent results
+    if( typeof hashseedzero !== 'undefined' && hashseedzero == true ) hoot.Settings.set({"hash.seed.zero": "true"});
 }
 
 //Getting schema for fcode, geom type

@@ -3422,7 +3422,7 @@ ufd = {
 function initialize()
 {
     // The print method simply prints the string representation to stdout
-    print("Initializing.");
+    //print("Initializing.");
 
     if (ufd.configIn == undefined)
     {

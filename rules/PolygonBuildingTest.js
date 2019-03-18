@@ -18,10 +18,13 @@ exports.reviewThreshold = parseFloat(hoot.get("building.review.threshold"));
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precedence over this function and must
+ * be commented out before using it.
  */
 exports.isMatchCandidate = function(map, e)
 {
-    return isBuilding(e);
+  return isBuilding(e);
 };
 
 /**
@@ -34,7 +37,7 @@ exports.isMatchCandidate = function(map, e)
  */
 exports.isWholeGroup = function()
 {
-    return true;
+  return true;
 };
 
 /**

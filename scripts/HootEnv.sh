@@ -15,7 +15,7 @@ export GDAL_DATA=`gdal-config --datadir`
 
 export LD_LIBRARY_PATH=$GDAL_LIB_DIR:$HOOT_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$HOOT_HOME/bin/:$PATH
-export QT_SELECT=4
+export QT_SELECT=5
 
 # If the user provided an argument then run as a command.
 if [ ${#@} -gt 0 ]; then
