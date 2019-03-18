@@ -43,7 +43,7 @@ namespace hoot
 {
 
 /**
- * Parts of this test will fail if Tomcat is running.
+ * Parts of this test will fail if Tomcat is not running.
  */
 class ServicesHootServicesLoginManagerTest : public HootTestFixture
 {
