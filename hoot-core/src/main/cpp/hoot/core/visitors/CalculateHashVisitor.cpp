@@ -101,7 +101,7 @@ QByteArray CalculateHashVisitor::toHash(const ConstElementPtr& e)
 {
   QCryptographicHash hash(QCryptographicHash::Sha1);
 
-  hash.addData(toJsonString(e).toAscii().constData());
+  hash.addData(toJsonString(e).toLatin1().constData());
 
   return hash.result();
 }

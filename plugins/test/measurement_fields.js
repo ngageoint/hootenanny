@@ -124,10 +124,10 @@ describe('TranslationServer', function () {
         xml = parser.parseFromString(tds_xml);
 
         assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("k"), "F_CODE");
-        assert.equal(xml.getElementsByTagName("tag")[2].getAttribute("v"), "AP030");
-        assert.equal(xml.getElementsByTagName("tag")[3].getAttribute("k"), "LZN");
-        assert.equal(xml.getElementsByTagName("tag")[3].getAttribute("v"), "332.2");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("k"), "F_CODE");
+        assert.equal(xml.getElementsByTagName("tag")[1].getAttribute("v"), "AP030");
+        assert.equal(xml.getElementsByTagName("tag")[4].getAttribute("k"), "LZN");
+        assert.equal(xml.getElementsByTagName("tag")[4].getAttribute("v"), "332.2");
 
     });
 

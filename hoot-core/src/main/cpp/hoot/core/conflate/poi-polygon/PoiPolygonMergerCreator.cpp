@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
@@ -139,7 +139,8 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "Merges POIs into polygons", false));
+  result.push_back(
+    CreatorDescription(className(), "Generates mergers that merge POIs into polygons", false));
   return result;
 }
 

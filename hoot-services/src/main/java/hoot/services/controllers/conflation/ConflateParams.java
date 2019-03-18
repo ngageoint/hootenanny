@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -62,6 +62,9 @@ public class ConflateParams {
     @JsonProperty("CONFLATION_TYPE")
     private String conflationType;
 
+    @JsonProperty("CONFLATION_ALGORITHM")
+    private String conflateAlgorithm;
+
     @JsonProperty("GENERATE_REPORT")
     private String generateReport;
 
@@ -73,6 +76,12 @@ public class ConflateParams {
 
     @JsonProperty("CONFLATION_COMMAND")
     private String conflationCommand;
+
+    @JsonProperty("HOOT_2_COMMANDS")
+	private String hoot2Commands;
+
+    @JsonProperty("HOOT_2")
+    private Boolean hoot2;
 
     public String getInputType1() {
         return inputType1;
@@ -186,6 +195,31 @@ public class ConflateParams {
         this.conflationCommand = conflationCommand;
     }
 
+	public String getHoot2Commands() {
+		return this.hoot2Commands;
+	}
+
+	public void setHoot2Commands(String hoot2Commands) {
+		this.hoot2Commands = hoot2Commands;
+	}
+
+	public void setHoot2(boolean hoot2) {
+		this.hoot2 = hoot2;
+	}
+
+	public Boolean getHoot2() {
+		return this.hoot2;
+	}
+
+	public String getConflateAlgorithm() {
+		return this.conflateAlgorithm;
+	}
+
+
+	public void setConflateAlgorithm(String algorithm) {
+		this.conflateAlgorithm = algorithm;
+	}
+
     @Override
     public String toString() {
         return "ConflateParams{" +
@@ -205,4 +239,5 @@ public class ConflateParams {
                 ", conflationCommand='" + conflationCommand + '\'' +
                 '}';
     }
+
 }

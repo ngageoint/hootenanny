@@ -55,8 +55,8 @@ PBF to OSM...
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-30"/>
-        <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -90,24 +90,24 @@ PBF to OSM...
         <nd ref="-11"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
-        <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="-8"/>
         <nd ref="-7"/>
-        <tag k="note" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="3"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32"/>
         <nd ref="-2"/>
         <nd ref="-1"/>
-        <tag k="note" v="1"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
@@ -140,7 +140,7 @@ Check for invalid characters. You should see 3 sets of warnings.
 17:04:52.599 INFO  ...ore/io/OsmMapWriterFactory.cpp( 141) Writing map to test-output/cmd/ConvertCmdTest/InvalidCharacters.osm...
 17:04:52.600 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 109) Found an invalid character in string: 'foo '
 17:04:52.600 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 110)   UCS-4 version of the string: [5]{102, 111, 111, 32, 17}
-17:04:52.600 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 109) Found an invalid character in string: '3 '
-17:04:52.601 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 110)   UCS-4 version of the string: [3]{51, 32, 1}
-17:04:52.601 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 109) Found an invalid character in string: ''
+17:04:52.600 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 109) Found an invalid character in string: ''
 17:04:52.601 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 110)   UCS-4 version of the string: [8]{0, 104, 105, 103, 104, 119, 97, 121}
+17:04:52.601 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 109) Found an invalid character in string: '3 '
+17:04:52.601 WARN  .../hoot/core/io/OsmXmlWriter.cpp( 110)   UCS-4 version of the string: [3]{51, 32, 1}

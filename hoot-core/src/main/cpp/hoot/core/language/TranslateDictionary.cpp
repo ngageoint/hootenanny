@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TranslateDictionary.h"
@@ -110,7 +110,7 @@ void TranslateDictionary::load(QString path)
   try
   {
     pt::ptree pt;
-    pt::read_json(path.toAscii().data(), pt);
+    pt::read_json(path.toLatin1().data(), pt);
 
     _loadTags(pt);
   }

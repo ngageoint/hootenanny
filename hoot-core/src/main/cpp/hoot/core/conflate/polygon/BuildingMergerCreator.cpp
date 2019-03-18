@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMergerCreator.h"
 
@@ -86,7 +86,8 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
 vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(CreatorDescription(className(), "Merges buildings together", false));
+  result.push_back(
+    CreatorDescription(className(), "Generates mergers that merge buildings together", false));
   return result;
 }
 

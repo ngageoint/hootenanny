@@ -294,7 +294,7 @@ void HighwayRfClassifier::_init() const
     QString path = ConfPath::search(ConfigOptions().getConflateMatchHighwayModel());
     LOG_DEBUG("Loading highway model from: " << path);
 
-    QFile file(path.toAscii().data());
+    QFile file(path.toLatin1().data());
     if (!file.open(QIODevice::ReadOnly))
     {
       throw HootException("Error opening file: " + path);

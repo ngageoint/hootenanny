@@ -124,6 +124,7 @@ dnc = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -178,21 +179,21 @@ dnc = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -575,6 +576,33 @@ dnc = {
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
+        // Unpack the OSM_TAGS attribute if it exists
+        if (attrs.OSM_TAGS)
+        {
+            var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process attrs.OSM_TAGS
+
         // DNC doesn't have a lot of info for land features
         if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
         if (attrs.F_CODE == 'AP030') tags.highway = 'road';
@@ -614,32 +642,51 @@ dnc = {
         }
         translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
 
-        // Unpack the OSM_TAGS attribute if it exists
-        if (attrs.OSM_TAGS)
+        // Fix lifecycle tags
+        switch (tags.condition)
         {
-            var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+            case undefined: // Break early if no value
+                break;
 
-            if (tObj.tags !== '')
-            {
-                var tTags = JSON.parse(tObj.tags)
-                for (i in tTags)
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
                 {
-                    // Debug
-                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-                    tags[i] = tTags[i];
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
                 }
-            }
+                break;
 
-            if (tObj.text !== '')
-            {
-                tags.note = tObj.text;
-            }
-            else
-            {
-                delete tags.note;
-            }
-        } // End process attrs.OSM_TAGS
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
     }, // End of applyToOsmPostProcessing
   
@@ -677,7 +724,150 @@ dnc = {
                 continue;
             }
 
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
         } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
 
         if (dnc.dncPreRules == undefined)
         {

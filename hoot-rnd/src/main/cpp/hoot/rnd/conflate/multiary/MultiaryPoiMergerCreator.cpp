@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryPoiMergerCreator.h"
 
@@ -70,7 +70,8 @@ std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
   d.className = className();
-  d.description = "identifies clusters within a match set and merges each cluster.";
+  d.description =
+    "Generates mergers that identify Multiary POI clusters within a match set and merges each cluster.";
   d.experimental = true;
   vector<CreatorDescription> result;
   result.push_back(d);

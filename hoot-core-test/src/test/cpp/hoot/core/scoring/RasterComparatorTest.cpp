@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -60,10 +60,10 @@ public:
 
         RasterComparator uut(map, map2);
         uut.setPixelSize(3);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.884, uut.compareMaps(), 0.0025);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.891, uut.compareMaps(), 0.0025);
 
         uut.setPixelSize(2);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.892, uut.compareMaps(), 0.002);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.896, uut.compareMaps(), 0.002);
 
         uut.setPixelSize(1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(0.894, uut.compareMaps(), 0.002);

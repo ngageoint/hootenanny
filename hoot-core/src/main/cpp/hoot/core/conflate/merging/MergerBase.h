@@ -40,9 +40,8 @@ public:
 
   typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 
-  MergerBase() {}
-
-  virtual ~MergerBase() {}
+  MergerBase();
+  virtual ~MergerBase();
 
   virtual std::set<ElementId> getImpactedElementIds() const override;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIPOLYGONCREATOR_H
 #define MULTIPOLYGONCREATOR_H
@@ -120,7 +120,6 @@ private:
   std::deque<ConstWayPtr> _orderWaysForRing(const std::vector<ConstWayPtr>& partials) const;
 
   geos::geom::LinearRing* _toLinearRing(const ConstWayPtr& w) const;
-
 };
 
 }

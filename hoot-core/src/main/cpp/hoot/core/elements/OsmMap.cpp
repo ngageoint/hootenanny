@@ -37,7 +37,7 @@ using namespace boost;
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMapListener.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -110,10 +110,10 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
   {
     char* wkt1 = 0;
     getProjection()->exportToPrettyWkt(&wkt1);
-    QString proj1 = QString::fromAscii(wkt1);
+    QString proj1 = QString::fromLatin1(wkt1);
     char* wkt2 = 0;
     appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
-    QString proj2 = QString::fromAscii(wkt2);
+    QString proj2 = QString::fromLatin1(wkt2);
     throw HootException(
       "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
       "\nMap being appended from has projection:\n" + proj2);

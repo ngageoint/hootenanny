@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Match.h"
 
@@ -37,9 +37,12 @@ namespace hoot
 
 long Match::_orderCount = 0;
 
+Match::Match()
+{
+}
+
 Match::~Match()
 {
-
 }
 
 QString Match::explain() const

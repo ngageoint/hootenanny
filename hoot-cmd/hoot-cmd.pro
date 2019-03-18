@@ -4,6 +4,7 @@
 
 QT += testlib \
     xml \
+    concurrent \
 
 TARGET = hoot.bin
 TEMPLATE = app
@@ -18,7 +19,6 @@ INCLUDEPATH += \
     $${DEPENDPATH}
 
 CONFIG += rtti \
-    qtestlib \
     debug
 
 include(../Configure.pri)

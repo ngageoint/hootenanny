@@ -246,6 +246,7 @@ mgcp = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -300,21 +301,21 @@ mgcp = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -609,6 +610,33 @@ mgcp = {
     // Post Processing: Lots of cleanup
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
+        // Unpack the TXT field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process tags.note
+
         // Calculate accuracy: taken straight from facc.py
         // 1/30 inch * SCALE for standard
         // NGA standard is +/-25m 90% circular error (CE) for vector data
@@ -768,28 +796,51 @@ mgcp = {
             if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
         }
 
-
-        // Lifecycle tags
-        if (tags.condition)
+        // Fix lifecycle tags
+        switch (tags.condition)
         {
-            if (tags.condition == 'construction')
-            {
-//                 if (tags.highway && attrs.F_CODE == 'AP030')
-                if (tags.highway)
-                {
-                    tags.construction = tags.highway;
-                    tags.highway = 'construction';
-                    delete tags.condition;
-                }
-                else if (tags.railway)
-                {
-                    tags.construction = tags.railway;
-                    tags.railway = 'construction';
-                    delete tags.condition;
-                }
-            } // End Construction
+            case undefined: // Break early if no value
+                break;
 
-        } // End Condition tags
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
         // Add 'building = yes' to amenities if we don't already have one
         // if (tags.amenity && !tags.building)
@@ -929,33 +980,6 @@ mgcp = {
                 break;
         } // End switch TRS
 
-        // Unpack the TXT field
-        if (tags.note)
-        {
-            var tObj = translate.unpackMemo(tags.note);
-
-            if (tObj.tags !== '')
-            {
-                var tTags = JSON.parse(tObj.tags)
-                for (i in tTags)
-                {
-                    // Debug
-                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-                    tags[i] = tTags[i];
-                }
-            }
-
-            if (tObj.text !== '')
-            {
-                tags.note = tObj.text;
-            }
-            else
-            {
-                delete tags.note;
-            }
-        } // End process tags.note
-
         // Content vs Product for storage tanks
         if (tags.product && tags.man_made == 'storage_tank')
         {
@@ -1010,7 +1034,7 @@ mgcp = {
             }
 
             // Convert "abandoned:XXX" features
-            if (i.indexOf('abandoned:') !== -1)
+            if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
             {
                 // Hopeing there is only one ':' in the tag name...
                 var tList = i.split(':');
@@ -1019,6 +1043,149 @@ mgcp = {
                 delete tags[i];
                 continue;
             }
+
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
+        } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
         }
 
         if (mgcp.mgcpPreRules == undefined)
@@ -1030,8 +1197,8 @@ mgcp = {
             ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.communication == 'line'","t['cable:type'] = 'communication'"],
-            ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
-            ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
+            // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
+            // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -58,8 +58,6 @@ void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 
 void SuperfluousWayRemover::removeWays()
 {
-  LOG_DEBUG("Removing superfluous ways...");
-
   _numAffected = 0;
   boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 

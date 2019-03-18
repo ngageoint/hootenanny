@@ -6,7 +6,7 @@ set -e
 mkdir -p test-output/cmd/RubberSheetConflateTest
 
 # Broke this into seperate lines to make reading easier.
-hoot conflate -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D conflate.pre.ops=hoot::RubberSheet -D "rubber.sheet.ref=true" -D "rubber.sheet.minimum.ties=10" -D "unify.optimizer.time.limit=30" test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/RubberSheetConflateTest/output.osm
+hoot conflate -C Testing.conf -C core/RemoveReview2Pre.conf -D uuid.helper.repeatable=true -D conflate.pre.ops=hoot::RubberSheet -D "rubber.sheet.ref=true" -D "rubber.sheet.minimum.ties=10" -D "unify.optimizer.time.limit=30" test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/RubberSheetConflateTest/output.osm
 
 hoot diff test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm ||
 (echo "You should run: diff test-output/cmd/RubberSheetConflateTest/output.osm test-files/cmd/glacial/RubberSheetConflateTest/output.osm" ;\
