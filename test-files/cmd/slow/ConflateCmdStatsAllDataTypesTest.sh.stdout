@@ -1,5 +1,5 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	117	116	144	
+Node Count	117	116	143	
 Way Count	14	12	18	
 Relation Count	0	0	9	
 Total Feature Count	25	22	35	
@@ -111,4 +111,4 @@ Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0
 Difference Between Total Features in Output and Total Features in Inputs			-12	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-25.53191489361702	
 
-17:58:14.389 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 432) Conflation job completed.
+15:52:18.129 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Conflation job completed.

@@ -172,7 +172,7 @@ pipeline {
         always {
             script {
                 // Send build notification
-                notifySlack(currentBuild.result, "#builds_hoot")
+                notifySlack(currentBuild.currentResult, "#builds_hoot")
             }
         }
         success {
