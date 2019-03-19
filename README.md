@@ -114,7 +114,7 @@ Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/ma
   * [User Interface Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUI.asciidoc)
   * [User Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyUserGuide.asciidoc)
   * [Algorithms Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyAlgorithms.asciidoc)
-  * [Algorithm Detail Slides](https://github.com/ngageoint/hootenanny/wiki/Slides)
+  * [Algorithm Detail Slides](https://github.com/ngageoint/hootenanny/wiki/Conflation-Algorithm-Slides)
   * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
 * When running the Hootenanny VM look for the PDF documentation included in 'hoot/docs' 
 
