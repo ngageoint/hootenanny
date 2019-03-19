@@ -439,7 +439,7 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	# suppress the harmless warning about generated HootSwig.cxx
 	# All the true craziness is so we use the qmake return code rather than
 	# the grep code.
-	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	qmake-qt5 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 

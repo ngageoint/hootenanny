@@ -99,7 +99,7 @@ RUN yum install -q -y \
 
 
 # Make sure that we have qmake for the build.
-RUN alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt4 500
+RUN alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt5 500
 
 # Cleanup
 RUN rm -f /etc/udev/rules.d/70-persistent-net.rules /var/log/wtmp /var/log/btmp \

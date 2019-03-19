@@ -42,6 +42,7 @@ using namespace boost;
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -59,18 +60,20 @@ unsigned int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmXmlWriter::OsmXmlWriter()
-  : _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-    _includeIds(false),
-    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-    _includePointInWays(false),
-    _includeCompatibilityTags(true),
-    _includePid(false),
-    _textStatus(ConfigOptions().getWriterTextStatus()),
-    _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
-    _precision(ConfigOptions().getWriterPrecision()),
-    _encodingErrorCount(0),
-    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+OsmXmlWriter::OsmXmlWriter() :
+_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_includeIds(false),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+_includePointInWays(false),
+_includeCompatibilityTags(true),
+_includePid(false),
+_textStatus(ConfigOptions().getWriterTextStatus()),
+_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+_precision(ConfigOptions().getWriterPrecision()),
+_encodingErrorCount(0),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_numWritten(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -132,18 +135,20 @@ void OsmXmlWriter::open(QString url)
   _initWriter();
 
   _bounds.init();
+
+  _numWritten = 0;
 }
 
 void OsmXmlWriter::close()
 {
-  if (_writer.get())
+  if (_fp.get() && _fp->isOpen())
   {
-    _writer->writeEndElement();
-    _writer->writeEndDocument();
-  }
+    if (_writer.get())
+    {
+      _writer->writeEndElement();
+      _writer->writeEndDocument();
+    }
 
-  if (_fp.get())
-  {
     _fp->close();
   }
 }
@@ -492,6 +497,12 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _writer->writeEndElement();
 
   _bounds.expandToInclude(n->getX(), n->getY());
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
@@ -612,6 +623,12 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _writeTags(w);
 
   _writer->writeEndElement();
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
@@ -638,6 +655,12 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _writeTags(r);
 
   _writer->writeEndElement();
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::finalizePartial()

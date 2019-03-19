@@ -74,22 +74,31 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 
   // Mangle (in a good way) ways that may cross our roundabouts, provided there
   // is no 'sibling' roundabout in the secondary dataset
-  for (size_t i = 0; i < removed.size(); i++)
+  QVector<bool> foundSibling(removed.size(), false);
+  for (size_t i = 0; i < removed.size() - 1; i++)
   {
-    geos::geom::Coordinate c1 = removed[i]->getCenter()->toCoordinate();
-    bool hasSibling = false;
-    for (size_t j = i+1; j < removed.size() && !hasSibling; j++)
+    //  If a sibling has already been found for this way, skip it
+    if (!foundSibling[i])
     {
-      geos::geom::Coordinate c2 = removed[j]->getCenter()->toCoordinate();
-      double distance = c1.distance(c2);
-      if (distance <= removed[i]->getCenter()->getCircularError())
-        hasSibling = true;
-    }
+      geos::geom::Coordinate c1 = removed[i]->getCenter()->toCoordinate();
+      for (size_t j = i + 1; j < removed.size() && !foundSibling[i]; j++)
+      {
+        geos::geom::Coordinate c2 = removed[j]->getCenter()->toCoordinate();
+        double distance = c1.distance(c2);
+        //  If the two centers are within the circular error, mark both as siblings
+        if (distance <= removed[i]->getCenter()->getCircularError())
+          foundSibling[i] = foundSibling[j] = true;
+      }
 
-    // If no sibling, do the mangle
-    if (!hasSibling)
-      removed[i]->handleCrossingWays(_pMap);
+      // If no sibling, do the mangle
+      if (!foundSibling[i])
+        removed[i]->handleCrossingWays(_pMap);
+    }
   }
+
+  //  Mangle the last way if it doesn't have a sibling
+  if (!foundSibling[removed.size() - 1])
+    removed[removed.size() - 1]->handleCrossingWays(_pMap);
 
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)

@@ -903,6 +903,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== hash.seed.zero
+
+* Data Type: bool
+* Default Value: `false`
+
+Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
+is required for unit tests, but shouldn't be used in normal operation.
+
 === highway.match.threshold
 
 * Data Type: double
@@ -3373,6 +3381,15 @@ For script test debugging only.  Sets a maximum allowed time, in seconds, for a 
 If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
+
+=== search.radius.calculator.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Element criterion class which determines which input features are used for search radius
+calculation.  An empty value specifies that all input features are to be used.  Conflation routines
+making use of automatic search radius calculation should set this value appropriately.
 
 === search.radius.default
 

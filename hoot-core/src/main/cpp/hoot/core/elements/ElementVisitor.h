@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
@@ -41,7 +41,7 @@ class ElementVisitor : public ApiEntityInfo
 {
 public:
 
-  ElementVisitor() : _numAffected(0) {}
+  ElementVisitor() : _numAffected(0), _numProcessed(0) {}
   virtual ~ElementVisitor() {}
 
   static std::string className() { return "hoot::ElementVisitor"; }
@@ -50,8 +50,9 @@ public:
 
 protected:
 
-  // This will only be used by those implementing OperationStatusInfo.
-  long _numAffected;
+  // These will only be used by those implementing OperationStatusInfo.
+  long _numAffected;    // how many elements the operation actually counted or did something to
+  long _numProcessed;   // how many elements the operation processed total
 };
 
 typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;

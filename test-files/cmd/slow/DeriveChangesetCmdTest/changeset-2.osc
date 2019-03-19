@@ -40,8 +40,8 @@
             <nd ref="-3"/>
             <nd ref="-4"/>
             <nd ref="-7"/>
-            <tag k="note" v="2"/>
             <tag k="highway" v="road"/>
+            <tag k="note" v="2"/>
         </way>
         <way id="-2" version="0" timestamp="">
             <nd ref="-34"/>
@@ -74,15 +74,15 @@
             <nd ref="-26"/>
             <nd ref="-27"/>
             <nd ref="-28"/>
-            <tag k="note" v="0"/>
             <tag k="highway" v="road"/>
+            <tag k="note" v="0"/>
         </way>
         <way id="-3" version="0" timestamp="">
             <nd ref="-4"/>
             <nd ref="-29"/>
             <nd ref="-30"/>
-            <tag k="note" v="3"/>
             <tag k="highway" v="road"/>
+            <tag k="note" v="3"/>
         </way>
     </create>
 </osmChange>

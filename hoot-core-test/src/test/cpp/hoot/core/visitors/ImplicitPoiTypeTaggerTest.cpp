@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -107,53 +107,54 @@ public:
     uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
-    HOOT_STR_EQUALS("name = Alshy Burgers\n"
-                    "amenity = pub\n",
+    HOOT_STR_EQUALS("amenity = pub\n"
+                    "name = Alshy Burgers\n",
                     map->getNode(-1)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: alshy; tags added: amenity = clinic\n"
+    HOOT_STR_EQUALS("amenity = clinic\n"
                     "name = Alshy Clinic\n"
-                    "amenity = clinic\n",
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: alshy; tags added: amenity = clinic\n",
                     map->getNode(-2)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: religion = muslim, amenity = place_of_worship\n"
-                    "poi = yes\n"
-                    "religion = muslim\n"
+    HOOT_STR_EQUALS("amenity = place_of_worship\n"
                     "name = masjid\n"
-                    "amenity = place_of_worship\n",
-                    map->getNode(-3)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: religion = muslim, amenity = place_of_worship\n"
-                    "poi = yes\n"
                     "religion = muslim\n"
-                    "name = masjid\n"
-                    "amenity = place_of_worship\n",
+                    "poi = yes\n"
+                    "hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: amenity = place_of_worship, religion = muslim\n",
                     map->getNode(-3)->getTags());
-    HOOT_STR_EQUALS("place = locality\n"
-                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Mustashfa; tags added: amenity = hospital\n"
+    HOOT_STR_EQUALS("amenity = place_of_worship\n"
+                    "name = masjid\n"
+                    "religion = muslim\n"
+                    "poi = yes\n"
+                    "hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: amenity = place_of_worship, religion = muslim\n",
+                    map->getNode(-3)->getTags());
+    HOOT_STR_EQUALS("amenity = hospital\n"
                     "name = alwhdt Mustashfa\n"
-                    "amenity = hospital\n",
+                    "place = locality\n"
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Mustashfa; tags added: amenity = hospital\n",
                     map->getNode(-4)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: sihhi; tags added: amenity = clinic\n"
+    HOOT_STR_EQUALS("amenity = clinic\n"
+                    "name = Sihhi\n"
                     "alt_name = Şiḩḩī\n"
-                    "name = Sihhi\n"
-                    "amenity = clinic\n",
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: sihhi; tags added: amenity = clinic\n",
                     map->getNode(-5)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Sihhi; tags added: amenity = clinic\n"
-                    "alt_name = Clinic\n"
+    HOOT_STR_EQUALS("amenity = clinic\n"
                     "name = Sihhi\n"
-                    "amenity = clinic\n",
+                    "alt_name = Clinic\n"
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Sihhi; tags added: amenity = clinic\n",
                     map->getNode(-6)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: religion = muslim, amenity = place_of_worship\n"
-                    "religion = muslim\n"
+    HOOT_STR_EQUALS("amenity = place_of_worship\n"
                     "name = masjid mosque\n"
-                    "amenity = place_of_worship\n",
+                    "religion = muslim\n"
+                    "hoot:implicitTags:tagsAdded = Added 2 implicitly derived tag(s) based on: mosque; tags added: amenity = place_of_worship, religion = muslim\n",
                     map->getNode(-7)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Mustashfa alwhdt; tags added: amenity = hospital\n"
+    HOOT_STR_EQUALS("amenity = hospital\n"
                     "name = Mustashfa alwhdt\n"
-                    "amenity = hospital\n",
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: Mustashfa alwhdt; tags added: amenity = hospital\n",
                     map->getNode(-8)->getTags());
-    HOOT_STR_EQUALS("hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: alwhdt; tags added: amenity = clinic\n"
+    HOOT_STR_EQUALS("amenity = clinic\n"
                     "name = alwhdt\n"
-                    "amenity = clinic\n",
+                    "hoot:implicitTags:tagsAdded = Added 1 implicitly derived tag(s) based on: alwhdt; tags added: amenity = clinic\n",
                     map->getNode(-9)->getTags());
+
   }
 
   void runDuplicateTagKeyTest()

@@ -30,7 +30,7 @@
 function initialize()
 {
     // The print method simply prints the string representation to stdout
-    print("Initializing.")
+    //print("Initializing.")
 }
 
 // an optional finalize function that gets called once after all
