@@ -2340,7 +2340,7 @@ QString HootApiDb::insertJob(const QString statusDetail)
       " (job_id, start, status, percent_complete, status_detail) " +
       "VALUES (:jobId, NOW(), :status, :percentComplete, :statusDetail)");
   }
-  const QString jobId = UuidHelper::createUuid();
+  const QString jobId = UuidHelper::createUuid().toString();
   _insertJob->bindValue(":jobId", jobId);
   _insertJob->bindValue(":status", (int)ServicesJobStatus::Running);
   _insertJob->bindValue(":percentComplete", 0.0);
