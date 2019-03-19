@@ -66,8 +66,8 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], "AQ170");
-        assert.equal(tags["FFN"], "382");
-        assert.equal(tags["FFN2"], "470");
+        assert.equal(tags["FFN"], "470");
+        assert.equal(tags["FFN2"], "382");
     });
 
 
