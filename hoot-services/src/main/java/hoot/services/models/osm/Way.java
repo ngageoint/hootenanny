@@ -354,17 +354,6 @@ public class Way extends Element {
 
         Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
 
-        // if this is a node created within the same request that is referencing
-        // this way, it won't exist in the database, but it will be in the element cache created
-        // when parsing the node from the request
-        if (parsedNodeId < 0) {
-            if (!parsedNodes.containsKey(parsedNodeId)) {
-                // TODO: add test for this
-                throw new IllegalArgumentException("Created way references new node not " +
-                        "found in create request with ID: " + parsedNodeId);
-            }
-        }
-
         // The node is referenced somewhere else in this request, so get its
         // info from the request, not the database b/c the database either won't have it or will have
         // outdated info. Only get info from the request if the node is being created/modified, as if it is
