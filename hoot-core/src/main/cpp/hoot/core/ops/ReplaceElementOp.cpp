@@ -112,8 +112,8 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
           LOG_VARE(from);
           LOG_VARE(to);
           map->validate();
-          throw InternalErrorException("Internal Error: Somehow a non-node is being reported as "
-            "part of a way.");
+          throw InternalErrorException(
+            "Internal Error: Somehow a non-node is being reported as part of a way.");
         }
         else if (to->getElementType() == ElementType::Node)
         {

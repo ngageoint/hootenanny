@@ -3507,7 +3507,7 @@ value of 0.0 or less indicates no node reuse will occur.
 === snap.unconnected.ways.reuse.way.nodes
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
 will attempt to reuse existing way nodes on the way being snapped to instead of adding

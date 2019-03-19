@@ -38,10 +38,16 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/algorithms/WayDiscretizer.h>
+#include <hoot/core/algorithms/Distance.h>
 
-//Qt
+// Qt
 #include <QDateTime>
 #include <QRegExp>
+
+#include <float.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -213,6 +219,84 @@ bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstEl
   return
     element1HighwayVal != "road" && element2HighwayVal != "road" &&
     element1HighwayVal != element2HighwayVal;
+}
+
+std::set<long> getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
+                                           const ElementCriterionPtr& wayCriterion)
+{
+  const std::set<long>& idsOfWaysContainingNode =
+    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
+  std::set<long> filteredWayIds;
+  for (std::set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
+       containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
+  {
+    const long containingWayId = *containingWaysItr;
+    if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
+    {
+      filteredWayIds.insert(containingWayId);
+    }
+  }
+  return filteredWayIds;
+}
+
+geos::geom::Coordinate OsmUtils::closestWayCoordToNode(
+  const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
+  const double discretizationSpacing, const ConstOsmMapPtr& map)
+{
+  WayDiscretizer wayDiscretizer(map, way);
+  std::vector<geos::geom::Coordinate> discretizedWayCoords;
+  // TODO: make this configurable?
+  wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords);
+  discretizedWayCoords.push_back(
+    map->getNode(way->getNodeId(0))->toCoordinate());
+  discretizedWayCoords.push_back(
+    map->getNode(way->getNodeId(way->getNodeIds().size() - 1))->toCoordinate());
+  LOG_VARD(discretizedWayCoords);
+
+  double shortestDistance = DBL_MAX;
+  geos::geom::Coordinate closestWayCoordToNode;
+  for (size_t i = 0; i < discretizedWayCoords.size(); i++)
+  {
+    geos::geom::Coordinate wayCoord = discretizedWayCoords[i];
+    LOG_VARD(wayCoord);
+    const double distanceBetweenNodeAndWayCoord = wayCoord.distance(node->toCoordinate());
+    LOG_VARD(distanceBetweenNodeAndWayCoord);
+    // TODO: This *may* be able to be optimized to skip out once the distance values
+    // start getting larger.
+    if (distanceBetweenNodeAndWayCoord < shortestDistance)
+    {
+      closestWayCoordToNode = wayCoord;
+      shortestDistance = distanceBetweenNodeAndWayCoord;
+    }
+  }
+  distance = shortestDistance;
+
+  return closestWayCoordToNode;
+}
+
+long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
+                                      const ConstOsmMapPtr& map)
+{
+  double shortestDistance = DBL_MAX;
+  long closestWayNodeId = 0;
+
+  const std::vector<long>& wayNodeIds = way->getNodeIds();
+  for (size_t i = 0; i < wayNodeIds.size(); i++)
+  {
+    ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);
+    LOG_VARD(wayNode);
+    const double distanceFromNodeToWayNode =
+      Distance::euclidean(node->toCoordinate(), wayNode->toCoordinate());
+    LOG_VARD(distanceFromNodeToWayNode);
+    if (distanceFromNodeToWayNode < shortestDistance)
+    {
+      shortestDistance = distanceFromNodeToWayNode;
+      closestWayNodeId = wayNode->getId();
+    }
+  }
+  LOG_VARD(shortestDistance);
+
+  return closestWayNodeId;
 }
 
 }

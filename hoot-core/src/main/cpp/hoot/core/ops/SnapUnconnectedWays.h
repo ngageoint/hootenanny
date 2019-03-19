@@ -9,6 +9,9 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
+// Tgs
+#include <tgs/RStarTree/HilbertRTree.h>
+
 namespace hoot
 {
 
@@ -52,18 +55,47 @@ private:
   double _maxNodeReuseDistance;
   double _maxSnapDistance;
   QString _snappedRoadsTagKey;
-  ElementCriterionPtr _wayToSnapCriterion;
-  ElementCriterionPtr _wayToSnapToCriterion;
-  ElementCriterionPtr _wayNodeToSnapToCriterion;
+  QString _wayToSnapToCriterionClassName;
+  QString _wayToSnapCriterionClassName;
+  QString _wayNodeToSnapToCriterionClassName;
+  Status _snapWayStatus;
+  Status _snapToWayStatus;
 
-  QList<long> _snappedRoadNodes;
-  QList<long> _snappedToRoadNodes;
+  OsmMapPtr _map;
+
+  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
+  std::deque<ElementId> _snapToWayNodeIndexToEid;
+  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
+  std::deque<ElementId> _snapToWayIndexToEid;
+
+  // TODO: rename to ids
+  QList<long> _snappedWayNodes;
+  QList<long> _snappedToWayNodes;
 
   int _taskStatusUpdateInterval;
 
+  Settings _conf;
+
   // Specifying the element as input here allows for optionally using its CE in the search radius
   // calculation.
-  Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
+  Meters _getWaySearchRadius(const boost::shared_ptr<const Element>& e) const;
+  Meters _getWayNodeSearchRadius(const boost::shared_ptr<const Element>& e) const;
+
+  ElementCriterionPtr _createFeatureCriterion(const QString criterionClassName,
+                                              const Status& status);
+  void _createFeatureIndex(ElementCriterionPtr featureCrit,
+                           boost::shared_ptr<Tgs::HilbertRTree> index,
+                           std::deque<ElementId>& indexToEid, const ElementType& elementType);
+
+  std::set<long> _getUnconnectedWayEndNodeIds(const ConstWayPtr& way,
+                                              const ElementCriterionPtr& wayCrit) const;
+  std::set<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& unconnectedWayEndNode,
+                                                 const ElementType& elementType) const;
+  int _getSnappedNodeInsertIndex(NodePtr unconnectedWayEndNode, const long closestSnapToWayNodeId,
+                                 const ConstWayPtr& snapToWay) const;
+
+  bool _snapUnconnectedNodeToWayNode(NodePtr unconnectedWayEndNode);
+  bool _snapUnconnectedNodeToWay(NodePtr unconnectedWayEndNode);
 };
 
 }

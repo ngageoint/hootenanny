@@ -200,7 +200,7 @@ Status::Type Status::fromString(QString typeString)
   }
   else
   {
-    throw HootException("Invalid element type string: " + typeString);
+    throw IllegalArgumentException("Invalid element type string: " + typeString);
   }
 }
 

@@ -273,6 +273,43 @@ public:
    * false otherwise
    */
   static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @param wayCriterion
+   * @return
+   */
+  static std::set<long> getContainingWayIdsByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * TODO
+   *
+   * @param node
+   * @param way
+   * @param distance
+   * @param discretizationSpacing
+   * @param map
+   * @return
+   */
+  static geos::geom::Coordinate closestWayCoordToNode(
+    const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
+    const double discretizationSpacing, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param node
+   * @param way
+   * @param map
+   * @return
+   */
+  static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
+                                     const ConstOsmMapPtr& map);
 };
 
 }
