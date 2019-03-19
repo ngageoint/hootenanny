@@ -3159,7 +3159,7 @@ honored by all readers.
 === reader.conflate.use.data.source.ids.1
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Determines whether the reader used by the conflate command to read the first input dataset will
 use the element ID's specified by the input datasets (true) or use internal ID management for the
