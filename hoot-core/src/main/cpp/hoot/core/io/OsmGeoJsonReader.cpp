@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmGeoJsonReader.h"
@@ -73,10 +73,13 @@ bool OsmGeoJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
 
+  bool isRelativeUrl = myUrl.isRelative();
+  bool isLocalFile =  myUrl.isLocalFile();
+
   //  Is it a file?
-  if (myUrl.isRelative() || myUrl.isLocalFile())
+  if (isRelativeUrl || isLocalFile)
   {
-    QString filename = myUrl.toLocalFile();
+    QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
 
     if (QFile::exists(filename) && url.endsWith(".geojson", Qt::CaseInsensitive))
       return true;

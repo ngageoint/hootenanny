@@ -45,6 +45,7 @@ public:
 
   static unsigned int logWarnCount;
 
+  ScriptMerger();
   ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
 
@@ -56,6 +57,9 @@ public:
   bool hasFunction(QString name) const;
 
   virtual QString toString() const override { return QString("ScriptMerger"); }
+
+  virtual QString getDescription() const
+  { return "Merges elements matched with Generic Conflation"; }
 
 protected:
 

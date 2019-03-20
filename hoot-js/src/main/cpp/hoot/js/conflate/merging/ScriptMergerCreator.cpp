@@ -130,7 +130,7 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
   d.className = className();
-  d.description = "Script merge creator required by all script match creators";
+  d.description = "Generates mergers used in Generic Conflation";
   d.experimental = false;
   vector<CreatorDescription> result;
   result.push_back(d);

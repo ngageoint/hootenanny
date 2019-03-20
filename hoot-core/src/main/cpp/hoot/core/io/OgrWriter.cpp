@@ -311,7 +311,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     {
       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
 
-      if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
+      if (poFDefn->GetFieldIndex(f->getName().toLatin1()) == -1)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
@@ -328,7 +328,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   else
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
-    poLayer = _ds->CreateLayer(layerName.toAscii(),
+    poLayer = _ds->CreateLayer(layerName.toLatin1(),
                   MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
 
     if (poLayer == NULL)
@@ -341,7 +341,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
-      OGRFieldDefn oField(f->getName().toAscii(), toOgrFieldType(f->getType()));
+      OGRFieldDefn oField(f->getName().toLatin1(), toOgrFieldType(f->getType()));
 
       // Fix the field length but only for Strings
       if (oField.GetType() == OFTString)

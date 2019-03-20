@@ -43,8 +43,11 @@ class BuildingMerger : public MergerBase
 {
 public:
 
+  static std::string className() { return "hoot::BuildingMerger"; }
+
   static unsigned int logWarnCount;
 
+  BuildingMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -70,6 +73,8 @@ public:
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
+
+  virtual QString getDescription() const { return "Merges buildings"; }
 
 protected:
 

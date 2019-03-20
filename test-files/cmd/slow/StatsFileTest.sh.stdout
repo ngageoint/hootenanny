@@ -1,7 +1,10 @@
 ****Quick Stats****
-14:53:02.519 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-14:53:02.577 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-14:53:02.578 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+18:14:23.494 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+18:14:23.506 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
+18:14:23.506 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
+18:14:23.506 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+18:14:23.573 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+18:14:23.573 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -12,26 +15,28 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-14:53:02.902 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-14:53:02.961 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-14:53:03.211 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-14:53:03.212 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
- Using default search radius value = 15
-14:53:03.213 INFO  ...ase-1/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-14:53:03.214 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
- Using default search radius value = 15
-14:53:03.215 INFO  ...lease-1/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-14:53:03.844 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /fouo/hoot-release-1/hoot/translations/TDSv61.js
-14:53:06.254 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
-14:53:06.302 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-14:53:06.304 INFO  .../hoot/rules/LinearWaterway.js"(  30) "Calculating search radius for waterway conflation..."
-14:53:06.305 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
- Using default search radius value = 15
-14:53:06.306 INFO  ...ase-1/hoot/rules/PowerLine.js"(  34) "Calculating search radius for power line conflation..."
-14:53:06.307 INFO  ...ate/SearchRadiusCalculator.cpp(  94) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
- Using default search radius value = 15
-14:53:06.307 INFO  ...lease-1/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-14:53:06.750 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: /fouo/hoot-release-1/hoot/translations/TDSv61.js
+18:14:24.164 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+18:14:24.196 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
+18:14:24.197 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
+18:14:24.197 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+18:14:24.266 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+18:14:24.529 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+18:14:24.530 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+18:14:24.531 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+18:14:24.532 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+18:14:24.533 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+18:14:25.404 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+18:14:28.012 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+18:14:28.018 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
+18:14:28.018 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
+18:14:28.018 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 128 elements from input.
+18:14:28.089 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+18:14:28.091 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+18:14:28.093 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+18:14:28.093 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+18:14:28.096 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+18:14:28.097 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+18:14:28.843 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
 {
     "Node Count":
     [

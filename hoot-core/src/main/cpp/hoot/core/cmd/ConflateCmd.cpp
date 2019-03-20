@@ -113,7 +113,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (args.contains("--differential"))
   {
     isDiffConflate = true;
-    args.removeAt(args.indexOf("--differential"));    
+    args.removeAt(args.indexOf("--differential"));
 
     // Check for tags argument "--Include-Tags"
 
@@ -364,11 +364,13 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     // are involved in reviews.
 
     QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
     // Currently, all these things will be true if we're running Attribute Conflation, but I'm
     // specifying them anyway to harden this a bit.
     if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
         postConflateOps.contains("hoot::RemoveElementsVisitor") &&
-        ConfigOptions().getRemoveElementsVisitorElementCriterion() == "hoot::ReviewRelationCriterion" &&
+        ConfigOptions().getRemoveElementsVisitorElementCriterion() ==
+          "hoot::ReviewRelationCriterion" &&
         postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
     {
       const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
@@ -388,7 +390,10 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
       conf().set(
         ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
     }
-    LOG_VARD(conf().get(ConfigOptions::getRemoveElementsVisitorElementCriterionKey()));
+
+    LOG_DEBUG(
+      "Post conflate ops after Attribute Conflation adjustment: " <<
+      conf().get("conflate.post.ops").toStringList());
   }
 }
 

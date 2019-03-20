@@ -183,7 +183,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -196,7 +196,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toAscii(),
+  poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbLineString,
                               options.getCrypticOptions());
   if( poLayer == NULL )
@@ -209,7 +209,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
 
   for (int i = 0; i < columns.size(); i++)
   {
-    OGRFieldDefn oField(columns[i].toAscii(), OFTString);
+    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
 
     oField.SetWidth(64);
 
@@ -244,7 +244,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
       {
         if (way->getTags().contains(columns[i]))
         {
-          QByteArray c = shpColumns[i].toAscii();
+          QByteArray c = shpColumns[i].toLatin1();
           QByteArray v = way->getTags()[columns[i]].toUtf8();
           poFeature->SetField(c.constData(), v.constData());
         }
@@ -294,7 +294,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -307,7 +307,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toAscii(),
+  poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, options.getCrypticOptions());
   if( poLayer == NULL )
   {
@@ -319,7 +319,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 
   for (int i = 0; i < columns.size(); i++)
   {
-    OGRFieldDefn oField(columns[i].toAscii(), OFTString);
+    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
 
     oField.SetWidth(64);
 
@@ -354,7 +354,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
       {
         if (node->getTags().contains(columns[i]))
         {
-          QByteArray c = shpColumns[i].toAscii();
+          QByteArray c = shpColumns[i].toLatin1();
           QByteArray v = node->getTags()[columns[i]].toUtf8();
           poFeature->SetField(c.constData(), v.constData());
         }
@@ -398,7 +398,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
-  GDALDataset* poDS = poDriver->Create(path.toAscii(), 0, 0, 0, GDT_Unknown, NULL);
+  GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
   if( poDS == NULL )
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
@@ -411,7 +411,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
-  poLayer = poDS->CreateLayer(layerName.toAscii(),
+  poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbMultiPolygon,
                               options.getCrypticOptions());
   if( poLayer == NULL )
@@ -424,7 +424,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
 
   for (int i = 0; i < columns.size(); i++)
   {
-    OGRFieldDefn oField(columns[i].toAscii(), OFTString);
+    OGRFieldDefn oField(columns[i].toLatin1(), OFTString);
 
     oField.SetWidth(64);
 
@@ -481,7 +481,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   {
     if (relation->getTags().contains(columns[i]))
     {
-      QByteArray c = shpColumns[i].toAscii();
+      QByteArray c = shpColumns[i].toLatin1();
       QByteArray v = relation->getTags()[columns[i]].toUtf8();
       poFeature->SetField(c.constData(), v.constData());
     }
@@ -524,7 +524,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const WayPtr &
   {
     if (way->getTags().contains(columns[i]))
     {
-      QByteArray c = shpColumns[i].toAscii();
+      QByteArray c = shpColumns[i].toLatin1();
       QByteArray v = way->getTags()[columns[i]].toUtf8();
       poFeature->SetField(c.constData(), v.constData());
     }

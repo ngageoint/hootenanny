@@ -9,10 +9,10 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create way 1669801*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1669801, 1, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1669801, 1, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (1669801, 'note', '1');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (1669801, 'note', '1', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (1669801, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (1669801, 'highway', 'road', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (1669801, 'note', '1');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (1669801, 'note', '1', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669801, 1669731, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669801, 1669731, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669801, 1669791, 1, 2);

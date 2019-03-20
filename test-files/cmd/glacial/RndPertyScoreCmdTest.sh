@@ -12,11 +12,11 @@ myCmd="hoot perty -D perty.systematic.error.x=1 \
 score=`$myCmd | grep "PERTY" | sed "s/PERTY Score: //g"`
 target_score="0.950"
 
-result=`echo $score'>='$target_score | bc`
-
-if [ result ]; then
-  echo "PERTY score greather than or equal to $target_score"
+# Commented out since we don't have "bc" everywhere
+# result=`echo $score'>='$target_score | bc`
+# if [ result ]; then
+if [ $(awk '{printf($1 >= $2) ? 1 : 0}' <<<" $score $target_score ") -eq "1" ] ; then
+  echo "PERTY score greater than or equal to $target_score"
 else
   echo "PERTY score ($score) LESS THAN $target_score"
 fi
-

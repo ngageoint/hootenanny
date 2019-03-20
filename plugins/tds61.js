@@ -471,6 +471,7 @@ tds61 = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -528,21 +529,21 @@ tds61 = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -782,6 +783,31 @@ tds61 = {
 // #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
+        // Unpack the ZI006_MEM field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text && tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process tags.note
+
         // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
@@ -1052,39 +1078,56 @@ tds61 = {
             }
         } // End Hydrocarbons
 
-        // Fix up lifestyle tags.
-        // This needs to be expanded to handle all of the options.
-//      ['PCF','1','condition','construction'], // Construction
-//      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
-//      ['PCF','3','condition','abandoned'], // Unmaintained in spec
-//      ['PCF','4','condition','damaged'], // Damaged
-//      ['PCF','5','condition','dismantled'], // Dismantled
-//      ['PCF','6','condition','destroyed'], // Destroyed
-        if (tags.condition)
-        {
-            if (tags.condition == 'construction')
-            {
-//                 if (tags.highway && attrs.F_CODE == 'AP030')
-                if (tags.highway)
-                {
-                    tags.construction = tags.highway;
-                    tags.highway = 'construction';
-                    delete tags.condition;
-                }
-                else if (tags.railway)
-                {
-                    tags.construction = tags.railway;
-                    tags.railway = 'construction';
-                    delete tags.condition;
-                }
-            } // End Construction
-
-        } // End Condition tags
-
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+        // Fix lifecycle tags
+        switch (tags.condition)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
         // Not sure about adding a Highway tag to this.
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
@@ -1129,31 +1172,6 @@ tds61 = {
                 delete tags.tourism;
             }
         }
-
-        // Unpack the ZI006_MEM field
-        if (tags.note)
-        {
-            var tObj = translate.unpackMemo(tags.note);
-
-            if (tObj.tags !== '')
-            {
-                var tTags = JSON.parse(tObj.tags)
-                for (i in tTags)
-                {
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-                    tags[i] = tTags[i];
-                }
-            }
-
-            if (tObj.text && tObj.text !== '')
-            {
-                tags.note = tObj.text;
-            }
-            else
-            {
-                delete tags.note;
-            }
-        } // End process tags.note
 
         // Fix up areas
         // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
@@ -1228,7 +1246,149 @@ tds61 = {
                 continue;
             }
 
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
         } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
 
         if (tds61.tdsPreRules == undefined)
         {

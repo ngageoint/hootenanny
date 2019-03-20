@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingWayNodeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;

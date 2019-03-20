@@ -408,7 +408,7 @@ dnc.rules = {
 
 
         // BOT - Bridge Opening Type
-        ['BOT','0','bridge:movable','yes'], // Unknown
+        ['BOT','0',undefined,undefined], // Unknown
         ['BOT','4','bridge:movable','bascule'], // Draw/Bascule
         ['BOT','10','bridge:movable','swing'],
         ['BOT','11','bridge:movable','lift'],
