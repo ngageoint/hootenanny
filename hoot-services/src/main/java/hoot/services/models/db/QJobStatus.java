@@ -64,6 +64,8 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public final StringPath statusDetail = createString("statusDetail");
 
+    public final NumberPath<Long> resourceId = createNumber("resource_id", Long.class);
+
     public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
 
     public QJobStatus(String variable) {

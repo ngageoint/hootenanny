@@ -46,6 +46,7 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
@@ -60,6 +61,8 @@ public class ClipDatasetResource {
     @Autowired
     private ClipDatasetCommandFactory clipDatasetCommandFactory;
 
+    @Autowired
+    private UpdateParentCommandFactory updateParentCommandFactory;
 
     /**
      * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
@@ -96,8 +99,9 @@ public class ClipDatasetResource {
 
         try {
             ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
+            InternalCommand updateDb = updateParentCommandFactory.build(jobId, params, user, this.getClass());
 
-            Command[] workflow = { clipCommand };
+            Command[] workflow = { clipCommand, updateDb };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }

@@ -43,6 +43,9 @@ public class ClipDatasetParams {
     @JsonProperty("PATH_NAME")
     private String pathName;
 
+    @JsonProperty("FOLDER_ID")
+    private Long folderId;
+
     public String getInputName() {
         return inputName;
     }
@@ -75,13 +78,21 @@ public class ClipDatasetParams {
         this.pathName = pathName;
     }
 
+    public Long getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(Long folderId) {
+        this.folderId = folderId;
+    }
+
     @Override
     public String toString() {
         return "ClipDatasetParams{" +
                 "inputName='" + inputName + '\'' +
                 ", outputName='" + outputName + '\'' +
                 ", bounds='" + bounds + '\'' +
-                ", pathName='" + pathName + '\'' +
+                ", folderId='" + folderId + '\'' +
                 '}';
     }
 }

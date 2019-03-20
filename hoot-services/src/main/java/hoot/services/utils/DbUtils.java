@@ -27,6 +27,7 @@
 package hoot.services.utils;
 
 
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QMaps.maps;
 
 import java.sql.Connection;
@@ -55,6 +56,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
@@ -213,6 +215,14 @@ public final class DbUtils {
                 .where(maps.id.eq(mapId))
                 .set(Collections.singletonList(maps.tags),
                         Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
+                .execute();
+    }
+
+    public static void updateFoldersMapping() {
+        createQuery().insert(folderMapMappings).columns(folderMapMappings.mapId, folderMapMappings.folderId)
+                .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0")).from(maps)
+                        .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId).distinct()
+                                .from(folderMapMappings))))
                 .execute();
     }
 
