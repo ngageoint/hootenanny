@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.1766691" minlon="11.5285062" maxlat="48.17668349999999" maxlon="11.5285066"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1766834999999887" lon="11.5285066000000000">
-        <tag k="REF1" v="0045a8"/>
-        <tag k="wheelchair" v="no"/>
-        <tag k="description" v="Georg-Brauchle-Ring"/>
-        <tag k="uuid" v="{40822740-275a-5758-bb90-4e25b9d30d49}"/>
-        <tag k="railway" v="subway_entrance"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1766690999999980" lon="11.5285062000000007">
+    <node visible="true" id="-208780" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1766690999999980" lon="11.5285062000000007">
         <tag k="station" v="light_rail"/>
         <tag k="REF1" v="01163b"/>
         <tag k="REF2" v="0045a8;01163b"/>
@@ -25,9 +17,17 @@
         <tag k="railway" v="subway_entrance"/>
         <tag k="error:circular" v="15"/>
     </node>
+    <node visible="true" id="-208779" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1766834999999887" lon="11.5285066000000000">
+        <tag k="REF1" v="0045a8"/>
+        <tag k="wheelchair" v="no"/>
+        <tag k="description" v="Georg-Brauchle-Ring"/>
+        <tag k="uuid" v="{40822740-275a-5758-bb90-4e25b9d30d49}"/>
+        <tag k="railway" v="subway_entrance"/>
+        <tag k="error:circular" v="15"/>
+    </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-2" role="reviewee"/>
-        <member type="node" ref="-1" role="reviewee"/>
+        <member type="node" ref="-208779" role="reviewee"/>
+        <member type="node" ref="-208780" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

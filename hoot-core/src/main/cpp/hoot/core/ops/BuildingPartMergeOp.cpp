@@ -34,7 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -42,6 +42,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/StreamUtils.h>
@@ -74,6 +75,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
 {
   // merge with buildings that are contained by this polygon
   vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
+  int totalProcessed = 0;
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     const WayPtr& candidate = _map->getWay(intersectIds[i]);
@@ -99,6 +101,15 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
         _ds.joinT(candidate, neighbor);
       }
     }
+
+    totalProcessed++;
+    if (totalProcessed % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(totalProcessed) <<
+        " intersecting buildings / " <<
+        StringUtils::formatLargeNumber(intersectIds.size()) << " total buildings.");
+    }
   }
 }
 
@@ -106,11 +117,21 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
   set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   // go through each of the neighboring ways.
+  int totalProcessed = 0;
   for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
   {
     WayPtr neighbor = _map->getWay(*it);
     // add these two buildings to a set.
     _ds.joinT(neighbor, w);
+
+    totalProcessed++;
+    if (totalProcessed % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(neighborIds.size()) <<
+        " way neighbors for building part merging.");
+    }
   }
 }
 
@@ -122,6 +143,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
 
   const vector<RelationData::Entry>& members = r->getMembers();
 
+  int totalProcessed = 0;
   for (size_t i = 0; i < members.size(); i++)
   {
     if (members[i].getElementId().getType() == ElementType::Way)
@@ -149,6 +171,15 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
       }
       logWarnCount++;
     }
+
+    totalProcessed++;
+    if (totalProcessed % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(members.size()) <<
+        " relation members for building part merging.");
+    }
   }
 }
 
@@ -161,16 +192,11 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _ds.clear();
   _map = map;
 
-  size_t i;
-  i = 0;
+  int totalProcessed = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    if (i % 1000 == 0)
-    {
-      PROGRESS_INFO("Ways: " << i << " / " << ways.size() << "        ");
-    }
     const WayPtr& w = it->second;
     // add the way to a building group if appropriate
     // if the way is part of a building
@@ -179,53 +205,67 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
       _addNeighborsToGroup(w);
       boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(w);
       _addContainedWaysToGroup(*g, w);
+      _numAffected++;
     }
-    i++;
-  }
-  LOG_DEBUG("Ways: " << ways.size() << " / " << ways.size() << "        ");
 
-  i = 0;
+    totalProcessed++;
+    if (totalProcessed % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(ways.size()) <<
+        " ways for building part merging.");
+    }
+  }
+
+  totalProcessed = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)
-    {
-      PROGRESS_INFO("Relations: " << i << " / " << relations.size() << "        ");
-    }
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
     if (_isBuildingPart(r))
     {
       _addNeighborsToGroup(r);
+      _numAffected++;
     }
-    i++;
+
+    totalProcessed++;
+    if (totalProcessed % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(relations.size()) <<
+        " relations for building part merging.");
+    }
   }
-  LOG_DEBUG("Relations: " << relations.size() << " / " << relations.size() << "        ");
 
   ////
   /// Time to start making changes to the map.
   ////
 
   // go through each of the grouped buildings
-  i = 0;
+  totalProcessed = 0;
   const DisjointSetMap< boost::shared_ptr<Element> >::AllGroups& groups = _ds.getAllGroups();
   for (DisjointSetMap< boost::shared_ptr<Element> >::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
-    if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
-    {
-      PROGRESS_INFO("Combining Parts: " << i << " / " << groups.size() << "        ");
-    }
     // combine the group of building parts into a relation.
-    const vector< boost::shared_ptr<Element> >& parts = it->second;
+    const vector<boost::shared_ptr<Element>>& parts = it->second;
     if (parts.size() > 1)
     {
       _combineParts(parts);
     }
-    i++;
+
+    totalProcessed++;
+    if (totalProcessed % 100 == 0)
+    {
+      PROGRESS_INFO(
+        "Merged " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(groups.size()) << " building parts.");
+    }
   }
-  LOG_DEBUG("Combining Parts: " << groups.size() << " / " << groups.size() << "        ");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.

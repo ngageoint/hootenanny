@@ -358,14 +358,7 @@ If true, changesets derived can issue delete statements for the reference datase
 passed to the changeset deriver).  If false, no delete statements will be issued for the reference
 dataset.
 
-=== changeset.apidb.max.writers
-
-* Data Type: long
-* Default Value: `10`
-
-The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
-
-=== changeset.apidb.max.size
+=== changeset.apidb.size.max
 
 * Data Type: long
 * Default Value: `1000`
@@ -375,6 +368,29 @@ is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
+
+=== changeset.apidb.writers.max
+
+* Data Type: long
+* Default Value: `10`
+
+The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
+
+=== changeset.apidb.writers.throttle
+
+* Data Type: bool
+* Default Value: `false`
+
+Flag to turn on throttling for OSM API changeset writes.  When turned on, each processing thread
+will wait `changeset.api.writers.throttle.time` seconds after a successful write before submitting
+another changeset to the OSM API.
+
+=== changeset.apidb.writers.throttle.time
+
+* Data Type: long
+* Default Value: `30`
+
+The number of seconds after a successful write before submitting another changeset to the OSM API.
 
 === changeset.buffer
 
@@ -886,6 +902,14 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== hash.seed.zero
+
+* Data Type: bool
+* Default Value: `false`
+
+Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
+is required for unit tests, but shouldn't be used in normal operation.
 
 === highway.match.threshold
 
@@ -3135,7 +3159,7 @@ honored by all readers.
 === reader.conflate.use.data.source.ids.1
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Determines whether the reader used by the conflate command to read the first input dataset will
 use the element ID's specified by the input datasets (true) or use internal ID management for the
@@ -3357,6 +3381,15 @@ For script test debugging only.  Sets a maximum allowed time, in seconds, for a 
 If the script runs longer than the specified time, then it is forcefully stopped by the system.  If
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
+
+=== search.radius.calculator.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Element criterion class which determines which input features are used for search radius
+calculation.  An empty value specifies that all input features are to be used.  Conflation routines
+making use of automatic search radius calculation should set this value appropriately.
 
 === search.radius.default
 

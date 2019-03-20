@@ -36,11 +36,16 @@ namespace hoot
 
 /**
  * Marks all the specified pairs with review tags using ReviewMarker.
+ *
+ * @todo Should this inherit MergerBase instead?
  */
 class MarkForReviewMerger : public Merger
 {
 public:
 
+  static std::string className() { return "hoot::MarkForReviewMerger"; }
+
+  MarkForReviewMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -55,7 +60,8 @@ public:
   MarkForReviewMerger(const std::set<ElementId>& eids, QString note,
                       QString reviewType, double score);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   virtual std::set<ElementId> getImpactedElementIds() const override;
 
@@ -65,6 +71,9 @@ public:
 
   virtual QString toString() const override;
 
+  virtual QString getDescription() const
+  { return "Marks elements as needing review before merging"; }
+
 private:
 
   std::set<ElementId> _eids;
@@ -73,7 +82,6 @@ private:
   QString _reviewType;
   double _score;
   ReviewMarker _reviewMarker;
-
 };
 
 }

@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>

@@ -55,6 +55,9 @@ gcov/
 gdb
 go
 hoot-cmd/Makefile
+hoot-js/Makefile
+hoot-rnd/Makefile
+hoot-test/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
 hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
@@ -105,6 +108,7 @@ plugins/etds*_rules.js
 plugins/emgcp*_rules.js
 plugins/eggdm*_rules.js
 plugins-local
+.qmake.stash
 translations-local
 **/*.pro.user*
 *.pro.user*

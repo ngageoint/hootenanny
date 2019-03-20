@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/WayMatchStringSplitter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -39,11 +39,19 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, PartialNetworkMerger)
+
+PartialNetworkMerger::PartialNetworkMerger() :
+MergerBase()
+{
+}
 
 PartialNetworkMerger::PartialNetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   QSet<ConstEdgeMatchPtr> edgeMatches,

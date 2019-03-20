@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -69,10 +69,10 @@ public:
     map->visitRw(v);
 
     QString ss1 = n1->getTags().toString().replace("\n", " ");
-    CPPUNIT_ASSERT_EQUAL(string("geometry_type = Point name = strange test "), ss1.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("name = strange test geometry_type = Point "), ss1.toStdString());
 
     QString ss2 = w1->getTags().toString().replace("\n", " ");
-    CPPUNIT_ASSERT_EQUAL(string("geometry_type = LineString highway = road "), ss2.toStdString());
+    CPPUNIT_ASSERT_EQUAL(string("highway = road geometry_type = LineString "), ss2.toStdString());
   }
 
 };

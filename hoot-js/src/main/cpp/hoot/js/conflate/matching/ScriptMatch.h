@@ -51,6 +51,7 @@ public:
 
   static unsigned int logWarnCount;
 
+  ScriptMatch();
   /**
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
@@ -67,9 +68,6 @@ public:
 
   virtual double getProbability() const;
 
-  /**
-   *
-   */
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
   virtual bool isWholeGroup() const { return _isWholeGroup; }
@@ -80,13 +78,14 @@ public:
   virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
-//  v8::Persistent<v8::Object> getPlugin() const { return _plugin; }
 
   boost::shared_ptr<PluginContext> getScript() const { return _script; }
 
   virtual QString toString() const override;
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
+
+  virtual QString getDescription() const { return "Matches elements with Generic Conflation"; }
 
 private:
 

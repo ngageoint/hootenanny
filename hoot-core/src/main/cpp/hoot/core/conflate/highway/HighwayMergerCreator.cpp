@@ -102,7 +102,8 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "Merges roads conflated with the non-greedy algorithm", false));
+    CreatorDescription(className(),
+    "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm", false));
   return result;
 }
 

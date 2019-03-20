@@ -42,6 +42,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -68,7 +69,9 @@ _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
 _preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing())
+_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing()),
+_numRead(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
@@ -186,6 +189,11 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
 
+  if( _wayIdMap.contains(_wayId) )
+  {
+    throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+  }
+
   long newId;
   if (_useDataSourceId)
   {
@@ -298,6 +306,12 @@ void OsmXmlReader::read(OsmMapPtr map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
+  // clear node id maps in case the reader is used for mulitple files
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
+
+  _numRead = 0;
   finalizePartial();
   _map = map;
 
@@ -327,13 +341,16 @@ void OsmXmlReader::read(OsmMapPtr map)
   file.close();
 
   ReportMissingElementsVisitor visitor;
+  LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
+  LOG_INFO("\t" << visitor.getCompletedStatusMessage());
 
   _map.reset();
 }
 
 void OsmXmlReader::readFromString(QString xml, OsmMapPtr map)
 {
+  _numRead = 0;
   finalizePartial();
   _map = map;
 
@@ -352,7 +369,9 @@ void OsmXmlReader::readFromString(QString xml, OsmMapPtr map)
   }
 
   ReportMissingElementsVisitor visitor;
+  LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
+  LOG_INFO("\t" << visitor.getCompletedStatusMessage());
 
   _map.reset();
 }
@@ -674,6 +693,12 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
       _map->addRelation(r);
       //LOG_VART(r);
     }
+  }
+
+  _numRead++;
+  if (_numRead % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
   }
 
   return true;

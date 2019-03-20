@@ -44,6 +44,7 @@ namespace pt = boost::property_tree;
 // Qt
 #include <QTextStream>
 #include <QTextCodec>
+#include <QUrlQuery>
 
 // Standard
 #include <fstream>
@@ -125,10 +126,15 @@ void OsmJsonReader::open(QString url)
 
     // Handle files or URLs
     _url = QUrl(url);
-    if (_url.isRelative() || _url.isLocalFile())
+
+    bool isRelativeUrl = _url.isRelative();
+    bool isLocalFile =  _url.isLocalFile();
+
+    if (isRelativeUrl || isLocalFile)
     {
+      QString filename = isRelativeUrl ? _url.toString() : _url.toLocalFile();
       _isFile = true;
-      _file.setFileName(_url.toLocalFile());
+      _file.setFileName(filename);
       _file.open(QFile::ReadOnly | QFile::Text);
     }
     else
@@ -447,18 +453,21 @@ void OsmJsonReader::_readFromHttp()
   if (!_url.isValid())
     throw HootException("Invalid URL: " + _url.toString());
   //  Update the `srsname` parameter to use EPSG:4326
-  if (_url.hasQueryItem("srsname"))
+
+  QUrlQuery urlQuery(_url);
+  if (urlQuery.hasQueryItem("srsname"))
   {
-    _url.removeQueryItem("srsname");
-    _url.addQueryItem("srsname", "EPSG:4326");
+    urlQuery.removeQueryItem("srsname");
+    urlQuery.addQueryItem("srsname", "EPSG:4326");
+    _url.setQuery(urlQuery);
   }
   bool split = false;
   int numSplits = 1;
   vector<thread> threads;
   //  Check if there is a bounding box
-  if (_url.hasQueryItem("bbox") && _runParallel)
+  if (urlQuery.hasQueryItem("bbox") && _runParallel)
   {
-    QStringList bbox = _url.allQueryItemValues("bbox");
+    QStringList bbox = urlQuery.allQueryItemValues("bbox");
     //  Parse the bounding box
     geos::geom::Envelope envelope = GeometryUtils::envelopeFromConfigString(bbox.last());
     //  Check if the bounding box needs to be split
@@ -532,8 +541,10 @@ void OsmJsonReader::_doHttpRequestFunc()
       _bboxMutex.unlock();
       //  Update the URL
       QUrl url(_url);
-      url.removeQueryItem("bbox");
-      url.addQueryItem("bbox", GeometryUtils::toString(envelope) + ",EPSG:4326");
+      QUrlQuery urlQuery(url);
+      urlQuery.removeQueryItem("bbox");
+      urlQuery.addQueryItem("bbox", GeometryUtils::toString(envelope) + ",EPSG:4326");
+      url.setQuery(urlQuery);
       HootNetworkRequest request;
       LOG_VART(url);
       request.networkRequest(url);

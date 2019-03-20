@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480829999999912" lon="11.7021624999999982">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="48.04808299999999" minlon="11.70201" maxlat="48.04809999999998" maxlon="11.7021625"/>
+    <node visible="true" id="-3200104" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480999999999838" lon="11.7020099999999978">
+        <tag k="REF2" v="none"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="addr:street" v="PFARRER-WENK-PLATZ"/>
+        <tag k="access" v="yes"/>
+        <tag k="phone" v="8102-8000"/>
+        <tag k="addr:housenumber" v="1"/>
+        <tag k="language" v="GER"/>
+        <tag k="source" v="navteq"/>
+        <tag k="uuid" v="{52820107}"/>
+        <tag k="name" v="RATHAUS HOHENBRUNN"/>
+        <tag k="amenity" v="townhall"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-3200103" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480829999999912" lon="11.7021624999999982">
         <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
         <tag k="openGeoDB:license_plate_code" v="M"/>
         <tag k="openGeoDB:community_identification_number" v="09184129"/>
@@ -22,20 +37,6 @@
         <tag k="openGeoDB:population" v="8569"/>
         <tag k="place" v="village"/>
         <tag k="opengeodb:lat" v="48.0479938"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480999999999838" lon="11.7020099999999978">
-        <tag k="REF2" v="none"/>
-        <tag k="addr:language" v="GER"/>
-        <tag k="addr:street" v="PFARRER-WENK-PLATZ"/>
-        <tag k="access" v="yes"/>
-        <tag k="phone" v="8102-8000"/>
-        <tag k="addr:housenumber" v="1"/>
-        <tag k="language" v="GER"/>
-        <tag k="source" v="navteq"/>
-        <tag k="uuid" v="{52820107}"/>
-        <tag k="name" v="RATHAUS HOHENBRUNN"/>
-        <tag k="amenity" v="townhall"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

@@ -307,7 +307,9 @@ private:
     options.append("--formats");
     options.append("--languages");
     options.append("--matchers");
+    options.append("--match-creators");
     options.append("--mergers");
+    options.append("--merger-creators");
     options.append("--operators");
     options.append("--string-comparators");
     options.append("--subline-matchers");
