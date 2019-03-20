@@ -226,7 +226,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
       // split a way at a t-intersection, or when previous mergers produce
       // an intersection that is not split.
 
-      LOG_WARN("scrapNode should line up with the beginning or end of a way.");
+      LOG_DEBUG("scrapNode should line up with the beginning or end of a way.");
       LOG_VART(_mapping->getWayString1());
       LOG_VART(_mapping->getWayString2());
       LOG_VART(scrapNodeId);
@@ -236,7 +236,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
   }

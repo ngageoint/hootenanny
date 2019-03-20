@@ -1,3 +1,4 @@
+[[perty]]
 == perty
 
 === Description
@@ -72,4 +73,8 @@ test run falls within an allowed user specified score variance threshold when co
 as passing.  Otherwise the test is classified as having failed.  Note: If you want to bypass the "pass/fail" determination of the 
 command, you can set the +perty.test.allowed.score.variance+ equal to 1.0 and set +perty.test.expected.scores+ to a list the same 
 size as the number of of test runs.  This effectively disables the score validation.
+
+=== See Also
+
+* `perty.*` configuration options
 

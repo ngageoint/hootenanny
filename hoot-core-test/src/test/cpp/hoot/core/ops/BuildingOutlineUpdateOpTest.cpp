@@ -81,11 +81,10 @@ public:
                      "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
   }
 
-  //see https://github.com/ngageoint/hootenanny/issues/442
+  // see https://github.com/ngageoint/hootenanny/issues/442
   //
-  //This test is only testing the uncleanable relations right now.  If the issue mentioned about
-  //BuildingOutlineUpdateOp::_unionOutline is fixed, then this will also be testing ways (see
-  //BuildingOutlineUpdateOp::_createOutline).
+  // This test is only testing the uncleanable relations right now.  We may still need to test for
+  // uncleanable ways too.
   void runUncleanableToplogyTest()
   {
     DisableLog dl;

@@ -42,7 +42,7 @@
 #include <hoot/core/visitors/FindHighwayIntersectionsVisitor.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NodeCriterion.h>

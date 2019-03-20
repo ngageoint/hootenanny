@@ -69,8 +69,8 @@ namespace hoot
 class FakeMatch : public Match
 {
 public:
-  FakeMatch() : Match(boost::shared_ptr<MatchThreshold>()) {}
 
+  FakeMatch() : Match(boost::shared_ptr<MatchThreshold>()) {}
   FakeMatch(ElementId eid1, ElementId eid2, double p, const boost::shared_ptr<const MatchThreshold> mt) :
     Match(mt),
     _eid1(eid1),
@@ -119,6 +119,8 @@ public:
   }
 
   MatchType getType() const { return _threshold->getType(*this); }
+
+  virtual QString getDescription() const { return ""; }
 
 private:
 

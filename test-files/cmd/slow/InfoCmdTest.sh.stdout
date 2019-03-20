@@ -3673,19 +3673,35 @@ URL: N/A
 
 Listing a match creator...
 
-  HighwayMatchCreator                             Matches roads with the non-greedy algorithm
+  HighwayMatchCreator                             Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm
 
 Listing a script match creator...
 
   ScriptMatchCreator,PoiGeneric.js                Matches POIs
 
+Listing a merger creator...
+
+  PoiPolygonMergerCreator                         Generates mergers that merge POIs into polygons
+
+Listing a script merger creator...
+
+  ScriptMergerCreator                             Generates mergers used in Generic Conflation
+
+Listing a matcher...
+
+  HighwayMatch                                 Matches roads with the 2nd Generation (Unifying) Algorithm
+
+Listing a script matcher...
+
+  ScriptMatch                                  Matches elements with Generic Conflation
+
 Listing a merger...
 
-  PoiPolygonMergerCreator                         Merges POIs into polygons
+  PoiPolygonMerger                             Merges POIs into polygons
 
 Listing a script merger...
 
-  ScriptMergerCreator                             Script merge creator required by all script match creators
+  ScriptMerger                                 Merges elements matched with Generic Conflation
 
 Listing an op...
 

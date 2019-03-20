@@ -28,7 +28,7 @@
 #include "RandomForestModelBuilder.h"
 
 // Hoot
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/io/ArffWriter.h>

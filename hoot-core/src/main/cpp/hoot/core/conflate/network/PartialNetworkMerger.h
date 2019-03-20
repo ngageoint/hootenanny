@@ -45,6 +45,9 @@ class PartialNetworkMerger : public MergerBase, public EidMapper
 {
 public:
 
+  static std::string className() { return "hoot::PartialNetworkMerger"; }
+
+  PartialNetworkMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -63,6 +66,8 @@ public:
   virtual void replace(ElementId oldEid, ElementId newEid);
 
   virtual QString toString() const;
+
+  virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
 
 protected:
 

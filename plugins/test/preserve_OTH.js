@@ -65,7 +65,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["F_CODE"], "AL010");
         assert.equal(tags["ZI001_SDP"], "DigitalGlobe");
         assert.equal(tags["ZSAX_RS0"], "U");
-        assert.equal(tags["ZI006_MEM"], "<OSM>{\"source:imagery:datetime\":\"2017-11-11 10:45:15\",\"source:imagery:sensor\":\"WV02\",\"source:imagery:id\":\"756b80e1f695fb591caca8e7ce0f9ef5\"}</OSM>");
+        assert.equal(tags["ZI006_MEM"], "<OSM>{\"source:imagery:sensor\":\"WV02\",\"source:imagery:id\":\"756b80e1f695fb591caca8e7ce0f9ef5\",\"source:imagery:datetime\":\"2017-11-11 10:45:15\"}</OSM>");
         assert.equal(tags["OTH"], "(FFN:foo)");
         assert.equal(tags["UFI"], "0d8b2563-81cf-44d4-8ef7-52c0e862651f");
 

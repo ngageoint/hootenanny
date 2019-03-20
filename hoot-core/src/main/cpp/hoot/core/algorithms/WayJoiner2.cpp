@@ -28,7 +28,7 @@
 #include "WayJoiner2.h"
 
 //  Hoot
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
@@ -104,6 +104,7 @@ void WayJoiner2::join(const OsmMapPtr& map)
   // think about it more before rushing something.  Also negative about this, is that it assumes
   // we're always using Attribute Conflation with WayJoiner2, which is currently the case, but
   // really too tightly coupled of a relationship regardless.
+  // TODO: move this logic somewhere else
   _removeHootCreatedMultiLineStringRelations(map);
   OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-multilinestring-relations");
 }
@@ -111,7 +112,11 @@ void WayJoiner2::join(const OsmMapPtr& map)
 void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
 {
   LOG_TRACE("Removing multilinestring relations created during conflation...");
-  // This may be a little dangerous, but will have to do for now...
+  // I don't think this is quite right, b/c if there are any multilinestring relations in the input
+  // data that end up getting conflated with something else, they're going to be dropped and
+  // shouldn't be.  What we really want to do is only drop multilinestring relations created
+  // specifically by hoot during conflation (Attribute Conflation specific).
+  // TODO: #3025
   ElementCriterionPtr crit(
     new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));
   RemoveElementsVisitor vis(crit);

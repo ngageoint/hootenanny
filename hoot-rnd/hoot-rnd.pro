@@ -8,8 +8,7 @@
 # 1. TRL5 - Module and/or subsystem validation in a relevant environment
 # -------------------------------------------------
 
-QT += script \
-    sql \
+QT += sql \
     testlib \
     xml \
     network \
@@ -33,7 +32,6 @@ INCLUDEPATH += \
 PRECOMPILED_HEADER = ../hoot-core/src/main/cpp/hoot/core/HootCoreStable.h
 
 CONFIG += rtti \
-    qtestlib \
     precompile_header
 
 include(../Configure.pri)

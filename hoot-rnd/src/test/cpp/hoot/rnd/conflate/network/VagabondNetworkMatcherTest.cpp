@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>

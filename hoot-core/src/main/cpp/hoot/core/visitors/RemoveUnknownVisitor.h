@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -36,7 +37,7 @@ namespace hoot
 /**
  * Removes all elements of a given status.
  */
-class RemoveUnknownVisitor : public ElementOsmMapVisitor
+class RemoveUnknownVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -46,7 +47,13 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Removes all elements of a given status"; }
+  virtual QString getDescription() const
+  { return "Removes all elements of Unknown1 or Unknown2 status"; }
+
+  virtual QString getInitStatusMessage() const { return "Removing elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " elements."; }
 
 protected:
 
@@ -70,7 +77,8 @@ public:
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
 
-  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown1"; }
+  virtual QString getDescription() const override
+  { return "Removes all elements with a status of Unknown1"; }
 };
 
 /**
@@ -84,7 +92,8 @@ public:
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
 
-  virtual QString getDescription() const override { return "Removes all elements with a status of Unknown2"; }
+  virtual QString getDescription() const override
+  { return "Removes all elements with a status of Unknown2"; }
 };
 
 }

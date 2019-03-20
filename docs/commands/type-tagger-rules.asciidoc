@@ -1,3 +1,4 @@
+[[type-tagger-rules]]
 == type-tagger-rules
 
 === Description
@@ -69,3 +70,9 @@ type-tagger-rules --db-stats (input)
 --------------------------------------
 hoot type-tagger-rules --db-stats implicitTagRules.sqlite
 --------------------------------------
+
+=== See Also
+
+* <<hootuser, ImplicitTypeTaggingUser>>
+* <<hootalgo, ImplicitTypeTaggingAlg>>
+* <<hootDevGuide, ImplicitTagRulesDatabaseGeneration>>

@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -53,6 +53,7 @@
 #include <hoot/core/visitors/ExtractWaysVisitor.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -63,7 +64,14 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Merger, HighwaySnapMerger)
+
 unsigned int HighwaySnapMerger::logWarnCount = 0;
+
+HighwaySnapMerger::HighwaySnapMerger() :
+HighwayMergerAbstract()
+{
+}
 
 HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
@@ -181,8 +189,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_VART(e1->getStatus());
-  //LOG_VART(e2->getStatus());
   OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwaySnapMerger: e1");
   OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwaySnapMerger: e2");
 

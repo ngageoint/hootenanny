@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.9212924" minlon="-77.0350296" maxlat="38.9217453" maxlon="-77.0332861"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9212923999999987" lon="-77.0332860999999980">
+    <node visible="true" id="185" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9212923999999987" lon="-77.0332860999999980">
         <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.094Z;2015-06-01T19:33:35.307Z"/>
         <tag k="addr:full" v="1424 CHAPIN STREET NW"/>
         <tag k="alt_name" v="Meridian Manor"/>
@@ -9,7 +9,7 @@
         <tag k="amenity" v="building"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9217452999999978" lon="-77.0350296000000014">
+    <node visible="true" id="213" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9217452999999978" lon="-77.0350296000000014">
         <tag k="source:ingest:datetime" v="2015-06-01T17:43:03.101Z;2015-06-01T19:33:35.307Z"/>
         <tag k="addr:full" v="2401 15TH STREET NW"/>
         <tag k="alt_name" v="Meridian Hall"/>
@@ -18,8 +18,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-2" role="reviewee"/>
-        <member type="node" ref="-1" role="reviewee"/>
+        <member type="node" ref="185" role="reviewee"/>
+        <member type="node" ref="213" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

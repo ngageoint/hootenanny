@@ -41,4 +41,5 @@ hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm
 === See Also
 
 * `cookie.cutter.*` configuration options
+* _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 
