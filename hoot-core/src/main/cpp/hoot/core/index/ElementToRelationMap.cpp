@@ -74,7 +74,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_pt
 
 const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 {
-  HashMap< ElementId, set<long> >::const_iterator it = _mapping.find(eid);
+  HashMap<ElementId, set<long>>::const_iterator it = _mapping.find(eid);
   if (it == _mapping.end())
   {
     return _emptySet;

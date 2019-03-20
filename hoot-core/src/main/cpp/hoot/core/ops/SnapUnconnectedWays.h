@@ -119,11 +119,10 @@ private:
    *
    * @param criterionClassName the name of a hoot ElementCriterion class
    * @param status a hoot status; either Unknown1 or Unknown2
-   * @param elementType the element type of the criterion class; either Way or Node
    * @return an element criterion
    */
   ElementCriterionPtr _createFeatureCriterion(const QString criterionClassName,
-                                              const Status& status, const ElementType& elementType);
+                                              const Status& status);
   /*
    * Creates an index needed when searching for features to snap to
    *
@@ -133,7 +132,7 @@ private:
    * @param elementType the element type of the criterion class; either Way or Node
    */
   void _createFeatureIndex(ElementCriterionPtr featureCrit,
-                           boost::shared_ptr<Tgs::HilbertRTree> index,
+                           boost::shared_ptr<Tgs::HilbertRTree>& index,
                            std::deque<ElementId>& indexToEid, const ElementType& elementType);
 
   /*

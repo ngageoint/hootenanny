@@ -32,7 +32,13 @@ SnapUnconnectedWays::SnapUnconnectedWays() :
 _maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
 _snapToWayDiscretizationSpacing(0.1),
-_snappedRoadsTagKey("")
+_snappedRoadsTagKey(""),
+_wayToSnapToCriterionClassName("hoot::WayCriterion"),
+_wayToSnapCriterionClassName("hoot::WayCriterion"),
+_wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
+_snapWayStatus(Status::Unknown2),
+_snapToWayStatus(Status::Unknown1),
+_taskStatusUpdateInterval(1000)
 {
   setConfiguration(conf());
 }
@@ -40,6 +46,8 @@ _snappedRoadsTagKey("")
 void SnapUnconnectedWays::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
+
+  _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
 
   if (confOpts.getSnapUnconnectedWaysReuseWayNodes())
   {
@@ -76,11 +84,17 @@ void SnapUnconnectedWays::setConfiguration(const Settings& conf)
   _wayToSnapCriterionClassName = confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed();
   if (_wayToSnapCriterionClassName.isEmpty())
   {
+    LOG_WARN(
+      "No snap way criterion specified for the Unconnected Way Snapper.  " <<
+      "Defaulting to: hoot::WayCriterion.");
     _wayToSnapCriterionClassName = "hoot::WayCriterion";
   }
   _wayToSnapToCriterionClassName = confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed();
   if (_wayToSnapToCriterionClassName.isEmpty())
   {
+    LOG_WARN(
+      "No snap to way criterion specified for the Unconnected Way Snapper.  " <<
+      "Defaulting to: hoot::WayCriterion.");
     _wayToSnapToCriterionClassName = "hoot::WayCriterion";
   }
   if (_maxNodeReuseDistance != 0.0)
@@ -89,6 +103,9 @@ void SnapUnconnectedWays::setConfiguration(const Settings& conf)
       confOpts.getSnapUnconnectedWaysSnapToWayNodeCriterion().trimmed();
     if (_wayNodeToSnapToCriterionClassName.isEmpty())
     {
+      LOG_WARN(
+        "No snap to way node criterion specified for the Unconnected Way Snapper.  " <<
+        "Defaulting to: hoot::WayNodeCriterion.");
       _wayNodeToSnapToCriterionClassName = "hoot::WayNodeCriterion";
     }
   }
@@ -97,38 +114,35 @@ void SnapUnconnectedWays::setConfiguration(const Settings& conf)
 }
 
 ElementCriterionPtr SnapUnconnectedWays::_createFeatureCriterion(
-  const QString criterionClassName, const Status& status, const ElementType& elementType)
+  const QString criterionClassName, const Status& status)
 {
   // TODO: We may want to force inheritiance from WayCriterion for snap to ways and from
   // WayNodeCriterion for snap to way nodes.
 
-  ElementCriterionPtr outputCrit;
-  ElementCriterionPtr critTemp;
   const QString critClass = criterionClassName.trimmed();
   if (!critClass.isEmpty())
   {
-    critTemp.reset(Factory::getInstance().constructObject<ElementCriterion>(critClass));
-    Configurable* configurable = dynamic_cast<Configurable*>(critTemp.get());
-    if (configurable != 0)
+    LOG_DEBUG(
+      "Creating feature filtering criterion: " << criterionClassName << ", status: " <<
+      status.toString() << "...");
+    ElementCriterionPtr critTemp(
+      Factory::getInstance().constructObject<ElementCriterion>(critClass));
+    boost::shared_ptr<Configurable> configurable =
+      boost::dynamic_pointer_cast<Configurable>(critTemp);
+    if (configurable)
     {
       configurable->setConfiguration(_conf);
     }
-    ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(critTemp.get());
-    if (mapConsumer != 0)
+    boost::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      boost::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
+    if (mapConsumer)
     {
       mapConsumer->setOsmMap(_map.get());
     }
+    return
+      boost::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
   }
-  else if (elementType == ElementType::Way)
-  {
-    critTemp.reset(new WayCriterion());
-  }
-  else if (elementType == ElementType::Node)
-  {
-    critTemp.reset(new WayNodeCriterion());
-  }
-  outputCrit.reset(new ChainCriterion(new StatusCriterion(status), critTemp));
-  return outputCrit;
+  return ElementCriterionPtr();
 }
 
 Meters SnapUnconnectedWays::_getWaySearchRadius(const ConstElementPtr& /*e*/) const
@@ -144,8 +158,9 @@ Meters SnapUnconnectedWays::_getWayNodeSearchRadius(const ConstElementPtr& /*e*/
 }
 
 std::set<long> SnapUnconnectedWays::_getUnconnectedEndNodeIds(const ConstWayPtr& way,
-                                               const ElementCriterionPtr& wayCrit) const
+                                                           const ElementCriterionPtr& wayCrit) const
 {
+  LOG_DEBUG("Getting unconnected end nodes for: " << way->getElementId() << "...");
   std::set<long> unconnectedEndNodeIds;
 
   // get the way's nodes
@@ -161,8 +176,10 @@ std::set<long> SnapUnconnectedWays::_getUnconnectedEndNodeIds(const ConstWayPtr&
   // filter the connected ways to each endpoint down by crit
   const std::set<long> filteredWaysContainingFirstEndNode =
     OsmUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
+  LOG_VARD(filteredWaysContainingFirstEndNode);
   const std::set<long> filteredWaysContainingSecondEndNode =
     OsmUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+  LOG_VARD(filteredWaysContainingSecondEndNode);
 
   // If only one way is connected to a node, then then that node is an unconnected end way
   // node.
@@ -180,10 +197,12 @@ std::set<long> SnapUnconnectedWays::_getUnconnectedEndNodeIds(const ConstWayPtr&
 }
 
 void SnapUnconnectedWays::_createFeatureIndex(ElementCriterionPtr featureCrit,
-                                              boost::shared_ptr<Tgs::HilbertRTree> index,
+                                              boost::shared_ptr<Tgs::HilbertRTree>& index,
                                               std::deque<ElementId>& indexToEid,
                                               const ElementType& elementType)
 {
+  LOG_DEBUG("Creating feature index of type: " << elementType << "...");
+
   // TODO: tune these indexes? - see #3054
   boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   index.reset(new Tgs::HilbertRTree(mps, 2));
@@ -214,12 +233,14 @@ void SnapUnconnectedWays::_createFeatureIndex(ElementCriterionPtr featureCrit,
   indexer->finalizeIndex();
   LOG_DEBUG(indexer->getCompletedStatusMessage());
   LOG_VARD(indexToEid.size());
+  LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
 std::set<ElementId> SnapUnconnectedWays::_getNearbyFeaturesToSnapTo(
   const ConstNodePtr& node, const ElementType& elementType) const
 {
-  LOG_VARD(node->getId());
+  LOG_DEBUG("Retrieving nearby features to snap to for: " << node->getElementId() << "...");
+
   boost::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
   if (elementType == ElementType::Node)
   {
@@ -240,6 +261,10 @@ std::set<ElementId> SnapUnconnectedWays::_getNearbyFeaturesToSnapTo(
 int SnapUnconnectedWays::_getNodeToSnapWayInsertIndex(NodePtr nodeToSnap,
                                                       const ConstWayPtr& wayToSnapTo) const
 {
+  LOG_DEBUG(
+    "Calculating way snap insert index for: " << nodeToSnap->getElementId() << " going into: " <<
+    wayToSnapTo->getElementId() << "...");
+
   // Find the closest node to our new node on the snap to road.
   // TODO: Is there a better way to do this using WayLocation?
   const long closestWayNodeId = OsmUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map);
@@ -307,6 +332,8 @@ int SnapUnconnectedWays::_getNodeToSnapWayInsertIndex(NodePtr nodeToSnap,
 
 bool SnapUnconnectedWays::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
 {
+  LOG_DEBUG("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way node...");
+
   // find all way nodes near this unconnected node that don't belong to the same way
   // the unconnected way node is already on
   const std::set<ElementId> wayNodesToSnapTo =
@@ -383,7 +410,7 @@ bool SnapUnconnectedWays::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
 
 bool SnapUnconnectedWays::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
 {
-  LOG_VARD(nodeToSnap->getId());
+  LOG_DEBUG("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
 
   const std::set<ElementId> waysToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Way);
@@ -465,18 +492,24 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
   _snappedWayNodeIds.clear();
   _snappedToWayNodeIds.clear();
 
-  // create feature crits for filtering
+  // create feature crits for filtering what we snap and snap to
   ElementCriterionPtr wayToSnapCrit =
-    _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatus, ElementType::Way);
+    _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatus);
   ElementCriterionPtr wayToSnapToCrit =
-    _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatus, ElementType::Way);
-  ElementCriterionPtr wayNodeToSnapToCrit =
-    _createFeatureCriterion(
-      _wayNodeToSnapToCriterionClassName, _snapToWayStatus, ElementType::Node);
+    _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatus);
+  ElementCriterionPtr wayNodeToSnapToCrit;
+  if (_maxNodeReuseDistance != 0.0)
+  {
+    wayNodeToSnapToCrit =
+      _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatus);
+  }
 
   // create needed geospatial indexes for surrounding feature searches
-  _createFeatureIndex(
-    wayNodeToSnapToCrit, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, ElementType::Node);
+  if (wayNodeToSnapToCrit)
+  {
+    _createFeatureIndex(
+      wayNodeToSnapToCrit, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, ElementType::Node);
+  }
   _createFeatureIndex(
     wayToSnapToCrit, _snapToWayIndex, _snapToWayIndexToEid, ElementType::Way);
 
@@ -488,43 +521,44 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
     const ConstWayPtr& wayToSnap = wayItr->second;
     LOG_VARD(wayToSnap->getElementId());
 
-    // for all ways passing the snap way crit
+    // for all ways passing the way to snap crit
     if (wayToSnapCrit->isSatisfied(wayToSnap))
     {
       // find any endpoints on the way not connected to any other way
       const std::set<long> unconnectedEndNodeIds =
         _getUnconnectedEndNodeIds(wayToSnap, wayToSnapCrit);
+      LOG_VARD(unconnectedEndNodeIds.size());
       for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
            unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
       {
-          const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
-          LOG_VARD(_snappedWayNodeIds.contains(unconnectedEndNodeId));
-          // don't snap the same node more than once
-          if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
+        const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
+        LOG_VARD(_snappedWayNodeIds.contains(unconnectedEndNodeId));
+        // don't snap the same node more than once
+        if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
+        {
+          NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
+          // try to find the nearest way node to snap to that is within the reuse distance, if
+          // one was specified
+          bool snapOccurred = false;
+          if (_maxNodeReuseDistance > 0.0 && wayNodeToSnapToCrit)
           {
-            NodePtr unconnectedEndNode = map->getNode(unconnectedEndNodeId);
-            // try to find the nearest way node to snap to that is within the reuse distance, if
-            // one was specified
-            bool snapOccurred = false;
-            if (_maxNodeReuseDistance > 0.0 && wayNodeToSnapToCrit)
-            {
-              snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
-            }
-
-            if (!snapOccurred)
-            {
-              // If no nearby way nodes were found, we're going to try to find nearby ways, then
-              // snap into the closest location on those neighboring ways.
-              /*snapOccurred =*/ _snapUnconnectedNodeToWay(unconnectedEndNode);
-            }
+            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
           }
-      }
-    }
 
-    if (_numAffected % _taskStatusUpdateInterval == 0)
-    {
-      PROGRESS_INFO(
-        "Snapped " << StringUtils::formatLargeNumber(_numAffected) << " way nodes.");
+          if (!snapOccurred)
+          {
+            // If no nearby way nodes were found, we're going to try to find nearby ways. Then,
+            // snap into the closest location on those neighboring ways.
+            /*snapOccurred =*/ _snapUnconnectedNodeToWay(unconnectedEndNode);
+          }
+
+          if (_numAffected % _taskStatusUpdateInterval == 0)
+          {
+            PROGRESS_INFO(
+              "Snapped " << StringUtils::formatLargeNumber(_numAffected) << " way nodes.");
+          }
+        }
+      }
     }
 
     waysProcessed++;

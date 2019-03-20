@@ -319,7 +319,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_DEBUG("Storing tag changes...");
+  LOG_DEBUG("\tStoring tag changes...");
 
   // Make sure we have a container for our changes
   if (!_pTagChanges)

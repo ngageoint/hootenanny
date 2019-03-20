@@ -3524,7 +3524,7 @@ the endpoint way node to the way.
 === snap.unconnected.ways.snap.to.way.criterion
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `hoot::WayCriterion`
 
 Optional criterion class to filter the types of ways being snapped to.  An example would be:
 hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
@@ -3533,7 +3533,7 @@ way snapping.
 === snap.unconnected.ways.snap.to.way.node.criterion
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `hoot::WayNodeCriterion`
 
 Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
 hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
@@ -3542,7 +3542,7 @@ for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.n
 === snap.unconnected.ways.snap.way.criterion
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `hoot::WayCriterion`
 
 Optional criterion class to filter the types of ways being snapped.  An example would be:
 hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
