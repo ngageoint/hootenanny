@@ -198,8 +198,15 @@ public class ConflateCommandTest {
 
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
-        assertTrue(options.contains("\"address.additional.tag.keys=true\""));
-        assertTrue(options.contains("\"highway.merge.tags.only=foo=bar;blim=blam\""));
+        assertTrue(options.contains("\"address.additional.tag.keys=foo=bar;blim=blam\""));
+        assertTrue(options.contains("\"highway.merge.tags.only=true\""));
+
+        // handles cleaning options...
+        conflateParams.setCleaningOpts(Arrays.asList("DualWaySplitter"));
+        conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+        options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
+        assertTrue(options.contains("\"map.cleaner.transforms-=hoot::DualWaySplitter\""));
+
     }
 
     @Test(expected = IllegalArgumentException.class)

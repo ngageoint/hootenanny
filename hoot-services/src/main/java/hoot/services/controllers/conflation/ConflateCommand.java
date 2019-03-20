@@ -211,7 +211,7 @@ class ConflateCommand extends ExternalCommand {
             if (params.getCleaningOpts() != null) { // remove cleaning specified cleaning options...
                 for (String cleaningOption: params.getCleaningOpts()) {
                     if (cleaningOptions.contains(cleaningOption)) {
-                        options.add("map.cleaner.transforms-=hoot::" + cleaningOption);
+                        options.add("\"map.cleaner.transforms-=hoot::" + cleaningOption + "\"");
                     }
                 }
             }
