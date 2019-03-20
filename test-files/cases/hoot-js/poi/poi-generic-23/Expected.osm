@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.73052500013" minlon="31.41357699957999" maxlat="30.7333329885" maxlon="31.416667"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.7305250001300010" lon="31.4135769995799947">
+    <node visible="true" id="-3302721" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.7305250001300010" lon="31.4135769995799947">
         <tag k="hoot:mismatch" v="2"/>
         <tag k="source" v="mgcp"/>
         <tag k="religion" v="islam"/>
@@ -23,7 +23,7 @@
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.7333329884999991" lon="31.4166670000000003">
+    <node visible="true" id="-3302720" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.7333329884999991" lon="31.4166670000000003">
         <tag k="REF1" v="000105"/>
         <tag k="name:ar" v="سيدي عسكر"/>
         <tag k="is_in" v="Egypt, جمهورية مصر العربية"/>
@@ -41,8 +41,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-3302720" role="reviewee"/>
+        <member type="node" ref="-3302721" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

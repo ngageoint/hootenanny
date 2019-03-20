@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.12132148822" minlon="31.3138683" maxlat="30.12159799975" maxlon="31.31399900035"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1215979997499979" lon="31.3139990003500017">
+    <node visible="true" id="-430185" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1215979997499979" lon="31.3139990003500017">
         <tag k="REF2" v="0020a1"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
@@ -21,7 +21,7 @@
         <tag k="source:date_time" v="2007-04-29"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1213214882200013" lon="31.3138682999999993">
+    <node visible="true" id="-430184" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1213214882200013" lon="31.3138682999999993">
         <tag k="REF1" v="0020a1"/>
         <tag k="name:ar" v="المطرية"/>
         <tag k="int_name" v="El-Matareyya"/>
@@ -31,8 +31,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-430184" role="reviewee"/>
+        <member type="node" ref="-430185" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

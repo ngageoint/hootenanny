@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="0.004415911553967119" minlon="5.97372708019433e-05" maxlat="0.006186612290206156" maxlon="0.001929360328719445"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061462428029057" lon="0.0000597372708019">
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061462428029057" lon="0.0000597372708019">
         <tag k="poi" v="yes"/>
         <tag k="uuid" v="E"/>
         <tag k="name" v="foo"/>
-        <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0044159115539671" lon="0.0001907036049741"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0044268858231206" lon="0.0019293603287194"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061866122902062" lon="0.0018705944176551"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061590821735556" lon="0.0001431008508867"/>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <nd ref="-1"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061590821735556" lon="0.0001431008508867"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0061866122902062" lon="0.0018705944176551"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0044268858231206" lon="0.0019293603287194"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0044159115539671" lon="0.0001907036049741"/>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="-20"/>
+        <nd ref="-18"/>
+        <nd ref="-16"/>
+        <nd ref="-22"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="B;D"/>
         <tag k="name" v="foo"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-5" role="reviewee"/>
-        <member type="way" ref="-1" role="reviewee"/>
+        <member type="node" ref="-23" role="reviewee"/>
+        <member type="way" ref="-26" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:members" v="2"/>
