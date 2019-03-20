@@ -89,6 +89,9 @@ public class ConflateParams {
     @JsonProperty("DISABLED_FEATURES")
     private List<String> disabledFeatures;
 
+    @JsonProperty("CLEANING_OPTIONS")
+    private List<String> cleaningOpts;
+
     public String getInputType1() {
         return inputType1;
     }
@@ -233,6 +236,14 @@ public class ConflateParams {
 	public void setDisabledFeatures(List<String> disabledFeatures) {
 		this.disabledFeatures = disabledFeatures;
 	}
+
+    public List<String> getCleaningOpts() {
+        return this.cleaningOpts;
+    }
+
+    public void setCleaningOpts(List<String> cleaningOpts) {
+        this.cleaningOpts = cleaningOpts;
+    }
 
     @Override
     public String toString() {

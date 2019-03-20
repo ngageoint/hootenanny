@@ -2,7 +2,7 @@
     "Cleaning": {
         "members": {
             "hoot::RemoveRoundabouts": "Handle Roundabouts",
-            "DualWaySplitter": "Split Dual Way"
+            "hoot::DualWaySplitter": "Split Dual Way"
         }
     },
     "General": {

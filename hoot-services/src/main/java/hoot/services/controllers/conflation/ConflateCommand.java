@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -76,6 +77,7 @@ class ConflateCommand extends ExternalCommand {
 
     private String conflationType = null;
     private String conflationAlgorithm = null;
+    private static List<String> cleaningOptions = new ArrayList<>();
 
     private static Map<String, Map<String, String>> conflationFeatures = null;
     private static Map<String, Map<String, String>> configOptions = null;
@@ -93,6 +95,10 @@ class ConflateCommand extends ExternalCommand {
 			schema = new TypeReference<Map<String, Map<String, String>>>(){};
 			file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
 			configOptions = mapper.readValue(file, schema);
+
+            // use default options for map cleaners list...
+			cleaningOptions.addAll(Arrays.asList(configOptions.get("MapCleanerTransforms").get("default")
+				.replaceAll("hoot::","").split(";")));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -201,6 +207,14 @@ class ConflateCommand extends ExternalCommand {
         			}
         		}
         	}
+
+            if (params.getCleaningOpts() != null) { // remove cleaning specified cleaning options...
+                for (String cleaningOption: params.getCleaningOpts()) {
+                    if (cleaningOptions.contains(cleaningOption)) {
+                        options.add("map.cleaner.transforms-=hoot::" + cleaningOption);
+                    }
+                }
+            }
 
         }
 

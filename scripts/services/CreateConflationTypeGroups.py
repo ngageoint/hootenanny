@@ -57,7 +57,7 @@ def createUiJSON(groups, options):
                 if isCleaning:
                     members.append({
                         'label': typeMembers[flag],
-                        'id': flag.replace('::', ''),
+                        'id': flag.replace('hoot::', ''),
                         'input': 'checkbox'
                     })
                 else:
