@@ -3494,6 +3494,14 @@ then they'll be a candidate for merging.
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
+=== snap.unconnected.ways.way.discretization.spacing
+
+* Data Type: double
+* Default Value: `0.1`
+
+The spacing granularity to which a unconnected way node is snapped back to a way with the
+Unconnected Way Snapper.
+
 === snap.unconnected.ways.way.node.reuse.tolerance
 
 * Data Type: double

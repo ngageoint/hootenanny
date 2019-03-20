@@ -224,19 +224,19 @@ bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstEl
 std::set<long> getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
                                            const ElementCriterionPtr& wayCriterion)
 {
+  std::set<long> containingWayIds;
   const std::set<long>& idsOfWaysContainingNode =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
-  std::set<long> filteredWayIds;
   for (std::set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
        containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
   {
     const long containingWayId = *containingWaysItr;
     if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
     {
-      filteredWayIds.insert(containingWayId);
+      containingWayIds.insert(containingWayId);
     }
   }
-  return filteredWayIds;
+  return containingWayIds;
 }
 
 geos::geom::Coordinate OsmUtils::closestWayCoordToNode(
@@ -245,7 +245,6 @@ geos::geom::Coordinate OsmUtils::closestWayCoordToNode(
 {
   WayDiscretizer wayDiscretizer(map, way);
   std::vector<geos::geom::Coordinate> discretizedWayCoords;
-  // TODO: make this configurable?
   wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords);
   discretizedWayCoords.push_back(
     map->getNode(way->getNodeId(0))->toCoordinate());

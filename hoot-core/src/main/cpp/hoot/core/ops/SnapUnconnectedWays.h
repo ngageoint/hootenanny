@@ -8,6 +8,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/WayCriterion.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -35,67 +36,148 @@ public:
 
   SnapUnconnectedWays();
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  //virtual std::string getClassName() const { return className(); }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getInitStatusMessage() const
   { return "Snapping unconnected ways to nearest way..."; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getCompletedStatusMessage() const
   { return "Snapped " + QString::number(_numAffected) + " ways."; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getDescription() const
   { return "Snaps unconnected way endpoints to the nearest way."; }
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
 private:
 
+  // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
+  // furthest away a way can be from a unconnected node for us to consider snapping to it
   double _maxSnapDistance;
+  // how small we cut up the snap to way when trying to snap to one of its coords
+  double _snapToWayDiscretizationSpacing;
+
+  // allow for optionally tagging the snapped node
   QString _snappedRoadsTagKey;
+
+  // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
+  // the feature criterion to be used for way snap source candidates
   QString _wayToSnapCriterionClassName;
+  // the feature criterion to be used for way snap target candidates
   QString _wayNodeToSnapToCriterionClassName;
+  // the status criterion to be used for the snap source way
   Status _snapWayStatus;
+  // the status criterion to be used for the snap target way
   Status _snapToWayStatus;
 
-  OsmMapPtr _map;
-
+  // feature indexes used for way nodes being snapped to
   boost::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
   std::deque<ElementId> _snapToWayNodeIndexToEid;
+
+  // feature indexes used for ways being snapped to
   boost::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
-  // TODO: rename to ids
-  QList<long> _snappedWayNodes;
-  QList<long> _snappedToWayNodes;
+  // keep track of features that are snapped to
+  QList<long> _snappedWayNodeIds;
+  QList<long> _snappedToWayNodeIds;
 
   int _taskStatusUpdateInterval;
-
+  OsmMapPtr _map;
   Settings _conf;
 
-  // Specifying the element as input here allows for optionally using its CE in the search radius
-  // calculation.
-  Meters _getWaySearchRadius(const boost::shared_ptr<const Element>& e) const;
-  Meters _getWayNodeSearchRadius(const boost::shared_ptr<const Element>& e) const;
+  /*
+   * The radius around the end node to look for ways to snap to.
+   */
+  Meters _getWaySearchRadius(const ConstElementPtr& e) const;
+  /*
+   * The radius around the end node to look for way nodes to snap to.
+   */
+  Meters _getWayNodeSearchRadius(const ConstElementPtr& e) const;
 
+  /*
+   * Creates the criterion used to determine via filtering which features we want to snap or snap to
+   *
+   * @param criterionClassName the name of a hoot ElementCriterion class
+   * @param status a hoot status; either Unknown1 or Unknown2
+   * @param elementType the element type of the criterion class; either Way or Node
+   * @return an element criterion
+   */
   ElementCriterionPtr _createFeatureCriterion(const QString criterionClassName,
-                                              const Status& status);
+                                              const Status& status, const ElementType& elementType);
+  /*
+   * Creates an index needed when searching for features to snap to
+   *
+   * @param featureCrit the element criterion for the feature type being indexed
+   * @param index a pointer to the geospatial index being created
+   * @param indexToEid a pointer to the element ID index being created
+   * @param elementType the element type of the criterion class; either Way or Node
+   */
   void _createFeatureIndex(ElementCriterionPtr featureCrit,
                            boost::shared_ptr<Tgs::HilbertRTree> index,
                            std::deque<ElementId>& indexToEid, const ElementType& elementType);
 
-  std::set<long> _getUnconnectedWayEndNodeIds(const ConstWayPtr& way,
-                                              const ElementCriterionPtr& wayCrit) const;
-  std::set<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& unconnectedWayEndNode,
+  /*
+   * Identifies unconnected way nodes
+   *
+   * @param way the way to examine
+   * @param wayCrit an optional element criterion to restrict the types of ways being examined
+   * @return a collection of node IDs
+   */
+  std::set<long> _getUnconnectedEndNodeIds(const ConstWayPtr& way,
+                                           const ElementCriterionPtr& wayCrit =
+                                             ElementCriterionPtr()) const;
+  /*
+   * Return feature candidates to snap to
+   *
+   * @param node the node attempting snapping
+   * @param elementType the element type of the feature being snapped to; either Way or Node
+   * @return a collection of element IDs
+   */
+  std::set<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
                                                  const ElementType& elementType) const;
-  int _getSnappedNodeInsertIndex(NodePtr unconnectedWayEndNode, const long closestSnapToWayNodeId,
-                                 const ConstWayPtr& snapToWay) const;
+  /*
+   * Determines where in a way to snap an unconnected end node
+   *
+   * @param nodeToSnap the node being snapped
+   * @param snapToWay the way being snapped to
+   * @return a way node index
+   */
+  int _getNodeToSnapWayInsertIndex(NodePtr nodeToSnap, const ConstWayPtr& snapToWay) const;
 
-  bool _snapUnconnectedNodeToWayNode(NodePtr unconnectedWayEndNode);
-  bool _snapUnconnectedNodeToWay(NodePtr unconnectedWayEndNode);
+  /*
+   * Attempts to snap an unconnected way end node to another way node
+   *
+   * @param nodeToSnap the node to attempt to snap
+   * @return true if the node was snapped; false otherwise
+   */
+  bool _snapUnconnectedNodeToWayNode(NodePtr nodeToSnap);
+  /*
+   * Attempts to snap an unconnected way end node to another way
+   *
+   * @param nodeToSnap the node to attempt to snap
+   * @return true if the node was snapped; false otherwise
+   */
+  bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap);
 };
 
 }

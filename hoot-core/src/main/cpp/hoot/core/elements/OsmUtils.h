@@ -275,38 +275,41 @@ public:
   static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
 
   /**
-   * TODO
+   * Returns the IDs of all ways containing an input node
    *
-   * @param nodeId
-   * @param map
-   * @param wayCriterion
-   * @return
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of way IDs
    */
   static std::set<long> getContainingWayIdsByNodeId(
     const long nodeId, const ConstOsmMapPtr& map,
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
-   * TODO
+   * Determines the coordinate on a way closest to another node not on the way
    *
-   * @param node
-   * @param way
-   * @param distance
-   * @param discretizationSpacing
-   * @param map
-   * @return
+   * @param node the node to find the closet way coordinate to
+   * @param way the way to find the closest coordinate on
+   * @param distance the distance that will be calculated between the node and the closest
+   * coordinate on the way
+   * @param discretizationSpacing the distance at which the way will be discretized; a smaller
+   * value results in a more accurate distance value, generates more coordinates on the way, and
+   * increase runtime
+   * @param map the map containing the input node and way
+   * @return a coordinate
    */
   static geos::geom::Coordinate closestWayCoordToNode(
     const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
     const double discretizationSpacing, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines the ID of the closest way node on a way to another node not on the way
    *
-   * @param node
-   * @param way
-   * @param map
-   * @return
+   * @param node the node to find the closest way node to
+   * @param way the way to find the closest way node on
+   * @param map the map containing the input node and way
+   * @return a way node ID
    */
   static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
                                      const ConstOsmMapPtr& map);
