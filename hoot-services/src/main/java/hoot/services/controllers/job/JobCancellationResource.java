@@ -29,8 +29,10 @@ package hoot.services.controllers.job;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -102,4 +104,33 @@ public class JobCancellationResource {
 
         return Response.ok(json.toJSONString()).build();
     }
+
+    @GET
+    @Path("/{jobId}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response process(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+
+        Users user = Users.fromRequest(request);
+
+        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId, user.getId());
+
+        if (jobStatus == null) {
+            throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+        } else {
+            try {
+                this.externalCommandInterface.terminate(jobId);
+                this.jobStatusManager.setCancelled(jobId, "Cancelled by user!");
+            } catch (Exception e) {
+                String msg = "Error cancelling job with ID = " + jobId;
+                throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+            }
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        return Response.ok(json.toJSONString()).build();
+    }
+
 }

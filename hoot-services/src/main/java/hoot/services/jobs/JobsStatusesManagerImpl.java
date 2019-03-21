@@ -62,7 +62,8 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
             recentJobs = createQuery().select(jobStatus)
                     .from(jobStatus)
                     .where(jobStatus.userId.eq(user.getId())
-                            .or(jobStatus.status.eq(RUNNING.ordinal())))
+                            .or(jobStatus.status.eq(RUNNING.ordinal()))
+                    )
                     .orderBy(jobStatus.start.desc()).limit(limit).fetch();
         }
 
