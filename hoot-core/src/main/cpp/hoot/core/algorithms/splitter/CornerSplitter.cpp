@@ -97,7 +97,6 @@ void CornerSplitter::splitCorners()
   {
     ConstWayPtr pWay = _map->getWay(_todoWays[i]);
     size_t nodeCount = pWay->getNodeCount();
-
     // If the way has just two nodes, there are no corners
     if (nodeCount > 2)
     {
@@ -245,8 +244,8 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
     {
       boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
-      subline->add(0, ls->getCoordinateN(nodeIdx), false);
-      subline->add(1, ls->getCoordinateN(nodeIdx - 1), false);
+      subline->add(0, ls->getCoordinateN(nodeIdx), true);
+      subline->add(1, ls->getCoordinateN(nodeIdx - 1), true);
       boost::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
@@ -256,8 +255,8 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
     {
       boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
-      subline->add(0, ls->getCoordinateN(nodeIdx), false);
-      subline->add(1, ls->getCoordinateN(nodeIdx + 1), false);
+      subline->add(0, ls->getCoordinateN(nodeIdx), true);
+      subline->add(1, ls->getCoordinateN(nodeIdx + 1), true);
       boost::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
