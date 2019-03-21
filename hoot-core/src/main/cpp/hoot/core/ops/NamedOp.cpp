@@ -56,6 +56,11 @@ _namedOps(namedOps)
 {
 }
 
+void NamedOp::setConfiguration(const Settings& conf)
+{
+  _conf = &conf;
+}
+
 void NamedOp::apply(OsmMapPtr& map)
 {
   Factory& f = Factory::getInstance();
@@ -140,11 +145,6 @@ void NamedOp::apply(OsmMapPtr& map)
 
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
   }
-}
-
-void NamedOp::setConfiguration(const Settings& conf)
-{
-  _conf = &conf;
 }
 
 }

@@ -245,15 +245,16 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
-  OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
+  OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
 
-  // doing this after the conflate post ops, since some invalid reviews are removed by them
+  // doing this after the conflate post ops run, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
 
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
@@ -269,6 +270,7 @@ int ConflateCmd::runSimple(QStringList args)
       diffConflator.addChangesToMap(result, pTagChanges);
     }
     IoUtils::saveMap(result, output);
+    OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
   }
 
   // Do the tags if we need to

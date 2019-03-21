@@ -313,6 +313,17 @@ public:
    */
   static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
                                      const ConstOsmMapPtr& map);
+
+  /**
+   * Determines whether the start or end of a way is closer to a specified node
+   *
+   * @param node node to check distance from input way
+   * @param way way to check distance from input node
+   * @param map map containing the inputs way and node
+   * @return true if the node is closer to the end of the way; false otherwise
+   */
+  static bool endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
+                                                const ConstOsmMapPtr& map);
 };
 
 }

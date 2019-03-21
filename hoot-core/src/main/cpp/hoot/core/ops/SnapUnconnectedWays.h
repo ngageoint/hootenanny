@@ -71,6 +71,8 @@ private:
   double _maxSnapDistance;
   // how small we cut up the snap to way when trying to snap to one of its coords
   double _snapToWayDiscretizationSpacing;
+  // adds the CE of each individual way node snap candidate to the nearby feature search radius
+  bool _addCeToSearchDistance;
 
   // allow for optionally tagging the snapped node
   QString _snappedRoadsTagKey;
@@ -94,9 +96,8 @@ private:
   boost::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
-  // keep track of features that are snapped to
+  // keep track of the way nodes that are snapped
   QList<long> _snappedWayNodeIds;
-  QList<long> _snappedToWayNodeIds;
 
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;
@@ -124,13 +125,14 @@ private:
    * Creates an index needed when searching for features to snap to
    *
    * @param featureCrit the element criterion for the feature type being indexed
-   * @param index a pointer to the geospatial index being created
-   * @param indexToEid a pointer to the element ID index being created
+   * @param featureIndex a pointer to the geospatial index being created
+   * @param featureIndexToEid a pointer to the element ID index being created
    * @param elementType the element type of the criterion class; either Way or Node
    */
   void _createFeatureIndex(ElementCriterionPtr featureCrit,
-                           boost::shared_ptr<Tgs::HilbertRTree>& index,
-                           std::deque<ElementId>& indexToEid, const ElementType& elementType);
+                           boost::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+                           std::deque<ElementId>& featureIndexToEid,
+                           const ElementType& elementType);
 
   /*
    * Identifies unconnected way nodes

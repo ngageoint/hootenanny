@@ -44,7 +44,9 @@ namespace hoot
 class SnapUnconnectedWaysTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SnapUnconnectedWaysTest);
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runSnapToWayTest);
+  CPPUNIT_TEST(runSnapToWayNodeTest);
+  CPPUNIT_TEST(runConfigOptionsValidationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -58,7 +60,17 @@ public:
     TestUtils::mkpath(outputPath);
   }
 
-  void runBasicTest()
+  void runSnapToWayTest()
+  {
+
+  }
+
+  void runSnapToWayNodeTest()
+  {
+
+  }
+
+  void runConfigOptionsValidationTest()
   {
 
   }

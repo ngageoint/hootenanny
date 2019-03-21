@@ -221,48 +221,80 @@ bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstEl
     element1HighwayVal != element2HighwayVal;
 }
 
-std::set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
+set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
                                                      const ElementCriterionPtr& wayCriterion)
 {
-  std::set<long> containingWayIds;
-  const std::set<long>& idsOfWaysContainingNode =
+  set<long> containingWayIds;
+
+  const set<long>& idsOfWaysContainingNode =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
-  for (std::set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
+  for (set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
        containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
   {
-    const long containingWayId = *containingWaysItr;
-    ConstWayPtr containingWay = map->getWay(containingWayId);
-    if (!wayCriterion || wayCriterion->isSatisfied(containingWay))
+    const long containingWayId = *containingWaysItr;;
+    if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
     {
       containingWayIds.insert(containingWayId);
     }
   }
+
   return containingWayIds;
 }
 
-geos::geom::Coordinate OsmUtils::closestWayCoordToNode(
+bool OsmUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
+                                                 const ConstOsmMapPtr& map)
+{
+  if (way->getFirstNodeId() == way->getLastNodeId())
+  {
+    return false;
+  }
+  const double distanceToStartNode =
+    Distance::euclidean(node->toCoordinate(), map->getNode(way->getFirstNodeId())->toCoordinate());
+  const double distanceToEndNode =
+    Distance::euclidean(node->toCoordinate(), map->getNode(way->getLastNodeId())->toCoordinate());
+  return distanceToEndNode < distanceToStartNode;
+}
+
+Coordinate OsmUtils::closestWayCoordToNode(
   const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
   const double discretizationSpacing, const ConstOsmMapPtr& map)
 {
+  // determine which end of the way is closer to our input node (to handle looping ways)
+  const bool startAtEnd = endWayNodeIsCloserToNodeThanStart(node, way, map);
+  LOG_VARD(startAtEnd);
+
+  // split the way up into coords
+  vector<Coordinate> discretizedWayCoords;
+  //vector<Coordinate> discretizedWayCoordsTemp;
   WayDiscretizer wayDiscretizer(map, way);
-  std::vector<geos::geom::Coordinate> discretizedWayCoords;
   wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords);
-  discretizedWayCoords.push_back(
-    map->getNode(way->getNodeId(0))->toCoordinate());
-  discretizedWayCoords.push_back(
-    map->getNode(way->getNodeId(way->getNodeIds().size() - 1))->toCoordinate());
+  // add the first and last coords in (one or both could already be there, but it won't hurt if
+  // they're duplicated)
+  discretizedWayCoords.insert(
+    discretizedWayCoords.begin(), map->getNode(way->getFirstNodeId())->toCoordinate());
+  discretizedWayCoords.push_back(map->getNode(way->getLastNodeId())->toCoordinate());
+  if (startAtEnd)
+  {
+    std::reverse(discretizedWayCoords.begin(), discretizedWayCoords.end());
+  }
   LOG_VARD(discretizedWayCoords);
 
+  // find the closest coord to the input node
   double shortestDistance = DBL_MAX;
-  geos::geom::Coordinate closestWayCoordToNode;
+  double lastDistance = DBL_MAX;
+  Coordinate closestWayCoordToNode;
   for (size_t i = 0; i < discretizedWayCoords.size(); i++)
   {
-    geos::geom::Coordinate wayCoord = discretizedWayCoords[i];
+    const Coordinate wayCoord = discretizedWayCoords[i];
     LOG_VARD(wayCoord);
     const double distanceBetweenNodeAndWayCoord = wayCoord.distance(node->toCoordinate());
     LOG_VARD(distanceBetweenNodeAndWayCoord);
-    // TODO: This *may* be able to be optimized to skip out once the distance values
-    // start getting larger.
+    // Since we're going in node order and started at the closest end of the way, if we start
+    // seeing larger distances, then we're done.
+    if (distanceBetweenNodeAndWayCoord > lastDistance)
+    {
+      break;
+    }
     if (distanceBetweenNodeAndWayCoord < shortestDistance)
     {
       closestWayCoordToNode = wayCoord;
@@ -280,7 +312,7 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   double shortestDistance = DBL_MAX;
   long closestWayNodeId = 0;
 
-  const std::vector<long>& wayNodeIds = way->getNodeIds();
+  const vector<long>& wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
     ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);

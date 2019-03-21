@@ -3494,32 +3494,31 @@ then they'll be a candidate for merging.
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
-=== snap.unconnected.ways.way.discretization.spacing
+=== snap.unconnected.ways.add.circular.error.to.search.radius
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all tolerances use by the Unconnected Way Snapper will have the circular error of the
+snap node candidate added to them.
+
+=== snap.unconnected.ways.discretization.spacing
 
 * Data Type: double
-* Default Value: `0.1`
+* Default Value: `1.0`
 
 The spacing granularity to which a unconnected way node is snapped back to a way with the
-Unconnected Way Snapper.
+Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
+setting it too high may result in less accurate way snapping.
 
-=== snap.unconnected.ways.way.node.reuse.tolerance
+=== snap.unconnected.ways.existing.way.node.tolerance
 
 * Data Type: double
 * Default Value: `0.5`
 
 Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
 way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
-the existing way node instead of adding the way endpoint node as a new way node on the way.  A
-value of 0.0 or less indicates no node reuse will occur.
-
-=== snap.unconnected.ways.reuse.way.nodes
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
-will attempt to reuse existing way nodes on the way being snapped to instead of adding
-the endpoint way node to the way.
+the existing way node instead of adding the way endpoint node as a new way node on the way.
 
 === snap.unconnected.ways.snap.to.way.criterion
 
@@ -3539,6 +3538,15 @@ Optional criterion class to filter the types of way nodes being snapped to.  An 
 hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
 for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
 
+=== snap.unconnected.ways.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
+section of the neighboring way.
+
 === snap.unconnected.ways.snap.way.criterion
 
 * Data Type: string
@@ -3556,15 +3564,6 @@ way snapping.
 Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
 snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference ways.
 
-=== snap.unconnected.ways.snap.tolerance
-
-* Data Type: double
-* Default Value: `5.0`
-
-Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
-way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
-section of the neighboring way.  A value of 0.0 or less indicates no snapping will occur.
-
 === snap.unconnected.ways.tag.key
 
 * Data Type: string
@@ -3572,6 +3571,15 @@ section of the neighboring way.  A value of 0.0 or less indicates no snapping wi
 
 If specified, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
 will tag them with the specified tag key.
+
+=== snap.unconnected.ways.use.existing.way.nodes
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will attempt to reuse existing way nodes on the way being snapped to instead of adding
+the endpoint way node to the way.
 
 === spark.changeset.writer.element.payload.format
 

@@ -119,7 +119,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
 
   // will reproject only if necessary
-  LOG_DEBUG("\tProjecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
@@ -146,7 +145,6 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
-  //MapProjector::projectToWgs84(_pMap);    // TODO: re-enable this?
   _calcAndStoreTagChanges();
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
@@ -297,11 +295,14 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
                           "conflation yet.");
     }
   }
+  OsmMapWriterFactory::writeDebugMap(pMap, "after-adding-diff-tag-changes");
 }
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
   LOG_DEBUG("\tStoring tag changes...");
+
+  MapProjector::projectToWgs84(_pMap);
 
   // Make sure we have a container for our changes
   if (!_pTagChanges)
