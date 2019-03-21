@@ -44,10 +44,8 @@ class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImplicitTagRawRulesDeriverTest);
 
-  // fix these - keep showing up as diff output even though its identical - #2634
-  //CPPUNIT_TEST(runBasicPoiTest);
-  //CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
-
+  CPPUNIT_TEST(runBasicPoiTest);
+  CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
   CPPUNIT_TEST(runMultipleInputsPoiTest);
   CPPUNIT_TEST(runDuplicateWordKeyCountPoiTest);
   CPPUNIT_TEST(runNameCasePoiTest); 
@@ -83,7 +81,7 @@ public:
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesGeneratorTest-runBasicTest.implicitTagRules", outputFile);
+      inDir() + "/ImplicitTagRawRulesDeriverTest-runBasicTest.implicitTagRules", outputFile);
   }
 
   void runMultipleInputsPoiTest()
@@ -208,7 +206,7 @@ public:
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesGeneratorTest-runTranslateNamesFalsePoiTest.implicitTagRules",
+      inDir() + "/ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest.implicitTagRules",
       outputFile);
   }
 
