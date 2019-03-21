@@ -6,7 +6,16 @@
     },
     "General": {
         "members": {
-            "add.review.tags.to.features": "Add review tags to individual features"
+            "add.review.tags.to.features": "Add review tags to individual features",
+            "review.score.criterion.min.threshold": "Min Review Score",
+            "review.score.criterion.max.threshold": "Max Review Score"
+        }
+    },
+    "Attribute": {
+        "members": {
+            "attribute.conflation.aggressive.highway.joining": "Aggressively join highways",
+            "attribute.conflation.allow.ref.geometry.changes.for.bridges": "Do not change reference layer bridge geometries",
+            "attribute.conflation.allow.reviews.by.score": "Allow reviews by score"
         }
     },
     "Roads": {
