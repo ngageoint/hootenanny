@@ -354,11 +354,10 @@ int SnapUnconnectedWays::_getNodeToSnapWayInsertIndex(NodePtr nodeToSnap,
     wayToSnapTo->getElementId() << "...");
 
   // find the closest way node on snap target way to our node being snapped
-  const long closestWayNodeId = OsmUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map);
-  LOG_VARD(closestWayNodeId);
   const std::vector<long>& wayToSnapToNodeIds = wayToSnapTo->getNodeIds();
   LOG_VARD(wayToSnapToNodeIds);
-  const int indexOfClosestWayNodeId = wayToSnapTo->getNodeIndex(closestWayNodeId);
+  const int indexOfClosestWayNodeId =
+    wayToSnapTo->getNodeIndex(OsmUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map));
   LOG_VARD(indexOfClosestWayNodeId);
 
   int indexOfSecondClosestWayNodeId = -1;
@@ -510,7 +509,7 @@ bool SnapUnconnectedWays::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
     LOG_VARD(wayToSnapToContainsNodeToSnap);
     if (!wayToSnapToContainsNodeToSnap)
     {
-      // Find the closest coord on the neighboring way to our input node by discretizing it.
+      // find the closest coord on the neighboring way to our input node
       double shortestDistanceFromNodeToSnapToWayCoord = DBL_MAX;
       const geos::geom::Coordinate closestWayToSnapToCoord =
         OsmUtils::closestWayCoordToNode(nodeToSnap, wayToSnapTo,

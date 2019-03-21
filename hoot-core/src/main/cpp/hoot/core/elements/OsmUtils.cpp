@@ -326,6 +326,7 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   }
   LOG_VARD(shortestDistance);
 
+  LOG_VARD(closestWayNodeId);
   return closestWayNodeId;
 }
 
