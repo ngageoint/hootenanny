@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static hoot.services.models.db.QMaps.maps;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,8 +118,11 @@ public class ExportResource {
      *
      * {
      *   "translation":"MGCP.js", //Translation script name.
-     *   "inputtype":"db",        //[db | file] db means input from hoot db will be used. file mean
-     *                            //a file path will be specified.
+     *   "inputtype":"db",        //[db | dbs | folder|  file]
+     *   						  // - db means input from hoot db will be used.
+     *                            // - dbs means list of maps in hoot db are used.
+     *                            // - folder means all files in a hoot db folder are used.
+     *                            // - file means a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
      *   "outputtype":"gdb",      //[gdb | shp | tiles]. gdb will produce an ESRI file
@@ -168,7 +172,18 @@ public class ExportResource {
 
 	           	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
 	           	workflow.add(zipCommand);
-	            params.setInputType("folder");
+            	params.setInputType("folder");
+	        } else if (inputType.equalsIgnoreCase("dbs")) {
+	        	params.setInputType("db");
+
+	        	for (String map: Arrays.asList(params.getInput().split(","))) {
+	        		params.setInput(map);
+	        		params.setOutputName(map);
+	        		workflow.add(getCommand(user, jobId, params, debugLevel));
+	        	}
+
+	        	Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER");
+	        	workflow.add(zipCommand);
 
 	        } else {
 	        	workflow.add(getCommand(user, jobId, params, debugLevel));
