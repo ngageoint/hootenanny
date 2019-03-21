@@ -13,7 +13,6 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -157,45 +156,6 @@ Meters SnapUnconnectedWays::_getWayNodeSearchRadius(const ConstElementPtr& /*e*/
   return _maxNodeReuseDistance;
 }
 
-std::set<long> SnapUnconnectedWays::_getUnconnectedEndNodeIds(const ConstWayPtr& way,
-                                                           const ElementCriterionPtr& wayCrit) const
-{
-  LOG_DEBUG("Getting unconnected end nodes for: " << way->getElementId() << "...");
-  std::set<long> unconnectedEndNodeIds;
-
-  // get the way's nodes
-  const std::vector<long>& wayNodeIds = way->getNodeIds();
-  LOG_VARD(wayNodeIds);
-
-  // grab the endpoints
-  const long firstEndNodeId = wayNodeIds.at(0);
-  LOG_VARD(firstEndNodeId);
-  const long secondEndNodeId = wayNodeIds.at(wayNodeIds.size() - 1);
-  LOG_VARD(secondEndNodeId);
-
-  // filter the connected ways to each endpoint down by crit
-  const std::set<long> filteredWaysContainingFirstEndNode =
-    OsmUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
-  LOG_VARD(filteredWaysContainingFirstEndNode);
-  const std::set<long> filteredWaysContainingSecondEndNode =
-    OsmUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
-  LOG_VARD(filteredWaysContainingSecondEndNode);
-
-  // If only one way is connected to a node, then then that node is an unconnected end way
-  // node.
-  if (filteredWaysContainingFirstEndNode.size() == 1)
-  {
-    unconnectedEndNodeIds.insert(firstEndNodeId);
-  }
-  if (filteredWaysContainingSecondEndNode.size() == 1)
-  {
-    unconnectedEndNodeIds.insert(secondEndNodeId);
-  }
-  LOG_VARD(unconnectedEndNodeIds);
-
-  return unconnectedEndNodeIds;
-}
-
 void SnapUnconnectedWays::_createFeatureIndex(ElementCriterionPtr featureCrit,
                                               boost::shared_ptr<Tgs::HilbertRTree>& index,
                                               std::deque<ElementId>& indexToEid,
@@ -236,6 +196,45 @@ void SnapUnconnectedWays::_createFeatureIndex(ElementCriterionPtr featureCrit,
   LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
+std::set<long> SnapUnconnectedWays::_getUnconnectedEndNodeIds(const ConstWayPtr& way,
+                                                           const ElementCriterionPtr& wayCrit) const
+{
+  LOG_DEBUG("Getting unconnected end nodes for: " << way->getElementId() << "...");
+  std::set<long> unconnectedEndNodeIds;
+
+  // get the way's nodes
+  const std::vector<long>& wayNodeIds = way->getNodeIds();
+  LOG_VARD(wayNodeIds);
+
+  // grab the endpoints
+  const long firstEndNodeId = wayNodeIds.at(0);
+  LOG_VARD(firstEndNodeId);
+  const long secondEndNodeId = wayNodeIds.at(wayNodeIds.size() - 1);
+  LOG_VARD(secondEndNodeId);
+
+  // filter the connected ways to each endpoint down by crit
+  const std::set<long> filteredWaysContainingFirstEndNode =
+    OsmUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
+  LOG_VARD(filteredWaysContainingFirstEndNode);
+  const std::set<long> filteredWaysContainingSecondEndNode =
+    OsmUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+  LOG_VARD(filteredWaysContainingSecondEndNode);
+
+  // If only one way is connected to a node, then then that node is an unconnected end way
+  // node.
+  if (filteredWaysContainingFirstEndNode.size() == 1)
+  {
+    unconnectedEndNodeIds.insert(firstEndNodeId);
+  }
+  if (filteredWaysContainingSecondEndNode.size() == 1)
+  {
+    unconnectedEndNodeIds.insert(secondEndNodeId);
+  }
+  LOG_VARD(unconnectedEndNodeIds);
+
+  return unconnectedEndNodeIds;
+}
+
 std::set<ElementId> SnapUnconnectedWays::_getNearbyFeaturesToSnapTo(
   const ConstNodePtr& node, const ElementType& elementType) const
 {
@@ -271,6 +270,7 @@ int SnapUnconnectedWays::_getNodeToSnapWayInsertIndex(NodePtr nodeToSnap,
   LOG_VARD(closestWayNodeId);
 
   const std::vector<long>& wayToSnapToNodeIds = wayToSnapTo->getNodeIds();
+  LOG_VARD(wayToSnapToNodeIds);
   const int indexOfClosestWayNodeId = wayToSnapTo->getNodeIndex(closestWayNodeId);
   LOG_VARD(indexOfClosestWayNodeId);
 
@@ -288,11 +288,11 @@ int SnapUnconnectedWays::_getNodeToSnapWayInsertIndex(NodePtr nodeToSnap,
   else
   {
     // try both the one before and after the closest node to see which is closer
-    const int wayNodeBeforeIndex = indexOfSecondClosestWayNodeId - 1;
+    const int wayNodeBeforeIndex = indexOfClosestWayNodeId - 1;
     LOG_VARD(wayNodeBeforeIndex);
     const long wayNodeBeforeId = wayToSnapTo->getNodeId(wayNodeBeforeIndex);
     LOG_VARD(wayNodeBeforeId);
-    const int wayNodeAfterIndex = indexOfSecondClosestWayNodeId + 1;
+    const int wayNodeAfterIndex = indexOfClosestWayNodeId + 1;
     LOG_VARD(wayNodeAfterIndex);
     const long wayNodeAfterId = wayToSnapTo->getNodeId(wayNodeAfterIndex);
     LOG_VARD(wayNodeAfterId);
@@ -427,7 +427,7 @@ bool SnapUnconnectedWays::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
 
     const bool wayToSnapToContainsNodeToSnap =
       std::find(
-        wayNodeIdsToSnapTo.begin(), wayNodeIdsToSnapTo.end(), nodeToSnap->getId()) ==
+        wayNodeIdsToSnapTo.begin(), wayNodeIdsToSnapTo.end(), nodeToSnap->getId()) !=
       wayNodeIdsToSnapTo.end();
     LOG_VARD(wayToSnapToContainsNodeToSnap);
     if (!wayToSnapToContainsNodeToSnap)
@@ -522,9 +522,10 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
     LOG_VARD(wayToSnap->getElementId());
 
     // for all ways passing the way to snap crit
+    //TODO: is this check needed since its done in _getUnconnectedEndNodeIds?
     if (wayToSnapCrit->isSatisfied(wayToSnap))
     {
-      // find any endpoints on the way not connected to any other way
+      // Find any endpoints on the way not connected to any other way.
       const std::set<long> unconnectedEndNodeIds =
         _getUnconnectedEndNodeIds(wayToSnap, wayToSnapCrit);
       LOG_VARD(unconnectedEndNodeIds.size());
@@ -537,8 +538,9 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
         if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
         {
           NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
-          // try to find the nearest way node to snap to that is within the reuse distance, if
-          // one was specified
+          // Try to find the nearest way node satisifying the specifying way node criteria that
+          // is within the reuse distance, if one was specified, and snap to it in order to cut
+          // back on the number of new way nodes being added to way being snapped to.
           bool snapOccurred = false;
           if (_maxNodeReuseDistance > 0.0 && wayNodeToSnapToCrit)
           {
@@ -547,12 +549,12 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
 
           if (!snapOccurred)
           {
-            // If no nearby way nodes were found, we're going to try to find nearby ways. Then,
-            // snap into the closest location on those neighboring ways.
+            // Otherwise if no nearby way nodes were found to snap to, we're going to try to find
+            // a nearby way and snap into the closest location on it.
             /*snapOccurred =*/ _snapUnconnectedNodeToWay(unconnectedEndNode);
           }
 
-          if (_numAffected % _taskStatusUpdateInterval == 0)
+          if (snapOccurred && _numAffected % _taskStatusUpdateInterval == 0)
           {
             PROGRESS_INFO(
               "Snapped " << StringUtils::formatLargeNumber(_numAffected) << " way nodes.");
@@ -566,7 +568,7 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(waysProcessed) << " / " <<
-        StringUtils::formatLargeNumber(ways.size()) << " ways for way snapping.");
+        StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }
 }

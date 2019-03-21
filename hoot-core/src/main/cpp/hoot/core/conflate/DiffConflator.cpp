@@ -89,7 +89,6 @@ DiffConflator::DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _reset();
 }
 
-
 DiffConflator::~DiffConflator()
 {
   _reset();
@@ -110,20 +109,20 @@ void DiffConflator::apply(OsmMapPtr& map)
   RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
   _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-discarding-relations");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-discarding-relations");
 
   LOG_DEBUG("\tDiscarding unconflatable elements...");
   NonConflatableElementRemover nonConflateRemover;
   nonConflateRemover.apply(_pMap);
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-removing non-conflatable");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
 
   // will reproject only if necessary
   LOG_DEBUG("\tProjecting to planar...");
   MapProjector::projectToPlanar(_pMap);
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-projecting-to-planar");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
   // find all the matches in this _pMap
   if (_matchThreshold.get())
@@ -142,89 +141,30 @@ void DiffConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Matches Found", _matches.size()));
   _stats.append(SingleStat("Number of Matches Found per Second",
     (double)_matches.size() / findMatchesTime));
-  OsmMapWriterFactory::writeDebugMap(map, "after-matching");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
 
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
   //MapProjector::projectToWgs84(_pMap);    // TODO: re-enable this?
   _calcAndStoreTagChanges();
-  OsmMapWriterFactory::writeDebugMap(map, "after-storing-tag-changes");
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
-  LOG_DEBUG("\tDeleting secondary match elements...");
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
-  {
-    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-         pit != pairs.end(); ++pit)
-    {
-      if (!pit->first.isNull())
-      {
-        LOG_VART(pit->first);
-        ElementPtr e = _pMap->getElement(pit->first);
-        if (e && e->getStatus() == Status::Unknown2)
-        {
-          RecursiveElementRemover(pit->first).apply(_pMap);
-        }
-      }
-      if (!pit->second.isNull())
-      {
-        LOG_VART(pit->second);
-        ElementPtr e = _pMap->getElement(pit->second);
-        if (e && e->getStatus() == Status::Unknown2)
-        {
-          RecursiveElementRemover(pit->second).apply(_pMap);
-        }
-      }
-    }
-  }
-  OsmMapWriterFactory::writeDebugMap(map, "after-removing-sec-matches");
+  _removeMatches(Status::Unknown2);
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore. See additional notes in SnapUnconnectedWays.
-    SnapUnconnectedWays roadSnapper;
-    LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-    roadSnapper.apply(_pMap);
-    LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(map, "after-road-snapping");
+    _snapSecondaryRoadsBackToRef();
   }
 
   // _pMap at this point contains all of input1, we are going to delete everything left that
   // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
   // differential that we want.
-  LOG_DEBUG("\tRemoving reference match elements...");
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
-  {
-    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-         pit != pairs.end(); ++pit)
-    {
-      if (!pit->first.isNull())
-      {
-        LOG_VART(pit->first);
-        ElementPtr e = _pMap->getElement(pit->first);
-        if (e && e->getStatus() == Status::Unknown1)
-        {
-          RecursiveElementRemover(pit->first).apply(_pMap);
-        }
-      }
-      if (!pit->second.isNull())
-      {
-        LOG_VART(pit->second);
-        ElementPtr e = _pMap->getElement(pit->second);
-        if (e && e->getStatus() == Status::Unknown1)
-        {
-          RecursiveElementRemover(pit->second).apply(_pMap);
-        }
-      }
-    }
-  }
-  OsmMapWriterFactory::writeDebugMap(map, "after-removing-ref-matches");
+  _removeMatches(Status::Unknown1);
 
   // Now remove input1 elements
   LOG_DEBUG("\tRemoving all reference elements...");
@@ -232,7 +172,49 @@ void DiffConflator::apply(OsmMapPtr& map)
   RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
   removeRef1Visitor.setRecursive(true);
   _pMap->visitRw(removeRef1Visitor);
-  OsmMapWriterFactory::writeDebugMap(map, "after-removing-ref-elements");
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+}
+
+void DiffConflator::_snapSecondaryRoadsBackToRef()
+{
+  SnapUnconnectedWays roadSnapper;
+  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
+  roadSnapper.apply(_pMap);
+  LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+}
+
+void DiffConflator::_removeMatches(const Status& status)
+{
+  LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
+  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  {
+    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
+         pit != pairs.end(); ++pit)
+    {
+      if (!pit->first.isNull())
+      {
+        LOG_VART(pit->first);
+        ElementPtr e = _pMap->getElement(pit->first);
+        if (e && e->getStatus() == status)
+        {
+          RecursiveElementRemover(pit->first).apply(_pMap);
+        }
+      }
+      if (!pit->second.isNull())
+      {
+        LOG_VART(pit->second);
+        ElementPtr e = _pMap->getElement(pit->second);
+        if (e && e->getStatus() == status)
+        {
+          RecursiveElementRemover(pit->second).apply(_pMap);
+        }
+      }
+    }
+  }
+
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
 }
 
 void DiffConflator::setConfiguration(const Settings &conf)
@@ -373,6 +355,8 @@ void DiffConflator::_calcAndStoreTagChanges()
       }
     }
   }
+
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
 // See if tags are the same

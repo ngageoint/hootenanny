@@ -8,7 +8,6 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/criterion/WayCriterion.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -17,16 +16,16 @@ namespace hoot
 {
 
 /**
- * This class is set up to snap an unconnected way endpoint node to another way, using the element
- * input criteria to determine which types of ways to snap.  As of 3/15/19, this has only ever
- * been tested with roads, however.
+ * This class is set up to snap an unconnected way endpoint node to another way, using custom
+ * element input criteria to determine which types of ways should be snapped and what type of ways
+ * they should be snapped to.  However, as of 3/20/19, this has only ever been tested with roads.
  *
- * The main impetus of this class was to specifically make the road output of Differential
- * Conflation using the Network Algorithm (with rubber sheeting as a pre conflate op) better by
- * cleaning up unconnected roads.  However, this could also be used as a cleanup op after other
- * types of conflation.  Future efforts, however if possible, should focus on trying to fix the
- * lack of snapping in the conflation routines themselves if possible rather than using this as an
- * after the fact cleanup utility.
+ * The main impetus in creating this class was to make the road output of Differential Conflation
+ * using the Network Algorithm (with rubber sheeting as a pre conflate op) better by snapping
+ * unconnected secondary roads to the nearest road in the reference dataset.  However, this op
+ * could also be used as a cleanup op after other types of conflation.  Future efforts, if possible,
+ * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
+ * than relying on this as a cleanup utility.
  */
 class SnapUnconnectedWays : public OsmMapOperation, public OperationStatusInfo, public Configurable
 {
@@ -40,8 +39,6 @@ public:
    * @see OsmMapOperation
    */
   virtual void apply(OsmMapPtr& map);
-
-  //virtual std::string getClassName() const { return className(); }
 
   /**
    * @see OperationStatusInfo
