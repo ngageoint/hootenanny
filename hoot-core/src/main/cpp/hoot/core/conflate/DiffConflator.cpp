@@ -155,7 +155,16 @@ void DiffConflator::apply(OsmMapPtr& map)
   {
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
-    // anymore. See additional notes in SnapUnconnectedWays.
+    // anymore.
+
+    // One big weakness here is that if the map was rubbersheeted beforehand (e.g. as a pre
+    // conflation op when using the Network alg), we'll be snapping back to the rubbersheeted
+    // ref data, which never actually makes it to the output since we drop out ref matches. So,
+    // in places where the rubbersheeting severely moved ref ways, it may not appear that the
+    // snapping did very well.  Since the rubbersheeting potentially makes the matching better,
+    // which directly feeds this operation, there's really no other recourse other than to try
+    // diff conflate both with and w/o rubbersheeting to see which yields better overall results.
+
     _snapSecondaryRoadsBackToRef();
   }
 

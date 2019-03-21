@@ -244,7 +244,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
 bool OsmUtils::endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
                                                  const ConstOsmMapPtr& map)
 {
-  if (way->getFirstNodeId() == way->getLastNodeId())
+  if (way->isFirstLastNodeIdentical())
   {
     return false;
   }
@@ -259,13 +259,8 @@ Coordinate OsmUtils::closestWayCoordToNode(
   const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
   const double discretizationSpacing, const ConstOsmMapPtr& map)
 {
-  // determine which end of the way is closer to our input node (to handle looping ways)
-  const bool startAtEnd = endWayNodeIsCloserToNodeThanStart(node, way, map);
-  LOG_VARD(startAtEnd);
-
   // split the way up into coords
   vector<Coordinate> discretizedWayCoords;
-  //vector<Coordinate> discretizedWayCoordsTemp;
   WayDiscretizer wayDiscretizer(map, way);
   wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords);
   // add the first and last coords in (one or both could already be there, but it won't hurt if
@@ -273,7 +268,10 @@ Coordinate OsmUtils::closestWayCoordToNode(
   discretizedWayCoords.insert(
     discretizedWayCoords.begin(), map->getNode(way->getFirstNodeId())->toCoordinate());
   discretizedWayCoords.push_back(map->getNode(way->getLastNodeId())->toCoordinate());
-  if (startAtEnd)
+
+  // determine which end of the way is closer to our input node (to handle ways looping back on
+  // themselves)
+  if (endWayNodeIsCloserToNodeThanStart(node, way, map))
   {
     std::reverse(discretizedWayCoords.begin(), discretizedWayCoords.end());
   }
@@ -329,6 +327,27 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   LOG_VARD(shortestDistance);
 
   return closestWayNodeId;
+}
+
+bool OsmUtils::nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+                                             const ConstOsmMapPtr& map)
+{
+  const std::set<long>& waysContainingNode1 =
+    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId1);
+  LOG_VARD(waysContainingNode1);
+
+  const std::set<long>& waysContainingNode2 =
+    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId2);
+  LOG_VARD(waysContainingNode2);
+
+  std::set<long> commonNodesBetweenWayGroups;
+  std::set_intersection(
+    waysContainingNode1.begin(), waysContainingNode1.end(),
+    waysContainingNode2.begin(), waysContainingNode2.end(),
+    std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
+  LOG_VARD(commonNodesBetweenWayGroups);
+
+  return commonNodesBetweenWayGroups.size() != 0;
 }
 
 }
