@@ -156,29 +156,25 @@ public class ExportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            if (params.getHoot2() != null) {
-	            if (inputType.equalsIgnoreCase("folder")) {
-	            	Long folder_id = Long.parseLong(params.getInput());
-	            	params.setInputType("db");
+	        if (inputType.equalsIgnoreCase("folder")) {
+	        	Long folder_id = Long.parseLong(params.getInput());
+	        	params.setInputType("db"); // make folder input really db input...
 
-	            	for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) {
-	                	params.setInput(Long.toString(mapInfo.get(maps.id)));
-	                	params.setOutputName(mapInfo.get(maps.displayName));
-	            		workflow.add(getCommand(user, jobId, params, debugLevel));
-	            	}
-	            	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
-	            	workflow.add(zipCommand);
-
-	            	params.setInputType("folder");
-	            } else if (inputType.equalsIgnoreCase("db")) {
-	            	workflow.add(getCommand(user, jobId, params, debugLevel));
-	            	if (outputType.matches("osm|shp|fgd")) {
-	                	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-	                	workflow.add(zipCommand);
-	            	}
+	            for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
+	               	params.setInput(Long.toString(mapInfo.get(maps.id)));
+	               	params.setOutputName(mapInfo.get(maps.displayName));
+	           		workflow.add(getCommand(user, jobId, params, debugLevel));
 	            }
 
-            } else {}
+	           	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
+	           	workflow.add(zipCommand);
+	            params.setInputType("folder");
+
+	        } else {
+	        	workflow.add(getCommand(user, jobId, params, debugLevel));
+	        	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+	            workflow.add(zipCommand);
+	        }
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
