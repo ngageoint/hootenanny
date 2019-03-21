@@ -18,7 +18,7 @@ namespace hoot
 /**
  * This class is set up to snap an unconnected way endpoint node to another way, using custom
  * element input criteria to determine which types of ways should be snapped and what type of ways
- * they should be snapped to.  However, as of 3/20/19, this has only ever been tested with roads.
+ * they should be snapped to.  However, as of 3/21/19, this has only ever been tested with roads.
  *
  * The main impetus in creating this class was to make the road output of Differential Conflation
  * using the Network Algorithm (with rubber sheeting as a pre conflate op) better by snapping
@@ -65,6 +65,9 @@ public:
 
 private:
 
+  // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
+  // a new way node
+  bool _snapToExistingWayNodes;
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
   // furthest away a way can be from a unconnected node for us to consider snapping to it
@@ -107,6 +110,7 @@ private:
    * The radius around the end node to look for ways to snap to.
    */
   Meters _getWaySearchRadius(const ConstElementPtr& e) const;
+
   /*
    * The radius around the end node to look for way nodes to snap to.
    */
@@ -169,6 +173,7 @@ private:
    * @return true if the node was snapped; false otherwise
    */
   bool _snapUnconnectedNodeToWayNode(NodePtr nodeToSnap);
+
   /*
    * Attempts to snap an unconnected way end node to another way
    *

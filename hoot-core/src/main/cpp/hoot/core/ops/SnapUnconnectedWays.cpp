@@ -29,9 +29,10 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SnapUnconnectedWays)
 
 SnapUnconnectedWays::SnapUnconnectedWays() :
+_snapToExistingWayNodes(true),
 _maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
-_snapToWayDiscretizationSpacing(0.1),
+_snapToWayDiscretizationSpacing(1.0),
 _addCeToSearchDistance(false),
 _snappedRoadsTagKey(""),
 _wayToSnapToCriterionClassName("hoot::WayCriterion"),
@@ -50,7 +51,8 @@ void SnapUnconnectedWays::setConfiguration(const Settings& conf)
 
   _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
 
-  if (confOpts.getSnapUnconnectedWaysUseExistingWayNodes())
+  _snapToExistingWayNodes = ConfigOptions().getSnapUnconnectedWaysUseExistingWayNodes();
+  if (_snapToExistingWayNodes)
   {
     _maxNodeReuseDistance = confOpts.getSnapUnconnectedWaysExistingWayNodeTolerance();
     if (_maxNodeReuseDistance <= 0.0)
@@ -131,7 +133,7 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
   ElementCriterionPtr wayToSnapToCrit =
     _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatus);
   ElementCriterionPtr wayNodeToSnapToCrit;
-  if (_maxNodeReuseDistance != 0.0)
+  if (_snapToExistingWayNodes)
   {
     wayNodeToSnapToCrit =
       _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatus);
@@ -175,7 +177,7 @@ void SnapUnconnectedWays::apply(OsmMapPtr& map)
         // node.  This reuse of existing way nodes on way being snapped to is done in order to cut
         // back on the number of new way nodes being added.
         bool snapOccurred = false;
-        if (_maxNodeReuseDistance > 0.0 && wayNodeToSnapToCrit)
+        if (_snapToExistingWayNodes)
         {
           snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
         }
