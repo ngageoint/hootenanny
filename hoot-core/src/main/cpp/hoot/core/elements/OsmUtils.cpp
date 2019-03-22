@@ -238,6 +238,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
     }
   }
 
+  LOG_VART(containingWayIds);
   return containingWayIds;
 }
 
@@ -268,14 +269,13 @@ Coordinate OsmUtils::closestWayCoordToNode(
   discretizedWayCoords.insert(
     discretizedWayCoords.begin(), map->getNode(way->getFirstNodeId())->toCoordinate());
   discretizedWayCoords.push_back(map->getNode(way->getLastNodeId())->toCoordinate());
-
   // determine which end of the way is closer to our input node (to handle ways looping back on
   // themselves)
   if (endWayNodeIsCloserToNodeThanStart(node, way, map))
   {
     std::reverse(discretizedWayCoords.begin(), discretizedWayCoords.end());
   }
-  LOG_VARD(discretizedWayCoords);
+  LOG_VART(discretizedWayCoords);
 
   // find the closest coord to the input node
   double shortestDistance = DBL_MAX;
@@ -284,9 +284,7 @@ Coordinate OsmUtils::closestWayCoordToNode(
   for (size_t i = 0; i < discretizedWayCoords.size(); i++)
   {
     const Coordinate wayCoord = discretizedWayCoords[i];
-    LOG_VARD(wayCoord);
     const double distanceBetweenNodeAndWayCoord = wayCoord.distance(node->toCoordinate());
-    LOG_VARD(distanceBetweenNodeAndWayCoord);
     // Since we're going in node order and started at the closest end of the way, if we start
     // seeing larger distances, then we're done.
     if (distanceBetweenNodeAndWayCoord > lastDistance)
@@ -301,6 +299,9 @@ Coordinate OsmUtils::closestWayCoordToNode(
   }
   distance = shortestDistance;
 
+  LOG_VART(distance);
+  LOG_VART(closestWayCoordToNode);
+
   return closestWayCoordToNode;
 }
 
@@ -313,20 +314,18 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   const vector<long>& wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);
-    LOG_VARD(wayNode);
+    ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);;
     const double distanceFromNodeToWayNode =
       Distance::euclidean(node->toCoordinate(), wayNode->toCoordinate());
-    LOG_VARD(distanceFromNodeToWayNode);
     if (distanceFromNodeToWayNode < shortestDistance)
     {
       shortestDistance = distanceFromNodeToWayNode;
       closestWayNodeId = wayNode->getId();
     }
   }
-  LOG_VARD(shortestDistance);
+  LOG_VART(shortestDistance);
 
-  LOG_VARD(closestWayNodeId);
+  LOG_VART(closestWayNodeId);
   return closestWayNodeId;
 }
 
@@ -335,18 +334,18 @@ bool OsmUtils::nodesAreContainedByTheSameWay(const long nodeId1, const long node
 {
   const std::set<long>& waysContainingNode1 =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId1);
-  LOG_VARD(waysContainingNode1);
+  LOG_VART(waysContainingNode1);
 
   const std::set<long>& waysContainingNode2 =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId2);
-  LOG_VARD(waysContainingNode2);
+  LOG_VART(waysContainingNode2);
 
   std::set<long> commonNodesBetweenWayGroups;
   std::set_intersection(
     waysContainingNode1.begin(), waysContainingNode1.end(),
     waysContainingNode2.begin(), waysContainingNode2.end(),
     std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
-  LOG_VARD(commonNodesBetweenWayGroups);
+  LOG_VART(commonNodesBetweenWayGroups);
 
   return commonNodesBetweenWayGroups.size() != 0;
 }

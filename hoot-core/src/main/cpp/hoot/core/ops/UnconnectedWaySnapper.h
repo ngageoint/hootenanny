@@ -1,6 +1,6 @@
 
-#ifndef SNAP_UNCONNECTED_WAYS
-#define SNAP_UNCONNECTED_WAYS
+#ifndef UNCONNECTED_WAY_SNAPPER
+#define UNCONNECTED_WAY_SNAPPER
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -27,13 +27,14 @@ namespace hoot
  * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
  * than relying on this as a cleanup utility.
  */
-class SnapUnconnectedWays : public OsmMapOperation, public OperationStatusInfo, public Configurable
+class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
+  public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SnapUnconnectedWays"; }
+  static std::string className() { return "hoot::UnconnectedWaySnapper"; }
 
-  SnapUnconnectedWays();
+  UnconnectedWaySnapper();
 
   /**
    * @see OsmMapOperation
@@ -185,4 +186,4 @@ private:
 
 }
 
-#endif // SNAP_UNCONNECTED_WAYS
+#endif // UNCONNECTED_WAY_SNAPPER

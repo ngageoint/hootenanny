@@ -55,7 +55,7 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/ops/SnapUnconnectedWays.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/StringUtils.h>
 
 // standard
@@ -184,7 +184,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
 void DiffConflator::_snapSecondaryRoadsBackToRef()
 {
-  SnapUnconnectedWays roadSnapper;
+  UnconnectedWaySnapper roadSnapper;
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());

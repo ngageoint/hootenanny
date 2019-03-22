@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/SnapUnconnectedWays.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
@@ -41,9 +41,9 @@
 namespace hoot
 {
 
-class SnapUnconnectedWaysTest : public HootTestFixture
+class UnconnectedWaySnapperTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(SnapUnconnectedWaysTest);
+  CPPUNIT_TEST_SUITE(UnconnectedWaySnapperTest);
   CPPUNIT_TEST(runSnapToWayTest);
   CPPUNIT_TEST(runSnapToWayNodeTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
@@ -51,10 +51,10 @@ class SnapUnconnectedWaysTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/SnapUnconnectedWaysTest/";
-  const QString outputPath = "test-output/ops/SnapUnconnectedWaysTest/";
+  const QString inputPath = "test-files/ops/UnconnectedWaySnapperTest/";
+  const QString outputPath = "test-output/ops/UnconnectedWaySnapperTest/";
 
-  SnapUnconnectedWaysTest()
+  UnconnectedWaySnapperTest()
   {
     setResetType(ResetBasic);
     TestUtils::mkpath(outputPath);
@@ -76,6 +76,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SnapUnconnectedWaysTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UnconnectedWaySnapperTest, "quick");
 
 }
