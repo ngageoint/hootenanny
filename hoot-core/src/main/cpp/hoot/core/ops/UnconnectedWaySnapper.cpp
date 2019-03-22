@@ -14,6 +14,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -34,7 +35,7 @@ _maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
 _snapToWayDiscretizationSpacing(1.0),
 _addCeToSearchDistance(false),
-_snappedWayNodesTagKey(""),
+_markSnappedNodes(false),
 _wayToSnapToCriterionClassName("hoot::WayCriterion"),
 _wayToSnapCriterionClassName("hoot::WayCriterion"),
 _wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
@@ -65,7 +66,7 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setMaxSnapDistance(confOpts.getSnapUnconnectedWaysSnapTolerance());
   setAddCeToSearchDistance(confOpts.getSnapUnconnectedWaysAddCircularErrorToSearchRadius());
   setWayDiscretizationSpacing(confOpts.getSnapUnconnectedWaysDiscretizationSpacing());
-  setSnappedWayNodesTagKey(confOpts.getSnapUnconnectedWaysTagKey());
+  setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
 
   setSnapWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapWayStatus()));
   setSnapToWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapToWayStatus()));
@@ -497,13 +498,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
           TagMergerFactory::mergeTags(
             wayNodeToSnapTo->getTags(), nodeToSnap->getTags(), ElementType::Node));
         // Add the optional custom tag for tracking purposes.
-        if (!_snappedWayNodesTagKey.isEmpty())
+        if (_markSnappedNodes)
         {
-          wayNodeToSnapTo->getTags().set(_snappedWayNodesTagKey, "yes");
-          if (Log::getInstance().getLevel() <= Log::Debug)
-          {
-            wayNodeToSnapTo->getTags().set("hoot:way_snap_type", "snapped_to_way_node");
-          }
+          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way_node");
         }
 
         // Replace the snapped node with the node we snapped it to.
@@ -582,13 +579,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
         nodeToSnap->setY(closestWayToSnapToCoord.y);
 
         // Add the optional custom tag for tracking purposes.
-        if (!_snappedWayNodesTagKey.isEmpty())
+        if (_markSnappedNodes)
         {
-          nodeToSnap->getTags().set(_snappedWayNodesTagKey, "yes");
-          if (Log::getInstance().getLevel() <= Log::Debug)
-          {
-            nodeToSnap->getTags().set("hoot:way_snap_type", "snapped_to_way");
-          }
+          nodeToSnap->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way");
         }
 
         // add the snapped node as a way node on the target way

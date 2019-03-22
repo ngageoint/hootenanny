@@ -80,7 +80,7 @@ public:
   void setMaxSnapDistance(double distance);
   void setWayDiscretizationSpacing(double spacing);
   void setAddCeToSearchDistance(bool add) { _addCeToSearchDistance = add; }
-  void setSnappedWayNodesTagKey(QString key) { _snappedWayNodesTagKey = key; }
+  void setMarkSnappedNodes(bool mark) { _markSnappedNodes = mark; }
   void setWayToSnapToCriterionClassName(QString name);
   void setWayToSnapCriterionClassName(QString name);
   void setWayNodeToSnapToCriterionClassName(QString name);
@@ -103,8 +103,8 @@ private:
   // adds the CE of each individual way node snap candidate to the nearby feature search radius
   bool _addCeToSearchDistance;
 
-  // allow for optionally tagging the snapped node
-  QString _snappedWayNodesTagKey;
+  // allow for optionally tagging the snapped node; useful for debugging
+  bool _markSnappedNodes;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
