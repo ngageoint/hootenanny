@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="7.6988" minlon="-72.36539999999999" maxlat="7.703000000000001" maxlon="-72.3584"/>
-    <node visible="true" id="-892" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012553812881999" lon="-72.3611678554792235">
+    <node visible="true" id="-880" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7012553812881999" lon="-72.3611678554792235">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-892"/>
+        <tag k="hoot:id" v="-880"/>
     </node>
-    <node visible="true" id="-891" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013901482034317" lon="-72.3616783782998283">
+    <node visible="true" id="-879" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7013901482034317" lon="-72.3616783782998283">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-891"/>
+        <tag k="hoot:id" v="-879"/>
     </node>
-    <node visible="true" id="-888" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007844373138692" lon="-72.3608138875766400">
+    <node visible="true" id="-876" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007844373138692" lon="-72.3608138875766400">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-888"/>
+        <tag k="hoot:id" v="-876"/>
     </node>
-    <node visible="true" id="-887" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006221644488200" lon="-72.3616555431526365">
+    <node visible="true" id="-875" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7006221644488200" lon="-72.3616555431526365">
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-887"/>
+        <tag k="hoot:id" v="-875"/>
     </node>
-    <node visible="true" id="-884" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996465494859683" lon="-72.3620384038982110">
+    <node visible="true" id="-872" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6996465494859683" lon="-72.3620384038982110">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-884"/>
+        <tag k="hoot:id" v="-872"/>
     </node>
-    <node visible="true" id="-883" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998374847308737" lon="-72.3619818040271099">
+    <node visible="true" id="-871" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6998374847308737" lon="-72.3619818040271099">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-883"/>
+        <tag k="hoot:id" v="-871"/>
     </node>
     <node visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7000125445999998" lon="-72.3589731062100014">
         <tag k="bdw-id" v="{982630d9-e726-433a-bcd7-a33ef723c34f}"/>
@@ -1343,8 +1343,8 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
     </node>
-    <way visible="true" id="-1454" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-892"/>
+    <way visible="true" id="-1426" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-880"/>
         <nd ref="-191"/>
         <nd ref="-190"/>
         <nd ref="-189"/>
@@ -1354,21 +1354,21 @@
         <tag k="source:datetime" v="2012-07-10T16:22:23Z;2012-07-12T16:14:21Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-1454"/>
+        <tag k="hoot:id" v="-1426"/>
     </way>
-    <way visible="true" id="-1453" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1425" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-202"/>
         <nd ref="-192"/>
-        <nd ref="-891"/>
+        <nd ref="-879"/>
         <tag k="bdw-id" v="{ef7b4cf9-7bd7-4c8b-af43-343bb12118f2}"/>
         <tag k="source:datetime" v="2012-07-10T16:22:23Z;2012-07-12T16:14:21Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-1453"/>
+        <tag k="hoot:id" v="-1425"/>
     </way>
-    <way visible="true" id="-1452" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-891"/>
-        <nd ref="-892"/>
+    <way visible="true" id="-1424" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-879"/>
+        <nd ref="-880"/>
         <tag k="bdw-id" v="{40ea34f9-03b9-46b5-b9ad-7e71a1b00175}"/>
         <tag k="bridge" v="yes"/>
         <tag k="layer" v="1"/>
@@ -1376,34 +1376,34 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1452"/>
+        <tag k="hoot:id" v="-1424"/>
     </way>
-    <way visible="true" id="-1449" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-888"/>
+    <way visible="true" id="-1421" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-876"/>
         <nd ref="-214"/>
         <tag k="bdw-id" v="{23973f69-7830-4ee2-be77-9592a2c17bf3}"/>
         <tag k="source:datetime" v="2013-10-26T16:12:18Z;2013-10-26T16:12:16Z"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-1449"/>
+        <tag k="hoot:id" v="-1421"/>
     </way>
-    <way visible="true" id="-1448" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1420" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-231"/>
         <nd ref="-109"/>
         <nd ref="-108"/>
         <nd ref="-107"/>
         <nd ref="-106"/>
         <nd ref="-105"/>
-        <nd ref="-887"/>
+        <nd ref="-875"/>
         <tag k="bdw-id" v="{23973f69-7830-4ee2-be77-9592a2c17bf3}"/>
         <tag k="source:datetime" v="2013-10-26T16:12:18Z;2013-10-26T16:12:16Z"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-1448"/>
+        <tag k="hoot:id" v="-1420"/>
     </way>
-    <way visible="true" id="-1447" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-887"/>
-        <nd ref="-888"/>
+    <way visible="true" id="-1419" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-875"/>
+        <nd ref="-876"/>
         <tag k="bdw-id" v="{206c3cb6-55ad-4745-95a6-7b713f797b58}"/>
         <tag k="bridge" v="yes"/>
         <tag k="layer" v="1"/>
@@ -1411,18 +1411,18 @@
         <tag k="highway" v="secondary"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1447"/>
+        <tag k="hoot:id" v="-1419"/>
     </way>
-    <way visible="true" id="-1444" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-884"/>
+    <way visible="true" id="-1416" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-872"/>
         <nd ref="-162"/>
         <tag k="bdw-id" v="{7a909337-b6e1-43dc-bd38-80f089cc6bbb}"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-12T16:14:16Z"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-1444"/>
+        <tag k="hoot:id" v="-1416"/>
     </way>
-    <way visible="true" id="-1443" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1415" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-231"/>
         <nd ref="-172"/>
         <nd ref="-171"/>
@@ -1432,25 +1432,25 @@
         <nd ref="-167"/>
         <nd ref="-166"/>
         <nd ref="-165"/>
-        <nd ref="-883"/>
+        <nd ref="-871"/>
         <tag k="bdw-id" v="{7a909337-b6e1-43dc-bd38-80f089cc6bbb}"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-12T16:14:16Z"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-1443"/>
+        <tag k="hoot:id" v="-1415"/>
     </way>
-    <way visible="true" id="-1442" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-883"/>
+    <way visible="true" id="-1414" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-871"/>
         <nd ref="-164"/>
         <nd ref="-163"/>
-        <nd ref="-884"/>
+        <nd ref="-872"/>
         <tag k="bdw-id" v="{607c2a36-d410-462c-bcfe-cf528efb36d2}"/>
         <tag k="bridge" v="yes"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
-        <tag k="hoot:id" v="-1442"/>
+        <tag k="hoot:id" v="-1414"/>
     </way>
     <way visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-260"/>
@@ -2007,8 +2007,8 @@
         <nd ref="-61"/>
         <nd ref="-60"/>
         <nd ref="-217"/>
-        <tag k="bdw-id" v="{0e4a3555-a203-4f60-930f-2453ea55da17}"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:18Z;2012-07-12T16:14:21Z"/>
+        <tag k="bdw-id" v="{60de46a5-bb9b-48ea-b3b9-abdd7e0438d5}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z;2012-07-12T16:14:18Z"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-30"/>
