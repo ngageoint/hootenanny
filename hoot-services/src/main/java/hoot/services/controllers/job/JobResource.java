@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -94,9 +93,9 @@ public class JobResource {
         hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
-            if (!jobStatus.getUserId().equals(user.getId()) && !(jobStatus.getStatus() == JobStatus.RUNNING.ordinal())) {
-                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
-            }
+//            if (!jobStatus.getUserId().equals(user.getId()) && !(jobStatus.getStatus() == JobStatus.RUNNING.ordinal())) {
+//                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+//            }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
             response.setStatusDetail(jobStatus.getStatusDetail());

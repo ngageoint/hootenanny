@@ -40,6 +40,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -56,6 +57,8 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +80,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/export")
 @Transactional
 public class ExportResource {
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -119,6 +123,8 @@ public class ExportResource {
         // ensure valid email address in `params`:
         if(user != null) {
             params.setUserEmail(user.getEmail());
+        } else {
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must authenticate to export").build());
         }
 
         try {
@@ -171,12 +177,15 @@ public class ExportResource {
                     DbUtils.getMapIdFromRef(params.getInput())));
         }
         catch (WebApplicationException wae) {
+            logger.error(wae.getMessage(), wae);
             throw wae;
         }
         catch (IllegalArgumentException iae) {
+            logger.error(iae.getMessage(), iae);
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
+            logger.error(e.getMessage(), e);
             String msg = "Error exporting data!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }

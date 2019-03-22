@@ -48,7 +48,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
-import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
@@ -59,7 +59,7 @@ import hoot.services.models.db.QJobStatus;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class JobResourceTest extends HootServicesJerseyTestAbstract {
+public class JobResourceTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
