@@ -682,16 +682,7 @@
                 "minvalue":"0.01",
                 "maxvalue":"50.0",
                 "hoot_key":"snap.unconnected.ways.existing.way.node.tolerance"
-            },
-            {
-        	"id":"differential_road_snap_custom_tag_key",
-        	"elem_type":"string",
-        	"description":"If specified, snapped road nodes will have a tag with the specified key added to them.",
-        	"name":"Snapped Road Custom Tag Key",
-        	"defaultvalue":"",
-        	"hoot_key":"snap.unconnected.ways.tag.key",
-        	"onchange":"true"
-    	    }
+            }
         ]
     },
     {
