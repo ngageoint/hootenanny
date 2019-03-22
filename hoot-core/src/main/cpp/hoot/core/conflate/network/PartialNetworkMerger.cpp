@@ -176,12 +176,12 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   {
     if (e->getString1()->isStub() || e->getString2()->isStub())
     {
-      LOG_VARD(_edgeMatches);
-      LOG_VARD(e);
+      LOG_VART(_edgeMatches);
+      LOG_VART(e);
       throw IllegalArgumentException("Didn't expect a stub in a full match.");
     }
   }
-  LOG_VARD(_edgeMatches);
+  LOG_VART(_edgeMatches);
 
   ///
   /// This approach may seem a little odd at first. We need to accomodate the following problems:
@@ -257,12 +257,12 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   vector<pair<ElementId, ElementId> > &/*replaced*/, ConstEdgeMatchPtr edgeMatch) const
 {
   LOG_DEBUG("Processing stub match...");
-  LOG_VARD(edgeMatch);
+  LOG_VART(edgeMatch);
 
   if (edgeMatch->getString1()->isStub())
   {
     LOG_DEBUG("Removing secondary features...");
-    LOG_VARD(edgeMatch->getString2()->getMembers());
+    LOG_VART(edgeMatch->getString2()->getMembers());
 
     // If the feature we're merging into is a stub, then just delete the secondary feature.
     // Attributes may be lost, but there isn't really anywhere to put them.
@@ -273,10 +273,10 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   }
   else if (edgeMatch->getString2()->isStub())
   {
-    LOG_VARD(edgeMatch->getString1()->getMembers().size());
-    LOG_VARD(edgeMatch->getString1()->getMembers());
-    LOG_VARD(edgeMatch->getString2()->getMembers().size());
-    LOG_VARD(edgeMatch->getString2()->getMembers());
+    LOG_VART(edgeMatch->getString1()->getMembers().size());
+    LOG_VART(edgeMatch->getString1()->getMembers());
+    LOG_VART(edgeMatch->getString2()->getMembers().size());
+    LOG_VART(edgeMatch->getString2()->getMembers());
 
     // if the feature we're merging is a stub, then things get a little more complicated. So far
     // our best option is to disconnect the intersection that is being merged. Then the edges should
@@ -288,12 +288,12 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     set<ElementId> eids;
     foreach (ConstElementPtr e, edgeMatch->getString2()->getMembers())
     {
-      LOG_VARD(e);
+      LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
     }
     foreach (ConstElementPtr e, edgeMatch->getString1()->getMembers())
     {
-      LOG_VARD(e);
+      LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
     }
     ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "

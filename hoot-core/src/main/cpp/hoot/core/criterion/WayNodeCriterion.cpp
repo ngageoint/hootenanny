@@ -49,12 +49,10 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
     const std::set<long>& containingWays = nodeToWayMap->getWaysByNode(e->getId());
-    LOG_VART(containingWays);
     for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
          containingWaysItr != containingWays.end(); ++containingWaysItr)
     {
       const long containingWayId = *containingWaysItr;
-      LOG_VART(containingWayId);
       if (wayCrit.isSatisfied(_map->getWay(containingWayId)))
       {
         LOG_TRACE("Way node: " << e->getElementId() << " found in way: " << containingWayId);

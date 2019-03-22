@@ -1109,11 +1109,6 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     OGRFeature::DestroyFeature(f);
     f = 0;
 
-//    if (_count % 1000 == 0 && Log::getInstance().isInfoEnabled())
-//    {
-//      LOG_DEBUG("Loading " << _path.toUtf8().data() << " " << _layerName.toLatin1().data() << " " <<
-//                _count << " / " << _featureCount);
-//    }
     _count++;
     if (_count % 1000 == 0)
     {

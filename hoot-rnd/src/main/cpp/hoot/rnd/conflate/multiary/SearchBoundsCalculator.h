@@ -45,13 +45,15 @@ namespace hoot
 class SearchBoundsCalculator
 {
 public:
-  SearchBoundsCalculator(SearchRadiusProviderPtr radiusProvider);
 
-  geos::geom::Envelope calculateSearchBounds(const ConstOsmMapPtr& map, const ConstNodePtr& n)
-    const;
+  SearchBoundsCalculator(boost::shared_ptr<SearchRadiusProvider> radiusProvider);
+
+  geos::geom::Envelope calculateSearchBounds(
+    const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
 
 private:
-  SearchRadiusProviderPtr _radiusProvider;
+
+  boost::shared_ptr<SearchRadiusProvider> _radiusProvider;
 };
 
 typedef boost::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
