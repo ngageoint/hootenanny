@@ -51,8 +51,8 @@ public:
   /**
    * Run a specified query and compare the results against the expected results.
    */
-  static void compareRecords(QString sql, QString expected, QVariant v1 = QVariant(),
-    QVariant v2 = QVariant());
+  static void compareRecords(QString sql, QString expected, QString testName = NULL,
+                             QVariant v1 = QVariant(), QVariant v2 = QVariant());
 
   /**
    * Retrieves a URL used to modify services database data

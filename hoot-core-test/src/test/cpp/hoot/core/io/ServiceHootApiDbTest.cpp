@@ -400,6 +400,7 @@ public:
           " WHERE id=:id "
           "ORDER BY longitude",
           "38;-104;true;1329332431;1",
+          NULL,
           (qlonglong)nodeId);
 
 
@@ -413,6 +414,7 @@ public:
           " WHERE id=:id "
           "ORDER BY longitude",
           "3.1415;2.71828;true;3222453693;1",
+          NULL,
           (qlonglong)nodeId);
   }
 
