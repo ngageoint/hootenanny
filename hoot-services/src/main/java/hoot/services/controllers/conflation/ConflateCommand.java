@@ -79,7 +79,7 @@ class ConflateCommand extends ExternalCommand {
     private String conflationAlgorithm = null;
     private static List<String> cleaningOptions = new ArrayList<>();
 
-    private static Map<String, Map<String, String>> conflationFeatures = null;
+    private static Map<String, Map<String, Object>> conflationFeatures = null;
     private static Map<String, Map<String, String>> configOptions = null;
 
     static {
@@ -100,12 +100,42 @@ class ConflateCommand extends ExternalCommand {
 			cleaningOptions.addAll(Arrays.asList(configOptions.get("MapCleanerTransforms").get("default")
 				.replaceAll("hoot::","").split(";")));
 
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
 
+    public static Map<String, Map<String, String>> getConfigOptions() {
+    	return configOptions;
+    }
 
+    public static Map<String, Map<String, Object>> getConflationFeatures() {
+    	return conflationFeatures;
+    }
+
+
+	public static String getConfigKey(String key) {
+		String configKey = null;
+		for (String k: configOptions.keySet()) {
+			 if (configOptions.get(k).get("key").equals(key)) {
+				 configKey = k;
+			 	 break;
+			 }
+		}
+		return configKey;
+	}
+
+	public static boolean isUiOption(String key) {
+		boolean isOption = false;
+		for (String k: conflationFeatures.keySet()) {
+			if (((HashMap) conflationFeatures.get(k).get("members")).keySet().contains(key)) {
+				isOption = true;
+				break;
+			}
+		}
+		return isOption;
+	}
 
 
     ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller, Users user) throws IllegalArgumentException {
@@ -183,8 +213,8 @@ class ConflateCommand extends ExternalCommand {
         			// ignore the road matcher/mergers not relevant conflation type/algorithm confs...
         			if (feature.equals(roadType)) continue;
         			if (!disabledFeatures.contains(feature)) {
-        				matchers.add(conflationFeatures.get(feature).get("matcher"));
-        				mergers.add(conflationFeatures.get(feature).get("merger"));
+        				matchers.add((String) conflationFeatures.get(feature).get("matcher"));
+        				mergers.add((String) conflationFeatures.get(feature).get("merger"));
         			}
         		}
         		options.add("match.creators=" + String.join(";", matchers));

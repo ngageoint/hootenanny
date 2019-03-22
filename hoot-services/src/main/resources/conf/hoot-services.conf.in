@@ -121,6 +121,18 @@ advOptAttributeOverride=conf/services/conflationAttributeOps.json
 # Conflation Types map
 conflationTypes=conf/services/conflationTypes.json
 
+# Attribute Conflation Conf
+attributeConf=conf/core/AttributeConflation.conf
+
+# Differential Conflation Conf
+differentialConf=conf/core/DifferentialConflation.conf
+
+# Horizontal Algorithm Conf
+horizontalConf=conf/core/HorizontalConflation.conf
+
+# Network Conflation Conf
+networkConf=conf/core/NetworkAlgorithm.conf
+
 # Element merge Node Server port
 ElementMergeServerPort=8096
 

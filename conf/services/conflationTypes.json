@@ -14,7 +14,7 @@
     "Attribute": {
         "members": {
             "attribute.conflation.aggressive.highway.joining": "Aggressively join highways",
-            "attribute.conflation.allow.ref.geometry.changes.for.bridges": "Do not change reference layer bridge geometries",
+            "attribute.conflation.allow.ref.geometry.changes.for.bridges": "Change reference layer bridge geometries",
             "attribute.conflation.allow.reviews.by.score": "Allow reviews by score",
             "corner.splitter.rounded.split": "Split Rounded Corners"
         }

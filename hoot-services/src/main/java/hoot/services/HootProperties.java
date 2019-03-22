@@ -51,6 +51,10 @@ public final class HootProperties {
     public static final String HORZ_OVERRIDE_PATH;
     public static final String ATT_OVERRIDE_PATH;
     public static final String CONFLATION_TYPES_PATH;
+    public static final String ATTRIBUTE_CONFLATION_PATH;
+    public static final String DIFFERENTIAL_CONFLATION_PATH;
+    public static final String HORIZONTAL_CONFLATION_PATH;
+    public static final String NETWORK_CONFLATION_PATH;
     public static final String CONFIG_OPTIONS;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
@@ -173,6 +177,10 @@ public final class HootProperties {
         HORZ_OVERRIDE_PATH = getProperty("advOptHorizontalOverride");
         ATT_OVERRIDE_PATH = getProperty("advOptAttributeOverride");
         CONFLATION_TYPES_PATH = getProperty("conflationTypes");
+        ATTRIBUTE_CONFLATION_PATH = getProperty("attributeConf");
+        DIFFERENTIAL_CONFLATION_PATH = getProperty("differentialConf");
+        HORIZONTAL_CONFLATION_PATH = getProperty("horizontalConf");
+        NETWORK_CONFLATION_PATH = getProperty("networkConf");
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
