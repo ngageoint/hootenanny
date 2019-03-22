@@ -127,7 +127,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(_map);
 
   // create feature crits for filtering what things we snap and snap to (will default to just
-  // plain ways and way nodes)
+  // plain ways and way nodes if nothing was specified)
   ElementCriterionPtr wayToSnapCrit =
     _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatus);
   ElementCriterionPtr wayToSnapToCrit =
@@ -182,15 +182,10 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 
         if (!snapOccurred)
         {
-          // Otherwise if we weren't able to snap to a nearby way node, we're going to try to find
-          // a nearby way and snap onto the closest location on it.
+          // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
+          // option was turned off, we're going to try to find a nearby way and snap onto the
+          // closest location on it.
           /*snapOccurred =*/ _snapUnconnectedNodeToWay(unconnectedEndNode);
-        }
-
-        if (snapOccurred && _numAffected % _taskStatusUpdateInterval == 0)
-        {
-          PROGRESS_INFO(
-            "Snapped " << StringUtils::formatLargeNumber(_numAffected) << " way nodes.");
         }
       }
     }
@@ -250,14 +245,14 @@ void UnconnectedWaySnapper::_createFeatureIndex(ElementCriterionPtr featureCrit,
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&SnapUnconnectedWays::_getWayNodeSearchRadius, this, _1), _map));
+        boost::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, _1), _map));
   }
   else
   {
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&SnapUnconnectedWays::_getWaySearchRadius, this, _1), _map));
+        boost::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, _1), _map));
   }
   LOG_TRACE(spatialIndexer->getInitStatusMessage());
   if (elementType == ElementType::Node)
@@ -483,7 +478,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
 
 bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
 {
-  LOG_DEBUG("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
+  LOG_TRACE("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
 
   // get nearby ways
   const std::set<ElementId> waysToSnapTo =
@@ -499,8 +494,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
     // Make sure the way we're trying to snap to doesn't already contain the node we're trying to
     // snap to it.
     const bool wayToSnapToContainsNodeToSnap =
-      std::find(
-        wayNodeIdsToSnapTo.begin(), wayNodeIdsToSnapTo.end(), nodeToSnap->getId()) !=
+      std::find(wayNodeIdsToSnapTo.begin(), wayNodeIdsToSnapTo.end(), nodeToSnap->getId()) !=
       wayNodeIdsToSnapTo.end();
     LOG_VART(wayToSnapToContainsNodeToSnap);
     if (!wayToSnapToContainsNodeToSnap)
@@ -511,8 +505,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
         OsmUtils::closestWayCoordToNode(nodeToSnap, wayToSnapTo,
           shortestDistanceFromNodeToSnapToWayCoord, _snapToWayDiscretizationSpacing, _map);
 
-      // This check of the calc'd distance being less than the allowed snap distance should not be
-      // necessary, but it is for now.  For some reason, neighbors are occasionally being
+      // This check of the calculated distance being less than the allowed snap distance should not
+      // be necessary, but it is for now.  For some reason, neighbors are occasionally being
       // returned at longer distances away than expected.
       if (/*shortestDistance != DBL_MAX &&*/
           shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
@@ -524,7 +518,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
 
         if (Log::getInstance().getLevel() <= Log::Debug)
         {
-          // This conversion is expensive, so do it during debugging only.
+          // This projection could be expensive, so do it during debugging only.
           const geos::geom::Coordinate wgs84Coord =
             MapProjector::project(
               closestWayToSnapToCoord, _map->getProjection(),

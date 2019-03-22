@@ -47,6 +47,10 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runSnapToWayTest);
   CPPUNIT_TEST(runSnapToWayNodeTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
+  CPPUNIT_TEST(runFilterTest);
+  CPPUNIT_TEST(runSmallWaySnapToTest);
+  CPPUNIT_TEST(runWayNodeSelfSnapTest);
+  CPPUNIT_TEST(runNodesContainedByTheSameWayTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -71,6 +75,26 @@ public:
   }
 
   void runConfigOptionsValidationTest()
+  {
+
+  }
+
+  void runFilterTest()
+  {
+
+  }
+
+  void runSmallWaySnapToTest()
+  {
+
+  }
+
+  void runWayNodeSelfSnapTest()
+  {
+
+  }
+
+  void runNodesContainedByTheSameWayTest()
   {
 
   }

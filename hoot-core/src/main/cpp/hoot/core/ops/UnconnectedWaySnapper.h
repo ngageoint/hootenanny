@@ -45,19 +45,19 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getInitStatusMessage() const
-  { return "Snapping unconnected ways to nearest way..."; }
+  { return "Snapping unconnected ways to the nearest way..."; }
 
   /**
    * @see OperationStatusInfo
    */
   virtual QString getCompletedStatusMessage() const
-  { return "Snapped " + QString::number(_numAffected) + " ways."; }
+  { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
    * @see OperationStatusInfo
    */
   virtual QString getDescription() const
-  { return "Snaps unconnected way endpoints to the nearest way."; }
+  { return "Snaps unconnected ways to the nearest way."; }
 
   /**
    * @see Configurable
