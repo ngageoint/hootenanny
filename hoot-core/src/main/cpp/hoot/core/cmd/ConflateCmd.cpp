@@ -46,9 +46,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -212,7 +211,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-  LOG_INFO("Total elements read: " << initialElementCount);
+  LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   LOG_INFO("Applying pre-conflation operations...");

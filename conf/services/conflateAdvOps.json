@@ -689,7 +689,7 @@
         	"description":"If specified, snapped road nodes will have a tag with the specified key added to them.",
         	"name":"Snapped Road Custom Tag Key",
         	"defaultvalue":"",
-        	"hoot_key":"snap.unconnected.ways.tag.ke",
+        	"hoot_key":"snap.unconnected.ways.tag.key",
         	"onchange":"true"
     	    }
         ]

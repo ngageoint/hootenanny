@@ -34,93 +34,133 @@ _maxNodeReuseDistance(0.5),
 _maxSnapDistance(5.0),
 _snapToWayDiscretizationSpacing(1.0),
 _addCeToSearchDistance(false),
-_snappedRoadsTagKey(""),
+_snappedWayNodesTagKey(""),
 _wayToSnapToCriterionClassName("hoot::WayCriterion"),
 _wayToSnapCriterionClassName("hoot::WayCriterion"),
 _wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
 _snapWayStatus(Status::Unknown2),
 _snapToWayStatus(Status::Unknown1),
+_numSnappedToWays(0),
+_numSnappedToWayNodes(0),
 _taskStatusUpdateInterval(1000)
 {
-  setConfiguration(conf());
 }
 
 void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
 
-  _taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  _taskStatusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 
-  _snapToExistingWayNodes = ConfigOptions().getSnapUnconnectedWaysUseExistingWayNodes();
+  setSnapToExistingWayNodes(confOpts.getSnapUnconnectedWaysUseExistingWayNodes());
   if (_snapToExistingWayNodes)
   {
-    _maxNodeReuseDistance = confOpts.getSnapUnconnectedWaysExistingWayNodeTolerance();
-    if (_maxNodeReuseDistance <= 0.0)
-    {
-      throw IllegalArgumentException(
-        "Invalid " + ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey() + " value: "
-        + QString::number(_maxNodeReuseDistance) + ". The value must be greater than 0.0.");
-    }
+    setMaxNodeReuseDistance(confOpts.getSnapUnconnectedWaysExistingWayNodeTolerance());
   }
   else
   {
     // Setting it to zero, if it wasn't specified, allows for skipping way node reuse completely.
     _maxNodeReuseDistance = 0.0;
   }
-  _maxSnapDistance = confOpts.getSnapUnconnectedWaysSnapTolerance();
-  if (_maxSnapDistance <= 0.0)
+  setMaxSnapDistance(confOpts.getSnapUnconnectedWaysSnapTolerance());
+  setAddCeToSearchDistance(confOpts.getSnapUnconnectedWaysAddCircularErrorToSearchRadius());
+  setWayDiscretizationSpacing(confOpts.getSnapUnconnectedWaysDiscretizationSpacing());
+  setSnappedWayNodesTagKey(confOpts.getSnapUnconnectedWaysTagKey());
+
+  setSnapWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapWayStatus()));
+  setSnapToWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapToWayStatus()));
+
+  setWayToSnapCriterionClassName(confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed());
+  setWayToSnapToCriterionClassName(confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed());
+  if (_snapToExistingWayNodes)
+  {
+    setWayNodeToSnapToCriterionClassName(
+      confOpts.getSnapUnconnectedWaysSnapToWayNodeCriterion().trimmed());
+  }
+
+  _conf = conf;
+}
+
+void UnconnectedWaySnapper::setMaxNodeReuseDistance(double distance)
+{
+  if (distance <= 0.0)
+  {
+    throw IllegalArgumentException(
+      "Invalid " + ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey() + " value: "
+      + QString::number(distance) + ". The value must be greater than 0.0.");
+  }
+  _maxNodeReuseDistance = distance;
+}
+void UnconnectedWaySnapper::setMaxSnapDistance(double distance)
+{
+  if (distance <= 0.0)
   {
     throw IllegalArgumentException(
       "Invalid " + ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey() + " value: "
-      + QString::number(_maxSnapDistance) + ". The value must be greater than 0.0.");
+      + QString::number(distance) + ". The value must be greater than 0.0.");
   }
-  _addCeToSearchDistance = confOpts.getSnapUnconnectedWaysAddCircularErrorToSearchRadius();
-  _snapToWayDiscretizationSpacing  = confOpts.getSnapUnconnectedWaysDiscretizationSpacing();
-  _snappedRoadsTagKey = confOpts.getSnapUnconnectedWaysTagKey();
-
-  _snapWayStatus = Status::fromString(confOpts.getSnapUnconnectedWaysSnapWayStatus());
-  _snapToWayStatus = Status::Unknown1;
-  if (_snapWayStatus == Status::Unknown1)
+  _maxSnapDistance = distance;
+}
+void UnconnectedWaySnapper::setWayDiscretizationSpacing(double spacing)
+{
+  if (spacing <= 0.0)
   {
-    _snapToWayStatus = Status::Unknown2;
+    throw IllegalArgumentException(
+      "Invalid " + ConfigOptions::getSnapUnconnectedWaysDiscretizationSpacingKey() + " value: "
+      + QString::number(spacing) + ". The value must be greater than 0.0.");
   }
+  _snapToWayDiscretizationSpacing = spacing;
+}
 
-  _wayToSnapCriterionClassName = confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed();
-  if (_wayToSnapCriterionClassName.isEmpty())
-  {
-    LOG_WARN(
-      "No snap way criterion specified for the Unconnected Way Snapper.  " <<
-      "Defaulting to: hoot::WayCriterion.");
-    _wayToSnapCriterionClassName = "hoot::WayCriterion";
-  }
-  _wayToSnapToCriterionClassName = confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed();
-  if (_wayToSnapToCriterionClassName.isEmpty())
+void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(QString name)
+{
+  if (name.trimmed().isEmpty())
   {
     LOG_WARN(
       "No snap to way criterion specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayCriterion.");
     _wayToSnapToCriterionClassName = "hoot::WayCriterion";
   }
-  if (_maxNodeReuseDistance != 0.0)
+  else
   {
-    _wayNodeToSnapToCriterionClassName =
-      confOpts.getSnapUnconnectedWaysSnapToWayNodeCriterion().trimmed();
-    if (_wayNodeToSnapToCriterionClassName.isEmpty())
-    {
-      LOG_WARN(
-        "No snap to way node criterion specified for the Unconnected Way Snapper.  " <<
-        "Defaulting to: hoot::WayNodeCriterion.");
-      _wayNodeToSnapToCriterionClassName = "hoot::WayNodeCriterion";
-    }
+    _wayToSnapToCriterionClassName = name.trimmed();
   }
-
-  _conf = conf;
+}
+void UnconnectedWaySnapper::setWayToSnapCriterionClassName(QString name)
+{
+  if (name.trimmed().isEmpty())
+  {
+    LOG_WARN(
+      "No snap way criterion specified for the Unconnected Way Snapper.  " <<
+      "Defaulting to: hoot::WayCriterion.");
+    _wayToSnapCriterionClassName = "hoot::WayCriterion";
+  }
+  else
+  {
+    _wayToSnapCriterionClassName = name.trimmed();
+  }
+}
+void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(QString name)
+{
+  if (name.trimmed().isEmpty())
+  {
+    LOG_WARN(
+      "No snap to way node criterion specified for the Unconnected Way Snapper.  " <<
+      "Defaulting to: hoot::WayNodeCriterion.");
+    _wayNodeToSnapToCriterionClassName = "hoot::WayNodeCriterion";
+  }
+  else
+  {
+    _wayNodeToSnapToCriterionClassName = name.trimmed();
+  }
 }
 
 void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 {
   _map = map;
   _numAffected = 0;
+  _numSnappedToWays = 0;
+  _numSnappedToWayNodes = 0;
   _snappedWayNodeIds.clear();
 
   // need to be in planar for all of this
@@ -198,6 +238,9 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size()) << " ways for unconnected snapping.");
     }
   }
+
+  LOG_DEBUG(_numSnappedToWays << " ways snapped to the closest point on other ways");
+  LOG_DEBUG(_numSnappedToWayNodes << " ways snapped directly to way nodes");
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
@@ -454,9 +497,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
           TagMergerFactory::mergeTags(
             wayNodeToSnapTo->getTags(), nodeToSnap->getTags(), ElementType::Node));
         // Add the optional custom tag for tracking purposes.
-        if (!_snappedRoadsTagKey.isEmpty())
+        if (!_snappedWayNodesTagKey.isEmpty())
         {
-          wayNodeToSnapTo->getTags().set(_snappedRoadsTagKey, "yes");
+          wayNodeToSnapTo->getTags().set(_snappedWayNodesTagKey, "yes");
+          if (Log::getInstance().getLevel() <= Log::Debug)
+          {
+            wayNodeToSnapTo->getTags().set("hoot:way_snap_type", "snapped_to_way_node");
+          }
         }
 
         // Replace the snapped node with the node we snapped it to.
@@ -466,6 +513,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
 
         _snappedWayNodeIds.append(nodeToSnap->getId());
         _numAffected++;
+        _numSnappedToWayNodes++;
 
         // Don't snap the node more than once.
         return true;
@@ -510,11 +558,11 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
       // returned at longer distances away than expected.
       if (/*shortestDistance != DBL_MAX &&*/
           shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
-      {
-        // Now, figure out where on the target way to insert our node being snapped.
-        const int nodeToSnapInsertIndex = _getNodeToSnapWayInsertIndex(nodeToSnap, wayToSnapTo);
-
+      { 
         // snap the node to the way
+
+        // figure out where on the target way to insert our node being snapped
+        const int nodeToSnapInsertIndex = _getNodeToSnapWayInsertIndex(nodeToSnap, wayToSnapTo);
 
         if (Log::getInstance().getLevel() <= Log::Debug)
         {
@@ -528,15 +576,20 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
             closestWayToSnapToCoord.toString() << " (wgs84: " << wgs84Coord.toString() <<
             ") and inserting at index: " << nodeToSnapInsertIndex);
         }
+
         // move the snapped node to the closest way coord
         nodeToSnap->setX(closestWayToSnapToCoord.x);
         nodeToSnap->setY(closestWayToSnapToCoord.y);
+
         // Add the optional custom tag for tracking purposes.
-        if (!_snappedRoadsTagKey.isEmpty())
+        if (!_snappedWayNodesTagKey.isEmpty())
         {
-          nodeToSnap->getTags().set(_snappedRoadsTagKey, "yes");
+          nodeToSnap->getTags().set(_snappedWayNodesTagKey, "yes");
+          if (Log::getInstance().getLevel() <= Log::Debug)
+          {
+            nodeToSnap->getTags().set("hoot:way_snap_type", "snapped_to_way");
+          }
         }
-        _snappedWayNodeIds.append(nodeToSnap->getId());
 
         // add the snapped node as a way node on the target way
         QList<long> wayNodeIdsToSnapToList =
@@ -545,7 +598,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
         wayToSnapTo->setNodes(wayNodeIdsToSnapToList.toVector().toStdVector());
         LOG_VART(wayToSnapTo->getNodeIds());
 
+        _snappedWayNodeIds.append(nodeToSnap->getId());
         _numAffected++;
+        _numSnappedToWays++;
 
         // Don't snap the node more than once.
         return true;

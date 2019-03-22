@@ -31,6 +31,8 @@
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,19 +46,14 @@ namespace hoot
 class UnconnectedWaySnapperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(UnconnectedWaySnapperTest);
-  CPPUNIT_TEST(runSnapToWayTest);
-  CPPUNIT_TEST(runSnapToWayNodeTest);
+  CPPUNIT_TEST(runSnapTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
-  CPPUNIT_TEST(runFilterTest);
-  CPPUNIT_TEST(runSmallWaySnapToTest);
-  CPPUNIT_TEST(runWayNodeSelfSnapTest);
-  CPPUNIT_TEST(runNodesContainedByTheSameWayTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  const QString inputPath = "test-files/ops/UnconnectedWaySnapperTest/";
-  const QString outputPath = "test-output/ops/UnconnectedWaySnapperTest/";
+  const QString inputPath = "test-files/ops/UnconnectedWaySnapper/";
+  const QString outputPath = "test-output/ops/UnconnectedWaySnapper/";
 
   UnconnectedWaySnapperTest()
   {
@@ -64,39 +61,90 @@ public:
     TestUtils::mkpath(outputPath);
   }
 
-  void runSnapToWayTest()
+  void runSnapTest()
   {
+    const QString testName = "runSnapTest";
 
-  }
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(inputPath + testName + "In1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + testName + "In2.osm", map);
 
-  void runSnapToWayNodeTest()
-  {
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setSnappedWayNodesTagKey("runSnapTest");
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatus(Status::Unknown1);
+    uut.setSnapWayStatus(Status::Unknown2);
+    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
+    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
+    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.apply(map);
 
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter().write(map, outputPath + testName +  + "Out.osm");
+    CPPUNIT_ASSERT_EQUAL(uut.getNumAffected(), 14L);
+    CPPUNIT_ASSERT_EQUAL(uut.getNumSnappedToWayNodes(), 1L);
+    CPPUNIT_ASSERT_EQUAL(uut.getNumSnappedToWays(), 13L);
+    HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
   }
 
   void runConfigOptionsValidationTest()
   {
+    DisableLog dl;
+    UnconnectedWaySnapper uut;
+    QString exceptionMsg;
 
-  }
+    try
+    {
+      uut.setMaxNodeReuseDistance(0.0);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.startsWith(
+        "Invalid " + ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey() +
+        " value:"));
 
-  void runFilterTest()
-  {
+    try
+    {
+      uut.setMaxSnapDistance(0.0);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.startsWith(
+        "Invalid " + ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey() + " value:"));
 
-  }
+    try
+    {
+      uut.setWayDiscretizationSpacing(0.0);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg.startsWith(
+        "Invalid " + ConfigOptions::getSnapUnconnectedWaysDiscretizationSpacingKey() + " value:"));
 
-  void runSmallWaySnapToTest()
-  {
+    uut.setWayToSnapToCriterionClassName("");
+    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapToCriterionClassName);
 
-  }
+    uut.setWayToSnapCriterionClassName(" ");
+    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapCriterionClassName);
 
-  void runWayNodeSelfSnapTest()
-  {
-
-  }
-
-  void runNodesContainedByTheSameWayTest()
-  {
-
+    uut.setWayNodeToSnapToCriterionClassName(" ");
+    HOOT_STR_EQUALS("hoot::WayNodeCriterion", uut._wayNodeToSnapToCriterionClassName);
   }
 };
 

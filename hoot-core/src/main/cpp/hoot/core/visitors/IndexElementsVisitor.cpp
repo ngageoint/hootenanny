@@ -94,7 +94,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
                                                    const deque<ElementId>& indexToEid,
                                                    ConstOsmMapPtr pMap)
 {
-  LOG_DEBUG("Finding neighbors within env: " << env << "...");
+  LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
   LOG_VART(index.get());
 

@@ -26,6 +26,14 @@ namespace hoot
  * could also be used as a cleanup op after other types of conflation.  Future efforts, if possible,
  * should focus on trying to fix the lack of snapping in the conflation routines themselves rather
  * than relying on this as a cleanup utility.
+ *
+ * *Possible* future enhancements:
+ *
+ * - If the ways are very parallel, snapping them may not make sense.  I've only seen bad snapped
+ * roads like this in cropped data so far so may not end up being relevant.
+ * - If there ends up being a way node fairly close to the selected snap point on the way and that
+ * way node was skipped over due to being outside of the way snap threshold, it still might make
+ * sense to snap to it instead.  Have only seen one instance of this so far...
  */
 class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
   public Configurable
@@ -64,7 +72,24 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
+  long getNumSnappedToWays() const { return _numSnappedToWays; }
+  long getNumSnappedToWayNodes() const { return _numSnappedToWayNodes; }
+
+  void setSnapToExistingWayNodes(bool snap) { _snapToExistingWayNodes = snap; }
+  void setMaxNodeReuseDistance(double distance);
+  void setMaxSnapDistance(double distance);
+  void setWayDiscretizationSpacing(double spacing);
+  void setAddCeToSearchDistance(bool add) { _addCeToSearchDistance = add; }
+  void setSnappedWayNodesTagKey(QString key) { _snappedWayNodesTagKey = key; }
+  void setWayToSnapToCriterionClassName(QString name);
+  void setWayToSnapCriterionClassName(QString name);
+  void setWayNodeToSnapToCriterionClassName(QString name);
+  void setSnapWayStatus(const Status& status) { _snapWayStatus = status; }
+  void setSnapToWayStatus(const Status& status) { _snapToWayStatus = status; }
+
 private:
+
+  friend class UnconnectedWaySnapperTest;
 
   // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
   // a new way node
@@ -79,7 +104,7 @@ private:
   bool _addCeToSearchDistance;
 
   // allow for optionally tagging the snapped node
-  QString _snappedRoadsTagKey;
+  QString _snappedWayNodesTagKey;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
@@ -89,7 +114,7 @@ private:
   QString _wayNodeToSnapToCriterionClassName;
   // the status criterion to be used for the snap source way
   Status _snapWayStatus;
-  // the status criterion to be used for the snap target way
+  // the status criterion to be used for the snap target way or way node
   Status _snapToWayStatus;
 
   // feature indexes used for way nodes being snapped to
@@ -102,6 +127,8 @@ private:
 
   // keep track of the way nodes that are snapped
   QList<long> _snappedWayNodeIds;
+  long _numSnappedToWays;
+  long _numSnappedToWayNodes;
 
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;

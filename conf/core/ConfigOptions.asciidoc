@@ -3568,6 +3568,14 @@ Optional criterion class to filter the types of way nodes being snapped to.  An 
 hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
 for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
 
+=== snap.unconnected.ways.snap.to.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways or way nodes being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1'
+to snap reference ways or 'Input2' to snap secondary ways.
+
 === snap.unconnected.ways.snap.tolerance
 
 * Data Type: double
@@ -3592,7 +3600,7 @@ way snapping.
 * Default Value: ``
 
 Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
-snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference ways.
+snap reference ways 'Input2' to snap secondary ways.
 
 === snap.unconnected.ways.tag.key
 
