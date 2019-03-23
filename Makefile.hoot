@@ -47,6 +47,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
 	rm -f plugins/config.js
+	rm -f conf/core/ConfigOptions.json
 	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
 	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
@@ -128,6 +129,9 @@ hoot-core/src/main/cpp/hoot/core/HootConfig.h: config.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h: hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.asciidoc scripts/core/CreateConfigCode.py
 	python scripts/core/CreateConfigCode.py conf/core/ConfigOptions.asciidoc hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
+
+conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/ConfigOptions.asciidoc
+	python $^ $@ || (rm -f $@ ; exit -1)
 
 plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
 	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
@@ -236,7 +240,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 # Build automatically generated JS files
-js-make: $(SCHEMA_FILES) plugins/config.js
+js-make: $(SCHEMA_FILES) plugins/config.js conf/core/ConfigOptions.json
 
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
@@ -435,7 +439,7 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	# suppress the harmless warning about generated HootSwig.cxx
 	# All the true craziness is so we use the qmake return code rather than
 	# the grep code.
-	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	qmake-qt5 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 

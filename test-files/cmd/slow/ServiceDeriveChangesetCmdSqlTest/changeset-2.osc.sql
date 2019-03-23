@@ -105,10 +105,10 @@ INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "time
 /* create way 1669795*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1669795, 2, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1669795, 2, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (1669795, 'note', '2');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (1669795, 'note', '2', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (1669795, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (1669795, 'highway', 'road', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (1669795, 'note', '2');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (1669795, 'note', '2', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669795, 1669725, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669795, 1669725, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669795, 1669727, 1, 2);
@@ -120,10 +120,10 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669795, 16
 /* create way 1669797*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1669797, 2, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1669797, 2, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (1669797, 'note', '0');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (1669797, 'note', '0', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (1669797, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (1669797, 'highway', 'road', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (1669797, 'note', '0');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (1669797, 'note', '0', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669797, 1669789, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669797, 1669789, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669797, 1669787, 1, 2);
@@ -187,10 +187,10 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669797, 16
 /* create way 1669799*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (1669799, 2, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (1669799, 2, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (1669799, 'note', '3');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (1669799, 'note', '3', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (1669799, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (1669799, 'highway', 'road', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (1669799, 'note', '3');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (1669799, 'note', '3', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669799, 1669729, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (1669799, 1669729, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (1669799, 1669779, 1, 2);

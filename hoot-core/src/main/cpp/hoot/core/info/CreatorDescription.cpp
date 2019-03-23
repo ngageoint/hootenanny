@@ -33,8 +33,8 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>

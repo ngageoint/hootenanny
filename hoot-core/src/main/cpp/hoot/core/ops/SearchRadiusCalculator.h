@@ -83,6 +83,8 @@ private:
 
   int _precision;
 
+  QString _elementCriterion;
+
   friend class SearchRadiusCalculatorTest;
 };
 

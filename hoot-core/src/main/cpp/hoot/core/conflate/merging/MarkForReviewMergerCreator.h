@@ -49,7 +49,6 @@ public:
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
-
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GDAL
@@ -60,7 +60,7 @@ using namespace geos::geom;
 using namespace hoot;
 
 // Qt
-#include <QtGui/QApplication>
+#include <QCoreApplication>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -373,6 +373,10 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
 
 int main(int argc, char *argv[])
 {
+  // set the Qt hash seed to 0 for consistent test results
+  conf().set(ConfigOptions().getHashSeedZeroKey(), true);
+  qSetGlobalQHashSeed(0);
+
   if (argc == 1)
   {
     cout << argv[0] << " Usage:\n"

@@ -191,6 +191,7 @@ public:
   bool isTrue(const QString& key) const;
 
   bool operator==(const Tags& other) const;
+  inline bool operator!=(const Tags& other) const { return !(*this == other); }
 
   /**
    * Similar to operator== but 'hoot::*' tags are ignored

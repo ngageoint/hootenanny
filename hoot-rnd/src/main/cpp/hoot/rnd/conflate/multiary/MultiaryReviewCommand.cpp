@@ -261,7 +261,7 @@ QByteArray MultiaryReviewCommand::_getElementHashID(ElementPtr e) const
   // Return the hash
   QString hexString = e->getTags()[hashKey];
   hexString.replace("sha1sum:", "");
-  return QByteArray::fromHex(hexString.toAscii());
+  return QByteArray::fromHex(hexString.toLatin1());
 }
 
 QString MultiaryReviewCommand::_getHashIDList() const

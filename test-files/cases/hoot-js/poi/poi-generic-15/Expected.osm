@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="31.5656075" minlon="35.75" maxlat="31.566667" maxlon="35.7704385"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5656074999999987" lon="35.7517369999999985">
+    <node visible="true" id="-951427" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5656074999999987" lon="35.7517369999999985">
         <tag k="source" v="mgcp"/>
         <tag k="source:text" v="Hill"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
@@ -24,7 +24,7 @@
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5661085000000021" lon="35.7704384999999974">
+    <node visible="true" id="-951426" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5661085000000021" lon="35.7704384999999974">
         <tag k="source" v="mgcp"/>
         <tag k="source:text" v="Hill"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
@@ -47,7 +47,7 @@
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5666670000000025" lon="35.7500000000000000">
+    <node visible="true" id="-951425" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5666670000000025" lon="35.7500000000000000">
         <tag k="REF1" v="0006de"/>
         <tag k="name:ar" v="العاصي"/>
         <tag k="is_in" v="Jordan, الأردن"/>
@@ -60,8 +60,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-3" role="reviewee"/>
+        <member type="node" ref="-951425" role="reviewee"/>
+        <member type="node" ref="-951427" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

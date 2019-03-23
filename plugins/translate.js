@@ -173,28 +173,30 @@ translate = {
             tAttrib = '',
             row = [];
 
-        for (var col in inList)
+        var kList = Object.keys(inList).sort();
+        for (var i=0, kLen=kList.length; i < kLen; i++)
         {
-            var value = inList[col];
-            if (col in lookup)
+            var key = kList[i];
+            var value = inList[key];
+            if (key in lookup)
             {
-                if (value in lookup[col])
+                if (value in lookup[key])
                 {
-                    row = lookup[col][value];
+                    row = lookup[key][value];
 
                     // Drop all of the undefined values
                     if (row[0])
                     {
                         outList[row[0]] = row[1];
                         // Debug
-                        // print('Used:' + col + ' = ' + inList[col] + ' - ' + row[0] + ' = ' + row[1]);
-                        delete inList[col];
+                        // print('Used:' + key + ' = ' + inList[key] + ' - ' + row[0] + ' = ' + row[1]);
+                        delete inList[key];
                     }
                     else
                     {
                         // Debug
-                        // print('UsedUndef:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        // print('UsedUndef:' + key + ' = ' + inList[key]);
+                        delete inList[key];
                     }
                 }
                 // there may be situations where this error is inappropriate. Though we haven't run
@@ -203,33 +205,33 @@ translate = {
                 else if (value !== '')
                 {
                     // If these tags are used to find an FCODE, ignore them
-                    if ((col in fCodeList) && (value in fCodeList[col]))
+                    if ((key in fCodeList) && (value in fCodeList[key]))
                     {
                         // Debug
-                        // print('UsedFCode:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        // print('UsedFCode:' + key + ' = ' + inList[key]);
+                        delete inList[key];
                         continue;
                     }
 
-                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + key + '=' + value + ')');
                 }
-            } // End col in lookup
+            } // End key in lookup
             else
             {
                 // If these tags are used to find an FCODE, ignore them
-                if ((col in fCodeList) && (value in fCodeList[col]))
+                if ((key in fCodeList) && (value in fCodeList[key]))
                 {
                     // Debug
-                    // print('UsedFCode:' + col + ' = ' + inList[col]);
-                    delete inList[col];
+                    // print('UsedFCode:' + key+ ' = ' + inList[col]);
+                    delete inList[key];
                     continue;
                 }
 
                 // Debug:
-                // print('Col::  :' + col + ':  Value :' + value + ':');
+                // print('Col::  :' + key + ':  Value :' + value + ':');
 
-                endChar = col.charAt(col.length - 1) // Going to look for a 2 or a 3
-                tAttrib = col.slice(0,-1);
+                endChar = key.charAt(key.length - 1) // Going to look for a 2 or a 3
+                tAttrib = key.slice(0,-1);
 
                 if (tAttrib in lookup)
                 {
@@ -241,7 +243,7 @@ translate = {
                         if (row[0])
                         {
                             outList[row[0] + endChar] = row[1];
-                            delete inList[col];
+                            delete inList[key];
                             // Debug:
                             // print ('one2one: Setting :' + row[0] + endChar + ': to :' + row[1] + ':');
                         }
@@ -250,11 +252,11 @@ translate = {
                 else
                 {
                     // Removing the var test for a while.
-                    // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
-                    hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
+                    // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
+                    hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
                 }
-            } // End !col in lookup
-        } // End for col in inList
+            } // End !key in lookup
+        } // End for key in inList
     }, // End applyOne2One
 
 
@@ -263,26 +265,28 @@ translate = {
     {
         var row = [];
 
-        for (var col in inList)
+        var kList = Object.keys(inList).sort();
+        for (var i=0, kLen=kList.length; i < kLen; i++)
         {
-            var value = inList[col];
-            if (col in lookup)
+            var key = kList[i];
+            var value = inList[key];
+            if (key in lookup)
             {
-                if (value in lookup[col])
+                if (value in lookup[key])
                 {
-                    row = lookup[col][value];
+                    row = lookup[key][value];
 
                     // Drop all of the undefined values
                     if (row[0])
                     {
                         outList[row[0]] = row[1];
                         // Debug
-                        // print('Fuzzy: ' + col);
-                        delete inList[col];
+                        // print('Fuzzy: ' + key);
+                        delete inList[key];
                     }
                 }
             }
-        } // End for col in inList
+        } // End for key in inList
     }, // End applyOne2OneQuiet
 
 
@@ -296,15 +300,17 @@ translate = {
             othVal = '',
             value = '';
 
-        for (var col in inList)
+        var kList = Object.keys(inList).sort();
+        for (var i=0, kLen=kList.length; i < kLen; i++)
         {
-            var value = inList[col];
+            var key = kList[i];
+            var value = inList[key];
 
-            if (col in lookup)
+            if (key in lookup)
             {
-                if (value in lookup[col])
+                if (value in lookup[key])
                 {
-                    var row = lookup[col][value];
+                    var row = lookup[key][value];
 
                     // Debug:
                     // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
@@ -319,33 +325,33 @@ translate = {
                         {
                             outList[row[0]] = row[1];
                             // Debug
-                            // print('Used:' + col + ' = ' + inList[col]);
-                            delete inList[col];
+                            // print('Used:' + key + ' = ' + inList[key]);
+                            delete inList[key];
                         }
                         else if (! outList[row[0] + '2'])
                         {
                             outList[row[0] + '2'] = row[1];
                             // Debug
-                            // print('Used:' + col + ' = ' + inList[col] + ' as 2nd');
-                            delete inList[col];
+                            // print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
+                            delete inList[key];
                         }
                         else if (! outList[row[0] + '3'])
                         {
                             outList[row[0] + '3'] = row[1];
                             // Debug
-                            // print('Used:' + col + ' = ' + inList[col] + ' as 3rd');
-                            delete inList[col];
+                            // print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
+                            delete inList[key];
                         }
                         else
                         {
-                            hoot.logWarn('Could not assign: ' + col + ' = ' + inList[col] + ' to the 4th or greater value of ' + row[0]);
+                            hoot.logWarn('Could not assign: ' + key + ' = ' + inList[key] + ' to the 4th or greater value of ' + row[0]);
                         }
                     }
                     else
                     {
                         // Debug
-                        // print('UsedUndef:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        // print('UsedUndef:' + key + ' = ' + inList[key]);
+                        delete inList[key];
                     }
 
                 }
@@ -355,19 +361,19 @@ translate = {
                 else if (value !== '')
                 {
                     // If these tags are used to find an FCODE, ignore them
-                    if ((col in fCodeList) && (value in fCodeList[col]))
+                    if ((key in fCodeList) && (value in fCodeList[key]))
                     {
                         // Debug
-                        //print('UsedFCode:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        //print('UsedFCode:' + key + ' = ' + inList[key]);
+                        delete inList[key];
                         continue;
                     }
 
-                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
+                    hoot.logTrace('Lookup value not found for column:: (' + key + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
-                    otherVal = lookup[col]['other'];
+                    otherVal = lookup[key]['other'];
 
                     if (otherVal)
                     { 
@@ -381,31 +387,31 @@ translate = {
                         outList[otherVal[0]] = otherVal[1];
 
                         // Debug
-                        //print('UsedOTH:' + col + ' = ' + inList[col]);
-                        delete inList[col];
+                        //print('UsedOTH:' + key + ' = ' + inList[key]);
+                        delete inList[key];
 
                     } // End if otherVal
                     else
                     {
-                        hoot.logTrace('Could not add ::' + col + '=' + value + ':: to the OTH field');
+                        hoot.logTrace('Could not add ::' + key + '=' + value + ':: to the OTH field');
                     }
                 } // End value != ''
-            } // End col in lookup
+            } // End key in lookup
             else
             {
                 // If we didn't find the tag, check if it is used to find an FCODE. If so, mark it as used
-                if ((col in fCodeList) && (value in fCodeList[col]))
+                if ((key in fCodeList) && (value in fCodeList[key]))
                 {
                     // Debug
-                    //print('UsedX:' + col + ' = ' + inList[col]);
-                    delete inList[col];
+                    //print('UsedX:' + key + ' = ' + inList[key]);
+                    delete inList[key];
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
+                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
                 }
-            } // End !col in lookup
-        } // End for col in inList
+            } // End !key in lookup
+        } // End for key in inList
 
     }, // End applyTdsOne2One
 
