@@ -140,7 +140,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         jobParams.setTextStatus(false);
         jobParams.setInputType("file");
         jobParams.setOutputType("tiles");
-        jobParams.setInput("input1;input2");
+        jobParams.setInput(String.valueOf(mapId));
         jobParams.setBounds(aoi);
         jobParams.setMaxNodeCountPerTile(1000);
         jobParams.setPixelSize(0.001);

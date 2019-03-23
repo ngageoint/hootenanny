@@ -117,14 +117,8 @@ public class ExportResource {
     public Response export(ExportParams params, @Context HttpServletRequest request,
                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
+        params.setUserEmail(user.getEmail());
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
-
-        // ensure valid email address in `params`:
-        if(user != null) {
-            params.setUserEmail(user.getEmail());
-        } else {
-            user = Users.TEST_USER;
-        }
 
         try {
             String outputType = params.getOutputType();

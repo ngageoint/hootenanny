@@ -139,6 +139,7 @@ public class JobResource {
             this.jobStatusManager.deleteJob(jobId, user.getId());
         }
         catch (Exception e) {
+            logger.error("job delete", e);
             String msg = "Error submitting delete job request for job with id =  " + jobId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
@@ -170,6 +171,7 @@ public class JobResource {
             errors = this.jobStatusManager.getJobErrors(jobId, user.getId());
         }
         catch (Exception e) {
+            logger.error("job error", e);
             String msg = "Error getting error for job with id =  " + jobId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }

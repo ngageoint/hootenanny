@@ -49,10 +49,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hoot.services.UnitTest;
+import hoot.services.controllers.job.JobStatusResponse;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.job.JobType;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QJobStatus;
+import hoot.services.models.db.Users;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
@@ -71,9 +74,11 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
 
                     JobStatus jobStatus = new JobStatus();
                     jobStatus.setJobId(jobIdPrefix + i);
+                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
                     jobStatus.setPercentComplete(100.0);
+                    jobStatus.setUserId(Users.TEST_USER.getId());
 
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
                     jobStatus.setStart(ts);
@@ -87,9 +92,9 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     .get();
             String actualResult = response.readEntity(String.class);
             ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatus> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatus>>(){});
+            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
             Assert.assertEquals(20, jobs.size());
-            for(JobStatus j : jobs) {
+            for(JobStatusResponse j : jobs) {
                 Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
             }
         } finally {
@@ -112,9 +117,11 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
 
                     JobStatus jobStatus = new JobStatus();
                     jobStatus.setJobId(jobIdPrefix + i);
+                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
                     jobStatus.setPercentComplete(100.0);
+                    jobStatus.setUserId(Users.TEST_USER.getId());
 
                     Timestamp ts = new Timestamp(now);
                     jobStatus.setStart(ts);
@@ -127,9 +134,11 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
 
                 JobStatus jobStatus = new JobStatus();
                 jobStatus.setJobId(jobIdPrefix + i);
+                jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                 jobStatus.setStatus(COMPLETE.ordinal());
                 jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
                 jobStatus.setPercentComplete(100.0);
+                jobStatus.setUserId(Users.TEST_USER.getId());
 
                 Timestamp ts = new Timestamp(old);
                 jobStatus.setStart(ts);
@@ -144,9 +153,9 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     .get();
             String actualResult = response.readEntity(String.class);
             ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatus> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatus>>(){});
+            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
             Assert.assertEquals(10, jobs.size());
-            for(JobStatus j : jobs) {
+            for(JobStatusResponse j : jobs) {
                 Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
             }
         } finally {
@@ -167,6 +176,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
 
                     JobStatus jobStatus = new JobStatus();
                     jobStatus.setJobId(jobIdPrefix + i);
+                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
+                    jobStatus.setUserId(Users.TEST_USER.getId());
                     if (i % 2 == 0) {
                         jobStatus.setStatus(COMPLETE.ordinal());
                         jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
@@ -188,6 +199,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
 
                 JobStatus jobStatus = new JobStatus();
                 jobStatus.setJobId(jobIdPrefix + i);
+                jobStatus.setJobType(JobType.UNKNOWN.ordinal());
+                jobStatus.setUserId(Users.TEST_USER.getId());
                 if (i % 2 == 0) {
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
@@ -211,9 +224,9 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     .get();
             String actualResult = response.readEntity(String.class);
             ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatus> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatus>>(){});
+            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
             Assert.assertEquals(13, jobs.size());
-            for(JobStatus j : jobs) {
+            for(JobStatusResponse j : jobs) {
                 Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
             }
         } finally {

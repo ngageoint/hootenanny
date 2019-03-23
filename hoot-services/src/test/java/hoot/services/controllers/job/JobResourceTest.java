@@ -54,6 +54,7 @@ import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QCommandStatus;
 import hoot.services.models.db.QJobStatus;
+import hoot.services.models.db.Users;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -64,7 +65,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testJobIdStatusUNKNOWN() throws Exception {
-        JobResource jobResource = new JobResource();
         String jobId = UUID.randomUUID().toString();
 
         Response response = target("/status/" + jobId)
@@ -151,6 +151,7 @@ public class JobResourceTest extends OSMResourceTestAbstract {
             jobStatus.setStatus(COMPLETE.ordinal());
             jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
             jobStatus.setPercentComplete(100.0);
+            jobStatus.setUserId(Users.TEST_USER.getId());
 
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             jobStatus.setStart(ts);
@@ -203,7 +204,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testJobError() throws Exception {
-        JobResource jobResource = new JobResource();
         String jobId = UUID.randomUUID().toString();
 
         JobStatus jobStatus = new JobStatus();
@@ -211,6 +211,7 @@ public class JobResourceTest extends OSMResourceTestAbstract {
         jobStatus.setStatus(FAILED.ordinal());
         jobStatus.setStatusDetail("JOB FAILED");
         jobStatus.setPercentComplete(0.0);
+        jobStatus.setUserId(Users.TEST_USER.getId());
 
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         jobStatus.setStart(ts);
@@ -224,7 +225,7 @@ public class JobResourceTest extends OSMResourceTestAbstract {
         listCommandStatus.setStart(new Timestamp(System.currentTimeMillis()));
         listCommandStatus.setFinish(new Timestamp(System.currentTimeMillis() + 1000));
         listCommandStatus.setJobId(jobId);
-        listCommandStatus.setStderr("The command returned an error.\nCommand not found.");
+        listCommandStatus.setStderr("The command returned an error. Command not found.");
         listCommandStatus.setStdout("Running command hoot foo...");
 
         createQuery().insert(QCommandStatus.commandStatus).populate(listCommandStatus).execute();
@@ -233,7 +234,7 @@ public class JobResourceTest extends OSMResourceTestAbstract {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 
-        String expectedResult = "{\"errors\":[\"The command returned an error.\nCommand not found.\"]}";
+        String expectedResult = "{\"errors\":[\"The command returned an error. Command not found.\"]}";
         String actualResult = response.readEntity(String.class);
 
         assertEquals(expectedResult, actualResult);

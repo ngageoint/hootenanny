@@ -152,9 +152,13 @@ public class Users {
 
     public static Users fromRequest(HttpServletRequest request) {
         if(request == null) {
-            return null;
+            return TEST_USER;  //Not sure this shouldn't be null
         }
-        return (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        if (user == null) {
+            return TEST_USER;
+        }
+        return user;
     }
 
     private static Users generateTestUser() {
