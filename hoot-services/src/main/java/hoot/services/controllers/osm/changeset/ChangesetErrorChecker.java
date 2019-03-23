@@ -189,6 +189,40 @@ class ChangesetErrorChecker {
         }
     }
 
+    void checkTopLevelElements(Map<ElementType, Set<Long>> elementList) {
+        // check top level elements
+        for (EntityChangeType entityChangeType : EntityChangeType.values()) {
+            if (entityChangeType != EntityChangeType.CREATE) {
+
+                for (ElementType elementType : ElementType.values()) {
+                    if (elementType != ElementType.Changeset) {
+                        NodeList elementIdXmlNodes = null;
+                        try {
+                            elementIdXmlNodes = XPathAPI.selectNodeList(changesetDoc,
+                                    "//osmChange/" + entityChangeType.toString().toLowerCase() + "/"
+                                            + elementType.toString().toLowerCase() + "/@id");
+                        }
+                        catch (TransformerException e) {
+                            throw new RuntimeException("Error calling XPathAPI!", e);
+                        }
+
+                        for (int i = 0; i < elementIdXmlNodes.getLength(); i++) {
+                            long id;
+                            try {
+                                id = Long.parseLong(elementIdXmlNodes.item(i).getNodeValue());
+                            }
+                            catch (NumberFormatException | NullPointerException e) {
+                                throw new IllegalArgumentException(e);
+                            }
+//                            if (id > 0) {
+                                elementList.get(elementType).add(id);
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     void checkWayNodes(Map<ElementType, Set<Long>> elementList) {
         NodeList wayNodeIdXmlNodes;
         NodeList wayNodeRefXmlNodes;
@@ -288,8 +322,8 @@ class ChangesetErrorChecker {
 
         try {
             checkRelationMembers(elementTypesToElementIds);
-
             checkWayNodes(elementTypesToElementIds);
+            checkTopLevelElements(elementTypesToElementIds);
         } catch (IllegalArgumentException exc) {
             throw new IllegalArgumentException(emptyIdErrorMsg, exc);
         }

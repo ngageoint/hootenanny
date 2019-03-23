@@ -486,7 +486,7 @@
                 "hoot_key":"unify.optimizer.time.limit"
             }
         ]
-    },
+    }, 
     {
         "id":"hoot_road_options",
         "elem_type":"group",

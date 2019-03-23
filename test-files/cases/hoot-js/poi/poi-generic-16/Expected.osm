@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.16352458824" minlon="31.46648899977" maxlat="30.16354000036999" maxlon="31.4665112"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1635400003699949" lon="31.4664889997700001">
+    <node visible="true" id="-2231903" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1635400003699949" lon="31.4664889997700001">
         <tag k="controlling_authority" v="unknown"/>
         <tag k="source" v="mgcp"/>
         <tag k="condition" v="functional"/>
@@ -26,14 +26,14 @@
         <tag k="angle" v="164"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1635245882400014" lon="31.4665111999999993">
+    <node visible="true" id="-2231902" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1635245882400014" lon="31.4665111999999993">
         <tag k="REF1" v="001285"/>
         <tag k="barrier" v="toll_booth"/>
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-2231902" role="reviewee"/>
+        <member type="node" ref="-2231903" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

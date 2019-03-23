@@ -647,6 +647,36 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
+=== corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate
+
+=== corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
+
 === create.bogus.review.tags
 
 * Data Type: bool
@@ -3159,7 +3189,7 @@ honored by all readers.
 === reader.conflate.use.data.source.ids.1
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Determines whether the reader used by the conflate command to read the first input dataset will
 use the element ID's specified by the input datasets (true) or use internal ID management for the
