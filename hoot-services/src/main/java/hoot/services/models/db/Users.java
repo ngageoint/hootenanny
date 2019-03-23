@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Generated("com.querydsl.codegen.BeanSerializer")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Users {
+
+    public static final Users TEST_USER = Users.generateTestUser();
 
     public Users() {
         this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
@@ -144,7 +147,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return this.displayName;
+        return this.displayName + "//" + this.id;
     }
 
     public static Users fromRequest(HttpServletRequest request) {
@@ -152,5 +155,20 @@ public class Users {
             return null;
         }
         return (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+    }
+
+    private static Users generateTestUser() {
+        Users u = new Users();
+        u.setId(-1L);
+        u.setDisplayName("Test User");
+        u.setEmail("test@hootenanny");
+        u.setProviderAccessKey("provider_access_key");
+        u.setProviderAccessToken("provider_access_token");
+
+        u.setHootservicesCreatedAt(new Timestamp(new Date().getTime()));
+        u.setHootservicesLastAuthorize(u.getHootservicesCreatedAt());
+        u.setProviderCreatedAt(u.getHootservicesCreatedAt());
+
+        return u;
     }
 }
