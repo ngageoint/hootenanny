@@ -35,7 +35,7 @@ Feature: Highlight features on click
         And I reject the alert
 
     Scenario: I select a feature and see an orange highlight
-        When I select a node map feature with OSM id "n-1"
+        When I select a node map feature ending with OSM id "n-1"
         Then I should see a node element "n-1" with a selected highlight
         # Then I de-select the feature
         And I click the "map" at "450","300"
