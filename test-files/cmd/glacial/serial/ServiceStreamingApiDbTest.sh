@@ -15,7 +15,7 @@ HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=f
 
 echo "streaming hoot api db --> osm api db..."
 echo ""
-hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
+hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
 hoot diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
@@ -29,7 +29,7 @@ hoot diff $HOOT_OPTS $OSM_API_DB_URL "$HOOT_DB_URL/ToyTestA"
 
 echo "streaming hoot api db --> pbf..."
 echo ""
-hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
+hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm.pbf
 hoot diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm.pbf
 
@@ -42,7 +42,7 @@ hoot diff $HOOT_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ToyTestA-osmapidb.osm.pbf
 
 echo "streaming hoot api db --> xml..."
 echo ""
-hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
+hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
 hoot convert $HOOT_OPTS -D writer.xml.sort.by.id=false "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm
 hoot diff $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OUTPUT_DIR/ToyTestA-hootapidb.osm
 
@@ -59,7 +59,7 @@ BOUNDS="-104.7223166,38.8845025,-104.7148732,38.8975378"
 
 echo "hoot api db bounds --> xml"
 echo ""
-hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
+hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
 hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS -D writer.xml.sort.by.id=false "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.osm
 hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-hootapidb.osm
 
@@ -72,7 +72,7 @@ hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-osmapid
 
 echo "hoot api db bounds --> ogr"
 echo ""
-hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
+hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
 hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp --trans translations/Poi.js
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-hootapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm

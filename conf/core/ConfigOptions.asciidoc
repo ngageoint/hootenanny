@@ -1136,11 +1136,11 @@ a new map is written.
 === hootapi.db.writer.remap.ids
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If this value is set to true, then all incoming element IDs are remapped into new IDs as the
-elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
-incoming IDs are non-positive.
+elements are written to a Hootenanny API database, otherwise the original IDs from the map
+are preserved.
 
 === id.generator
 
