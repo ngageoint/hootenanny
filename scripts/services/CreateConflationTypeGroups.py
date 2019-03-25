@@ -48,6 +48,7 @@ def createUiJSON(groups, options):
     try:
         uiGroupsArray = []
         configMembers = [{'key': key, 'member': member} for key, member in options.items()]
+        cleaningOptions = options['MapCleanerTransforms']['default'].split(';')
         for conflateType, conflateConfig in groups.items():
             if conflateType == 'RoadsNetwork': continue;
             members = []
@@ -58,7 +59,8 @@ def createUiJSON(groups, options):
                     members.append({
                         'label': typeMembers[flag],
                         'id': flag.replace('hoot::', ''),
-                        'input': 'checkbox'
+                        'input': 'checkbox',
+                        'default': 'true' if flag in cleaningOptions else 'false'
                     })
                 else:
                     match = next(
