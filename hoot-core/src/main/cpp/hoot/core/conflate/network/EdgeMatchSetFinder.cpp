@@ -76,6 +76,7 @@ void EdgeMatchSetFinder::addEdgeMatches(ConstNetworkEdgePtr e1, ConstNetworkEdge
     em->getString1()->addFirstEdge(e1);
     em->getString2()->addFirstEdge(e2);
     _recordMatch(em);
+    LOG_VART(em);
   }
   else
   {

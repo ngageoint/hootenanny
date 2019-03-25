@@ -647,6 +647,36 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
+=== corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate
+
+=== corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
+
 === create.bogus.review.tags
 
 * Data Type: bool
@@ -676,6 +706,14 @@ Debugging: The filename to use when saving the debug map during conflation.
 If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
+
+=== differential.snap.unconnected.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
+secondary road endpoint nodes to the nearest reference road.
 
 === differential.tag.ignore.list
 
@@ -1106,11 +1144,11 @@ a new map is written.
 === hootapi.db.writer.remap.ids
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If this value is set to true, then all incoming element IDs are remapped into new IDs as the
-elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
-incoming IDs are non-positive.
+elements are written to a Hootenanny API database, otherwise the original IDs from the map
+are preserved.
 
 === id.generator
 
@@ -1862,15 +1900,6 @@ The threshold at which a network match is called a match when using network conf
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== network.match.write.debug.maps
-
-* Data Type: bool
-* Default Value: `false`
-
-If true debug maps will be generated at every iteration when using network conflation. This is
-useful when debugging. The maps can be large and slow things down significantly. This setting is
-independent of conflate.write.debug.maps.
 
 === network.matcher
 
@@ -3494,6 +3523,101 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
+
+=== snap.unconnected.ways.add.circular.error.to.search.radius
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all tolerances use by the Unconnected Way Snapper will have the circular error of the
+snap node candidate added to them.
+
+=== snap.unconnected.ways.discretization.spacing
+
+* Data Type: double
+* Default Value: `1.0`
+
+The spacing granularity to which a unconnected way node is snapped back to a way with the
+Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
+setting it too high may result in less accurate way snapping.
+
+=== snap.unconnected.ways.existing.way.node.tolerance
+
+* Data Type: double
+* Default Value: `0.5`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
+the existing way node instead of adding the way endpoint node as a new way node on the way.
+
+=== snap.unconnected.ways.mark.snapped.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
+marked with a 'hoot:snapped' tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.snap.to.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped to.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+way snapping.
+
+=== snap.unconnected.ways.snap.to.way.node.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayNodeCriterion`
+
+Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
+hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
+for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+
+=== snap.unconnected.ways.snap.to.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways or way nodes being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1'
+to snap reference ways or 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
+section of the neighboring way.
+
+=== snap.unconnected.ways.snap.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+way snapping.
+
+=== snap.unconnected.ways.snap.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
+snap reference ways 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.use.existing.way.nodes
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will attempt to reuse existing way nodes on the way being snapped to instead of adding
+the endpoint way node to the way.
 
 === spark.changeset.writer.element.payload.format
 

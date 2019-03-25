@@ -28,7 +28,7 @@ INCLUDEPATH += \
 PRECOMPILED_HEADER = src/main/cpp/hoot/swig/HootSwigStable.h
 
 CONFIG += rtti \
-    qtestlib \
+    testlib \
     precompile_header
 
 OTHER_FILES += README.txt \

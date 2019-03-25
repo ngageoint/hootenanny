@@ -54,7 +54,7 @@ NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatch
 {
   double p;
 
-  if (score > 0.5)
+  if (score > 0.5)  // TODO: move to config - #2913
   {
     // Send the score through a logistic function to keep the values in range. These values are
     // arbitrary and may need tweaking.
@@ -127,18 +127,20 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
         _toElement(string2->getEdge(i))->getElementId()
       ));
   }
+
+  LOG_VART(_pairs);
 }
 
 bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
 {
-  set< pair<ElementId, ElementId> > s = other.getMatchPairs();
+  set<pair<ElementId, ElementId>> s = other.getMatchPairs();
 
   // if any element ids overlap then they're conflicting.
-  for (set< pair<ElementId, ElementId> >::const_iterator it = s.begin(); it != s.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
   {
     const pair<ElementId, ElementId>& ip = *it;
 
-    for (set< pair<ElementId, ElementId> >::const_iterator jt = _pairs.begin(); jt != _pairs.end();
+    for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
       ++jt)
     {
       const pair<ElementId, ElementId>& jp = *jt;

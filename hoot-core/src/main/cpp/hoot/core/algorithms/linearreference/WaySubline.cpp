@@ -42,14 +42,12 @@ namespace hoot
 
 WaySubline::WaySubline()
 {
-
 }
 
 WaySubline::WaySubline(const WaySubline& from) :
   _start(from.getStart()),
   _end(from.getEnd())
 {
-
 }
 
 WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap)

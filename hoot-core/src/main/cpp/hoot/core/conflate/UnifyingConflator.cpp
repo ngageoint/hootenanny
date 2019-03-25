@@ -78,7 +78,6 @@ UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThre
   _reset();
 }
 
-
 UnifyingConflator::~UnifyingConflator()
 {
   _reset();

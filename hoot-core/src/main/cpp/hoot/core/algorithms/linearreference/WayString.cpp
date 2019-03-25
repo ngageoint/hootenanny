@@ -227,7 +227,7 @@ WayPtr WayString::copySimplifiedWayIntoMap(const ElementProvider& map, OsmMapPtr
     newTags =
       TagMergerFactory::getInstance().mergeTags(newTags, oldWay->getTags(), ElementType::Way);
 
-    // figure out which node is the first node, if we're between nodes, then create a new node to
+    // Figure out which node is the first node. If we're between nodes, then create a new node to
     // add.
     size_t formeri;
     vector<long> newNids;

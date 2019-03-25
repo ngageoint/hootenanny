@@ -593,10 +593,10 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-        LOG_TRACE(
-                    "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
-                    " since the value field is empty");
-        continue;
+      LOG_TRACE(
+        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+        " since the value field is empty");
+      continue;
     }
 
     t[fieldDefn->GetFieldDefn(i)->GetNameRef()] = value;
@@ -626,26 +626,28 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
       switch (wkbFlatten(g->getGeometryType()))
       {
         case wkbLineString:
-          LOG_TRACE("Adding line string");
+          LOG_TRACE("Adding line string: " << _toWkt(g).left(100));
           _addLineString((OGRLineString*)g, t);
           break;
         case wkbPoint:
-          LOG_TRACE("Adding point");
+          LOG_TRACE("Adding point: " << _toWkt(g).left(100));
           _addPoint((OGRPoint*)g, t);
           break;
         case wkbPolygon:
-          LOG_TRACE("Adding polygon");
+          LOG_TRACE("Adding polygon: " << _toWkt(g).left(100));
           _addPolygon((OGRPolygon*)g, t);
           break;
         case wkbMultiPolygon:
-          LOG_TRACE("Adding multi-polygon");
+          LOG_TRACE("Adding multi-polygon: " << _toWkt(g).left(100));
           _addMultiPolygon((OGRMultiPolygon*)g, t);
           break;
         case wkbMultiPoint:
         case wkbMultiLineString:
         case wkbGeometryCollection:
         {
-          LOG_TRACE("Adding geometry collection (multipoint, multiline, etc.)");
+          LOG_TRACE(
+            "Adding geometry collection (multipoint, multiline, etc.): " <<
+            _toWkt(g).left(100));
           OGRGeometryCollection* gc = dynamic_cast<OGRGeometryCollection*>(g);
           int nParts = gc->getNumGeometries();
           for (int i = 0; i < nParts; i++)
@@ -758,7 +760,9 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Skipping polygon with empty exterior ring: " << _toWkt(p).left(100));
+        LOG_WARN(
+          "Skipping polygon in layer: " << _layerName.toLatin1().data() <<
+          " with empty exterior ring: " << _toWkt(p).left(100));
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -1104,12 +1108,15 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     _addFeature(f);
     OGRFeature::DestroyFeature(f);
     f = 0;
-    if (_count % 1000 == 0 && Log::getInstance().isInfoEnabled())
-    {
-      LOG_DEBUG("Loading " << _path.toUtf8().data() << " " << _layerName.toLatin1().data() << " " <<
-                _count << " / " << _featureCount);
-    }
+
     _count++;
+    if (_count % 1000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tRead from layer: " << _count << " / " << _featureCount << " features from layer: " <<
+        _layerName.toLatin1().data());
+    }
+
     if (progress.getState() != "Pending")
     {
       progress.setFromRelative(
