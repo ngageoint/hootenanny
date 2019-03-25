@@ -47,8 +47,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -479,8 +479,6 @@ public class FolderResource {
         return Response.status(Status.OK).entity(affectedFolders).build();
     }
 
-//    get
-
     /**
      * Converts a set of folder database records into an object returnable by a
      * web service
@@ -541,25 +539,25 @@ public class FolderResource {
      *
      */
     public static List<Tuple> getFolderMaps(Users user, Long folder_id) {
-    	List<Tuple> mapsInfo = new ArrayList<>();
-    	try {
-    		getFolderForUser(user, folder_id); // will throw an exception if folder not visible to user...
-    		mapsInfo = createQuery()
-    			.select(maps.id, maps.displayName)
-    			.from(maps)
-    			.innerJoin(folderMapMappings)
-    			.on(maps.id.eq(folderMapMappings.mapId))
-    			.where(folderMapMappings.folderId.eq(folder_id))
-    			.fetch();
+        List<Tuple> mapsInfo = new ArrayList<>();
+        try {
+            getFolderForUser(user, folder_id); // will throw an exception if folder not visible to user...
+            mapsInfo = createQuery()
+                .select(maps.id, maps.displayName)
+                .from(maps)
+                .innerJoin(folderMapMappings)
+                .on(maps.id.eq(folderMapMappings.mapId))
+                .where(folderMapMappings.folderId.eq(folder_id))
+                .fetch();
 
-    	} catch (ForbiddenException | NotFoundException e) {
-    		throw e;
-    	}
-    	return mapsInfo;
+        } catch (ForbiddenException | NotFoundException e) {
+            throw e;
+        }
+        return mapsInfo;
     }
 
     public static String getFolderName(Long folder_id) {
-    	return createQuery().select(folders.displayName).from(folders).where(folders.id.eq(folder_id)).fetchFirst();
+        return createQuery().select(folders.displayName).from(folders).where(folders.id.eq(folder_id)).fetchFirst();
     }
 
     public static Folders getFolderForUser(Users user, Long folderId) {

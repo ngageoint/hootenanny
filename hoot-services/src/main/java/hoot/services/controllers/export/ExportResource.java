@@ -30,6 +30,7 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static hoot.services.models.db.QMaps.maps;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +38,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -62,11 +62,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Maps;
 import com.querydsl.core.Tuple;
 
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.FolderResource;
@@ -76,9 +74,6 @@ import hoot.services.job.JobProcessor;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.models.db.QFolders.folders;
-import static hoot.services.models.db.QMaps.maps;
 
 @Controller
 @Path("/export")
@@ -93,15 +88,15 @@ public class ExportResource {
     public ExportResource() {}
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
-    	Class<? extends ExportCommand> exportCommand = null;
-    	if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-    		exportCommand = ExportOSMCommand.class;
-    	} else if (outputType.equals("tiles")) {
-    		exportCommand = CalculateTilesCommand.class;
-    	} else {
-    		exportCommand = ExportCommand.class;
-    	}
-    	return exportCommand;
+        Class<? extends ExportCommand> exportCommand = null;
+        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
+            exportCommand = ExportOSMCommand.class;
+        } else if (outputType.equals("tiles")) {
+            exportCommand = CalculateTilesCommand.class;
+        } else {
+            exportCommand = ExportCommand.class;
+        }
+        return exportCommand;
     }
 
     private ExportCommand getCommand(Users user, String jobId, ExportParams params, String debugLevel) {
@@ -118,8 +113,8 @@ public class ExportResource {
      *
      * {
      *   "translation":"MGCP.js", //Translation script name.
-     *   "inputtype":"db",        //[db | dbs | folder|  file]
-     *   						  // - db means input from hoot db will be used.
+     *   "inputtype":"db",        //[db | dbs | folder| file]
+     *                            // - db means input from hoot db will be used.
      *                            // - dbs means list of maps in hoot db are used.
      *                            // - folder means all files in a hoot db folder are used.
      *                            // - file means a file path will be specified.
@@ -149,7 +144,7 @@ public class ExportResource {
         }
 
         try {
-        	String inputType = params.getInputType();
+            String inputType = params.getInputType();
             String outputType = params.getOutputType();
             String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
@@ -160,44 +155,44 @@ public class ExportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-	        if (inputType.equalsIgnoreCase("folder")) {
-	        	Long folder_id = Long.parseLong(params.getInput());
-	        	params.setInputType("db"); // make folder input really a db input...
+            if (inputType.equalsIgnoreCase("folder")) {
+                Long folder_id = Long.parseLong(params.getInput());
+                params.setInputType("db"); // make folder input really a db input...
 
-	            for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
-	               	params.setInput(Long.toString(mapInfo.get(maps.id)));
-	               	params.setOutputName(mapInfo.get(maps.displayName));
-	           		workflow.add(getCommand(user, jobId, params, debugLevel));
-	            }
+                for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
+                    params.setInput(Long.toString(mapInfo.get(maps.id)));
+                    params.setOutputName(mapInfo.get(maps.displayName));
+                    workflow.add(getCommand(user, jobId, params, debugLevel));
+                }
 
-	           	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
-	           	workflow.add(zipCommand);
-            	params.setInputType("folder");
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
+                workflow.add(zipCommand);
+                params.setInputType("folder");
 
-	        } else if (inputType.equalsIgnoreCase("dbs")) {
-	        	params.setInputType("db");
+            } else if (inputType.equalsIgnoreCase("dbs")) {
+                params.setInputType("db");
 
-	        	for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
-	        		params.setInput(map);
-	        		params.setOutputName(map);
-	        		workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
-	        	}
+                for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
+                    params.setInput(map);
+                    params.setOutputName(map);
+                    workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
+                }
 
-	        	Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
-	        	workflow.add(zipCommand);
+                Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
+                workflow.add(zipCommand);
 
-	        } else {
-	        	workflow.add(getCommand(user, jobId, params, debugLevel));
+            } else {
+                workflow.add(getCommand(user, jobId, params, debugLevel));
 
-	        	// only try to add zipCommand to workflow if not osm.pbf or tiles...
-	        	if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
-	        		Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                // only try to add zipCommand to workflow if not osm.pbf or tiles...
+                if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
+                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
 
-	        		if (zipCommand != null) {
-	        			workflow.add(zipCommand);
-	        		}
-	        	}
-	        }
+                    if (zipCommand != null) {
+                        workflow.add(zipCommand);
+                    }
+                }
+            }
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
