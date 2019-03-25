@@ -28,6 +28,7 @@ package hoot.services.utils;
 
 
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
 
@@ -191,6 +192,20 @@ public class DbUtils {
             .insert(folderMapMappings)
             .columns(folderMapMappings.mapId, folderMapMappings.folderId)
             .values(mapId, folderId).execute();
+    }
+
+    /**
+     * Sets the parent directory for the specified folder
+     *
+     * @param folderId folder id whos parent we are setting
+     * @param parentId parent directory id that the folder will get linked to
+     */
+    public static void setFolderParent(Long folderId, Long parentId) {
+        createQuery()
+                .update(folders)
+                .where(folders.id.eq(folderId))
+                .set(folders.parentId, parentId)
+                .execute();
     }
 
     /**
