@@ -162,7 +162,7 @@ public class ExportResource {
 
 	        if (inputType.equalsIgnoreCase("folder")) {
 	        	Long folder_id = Long.parseLong(params.getInput());
-	        	params.setInputType("db"); // make folder input really db input...
+	        	params.setInputType("db"); // make folder input really a db input...
 
 	            for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
 	               	params.setInput(Long.toString(mapInfo.get(maps.id)));
@@ -173,21 +173,23 @@ public class ExportResource {
 	           	Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
 	           	workflow.add(zipCommand);
             	params.setInputType("folder");
+
 	        } else if (inputType.equalsIgnoreCase("dbs")) {
 	        	params.setInputType("db");
 
-	        	for (String map: Arrays.asList(params.getInput().split(","))) {
+	        	for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
 	        		params.setInput(map);
 	        		params.setOutputName(map);
-	        		workflow.add(getCommand(user, jobId, params, debugLevel));
+	        		workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
 	        	}
 
-	        	Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER");
+	        	Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
 	        	workflow.add(zipCommand);
 
 	        } else {
 	        	workflow.add(getCommand(user, jobId, params, debugLevel));
 
+	        	// only try to add zipCommand to workflow if not osm.pbf or tiles...
 	        	if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
 	        		Command zipCommand = getZIPCommand(workDir, outputName, outputType);
 
