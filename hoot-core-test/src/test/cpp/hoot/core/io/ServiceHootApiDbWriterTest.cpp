@@ -127,12 +127,13 @@ public:
 
     _mapId = writer.getMapId();
 
-    compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(_mapId) +
-                   " ORDER BY longitude",
-                   "\"note\"=>\"n1',\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(_mapId) +
+                                         " ORDER BY longitude",
+                                         "\"note\"=>\"n1',\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                         "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                                         "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
   }
 
   void runInsertTest()
@@ -178,47 +179,53 @@ public:
 
     _mapId = writer.getMapId();
 
-    compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
-                   " WHERE email LIKE :email",
-                   QString("%1;%2").arg(userEmail()).arg(userName()),
-                   userEmail());
+    ServicesDbTestUtils::compareRecords( "SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
+                                         " WHERE email LIKE :email",
+                                         QString("%1;%2").arg(userEmail()).arg(userName()),
+                                         _testName,
+                                         userEmail());
 
-    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(_mapId) +
-                   " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                         HootApiDb::getCurrentNodesTableName(_mapId) +
+                                         " ORDER BY longitude",
+                                         "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                         "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                                         "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getCurrentWaysTableName(_mapId) +
-                   " ORDER BY id",
-                   "1;true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"\n"
-                   "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT id, visible, version, tags FROM " +
+                                         HootApiDb::getCurrentWaysTableName(_mapId) +
+                                         " ORDER BY id",
+                                         "1;true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"\n"
+                                         "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT way_id, node_id, sequence_id FROM " +
-                   HootApiDb::getCurrentWayNodesTableName(_mapId) +
-                   " ORDER BY way_id, node_id, sequence_id",
-                   "1;1;0\n"
-                   "1;2;1\n"
-                   "2;2;0\n"
-                   "2;3;1",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT way_id, node_id, sequence_id FROM " +
+                                         HootApiDb::getCurrentWayNodesTableName(_mapId) +
+                                         " ORDER BY way_id, node_id, sequence_id",
+                                         "1;1;0\n"
+                                         "1;2;1\n"
+                                         "2;2;0\n"
+                                         "2;3;1",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT id, visible, version, tags FROM " +
-                   HootApiDb::getCurrentRelationsTableName(_mapId),
-                   "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT id, visible, version, tags FROM " +
+                                         HootApiDb::getCurrentRelationsTableName(_mapId),
+                                         "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT relation_id, member_type, member_id, member_role, sequence_id "
-                   "FROM " +
-                   HootApiDb::getCurrentRelationMembersTableName(_mapId) +
-                   " ORDER BY relation_id, member_type",
-                   "1;node;1;n1;0\n"
-                   "1;way;1;w1;1",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT relation_id, member_type, member_id, member_role, sequence_id "
+                                         "FROM " +
+                                         HootApiDb::getCurrentRelationMembersTableName(_mapId) +
+                                         " ORDER BY relation_id, member_type",
+                                         "1;node;1;n1;0\n"
+                                         "1;way;1;w1;1",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName));
@@ -288,82 +295,56 @@ public:
     writer.write(map);
     _mapId = writer.getMapId();
 
-    compareRecords("SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
-                   " WHERE email LIKE :email",
-                   QString("%1;%2").arg(userEmail()).arg(userName()),
-                   userEmail());
+    ServicesDbTestUtils::compareRecords( "SELECT email, display_name FROM " + ApiDb::getUsersTableName() +
+                                         " WHERE email LIKE :email",
+                                         QString("%1;%2").arg(userEmail()).arg(userName()),
+                                         _testName,
+                                         userEmail());
 
-    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(_mapId) +
-                   " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                         HootApiDb::getCurrentNodesTableName(_mapId) +
+                                         " ORDER BY longitude",
+                                         "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                         "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                                         "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getCurrentWaysTableName(_mapId) +
-                   " ORDER BY id",
-                   "true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"\n"
-                   "true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT visible, version, tags FROM " +
+                                         HootApiDb::getCurrentWaysTableName(_mapId) +
+                                         " ORDER BY id",
+                                         "true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"\n"
+                                         "true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT sequence_id FROM " +
-                   HootApiDb::getCurrentWayNodesTableName(_mapId) +
-                   " ORDER BY way_id, node_id, sequence_id",
-                   "1\n"
-                   "0\n"
-                   "1\n"
-                   "0",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT sequence_id FROM " +
+                                         HootApiDb::getCurrentWayNodesTableName(_mapId) +
+                                         " ORDER BY way_id, node_id, sequence_id",
+                                         "1\n"
+                                         "0\n"
+                                         "1\n"
+                                         "0",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT visible, version, tags FROM " +
-                   HootApiDb::getCurrentRelationsTableName(_mapId) +
-                   " ORDER BY id",
-                   "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"\n"
-                   "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
-                   (qlonglong)_mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT visible, version, tags FROM " +
+                                         HootApiDb::getCurrentRelationsTableName(_mapId) +
+                                         " ORDER BY id",
+                                         "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"\n"
+                                         "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
+                                         _testName,
+                                         (qlonglong)_mapId);
 
-    compareRecords("SELECT member_type, member_role, sequence_id "
-                   "FROM " +
-                   HootApiDb::getCurrentRelationMembersTableName(_mapId) +
-                   " ORDER BY relation_id, member_type",
-                   "relation;r1;0\n"
-                   "node;n1;0\n"
-                   "way;w1;1",
-                   (qlonglong)_mapId);
-  }
-
-  // merge this into ServicesDbTestUtils::compareRecords - #2934
-  void compareRecords(QString sql, QString expected, QVariant v1 = QVariant())
-  {
-    HootApiDb db;
-    db.open(ServicesDbTestUtils::getDbModifyUrl(_testName));
-    QString result = db.execToString(sql, v1);
-    if (expected == "")
-    {
-      QStringList rows = result.split("\n");
-      for (int i = 0; i < rows.size(); ++i)
-      {
-        cout << "\"" << rows[i];
-        if (i == rows.size() - 1)
-        {
-          cout << "\"" << endl;
-        }
-        else
-        {
-          cout << "\\n\"" << endl;
-        }
-      }
-    }
-    else
-    {
-      if (expected != result)
-      {
-        LOG_INFO(TestUtils::toQuotedString(result));
-      }
-      CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
-    }
+    ServicesDbTestUtils::compareRecords( "SELECT member_type, member_role, sequence_id "
+                                         "FROM " +
+                                         HootApiDb::getCurrentRelationMembersTableName(_mapId) +
+                                         " ORDER BY relation_id, member_type",
+                                         "relation;r1;0\n"
+                                         "node;n1;0\n"
+                                         "way;w1;1",
+                                         _testName,
+                                         (qlonglong)_mapId);
   }
 
   void writeTwoMapsSameNameDifferentUsers()
@@ -449,12 +430,13 @@ public:
     writer2.close();
 
     //the second map should get appended to the first
-    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(mapId) +
-                   " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
-                   (qlonglong)mapId);
+    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                         HootApiDb::getCurrentNodesTableName(mapId) +
+                                         " ORDER BY longitude",
+                                         "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                         "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                                         _testName,
+                                         (qlonglong)mapId);
   }
 
   void twoMapsSameNameSameUserOverwriteEnabledTest()
@@ -495,11 +477,12 @@ public:
     writer2.close();
 
     // the second map should replace the first
-    compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                   HootApiDb::getCurrentNodesTableName(secondMapId) +
-                   " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
-                   (qlonglong)secondMapId);
+    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                         HootApiDb::getCurrentNodesTableName(secondMapId) +
+                                         " ORDER BY longitude",
+                                         "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                                         _testName,
+                                         (qlonglong)secondMapId);
 
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());

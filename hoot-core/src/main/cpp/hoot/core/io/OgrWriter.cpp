@@ -107,6 +107,7 @@ OgrWriter::OgrWriter():
 
   _textStatus = ConfigOptions().getWriterTextStatus();
   _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
+  _includeCircularErrorTags = ConfigOptions().getWriterIncludeCircularErrorTags();
   _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -617,7 +618,10 @@ void OgrWriter::write(ConstOsmMapPtr map)
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
 
     Tags t = e->getTags();
-    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    if(_includeCircularErrorTags)
+    {
+      t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    }
 
     if (_textStatus)
     {
