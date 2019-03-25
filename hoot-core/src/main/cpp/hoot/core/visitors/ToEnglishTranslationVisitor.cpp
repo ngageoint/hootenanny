@@ -45,11 +45,11 @@ ToEnglishTranslationVisitor::ToEnglishTranslationVisitor() :
 _ignorePreTranslatedTags(false),
 _parseNames(false),
 _numTotalElements(0),
+_numProcessedTags(0),
+_numProcessedElements(0),
 _currentElementHasSuccessfulTagTranslation(false),
 _numTagTranslationsMade(0),
 _numElementsWithSuccessfulTagTranslation(0),
-_numProcessedTags(0),
-_numProcessedElements(0),
 _taskStatusUpdateInterval(10000)
 {
 }

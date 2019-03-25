@@ -104,11 +104,11 @@ void ReplaceTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   // Key and Value must match exactly. Then we replace.
   Tags::iterator it = e->getTags().find(_matchKey);
-  if (it != e->getTags().end()
-      && (0 == it.value().compare(_matchValue)))
+  if (it != e->getTags().end() && (0 == it.value().compare(_matchValue)))
   {
     e->getTags().remove(_matchKey);
     e->getTags().appendValue(_replaceKey, _replaceValue);
+    _numAffected++;
   }
 }
 

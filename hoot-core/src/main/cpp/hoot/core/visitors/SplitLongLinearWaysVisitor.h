@@ -27,10 +27,13 @@
 #ifndef SPLITLONGLINEARWAYSVISITOR_H
 #define SPLITLONGLINEARWAYSVISITOR_H
 
+// Hoot
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+
+// Std
 #include <string>
 #include <cassert>
-
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 namespace hoot
 {
@@ -39,7 +42,7 @@ class OsmMap;
 class Element;
 class Settings;
 
-class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
+class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
 
@@ -58,7 +61,13 @@ public:
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 
   virtual QString getDescription() const
-  { return "Splits ways containing more nodes than OSM supports"; }
+  { return "Splits ways containing a number of nodes above a specified threshold"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Splitting ways..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Split " + QString::number(_numAffected) + " ways"; }
 
 private:
 

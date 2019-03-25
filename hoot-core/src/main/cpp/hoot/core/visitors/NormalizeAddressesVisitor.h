@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,7 @@ namespace hoot
 /**
  * Normalizes element address tag values
  */
-class NormalizeAddressesVisitor : public ElementVisitor
+class NormalizeAddressesVisitor : public ElementVisitor, public OperationStatusInfo
 {
 public:
 
@@ -51,7 +52,12 @@ public:
    */
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getDescription() const { return "Normalizes element addresses"; }
+  virtual QString getDescription() const { return "Normalizes addresses"; }
+
+  virtual QString getInitStatusMessage() const { return "Normalizing addresses..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
 
 private:
 

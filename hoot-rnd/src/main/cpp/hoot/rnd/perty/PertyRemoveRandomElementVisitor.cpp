@@ -74,6 +74,7 @@ void PertyRemoveRandomElementVisitor::visit(const ConstElementPtr& e)
   {
     RecursiveElementRemover(
       ElementId(e->getElementType(), e->getId())).apply(_map->shared_from_this());
+    _numAffected++;
   }
 }
 

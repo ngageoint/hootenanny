@@ -55,6 +55,7 @@ SuperfluousNodeRemover::SuperfluousNodeRemover()
 
 void SuperfluousNodeRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _usedNodes.clear();
 
   const WayMap& ways = map->getWays();
@@ -98,6 +99,7 @@ void SuperfluousNodeRemover::apply(boost::shared_ptr<OsmMap> &map)
       {
         LOG_TRACE("Removing node. " << n->getElementId());
         RemoveNodeOp::removeNodeNoCheck(map, n->getId());
+        _numAffected++;
       }
       else
       {

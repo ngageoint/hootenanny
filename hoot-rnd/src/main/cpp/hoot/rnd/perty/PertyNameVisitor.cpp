@@ -133,6 +133,7 @@ void PertyNameVisitor::visit(const boost::shared_ptr<Element>& e)
     if (change)
     {
       e->getTags().setList(k, vl);
+      _numAffected++;
     }
   }
 }

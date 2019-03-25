@@ -49,6 +49,7 @@ NoInformationElementRemover::NoInformationElementRemover()
 
 void NoInformationElementRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
   _map = map;
 
   boost::shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());

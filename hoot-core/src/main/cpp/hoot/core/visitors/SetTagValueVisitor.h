@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
  * the tag doesn't exist on the element.
  */
 class SetTagValueVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer
+  public ElementCriterionConsumer, public OperationStatusInfo
 {
 public:
 
@@ -61,6 +62,11 @@ public:
   { return "Adds or updates one or more tags with a specified key/value combination"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+
+  virtual QString getInitStatusMessage() const { return "Updating tags..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Updated " + QString::number(_numAffected) + " tags"; }
 
 private:
 

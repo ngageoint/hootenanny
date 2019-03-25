@@ -32,6 +32,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QSet>
@@ -42,7 +43,8 @@ namespace hoot
 /**
  * Translates selected tag values to English
  */
-class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
+class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable,
+  public OperationStatusInfo
 {
 
 public:
@@ -59,6 +61,16 @@ public:
   virtual QString getDescription() const
   { return "Translates selected tag values to English"; }
 
+  virtual QString getInitStatusMessage() const
+  { return "Translating tags to English..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +
+      QString::number(_numProcessedElements) + " different elements";
+  }
+
 protected:
 
   boost::shared_ptr<ToEnglishTranslator> _translatorClient;
@@ -71,6 +83,8 @@ protected:
   bool _parseNames;
 
   long _numTotalElements;
+  long _numProcessedTags;
+  long _numProcessedElements;
 
   QString _translatedText;
 
@@ -90,8 +104,6 @@ private:
   bool _currentElementHasSuccessfulTagTranslation;
   long _numTagTranslationsMade;
   long _numElementsWithSuccessfulTagTranslation;
-  long _numProcessedTags;
-  long _numProcessedElements;
   int _taskStatusUpdateInterval;
 };
 

@@ -102,13 +102,19 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)
+  {
     removed[i]->removeRoundabout(_pMap);
+    _numAffected++;
+  }
 }
 
 void RemoveRoundabouts::apply(OsmMapPtr &pMap)
 {
+  _numAffected = 0;
   _pMap = pMap;
+
   MapProjector::projectToPlanar(_pMap);
+
   std::vector<RoundaboutPtr> removed;
   removeRoundabouts(removed);
   pMap->setRoundabouts(removed);

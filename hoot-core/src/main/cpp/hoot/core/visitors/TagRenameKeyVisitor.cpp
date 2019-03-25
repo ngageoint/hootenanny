@@ -68,6 +68,7 @@ void TagRenameKeyVisitor::visit(const boost::shared_ptr<Element>& e)
     tags.remove(_oldKey);
     tags.insert(_newKey, value);
     e->setTags(tags);
+    _numAffected++;
   }
 }
 

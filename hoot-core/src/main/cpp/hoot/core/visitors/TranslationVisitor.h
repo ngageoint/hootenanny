@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QString>
@@ -44,7 +45,7 @@ class ScriptToOgrTranslator;
 /**
  * Translates elements that are passed to the visitor.
  */
-class TranslationVisitor : public ElementVisitor, public Configurable
+class TranslationVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -65,6 +66,12 @@ public:
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Translates features to a schema"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Translating features to a schema..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
 private:
 

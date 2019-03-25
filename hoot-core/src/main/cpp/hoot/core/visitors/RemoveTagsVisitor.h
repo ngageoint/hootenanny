@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ namespace hoot
  * Removes any tags with keys matching those passed to this visitor
  */
 class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer
+  public ElementCriterionConsumer, public OperationStatusInfo
 {
 public:
 
@@ -62,12 +63,23 @@ public:
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
+  virtual QString getInitStatusMessage() const
+  { return "Removing tags..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Removed " + QString::number(_numTagsRemoved) + " tags from " +
+      QString::number(_numAffected) + " different elements";
+  }
+
 private:
 
   QStringList _keys;
   boost::shared_ptr<ElementCriterion> _criterion;
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
+  long _numTagsRemoved;
 
   void _setCriterion(const QString criterionName);
 };

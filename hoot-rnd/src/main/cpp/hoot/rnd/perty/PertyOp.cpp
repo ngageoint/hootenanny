@@ -201,6 +201,8 @@ void PertyOp::setConfiguration(const Settings& conf)
 
 void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
+
   // permute the data first
   permute(map);
 

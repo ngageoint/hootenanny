@@ -68,9 +68,8 @@ public:
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines that changed during conflation..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
-  { return ""; }
+  { return "Updated " + QString::number(_numAffected) + " building outlines"; }
 
   virtual QString getDescription() const override
   { return "Updates any multi-part building outlines that changed during conflation"; }

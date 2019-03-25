@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -41,7 +42,7 @@ class OsmMap;
  * a lack of string match. If the review is impossible it will be deleted. This is handy due to the
  * way multilinestrings are generated during the conflation process.
  */
-class HighwayReviewCleanerOp : public OsmMapOperation
+class HighwayReviewCleanerOp : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -51,8 +52,13 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual QString getDescription() const
-  { return "Identifies highway reviews that are impossible due to a lack of string match"; }
+  virtual QString getDescription() const { return "Identifies invalid road reviews"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Identifying invalid road reviews..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Identified " + QString::number(_numAffected) + " invalid road reviews"; }
 
 private:
 

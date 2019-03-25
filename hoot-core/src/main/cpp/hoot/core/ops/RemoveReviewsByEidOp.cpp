@@ -61,6 +61,8 @@ void RemoveReviewsByEidOp::addElement(const ConstElementPtr& e)
 
 void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
 {
+  _numAffected = 0;
+
   if (_eid.isNull())
   {
     throw IllegalArgumentException("You must specify a valid element ID.");
@@ -83,6 +85,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
   {
     // just remove the review, not its children.
     RemoveElementOp::removeElement(map, *it);
+    _numAffected++;
   }
 
   if (_clearAndRemove)

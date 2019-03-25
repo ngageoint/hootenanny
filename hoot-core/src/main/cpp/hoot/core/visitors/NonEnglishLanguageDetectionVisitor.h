@@ -33,6 +33,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/language/LanguageDetector.h>
 #include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMap>
@@ -48,7 +49,8 @@ namespace hoot
  * this class is useful if you're uncertain which source languages to declare for translation and
  * don't have the resources to stand up a translation server for every possible language.
  */
-class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configurable
+class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configurable,
+  public OperationStatusInfo
 {
 
 public:
@@ -68,6 +70,9 @@ public:
   virtual QString getDescription() const
   { return "Detects source languages for selected tags"; }
 
+  virtual QString getInitStatusMessage() const;
+  virtual QString getCompletedStatusMessage() const;
+
 private:
 
   friend class NonEnglishLanguageDetectionVisitorTest;
@@ -79,10 +84,10 @@ private:
   bool _writeDetectedLangTags;
   bool _parseNames;
 
-  QString _detectionSummary;
-  bool _currentElementHasSuccessfulTagDetection;
+  mutable QString _detectionSummary;
+  mutable bool _currentElementHasSuccessfulTagDetection;
   long _numTagDetectionsMade;
-  long _numElementsWithSuccessfulTagDetection;
+  mutable long _numElementsWithSuccessfulTagDetection;
   long _numTotalElements;
   long _numProcessedTags;
   long _numProcessedElements;
@@ -92,6 +97,8 @@ private:
   boost::shared_ptr<LanguageDetector> _langDetector;
 
   QString _getLangCountsSortedByLangName() const;
+
+  void _printDetailedSummary();
 };
 
 }

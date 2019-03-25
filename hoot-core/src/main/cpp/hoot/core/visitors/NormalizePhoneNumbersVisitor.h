@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberNormalizer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,8 @@ namespace hoot
 /**
  * Normalizes element phone numbers
  */
-class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable
+class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
@@ -51,7 +53,16 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getDescription() const { return "Normalizes element phone numbers"; }
+  virtual QString getDescription() const { return "Normalizes phone numbers"; }
+
+  virtual QString getInitStatusMessage() const { return "Normalizing phone numbers..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Normalized " + QString::number(_phoneNumberNormalizer.getNumNormalized()) +
+      " phone numbers";
+  }
 
 private:
 

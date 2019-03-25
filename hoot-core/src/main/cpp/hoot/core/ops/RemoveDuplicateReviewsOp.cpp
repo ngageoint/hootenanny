@@ -48,6 +48,7 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 
 void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
   _map = map;
 
   // go through all the relations to get duplicate reviews
@@ -83,6 +84,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
       for (int i = 0; i < duplicateReviews.size(); i++)
       {
         ReviewMarker::removeElement(map, duplicateReviews[i]);
+        _numAffected++;
       }
 
       ElementId beid = *eids.begin();

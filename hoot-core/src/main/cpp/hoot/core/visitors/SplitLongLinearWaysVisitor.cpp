@@ -73,7 +73,7 @@ _maxNodesPerWay(0)
     _maxNodesPerWay = _defaultMaxNodesPerWay;
   }
 
-  LOG_INFO("Max nodes per way set to " << getMaxNumberOfNodes() );
+  LOG_DEBUG("Max nodes per way set to " << getMaxNumberOfNodes() );
 }
 
 void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element)
@@ -99,14 +99,6 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   {
     LOG_TRACE("Found way " << way->getId() << " with " << way->getNodeCount() << " nodes");
     printInfo = true;
-  }
-
-  // Make sure we've got highway tag
-  Tags myTags = way->getTags();
-
-  if (myTags.contains("road"))
-  {
-    LOG_TRACE("Way has road tag with value " << myTags.get("road"));
   }
 
   // Ensure we're a linear way -- heuristic is reported to be mostly accurate
@@ -191,6 +183,8 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
       masterNodeIndex += (nodesThisTime - 1);
     }
   }
+
+  _numAffected++;
 }
 
 }

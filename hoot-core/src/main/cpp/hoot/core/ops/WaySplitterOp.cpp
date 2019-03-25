@@ -46,6 +46,8 @@ WaySplitterOp::WaySplitterOp()
 
 void WaySplitterOp::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
+
   LOG_INFO("splitting with max length: " << _maxLength);
   MapProjector::projectToPlanar(map);
 
@@ -54,6 +56,7 @@ void WaySplitterOp::apply(boost::shared_ptr<OsmMap> &map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WaySplitter::split(map, map->getWay(it->first), _maxLength);
+    _numAffected++;
   }
 }
 

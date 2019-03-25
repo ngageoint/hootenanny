@@ -45,6 +45,7 @@ void PhoneNumberLocateVisitor::setConfiguration(const Settings& conf)
 void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
 {
   QList<ElementPhoneNumber> phoneNumbers = _phoneNumberParser.parsePhoneNumbers(*e);
+  bool anyPhoneNumberLocated = false;
   for (QList<ElementPhoneNumber>::const_iterator phoneNumberItr = phoneNumbers.constBegin();
        phoneNumberItr != phoneNumbers.constEnd(); ++phoneNumberItr)
   {
@@ -54,7 +55,14 @@ void PhoneNumberLocateVisitor::visit(const ElementPtr& e)
     if (!locationDescription.isEmpty())
     {
       e->getTags().set(phoneNumber.tagKey + ":location", locationDescription);
+      _totalPhoneNumbersLocated++;
+      anyPhoneNumberLocated = true;
     }
+  }
+
+  if (anyPhoneNumberLocated)
+  {
+    _numAffected++;
   }
 }
 
