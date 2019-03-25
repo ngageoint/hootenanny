@@ -47,8 +47,8 @@ bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   HighwayCriterion highwayCrit;
   if (e->getElementType() == ElementType::Node)
   {
-    boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
-    const std::set<long>& containingWays = nodeToWayMap->getWaysByNode(e->getId());
+    const std::set<long>& containingWays =
+      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
     for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
          containingWaysItr != containingWays.end(); ++containingWaysItr)
     {

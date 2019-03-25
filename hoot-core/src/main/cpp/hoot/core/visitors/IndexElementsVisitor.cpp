@@ -44,11 +44,10 @@ using namespace Tgs;
 namespace hoot
 {
 
-IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& index,
-                                           deque<ElementId>& indexToEid,
-                                           const boost::shared_ptr<ElementCriterion>& criterion,
-                                 boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
-                                           ConstOsmMapPtr pMap) :
+IndexElementsVisitor::IndexElementsVisitor(
+  boost::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
+  const boost::shared_ptr<ElementCriterion>& criterion,
+  boost::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
 _criterion(criterion),
 _getSearchRadius(getSearchRadius),
 _index(index),
@@ -81,7 +80,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     env->expandBy(searchRadius);
     b.setBounds(0, env->getMinX(), env->getMaxX());
-    b.setBounds(1, env->getMinY(), env->getMaxY());;
+    b.setBounds(1, env->getMinY(), env->getMaxY());
 
     _boxes.push_back(b);
 

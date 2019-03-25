@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/WayCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 
@@ -44,23 +43,9 @@ WayNodeCriterion::WayNodeCriterion()
 
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  WayCriterion wayCrit;
-  if (e->getElementType() == ElementType::Node)
-  {
-    boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
-    const std::set<long>& containingWays = nodeToWayMap->getWaysByNode(e->getId());
-    for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
-         containingWaysItr != containingWays.end(); ++containingWaysItr)
-    {
-      const long containingWayId = *containingWaysItr;
-      if (wayCrit.isSatisfied(_map->getWay(containingWayId)))
-      {
-        LOG_TRACE("Way node: " << e->getElementId() << " found in way: " << containingWayId);
-        return true;
-      }
-    }
-  }
-  return false;
+  return
+    e->getElementType() == ElementType::Node &&
+    _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId()).size() > 0;
 }
 
 }

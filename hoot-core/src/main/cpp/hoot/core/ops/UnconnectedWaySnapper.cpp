@@ -146,7 +146,8 @@ void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(QString name)
     LOG_WARN(
       "No snap to way criterion specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayCriterion.");
-    _wayToSnapToCriterionClassName = "hoot::WayCriterion";
+    _wayToSnapToCriterionClassName =
+      ConfigOptions::getSnapUnconnectedWaysSnapToWayCriterionDefaultValue();
   }
   else
   {
@@ -160,7 +161,8 @@ void UnconnectedWaySnapper::setWayToSnapCriterionClassName(QString name)
     LOG_WARN(
       "No snap way criterion specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayCriterion.");
-    _wayToSnapCriterionClassName = "hoot::WayCriterion";
+    _wayToSnapCriterionClassName =
+      ConfigOptions::getSnapUnconnectedWaysSnapWayCriterionDefaultValue();
   }
   else
   {
@@ -174,7 +176,8 @@ void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(QString name)
     LOG_WARN(
       "No snap to way node criterion specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayNodeCriterion.");
-    _wayNodeToSnapToCriterionClassName = "hoot::WayNodeCriterion";
+    _wayNodeToSnapToCriterionClassName =
+      ConfigOptions::getSnapUnconnectedWaysSnapToWayNodeCriterionDefaultValue();
   }
   else
   {
