@@ -28,6 +28,7 @@ package hoot.services.utils;
 
 
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
 
 import java.sql.Connection;
@@ -63,6 +64,7 @@ import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.models.db.QUsers;
@@ -71,7 +73,8 @@ import hoot.services.models.db.QUsers;
 /**
  * General Hoot services database utilities
  */
-public final class DbUtils {
+@Transactional
+public class DbUtils {
     private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
     private static final SQLTemplates templates = PostgreSQLTemplates.builder().quote().build();
@@ -164,6 +167,41 @@ public final class DbUtils {
         return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName)).fetchOne();
     }
 
+    /**
+     * Gets the map id using the job id
+     *
+     * @param jobId jobs id
+     * @return map ID
+     */
+    public static Long getMapIdByJobId(String jobId) {
+        return createQuery()
+                .select(jobStatus.resourceId)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+    }
+
+    /**
+     * Sets the parent directory for the specified map
+     *
+     * @param mapId map id whos parent we are setting
+     * @param folderId parent directory id that map id will get linked to
+     */
+    public static void setParentDirectory(Long mapId, Long folderId) {
+        createQuery()
+            .insert(folderMapMappings)
+            .columns(folderMapMappings.mapId, folderMapMappings.folderId)
+            .values(mapId, folderId).execute();
+    }
+
+    /**
+     * Deletes the folder mapping matching the specified map id
+     *
+     * @param mapId map id which we are deleting
+     */
+    public static void deleteFolderMapping(Long mapId) {
+        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
+    }
+
     public static String getDisplayNameById(long mapId) {
         return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId)).fetchOne();
     }
@@ -219,9 +257,12 @@ public final class DbUtils {
     }
 
     public static void updateFoldersMapping() {
-        createQuery().insert(folderMapMappings).columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0")).from(maps)
-                        .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId).distinct()
+        createQuery().insert(folderMapMappings)
+                .columns(folderMapMappings.mapId, folderMapMappings.folderId)
+                .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0"))
+                        .from(maps)
+                        .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId)
+                                .distinct()
                                 .from(folderMapMappings))))
                 .execute();
     }

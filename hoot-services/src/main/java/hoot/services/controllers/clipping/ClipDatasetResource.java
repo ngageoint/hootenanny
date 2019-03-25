@@ -99,9 +99,9 @@ public class ClipDatasetResource {
 
         try {
             ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
-            InternalCommand updateDb = updateParentCommandFactory.build(jobId, params, user, this.getClass());
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params, user, this.getClass());
 
-            Command[] workflow = { clipCommand, updateDb };
+            Command[] workflow = { clipCommand, setFolderCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }
@@ -109,7 +109,7 @@ public class ClipDatasetResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error processing dataset clipping request!  Params: " + params;
+            String msg = "Error processing dataset clipping request! \nParams: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

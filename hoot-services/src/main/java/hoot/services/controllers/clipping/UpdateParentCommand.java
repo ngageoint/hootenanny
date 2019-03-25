@@ -46,8 +46,6 @@ import hoot.services.utils.DbUtils;
 
 
 class UpdateParentCommand implements InternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(UpdateParentCommand.class);
-
     private final String mapName;
     private final String jobId;
     private final Users user;
@@ -82,22 +80,16 @@ class UpdateParentCommand implements InternalCommand {
         try {
             DbUtils.updateFoldersMapping();
 
-            Long mapId = createQuery()
-                    .select(jobStatus.resourceId)
-                    .from(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId)).fetchOne();
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
 
             // These functions ensure the map + folder are either owned by the user -or- public.
             Map m = MapResource.getMapForUser(user, mapId.toString(), false, true);
             FolderResource.getFolderForUser(user, folderId);
 
             // Delete any existing to avoid duplicate entries
-            createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
+            DbUtils.deleteFolderMapping(m.getId());
 
-            createQuery()
-                    .insert(folderMapMappings)
-                    .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                    .values(m.getId(), folderId).execute();
+            DbUtils.setParentDirectory(m.getId(), folderId);
         }
         catch (Exception ex) {
             String msg = "Failure update parent folder: " + ex.getMessage();
