@@ -44,15 +44,14 @@ using namespace Tgs;
 namespace hoot
 {
 
-IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& index,
-                                           deque<ElementId>& indexToEid,
-                                           const boost::shared_ptr<ElementCriterion>& criterion,
-                                           boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
-                                           ConstOsmMapPtr pMap) :
-  _criterion(criterion),
-  _getSearchRadius(getSearchRadius),
-  _index(index),
-  _indexToEid(indexToEid)
+IndexElementsVisitor::IndexElementsVisitor(
+  boost::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
+  const boost::shared_ptr<ElementCriterion>& criterion,
+  boost::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
+_criterion(criterion),
+_getSearchRadius(getSearchRadius),
+_index(index),
+_indexToEid(indexToEid)
 {
   _map = pMap.get();
 }
@@ -65,6 +64,7 @@ void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 
 void IndexElementsVisitor::finalizeIndex()
 {
+  LOG_DEBUG("Finalizing index...");
   _index->bulkInsert(_boxes, _fids);
 }
 
@@ -83,6 +83,8 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
     b.setBounds(1, env->getMinY(), env->getMaxY());
 
     _boxes.push_back(b);
+
+    _numAffected++;
   }
 }
 
@@ -91,7 +93,12 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
                                                    const deque<ElementId>& indexToEid,
                                                    ConstOsmMapPtr pMap)
 {
+  LOG_TRACE("Finding neighbors within env: " << env << "...");
+  LOG_VART(indexToEid.size());
+  LOG_VART(index.get());
+
   const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
+  LOG_VART(e2r.size());
 
   set<ElementId> result;
   vector<double> min(2), max(2);
@@ -116,6 +123,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
     }
   }
 
+  LOG_VART(result.size());
   return result;
 }
 

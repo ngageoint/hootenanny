@@ -117,7 +117,7 @@ private:
   typedef boost::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
   typedef boost::shared_ptr<MatchRelationship> MatchRelationshipPtr;
 
-  typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr> > MatchRelationshipMap;
+  typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>> MatchRelationshipMap;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeScoreMap _scores, _weights;

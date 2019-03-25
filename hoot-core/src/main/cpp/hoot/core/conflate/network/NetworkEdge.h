@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKEDGE_H
 #define NETWORKEDGE_H
@@ -46,8 +46,8 @@ namespace hoot
 class NetworkEdge
 {
 public:
-  NetworkEdge();
 
+  NetworkEdge();
   NetworkEdge(ConstNetworkVertexPtr from, ConstNetworkVertexPtr to, bool directed = false,
     ConstElementPtr member = ConstElementPtr());
 
@@ -78,6 +78,7 @@ public:
   QString toString() const;
 
 private:
+
   ConstNetworkVertexPtr _from, _to;
   bool _directed;
   QList<ConstElementPtr> _members;

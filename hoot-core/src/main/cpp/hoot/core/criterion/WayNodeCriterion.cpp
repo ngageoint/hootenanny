@@ -22,36 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WAYMAPPING_H
-#define WAYMAPPING_H
+#include "WayNodeCriterion.h"
 
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
+// hoot
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 namespace hoot
 {
 
-/**
- * Given a WaySublineMatchString, produce a mapping from one way string to the other.
- */
-class WayMapping
+HOOT_FACTORY_REGISTER(ElementCriterion, WayNodeCriterion)
+
+WayNodeCriterion::WayNodeCriterion()
 {
-public:
-
-  virtual ~WayMapping();
-
-  /**
-   * Given a point on subline string 1, return the corresponding point on subline string 2.
-   */
-  virtual WayLocationPtr map1to2(ConstWayLocationPtr wl1) const = 0;
-
-  /**
-   * Given a point on subline string 2, return the corresponding point on subline string 1.
-   */
-  virtual WayLocationPtr map2to1(ConstWayLocationPtr wl1) const = 0;
-};
-
 }
 
-#endif // WAYMAPPING_H
+bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  return
+    e->getElementType() == ElementType::Node &&
+    _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId()).size() > 0;
+}
+
+}

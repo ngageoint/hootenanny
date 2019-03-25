@@ -22,36 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WAYMAPPING_H
-#define WAYMAPPING_H
+#ifndef WAY_NODE_CRITERION_H
+#define WAY_NODE_CRITERION_H
 
-#include <hoot/core/algorithms/linearreference/WayLocation.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-/**
- * Given a WaySublineMatchString, produce a mapping from one way string to the other.
- */
-class WayMapping
+class WayNodeCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  virtual ~WayMapping();
+  static std::string className() { return "hoot::WayNodeCriterion"; }
 
-  /**
-   * Given a point on subline string 1, return the corresponding point on subline string 2.
-   */
-  virtual WayLocationPtr map1to2(ConstWayLocationPtr wl1) const = 0;
+  WayNodeCriterion();
 
-  /**
-   * Given a point on subline string 2, return the corresponding point on subline string 1.
-   */
-  virtual WayLocationPtr map2to1(ConstWayLocationPtr wl1) const = 0;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies way nodes"; }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // WAYMAPPING_H
+#endif // WAY_NODE_CRITERION_H

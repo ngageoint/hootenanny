@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DEBUGNETWORKMAPCREATOR_H
 #define DEBUGNETWORKMAPCREATOR_H
@@ -42,12 +42,14 @@ namespace hoot
 class DebugNetworkMapCreator
 {
 public:
+
   DebugNetworkMapCreator(double matchThreshold = 0.15);
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
     QList<NetworkVertexScorePtr> vertexScores);
 
 private:
+
   double _matchThreshold;
 
   void _addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edgeScore);

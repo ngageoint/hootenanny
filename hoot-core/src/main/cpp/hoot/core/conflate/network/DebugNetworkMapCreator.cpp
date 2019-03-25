@@ -70,7 +70,9 @@ void DebugNetworkMapCreator::_addEdgeLink(OsmMapPtr map, NetworkEdgeScorePtr edg
     tags.set(MetadataTags::HootEdgeId(), edgeScore->getEdgeMatch()->getUid());
     tags.set(MetadataTags::HootEdge(), edgeScore->toString());
 
-    RelationPtr r(new Relation(Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match"));
+    RelationPtr r(
+      new Relation(
+        Status::Invalid, map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, "match"));
     r->setTags(tags);
     r->addElement("visual", w);
 

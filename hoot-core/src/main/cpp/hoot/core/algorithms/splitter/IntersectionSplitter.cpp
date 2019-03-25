@@ -137,19 +137,22 @@ void IntersectionSplitter::splitIntersections()
   _mapNodesToWays();
 
   // go through all the nodes
-  bool todoLogged = false;
+  int totalNodes = _todoNodes.size();
+  int numProcessed = 0;
   while (_todoNodes.isEmpty() == false)
   {
     long nodeId = *_todoNodes.begin();
     //  Remove the node first in case it needs to be reprocessed later
     _todoNodes.remove(nodeId);
+    numProcessed++;
 
-    if (Log::getInstance().isInfoEnabled() && _todoNodes.size() % 1000 == 0 &&
-        _todoNodes.size() > 0)
+    if (_todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
     {
-      PROGRESS_INFO("  Intersection splitter todo: " << _todoNodes.size() << "       ");
-      todoLogged = true;
+      PROGRESS_INFO(
+        "\t\tProcessed intersection splits for: " << numProcessed << " / " << totalNodes <<
+        " nodes.");
     }
+
     // if the node is part of two or more ways
     if (_nodeToWays.count(nodeId) >= 2)
     {
@@ -160,11 +163,6 @@ void IntersectionSplitter::splitIntersections()
         _splitWay(*way, nodeId);
       }
     }
-  }
-
-  if (Log::getInstance().isInfoEnabled() && todoLogged)
-  {
-    LOG_INFO("  Intersection splitter todo: 0       ");
   }
 }
 

@@ -266,7 +266,7 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   for (size_t i = 0; i < candidates.size(); i++)
   {
     PROGRESS_INFO(
-      "Running interpolator: (" << (i + 1) << " / " <<
+      "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
       candidates.size() << "): " << candidates[i] << "...");
     boost::shared_ptr<Interpolator> candidate(
       Factory::getInstance().constructObject<Interpolator>(candidates[i]));

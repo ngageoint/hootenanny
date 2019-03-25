@@ -22,42 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SEARCHBOUNDSCALCULATOR_H
-#define SEARCHBOUNDSCALCULATOR_H
-
-// geos
-#include <geos/geom/Envelope.h>
+#include "HighwayNodeCriterion.h"
 
 // hoot
-#include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 namespace hoot
 {
 
-/**
- * Given a POI in WGS84, calculate the search bounds in decimal degrees.
- *
- * Bad things may happen at the anti-meridian and poles.
- */
-class SearchBoundsCalculator
+HOOT_FACTORY_REGISTER(ElementCriterion, HighwayNodeCriterion)
+
+HighwayNodeCriterion::HighwayNodeCriterion()
 {
-public:
-
-  SearchBoundsCalculator(boost::shared_ptr<SearchRadiusProvider> radiusProvider);
-
-  geos::geom::Envelope calculateSearchBounds(
-    const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
-
-private:
-
-  boost::shared_ptr<SearchRadiusProvider> _radiusProvider;
-};
-
-typedef boost::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
-
 }
 
-#endif // SEARCHBOUNDSCALCULATOR_H
+bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  HighwayCriterion highwayCrit;
+  if (e->getElementType() == ElementType::Node)
+  {
+    const std::set<long>& containingWays =
+      _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
+    for (std::set<long>::const_iterator containingWaysItr = containingWays.begin();
+         containingWaysItr != containingWays.end(); ++containingWaysItr)
+    {
+      const long containingWayId = *containingWaysItr;
+      if (highwayCrit.isSatisfied(_map->getWay(containingWayId)))
+      {
+        //LOG_TRACE("Road node: " << e->getElementId() << " found in way: " << containingWayId);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+}

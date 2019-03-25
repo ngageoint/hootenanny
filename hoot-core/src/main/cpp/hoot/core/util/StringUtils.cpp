@@ -60,12 +60,7 @@ QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
 
 QString StringUtils::formatLargeNumber(const unsigned long number)
 {
-  //I want to see comma separators...probably a better way to handle this...will go with this for
-  //now.
-  const QLocale& cLocale = QLocale::c();
-  QString ss = cLocale.toString((qulonglong)number);
-  ss.replace(cLocale.groupSeparator(), ',');
-  return ss;
+  return QLocale(QLocale::English).toString((qulonglong)number);
 }
 
 bool StringUtils::hasAlphabeticCharacter(const QString input)

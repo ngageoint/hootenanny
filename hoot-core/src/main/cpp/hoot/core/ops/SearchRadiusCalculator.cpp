@@ -37,6 +37,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -69,7 +70,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   LOG_VARD(map->getElementCount());
   LOG_DEBUG(
     "Element count before search radius calculation filtering: " <<
-    mapWithOnlyUnknown1And2->getElementCount());
+    StringUtils::formatLargeNumber(mapWithOnlyUnknown1And2->getElementCount()));
 
   // don't care about conflated data and invalid data
   LOG_INFO("Removing invalid and previously conflated data for search radius calculation...");
@@ -84,7 +85,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   {
     LOG_INFO(
       "Filtered out: " <<
-      elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
+      StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
       " invalid or conflated elements.");
     elementCountTemp = mapWithOnlyUnknown1And2->getElementCount();
   }
@@ -110,7 +111,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   {
     LOG_INFO(
       "Filtered out: " <<
-      elementCountTemp - mapWithOnlyUnknown1And2->getElementCount() <<
+      StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
       " elements not satisfying candidate criterion.");
   }
 
@@ -118,9 +119,10 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
   {
     //should this be a warning?
     LOG_DEBUG(
-      "Skipping " << map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount() <<
-      " features with conflated or invalid status out of " << map->getElementCount() <<
-      " total features.");
+      "Skipping " <<
+      StringUtils::formatLargeNumber(map->getElementCount() - mapWithOnlyUnknown1And2->getElementCount()) <<
+      " features with conflated or invalid status out of " <<
+      StringUtils::formatLargeNumber(map->getElementCount()) << " total features.");
   }
   if (mapWithOnlyUnknown1And2->getElementCount() == 0)
   {
@@ -133,7 +135,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
 
   LOG_DEBUG(
     "Element count after search radius calculation filtering: " <<
-    mapWithOnlyUnknown1And2->getElementCount());
+    StringUtils::formatLargeNumber(mapWithOnlyUnknown1And2->getElementCount()));
 
   boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);
