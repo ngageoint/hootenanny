@@ -187,8 +187,14 @@ public class ExportResource {
 
 	        } else {
 	        	workflow.add(getCommand(user, jobId, params, debugLevel));
-	        	Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-	            workflow.add(zipCommand);
+
+	        	if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
+	        		Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+
+	        		if (zipCommand != null) {
+	        			workflow.add(zipCommand);
+	        		}
+	        	}
 	        }
 
             jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
