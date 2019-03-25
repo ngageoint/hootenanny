@@ -3737,5 +3737,5 @@ Listing pre-conflation operations...
 
 Listing post-conflation operations...
 
-  SuperfluousNodeRemover                       operation         Removes all nodes no part of a way
+  SuperfluousNodeRemover                       operation         Removes all nodes not part of a way
 
