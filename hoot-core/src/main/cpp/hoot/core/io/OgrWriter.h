@@ -169,6 +169,7 @@ protected:
   StrictChecking _strictChecking;
   bool _textStatus;
   bool _includeDebug;
+  bool _includeCircularErrorTags;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
