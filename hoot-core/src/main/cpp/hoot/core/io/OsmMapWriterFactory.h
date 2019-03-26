@@ -53,7 +53,7 @@ public:
   static bool hasElementOutputStream(QString url);
 
   static void write(const boost::shared_ptr<const OsmMap>& map, QString url,
-                    const bool silent = false);
+                    const bool silent = false, const bool is_debug = false);
 
   static QString getWriterName(const QString url);
 
