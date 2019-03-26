@@ -40,9 +40,6 @@ public class ClipDatasetParams {
     @JsonProperty("BBOX")
     private String bounds;
 
-    @JsonProperty("PATH_NAME")
-    private String pathName;
-
     @JsonProperty("FOLDER_ID")
     private Long folderId;
 
@@ -68,14 +65,6 @@ public class ClipDatasetParams {
 
     public void setBounds(String bounds) {
         this.bounds = bounds;
-    }
-
-    public String getPathName() {
-        return pathName;
-    }
-
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
     }
 
     public Long getFolderId() {
