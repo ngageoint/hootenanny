@@ -76,15 +76,15 @@ public static final String NEW_CONFLATION_PATH; // define the new constant
 NEW_CONFLATION_PATH = getProperty("newConflationConf") // read the config into memory...
 ```
 
-3. add a reference to the new conflatoin type to the HashMap of conf paths in the `hoot-services/src/main/java/hoot/services/controllers/conflation/AdvancedConflationOptionsResource.java`
+3. add a reference to the new conflation type to the HashMap of conf paths in the `hoot-services/src/main/java/hoot/services/controllers/conflation/AdvancedConflationOptionsResource.java`
 
 ```java
     private static Map<String, String> confMap = new HashMap<String, String>(){{
-    	put("attribute", ATTRIBUTE_CONFLATION_PATH);
-    	put("horizontal", HORIZONTAL_CONFLATION_PATH);
-    	put("network", NETWORK_CONFLATION_PATH);
-    	put("differntial", DIFFERENTIAL_CONFLATION_PATH);
-    	put("new", NEW_CONFLATION_PATH); // new option...
+        put("attribute", ATTRIBUTE_CONFLATION_PATH);
+        put("horizontal", HORIZONTAL_CONFLATION_PATH);
+        put("network", NETWORK_CONFLATION_PATH);
+        put("differntial", DIFFERENTIAL_CONFLATION_PATH);
+        put("new", NEW_CONFLATION_PATH); // new option...
     }};
 ```
 

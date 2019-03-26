@@ -43,28 +43,28 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test
     @Category(UnitTest.class)
-	public void testGetOptionsWhenConflationOptions() throws Exception {
-		Response responseData =
-    			target("/advancedopts/getoptions")
-    				.queryParam("conftype", "conflationOptions")
-    				.request(MediaType.APPLICATION_JSON)
-    				.get();
+    public void testGetOptionsWhenConflationOptions() throws Exception {
+        Response responseData =
+                target("/advancedopts/getoptions")
+                    .queryParam("conftype", "conflationOptions")
+                    .request(MediaType.APPLICATION_JSON)
+                    .get();
 
-    	String jsonStr = responseData.readEntity(String.class);
-     	assertThat(jsonStr, CoreMatchers.containsString("AttributeConflationAggressiveHighwayJoining"));
-	}
+        String jsonStr = responseData.readEntity(String.class);
+         assertThat(jsonStr, CoreMatchers.containsString("AttributeConflationAggressiveHighwayJoining"));
+    }
 
     @Test
     @Category(UnitTest.class)
     public void testGetOptionsWhenHoot2() throws Exception {
-    	Response responseData =
-    			target("/advancedopts/getoptions")
-    				.queryParam("conftype", "hoot2")
-    				.request(MediaType.APPLICATION_JSON)
-    				.get();
+        Response responseData =
+                target("/advancedopts/getoptions")
+                    .queryParam("conftype", "hoot2")
+                    .request(MediaType.APPLICATION_JSON)
+                    .get();
 
-    	String jsonStr = responseData.readEntity(String.class);
-     	assertThat(jsonStr, CoreMatchers.containsString("Roads"));
+        String jsonStr = responseData.readEntity(String.class);
+         assertThat(jsonStr, CoreMatchers.containsString("Roads"));
     }
 
     @Test

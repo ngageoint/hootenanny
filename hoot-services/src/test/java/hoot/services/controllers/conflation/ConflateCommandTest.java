@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.conflation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,12 +43,8 @@ import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class ConflateCommandTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConflateCommandTest.class);
 
     @Test
     @Category(UnitTest.class)
@@ -113,12 +111,12 @@ public class ConflateCommandTest {
     @Test
     @Category(UnitTest.class)
     public void testCreateConflateCommandHoot2() {
-    	String jobId = UUID.randomUUID().toString();
+        String jobId = UUID.randomUUID().toString();
 
-    	// captures expectation for attribute, reference, horizontal...
+        // captures expectation for attribute, reference, horizontal...
 
-    	ConflateParams conflateParams = new ConflateParams();
-    	conflateParams.setConflationCommand("conflate");
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
         conflateParams.setInputType2("DB");
@@ -148,8 +146,8 @@ public class ConflateCommandTest {
 
         // handles case for network...
         jobId = UUID.randomUUID().toString();
-    	conflateParams = new ConflateParams();
-    	conflateParams.setConflationCommand("conflate");
+        conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
         conflateParams.setInputType2("DB");
@@ -170,8 +168,8 @@ public class ConflateCommandTest {
         assertTrue(conflateCommand.getSubstitutionMap().get("CONFLATION_ALGORITHM").toString().equals("NetworkAlgorithm.conf"));
 
         // handles disabled features...
-    	conflateParams = new ConflateParams();
-    	conflateParams.setConflationCommand("conflate");
+        conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
         conflateParams.setInputType2("DB");
@@ -212,12 +210,12 @@ public class ConflateCommandTest {
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
     public void testHoot2Exceptions() {
-    	// illustrates command will not be executed if alg or conflate type are not valid...
+        // illustrates command will not be executed if alg or conflate type are not valid...
 
-    	String jobId = UUID.randomUUID().toString();
+        String jobId = UUID.randomUUID().toString();
 
-    	ConflateParams conflateParams = new ConflateParams();
-    	conflateParams.setConflationCommand("conflate");
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
         conflateParams.setInputType2("DB");

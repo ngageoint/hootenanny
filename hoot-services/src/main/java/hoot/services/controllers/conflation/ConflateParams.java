@@ -81,7 +81,7 @@ public class ConflateParams {
     private String conflationCommand;
 
     @JsonProperty("HOOT2_ADV_OPTIONS")
-	private Map<String, String> hoot2AdvOptions;
+    private Map<String, String> hoot2AdvOptions;
 
     @JsonProperty("HOOT_2")
     private Boolean hoot2;
@@ -204,38 +204,38 @@ public class ConflateParams {
         this.conflationCommand = conflationCommand;
     }
 
-	public Map<String, String> getHoot2AdvOptions() {
-		return this.hoot2AdvOptions;
-	}
+    public Map<String, String> getHoot2AdvOptions() {
+        return this.hoot2AdvOptions;
+    }
 
-	public void setHoot2AdvOptions(Map<String, String> hoot2AdvOptions) {
-		this.hoot2AdvOptions = hoot2AdvOptions;
-	}
+    public void setHoot2AdvOptions(Map<String, String> hoot2AdvOptions) {
+        this.hoot2AdvOptions = hoot2AdvOptions;
+    }
 
-	public void setHoot2(boolean hoot2) {
-		this.hoot2 = hoot2;
-	}
+    public void setHoot2(boolean hoot2) {
+        this.hoot2 = hoot2;
+    }
 
-	public Boolean getHoot2() {
-		return this.hoot2;
-	}
+    public Boolean getHoot2() {
+        return this.hoot2;
+    }
 
-	public String getConflateAlgorithm() {
-		return this.conflateAlgorithm;
-	}
+    public String getConflateAlgorithm() {
+        return this.conflateAlgorithm;
+    }
 
 
-	public void setConflateAlgorithm(String algorithm) {
-		this.conflateAlgorithm = algorithm;
-	}
+    public void setConflateAlgorithm(String algorithm) {
+        this.conflateAlgorithm = algorithm;
+    }
 
-	public List<String> getDisabledFeatures() {
-		return this.disabledFeatures;
-	}
+    public List<String> getDisabledFeatures() {
+        return this.disabledFeatures;
+    }
 
-	public void setDisabledFeatures(List<String> disabledFeatures) {
-		this.disabledFeatures = disabledFeatures;
-	}
+    public void setDisabledFeatures(List<String> disabledFeatures) {
+        this.disabledFeatures = disabledFeatures;
+    }
 
     public List<String> getCleaningOpts() {
         return this.cleaningOpts;
