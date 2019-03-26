@@ -55,6 +55,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -127,6 +128,23 @@ public class AdvancedConflationOptionsResource {
     	if (confOptionsMap == null) {
     		confOptionsMap = buildConfOptionsMap();
     	}
+    }
+
+    @GET
+    @Path("/conflationtypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response conflationTypes() {
+        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
+        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
+        	return WordUtils.capitalizeFully(type);
+        }).collect(Collectors.toList()));
+
+        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
+        conflationTypes.add(0, "Reference");
+
+        JSONArray responseJSON = new JSONArray();
+        responseJSON.addAll(conflationTypes);
+        return Response.ok(responseJSON.toJSONString()).build();
     }
 
     @GET
