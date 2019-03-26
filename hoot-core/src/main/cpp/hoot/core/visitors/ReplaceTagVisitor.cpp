@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReplaceTagVisitor.h"
 
@@ -104,11 +104,11 @@ void ReplaceTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   // Key and Value must match exactly. Then we replace.
   Tags::iterator it = e->getTags().find(_matchKey);
-  if (it != e->getTags().end()
-      && (0 == it.value().compare(_matchValue)))
+  if (it != e->getTags().end() && (0 == it.value().compare(_matchValue)))
   {
     e->getTags().remove(_matchKey);
     e->getTags().appendValue(_replaceKey, _replaceValue);
+    _numAffected++;
   }
 }
 

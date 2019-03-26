@@ -3627,6 +3627,13 @@ the endpoint way node to the way.
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
 
+=== split.name.visitor.max.length
+
+* Data Type: int
+* Default Value: `255`
+
+The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
+
 === stats.translate.script
 
 * Data Type: string

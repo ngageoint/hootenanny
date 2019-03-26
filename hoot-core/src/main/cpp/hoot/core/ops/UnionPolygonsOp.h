@@ -30,6 +30,8 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/UnionPolygonsVisitor.h>
 
 namespace hoot
 {
@@ -38,8 +40,10 @@ class OsmMap;
 
 /**
  * A map operation making use of UnionPolyonsVisitor
+ *
+ * @todo We could possibly use a VisitorOp with UnionPolygonsVisitor for this instead.
  */
-class UnionPolygonsOp : public OsmMapOperation
+class UnionPolygonsOp : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
@@ -51,7 +55,16 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual QString getDescription() const override { return "Combines all areas"; }
+  virtual QString getDescription() const override { return _combiner->getDescription(); }
+
+  virtual QString getInitStatusMessage() const { return _combiner->getInitStatusMessage(); }
+
+  virtual QString getCompletedStatusMessage() const
+  { return _combiner->getCompletedStatusMessage(); }
+
+private:
+
+  boost::shared_ptr<UnionPolygonsVisitor> _combiner;
 };
 
 }
