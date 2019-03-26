@@ -42,6 +42,12 @@ namespace hoot
 {
 class FilteredVisitor;
 
+/**
+ * Calcs the set of stats that feeds the stats command.
+ *
+ * @todo This has grown quite large and could probably be made a little maintenance-prone with some
+ * abstractions. - see #2908
+ */
 class CalculateStatsOp : public ConstOsmMapOperation
 {
 public:

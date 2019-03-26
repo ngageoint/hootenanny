@@ -34,15 +34,40 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, TagCountVisitor)
 
 TagCountVisitor::TagCountVisitor() :
-  _totalCount(0),
-  _informationCount(0)
+_totalCount(0),
+_informationCount(0),
+_smallestCount(LONG_MAX),
+_smallestInformationCount(LONG_MAX),
+_largestCount(0),
+_largestInformationCount(0)
 {
 }
 
 void TagCountVisitor::visit(const ConstElementPtr& e)
 {
-  _totalCount += e->getTags().getNonDebugCount();
-  _informationCount += e->getTags().getInformationCount();
+  const int nonDebugCount = e->getTags().getNonDebugCount();
+  _totalCount += nonDebugCount;
+  if (nonDebugCount < _smallestCount)
+  {
+    _smallestCount = nonDebugCount;
+  }
+  if (nonDebugCount > _largestCount)
+  {
+    _largestCount = nonDebugCount;
+  }
+
+  const int informationCount = e->getTags().getInformationCount();
+  _informationCount += informationCount;
+  if (informationCount < _smallestCount)
+  {
+    _smallestInformationCount = informationCount;
+  }
+  if (informationCount > _largestCount)
+  {
+    _largestInformationCount = informationCount;
+  }
+
+  _numAffected++;
 }
 
 }

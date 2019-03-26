@@ -46,7 +46,7 @@ public:
 
   static std::string className() { return "hoot::LengthOfWaysVisitor"; }
 
-  LengthOfWaysVisitor() : _total(0) {}
+  LengthOfWaysVisitor();
 
   static Meters getLengthOfWays(const OsmMapPtr& map, ElementPtr e);
 
@@ -58,14 +58,15 @@ public:
 
   virtual QString getDescription() const { return "Calculates the length of all ways"; }
 
-  // TODO
-  virtual double getMin() const { return 0.0; }
-  virtual double getMax() const { return 0.0; }
-  virtual double getAverage() const { return 0.0; }
+  virtual double getMin() const { return _smallest; }
+  virtual double getMax() const { return _largest; }
+  virtual double getAverage() const { return _total / _numAffected; }
 
 private:
 
   Meters _total;
+  Meters _smallest;
+  Meters _largest;
 };
 
 }

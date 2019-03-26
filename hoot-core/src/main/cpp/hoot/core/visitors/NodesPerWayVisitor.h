@@ -5,14 +5,14 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/WayCriterion.h>
 
 namespace hoot
 {
 
-/**
- *
- */
-class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic
+class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
+  public OperationStatusInfo
 {
 public:
 
@@ -22,13 +22,27 @@ public:
 
   virtual void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Calculates way node statistics"; }
 
-  // TODO
-  virtual double getStat() const { return 0.0; }
-  virtual double getMin() const { return 0.0; }
-  virtual double getMax() const { return 0.0; }
-  virtual double getAverage() const { return 0.0; }
+  virtual QString getInitStatusMessage() const
+  { return "Calculating way node statistics..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Calculated node statistics for " + QString::number(_numAffected) + " ways"; }
+
+  virtual double getStat() const { return _totalNodes; }
+  virtual double getMin() const { return _minNodesPerWay; }
+  virtual double getMax() const { return _maxNodesPerWay; }
+  virtual double getAverage() const { return _totalNodes / _numWays; }
+
+private:
+
+  WayCriterion _crit;
+
+  int _totalNodes;
+  int _numWays;
+  int _minNodesPerWay;
+  int _maxNodesPerWay;
 };
 
 }

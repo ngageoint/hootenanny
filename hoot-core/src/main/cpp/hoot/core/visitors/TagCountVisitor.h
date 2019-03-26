@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,8 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
+class TagCountVisitor : public ConstElementVisitor, public NumericStatistic,
+  public OperationStatusInfo
 {
 public:
 
@@ -46,23 +48,34 @@ public:
 
   TagCountVisitor();
 
-  long getInformationCount() const { return _informationCount; }
-
-  virtual double getStat() const { return _totalCount; }
-
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Counts element tags"; }
+  virtual QString getDescription() const { return "Calculates tag count statistics"; }
 
-  // TODO
-  virtual double getMin() const { return 0.0; }
-  virtual double getMax() const { return 0.0; }
-  virtual double getAverage() const { return 0.0; }
+  virtual QString getInitStatusMessage() const
+  { return "Calculating tag count statistics..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
+
+  virtual double getStat() const { return _totalCount; }
+  virtual double getMin() const { return _smallestCount; }
+  virtual double getMax() const { return _largestCount; }
+  virtual double getAverage() const { return _totalCount / _numAffected; }
+
+  long getInformationCount() const { return _informationCount; }
+  long getInformationMin() const { return _smallestInformationCount; }
+  long getInformationMax() const { return _largestInformationCount; }
+  long getInformationAverage() const { return _informationCount / _numAffected; }
 
 private:
 
   long _totalCount;
   long _informationCount;
+  long _smallestCount;
+  long _smallestInformationCount;
+  long _largestCount;
+  long _largestInformationCount;
 };
 
 }

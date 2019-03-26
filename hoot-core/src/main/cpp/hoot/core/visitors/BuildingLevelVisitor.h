@@ -5,6 +5,8 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
@@ -22,13 +24,31 @@ public:
 
   virtual void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Calculates building level statistics"; }
 
-  // TODO
-  virtual double getStat() const { return 0.0; }
-  virtual double getMin() const { return 0.0; }
-  virtual double getMax() const { return 0.0; }
-  virtual double getAverage() const { return 0.0; }
+  virtual QString getInitStatusMessage() const
+  { return "Calculating building level statistics..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Calculated level statistics for " + QString::number(_numAffected) + " buildings"; }
+
+
+  virtual double getStat() const { return _totalLevels; }
+  virtual double getMin() const { return _minLevels; }
+  virtual double getMax() const { return _maxLevels; }
+  virtual double getAverage() const { return _totalLevels / _numLevelsProcessed; }
+
+private:
+
+  BuildingCriterion _crit;
+
+  // in meters
+  double _totalLevels;
+  double _numLevelsProcessed;
+  double _minLevels;
+  double _maxLevels;
+
+  int _getNumLevels(const ConstElementPtr& e) const;
 };
 
 }

@@ -205,6 +205,18 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       SingleStat("Maximum Number of Tags Found on an Feature", tagCountVisitor.getMax()));
     _stats.append(
       SingleStat("Average Number of Tags Found on an Feature", tagCountVisitor.getAverage()));
+    _stats.append(
+      SingleStat(
+        "Minimum Number of Information Tags Found on an Feature",
+        tagCountVisitor.getInformationMin()));
+    _stats.append(
+      SingleStat(
+        "Maximum Number of Information Tags Found on an Feature",
+        tagCountVisitor.getInformationMax()));
+    _stats.append(
+      SingleStat(
+        "Average Number of Information Tags Found on an Feature",
+        tagCountVisitor.getInformationAverage()));
 
     _stats.append(SingleStat("Number of Features with a Name",
       _applyVisitor(

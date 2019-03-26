@@ -22,32 +22,45 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "UniqueTagKeysVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/BuildingHeightVisitor.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, UniqueTagKeysVisitor)
-
-UniqueTagKeysVisitor::UniqueTagKeysVisitor()
+// TODO: add bad inputs test from wiki
+class BuildingHeightVisitorTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(BuildingHeightVisitorTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  void runBasicTest()
+  {
+//    OsmMapPtr map(new OsmMap());
+//    OsmMapReaderFactory::read(
+//      map,
+//      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+//      false,
+//      Status::Unknown1);
+
+//    AddressCountVisitor uut;
+//    map->visitRo(uut);
+//    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+  }
+
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingHeightVisitorTest, "quick");
+
 }
 
-void UniqueTagKeysVisitor::setConfiguration(const Settings& /*conf*/)
-{
-  //ConfigOptions configOptions(conf);
 
-}
-
-void UniqueTagKeysVisitor::visit(const ConstElementPtr& /*e*/)
-{
-
-}
-
-}

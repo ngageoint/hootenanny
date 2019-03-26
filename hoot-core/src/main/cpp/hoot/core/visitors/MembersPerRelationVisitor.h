@@ -5,14 +5,14 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/RelationCriterion.h>
 
 namespace hoot
 {
 
-/**
- *
- */
-class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStatistic
+class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStatistic,
+  public OperationStatusInfo
 {
 public:
 
@@ -22,13 +22,27 @@ public:
 
   virtual void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return "Calculates relation member statistics"; }
 
-  // TODO
-  virtual double getStat() const { return 0.0; }
-  virtual double getMin() const { return 0.0; }
-  virtual double getMax() const { return 0.0; }
-  virtual double getAverage() const { return 0.0; }
+  virtual QString getInitStatusMessage() const
+  { return "Calculating relation member statistics..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Calculated member statistics for " + QString::number(_numAffected) + " relations"; }
+
+  virtual double getStat() const { return _totalMembers; }
+  virtual double getMin() const { return _minMembersPerRelation; }
+  virtual double getMax() const { return _maxMembersPerRelation; }
+  virtual double getAverage() const { return _totalMembers / _numRelations; }
+
+private:
+
+  RelationCriterion _crit;
+
+  int _totalMembers;
+  int _numRelations;
+  int _minMembersPerRelation;
+  int _maxMembersPerRelation;
 };
 
 }
