@@ -262,7 +262,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
                 currentJobStatus.setPercentComplete(percentComplete);
             }
 
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED) || (newStatus == CANCELLED)) {
                 currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
             }
 
@@ -285,7 +285,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             currentJobStatus.setStart(ts);
 
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED) || (newStatus == CANCELLED)) {
                 currentJobStatus.setEnd(ts);
             }
 

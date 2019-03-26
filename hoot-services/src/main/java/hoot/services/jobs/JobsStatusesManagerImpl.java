@@ -91,7 +91,8 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
         List<JobStatus> jobsHistory = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
-                .where(jobStatus.userId.eq(user.getId()))
+                .where(jobStatus.userId.eq(user.getId())
+                    .and(jobStatus.status.gt(0)))
                 .orderBy(jobStatus.start.desc())
                 .fetch();
 
