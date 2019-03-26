@@ -105,9 +105,9 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
-                // Configure authentication
+                // Configure authentication and reboot tomcat
                 sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
-
+                sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
         stage("Core Tests") {
