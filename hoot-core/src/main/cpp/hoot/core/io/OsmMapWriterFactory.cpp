@@ -166,9 +166,8 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
 
     if (matcher)
     {
-      DebugNetworkMapCreator(
-        matcher->getMatchThreshold()).addDebugElements(
-          copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+      DebugNetworkMapCreator()
+        .addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
     }
 
     MapProjector::projectToWgs84(copy);

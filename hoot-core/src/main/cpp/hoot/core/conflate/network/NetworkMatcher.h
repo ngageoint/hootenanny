@@ -55,7 +55,7 @@ public:
 
   virtual ~NetworkMatcher();
 
-  virtual double getMatchThreshold() const { return 0.15; }
+  virtual double getMatchThreshold() const = 0;
 
   /**
    * Iterate torwards a solution. Each iteration should slowly move towards a better result, but
@@ -86,7 +86,6 @@ protected:
   void _createVertex2Index();
 
   Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env, Tgs::HilbertRTreePtr tree);
-
 };
 
 typedef boost::shared_ptr<NetworkMatcher> NetworkMatcherPtr;

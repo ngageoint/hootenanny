@@ -51,6 +51,7 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 NetworkMergerCreator::NetworkMergerCreator()
 {
   _map = 0;
+  _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
@@ -139,8 +140,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         const double overlapPercent = _getOverlapPercent(matches);
-        // move value to config - #2913
-        if (overlapPercent > 80.0) // Go ahead and merge largest match
+        if (overlapPercent > _minMatchOverlapPercentage) // Go ahead and merge largest match
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
@@ -276,7 +276,7 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
     }
   }
 
-  return 100.0*count / total;
+  return 100.0 * count / total;
 }
 
 // Tricky: lets approach this from the perspective of the smaller match, not the larger
@@ -311,8 +311,8 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     m2e2 = m1->getEdgeMatch()->getString2()->getAllEdges();
   }
 
-  double count = 0;
-  double total = 0;
+  double count = 0.0;
+  double total = 0.0;
   foreach (EdgeString::EdgeEntry ee, m1e1)
   {
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
