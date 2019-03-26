@@ -76,6 +76,11 @@
 #include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/TunnelCriterion.h>
+#include <hoot/core/visitors/BuildingHeightVisitor.h>
+#include <hoot/core/visitors/BuildingLevelVisitor.h>
+#include <hoot/core/visitors/NodesPerWayVisitor.h>
+#include <hoot/core/visitors/MembersPerRelationVisitor.h>
+#include <hoot/core/visitors/UniqueTagKeysVisitor.h>
 
 #include <math.h>
 
@@ -173,6 +178,20 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   if (!_quick)
   {
+    NodesPerWayVisitor nodesPerWayVis;
+    _applyVisitor(constMap, &nodesPerWayVis);
+    _stats.append(SingleStat("Least Number of Nodes in a Way", nodesPerWayVis.getMin()));
+    _stats.append(SingleStat("Most Number of Nodes in a Way", nodesPerWayVis.getMax()));
+    _stats.append(SingleStat("Average Nodes Per Way", nodesPerWayVis.getAverage()));
+    _stats.append(SingleStat("Total Number of Way Nodes", nodesPerWayVis.getStat()));
+
+    MembersPerRelationVisitor membersPerRelationVis;
+    _applyVisitor(constMap, &membersPerRelationVis);
+    _stats.append(SingleStat("Least Members in a Relation", membersPerRelationVis.getMin()));
+    _stats.append(SingleStat("Most Members in a Relation", membersPerRelationVis.getMax()));
+    _stats.append(SingleStat("Average Members Per Relation", membersPerRelationVis.getAverage()));
+    _stats.append(SingleStat("Total Number of Relation Members", membersPerRelationVis.getStat()));
+
     TagCountVisitor tagCountVisitor;
     _applyVisitor(constMap, &tagCountVisitor);
     const long numTotalTags = (long)tagCountVisitor.getStat();
@@ -180,6 +199,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     const long numInformationTags = tagCountVisitor.getInformationCount();
     _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
     _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
+    _stats.append(
+      SingleStat("Minimum Number of Tags Found on an Feature", tagCountVisitor.getMin()));
+    _stats.append(
+      SingleStat("Maximum Number of Tags Found on an Feature", tagCountVisitor.getMax()));
+    _stats.append(
+      SingleStat("Average Number of Tags Found on an Feature", tagCountVisitor.getAverage()));
 
     _stats.append(SingleStat("Number of Features with a Name",
       _applyVisitor(
@@ -485,6 +510,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _applyVisitor(
         constMap, FilteredVisitor(MultiUseBuildingCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
+    BuildingHeightVisitor buildingHeightVis;
+    _applyVisitor(constMap, &buildingHeightVis);
+    _stats.append(SingleStat("Shortest Building", buildingHeightVis.getMin()));
+    _stats.append(SingleStat("Tallest Building", buildingHeightVis.getMax()));
+    _stats.append(SingleStat("Average Building Height", buildingHeightVis.getAverage()));
+    BuildingLevelVisitor buildingLevelVis;
+    _applyVisitor(constMap, &buildingLevelVis);
+    _stats.append(SingleStat("Smallest Number of Levels in a Building", buildingLevelVis.getMin()));
+    _stats.append(SingleStat("Largest Number of Levels in a Building", buildingHeightVis.getMax()));
+    _stats.append(
+      SingleStat("Average Number of Levels in a Building", buildingHeightVis.getAverage()));
 
     _stats.append(SingleStat("Number of Non-Building Areas",
       _applyVisitor(
@@ -506,6 +542,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     PhoneNumberCountVisitor phoneCountVis;
     _applyVisitor(constMap, &phoneCountVis);
     _stats.append(SingleStat("Total Number of Phone Numbers", phoneCountVis.getStat()));
+
+    // TODO: UniqueTagKeysVisitor
   }
 
   logMsg = "Map statistics calculated";
