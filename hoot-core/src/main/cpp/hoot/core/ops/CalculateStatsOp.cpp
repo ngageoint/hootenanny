@@ -65,6 +65,19 @@
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/visitors/AddressCountVisitor.h>
+#include <hoot/core/visitors/PhoneNumberCountVisitor.h>
+#include <hoot/core/criterion/HasAddressCriterion.h>
+#include <hoot/core/criterion/HasPhoneNumberCriterion.h>
+#include <hoot/core/criterion/HasNameCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/MultiUseBuildingCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/criterion/BridgeCriterion.h>
+#include <hoot/core/criterion/TunnelCriterion.h>
 
 #include <math.h>
 
@@ -216,7 +229,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     double conflatedFeatureCount =
       _applyVisitor(
         constMap,
-        FilteredVisitor(StatusCriterion(Status::Conflated), ConstElementVisitorPtr(new FeatureCountVisitor())));
+        FilteredVisitor(
+          StatusCriterion(Status::Conflated), ConstElementVisitorPtr(new FeatureCountVisitor())));
 
     //We're tailoring the stats to whether the map being examined is the input to a conflation job
     //or the output from a conflation job.  When the stats option is called from the conflate
@@ -237,8 +251,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         constMap,
         FilteredVisitor(
           ChainCriterion(
-            ElementCriterionPtr(new NotCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)))),
-            ElementCriterionPtr(new NotCriterion(ElementCriterionPtr(new NeedsReviewCriterion(constMap))))),
+            ElementCriterionPtr(
+              new NotCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)))),
+            ElementCriterionPtr(
+              new NotCriterion(ElementCriterionPtr(new NeedsReviewCriterion(constMap))))),
           ConstElementVisitorPtr(new MatchCandidateCountVisitor(matchCreators))),
         matchCandidateCountsData);
     LOG_VARD(matchCreators.size());
@@ -332,7 +348,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               constMap,
               //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
               //instead of FeatureCountVisitor
-              FilteredVisitor(PoiPolygonPolyCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
+              FilteredVisitor(
+                PoiPolygonPolyCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
         _stats.append(
           SingleStat(
@@ -386,7 +403,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Percentage of Total Features Unmatched",
         ((double)unconflatedFeatureCount / (double)featureCount) * 100.0));
 
-    for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it = conflatableFeatureCounts.begin();
+    for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
+           conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
     {
       // Unknown does not get us a usable element criterion, so skip it
@@ -441,6 +459,67 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       LOG_DEBUG("Skipping stats translation");
     }
+
+    _stats.append(SingleStat("Number of Bridges",
+      _applyVisitor(
+        constMap, FilteredVisitor(BridgeCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Tunnels",
+      _applyVisitor(
+        constMap, FilteredVisitor(TunnelCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of One-Way Streets",
+      _applyVisitor(
+        constMap, FilteredVisitor(OneWayCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Road Roundabouts",
+      _applyVisitor(
+        constMap, FilteredVisitor(RoundaboutCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Multi-Use Buildings",
+      _applyVisitor(
+        constMap, FilteredVisitor(MultiUseBuildingCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Non-Building Areas",
+      _applyVisitor(
+        constMap, FilteredVisitor(NonBuildingAreaCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Railways",
+      _applyVisitor(
+        constMap, FilteredVisitor(RailwayCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Power Lines",
+      _applyVisitor(
+        constMap, FilteredVisitor(PowerLineCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Features with a Name",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasNameCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Number of Features with an Address",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasAddressCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    AddressCountVisitor addressCountVis;
+    _applyVisitor(constMap, &addressCountVis);
+    _stats.append(SingleStat("Total Number of Addresses", addressCountVis.getStat()));
+
+    _stats.append(SingleStat("Number of Features with a Phone Number",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasPhoneNumberCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    PhoneNumberCountVisitor phoneCountVis;
+    _applyVisitor(constMap, &phoneCountVis);
+    _stats.append(SingleStat("Total Number of Phone Numbers", phoneCountVis.getStat()));
   }
 
   logMsg = "Map statistics calculated";
