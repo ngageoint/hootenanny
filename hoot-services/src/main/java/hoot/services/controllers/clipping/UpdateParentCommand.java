@@ -26,22 +26,14 @@
  */
 package hoot.services.controllers.clipping;
 
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
-import static hoot.services.utils.DbUtils.createQuery;
-
 import java.time.LocalDateTime;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
-import hoot.services.models.osm.Map;
-import static hoot.services.models.db.QJobStatus.jobStatus;
 import hoot.services.models.db.Users;
+import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 
 
