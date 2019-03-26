@@ -116,9 +116,9 @@ public class BasemapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@Context HttpServletRequest request,
                                 @QueryParam("INPUT_NAME") String inputName,
-                                  @QueryParam("PROJECTION") String projection,
-                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
-                                  FormDataMultiPart multiPart) {
+                                @QueryParam("PROJECTION") String projection,
+                                @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
+                                FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
         JSONArray jobsArr = new JSONArray();
 

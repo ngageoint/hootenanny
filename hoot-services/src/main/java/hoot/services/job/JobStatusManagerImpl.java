@@ -57,7 +57,6 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public void addJob(Job job) {
         try {
-//            this.updateJobStatus(job.getJobId(), RUNNING, "PROCESSING", 0.0, job.getUserId());
 
             hoot.services.models.db.JobStatus newJobStatus = new hoot.services.models.db.JobStatus();
             newJobStatus.setJobId(job.getJobId());

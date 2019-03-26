@@ -93,15 +93,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
 
-            // Sensitive params included
-            String actualCommand = Arrays.stream(quoteArgsWithSpaces(cmdLine.toStrings()))
-                    .collect(Collectors.joining(" "));
-
             // Sensitive params obfuscated
             obfuscatedCommand = Arrays.stream(
-//                    quoteArgsWithSpaces(
-                            parse(commandTemplate, substitutionMap).toStrings()
-//                        )
+                        parse(commandTemplate, substitutionMap).toStrings()
                     )
                     .collect(Collectors.joining(" "));
 
@@ -156,16 +150,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         catch (IOException e) {
             throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
         }
-    }
-
-    /**
-     * Adds quotes to arguments that contain spaces
-     *
-     * @param args arguments to quotes
-     * @return array of arguments with the ones with spaces having quotes around them
-     */
-    private static String[] quoteArgsWithSpaces(String[] args) {
-        return Arrays.stream(args).map(s -> "\"" + s + "\"").toArray(String[]::new);
     }
 
     private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {

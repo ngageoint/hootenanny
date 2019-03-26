@@ -167,7 +167,7 @@ public class ExportResource {
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
-                    DbUtils.getMapIdFromRef(params.getInput())));
+                    DbUtils.getMapIdFromRef(params.getInput(), user.getId())));
         }
         catch (WebApplicationException wae) {
             logger.error(wae.getMessage(), wae);

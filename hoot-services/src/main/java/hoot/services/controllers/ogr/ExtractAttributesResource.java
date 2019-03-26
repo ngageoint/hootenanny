@@ -101,8 +101,8 @@ public class ExtractAttributesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@Context HttpServletRequest request,
                                 @QueryParam("INPUT_TYPE") String inputType,
-                                  @QueryParam("DEBUG_LEVEL") @DefaultValue("error") String debugLevel,
-                                  FormDataMultiPart multiPart) {
+                                @QueryParam("DEBUG_LEVEL") @DefaultValue("error") String debugLevel,
+                                FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
         String jobId = UUID.randomUUID().toString();
 

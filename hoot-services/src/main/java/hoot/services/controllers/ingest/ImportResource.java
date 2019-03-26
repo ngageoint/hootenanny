@@ -120,10 +120,7 @@ public class ImportResource {
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
-        Users user = null;
-        if(request != null) {
-            user = Users.fromRequest(request);
-        }
+        Users user = Users.fromRequest(request);
         List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();
 
         try {

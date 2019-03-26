@@ -40,14 +40,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.JobStatusManager;
+import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Users;
 
 
@@ -55,7 +54,6 @@ import hoot.services.models.db.Users;
 @Path("/cancel")
 @Transactional
 public class JobCancellationResource {
-    private static final Logger logger = LoggerFactory.getLogger(JobCancellationResource.class);
 
     @Autowired
     private ExternalCommandManager externalCommandInterface;
@@ -84,8 +82,7 @@ public class JobCancellationResource {
         Users user = Users.fromRequest(request);
 
         String jobIdToCancel = params.getJobId();
-        String mapDisplayName = params.getMapId(); //not sure why we'd need this
-        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobIdToCancel, user.getId());
+        JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobIdToCancel, user.getId());
 
         if (jobStatus == null) {
             throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
@@ -113,7 +110,7 @@ public class JobCancellationResource {
 
         Users user = Users.fromRequest(request);
 
-        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId, user.getId());
+        JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId, user.getId());
 
         if (jobStatus == null) {
             throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);

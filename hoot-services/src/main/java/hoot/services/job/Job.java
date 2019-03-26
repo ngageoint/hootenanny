@@ -39,17 +39,14 @@ public class Job {
 
     public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
         this.jobId = jobId;
-        this.setUserId(userId);
+        this.userId = userId;
         this.commands = commands;
         this.jobType = jobType;
         this.mapId = mapId;
     }
 
     public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
-        this.jobId = jobId;
-        this.setUserId(userId);
-        this.commands = commands;
-        this.jobType = jobType;
+        this(jobId, userId, commands, jobType, null);
     }
 
     public Job(String jobId) {

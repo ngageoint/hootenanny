@@ -76,13 +76,9 @@ class ImportCommand extends ExternalCommand {
 
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true"); //is this dangerous if name is not globally unique?
+        options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.job.id=" + jobId);
-        if(user != null) {
-            options.add("api.db.email=" + user.getEmail());
-        } else {
-            options.add("api.db.email=test@test.com");
-        }
+        options.add("api.db.email=" + user.getEmail());
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
             //options.add("convert.ops=hoot::TranslationOp");
