@@ -446,8 +446,6 @@ int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(
     const long wayNodeBeforeId = wayToSnapTo->getNodeId(wayNodeBeforeIndex);
     const int wayNodeAfterIndex = indexOfClosestWayNodeId + 1;
     const long wayNodeAfterId = wayToSnapTo->getNodeId(wayNodeAfterIndex);
-    assert(map->containsNode(wayNodeBeforeId));
-    assert(map->containsNode(wayNodeAfterId));
     LOG_VART(wayNodeBeforeIndex);
     LOG_VART(wayNodeBeforeId);
     LOG_VART(wayNodeAfterIndex);
