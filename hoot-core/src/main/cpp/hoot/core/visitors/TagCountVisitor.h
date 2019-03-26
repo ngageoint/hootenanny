@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ConstElementVisitor, public SingleStatistic
+class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
@@ -53,6 +53,11 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return "Counts element tags"; }
+
+  // TODO
+  virtual double getMin() const { return 0.0; }
+  virtual double getMax() const { return 0.0; }
+  virtual double getAverage() const { return 0.0; }
 
 private:
 

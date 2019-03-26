@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
 
 namespace hoot
 {
@@ -40,7 +40,7 @@ class OsmMap;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first projected into meters.
  */
-class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
+class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStatistic
 {
 public:
 
@@ -52,11 +52,16 @@ public:
 
   Meters getLengthOfWays() const { return _total; }
 
-  double getStat() const { return getLengthOfWays(); }
+  virtual double getStat() const { return getLengthOfWays(); }
 
   virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Calculates the length of all ways"; }
+
+  // TODO
+  virtual double getMin() const { return 0.0; }
+  virtual double getMax() const { return 0.0; }
+  virtual double getAverage() const { return 0.0; }
 
 private:
 

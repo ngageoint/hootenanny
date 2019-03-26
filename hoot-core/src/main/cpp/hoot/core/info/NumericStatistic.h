@@ -24,22 +24,29 @@
  *
  * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SINGLESTATISTIC_H
-#define SINGLESTATISTIC_H
+#ifndef NUMERIC_STATISTIC_H
+#define NUMERIC_STATISTIC_H
+
+// Hoot
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {
 
 /**
- * Simple interface primarily for returning feature statistics from visitors
+ * Simple interface for dealing with numeric stats in a little more detail than SingleStatistic
  */
-class SingleStatistic
+class NumericStatistic : public SingleStatistic
 {
 public:
 
-  virtual ~SingleStatistic() {}
+  virtual ~NumericStatistic() {}
 
-  virtual double getStat() const = 0;
+  // We'll inherit SingleStatistic::getStat for returning stat totals and add these:
+
+  virtual double getMin() const = 0;
+  virtual double getMax() const = 0;
+  virtual double getAverage() const = 0;
 };
 
 }

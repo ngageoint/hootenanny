@@ -72,8 +72,6 @@
 #include <hoot/core/criterion/HasNameCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
@@ -183,9 +181,14 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
     _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
 
+    _stats.append(SingleStat("Number of Features with a Name",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasNameCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
     UniqueNamesVisitor v;
     _applyVisitor(constMap, &v);
     _stats.append(SingleStat("Unique Names", v.getStat()));
+
     _stats.append(
       SingleStat("Meters of Linear Features",
       _applyVisitor(
@@ -198,12 +201,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         FilteredVisitor(StatsAreaCriterion(),
           ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
     _stats.append(
-      SingleStat("Meters of Highway",
+      SingleStat("Meters of Roads",
       _applyVisitor(
         constMap,
         FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
     _stats.append(
-      SingleStat("Highway Unique Name Count",
+      SingleStat("Road Unique Name Count",
       _applyVisitor(
       constMap,
       FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
@@ -439,7 +442,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _stats.append(SingleStat("Building Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("Highway Translated Populated Tag Percent",
+      _stats.append(SingleStat("Road Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("POI Translated Populated Tag Percent",
@@ -460,21 +463,19 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       LOG_DEBUG("Skipping stats translation");
     }
 
+    // would like to get these next to the rest of the road stats
     _stats.append(SingleStat("Number of Bridges",
       _applyVisitor(
         constMap, FilteredVisitor(BridgeCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-
     _stats.append(SingleStat("Number of Tunnels",
       _applyVisitor(
         constMap, FilteredVisitor(TunnelCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-
     _stats.append(SingleStat("Number of One-Way Streets",
       _applyVisitor(
         constMap, FilteredVisitor(OneWayCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-
     _stats.append(SingleStat("Number of Road Roundabouts",
       _applyVisitor(
         constMap, FilteredVisitor(RoundaboutCriterion(),
@@ -488,21 +489,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Number of Non-Building Areas",
       _applyVisitor(
         constMap, FilteredVisitor(NonBuildingAreaCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-    _stats.append(SingleStat("Number of Railways",
-      _applyVisitor(
-        constMap, FilteredVisitor(RailwayCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-    _stats.append(SingleStat("Number of Power Lines",
-      _applyVisitor(
-        constMap, FilteredVisitor(PowerLineCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-    _stats.append(SingleStat("Number of Features with a Name",
-      _applyVisitor(
-        constMap, FilteredVisitor(HasNameCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
 
     _stats.append(SingleStat("Number of Features with an Address",
