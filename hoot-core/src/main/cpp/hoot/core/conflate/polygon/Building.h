@@ -41,6 +41,7 @@ class OsmMap;
 class Building
 {
 public:
+
   Building(const OsmMap& map, const ConstElementPtr& e);
 
   /**
@@ -51,6 +52,7 @@ public:
   boost::shared_ptr<geos::geom::Geometry> buildOutline() const;
 
 private:
+
   ConstElementPtr _e;
   const OsmMap& _map;
 };

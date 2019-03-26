@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Counts the number of valid element phone numbers
+ * Counts the total number of valid element phone numbers where an element may have more than one
+ * phone number
  */
 class PhoneNumberCountVisitor : public ConstElementVisitor, public SingleStatistic,
   public Configurable

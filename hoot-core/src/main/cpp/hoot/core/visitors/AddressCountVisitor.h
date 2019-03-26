@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 
@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- * Counts the number of valid element addresses
+ * Counts the total number of valid element addresses where an element may have more than one
+ * address.
  */
 class AddressCountVisitor : public ConstElementVisitor, public SingleStatistic, public Configurable
 {

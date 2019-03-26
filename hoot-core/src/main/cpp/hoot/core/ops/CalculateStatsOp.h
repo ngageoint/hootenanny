@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 
 // Qt
 #include <QList>
