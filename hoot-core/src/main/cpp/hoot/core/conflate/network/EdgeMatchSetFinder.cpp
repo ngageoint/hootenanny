@@ -48,6 +48,7 @@ EdgeMatchSetFinder::EdgeMatchSetFinder(NetworkDetailsPtr details, IndexedEdgeMat
   _matchSet(matchSet),
   _n1(n1),
   _n2(n2),
+  _maxSteps(ConfigOptions().getNetworkEdgeMatchSetFinderMaxIterations()),
   _numSimilarEdgeMatches(0)
 {
   _resetEdgeMatchSimilarities();
@@ -110,7 +111,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
   bool toMatch = _isCandidateMatch(to1, to2);
   bool foundSolution = false;
 
-  if (_steps > 20) // make this configurable - #2913
+  if (_steps > _maxSteps)
   {
     LOG_VART(_steps);
     return false;

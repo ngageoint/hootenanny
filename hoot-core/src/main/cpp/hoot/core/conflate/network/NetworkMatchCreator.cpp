@@ -60,7 +60,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
 
-NetworkMatchCreator::NetworkMatchCreator()
+NetworkMatchCreator::NetworkMatchCreator() :
+_matchScoringFunctionMax(ConfigOptions().getNetworkMatchScoringFunctionMax()),
+_matchScoringFunctionCurveMidpointX(ConfigOptions().getNetworkMatchScoringFunctionCurveMidX()),
+_matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFunctionCurveSteepness())
 {
   _userCriterion.reset(new HighwayCriterion());
 }
@@ -75,7 +78,10 @@ Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId
 const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
   ConstMatchThresholdPtr mt)
 {
-  return new NetworkMatch(map, e->getEdgeMatch(), e->getScore(), mt);
+  return
+    new NetworkMatch(
+      map, e->getEdgeMatch(), e->getScore(), mt, _matchScoringFunctionMax,
+      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness);
 }
 
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
@@ -133,7 +139,6 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     OsmMapWriterFactory::writeDebugMap(map, "network-match-iteration-" + QString::number(i + 1));
   }
 
-  // Finalize
   matcher->finalize();
 
   OsmMapWriterFactory::writeDebugMap(map, "network-match-after-final-iteration", matcher);
@@ -142,13 +147,13 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   // Convert graph edge matches into NetworkMatch objects.
   QList<NetworkEdgeScorePtr> edgeMatch = matcher->getAllEdgeScores();
 
-  LOG_VARD(matcher->getMatchThreshold());
   for (int i = 0; i < edgeMatch.size(); i++)
   {
     LOG_VART(edgeMatch[i]->getUid());
     LOG_VART(edgeMatch[i]->getScore());
     LOG_VART(edgeMatch[i]->getEdgeMatch());
 
+    // Note that here we want the whole network match threshold, not the individual match threshold.
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());

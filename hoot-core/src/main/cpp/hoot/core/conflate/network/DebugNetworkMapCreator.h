@@ -43,7 +43,7 @@ class DebugNetworkMapCreator
 {
 public:
 
-  DebugNetworkMapCreator(double matchThreshold = 0.15);
+  DebugNetworkMapCreator();
 
   void addDebugElements(OsmMapPtr map, QList<NetworkEdgeScorePtr> edgeScores,
     QList<NetworkVertexScorePtr> vertexScores);

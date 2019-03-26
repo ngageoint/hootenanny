@@ -64,6 +64,10 @@ private:
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   ElementCriterionPtr _userCriterion;
 
+  double _matchScoringFunctionMax;
+  double _matchScoringFunctionCurveMidpointX;
+  double _matchScoringFunctionCurveSteepness;
+
   const Match* _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
     ConstMatchThresholdPtr mt);
 };

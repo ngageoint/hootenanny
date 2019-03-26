@@ -48,7 +48,6 @@ NetworkMatcher::~NetworkMatcher()
 
 void NetworkMatcher::finalize()
 {
-
 }
 
 void NetworkMatcher::_createEdge2Index()

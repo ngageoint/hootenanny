@@ -1846,6 +1846,20 @@ List of merger creators to use during conflation. This can modify what features 
 A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
 may want to consider changing this value. Reasonable range is [1, ~10].
 
+=== network.conflicts.conflicting.score.threshold.modifier
+
+* Data Type: double
+* Default Value: `0.3`
+
+Added to a conflicting match score to allow for match pruning
+
+=== network.conflicts.matcher.threshold
+
+* Data Type: double
+* Default Value: `0.35`
+
+The score threshold used to compare whole networks with the ConflictsNetworkMatcher
+
 === network.conflicts.outbound.weighting
 
 * Data Type: double
@@ -1863,6 +1877,21 @@ neighbor.  This value is generally not changed by users.  Reasonable range is [0
 A larger value will increase the weight of partial matches when using network conflation.  A
 smaller value prefers whole matches over partial matches. This value is generally not changed by
 users. Reasonable range is (0, ~2].
+
+=== network.conflicts.sanity.check.min.separation.distance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Minimum separation distance, in meters, for match distance separation to use when sanity checking
+match relationships.
+
+=== network.conflicts.sanity.check.separation.distance.multiplier
+
+* Data Type: double
+* Default Value: `2.5`
+
+Distance multiplier to use when santiy checking match relationships.
 
 === network.conflicts.stub.handicap
 
@@ -1884,11 +1913,42 @@ not changed by users.  Reasonable range is [0, ~10].
 === network.conflicts.weight.influence
 
 * Data Type: double
-* Default Value: `0.0`
+* Default Value: `0.68`
 
 A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
 give matches with more support a higher weight when using network conflation. This value is
 generally not changed by users. Reasonable range is [0, 2].
+
+=== network.edge.match.set.finder.max.iterations
+
+* Data Type: int
+* Default Value: `20`
+
+The maximum number of optimization iterations used to calculate edge match sets.
+
+=== network.match.scoring.function.max
+
+* Data Type: double
+* Default Value: `1.0`
+
+Maximum possible value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.mid.x
+
+* Data Type: double
+* Default Value: `0.5`
+
+X value curve midpoint value for the logistic function applied to conflation matches with the
+Network Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.steepness
+
+* Data Type: double
+* Default Value: `2.0`
+
+Curve steepness value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
 
 === network.match.threshold
 
@@ -1917,6 +1977,13 @@ debug and test. The parameter must be a class that is registered with the factor
 
 The maximum allowable length of a stub connection (way to node match) when using network conflation.
 Value in meters.
+
+=== network.merger.min.large.match.overlap.percentage
+
+* Data Type: double
+* Default Value: `80.0`
+
+The minimum network match overlap percentage allowed for a network merge to occur.
 
 === network.miss.threshold
 

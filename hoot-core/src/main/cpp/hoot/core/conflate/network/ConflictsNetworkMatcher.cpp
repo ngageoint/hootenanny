@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -55,6 +56,11 @@ ConflictsNetworkMatcher::ConflictsNetworkMatcher()
   _weightInfluence = conf.getNetworkConflictsWeightInfluence();
   _outboundWeighting = conf.getNetworkConflictsOutboundWeighting();
   _stubThroughWeighting = conf.getNetworkConflictsStubThroughWeighting();
+  _sanityCheckMinSeparationDistance = conf.getNetworkConflictsSanityCheckMinSeparationDistance();
+  _sanityCheckSeparationDistanceMultiplier =
+    conf.getNetworkConflictsSanityCheckSeparationDistanceMultiplier();
+  _conflictingScoreThresholdModifier = conf.getNetworkConflictsConflictingScoreThresholdModifier();
+  _matchThreshold = conf.getNetworkConflictsMatcherThreshold();
 }
 
 double ConflictsNetworkMatcher::_aggregateScores(QList<double> pairs)
@@ -166,27 +172,24 @@ Meters ConflictsNetworkMatcher::_getMatchSeparation(ConstEdgeMatchPtr pMatch)
 
 void ConflictsNetworkMatcher::_sanityCheckRelationships()
 {
-  // Check our relationships for sanity...
   int ctr = 0;
   const int total = _scores.keys().size();
   int matchesRemoved = 0;
   foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
-    double myDistance = _getMatchSeparation(em);
-
+    const double myDistance = _getMatchSeparation(em);
     foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
-      // If it's a conflict, AND we are a lot closer, ax the other one
+      // If it's a conflict, AND we are a lot closer, axe the other one
       if (r->isConflict())
       {
-        double theirDistance = _getMatchSeparation(r->getEdge());
-
-        // move values to config - #2913
-        if (myDistance > 5.0 && myDistance * 2.5 < theirDistance)
+        const double theirDistance = _getMatchSeparation(r->getEdge());
+        if (myDistance > _sanityCheckMinSeparationDistance &&
+            ((myDistance * _sanityCheckSeparationDistanceMultiplier) < theirDistance))
         {
-          LOG_TRACE("Removing insane match: " << r->getEdge()->getUid() << " - "
-                    << theirDistance << " keeping: " << em->getUid()
-                    << " - " << myDistance);
+          LOG_TRACE(
+            "Removing insane match: " << r->getEdge()->getUid() << " - " << theirDistance <<
+            " keeping: " << em->getUid() << " - " << myDistance);
 
           // Remove match
           _edgeMatches->getAllMatches().remove(r->getEdge());
@@ -595,7 +598,6 @@ void ConflictsNetworkMatcher::_iterateSimple()
   }
 
   // Setting this really helps reduce scoring oscillation
-  _weightInfluence = 0.68; // move to config - #2913
   foreach (ConstEdgeMatchPtr em, newWeights.keys())
   {
     newWeights[em] = pow(newWeights[em] * newWeights.size() / weightSum, _weightInfluence);
@@ -645,10 +647,10 @@ void ConflictsNetworkMatcher::finalize()
       const double myScore = _scores[em];
       const double theirScore = _scores[r->getEdge()];
 
-      // If it's a conflict, AND we score a lot better, ax the other one
+      // If it's a conflict, AND we score a lot better, axe the other one
       if (r->isConflict())
       {
-        if (myScore > 0.3 + theirScore) // move score value to config - #2913
+        if (myScore > (_conflictingScoreThresholdModifier + theirScore))
         {
           _scores[r->getEdge()] = 1.0e-5;
         }
@@ -693,7 +695,7 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
 
       const double score = _details->getPartialEdgeMatchScore(e1, e2);
       LOG_TRACE("partial edge match score:" << score);
-      if (score > 0)
+      if (score > 0.0)
       {
         // Add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);

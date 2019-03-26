@@ -33,8 +33,8 @@
 namespace hoot
 {
 
-DebugNetworkMapCreator::DebugNetworkMapCreator(double matchThreshold) :
-  _matchThreshold(matchThreshold)
+DebugNetworkMapCreator::DebugNetworkMapCreator() :
+_matchThreshold(ConfigOptions().getNetworkMatchThreshold())
 {
 }
 
@@ -125,7 +125,7 @@ void DebugNetworkMapCreator::_addVertexLink(OsmMapPtr map, NetworkVertexScorePtr
     w->getTags().set(MetadataTags::HootVertexScore21(), vertexScore->getScore21());
     w->getTags().set(MetadataTags::HootVertexScore(), vertexScore->getScore());
     w->getTags().set(MetadataTags::HootVertex(), vertexScore->toString());
-    if (vertexScore->getScore() >= 0.15)
+    if (vertexScore->getScore() >= _matchThreshold)
     {
       w->getTags().set("highway", "footway");
     }
