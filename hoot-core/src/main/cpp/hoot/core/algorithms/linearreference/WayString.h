@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRING_H
 #define WAYSTRING_H
@@ -64,8 +64,8 @@ public:
 
   Meters calculateLength() const;
 
-  WayLocation calculateLocationFromStart(Meters distance,
-    ElementId preferredEid = ElementId()) const;
+  WayLocation calculateLocationFromStart(
+    Meters distance, ElementId preferredEid = ElementId()) const;
 
   /**
    * Simplifies this WayString from a complex collection of sublines into a single simple way. The

@@ -40,6 +40,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -210,19 +211,21 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-          _map->getElementCount() << " total elements.");
+          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
+          " total elements.");
       }
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
     }
   }
 
@@ -240,7 +243,7 @@ public:
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
+      // 10 children - 368 - see #3054
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
@@ -329,7 +332,9 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
     map, matches, _getRf(), threshold, _filter, Status::Unknown1,
     ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
   map->visitRo(v);
-  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " building match candidates.");
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    " building match candidates.");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
@@ -348,7 +353,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
     QString path = ConfPath::search(_conflateMatchBuildingModel);
     LOG_DEBUG("Loading model from: " << path);
 
-    QFile file(path.toAscii().data());
+    QFile file(path.toLatin1().data());
     if (!file.open(QIODevice::ReadOnly))
     {
       throw HootException("Error opening file: " + path);

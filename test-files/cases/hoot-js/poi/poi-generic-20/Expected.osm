@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="31.7833" minlon="35.833333" maxlat="31.78333299999999" maxlon="35.83667"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.7832999999999970" lon="35.8366699999999980">
+    <node visible="true" id="-292923" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.7832999999999970" lon="35.8366699999999980">
         <tag k="REF2" v="000263"/>
         <tag k="place" v="populated"/>
         <tag k="hoot:mismatch" v="2"/>
@@ -11,7 +11,7 @@
         <tag k="name" v="Māsūḩ"/>
         <tag k="error:circular" v="1000"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.7833329999999918" lon="35.8333330000000032">
+    <node visible="true" id="-292922" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.7833329999999918" lon="35.8333330000000032">
         <tag k="REF1" v="000263"/>
         <tag k="place" v="locality"/>
         <tag k="historic" v="ruins"/>
@@ -28,8 +28,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-292922" role="reviewee"/>
+        <member type="node" ref="-292923" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

@@ -42,6 +42,7 @@ using namespace boost;
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -59,18 +60,20 @@ unsigned int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
-OsmXmlWriter::OsmXmlWriter()
-  : _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-    _includeIds(false),
-    _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-    _includePointInWays(false),
-    _includeCompatibilityTags(true),
-    _includePid(false),
-    _textStatus(ConfigOptions().getWriterTextStatus()),
-    _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
-    _precision(ConfigOptions().getWriterPrecision()),
-    _encodingErrorCount(0),
-    _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+OsmXmlWriter::OsmXmlWriter() :
+_formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
+_includeIds(false),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+_includePointInWays(false),
+_includeCompatibilityTags(true),
+_includePid(false),
+_textStatus(ConfigOptions().getWriterTextStatus()),
+_osmSchema(ConfigOptions().getOsmMapWriterSchema()),
+_precision(ConfigOptions().getWriterPrecision()),
+_encodingErrorCount(0),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
+_numWritten(0),
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -132,18 +135,20 @@ void OsmXmlWriter::open(QString url)
   _initWriter();
 
   _bounds.init();
+
+  _numWritten = 0;
 }
 
 void OsmXmlWriter::close()
 {
-  if (_writer.get())
+  if (_fp.get() && _fp->isOpen())
   {
-    _writer->writeEndElement();
-    _writer->writeEndDocument();
-  }
+    if (_writer.get())
+    {
+      _writer->writeEndElement();
+      _writer->writeEndDocument();
+    }
 
-  if (_fp.get())
-  {
     _fp->close();
   }
 }
@@ -220,6 +225,10 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _initWriter();
   }
 
+  //  Debug maps get a bunch of debug settings setup here
+  if (getIsDebugMap())
+    _overrideDebugSettings();
+
   // The coord sys and schema entries don't get written to streamed output b/c we don't have
   // the map object to read the coord sys from.
 
@@ -241,6 +250,7 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _writer->writeAttribute("schema", _osmSchema);
   }
 
+  //  Osmosis chokes on the bounds being written at the end of the file, do it first
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
   _writeBounds(bounds);
 
@@ -492,6 +502,12 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _writer->writeEndElement();
 
   _bounds.expandToInclude(n->getX(), n->getY());
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
@@ -612,6 +628,12 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _writeTags(w);
 
   _writer->writeEndElement();
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
@@ -638,13 +660,31 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _writeTags(r);
 
   _writer->writeEndElement();
+
+  _numWritten++;
+  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  {
+    PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+  }
 }
 
 void OsmXmlWriter::finalizePartial()
 {
-  //osmosis chokes on the bounds being written at the end of the file, so not writing it at all
-  //_writeBounds(_bounds);
   close();
+}
+
+void OsmXmlWriter::_overrideDebugSettings()
+{
+  //  Include Hoot ID tag
+  _includeIds = true;
+  //  Include parent ID tag
+  _includePid = true;
+  //  Include debug tags
+  _includeDebug = true;
+  //  Output the status as text
+  _textStatus = true;
+  //  Output circular error
+  _includeCircularErrorTags = true;
 }
 
 }

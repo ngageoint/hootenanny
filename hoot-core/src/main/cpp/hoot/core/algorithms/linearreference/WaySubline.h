@@ -125,7 +125,8 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf = 0, bool reuse = false) const;
+  WayPtr toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf = 0,
+               bool reuse = false) const;
 
   /**
    * Returns true if the two sublines have any points in common.

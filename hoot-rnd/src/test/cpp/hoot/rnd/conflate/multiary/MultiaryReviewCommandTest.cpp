@@ -140,7 +140,7 @@ public:
     matchCmd.addElementHash(pMap->getElement(ElementType::Node, -2));
 
     QByteArray hashBytes = *(matchCmd.getElementHashes().begin());
-    QString hashString = pMap->getElement(ElementType::Node, -2)->getTags()[MetadataTags::HootHash()];
+    QString hashString = pMap->getElement(ElementType::Node, -1)->getTags()[MetadataTags::HootHash()];
     hashString.replace("sha1sum:", "");
 
     CPPUNIT_ASSERT(hashString == QString(hashBytes.toHex()));

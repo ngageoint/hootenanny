@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHSTRINGMAPPING_H
 #define WAYMATCHSTRINGMAPPING_H
@@ -63,11 +63,13 @@ enum WayNumber
 class WayMatchStringMapping
 {
 public:
+
   WayMatchStringMapping() {}
 
   virtual WayStringPtr getWayString1() = 0;
   virtual WayStringPtr getWayString2() = 0;
-  WayStringPtr getWayString(WayNumber way) { return (way == WayNumber::Way1) ? getWayString1() : getWayString2(); }
+  WayStringPtr getWayString(WayNumber way)
+  { return (way == WayNumber::Way1) ? getWayString1() : getWayString2(); }
 
   /**
    * @param preferedEid Prefer to use this element ID if possible. (e.g. if the mapped point falls
@@ -83,8 +85,8 @@ public:
 
   virtual void setWayString1(const WayStringPtr& ws1) = 0;
   virtual void setWayString2(const WayStringPtr& ws2) = 0;
-  void setWayString(WayNumber way, const WayStringPtr& ws) { (way == WayNumber::Way1) ? setWayString1(ws) : setWayString2(ws); }
-
+  void setWayString(WayNumber way, const WayStringPtr& ws)
+  { (way == WayNumber::Way1) ? setWayString1(ws) : setWayString2(ws); }
 };
 
 typedef boost::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;

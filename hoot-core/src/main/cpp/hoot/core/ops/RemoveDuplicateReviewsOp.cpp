@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
@@ -48,6 +48,7 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 
 void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
   _map = map;
 
   // go through all the relations to get duplicate reviews
@@ -83,6 +84,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
       for (int i = 0; i < duplicateReviews.size(); i++)
       {
         ReviewMarker::removeElement(map, duplicateReviews[i]);
+        _numAffected++;
       }
 
       ElementId beid = *eids.begin();

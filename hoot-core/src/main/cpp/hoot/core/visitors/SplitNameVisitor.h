@@ -22,21 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
 
+// Hoot
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
 /**
- * Sometimes name fields have more than 255 characters. This method takes all names beyond the 255
- * character point and puts them into fields named 'name:0', 'name:1', etc.
+ * Sometimes name fields have more characters than we'd like. This method takes all names beyond
+ * the a specified character limit and puts them into fields named 'name:0', 'name:1', etc.
  */
-class SplitNameVisitor : public ElementVisitor
+class SplitNameVisitor : public ElementVisitor, public OperationStatusInfo, public Configurable
 {
 public:
 
@@ -51,6 +54,14 @@ public:
   virtual QString getDescription() const
   { return "Splits name tags over 255 characters"; }
 
+  virtual QString getInitStatusMessage() const
+  { return "..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " building outlines"; }
+
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
   int _maxSize;
@@ -60,11 +71,11 @@ private:
   int _getNextNameId(const Tags& t, int lastId);
 
   /**
-   * Given a name list greater than 255 characters, split the names up so that the result is a
-   * string <= 255 characters and put all the extra names into extras.
+   * Given a name list greater than a certain character size, split the names up so that the result
+   * is a string <= the max allowed character size, and put all the extra names into extras.
    *
-   * If a name is greater than 255 characters it is cropped down to 252 characters plus "..." at the
-   * end.
+   * If a name is greater than the character max size, it is cropped down to the max size minus
+   * three plus "..." at the end.
    */
   QStringList _splitNames(const QString& v, QStringList& extras);
 };

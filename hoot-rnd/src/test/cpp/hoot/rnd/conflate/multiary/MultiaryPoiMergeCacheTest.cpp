@@ -112,8 +112,8 @@ public:
       // -1 is the first element by input number.
       HOOT_STR_EQUALS(-1, out->mergedElement->getId());
       // while the IDs are the same, the merged element should be a new instance.
-      HOOT_STR_EQUALS("hoot:hash = AAA\nname = my restaurant\namenity = pub\n", map->getNode(-1)->getTags());
-      HOOT_STR_EQUALS("hoot:hash = \nsource:hash = AAA;BBB;CCC\nalt_name = My Restaurant;Not the same\nname = my restaurant\namenity = pub\n",
+      HOOT_STR_EQUALS("amenity = pub\nhoot:hash = AAA\nname = my restaurant\n", map->getNode(-1)->getTags());
+      HOOT_STR_EQUALS("amenity = pub\nhoot:hash = \nname = my restaurant\nalt_name = My Restaurant;Not the same\nsource:hash = AAA;BBB;CCC\n",
         out->mergedElement->getTags());
     }
 

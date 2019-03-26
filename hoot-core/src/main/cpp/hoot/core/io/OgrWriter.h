@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OGRWRITER_H
@@ -169,6 +169,7 @@ protected:
   StrictChecking _strictChecking;
   bool _textStatus;
   bool _includeDebug;
+  bool _includeCircularErrorTags;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 

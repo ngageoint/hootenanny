@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NonEnglishLanguageDetectionVisitor.h"
@@ -43,6 +43,7 @@ NonEnglishLanguageDetectionVisitor::NonEnglishLanguageDetectionVisitor() :
 _ignorePreTranslatedTags(false),
 _writeDetectedLangTags(false),
 _parseNames(false),
+_detectionSummary(""),
 _currentElementHasSuccessfulTagDetection(false),
 _numTagDetectionsMade(0),
 _numElementsWithSuccessfulTagDetection(0),
@@ -55,26 +56,46 @@ _taskStatusUpdateInterval(10000)
 
 NonEnglishLanguageDetectionVisitor::~NonEnglishLanguageDetectionVisitor()
 {
+  _printDetailedSummary();
+}
+
+QString NonEnglishLanguageDetectionVisitor::getInitStatusMessage() const
+{
+  _detectionSummary = "";
+  return "Detecting source languages...";
+}
+
+QString NonEnglishLanguageDetectionVisitor::getCompletedStatusMessage() const
+{
   //check the last element parsed to see if it had any successful tag translations
   if (_currentElementHasSuccessfulTagDetection)
   {
     _numElementsWithSuccessfulTagDetection++;
+    _currentElementHasSuccessfulTagDetection = false;
   }
+  _detectionSummary +=
+    QString::number(_numTagDetectionsMade) + " successful tag detections made on " +
+    QString::number(_numElementsWithSuccessfulTagDetection) + " different elements.";
+  return _detectionSummary;
+}
 
-  LOG_INFO("");
-  LOG_INFO(
+void NonEnglishLanguageDetectionVisitor::_printDetailedSummary()
+{
+  LOG_DEBUG("");
+  LOG_DEBUG(getCompletedStatusMessage());
+  LOG_DEBUG(
     _numTagDetectionsMade << " successful tag detections made on " <<
     _numElementsWithSuccessfulTagDetection << " different elements.");
-  LOG_INFO(
+  LOG_DEBUG(
     "Detected languages for " << _numTagDetectionsMade << " tags out of " << _numProcessedTags <<
     " encountered.");
-  LOG_INFO(
+  LOG_DEBUG(
     "Attempted to detect languages on tags for " << _numProcessedElements << " elements out of " <<
     _numTotalElements << " elements encountered.");
   const QString nameSortedCounts = _getLangCountsSortedByLangName();
   if (!nameSortedCounts.isEmpty())
   {
-    LOG_INFO(nameSortedCounts);
+    LOG_DEBUG(nameSortedCounts);
   }
 }
 

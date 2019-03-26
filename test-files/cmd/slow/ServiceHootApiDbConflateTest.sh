@@ -3,7 +3,7 @@ set -e
 
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
+export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D api.db.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
@@ -25,7 +25,7 @@ hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/A
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
+hoot conflate $HOOT_OPTS -D reader.conflate.use.data.source.ids.1=true -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/ServiceHootApiDbConflateTest/output1.osm
 
 hoot delete-db-map $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
@@ -46,7 +46,7 @@ hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads-ServiceHoo
 hoot convert $HOOT_OPTS test-files/DcTigerRoads.osm "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
-hoot conflate $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
+hoot conflate $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D reader.conflate.use.data.source.ids.1=true -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D remove.tags.visitor.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/ServiceHootApiDbConflateTest/output2.osm
 
 hoot delete-db-map $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &

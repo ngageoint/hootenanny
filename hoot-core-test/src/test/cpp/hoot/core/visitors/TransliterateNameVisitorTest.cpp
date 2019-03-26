@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -57,9 +57,9 @@ public:
     TransliterateNameVisitor v;
     map->visitRw(v);
     QStringList names = n1->getTags().getNames();
-    CPPUNIT_ASSERT_EQUAL(true, TransliterateNameVisitor::isLatin(names[0]));
-    //characters is latin, no "note, Transliterated Name" added.
-    CPPUNIT_ASSERT_EQUAL(true, n1->getTags().find("note") == n1->getTags().end());
+    CPPUNIT_ASSERT_EQUAL(false, TransliterateNameVisitor::isLatin(names[0]));
+    //characters is not latin, "note, Transliterated Name" added.
+    CPPUNIT_ASSERT_EQUAL(false, n1->getTags().find("note") == n1->getTags().end());
 
     OsmMapPtr map1(new OsmMap());
     NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));

@@ -50,6 +50,8 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, ConstWayPtr way) :
 {
   _way = way;
 
+  LOG_TRACE("Preparing way for discretization: " << _way);
+
   // Go through all the nodes
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
@@ -74,6 +76,8 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, ConstWayPtr way) :
 
 void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 {
+  LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
+
   double length = _lengthNodes.back();
   double d = 0.0;
 

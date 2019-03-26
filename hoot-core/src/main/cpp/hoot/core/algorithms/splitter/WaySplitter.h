@@ -82,19 +82,19 @@ public:
    * an array. The old way will be removed from the source map and the two new ones will be added.
    * No nodes will be removed or replaced, but a new node may be added.
    */
-  std::vector< WayPtr > split(WayLocation& splitPoint);
+  std::vector<WayPtr> split(WayLocation& splitPoint);
 
   /**
    * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already
    * then nothing is done. There are no guarantees about the size, but the child ways should be
    * approximately equal.The resulting ways will be placed in a's parent OsmMap.
+   *
    * @param w The way to split.
    * @param maxSize the maximum size of the way in map units.
    */
   static void split(const OsmMapPtr& map, const WayPtr& w, double maxSize);
 
-  static std::vector< WayPtr > split(const OsmMapPtr& map, WayPtr a,
-    WayLocation& splitPoint);
+  static std::vector<WayPtr> split(const OsmMapPtr& map, WayPtr a, WayLocation& splitPoint);
 
 private:
 

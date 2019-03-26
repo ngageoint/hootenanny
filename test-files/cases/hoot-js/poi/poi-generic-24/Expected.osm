@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.03000218818" minlon="31.2618605" maxlat="30.03008199998" maxlon="31.26189299956"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300819999800019" lon="31.2618929995600006">
+    <node visible="true" id="-3692884" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300819999800019" lon="31.2618929995600006">
         <tag k="source" v="mgcp"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
         <tag k="source:date_time" v="2007-04-29"/>
@@ -23,7 +23,7 @@
         <tag k="historic" v="monument"/>
         <tag k="error:circular" v="28.65"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300021881800028" lon="31.2618604999999974">
+    <node visible="true" id="-3692883" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300021881800028" lon="31.2618604999999974">
         <tag k="REF1" v="00216d"/>
         <tag k="artwork" v="statue"/>
         <tag k="name" v="ابراهيم باشا"/>
@@ -32,8 +32,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-3692883" role="reviewee"/>
+        <member type="node" ref="-3692884" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

@@ -121,8 +121,8 @@ void MapCropper::setConfiguration(const Settings& conf)
 }
 
 void MapCropper::apply(OsmMapPtr& map)
-{
-  LOG_INFO("Cropping map...");
+{;
+  _numAffected = 0;
   OsmMapPtr result = map;
 
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)

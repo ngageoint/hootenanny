@@ -73,10 +73,10 @@ public:
                     "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"" + MetadataTags::Ref1() + "\":\"A\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861077,\"lat\":37.80112,\"lon\":-122.41676,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861082,\"lat\":37.801247,\"lon\":-122.41672,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"amenity\":\"restaurant\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861083,\"lat\":37.801263,\"lon\":-122.41673,\"tags\":{\"" + MetadataTags::Ref1() + "\":\"C\",\"amenity\":\"restaurant\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"" + MetadataTags::Ref2() + "\":\"B\",\"highway\":\"road\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"" + MetadataTags::Ref1() + "\":\"B\",\"highway\":\"road\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"node\",\"id\":-861082,\"lat\":37.801247,\"lon\":-122.41672,\"tags\":{\"amenity\":\"restaurant\",\"" + MetadataTags::Ref2() + "\":\"none\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-861083,\"lat\":37.801263,\"lon\":-122.41673,\"tags\":{\"amenity\":\"restaurant\",\"" + MetadataTags::Ref1() + "\":\"C\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"highway\":\"road\",\"" + MetadataTags::Ref2() + "\":\"B\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"highway\":\"road\",\"" + MetadataTags::Ref1() + "\":\"B\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }

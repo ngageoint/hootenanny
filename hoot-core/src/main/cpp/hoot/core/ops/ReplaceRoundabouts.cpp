@@ -64,11 +64,14 @@ void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
   {
     RoundaboutPtr pRoundabout = roundabouts[i];
     pRoundabout->replaceRoundabout(pMap);
+    _numAffected++;
   }
 }
 
 void ReplaceRoundabouts::apply(boost::shared_ptr<OsmMap> &pMap)
 {
+  _numAffected = 0;
+
   replaceRoundabouts(pMap);
 }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1330000000000098" lon="11.6926500000000004">
+    <bounds minlat="48.132867" minlon="11.6921556" maxlat="48.13300000000001" maxlon="11.69265"/>
+    <node visible="true" id="-2477477" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1330000000000098" lon="11.6926500000000004">
         <tag k="REF2" v="013e59"/>
         <tag k="addr:language" v="GER"/>
         <tag k="addr:street" v="WILLY-BRANDT-PLATZ"/>
@@ -15,7 +16,7 @@
         <tag k="tourism" v="hotel"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1328669999999974" lon="11.6921555999999995">
+    <node visible="true" id="-2477476" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1328669999999974" lon="11.6921555999999995">
         <tag k="REF1" v="013e59"/>
         <tag k="website" v="http://www.novotel.com/gb/hotel-5563-novotel-muenchen-messe/index.shtml"/>
         <tag k="email" v="h5563@accor.com"/>

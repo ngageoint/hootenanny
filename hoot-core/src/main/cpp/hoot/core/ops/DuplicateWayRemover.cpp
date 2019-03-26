@@ -65,6 +65,7 @@ DuplicateWayRemover::DuplicateWayRemover()
 
 void DuplicateWayRemover::apply(OsmMapPtr& map)
 {
+  _numAffected = 0;
   _map = map;
 
   // create a map from nodes to ways

@@ -48,7 +48,8 @@ public:
 
   NetworkMatch();
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
-    double score, ConstMatchThresholdPtr mt);
+    double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
+    double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
 
   /**
    * Classifies the match and returns a classification object.

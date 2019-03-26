@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Boost
 #include <boost/bind.hpp>
@@ -147,6 +148,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
+      // TODO: Aren't we already filtering by poly when we create the index?  Check this.  Also,
+      // maybe could make the unknown part of the criteria to being with.
       if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
         _surroundingPolyIds.insert(*it);
@@ -174,6 +177,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
     {
       const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
+      // TODO: Aren't we already filtering by poi when we create the index?  Check this.  Also,
+      // maybe could make the unknown part of the criteria to begin with.
       if (n->isUnknown() && _poiCrit.isSatisfied(n))
       {
         _surroundingPoiIds.insert(*it);
@@ -193,8 +198,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
   if (isMatchCandidate(e))
   {
-    //Technically, the density based density matches depends on this data too, but since that
-    //code has been disabled, this check is good enough.
+    // Technically, the density based matches depends on this data too, but since that code has
+    // been disabled, this check is good enough.
     if (_enableAdvancedMatching || _enableReviewReduction)
     {
       _collectSurroundingPolyIds(e);
@@ -203,19 +208,21 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_DEBUG(
-        "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-        _map->getElementCount() << " total elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+        " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
+        " total elements.");
     }
   }
 
   _numElementsVisited++;
-  if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
-      "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+      "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+      StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
   }
 }
 
@@ -237,6 +244,7 @@ boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
 {
   if (!_polyIndex)
   {
+    // TODO: tune this? - see #3054
     boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
     _polyIndex.reset(new Tgs::HilbertRTree(mps, 2));
 
@@ -252,7 +260,6 @@ boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();
   }
-
   return _polyIndex;
 }
 
@@ -260,6 +267,7 @@ boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
 {
   if (!_poiIndex)
   {
+    // TODO: tune this? - see #3054
     boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
     _poiIndex.reset(new Tgs::HilbertRTree(mps, 2));
 
@@ -274,7 +282,6 @@ boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
     _getMap()->visitNodesRo(v);
     v.finalizeIndex();
   }
-
   return _poiIndex;
 }
 

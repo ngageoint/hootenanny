@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ToEnglishTranslationComparisonVisitor.h"
@@ -39,7 +39,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ToEnglishTranslationComparisonVisitor)
 
 ToEnglishTranslationComparisonVisitor::ToEnglishTranslationComparisonVisitor() :
-ToEnglishTranslationVisitor()
+ToEnglishTranslationVisitor(),
+_numTagsCompared(0)
 {
 }
 
@@ -89,6 +90,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
 void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   const Tags& tags = e->getTags();
+  bool atLeastOneTranslationCompared = false;
   for (int i = 0; i < _preTranslatedTagKeys.size(); i++)
   {
     const QString toTranslateTagKey = _tagKeysAsList.at(i);
@@ -99,6 +101,7 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
     //our translation to it with
     if (tags.contains(toTranslateTagKey) && tags.contains(preTranslatedTagKey))
     {
+      atLeastOneTranslationCompared = true;
       _preTranslatedVal = tags.get(preTranslatedTagKey).trimmed();
       LOG_VARD(_preTranslatedVal);
 
@@ -110,10 +113,15 @@ void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Elemen
         _element->getTags().appendValue(
           "hoot:translated:similarity:score:" + _toTranslateTagKey + ":en",
           QString::number(similarityScore));
+        _numProcessedTags++;
       }
     }
   }
 
+  if (atLeastOneTranslationCompared)
+  {
+    _numProcessedElements++;
+  }
   _numTotalElements++;
 }
 

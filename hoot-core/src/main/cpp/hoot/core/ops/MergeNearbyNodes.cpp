@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MergeNearbyNodes.h"
@@ -37,6 +37,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QTime>
@@ -75,8 +76,6 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 
 void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("MergeNearbyNodes start");
-
   QTime time;
   time.start();
 
@@ -109,7 +108,6 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 
-  int mergeCount = 0;
   int count = 0;
 
   cph.resetIterator();
@@ -149,21 +147,22 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
             if (replace)
             {
               map->replaceNode(v[j], v[i]);
-              mergeCount++;
+              _numAffected++;
             }
           }
         }
       }
     }
 
-    if (count % 1000 == 0)
+    if (count % 10000 == 0)
     {
-      PROGRESS_INFO("MergeNearbyNodes " << count << " " << mergeCount << "    ");
+      PROGRESS_INFO(
+        "Merged " << StringUtils::formatLargeNumber(_numAffected) << " nearby nodes / " <<
+        StringUtils::formatLargeNumber(count) << " nodes processed. Nodes remaining: " <<
+        (StringUtils::formatLargeNumber((int)nodes.size() - count)));
     }
     count++;
   }
-
-  LOG_INFO("MergeNearbyNodes " << nodes.size() << " elapsed: " << time.elapsed() << "ms        ");
 }
 
 void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Stxxl.h"
 
@@ -121,7 +121,7 @@ void Stxxl::setConfig(QString configFile)
 
   // initialize the environment variable for loading STXXL configuration. If the environment
   // variable has already been set then overwrite it (that is the 1 at the end).
-  setenv("STXXLCFG", _configFileTmp.fileName().toAscii().data(), 1);
+  setenv("STXXLCFG", _configFileTmp.fileName().toLatin1().data(), 1);
 }
 
 }

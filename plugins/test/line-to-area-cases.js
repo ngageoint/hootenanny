@@ -81,8 +81,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds40, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AF050");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AF050");
             });
         });
 
@@ -96,8 +96,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds61, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AF050");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AF050");
             });
         });
         it('should handle OSM to MGCP', function() {
@@ -124,8 +124,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2ggdmv30, function(err, result) {
               if (err) console.log(err);
-              assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
-              assert.equal(result.osm.way[0].tag[1].$.v, "AF050")
+              assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+              assert.equal(result.osm.way[0].tag[0].$.v, "AF050")
             })
         })
     })
@@ -140,8 +140,8 @@ describe('TranslationServer', function () {
 
             xml2js.parseString(trans2tds40, function(err, result) {
                 if (err) console.log(err);
-                assert.equal(result.osm.way[0].tag[1].$.k, "F_CODE");
-                assert.equal(result.osm.way[0].tag[1].$.v, "AQ111");
+                assert.equal(result.osm.way[0].tag[0].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AQ111");
             });
         });
 

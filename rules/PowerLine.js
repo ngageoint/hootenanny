@@ -8,6 +8,8 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
+// See #3047
+exports.matchCandidateCriterion = "hoot::PowerLineCriterion";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -37,7 +39,8 @@ exports.calculateSearchRadius = function(map)
         calculateSearchRadiusUsingRubberSheeting(
           map,
           hoot.get("rubber.sheet.ref"),
-          hoot.get("rubber.sheet.minimum.ties")));
+          hoot.get("rubber.sheet.minimum.ties"),
+          exports.matchCandidateCriterion));
   }
   else
   {
@@ -50,9 +53,15 @@ exports.calculateSearchRadius = function(map)
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
  * early on. E.g. no need to check nodes for a polygon to polygon match.
+ *
+ * exports.matchCandidateCriterion takes precedence over this function and must
+ * be commented out before using it.
+ * 
+ * @todo This must be left enabled for now despite exports.matchCandidateCriterion being enabled.  See #3047.
  */
 exports.isMatchCandidate = function(map, e)
 {
+  //return true;
   return isPowerLine(e);
 };
 

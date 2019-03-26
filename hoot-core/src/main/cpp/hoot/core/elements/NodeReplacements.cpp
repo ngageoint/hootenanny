@@ -71,7 +71,7 @@ long NodeReplacements::_getFinalReplacement(long oldId)
 void NodeReplacements::_read(QString fn)
 {
   fstream is;
-  QByteArray ba = fn.toAscii();
+  QByteArray ba = fn.toLatin1();
   is.open(ba.data(), ios_base::in);
   _read(is);
   is.close();
@@ -142,7 +142,7 @@ QString NodeReplacements::toString() const
 void NodeReplacements::write(QString fn)
 {
   fstream os;
-  QByteArray ba = fn.toAscii();
+  QByteArray ba = fn.toLatin1();
   os.open(ba.data(), ios_base::out);
   write(os);
   os.close();

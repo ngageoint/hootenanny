@@ -136,6 +136,7 @@ void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
 
 void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _map = map;
   _buildingRelationIds.clear();
 
@@ -312,7 +313,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     LOG_TRACE("Building outline is empty.  Skipping creation of multipoly relation.");
   }
 
-  LOG_DEBUG("Output building: " << building);
+  LOG_TRACE("Output building: " << building);
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,
