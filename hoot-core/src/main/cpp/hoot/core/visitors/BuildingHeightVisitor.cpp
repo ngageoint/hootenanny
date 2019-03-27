@@ -36,6 +36,7 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
       {
         _maxHeight = height;
       }
+      // We're only going to return stats for buildings with the tag.
       _numHeightsProcessed++;
     }
     _numAffected++;

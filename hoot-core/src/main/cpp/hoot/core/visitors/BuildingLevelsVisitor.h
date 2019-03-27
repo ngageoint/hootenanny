@@ -1,6 +1,6 @@
 
-#ifndef BUILDING_LEVEL_VISITOR_H
-#define BUILDING_LEVEL_VISITOR_H
+#ifndef BUILDING_LEVELS_VISITOR_H
+#define BUILDING_LEVELS_VISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
@@ -14,13 +14,13 @@ namespace hoot
 /**
  *
  */
-class BuildingLevelVisitor : public ConstElementVisitor, public NumericStatistic
+class BuildingLevelsVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
-  static std::string className() { return "hoot::BuildingLevelVisitor"; }
+  static std::string className() { return "hoot::BuildingLevelsVisitor"; }
 
-  BuildingLevelVisitor();
+  BuildingLevelsVisitor();
 
   virtual void visit(const ConstElementPtr& e) override;
 
@@ -53,4 +53,4 @@ private:
 
 }
 
-#endif // BUILDING_LEVEL_VISITOR_H
+#endif // BUILDING_LEVELS_VISITOR_H

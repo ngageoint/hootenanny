@@ -77,7 +77,7 @@
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/TunnelCriterion.h>
 #include <hoot/core/visitors/BuildingHeightVisitor.h>
-#include <hoot/core/visitors/BuildingLevelVisitor.h>
+#include <hoot/core/visitors/BuildingLevelsVisitor.h>
 #include <hoot/core/visitors/NodesPerWayVisitor.h>
 #include <hoot/core/visitors/MembersPerRelationVisitor.h>
 
@@ -526,7 +526,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Shortest Building", buildingHeightVis.getMin()));
     _stats.append(SingleStat("Tallest Building", buildingHeightVis.getMax()));
     _stats.append(SingleStat("Average Building Height", buildingHeightVis.getAverage()));
-    BuildingLevelVisitor buildingLevelVis;
+    BuildingLevelsVisitor buildingLevelVis;
     _applyVisitor(constMap, &buildingLevelVis);
     _stats.append(SingleStat("Smallest Number of Levels in a Building", buildingLevelVis.getMin()));
     _stats.append(SingleStat("Largest Number of Levels in a Building", buildingHeightVis.getMax()));

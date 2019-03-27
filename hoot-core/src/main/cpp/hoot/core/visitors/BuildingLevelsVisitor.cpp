@@ -1,5 +1,5 @@
 
-#include "BuildingLevelVisitor.h"
+#include "BuildingLevelsVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -7,9 +7,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, BuildingLevelVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, BuildingLevelsVisitor)
 
-BuildingLevelVisitor::BuildingLevelVisitor() :
+BuildingLevelsVisitor::BuildingLevelsVisitor() :
 _totalLevels(0),
 _numLevelsProcessed(0),
 _minLevels(INT_MAX),
@@ -17,7 +17,7 @@ _maxLevels(0)
 {
 }
 
-void BuildingLevelVisitor::visit(const ConstElementPtr& e)
+void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
 {
   if (_crit.isSatisfied(e))
   {
@@ -33,13 +33,14 @@ void BuildingLevelVisitor::visit(const ConstElementPtr& e)
       {
         _maxLevels = numLevels;
       }
+      // We're only going to return stats for buildings with the tag.
       _numLevelsProcessed++;
     }
     _numAffected++;
   }
 }
 
-int BuildingLevelVisitor::_getNumLevels(const ConstElementPtr& e) const
+int BuildingLevelsVisitor::_getNumLevels(const ConstElementPtr& e) const
 {
   // just handling the levels above ground for now
   if (e->getTags().contains("building:levels"))
