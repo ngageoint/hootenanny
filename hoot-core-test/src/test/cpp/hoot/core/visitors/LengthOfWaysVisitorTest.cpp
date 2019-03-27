@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+static const QString input = "";
+
 class LengthOfWaysVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LengthOfWaysVisitorTest);
@@ -42,18 +44,24 @@ class LengthOfWaysVisitorTest : public HootTestFixture
 
 public:
 
+  LengthOfWaysVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runBasicTest()
   {
-//    OsmMapPtr map(new OsmMap());
-//    OsmMapReaderFactory::read(
-//      map,
-//      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-//      false,
-//      Status::Unknown1);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
 
-//    AddressCountVisitor uut;
-//    map->visitRo(uut);
-//    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    LengthOfWaysVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(0L, uut.numWithStat());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
   }
 
 };

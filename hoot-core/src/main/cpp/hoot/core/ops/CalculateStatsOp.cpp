@@ -179,17 +179,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   {
     NodesPerWayVisitor nodesPerWayVis;
     _applyVisitor(constMap, &nodesPerWayVis);
-    _stats.append(SingleStat("Least Number of Nodes in a Way", nodesPerWayVis.getMin()));
-    _stats.append(SingleStat("Most Number of Nodes in a Way", nodesPerWayVis.getMax()));
+    _stats.append(SingleStat("Least Nodes in a Way", nodesPerWayVis.getMin()));
+    _stats.append(SingleStat("Most Nodes in a Way", nodesPerWayVis.getMax()));
     _stats.append(SingleStat("Average Nodes Per Way", nodesPerWayVis.getAverage()));
-    _stats.append(SingleStat("Total Number of Way Nodes", nodesPerWayVis.getStat()));
+    _stats.append(SingleStat("Total Way Nodes", nodesPerWayVis.getStat()));
 
     MembersPerRelationVisitor membersPerRelationVis;
     _applyVisitor(constMap, &membersPerRelationVis);
     _stats.append(SingleStat("Least Members in a Relation", membersPerRelationVis.getMin()));
     _stats.append(SingleStat("Most Members in a Relation", membersPerRelationVis.getMax()));
     _stats.append(SingleStat("Average Members Per Relation", membersPerRelationVis.getAverage()));
-    _stats.append(SingleStat("Total Number of Relation Members", membersPerRelationVis.getStat()));
+    _stats.append(SingleStat("Total Relation Members", membersPerRelationVis.getStat()));
 
     TagCountVisitor tagCountVisitor;
     _applyVisitor(constMap, &tagCountVisitor);
@@ -199,25 +199,25 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
     _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
     _stats.append(
-      SingleStat("Minimum Number of Tags Found on an Feature", tagCountVisitor.getMin()));
+      SingleStat("Most Tags on a Feature", tagCountVisitor.getMin()));
     _stats.append(
-      SingleStat("Maximum Number of Tags Found on an Feature", tagCountVisitor.getMax()));
+      SingleStat("Least Tags on a Feature", tagCountVisitor.getMax()));
     _stats.append(
-      SingleStat("Average Number of Tags Found on an Feature", tagCountVisitor.getAverage()));
+      SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
     _stats.append(
       SingleStat(
-        "Minimum Number of Information Tags Found on an Feature",
+        "Least Information Tags on a Feature",
         tagCountVisitor.getInformationMin()));
     _stats.append(
       SingleStat(
-        "Maximum Number of Information Tags Found on an Feature",
+        "Most Information Tags on a Feature",
         tagCountVisitor.getInformationMax()));
     _stats.append(
       SingleStat(
-        "Average Number of Information Tags Found on an Feature",
+        "Average Information Tags Per Feature",
         tagCountVisitor.getInformationAverage()));
 
-    _stats.append(SingleStat("Number of Features with a Name",
+    _stats.append(SingleStat("Features with Names",
       _applyVisitor(
         constMap, FilteredVisitor(HasNameCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
@@ -345,7 +345,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Percentage of Total Features Unconflatable",
         ((double)unconflatableFeatureCount / (double)featureCount) * 100.0));
 
-    _stats.append(SingleStat("Number of Match Creators", matchCreators.size()));
+    _stats.append(SingleStat("Match Creators", matchCreators.size()));
     QMap<CreatorDescription::BaseFeatureType, double> conflatableFeatureCounts;
     for (CreatorDescription::BaseFeatureType ft = CreatorDescription::POI;
          ft < CreatorDescription::Unknown;
@@ -429,7 +429,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         "Percentage of Total Features Marked for Review",
         ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0));
     _stats.append(
-      SingleStat("Total Number of Reviews to be Made", numReviewsToBeMade));
+      SingleStat("Total Reviews to be Made", numReviewsToBeMade));
     const double unconflatedFeatureCount =
       _applyVisitor(
         constMap,
@@ -500,61 +500,61 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     }
 
     // TODO: would like to get these next to the rest of the road stats
-    _stats.append(SingleStat("Number of Bridges",
+    _stats.append(SingleStat("Bridges",
       _applyVisitor(
         constMap, FilteredVisitor(BridgeCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("Number of Tunnels",
+    _stats.append(SingleStat("Tunnels",
       _applyVisitor(
         constMap, FilteredVisitor(TunnelCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("Number of One-Way Streets",
+    _stats.append(SingleStat("One-Way Streets",
       _applyVisitor(
         constMap, FilteredVisitor(OneWayCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("Number of Road Roundabouts",
+    _stats.append(SingleStat("Road Roundabouts",
       _applyVisitor(
         constMap, FilteredVisitor(RoundaboutCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
 
-    _stats.append(SingleStat("Number of Multi-Use Buildings",
+    _stats.append(SingleStat("Multi-Use Buildings",
       _applyVisitor(
         constMap, FilteredVisitor(MultiUseBuildingCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
     BuildingHeightVisitor buildingHeightVis;
     _applyVisitor(constMap, &buildingHeightVis);
-    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.getNumWithStat()));
-    _stats.append(SingleStat("Shortest Building", buildingHeightVis.getMin()));
-    _stats.append(SingleStat("Tallest Building", buildingHeightVis.getMax()));
-    _stats.append(SingleStat("Average Building Height", buildingHeightVis.getAverage()));
+    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.numWithStat()));
+    _stats.append(SingleStat("Shortest Building Height", buildingHeightVis.getMin()));
+    _stats.append(SingleStat("Tallest Building Height", buildingHeightVis.getMax()));
+    _stats.append(SingleStat("Average Height Per Building", buildingHeightVis.getAverage()));
     BuildingLevelsVisitor buildingLevelVis;
     _applyVisitor(constMap, &buildingLevelVis);
-    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.getNumWithStat()));
-    _stats.append(SingleStat("Smallest Number of Levels in a Building", buildingLevelVis.getMin()));
-    _stats.append(SingleStat("Largest Number of Levels in a Building", buildingHeightVis.getMax()));
+    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.numWithStat()));
+    _stats.append(SingleStat("Least Levels in a Building", buildingLevelVis.getMin()));
+    _stats.append(SingleStat("Most Levels in a Building", buildingHeightVis.getMax()));
     _stats.append(
-      SingleStat("Average Number of Levels in a Building", buildingHeightVis.getAverage()));
+      SingleStat("Average Levels Per Building", buildingHeightVis.getAverage()));
 
-    _stats.append(SingleStat("Number of Non-Building Areas",
+    _stats.append(SingleStat("Non-Building Areas",
       _applyVisitor(
         constMap, FilteredVisitor(NonBuildingAreaCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
 
-    _stats.append(SingleStat("Number of Features with an Address",
+    _stats.append(SingleStat("Features with Addresses",
       _applyVisitor(
         constMap, FilteredVisitor(HasAddressCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
     AddressCountVisitor addressCountVis;
     _applyVisitor(constMap, &addressCountVis);
-    _stats.append(SingleStat("Total Number of Addresses", addressCountVis.getStat()));
+    _stats.append(SingleStat("Total Addresses", addressCountVis.getStat()));
 
-    _stats.append(SingleStat("Number of Features with a Phone Number",
+    _stats.append(SingleStat("Features with Phone Numbers",
       _applyVisitor(
         constMap, FilteredVisitor(HasPhoneNumberCriterion(),
         ConstElementVisitorPtr(new ElementCountVisitor())))));
     PhoneNumberCountVisitor phoneCountVis;
     _applyVisitor(constMap, &phoneCountVis);
-    _stats.append(SingleStat("Total Number of Phone Numbers", phoneCountVis.getStat()));
+    _stats.append(SingleStat("Total Phone Numbers", phoneCountVis.getStat()));
   }
 
   logMsg = "Map statistics calculated";

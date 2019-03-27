@@ -58,6 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Calculates the length of all ways"; }
 
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getMin() const { return _smallest; }
   virtual double getMax() const { return _largest; }
   virtual double getAverage() const { return _total / _numAffected; }
