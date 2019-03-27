@@ -23,7 +23,8 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
 {
   if (_crit.isSatisfied(e))
   {
-    const int height = _getHeight(e);
+    const Meters height = _getHeight(e);
+    LOG_VART(height);
     if (height > 0)
     {
       _totalHeight += height;
@@ -41,11 +42,14 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-double BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
+Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
 {
   if (e->getTags().contains("height"))
   {
-    return QString::number(e->getTags().getLength("height").value(), 'g', 2).toDouble();
+    const Meters height =
+      QString::number(e->getTags().getLength("height").value(), 'g', 2).toDouble();
+    LOG_VART(height);
+    return height;
   }
   return 0.0;
 }

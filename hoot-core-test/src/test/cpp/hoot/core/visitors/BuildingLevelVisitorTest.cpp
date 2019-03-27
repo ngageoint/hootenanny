@@ -34,6 +34,10 @@
 namespace hoot
 {
 
+// reusing BuildingHeightVisitorTest's input
+static const QString input =
+  "test-files/visitors/BuildingHeightVisitorTest/BuildingHeightVisitorTestInput.osm";
+
 class BuildingLevelVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingLevelVisitorTest);
@@ -42,18 +46,23 @@ class BuildingLevelVisitorTest : public HootTestFixture
 
 public:
 
+  BuildingLevelVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
+
   void runBasicTest()
   {
-//    OsmMapPtr map(new OsmMap());
-//    OsmMapReaderFactory::read(
-//      map,
-//      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-//      false,
-//      Status::Unknown1);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
 
-//    AddressCountVisitor uut;
-//    map->visitRo(uut);
-//    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    BuildingLevelVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
   }
 
 };

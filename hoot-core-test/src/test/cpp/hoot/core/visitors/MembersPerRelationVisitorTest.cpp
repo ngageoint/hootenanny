@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+static const QString input = "test-files/MultiPolygonTest.osm";
+
 class MembersPerRelationVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MembersPerRelationVisitorTest);
@@ -42,20 +44,24 @@ class MembersPerRelationVisitorTest : public HootTestFixture
 
 public:
 
-  void runBasicTest()
+  MembersPerRelationVisitorTest()
   {
-//    OsmMapPtr map(new OsmMap());
-//    OsmMapReaderFactory::read(
-//      map,
-//      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-//      false,
-//      Status::Unknown1);
-
-//    AddressCountVisitor uut;
-//    map->visitRo(uut);
-//    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    setResetType(ResetBasic);
   }
 
+  void runBasicTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+
+    MembersPerRelationVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MembersPerRelationVisitorTest, "quick");

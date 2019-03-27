@@ -40,12 +40,12 @@ private:
   BuildingCriterion _crit;
 
   // in meters
-  double _totalHeight;
-  double _numHeightsProcessed;
-  double _minHeight;
-  double _maxHeight;
+  Meters _totalHeight;
+  Meters _numHeightsProcessed;
+  Meters _minHeight;
+  Meters _maxHeight;
 
-  double _getHeight(const ConstElementPtr& e) const;
+  Meters _getHeight(const ConstElementPtr& e) const;
 };
 
 }

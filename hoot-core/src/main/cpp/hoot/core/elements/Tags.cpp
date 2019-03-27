@@ -238,6 +238,7 @@ Velocity Tags::getVelocity(const QString& k) const
 Length Tags::getLength(const QString& k) const
 {
   QString v = get(k);
+  LOG_VART(v);
 
   Length result;
   bool ok;

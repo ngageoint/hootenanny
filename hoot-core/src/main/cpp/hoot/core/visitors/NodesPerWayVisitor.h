@@ -30,17 +30,16 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated node statistics for " + QString::number(_numAffected) + " ways"; }
 
-  virtual double getStat() const { return _totalNodes; }
+  virtual double getStat() const { return _totalWayNodes; }
   virtual double getMin() const { return _minNodesPerWay; }
   virtual double getMax() const { return _maxNodesPerWay; }
-  virtual double getAverage() const { return _totalNodes / _numWays; }
+  virtual double getAverage() const { return _totalWayNodes / _numAffected; }
 
 private:
 
   WayCriterion _crit;
 
-  int _totalNodes;
-  int _numWays;
+  int _totalWayNodes;
   int _minNodesPerWay;
   int _maxNodesPerWay;
 };

@@ -34,7 +34,9 @@
 namespace hoot
 {
 
-// TODO: add bad inputs test from wiki
+static const QString input =
+  "test-files/visitors/BuildingHeightVisitorTest/BuildingHeightVisitorTestInput.osm";
+
 class BuildingHeightVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingHeightVisitorTest);
@@ -43,20 +45,24 @@ class BuildingHeightVisitorTest : public HootTestFixture
 
 public:
 
-  void runBasicTest()
+  BuildingHeightVisitorTest()
   {
-//    OsmMapPtr map(new OsmMap());
-//    OsmMapReaderFactory::read(
-//      map,
-//      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
-//      false,
-//      Status::Unknown1);
-
-//    AddressCountVisitor uut;
-//    map->visitRo(uut);
-//    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getStat());
+    setResetType(ResetBasic);
   }
 
+  void runBasicTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+
+    BuildingHeightVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingHeightVisitorTest, "quick");

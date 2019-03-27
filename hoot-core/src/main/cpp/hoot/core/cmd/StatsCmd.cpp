@@ -76,8 +76,8 @@ public:
     {
       if (args[i].startsWith(OUTPUT_SWITCH))
       {
-        output_filename = args[i];
-        output_filename.remove(OUTPUT_SWITCH);
+        outputFilename = args[i];
+        outputFilename.remove(OUTPUT_SWITCH);
         toFile = true;
         inputs.removeOne(args[i]);
       }
@@ -121,25 +121,6 @@ public:
       cout << "Stat Name\t" << inputs.join(sep) << endl;
       cout << MapStatsWriter().statsToString(allStats, sep);
     }
-
-    if (ConfigOptions().getStatsTagKeys().size() > 0)
-    {
-
-    }
-//    // TODO: TagDistribution and TagInfo
-//    TagDistribution tagDist;
-//    //tagDist.setCriterionClassName(criterionClassName);
-//    tagDist.setLimit(ConfigOptions().getStatsMaxValuesPerTagKey());
-//    tagDist.setSortByFrequency(true);
-//    tagDist.setTagKeys(ConfigOptions().getStatsTagKeys());
-//    tagDist.setTokenize(false);
-
-//    std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
-
-//    TagInfo tagInfo(
-//      ConfigOptions().getStatsMaxValuesPerTagKey(), ConfigOptions().getStatsTagKeys(), false, false,
-//      true);
-//    cout << tagInfo.getInfo(inputs) << endl;
 
     return 0;
   }

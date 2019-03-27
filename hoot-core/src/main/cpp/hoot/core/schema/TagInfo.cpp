@@ -60,7 +60,7 @@ QString TagInfo::getInfo(const QStringList inputs)
   {
     info += QString("  \"%1\":{\n").arg(QFileInfo(inputs.at(i)).fileName());
 
-    info += tagInfo.getInfo(inputs.at(i));
+    info += _getInfo(inputs.at(i));
     info += "\n  }";
 
     // Dont add a comma to the last dataset
@@ -74,7 +74,7 @@ QString TagInfo::getInfo(const QStringList inputs)
   return info;
 }
 
-QString TagInfo::_getInfo(const QString input)
+QString TagInfo::_getInfo(QString input)
 {
   LOG_VARD(input);
   LOG_VART(_tagValuesPerKeyLimit);
