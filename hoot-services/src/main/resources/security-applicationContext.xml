@@ -46,6 +46,7 @@
 		<oauth:url pattern="/info/**" resources="openStreetMap" />
 		<oauth:url pattern="/ogr/**" resources="openStreetMap" />
 		<oauth:url pattern="/ingest/**" resources="openStreetMap" />
+		<oauth:url pattern="/grail/**" resources="openStreetMap" />
 		<oauth:url pattern="/language/**" resources="openStreetMap" />
 		<!--  pattern="/auth/**" not listed intentionally -->
 	</oauth:consumer>

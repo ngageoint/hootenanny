@@ -92,26 +92,6 @@
         <url-pattern>/ogr/*</url-pattern>
         <url-pattern>/ingest/*</url-pattern>
         <url-pattern>/grail/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ogc</servlet-name>
-        <servlet-class>org.deegree.services.controller.OGCFrontController</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ogc</servlet-name>
-        <url-pattern>/ogc/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>config</servlet-name>
-        <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>config</servlet-name>
-        <url-pattern>/config/*</url-pattern>
         <url-pattern>/language/*</url-pattern>
         <!-- [!] new url-pattern's added here should be considered for security-applicationContext.xml [!] -->
     </servlet-mapping>
