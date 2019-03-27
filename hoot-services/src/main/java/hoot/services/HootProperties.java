@@ -136,8 +136,7 @@ public final class HootProperties {
     private static final String MAIN_OSMAPI_URL;
     private static final String MAIN_OSMAPI_VERSION;
 
-    private static final String RAILSPORT_USER;
-    private static final String RAILSPORT_PWORD;
+    private static final String RAILSPORT_PROTOCOL;
     private static final String RAILSPORT_HOST;
     private static final String RAILSPORT_PORT;
     private static final String RAILSPORT_API_VERSION;
@@ -298,8 +297,7 @@ public final class HootProperties {
         MAIN_OVERPASS_URL = "${MAIN_OVERPASS_URL}";
 
         // The OSM Rails Port that we are going to pull and push data to.
-        RAILSPORT_USER = "${RAILSPORT_USER}";
-        RAILSPORT_PWORD = "${RAILSPORT_PASSWORD}";
+        RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}";
         RAILSPORT_HOST = "${RAILSPORT_HOST}";
         RAILSPORT_PORT = "${RAILSPORT_PORT}";
         RAILSPORT_API_VERSION = "${RAILSPORT_API_VERSION}";
@@ -307,13 +305,13 @@ public final class HootProperties {
         // Some sites don't need a port number
         // This _should_ goto https at some stage
         if (replaceSensitiveData(RAILSPORT_PORT).equals("XXX")) {
-            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_HOST;
-            RAILSPORT_PULL_URL = "http://" + RAILSPORT_HOST + "/api/" + RAILSPORT_API_VERSION;
-            RAILSPORT_CAPABILITIES_URL = "http://" + RAILSPORT_HOST + "/api/capabilities";
+            RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/capabilities";
         } else {
-            RAILSPORT_PUSH_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
-            RAILSPORT_PULL_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/" + RAILSPORT_API_VERSION;
-            RAILSPORT_CAPABILITIES_URL = "http://" + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
+            RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
         }
 
     }
