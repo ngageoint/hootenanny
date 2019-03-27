@@ -33,7 +33,6 @@ import hoot.services.command.InternalCommand;
 import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.models.db.Users;
-import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 
 
@@ -70,18 +69,13 @@ class UpdateParentCommand implements InternalCommand {
 
     private void updateParentDirectory() {
         try {
-            DbUtils.updateFoldersMapping();
-
             Long mapId = DbUtils.getMapIdByJobId(jobId);
 
             // These functions ensure the map + folder are either owned by the user -or- public.
-            Map m = MapResource.getMapForUser(user, mapId.toString(), false, true);
+            MapResource.getMapForUser(user, mapId.toString(), false, true);
             FolderResource.getFolderForUser(user, folderId);
 
-            // Delete any existing to avoid duplicate entries
-            DbUtils.deleteFolderMapping(m.getId());
-
-            DbUtils.setParentDirectory(m.getId(), folderId);
+            DbUtils.updateFolderMapping(mapId, folderId);
         }
         catch (Exception ex) {
             String msg = "Failure update parent folder: " + ex.getMessage();

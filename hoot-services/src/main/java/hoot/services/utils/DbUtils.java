@@ -59,7 +59,6 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
@@ -75,7 +74,7 @@ import hoot.services.models.db.QUsers;
  * General Hoot services database utilities
  */
 @Transactional
-public final class DbUtils {
+public class DbUtils {
     private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
     private static final SQLTemplates templates = PostgreSQLTemplates.builder().quote().build();
@@ -183,19 +182,6 @@ public final class DbUtils {
     }
 
     /**
-     * Sets the parent directory for the specified map
-     *
-     * @param mapId map id whos parent we are setting
-     * @param folderId parent directory id that map id will get linked to
-     */
-    public static void setParentDirectory(Long mapId, Long folderId) {
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(mapId, folderId).execute();
-    }
-
-    /**
      * Sets the parent directory for the specified folder
      *
      * @param folderId folder id whos parent we are setting
@@ -207,15 +193,6 @@ public final class DbUtils {
                 .where(folders.id.eq(folderId))
                 .set(folders.parentId, parentId)
                 .execute();
-    }
-
-    /**
-     * Deletes the folder mapping matching the specified map id
-     *
-     * @param mapId map id which we are deleting
-     */
-    public static void deleteFolderMapping(Long mapId) {
-        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
     }
 
     public static String getDisplayNameById(long mapId) {
@@ -286,15 +263,44 @@ public final class DbUtils {
                 .execute();
     }
 
-    public static void updateFoldersMapping() {
-        createQuery().insert(folderMapMappings)
+    /**
+     * Inserts a mapid to the folder mapping table if it doesn't exist
+     * Updates mapid's parent if it does exist
+     *
+     * @param mapId map id whos parent we are setting
+     * @param folderId parent directory id that map id will get linked to
+     */
+    public static void updateFolderMapping(Long mapId, Long folderId) {
+        long recordCount = createQuery()
+            .from(folderMapMappings)
+            .where(folderMapMappings.mapId.eq(mapId))
+            .fetchCount();
+
+        if (recordCount == 0) {
+            createQuery()
+                .insert(folderMapMappings)
                 .columns(folderMapMappings.mapId, folderMapMappings.folderId)
-                .select(new SQLQuery<>().select(maps.id, Expressions.numberTemplate(Long.class, "0"))
-                        .from(maps)
-                        .where(maps.id.notIn(new SQLQuery<>().select(folderMapMappings.mapId)
-                                .distinct()
-                                .from(folderMapMappings))))
+                .values(mapId, folderId)
                 .execute();
+        } else {
+            createQuery()
+                .update(folderMapMappings)
+                .where(folderMapMappings.mapId.eq(mapId))
+                .set(folderMapMappings.folderId, folderId)
+                .execute();
+        }
+    }
+
+    /**
+     * Deletes the folder mapping matching the specified map id
+     *
+     * @param mapId map id which we are deleting
+     */
+    public static void deleteFolderMapping(Long mapId) {
+        createQuery()
+            .delete(folderMapMappings)
+            .where(folderMapMappings.mapId.eq(mapId))
+            .execute();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {
