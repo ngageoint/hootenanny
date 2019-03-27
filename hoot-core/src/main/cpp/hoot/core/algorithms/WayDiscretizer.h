@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_DISCRETIZER_H__
 #define __WAY_DISCRETIZER_H__
@@ -82,6 +82,7 @@ public:
   geos::geom::Coordinate interpolate(double d);
 
 protected:
+
   ConstOsmMapPtr _map;
   boost::shared_ptr<const hoot::Way> _way;
   // The distance from the beginning of the way to each node that makes up the way.

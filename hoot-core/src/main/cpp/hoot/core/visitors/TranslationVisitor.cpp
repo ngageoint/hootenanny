@@ -173,6 +173,8 @@ void TranslationVisitor::visit(const ElementPtr& e)
 
       LOG_TRACE("Tags after: " << tags);
     }
+
+    _numAffected++;
   }
 }
 

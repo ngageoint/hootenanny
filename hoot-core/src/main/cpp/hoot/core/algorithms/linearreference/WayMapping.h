@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMAPPING_H
 #define WAYMAPPING_H
@@ -38,6 +38,7 @@ namespace hoot
 class WayMapping
 {
 public:
+
   virtual ~WayMapping();
 
   /**
@@ -49,7 +50,6 @@ public:
    * Given a point on subline string 2, return the corresponding point on subline string 1.
    */
   virtual WayLocationPtr map2to1(ConstWayLocationPtr wl1) const = 0;
-
 };
 
 }

@@ -45,6 +45,8 @@ HighwayReviewCleanerOp::HighwayReviewCleanerOp()
 
 void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
+  _numAffected = 0;
+
   RelationMap relations = map->getRelations();
 
   ReviewMarker reviewMarker;

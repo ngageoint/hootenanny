@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyOp.h"
 
@@ -201,6 +201,8 @@ void PertyOp::setConfiguration(const Settings& conf)
 
 void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  _numAffected = 0;
+
   // permute the data first
   permute(map);
 

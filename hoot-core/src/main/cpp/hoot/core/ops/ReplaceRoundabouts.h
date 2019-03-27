@@ -81,11 +81,10 @@ public:
   void replaceRoundabouts(boost::shared_ptr<OsmMap> pMap);
 
   virtual QString getInitStatusMessage() const
-  { return "Replacing roundabouts with simple intersections..."; }
+  { return "Replacing road roundabouts with simple intersections..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
-  { return ""; }
+  { return "Replaced " + QString::number(_numAffected) + " road roundabouts"; }
 
   virtual QString getDescription() const override
   { return "Replaces road roundabouts with simple intersections"; }

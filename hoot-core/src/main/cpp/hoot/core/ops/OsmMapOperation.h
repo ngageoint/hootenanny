@@ -74,6 +74,8 @@ public:
    */
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
+  long getNumAffected() const { return _numAffected; }
+
 protected:
 
   // These will only be used by those implementing OperationStatusInfo.

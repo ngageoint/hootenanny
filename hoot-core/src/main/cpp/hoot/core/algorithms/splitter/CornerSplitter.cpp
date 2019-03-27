@@ -286,8 +286,7 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
 
     _map->replace(pWay, newWays);
 
-    // Need to process the "right-hand-side" of the split, looking for more
-    // corners
+    // Need to process the "right-hand-side" of the split, looking for more corners
     _todoWays.push_back(splits[1]->getId());
 
     LOG_VART(_map->containsElement(splitWayId));

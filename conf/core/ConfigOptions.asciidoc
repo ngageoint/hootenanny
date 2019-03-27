@@ -707,6 +707,14 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== differential.snap.unconnected.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
+secondary road endpoint nodes to the nearest reference road.
+
 === differential.tag.ignore.list
 
 * Data Type: list
@@ -1838,6 +1846,20 @@ List of merger creators to use during conflation. This can modify what features 
 A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
 may want to consider changing this value. Reasonable range is [1, ~10].
 
+=== network.conflicts.conflicting.score.threshold.modifier
+
+* Data Type: double
+* Default Value: `0.3`
+
+Added to a conflicting match score to allow for match pruning
+
+=== network.conflicts.matcher.threshold
+
+* Data Type: double
+* Default Value: `0.35`
+
+The score threshold used to compare whole networks with the ConflictsNetworkMatcher
+
 === network.conflicts.outbound.weighting
 
 * Data Type: double
@@ -1855,6 +1877,21 @@ neighbor.  This value is generally not changed by users.  Reasonable range is [0
 A larger value will increase the weight of partial matches when using network conflation.  A
 smaller value prefers whole matches over partial matches. This value is generally not changed by
 users. Reasonable range is (0, ~2].
+
+=== network.conflicts.sanity.check.min.separation.distance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Minimum separation distance, in meters, for match distance separation to use when sanity checking
+match relationships.
+
+=== network.conflicts.sanity.check.separation.distance.multiplier
+
+* Data Type: double
+* Default Value: `2.5`
+
+Distance multiplier to use when santiy checking match relationships.
 
 === network.conflicts.stub.handicap
 
@@ -1876,11 +1913,42 @@ not changed by users.  Reasonable range is [0, ~10].
 === network.conflicts.weight.influence
 
 * Data Type: double
-* Default Value: `0.0`
+* Default Value: `0.68`
 
 A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
 give matches with more support a higher weight when using network conflation. This value is
 generally not changed by users. Reasonable range is [0, 2].
+
+=== network.edge.match.set.finder.max.iterations
+
+* Data Type: int
+* Default Value: `20`
+
+The maximum number of optimization iterations used to calculate edge match sets.
+
+=== network.match.scoring.function.max
+
+* Data Type: double
+* Default Value: `1.0`
+
+Maximum possible value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.mid.x
+
+* Data Type: double
+* Default Value: `0.5`
+
+X value curve midpoint value for the logistic function applied to conflation matches with the
+Network Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.steepness
+
+* Data Type: double
+* Default Value: `2.0`
+
+Curve steepness value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
 
 === network.match.threshold
 
@@ -1892,15 +1960,6 @@ The threshold at which a network match is called a match when using network conf
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== network.match.write.debug.maps
-
-* Data Type: bool
-* Default Value: `false`
-
-If true debug maps will be generated at every iteration when using network conflation. This is
-useful when debugging. The maps can be large and slow things down significantly. This setting is
-independent of conflate.write.debug.maps.
 
 === network.matcher
 
@@ -1918,6 +1977,13 @@ debug and test. The parameter must be a class that is registered with the factor
 
 The maximum allowable length of a stub connection (way to node match) when using network conflation.
 Value in meters.
+
+=== network.merger.min.large.match.overlap.percentage
+
+* Data Type: double
+* Default Value: `80.0`
+
+The minimum network match overlap percentage allowed for a network merge to occur.
 
 === network.miss.threshold
 
@@ -3525,6 +3591,101 @@ then they'll be a candidate for merging.
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
+=== snap.unconnected.ways.add.circular.error.to.search.radius
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all tolerances use by the Unconnected Way Snapper will have the circular error of the
+snap node candidate added to them.
+
+=== snap.unconnected.ways.discretization.spacing
+
+* Data Type: double
+* Default Value: `1.0`
+
+The spacing granularity to which a unconnected way node is snapped back to a way with the
+Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
+setting it too high may result in less accurate way snapping.
+
+=== snap.unconnected.ways.existing.way.node.tolerance
+
+* Data Type: double
+* Default Value: `0.5`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
+the existing way node instead of adding the way endpoint node as a new way node on the way.
+
+=== snap.unconnected.ways.mark.snapped.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
+marked with a 'hoot:snapped' tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.snap.to.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped to.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+way snapping.
+
+=== snap.unconnected.ways.snap.to.way.node.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayNodeCriterion`
+
+Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
+hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
+for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+
+=== snap.unconnected.ways.snap.to.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways or way nodes being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1'
+to snap reference ways or 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
+section of the neighboring way.
+
+=== snap.unconnected.ways.snap.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+way snapping.
+
+=== snap.unconnected.ways.snap.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
+snap reference ways 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.use.existing.way.nodes
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will attempt to reuse existing way nodes on the way being snapped to instead of adding
+the endpoint way node to the way.
+
 === spark.changeset.writer.element.payload.format
 
 * Data Type: string
@@ -3532,6 +3693,13 @@ a single way.
 
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
+
+=== split.name.visitor.max.length
+
+* Data Type: int
+* Default Value: `255`
+
+The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
 
 === stats.translate.script
 

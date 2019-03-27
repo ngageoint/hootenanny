@@ -225,6 +225,10 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _initWriter();
   }
 
+  //  Debug maps get a bunch of debug settings setup here
+  if (getIsDebugMap())
+    _overrideDebugSettings();
+
   // The coord sys and schema entries don't get written to streamed output b/c we don't have
   // the map object to read the coord sys from.
 
@@ -246,6 +250,7 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _writer->writeAttribute("schema", _osmSchema);
   }
 
+  //  Osmosis chokes on the bounds being written at the end of the file, do it first
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
   _writeBounds(bounds);
 
@@ -665,9 +670,21 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 
 void OsmXmlWriter::finalizePartial()
 {
-  //osmosis chokes on the bounds being written at the end of the file, so not writing it at all
-  //_writeBounds(_bounds);
   close();
+}
+
+void OsmXmlWriter::_overrideDebugSettings()
+{
+  //  Include Hoot ID tag
+  _includeIds = true;
+  //  Include parent ID tag
+  _includePid = true;
+  //  Include debug tags
+  _includeDebug = true;
+  //  Output the status as text
+  _textStatus = true;
+  //  Output circular error
+  _includeCircularErrorTags = true;
 }
 
 }
