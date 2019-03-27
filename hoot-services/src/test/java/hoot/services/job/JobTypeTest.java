@@ -22,37 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
-import org.springframework.stereotype.Service;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.JobStatus;
+import hoot.services.UnitTest;
 
 
-@Service
-public interface JobStatusManager {
-    void addJob(Job job);
+public class JobTypeTest {
 
-    void deleteJob(String jobId, Long userId);
+    @Test
+    @Category(UnitTest.class)
+    public void test() {
+        assertEquals(JobType.IMPORT, JobType.fromInteger(0));
+        assertEquals(JobType.EXPORT, JobType.fromInteger(1));
+        assertEquals(JobType.CONFLATE, JobType.fromInteger(2));
+        assertEquals(JobType.CLIP, JobType.fromInteger(3));
+        assertEquals(JobType.ATTRIBUTES, JobType.fromInteger(4));
+        assertEquals(JobType.BASEMAP, JobType.fromInteger(5));
+        assertEquals(JobType.DELETE, JobType.fromInteger(6));
+        assertEquals(JobType.UNKNOWN, JobType.fromInteger(7));
+        assertEquals(JobType.UNKNOWN, JobType.fromInteger(-1));
+        assertEquals(JobType.UNKNOWN, JobType.fromInteger(99));
+    }
 
-    void updateJob(String jobId, String statusDetail, Double percentComplete);
-
-    void setCancelled(String jobId, String reason);
-
-    void setCompleted(String jobId, String statusDetail);
-
-    void setFailed(String jobId, String statusDetail);
-
-    JobStatus getJobStatusObj(String jobId);
-
-    JobStatus getJobStatusObj(String jobId, Long userId);
-
-    List<String> getJobErrors(String jobId, Long userId);
-
-    List<CommandStatus> getCommandDetail(String jobId, Long userId);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="brian.hatchl" id="25" context="default">
+    <comment>
+        add job status col for user id and job type
+    </comment>
+
+        <addColumn tableName="job_status">
+            <column name="user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="job_type" type="int">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+    </changeSet>
+</databaseChangeLog>

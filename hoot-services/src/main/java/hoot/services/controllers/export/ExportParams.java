@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.export;
 
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExportParams {
-	
+
     @JsonProperty("outputtype")
     private String outputType;
 
@@ -67,12 +67,15 @@ public class ExportParams {
     @JsonProperty("append")
     private Boolean append;
 
+    @JsonProperty("hoot2")
+    private Boolean hoot2;
+
     @JsonProperty("USER_EMAIL")
     private String userEmail;
-    
+
     @JsonProperty("MAX_NODE_COUNT_PER_TILE")
     private long maxNodeCountPerTile = -1;
-    
+
     @JsonProperty("PIXEL_SIZE")
     private double pixelSize = -1.0;
 
@@ -171,7 +174,7 @@ public class ExportParams {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
-    
+
     public long getMaxNodeCountPerTile() {
         return maxNodeCountPerTile;
     }
@@ -179,13 +182,21 @@ public class ExportParams {
     public void setMaxNodeCountPerTile(long maxNodeCountPerTile) {
         this.maxNodeCountPerTile = maxNodeCountPerTile;
     }
-    
+
     public double getPixelSize() {
         return pixelSize;
     }
 
     public void setPixelSize(double pixelSize) {
         this.pixelSize = pixelSize;
+    }
+
+    public void setHoot2(boolean hoot2) {
+        this.hoot2 = hoot2;
+    }
+
+    public Boolean getHoot2() {
+        return hoot2;
     }
 
     @Override
@@ -206,4 +217,5 @@ public class ExportParams {
                 ", pixelSize='" + pixelSize + '\'' +
                 '}';
     }
+
 }

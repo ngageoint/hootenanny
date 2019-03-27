@@ -160,6 +160,12 @@ private:
    * @param bounds the bounds to write
    */
   void _writeBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Sets debug settings to add extra metadata to output map for debugging purposes
+   * enabled with `debug.maps.write` setting
+   */
+  void _overrideDebugSettings();
 };
 
 }

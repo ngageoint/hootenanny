@@ -22,37 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import java.util.List;
+public enum JobType {
+    IMPORT, EXPORT, CONFLATE, CLIP, ATTRIBUTES, BASEMAP, DELETE, UNKNOWN;
 
-import org.springframework.stereotype.Service;
+    public static JobType fromInteger(int value) {
+        if ((value >= 0) && (value < JobType.values().length)) {
+            return JobType.values()[value];
+        }
+        return UNKNOWN;
+    }
 
-import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.JobStatus;
-
-
-@Service
-public interface JobStatusManager {
-    void addJob(Job job);
-
-    void deleteJob(String jobId, Long userId);
-
-    void updateJob(String jobId, String statusDetail, Double percentComplete);
-
-    void setCancelled(String jobId, String reason);
-
-    void setCompleted(String jobId, String statusDetail);
-
-    void setFailed(String jobId, String statusDetail);
-
-    JobStatus getJobStatusObj(String jobId);
-
-    JobStatus getJobStatusObj(String jobId, Long userId);
-
-    List<String> getJobErrors(String jobId, Long userId);
-
-    List<CommandStatus> getCommandDetail(String jobId, Long userId);
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }
