@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+nfsShare = false
+fouoShare = false
+
 Vagrant.configure(2) do |config|
   # Hoot port mapping
   tomcatPort = ENV['TOMCAT_PORT']
@@ -80,7 +83,19 @@ Vagrant.configure(2) do |config|
   config.vm.define "default", primary: true do |hoot_centos7_prov|
     hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
     hoot_centos7_prov.vm.hostname = "centos7-hoot"
-    hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    if nfsShare 
+      hoot_centos7_prov.vm.network "private_network", ip: "192.168.33.10" 
+      hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
+      if fouoShare 
+        hoot_centos7_prov.vm.synced_folder "/fouo", "/fouo", type: "nfs"
+      end
+    else
+      hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
+      if fouoShare 
+        hoot_centos7_prov.vm.synced_folder "/fouo", "/fouo"
+      end
+    end
 
     hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
@@ -94,7 +109,19 @@ Vagrant.configure(2) do |config|
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
     hoot_centos7.vm.hostname = "hoot-centos"
-    hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    if nfsShare 
+      hoot_centos7.vm.network "private_network", ip: "192.168.33.10" 
+      hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
+      if fouoShare 
+        hoot_centos7.vm.synced_folder "/fouo", "/fouo", type: "nfs"
+      end
+    else
+      hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot"
+      if fouoShare 
+        hoot_centos7.vm.synced_folder "/fouo", "/fouo"
+      end
+    end
 
     hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
