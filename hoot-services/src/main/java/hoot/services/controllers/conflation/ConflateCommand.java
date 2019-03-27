@@ -42,7 +42,6 @@ import org.apache.commons.io.FileUtils;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Users;
 
 

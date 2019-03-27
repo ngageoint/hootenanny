@@ -22,17 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import static hoot.services.job.JobStatus.*;
+import static hoot.services.job.JobStatus.CANCELLED;
+import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.job.JobStatus.FAILED;
+import static hoot.services.job.JobStatus.RUNNING;
 import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +55,49 @@ public class JobStatusManagerImpl implements JobStatusManager {
     public JobStatusManagerImpl() {}
 
     @Override
-    public void addJob(String jobId) {
+    public void addJob(Job job) {
         try {
-            this.updateJob(jobId, RUNNING, "PROCESSING", 0.0);
+
+            hoot.services.models.db.JobStatus newJobStatus = new hoot.services.models.db.JobStatus();
+            newJobStatus.setJobId(job.getJobId());
+            newJobStatus.setUserId(job.getUserId());
+            newJobStatus.setJobType(job.getJobType().ordinal());
+            newJobStatus.setStatus(RUNNING.ordinal());
+            newJobStatus.setStatusDetail("PROCESSING");
+            newJobStatus.setPercentComplete(0.0);
+            newJobStatus.setResourceId(job.getMapId());
+            Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
+            newJobStatus.setStart(ts);
+
+            createQuery().insert(jobStatus).populate(newJobStatus).execute();
+
         }
         catch (Exception e) {
-            logger.error("Error adding a new job with ID = {} ", jobId, e);
+            logger.error("Error adding a new job with ID = {} ", job.getJobId(), e);
+            throw e;
+        }
+    }
+
+
+    @Override
+    public void deleteJob(String jobId, Long userId) {
+        try {
+            hoot.services.models.db.JobStatus js = createQuery().select(jobStatus).from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).fetchFirst();
+            //hack to check that user owns this job before deleting commands
+            //no cascade delete in querydsl
+            if (js != null) {
+
+                createQuery().delete(commandStatus)
+                    .where(commandStatus.jobId.eq(jobId)).execute();
+
+                createQuery().delete(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId).and(jobStatus.userId.eq(userId))).execute();
+            }
+
+        }
+        catch (Exception e) {
+            logger.error("Error deleting job with ID = {} ", jobId, e);
             throw e;
         }
     }
@@ -124,10 +165,61 @@ public class JobStatusManagerImpl implements JobStatusManager {
         return null;
     }
 
+    /**
+     * Returns a job status record by ID and User
+     *
+     * @param jobId
+     *            ID of the job to retrieve the status for
+     * @param userId
+     *            user to compare to job owner
+     * @return a job status record
+     */
     @Override
-    public List<CommandStatus> getCommandDetail(String jobId) {
+    public List<String> getJobErrors(String jobId, Long userId) {
         try {
-            return createQuery().select(commandStatus).from(commandStatus).where(commandStatus.jobId.eq(jobId)).fetch();
+            List<CommandStatus> commands =  getCommandDetail(jobId, userId);
+
+            return commands.stream().map(comm -> comm.getStderr())
+                    .filter(error -> !error.isEmpty())
+                    .collect(Collectors.toList());
+        }
+        catch (Exception e) {
+            logger.error("{} failed to fetch job status.", jobId, e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a job status record by ID and User
+     *
+     * @param jobId
+     *            ID of the job to retrieve the status for
+     * @param userId
+     *            user to compare to job owner
+     * @return a job status record
+     */
+    @Override
+    public hoot.services.models.db.JobStatus getJobStatusObj(String jobId, Long userId) {
+        try {
+            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(
+                        jobStatus.userId.eq(userId).or(jobStatus.status.eq(RUNNING.ordinal()))
+                    )
+                ).fetchOne();
+        }
+        catch (Exception e) {
+            logger.error("{} failed to fetch job status.", jobId, e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<CommandStatus> getCommandDetail(String jobId, Long userId) {
+        try {
+            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(jobStatus.jobId.eq(jobId)
+                    .and(jobStatus.userId.eq(userId)
+                    .and(jobStatus.jobId.eq(commandStatus.jobId)))).fetch();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch command status(es) for job with ID = {}", jobId, e);
@@ -141,7 +233,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
      */
     private void updateJob(String jobId, JobStatus jobStatus, String statusDetail, Double percentComplete) {
         try {
-            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete);
+            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete, null);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -155,7 +247,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
      * @param jobId
      * @param newStatus
      */
-    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Double percentComplete) {
+    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Double percentComplete, Long userId) {
         hoot.services.models.db.JobStatus currentJobStatus = createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
 
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
@@ -169,7 +261,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
                 currentJobStatus.setPercentComplete(percentComplete);
             }
 
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED) || (newStatus == CANCELLED)) {
                 currentJobStatus.setEnd(new Timestamp(System.currentTimeMillis()));
             }
 
@@ -178,6 +270,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
         else if (currentJobStatus == null) {
             currentJobStatus = new hoot.services.models.db.JobStatus();
             currentJobStatus.setJobId(jobId);
+            currentJobStatus.setUserId(userId);
             currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {
@@ -191,7 +284,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             currentJobStatus.setStart(ts);
 
-            if ((newStatus == COMPLETE) || (newStatus == FAILED)) {
+            if ((newStatus == COMPLETE) || (newStatus == FAILED) || (newStatus == CANCELLED)) {
                 currentJobStatus.setEnd(ts);
             }
 

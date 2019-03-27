@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -77,11 +77,8 @@ class ImportCommand extends ExternalCommand {
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
-        if(user != null) {
-            options.add("api.db.email=" + user.getEmail());
-        } else {
-            options.add("api.db.email=test@test.com");
-        }
+        options.add("hootapi.db.writer.job.id=" + jobId);
+        options.add("api.db.email=" + user.getEmail());
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
             //options.add("convert.ops=hoot::TranslationOp");
