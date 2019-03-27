@@ -71,13 +71,6 @@ public:
    */
   int getInput() const;
 
-  /**
-   * @brief toCompatString
-   * @return A backwards compatible string for serializing and testing. Ultimately this
-   *   should be replaced with toString() when the proper refactoring is done.
-   */
-  QString toCompatString() const;
-
   QString toString() const;
 
   // This is not pretty and it is a copy of "toString".

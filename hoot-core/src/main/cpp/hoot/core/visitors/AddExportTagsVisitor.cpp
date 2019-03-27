@@ -33,22 +33,39 @@ namespace hoot
 {
 
 AddExportTagsVisitor::AddExportTagsVisitor()
-{
+{  
+  _textStatus = ConfigOptions().getWriterTextStatus();
   _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
   _includeCircularError = ConfigOptions().getWriterIncludeCircularErrorTags();
 }
 
-void AddExportTagsVisitor::visit(const ElementPtr& e)
-{
+void AddExportTagsVisitor::visit(const ElementPtr& pElement)
+{ 
+  Tags& tags = pElement->getTags();
+  const ElementType type = pElement->getElementType();
+
   if (_includeDebug)
   {
-    e->getTags()[MetadataTags::HootStatus()] = e->getStatus().toString();
-    e->getTags()[MetadataTags::HootId()] = QString::number(e->getId());
+    Status status = pElement->getStatus();
+    bool includeStatus =
+        status != Status::Invalid ||
+        type == ElementType::Relation ||
+        type == ElementType::Node;
+
+    if( includeStatus )
+    {
+      tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : status.toString();
+    }
+
+    tags[MetadataTags::HootId()] = QString::number(pElement->getId());
   }
 
-  if (_includeCircularError && e->hasCircularError())
+  if (_includeCircularError &&
+       pElement->hasCircularError() &&
+       type != ElementType::Node
+     )
   {
-    e->getTags()[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    tags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
   }
 }
 

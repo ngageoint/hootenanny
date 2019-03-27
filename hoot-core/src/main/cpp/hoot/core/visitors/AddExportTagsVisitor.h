@@ -49,12 +49,16 @@ public:
 
   static std::string className() { return "hoot::AddExportTagsVisitor"; }
 
-  virtual void visit(const ElementPtr& e);
+  virtual void visit(const ElementPtr& pElement);
 
   virtual QString getDescription() const { return "Adds tags needed for exporting"; }
 
+  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
+  void _overrideDebugSettings() { _textStatus = true; _includeCircularError= true; _includeDebug = true; }
+
 private:
 
+  bool _textStatus;
   bool _includeCircularError;
   bool _includeDebug;
 };
