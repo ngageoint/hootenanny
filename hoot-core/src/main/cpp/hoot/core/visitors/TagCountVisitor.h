@@ -64,18 +64,22 @@ public:
   virtual double getMax() const { return _largestCount; }
   virtual double getAverage() const { return _totalCount / _numAffected; }
 
+  long numWithInformationStat() const { return _numInformationAffected; }
   long getInformationCount() const { return _informationCount; }
   long getInformationMin() const { return _smallestInformationCount; }
   long getInformationMax() const { return _largestInformationCount; }
-  long getInformationAverage() const { return _informationCount / _numAffected; }
+  double getInformationAverage() const
+  { return (double)_informationCount / (double)_numInformationAffected; }
 
 private:
 
   long _totalCount;
-  long _informationCount;
   long _smallestCount;
-  long _smallestInformationCount;
   long _largestCount;
+
+  long _numInformationAffected;
+  long _informationCount;
+  long _smallestInformationCount;
   long _largestInformationCount;
 };
 

@@ -13,7 +13,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, BuildingHeightVisitor)
 
 BuildingHeightVisitor::BuildingHeightVisitor() :
 _totalHeight(0.0),
-_minHeight(DBL_MAX),
+_minHeight(0.0),
 _maxHeight(0.0)
 {
 }
@@ -27,7 +27,7 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
     if (height > 0)
     {
       _totalHeight += height;
-      if (height < _minHeight)
+      if (_minHeight == 0 || height < _minHeight)
       {
         _minHeight = height;
       }

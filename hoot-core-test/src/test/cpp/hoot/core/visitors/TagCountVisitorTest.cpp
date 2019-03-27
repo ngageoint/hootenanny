@@ -61,7 +61,11 @@ public:
     TagCountVisitor tagCountVisitor;
     constMap->visitRo(tagCountVisitor);
 
-    CPPUNIT_ASSERT_EQUAL((long)13, (long)tagCountVisitor.getStat());
+    CPPUNIT_ASSERT_EQUAL(7L, tagCountVisitor.numWithStat());
+    CPPUNIT_ASSERT_EQUAL(13.0, tagCountVisitor.getStat());
+    CPPUNIT_ASSERT_EQUAL(1.0, tagCountVisitor.getMin());
+    CPPUNIT_ASSERT_EQUAL(2.0, tagCountVisitor.getMax());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.857, tagCountVisitor.getAverage(), 3);
   }
 
   void informationTagCountTest()
@@ -71,7 +75,11 @@ public:
     TagCountVisitor tagCountVisitor;
     constMap->visitRo(tagCountVisitor);
 
-    CPPUNIT_ASSERT_EQUAL((long)7, tagCountVisitor.getInformationCount());
+    CPPUNIT_ASSERT_EQUAL(7L, tagCountVisitor.numWithStat());
+    CPPUNIT_ASSERT_EQUAL(7L, tagCountVisitor.getInformationCount());
+    CPPUNIT_ASSERT_EQUAL(1L, tagCountVisitor.getInformationMin());
+    CPPUNIT_ASSERT_EQUAL(1L, tagCountVisitor.getInformationMax());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, tagCountVisitor.getInformationAverage(), 2);
   }
 
 private:
@@ -85,7 +93,6 @@ private:
     ConstOsmMapPtr constMap = map;
     return constMap;
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagCountVisitorTest, "quick");

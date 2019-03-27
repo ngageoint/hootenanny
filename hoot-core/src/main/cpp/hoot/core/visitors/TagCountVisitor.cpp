@@ -35,10 +35,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, TagCountVisitor)
 
 TagCountVisitor::TagCountVisitor() :
 _totalCount(0),
-_informationCount(0),
-_smallestCount(LONG_MAX),
-_smallestInformationCount(LONG_MAX),
+_smallestCount(0),
 _largestCount(0),
+_numInformationAffected(0),
+_informationCount(0),
+_smallestInformationCount(0),
 _largestInformationCount(0)
 {
 }
@@ -46,8 +47,12 @@ _largestInformationCount(0)
 void TagCountVisitor::visit(const ConstElementPtr& e)
 {
   const int nonDebugCount = e->getTags().getNonDebugCount();
+  if (nonDebugCount > 0)
+  {
+    _numAffected++;
+  }
   _totalCount += nonDebugCount;
-  if (nonDebugCount < _smallestCount)
+  if (_smallestCount == 0 || nonDebugCount < _smallestCount)
   {
     _smallestCount = nonDebugCount;
   }
@@ -57,17 +62,19 @@ void TagCountVisitor::visit(const ConstElementPtr& e)
   }
 
   const int informationCount = e->getTags().getInformationCount();
+  if (informationCount > 0)
+  {
+    _numInformationAffected++;
+  }
   _informationCount += informationCount;
-  if (informationCount < _smallestCount)
+  if (_smallestInformationCount == 0 || informationCount < _smallestInformationCount)
   {
     _smallestInformationCount = informationCount;
   }
-  if (informationCount > _largestCount)
+  if (informationCount > _largestInformationCount)
   {
     _largestInformationCount = informationCount;
   }
-
-  _numAffected++;
 }
 
 }

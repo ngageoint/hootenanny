@@ -11,7 +11,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, BuildingLevelsVisitor)
 
 BuildingLevelsVisitor::BuildingLevelsVisitor() :
 _totalLevels(0),
-_minLevels(INT_MAX),
+_minLevels(0),
 _maxLevels(0)
 {
 }
@@ -24,7 +24,7 @@ void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
     if (numLevels > 0)
     {
       _totalLevels += numLevels;
-      if (numLevels < _minLevels)
+      if (_minLevels == 0 || numLevels < _minLevels)
       {
         _minLevels = numLevels;
       }

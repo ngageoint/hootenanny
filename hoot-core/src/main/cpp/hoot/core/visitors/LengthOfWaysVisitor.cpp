@@ -42,7 +42,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, LengthOfWaysVisitor)
 
 LengthOfWaysVisitor::LengthOfWaysVisitor() :
 _total(0.0),
-_smallest(DBL_MAX),
+_smallest(0.0),
 _largest(0.0)
 {
 }
@@ -65,7 +65,7 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
 
     _total += length;
 
-    if (length < _smallest)
+    if (_smallest == 0.0 || length < _smallest)
     {
       _smallest = length;
     }

@@ -12,7 +12,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, NodesPerWayVisitor)
 
 NodesPerWayVisitor::NodesPerWayVisitor() :
 _totalWayNodes(0),
-_minNodesPerWay(INT_MAX),
+_minNodesPerWay(0),
 _maxNodesPerWay(0)
 {
 }
@@ -24,7 +24,7 @@ void NodesPerWayVisitor::visit(const ConstElementPtr& e)
     ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(e);
     const int numWayNodes = way->getNodeCount();
     _totalWayNodes += numWayNodes;
-    if (numWayNodes < _minNodesPerWay)
+    if (_minNodesPerWay == 0 || numWayNodes < _minNodesPerWay)
     {
       _minNodesPerWay = numWayNodes;
     }

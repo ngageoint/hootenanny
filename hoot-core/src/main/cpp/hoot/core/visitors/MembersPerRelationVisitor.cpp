@@ -12,7 +12,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, MembersPerRelationVisitor)
 
 MembersPerRelationVisitor::MembersPerRelationVisitor() :
 _totalMembers(0),
-_minMembersPerRelation(INT_MAX),
+_minMembersPerRelation(0),
 _maxMembersPerRelation(0)
 {
 }
@@ -24,7 +24,7 @@ void MembersPerRelationVisitor::visit(const ConstElementPtr& e)
     ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e);
     const int numMembers = relation->getMembers().size();
     _totalMembers += numMembers;
-    if (numMembers < _minMembersPerRelation)
+    if (_minMembersPerRelation == 0 || numMembers < _minMembersPerRelation)
     {
       _minMembersPerRelation = numMembers;
     }
