@@ -1,0 +1,11 @@
+{
+    "Roads": [
+        {
+            "label": "Road engines",
+            "id": "RoadEngines",
+            "input": "combobox",
+            "data": [ "Unify", "Network" ],
+            "default": "Unify"
+        }
+    ]
+}
