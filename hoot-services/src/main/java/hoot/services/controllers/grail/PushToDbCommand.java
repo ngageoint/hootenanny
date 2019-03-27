@@ -48,12 +48,7 @@ class PushToDbCommand extends GrailCommand {
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.remap.ids=false");
-        if (params.getUser() != null) {
-            options.add("api.db.email=" + params.getUser().getEmail());
-        }
-        else {
-            options.add("api.db.email=test@test.com");
-        }
+        options.add("api.db.email=" + params.getUser().getEmail());
 
         List<String> hootOptions = toHootOptions(options);
 

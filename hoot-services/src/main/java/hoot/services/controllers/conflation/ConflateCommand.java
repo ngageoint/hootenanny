@@ -137,9 +137,6 @@ class ConflateCommand extends ExternalCommand {
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("writer.text.status=true");
         options.add("hootapi.db.writer.job.id=" + jobId);
-        options.add("hootapi.db.writer.remap.ids=false");
-
-        options.add("reader.conflate.use.data.source.ids.1=true");
 
         if(user == null) {
             options.add("api.db.email=test@test.com");

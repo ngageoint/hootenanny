@@ -26,16 +26,12 @@
  */
 package hoot.services.controllers.grail;
 
-// import java.io.File;
-// import java.io.FileUtils;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
@@ -45,7 +41,7 @@ class PullOSMDataCommand extends GrailCommand {
     PullOSMDataCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId,params);
 
-        // Debug 
+        // Debug
         logger.info("PullOSMCommand: " + params.toString());
 
         BoundingBox boundingBox = new BoundingBox(params.getBounds());
@@ -54,7 +50,7 @@ class PullOSMDataCommand extends GrailCommand {
         double maxBboxArea = params.getMaxBBoxSize();
 
         if (bboxArea > maxBboxArea) {
-            throw new IllegalArgumentException("The bounding box area (" + bboxArea + 
+            throw new IllegalArgumentException("The bounding box area (" + bboxArea +
                     ") is too large. It must be less than " + maxBboxArea + " degrees");
         }
 
