@@ -59,13 +59,13 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate review relations..."; }
+  virtual QString getInitStatusMessage() const
+  { return "Removing duplicate conflation review relations..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
   virtual QString getCompletedStatusMessage() const
-  { return ""; }
+  { return "Removed " + QString::number(_numAffected) + " duplicate conflation review relations"; }
 
-  virtual QString getDescription() const override { return "Removes duplicate reviews"; }
+  virtual QString getDescription() const override { return "Removes duplicate conflation reviews"; }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -548,7 +548,6 @@ Coordinate MapProjector::project(const Coordinate& c, boost::shared_ptr<OGRSpati
   return result;
 }
 
-
 void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRSpatialReference> ref)
 {
   boost::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
@@ -648,6 +647,7 @@ void MapProjector::projectToPlanar(boost::shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
+    LOG_DEBUG("Projecting to planar...");
     OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
     projectToPlanar(map, env);
   }
@@ -675,7 +675,7 @@ void MapProjector::projectToWgs84(boost::shared_ptr<OsmMap> map)
 }
 
 Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
-                                    boost::shared_ptr<OGRSpatialReference> srs)
+                                          boost::shared_ptr<OGRSpatialReference> srs)
 {
   boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);

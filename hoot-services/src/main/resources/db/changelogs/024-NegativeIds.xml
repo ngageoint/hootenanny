@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<changeSet author="ben.marchant" id="24"
+		context="default">
+		<comment>Alter nodes/ways/relations tables to allow for negative IDs</comment>
+    <!-- Change the column types from bigserial (1...max) to (-max...max) to allow for negative IDs -->
+    <modifyDataType tableName="current_nodes"     columnName="id" newDataType="bigint" />
+    <modifyDataType tableName="current_ways"      columnName="id" newDataType="bigint" />
+    <modifyDataType tableName="current_relations" columnName="id" newDataType="bigint" />
+
+	</changeSet>
+</databaseChangeLog>

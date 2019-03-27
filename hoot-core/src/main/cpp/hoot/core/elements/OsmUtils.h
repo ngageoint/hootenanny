@@ -273,6 +273,68 @@ public:
    * false otherwise
    */
   static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+
+  /**
+   * Returns the IDs of all ways containing an input node
+   *
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of way IDs
+   */
+  static std::set<long> getContainingWayIdsByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
+   * Determines the coordinate on a way closest to another node not on the way
+   *
+   * @param node the node to find the closet way coordinate to
+   * @param way the way to find the closest coordinate on
+   * @param distance the distance that will be calculated between the node and the closest
+   * coordinate on the way
+   * @param discretizationSpacing the distance at which the way will be discretized; a smaller
+   * value results in a more accurate distance value, generates more coordinates on the way, and
+   * increase runtime
+   * @param map the map containing the input node and way
+   * @return a coordinate
+   */
+  static geos::geom::Coordinate closestWayCoordToNode(
+    const ConstNodePtr& node, const ConstWayPtr& way, double& distance,
+    const double discretizationSpacing, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines the ID of the closest way node on a way to another node not on the way
+   *
+   * @param node the node to find the closest way node to
+   * @param way the way to find the closest way node on
+   * @param map the map containing the input node and way
+   * @return a way node ID
+   */
+  static long closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPtr& way,
+                                     const ConstOsmMapPtr& map);
+
+  /**
+   * Determines whether the start or end of a way is closer to a specified node
+   *
+   * @param node node to check distance from input way
+   * @param way way to check distance from input node
+   * @param map map containing the inputs way and node
+   * @return true if the node is closer to the end of the way; false otherwise
+   */
+  static bool endWayNodeIsCloserToNodeThanStart(const ConstNodePtr& node, const ConstWayPtr& way,
+                                                const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if two nodes belong to the same way
+   *
+   * @param nodeId1 the first node to examine
+   * @param nodeId2 the second node to examine
+   * @param map the map containing the nodes
+   * @return true if there is at least one way that contains both nodes; false otherwise
+   */
+  static bool nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+                                            const ConstOsmMapPtr& map);
 };
 
 }

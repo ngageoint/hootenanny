@@ -64,7 +64,11 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public final StringPath statusDetail = createString("statusDetail");
 
-    public final NumberPath<Long> resourceId = createNumber("resource_id", Long.class);
+    public final NumberPath<Long> resourceId = createNumber("resourceId", Long.class);
+
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
+
+    public final NumberPath<Integer> jobType = createNumber("jobType", Integer.class);
 
     public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
 
@@ -95,6 +99,9 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
         addMetadata(start, ColumnMetadata.named("start").withIndex(2).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
         addMetadata(status, ColumnMetadata.named("status").withIndex(4).ofType(Types.INTEGER).withSize(10).notNull());
         addMetadata(statusDetail, ColumnMetadata.named("status_detail").withIndex(6).ofType(Types.VARCHAR).withSize(2147483647));
+        addMetadata(resourceId, ColumnMetadata.named("resource_id").withIndex(7).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(userId, ColumnMetadata.named("user_id").withIndex(8).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(jobType, ColumnMetadata.named("job_type").withIndex(9).ofType(Types.INTEGER).withSize(10));
     }
 
 }

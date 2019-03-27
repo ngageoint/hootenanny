@@ -22,16 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.db;
 
-import java.util.List;
-
 import javax.annotation.Generated;
-
-import hoot.services.controllers.job.JobStatusResponse;
-import hoot.services.job.JobStatusManager;
 
 /**
  * JobStatus is a Querydsl bean type
@@ -50,6 +45,12 @@ public class JobStatus {
     private Integer status;
 
     private String statusDetail;
+
+    private Long resourceId;
+
+    private Long userId;
+
+    private Integer jobType;
 
     public java.sql.Timestamp getEnd() {
         return end;
@@ -98,20 +99,29 @@ public class JobStatus {
     public void setStatusDetail(String statusDetail) {
         this.statusDetail = statusDetail;
     }
-    public JobStatusResponse toJobStatusResponse() {
-    	JobStatusResponse response = new JobStatusResponse();
-        response.setJobId(jobId);
-        response.setStatus(hoot.services.job.JobStatus.fromInteger(this.getStatus()).toString());
-        response.setStatusDetail(this.getStatusDetail());
-        response.setPercentComplete(this.getPercentComplete());
-        response.setLastText(this.getStatusDetail());
-        return response;
+
+    public Long getResourceId() {
+        return resourceId;
     }
-    public JobStatusResponse toJobStatusResponse(JobStatusManager jobStatusManager) {
-    	JobStatusResponse response = this.toJobStatusResponse();
-        List<CommandStatus> commandDetail = jobStatusManager.getCommandDetail(jobId);
-        response.setCommandDetail(commandDetail);
-        return response;
+
+    public void setResourceId(Long resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Integer getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(Integer jobType) {
+        this.jobType = jobType;
     }
 
 }

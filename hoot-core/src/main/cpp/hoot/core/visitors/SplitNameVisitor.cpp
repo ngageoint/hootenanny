@@ -22,21 +22,28 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SplitNameVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitNameVisitor)
 
-SplitNameVisitor::SplitNameVisitor() : _maxSize(255)
+SplitNameVisitor::SplitNameVisitor() :
+_maxSize(255)
 {
+}
+
+void SplitNameVisitor::setConfiguration(const Settings& conf)
+{
+  _maxSize = ConfigOptions(conf).getSplitNameVisitorMaxLength();
 }
 
 void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)

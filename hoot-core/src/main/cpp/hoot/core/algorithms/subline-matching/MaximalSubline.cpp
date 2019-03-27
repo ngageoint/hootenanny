@@ -33,7 +33,6 @@
 // hoot
 #include <hoot/core/algorithms/BufferedLineSegmentIntersector.h>
 #include <hoot/core/algorithms/ExpectationIntersection.h>
-#include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>

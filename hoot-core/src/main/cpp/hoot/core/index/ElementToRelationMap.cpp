@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -74,7 +74,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_pt
 
 const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 {
-  HashMap< ElementId, set<long> >::const_iterator it = _mapping.find(eid);
+  HashMap<ElementId, set<long>>::const_iterator it = _mapping.find(eid);
   if (it == _mapping.end())
   {
     return _emptySet;

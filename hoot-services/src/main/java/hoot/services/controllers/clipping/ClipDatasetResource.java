@@ -49,6 +49,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 
 
@@ -103,7 +104,7 @@ public class ClipDatasetResource {
 
             Command[] workflow = { clipCommand, setFolderCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CLIP));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

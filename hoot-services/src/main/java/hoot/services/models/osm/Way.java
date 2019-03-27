@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -353,17 +353,6 @@ public class Way extends Element {
         Coordinates nodeCoords = new Coordinates();
 
         Map<Long, Element> parsedNodes = parsedElementIdsToElementsByType.get(ElementType.Node);
-
-        // if this is a node created within the same request that is referencing
-        // this way, it won't exist in the database, but it will be in the element cache created
-        // when parsing the node from the request
-        if (parsedNodeId < 0) {
-            if (!parsedNodes.containsKey(parsedNodeId)) {
-                // TODO: add test for this
-                throw new IllegalArgumentException("Created way references new node not " +
-                        "found in create request with ID: " + parsedNodeId);
-            }
-        }
 
         // The node is referenced somewhere else in this request, so get its
         // info from the request, not the database b/c the database either won't have it or will have

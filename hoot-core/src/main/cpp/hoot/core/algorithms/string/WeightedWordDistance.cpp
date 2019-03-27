@@ -73,7 +73,7 @@ WeightedWordDistance::WeightedWordDistance()
       "process. It can be manually downloaded from "
       "https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2 "
       "or similar. You can also override the default name with the " +
-      ConfigOptions().getWeightedWordDistanceDictionaryKey() + " config option.");
+      ConfigOptions::getWeightedWordDistanceDictionaryKey() + " config option.");
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceAbridgedDictionary());
     LOG_WARN("Using abridged dictionary. This may result in reduced conflation accuracy. " +
       dictPath);

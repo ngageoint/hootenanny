@@ -56,6 +56,8 @@ private:
 
   const OsmMap* _map;
 
+  double _minMatchOverlapPercentage;
+
   /**
    * Gets the largest match (in terms of number of elements, not necessarily physical size)
    */

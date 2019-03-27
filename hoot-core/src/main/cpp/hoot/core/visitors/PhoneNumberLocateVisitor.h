@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PHONE_NUMBER_LOCATE_VISITOR_H
@@ -33,6 +33,7 @@
 #include <hoot/core/conflate/phone/PhoneNumberLocator.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -41,7 +42,8 @@ namespace hoot
  * Writes tags to an element indicating the detected location associated with its phone number tags
  * using libphonenumber.  City level location is the most granular detection possible.
  */
-class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable
+class PhoneNumberLocateVisitor : public ElementVisitor, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
@@ -60,7 +62,16 @@ public:
   virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const
-  { return "Determines admin level locations for elements based on phone number tags"; }
+  { return "Determines admin level locations for elements based on phone numbers"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Locating elements with phone numbers..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Located " + QString::number(_totalPhoneNumbersLocated) + " phone numbers on " +
+      QString::number(_numAffected) + " different elements"; }
 
 private:
 
@@ -68,6 +79,8 @@ private:
 
   PhoneNumberParser _phoneNumberParser;
   PhoneNumberLocator _phoneNumberLocator;
+
+  int _totalPhoneNumbersLocated;
 };
 
 }

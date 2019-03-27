@@ -65,7 +65,6 @@ private:
   double _alpha;
   double _alphaShapeBuffer;
   bool _crop;
-
 };
 
 }

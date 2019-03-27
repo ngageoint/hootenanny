@@ -405,7 +405,6 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   progress.setReportType(configOptions.getProgressReportingFormat());
   progress.setState("Running");
 
-  LOG_INFO("Reading layers...");
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
@@ -486,13 +485,11 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      PROGRESS_INFO("Finished reading layer " << i + 1 << " of " << layers.size());
-      LOG_VART(input);
-      LOG_VART(layers[i]);
+      PROGRESS_INFO(
+        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
       progress.setTaskWeight(progressWeights[i]);
       reader.read(input, layers[i], map, progress);
     }
-    LOG_INFO("Finished reading layer " << layers.size() << " of " << layers.size());
   }
 
   if (map->getNodes().size() == 0)

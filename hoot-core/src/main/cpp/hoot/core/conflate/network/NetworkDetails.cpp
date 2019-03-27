@@ -763,7 +763,7 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     LOG_VART(w1.get());
     LOG_VART(w2.get());
 
-    //Not sure why this is happening.  Opened #2071 to look further into it.
+    //Not sure why this is happening...
     if (!w1.get() || !w2.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
