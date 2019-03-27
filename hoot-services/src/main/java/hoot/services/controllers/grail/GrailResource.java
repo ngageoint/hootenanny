@@ -26,7 +26,13 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.MAIN_OVERPASS_URL;
+import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
+import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
+import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,22 +42,21 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
-import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
-import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,15 +64,22 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
+import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
+import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 
 
@@ -213,6 +225,9 @@ public class GrailResource {
             ExternalCommand makeDiff = grailCommandFactory.build(mainJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
             workflow.add(makeDiff);
 
+            //FIXME: Split the apply portion into a second service call
+            //file outputs should be recorded to job status db record
+
             // Push to the local OSM API Db
             // TODO: The export/ApplyChangesetCommand.java command is hardcoded to push to OSMAPI_DB_URL. We could refactor it to
             // take the DB URL as a parameter.
@@ -228,7 +243,7 @@ public class GrailResource {
             }
 
             // Now roll the dice and run everything.....
-            jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -240,35 +255,6 @@ public class GrailResource {
             String msg = "Error during everything by box! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    @POST
-    @Path("/everythingtest")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response everythingTest(@Context HttpServletRequest request,
-            GrailParams reqParams,
-            @QueryParam("APPLY_TAGS") @DefaultValue("false") Boolean applyTags,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
-        Users user = Users.fromRequest(request);
-        String bbox = reqParams.getBounds();
-
-        JSONObject json = new JSONObject();
-        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        String userName = (user == null) ? null : user.getDisplayName();
-
-        json.put("jobid", jobId);
-        json.put("BBox", bbox);
-        json.put("User_ID", userName);
-        json.put("Debug", debugLevel);
-
-        logger.info("BBOX:" + bbox);
-        logger.info("User:" + userName);
-        logger.info("applyTags:" + applyTags);
-        logger.info("Debug_Level:" + debugLevel);
-        logger.info("json:" + json.toJSONString());
 
         return Response.ok(json.toJSONString()).build();
     }
@@ -326,7 +312,7 @@ public class GrailResource {
             workflow.add(applyChange);
 
             // Now roll the dice and run everything.....
-            jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -338,35 +324,6 @@ public class GrailResource {
             String msg = "Error during grail conflate! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    @POST
-    @Path("/conflatetest")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response conflateTest(@Context HttpServletRequest request,
-            @QueryParam("INPUT1") String input1,
-            @QueryParam("INPUT2") String input2,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
-        JSONObject json = new JSONObject();
-        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-
-        Users user = Users.fromRequest(request);
-        String userName = (user == null) ? null : user.getDisplayName();
-
-        json.put("jobid", jobId);
-        json.put("Input1", input1);
-        json.put("Input2", input2);
-        json.put("User_ID", userName);
-        json.put("Debug", debugLevel);
-
-        logger.info("User:" + userName);
-        logger.info("Input1:" + input1);
-        logger.info("Input2:" + input2);
-        logger.info("Debug_Level:" + debugLevel);
-        logger.info("json:" + json.toJSONString());
 
         return Response.ok(json.toJSONString()).build();
     }
@@ -387,8 +344,10 @@ public class GrailResource {
     @POST
     @Path("/pullosm")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response pullOsm(@QueryParam("BBOX") String bbox,
+    public Response pullOsm(@Context HttpServletRequest request,
+            @QueryParam("BBOX") String bbox,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+        Users user = Users.fromRequest(request);
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
@@ -449,7 +408,7 @@ public class GrailResource {
             InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
 
-            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -540,7 +499,7 @@ public class GrailResource {
             InternalCommand updateDb = updateDbCommandFactory.build(mainJobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
-            jobProcessor.submitAsync(new Job(mainJobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
@@ -673,7 +632,7 @@ public class GrailResource {
             InternalCommand updateDb = updateDbCommandFactory.build(jobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
-            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
@@ -744,7 +703,7 @@ public class GrailResource {
 
             Command[] workflow = { makeDiff };
 
-            jobProcessor.submitAsync(new Job(newJobId, workflow));
+            jobProcessor.submitAsync(new Job(newJobId, user.getId(), workflow, JobType.DERIVE_CHANGESET));
 
             json.put("jobId", newJobId);
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
@@ -766,7 +725,7 @@ public class GrailResource {
     /**
      * Apply changesets to the OSM API Db
      *
-     * POST hoot-services/grail/applydiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
+     * POST hoot-services/grail/applydiff/[JobId]?APPLY_TAGS=false&DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
      * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
@@ -822,7 +781,7 @@ public class GrailResource {
                 ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
                 Command[] workflow = { applyGeomChange };
-                jobProcessor.submitAsync(new Job(geomJobId, workflow));
+                jobProcessor.submitAsync(new Job(geomJobId, user.getId(), workflow, JobType.UPLOAD_CHANGESET));
             }
             catch (WebApplicationException wae) {
                 throw wae;
@@ -853,7 +812,7 @@ public class GrailResource {
                     ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
                     Command[] workflow = { applyTagChange };
-                    jobProcessor.submitAsync(new Job(tagJobId, workflow));
+                    jobProcessor.submitAsync(new Job(tagJobId, user.getId(), workflow, JobType.UPLOAD_CHANGESET));
                 }
                 catch (WebApplicationException wae) {
                     throw wae;
@@ -878,7 +837,7 @@ public class GrailResource {
     /**
      * Apply just the geometry diff to the OSM API Db
      *
-     * POST hoot-services/grail/applygeomdiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
+     * POST hoot-services/grail/applygeomdiff/[JobId]?APPLY_TAGS=false&DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
      * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
@@ -930,7 +889,7 @@ public class GrailResource {
                 ExternalCommand applyGeomChange = grailCommandFactory.build(geomJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
                 Command[] workflow = { applyGeomChange };
-                jobProcessor.submitAsync(new Job(geomJobId, workflow));
+                jobProcessor.submitAsync(new Job(geomJobId, user.getId(), workflow, JobType.UPLOAD_CHANGESET));
             }
             catch (WebApplicationException wae) {
                 throw wae;
@@ -954,7 +913,7 @@ public class GrailResource {
     /**
      * Apply just the tag diff to the OSM API Db
      *
-     * POST hoot-services/grail/applytagdiff/[JobId]?USER_ID="Papa Smurf"&APPLY_TAGS=falseDEBUG_LEVEL=<error,info,debug,verbose,trace>
+     * POST hoot-services/grail/applytagdiff/[JobId]?&APPLY_TAGS=false&DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *
      * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
@@ -1006,7 +965,7 @@ public class GrailResource {
                 ExternalCommand applyTagChange = grailCommandFactory.build(tagJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
 
                 Command[] workflow = { applyTagChange };
-                jobProcessor.submitAsync(new Job(tagJobId, workflow));
+                jobProcessor.submitAsync(new Job(tagJobId, user.getId(), workflow, JobType.UPLOAD_CHANGESET));
             }
             catch (WebApplicationException wae) {
                 throw wae;
