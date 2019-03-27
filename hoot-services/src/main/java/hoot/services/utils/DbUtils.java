@@ -51,6 +51,7 @@ import javax.ws.rs.WebApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -65,7 +66,6 @@ import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
-import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.models.db.QUsers;
@@ -218,8 +218,8 @@ public final class DbUtils {
         createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(mapId)).execute();
     }
 
-    public static String getDisplayNameById(long mapId, Long userId) {
-        return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId).and(maps.userId.eq(userId))).fetchOne();
+    public static String getDisplayNameById(long mapId) {
+        return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId)).fetchOne();
     }
 
     public static Long getMapIdFromRef(String mapRef, Long userId) {
