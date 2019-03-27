@@ -127,7 +127,7 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const = 0;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const = 0;
 
   virtual QString toString() const = 0;
 

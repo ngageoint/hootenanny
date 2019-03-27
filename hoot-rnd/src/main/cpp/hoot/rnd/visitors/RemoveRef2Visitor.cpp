@@ -116,29 +116,23 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
 
     if (eid.isNull())
     {
-      const QString errMsg = "Found a " + MetadataTags::Ref2() + " that references a non-existing " + MetadataTags::Ref1() + ": " + r;
-      // make _errorOnMissingRef1 configurable from nodejs - see #1175
-      //if (_errorOnMissingRef1)
-      //{
-        //throw IllegalArgumentException(errMsg);
-      //}
-      //else
-      //{
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(errMsg);
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
-        refs.removeAll(r);
-        if (refs.size() == 0 && key == MetadataTags::Ref2())
-        {
-          refs.append("none");
-        }
-      //}
+      const QString errMsg =
+        "Found a " + MetadataTags::Ref2() + " that references a non-existing " +
+         MetadataTags::Ref1() + ": " + r;
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN(errMsg);
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      refs.removeAll(r);
+      if (refs.size() == 0 && key == MetadataTags::Ref2())
+      {
+        refs.append("none");
+      }
     }
     else
     {

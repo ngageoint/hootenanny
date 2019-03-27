@@ -51,6 +51,8 @@ _criterion(criterion)
 
 void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
+
   assert(_eid.isNull() == false);
   if (map->containsElement(_eid) == false)
   {
@@ -143,6 +145,7 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     }
 
     RemoveRelationOp::removeRelation(map, eid.getId());
+    _numAffected++;
   }
   else if (eid.getType() == ElementType::Way)
   {
@@ -156,10 +159,12 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     }
 
     RemoveWayOp::removeWay(map, w->getId());
+    _numAffected++;
   }
   else if (eid.getType() == ElementType::Node)
   {
     RemoveNodeOp::removeNodeNoCheck(map, eid.getId());
+    _numAffected++;
   }
   else
   {

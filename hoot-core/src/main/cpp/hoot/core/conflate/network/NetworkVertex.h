@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKVERTEX_H
 #define NETWORKVERTEX_H
@@ -45,6 +45,7 @@ namespace hoot
 class NetworkVertex
 {
 public:
+
   NetworkVertex(ConstElementPtr e);
 
   ConstElementPtr getElement() const { return _e; }
@@ -61,6 +62,7 @@ public:
   geos::geom::Coordinate getCentroid() const;
 
 private:
+
   ConstElementPtr _e;
   int _uid;
   static int uidCount;

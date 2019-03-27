@@ -136,6 +136,7 @@ void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
 
 void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _map = map;
   _buildingRelationIds.clear();
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__HILBERT_R_TREE_H__
@@ -59,6 +59,7 @@ namespace Tgs
     class UserBoxHolder
     {
     public:
+
       const Box* box;
       int fid;
       int hilbertValue;

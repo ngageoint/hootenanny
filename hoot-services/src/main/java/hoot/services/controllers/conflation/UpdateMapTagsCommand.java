@@ -30,9 +30,6 @@ import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,11 +49,13 @@ class UpdateMapTagsCommand implements InternalCommand {
     private final Map<String, String> tags;
     private final String mapName;
     private final String jobId;
+    private final Long userId;
     private final Class<?> caller;
 
-    UpdateMapTagsCommand(ConflateParams params, String jobId, Class<?> caller) {
+    UpdateMapTagsCommand(ConflateParams params, String jobId, Long userId, Class<?> caller) {
         this.mapName = params.getOutputName();
         this.jobId = jobId;
+        this.userId = userId;
         this.tags = new HashMap<>();
         this.caller = caller;
 
@@ -100,7 +99,7 @@ class UpdateMapTagsCommand implements InternalCommand {
             // first one..
             // THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
 
-            Long mapId = DbUtils.getMapIdByName(mapName);
+            Long mapId = DbUtils.getMapIdFromRef(mapName, userId);
             if (mapId != null) {
                 // Hack alert!
                 // Add special handling of stats tag key

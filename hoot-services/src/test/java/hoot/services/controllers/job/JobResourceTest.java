@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
 
 import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.job.JobStatus.FAILED;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -47,23 +48,23 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
-import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QCommandStatus;
 import hoot.services.models.db.QJobStatus;
+import hoot.services.models.db.Users;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class JobResourceTest extends HootServicesJerseyTestAbstract {
+public class JobResourceTest extends OSMResourceTestAbstract {
 
     @Test
     @Category(UnitTest.class)
     public void testJobIdStatusUNKNOWN() throws Exception {
-        JobResource jobResource = new JobResource();
         String jobId = UUID.randomUUID().toString();
 
         Response response = target("/status/" + jobId)
@@ -85,6 +86,7 @@ public class JobResourceTest extends HootServicesJerseyTestAbstract {
         try {
             JobStatus jobStatus = new JobStatus();
             jobStatus.setJobId(jobId);
+            jobStatus.setUserId(Users.TEST_USER.getId());
             jobStatus.setStatus(COMPLETE.ordinal());
             jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
             jobStatus.setPercentComplete(100.0);
@@ -147,9 +149,11 @@ public class JobResourceTest extends HootServicesJerseyTestAbstract {
         try {
             JobStatus jobStatus = new JobStatus();
             jobStatus.setJobId(jobId);
+            jobStatus.setUserId(Users.TEST_USER.getId());
             jobStatus.setStatus(COMPLETE.ordinal());
             jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
             jobStatus.setPercentComplete(100.0);
+            jobStatus.setUserId(Users.TEST_USER.getId());
 
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             jobStatus.setStart(ts);
@@ -198,4 +202,45 @@ public class JobResourceTest extends HootServicesJerseyTestAbstract {
             createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.eq(jobId)).execute();
         }
     }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testJobError() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+
+        JobStatus jobStatus = new JobStatus();
+        jobStatus.setJobId(jobId);
+        jobStatus.setUserId(Users.TEST_USER.getId());
+        jobStatus.setStatus(FAILED.ordinal());
+        jobStatus.setStatusDetail("JOB FAILED");
+        jobStatus.setPercentComplete(0.0);
+        jobStatus.setUserId(Users.TEST_USER.getId());
+
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        jobStatus.setStart(ts);
+        jobStatus.setEnd(new Timestamp(System.currentTimeMillis() + 1000));
+
+        createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+
+        CommandStatus listCommandStatus = new CommandStatus();
+        listCommandStatus.setCommand("hoot foo");
+        listCommandStatus.setExitCode(0);
+        listCommandStatus.setStart(new Timestamp(System.currentTimeMillis()));
+        listCommandStatus.setFinish(new Timestamp(System.currentTimeMillis() + 1000));
+        listCommandStatus.setJobId(jobId);
+        listCommandStatus.setStderr("The command returned an error. Command not found.");
+        listCommandStatus.setStdout("Running command hoot foo...");
+
+        createQuery().insert(QCommandStatus.commandStatus).populate(listCommandStatus).execute();
+
+        Response response = target("/error/" + jobId)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+
+        String expectedResult = "{\"errors\":[\"The command returned an error. Command not found.\"]}";
+        String actualResult = response.readEntity(String.class);
+
+        assertEquals(expectedResult, actualResult);
+    }
+
 }

@@ -38,6 +38,8 @@
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -50,7 +52,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   //See if our type is known conflatable - return false
   // This could probably be made cleaner by adding a "conflatable" property to criterion. - #2941
   if (HighwayCriterion().isSatisfied(e))
-      return false;
+    return false;
   else if (LinearWaterwayCriterion().isSatisfied(e))
     return false;
   else if (PoiCriterion().isSatisfied(e))
@@ -62,6 +64,10 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (PowerLineCriterion().isSatisfied(e))
     return false;
   else if (AreaCriterion().isSatisfied(e))
+    return false;
+  else if (PoiPolygonPoiCriterion().isSatisfied(e))
+    return false;
+  else if (PoiPolygonPolyCriterion().isSatisfied(e))
     return false;
 
   // It is not something we can conflate

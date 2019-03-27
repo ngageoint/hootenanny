@@ -74,6 +74,7 @@ private:
   IndexedEdgeMatchSetPtr _matchSet;
   ConstOsmNetworkPtr _n1, _n2;
   int _steps;
+  int _maxSteps;
 
   int _numSimilarEdgeMatches;
   // stores three categories of EdgeMatchSimilarity; one with both edges in the regular direction,

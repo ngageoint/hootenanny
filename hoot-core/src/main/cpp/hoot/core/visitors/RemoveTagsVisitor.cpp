@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveTagsVisitor.h"
 
@@ -37,19 +37,22 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveTagsVisitor)
 
-RemoveTagsVisitor::RemoveTagsVisitor()
+RemoveTagsVisitor::RemoveTagsVisitor() :
+_numTagsRemoved(0)
 {
   setConfiguration(conf());
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(QString key) :
-_negateCriterion(false)
+_negateCriterion(false),
+_numTagsRemoved(0)
 {
   addKey(key);
 }
 
 RemoveTagsVisitor::RemoveTagsVisitor(QString key1, QString key2) :
-_negateCriterion(false)
+_negateCriterion(false),
+_numTagsRemoved(0)
 {
   addKey(key1);
   addKey(key2);
@@ -57,7 +60,8 @@ _negateCriterion(false)
 
 RemoveTagsVisitor::RemoveTagsVisitor(QStringList keys) :
 _keys(keys),
-_negateCriterion(false)
+_negateCriterion(false),
+_numTagsRemoved(0)
 {
 }
 
@@ -104,11 +108,13 @@ void RemoveTagsVisitor::visit(const boost::shared_ptr<Element>& e)
   {
     return;
   }
+  _numAffected++;
 
   for (int i = 0; i < _keys.size(); i++)
   {
     LOG_TRACE("Removing tag " << _keys[i] << "...");
     e->getTags().remove(_keys[i]);
+    _numTagsRemoved++;
   }
 }
 

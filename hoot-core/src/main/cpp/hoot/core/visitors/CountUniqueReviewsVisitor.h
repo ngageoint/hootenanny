@@ -38,8 +38,7 @@ namespace hoot
 class OsmMap;
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * Counts the number of unique feature reviews in a map
  */
 class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {

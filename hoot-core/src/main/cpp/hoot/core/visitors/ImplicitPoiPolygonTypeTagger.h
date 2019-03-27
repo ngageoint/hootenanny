@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -37,7 +38,7 @@ namespace hoot
 /**
  * Adds tags implicitly derived from feature names to POIs and polygons
  */
-class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
+class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger, public OperationStatusInfo
 {
 public:
 
@@ -48,6 +49,11 @@ public:
 
   virtual QString getDescription() const
   { return "Adds tags to POIs and polygons implicitly derived from their names"; }
+
+  virtual QString getInitStatusMessage() const { return "Adding tags to POIs and polygons..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Added " + QString::number(_numAffected) + " tags to POIs and polygons"; }
 
 protected:
 

@@ -46,9 +46,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -115,8 +114,6 @@ int ConflateCmd::runSimple(QStringList args)
     isDiffConflate = true;
     args.removeAt(args.indexOf("--differential"));
 
-    // Check for tags argument "--Include-Tags"
-
     if (args.contains("--include-tags"))
     {
       diffConflator.enableTags();
@@ -182,9 +179,8 @@ int ConflateCmd::runSimple(QStringList args)
   // read input 2
   if (!input2.isEmpty())
   {
-    IoUtils::loadMap(map, input2,
-                     ConfigOptions().getReaderConflateUseDataSourceIds2(),
-                     Status::Unknown2);
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
@@ -215,13 +211,12 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-
+  LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
 
   OsmMapPtr result = map;
@@ -250,16 +245,16 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+  OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
 
-  OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
-
-  // doing this after the conflate post ops, since some invalid reviews are removed by them
+  // doing this after the conflate post ops run, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
 
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
@@ -275,6 +270,7 @@ int ConflateCmd::runSimple(QStringList args)
       diffConflator.addChangesToMap(result, pTagChanges);
     }
     IoUtils::saveMap(result, output);
+    OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
   }
 
   // Do the tags if we need to

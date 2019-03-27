@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTORELATIONMAP_H
 #define ELEMENTTORELATIONMAP_H
@@ -53,6 +53,7 @@ class Element;
 class ElementToRelationMap
 {
 public:
+
   ElementToRelationMap();
 
   /**
@@ -83,10 +84,12 @@ public:
    */
   bool validate(const OsmMap& map) const;
 
+  size_t size() const { return _mapping.size(); }
+
 private:
 
   std::set<long> _emptySet;
-  HashMap< ElementId, std::set<long> > _mapping;
+  HashMap<ElementId, std::set<long>> _mapping;
 };
 
 }

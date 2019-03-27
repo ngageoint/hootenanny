@@ -56,6 +56,8 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +69,7 @@ import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -76,6 +79,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/export")
 @Transactional
 public class ExportResource {
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -113,12 +117,8 @@ public class ExportResource {
     public Response export(ExportParams params, @Context HttpServletRequest request,
                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
+        params.setUserEmail(user.getEmail());
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
-
-        // ensure valid email address in `params`:
-        if(user != null) {
-            params.setUserEmail(user.getEmail());
-        }
 
         try {
             String outputType = params.getOutputType();
@@ -166,15 +166,19 @@ public class ExportResource {
                 }
             }
 
-            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
+                    DbUtils.getMapIdFromRef(params.getInput(), user.getId())));
         }
         catch (WebApplicationException wae) {
+            logger.error(wae.getMessage(), wae);
             throw wae;
         }
         catch (IllegalArgumentException iae) {
+            logger.error(iae.getMessage(), iae);
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
+            logger.error(e.getMessage(), e);
             String msg = "Error exporting data!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
@@ -184,7 +188,7 @@ public class ExportResource {
 
         //Update last accessed timestamp for db datasets on export
         if (params.getInputType().equalsIgnoreCase("db")) {
-            Long mapid = DbUtils.getMapIdByName(params.getInput());
+            Long mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
             MapResource.updateLastAccessed(mapid);
         }
 

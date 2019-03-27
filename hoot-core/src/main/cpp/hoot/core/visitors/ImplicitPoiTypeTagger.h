@@ -51,7 +51,6 @@ public:
 protected:
 
   virtual bool _visitElement(const ElementPtr& e);
-
 };
 
 }

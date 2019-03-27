@@ -236,6 +236,10 @@ private:
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
 
   boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
+
+  void _removeMatches(const Status& status);
+
+  void _snapSecondaryRoadsBackToRef();
 };
 
 }
