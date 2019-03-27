@@ -30,6 +30,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated member statistics for " + QString::number(_numAffected) + " relations"; }
 
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getStat() const { return _totalMembers; }
   virtual double getMin() const { return _minMembersPerRelation; }
   virtual double getMax() const { return _maxMembersPerRelation; }

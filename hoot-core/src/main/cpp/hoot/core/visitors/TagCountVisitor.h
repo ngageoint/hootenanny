@@ -58,6 +58,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
 
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getStat() const { return _totalCount; }
   virtual double getMin() const { return _smallestCount; }
   virtual double getMax() const { return _largestCount; }

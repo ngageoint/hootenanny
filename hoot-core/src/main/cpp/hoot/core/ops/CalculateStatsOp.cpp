@@ -523,11 +523,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         ConstElementVisitorPtr(new ElementCountVisitor())))));
     BuildingHeightVisitor buildingHeightVis;
     _applyVisitor(constMap, &buildingHeightVis);
+    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.getNumWithStat()));
     _stats.append(SingleStat("Shortest Building", buildingHeightVis.getMin()));
     _stats.append(SingleStat("Tallest Building", buildingHeightVis.getMax()));
     _stats.append(SingleStat("Average Building Height", buildingHeightVis.getAverage()));
     BuildingLevelsVisitor buildingLevelVis;
     _applyVisitor(constMap, &buildingLevelVis);
+    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.getNumWithStat()));
     _stats.append(SingleStat("Smallest Number of Levels in a Building", buildingLevelVis.getMin()));
     _stats.append(SingleStat("Largest Number of Levels in a Building", buildingHeightVis.getMax()));
     _stats.append(

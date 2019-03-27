@@ -58,6 +58,7 @@ public:
     BuildingHeightVisitor uut;
     map->visitRo(uut);
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.numWithStat());
     CPPUNIT_ASSERT_EQUAL(0.0, uut.getStat());
     CPPUNIT_ASSERT_EQUAL(0.0, uut.getMin());
     CPPUNIT_ASSERT_EQUAL(0.0, uut.getMax());

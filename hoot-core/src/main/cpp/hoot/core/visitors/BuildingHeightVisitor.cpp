@@ -13,7 +13,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, BuildingHeightVisitor)
 
 BuildingHeightVisitor::BuildingHeightVisitor() :
 _totalHeight(0.0),
-_numHeightsProcessed(0),
 _minHeight(DBL_MAX),
 _maxHeight(0.0)
 {
@@ -37,9 +36,8 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
         _maxHeight = height;
       }
       // We're only going to return stats for buildings with the tag.
-      _numHeightsProcessed++;
+      _numAffected++;
     }
-    _numAffected++;
   }
 }
 

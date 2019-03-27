@@ -59,6 +59,7 @@ public:
     BuildingLevelsVisitor uut;
     map->visitRo(uut);
 
+    CPPUNIT_ASSERT_EQUAL(5, uut.numWithStat());
     CPPUNIT_ASSERT_EQUAL(20, (int)uut.getStat());
     CPPUNIT_ASSERT_EQUAL(1, (int)uut.getMin());
     CPPUNIT_ASSERT_EQUAL(10, (int)uut.getMax());

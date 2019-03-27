@@ -32,19 +32,17 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated level statistics for " + QString::number(_numAffected) + " buildings"; }
 
-
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getStat() const { return _totalLevels; }
   virtual double getMin() const { return _minLevels; }
   virtual double getMax() const { return _maxLevels; }
-  virtual double getAverage() const { return _totalLevels / _numLevelsProcessed; }
+  virtual double getAverage() const { return _totalLevels / _numAffected; }
 
 private:
 
   BuildingCriterion _crit;
 
-  // in meters
   double _totalLevels;
-  double _numLevelsProcessed;
   double _minLevels;
   double _maxLevels;
 

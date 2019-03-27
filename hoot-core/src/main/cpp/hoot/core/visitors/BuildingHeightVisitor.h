@@ -30,10 +30,11 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated height statistics for " + QString::number(_numAffected) + " buildings"; }
 
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getStat() const { return _totalHeight; }
   virtual double getMin() const { return _minHeight; }
   virtual double getMax() const { return _maxHeight; }
-  virtual double getAverage() const { return _totalHeight / _numHeightsProcessed; }
+  virtual double getAverage() const { return _totalHeight / _numAffected; }
 
 private:
 
@@ -41,7 +42,6 @@ private:
 
   // in meters
   Meters _totalHeight;
-  Meters _numHeightsProcessed;
   Meters _minHeight;
   Meters _maxHeight;
 

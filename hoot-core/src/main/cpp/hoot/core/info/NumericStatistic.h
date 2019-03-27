@@ -44,6 +44,7 @@ public:
 
   // We'll inherit SingleStatistic::getStat for returning stat totals and add these:
 
+  virtual long numWithStat() const = 0;
   virtual double getMin() const = 0;
   virtual double getMax() const = 0;
   virtual double getAverage() const = 0;

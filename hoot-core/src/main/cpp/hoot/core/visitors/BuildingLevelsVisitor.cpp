@@ -11,7 +11,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, BuildingLevelsVisitor)
 
 BuildingLevelsVisitor::BuildingLevelsVisitor() :
 _totalLevels(0),
-_numLevelsProcessed(0),
 _minLevels(INT_MAX),
 _maxLevels(0)
 {
@@ -34,9 +33,8 @@ void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
         _maxLevels = numLevels;
       }
       // We're only going to return stats for buildings with the tag.
-      _numLevelsProcessed++;
+      _numAffected++;
     }
-    _numAffected++;
   }
 }
 

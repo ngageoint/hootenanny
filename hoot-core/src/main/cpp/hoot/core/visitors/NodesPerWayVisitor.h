@@ -30,6 +30,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Calculated node statistics for " + QString::number(_numAffected) + " ways"; }
 
+  virtual long numWithStat() const { return _numAffected; }
   virtual double getStat() const { return _totalWayNodes; }
   virtual double getMin() const { return _minNodesPerWay; }
   virtual double getMax() const { return _maxNodesPerWay; }
