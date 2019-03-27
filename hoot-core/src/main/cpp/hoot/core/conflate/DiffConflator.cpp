@@ -40,7 +40,6 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>

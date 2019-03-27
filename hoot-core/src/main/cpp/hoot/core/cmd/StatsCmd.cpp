@@ -46,14 +46,14 @@ namespace hoot
 class StatsCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::StatsCmd"; }
 
   StatsCmd() {}
 
   virtual QString getName() const { return "stats"; }
 
-  virtual QString getDescription() const
-  { return "Displays a set of statistics for a map"; }
+  virtual QString getDescription() const { return "Displays a set of statistics for a map"; }
 
   int runSimple(QStringList args)
   {
@@ -70,7 +70,7 @@ public:
 
     bool quick = false;
     bool toFile = false;
-    QString output_filename = "";
+    QString outputFilename = "";
     //  Capture any flags and remove them before processing inputs
     for (int i = 0; i < args.size(); i++)
     {
@@ -88,12 +88,11 @@ public:
       }
     }
 
-    QString sep = "\t";
+    const QString sep = "\t";
     // read the conflation status from the file.
     conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
-    QList< QList<SingleStat> > allStats;
-
+    QList<QList<SingleStat>> allStats;
     for (int i = 0; i < inputs.size(); i++)
     {
       OsmMapPtr map(new OsmMap());
@@ -102,7 +101,6 @@ public:
       //either strictly use one reading method or the other.
       //IoUtils::loadMap(map, inputs[i], true, Status::Invalid);
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
-
       MapProjector::projectToPlanar(map);
 
       boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
@@ -113,16 +111,35 @@ public:
 
     if (toFile)
     {
-      if (output_filename.endsWith(".json", Qt::CaseInsensitive))
-        MapStatsWriter().writeStatsToJson(allStats, output_filename);
+      if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else
-        MapStatsWriter().writeStatsToText(allStats, output_filename);
+        MapStatsWriter().writeStatsToText(allStats, outputFilename);
     }
     else
     {
       cout << "Stat Name\t" << inputs.join(sep) << endl;
       cout << MapStatsWriter().statsToString(allStats, sep);
     }
+
+    if (ConfigOptions().getStatsTagKeys().size() > 0)
+    {
+
+    }
+//    // TODO: TagDistribution and TagInfo
+//    TagDistribution tagDist;
+//    //tagDist.setCriterionClassName(criterionClassName);
+//    tagDist.setLimit(ConfigOptions().getStatsMaxValuesPerTagKey());
+//    tagDist.setSortByFrequency(true);
+//    tagDist.setTagKeys(ConfigOptions().getStatsTagKeys());
+//    tagDist.setTokenize(false);
+
+//    std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
+
+//    TagInfo tagInfo(
+//      ConfigOptions().getStatsMaxValuesPerTagKey(), ConfigOptions().getStatsTagKeys(), false, false,
+//      true);
+//    cout << tagInfo.getInfo(inputs) << endl;
 
     return 0;
   }

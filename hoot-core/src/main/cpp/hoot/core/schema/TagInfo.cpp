@@ -36,6 +36,9 @@
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
+// Qt
+#include <QFileInfo>
+
 namespace hoot
 {
 
@@ -49,7 +52,29 @@ _exactKeyMatch(exactKeyMatch)
 {
 }
 
-QString TagInfo::getInfo(QString input)
+QString TagInfo::getInfo(const QStringList inputs)
+{
+  QString info = "{\n";
+
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    info += QString("  \"%1\":{\n").arg(QFileInfo(inputs.at(i)).fileName());
+
+    info += tagInfo.getInfo(inputs.at(i));
+    info += "\n  }";
+
+    // Dont add a comma to the last dataset
+    if (i != (inputs.size() - 1))
+    {
+      info += ",\n";
+    }
+  }
+  info += "\n}";
+
+  return info;
+}
+
+QString TagInfo::_getInfo(const QString input)
 {
   LOG_VARD(input);
   LOG_VART(_tagValuesPerKeyLimit);
@@ -66,8 +91,7 @@ QString TagInfo::getInfo(QString input)
 
   //Using a different code path for the OGR inputs to handle the layer syntax.  There may be
   //a way to combine the two logic paths...not sure, though.
-  boost::shared_ptr<OgrReader> ogrReader =
-    boost::dynamic_pointer_cast<OgrReader>(reader);
+  boost::shared_ptr<OgrReader> ogrReader = boost::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
     ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
@@ -91,12 +115,10 @@ QString TagInfo::getInfo(QString input)
 
     for (int i = 0; i < layers.size(); i++)
     {
-      TagInfoHash result;
-
       LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
 
+      TagInfoHash result;
       boost::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
-
       while (iterator->hasNext())
       {
         boost::shared_ptr<Element> e = iterator->next();
@@ -113,15 +135,12 @@ QString TagInfo::getInfo(QString input)
       }
 
       const QString tmpText = _printJSON(layers[i], result);
-
       // Skip empty layers
       if (tmpText == "")
       {
         continue;
       }
-
       finalText += tmpText;
-
       if (i != (layers.size() - 1))
       {
         finalText += ",\n";

@@ -241,11 +241,9 @@ void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
   RefToEidVisitor ref2(MetadataTags::Ref2());
-
   in->visitRo(ref2);
 
   CoOccurrenceVisitor coOccurrenceResult(ref2.getRefToEid(), _resultMatrix);
-
   in->visitRo(coOccurrenceResult);
 }
 

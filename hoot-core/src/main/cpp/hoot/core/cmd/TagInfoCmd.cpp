@@ -53,8 +53,6 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    QString finalText;
-
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
@@ -111,26 +109,15 @@ public:
       LOG_VART(args);
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
-
-    finalText += "{\n";
-
+    // everything left is an input
+    QStringList inputs;
     for (int i = 0; i < args.size(); i++)
     {
-      finalText += QString("  \"%1\":{\n").arg(QFileInfo(args[i]).fileName()); // Lazy :-)
-
-      finalText += tagInfo.getInfo(QString(args[i])) ;
-      finalText += "\n  }";
-
-      // Dont add a comma to the last dataset
-      if (i != (args.size() - 1))
-      {
-        finalText += ",\n";
-      }
+      inputs.append(args[i]);
     }
-    finalText += "\n}";
 
-    cout << finalText << endl;
+    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
+    cout << tagInfo.getInfo(inputs) << endl;
 
     return 0;
   }

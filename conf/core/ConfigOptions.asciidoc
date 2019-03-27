@@ -3709,6 +3709,23 @@ The maximum length, in characters, that the SplitNameVisitor will allow for a na
 Path to the translation script to use when translating tags for stats. If the path is empty, then
 all translation stats are disabled.
 
+=== stats.max.values.per.tag.key
+
+* Data Type: int
+* Default Value: `5`
+
+The maximum number of unique tag values per key that stats command will display.
+
+=== stats.tag.keys
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of tag keys for which the stats command will display unique tag values and distribution
+statistics.  Separate keys with a ';' and surround entire list in double quotes when passing in
+from the command line.
+
 === status.criterion.status
 
 * Data Type: string

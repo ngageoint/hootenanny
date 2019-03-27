@@ -49,33 +49,35 @@ public:
           const bool exactKeyMatch = true);
 
   /**
-   * Returns a tags string with values grouped by keys
+   * Returns a JSON string with tag values grouped by keys
    *
-   * @param input data source with tags to examine
-   * @return a tags string
+   * @param inputs data sources with tags to examine
+   * @return a JSON tags string
    */
-  QString getInfo(QString input);
+  QString getInfo(const QStringList inputs);
 
 private:
 
-  typedef QHash<QString, QHash<QString, int> > TagInfoHash;
+  typedef QHash<QString, QHash<QString, int>> TagInfoHash;
 
-  //the maximum number of tag values to return per key
+  // the maximum number of tag values to return per key
   int _tagValuesPerKeyLimit;
 
-  //specific tag keys for which to return tag values only; if empty, then values are
-  //returned for all tag keys
+  // specific tag keys for which to return tag values only; if empty, then values are
+  // returned for all tag keys
   QStringList _keys;
 
-  //if true, only tag keys will be returned
+  // if true, only tag keys will be returned
   bool _keysOnly;
 
-  //if true, tag comparisons are case sensitive
+  // if true, tag comparisons are case sensitive
   bool _caseSensitive;
 
-  //if true, specified/feature tag keys need to match exactly for values to be written; otherwise
-  //they match if any part of the feature tag key is contained in the specified tag key
+  // if true, specified/feature tag keys need to match exactly for values to be written; otherwise
+  // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
+
+  QString _getInfo(const QString input);
 
   QString _printJSON(QString lName, TagInfoHash& data);
 
