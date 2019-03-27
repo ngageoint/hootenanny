@@ -33,14 +33,13 @@ public:
   virtual double getStat() const { return _totalMembers; }
   virtual double getMin() const { return _minMembersPerRelation; }
   virtual double getMax() const { return _maxMembersPerRelation; }
-  virtual double getAverage() const { return _totalMembers / _numRelations; }
+  virtual double getAverage() const { return _totalMembers / _numAffected; }
 
 private:
 
   RelationCriterion _crit;
 
   int _totalMembers;
-  int _numRelations;
   int _minMembersPerRelation;
   int _maxMembersPerRelation;
 };

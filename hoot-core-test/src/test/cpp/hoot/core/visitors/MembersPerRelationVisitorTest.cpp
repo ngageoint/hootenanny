@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-static const QString input = "test-files/MultiPolygonTest.osm";
+static const QString input = "test-files/criterion/ComplexBuildings.osm";
 
 class MembersPerRelationVisitorTest : public HootTestFixture
 {
@@ -57,10 +57,10 @@ public:
     MembersPerRelationVisitor uut;
     map->visitRo(uut);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getStat());
-    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMin());
-    CPPUNIT_ASSERT_EQUAL(0, (int)uut.getMax());
-    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
+    CPPUNIT_ASSERT_EQUAL(7, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(2, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(3, (int)uut.getMax());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.33, uut.getAverage(), 2);
   }
 };
 

@@ -12,7 +12,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, MembersPerRelationVisitor)
 
 MembersPerRelationVisitor::MembersPerRelationVisitor() :
 _totalMembers(0),
-_numRelations(0),
 _minMembersPerRelation(INT_MAX),
 _maxMembersPerRelation(0)
 {
