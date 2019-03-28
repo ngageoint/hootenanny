@@ -316,12 +316,8 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       _writer->writeStartElement("tag");
       LOG_VART(key);
       _writer->writeAttribute("k", removeInvalidCharacters(key));
-
-      if (key != MetadataTags::HootStatus())
-      {
-        LOG_VART(val);
-        _writer->writeAttribute("v", removeInvalidCharacters(val));
-      }
+      LOG_VART(val);
+      _writer->writeAttribute("v", removeInvalidCharacters(val));
       _writer->writeEndElement();
     }
   }
@@ -483,11 +479,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", removeInvalidCharacters(key));
-
-      if (key != MetadataTags::HootStatus())
-      {
-        _writer->writeAttribute("v", removeInvalidCharacters(val));
-      }
+      _writer->writeAttribute("v", removeInvalidCharacters(val));
       _writer->writeEndElement();
     }
   }
