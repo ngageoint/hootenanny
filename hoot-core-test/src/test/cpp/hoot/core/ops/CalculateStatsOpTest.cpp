@@ -49,7 +49,8 @@ class CalculateStatsOpTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(CalculateStatsOpTest);
   CPPUNIT_TEST(runStatsNumTest);
   CPPUNIT_TEST(runStatsTest);
-  CPPUNIT_TEST(runStatsTestWithReviews);
+  // TODO: re-enable
+  //CPPUNIT_TEST(runStatsTestWithReviews);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,12 +73,13 @@ public:
       ConfigOptions::getStatsTranslateScriptDefaultValue());
   }
 
-  //this is here just to prevent someone from adding a stat that doesn't get tested in this test
+  // This is here to prevent inadvertant removal of stats and to make sure any new stats get added
+  // to this test.
   void runStatsNumTest()
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(139, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(172, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -106,8 +108,8 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       25331.21, calcStatsOp->getSingleStat("Meters Squared of Area Features"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      1267.47, calcStatsOp->getSingleStat("Meters of Highway"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Highway Unique Name Count"));
+      1267.47, calcStatsOp->getSingleStat("Meters of Roads"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Unique Name Count"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       25331.2, calcStatsOp->getSingleStat("Meters Squared of Buildings"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(13.0, calcStatsOp->getSingleStat("Building Unique Name Count"));
@@ -119,7 +121,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Total Conflated Features"));
     CPPUNIT_ASSERT_EQUAL(19.0, calcStatsOp->getSingleStat("Total Unmatched Features"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Number of Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Reviews to be Made"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Total Features Conflatable"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -131,7 +133,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(
@@ -153,7 +155,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of POI Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POI Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of POIs Conflated"), 1e-1);
@@ -162,28 +164,28 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       100.0, calcStatsOp->getSingleStat("Percentage of Unmatched POIs"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Highway Count"));
+    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Road Count"));
     //this seems a little funky to have no conflatable highways but see conflated highways in the
     //output, but since the conflated highways are already present in this file, its actually valid.
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Highways"));
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Highways"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Highways Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Highway Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Highways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Roads"));
+    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Roads"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Roads Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Roads"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      1119.92, calcStatsOp->getSingleStat("Meters of Highway Processed by Conflation"), 1e-1);
+      1119.92, calcStatsOp->getSingleStat("Meters of Road Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      77.78, calcStatsOp->getSingleStat("Percentage of Highways Conflated"), 1e-1);
+      77.78, calcStatsOp->getSingleStat("Percentage of Roads Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Percentage of Highways Marked for Review"), 1e-1);
+      0.0, calcStatsOp->getSingleStat("Percentage of Roads Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Highways"), 1e-1);
+      22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Roads"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(11.0, calcStatsOp->getSingleStat("Building Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Buildings"));
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Buildings"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Buildings Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Building Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Building Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Unmatched Buildings"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       14100.9,
@@ -199,7 +201,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
@@ -214,7 +216,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Power Lines"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
@@ -231,7 +233,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
+      0.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
@@ -245,7 +247,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygons"));
     CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Conflated Polygons"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Polygon Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygon Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       14810.8,
@@ -261,7 +263,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Areas"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Areas"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Areas Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Area Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Area Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Areas"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters Squared of Areas Processed by Conflation"), 1e-1);
@@ -283,7 +285,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.5138888, calcStatsOp->getSingleStat("Building Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
+      0.6481481, calcStatsOp->getSingleStat("Road Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
@@ -294,26 +296,27 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.513888, calcStatsOp->getSingleStat("Polygon Translated Populated Tag Percent"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Nodes in a Way"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Nodes in a Way"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Way Nodes"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Nodes in a Way"));
+    CPPUNIT_ASSERT_EQUAL(59.0, calcStatsOp->getSingleStat("Most Nodes in a Way"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(226.0, calcStatsOp->getSingleStat("Total Way Nodes"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Relation Members"));
+      3.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Total Relation Members"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Tags on a Feature"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Information Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Tags on a Feature"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Information Tags on a Feature"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Average Information Tags Per Feature"), 1e-1);
+      2.94, calcStatsOp->getSingleStat("Average Information Tags Per Feature"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Names"));
+    CPPUNIT_ASSERT_EQUAL(19.0, calcStatsOp->getSingleStat("Features with Names"));
+
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Tunnels"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("One-Way Streets"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Roundabouts"));
@@ -332,10 +335,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Average Levels Per Building"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Non-Building Areas"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Non-Building Areas"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Addresses"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Addresses"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Features with Addresses"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Addresses"));
 
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Phone Numbers"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Phone Numbers"));
@@ -367,8 +370,8 @@ public:
       1267.47, calcStatsOp->getSingleStat("Meters of Linear Features"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       25331.2, calcStatsOp->getSingleStat("Meters Squared of Area Features"), 1e-1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1267.47, calcStatsOp->getSingleStat("Meters of Highway"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Highway Unique Name Count"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1267.47, calcStatsOp->getSingleStat("Meters of Roads"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Unique Name Count"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       25331.2, calcStatsOp->getSingleStat("Meters Squared of Buildings"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(13.0, calcStatsOp->getSingleStat("Building Unique Name Count"));
@@ -380,7 +383,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Total Features Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(11.0, calcStatsOp->getSingleStat("Total Conflated Features"));
     CPPUNIT_ASSERT_EQUAL(18.0, calcStatsOp->getSingleStat("Total Unmatched Features"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Number of Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Reviews to be Made"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Total Features Conflatable"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -392,7 +395,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(
@@ -414,7 +417,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated POIs"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of POI Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("POI Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of POIs Conflated"), 1e-1);
@@ -423,27 +426,27 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       100.0, calcStatsOp->getSingleStat("Percentage of Unmatched POIs"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Highway Count"));
+    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Road Count"));
     //see comment in corresponding section of code in runStatsTest
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Highways"));
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Highways"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Highways Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Highway Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Highways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Roads"));
+    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Roads"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Roads Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Roads"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      1119.92, calcStatsOp->getSingleStat("Meters of Highway Processed by Conflation"), 1e-1);
+      1119.92, calcStatsOp->getSingleStat("Meters of Road Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      77.78, calcStatsOp->getSingleStat("Percentage of Highways Conflated"), 1e-1);
+      77.78, calcStatsOp->getSingleStat("Percentage of Roads Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Percentage of Highways Marked for Review"), 1e-1);
+      0.0, calcStatsOp->getSingleStat("Percentage of Roads Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Highways"), 1e-1);
+      22.22, calcStatsOp->getSingleStat("Percentage of Unmatched Roads"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Building Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Buildings"));
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Buildings"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Buildings Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of Building Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Building Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Buildings"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       13693.3,
@@ -459,7 +462,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Waterway Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
@@ -475,7 +478,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Number of Power Line Reviews to be Made"));
+      0.0, calcStatsOp->getSingleStat("Power Line Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
@@ -492,7 +495,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       1.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
-      1.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
+      1.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
@@ -506,7 +509,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygons"));
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Polygons"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of Polygon Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Polygon Reviews to be Made"));
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       13693.36,
@@ -529,7 +532,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.5138888, calcStatsOp->getSingleStat("Building Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.6481481, calcStatsOp->getSingleStat("Highway Translated Populated Tag Percent"), 1e-1);
+      0.6481481, calcStatsOp->getSingleStat("Road Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
@@ -540,26 +543,27 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.513888, calcStatsOp->getSingleStat("Polygon Translated Populated Tag Percent"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Nodes in a Way"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Nodes in a Way"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Way Nodes"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Nodes in a Way"));
+    CPPUNIT_ASSERT_EQUAL(59.0, calcStatsOp->getSingleStat("Most Nodes in a Way"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(226.0, calcStatsOp->getSingleStat("Total Way Nodes"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Relation Members"));
+      3.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Total Relation Members"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Tags on a Feature"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Most Information Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Tags on a Feature"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Information Tags on a Feature"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      0.0, calcStatsOp->getSingleStat("Average Information Tags Per Feature"), 1e-1);
+      2.94, calcStatsOp->getSingleStat("Average Information Tags Per Feature"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Names"));
+    CPPUNIT_ASSERT_EQUAL(19.0, calcStatsOp->getSingleStat("Features with Names"));
+
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Tunnels"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("One-Way Streets"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Roundabouts"));
@@ -578,10 +582,10 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Average Levels Per Building"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Non-Building Areas"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Non-Building Areas"));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Addresses"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Addresses"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Features with Addresses"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Addresses"));
 
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features with Phone Numbers"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Phone Numbers"));

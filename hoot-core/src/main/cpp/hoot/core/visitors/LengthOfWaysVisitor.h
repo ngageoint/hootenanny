@@ -61,7 +61,11 @@ public:
   virtual long numWithStat() const { return _numAffected; }
   virtual double getMin() const { return _smallest; }
   virtual double getMax() const { return _largest; }
-  virtual double getAverage() const { return _total / _numAffected; }
+  virtual double getAverage() const
+  {
+    const double average = _numAffected == 0 ? 0.0 : _total / _numAffected;
+    return average;
+  }
 
 private:
 

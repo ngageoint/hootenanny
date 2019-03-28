@@ -198,24 +198,15 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     const long numInformationTags = tagCountVisitor.getInformationCount();
     _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
     _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
+    _stats.append(SingleStat("Least Tags on a Feature", tagCountVisitor.getMin()));
+    _stats.append(SingleStat("Most Tags on a Feature", tagCountVisitor.getMax()));
+    _stats.append(SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
     _stats.append(
-      SingleStat("Most Tags on a Feature", tagCountVisitor.getMin()));
+      SingleStat("Least Information Tags on a Feature", tagCountVisitor.getInformationMin()));
     _stats.append(
-      SingleStat("Least Tags on a Feature", tagCountVisitor.getMax()));
+      SingleStat("Most Information Tags on a Feature", tagCountVisitor.getInformationMax()));
     _stats.append(
-      SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
-    _stats.append(
-      SingleStat(
-        "Least Information Tags on a Feature",
-        tagCountVisitor.getInformationMin()));
-    _stats.append(
-      SingleStat(
-        "Most Information Tags on a Feature",
-        tagCountVisitor.getInformationMax()));
-    _stats.append(
-      SingleStat(
-        "Average Information Tags Per Feature",
-        tagCountVisitor.getInformationAverage()));
+      SingleStat("Average Information Tags Per Feature", tagCountVisitor.getInformationAverage()));
 
     _stats.append(SingleStat("Features with Names",
       _applyVisitor(
@@ -730,8 +721,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
          criterion->clone(),
          ConstElementVisitorPtr(new CountUniqueReviewsVisitor())));
   _stats.append(
-    SingleStat(
-      QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
+    SingleStat(QString("%1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
 
   double unconflatedFeatureCount =
     _applyVisitor(
@@ -753,8 +743,12 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
 
   if (type == CreatorDescription::CalcTypeLength)
   {
-    _stats.append(SingleStat(QString("Meters of %1 Processed by Conflation").arg(description),
-      _applyVisitor(map, FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
+    _stats.append(
+      SingleStat(
+        QString("Meters of %1 Processed by Conflation").arg(description),
+      _applyVisitor(
+        map,
+        FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
         criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
   }
   else if (type == CreatorDescription::CalcTypeArea)

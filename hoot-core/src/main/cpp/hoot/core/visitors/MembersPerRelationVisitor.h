@@ -34,7 +34,11 @@ public:
   virtual double getStat() const { return _totalMembers; }
   virtual double getMin() const { return _minMembersPerRelation; }
   virtual double getMax() const { return _maxMembersPerRelation; }
-  virtual double getAverage() const { return _totalMembers / _numAffected; }
+  virtual double getAverage() const
+  {
+    const double average = _numAffected == 0 ? 0.0 : _totalMembers / _numAffected;
+    return average;
+  }
 
 private:
 

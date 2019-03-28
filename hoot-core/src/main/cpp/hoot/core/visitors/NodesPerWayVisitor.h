@@ -34,7 +34,11 @@ public:
   virtual double getStat() const { return _totalWayNodes; }
   virtual double getMin() const { return _minNodesPerWay; }
   virtual double getMax() const { return _maxNodesPerWay; }
-  virtual double getAverage() const { return _totalWayNodes / _numAffected; }
+  virtual double getAverage() const
+  {
+    const double average = _numAffected == 0 ? 0.0 : _totalWayNodes / _numAffected;
+    return average;
+  }
 
 private:
 

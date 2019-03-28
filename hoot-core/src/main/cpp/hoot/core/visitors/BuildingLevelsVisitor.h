@@ -36,7 +36,11 @@ public:
   virtual double getStat() const { return _totalLevels; }
   virtual double getMin() const { return _minLevels; }
   virtual double getMax() const { return _maxLevels; }
-  virtual double getAverage() const { return _totalLevels / _numAffected; }
+  virtual double getAverage() const
+  {
+    const double average = _numAffected == 0 ? 0.0 : _totalLevels / _numAffected;
+    return average;
+  }
 
 private:
 
