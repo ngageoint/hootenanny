@@ -75,11 +75,8 @@ public:
    * information in the tags.
    */
   void setIncludeCompatibilityTags(bool includeCompatibility);
-
-  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
   void setIncludeHootInfo(bool includeInfo) { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
-
   void setIncludePid(bool includePid) { _includePid = includePid; }
 
   /**
@@ -128,7 +125,6 @@ public:
 private:
 
   bool _formatXml;
-  bool _includeIds;
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;

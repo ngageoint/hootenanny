@@ -62,7 +62,6 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 
 OsmXmlWriter::OsmXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
-_includeIds(false),
 _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
 _includePointInWays(false),
 _includeCompatibilityTags(true),
@@ -484,14 +483,6 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
     }
   }
 
-  if ( /*_includeDebug ||*/ _includeIds)
-  {
-    _writer->writeStartElement("tag");
-    _writer->writeAttribute("k", MetadataTags::HootId());
-    _writer->writeAttribute("v", QString("%1").arg(w->getId()));
-    _writer->writeEndElement();
-  }
-
   _writer->writeEndElement();
 }
 
@@ -569,8 +560,6 @@ void OsmXmlWriter::_overrideDebugSettings()
 {
   // include circular error, text status and debug
   _addExportTagsVisitor.overrideDebugSettings();
-  //  Include Hoot ID tag
-  _includeIds = true;
   //  Include parent ID tag
   _includePid = true;
 }

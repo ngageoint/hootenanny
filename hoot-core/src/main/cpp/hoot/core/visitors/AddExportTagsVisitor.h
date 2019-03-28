@@ -54,7 +54,8 @@ public:
   virtual QString getDescription() const { return "Adds tags needed for exporting"; }
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-  void overrideDebugSettings() { _textStatus = true; _includeCircularError= true; _includeDebug = true; }
+  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
+  void overrideDebugSettings();
 
 private:
 
