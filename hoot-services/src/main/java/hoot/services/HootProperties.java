@@ -297,7 +297,7 @@ public final class HootProperties {
         MAIN_OVERPASS_URL = "${MAIN_OVERPASS_URL}";
 
         // The OSM Rails Port that we are going to pull and push data to.
-        RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}";
+        RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";
         RAILSPORT_HOST = "${RAILSPORT_HOST}";
         RAILSPORT_PORT = "${RAILSPORT_PORT}";
         RAILSPORT_API_VERSION = "${RAILSPORT_API_VERSION}";
