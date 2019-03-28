@@ -36,7 +36,6 @@
 
 // Qt
 #include <QMap>
-#include <QRegExp>
 #include <QStringList>
 
 // Standard

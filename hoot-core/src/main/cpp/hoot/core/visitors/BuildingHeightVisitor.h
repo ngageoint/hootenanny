@@ -8,6 +8,9 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
+// Qt
+#include <QRegularExpression>
+
 namespace hoot
 {
 
@@ -17,6 +20,8 @@ class BuildingHeightVisitor : public ConstElementVisitor, public NumericStatisti
 public:
 
   static std::string className() { return "hoot::BuildingHeightVisitor"; }
+
+  static unsigned int logWarnCount;
 
   BuildingHeightVisitor();
 
@@ -45,8 +50,18 @@ private:
   Meters _minHeight;
   Meters _maxHeight;
 
+  QRegularExpression _feetRegEx;
+
+  void _createFeetRegEx();
   Meters _getHeight(const ConstElementPtr& e);
-  void _cleanAndStandardizeLengthString(QString& value);
+  // considered putting this parsing logic in Tags::getLength() but decided against it for the time
+  // being
+  Meters _parseMetersVal(const QString heightStr);
+  Meters _parseFeetVal(const QString heightStr, const QRegularExpressionMatch& regexMatch) const;
+  Meters _parseFeetToken(const QString type, const QRegularExpressionMatch& regexMatch,
+                         bool& successfulParse) const;
+  void _logInvalidFeetHeight(const QString heightStr) const;
+  void _cleanHeightStr(QString& heightStr);
 };
 
 }

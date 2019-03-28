@@ -30,9 +30,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
-// Qt
-#include <QRegExp>
-
 // Standard
 #include <assert.h>
 

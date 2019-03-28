@@ -52,17 +52,20 @@ public:
 
   void runBasicTest()
   {
+    // Invalid height formats log warnings, so disable log output.
+    DisableLog dl;
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
 
     BuildingHeightVisitor uut;
     map->visitRo(uut);
 
-    CPPUNIT_ASSERT_EQUAL(0L, uut.numWithStat());
-    CPPUNIT_ASSERT_EQUAL(0.0, uut.getStat());
-    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMin());
-    CPPUNIT_ASSERT_EQUAL(0.0, uut.getMax());
-    CPPUNIT_ASSERT_EQUAL(0.0, uut.getAverage());
+    CPPUNIT_ASSERT_EQUAL(13L, uut.numWithStat());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.55, uut.getStat(), 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.91, uut.getMin(), 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8.1, uut.getMax(), 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4.43, uut.getAverage(), 2);
   }
 };
 
