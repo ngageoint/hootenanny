@@ -1,8 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-nfsShare = false
-fouoShare = false
+$nfsShare = false
+$fouoShare = false
 
 Vagrant.configure(2) do |config|
   # Hoot port mapping
@@ -79,29 +79,36 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  def mount_shares(config)
+    # sharing of the hosts hoot folder and optionally the fouo folder with or without nfs
+    if $nfsShare
+      config.vm.network "private_network", ip: "192.168.33.10"
+      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
+      if $fouoShare
+        config.vm.synced_folder "/fouo", "/fouo", type: "nfs"
+      end
+    else
+      config.vm.synced_folder ".", "/home/vagrant/hoot"
+      if $fouoShare
+        config.vm.synced_folder "/fouo", "/fouo"
+      end
+    end
+  end
+
+  def set_provisioners(config)
+    config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"   
+    config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+  end
+
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
     hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
     hoot_centos7_prov.vm.hostname = "centos7-hoot"
 
-    if nfsShare 
-      hoot_centos7_prov.vm.network "private_network", ip: "192.168.33.10" 
-      hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
-      if fouoShare 
-        hoot_centos7_prov.vm.synced_folder "/fouo", "/fouo", type: "nfs"
-      end
-    else
-      hoot_centos7_prov.vm.synced_folder ".", "/home/vagrant/hoot"
-      if fouoShare 
-        hoot_centos7_prov.vm.synced_folder "/fouo", "/fouo"
-      end
-    end
-
-    hoot_centos7_prov.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-    hoot_centos7_prov.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    hoot_centos7_prov.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    hoot_centos7_prov.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
-
+    mount_shares(hoot_centos7_prov)
+    set_provisioners(hoot_centos7_prov)
     aws_provider(hoot_centos7_prov, 'CentOS7')
   end
 
@@ -110,24 +117,8 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
     hoot_centos7.vm.hostname = "hoot-centos"
 
-    if nfsShare 
-      hoot_centos7.vm.network "private_network", ip: "192.168.33.10" 
-      hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
-      if fouoShare 
-        hoot_centos7.vm.synced_folder "/fouo", "/fouo", type: "nfs"
-      end
-    else
-      hoot_centos7.vm.synced_folder ".", "/home/vagrant/hoot"
-      if fouoShare 
-        hoot_centos7.vm.synced_folder "/fouo", "/fouo"
-      end
-    end
-
-    hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-    hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
-
+    mount_shares(hoot_centos7)
+    set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7')
   end
 
