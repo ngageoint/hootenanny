@@ -34,6 +34,7 @@ namespace hoot
 
 AddExportTagsVisitor::AddExportTagsVisitor()
 {  
+  _includeIds = false,
   _textStatus = ConfigOptions().getWriterTextStatus();
   _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
   _includeCircularError = ConfigOptions().getWriterIncludeCircularErrorTags();
@@ -42,28 +43,36 @@ AddExportTagsVisitor::AddExportTagsVisitor()
 void AddExportTagsVisitor::visit(const ElementPtr& pElement)
 { 
   Tags& tags = pElement->getTags();
-  const ElementType type = pElement->getElementType();
+  ElementType type = pElement->getElementType();
+  Status status = pElement->getStatus();
+  bool isNode = type == ElementType::Node;
+  bool isRelation = type == ElementType::Relation;  
+  bool validStatus = status != Status::Invalid;
+  bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
 
-  if (_includeDebug)
+  // deciding on status based on previous OsmXmlWriter implementation
+  bool addStatus = _includeDebug ||
+                   (_textStatus && (!isNode || (isNode && tags.getNonDebugCount() > 0))) ||
+                   (hasStatus && (isRelation || (!isRelation && validStatus)));
+
+  bool addCircularError = _includeCircularError &&
+                          pElement->hasCircularError() &&
+                          (!isNode || (isNode && tags.getNonDebugCount() > 0));
+
+  // HootStatus
+  if (addStatus)
   {
-    Status status = pElement->getStatus();
-    bool includeStatus =
-        status != Status::Invalid ||
-        type == ElementType::Relation ||
-        type == ElementType::Node;
+    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : status.toString();
+  }
 
-    if( includeStatus )
-    {
-      tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : status.toString();
-    }
-
+  // HootId
+  if (_includeDebug &&_includeIds)
+  {
     tags[MetadataTags::HootId()] = QString::number(pElement->getId());
   }
 
-  if (_includeCircularError &&
-       pElement->hasCircularError() &&
-       type != ElementType::Node
-     )
+  // Circular Error
+  if (addCircularError)
   {
     tags[MetadataTags::ErrorCircular()] = QString::number(pElement->getCircularError());
   }

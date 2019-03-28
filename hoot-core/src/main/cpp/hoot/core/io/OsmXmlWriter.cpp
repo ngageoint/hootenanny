@@ -338,14 +338,6 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     }
   }
 
-  if ( /* _includeDebug || */ _includeIds)
-  {
-    _writer->writeStartElement("tag");
-    _writer->writeAttribute("k", MetadataTags::HootId());
-    _writer->writeAttribute("v", QString("%1").arg(element->getId()));
-    _writer->writeEndElement();
-  }
-
   //  Output the PID as a tag if desired for debugging purposes
   if (_includePid && type == ElementType::Way)
   {
@@ -584,7 +576,7 @@ void OsmXmlWriter::finalizePartial()
 void OsmXmlWriter::_overrideDebugSettings()
 {
   // include circular error, text status and debug
-  _addExportTagsVisitor._overrideDebugSettings();
+  _addExportTagsVisitor.overrideDebugSettings();
   //  Include Hoot ID tag
   _includeIds = true;
   //  Include parent ID tag
