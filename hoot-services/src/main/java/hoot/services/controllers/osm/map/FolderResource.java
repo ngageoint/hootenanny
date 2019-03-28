@@ -74,6 +74,7 @@ import com.querydsl.sql.SQLQuery;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 
 
 @Controller
@@ -326,7 +327,7 @@ public class FolderResource {
      *
      * @param folderId
      *            ID of folder
-     * @param parentId
+     * @param newParentFolderId
      *            ID of another folder
      * @return jobId Success = True/False
      */
@@ -352,11 +353,7 @@ public class FolderResource {
         }
 
 
-        createQuery()
-            .update(folders)
-            .where(folders.id.eq(folderId))
-            .set(folders.parentId, newParentFolderId)
-            .execute();
+        DbUtils.setFolderParent(folderId, newParentFolderId);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
