@@ -83,7 +83,7 @@ Vagrant.configure(2) do |config|
     # sharing of the hosts hoot folder and optionally the fouo folder with or without nfs
     if $nfsShare
       config.vm.network "private_network", ip: "192.168.33.10"
-      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs"
+      config.vm.synced_folder ".", "/home/vagrant/hoot", type: "nfs", mount_options: ['vers=4'], nfs_version: 4
       if $fouoShare
         config.vm.synced_folder "/fouo", "/fouo", type: "nfs"
       end
