@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTORBASE_H
 #define FEATUREEXTRACTORBASE_H
@@ -51,12 +51,12 @@ public:
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
-  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const override { return Tgs::DataFrame::Numerical; }
 
   /**
    * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
    */
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const override
   {
     return Tgs::DataFrame::NullAsMissingValue;
   }

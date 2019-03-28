@@ -73,7 +73,7 @@ public:
 
   virtual QString getType() const { return "rnd"; }
 
-  int runSimple(QStringList args)
+  int runSimple(QStringList args) override
   {
     Timer totalTime;
 

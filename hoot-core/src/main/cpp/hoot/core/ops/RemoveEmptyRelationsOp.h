@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __REMOVE_EMPTY_RELATIONS_OP_H__
 #define __REMOVE_EMPTY_RELATIONS_OP_H__
@@ -53,9 +53,9 @@ public:
 
   long getNumRemoved() const { return _numAffected; }
 
-  virtual QString getInitStatusMessage() { return "Removing empty relations..."; }
+  virtual QString getInitStatusMessage() const { return "Removing empty relations..."; }
 
-  virtual QString getCompletedStatusMessage()
+  virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " empty relations"; }
 
   virtual QString getDescription() const { return "Removes relations with no members"; }

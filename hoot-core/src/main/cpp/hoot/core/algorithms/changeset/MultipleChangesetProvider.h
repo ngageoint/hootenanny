@@ -43,7 +43,7 @@ public:
 
   explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~MultipleChangesetProvider();
 
@@ -60,7 +60,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange();
+  virtual Change readNextChange() override;
 
   void addChangesetProvider(ChangesetProviderPtr newChangeset);
 

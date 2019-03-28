@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INVERTEDEDGEMATCHSET_H
 #define INVERTEDEDGEMATCHSET_H
@@ -42,7 +42,7 @@ public:
 
   virtual bool contains(const EdgeMatchPtr &em) const = 0;
 
-  virtual QString toString() const { assert(false); return ""; }
+  virtual QString toString() const override { assert(false); return ""; }
 };
 
 }

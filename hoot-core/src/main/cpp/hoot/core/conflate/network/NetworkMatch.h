@@ -44,8 +44,12 @@ class NetworkMatch : public Match
 {
 public:
 
+  static std::string className() { return "hoot::NetworkMatch"; }
+
+  NetworkMatch();
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
-    double score, ConstMatchThresholdPtr mt);
+    double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
+    double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
 
   /**
    * Classifies the match and returns a classification object.
@@ -105,6 +109,8 @@ public:
   bool isVerySimilarTo(const NetworkMatch* other) const;
 
   bool contains(const NetworkMatch* other) const;
+
+  virtual QString getDescription() const { return "Matches roads with the Network Algorithm"; }
 
 protected:
 

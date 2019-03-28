@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef EXTERNAL_MERGE_ELEMENT_SORTER_H
@@ -95,7 +95,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
@@ -110,7 +110,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
   void setMaxElementsPerFile(long max) { _maxElementsPerFile = max; }
   void setRetainTempFiles(bool retain) { _retainTempFiles = retain; }

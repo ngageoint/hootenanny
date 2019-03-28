@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ClosePointHash.h"
@@ -77,18 +77,10 @@ void ClosePointHash::resetIterator()
 
 int64_t ClosePointHash::_toBin(double x, double y)
 {
-  union
-  {
-    struct
-    {
-      int32_t x;
-      int32_t y;
-    } p;
-    int64_t h;
-  } i;
-  i.p.x = (int32_t)(x / _binSize + 0.5);
-  i.p.y = (int32_t)(y / _binSize + 0.5);
-  return i.h;
+  uint64_t xi = (uint32_t)(x / _binSize + 0.5);
+  uint64_t yi = (uint32_t)(y / _binSize + 0.5);
+
+  return (yi << 32) | xi;
 }
 
 }

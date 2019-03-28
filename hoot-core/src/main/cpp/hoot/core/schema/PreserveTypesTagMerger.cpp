@@ -98,26 +98,29 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         //can be merged into it.  Something similar to PoiPolygonTypeScoreExtractor::hasType but
         //looser could be used...or pass in a type def function to this class.
 
-        //arbitrarily use first one and add second to an alt_types field
-        LOG_TRACE(
-          "Both tag sets contain same type: " << it.key() <<
-          " but neither is more specific.  Keeping both...");
-        result[it.key()] = it.value();
-        LOG_VART(result[ALT_TYPES_TAG_KEY]);
-        if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+        if(it.key() != ALT_TYPES_TAG_KEY)
         {
-          const QString altType = it.key() % "=" % t2Copy[it.key()];
-          if (!result[ALT_TYPES_TAG_KEY].contains(altType))
+          //arbitrarily use first one and add second to an alt_types field
+          LOG_TRACE(
+            "Both tag sets contain same type: " << it.key() <<
+            " but neither is more specific.  Keeping both...");
+          result[it.key()] = it.value();
+          LOG_VART(result[ALT_TYPES_TAG_KEY]);
+          if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
           {
-            result[ALT_TYPES_TAG_KEY] =
-              result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % t2Copy[it.key()];
+            const QString altType = it.key() % "=" % t2Copy[it.key()];
+            if (!result[ALT_TYPES_TAG_KEY].contains(altType))
+            {
+              result[ALT_TYPES_TAG_KEY] =
+                result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % t2Copy[it.key()];
+            }
           }
+          else
+          {
+            result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
+          }
+          LOG_VART(result[ALT_TYPES_TAG_KEY]);
         }
-        else
-        {
-          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
-        }
-        LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
     }
     else if (!it.value().isEmpty())

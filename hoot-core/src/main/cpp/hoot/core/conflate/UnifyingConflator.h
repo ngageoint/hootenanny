@@ -52,10 +52,9 @@ class MergerFactory;
 class ElementId;
 
 /**
- * A different form of conflation from the standard greedy conflation. This is a work in progress
- * see the developer documentation for details and #2376 and #2452 for details.
+ * A different form of conflation from the standard greedy conflation.
  *
- * This is named unifying because it unifies the building conflation and road conflation approaches.
+ * This is named Unifying because it unifies the building conflation and road conflation approaches.
  *
  * Re-entrant but not thread safe.
  *

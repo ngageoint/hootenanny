@@ -31,29 +31,29 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/rnd/perty/RngConsumer.h>
 
 // Qt
 #include <QString>
-
-#include <hoot/rnd/perty/RngConsumer.h>
 
 namespace hoot
 {
 
 /**
- * Duplicates a POI with some random error.
- * This is not part of the original Perty paper.
+ * Duplicates a POI with some random error.  This is not part of the original Perty paper.
  *
  * This should really change the node after it has been duplicated.
+ * @todo This duplicates nodes, not POIs, so the name should be corrected.
  */
-class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer
+class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer,
+  public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::PertyDuplicatePoiOp"; }
 
   PertyDuplicatePoiOp();
-
   virtual ~PertyDuplicatePoiOp() {}
 
   virtual void apply(OsmMapPtr& map);
@@ -84,7 +84,13 @@ public:
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
   virtual QString getDescription() const
-  { return "Duplicates a POI with some random error"; }
+  { return "Duplicates a node with some random error"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Randomly duplicating nodes..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Randomly duplicated " + QString::number(_numAffected) + " nodes"; }
 
 private:
 

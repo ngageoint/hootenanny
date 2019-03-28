@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveReviewsByEidOp.h"
 
@@ -61,6 +61,8 @@ void RemoveReviewsByEidOp::addElement(const ConstElementPtr& e)
 
 void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
 {
+  _numAffected = 0;
+
   if (_eid.isNull())
   {
     throw IllegalArgumentException("You must specify a valid element ID.");
@@ -83,6 +85,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
   {
     // just remove the review, not its children.
     RemoveElementOp::removeElement(map, *it);
+    _numAffected++;
   }
 
   if (_clearAndRemove)

@@ -126,7 +126,8 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
 }
 
 double EdgeDistanceExtractor::distance(const OsmMap &map,
-  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element> &candidate) const
+                                       const boost::shared_ptr<const Element>& target,
+                                       const boost::shared_ptr<const Element> &candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
@@ -139,8 +140,9 @@ string EdgeDistanceExtractor::getName() const
   return (QString("EdgeDistance") + _aggregator->toString()).toStdString();
 }
 
-double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
-  const boost::shared_ptr<const Element>& e2) const
+double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
+                                           const boost::shared_ptr<const Element>& e1,
+                                           const boost::shared_ptr<const Element>& e2) const
 {
   vector<double> distances;
   vector<Coordinate> points = _discretize(map, e1);

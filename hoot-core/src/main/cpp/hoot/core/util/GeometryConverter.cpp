@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryConverter.h"
@@ -184,12 +184,13 @@ boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(co
 RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
   const OsmMapPtr& map, Status s, double circularError)
 {
-  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-    MetadataTags::RelationMultiPolygon()));
+  RelationPtr r(
+    new Relation(
+      s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon()));
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
-    convertPolygonToRelation(dynamic_cast<const Polygon*>(mp->getGeometryN(i)), map, r, s,
-      circularError);
+    convertPolygonToRelation(
+      dynamic_cast<const Polygon*>(mp->getGeometryN(i)), map, r, s, circularError);
   }
   map->addRelation(r);
   return r;

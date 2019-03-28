@@ -50,6 +50,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 
 
@@ -112,11 +113,11 @@ public class ConflateResource {
 
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
-            InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
+            InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, user.getId(), params, this.getClass());
 
             Command[] workflow = { conflateCommand, updateTagsCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSONOSMSCHEMALOADER_H
 #define JSONOSMSCHEMALOADER_H
@@ -48,11 +48,11 @@ public:
 
   virtual ~JsonOsmSchemaLoader() {}
 
-  virtual bool isSupported(QString url) const { return url.endsWith(".json"); }
+  virtual bool isSupported(QString url) const override { return url.endsWith(".json"); }
 
-  virtual void load(QString path, OsmSchema& s);
+  virtual void load(QString path, OsmSchema& s) override;
 
-  virtual std::set<QString> getDependencies() { return _deps; }
+  virtual std::set<QString> getDependencies() override { return _deps; }
 
 protected:
 

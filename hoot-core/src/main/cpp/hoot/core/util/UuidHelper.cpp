@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UuidHelper.h"
 
@@ -80,7 +80,7 @@ QUuid UuidHelper::createUuid5(QString string, QUuid ns)
 
 QByteArray UuidHelper::toByteArray(const QUuid& uuid)
 {
-  return QByteArray::fromHex(uuid.toString().toAscii().replace("-", "").replace("{", "").
+  return QByteArray::fromHex(uuid.toString().toLatin1().replace("-", "").replace("{", "").
                              replace("}", ""));
 }
 
@@ -91,7 +91,6 @@ QUuid UuidHelper::toUuid(const QByteArray& bytes)
   result.insert(16, "-");
   result.insert(12, "-");
   result.insert(8, "-");
-
   return QUuid(QString(result));
 }
 

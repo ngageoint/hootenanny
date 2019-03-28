@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGPARTMERGEOP_H
 #define BUILDINGPARTMERGEOP_H
@@ -32,6 +32,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -77,7 +78,7 @@ class OsmSchema;
  *
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable
+class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
 {
 public:
 
@@ -87,7 +88,7 @@ public:
 
   BuildingPartMergeOp();
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -98,8 +99,13 @@ public:
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Implicitly merges individual building parts into a single part"; }
+
+  virtual QString getInitStatusMessage() const { return "Merging building parts..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Processed " + QString::number(_numAffected) + " elements for building part merging."; }
 
 private:
 
@@ -108,7 +114,8 @@ private:
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
 
-  void _addContainedWaysToGroup(const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
+  void _addContainedWaysToGroup(
+    const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);
 
@@ -132,7 +139,6 @@ private:
    */
   bool _isBuildingPart(const WayPtr& w);
   bool _isBuildingPart(const RelationPtr& r);
-
 };
 
 }

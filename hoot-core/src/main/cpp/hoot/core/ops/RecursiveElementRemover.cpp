@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
@@ -51,6 +51,8 @@ _criterion(criterion)
 
 void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
+
   assert(_eid.isNull() == false);
   if (map->containsElement(_eid) == false)
   {
@@ -58,7 +60,6 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   }
 
   const ConstElementPtr& e = map->getElement(_eid);
-  LOG_TRACE("Removing: " << e->getElementId() << "...");
   ElementIdSetVisitor sv;
   e->visitRo(*map, sv);
 
@@ -66,7 +67,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   set<ElementId> toErase = sv.getElementSet();
 
   bool foundOne = true;
-  // keep looping through until we stop removing children. There may be times when the ordering of
+  // Keep looping through until we stop removing children. There may be times when the ordering of
   // the removal matters.
   while (foundOne)
   {
@@ -129,6 +130,8 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     return;
   }
 
+  LOG_TRACE("Removing: " << eid << "...");
+
   if (eid.getType() == ElementType::Relation)
   {
     const RelationPtr& r = map->getRelation(eid.getId());
@@ -142,6 +145,7 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     }
 
     RemoveRelationOp::removeRelation(map, eid.getId());
+    _numAffected++;
   }
   else if (eid.getType() == ElementType::Way)
   {
@@ -155,10 +159,12 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
     }
 
     RemoveWayOp::removeWay(map, w->getId());
+    _numAffected++;
   }
   else if (eid.getType() == ElementType::Node)
   {
     RemoveNodeOp::removeNodeNoCheck(map, eid.getId());
+    _numAffected++;
   }
   else
   {

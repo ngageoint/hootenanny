@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -47,6 +47,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
@@ -66,6 +67,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
@@ -292,7 +294,7 @@ public class FolderResource {
         Folders folder = getFolderForUser(user, folderId);
 
         if(user != null && !folder.getUserId().equals(user.getId())) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to delete it").build());
         }
 
         createQuery()
@@ -346,7 +348,7 @@ public class FolderResource {
                 ||
                 !parentFolder.getUserId().equals(user.getId())
         )) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own both folders in this request").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders in this request").build());
         }
 
 
@@ -384,7 +386,7 @@ public class FolderResource {
         Folders targetFolder = getFolderForUser(user, folderId);
 
         if(user != null && !targetFolder.getUserId().equals(user.getId())) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to rename it").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to rename it").build());
         }
 
         createQuery()
@@ -408,7 +410,7 @@ public class FolderResource {
         Folders f = getFolderForUser(user, folderId);
         // User must also -own- the folder:
         if(!f.getUserId().equals(user.getId())) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
         }
 
         String query = String.format("with recursive related_folders as (" +
@@ -477,7 +479,6 @@ public class FolderResource {
         return Response.status(Status.OK).entity(affectedFolders).build();
     }
 
-
     /**
      * Converts a set of folder database records into an object returnable by a
      * web service
@@ -494,6 +495,7 @@ public class FolderResource {
             FolderRecord folder = new FolderRecord();
             folder.setId(folderRecord.getId());
             folder.setName(folderRecord.getDisplayName());
+            folder.setUserId(folderRecord.getUserId());
             folder.setParentId(folderRecord.getParentId());
             folder.setPublic(folderRecord.getPublicCol());
             folderRecordList.add(folder);
@@ -529,6 +531,35 @@ public class FolderResource {
         return linkRecords;
     }
 
+    /**
+     * Returns list of info Tuples in folder visible to user
+     * @param user
+     * @param folder_id folder's  id
+     * @return list of all map ids
+     *
+     */
+    public static List<Tuple> getFolderMaps(Users user, Long folder_id) {
+        List<Tuple> mapsInfo = new ArrayList<>();
+        try {
+            getFolderForUser(user, folder_id); // will throw an exception if folder not visible to user...
+            mapsInfo = createQuery()
+                .select(maps.id, maps.displayName)
+                .from(maps)
+                .innerJoin(folderMapMappings)
+                .on(maps.id.eq(folderMapMappings.mapId))
+                .where(folderMapMappings.folderId.eq(folder_id))
+                .fetch();
+
+        } catch (ForbiddenException | NotFoundException e) {
+            throw e;
+        }
+        return mapsInfo;
+    }
+
+    public static String getFolderName(Long folder_id) {
+        return createQuery().select(folders.displayName).from(folders).where(folders.id.eq(folder_id)).fetchFirst();
+    }
+
     public static Folders getFolderForUser(Users user, Long folderId) {
         if(folderId == 0) {
             Folders f = new Folders();
@@ -549,7 +580,7 @@ public class FolderResource {
         if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
-        throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it").build());
+        throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it").build());
     }
     public static Folders folderFromList(List<Folders> folders, Long folderId) {
         for(Folders folder : folders) {
@@ -598,7 +629,7 @@ public class FolderResource {
         }
         for(Folders f : out) {
             if(user != null && !f.getUserId().equals(user.getId())) {
-                throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it.").build());
+                throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it.").build());
             }
         }
         return out;

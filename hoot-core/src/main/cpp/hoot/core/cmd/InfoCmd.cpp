@@ -61,7 +61,7 @@ public:
   virtual QString getDescription() const
   { return "Displays information about Hootenanny capabilities"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList args) override
   {
     //only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();
@@ -307,7 +307,9 @@ private:
     options.append("--formats");
     options.append("--languages");
     options.append("--matchers");
+    options.append("--match-creators");
     options.append("--mergers");
+    options.append("--merger-creators");
     options.append("--operators");
     options.append("--string-comparators");
     options.append("--subline-matchers");

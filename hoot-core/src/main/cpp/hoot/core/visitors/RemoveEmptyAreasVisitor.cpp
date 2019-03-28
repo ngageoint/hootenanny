@@ -34,6 +34,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
 namespace hoot
@@ -71,6 +72,14 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
       _numAffected++;
     }
+  }
+
+  _numProcessed++;
+  if (_numProcessed % 10000 == 0)
+  {
+    PROGRESS_INFO(
+      "\t\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
+      " elements for empty area removal.");
   }
 }
 

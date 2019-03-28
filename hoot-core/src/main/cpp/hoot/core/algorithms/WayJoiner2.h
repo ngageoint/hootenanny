@@ -41,7 +41,8 @@ namespace hoot
 
 /**
  * An experimental way joiner implemented to work with Attribute Conflation and a possible
- * predecessor to WayJoiner1.
+ * predecessor to WayJoiner1.  If we end up keeping WayJoiner1 and WayJoiner2 separate, then
+ * possibly a shared base class could be made to reduce some of the redundant code between them.
  */
 class WayJoiner2 : public WayJoiner
 {
@@ -80,7 +81,8 @@ private:
   int _numJoined;
 
   /**
-   * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that parent
+   * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
+   * parent
    */
   void _joinParentChild();
 
@@ -97,8 +99,8 @@ private:
   void _joinAtNode();
 
   /**
-   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at a node
-   *    essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
+   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at
+   * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
    */
   bool _areJoinable(const WayPtr& w1, const WayPtr& w2);
 
@@ -119,8 +121,24 @@ private:
    * @brief joinWays Function to rejoin two ways
    * @param parent Way that is modified to include the child way
    * @param child Way that will be merged into the parent and then deleted
+   * @return true if the two ways were joined; false otherwise
    */
-  void _joinWays(const WayPtr& parent, const WayPtr& child);
+  bool _joinWays(const WayPtr& parent, const WayPtr& child);
+
+  /*
+   * A more aggressive joining approach that tries to join up any unnamed generic roads in the
+   * output with a non-generic named road.  Best to be run after other joining routines and will
+   * likely result in some undesirable joins.
+   */
+  void _joinUnsplitWaysAtNode();
+
+  void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
+
+  bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
+
+  double _getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const;
+
+  void _removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map);
 };
 
 }

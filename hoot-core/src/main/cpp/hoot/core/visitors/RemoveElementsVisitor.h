@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
  * Removes any elements where that satisfy a criterion
  */
 class RemoveElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-    public ElementCriterionConsumer, public Configurable
+    public ElementCriterionConsumer, public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -74,6 +75,11 @@ public:
   virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+
+  virtual QString getInitStatusMessage() const { return "Removing elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_count) + " elements."; }
 
 private:
 

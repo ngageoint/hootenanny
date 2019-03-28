@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COOKIECUTTEROP_H
 #define COOKIECUTTEROP_H
@@ -48,7 +48,7 @@ public:
 
   CookieCutterOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -58,14 +58,13 @@ public:
   void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
   void setCrop(bool crop) { _crop = crop; }
 
-  virtual QString getDescription() const { return "Applies the cookie cut operation"; }
+  virtual QString getDescription() const override { return "Applies the cookie cut operation"; }
 
 private:
 
   double _alpha;
   double _alphaShapeBuffer;
   bool _crop;
-
 };
 
 }

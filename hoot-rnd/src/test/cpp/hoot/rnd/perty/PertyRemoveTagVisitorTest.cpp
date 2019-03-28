@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -83,11 +83,11 @@ public:
 
     stringstream ss1;
     ss1 << n1->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[2]{name:ru, alt_name}"), ss1.str());
+    CPPUNIT_ASSERT_EQUAL(string("[2]{name, alt_name}"), ss1.str());
 
     stringstream ss2;
     ss2 << n2->getTags().keys();
-    CPPUNIT_ASSERT_EQUAL(string("[1]{name}"), ss2.str());
+    CPPUNIT_ASSERT_EQUAL(string("[1]{alt_name}"), ss2.str());
   }
 
   void runExemptTagKeysTest()

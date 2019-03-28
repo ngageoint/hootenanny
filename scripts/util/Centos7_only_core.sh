@@ -29,8 +29,8 @@
 #
 # American-english-insane dictionary & words.sqlite. There isn't a package available for these so we use our own
 # copy stored on S3
-# https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
-# https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+# https://s3.amazonaws.com/hoot-support/american-english-insane.bz2
+# https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
 #
 # Alternate Maven mirror for packages
 # https://repo.maven.apache.org/maven2
@@ -103,7 +103,6 @@ sudo yum -y install \
     asciidoc \
     autoconf \
     automake \
-    bc \
     boost-devel \
     ccache \
     cmake \
@@ -235,8 +234,8 @@ cd ~
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
-    if hash qmake-qt4 >/dev/null 2>&1 ; then
-      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt4 500
+    if hash qmake-qt5 >/dev/null 2>&1 ; then
+      sudo alternatives --install /usr/bin/qmake qmake /usr/bin/qmake-qt5 500
     else
       echo "##### No qmake! #####"
     fi
@@ -248,7 +247,7 @@ if [ ! -f /usr/share/dict/american-english-insane ]; then
     if [ -f /home/centos/hoot-deps/american-english-insane.bz2 ]
         sudo bash -c "bzcat /home/centos/hoot-deps/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
-        wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+        wget --quiet -N https://s3.amazonaws.com/hoot-support/american-english-insane.bz2
         sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     fi
 fi

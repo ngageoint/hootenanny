@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYREMOVERANDOMELEMENTVISITOR_H
 #define PERTYREMOVERANDOMELEMENTVISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ namespace hoot
  * Randomly removes elements from a map
  */
 class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+    public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -60,9 +61,15 @@ public:
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
   virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const boost::shared_ptr<Element>& /*e*/) {}
+  virtual void visit(const boost::shared_ptr<Element>& /*e*/) override {}
 
   virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Removing random elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
 private:
 

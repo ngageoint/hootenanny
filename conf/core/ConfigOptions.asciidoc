@@ -85,6 +85,13 @@ details.
 If true, not only will review relations receive the hoot:review:needs tag, the features involved in
 the review will receive them as well.
 
+=== add.uuid.visitor.key
+
+* Data Type: string
+* Default Value: ``
+
+Tag key used by AddUuidVisitor for adding custom unique ID's to data.
+
 === address.additional.tag.keys
 
 * Data Type: list
@@ -173,7 +180,7 @@ ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is se
 
 First record ID to assign to written relations when writing to an OSM/Hootenanny API database or
 SQL file.  Must be a positive number.  Use this when working with an offline database and know the
-ID range you want to assign to relation records.  If writing to an OSM API databse, this option is
+ID range you want to assign to relation records.  If writing to an OSM API database, this option is
 ignored if "osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
 === apidb.bulk.inserter.stxxl.map.min.size
@@ -210,6 +217,32 @@ setting may cause writing to an OSM API database to occur more slowly.
 * Default Value: `17`
 
 The precision of numeric values written to Attribute-Relation (.arff) files.
+
+=== attribute.conflation.aggressive.highway.joining
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
+highway attribution into those with less specific highway attribution and no names.  Enabling this
+option may result in some false positive road joining.
+
+=== attribute.conflation.allow.ref.geometry.changes.for.bridges
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
+bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
+reference dataset will be lost.
+
+=== attribute.conflation.allow.reviews.by.score
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all reviews outside of the score range established by the configuration options
+review.score.criterion.max/min.threshold will be removed.
 
 === attribute.score.extractor.use.weight
 
@@ -279,6 +312,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.outline.update.op.remove.building.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when building outlines are updated the updater will remove the source building relations
+used to create the outline multipolygon relation.  If false, both source building relations and
+outline multipolygon relations will remain.
+
 === building.review.if.secondary.newer
 
 * Data Type: bool
@@ -316,14 +358,7 @@ If true, changesets derived can issue delete statements for the reference datase
 passed to the changeset deriver).  If false, no delete statements will be issued for the reference
 dataset.
 
-=== changeset.apidb.max.writers
-
-* Data Type: long
-* Default Value: `10`
-
-The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
-
-=== changeset.apidb.max.size
+=== changeset.apidb.size.max
 
 * Data Type: long
 * Default Value: `1000`
@@ -333,6 +368,29 @@ is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
+
+=== changeset.apidb.writers.max
+
+* Data Type: long
+* Default Value: `10`
+
+The maximum number of writers to spawn for writing changesets in parallel to an OSM API database.
+
+=== changeset.apidb.writers.throttle
+
+* Data Type: bool
+* Default Value: `false`
+
+Flag to turn on throttling for OSM API changeset writes.  When turned on, each processing thread
+will wait `changeset.api.writers.throttle.time` seconds after a successful write before submitting
+another changeset to the OSM API.
+
+=== changeset.apidb.writers.throttle.time
+
+* Data Type: long
+* Default Value: `30`
+
+The number of seconds after a successful write before submitting another changeset to the OSM API.
 
 === changeset.buffer
 
@@ -589,6 +647,36 @@ The buffer to add to the alpha shape before cutting by the cookie cutter map ope
 Crops based on the polygon rather than doing a cookie cut when using the cookie cutter map
 operation (see CookieCutterOp).
 
+=== corner.splitter.rounded.max.node.count
+
+* Data Type: int
+* Default Value: `6`
+
+Maximum number of nodes in a row to consider for a bend in a way to determine if the way
+is a rounded corner that should be split.  The higher the number, the more heading calculations
+are required.  The lower the number, the less accurate it will be.
+
+=== corner.splitter.rounded.split
+
+* Data Type: bool
+* Default Value: `false`
+
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate
+
+=== corner.splitter.rounded.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of rounded bends in way that constitutes a corner.
+
+=== corner.splitter.threshold
+
+* Data Type: double
+* Default Value: `55.0`
+
+Threshold in degrees between the heading of two way segments that constitutes a corner.
+
 === create.bogus.review.tags
 
 * Data Type: bool
@@ -618,6 +706,14 @@ Debugging: The filename to use when saving the debug map during conflation.
 If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
+
+=== differential.snap.unconnected.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, when running Differential Conflation the Unconnected Way Snapper will snap unconnected
+secondary road endpoint nodes to the nearest reference road.
 
 === differential.tag.ignore.list
 
@@ -684,6 +780,14 @@ case also matches.  If false, cleaning and conflation merge operations will cons
 the same text but differing case as the same with each other.
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
+
+=== duplicate.name.preserve.original.name
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
+will treat name and alternate name tags equally.
 
 === duplicate.way.remover.strict.tag.matching
 
@@ -836,6 +940,14 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== hash.seed.zero
+
+* Data Type: bool
+* Default Value: `false`
+
+Sets the Qt hash seed to 0 for consistent hash values and hash based container content order. This
+is required for unit tests, but shouldn't be used in normal operation.
 
 === highway.match.threshold
 
@@ -1032,11 +1144,11 @@ a new map is written.
 === hootapi.db.writer.remap.ids
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If this value is set to true, then all incoming element IDs are remapped into new IDs as the
-elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
-incoming IDs are non-positive.
+elements are written to a Hootenanny API database, otherwise the original IDs from the map
+are preserved.
 
 === id.generator
 
@@ -1734,6 +1846,20 @@ List of merger creators to use during conflation. This can modify what features 
 A larger value will conflate more aggressively (fewer reviews) when using network conflation. Users
 may want to consider changing this value. Reasonable range is [1, ~10].
 
+=== network.conflicts.conflicting.score.threshold.modifier
+
+* Data Type: double
+* Default Value: `0.3`
+
+Added to a conflicting match score to allow for match pruning
+
+=== network.conflicts.matcher.threshold
+
+* Data Type: double
+* Default Value: `0.35`
+
+The score threshold used to compare whole networks with the ConflictsNetworkMatcher
+
 === network.conflicts.outbound.weighting
 
 * Data Type: double
@@ -1751,6 +1877,21 @@ neighbor.  This value is generally not changed by users.  Reasonable range is [0
 A larger value will increase the weight of partial matches when using network conflation.  A
 smaller value prefers whole matches over partial matches. This value is generally not changed by
 users. Reasonable range is (0, ~2].
+
+=== network.conflicts.sanity.check.min.separation.distance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Minimum separation distance, in meters, for match distance separation to use when sanity checking
+match relationships.
+
+=== network.conflicts.sanity.check.separation.distance.multiplier
+
+* Data Type: double
+* Default Value: `2.5`
+
+Distance multiplier to use when santiy checking match relationships.
 
 === network.conflicts.stub.handicap
 
@@ -1772,11 +1913,42 @@ not changed by users.  Reasonable range is [0, ~10].
 === network.conflicts.weight.influence
 
 * Data Type: double
-* Default Value: `0.0`
+* Default Value: `0.68`
 
 A value of 0 will cause all edges to have the same weight with each neighbor, a higher value will
 give matches with more support a higher weight when using network conflation. This value is
 generally not changed by users. Reasonable range is [0, 2].
+
+=== network.edge.match.set.finder.max.iterations
+
+* Data Type: int
+* Default Value: `20`
+
+The maximum number of optimization iterations used to calculate edge match sets.
+
+=== network.match.scoring.function.max
+
+* Data Type: double
+* Default Value: `1.0`
+
+Maximum possible value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.mid.x
+
+* Data Type: double
+* Default Value: `0.5`
+
+X value curve midpoint value for the logistic function applied to conflation matches with the
+Network Algorithm. This value is generally not changed by users.
+
+=== network.match.scoring.function.curve.steepness
+
+* Data Type: double
+* Default Value: `2.0`
+
+Curve steepness value for the logistic function applied to conflation matches with the Network
+Algorithm. This value is generally not changed by users.
 
 === network.match.threshold
 
@@ -1788,15 +1960,6 @@ The threshold at which a network match is called a match when using network conf
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== network.match.write.debug.maps
-
-* Data Type: bool
-* Default Value: `false`
-
-If true debug maps will be generated at every iteration when using network conflation. This is
-useful when debugging. The maps can be large and slow things down significantly. This setting is
-independent of conflate.write.debug.maps.
 
 === network.matcher
 
@@ -1814,6 +1977,13 @@ debug and test. The parameter must be a class that is registered with the factor
 
 The maximum allowable length of a stub connection (way to node match) when using network conflation.
 Value in meters.
+
+=== network.merger.min.large.match.overlap.percentage
+
+* Data Type: double
+* Default Value: `80.0`
+
+The minimum network match overlap percentage allowed for a network merge to occur.
 
 === network.miss.threshold
 
@@ -3085,7 +3255,7 @@ honored by all readers.
 === reader.conflate.use.data.source.ids.1
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Determines whether the reader used by the conflate command to read the first input dataset will
 use the element ID's specified by the input datasets (true) or use internal ID management for the
@@ -3164,7 +3334,7 @@ Use this class for calculating the difference between element tags. If the diffe
 * Default Value: ``
 
 The plugin name of an element criterion used to select elements to delete.  To pass in complex
-nested criterion, use the Hootenanny Javascript interface instead.
+nested criteria, use the Hootenanny Javascript interface instead.
 
 === remove.elements.visitor.recursive
 
@@ -3203,6 +3373,32 @@ The tag the ReplaceTagVisitor replaces, of the form key=value.
 * Default Value: ``
 
 The tag the ReplaceTagVisitor uses as a replacement tag; of the form key=value.
+
+=== review.score.criterion.invert.thresholding
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold
+will pass the filter.
+
+=== review.score.criterion.max.threshold
+
+* Data Type: double
+* Default Value: `1.0`
+
+The score threshold above which reviews will not pass the filter.  A value of 1.0 signifies no
+maximum score threshold.  This currently works with Attribute Conflation only and can be enabled
+with attribute.conflation.allow.reviews.by.score.
+
+=== review.score.criterion.min.threshold
+
+* Data Type: double
+* Default Value: `0.0`
+
+The score threshold below which reviews will not pass the filter.  A value of 0.0 signifies no
+minimum score threshold.  This currently works with Attribute Conflation only and can be enabled
+with attribute.conflation.allow.reviews.by.score.
 
 === rubber.sheet.debug
 
@@ -3282,6 +3478,15 @@ If the script runs longer than the specified time, then it is forcefully stopped
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
 
+=== search.radius.calculator.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Element criterion class which determines which input features are used for search radius
+calculation.  An empty value specifies that all input features are to be used.  Conflation routines
+making use of automatic search radius calculation should set this value appropriately.
+
 === search.radius.default
 
 * Data Type: double
@@ -3342,7 +3547,7 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Default Value: ``
 
 The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
-in complex nested criterion, use the Hootenanny Javascript interface instead.
+in complex nested criteria, use the Hootenanny Javascript interface instead.
 
 === set.tag.value.visitor.key
 
@@ -3386,6 +3591,101 @@ then they'll be a candidate for merging.
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
+=== snap.unconnected.ways.add.circular.error.to.search.radius
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all tolerances use by the Unconnected Way Snapper will have the circular error of the
+snap node candidate added to them.
+
+=== snap.unconnected.ways.discretization.spacing
+
+* Data Type: double
+* Default Value: `1.0`
+
+The spacing granularity to which a unconnected way node is snapped back to a way with the
+Unconnected Way Snapper.  Setting this too low could result in lower algorithm performance, and
+setting it too high may result in less accurate way snapping.
+
+=== snap.unconnected.ways.existing.way.node.tolerance
+
+* Data Type: double
+* Default Value: `0.5`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way node for the way endpoint node to be snapped directly to
+the existing way node instead of adding the way endpoint node as a new way node on the way.
+
+=== snap.unconnected.ways.mark.snapped.nodes
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
+marked with a 'hoot:snapped' tag.  Useful for debugging purposes.
+
+=== snap.unconnected.ways.snap.to.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped to.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+way snapping.
+
+=== snap.unconnected.ways.snap.to.way.node.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayNodeCriterion`
+
+Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
+hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
+for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
+
+=== snap.unconnected.ways.snap.to.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways or way nodes being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1'
+to snap reference ways or 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.snap.tolerance
+
+* Data Type: double
+* Default Value: `5.0`
+
+Maximum distance used by the Unconnected Way Snapper, in meters, allowed between an unconnected
+way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
+section of the neighboring way.
+
+=== snap.unconnected.ways.snap.way.criterion
+
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
+
+Optional criterion class to filter the types of ways being snapped.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+way snapping.
+
+=== snap.unconnected.ways.snap.way.status
+
+* Data Type: string
+* Default Value: ``
+
+Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
+snap reference ways 'Input2' to snap secondary ways.
+
+=== snap.unconnected.ways.use.existing.way.nodes
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when the Unconnected Way Snapper snaps way endpoint nodes to neighboring ways, it
+will attempt to reuse existing way nodes on the way being snapped to instead of adding
+the endpoint way node to the way.
+
 === spark.changeset.writer.element.payload.format
 
 * Data Type: string
@@ -3393,6 +3693,13 @@ a single way.
 
 The format used to write the element payload portion of the Spark changeset file.  Valid options are
 'json' or 'xml'.
+
+=== split.name.visitor.max.length
+
+* Data Type: int
+* Default Value: `255`
+
+The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
 
 === stats.translate.script
 
@@ -3843,6 +4150,21 @@ databases are capped at 2000 nodes per way.
 
 The minimum size that a way should be split into for merging. Units in meters.
 
+=== way.remover.bounds
+
+* Data Type: string
+* Default Value: ``
+
+Bounds used by the RemoveWaysByBoundsOp when removing ways, of the form: minx,miny,maxx,maxy
+
+=== way.remover.invert.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the RemoveWaysByBoundsOp will remove ways outside of the bounds specified by
+way.remover.bounds.  Otherwise it will remove ways within the specified bounds.
+
 === way.splitter.max.length
 
 * Data Type: double
@@ -3897,7 +4219,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 

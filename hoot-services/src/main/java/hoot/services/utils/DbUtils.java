@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -156,14 +156,29 @@ public final class DbUtils {
      * Gets the map id from map name
      *
      * @param mapName map name
+     * @param userId user id
      * @return map ID
      */
-    public static Long getMapIdByName(String mapName) {
-        return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName)).fetchOne();
+    public static Long getMapIdByName(String mapName, Long userId) {
+        return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName).and(maps.userId.eq(userId))).fetchOne();
     }
 
-    public static String getDisplayNameById(long mapId) {
-        return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId)).fetchOne();
+    public static String getDisplayNameById(long mapId, Long userId) {
+        return createQuery().select(maps.displayName).from(maps).where(maps.id.eq(mapId).and(maps.userId.eq(userId))).fetchOne();
+    }
+
+    public static Long getMapIdFromRef(String mapRef, Long userId) {
+        Long mapId;
+        try {
+            mapId = Long.parseLong(mapRef);
+        }
+        catch (NumberFormatException ignored) {
+            mapId = getMapIdByName(mapRef, userId);
+        }
+        if(mapId == null) {
+            throw new IllegalArgumentException(mapRef + " doesn't have a corresponding map ID associated with it!");
+        }
+        return mapId;
     }
 
     /**

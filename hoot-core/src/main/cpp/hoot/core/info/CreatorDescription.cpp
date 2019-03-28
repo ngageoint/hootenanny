@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CreatorDescription.h"
@@ -33,8 +33,8 @@
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/criterion/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
@@ -64,7 +64,7 @@ baseFeatureType(featureType)
 {
 }
 
-QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
+QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
 {
   switch (t)
   {
@@ -91,7 +91,7 @@ QString CreatorDescription::BaseFeatureTypeToString(BaseFeatureType t)
   }
 }
 
-CreatorDescription::BaseFeatureType CreatorDescription::StringToBaseFeatureType(QString s)
+CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(QString s)
 {
   s = s.toLower();
   if (0 == s.compare("poi"))
@@ -172,7 +172,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
 
 QString CreatorDescription::toString() const
 {
-  return QString::fromStdString(className) + ";" + BaseFeatureTypeToString(baseFeatureType);
+  return QString::fromStdString(className) + ";" + baseFeatureTypeToString(baseFeatureType);
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYPOIMERGERCREATOR_H
 #define MULTIARYPOIMERGERCREATOR_H
@@ -50,6 +50,7 @@ namespace hoot
  * between elements. These reviews are a relevant aspect of the clustering.
  *
  * @sa MultiaryPoiMerger
+ * @todo Should this inherit from MergerBase instead?
  */
 class MultiaryPoiMergerCreator : public MergerCreator
 {
@@ -62,12 +63,12 @@ public:
    * This merger is very aggressive and will merge pretty much any set of matches that are passed
    * in. This should generally be the last merger.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const override;
 
   /**
    * Returns a description of this merger creator.
    */
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 };

@@ -66,31 +66,31 @@ public:
 
   virtual QString getHootDbVersion();
 
-  virtual bool isSupported(const QUrl& url);
+  virtual bool isSupported(const QUrl& url) override;
 
-  virtual void open(const QUrl& url);
+  virtual void open(const QUrl& url) override;
 
   virtual void commit();
 
   /**
    * @see ApiDb::elementTypeToElementTableName
    */
-  virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const override;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual std::vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId) override;
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  std::vector<RelationData::Entry> selectMembersForRelation(long relationId) override;
 
   /**
    * Returns true if the map with the specified ID exists in the services database
@@ -358,7 +358,7 @@ public:
   QString execToString(QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                        QVariant v3 = QVariant());
 
-  virtual QString tableTypeToTableName(const TableType& tableType) const;
+  virtual QString tableTypeToTableName(const TableType& tableType) const override;
 
   virtual long getNextId(const ElementType& elementType);
 
@@ -550,6 +550,13 @@ public:
    */
   long getJobStatusResourceId(const QString jobId);
 
+  /**
+   * @brief updateImportSequences Updates the node/way/relation ID sequences to ensure that
+   *   any elements inserted afterwards have the correct beginning ID so that there is no
+   *   reuse of IDs or ID collisions
+   */
+  void updateImportSequences();
+
 protected:
 
   virtual void _resetQueries();
@@ -598,6 +605,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertJob;
   boost::shared_ptr<QSqlQuery> _deleteJobById;
   boost::shared_ptr<QSqlQuery> _getJobStatusResourceId;
+  boost::shared_ptr<QSqlQuery> _updateIdSequence;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -635,6 +643,19 @@ private:
   unsigned long _nodesFlushedFromCache;
 
   int _precision;
+
+  long _maxInsertNodeId;
+  long _maxInsertWayId;
+  long _maxInsertRelationId;
+
+  /**
+   * @brief _updateImportSequence Updates the node/way/relation ID sequences to ensure that
+   *   any elements inserted afterwards have the correct beginning ID so that there is no
+   *   reuse of IDs or ID collisions
+   * @param max Maximum element ID used in the data imported
+   * @param sequenceName Name of the sequence to update
+   */
+  void _updateImportSequence(long max, const QString& sequenceName);
 
   /**
    * There are some statements that cannot be executed within a transaction

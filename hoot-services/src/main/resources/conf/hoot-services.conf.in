@@ -99,8 +99,15 @@ exportSizeThreshold=400000000
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
 
+
+# Config options asciidoc location
+configJsonPath=conf/core/ConfigOptions.json
+
 # Advanced options template
 advOptTemplate=conf/services/conflateAdvOps.json
+
+# Advanced options hoot2 template
+advOptHoot2Override=conf/services/conflationHoot2Ops.json
 
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json
@@ -110,6 +117,21 @@ advOptHorizontalOverride=conf/services/conflationHorizontalOps.json
 
 # Advanced options horizontal override
 advOptAttributeOverride=conf/services/conflationAttributeOps.json
+
+# Conflation Types map
+conflationTypes=conf/services/conflationTypes.json
+
+# Attribute Conflation Conf
+attributeConf=conf/core/AttributeConflation.conf
+
+# Differential Conflation Conf
+differentialConf=conf/core/DifferentialConflation.conf
+
+# Horizontal Algorithm Conf
+horizontalConf=conf/core/HorizontalConflation.conf
+
+# Network Conflation Conf
+networkConf=conf/core/NetworkAlgorithm.conf
 
 # Element merge Node Server port
 ElementMergeServerPort=8096
@@ -149,7 +171,7 @@ openNlpLanguageDetectionModel=language-translation/langdetect-183.bin
 # This will be used to redirect the user back to the site;
 # and should land the user at index.html to complete the oAuth process.
 # This value works for the UI running separately with node:
-oauthRedirectURL=http://localhost:8080/
+oauthRedirectURL=http://localhost:8080/login.html
 # This value works for the UI deployed by tomcat on vagrant:
 # oauthRedirectURL=http://localhost:8888/hootenanny-id
 # This value works with hoot core OOB auth:

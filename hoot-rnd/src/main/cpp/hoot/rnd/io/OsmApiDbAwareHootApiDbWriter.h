@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
 #define OSMAPIDBAWAREHOOTAPIDBWRITER_H
@@ -47,11 +47,11 @@ public:
 
   virtual ~OsmApiDbAwareHootApiDbWriter();
 
-  virtual void open(QString urlStr);
+  virtual void open(QString urlStr) override;
 
-  virtual void writePartial(const ConstNodePtr& node);
-  virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void writePartial(const ConstNodePtr& node) override;
+  virtual void writePartial(const ConstWayPtr& way) override;
+  virtual void writePartial(const ConstRelationPtr& relation) override;
 
 protected:
 

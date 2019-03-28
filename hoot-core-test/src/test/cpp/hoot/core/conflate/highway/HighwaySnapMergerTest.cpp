@@ -138,7 +138,7 @@ public:
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-4)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
@@ -146,7 +146,7 @@ public:
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"
@@ -154,7 +154,7 @@ public:
                     "status: unknown2\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-7)->toString());
   }
 
@@ -198,7 +198,7 @@ public:
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15",
+                    "circular error: 15\n",
                     map->getWay(-4)->toString());
   }
 
@@ -316,15 +316,15 @@ public:
         "{'type':'node','id':-11,'lat':5,'lon':100},\n"
         "{'type':'node','id':-12,'lat':0,'lon':20},\n"
         "{'type':'node','id':-13,'lat':0,'lon':60},\n"
-        "{'type':'way','id':-17,'nodes':[-5,-1],'tags':{'uuid':'w3','highway':'path','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+        "{'type':'way','id':-17,'nodes':[-5,-1],'tags':{'highway':'path','uuid':'w3','" + MetadataTags::ErrorCircular() + "':'15'},\n"
         "{'type':'way','id':-14,'nodes':[-11,-4],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
         "{'type':'way','id':-13,'nodes':[-3,-11],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
         "{'type':'way','id':-12,'nodes':[-1,-2],'tags':{'uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'},\n"
         "{'type':'relation','id':-2,'members':[\n"
-        "{'type':'way','ref':-14,'role':''}],'tags':{'uuid':'r','highway':'footway','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+        "{'type':'way','ref':-14,'role':''}],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
         "{'type':'relation','id':-1,'members':[\n"
         "{'type':'way','ref':-12,'role':''},\n"
-        "{'type':'way','ref':-13,'role':''}],'tags':{'uuid':'r;w3','highway':'footway','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+        "{'type':'way','ref':-13,'role':''}],'tags':{'highway':'footway','uuid':'r;w3','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
         "}\n"
         "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
@@ -382,10 +382,10 @@ public:
       "{'type':'node','id':-8,'lat':5,'lon':60},\n"
       "{'type':'way','id':-6,'nodes':[-8,-2],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
       "{'type':'way','id':-5,'nodes':[-1,-7],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-7,-8],'tags':{'uuid':'w1;w2','highway':'road','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+      "{'type':'way','id':-4,'nodes':[-7,-8],'tags':{'highway':'road','uuid':'w1;w2','" + MetadataTags::ErrorCircular() + "':'15'},\n"
       "{'type':'relation','id':-1,'members':[\n"
       "{'type':'way','ref':-5,'role':''},\n"
-      "{'type':'way','ref':-6,'role':''}],'tags':{'uuid':'w1','highway':'road','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+      "{'type':'way','ref':-6,'role':''}],'tags':{'highway':'road','uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
@@ -446,8 +446,8 @@ public:
       "{'type':'node','id':-3,'lat':0,'lon':0},\n"
       "{'type':'node','id':-4,'lat':0,'lon':100},\n"
       "{'type':'node','id':-5,'lat':0,'lon':50},\n"
-      "{'type':'way','id':-6,'nodes':[-2,-4],'tags':{'uuid':'r','highway':'footway','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-1,-2],'tags':{'uuid':'w1;r','highway':'road','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+      "{'type':'way','id':-6,'nodes':[-2,-4],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+      "{'type':'way','id':-4,'nodes':[-1,-2],'tags':{'highway':'road','uuid':'w1;r','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);

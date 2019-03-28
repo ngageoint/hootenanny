@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__BOX_H__
@@ -42,6 +42,7 @@ class BoxInternalData;
 class TGS_EXPORT Box
 {
 public:
+
   static const int MAX_DIMENSIONS = 4;
 
   Box();
@@ -89,6 +90,7 @@ public:
   bool isContained(const Box& b);
 
 private:
+
   double _lowerBound[MAX_DIMENSIONS];
   double _upperBound[MAX_DIMENSIONS];
   bool _valid;

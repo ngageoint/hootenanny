@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchMembers.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Standard
 #include <set>
@@ -48,10 +49,13 @@ class MatchClassification;
  *
  * This class is not re-entrant or thread safe.
  */
-class Match
+class Match : public ApiEntityInfo
 {
 public:
 
+  static std::string className() { return "hoot::Match"; }
+
+  Match();
   virtual ~Match();
 
   virtual QString explain() const;
@@ -123,7 +127,7 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const = 0;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const = 0;
 
   virtual QString toString() const = 0;
 
@@ -133,6 +137,8 @@ public:
    * @return a match type
    */
   virtual MatchType getType() const;
+
+  virtual QString getDescription() const = 0;
 
 protected:
 

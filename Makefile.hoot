@@ -47,6 +47,8 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
 	rm -f plugins/config.js
+	rm -f conf/core/ConfigOptions.json
+	rm -f conf/services/conflationTypeGroups.json
 	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
 	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
@@ -128,6 +130,12 @@ hoot-core/src/main/cpp/hoot/core/HootConfig.h: config.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h: hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h
 hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.asciidoc scripts/core/CreateConfigCode.py
 	python scripts/core/CreateConfigCode.py conf/core/ConfigOptions.asciidoc hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h
+
+conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/ConfigOptions.asciidoc
+	python $^ $@ || (rm -f $@ ; exit -1)
+
+conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json
+	python $^ $@ || (rm -f $@ ; exit -1)
 
 plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
 	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
@@ -260,7 +268,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 # Build automatically generated JS files
-js-make: $(SCHEMA_FILES) plugins/config.js
+js-make: $(SCHEMA_FILES) plugins/config.js conf/core/ConfigOptions.json
 
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
@@ -288,7 +296,7 @@ qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootC
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-services-build:	HOOT_VERSION_FILE
+services-build:	HOOT_VERSION_FILE conf/services/conflationHoot2Ops.json
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
@@ -464,7 +472,7 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	# suppress the harmless warning about generated HootSwig.cxx
 	# All the true craziness is so we use the qmake return code rather than
 	# the grep code.
-	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	qmake-qt5 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
@@ -523,13 +531,13 @@ conf/dictionary/words1.sqlite:
 	([ -e /tmp/words1.sqlite.bz2 ] && \
 	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
-	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2 && \
+	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2 && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
 	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 hoot-services/src/main/resources/language-translation/langdetect-183.bin:
-	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://s3.amazonaws.com/hoot-rpms/support-files/langdetect-183.bin; fi
-	test "`sha1sum hoot-services/src/main/resources/language-translation/langdetect-183.bin`" == 'be8bf56c1b8cb1ecddecc3009c7a3020f149987f  hoot-services/src/main/resources/language-translation/langdetect-183.bin' || echo "OpenNLP language detection not available due to failure downloading model."
+	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://s3.amazonaws.com/hoot-support/langdetect-183.bin; fi
+	echo '2ddf585fac2e02a9dcfb9a4a9cc9417562eaac351be2efb506a2eaa87f19e9d4  hoot-services/src/main/resources/language-translation/langdetect-183.bin' | sha256sum -c || echo "OpenNLP language detection not available due to failure downloading model."
 
 bin/HootEnv.sh: scripts/HootEnv.sh
 	mkdir -p bin

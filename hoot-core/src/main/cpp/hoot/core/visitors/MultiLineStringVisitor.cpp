@@ -67,7 +67,6 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    //ConstWayPtr w = _provider->getWay(e->getId());
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     visit(w);
   }

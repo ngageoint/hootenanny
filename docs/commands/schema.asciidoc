@@ -1,3 +1,4 @@
+[[schema]]
 == schema
 
 === Description
@@ -12,4 +13,8 @@ The +schema+ command prints OSM tag documentation. If +[documentation script]+ i
 --------------------------------------
 schema [documentation script]
 --------------------------------------
+
+=== See Also
+
+* <<hootuser, SchemaFiles>>
 

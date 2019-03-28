@@ -46,15 +46,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/AddRef1Visitor.h>
-#include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -80,30 +73,6 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   {
     cout << stats[i].name << sep << stats[i].value << endl;
   }
-}
-
-// Convenience function used when deriving a changeset
-boost::shared_ptr<ChangesetDeriver> ConflateCmd::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
-{
-  //Conflation requires all data to be in memory, so no point in adding support for
-  //ExternalMergeElementSorter here.
-
-  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
-  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
-  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
-  return delta;
-}
-
-ChangesetProviderPtr ConflateCmd::_getChangesetFromMap(OsmMapPtr pMap)
-{
-  // Make empty map
-  OsmMapPtr pEmptyMap(new OsmMap());
-
-  // Get Changeset Deriver
-  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
-
-  // Return the provider
-  return pDeriver;
 }
 
 int ConflateCmd::runSimple(QStringList args)
@@ -136,21 +105,22 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
 
+  DiffConflator diffConflator;
+
   bool isDiffConflate = false;
+
   if (args.contains("--differential"))
   {
     isDiffConflate = true;
     args.removeAt(args.indexOf("--differential"));
+
+    if (args.contains("--include-tags"))
+    {
+      diffConflator.enableTags();
+      args.removeAt(args.indexOf("--include-tags"));
+    }
   }
   LOG_VARD(isDiffConflate);
-
-  // Check for tags argument "--Include-Tags"
-  bool conflateTags = false;
-  if (args.contains("--include-tags"))
-  {
-    conflateTags = true;
-    args.removeAt(args.indexOf("--include-tags"));
-  }
 
   // Check for separate output files (for geometry & tags)
   bool separateOutput = false;
@@ -198,27 +168,19 @@ int ConflateCmd::runSimple(QStringList args)
                    ConfigOptions().getReaderConflateUseDataSourceIds1(),
                    Status::Unknown1);
 
-  DiffConflator diffConflator;
   ChangesetProviderPtr pTagChanges;
   if (isDiffConflate)
   {
     // Store original IDs for tag diff
     diffConflator.storeOriginalMap(map);
-
-    // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
-    Settings visitorConf;
-    visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-    boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
-    pRef1v->setConfiguration(visitorConf);
-    map->visitRw(*pRef1v);
+    diffConflator.markInputElements(map);
   }
 
   // read input 2
   if (!input2.isEmpty())
   {
-    IoUtils::loadMap(map, input2,
-                     ConfigOptions().getReaderConflateUseDataSourceIds2(),
-                     Status::Unknown2);
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
@@ -249,13 +211,12 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-
+  LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
-
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
 
   OsmMapPtr result = map;
@@ -264,7 +225,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // call the diff conflator
     diffConflator.apply(result);
-    if (conflateTags)
+    if (diffConflator.conflatingTags())
     {
       pTagChanges = diffConflator.getTagDiff();
     }
@@ -280,67 +241,40 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   // Apply any user specified operations.
+  _updateConfigOptionsForAttributeConflation();
   LOG_INFO("Applying post-conflation operations...");
+  LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+  OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
 
-  OsmMapWriterFactory::writeDebugMap(map, "after-post-ops");
-
-  // doing this after the conflate post ops, since some invalid reviews are removed by them
+  // doing this after the conflate post ops run, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
 
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
   // Figure out what to write
   if (isDiffConflate && output.endsWith(".osc"))
   {
-    // Write a changeset
-    ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(result);
-
-    if (!conflateTags)
-    {
-      // only one changeset to write
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pGeoChanges);
-    }
-    else if (separateOutput)
-    {
-      // write two changesets
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pGeoChanges);
-
-      QString outFileName = output;
-      outFileName.replace(".osc", "");
-      outFileName.append(".tags.osc");
-      OsmXmlChangesetFileWriter tagChangeWriter;
-      tagChangeWriter.write(outFileName, pTagChanges);
-    }
-    else
-    {
-      // write unified output
-      MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(result->getProjection()));
-      pChanges->addChangesetProvider(pGeoChanges);
-      pChanges->addChangesetProvider(pTagChanges);
-      OsmXmlChangesetFileWriter writer;
-      writer.write(output, pChanges);
-    }
+    diffConflator.writeChangeset(result, output, separateOutput);
   }
   else
   {
     // Write a map
-
-    if (conflateTags)
+    if (isDiffConflate && diffConflator.conflatingTags())
     {
       // Add tag changes to our map
       diffConflator.addChangesToMap(result, pTagChanges);
     }
     IoUtils::saveMap(result, output);
+    OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
   }
 
   // Do the tags if we need to
-  if (isDiffConflate && conflateTags)
+  if (isDiffConflate && diffConflator.conflatingTags())
   {
     LOG_INFO("Generating tag changeset...");
     // Write the file!
@@ -385,23 +319,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   if (isDiffConflate)
   {
-    // Differential specific stats - get some numbers for our output
-
-    ElementCriterionPtr pPoiCrit(new PoiCriterion());
-    CriterionCountVisitor poiCounter;
-    poiCounter.addCriterion(pPoiCrit);
-    result->visitRo(poiCounter);
-    stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
-
-    ElementCriterionPtr pBuildingCrit(new BuildingCriterion(result));
-    CriterionCountVisitor buildingCounter;
-    buildingCounter.addCriterion(pBuildingCrit);
-    result->visitRo(buildingCounter);
-    stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
-
-    LengthOfWaysVisitor lengthVisitor;
-    result->visitRo(lengthVisitor);
-    stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
+    diffConflator.calculateStats(result, stats);
   }
 
   if (displayStats)
@@ -425,6 +343,54 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Conflation job completed.");
 
   return 0;
+}
+
+void ConflateCmd::_updateConfigOptionsForAttributeConflation()
+{
+  // These are some custom adjustments to config opts that must be done for Attribute Conflation.
+  // There may be a way to eliminate these by adding more custom behavior to the UI.
+
+  // This option only gets used with Attribute Conflation for now, so we'll use it as the sole
+  // identifier for it.  This could change in the future, but hopefully if that happens, by then
+  // we have a better solution for changing these opts in place.
+  if (ConfigOptions().getHighwayMergeTagsOnly())
+  {
+    // If we're running Attribute Conflation and removing building relations, we need to remove them
+    // after the review relations have been removed or some building relations may still remain that
+    // are involved in reviews.
+
+    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
+    // Currently, all these things will be true if we're running Attribute Conflation, but I'm
+    // specifying them anyway to harden this a bit.
+    if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
+        postConflateOps.contains("hoot::RemoveElementsVisitor") &&
+        ConfigOptions().getRemoveElementsVisitorElementCriterion() ==
+          "hoot::ReviewRelationCriterion" &&
+        postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
+    {
+      const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
+      const int buildingOutlineOpIndex = postConflateOps.indexOf("hoot::BuildingOutlineUpdateOp");
+      if (removeElementsVisIndex > buildingOutlineOpIndex)
+      {
+        postConflateOps.removeAll("hoot::BuildingOutlineUpdateOp");
+        postConflateOps.append("hoot::BuildingOutlineUpdateOp");
+        conf().set("conflate.post.ops", postConflateOps);
+      }
+    }
+
+    // This swaps the logic that removes all reviews with the logic that removes them based on score
+    // thresholding.
+    if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
+    {
+      conf().set(
+        ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
+    }
+
+    LOG_DEBUG(
+      "Post conflate ops after Attribute Conflation adjustment: " <<
+      conf().get("conflate.post.ops").toStringList());
+  }
 }
 
 }

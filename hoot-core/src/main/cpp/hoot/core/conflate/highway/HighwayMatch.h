@@ -55,6 +55,9 @@ class HighwayMatch : public Match, public MatchDetails
 {
 public:
 
+  static std::string className() { return "hoot::HighwayMatch"; }
+
+  HighwayMatch();
   HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
                const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
@@ -87,6 +90,9 @@ public:
 
   virtual QString toString() const;
 
+  virtual QString getDescription() const
+  { return "Matches roads with the 2nd Generation (Unifying) Algorithm"; }
+
 private:
 
   boost::shared_ptr<HighwayClassifier> _classifier;
@@ -105,6 +111,11 @@ private:
 
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
+
+  void _updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
+                                                            const ConstOsmMapPtr& map,
+                                                            const ConstElementPtr e1,
+                                                            const ConstElementPtr e2);
 };
 
 }

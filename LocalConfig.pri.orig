@@ -17,9 +17,8 @@ release {
 }
 
 # Configure based on whether you optionally run ccache/distcc
-QMAKE_CXX=g++
-#QMAKE_CXX=ccache g++
-#QMAKE_CXX=ccache distcc g++
+#QMAKE_CXX=g++
+QMAKE_CXX=ccache g++
 
 # Warn about uninitialized variables
 QMAKE_CXXFLAGS+=-Wuninitialized 
@@ -43,12 +42,12 @@ QMAKE_LFLAGS=-fuse-ld=gold
 #QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
 
 # Show more warnings
-#QMAKE_CXXFLAGS+=-Wextra
-#QMAKE_CXXFLAGS+=-Wall
+QMAKE_CXXFLAGS+=-Wextra
+QMAKE_CXXFLAGS+=-Wall
 
 # Turn warnings into errors
 QMAKE_CXXFLAGS+=-Werror
                          
 # Use this with valgrind
-#QMAKE_CXXFLAGS+=-g -O1 
+#QMAKE_CXXFLAGS+=-g -O1
 

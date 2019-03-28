@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -39,11 +39,19 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(Merger, NetworkMerger)
+
+NetworkMerger::NetworkMerger() :
+MergerBase()
+{
+}
 
 NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   ConstEdgeMatchPtr edgeMatch, ConstNetworkDetailsPtr details) :
@@ -63,7 +71,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
 
   if (_edgeMatch->getString1()->isStub())
   {
-    LOG_TRACE("Removing secondary features...");
+    LOG_DEBUG("Removing secondary features...");
 
     // If the feature we're merging into is a stub, then just delete the secondary feature.
     // Attributes may be lost, but there isn't really anywhere to put them.
@@ -117,8 +125,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
 
     WayMatchStringMergerPtr merger(new WayMatchStringMerger(map, mapping, replaced));
 
-    LOG_TRACE("Merging tags in keeper segments...");
-
+    LOG_DEBUG("Merging tags in keeper segments...");
     // merge the tags in the keeper segments
     merger->setTagMerger(TagMergerFactory::getInstance().getDefaultPtr());
     merger->mergeTags();
@@ -126,8 +133,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     // set the status on all keeper ways to conflated.
     merger->setKeeperStatus(Status::Conflated);
 
-    LOG_TRACE("Parsing scrap nodes...");
-
+    LOG_DEBUG("Parsing scrap nodes...");
     // go through all the nodes in the scrap
     QList<ConstNodePtr> scrapNodeList;
     ExtractNodesVisitor extractVisitor(scrapNodeList);
@@ -153,7 +159,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     // TODO: this will need to replace one scrap with possibly multiple keeper elements
     // - think about the case when the way is part of an interstate or bus relation
     // remove the duplicate element.
-    LOG_TRACE("Removing duplicate elements...");
+    LOG_DEBUG("Removing duplicate elements...");
     merger->replaceScraps();
   }
 }

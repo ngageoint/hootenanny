@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyDuplicatePoiOp.h"
 
@@ -40,13 +40,6 @@
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/Log.h>
 
-
-// The older version of GCC in CentOS 6 gives a bunch of false warnings.
-#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION < 40800
-#pragma GCC diagnostic ignored "-Wuninitialized"
-#endif
-
 namespace hoot
 {
 
@@ -62,10 +55,13 @@ PertyDuplicatePoiOp::PertyDuplicatePoiOp()
 
 void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
 {
+  _numAffected = 0;
+
   MapProjector::projectToPlanar(map);
+
   boost::uniform_real<> uni(0.0, 1.0);
   boost::normal_distribution<> nd;
-  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);
+  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(*_rng, nd);
 
   // make a copy since we'll be modifying the map as we go.
   NodeMap nm = map->getNodes();
@@ -87,16 +83,18 @@ void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
 void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
 {
   boost::normal_distribution<> nd;
-  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);
+  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(*_rng, nd);
 
   Meters sigma = n->getCircularError() / 2.0;
   double x = n->getX() + N() * sigma * _moveMultiplier;
   double y = n->getY() + N() * sigma * _moveMultiplier;
 
-  NodePtr newNode(new Node(n->getStatus(), map->createNextNodeId(), x, y,
-    n->getCircularError()));
+  NodePtr newNode(
+    new Node(n->getStatus(), map->createNextNodeId(), x, y, n->getCircularError()));
 
   map->addNode(newNode);
+
+  _numAffected++;
 }
 
 void PertyDuplicatePoiOp::setConfiguration(const Settings& conf)

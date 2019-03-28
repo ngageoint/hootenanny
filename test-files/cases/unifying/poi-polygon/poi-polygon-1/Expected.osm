@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-0.3648929535851835" minlon="42.54567562958095" maxlat="-0.3647519699736392" maxlon="42.54593010416158"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722761711" lon="42.5456756295809484"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647519699736392" lon="42.5459240691913010"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648812189207291" lon="42.5459301041615845"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929535851835" lon="42.5456816645512390"/>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <nd ref="-4"/>
+    <node visible="true" id="-18110" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648929535851835" lon="42.5456816645512390"/>
+    <node visible="true" id="-18109" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648812189207291" lon="42.5459301041615845"/>
+    <node visible="true" id="-18108" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647519699736392" lon="42.5459240691913010"/>
+    <node visible="true" id="-18107" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722761711" lon="42.5456756295809484"/>
+    <way visible="true" id="-18105" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18107"/>
+        <nd ref="-18108"/>
+        <nd ref="-18109"/>
+        <nd ref="-18110"/>
+        <nd ref="-18107"/>
         <tag k="REF1" v="00011f"/>
         <tag k="building:levels" v="2"/>
         <tag k="roof:shape" v="flat"/>

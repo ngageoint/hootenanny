@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_NAME_VISITOR_H
 #define PERTY_NAME_VISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,8 @@ namespace hoot
 /**
  * A simple random name changer. This is not part of the original perty paper.
  */
-class PertyNameVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable
+class PertyNameVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
@@ -63,9 +65,15 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Randomly changes feature names"; }
+  virtual QString getDescription() const { return "Randomly changes element names"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Randomly changing element names..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
 
 private:
 

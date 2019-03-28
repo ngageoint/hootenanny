@@ -400,6 +400,10 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   {
     LOG_WARN("Keeping temp file: " << _sortedCountFile->fileName());
   }
+  if (!_countFile->exists())
+  {
+    throw HootException("Unable to sort file; file doesn't exist.");
+  }
 
   //This counts each unique line occurrence, sorts by decreasing occurrence count (necessary for
   //next step which removes duplicate tag keys associated with the same word), and replaces the
@@ -409,7 +413,7 @@ void ImplicitTagRawRulesDeriver::_sortByTagOccurrence()
   const QString cmd =
     "sort --parallel=" + QString::number(_sortParallelCount) + " " + _countFile->fileName() +
     " | uniq -c | sort -n -r --parallel=" + QString::number(_sortParallelCount) + " | " +
-    "sed -e 's/^ *//;s/ /\t/' > " + _sortedCountFile->fileName();
+    "sed -e 's/^ *//;s/ /\\t/' > " + _sortedCountFile->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Unable to sort file.");
@@ -622,10 +626,14 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
 void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
 {
   LOG_INFO("Sorting output by word...");
+  if (!input->exists())
+  {
+    throw HootException("Unable to sort file; file doesn't exist.");
+  }
 
   //sort by word, then by tag
   const QString cmd =
-    "sort -t'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
+    "sort -t$'\t' -k2,2 -k3,3 --parallel=" + QString::number(_sortParallelCount) + " " +
      input->fileName() + " -o " + _output->fileName();
   if (std::system(cmd.toStdString().c_str()) != 0)
   {

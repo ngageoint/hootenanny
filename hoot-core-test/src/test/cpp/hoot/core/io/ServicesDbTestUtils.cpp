@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ServicesDbTestUtils.h"
@@ -52,11 +52,11 @@ using namespace Tgs;
 namespace hoot
 {
 
-void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant v1,
-  QVariant v2)
+void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QString testName, QVariant v1, QVariant v2)
 {
   HootApiDb db;
-  db.open(ServicesDbTestUtils::getDbModifyUrl());
+  QUrl url = (testName == NULL) ? ServicesDbTestUtils::getDbModifyUrl() : ServicesDbTestUtils::getDbModifyUrl(testName);
+  db.open(url);
   QString result = db.execToString(sql, v1, v2);
   if (expected == "")
   {
@@ -76,6 +76,10 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant
   }
   else
   {
+    if (expected != result)
+    {
+      LOG_INFO(TestUtils::toQuotedString(result));
+    }
     CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
   }
 }

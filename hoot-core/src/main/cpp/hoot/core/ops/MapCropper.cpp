@@ -39,7 +39,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
@@ -121,8 +121,8 @@ void MapCropper::setConfiguration(const Settings& conf)
 }
 
 void MapCropper::apply(OsmMapPtr& map)
-{
-  LOG_INFO("Cropping map...");
+{;
+  _numAffected = 0;
   OsmMapPtr result = map;
 
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)

@@ -31,13 +31,14 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -265,8 +266,8 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   for (size_t i = 0; i < candidates.size(); i++)
   {
     PROGRESS_INFO(
-      "Running interpolator: " << candidates[i] << " (" << (i + 1) << " / " <<
-      candidates.size() << ")...");
+      "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
+      candidates.size() << "): " << candidates[i] << "...");
     boost::shared_ptr<Interpolator> candidate(
       Factory::getInstance().constructObject<Interpolator>(candidates[i]));
     // Setting this upper limit prevents some runaway optimizations.  Those conditions should be
@@ -347,7 +348,8 @@ void RubberSheet::_findTies()
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed intersections for " << ctr << " / " << n2w->size() << " nodes...");
+        "Processed intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(n2w->size()) << " nodes...");
     }
   }
 
@@ -374,7 +376,8 @@ void RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed paired intersections for " << ctr << " / " << _matches.size() << " matches...");
+        "Processed paired intersections for " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(_matches.size()) << " matches...");
     }
   }
 
@@ -431,7 +434,8 @@ void RubberSheet::_findTies()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Potential tie points processed: " << ctr << " / " << _finalPairs.size());
+        "Potential tie points processed: " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(_finalPairs.size()));
     }
   }
 

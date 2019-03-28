@@ -45,6 +45,9 @@ class NetworkMerger : public MergerBase
 {
 public:
 
+  static std::string className() { return "hoot::NetworkMerger"; }
+
+  NetworkMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -52,14 +55,17 @@ public:
   NetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, ConstEdgeMatchPtr edgeMatch,
     ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
+
+  virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
 
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

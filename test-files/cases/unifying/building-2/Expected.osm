@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2221222999999997" lon="106.9238902000000024"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2221168999999996" lon="106.9240623000000028"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2216408999999988" lon="106.9240471999999897"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2216462999999997" lon="106.9238749999999953"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2215710001999991" lon="106.9237276999099890"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2219849536299989" lon="106.9237180119099833"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2220509785200013" lon="106.9238307152200065"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2220519922600008" lon="106.9238845022200053"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2215674832300003" lon="106.9238969515700006"/>
-    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <nd ref="-8"/>
-        <nd ref="-9"/>
-        <nd ref="-6"/>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-6.2221223" minlon="106.92371801191" maxlat="-6.22156748323" maxlon="106.9240623"/>
+    <node visible="true" id="-5318598" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2221222999999997" lon="106.9238902000000024"/>
+    <node visible="true" id="-5318597" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2221168999999996" lon="106.9240623000000028"/>
+    <node visible="true" id="-5318596" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2216408999999988" lon="106.9240471999999897"/>
+    <node visible="true" id="-5318595" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2216462999999997" lon="106.9238749999999953"/>
+    <node visible="true" id="-5318594" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2215710001999991" lon="106.9237276999099890"/>
+    <node visible="true" id="-5318592" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2219849536299989" lon="106.9237180119099833"/>
+    <node visible="true" id="-5318590" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2220509785200013" lon="106.9238307152200065"/>
+    <node visible="true" id="-5318588" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2220519922600008" lon="106.9238845022200053"/>
+    <node visible="true" id="-5318586" timestamp="1970-01-01T00:00:00Z" version="1" lat="-6.2215674832300003" lon="106.9238969515700006"/>
+    <way visible="true" id="-5401869" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5318595"/>
+        <nd ref="-5318596"/>
+        <nd ref="-5318597"/>
+        <nd ref="-5318598"/>
+        <nd ref="-5318595"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="building 2"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <nd ref="-5"/>
-        <nd ref="-1"/>
+    <way visible="true" id="-5401868" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5318586"/>
+        <nd ref="-5318588"/>
+        <nd ref="-5318590"/>
+        <nd ref="-5318592"/>
+        <nd ref="-5318594"/>
+        <nd ref="-5318586"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="building 1"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-1" role="reviewee"/>
-        <member type="way" ref="-2" role="reviewee"/>
+        <member type="way" ref="-5401868" role="reviewee"/>
+        <member type="way" ref="-5401869" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Building"/>
         <tag k="hoot:review:members" v="2"/>

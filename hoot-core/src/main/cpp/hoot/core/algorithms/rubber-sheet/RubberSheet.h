@@ -75,7 +75,7 @@ public:
 
   RubberSheet();
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map) override;
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map.
@@ -131,7 +131,7 @@ public:
    void setLogWarningWhenRequirementsNotFound(bool logWarning)
    { _logWarningWhenRequirementsNotFound = logWarning; }
 
-   virtual QString getDescription() const { return "Applies rubber sheeting to a map"; }
+   virtual QString getDescription() const override { return "Applies rubber sheeting to a map"; }
 
 private:
 

@@ -127,6 +127,14 @@ public:
   static const QStringList& getNameKeys();
 
   /**
+   * Get name keys for a set of tags
+   *
+   * @param tags tags to parse name keys from
+   * @return a list of name keys
+   */
+  static QStringList getNameKeys(const Tags& tags);
+
+  /**
    * Return all the names for the current feature.
    */
   QStringList getNames() const;
@@ -183,6 +191,7 @@ public:
   bool isTrue(const QString& key) const;
 
   bool operator==(const Tags& other) const;
+  inline bool operator!=(const Tags& other) const { return !(*this == other); }
 
   /**
    * Similar to operator== but 'hoot::*' tags are ignored

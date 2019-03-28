@@ -97,7 +97,7 @@ public:
                       "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
                       "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"hoot:poipolygon:poismerged\":\"1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}]\n"
+                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"amenity\":\"bar\",\"area\":\"yes\",\"name\":\"foo\",\"alt_name\":\"bar\",\"note\":\"w1\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}]\n"
                       "}\n"
                       "", OsmJsonWriter().toString(map2));
       //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
@@ -119,7 +119,7 @@ public:
                       "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
                       "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"hoot:poipolygon:poismerged\":\"1\",\"alt_name\":\"foo\",\"name\":\"bar\",\"area\":\"yes\",\"amenity\":\"cafe\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}]\n"
+                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"amenity\":\"cafe\",\"area\":\"yes\",\"name\":\"bar\",\"alt_name\":\"foo\",\"note\":\"w1\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}]\n"
                       "}\n"
                       "", OsmJsonWriter().toString(map2));
     }
@@ -226,7 +226,7 @@ public:
       "{\"type\":\"way\",\"ref\":-22,\"role\":\"part\"},\n"
       "{\"type\":\"way\",\"ref\":-21,\"role\":\"part\"},\n"
       "{\"type\":\"way\",\"ref\":-20,\"role\":\"part\"},\n"
-      "{\"type\":\"way\",\"ref\":-19,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 1\",\"hoot:poipolygon:poismerged\":\"1\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":-19,\"role\":\"part\"}],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"name\":\"A\",\"alt_name\":\"B;C;D;E;F\",\"note\":\"Toy Scenario 1\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -273,7 +273,7 @@ public:
                     "{\"type\":\"way\",\"ref\":-18,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-17,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-16,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-15,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 2\",\"hoot:poipolygon:poismerged\":\"1\",\"poi\":\"yes\",\"alt_name\":\"B;C;D;E;F\",\"building\":\"yes\",\"name\":\"A\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-15,\"role\":\"part\"}],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"name\":\"A\",\"alt_name\":\"B;C;D;E;F\",\"note\":\"Toy Scenario 2\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -320,7 +320,7 @@ public:
                     "{\"type\":\"way\",\"ref\":-14,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-13,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-12,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-11,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 3\",\"hoot:poipolygon:poismerged\":\"2\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;D;E;F\",\"building\":\"yes\",\"name\":\"G\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-11,\"role\":\"part\"}],\"tags\":{\"hoot:poipolygon:poismerged\":\"2\",\"name\":\"G\",\"alt_name\":\"A;B;C;D;E;F\",\"note\":\"Toy Scenario 3\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -351,8 +351,8 @@ public:
                     "{\"type\":\"node\",\"id\":-89,\"lat\":-0.001418,\"lon\":-0.002001},\n"
                     "{\"type\":\"node\",\"id\":-90,\"lat\":-0.0006401,\"lon\":-0.001989},\n"
                     "{\"type\":\"node\",\"id\":-91,\"lat\":-0.0006401,\"lon\":-0.002465},\n"
-                    "{\"type\":\"node\",\"id\":-92,\"lat\":-8.829e-05,\"lon\":-0.002666},\n"
-                    "{\"type\":\"node\",\"id\":-93,\"lat\":-8.829e-05,\"lon\":-0.003494},\n"
+                    "{\"type\":\"node\",\"id\":-92,\"lat\":-8.829e-5,\"lon\":-0.002666},\n"
+                    "{\"type\":\"node\",\"id\":-93,\"lat\":-8.829e-5,\"lon\":-0.003494},\n"
                     "{\"type\":\"node\",\"id\":-94,\"lat\":-0.0004645,\"lon\":-0.003494},\n"
                     "{\"type\":\"node\",\"id\":-95,\"lat\":-0.0004645,\"lon\":-0.002666},\n"
                     "{\"type\":\"way\",\"id\":-10,\"nodes\":[-95,-94,-93,-92,-95],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
@@ -361,7 +361,7 @@ public:
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-10,\"role\":\"part\"},\n"
                     "{\"type\":\"way\",\"ref\":-9,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-8,\"role\":\"part\"}],\"tags\":{\"note\":\"Toy Scenario 4\",\"hoot:poipolygon:poismerged\":\"2\",\"poi\":\"yes\",\"alt_name\":\"A;B;C;E;F;bar;foo\",\"building\":\"yes\",\"name\":\"G\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-8,\"role\":\"part\"}],\"tags\":{\"hoot:poipolygon:poismerged\":\"2\",\"name\":\"G\",\"alt_name\":\"A;B;C;E;F;bar;foo\",\"note\":\"Toy Scenario 4\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
@@ -396,16 +396,16 @@ public:
                     "{\"type\":\"node\",\"id\":-21,\"lat\":-0.001443,\"lon\":0.001061},\n"
                     "{\"type\":\"node\",\"id\":-22,\"lat\":-0.0004838,\"lon\":0.001063},\n"
                     "{\"type\":\"node\",\"id\":-23,\"lat\":-0.0004828,\"lon\":0.0003969},\n"
-                    "{\"type\":\"node\",\"id\":-24,\"lat\":8.033e-05,\"lon\":0.0003977},\n"
-                    "{\"type\":\"node\",\"id\":-25,\"lat\":8.174e-05,\"lon\":-0.0005617},\n"
+                    "{\"type\":\"node\",\"id\":-24,\"lat\":8.033e-5,\"lon\":0.0003977},\n"
+                    "{\"type\":\"node\",\"id\":-25,\"lat\":8.174e-5,\"lon\":-0.0005617},\n"
                     "{\"type\":\"node\",\"id\":-76,\"lat\":-0.002703,\"lon\":-0.001282},\n"
                     "{\"type\":\"node\",\"id\":-77,\"lat\":-0.002331,\"lon\":-0.0003015},\n"
                     "{\"type\":\"node\",\"id\":-78,\"lat\":-0.001832,\"lon\":0.0001057},\n"
                     "{\"type\":\"node\",\"id\":-79,\"lat\":-0.0003266,\"lon\":-0.0003081},\n"
                     "{\"type\":\"node\",\"id\":-80,\"lat\":0.0004134,\"lon\":-0.0009227},\n"
-                    "{\"type\":\"node\",\"id\":-81,\"lat\":-0.0009662,\"lon\":1.795e-05},\n"
+                    "{\"type\":\"node\",\"id\":-81,\"lat\":-0.0009662,\"lon\":1.795e-5},\n"
                     "{\"type\":\"way\",\"id\":-7,\"nodes\":[-80,-79,-81,-78,-77,-76],\"tags\":{\"note\":\"Toy Scenario 5\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-25,-24,-23,-22,-21,-20,-19,-18,-17,-16,-15,-14,-25],\"tags\":{\"note\":\"Toy Scenario 5\",\"hoot:poipolygon:poismerged\":\"1\",\"poi\":\"yes\",\"alt_name\":\"F\",\"building\":\"yes\",\"name\":\"A\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-25,-24,-23,-22,-21,-20,-19,-18,-17,-16,-15,-14,-25],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"name\":\"A\",\"alt_name\":\"F\",\"note\":\"Toy Scenario 5\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(4).toString(map));
   }
@@ -439,7 +439,7 @@ public:
                     "{\"type\":\"node\",\"id\":-10,\"lat\":-0.0004452,\"lon\":0.003319},\n"
                     "{\"type\":\"node\",\"id\":-11,\"lat\":0.0001179,\"lon\":0.00332},\n"
                     "{\"type\":\"node\",\"id\":-12,\"lat\":0.0001194,\"lon\":0.00236},\n"
-                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-12],\"tags\":{\"note\":\"Toy Scenario 6\",\"hoot:poipolygon:poismerged\":\"1\",\"poi\":\"yes\",\"alt_name\":\"F\",\"building\":\"yes\",\"name\":\"A\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-12],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"name\":\"A\",\"alt_name\":\"F\",\"note\":\"Toy Scenario 6\",\"building\":\"yes\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }

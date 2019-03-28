@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -49,6 +49,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
@@ -95,6 +96,7 @@ import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -566,6 +568,8 @@ public class MapResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLayers(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        Users user = Users.fromRequest(request);
+
         // handles some ACL logic for us...
         getMapForRequest(request, mapId, false, true);
 
@@ -578,7 +582,7 @@ public class MapResource {
                 }
             };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE, DbUtils.getMapIdFromRef(mapId, user.getId())));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
@@ -634,10 +638,7 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateFolderMapLink(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("mapId") String mapId) {
 
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+        Users user = Users.fromRequest(request);
 
         // These functions ensure the map + folder are
         // either owned by the user -or- public.
@@ -668,6 +669,7 @@ public class MapResource {
     @Path("/{mapId}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        Users user = Users.fromRequest(request);
         Map m = getMapForRequest(request, mapId, true, false);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
@@ -678,13 +680,13 @@ public class MapResource {
 
         Object oInput1 = ret.get("input1");
         if (oInput1 != null) {
-            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()), user.getId());
             ret.put("input1Name", dispName);
         }
 
         Object oInput2 = ret.get("input2");
         if (oInput2 != null) {
-            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()), user.getId());
             ret.put("input2Name", dispName);
         }
 
@@ -804,7 +806,7 @@ public class MapResource {
             throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         }
         if(user != null && userDesiresModify && !m.getUserId().equals(user.getId())) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
         }
         return m;
     }

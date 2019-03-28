@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiRfClassifier.h"
 
@@ -80,7 +80,7 @@ PoiRfClassifier::PoiRfClassifier()
   QString path = ConfPath::search(ConfigOptions().getConflateMatchPoiModel());
   LOG_INFO("Loading POI model from: " << path);
 
-  QFile file(path.toAscii().data());
+  QFile file(path.toLatin1().data());
   if (!file.open(QIODevice::ReadOnly))
   {
     throw HootException("Error opening file: " + path);

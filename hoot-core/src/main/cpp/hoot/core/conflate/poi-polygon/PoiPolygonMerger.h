@@ -55,15 +55,16 @@ public:
 
   static unsigned int logWarnCount;
 
+  PoiPolygonMerger();
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
   explicit PoiPolygonMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
   /**
    * Utility method for merging a single POI with a single polygon
@@ -75,10 +76,12 @@ public:
    */
   static ElementId mergePoiAndPolygon(OsmMapPtr map);
 
+  virtual QString getDescription() const { return "Merges POIs into polygons"; }
+
 protected:
 
-  virtual PairsSet& _getPairs() { return _pairs; }
-  virtual const PairsSet& _getPairs() const { return _pairs; }
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
 

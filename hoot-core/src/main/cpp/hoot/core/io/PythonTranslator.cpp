@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Python
@@ -109,7 +109,7 @@ void PythonTranslator::_init()
   setenv("PYTHONPATH", pythonPath.join(":").toUtf8().constData(), 1);
   Py_Initialize();
 
-  char* data = moduleName.toAscii().data();
+  char* data = moduleName.toLatin1().data();
   PyObject* module = PyImport_ImportModule(data);
 
   if (module == NULL)

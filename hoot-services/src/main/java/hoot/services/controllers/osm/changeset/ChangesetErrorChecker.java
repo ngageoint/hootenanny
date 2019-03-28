@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.changeset;
 
@@ -30,6 +30,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -188,71 +189,7 @@ class ChangesetErrorChecker {
         }
     }
 
-    Map<Long, CurrentNodes> checkForElementExistenceErrors() {
-        logger.debug("Checking for element existence errors...");
-
-        // if an element is referenced (besides in its own create change) and doesn't exist in the db, then fail
-
-        Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<>();
-        for (ElementType elementType : ElementType.values()) {
-            if (elementType != ElementType.Changeset) {
-                elementTypesToElementIds.put(elementType, new HashSet<Long>());
-            }
-        }
-
-        String emptyIdErrorMsg = "Element in changeset has empty ID.";
-
-        // check relation members
-        for (ElementType elementType : ElementType.values()) {
-            if (elementType != ElementType.Changeset) {
-                NodeList relationMemberIdXmlNodes = null;
-                try {
-                    relationMemberIdXmlNodes = XPathAPI.selectNodeList(changesetDoc,
-                            "//osmChange/*/relation/member[@type = '" + elementType.toString().toLowerCase() + "']");
-                }
-                catch (TransformerException e) {
-                    throw new RuntimeException("Error invoking XPathAPI!", e);
-                }
-
-                for (int i = 0; i < relationMemberIdXmlNodes.getLength(); i++) {
-                    long id;
-                    try {
-                        id = Long.parseLong(relationMemberIdXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
-                    }
-                    catch (NumberFormatException | NullPointerException e) {
-                        throw new IllegalArgumentException(emptyIdErrorMsg, e);
-                    }
-
-                    if (id > 0) {
-                        elementTypesToElementIds.get(elementType).add(id);
-                    }
-                }
-            }
-        }
-
-        // check way nodes
-        NodeList wayNodeIdXmlNodes = null;
-        try {
-            wayNodeIdXmlNodes = XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/way/nd/@ref");
-        }
-        catch (TransformerException e) {
-            throw new RuntimeException("Error calling XPathAPI!", e);
-        }
-
-        for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++) {
-            long id;
-            try {
-                id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
-            }
-            catch (NumberFormatException | NullPointerException e) {
-                throw new IllegalArgumentException(emptyIdErrorMsg, e);
-            }
-
-            if (id > 0) {
-                elementTypesToElementIds.get(ElementType.Node).add(id);
-            }
-        }
-
+    void checkTopLevelElements(Map<ElementType, Set<Long>> elementList) {
         // check top level elements
         for (EntityChangeType entityChangeType : EntityChangeType.values()) {
             if (entityChangeType != EntityChangeType.CREATE) {
@@ -275,15 +212,120 @@ class ChangesetErrorChecker {
                                 id = Long.parseLong(elementIdXmlNodes.item(i).getNodeValue());
                             }
                             catch (NumberFormatException | NullPointerException e) {
-                                throw new IllegalArgumentException(emptyIdErrorMsg, e);
+                                throw new IllegalArgumentException(e);
                             }
-                            if (id > 0) {
-                                elementTypesToElementIds.get(elementType).add(id);
-                            }
+//                            if (id > 0) {
+                                elementList.get(elementType).add(id);
+//                            }
                         }
                     }
                 }
             }
+        }
+    }
+    void checkWayNodes(Map<ElementType, Set<Long>> elementList) {
+        NodeList wayNodeIdXmlNodes;
+        NodeList wayNodeRefXmlNodes;
+
+        try {
+            wayNodeIdXmlNodes  = XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/node/@id");
+            wayNodeRefXmlNodes = XPathAPI.selectNodeList(changesetDoc, "//osmChange/*/way/nd/@ref");
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error calling XPathAPI!", e);
+        }
+
+        //store node ids in an arraylist for easier ref to id matching
+        ArrayList<Long> nodeIds = new ArrayList<>();
+        for (int i = 0; i < wayNodeIdXmlNodes.getLength(); i++) {
+            long id;
+            try {
+                id = Long.parseLong(wayNodeIdXmlNodes.item(i).getNodeValue());
+            }
+            catch (NumberFormatException | NullPointerException e) {
+                throw new IllegalArgumentException(e);
+            }
+
+            nodeIds.add(id);
+        }
+
+        for (int i = 0; i < wayNodeRefXmlNodes.getLength(); i++) {
+            long id;
+            try {
+                id = Long.parseLong(wayNodeRefXmlNodes.item(i).getNodeValue());
+            }
+            catch (NumberFormatException | NullPointerException e) {
+                throw new IllegalArgumentException(e);
+            }
+
+            if (!nodeIds.contains(id)) {
+                elementList.get(ElementType.Node).add(id);
+            }
+        }
+    }
+
+    void checkRelationMembers(Map<ElementType, Set<Long>> elementList) {
+        // check relation members
+        for (ElementType elementType : ElementType.values()) {
+            if (elementType != ElementType.Changeset) {
+                NodeList relationMemberXmlNodes;
+                String currentType = elementType.toString().toLowerCase();
+                try {
+                    relationMemberXmlNodes = XPathAPI.selectNodeList(changesetDoc,
+                            "//osmChange/*/relation/member[@type = '" + currentType + "']");
+                }
+                catch (TransformerException e) {
+                    throw new RuntimeException("Error invoking XPathAPI!", e);
+                }
+
+                for (int i = 0; i < relationMemberXmlNodes.getLength(); i++) {
+                    NodeList refXmlNode;
+                    long id;
+
+                    try {
+                        id = Long.parseLong(relationMemberXmlNodes.item(i).getAttributes().getNamedItem("ref").getNodeValue());
+                    }
+                    catch (NumberFormatException | NullPointerException e) {
+                        throw new IllegalArgumentException(e);
+                    }
+
+                    try {
+                        refXmlNode = XPathAPI.selectNodeList(changesetDoc,
+                                "//osmChange/*/" + currentType + "[@id = '" + id + "']");
+                    }
+                    catch (TransformerException e) {
+                        throw new RuntimeException("Error invoking XPathAPI!", e);
+                    }
+
+                    if (refXmlNode.getLength() == 0) {
+                        elementList.get(elementType).add(id);
+                    }
+                }
+            }
+        }
+
+    }
+
+    Map<Long, CurrentNodes> checkForElementExistenceErrors() {
+        logger.debug("Checking for element existence errors...");
+
+        // if an element is referenced (besides in its own create change) and doesn't exist in the db, then fail
+
+        Map<ElementType, Set<Long>> elementTypesToElementIds = new HashMap<>();
+        for (ElementType elementType : ElementType.values()) {
+            if (elementType != ElementType.Changeset) {
+                elementTypesToElementIds.put(elementType, new HashSet<Long>());
+            }
+        }
+
+        String emptyIdErrorMsg = "Element in changeset has empty ID.";
+
+        try {
+            checkRelationMembers(elementTypesToElementIds);
+            checkWayNodes(elementTypesToElementIds);
+            checkTopLevelElements(elementTypesToElementIds);
+        } catch (IllegalArgumentException exc) {
+            throw new IllegalArgumentException(emptyIdErrorMsg, exc);
         }
 
         for (ElementType elementType : ElementType.values()) {

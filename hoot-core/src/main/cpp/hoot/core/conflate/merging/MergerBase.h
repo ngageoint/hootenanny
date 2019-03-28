@@ -40,17 +40,14 @@ public:
 
   typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 
-  MergerBase() {}
+  MergerBase();
+  virtual ~MergerBase();
 
-  virtual ~MergerBase() {}
-
-  virtual std::set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const override;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);
-
-  virtual QString toString() const { return QString("Unimplemented toString()"); }
 
 protected:
 

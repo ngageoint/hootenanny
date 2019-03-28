@@ -39,11 +39,6 @@ dnc = {
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         dnc.rawSchema = dnc.schema.getDbSchema();
 
-        // Debug:
-        // print("dncAttrLookup: Start");
-        // translate.dumpLookup(dncAttrLookup);
-        // print("dncAttrLookup: End");
-
         // Now add some fields to hold OSM specific information on export
         for (var i = 0, schemaLen = dnc.rawSchema.length; i < schemaLen; i++)
         {
@@ -57,21 +52,6 @@ dnc = {
                                       type:'String',
                                       defValue:'' 
                                     });
-        }
-
-        // Build the DNC fcode/attrs lookup table. Note: This is <GLOBAL>
-        dncAttrLookup = {};
-
-        for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
-        {
-            var attrArray = [];
-            for (var j=0, cLen = dnc.rawSchema[i].columns.length; j < cLen; j++)
-            {
-                attrArray.push(dnc.rawSchema[i].columns[j].name);
-            }
-            // Add the attrArray to the list as <layerName>:[array]  
-            // Eg RIVERL:[array]
-            dncAttrLookup[dnc.rawSchema[i].name] = attrArray;
         }
 
         // Now add an o2s[A,L,P] feature to the dnc.rawSchema
@@ -94,8 +74,18 @@ dnc = {
         // Add the first feature to the structure that we return
         var returnData = [{attrs:attrs, tableName:''}];
 
-        // Quit early if we don't need to check anything. We are only looking at linework
+        // Quit early if we don't need to check anything. We are only looking at linework from now on
         if (geometryType !== 'Line') return returnData;
+
+        // Admin Line vs Coastline - FA000
+        // I have no idea why this F_CODE is in two layers.
+        if (attrs.F_CODE == 'FA000')
+        {
+            // returnData.push({attrs:attrs, tableName:'COALINE'});
+            returnData.push({attrs:{'F_CODE':'FA000X'}, tableName:'COALINE'});
+            return returnData;
+        }
+
 
         // Only looking at roads & railways with something else tacked on
         if (!(tags.highway || tags.railway)) return returnData;
@@ -129,6 +119,7 @@ dnc = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -183,21 +174,21 @@ dnc = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -238,114 +229,14 @@ dnc = {
 
 
     // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
-    //                 feature
+    //                 feature. Also, set per feature defaults where appropriate.
     validateAttrs: function(layerName,geometryType,attrs,notUsed,transMap) {
 
-        var attrList = dncAttrLookup[layerName];
-
-        if (attrList != undefined)
-        {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (dnc.configOut.OgrDebugDumpvalidate == 'true')
-            {
-                for (var val in attrs)
-                {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + layerName);
-                        if (val in transMap)
-                        {
-                            notUsed[transMap[val][1]] = transMap[val][2];
-                            // Debug:
-                            hoot.logWarn('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-                        }
-                        else
-                        {
-                            hoot.logError('Validate: ' + val + ' missing from transMap');
-                        }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in dnc.rules.txtLength)
-                    {
-                        if (attrs[val].length > dnc.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= dnc.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
-                }
-            }
-            else
-            {
-                for (var val in attrs)
-                {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        if (val in transMap)
-                        {
-                            notUsed[transMap[val][1]] = transMap[val][2];
-                            // Debug:
-                            // print('Validate: re-adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-                        }
-                        else
-                        {
-                            hoot.logError('Validate: ' + val + ' missing from transMap');
-                        }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in dnc.rules.txtLength)
-                    {
-                        if (attrs[val].length > dnc.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= dnc.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
-                }
-            } // End getOgrDebugDumpvalidate
-        }
-        else
-        {
-            hoot.logWarn('Validate: No attrList for ' + layerName);
-        }
+        // Debug:
+        // print('Validate: ' + attrs.F_CODE + ' Geom:' + geometryType + ' LayerName:' + layerName);
 
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
-
         for (var i=0, sLen = dnc.rawSchema.length; i < sLen; i++)
         {
             if (dnc.rawSchema[i].name == layerName)
@@ -355,58 +246,156 @@ dnc = {
             }
         }
 
-        // Now validate the Enumerated values
-        for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
+        // Sanity checkoing
+        if (feature.name === undefined)
         {
-            // Skip non enumeratied attributes
-            if (feature.columns[i].type !== 'enumeration') continue;
+            // If we can't find an entry in attrArray then we have a problem,
+            // Throw an error message and return. 
+            hoot.logError('Validate: No feature for ' + layerName);
+            return;
+        }
+        // else
+        // {
+            // Debug:
+            // print('FeatureName: ' + feature.name);
+        // }
 
-            var enumName = feature.columns[i].name;
 
-            // Skip stuff that is missing and will end up as a default value
-            if (!attrs[enumName]) continue;
+        var attrArray = [];
+        for (var j=0, cLen = feature.columns.length; j < cLen; j++)
+        {
+            attrArray.push(feature.columns[j].name);
+        }
 
-            var attrValue = attrs[enumName];
-            var enumList = feature.columns[i].enumerations;
-            var enumValueList = [];
-
-            // Pull all of the values out of the enumerated list to make life easier
-            for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
-
-            // Check if it is a valid enumerated value
-            if (enumValueList.indexOf(attrValue) == -1)
+        // First: Go through the translated attributes and drop those that are not valid for the feature
+        for (var val in attrs)
+        {
+            if (attrArray.indexOf(val) == -1)
             {
-                if (dnc.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
-
-                // Do we have an "Other" value?
-                if (enumValueList.indexOf('999') == -1)
+                // Debug:
+                // print('Validate: Dropping ' + val + ' from ' + layerName);
+                if (val in transMap)
                 {
-                    // No: Set the offending enumerated value to the default value
-                    attrs[enumName] = feature.columns[i].defValue;
-
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
-                }
-                else
-                {
-                    // Yes: Set the offending enumerated value to the "other" value
-                    attrs[enumName] = '999';
-
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
-                }
-
-                // Since we either wiped the value or set it to '999', restore the tags for it 
-                if (enumName in transMap)
-                {
-                    notUsed[transMap[enumName][1]] = transMap[enumName][2];
+                    notUsed[transMap[val][1]] = transMap[val][2];
                     // Debug:
-                    //print('Validate: re-adding enumeration ' + transMap[enumName][1] + ' = ' + transMap[enumName][2] + ' to notUsed');
+                    // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
                 }
-                else
-                {
-                    hoot.logError('Validate: ' + enumName + ' missing from transMap');
-                }
+                // else
+                // {
+                    // Debug:
+                //     hoot.logError('Validate: ' + val + ' missing from transMap');
+                // }
+
+                delete attrs[val];
+
+                // Since we deleted the attribute, Skip the text check
+                continue;
             }
-        } // End Validate Enumerations
+
+            // Now check the length of the text fields
+            // We need more info from the customer about this: What to do if it is too long
+            if (val in dnc.rules.txtLength)
+            {
+                if (attrs[val].length > dnc.rules.txtLength[val])
+                {
+                    // First try splitting the attribute and grabbing the first value
+                    var tStr = attrs[val].split(';');
+                    if (tStr[0].length <= dnc.rules.txtLength[val])
+                    {
+                        attrs[val] = tStr[0];
+                    }
+                    else
+                    {
+                        hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + dnc.rules.txtLength[val] + ' characters.');
+                        // Still too long. Chop to the maximum length
+                        attrs[val] = tStr[0].substring(0,dnc.rules.txtLength[val]);
+                    }
+                } // End text attr length > max length
+            } // End in txtLength
+        } // End attr loop
+
+        // Grab the F_CODE and the geometry for use in lookup tables
+        var gFcode = attrs.F_CODE + geometryType.toString().charAt(0)
+
+        // Second: Now go through the feature, check the values and look at enumerations
+        // for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
+        for (var i=0, cLen = feature.columns.length; i < cLen; i++)
+        {
+            var colName = feature.columns[i].name;
+
+            // See if we have a default/mandatory value
+            if (dnc.rules.defaultList[gFcode])
+            {
+                // Debug:
+                // print('Found: ' + gFcode + ' in the default list');
+                // if (dnc.rules.defaultList[gFcode][attrs[colName]])
+                if (dnc.rules.defaultList[gFcode][colName])
+                {
+                    // Debug:
+                    // print('Setting: ' + colName + ' to ' + dnc.rules.defaultList[gFcode][colName]);
+                    attrs[colName] = dnc.rules.defaultList[gFcode][colName];
+
+                    // We wiped the value so try to restore the tags for it
+                    // NOTE: If this was an empty default, there is nothing to restore
+                    if (colName in transMap)
+                    {
+                        notUsed[transMap[colName][1]] = transMap[colName][2];
+                        // Debug:
+                        // print('Validate: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+                    }
+
+                    // Since we eddited the attribute, no point checking if it is enumerated.
+                    continue;
+                }
+            } // End F_CODE in defaultList
+            
+            // Now check if having a value for the attribute is actually valid
+            if (feature.columns[i].type == 'enumeration')
+            {
+                var attrValue = attrs[colName];
+                var enumList = feature.columns[i].enumerations;
+                var enumValueList = [];
+
+                // Pull all of the values out of the enumerated list to make life easier
+                for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
+
+                // Check if it is a valid enumerated value
+                if (enumValueList.indexOf(attrValue) == -1)
+                {
+                    // Do we have an "Other" value?
+                    if (enumValueList.indexOf('999') == -1 || attrValue == undefined)
+                    {
+                        // No: Set the offending enumerated value to the default value
+                        attrs[colName] = feature.columns[i].defValue;
+
+                        // Debug:
+                        // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    }
+                    else
+                    {
+                        // Yes: Set the offending enumerated value to the "other" value
+                        attrs[colName] = '999';
+
+                        // Debug:
+                        // print('Validate: 2: Enumerated Value: ' + attrValue + ' not found in ' + colName + ' Setting ' + colName + ' to Other (999)');
+                    }
+
+                    // Since we either wiped the value or set it to '999', try to restore the tags for it 
+                    if (colName in transMap)
+                    {
+                        notUsed[transMap[colName][1]] = transMap[colName][2];
+                        // Debug:
+                        // print('Validate: 2: re-adding enumeration ' + transMap[colName][1] + ' = ' + transMap[colName][2] + ' to notUsed');
+                    }
+                }
+
+                continue;
+            } // End validate Enumerations
+
+            // Since we did the enumerations, Text and Numbers are next
+
+
+        } // End feature attributes
     }, // End validateAttrs
 
 
@@ -582,43 +571,6 @@ dnc = {
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
-        // DNC doesn't have a lot of info for land features
-        if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
-        if (attrs.F_CODE == 'AP030') tags.highway = 'road';
-        if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
-
-        // If we have a UFI, store it.
-        tags.source = 'dnc:' + layerName.toLowerCase();;
-        if (attrs.OSM_UUID)
-        {
-            tags.uuid = '{' + attrs['OSM_UUID'].toString().toLowerCase() + '}';
-        }
-        else
-        {
-            tags.uuid = createUuid(); 
-        }
-
-        if (dnc.osmPostRules == undefined)
-        {
-            // ##############
-            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
-            //
-            // Rules format:  ["test expression","output result"];
-            // Note: t = tags, a = attrs and attrs can only be on the RHS
-            var rulesList = [
-            ["t.man_made == 'radar_station'","t['radar:use'] = 'early_warning';"],
-            ["t['cable:type'] && !(t.cable)","t.cable = 'yes';"],
-            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-            ["t.foreshore && !(t.tidal)","t.tidal = 'yes'; t.natural = 'water'"],
-            ["t.tidal && !(t.water)","t.natural = 'water'"]
-            ];
-
-            dnc.osmPostRules = translate.buildComplexRules(rulesList);
-        }
-
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
-
         // Unpack the OSM_TAGS attribute if it exists
         if (attrs.OSM_TAGS)
         {
@@ -645,6 +597,91 @@ dnc = {
                 delete tags.note;
             }
         } // End process attrs.OSM_TAGS
+
+        // DNC doesn't have a lot of info for land features
+        if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
+        if (attrs.F_CODE == 'AP030') tags.highway = 'road';
+        if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
+
+        // The Data Quality layer doesn't have an F_CODE
+        if (layerName.toLowerCase() == 'dqyarea_dqy') tags['source:metadata'] = 'dataset';
+
+        // If we have a UFI, store it.
+        tags.source = 'dnc:' + layerName.toLowerCase();;
+        if (attrs.OSM_UUID)
+        {
+            tags.uuid = '{' + attrs['OSM_UUID'].toString().toLowerCase() + '}';
+        }
+        else
+        {
+            tags.uuid = createUuid(); 
+        }
+
+        if (dnc.osmPostRules == undefined)
+        {
+            // ##############
+            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
+            //
+            // Rules format:  ["test expression","output result"];
+            // Note: t = tags, a = attrs and attrs can only be on the RHS
+            var rulesList = [
+            ["t['radar:use'] == 'early_warning' && !(t.man_made == 'radar_station')","t.man_made = 'radar_station'"],
+            ["t['cable:type'] && !(t.cable)","t.cable = 'yes';"],
+            ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
+            ["t.foreshore && !(t.tidal)","t.tidal = 'yes'; t.natural = 'water'"],
+            ["t.water == 'tidal' && !(t.natural)","t.natural = 'water'"]
+            // ["t.tidal && !(t.water)","t.natural = 'water'"]
+            ];
+
+            dnc.osmPostRules = translate.buildComplexRules(rulesList);
+        }
+        translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
+
+        // Fix lifecycle tags
+        switch (tags.condition)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
     }, // End of applyToOsmPostProcessing
   
@@ -682,7 +719,173 @@ dnc = {
                 continue;
             }
 
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
         } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+
+        if (dnc.dncPreRules == undefined)
+        {
+            // ##############
+            // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
+            //
+            // Rules format:  ["test expression","output result"];
+            // Note: t = tags, a = attrs and attrs can only be on the RHS
+            var rulesList = [
+            ["t['radar:use'] == 'early_warning' && t.man_made == 'radar_station'","delete t.man_made"]
+            ];
+
+            dnc.dncPreRules = translate.buildComplexRules(rulesList);
+        }
+
+        // Apply the rulesList
+        // translate.applyComplexRules(tags,attrs,dnc.dncPreRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = dnc.dncPreRules.length; i < rLen; i++)
+        {
+            if (dnc.dncPreRules[i][0](tags)) dnc.dncPreRules[i][1](tags,attrs);
+        }
+
 
         // natural water usually has a subtype. If it does, just keep the subtype
         if (tags.natural == 'water' && tags.water) delete tags.natural;
@@ -694,21 +897,21 @@ dnc = {
         //     delete tags.barrier; // Take away the walls...
         // }
 
-        // An "amenitiy" can be a building or a thing
-        // If appropriate, make the "amenity" into a building
-        // This list is taken from the OSM Wiki and Taginfo
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','ferry_terminal'
-            ]; // End bldArray
+        // // An "amenity" can be a building or a thing
+        // // If appropriate, make the "amenity" into a building
+        // // This list is taken from the OSM Wiki and Taginfo
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','ferry_terminal'
+        //     ]; // End bldArray
 
-        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // Places, localities and regions
         switch (tags.place)
@@ -879,13 +1082,47 @@ dnc = {
                     {
                         var row = dnc.fcodeLookup[col][value];
                         attrs.F_CODE = row[1];
+
+                        // Debug:
+                        // print('F_CODE: ' + col + ' = ' + value + ' makes ' + row[1]);
                     }
                 }
             }
         }
 
+        // An "amenitiy" can be a building or a thing
+        // If appropriate, make the "amenity" into a building
+        // This list is taken from the OSM Wiki and Taginfo
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','ferry_terminal'
+            ]; // End bldArray
+
+        if (!attrs.F_CODE && tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
+        // Now, re-translate some of the NAS building F_CODES to DNC
+        var buildingList = ['AD041','AH060','AJ080','AJ085','AJ110','AK110','AL014','AL019','AL099','AL250','AL371','GB230']; 
+        if (buildingList.indexOf(attrs.F_CODE) > -1)
+        {
+            attrs.F_CODE = 'AL015'; // General Building
+        }
+
+        // Some more custom F_CODE fixes
+        if (!attrs.F_CODE)
+        {
+            if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
+            if (tags.landcover == 'snowfield' || tags.landcover == 'ice-field') attrs.F_CODE = 'BJ100'; // Snowfield/Icefield
+            if (tags.aeroway == 'heliport') attrs.F_CODE = 'GB005'; // Airport
+        }
 
     }, // End applyToOgrPreProcessing
 
@@ -992,6 +1229,77 @@ dnc = {
         {
             if (dnc.configOut.OgrAddUuid == 'true') attrs.OSM_UUID = createUuid().replace('{','').replace('}','');
         }
+
+        // Fix some of the default values
+        switch (attrs.F_CODE + geometryType.toString().charAt(0))
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'AL015P':
+                if (attrs.BFC == '81')
+                {
+                    if (!attrs.COL) attrs.COL = 'N/A'
+                    if (!attrs.EXS) attrs.EXS = '-32768'
+                    if (!attrs.SSR) attrs.SSR = '-32768'
+                }
+                else
+                {
+                    if (!attrs.SST) attrs.SST = '-32768'
+                    if (!attrs.STA) attrs.STA = '-32768'
+
+                }
+                break;
+
+            case 'BB010A': // Anchorage
+            case 'BB010L': // Anchorage
+                if (!attrs.MAC) attrs.MAC = '11';
+                break;
+
+            case 'FC021A': // Maritime Limit Boundary
+                if (!attrs.PRO) attrs.PRO = '130';
+                break;
+
+            case 'FC021L': // Maritime Limit Boundary
+                switch (attrs.MBL)
+                {
+                    case undefined:
+                        break;
+
+                    case '-32768':
+                        if (!attrs.COD) attrs.COD = '1';
+                        if (!attrs.MAC) attrs.MAC = '0';
+                        if (!attrs.MBL) attrs.MBL = '0';
+                        if (!attrs.OPS) attrs.OPS = '1';
+                        break;
+
+                    case '13':
+                        if (!attrs.DRP) attrs.DRP = 'UNK';
+                        if (!attrs.LAF) attrs.LAF = '0';
+                        // Fall through to default
+
+                    default:
+                        if (!attrs.DRP) attrs.DRP = 'N/A';
+                        if (!attrs.COD) attrs.COD = '-32768';
+                        if (!attrs.MAC) attrs.MAC = '-32768';
+                        if (!attrs.NAM) attrs.NAM = 'N/A';
+                        if (!attrs.OPS) attrs.OPS = '-32768';
+                        if (!attrs.PRO) attrs.PRO = '-32768';
+                        break;
+                } // End MBL
+
+                break;
+
+            case 'FC031A': // Maritime Area
+                if (!attrs.DAN && attrs.ATN == '2') attrs.DAN = 'N/A';
+                break;
+
+            case 'FC021P': // Maritime Limit Boundary
+            case 'FC036P': // Restricted Area
+                if (!attrs.MAC) attrs.MAC = '0';
+                break;
+        } // End default fixes
+
     }, // End applyToOgrPostProcessing
 
 // #####################################################################################################
@@ -1053,10 +1361,7 @@ dnc = {
         // the fcode one2one rules
         if (dnc.fcodeLookup == undefined)
         {
-            // Add the FCODE rules for Import
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneIn);
-
-            dnc.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            dnc.fcodeLookup = translate.createLookup(dnc.rules.fcodeOne2oneIn);
             // translate.dumpOne2OneLookup(dnc.fcodeLookup);
         }
 
@@ -1151,7 +1456,6 @@ dnc = {
         {
             dnc.configOut = {};
             dnc.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            dnc.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             dnc.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             dnc.configOut.OgrThrowError = config.getOgrThrowError();
             dnc.configOut.OgrAddUuid = config.getOgrAddUuid();
@@ -1188,9 +1492,8 @@ dnc = {
         if (dnc.fcodeLookup == undefined)
         {
             // Add the FCODE rules for Export
-            // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,dnc.rules.fcodeOne2oneOut);
-            // dnc.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
-            fcodeCommon.one2one.push.apply(dnc.rules.fcodeOne2oneOut,fcodeCommon.one2one);
+            // We use the input rules and add the output ones on to the list
+            dnc.rules.fcodeOne2oneIn.push.apply(dnc.rules.fcodeOne2oneOut,dnc.rules.fcodeOne2oneIn);
             dnc.fcodeLookup = translate.createBackwardsLookup(dnc.rules.fcodeOne2oneOut);
             // Debug
             // translate.dumpOne2OneLookup(dnc.fcodeLookup);
@@ -1242,6 +1545,27 @@ dnc = {
         // dnc.applyToOgrPostProcessing(tags, attrs, geometryType);
         dnc.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
+        // Now figure out of the tags we used to find the F_CODE are still in the notUsedTags list
+        // If so, delete them
+        for (var col in notUsedTags)
+        {
+            var value = notUsedTags[col];
+            if (col in dnc.fcodeLookup)
+            {
+                if (value in dnc.fcodeLookup[col])
+                {
+                    var row = dnc.fcodeLookup[col][value];
+                    if (attrs.F_CODE == row[1])
+                    {
+                        // Debug:
+                        // print('F_CODE: Dropping ' + col + '=' + value + ' from notUsedTags');
+                        delete notUsedTags[col];
+                        break;
+                    }
+                }
+            }
+        } // End clean notUsedTags
+
         // Debug
         if (dnc.configOut.OgrDebugDumptags == 'true')
         {
@@ -1279,7 +1603,12 @@ dnc = {
                 // if (dncAttrLookup[gFcode.toUpperCase()])
                 if (tableName !== '')
                 {
-                    returnData[i]['tableName'] = tableName;
+                    // If we have already set the tablename, don't stomp on it
+                    if (returnData[i]['tableName'] == '') returnData[i]['tableName'] = tableName;
+
+                    // This is UGLY
+                    // FA000 appears in two layers. Both with different attribute lists
+                    if (returnData[i]['attrs']['F_CODE'] == 'FA000X') returnData[i]['attrs']['F_CODE'] = 'FA000';
 
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     dnc.validateAttrs(tableName,geometryType,returnData[i]['attrs'],notUsedTags,transMap);

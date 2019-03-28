@@ -114,7 +114,8 @@ void ogrWriterThread::run()
   v8::Locker v8Lock(threadIsolate);
 
   bool done = false;
-  std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+  std::pair<boost::shared_ptr<geos::geom::Geometry>,
+    std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
 
   // Setup writer
   boost::shared_ptr<OgrWriter> ogrWriter;
@@ -404,7 +405,6 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   progress.setReportType(configOptions.getProgressReportingFormat());
   progress.setState("Running");
 
-  LOG_INFO("Reading layers...");
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
@@ -485,13 +485,11 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      PROGRESS_INFO("Read layer " << i + 1 << " of " << layers.size());
-      LOG_VART(input);
-      LOG_VART(layers[i]);
+      PROGRESS_INFO(
+        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
       progress.setTaskWeight(progressWeights[i]);
       reader.read(input, layers[i], map, progress);
     }
-    LOG_INFO("Read layer " << layers.size() << " of " << layers.size());
   }
 
   if (map->getNodes().size() == 0)

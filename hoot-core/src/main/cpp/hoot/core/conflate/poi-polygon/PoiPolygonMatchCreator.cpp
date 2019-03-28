@@ -30,10 +30,11 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
+#include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -71,37 +72,54 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_INFO("Creating matches with: " << className() << "...");
+  LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
   map->visitRo(v);
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    " POI to Polygon match candidates.");
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }
   LOG_DEBUG(
-    "POI/Polygon total match pair candidates processed: " << PoiPolygonMatch::matchesProcessed);
-  LOG_DEBUG("POI/Polygon distance matches: " << PoiPolygonMatch::distanceMatches);
-  LOG_DEBUG("POI/Polygon type matches: " << PoiPolygonMatch::typeMatches);
-  LOG_DEBUG("POI/Polygon match pairs with no relevant type: " << PoiPolygonMatch::noTypeFoundCount);
+    "POI/Polygon total match pair candidates processed: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::matchesProcessed));
   LOG_DEBUG(
-    "POI/Polygon name matches: " << PoiPolygonMatch::nameMatches << " / " <<
-    PoiPolygonMatch::nameMatchCandidates << " match candidates.  " <<
-    PoiPolygonMatch::namesProcessed << " total names processed.");
+    "POI/Polygon distance matches: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::distanceMatches));
   LOG_DEBUG(
-    "POI/Polygon address matches: " << PoiPolygonMatch::addressMatches << " / " <<
-     PoiPolygonMatch::addressMatchCandidates << " candidate matches.  " <<
-     PoiPolygonMatch::addressesProcessed << " total addresses processed.");
+    "POI/Polygon type matches: " << StringUtils::formatLargeNumber(PoiPolygonMatch::typeMatches));
   LOG_DEBUG(
-    "POI/Polygon phone number matches: " << PoiPolygonMatch::phoneNumberMatches << " / " <<
-    PoiPolygonMatch::phoneNumberMatchCandidates << " candidate matches.  " <<
-    PoiPolygonMatch::phoneNumbersProcesed << " total phone numbers processed.");
+    "POI/Polygon match pairs with no relevant type: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::noTypeFoundCount));
   LOG_DEBUG(
-    "POI/Polygon convex polygon distance matches: " << PoiPolygonMatch::convexPolyDistanceMatches);
+    "POI/Polygon name matches: " << StringUtils::formatLargeNumber(PoiPolygonMatch::nameMatches) <<
+    " / " << StringUtils::formatLargeNumber(PoiPolygonMatch::nameMatchCandidates) <<
+    " match candidates.  " << StringUtils::formatLargeNumber(PoiPolygonMatch::namesProcessed) <<
+    " total names processed.");
+  LOG_DEBUG(
+    "POI/Polygon address matches: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressMatchCandidates) <<
+    " candidate matches.  " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::addressesProcessed) <<
+    " total addresses processed.");
+  LOG_DEBUG(
+    "POI/Polygon phone number matches: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatches) << " / " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumberMatchCandidates) <<
+    " candidate matches.  " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::phoneNumbersProcesed) <<
+    " total phone numbers processed.");
+  LOG_DEBUG(
+    "POI/Polygon convex polygon distance matches: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
@@ -110,7 +128,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   result.push_back(
     CreatorDescription(
       className(),
-      "Matches POIs to polygons",
+      "Generates matchers that match POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
       //input types

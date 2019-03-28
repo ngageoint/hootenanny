@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveDuplicateRelationMembersVisitor.h"
@@ -64,7 +64,6 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
       if (uniqueMembers.size() < (int)members.size())
       {
         _numAffected += ((int)members.size() - uniqueMembers.size());
-        LOG_VARD(_numAffected);
         relation->setMembers(uniqueMembers.toList().toVector().toStdVector());
       }
     }

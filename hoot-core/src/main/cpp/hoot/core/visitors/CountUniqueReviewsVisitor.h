@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTUNIQUEREVIEWSVISITOR_H
 #define COUNTUNIQUEREVIEWSVISITOR_H
@@ -38,8 +38,7 @@ namespace hoot
 class OsmMap;
 
 /**
- * Sums the length of all the ways. The map projection is used so to get meters the map must be
- * first reprojected into meters.
+ * Counts the number of unique feature reviews in a map
  */
 class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
@@ -52,7 +51,7 @@ public:
 
   double getStat() const { return _reviews.size(); }
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 

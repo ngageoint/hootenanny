@@ -32,7 +32,6 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/visitors/UnionPolygonsVisitor.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -47,17 +46,20 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnionPolygonsOp)
 
 UnionPolygonsOp::UnionPolygonsOp()
 {
+  _combiner.reset(new UnionPolygonsVisitor());
 }
 
 void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
-  UnionPolygonsVisitor v;
-  map->visitRo(v);
-  boost::shared_ptr<Geometry> g = v.getUnion();
+  _numAffected = 0;
+
+  map->visitRo(*_combiner);
+  boost::shared_ptr<Geometry> g = _combiner->getUnion();
   LOG_VART(g.get());
 
   OsmMapPtr result(new OsmMap());
-  GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, ElementData::CIRCULAR_ERROR_EMPTY);
+  GeometryConverter(result).convertGeometryToElement(
+    g.get(), Status::Unknown1, ElementData::CIRCULAR_ERROR_EMPTY);
 
   map.reset(new OsmMap(result));
   LOG_VART(map.get());

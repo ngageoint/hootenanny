@@ -36,7 +36,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -46,6 +46,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -122,13 +123,22 @@ private:
   OsmMap& _map;
 };
 
-BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
+BuildingOutlineUpdateOp::BuildingOutlineUpdateOp() :
+_removeBuildingRelations(false)
 {
+}
+
+void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
+{
+  _removeBuildingRelations =
+    ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations();
 }
 
 void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _map = map;
+  _buildingRelationIds.clear();
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
@@ -141,161 +151,121 @@ void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
       _createOutline(r);
     }
   }
+
+  if (_removeBuildingRelations)
+  {
+    _deleteBuildingRelations();
+  }
 }
 
-void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
-                                            boost::shared_ptr<Geometry> outline,
-                                            ElementPtr buildingMember)
+void BuildingOutlineUpdateOp::_deleteBuildingRelations()
 {
-  boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(buildingMember);
-  try
+  for (std::set<ElementId>::const_iterator it = _buildingRelationIds.begin(); it !=
+       _buildingRelationIds.end(); ++it)
   {
-    outline.reset(outline->Union(g.get()));
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-    LOG_VART(buildingMember->toString());
-    Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
-    try
-    {
-      outline.reset(outline->Union(cleanedGeom));
-    }
-    catch (const geos::util::TopologyException& e)
-    {
-      //couldn't clean, so mark parent relation for review (eventually we'll come up with
-      //cleaning that works here)
-      const QString errMsg =
-        QString("Element with uncleanable topology.  Error occurred during union ") +
-        QString("operation of element: ") + buildingMember->getElementId().toString();
-      // If _unionOutline gets activated, make a ReviewMaker mem var to use for this
-      ReviewMarker().mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN(errMsg + ": " + QString(e.what()));
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
+    RecursiveElementRemover(*it).apply(_map);
   }
 }
 
 void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 {
-  LOG_VART(building->toString());
+  LOG_TRACE("Input building: " << building->toString());
 
   boost::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
+    LOG_VART(entries[i].role);
     if (entries[i].role == MetadataTags::RoleOutline())
     {
-      LOG_TRACE("Removing outline from building: " << entries[i].getElementId() << "...");
+      LOG_TRACE("Removing outline role from: " << entries[i] << "...");
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
     else if (entries[i].role == MetadataTags::RolePart())
     {
-      LOG_TRACE("Processing building part: " << entries[i].getElementId() << "...");
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
+        WayPtr way = _map->getWay(entries[i].getElementId().getId());
+        if (way->getNodeCount() >= 4)   // TODO: put this in a config?
         {
-          WayPtr way = _map->getWay(entries[i].getElementId().getId());
-          if (way->getNodeCount() >= 4)
+          LOG_TRACE("Unioning building part: " << way << "...");
+
+          // TODO: Consolidate this with other duplicated code in this method as part of #3024.
+          boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
+          try
           {
-            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
+            outline.reset(outline->Union(g.get()));
+          }
+          catch (const geos::util::TopologyException& e)
+          {
+            LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
+            Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
             try
             {
-              outline.reset(outline->Union(g.get()));
+              outline.reset(outline->Union(cleanedGeom));
             }
             catch (const geos::util::TopologyException& e)
             {
-              LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-              LOG_VART(way->toString());
-              Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
-              try
+              //couldn't clean, so mark parent relation for review (eventually we'll come up with
+              //cleaning that works here)
+              const QString errMsg =
+                "Marking parent element for review for element with uncleanable topology: " +
+                way->getElementId().toString();
+              _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+              if (logWarnCount < Log::getWarnMessageLimit())
               {
-                outline.reset(outline->Union(cleanedGeom));
+                LOG_WARN(errMsg + ": " + QString(e.what()));
               }
-              catch (const geos::util::TopologyException& e)
+              else if (logWarnCount == Log::getWarnMessageLimit())
               {
-                //couldn't clean, so mark parent relation for review (eventually we'll come up with
-                //cleaning that works here)
-                const QString errMsg =
-                  "Marking parent element for review for element with uncleanable topology: " +
-                  way->getElementId().toString();
-                _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                if (logWarnCount < Log::getWarnMessageLimit())
-                {
-                  LOG_WARN(errMsg + ": " + QString(e.what()));
-                }
-                else if (logWarnCount == Log::getWarnMessageLimit())
-                {
-                  LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-                }
-                logWarnCount++;
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
               }
+              logWarnCount++;
             }
-          }
-
-          {
-            // There are some strange scoping/casting issues going on here, where if I try
-            //to consolidate the unioning code for ways and relations into this method, the
-            //resulting output differs significantly.  I believe the casting going on in
-            //GeometryConverter is related to the cause.  If that's solved, then the duplicated
-            //code can go away.
-
-            //_unionOutline(building, outline, way);
           }
         }
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
       {
         RelationPtr relation = _map->getRelation(entries[i].getElementId().getId());
+        LOG_VART(relation);
         if (relation->isMultiPolygon())
         {
+          LOG_TRACE("Unioning multipoly relation: " << relation << "...");
+
+          // TODO: Consolidate this with other duplicated code in this method as part of #3024.
+          boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
+          try
           {
-            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
+            outline.reset(outline->Union(g.get()));
+          }
+          catch (const geos::util::TopologyException& e)
+          {
+            LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
+            Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
             try
             {
-              outline.reset(outline->Union(g.get()));
+              outline.reset(outline->Union(cleanedGeom));
             }
             catch (const geos::util::TopologyException& e)
             {
-              LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-              LOG_VART(relation->toString());
-              Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
-              try
+              //couldn't clean, so mark parent relation for review (eventually we'll come up with
+              //cleaning that works here)
+              const QString errMsg =
+                "Marking parent element for review for element with uncleanable topology: " +
+                relation->getElementId().toString();
+              _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+              if (logWarnCount < Log::getWarnMessageLimit())
               {
-                outline.reset(outline->Union(cleanedGeom));
+                LOG_WARN(errMsg + ": " + QString(e.what()));
               }
-              catch (const geos::util::TopologyException& e)
+              else if (logWarnCount == Log::getWarnMessageLimit())
               {
-                //couldn't clean, so mark parent relation for review (eventually we'll come up with
-                //cleaning that works here)
-                const QString errMsg =
-                  "Marking parent element for review for element with uncleanable topology: " +
-                  relation->getElementId().toString();
-                _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
-                if (logWarnCount < Log::getWarnMessageLimit())
-                {
-                  LOG_WARN(errMsg + ": " + QString(e.what()));
-                }
-                else if (logWarnCount == Log::getWarnMessageLimit())
-                {
-                  LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-                }
-                logWarnCount++;
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
               }
+              logWarnCount++;
             }
-          }
-
-          {
-            //see comment above
-            //_unionOutline(building, outline, relation);
           }
         }
         else
@@ -316,18 +286,34 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     }
   }
 
-  if (outline->isEmpty() == false)
+  if (!outline->isEmpty())
   {
-    LOG_TRACE("Processing outline...");
+    LOG_TRACE("Adding building outline element...");
+
     const boost::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
     _mergeNodes(outlineElement, building);
-    outlineElement->setTags(building->getTags());
-    // we don't need the relation "type" tag.
+    outlineElement->setTags(building->getTags());;
+    // We don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
-    building->addElement(MetadataTags::RoleOutline(), outlineElement);
+    LOG_VART(outlineElement);
+    if (_removeBuildingRelations)
+    {
+      LOG_TRACE("Marking building: " << building->getElementId() << " for deletion...");
+      _buildingRelationIds.insert(building->getElementId());
+    }
+    else
+    {
+      building->addElement(MetadataTags::RoleOutline(), outlineElement);
+    }
   }
+  else
+  {
+    LOG_TRACE("Building outline is empty.  Skipping creation of multipoly relation.");
+  }
+
+  LOG_TRACE("Output building: " << building);
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,

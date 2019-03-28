@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef _HOOT_FACTORY_H
@@ -80,15 +80,15 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  boost::any create()
+  boost::any create() override
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
   }
 
-  std::string getBaseName() { return _baseName; }
+  std::string getBaseName() override { return _baseName; }
 
-  std::string getName() { return _name; }
+  std::string getName() override { return _name; }
 
 private:
 

@@ -74,11 +74,10 @@ public:
     _strictTagMatching = strictTagMatching;
   }
 
-  virtual QString getInitStatusMessage() { return "Removing duplicate ways..."; }
+  virtual QString getInitStatusMessage() const { return "Removing duplicate ways..."; }
 
-  // finish; wasn't obvious how to count the total affected - #2933
-  virtual QString getCompletedStatusMessage()
-  { return ""; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " duplicate ways"; }
 
   virtual QString getDescription() const { return "Removes duplicate ways from a map"; }
 

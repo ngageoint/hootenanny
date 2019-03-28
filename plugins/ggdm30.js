@@ -234,100 +234,53 @@ ggdm30 = {
 
         if (attrList != undefined)
         {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (ggdm30.config.OgrDebugDumpvalidate == 'true')
+            for (var val in attrs)
             {
-                for (var val in attrs)
+                if (attrList.indexOf(val) == -1)
                 {
-                    if (attrList.indexOf(val) == -1)
+                    if (val in othList)
                     {
-                        if (val in othList)
-                        {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
-                        }
-
-                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
+                        //Debug:
+                        // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+                        delete othList[val];
                     }
 
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in ggdm30.rules.txtLength)
-                    {
-                        if (attrs[val].length > ggdm30.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= ggdm30.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                    // Debug:
+                    hoot.logDebug('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                    delete attrs[val];
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-                } // End attrs loop
-            }
-            else
-            {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
+                    // Since we deleted the attribute, Skip the text check
+                    continue;
+                }
+
+                // Now check the length of the text fields
+                // We need more info from the customer about this: What to do if it is too long
+                if (val in ggdm30.rules.txtLength)
+                {
+                    if (attrs[val].length > ggdm30.rules.txtLength[val])
                     {
-                        if (val in othList)
+                        // First try splitting the attribute and grabbing the first value
+                        var tStr = attrs[val].split(';');
+                        if (tStr[0].length <= ggdm30.rules.txtLength[val])
                         {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
+                            attrs[val] = tStr[0];
                         }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in ggdm30.rules.txtLength)
-                    {
-                        if (attrs[val].length > ggdm30.rules.txtLength[val])
+                        else
                         {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= ggdm30.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
+                            // Still too long. Chop to the maximum length
+                            attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
+                        }
+                    } // End text attr length > max length
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-        	    } // End attrs loop
-            }
+                    // It's text fo skip the next test
+                    continue;
+                } // End in txtLength
+            } // End attrs loop
         }
         else
         {
-            hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         } // End Drop attrs
 
         // Repack the OTH field
@@ -456,6 +409,7 @@ ggdm30 = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -513,21 +467,21 @@ ggdm30 = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -696,6 +650,31 @@ ggdm30 = {
 // #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
+        // Unpack the MEMO field
+        if (tags.note)
+        {
+            var tObj = translate.unpackMemo(tags.note);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text && tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process tags.note
+
         // Roads. GGDM30 is the same as TDSv61
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
@@ -925,44 +904,56 @@ ggdm30 = {
                 tags.man_made = 'works';
             }
         }
-
-
-        // Fix up lifestyle tags
-        // This needs to be expanded to handle all of the options
-//      ['PCF','1','condition','construction'], // Construction
-//      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
-//      ['PCF','3','condition','abandoned'], // Unmaintained in spec
-//      ['PCF','4','condition','damaged'], // Damaged
-//      ['PCF','5','condition','dismantled'], // Dismantled
-//      ['PCF','6','condition','destroyed'], // Destroyed
-        // Old Method:
-//         translate.fixConstruction(tags, 'highway');
-//         translate.fixConstruction(tags, 'railway');
-        if (tags.condition)
-        {
-            if (tags.condition == 'construction')
-            {
-//                 if (tags.highway && attrs.F_CODE == 'AP030')
-                if (tags.highway)
-                {
-                    tags.construction = tags.highway;
-                    tags.highway = 'construction';
-                    delete tags.condition;
-                }
-                else if (tags.railway)
-                {
-                    tags.construction = tags.railway;
-                    tags.railway = 'construction';
-                    delete tags.condition;
-                }
-            } // End Construction
-
-        } // End Condition tags
-
         // Add defaults for common features
         if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
         if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
         if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
+
+        // Fix lifecycle tags
+        switch (tags.condition)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
         // Not sure about adding a Highway tag to this
         // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
@@ -1007,31 +998,6 @@ ggdm30 = {
                 delete tags.tourism;
             }
         }
-
-        // Unpack the MEMO field
-        if (tags.note)
-        {
-            var tObj = translate.unpackMemo(tags.note);
-
-            if (tObj.tags !== '')
-            {
-                var tTags = JSON.parse(tObj.tags)
-                for (i in tTags)
-                {
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-                    tags[i] = tTags[i];
-                }
-            }
-
-            if (tObj.text && tObj.text !== '')
-            {
-                tags.note = tObj.text;
-            }
-            else
-            {
-                delete tags.note;
-            }
-        } // End process tags.note
 
         // Fix the ZI020_GE4X Values
         var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth',
@@ -1090,7 +1056,150 @@ ggdm30 = {
                 continue;
             }
 
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
         } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
 
         if (ggdm30.preRules == undefined)
         {
@@ -1177,24 +1286,24 @@ ggdm30 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so
-        // Most of these are taken from raw OSM and the OSM Wiki
-        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // are not buildings
-        // Taking "place_of_worship" out of this and making it a building
-        // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','fuel', 'ferry_terminal'
-            ]; // End notBuildingList
+        // // Some tags imply that they are buildings but don't actually say so
+        // // Most of these are taken from raw OSM and the OSM Wiki
+        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // // are not buildings
+        // // Taking "place_of_worship" out of this and making it a building
+        // // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','fuel', 'ferry_terminal'
+        //     ]; // End notBuildingList
 
-        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        // if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1372,7 +1481,7 @@ ggdm30 = {
 
         // Bridges & Roads.  If we have an area or a line everything is fine
         // If we have a point, we need to make sure that it becomes a bridge, not a road
-        if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
+        if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
 
         // Railway sidetracks
@@ -1439,6 +1548,25 @@ ggdm30 = {
                 }
             }
         } // End find F_CODE
+
+        // Some tags imply that they are buildings but don't actually say so
+        // Most of these are taken from raw OSM and the OSM Wiki
+        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // are not buildings
+        // Taking "place_of_worship" out of this and making it a building
+        // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','fuel', 'ferry_terminal'
+            ]; // End notBuildingList
+
+        if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // If we still don't have an FCODE, try looking for individual elements
         if (!attrs.F_CODE)
@@ -2069,7 +2197,6 @@ ggdm30 = {
         {
             ggdm30.config = {};
             ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-            ggdm30.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             ggdm30.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
             ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
             ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
@@ -2205,74 +2332,7 @@ ggdm30 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(ggdmAttrLookup[gFcode]))
-        {
-            // For the UI: Throw an error and die if we don't have a valid feature
-            if (ggdm30.config.OgrThrowError == 'true')
-            {
-                if (! attrs.F_CODE)
-                {
-                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-                    return returnData;
-                }
-                else
-                {
-                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
-                    return returnData;
-                }
-            }
-
-            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Debug:
-            // Dump out what attributes we have converted before they get wiped out
-            if (ggdm30.config.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
-
-            // We want to keep the hoot:id if present
-            if (tags['hoot:id'])
-            {
-                tags.raw_id = tags['hoot:id'];
-                delete tags['hoot:id'];
-            }
-
-            // Convert all of the Tags to a string so we can jam it into an attribute
-            // var str = JSON.stringify(tags);
-            var str = JSON.stringify(tags,Object.keys(tags).sort());
-
-            // Shapefiles can't handle fields > 254 chars
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
-            {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
-            }
-            else
-            {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
-                {
-                    hoot.logTrace('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
-                }
-
-                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253),
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
-            }
-
-            returnData.push({attrs: attrs, tableName: tableName});
-        }
-        else // We have a feature
+        if (ggdmAttrLookup[gFcode])
         {
             // Check if we need to make more features
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2345,7 +2405,74 @@ ggdm30 = {
                 var reviewTable = 'review_' + geometryType.toString().charAt(0);
                 returnData.push({attrs: reviewAttrs, tableName: reviewTable});
             } // End ReviewTags
-        } // End else We have a feature
+        }
+        else
+        {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (ggdm30.config.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
+            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Debug:
+            // Dump out what attributes we have converted before they get wiped out
+            if (ggdm30.config.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
+
+            // We want to keep the hoot:id if present
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
+
+            // Convert all of the Tags to a string so we can jam it into an attribute
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
+
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
+            {
+                // return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                attrs = {tag1:str.substring(0,253),
+                         tag2:str.substring(253,506),
+                         tag3:str.substring(506,759),
+                         tag4:str.substring(759,1012)};
+            }
+
+            returnData.push({attrs: attrs, tableName: tableName});
+        } // End We DON'T have a feature
 
         // Debug:
         if (ggdm30.config.OgrDebugDumptags == 'true')

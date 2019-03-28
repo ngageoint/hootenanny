@@ -76,7 +76,7 @@ public:
    * @brief apply performs the removal operation
    * @param map to operate on
    */
-  void apply(OsmMapPtr& map);
+  void apply(OsmMapPtr& map) override;
 
   /**
    * @brief getClassName gest the name of the class
@@ -113,7 +113,7 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
-  virtual QString getDescription() const { return "Removes a single element"; }
+  virtual QString getDescription() const override { return "Removes a single element"; }
 
 private:
 
