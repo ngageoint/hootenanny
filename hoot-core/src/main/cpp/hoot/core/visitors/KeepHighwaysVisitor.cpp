@@ -45,7 +45,7 @@ void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
   ElementType type = e->getElementType();
   long id = e->getId();
 
-  if (HighwayCriterion().isSatisfied(e) == false || AreaCriterion().isSatisfied(e))
+  if (HighwayCriterion(_map->shared_from_this()).isSatisfied(e) == false || AreaCriterion().isSatisfied(e))
   {
     // we don't want to accidentally delete a highway by deleting a relation that contains
     // highways.

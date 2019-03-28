@@ -188,12 +188,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       SingleStat("Meters of Highway",
       _applyVisitor(
         constMap,
-        FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+        FilteredVisitor(HighwayCriterion(map), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
     _stats.append(
       SingleStat("Highway Unique Name Count",
       _applyVisitor(
       constMap,
-      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+      FilteredVisitor(HighwayCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
     _stats.append(
       SingleStat("Meters Squared of Buildings",
       _applyVisitor(
@@ -422,7 +422,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("Highway Translated Populated Tag Percent",
-        _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(),
+        _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(map),
           ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
       _stats.append(SingleStat("POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),

@@ -27,10 +27,11 @@
 #include "HighwayCriterion.h"
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
@@ -44,35 +45,34 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
   Tags::const_iterator it = tags.find("highway");
-  QString key;
 
   // Is it a legit highway?
   if ((type == ElementType::Way || type == ElementType::Relation) &&
       it != tags.end() && it.value() != "")
   {
     result = true;
-    key = it.key();
   }
-
-  // Maybe it's a way with nothing but a time tag...
-  it = tags.find("source:datetime");
-  if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
+  //  Make sure it isn't a building or a part of a building
+  else if (_map && (BuildingCriterion(_map).isSatisfied(element) ||
+                    BuildingCriterion(_map).isParentABuilding(element->getElementId())))
   {
-    // We can treat it like a highway
-    result = true;
-    key = it.key();
+    result = false;
   }
-
+  else
+  {
+    // Maybe it's a way with nothing but a time tag...
+    it = tags.find("source:datetime");
+    if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
+    {
+      // We can treat it like a highway
+      result = true;
+    }
+  }
   // Make sure this isn't an area highway section!
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);
   }
-
-//  if (result)
-//  {
-//    LOG_TRACE("element: " << element->getElementId() << " isLinearHighway; key: " << key);
-//  }
 
   return result;
 }
