@@ -4,8 +4,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 
-#include <float.h>
-
 namespace hoot
 {
 
@@ -24,7 +22,9 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
   {
     const Meters height = _getHeight(e);
     LOG_VART(height);
-    if (height > 0)
+    // height = 0 denotes no height tag present. We're only going to return stats for buildings
+    // with the tag.
+    if (height > 0.0)
     {
       _totalHeight += height;
       if (_minHeight == 0 || height < _minHeight)
@@ -35,22 +35,36 @@ void BuildingHeightVisitor::visit(const ConstElementPtr& e)
       {
         _maxHeight = height;
       }
-      // We're only going to return stats for buildings with the tag.
       _numAffected++;
     }
   }
 }
 
-Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e) const
+Meters BuildingHeightVisitor::_getHeight(const ConstElementPtr& e)
 {
-  if (e->getTags().contains("height"))
+  QString heightStr = e->getTags().get("height").trimmed();
+  if (!heightStr.isEmpty())
   {
-    const Meters height =
-      QString::number(e->getTags().getLength("height").value(), 'g', 2).toDouble();
-    LOG_VART(height);
-    return height;
+    _cleanAndStandardizeLengthString(heightStr);
+    bool ok = false;
+    const Meters height = heightStr.toDouble(&ok);
+    if (ok)
+    {
+      LOG_VART(height);
+      return height;
+    }
   }
   return 0.0;
+}
+
+void BuildingHeightVisitor::_cleanAndStandardizeLengthString(QString& value)
+{
+  value = value.toLower().trimmed();
+  // convert feet to meters
+
+  value.replace("m", "");
+  value.replace(",", ".");
+  value = value.simplified();
 }
 
 }

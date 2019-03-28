@@ -45,7 +45,8 @@ private:
   Meters _minHeight;
   Meters _maxHeight;
 
-  Meters _getHeight(const ConstElementPtr& e) const;
+  Meters _getHeight(const ConstElementPtr& e);
+  void _cleanAndStandardizeLengthString(QString& value);
 };
 
 }

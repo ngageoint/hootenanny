@@ -96,6 +96,18 @@
   <node id='-18957698' action='modify' visible='true' lat='-0.00636014795' lon='-0.00126557897' />
   <node id='-18957699' action='modify' visible='true' lat='-0.00538192062' lon='-0.00126413828' />
   <node id='-18957700' action='modify' visible='true' lat='-0.00538278699' lon='-0.00067587571' />
+  <node id='-18957807' action='modify' visible='true' lat='-0.00748078644' lon='-0.00358818672' />
+  <node id='-18957808' action='modify' visible='true' lat='-0.0074821994' lon='-0.00262878992' />
+  <node id='-18957809' action='modify' visible='true' lat='-0.00804536998' lon='-0.00262961933' />
+  <node id='-18957810' action='modify' visible='true' lat='-0.00804635057' lon='-0.00196379971' />
+  <node id='-18957811' action='modify' visible='true' lat='-0.00900575659' lon='-0.00196521268' />
+  <node id='-18957812' action='modify' visible='true' lat='-0.00900480695' lon='-0.00261002227' />
+  <node id='-18957813' action='modify' visible='true' lat='-0.00950138263' lon='-0.0026107536' />
+  <node id='-18957814' action='modify' visible='true' lat='-0.00949994195' lon='-0.0035889717' />
+  <node id='-18957815' action='modify' visible='true' lat='-0.00905587751' lon='-0.0035883177' />
+  <node id='-18957816' action='modify' visible='true' lat='-0.00905500792' lon='-0.00417876901' />
+  <node id='-18957817' action='modify' visible='true' lat='-0.0080767806' lon='-0.00417732832' />
+  <node id='-18957818' action='modify' visible='true' lat='-0.00807764697' lon='-0.00358906575' />
   <way id='-18957198' action='modify' visible='true'>
     <nd ref='-18957197' />
     <nd ref='-18957195' />
@@ -112,7 +124,7 @@
     <nd ref='-18957197' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='1' />
-    <tag k='height' v='6.1' />
+    <tag k='height' v='8.1' />
     <tag k='name' v='valid meters format 1' />
   </way>
   <way id='-18957235' action='modify' visible='true'>
@@ -131,7 +143,7 @@
     <nd ref='-18957236' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='2' />
-    <tag k='height' v='7&apos;4&quot;' />
+    <tag k='height' v='15&apos;4&quot;' />
     <tag k='name' v='valid feet format' />
   </way>
   <way id='-18957331' action='modify' visible='true'>
@@ -150,7 +162,7 @@
     <nd ref='-18957332' />
     <tag k='building' v='yes' />
     <tag k='building:levels' v='10' />
-    <tag k='height' v='4 m' />
+    <tag k='height' v='8 m' />
     <tag k='name' v='valid meters format 2' />
   </way>
   <way id='-18957395' action='modify' visible='true'>
@@ -168,7 +180,7 @@
     <nd ref='-18957397' />
     <nd ref='-18957396' />
     <tag k='building' v='yes' />
-    <tag k='height' v='4m' />
+    <tag k='height' v='8m' />
     <tag k='name' v='invalid meters format 1' />
   </way>
   <way id='-18957449' action='modify' visible='true'>
@@ -186,7 +198,7 @@
     <nd ref='-18957451' />
     <nd ref='-18957450' />
     <tag k='building' v='yes' />
-    <tag k='height' v='0,8' />
+    <tag k='height' v='8,1' />
     <tag k='name' v='invalid meters format 2' />
   </way>
   <way id='-18957508' action='modify' visible='true'>
@@ -243,5 +255,23 @@
     <nd ref='-18957689' />
     <tag k='building' v='yes' />
     <tag k='name' v='no height' />
+  </way>
+  <way id='-18957806' action='modify' visible='true'>
+    <nd ref='-18957807' />
+    <nd ref='-18957808' />
+    <nd ref='-18957809' />
+    <nd ref='-18957810' />
+    <nd ref='-18957811' />
+    <nd ref='-18957812' />
+    <nd ref='-18957813' />
+    <nd ref='-18957814' />
+    <nd ref='-18957815' />
+    <nd ref='-18957816' />
+    <nd ref='-18957817' />
+    <nd ref='-18957818' />
+    <nd ref='-18957807' />
+    <tag k='building' v='yes' />
+    <tag k='height' v='8.1 m' />
+    <tag k='name' v='valid meters format 3' />
   </way>
 </osm>

@@ -21,6 +21,8 @@ void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
   if (_crit.isSatisfied(e))
   {
     const int numLevels = _getNumLevels(e);
+    // num levels = 0 denotes no levels tag. We're only going to return stats for buildings with
+    // the tag.
     if (numLevels > 0)
     {
       _totalLevels += numLevels;
@@ -32,7 +34,6 @@ void BuildingLevelsVisitor::visit(const ConstElementPtr& e)
       {
         _maxLevels = numLevels;
       }
-      // We're only going to return stats for buildings with the tag.
       _numAffected++;
     }
   }
