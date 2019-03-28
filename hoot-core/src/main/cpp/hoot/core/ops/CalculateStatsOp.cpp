@@ -248,6 +248,62 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       constMap,
       FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
+    _stats.append(SingleStat("Bridges",
+      _applyVisitor(
+        constMap, FilteredVisitor(BridgeCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    _stats.append(SingleStat("Tunnels",
+      _applyVisitor(
+        constMap, FilteredVisitor(TunnelCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    _stats.append(SingleStat("One-Way Streets",
+      _applyVisitor(
+        constMap, FilteredVisitor(OneWayCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    _stats.append(SingleStat("Road Roundabouts",
+      _applyVisitor(
+        constMap, FilteredVisitor(RoundaboutCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Multi-Use Buildings",
+      _applyVisitor(
+        constMap, FilteredVisitor(MultiUseBuildingCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    BuildingHeightVisitor buildingHeightVis;
+    _applyVisitor(constMap, &buildingHeightVis);
+    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.numWithStat()));
+    _stats.append(SingleStat("Shortest Building Height", buildingHeightVis.getMin()));
+    _stats.append(SingleStat("Tallest Building Height", buildingHeightVis.getMax()));
+    _stats.append(SingleStat("Average Height Per Building", buildingHeightVis.getAverage()));
+    BuildingLevelsVisitor buildingLevelVis;
+    _applyVisitor(constMap, &buildingLevelVis);
+    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.numWithStat()));
+    _stats.append(SingleStat("Least Levels in a Building", buildingLevelVis.getMin()));
+    _stats.append(SingleStat("Most Levels in a Building", buildingHeightVis.getMax()));
+    _stats.append(
+      SingleStat("Average Levels Per Building", buildingHeightVis.getAverage()));
+
+    _stats.append(SingleStat("Non-Building Areas",
+      _applyVisitor(
+        constMap, FilteredVisitor(NonBuildingAreaCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+
+    _stats.append(SingleStat("Features with Addresses",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasAddressCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    AddressCountVisitor addressCountVis;
+    _applyVisitor(constMap, &addressCountVis);
+    _stats.append(SingleStat("Total Addresses", addressCountVis.getStat()));
+
+    _stats.append(SingleStat("Features with Phone Numbers",
+      _applyVisitor(
+        constMap, FilteredVisitor(HasPhoneNumberCriterion(),
+        ConstElementVisitorPtr(new ElementCountVisitor())))));
+    PhoneNumberCountVisitor phoneCountVis;
+    _applyVisitor(constMap, &phoneCountVis);
+    _stats.append(SingleStat("Total Phone Numbers", phoneCountVis.getStat()));
+
     FeatureCountVisitor featureCountVisitor;
     _applyVisitor(constMap, &featureCountVisitor);
     const long featureCount = featureCountVisitor.getCount();
@@ -489,63 +545,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       LOG_DEBUG("Skipping stats translation");
     }
-
-    // TODO: would like to get these next to the rest of the road stats
-    _stats.append(SingleStat("Bridges",
-      _applyVisitor(
-        constMap, FilteredVisitor(BridgeCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("Tunnels",
-      _applyVisitor(
-        constMap, FilteredVisitor(TunnelCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("One-Way Streets",
-      _applyVisitor(
-        constMap, FilteredVisitor(OneWayCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    _stats.append(SingleStat("Road Roundabouts",
-      _applyVisitor(
-        constMap, FilteredVisitor(RoundaboutCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-    _stats.append(SingleStat("Multi-Use Buildings",
-      _applyVisitor(
-        constMap, FilteredVisitor(MultiUseBuildingCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    BuildingHeightVisitor buildingHeightVis;
-    _applyVisitor(constMap, &buildingHeightVis);
-    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.numWithStat()));
-    _stats.append(SingleStat("Shortest Building Height", buildingHeightVis.getMin()));
-    _stats.append(SingleStat("Tallest Building Height", buildingHeightVis.getMax()));
-    _stats.append(SingleStat("Average Height Per Building", buildingHeightVis.getAverage()));
-    BuildingLevelsVisitor buildingLevelVis;
-    _applyVisitor(constMap, &buildingLevelVis);
-    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.numWithStat()));
-    _stats.append(SingleStat("Least Levels in a Building", buildingLevelVis.getMin()));
-    _stats.append(SingleStat("Most Levels in a Building", buildingHeightVis.getMax()));
-    _stats.append(
-      SingleStat("Average Levels Per Building", buildingHeightVis.getAverage()));
-
-    _stats.append(SingleStat("Non-Building Areas",
-      _applyVisitor(
-        constMap, FilteredVisitor(NonBuildingAreaCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-    _stats.append(SingleStat("Features with Addresses",
-      _applyVisitor(
-        constMap, FilteredVisitor(HasAddressCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    AddressCountVisitor addressCountVis;
-    _applyVisitor(constMap, &addressCountVis);
-    _stats.append(SingleStat("Total Addresses", addressCountVis.getStat()));
-
-    _stats.append(SingleStat("Features with Phone Numbers",
-      _applyVisitor(
-        constMap, FilteredVisitor(HasPhoneNumberCriterion(),
-        ConstElementVisitorPtr(new ElementCountVisitor())))));
-    PhoneNumberCountVisitor phoneCountVis;
-    _applyVisitor(constMap, &phoneCountVis);
-    _stats.append(SingleStat("Total Phone Numbers", phoneCountVis.getStat()));
   }
 
   logMsg = "Map statistics calculated";

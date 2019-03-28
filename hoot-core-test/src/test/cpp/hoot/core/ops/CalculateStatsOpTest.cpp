@@ -49,8 +49,7 @@ class CalculateStatsOpTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(CalculateStatsOpTest);
   CPPUNIT_TEST(runStatsNumTest);
   CPPUNIT_TEST(runStatsTest);
-  // TODO: re-enable
-  //CPPUNIT_TEST(runStatsTestWithReviews);
+  CPPUNIT_TEST(runStatsTestWithReviews);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -545,19 +544,19 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Nodes in a Way"));
     CPPUNIT_ASSERT_EQUAL(59.0, calcStatsOp->getSingleStat("Most Nodes in a Way"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(226.0, calcStatsOp->getSingleStat("Total Way Nodes"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9.0, calcStatsOp->getSingleStat("Average Nodes Per Way"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(209.0, calcStatsOp->getSingleStat("Total Way Nodes"));
 
-    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
-    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Least Members in a Relation"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Most Members in a Relation"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      3.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(3.0, calcStatsOp->getSingleStat("Total Relation Members"));
+      2.0, calcStatsOp->getSingleStat("Average Members Per Relation"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Total Relation Members"));
 
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Tags on a Feature"));
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Tags on a Feature"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
-    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, calcStatsOp->getSingleStat("Average Tags Per Feature"), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Least Information Tags on a Feature"));
     CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Most Information Tags on a Feature"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       2.94, calcStatsOp->getSingleStat("Average Information Tags Per Feature"), 1e-1);
@@ -582,7 +581,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Average Levels Per Building"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Non-Building Areas"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Non-Building Areas"));
 
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Features with Addresses"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Total Addresses"));

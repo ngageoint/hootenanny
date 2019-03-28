@@ -96,7 +96,7 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
   s = s.toLower();
   if (0 == s.compare("poi"))
     return POI;
-  else if (/*0 == s.compare("highway")*/0 == s.compare("road"))
+  else if (0 == s.compare("road"))
     return Highway;
   else if (0 == s.compare("building"))
     return Building;

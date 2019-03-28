@@ -35,14 +35,14 @@ namespace hoot
 
 /**
  * Simple interface for dealing with numeric stats in a little more detail than SingleStatistic
+ *
+ * inherit SingleStatistic::getStat for returning stat totals and add some additional stats
  */
 class NumericStatistic : public SingleStatistic
 {
 public:
 
   virtual ~NumericStatistic() {}
-
-  // We'll inherit SingleStatistic::getStat for returning stat totals and add these:
 
   virtual long numWithStat() const = 0;
   virtual double getMin() const = 0;

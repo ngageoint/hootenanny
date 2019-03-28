@@ -1,10 +1,10 @@
 ****Quick Stats****
-18:14:23.494 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-18:14:23.506 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
-18:14:23.506 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
-18:14:23.506 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
-18:14:23.573 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-18:14:23.573 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+21:19:50.415 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:19:50.426 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+21:19:50.426 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+21:19:50.426 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+21:19:50.464 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+21:19:50.464 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -15,28 +15,40 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-18:14:24.164 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-18:14:24.196 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
-18:14:24.197 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
-18:14:24.197 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
-18:14:24.266 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-18:14:24.529 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-18:14:24.530 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-18:14:24.531 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-18:14:24.532 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-18:14:24.533 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-18:14:25.404 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
-18:14:28.012 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
-18:14:28.018 INFO  .../hoot/core/io/OsmXmlReader.cpp( 334) 	Reporting missing elements...
-18:14:28.018 INFO  .../hoot/core/io/OsmXmlReader.cpp( 336) 	Reported 0 missing elements.
-18:14:28.018 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 128 elements from input.
-18:14:28.089 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
-18:14:28.091 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-18:14:28.093 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-18:14:28.093 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-18:14:28.096 INFO  ...ops/SearchRadiusCalculator.cpp( 130) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-18:14:28.097 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-18:14:28.843 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+21:19:51.005 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:19:51.023 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+21:19:51.024 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+21:19:51.024 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+21:19:51.073 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+21:20:02.217 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+21:20:02.218 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:20:02.219 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
+21:20:02.219 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
+21:20:02.220 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:20:02.221 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+21:20:02.222 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
+21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
+21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:20:02.224 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+21:20:03.021 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+21:20:04.820 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+21:20:04.822 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+21:20:04.822 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+21:20:04.822 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 128 elements from input.
+21:20:04.853 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+21:20:04.859 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+21:20:04.860 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
+21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
+21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:20:04.861 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
+21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
+21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:20:04.864 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+21:20:05.480 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
 {
     "Node Count":
     [
@@ -83,6 +95,46 @@ Maximum Relation ID	-9.223372036854776e+18
         "-9.223372036854776e+18",
         "-9.223372036854776e+18"
     ],
+    "Least Nodes in a Way":
+    [
+        "3",
+        "4"
+    ],
+    "Most Nodes in a Way":
+    [
+        "33",
+        "41"
+    ],
+    "Average Nodes Per Way":
+    [
+        "8",
+        "10"
+    ],
+    "Total Way Nodes":
+    [
+        "121",
+        "126"
+    ],
+    "Least Members in a Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Most Members in a Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Average Members Per Relation":
+    [
+        "0",
+        "0"
+    ],
+    "Total Relation Members":
+    [
+        "0",
+        "0"
+    ],
     "Total Feature Tags":
     [
         "77",
@@ -97,6 +149,41 @@ Maximum Relation ID	-9.223372036854776e+18
     [
         "0",
         "0"
+    ],
+    "Least Tags on a Feature":
+    [
+        "2",
+        "1"
+    ],
+    "Most Tags on a Feature":
+    [
+        "4",
+        "4"
+    ],
+    "Average Tags Per Feature":
+    [
+        "3",
+        "2"
+    ],
+    "Least Information Tags on a Feature":
+    [
+        "2",
+        "1"
+    ],
+    "Most Information Tags on a Feature":
+    [
+        "4",
+        "4"
+    ],
+    "Average Information Tags Per Feature":
+    [
+        "3.08",
+        "2.818181818181818"
+    ],
+    "Features with Names":
+    [
+        "20",
+        "17"
     ],
     "Unique Names":
     [
@@ -113,12 +200,12 @@ Maximum Relation ID	-9.223372036854776e+18
         "20531.70536126304",
         "18518.60105949109"
     ],
-    "Meters of Highway":
+    "Meters of Roads":
     [
         "1268.391471683038",
         "1199.557803800593"
     ],
-    "Highway Unique Name Count":
+    "Road Unique Name Count":
     [
         "0",
         "0"
@@ -132,6 +219,96 @@ Maximum Relation ID	-9.223372036854776e+18
     [
         "7",
         "7"
+    ],
+    "Bridges":
+    [
+        "0",
+        "0"
+    ],
+    "Tunnels":
+    [
+        "0",
+        "0"
+    ],
+    "One-Way Streets":
+    [
+        "0",
+        "0"
+    ],
+    "Road Roundabouts":
+    [
+        "0",
+        "0"
+    ],
+    "Multi-Use Buildings":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings With Height Info":
+    [
+        "0",
+        "0"
+    ],
+    "Shortest Building Height":
+    [
+        "0",
+        "0"
+    ],
+    "Tallest Building Height":
+    [
+        "0",
+        "0"
+    ],
+    "Average Height Per Building":
+    [
+        "0",
+        "0"
+    ],
+    "Buildings With Level Info":
+    [
+        "0",
+        "0"
+    ],
+    "Least Levels in a Building":
+    [
+        "0",
+        "0"
+    ],
+    "Most Levels in a Building":
+    [
+        "0",
+        "0"
+    ],
+    "Average Levels Per Building":
+    [
+        "0",
+        "0"
+    ],
+    "Non-Building Areas":
+    [
+        "0",
+        "0"
+    ],
+    "Features with Addresses":
+    [
+        "1",
+        "0"
+    ],
+    "Total Addresses":
+    [
+        "1",
+        "0"
+    ],
+    "Features with Phone Numbers":
+    [
+        "0",
+        "0"
+    ],
+    "Total Phone Numbers":
+    [
+        "0",
+        "0"
     ],
     "Total Feature Count":
     [
@@ -163,7 +340,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Match Creators":
+    "Match Creators":
     [
         "8",
         "8"
@@ -206,7 +383,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Number of Reviews to be Made":
+    "Total Reviews to be Made":
     [
         "0",
         "0"
@@ -241,7 +418,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of POI Reviews to be Made":
+    "POI Reviews to be Made":
     [
         "0",
         "0"
@@ -266,52 +443,52 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Highway Count":
+    "Road Count":
     [
         "4",
         "4"
     ],
-    "Conflatable Highways":
+    "Conflatable Roads":
     [
         "4",
         "4"
     ],
-    "Conflated Highways":
+    "Conflated Roads":
     [
         "0",
         "0"
     ],
-    "Highways Marked for Review":
+    "Roads Marked for Review":
     [
         "0",
         "0"
     ],
-    "Number of Highway Reviews to be Made":
+    "Road Reviews to be Made":
     [
         "0",
         "0"
     ],
-    "Unmatched Highways":
+    "Unmatched Roads":
     [
         "4",
         "4"
     ],
-    "Meters of Highway Processed by Conflation":
+    "Meters of Road Processed by Conflation":
     [
         "0",
         "0"
     ],
-    "Percentage of Highways Conflated":
+    "Percentage of Roads Conflated":
     [
         "0",
         "0"
     ],
-    "Percentage of Highways Marked for Review":
+    "Percentage of Roads Marked for Review":
     [
         "0",
         "0"
     ],
-    "Percentage of Unmatched Highways":
+    "Percentage of Unmatched Roads":
     [
         "100",
         "100"
@@ -336,7 +513,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Building Reviews to be Made":
+    "Building Reviews to be Made":
     [
         "0",
         "0"
@@ -386,7 +563,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Waterway Reviews to be Made":
+    "Waterway Reviews to be Made":
     [
         "0",
         "0"
@@ -436,7 +613,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Polygon Conflatable POI Reviews to be Made":
+    "Polygon Conflatable POI Reviews to be Made":
     [
         "0",
         "0"
@@ -481,7 +658,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Polygon Reviews to be Made":
+    "Polygon Reviews to be Made":
     [
         "0",
         "0"
@@ -531,7 +708,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Area Reviews to be Made":
+    "Area Reviews to be Made":
     [
         "0",
         "0"
@@ -581,7 +758,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Railway Reviews to be Made":
+    "Railway Reviews to be Made":
     [
         "0",
         "0"
@@ -631,7 +808,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Number of Power Line Reviews to be Made":
+    "Power Line Reviews to be Made":
     [
         "0",
         "0"
@@ -691,7 +868,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0.0707070707070707",
         "0.0707070707070707"
     ],
-    "Highway Translated Populated Tag Percent":
+    "Road Translated Populated Tag Percent":
     [
         "0.04458598726114649",
         "0.03821656050955414"
