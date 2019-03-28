@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	117	116	143	
-Way Count	14	12	18	
+Node Count	117	116	142	
+Way Count	14	12	17	
 Relation Count	0	0	9	
-Total Feature Count	25	22	35	
+Total Feature Count	25	22	34	
 Total Conflatable Features	24	20	0	
 Percentage of Total Features Conflatable	96	90.90909090909091	0	
 Untagged Feature Count	0	0	0	
@@ -15,13 +15,13 @@ Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0
 POIs Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 Features Conflatable by: hoot::PoiPolygonMatchCreator	20	16	0	
 Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10		
-Total Conflated Features	0	0	14	
-Percentage of Total Features Conflated	0	0	40	
+Total Conflated Features	0	0	13	
+Percentage of Total Features Conflated	0	0	38.23529411764706	
 Total Features Marked for Review	0	0	11	
-Percentage of Total Features Marked for Review	0	0	31.42857142857143	
+Percentage of Total Features Marked for Review	0	0	32.35294117647059	
 Total Number of Reviews to be Made	0	0	8	
 Total Unmatched Features	25	22	21	
-Percentage of Total Features Unmatched	100	100	60	
+Percentage of Total Features Unmatched	100	100	61.76470588235294	
 POI Count	11	10	16	
 Conflatable POIs	11	10	0	
 Conflated POIs	0	0	5	
@@ -31,15 +31,15 @@ Unmatched POIs	11	10	11
 Percentage of POIs Conflated	0	0	31.25	
 Percentage of POIs Marked for Review	0	0	68.75	
 Percentage of Unmatched POIs	100	100	68.75	
-Highway Count	4	4	5	
+Highway Count	4	4	4	
 Conflatable Highways	4	4	0	
-Conflated Highways	0	0	4	
+Conflated Highways	0	0	3	
 Highways Marked for Review	0	0	0	
 Number of Highway Reviews to be Made	0	0	0	
 Unmatched Highways	4	4	1	
-Percentage of Highways Conflated	0	0	80	
+Percentage of Highways Conflated	0	0	75	
 Percentage of Highways Marked for Review	0	0	0	
-Percentage of Unmatched Highways	100	100	20	
+Percentage of Unmatched Highways	100	100	25	
 Building Count	10	8	11	
 Conflatable Buildings	10	8	0	
 Conflated Buildings	0	0	4	
@@ -108,7 +108,7 @@ Percentage of Power Lines Conflated	0	0	0
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
 Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
-Difference Between Total Features in Output and Total Features in Inputs			-12	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-25.53191489361702	
+Difference Between Total Features in Output and Total Features in Inputs			-13	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
 
-15:52:18.129 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Conflation job completed.
+15:11:14.539 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.

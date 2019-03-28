@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	36	65	38	
-Way Count	4	4	5	
+Node Count	36	65	37	
+Way Count	4	4	4	
 Relation Count	0	0	0	
-Total Feature Count	4	4	5	
+Total Feature Count	4	4	4	
 Total Conflatable Features	4	4	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Feature Count	0	0	0	
@@ -10,13 +10,13 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Number of Match Creators	8	8	8	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
-Total Conflated Features	0	0	4	
-Percentage of Total Features Conflated	0	0	80	
+Total Conflated Features	0	0	3	
+Percentage of Total Features Conflated	0	0	75	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Number of Reviews to be Made	0	0	0	
 Total Unmatched Features	4	4	1	
-Percentage of Total Features Unmatched	100	100	20	
+Percentage of Total Features Unmatched	100	100	25	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -26,15 +26,15 @@ Unmatched POIs	0	0	0
 Percentage of POIs Conflated	0	0	0	
 Percentage of POIs Marked for Review	0	0	0	
 Percentage of Unmatched POIs	0	0	0	
-Highway Count	4	4	5	
+Highway Count	4	4	4	
 Conflatable Highways	4	4	0	
-Conflated Highways	0	0	4	
+Conflated Highways	0	0	3	
 Highways Marked for Review	0	0	0	
 Number of Highway Reviews to be Made	0	0	0	
 Unmatched Highways	4	4	1	
-Percentage of Highways Conflated	0	0	80	
+Percentage of Highways Conflated	0	0	75	
 Percentage of Highways Marked for Review	0	0	0	
-Percentage of Unmatched Highways	100	100	20	
+Percentage of Unmatched Highways	100	100	25	
 Building Count	0	0	0	
 Conflatable Buildings	0	0	0	
 Conflated Buildings	0	0	0	
@@ -102,7 +102,7 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Difference Between Total Features in Output and Total Features in Inputs			-3	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-37.5	
+Difference Between Total Features in Output and Total Features in Inputs			-4	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-50	
 
-15:52:15.290 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 347) Conflation job completed.
+12:37:09.796 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
