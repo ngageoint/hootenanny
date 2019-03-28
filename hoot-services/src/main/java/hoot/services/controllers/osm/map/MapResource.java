@@ -680,13 +680,13 @@ public class MapResource {
 
         Object oInput1 = ret.get("input1");
         if (oInput1 != null) {
-            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()), user.getId());
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput1.toString()));
             ret.put("input1Name", dispName);
         }
 
         Object oInput2 = ret.get("input2");
         if (oInput2 != null) {
-            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()), user.getId());
+            String dispName = DbUtils.getDisplayNameById(Long.valueOf(oInput2.toString()));
             ret.put("input2Name", dispName);
         }
 
