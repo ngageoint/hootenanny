@@ -177,46 +177,46 @@ public class GrailResource {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("EverythingByBox: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
             if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
             }
 
-            // Pull OSM data from the local OSM API Db
-            File localOSMFile = new File(workDir, "local.osm");
-            if (localOSMFile.exists()) localOSMFile.delete();
+            // Pull OSM data from the dest OSM API Db
+            File destOSMFile = new File(workDir, "dest.osm");
+            if (destOSMFile.exists()) destOSMFile.delete();
 
             GrailParams apiParams = new GrailParams();
             apiParams.setUser(user);
             apiParams.setBounds(bbox);
             apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-            apiParams.setOutput(localOSMFile.getAbsolutePath());
+            apiParams.setOutput(destOSMFile.getAbsolutePath());
             apiParams.setPullUrl(RAILSPORT_PULL_URL);
 
             String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-            json.put("jobid:LocalOSM", jobId);
-            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
-            workflow.add(getLocalOSM);
+            json.put("jobid:DestOSM", jobId);
+            // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            InternalCommand getDestOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
+            workflow.add(getDestOSM);
 
-            // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir, "internet.osm");
-            if (internetOSMFile.exists()) internetOSMFile.delete();
+            // Pull OSM data from the source OSM Db using overpass
+            File sourceOSMFile = new File(workDir, "source.osm");
+            if (sourceOSMFile.exists()) sourceOSMFile.delete();
 
             GrailParams overpassParams = new GrailParams();
             overpassParams.setUser(user);
             overpassParams.setBounds(bbox);
             overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-            overpassParams.setOutput(internetOSMFile.getAbsolutePath());
+            overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
             overpassParams.setPullUrl(MAIN_OVERPASS_URL);
 
             jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-            json.put("jobid:InternetOSM", jobId);
+            json.put("jobid:SourceOSM", jobId);
             InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
 
             // Run the diff command.
             // TODO: We could possibly use ConflateCommand.java for this. If we setup the params for it - especially the 35 bazillion Hoot Options
-            params.setInput1(localOSMFile.getAbsolutePath());
-            params.setInput2(internetOSMFile.getAbsolutePath());
+            params.setInput1(destOSMFile.getAbsolutePath());
+            params.setInput2(sourceOSMFile.getAbsolutePath());
 
             File geomDiffFile = new File(workDir, "diff.osc");
             if (geomDiffFile.exists()) geomDiffFile.delete();
@@ -228,7 +228,7 @@ public class GrailResource {
             //FIXME: Split the apply portion into a second service call
             //file outputs should be recorded to job status db record
 
-            // Push to the local OSM API Db
+            // Push to the dest OSM API Db
             // TODO: The export/ApplyChangesetCommand.java command is hardcoded to push to OSMAPI_DB_URL. We could refactor it to
             // take the DB URL as a parameter.
             params.setPushUrl(RAILSPORT_PUSH_URL);
@@ -373,7 +373,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
         }
 
         GrailParams apiParams = new GrailParams();
@@ -390,20 +390,20 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         try {
-            // Pull data from the local OSM API Db
-            File localOSMFile = new File(workDir, "local.osm");
-            if (localOSMFile.exists()) { localOSMFile.delete(); }
+            // Pull data from the dest OSM API Db
+            File destOSMFile = new File(workDir, "dest.osm");
+            if (destOSMFile.exists()) { destOSMFile.delete(); }
 
-            apiParams.setOutput(localOSMFile.getAbsolutePath());
-            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
-            workflow.add(getLocalOSM);
+            apiParams.setOutput(destOSMFile.getAbsolutePath());
+            // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            InternalCommand getDestOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
+            workflow.add(getDestOSM);
 
-            // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir, "internet.osm");
-            if (internetOSMFile.exists()) { internetOSMFile.delete(); }
+            // Pull OSM data from the real source OSM Db using overpass
+            File sourceOSMFile = new File(workDir, "source.osm");
+            if (sourceOSMFile.exists()) { sourceOSMFile.delete(); }
 
-            overpassParams.setOutput(internetOSMFile.getAbsolutePath());
+            overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
 
             InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
@@ -432,7 +432,7 @@ public class GrailResource {
      *
      * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
-     *            has local.osm & internet.osm files to run the diff with.
+     *            has dest.osm & source.osm files to run the diff with.
      *
      * @return Job ID
      *            This is the id for the processing job. NOT the directory that the data is stored in.
@@ -449,13 +449,13 @@ public class GrailResource {
         Users user = Users.fromRequest(request);
 
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
-        File localOSMFile = new File(workDir, "local.osm");
-        File internetOSMFile = new File(workDir, "internet.osm");
+        File destOSMFile = new File(workDir, "dest.osm");
+        File sourceOSMFile = new File(workDir, "source.osm");
 
         // the first 10 digits of a random UUID _should_ be unique....
         String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""), 10);
-        String localDbFile = "local" + randomString;
-        String internetDbFile = "internet" + randomString;
+        String destDbFile = "dest" + randomString;
+        String sourceDbFile = "source" + randomString;
 
         GrailParams apiParams = new GrailParams();
         GrailParams overpassParams = new GrailParams();
@@ -472,7 +472,7 @@ public class GrailResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
             }
 
-            if (!localOSMFile.exists() || !internetOSMFile.exists()) {
+            if (!destOSMFile.exists() || !sourceOSMFile.exists()) {
                 logger.error("PushToDb: Missing OSM files in {} ", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Missing OSM files in " + jobDir + ". Did you run pullosm?").build();
             }
@@ -480,22 +480,22 @@ public class GrailResource {
             // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
             // Till I figure out a better way to do this, we will use our version.
             apiParams.setUser(user);
-            apiParams.setInput1(localOSMFile.getAbsolutePath());
-            apiParams.setOutput(localDbFile);
+            apiParams.setInput1(destOSMFile.getAbsolutePath());
+            apiParams.setOutput(destDbFile);
             ExternalCommand pushApi = grailCommandFactory.build(mainJobId, apiParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushApi);
 
             overpassParams.setUser(user);
-            overpassParams.setInput1(internetOSMFile.getAbsolutePath());
-            overpassParams.setOutput(internetDbFile);
+            overpassParams.setInput1(sourceOSMFile.getAbsolutePath());
+            overpassParams.setOutput(sourceDbFile);
             ExternalCommand pushOverpass = grailCommandFactory.build(mainJobId, overpassParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushOverpass);
 
             // Now create a folder and link the uploaded layers to it
             linkParams.setUser(user);
             linkParams.setFolder(jobDir);
-            linkParams.setInput1(localDbFile);
-            linkParams.setInput2(internetDbFile);
+            linkParams.setInput1(destDbFile);
+            linkParams.setInput2(sourceDbFile);
             InternalCommand updateDb = updateDbCommandFactory.build(mainJobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
@@ -562,7 +562,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
         }
 
         GrailParams apiParams = new GrailParams();
@@ -581,20 +581,20 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         try {
-            // Pull data from the local OSM API Db
-            File localOSMFile = new File(workDir, "local.osm");
-            if (localOSMFile.exists()) { localOSMFile.delete(); }
+            // Pull data from the dest OSM API Db
+            File destOSMFile = new File(workDir, "dest.osm");
+            if (destOSMFile.exists()) { destOSMFile.delete(); }
 
-            apiParams.setOutput(localOSMFile.getAbsolutePath());
-            // ExternalCommand getLocalOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getLocalOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
-            workflow.add(getLocalOSM);
+            apiParams.setOutput(destOSMFile.getAbsolutePath());
+            // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+            InternalCommand getDestOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
+            workflow.add(getDestOSM);
 
-            // Pull OSM data from the real, internet, OSM Db using overpass
-            File internetOSMFile = new File(workDir, "internet.osm");
-            if (internetOSMFile.exists()) { internetOSMFile.delete(); }
+            // Pull OSM data from the real source OSM Db using overpass
+            File sourceOSMFile = new File(workDir, "source.osm");
+            if (sourceOSMFile.exists()) { sourceOSMFile.delete(); }
 
-            overpassParams.setOutput(internetOSMFile.getAbsolutePath());
+            overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
 
             InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
             workflow.add(getOverpassOSM);
@@ -602,8 +602,8 @@ public class GrailResource {
             // Now we paste in the "pushtodb"
             // the first 10 digits of a random UUID _should_ be unique....
             String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""), 10);
-            String localDbFile = "local" + randomString;
-            String internetDbFile = "internet" + randomString;
+            String destDbFile = "dest" + randomString;
+            String sourceDbFile = "source" + randomString;
 
             GrailParams apiPushParams = new GrailParams();
             GrailParams overpassPushParams = new GrailParams();
@@ -615,20 +615,20 @@ public class GrailResource {
 
             // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
             // Till I figure out a better way to do this, we will use our version.
-            apiPushParams.setInput1(localOSMFile.getAbsolutePath());
-            apiPushParams.setOutput(localDbFile);
+            apiPushParams.setInput1(destOSMFile.getAbsolutePath());
+            apiPushParams.setOutput(destDbFile);
             ExternalCommand pushApi = grailCommandFactory.build(jobId, apiPushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushApi);
 
-            overpassPushParams.setInput1(internetOSMFile.getAbsolutePath());
-            overpassPushParams.setOutput(internetDbFile);
+            overpassPushParams.setInput1(sourceOSMFile.getAbsolutePath());
+            overpassPushParams.setOutput(sourceDbFile);
             ExternalCommand pushOverpass = grailCommandFactory.build(jobId, overpassPushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushOverpass);
 
             // Now create a folder and link the uploaded layers to it
             linkParams.setFolder(jobId);
-            linkParams.setInput1(localDbFile);
-            linkParams.setInput2(internetDbFile);
+            linkParams.setInput1(destDbFile);
+            linkParams.setInput2(sourceDbFile);
             InternalCommand updateDb = updateDbCommandFactory.build(jobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
@@ -657,7 +657,7 @@ public class GrailResource {
      *
      * @param jobDir
      *            Internally, this is the directory that the files are kept in. We expect that the directory
-     *            has local.osm & internet.osm files to run the diff with.
+     *            has dest.osm & source.osm files to run the diff with.
      *
      * @return Job ID
      *            This is the id for the processing job. NOT the directory that the data is stored in.
@@ -674,8 +674,8 @@ public class GrailResource {
         Users user = Users.fromRequest(request);
 
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
-        File localOSMFile = new File(workDir, "local.osm");
-        File internetOSMFile = new File(workDir, "internet.osm");
+        File destOSMFile = new File(workDir, "dest.osm");
+        File sourceOSMFile = new File(workDir, "source.osm");
 
         try {
             if (!workDir.exists()) {
@@ -683,7 +683,7 @@ public class GrailResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
             }
 
-            if (!localOSMFile.exists() || !internetOSMFile.exists()) {
+            if (!destOSMFile.exists() || !sourceOSMFile.exists()) {
                 logger.error("RunDiff: Missing OSM files in {} ", workDir.getAbsolutePath());
                 return Response.status(Response.Status.BAD_REQUEST).entity("Missing OSM files in " + jobDir + ". Did you run pullosm?").build();
             }
@@ -696,8 +696,8 @@ public class GrailResource {
 
             params.setUser(user);
             params.setOutput(diffFile.getAbsolutePath());
-            params.setInput1(localOSMFile.getAbsolutePath());
-            params.setInput2(internetOSMFile.getAbsolutePath());
+            params.setInput1(destOSMFile.getAbsolutePath());
+            params.setInput2(sourceOSMFile.getAbsolutePath());
 
             ExternalCommand makeDiff = grailCommandFactory.build(newJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
 
@@ -758,7 +758,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
@@ -866,7 +866,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("RunGeomApply: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
@@ -942,7 +942,7 @@ public class GrailResource {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         logger.info("ApplyTagDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
         if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The local OSM API server is offline. Try again later").build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
         }
 
         GrailParams params = new GrailParams();
