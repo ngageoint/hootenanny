@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -127,6 +128,10 @@ protected:
   bool _hasTags(ConstElementPtr e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(ConstElementPtr e);
+
+private:
+
+  AddExportTagsVisitor _addExportTagsVisitor;
 };
 
 } // hoot
