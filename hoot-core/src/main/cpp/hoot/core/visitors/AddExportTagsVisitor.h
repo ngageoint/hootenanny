@@ -55,6 +55,8 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
   void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
+  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
+
   void overrideDebugSettings();
 
 private:

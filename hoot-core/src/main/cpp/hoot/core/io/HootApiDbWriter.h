@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Tgs
 #include <tgs/BigContainers/BigMap.h>
@@ -66,12 +67,7 @@ public:
 
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
 
-  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
-
-  void setTextStatus(bool textStatus) { _textStatus = textStatus; }
-
-  void setIncludeCircularError(bool includeCircularError)
-  { _includeCircularError = includeCircularError; }
+  void setIncludeDebug(bool includeDebug) { _addExportTagsVisitor.setIncludeDebug(includeDebug); }
 
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
@@ -118,9 +114,9 @@ protected:
   unsigned long _waysWritten;
   unsigned long _relationsWritten;
 
-  bool _remapIds;
+  AddExportTagsVisitor _addExportTagsVisitor;
 
-  bool _includeDebug;
+  bool _remapIds;
 
   void _createElement(ConstElementPtr element);
   void _modifyElement(ConstElementPtr element);
@@ -138,8 +134,6 @@ protected:
 
   virtual std::vector<long> _remapNodes(const std::vector<long>& nids);
 
-  void _addElementTags(const boost::shared_ptr<const Element>& e, Tags& t);
-
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.
    */
@@ -150,9 +144,6 @@ private:
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
-  bool _includeIds;
-  bool _textStatus;
-  bool _includeCircularError;
   QString _jobId;
 
   bool _open;
