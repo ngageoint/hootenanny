@@ -34,6 +34,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -76,7 +77,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Merging nearby nodes..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Merged " + QString::number(_numAffected) + " nearby nodes."; }
+  { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " nearby nodes."; }
 
 protected:
 

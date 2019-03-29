@@ -54,6 +54,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
@@ -1113,7 +1114,8 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     if (_count % 1000 == 0)
     {
       PROGRESS_INFO(
-        "\tRead from layer: " << _count << " / " << _featureCount << " features from layer: " <<
+        "\tRead: " << StringUtils::formatLargeNumber(_count) << " / " <<
+        StringUtils::formatLargeNumber(_featureCount) << " features from layer: " <<
         _layerName.toLatin1().data());
     }
 

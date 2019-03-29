@@ -80,15 +80,20 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
-      LOG_INFO("\tApplying operation: " << s << "...");
+      QString initMessage = "\tApplying operation " + s;
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO("\t\t" << statusInfo->getInitStatusMessage());
+        initMessage += ": " + statusInfo->getInitStatusMessage();
       }
+      else
+      {
+        initMessage += "...";
+      }
+      LOG_INFO(initMessage);
       LOG_DEBUG(
-        "\t\tElement count before operation " << s << ": " <<
+        "\tElement count before operation " << s << ": " <<
         StringUtils::formatLargeNumber(map->getElementCount()));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -102,7 +107,7 @@ void NamedOp::apply(OsmMapPtr& map)
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          "\t\t" << statusInfo->getCompletedStatusMessage() + " in " +
+          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
@@ -111,13 +116,18 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
-      LOG_INFO("\tApplying operation: " << s);
+      QString initMessage = "\tApplying operation " + s;
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
       {
-        LOG_INFO("\t\t" << statusInfo->getInitStatusMessage());
+        initMessage += ": " + statusInfo->getInitStatusMessage();
       }
+      else
+      {
+        initMessage += "...";
+      }
+      LOG_INFO(initMessage);
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -130,7 +140,7 @@ void NamedOp::apply(OsmMapPtr& map)
       if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
       {
         LOG_INFO(
-          "\t\t" << statusInfo->getCompletedStatusMessage() + " in " +
+          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
           StringUtils::secondsToDhms(timer.elapsed()));
       }
     }
@@ -140,7 +150,7 @@ void NamedOp::apply(OsmMapPtr& map)
     }
 
     LOG_DEBUG(
-      "\t\tElement count after operation " << s << ": " <<
+      "\tElement count after operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
 
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));

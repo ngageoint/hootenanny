@@ -41,7 +41,6 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 // tgs
@@ -59,7 +58,8 @@ unsigned int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
-BuildingPartMergeOp::BuildingPartMergeOp()
+BuildingPartMergeOp::BuildingPartMergeOp() :
+_numGeometriesCleaned(0)
 {
   vector<SchemaVertex> buildingPartTags =
     OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
@@ -74,13 +74,13 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   const boost::shared_ptr<Element>& neighbor)
 {
   // merge with buildings that are contained by this polygon
-  vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
+  const vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
   int totalProcessed = 0;
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     const WayPtr& candidate = _map->getWay(intersectIds[i]);
     // if this is another building part totally contained by this building
-    if (_isBuildingPart(candidate))
+    if (_buildingCrit.isSatisfied(candidate))
     {
       bool contains = false;
       try
@@ -94,6 +94,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
         boost::shared_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
         boost::shared_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
         contains = cleanG->contains(cleanCandidate.get());
+        _numGeometriesCleaned++;
       }
 
       if (contains)
@@ -105,17 +106,17 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
     totalProcessed++;
     if (totalProcessed % 1000 == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(totalProcessed) <<
-        " intersecting buildings / " <<
-        StringUtils::formatLargeNumber(intersectIds.size()) << " total buildings.");
+//      PROGRESS_INFO(
+//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) <<
+//        " intersecting buildings / " <<
+//        StringUtils::formatLargeNumber(intersectIds.size()) << " total buildings.");
     }
   }
 }
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
-  set<long> neighborIds = _calculateNeighbors(w, w->getTags());
+  const set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   // go through each of the neighboring ways.
   int totalProcessed = 0;
   for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
@@ -127,10 +128,10 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
     totalProcessed++;
     if (totalProcessed % 1000 == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-        StringUtils::formatLargeNumber(neighborIds.size()) <<
-        " way neighbors for building part merging.");
+//      PROGRESS_INFO(
+//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+//        StringUtils::formatLargeNumber(neighborIds.size()) <<
+//        " way neighbors for building part merging.");
     }
   }
 }
@@ -150,7 +151,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     {
       const WayPtr& member = _map->getWay(members[i].getElementId().getId());
 
-      set<long> neighborIds = _calculateNeighbors(member, r->getTags());
+      const set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       // got through each of the neighboring ways.
       for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
@@ -175,10 +176,10 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     totalProcessed++;
     if (totalProcessed % 1000 == 0)
     {
-      PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-        StringUtils::formatLargeNumber(members.size()) <<
-        " relation members for building part merging.");
+//      PROGRESS_INFO(
+//        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+//        StringUtils::formatLargeNumber(members.size()) <<
+//        " relation members for building part merging.");
     }
   }
 }
@@ -200,7 +201,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     const WayPtr& w = it->second;
     // add the way to a building group if appropriate
     // if the way is part of a building
-    if (_isBuildingPart(w))
+    if (_buildingCrit.isSatisfied(w))
     {
       _addNeighborsToGroup(w);
       boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(w);
@@ -225,7 +226,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   {
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
-    if (_isBuildingPart(r))
+    if (_buildingCrit.isSatisfied(r))
     {
       _addNeighborsToGroup(r);
       _numAffected++;
@@ -247,8 +248,8 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 
   // go through each of the grouped buildings
   totalProcessed = 0;
-  const DisjointSetMap< boost::shared_ptr<Element> >::AllGroups& groups = _ds.getAllGroups();
-  for (DisjointSetMap< boost::shared_ptr<Element> >::AllGroups::const_iterator it = groups.begin();
+  const DisjointSetMap<boost::shared_ptr<Element>>::AllGroups& groups = _ds.getAllGroups();
+  for (DisjointSetMap<boost::shared_ptr<Element>>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
     // combine the group of building parts into a relation.
@@ -266,6 +267,10 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(groups.size()) << " building parts.");
     }
   }
+
+  LOG_INFO(
+    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
+    " building geometries.");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
@@ -288,9 +293,8 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
     for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       WayPtr neighbor = _map->getWay(*it);
-      // if the neighbor is a building and it also has the two contiguos nodes we're looking at
-      if (neighbor != w &&
-          _isBuildingPart(neighbor) &&
+      // if the neighbor is a building and it also has the two contiguous nodes we're looking at
+      if (neighbor != w && _buildingCrit.isSatisfied(neighbor) &&
           _hasContiguousNodes(neighbor, w->getNodeId(i), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
@@ -317,14 +321,13 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   LOG_VARD(parts.size());
   if (parts.size() == 0)
   {
-    throw IllegalArgumentException("No building parts passed to BuildingPartMergeOp::combineParts.");
+    throw IllegalArgumentException(
+      "No building parts passed to BuildingPartMergeOp::combineParts.");
   }
 
   RelationPtr building(
     new Relation(
-      parts[0]->getStatus(),
-      map->createNextRelationId(),
-      ElementData::CIRCULAR_ERROR_EMPTY,
+      parts[0]->getStatus(), map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY,
       MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();
@@ -407,13 +410,13 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
 {
   // remove all the building tags that are building:part=yes specific.
   for (set<QString>::const_iterator it = _buildingPartTagNames.begin();
-    it != _buildingPartTagNames.end(); ++it)
+       it != _buildingPartTagNames.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
   }
 
-  double score = TagComparator::getInstance().compareTags(t1, t2);
+  const double score = TagComparator::getInstance().compareTags(t1, t2);
   // check for score near 1.0
   return fabs(1.0 - score) < 0.001;
 }
@@ -421,7 +424,6 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
 bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 {
   const std::vector<long>& nodes = w->getNodeIds();
-
   for (size_t i = 0; i < nodes.size() - 1; i++)
   {
     if ((nodes[i] == n1 && nodes[i + 1] == n2) ||
@@ -431,26 +433,6 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
     }
   }
   return false;
-}
-
-bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
-{
-  bool result = false;
-  if (BuildingCriterion().isSatisfied(w))
-  {
-    result = true;
-  }
-  return result;
-}
-
-bool BuildingPartMergeOp::_isBuildingPart(const RelationPtr& r)
-{
-  bool result = false;
-  if (BuildingCriterion().isSatisfied(r))
-  {
-    result = true;
-  }
-  return result;
 }
 
 }

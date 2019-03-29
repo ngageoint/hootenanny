@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -41,7 +42,7 @@ namespace __gnu_cxx
 {
 
 template<>
-  struct hash< boost::shared_ptr<hoot::Element> >
+  struct hash<boost::shared_ptr<hoot::Element>>
   {
     size_t
     operator()(const boost::shared_ptr<hoot::Element>& k) const
@@ -110,9 +111,11 @@ public:
 private:
 
   /// Used to keep track of which elements make up a building.
-  Tgs::DisjointSetMap< boost::shared_ptr<Element> > _ds;
+  Tgs::DisjointSetMap<boost::shared_ptr<Element>> _ds;
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
+  BuildingCriterion _buildingCrit;
+  int _numGeometriesCleaned;
 
   void _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
@@ -133,12 +136,6 @@ private:
    * Returns true if the nodes n1 and n2 appear in w in consecutive order.
    */
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
-
-  /**
-   * Returns true if this way is a building, or part of a building through a relation.
-   */
-  bool _isBuildingPart(const WayPtr& w);
-  bool _isBuildingPart(const RelationPtr& r);
 };
 
 }

@@ -37,7 +37,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QTime>
@@ -67,7 +66,6 @@ double calcDistance(const NodePtr& n1, const NodePtr& n2)
 MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 {
   _distance = distance;
-
   if (_distance < 0.0)
   {
     _distance = ConfigOptions().getMergeNearbyNodesDistance();
@@ -101,15 +99,23 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
+  int count = 0;
   const NodeMap& nodes = planar->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
+    count++;
+
+    if (count % 10000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tInitialized " << StringUtils::formatLargeNumber(count) << " nodes / " <<
+        StringUtils::formatLargeNumber(nodes.size()) << " for merging.");
+    }
   }
 
-  int count = 0;
-
+  count = 0;
   cph.resetIterator();
   while (cph.next())
   {
@@ -157,9 +163,9 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
     if (count % 10000 == 0)
     {
       PROGRESS_INFO(
-        "Merged " << StringUtils::formatLargeNumber(_numAffected) << " nearby nodes / " <<
-        StringUtils::formatLargeNumber(count) << " nodes processed. Nodes remaining: " <<
-        (StringUtils::formatLargeNumber((int)nodes.size() - count)));
+        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " / " <<
+        StringUtils::formatLargeNumber(count) << " nodes; remaining: " <<
+        (StringUtils::formatLargeNumber((int)cph.size() - count)));
     }
     count++;
   }
@@ -180,6 +186,5 @@ void MergeNearbyNodes::writeObject(QDataStream& os) const
 {
   os << _distance;
 }
-
 
 }
