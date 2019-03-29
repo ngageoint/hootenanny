@@ -221,11 +221,8 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
 
 void OsmJsonWriter::_writeTags(ConstElementPtr e)
 {
-  ElementPtr eClone(e->clone());
-  _addExportTagsVisitor.visit(eClone);
-
   bool firstTag = true;
-  const Tags& tags = eClone->getTags();
+  const Tags& tags = e->getTags();
   if (tags.size() > 0)
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -236,6 +233,19 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
         value = value.replace("{", "").replace("}", "");
       _writeTag(key, value, firstTag);
     }
+  }
+
+  if (_writeHootFormat &&
+      (e->getElementType() != ElementType::Node || // turn this on when we start using node circularError.
+      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0)))
+  {
+    _writeTag(MetadataTags::ErrorCircular(), QString::number(e->getCircularError(), 'g', _precision), firstTag);
+  }
+
+  if (_includeDebug)
+  {
+    _writeTag(MetadataTags::HootId(), QString::number(e->getId()), firstTag);
+    _writeTag(MetadataTags::HootStatus(), QString::number((int)e->getStatus().getEnum()), firstTag);
   }
 
   if (firstTag == false)
