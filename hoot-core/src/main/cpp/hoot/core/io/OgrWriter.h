@@ -37,7 +37,6 @@
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/schema/StrictChecking.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // GDAL
 #include <ogr_spatialref.h>
@@ -168,9 +167,11 @@ protected:
   QString _prependLayerName;
   boost::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
+  bool _textStatus;
+  bool _includeDebug;
+  bool _includeCircularErrorTags;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
-  AddExportTagsVisitor _addExportTagsVisitor;
 
   void _addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<geos::geom::Geometry> g);
 

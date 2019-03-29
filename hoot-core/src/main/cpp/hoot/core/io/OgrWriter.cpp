@@ -105,6 +105,9 @@ OgrWriter::OgrWriter():
 {
   setConfiguration(conf());
 
+  _textStatus = ConfigOptions().getWriterTextStatus();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
+  _includeCircularErrorTags = ConfigOptions().getWriterIncludeCircularErrorTags();
   _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -615,7 +618,26 @@ void OgrWriter::write(ConstOsmMapPtr map)
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
 
     Tags t = e->getTags();
-    for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
+    if(_includeCircularErrorTags)
+    {
+      t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    }
+
+    if (_textStatus)
+    {
+      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
+    }
+    else
+    {
+      t[MetadataTags::HootStatus()] = e->getStatusString();
+    }
+
+    if (_includeDebug)
+    {
+      t[MetadataTags::HootId()] = QString::number(e->getId());
+    }
+
+    for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
       {
@@ -642,15 +664,11 @@ void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
   }
 }
 
-void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& element)
+void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& e)
 {
   boost::shared_ptr<Geometry> g;
   vector<ScriptToOgrTranslator::TranslatedFeature> tf;
-
-  ElementPtr elementClone(element->clone());
-  _addExportTagsVisitor.visit(elementClone);
-
-  translateToFeatures(provider, elementClone, g, tf);
+  translateToFeatures(provider, e, g, tf);
   writeTranslatedFeature(g, tf);
 }
 
