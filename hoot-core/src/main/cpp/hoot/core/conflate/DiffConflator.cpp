@@ -504,17 +504,17 @@ void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stat
   CriterionCountVisitor poiCounter;
   poiCounter.addCriterion(pPoiCrit);
   pResultMap->visitRo(poiCounter);
-  stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+  stats.append((SingleStat("New POIs", poiCounter.getCount())));
 
   ElementCriterionPtr pBuildingCrit(new BuildingCriterion(pResultMap));
   CriterionCountVisitor buildingCounter;
   buildingCounter.addCriterion(pBuildingCrit);
   pResultMap->visitRo(buildingCounter);
-  stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+  stats.append((SingleStat("New Buildings", buildingCounter.getCount())));
 
   LengthOfWaysVisitor lengthVisitor;
   pResultMap->visitRo(lengthVisitor);
-  stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
+  stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
 }
 
 }

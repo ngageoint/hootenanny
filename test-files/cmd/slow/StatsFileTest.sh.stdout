@@ -1,13 +1,13 @@
 ****Quick Stats****
-21:19:50.415 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-21:19:50.426 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
-21:19:50.426 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
-21:19:50.426 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
-21:19:50.464 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
-21:19:50.464 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
-Node Count	117
-Way Count	14
-Relation Count	0
+19:32:58.009 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+19:32:58.056 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+19:32:58.057 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+19:32:58.057 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+19:32:58.102 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+19:32:58.105 INFO  ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/StatsAllDataTypesA.txt
+Nodes	117
+Ways	14
+Relations	0
 Minimum Node ID	-1559901
 Maximum Node ID	-1559547
 Minimum Way ID	-1559905
@@ -15,52 +15,52 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-21:19:51.005 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
-21:19:51.023 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
-21:19:51.024 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
-21:19:51.024 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
-21:19:51.073 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
-21:20:02.217 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-21:20:02.218 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-21:20:02.219 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
-21:20:02.219 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
-21:20:02.220 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-21:20:02.221 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-21:20:02.222 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
-21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
-21:20:02.223 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-21:20:02.224 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-21:20:03.021 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
-21:20:04.820 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
-21:20:04.822 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
-21:20:04.822 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
-21:20:04.822 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 128 elements from input.
-21:20:04.853 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
-21:20:04.859 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-21:20:04.860 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
-21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
-21:20:04.861 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-21:20:04.861 INFO  ...mdisk/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
-21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
-21:20:04.863 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-21:20:04.864 INFO  "/ramdisk/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
-21:20:05.480 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js
+19:32:59.266 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+19:32:59.290 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+19:32:59.291 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+19:32:59.291 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 131 elements from input.
+19:32:59.331 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+19:33:08.177 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+19:33:08.179 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+19:33:08.181 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
+19:33:08.181 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
+19:33:08.182 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+19:33:08.183 INFO  ...grant/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+19:33:08.183 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+19:33:08.184 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 131 invalid or conflated elements.
+19:33:08.184 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
+19:33:08.184 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+19:33:08.184 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+19:33:08.892 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
+19:33:10.594 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+19:33:10.600 INFO  .../hoot/core/io/OsmXmlReader.cpp( 345) 	Reporting missing elements...
+19:33:10.600 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reported 0 missing elements.
+19:33:10.601 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 128 elements from input.
+19:33:10.630 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
+19:33:10.640 INFO  .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
+19:33:10.641 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+19:33:10.641 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
+19:33:10.642 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::LinearWaterwayCriterion for search radius calculation...
+19:33:10.642 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+19:33:10.642 INFO  ...grant/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
+19:33:10.643 INFO  ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+19:33:10.643 INFO  ...ops/SearchRadiusCalculator.cpp(  89) Filtered out: 128 invalid or conflated elements.
+19:33:10.643 INFO  ...ops/SearchRadiusCalculator.cpp( 101) Removing elements not satisfying: hoot::PowerLineCriterion for search radius calculation...
+19:33:10.643 INFO  ...ops/SearchRadiusCalculator.cpp( 132) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+19:33:10.644 INFO  ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: 15"
+19:33:11.247 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js
 {
-    "Node Count":
+    "Nodes":
     [
         "117",
         "116"
     ],
-    "Way Count":
+    "Ways":
     [
         "14",
         "12"
     ],
-    "Relation Count":
+    "Relations":
     [
         "0",
         "0"
@@ -190,6 +190,16 @@ Maximum Relation ID	-9.223372036854776e+18
         "12",
         "12"
     ],
+    "Unique Road Names":
+    [
+        "0",
+        "0"
+    ],
+    "Unique Building Names":
+    [
+        "7",
+        "7"
+    ],
     "Meters of Linear Features":
     [
         "1268.391471683038",
@@ -205,20 +215,10 @@ Maximum Relation ID	-9.223372036854776e+18
         "1268.391471683038",
         "1199.557803800593"
     ],
-    "Road Unique Name Count":
-    [
-        "0",
-        "0"
-    ],
     "Meters Squared of Buildings":
     [
         "20531.70536126304",
         "18518.60105949109"
-    ],
-    "Building Unique Name Count":
-    [
-        "7",
-        "7"
     ],
     "Bridges":
     [
@@ -310,7 +310,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Feature Count":
+    "Total Features":
     [
         "25",
         "22"
@@ -325,7 +325,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Untagged Feature Count":
+    "Untagged Features":
     [
         "0",
         "0"
@@ -398,7 +398,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "POI Count":
+    "POIs":
     [
         "11",
         "10"
@@ -443,7 +443,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Road Count":
+    "Roads":
     [
         "4",
         "4"
@@ -493,7 +493,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Building Count":
+    "Buildings":
     [
         "10",
         "8"
@@ -543,7 +543,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Waterway Count":
+    "Waterways":
     [
         "0",
         "0"
@@ -593,7 +593,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Polygon Conflatable POI Count":
+    "Polygon Conflatable POIs":
     [
         "10",
         "8"
@@ -638,7 +638,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Polygon Count":
+    "Polygons":
     [
         "10",
         "8"
@@ -688,7 +688,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "100",
         "100"
     ],
-    "Area Count":
+    "Areas":
     [
         "0",
         "0"
@@ -738,7 +738,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Railway Count":
+    "Railways":
     [
         "0",
         "0"
@@ -788,7 +788,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Power Line Count":
+    "Power Lines":
     [
         "0",
         "0"
@@ -848,17 +848,17 @@ Maximum Relation ID	-9.223372036854776e+18
         "0.0698058653448988",
         "0.06672845227062095"
     ],
-    "Translated Populated Tag Count":
+    "Translated Populated Tags":
     [
         "169",
         "144"
     ],
-    "Translated Default Tag Count":
+    "Translated Default Tags":
     [
         "1708",
         "1504"
     ],
-    "Translated Null Tag Count":
+    "Translated Null Tags":
     [
         "544",
         "510"
