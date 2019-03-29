@@ -60,12 +60,12 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
   }
 
   const double numInputFeaturesTotal =
-    getSingleStat("Total Feature Count", _input1Stats) +
-    getSingleStat("Total Feature Count", _input2Stats);
+    getSingleStat("Total Features", _input1Stats) +
+    getSingleStat("Total Features", _input2Stats);
 
   if (numInputFeaturesTotal > 0.0)
   {
-    const double numTotalFeaturesInOutput = getSingleStat("Total Feature Count", _outputStats);
+    const double numTotalFeaturesInOutput = getSingleStat("Total Features", _outputStats);
     LOG_VART(numTotalFeaturesInOutput);
     const double differenceBetweenTotalInputFeaturesAndTotalOutputFeatures =
       numTotalFeaturesInOutput - numInputFeaturesTotal;

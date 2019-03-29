@@ -51,11 +51,11 @@ public:
   void runTest()
   {
     QList<SingleStat> inputStats1;
-    inputStats1.append(SingleStat("Total Feature Count", 6.0));
+    inputStats1.append(SingleStat("Total Features", 6.0));
     QList<SingleStat> inputStats2;
-    inputStats2.append(SingleStat("Total Feature Count", 4.0));
+    inputStats2.append(SingleStat("Total Features", 4.0));
     QList<SingleStat> outputStats;
-    outputStats.append(SingleStat("Total Feature Count", 12.0));
+    outputStats.append(SingleStat("Total Features", 12.0));
     QList<SingleStat> statsToUpdate;
     statsToUpdate.append(SingleStat("Some Stat", 0.0));
 

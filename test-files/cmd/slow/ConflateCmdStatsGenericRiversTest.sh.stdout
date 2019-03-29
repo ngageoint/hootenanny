@@ -1,7 +1,7 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Node Count	338	176	424	
-Way Count	14	15	102	
-Relation Count	0	0	9	
+Nodes	338	176	424	
+Ways	14	15	102	
+Relations	0	0	9	
 Least Nodes in a Way	3	2	2	
 Most Nodes in a Way	66	26	42	
 Average Nodes Per Way	24	12	5	
@@ -17,8 +17,6 @@ Least Information Tags on a Feature	3	3	6
 Most Information Tags on a Feature	5	4	8	
 Average Information Tags Per Feature	4.142857142857143	3.133333333333333	4.427272727272728	
 Features with Names	4	2	31	
-Meters of Roads	0	0	0	
-Road Unique Name Count	0	0	0	
 Bridges	0	0	0	
 Tunnels	0	0	0	
 One-Way Streets	0	0	0	
@@ -37,10 +35,10 @@ Features with Addresses	0	0	0
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Feature Count	14	15	110	
+Total Features	14	15	110	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
-Untagged Feature Count	0	0	0	
+Untagged Features	0	0	0	
 Total Unconflatable Features	0	0	0	
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	1	1	1	
@@ -52,7 +50,7 @@ Percentage of Total Features Marked for Review	0	0	1.818181818181818
 Total Reviews to be Made	0	0	1	
 Total Unmatched Features	14	15	91	
 Percentage of Total Features Unmatched	100	100	82.72727272727273	
-POI Count	0	0	0	
+POIs	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
 POIs Marked for Review	0	0	0	
@@ -61,17 +59,16 @@ Unmatched POIs	0	0	0
 Percentage of POIs Conflated	0	0	0	
 Percentage of POIs Marked for Review	0	0	0	
 Percentage of Unmatched POIs	0	0	0	
-Road Count	0	0	0	
+Roads	0	0	0	
 Conflatable Roads	0	0	0	
 Conflated Roads	0	0	0	
 Roads Marked for Review	0	0	0	
 Road Reviews to be Made	0	0	0	
 Unmatched Roads	0	0	0	
-Meters of Road Processed by Conflation	0	0	0	
 Percentage of Roads Conflated	0	0	0	
 Percentage of Roads Marked for Review	0	0	0	
 Percentage of Unmatched Roads	0	0	0	
-Building Count	0	0	0	
+Buildings	0	0	0	
 Conflatable Buildings	0	0	0	
 Conflated Buildings	0	0	0	
 Buildings Marked for Review	0	0	0	
@@ -80,7 +77,7 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
-Waterway Count	14	15	110	
+Waterways	14	15	110	
 Conflatable Waterways	14	15	0	
 Conflated Waterways	0	0	19	
 Waterways Marked for Review	0	0	2	
@@ -90,7 +87,7 @@ Meters of Waterway Processed by Conflation	0	0	10183.46772175741
 Percentage of Waterways Conflated	0	0	17.27272727272727	
 Percentage of Waterways Marked for Review	0	0	1.818181818181818	
 Percentage of Unmatched Waterways	100	100	82.72727272727273	
-Polygon Conflatable POI Count	0	0	0	
+Polygon Conflatable POIs	0	0	0	
 Conflatable Polygon Conflatable POIs	0	0	0	
 Conflated Polygon Conflatable POIs	0	0	0	
 Polygon Conflatable POIs Marked for Review	0	0	0	
@@ -99,7 +96,7 @@ Unmatched Polygon Conflatable POIs	0	0	0
 Percentage of Polygon Conflatable POIs Conflated	0	0	0	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	0	
 Percentage of Unmatched Polygon Conflatable POIs	0	0	0	
-Polygon Count	0	0	0	
+Polygons	0	0	0	
 Conflatable Polygons	0	0	0	
 Conflated Polygons	0	0	0	
 Polygons Marked for Review	0	0	0	
@@ -108,7 +105,7 @@ Unmatched Polygons	0	0	0
 Percentage of Polygons Conflated	0	0	0	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons	0	0	0	
-Area Count	0	0	0	
+Areas	0	0	0	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
@@ -118,7 +115,7 @@ Meters Squared of Areas Processed by Conflation	0	0	0
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas	0	0	0	
-Railway Count	0	0	0	
+Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
 Railways Marked for Review	0	0	0	
@@ -128,7 +125,7 @@ Meters of Railway Processed by Conflation	0	0	0
 Percentage of Railways Conflated	0	0	0	
 Percentage of Railways Marked for Review	0	0	0	
 Percentage of Unmatched Railways	0	0	0	
-Power Line Count	0	0	0	
+Power Lines	0	0	0	
 Conflatable Power Lines	0	0	0	
 Conflated Power Lines	0	0	0	
 Power Lines Marked for Review	0	0	0	
@@ -138,7 +135,8 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
+Translated Populated Tags	14	107	465	
 Difference Between Total Features in Output and Total Features in Inputs			81	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			279.3103448275862	
 
-21:15:30.189 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
+18:43:07.617 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
