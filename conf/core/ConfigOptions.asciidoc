@@ -4240,7 +4240,7 @@ NoInformationElementRemover cleaning operation.
 === writer.include.circular.error.tags
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 When true, writers will include circular error information. Not honored by all writers.
 
