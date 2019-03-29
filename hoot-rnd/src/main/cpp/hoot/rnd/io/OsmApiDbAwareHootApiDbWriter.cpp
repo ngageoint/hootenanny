@@ -135,40 +135,37 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
 {
-  ElementPtr pe( node->clone() );
-  NodePtr nodeClone = boost::dynamic_pointer_cast<Node>(pe);
-
   long nodeId;
-  LOG_VART(nodeClone->getId());
-  LOG_VART(nodeClone->getStatus());
-  if (nodeClone->getId() > 0)
+  LOG_VART(node->getId());
+  LOG_VART(node->getStatus());
+  if (node->getId() > 0)
   {
-    nodeId = nodeClone->getId();
+    nodeId = node->getId();
   }
   else
   {
-    nodeId = _getRemappedElementId(nodeClone->getElementId());
+    nodeId = _getRemappedElementId(node->getElementId());
   }
-
-  // since it's now a copy for writing, just assign the new id
-  nodeClone->setId(nodeId);
-
   LOG_VART(nodeId);
 
-  _addExportTagsVisitor.visit(nodeClone);
-
-  Tags tags = nodeClone->getTags();
+  Tags tags = node->getTags();
+  _addElementTags(node, tags);
+  if (_includeDebug)
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(nodeId));
+  }
 
   const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
   if (alreadyThere)
   {
-    _hootdb.updateNode(nodeId, nodeClone->getY(), nodeClone->getX(), nodeClone->getVersion() + 1, tags);
+    _hootdb.updateNode(nodeId, node->getY(), node->getX(), node->getVersion() + 1, tags);
 
-    LOG_VART(nodeClone->getVersion() + 1);
+    LOG_VART(node->getVersion() + 1);
   }
   else
   {
-    _hootdb.insertNode(nodeId, nodeClone->getY(), nodeClone->getX(), tags);
+    _hootdb.insertNode(nodeId, node->getY(), node->getX(), tags);
     _nodeRemap[nodeId] = nodeId;
 
     LOG_TRACE("version=1");
@@ -180,32 +177,30 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& way)
 {
-  ElementPtr pe( way->clone() );
-  WayPtr wayClone = boost::dynamic_pointer_cast<Way>(pe);
-
   long wayId;
-  LOG_VART(wayClone->getElementId());
-  LOG_VART(wayClone->getStatus());
-  if (wayClone->getId() > 0)
+  LOG_VART(way->getElementId());
+  LOG_VART(way->getStatus());
+  if (way->getId() > 0)
   {
-    wayId = wayClone->getId();
+    wayId = way->getId();
   }
   else
   {
-    wayId = _getRemappedElementId(wayClone->getElementId());
+    wayId = _getRemappedElementId(way->getElementId());
   }
 
-  // since it's now a copy for writing, just assign the new id
-  wayClone->setId(wayId);
-
-  _addExportTagsVisitor.visit(wayClone);
-
-  Tags tags = wayClone->getTags();
+  Tags tags = way->getTags();
+  _addElementTags(way, tags);
+  if (_includeDebug)
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(wayId));
+  }
 
   const bool alreadyThere = _wayRemap.count(wayId) != 0;
   if (alreadyThere)
   {
-    _hootdb.updateWay(wayId, wayClone->getVersion() + 1, tags);
+    _hootdb.updateWay(wayId, way->getVersion() + 1, tags);
   }
   else
   {
@@ -215,11 +210,11 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& way)
 
   if (_remapIds)
   {
-    _hootdb.insertWayNodes(wayId, _remapNodes(wayClone->getNodeIds()));
+    _hootdb.insertWayNodes(wayId, _remapNodes(way->getNodeIds()));
   }
   else
   {
-    _hootdb.insertWayNodes(wayId, wayClone->getNodeIds());
+    _hootdb.insertWayNodes(wayId, way->getNodeIds());
   }
 
   _countChange();
@@ -228,37 +223,34 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& way)
 
 void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& relation)
 {
-  ElementPtr pe( relation->clone() );
-  RelationPtr relationClone = boost::dynamic_pointer_cast<Relation>(pe);
-
   long relationId;
-  LOG_VART(relationClone->getId());
-  LOG_VART(relationClone->getStatus());
-  if (relationClone->getId() > 0)
+  LOG_VART(relation->getId());
+  LOG_VART(relation->getStatus());
+  if (relation->getId() > 0)
   {
-    relationId = relationClone->getId();
+    relationId = relation->getId();
   }
   else
   {
-    relationId = _getRemappedElementId(relationClone->getElementId());
+    relationId = _getRemappedElementId(relation->getElementId());
   }
 
-  // since it's now a copy for writing, just assign the new id
-  relationClone->setId(relationId);
-
-  _addExportTagsVisitor.visit(relationClone);
-
-  Tags tags = relationClone->getTags();
-
-  if (!relationClone->getType().isEmpty())
+  Tags tags = relation->getTags();
+  _addElementTags(relation, tags);
+  if (!relation->getType().isEmpty())
   {
-    tags["type"] = relationClone->getType();
+    tags["type"] = relation->getType();
+  }
+  if (_includeDebug)
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(relationId));
   }
 
   const bool alreadyThere = _relationRemap.count(relationId) != 0;
   if (alreadyThere)
   {
-    _hootdb.updateRelation(relationId, relationClone->getVersion() + 1, tags);
+    _hootdb.updateRelation(relationId, relation->getVersion() + 1, tags);
   }
   else
   {
@@ -266,9 +258,9 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& relation
     _relationRemap[relationId] = relationId;
   }
 
-  for (size_t i = 0; i < relationClone->getMembers().size(); ++i)
+  for (size_t i = 0; i < relation->getMembers().size(); ++i)
   {
-    RelationData::Entry e = relationClone->getMembers()[i];
+    RelationData::Entry e = relation->getMembers()[i];
 
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();

@@ -53,6 +53,7 @@ _nodesWritten(0),
 _waysWritten(0),
 _relationsWritten(0),
 _remapIds(true),
+_includeIds(false),
 _jobId(-1),
 _open(false)
 {
@@ -62,6 +63,22 @@ _open(false)
 HootApiDbWriter::~HootApiDbWriter()
 {
   close();
+}
+
+void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e, Tags& t)
+{
+  LOG_TRACE("Adding element tags to: " << e->getElementId());
+  if (!t.contains(MetadataTags::HootStatus()))
+  {
+    if ((_textStatus && t.getNonDebugCount() > 0) || (_includeDebug && _textStatus))
+      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
+    else if (_includeDebug && !_textStatus)
+      t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
+  }
+  if (e->hasCircularError() && _includeCircularError)
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+  if (_includeDebug || _includeIds)
+    t[MetadataTags::HootId()] = QString("%1").arg(e->getId());
 }
 
 void HootApiDbWriter::close()
@@ -320,6 +337,9 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
+  setIncludeDebug(configOptions.getWriterIncludeDebugTags());
+  setTextStatus(configOptions.getWriterTextStatus());
+  setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
   setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
   setJobId(configOptions.getHootapiDbWriterJobId());
@@ -396,35 +416,31 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());
 
-  ElementPtr pe( n->clone() );
-  NodePtr nClone = boost::dynamic_pointer_cast<Node>(pe);
-
-  _addExportTagsVisitor.visit(nClone);
-
-  Tags tags = nClone->getTags();
+  Tags tags = n->getTags();
+  _addElementTags(n, tags);
 
   if (_remapIds)
   {
-    bool alreadyThere = _nodeRemap.count(nClone->getId()) != 0;
-    long nodeId = _getRemappedElementId(nClone->getElementId());
+    bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
+    long nodeId = _getRemappedElementId(n->getElementId());
     LOG_VART(nodeId);
 
     if (alreadyThere)
     {
-      _hootdb.updateNode(nodeId, nClone->getY(), nClone->getX(), nClone->getVersion() + 1, tags);
+      _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, tags);
     }
     else
     {
-      _hootdb.insertNode(nodeId, nClone->getY(), nClone->getX(), tags);
+      _hootdb.insertNode(nodeId, n->getY(), n->getX(), tags);
     }
   }
   else
   {
-    LOG_VART(nClone->getId());
-    _hootdb.insertNode(nClone->getId(), nClone->getY(), nClone->getX(), tags);
+    LOG_VART(n->getId());
+    _hootdb.insertNode(n->getId(), n->getY(), n->getX(), tags);
   }
 
-  LOG_VART(nClone->getVersion());
+  LOG_VART(n->getVersion());
 
   _countChange();
   _nodesWritten++;
@@ -434,23 +450,19 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
   LOG_TRACE("Writing way: " << w->getElementId());
 
-  ElementPtr pe( w->clone() );
-  WayPtr wClone = boost::dynamic_pointer_cast<Way>(pe);
-
-  _addExportTagsVisitor.visit(wClone);
-
   long wayId;
 
-  Tags tags = wClone->getTags();
+  Tags tags = w->getTags();
+  _addElementTags(w, tags);
 
   if (_remapIds)
   {
-    bool alreadyThere = _wayRemap.count(wClone->getId()) != 0;
-    wayId = _getRemappedElementId(wClone->getElementId());
+    bool alreadyThere = _wayRemap.count(w->getId()) != 0;
+    wayId = _getRemappedElementId(w->getElementId());
 
     if (alreadyThere)
     {
-      _hootdb.updateWay(wayId, wClone->getVersion() + 1, tags);
+      _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
     }
     else
     {
@@ -459,17 +471,17 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   }
   else
   {
-     wayId = wClone->getId();
-    _hootdb.insertWay(wClone->getId(), tags);
+    wayId = w->getId();
+    _hootdb.insertWay(w->getId(), tags);
   }
 
   if (_remapIds == true)
   {
-    _hootdb.insertWayNodes(wayId, _remapNodes(wClone->getNodeIds()));
+    _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
   }
   else
   {
-    _hootdb.insertWayNodes(wayId, wClone->getNodeIds());
+    _hootdb.insertWayNodes(wayId, w->getNodeIds());
   }
 
   _countChange();
@@ -481,35 +493,31 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   LOG_TRACE("Writing relation: " << r->getElementId());
 
-  ElementPtr pe( r->clone() );
-  RelationPtr rClone = boost::dynamic_pointer_cast<Relation>(pe);
-
-  _addExportTagsVisitor.visit(rClone);
-
   long relationId;
 
-  Tags tags = rClone->getTags();
+  Tags tags = r->getTags();
+  _addElementTags(r, tags);
 
-  if (!rClone->getType().isEmpty())
+  if (!r->getType().isEmpty())
   {
-    tags["type"] = rClone->getType();
+    tags["type"] = r->getType();
   }
 
   if (_remapIds)
   {
-    relationId = _getRemappedElementId(rClone->getElementId());
+    relationId = _getRemappedElementId(r->getElementId());
 
     _hootdb.insertRelation(relationId, tags);
   }
   else
   {
-    _hootdb.insertRelation(rClone->getId(), tags);
-    relationId = rClone->getId();
+    _hootdb.insertRelation(r->getId(), tags);
+    relationId = r->getId();
   }
 
-  for (size_t i = 0; i < rClone->getMembers().size(); ++i)
+  for (size_t i = 0; i < r->getMembers().size(); ++i)
   {
-    RelationData::Entry e = rClone->getMembers()[i];
+    RelationData::Entry e = r->getMembers()[i];
 
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
