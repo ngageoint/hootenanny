@@ -396,8 +396,7 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId());
 
-  ElementPtr pe( n->clone() );
-  NodePtr nClone = boost::dynamic_pointer_cast<Node>(pe);
+  NodePtr nClone = boost::dynamic_pointer_cast<Node>(ElementPtr(n->clone()));
 
   _addExportTagsVisitor.visit(nClone);
 
@@ -434,8 +433,7 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
   LOG_TRACE("Writing way: " << w->getElementId());
 
-  ElementPtr pe( w->clone() );
-  WayPtr wClone = boost::dynamic_pointer_cast<Way>(pe);
+  WayPtr wClone = boost::dynamic_pointer_cast<Way>(ElementPtr(w->clone()));
 
   _addExportTagsVisitor.visit(wClone);
 
@@ -481,8 +479,7 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   LOG_TRACE("Writing relation: " << r->getElementId());
 
-  ElementPtr pe( r->clone() );
-  RelationPtr rClone = boost::dynamic_pointer_cast<Relation>(pe);
+  RelationPtr rClone = boost::dynamic_pointer_cast<Relation>(ElementPtr(r->clone()));
 
   _addExportTagsVisitor.visit(rClone);
 
