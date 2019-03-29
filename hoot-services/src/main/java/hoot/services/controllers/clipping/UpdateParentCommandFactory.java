@@ -22,37 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.clipping;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
 
-import org.springframework.stereotype.Service;
-
-import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Users;
 
 
-@Service
-public interface JobStatusManager {
-    void addJob(Job job);
+@Component
+class UpdateParentCommandFactory {
 
-    void deleteJob(String jobId, Long userId);
-
-    void updateJob(String jobId, String statusDetail, Double percentComplete);
-
-    void setCancelled(String jobId, String reason);
-
-    void setCompleted(String jobId, String statusDetail);
-
-    void setFailed(String jobId, String statusDetail);
-
-    JobStatus getJobStatusObj(String jobId);
-
-    JobStatus getJobStatusObj(String jobId, Long userId);
-
-    List<String> getJobErrors(String jobId, Long userId);
-
-    List<CommandStatus> getCommandDetail(String jobId, Long userId);
+    UpdateParentCommand build(String jobId, ClipDatasetParams params, Users user, Class<?> caller) {
+        return new UpdateParentCommand(jobId, params, user, caller);
+    }
 }

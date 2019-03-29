@@ -234,100 +234,53 @@ ggdm30 = {
 
         if (attrList != undefined)
         {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (ggdm30.config.OgrDebugDumpvalidate == 'true')
+            for (var val in attrs)
             {
-                for (var val in attrs)
+                if (attrList.indexOf(val) == -1)
                 {
-                    if (attrList.indexOf(val) == -1)
+                    if (val in othList)
                     {
-                        if (val in othList)
-                        {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
-                        }
-
-                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
+                        //Debug:
+                        // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+                        delete othList[val];
                     }
 
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in ggdm30.rules.txtLength)
-                    {
-                        if (attrs[val].length > ggdm30.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= ggdm30.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                    // Debug:
+                    hoot.logDebug('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
+                    delete attrs[val];
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-                } // End attrs loop
-            }
-            else
-            {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
+                    // Since we deleted the attribute, Skip the text check
+                    continue;
+                }
+
+                // Now check the length of the text fields
+                // We need more info from the customer about this: What to do if it is too long
+                if (val in ggdm30.rules.txtLength)
+                {
+                    if (attrs[val].length > ggdm30.rules.txtLength[val])
                     {
-                        if (val in othList)
+                        // First try splitting the attribute and grabbing the first value
+                        var tStr = attrs[val].split(';');
+                        if (tStr[0].length <= ggdm30.rules.txtLength[val])
                         {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
+                            attrs[val] = tStr[0];
                         }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in ggdm30.rules.txtLength)
-                    {
-                        if (attrs[val].length > ggdm30.rules.txtLength[val])
+                        else
                         {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= ggdm30.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncateing to ' + ggdm30.rules.txtLength[val] + ' characters.');
+                            // Still too long. Chop to the maximum length
+                            attrs[val] = tStr[0].substring(0,ggdm30.rules.txtLength[val]);
+                        }
+                    } // End text attr length > max length
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-        	    } // End attrs loop
-            }
+                    // It's text fo skip the next test
+                    continue;
+                } // End in txtLength
+            } // End attrs loop
         }
         else
         {
-            hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         } // End Drop attrs
 
         // Repack the OTH field
@@ -1333,24 +1286,24 @@ ggdm30 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so
-        // Most of these are taken from raw OSM and the OSM Wiki
-        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // are not buildings
-        // Taking "place_of_worship" out of this and making it a building
-        // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','fuel', 'ferry_terminal'
-            ]; // End notBuildingList
+        // // Some tags imply that they are buildings but don't actually say so
+        // // Most of these are taken from raw OSM and the OSM Wiki
+        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // // are not buildings
+        // // Taking "place_of_worship" out of this and making it a building
+        // // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','fuel', 'ferry_terminal'
+        //     ]; // End notBuildingList
 
-        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        // if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1528,7 +1481,7 @@ ggdm30 = {
 
         // Bridges & Roads.  If we have an area or a line everything is fine
         // If we have a point, we need to make sure that it becomes a bridge, not a road
-        if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
+        if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
 
         // Railway sidetracks
@@ -1595,6 +1548,25 @@ ggdm30 = {
                 }
             }
         } // End find F_CODE
+
+        // Some tags imply that they are buildings but don't actually say so
+        // Most of these are taken from raw OSM and the OSM Wiki
+        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // are not buildings
+        // Taking "place_of_worship" out of this and making it a building
+        // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','fuel', 'ferry_terminal'
+            ]; // End notBuildingList
+
+        if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // If we still don't have an FCODE, try looking for individual elements
         if (!attrs.F_CODE)
@@ -2225,7 +2197,6 @@ ggdm30 = {
         {
             ggdm30.config = {};
             ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-            ggdm30.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             ggdm30.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
             ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
             ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
@@ -2361,74 +2332,7 @@ ggdm30 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(ggdmAttrLookup[gFcode]))
-        {
-            // For the UI: Throw an error and die if we don't have a valid feature
-            if (ggdm30.config.OgrThrowError == 'true')
-            {
-                if (! attrs.F_CODE)
-                {
-                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-                    return returnData;
-                }
-                else
-                {
-                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
-                    return returnData;
-                }
-            }
-
-            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Debug:
-            // Dump out what attributes we have converted before they get wiped out
-            if (ggdm30.config.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
-
-            // We want to keep the hoot:id if present
-            if (tags['hoot:id'])
-            {
-                tags.raw_id = tags['hoot:id'];
-                delete tags['hoot:id'];
-            }
-
-            // Convert all of the Tags to a string so we can jam it into an attribute
-            // var str = JSON.stringify(tags);
-            var str = JSON.stringify(tags,Object.keys(tags).sort());
-
-            // Shapefiles can't handle fields > 254 chars
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
-            {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
-            }
-            else
-            {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
-                {
-                    hoot.logTrace('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
-                }
-
-                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253),
-                         tag2:str.substring(253,506),
-                         tag3:str.substring(506,759),
-                         tag4:str.substring(759,1012)};
-            }
-
-            returnData.push({attrs: attrs, tableName: tableName});
-        }
-        else // We have a feature
+        if (ggdmAttrLookup[gFcode])
         {
             // Check if we need to make more features
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2501,7 +2405,74 @@ ggdm30 = {
                 var reviewTable = 'review_' + geometryType.toString().charAt(0);
                 returnData.push({attrs: reviewAttrs, tableName: reviewTable});
             } // End ReviewTags
-        } // End else We have a feature
+        }
+        else
+        {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (ggdm30.config.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
+            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Debug:
+            // Dump out what attributes we have converted before they get wiped out
+            if (ggdm30.config.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
+
+            // We want to keep the hoot:id if present
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
+
+            // Convert all of the Tags to a string so we can jam it into an attribute
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
+
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
+            {
+                // return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                attrs = {tag1:str.substring(0,253),
+                         tag2:str.substring(253,506),
+                         tag3:str.substring(506,759),
+                         tag4:str.substring(759,1012)};
+            }
+
+            returnData.push({attrs: attrs, tableName: tableName});
+        } // End We DON'T have a feature
 
         // Debug:
         if (ggdm30.config.OgrDebugDumptags == 'true')

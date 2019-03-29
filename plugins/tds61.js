@@ -249,100 +249,51 @@ tds61 = {
 
         if (attrList != undefined)
         {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (tds61.configOut.OgrDebugDumpvalidate == 'true')
-            {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
+    	    for (var val in attrs)
+    	    {
+        	    if (attrList.indexOf(val) == -1)
+                {
+                    if (val in othList)
                     {
-                        if (val in othList)
-                        {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
-                        }
-
-                        hoot.logWarn('Validate: Dropping ' + val + '  from ' + attrs.F_CODE);
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
+                        //Debug:
+                        // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+                        delete othList[val];
                     }
 
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in tds61.rules.txtLength)
-                    {
-                        if (attrs[val].length > tds61.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= tds61.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds61.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
-                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                    delete attrs[val];
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-                } // End attrs loop
-            }
-            else
-            {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
+                    // Since we deleted the attribute, Skip the text check
+                    continue;
+                }
+
+                // Now check the length of the text fields
+                // We need more info from the customer about this: What to do if it is too long
+                if (val in tds61.rules.txtLength)
+                {
+                    if (attrs[val].length > tds61.rules.txtLength[val])
                     {
-                        if (val in othList)
+                        // First try splitting the attribute and grabbing the first value
+                        var tStr = attrs[val].split(';');
+                        if (tStr[0].length <= tds61.rules.txtLength[val])
                         {
-                            //Debug:
-                            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-                            delete othList[val];
+                            attrs[val] = tStr[0];
                         }
-
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in tds61.rules.txtLength)
-                    {
-                        if (attrs[val].length > tds61.rules.txtLength[val])
+                        else
                         {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= tds61.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds61.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length.
-                                attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds61.rules.txtLength[val] + ' characters.');
+                            // Still too long. Chop to the maximum length.
+                            attrs[val] = tStr[0].substring(0,tds61.rules.txtLength[val]);
+                        }
+                    } // End text attr length > max length
 
-                        // It's text fo skip the next test
-                        continue;
-                    } // End in txtLength
-        	    } // End attrs loop
-            }
+                    // It's text fo skip the next test
+                    continue;
+                } // End in txtLength
+    	    } // End attrs loop
         }
         else
         {
-            hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         } // End Drop attrs
 
         // Repack the OTH field
@@ -1466,23 +1417,23 @@ tds61 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // Some tags imply that they are buildings but don't actually say so
-        // Most of these are taken from raw OSM and the OSM Wiki
-        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // are not buildings
-        // Taking "place_of_worship" out of this and making it a building
-        var notBuildingList = [
-            'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
-            'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
-            'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
-            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'nameplate', 'park', 'parking',
-            'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
-            'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
-            'water_point', 'watering_place', 'yes', 'ferry_terminal',
-            'fuel' // NOTE: Fuel goes to a different F_CODE
-            ]; // End notBuildingList
+        // // Some tags imply that they are buildings but don't actually say so
+        // // Most of these are taken from raw OSM and the OSM Wiki
+        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // // are not buildings
+        // // Taking "place_of_worship" out of this and making it a building
+        // var notBuildingList = [
+        //     'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
+        //     'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
+        //     'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
+        //     'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'nameplate', 'park', 'parking',
+        //     'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
+        //     'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
+        //     'water_point', 'watering_place', 'yes', 'ferry_terminal',
+        //     'fuel' // NOTE: Fuel goes to a different F_CODE
+        //     ]; // End notBuildingList
 
-        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        // if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1739,8 +1690,7 @@ tds61 = {
 
         // Bridges & Roads.  If we have an area or a line everything is fine
         // If we have a point, we need to make sure that it becomes a bridge, not a road
-        if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
-
+        if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
         // Railway sidetracks
         if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
@@ -1789,7 +1739,6 @@ tds61 = {
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
-
         if (!(attrs.F_CODE) && tds61.fcodeLookup)
         {
             for (var col in tags)
@@ -1806,6 +1755,25 @@ tds61 = {
                 }
             }
         } // End find F_CODE
+
+        // Some tags imply that they are buildings but don't actually say so
+        // Most of these are taken from raw OSM and the OSM Wiki
+        // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+        // are not buildings
+        // Taking "place_of_worship" out of this and making it a building
+        var notBuildingList = [
+            'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
+            'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
+            'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
+            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'nameplate', 'park', 'parking',
+            'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
+            'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
+            'water_point', 'watering_place', 'yes', 'ferry_terminal',
+            'fuel' // NOTE: Fuel goes to a different F_CODE
+            ]; // End notBuildingList
+
+        if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+
 
         // If we still don't have an FCODE, try looking for individual elements
         if (!attrs.F_CODE)
@@ -2475,7 +2443,6 @@ tds61 = {
         {
             tds61.configOut = {};
             tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            tds61.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
             tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
@@ -2585,14 +2552,19 @@ tds61 = {
 
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
+        translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
+
+        // Debug:
         if (tds61.configOut.OgrDebugDumptags == 'true')
         {
-            print('Before fcodelookup');
+            print('After applytdsone2one');
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            kList = Object.keys(notUsedTags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
+            kList = Object.keys(attrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
-
-        translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
         // Post Processing
         // We send the original list of tags and the list of tags we haven't used yet
@@ -2618,74 +2590,7 @@ tds61 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
-        {
-            // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds61.configOut.OgrThrowError == 'true')
-            {
-                if (! attrs.F_CODE)
-                {
-                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
-                    return returnData;
-                }
-                else
-                {
-                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
-                    return returnData;
-                }
-            }
-
-            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
-
-            tableName = 'o2s_' + geometryType.toString().charAt(0);
-
-            // Debug:
-            // Dump out what attributes we have converted before they get wiped out
-            if (tds61.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
-
-            // We want to keep the hoot:id if present
-            if (tags['hoot:id'])
-            {
-                tags.raw_id = tags['hoot:id'];
-                delete tags['hoot:id'];
-            }
-
-            // Convert all of the Tags to a string so we can jam it into an attribute
-            // var str = JSON.stringify(tags);
-            var str = JSON.stringify(tags,Object.keys(tags).sort());
-
-            // Shapefiles can't handle fields > 254 chars
-            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
-            // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || tds61.configOut.OgrSplitO2s == 'false')
-            {
-                // return {attrs:{tag1:str}, tableName: tableName};
-                attrs = {tag1:str};
-            }
-            else
-            {
-                // Not good. Will fix with the rewrite of the tag splitting code
-                if (str.length > 1012)
-                {
-                    hoot.logTrace('o2s tags truncated to fit in available space.');
-                    str = str.substring(0,1012);
-                }
-
-                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
-                attrs = {tag1:str.substring(0,253),
-                        tag2:str.substring(253,506),
-                        tag3:str.substring(506,759),
-                        tag4:str.substring(759,1012)};
-            }
-
-            returnData.push({attrs: attrs, tableName: tableName});
-        }
-        else // We have a feature
+        if (tds61.AttrLookup[gFcode.toUpperCase()])
         {
             // Check if we need to make more features
             // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2759,7 +2664,74 @@ tds61 = {
                 var reviewTable = 'review_' + geometryType.toString().charAt(0);
                 returnData.push({attrs: reviewAttrs, tableName: reviewTable});
             } // End ReviewTags
-        } // End else We have a feature
+        }
+        else // We DON'T have a feature
+        {
+            // For the UI: Throw an error and die if we don't have a valid feature
+            if (tds61.configOut.OgrThrowError == 'true')
+            {
+                if (! attrs.F_CODE)
+                {
+                    returnData.push({attrs:{'error':'No Valid Feature Code'}, tableName: ''});
+                    return returnData;
+                }
+                else
+                {
+                    //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    return returnData;
+                }
+            }
+
+            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+
+            tableName = 'o2s_' + geometryType.toString().charAt(0);
+
+            // Debug:
+            // Dump out what attributes we have converted before they get wiped out
+            if (tds61.configOut.OgrDebugDumptags == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
+
+            // We want to keep the hoot:id if present
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
+
+            // Convert all of the Tags to a string so we can jam it into an attribute
+            // var str = JSON.stringify(tags);
+            var str = JSON.stringify(tags,Object.keys(tags).sort());
+
+            // Shapefiles can't handle fields > 254 chars
+            // If the tags are > 254 char, split into pieces. Not pretty but stops errors
+            // A nicer thing would be to arrange the tags until they fit neatly
+            if (str.length < 255 || tds61.configOut.OgrSplitO2s == 'false')
+            {
+                // return {attrs:{tag1:str}, tableName: tableName};
+                attrs = {tag1:str};
+            }
+            else
+            {
+                // Not good. Will fix with the rewrite of the tag splitting code
+                if (str.length > 1012)
+                {
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
+                    str = str.substring(0,1012);
+                }
+
+                // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+                attrs = {tag1:str.substring(0,253),
+                        tag2:str.substring(253,506),
+                        tag3:str.substring(506,759),
+                        tag4:str.substring(759,1012)};
+            }
+
+            returnData.push({attrs: attrs, tableName: tableName});
+        } // End else We DON'T have a feature
 
         // Debug:
         if (tds61.configOut.OgrDebugDumptags == 'true')

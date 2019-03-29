@@ -22,11 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.BASEMAPS_FOLDER;
+import static hoot.services.HootProperties.BASEMAPS_TILES_FOLDER;
+import static hoot.services.HootProperties.BASEMAP_RASTER_EXTENSIONS;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -37,6 +40,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -45,6 +49,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
@@ -71,6 +76,8 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
+import hoot.services.models.db.Users;
 import hoot.services.utils.JsonUtils;
 import hoot.services.utils.MultipartSerializer;
 
@@ -90,9 +97,9 @@ public class BasemapResource {
 
     /**
      * Upload dataset file and create TMS tiles.
-     * 
+     *
      * POST hoot-services/ingest/basemap/upload?INPUT_NAME=MyBasemap
-     * 
+     *
      * @param inputName
      *            Name of basemap
      * @param projection
@@ -107,10 +114,12 @@ public class BasemapResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
-                                  @QueryParam("PROJECTION") String projection,
-                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
-                                  FormDataMultiPart multiPart) {
+    public Response processUpload(@Context HttpServletRequest request,
+                                @QueryParam("INPUT_NAME") String inputName,
+                                @QueryParam("PROJECTION") String projection,
+                                @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
+                                FormDataMultiPart multiPart) {
+        Users user = Users.fromRequest(request);
         JSONArray jobsArr = new JSONArray();
 
         try {
@@ -147,7 +156,7 @@ public class BasemapResource {
 
             Command[] workflow = { ingestBasemapCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.BASEMAP));
 
             JSONObject response = new JSONObject();
             response.put("jobid", jobId);
@@ -171,9 +180,9 @@ public class BasemapResource {
 
     /**
      * Service method endpoint for retrieving the uploaded basemaps list.
-     * 
+     *
      * GET hoot-services/ingest/basemap/getlist
-     * 
+     *
      * @return JSON Array containing basemap information
      */
     @GET
@@ -206,9 +215,9 @@ public class BasemapResource {
 
     /**
      * Service method endpoint for enabling a basemap.
-     * 
+     *
      * GET hoot-services/ingest/basemap/enable?NAME=abc&ENABLE=true
-     * 
+     *
      * @param basemap
      *            Name of a basemap
      * @param enable
@@ -236,11 +245,11 @@ public class BasemapResource {
 
     /**
      * Service method endpoint for deleting a basemap.
-     * 
+     *
      * GET hoot-services/ingest/basemap/delete?NAME=abc
-     * 
+     *
      * //TODO: this should be an HTTP DELETE
-     * 
+     *
      * @param basemap
      *            Name of a basemap
      * @return JSON containing enable state

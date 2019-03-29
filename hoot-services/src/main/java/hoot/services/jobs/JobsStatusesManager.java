@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.jobs;
 
@@ -30,9 +30,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import hoot.services.models.db.JobStatus;
+import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.models.db.Users;
 
 @Service
 public interface JobsStatusesManager {
-	List<JobStatus> getRecentJobs(int limit);
+    List<JobStatusResponse> getRecentJobs(Users user, int limit);
+    List<JobStatusResponse> getRunningJobs();
+    List<JobStatusResponse> getJobsHistory(Users user);
 }

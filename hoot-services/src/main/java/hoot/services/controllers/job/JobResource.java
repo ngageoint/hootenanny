@@ -22,21 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.CommandStatus;
+import hoot.services.models.db.Users;
 
 
 @Controller
@@ -80,13 +87,16 @@ public class JobResource {
     public JobStatusResponse getJobStatus(@Context HttpServletRequest request, @PathParam("jobId") String jobId,
             @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
 
-        // Users user = (Users)
-        // request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = Users.fromRequest(request);
+
         JobStatusResponse response = new JobStatusResponse();
 
         hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
+            if (!jobStatus.getUserId().equals(user.getId())) {
+                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+            }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
             response.setStatusDetail(jobStatus.getStatusDetail());
@@ -94,7 +104,7 @@ public class JobResource {
             response.setLastText(jobStatus.getStatusDetail());
 
             if (includeCommandDetail) {
-                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
+                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId, user.getId());
                 response.setCommandDetail(commandDetail);
             }
         }
@@ -106,4 +116,68 @@ public class JobResource {
 
         return response;
     }
+
+    /**
+     * Deletes a job status record
+     *
+     * DELETE hoot-services/job/{id}
+     *
+     *
+     * @param jobId
+     *            ID of job record to be deleted
+     * @return id of the deleted job
+     */
+    @DELETE
+    @Path("/{jobId}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteJob(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+        Users user = Users.fromRequest(request);
+        try {
+            this.jobStatusManager.deleteJob(jobId, user.getId());
+        }
+        catch (Exception e) {
+            logger.error("job delete", e);
+            String msg = "Error submitting delete job request for job with id =  " + jobId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+
+        return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Gets error message for a job
+     *
+     * GET hoot-services/job/error/{id}
+     *
+     *
+     * @param jobId
+     *            ID of job record get error
+     * @return error message of job commands
+     */
+    @GET
+    @Path("/error/{jobId}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJobErrors(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
+        Users user = Users.fromRequest(request);
+        List<String> errors;
+        try {
+            errors = this.jobStatusManager.getJobErrors(jobId, user.getId());
+        }
+        catch (Exception e) {
+            logger.error("job error", e);
+            String msg = "Error getting error for job with id =  " + jobId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("errors", errors);
+
+        return Response.ok().entity(ret).build();
+    }
+
 }

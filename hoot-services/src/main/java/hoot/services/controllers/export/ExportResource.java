@@ -29,9 +29,11 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
+import static hoot.services.models.db.QMaps.maps;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,26 +58,31 @@ import javax.xml.transform.dom.DOMSource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
+
 import hoot.services.command.Command;
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
+import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-
 
 @Controller
 @Path("/export")
 @Transactional
 public class ExportResource {
+    private static final Logger logger = LoggerFactory.getLogger(ExportResource.class);
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -83,6 +90,23 @@ public class ExportResource {
     private UserAwareExportCommandFactory userAwareExportCommandFactory;
 
     public ExportResource() {}
+
+    private Class<? extends ExportCommand> getCommand(String outputType) {
+        Class<? extends ExportCommand> exportCommand = null;
+        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
+            exportCommand = ExportOSMCommand.class;
+        } else if (outputType.equals("tiles")) {
+            exportCommand = CalculateTilesCommand.class;
+        } else {
+            exportCommand = ExportCommand.class;
+        }
+        return exportCommand;
+    }
+
+    private ExportCommand getCommand(Users user, String jobId, ExportParams params, String debugLevel) {
+        return userAwareExportCommandFactory.build(jobId, params, debugLevel,
+                getCommand(params.getOutputType()), this.getClass(), user);
+    }
 
     /**
      * Asynchronous export service.
@@ -93,8 +117,11 @@ public class ExportResource {
      *
      * {
      *   "translation":"MGCP.js", //Translation script name.
-     *   "inputtype":"db",        //[db | file] db means input from hoot db will be used. file mean
-     *                            //a file path will be specified.
+     *   "inputtype":"db",        //[db | dbs | folder| file]
+     *                            // - db means input from hoot db will be used.
+     *                            // - dbs means list of maps in hoot db are used.
+     *                            // - folder means all files in a hoot db folder are used.
+     *                            // - file means a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
      *   "outputtype":"gdb",      //[gdb | shp | tiles]. gdb will produce an ESRI file
@@ -113,14 +140,11 @@ public class ExportResource {
     public Response export(ExportParams params, @Context HttpServletRequest request,
                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
+        params.setUserEmail(user.getEmail());
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
-        // ensure valid email address in `params`:
-        if(user != null) {
-            params.setUserEmail(user.getEmail());
-        }
-
         try {
+            String inputType = params.getInputType();
             String outputType = params.getOutputType();
             String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
@@ -131,50 +155,58 @@ public class ExportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            if (outputType.equalsIgnoreCase("osm")) {
-                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass(), user);
+            if (inputType.equalsIgnoreCase("folder")) {
+                Long folder_id = Long.parseLong(params.getInput());
+                params.setInputType("db"); // make folder input really a db input...
 
-                workflow.add(exportOSMCommand);
+                for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
+                    params.setInput(Long.toString(mapInfo.get(maps.id)));
+                    params.setOutputName(mapInfo.get(maps.displayName));
+                    workflow.add(getCommand(user, jobId, params, debugLevel));
+                }
 
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
+                workflow.add(zipCommand);
+                params.setInputType("folder");
+
+            } else if (inputType.equalsIgnoreCase("dbs")) {
+                params.setInputType("db");
+
+                for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
+                    params.setInput(map);
+                    params.setOutputName(map);
+                    workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
+                }
+
+                Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
+                workflow.add(zipCommand);
+
+            } else {
+                workflow.add(getCommand(user, jobId, params, debugLevel));
+
+                // only try to add zipCommand to workflow if not osm.pbf or tiles...
+                if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
+                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+
+                    if (zipCommand != null) {
+                        workflow.add(zipCommand);
+                    }
                 }
             }
-            else if (outputType.equalsIgnoreCase("osm.pbf")) {
-                ExternalCommand exportOSMCommand = userAwareExportCommandFactory.build(jobId, params, debugLevel,
-                        ExportOSMCommand.class, this.getClass(), user);
 
-                workflow.add(exportOSMCommand);
-            }
-            else if (outputType.startsWith("tiles")) {
-                ExternalCommand calculateTilesCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, CalculateTilesCommand.class, this.getClass(), user);
-
-                workflow.add(calculateTilesCommand);
-            }
-            else { //else Shape/FGDB
-                ExternalCommand exportCommand = userAwareExportCommandFactory.build(jobId, params,
-                        debugLevel, ExportCommand.class, this.getClass(), user);
-
-                workflow.add(exportCommand);
-
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
-                }
-            }
-
-            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
+                    DbUtils.getMapIdFromRef(params.getInput(), user.getId())));
         }
         catch (WebApplicationException wae) {
+            logger.error(wae.getMessage(), wae);
             throw wae;
         }
         catch (IllegalArgumentException iae) {
+            logger.error(iae.getMessage(), iae);
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
+            logger.error(e.getMessage(), e);
             String msg = "Error exporting data!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
@@ -184,7 +216,7 @@ public class ExportResource {
 
         //Update last accessed timestamp for db datasets on export
         if (params.getInputType().equalsIgnoreCase("db")) {
-            Long mapid = DbUtils.getMapIdByName(params.getInput());
+            Long mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
             MapResource.updateLastAccessed(mapid);
         }
 
@@ -361,15 +393,14 @@ public class ExportResource {
     private Command getZIPCommand(File workDir, String outputName, String outputType) {
         File targetZIP = new File(workDir, outputName + ".zip");
 
-        if (outputType.equalsIgnoreCase("SHP")) {
+        if (outputType.equalsIgnoreCase("FOLDER") || outputType.equalsIgnoreCase("GDB")) {
+            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        } else if (outputType.equalsIgnoreCase("SHP")) {
             return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
         }
         else if (outputType.equalsIgnoreCase("OSM")) {
             String fileToCompress = outputName + "." + outputType;
             return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
-        }
-        else if (outputType.equalsIgnoreCase("GDB")) {
-            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
         }
         else {
             return null;
