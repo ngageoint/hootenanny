@@ -93,9 +93,9 @@ private:
   bool _multipleChangesetsWritten;
 
   bool _addTimestamp;
+  bool _includeDebugTags;
 
   OsmXmlWriter _invalidCharacterHandler;
-  AddExportTagsVisitor _addExportTagsVisitor;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
   //keeping track of these mappings unfortunately makes this writer memory bound

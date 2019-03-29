@@ -47,7 +47,8 @@ OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
 _multipleChangesetsWritten(false),
-_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp())
+_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _stats.resize(Change::Unknown, ElementType::Unknown);
   vector<QString> rows( {"Create", "Modify", "Delete"} );
@@ -191,22 +192,18 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
 {
   LOG_TRACE("Writing change for " << n << "...");
 
-  NodePtr nClone = boost::dynamic_pointer_cast<Node>(ElementPtr(n->clone()));
-
-  _addExportTagsVisitor.visit(nClone);
-
   writer.writeStartElement("node");
-  long id = nClone->getId();
+  long id = n->getId();
   if (_change.getType() == Change::Create)
   {
     //rails port expects negative ids for new elements; we're starting at -1 to match the convention
     //of iD editor, but that's not absolutely necessary to write the changeset to rails port
     id = _newElementIdCtrs[ElementType::Node] * -1; //assuming no id's = 0
     LOG_TRACE(
-      "Converting new element with id: " << nClone->getElementId() << " to id: " <<
+      "Converting new element with id: " << n->getElementId() << " to id: " <<
       ElementId(ElementType::Node, id));
     _newElementIdCtrs[ElementType::Node] = _newElementIdCtrs[ElementType::Node] + 1;
-    _newElementIdMappings[ElementType::Node].insert(nClone->getId(), id);
+    _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
   long version = ElementData::VERSION_EMPTY;
@@ -214,22 +211,25 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   if (_change.getType() == Change::Create)
     version = 0;
   else
-    version = nClone->getVersion();
+    version = n->getVersion();
   writer.writeAttribute("version", QString::number(version));
 
-  writer.writeAttribute("lat", QString::number(nClone->getY(), 'f', _precision));
-  writer.writeAttribute("lon", QString::number(nClone->getX(), 'f', _precision));
+  writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
+  writer.writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
 
   if (_addTimestamp)
   {
-    if (nClone->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(nClone->getTimestamp()));
+    if (n->getTimestamp() != 0)
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(n->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
 
-  Tags tags = nClone->getTags();
-
+  Tags tags = n->getTags();
+  if (_includeDebugTags)
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(n->getStatus().getEnum()));
+  }
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false &&
@@ -246,6 +246,15 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
     }
   }
 
+  // turn this on when we start using node circularError.
+  if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0)
+  {
+    writer.writeStartElement("tag");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
+    writer.writeAttribute("v", QString("%1").arg(n->getCircularError()));
+    writer.writeEndElement();
+  }
+
   writer.writeEndElement();
 }
 
@@ -253,21 +262,17 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
 {
   LOG_TRACE("Writing change for " << w << "...");
 
-  WayPtr wClone = boost::dynamic_pointer_cast<Way>(ElementPtr(w->clone()));
-
-  _addExportTagsVisitor.visit(wClone);
-
   writer.writeStartElement("way");
-  long id = wClone->getId();
+  long id = w->getId();
   if (_change.getType() == Change::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Way] * -1;
     LOG_TRACE(
-      "Converting new element with id: " << wClone->getElementId() << " to id: " <<
+      "Converting new element with id: " << w->getElementId() << " to id: " <<
       ElementId(ElementType::Way, id));
     _newElementIdCtrs[ElementType::Way] = _newElementIdCtrs[ElementType::Way] + 1;
-    _newElementIdMappings[ElementType::Way].insert(wClone->getId(), id);
+    _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
   long version = ElementData::VERSION_EMPTY;
@@ -275,20 +280,20 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   if (_change.getType() == Change::Create)
     version = 0;
   else
-    version = wClone->getVersion();
+    version = w->getVersion();
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
-    if (wClone->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(wClone->getTimestamp()));
+    if (w->getTimestamp() != 0)
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(w->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
 
-  for (size_t j = 0; j < wClone->getNodeCount(); j++)
+  for (size_t j = 0; j < w->getNodeCount(); j++)
   {
     writer.writeStartElement("nd");
-    long nodeRefId = wClone->getNodeId(j);
+    long nodeRefId = w->getNodeId(j);
     if (_newElementIdMappings[ElementType::Node].contains(nodeRefId))
     {
       const long newNodeRefId = _newElementIdMappings[ElementType::Node][nodeRefId];
@@ -301,8 +306,11 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     writer.writeEndElement();
   }
 
-  Tags tags = wClone->getTags();
-
+  Tags tags = w->getTags();
+  if (_includeDebugTags)
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(w->getStatus().getEnum()));
+  }
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
@@ -318,6 +326,14 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     }
   }
 
+  if (w->hasCircularError())
+  {
+    writer.writeStartElement("tag");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
+    writer.writeAttribute("v", QString("%1").arg(w->getCircularError()));
+    writer.writeEndElement();
+  }
+
   writer.writeEndElement();
 }
 
@@ -325,21 +341,17 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
 {
   LOG_TRACE("Writing change for " << r << "...");
 
-  RelationPtr rClone = boost::dynamic_pointer_cast<Relation>(ElementPtr(r->clone()));
-
-  _addExportTagsVisitor.visit(rClone);
-
   writer.writeStartElement("relation");
-  long id = rClone->getId();
+  long id = r->getId();
   if (_change.getType() == Change::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Relation] * -1;
     LOG_TRACE(
-      "Converting new element with id: " << rClone->getElementId() << " to id: " <<
+      "Converting new element with id: " << r->getElementId() << " to id: " <<
       ElementId(ElementType::Relation, id));
     _newElementIdCtrs[ElementType::Relation] = _newElementIdCtrs[ElementType::Relation] + 1;
-    _newElementIdMappings[ElementType::Relation].insert(rClone->getId(), id);
+    _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
   long version = ElementData::VERSION_EMPTY;
@@ -347,17 +359,17 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   if (_change.getType() == Change::Create)
     version = 0;
   else
-    version = rClone->getVersion();
+    version = r->getVersion();
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
-    if (rClone->getTimestamp() != 0)
-      writer.writeAttribute("timestamp", OsmUtils::toTimeString(rClone->getTimestamp()));
+    if (r->getTimestamp() != 0)
+      writer.writeAttribute("timestamp", OsmUtils::toTimeString(r->getTimestamp()));
     else
       writer.writeAttribute("timestamp", "");
   }
 
-  const vector<RelationData::Entry>& members = rClone->getMembers();
+  const vector<RelationData::Entry>& members = r->getMembers();
   for (size_t j = 0; j < members.size(); j++)
   {
     const RelationData::Entry& e = members[j];
@@ -380,8 +392,11 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     writer.writeEndElement();
   }
 
-  Tags tags = rClone->getTags();
-
+  Tags tags = r->getTags();
+  if (_includeDebugTags)
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(r->getStatus().getEnum()));
+  }
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
@@ -397,13 +412,21 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     }
   }
 
-  if (rClone->getType() != "")
+  if (r->getType() != "")
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", "type");
     writer.writeAttribute(
       "v",
-      _invalidCharacterHandler.removeInvalidCharacters(rClone->getType()));
+      _invalidCharacterHandler.removeInvalidCharacters(r->getType()));
+    writer.writeEndElement();
+  }
+
+  if (r->hasCircularError())
+  {
+    writer.writeStartElement("tag");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
+    writer.writeAttribute("v", QString("%1").arg(r->getCircularError()));
     writer.writeEndElement();
   }
 
