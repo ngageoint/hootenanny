@@ -8,7 +8,7 @@ comparefile=$HOOT_HOME/test-files/cmd/quick/CropCmdTest/cropped.osm
 outputfile=$HOOT_HOME/test-output/cmd/quick/CropCmdTest/cropped.osm
 
 # Run the command.
-hoot crop -C Testing.conf -D writer.include.circular.error.tags=true $inputfile $outputfile -77.05,38.888,-77.03,38.90
+hoot crop $inputfile $outputfile -77.05,38.888,-77.03,38.90 
 
 # Checking output
 hoot diff $comparefile $outputfile || diff $comparefile $outputfile

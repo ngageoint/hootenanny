@@ -77,7 +77,6 @@ public:
   void setIncludeCompatibilityTags(bool includeCompatibility);
   void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
   void setIncludeHootInfo(bool includeInfo) { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
-  void setIncludeCircularError(bool includeCircularError) { _addExportTagsVisitor.setIncludeCircularError(includeCircularError); }
   void setIncludePid(bool includePid) { _includePid = includePid; }
 
   /**
