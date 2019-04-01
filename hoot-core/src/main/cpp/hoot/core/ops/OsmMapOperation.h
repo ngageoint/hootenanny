@@ -50,6 +50,10 @@ class OsmMap;
 
 /**
  * Modifies an OsmMap in some way.
+ *
+ * Due to needing an entire map, this does not support streaming I/O.  If you do not need the
+ * entire input map in memory at one time (operation logic does not require it and you are not
+ * running in the conflate pipeline), consider using ElementVisitor instead.
  */
 class OsmMapOperation : public ApiEntityInfo
 {

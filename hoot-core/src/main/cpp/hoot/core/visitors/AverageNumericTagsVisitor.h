@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef AVERAGE_NUMERIC_TAGS_VISITOR_H
@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 // Qt
 #include <QStringList>
@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * Sums numeric tag values with a specified key
+ * Calculates the average of numeric tag values with a specified key
  *
  * In the future, we may want to have this support substrings as well.
  */
@@ -57,8 +57,8 @@ public:
   explicit AverageNumericTagsVisitor(const QStringList keys);
 
   /**
-   * Given a set of tag keys and for all features having those tags, averages the numerical values of
-   * the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag
+   * Given a set of tag keys and for all features having those tags, averages the numerical values
+   * of the tags.  If the tag value cannot be converted to a number, a warning is logged and the tag
    * is skipped.
    *
    * @param e element to check for tag on

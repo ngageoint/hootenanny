@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCountVisitor.h"
 
@@ -34,15 +34,47 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, TagCountVisitor)
 
 TagCountVisitor::TagCountVisitor() :
-  _totalCount(0),
-  _informationCount(0)
+_totalCount(0),
+_smallestCount(0),
+_largestCount(0),
+_numInformationAffected(0),
+_informationCount(0),
+_smallestInformationCount(0),
+_largestInformationCount(0)
 {
 }
 
 void TagCountVisitor::visit(const ConstElementPtr& e)
 {
-  _totalCount += e->getTags().getNonDebugCount();
-  _informationCount += e->getTags().getInformationCount();
+  const int nonDebugCount = e->getTags().getNonDebugCount();
+  if (nonDebugCount > 0)
+  {
+    _numAffected++;
+  }
+  _totalCount += nonDebugCount;
+  if (_smallestCount == 0 || nonDebugCount < _smallestCount)
+  {
+    _smallestCount = nonDebugCount;
+  }
+  if (nonDebugCount > _largestCount)
+  {
+    _largestCount = nonDebugCount;
+  }
+
+  const int informationCount = e->getTags().getInformationCount();
+  if (informationCount > 0)
+  {
+    _numInformationAffected++;
+  }
+  _informationCount += informationCount;
+  if (_smallestInformationCount == 0 || informationCount < _smallestInformationCount)
+  {
+    _smallestInformationCount = informationCount;
+  }
+  if (informationCount > _largestInformationCount)
+  {
+    _largestInformationCount = informationCount;
+  }
 }
 
 }

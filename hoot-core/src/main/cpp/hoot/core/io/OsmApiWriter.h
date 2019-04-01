@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmApiCapabilites.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 
 //  Standard

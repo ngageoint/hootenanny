@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AttributeCoOccurrence.h"
@@ -241,11 +241,9 @@ void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
   RefToEidVisitor ref2(MetadataTags::Ref2());
-
   in->visitRo(ref2);
 
   CoOccurrenceVisitor coOccurrenceResult(ref2.getRefToEid(), _resultMatrix);
-
   in->visitRo(coOccurrenceResult);
 }
 

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
