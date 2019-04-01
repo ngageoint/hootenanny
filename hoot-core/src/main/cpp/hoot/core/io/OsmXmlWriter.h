@@ -140,6 +140,8 @@ private:
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
   bool _includeCircularErrorTags;
+  long _numWritten;
+  long _statusUpdateInterval;
 
   static QString _typeName(ElementType e);
 
@@ -158,6 +160,12 @@ private:
    * @param bounds the bounds to write
    */
   void _writeBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Sets debug settings to add extra metadata to output map for debugging purposes
+   * enabled with `debug.maps.write` setting
+   */
+  void _overrideDebugSettings();
 };
 
 }

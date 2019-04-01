@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAG_DISTRIBUTION_H
@@ -72,12 +72,24 @@ public:
 
 private:
 
+  // the tag keys to collect tag values distribution stats for
   QStringList _tagKeys;
+
+  // optional filtering crit
   QString _criterionClassName;
+
+  // if true, tag values sorted by decreasing frequency; otherwise sorted alphabetically
   bool _sortByFrequency;
+
+  // breaks up tag values into tokens
   bool _tokenize;
+
+  // max number of tag values to process per key
   int _limit;
+
+  // count of total tags processed for all keys
   long _total;
+
   int _taskStatusUpdateInterval;
   QRegExp _nonWord;
 

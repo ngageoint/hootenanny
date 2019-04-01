@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SetTagValueVisitor.h"
 
@@ -54,12 +54,6 @@ _negateCriterion(negateCriterion)
   _k.append(key);
   _v.append(value);
   _setCriterion(criterionName);
-
-  LOG_VART(_k);
-  LOG_VART(_v);
-  LOG_VART(_appendToExistingValue);
-  LOG_VART(_overwriteExistingTag);
-  LOG_VART(_negateCriterion);
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
@@ -75,12 +69,6 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
   _overwriteExistingTag = configOptions.getSetTagValueVisitorOverwrite();
   _negateCriterion = configOptions.getElementCriterionNegate();
   _setCriterion(configOptions.getSetTagValueVisitorElementCriterion());
-
-  LOG_VART(_k);
-  LOG_VART(_v);
-  LOG_VART(_appendToExistingValue);
-  LOG_VART(_overwriteExistingTag);
-  LOG_VART(_negateCriterion);
 }
 
 void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -154,6 +142,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
     LOG_VART(v);
     LOG_VART(e->getTags()[k]);
   }
+  _numAffected++;
 }
 
 void SetTagValueVisitor::visit(const boost::shared_ptr<Element>& e)

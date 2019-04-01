@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="37.7501426" minlon="-122.4097502" maxlat="37.75070590000001" maxlon="-122.4089949"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506720000000087" lon="-122.4097501999999906">
+    <node visible="true" id="-1148841" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7507059000000069" lon="-122.4092694999999935">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7501426000000038" lon="-122.4096901000000059">
+    <node visible="true" id="-1148840" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506855999999971" lon="-122.4092694999999935">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7501833999999974" lon="-122.4089948999999820">
+    <node visible="true" id="-1148839" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506990999999985" lon="-122.4090463999999940">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506990999999985" lon="-122.4090463999999940">
+    <node visible="true" id="-1148838" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7501833999999974" lon="-122.4089948999999820">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506855999999971" lon="-122.4092694999999935">
+    <node visible="true" id="-1148837" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7501426000000038" lon="-122.4096901000000059">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7507059000000069" lon="-122.4092694999999935">
+    <node visible="true" id="-1148836" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7506720000000087" lon="-122.4097501999999906">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-6"/>
-        <nd ref="-5"/>
-        <nd ref="-4"/>
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <nd ref="-6"/>
+    <way visible="true" id="-1148835" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1148836"/>
+        <nd ref="-1148837"/>
+        <nd ref="-1148838"/>
+        <nd ref="-1148839"/>
+        <nd ref="-1148840"/>
+        <nd ref="-1148841"/>
+        <nd ref="-1148836"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="created_by" v="Potlatch 0.10f"/>
         <tag k="operator" v="San Francisco Unified School District"/>
         <tag k="name" v="Hilltop Special Services Center"/>
         <tag k="amenity" v="school"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>

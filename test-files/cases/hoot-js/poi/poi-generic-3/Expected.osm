@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.04804000000001" minlon="11.70149" maxlat="48.04808300000001" maxlon="11.7021625"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480400000000074" lon="11.7014899999999979">
+    <node visible="true" id="-3200104" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480400000000074" lon="11.7014899999999979">
         <tag k="REF2" v="none"/>
         <tag k="addr:language" v="GER"/>
         <tag k="addr:street" v="TAUFKIRCHNER STRASSE"/>
@@ -13,7 +13,7 @@
         <tag k="name" v="HOHENBRUNN"/>
         <tag k="error:circular" v="150"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480830000000054" lon="11.7021624999999982">
+    <node visible="true" id="-3200103" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480830000000054" lon="11.7021624999999982">
         <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
         <tag k="openGeoDB:license_plate_code" v="M"/>
         <tag k="openGeoDB:community_identification_number" v="09184129"/>
@@ -38,8 +38,8 @@
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-1" role="reviewee"/>
-        <member type="node" ref="-2" role="reviewee"/>
+        <member type="node" ref="-3200103" role="reviewee"/>
+        <member type="node" ref="-3200104" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:members" v="2"/>

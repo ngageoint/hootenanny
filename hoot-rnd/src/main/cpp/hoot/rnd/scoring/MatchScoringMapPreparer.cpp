@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchScoringMapPreparer.h"
 
 // hoot
-#include <hoot/core/conflate/cleaning/MapCleaner.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/NodeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>

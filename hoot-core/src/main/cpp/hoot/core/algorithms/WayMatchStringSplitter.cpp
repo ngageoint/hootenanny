@@ -66,8 +66,9 @@ QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> WayMatchStringSplitte
   return result;
 }
 
-void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
-                                        QList<WayMatchStringMerger::SublineMappingPtr> mappings)
+void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
+                                       vector<pair<ElementId, ElementId>> &replaced,
+                                       QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
   LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
 

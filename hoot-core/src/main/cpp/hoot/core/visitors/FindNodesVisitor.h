@@ -35,8 +35,7 @@
 namespace hoot
 {
 
-// Used to get a vector of IDs for the nodes that satisfy
-// the specified criterion
+// Used to get a vector of IDs for the nodes that satisfy the specified criterion
 class FindNodesVisitor : public ElementConstOsmMapVisitor
 {
 public:
@@ -52,17 +51,13 @@ public:
   // Get matching IDs
   std::vector<long> getIds() { return _nodeIds; }
 
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
-                                    ElementCriterion* pCrit);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
 
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
-                                     ElementCriterion* pCrit,
-                                     const geos::geom::Coordinate& refCoord,
-                                     Meters maxDistance);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
 
   // Convenience method for finding nodes that contain the given tag
-  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map,
-                                          const QString& key,
+  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key,
                                           const QString& value);
 
   virtual QString getDescription() const { return "Returns the node IDs visited"; }

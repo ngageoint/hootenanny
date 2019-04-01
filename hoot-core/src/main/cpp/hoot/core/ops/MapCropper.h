@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAPCROPPER_H
@@ -38,6 +38,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -58,7 +59,7 @@ class Way;
  * ReprojectToGeographicOp.
  */
 class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable
+  public Configurable, public OperationStatusInfo
 {
 public:
 
@@ -74,8 +75,8 @@ public:
 
   static void crop(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
 
-  static void crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const geos::geom::Geometry>& g,
-    bool invert);
+  static void crop(boost::shared_ptr<OsmMap> map,
+                   const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
   virtual std::string getClassName() const { return className(); }
 
@@ -90,6 +91,12 @@ public:
   virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Crops a map"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Cropping map..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
 private:
 

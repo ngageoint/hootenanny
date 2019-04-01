@@ -44,6 +44,7 @@
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -139,6 +140,7 @@ public:
 
     // create an envlope around the e plus the search radius.
     boost::shared_ptr<Envelope> env(e->getEnvelope(map));
+    LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);
     env->expandBy(searchRadius);
 
@@ -152,6 +154,7 @@ public:
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
+      LOG_VART(e2.get());
       if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
@@ -162,7 +165,7 @@ public:
           delete m;
         }
         else
-        {
+        {;
           _result.push_back(m);
         }
       }
@@ -295,6 +298,8 @@ public:
       return;
     }
 
+    LOG_DEBUG("Calculating search radius for: " << _scriptPath << "...");
+
     Handle<Function> func = Handle<Function>::Cast(value);
     Handle<Value> jsArgs[1];
     int argc = 0;
@@ -307,10 +312,11 @@ public:
 
     //this is meant to have been set externally in a js rules file
     _customSearchRadius = getNumber(ToLocal(&plugin), "searchRadius", -1.0, 15.0);
-    LOG_VART(_customSearchRadius);
 
     QFileInfo scriptFileInfo(_scriptPath);
-    LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
+    LOG_DEBUG(
+      "Search radius of: " << _customSearchRadius << " to be used for: " <<
+      scriptFileInfo.fileName());
   }
 
   void cleanMapCache()
@@ -323,7 +329,7 @@ public:
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
+      // 10 children - 368 - see #3054
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
@@ -398,26 +404,65 @@ public:
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));
     Persistent<Object> plugin(current, getPlugin(_script));
-    Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
-    if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
-    {
-      throw HootException("Error finding 'isMatchCandidate' function.");
-    }
-    Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
-    if (value->IsFunction() == false)
-    {
-      throw HootException("isMatchCandidate is not a function.");
-    }
-    Handle<Function> func = Handle<Function>::Cast(value);
-    Handle<Value> jsArgs[2];
 
-    int argc = 0;
-    jsArgs[argc++] = getOsmMapJs();
-    jsArgs[argc++] = ElementJs::New(e);
+    bool result = false;
 
-    Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+    // Prioritize exports.matchCandidateCriterion over the isMatchCandidate function
+    // TODO: this is crashing; see #3047
+//    Handle<String> matchCandidateCriterionStrHandle =
+//      String::NewFromUtf8(current, "matchCandidateCriterion");
+//    QString matchCandidateCriterionStr;
+//    if (ToLocal(&plugin)->Has(matchCandidateCriterionStrHandle))
+//    {
+//      Handle<Value> value = ToLocal(&plugin)->Get(matchCandidateCriterionStrHandle);
+//      matchCandidateCriterionStr = toCpp<QString>(value);
+//    }
+//    matchCandidateCriterionStr = matchCandidateCriterionStr.trimmed();
+//    LOG_VART(matchCandidateCriterionStr);
 
-    bool result = f->BooleanValue();
+//    if (!matchCandidateCriterionStr.isEmpty())
+//    {
+//      boost::shared_ptr<ElementCriterion> matchCandidateCriterion;
+//      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
+//      {
+//        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
+//        matchCandidateCriterion = _matchCandidateCriterionCache[matchCandidateCriterionStr];
+//      }
+//      else
+//      {
+//        LOG_TRACE("Creating " << matchCandidateCriterionStr << "...");
+//        matchCandidateCriterion.reset(
+//          Factory::getInstance().constructObject<ElementCriterion>(matchCandidateCriterionStr));
+//        _matchCandidateCriterionCache[matchCandidateCriterionStr] = matchCandidateCriterion;
+//      }
+//      result = matchCandidateCriterion->isSatisfied(e);
+//      LOG_VART(result);
+//    }
+//    else
+//    {
+      Handle<String> isMatchCandidateStr = String::NewFromUtf8(current, "isMatchCandidate");
+      if (ToLocal(&plugin)->Has(isMatchCandidateStr) == false)
+      {
+        throw HootException("Error finding 'isMatchCandidate' function.");
+      }
+      Handle<Value> value = ToLocal(&plugin)->Get(isMatchCandidateStr);
+      if (value->IsFunction() == false)
+      {
+        throw HootException("isMatchCandidate is not a function.");
+      }
+      Handle<Function> func = Handle<Function>::Cast(value);
+      Handle<Value> jsArgs[2];
+
+      int argc = 0;
+      jsArgs[argc++] = getOsmMapJs();
+      jsArgs[argc++] = ElementJs::New(e);
+
+      Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
+
+      result = f->BooleanValue();
+      LOG_VART(result);
+    //}
+
     _matchCandidateCache[e->getElementId()] = result;
     return result;
   }
@@ -429,19 +474,20 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
-          "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
-          getMap()->getElementCount() << " total elements.");
+          "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+          " match candidates / " << StringUtils::formatLargeNumber(getMap()->getElementCount()) <<
+          " total elements.");
       }
     }
     _numElementsVisited++;
-    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " <<
-        getMap()->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(getMap()->getElementCount()) << " elements.");
     }
   }
 
@@ -472,6 +518,7 @@ private:
 
   QHash<ElementId, bool> _matchCandidateCache;
   QHash<ElementId, double> _searchRadiusCache;
+  QMap<QString, ElementCriterionPtr> _matchCandidateCriterionCache;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
@@ -540,7 +587,7 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
   return 0;
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
+void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*> &matches,
                                        ConstMatchThresholdPtr threshold)
 {
   if (!_script)
@@ -548,9 +595,12 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
+  const CreatorDescription scriptInfo = _getScriptDescription(_scriptPath);
+
   ScriptMatchVisitor v(map, matches, threshold, _script, _filter);
   v.setScriptPath(_scriptPath);
   v.calculateSearchRadius();
+
   _cachedCustomSearchRadii[_scriptPath] = v.getCustomSearchRadius();
   LOG_VART(_scriptPath);
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
@@ -560,13 +610,10 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
     "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   map->visitRo(v);
-//  LOG_INFO(
-//    "Found " << v.getNumMatchCandidatesFound() << " " <<
-//    scriptFileInfo.fileName().replace(".js", "") << " match candidates.");
   LOG_INFO(
-    "Found " << v.getNumMatchCandidatesFound() << " " <<
-    CreatorDescription::baseFeatureTypeToString(
-      _getScriptDescription(_scriptPath).baseFeatureType) << " match candidates.");
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
+    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
+    " match candidates.");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const

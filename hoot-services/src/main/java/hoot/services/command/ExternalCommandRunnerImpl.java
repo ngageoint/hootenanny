@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
@@ -93,12 +93,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
 
-            // Sensitive params included
-            String actualCommand = Arrays.stream(quoteArgsWithSpaces(cmdLine.toStrings()))
-                    .collect(Collectors.joining(" "));
-
             // Sensitive params obfuscated
-            obfuscatedCommand = Arrays.stream(quoteArgsWithSpaces(parse(commandTemplate, substitutionMap).toStrings()))
+            obfuscatedCommand = Arrays.stream(
+                        parse(commandTemplate, substitutionMap).toStrings()
+                    )
                     .collect(Collectors.joining(" "));
 
             LocalDateTime start = null;
@@ -110,7 +108,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
 
-                exitCode = executor.execute(cmdLine);
+                exitCode = executor.execute(cmdLine); //TODO: should be made async
             }
             catch (Exception e) {
                 exitCode = CommandResult.FAILURE;
@@ -152,16 +150,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         catch (IOException e) {
             throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
         }
-    }
-
-    /**
-     * Adds quotes to arguments that contain spaces
-     *
-     * @param args arguments to quotes
-     * @return array of arguments with the ones with spaces having quotes around them
-     */
-    private static String[] quoteArgsWithSpaces(String[] args) {
-        return Arrays.stream(args).map(s -> "\"" + s + "\"").toArray(String[]::new);
     }
 
     private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {

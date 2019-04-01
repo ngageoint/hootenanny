@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5337806000000000" lon="-46.3069421000000006">
-        <tag k="operator" v="Radial"/>
-        <tag k="name" v="Terminal Norte de Suzano"/>
-        <tag k="shelter" v="yes"/>
-        <tag k="highway" v="bus_stop"/>
-        <tag k="source:datetime" v="2014-06-18T23:59:00.000Z"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5325300000000013" lon="-46.3133899999999983">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-23.5337806" minlon="-46.31339" maxlat="-23.53253" maxlon="-46.3069421"/>
+    <node visible="true" id="-20449830" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5325300000000013" lon="-46.3133899999999983">
         <tag k="ele" v="741"/>
         <tag k="is_in:country_code" v="BR"/>
         <tag k="source" v="geonames"/>
         <tag k="uuid" v="GeoNames.org:8504807"/>
         <tag k="name" v="Suzano"/>
         <tag k="railway" v="station"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-20449829" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5337806000000000" lon="-46.3069421000000006">
+        <tag k="operator" v="Radial"/>
+        <tag k="name" v="Terminal Norte de Suzano"/>
+        <tag k="shelter" v="yes"/>
+        <tag k="highway" v="bus_stop"/>
+        <tag k="source:datetime" v="2014-06-18T23:59:00.000Z"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

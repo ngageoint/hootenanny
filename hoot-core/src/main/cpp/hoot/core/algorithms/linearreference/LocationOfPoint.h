@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOCATIONOFPOINT_H
@@ -54,8 +54,8 @@ public:
 
   LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way);
 
-  static WayLocation locate(const ConstOsmMapPtr &map, ConstWayPtr way,
-    const geos::geom::Coordinate &inputPt);
+  static WayLocation locate(const ConstOsmMapPtr& map, ConstWayPtr way,
+    const geos::geom::Coordinate& inputPt);
 
   /**
    * Find the nearest location along a {@link Way} to a given point.
@@ -74,24 +74,22 @@ public:
   geos::geom::Coordinate locate(double d);
 
   /**
-   * Find the nearest location along a {@link Way} to a given point
-   * after the specified minimum {@link LineStringLocation}.
-   * If possible the location returned will be strictly greater than the
-   * <code>minLocation</code>.
-   * If this is not possible, the
-   * value returned will equal <code>minLocation</code>.
-   * (An example where this is not possible is when
-   * minLocation = [end of line] ).
+   * Find the nearest location along a {@link Way} to a given point after the specified minimum
+   * {@link LineStringLocation}. If possible the location returned will be strictly greater than
+   * the <code>minLocation</code>. If this is not possible, the value returned will equal
+   * <code>minLocation</code>.  (An example where this is not possible is when minLocation =
+   * [end of line]).
    *
    * @param inputPt the coordinate to locate
    * @param minLocation the minimum location for the point location
    * @return the location of the nearest point
    */
-  WayLocation locateAfter(const geos::geom::Coordinate& inputPt, const WayLocation& minLocation) const;
+  WayLocation locateAfter(const geos::geom::Coordinate& inputPt,
+                          const WayLocation& minLocation) const;
 
   /**
-   * Tests whether a location given by a <index, segmentFraction> pair
-   * is located after a {@link WayLocation}.
+   * Tests whether a location given by a <index, segmentFraction> pair is located after a
+   * {@link WayLocation}.
    *
    * @param i the segment index
    * @param segFrac the fraction along the segment
@@ -100,9 +98,11 @@ public:
    */
   bool isGreater(int i, double segFrac, const WayLocation& loc) const;
 
-  static double segmentFraction(const geos::geom::LineSegment& seg, const geos::geom::Coordinate& inputPt);
+  static double segmentFraction(const geos::geom::LineSegment& seg,
+                                const geos::geom::Coordinate& inputPt);
 
 private:
+
   ConstOsmMapPtr _map;
   ConstWayPtr _way;
   mutable double _length;

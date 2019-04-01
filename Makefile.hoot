@@ -48,6 +48,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -rf bin/*
 	rm -f plugins/config.js
 	rm -f conf/core/ConfigOptions.json
+	rm -f conf/services/conflationTypeGroups.json
 	rm -f translations/*.pyc
 	rm -f $(SCHEMA_FILES)
 	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
@@ -132,6 +133,7 @@ hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.a
 
 conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/ConfigOptions.asciidoc
 	python $^ $@ || (rm -f $@ ; exit -1)
+	python scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json $@ conf/services/conflationTypeDefaults.json conf/services/conflationHoot2Ops.json || (rm -f conf/services/conflationHoot2Ops.json ; exit -1)
 
 plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
 	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
@@ -268,7 +270,7 @@ qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootC
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 
-services-build:	HOOT_VERSION_FILE
+services-build:	HOOT_VERSION_FILE conf/services/conflationHoot2Ops.json
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile build
 endif
@@ -439,7 +441,7 @@ Makefile.qmake: Hootenanny.pro Configure.pri LocalConfig.pri
 	# suppress the harmless warning about generated HootSwig.cxx
 	# All the true craziness is so we use the qmake return code rather than
 	# the grep code.
-	qmake-qt4 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
+	qmake-qt5 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
 	  || true \
 	  ; [ "$${PIPESTATUS[0]}" == "0" ] && true || false
 

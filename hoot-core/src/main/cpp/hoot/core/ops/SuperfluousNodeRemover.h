@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSNODEREMOVER_H
@@ -36,6 +36,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Standard
 #include <set>
@@ -55,7 +56,8 @@ class OsmMap;
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
  * operations such as the FourPassDriver.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
+class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
+  public OperationStatusInfo
 {
 public:
 
@@ -77,13 +79,17 @@ public:
 
   virtual void writeObject(QDataStream& os) const;
 
-  virtual QString getDescription() const { return "Removes all nodes no part of a way"; }
+  virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
+
+  virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Removed " + QString::number(_numAffected) + " superfluous nodes"; }
 
 protected:
 
   geos::geom::Envelope _bounds;
   std::set<long> _usedNodes;
-
 };
 
 }

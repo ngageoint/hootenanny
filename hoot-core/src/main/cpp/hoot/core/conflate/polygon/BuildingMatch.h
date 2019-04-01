@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
@@ -50,6 +50,9 @@ class BuildingMatch : public Match, public MatchDetails
 {
 public:
 
+  static std::string className() { return "hoot::BuildingMatch"; }
+
+  BuildingMatch();
   BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
                 const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt,
                 bool reviewIfSecondaryFeatureNewer, QString dateTagKey, QString dateFormat);
@@ -78,6 +81,8 @@ public:
 
   virtual QString explain() const { return _explainText; }
   virtual void setExplain(const QString explainText) { _explainText = explainText; }
+
+  virtual QString getDescription() const { return "Matches buildings"; }
 
 private:
 

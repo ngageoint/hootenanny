@@ -47,6 +47,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -210,7 +211,7 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
       {
         PROGRESS_DEBUG(
           "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
@@ -219,10 +220,11 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
     {
       PROGRESS_INFO(
-        "Processed " << _numElementsVisited << " / " << _map->getElementCount() << " elements.");
+        "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
+        StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
     }
   }
 
@@ -240,7 +242,7 @@ public:
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
+      // 10 children - 368 - see #3054
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
@@ -327,7 +329,9 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
   map->visitRo(v);
-  LOG_INFO("Found " << v.getNumMatchCandidatesFound() << " highway match candidates.");
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+    " highway match candidates.");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
@@ -335,8 +339,9 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Matches roads with the 2nd generation algorithm", CreatorDescription::Highway,
-      false));
+      className(),
+      "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
+      CreatorDescription::Highway, false));
   return result;
 }
 

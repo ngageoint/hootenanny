@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -164,4 +164,15 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
 
 
     }
+
+//    public void testGetFolderMaps() {
+//        Map<String,Object> response = target("api/0.6/map/folders/add/0/testFolder" + Long.toString(System.currentTimeMillis()))
+//                .request(MediaType.APPLICATION_JSON)
+//                .post(Entity.entity("", MediaType.TEXT_PLAIN), new GenericType<Map<String, Object>>() {});
+//            Number parentFolderId = (Number) response.get("folderId");
+//            boolean success = (boolean) response.get("success");
+//            assertTrue(parentFolderId.longValue() > 0);
+//            assertTrue(success);
+//    }
+
 }

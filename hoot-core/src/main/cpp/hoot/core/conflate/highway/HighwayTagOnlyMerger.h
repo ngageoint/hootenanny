@@ -46,10 +46,14 @@ public:
 
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
+  HighwayTagOnlyMerger();
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                        const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
   ~HighwayTagOnlyMerger();
+
+  virtual QString getDescription() const
+  { return "Merges road tags only (some geometry exceptions)"; }
 
 protected:
 

@@ -50,7 +50,6 @@ class EdgeMatch
 public:
 
   EdgeMatch();
-
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
 
   boost::shared_ptr<EdgeMatch> clone() const;

@@ -39,11 +39,6 @@ dnc = {
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         dnc.rawSchema = dnc.schema.getDbSchema();
 
-        // Debug:
-        // print("dncAttrLookup: Start");
-        // translate.dumpLookup(dncAttrLookup);
-        // print("dncAttrLookup: End");
-
         // Now add some fields to hold OSM specific information on export
         for (var i = 0, schemaLen = dnc.rawSchema.length; i < schemaLen; i++)
         {
@@ -124,6 +119,7 @@ dnc = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -178,21 +174,21 @@ dnc = {
             delete nTags.cutting;
         }
 
-        if (nTags.bridge)
+        if (nTags.bridge && nTags.bridge !== 'no')
         {
             newAttributes.F_CODE = 'AQ040';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.bridge;
         }
 
-        if (nTags.tunnel)
+        if (nTags.tunnel && nTags.tunnel !== 'no')
         {
             newAttributes.F_CODE = 'AQ130';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
             delete nTags.tunnel;
         }
 
-        if (nTags.ford)
+        if (nTags.ford && nTags.ford !== 'no')
         {
             newAttributes.F_CODE = 'BH070';
             newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
@@ -575,6 +571,33 @@ dnc = {
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
+        // Unpack the OSM_TAGS attribute if it exists
+        if (attrs.OSM_TAGS)
+        {
+            var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+
+            if (tObj.tags !== '')
+            {
+                var tTags = JSON.parse(tObj.tags)
+                for (i in tTags)
+                {
+                    // Debug
+                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+                    if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+                    tags[i] = tTags[i];
+                }
+            }
+
+            if (tObj.text !== '')
+            {
+                tags.note = tObj.text;
+            }
+            else
+            {
+                delete tags.note;
+            }
+        } // End process attrs.OSM_TAGS
+
         // DNC doesn't have a lot of info for land features
         if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
         if (attrs.F_CODE == 'AP030') tags.highway = 'road';
@@ -614,32 +637,51 @@ dnc = {
         }
         translate.applyComplexRules(tags,attrs,dnc.osmPostRules);
 
-        // Unpack the OSM_TAGS attribute if it exists
-        if (attrs.OSM_TAGS)
+        // Fix lifecycle tags
+        switch (tags.condition)
         {
-            var tObj = translate.unpackMemo(attrs.OSM_TAGS);
+            case undefined: // Break early if no value
+                break;
 
-            if (tObj.tags !== '')
-            {
-                var tTags = JSON.parse(tObj.tags)
-                for (i in tTags)
+            case 'construction':
+                for (var typ of ['highway','bridge','railway','building'])
                 {
-                    // Debug
-                    // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-                    if (tags[tTags[i]]) hoot.logWarn('Unpacking OSM_TAGS, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-                    tags[i] = tTags[i];
+                    if (tags[typ])
+                    {
+                        tags.construction = tags[typ];
+                        tags[typ] = 'construction';
+                        delete tags.condition;
+                        break;
+                    }
                 }
-            }
+                break;
 
-            if (tObj.text !== '')
-            {
-                tags.note = tObj.text;
-            }
-            else
-            {
-                delete tags.note;
-            }
-        } // End process attrs.OSM_TAGS
+            case 'abandoned':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['abandoned:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                        break;
+                    }
+                }
+                break;
+
+            case 'dismantled':
+                for (var typ of ['highway','bridge','railway','building'])
+                {
+                    if (tags[typ])
+                    {
+                        tags['demolished:' + typ] = tags[typ];
+                        delete tags[typ];
+                        delete tags.condition;
+                    break;
+                    }
+                }
+                break;
+        } // End switch condifion
 
     }, // End of applyToOsmPostProcessing
   
@@ -677,7 +719,150 @@ dnc = {
                 continue;
             }
 
+            // Convert "demolished:XXX" features
+            if (i.indexOf('demolished:') !== -1)
+            {
+                // Hopeing there is only one ':' in the tag name...
+                var tList = i.split(':');
+                tags[tList[1]] = tags[i];
+                tags.condition = 'dismantled';
+                delete tags[i];
+                continue;
+            }
         } // End Cleanup loop
+
+        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
+        // repeating the code
+        switch (tags.highway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.highway = 'road';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.highway = 'road';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.highway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.highway = 'road';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.railway)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.railway = 'rail';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'demolished':
+                tags.railway = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.railway = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.railway = 'rail';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.building)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.building = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.building = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.building = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.building = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.building = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
+        switch (tags.bridge)
+        {
+            case undefined: // Break early if no value
+                break;
+
+            case 'abandoned':
+            case 'disused':
+                tags.bridge = 'yes';
+                tags.condition = 'abandoned';
+                break;
+
+            case 'destroyed':
+                tags.bridge = 'yes';
+                tags.condition = 'destroyed';
+                break;
+
+            case 'demolished':
+                tags.bridge = 'yes';
+                tags.condition = 'dismantled';
+                break;
+
+            case 'construction':
+                if (tags.construction)
+                {
+                    tags.bridge = tags.construction;
+                    delete tags.construction;
+                }
+                else
+                {
+                    tags.bridge = 'yes';                    
+                }
+                tags.condition = 'construction';
+                break;
+        }
+
 
         if (dnc.dncPreRules == undefined)
         {
@@ -712,21 +897,21 @@ dnc = {
         //     delete tags.barrier; // Take away the walls...
         // }
 
-        // An "amenitiy" can be a building or a thing
-        // If appropriate, make the "amenity" into a building
-        // This list is taken from the OSM Wiki and Taginfo
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','ferry_terminal'
-            ]; // End bldArray
+        // // An "amenity" can be a building or a thing
+        // // If appropriate, make the "amenity" into a building
+        // // This list is taken from the OSM Wiki and Taginfo
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','ferry_terminal'
+        //     ]; // End bldArray
 
-        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // Places, localities and regions
         switch (tags.place)
@@ -904,6 +1089,22 @@ dnc = {
                 }
             }
         }
+
+        // An "amenitiy" can be a building or a thing
+        // If appropriate, make the "amenity" into a building
+        // This list is taken from the OSM Wiki and Taginfo
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','ferry_terminal'
+            ]; // End bldArray
+
+        if (!attrs.F_CODE && tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
@@ -1255,7 +1456,6 @@ dnc = {
         {
             dnc.configOut = {};
             dnc.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            dnc.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             dnc.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             dnc.configOut.OgrThrowError = config.getOgrThrowError();
             dnc.configOut.OgrAddUuid = config.getOgrAddUuid();

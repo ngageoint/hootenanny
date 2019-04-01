@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -40,8 +40,8 @@ public class ClipDatasetParams {
     @JsonProperty("BBOX")
     private String bounds;
 
-    @JsonProperty("PATH_NAME")
-    private String pathName;
+    @JsonProperty("FOLDER_ID")
+    private Long folderId;
 
     public String getInputName() {
         return inputName;
@@ -67,12 +67,12 @@ public class ClipDatasetParams {
         this.bounds = bounds;
     }
 
-    public String getPathName() {
-        return pathName;
+    public Long getFolderId() {
+        return folderId;
     }
 
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
+    public void setFolderId(Long folderId) {
+        this.folderId = folderId;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ClipDatasetParams {
                 "inputName='" + inputName + '\'' +
                 ", outputName='" + outputName + '\'' +
                 ", bounds='" + bounds + '\'' +
-                ", pathName='" + pathName + '\'' +
+                ", folderId='" + folderId + '\'' +
                 '}';
     }
 }

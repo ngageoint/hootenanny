@@ -1,6 +1,7 @@
 hoot-services/src/main/resources/conf/local.conf
 plugins/config.js
 conf/core/ConfigOptions.json
+conf/services/conflationHoot2Ops.json
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
 *.pyc
@@ -54,6 +55,9 @@ gcov/
 gdb
 go
 hoot-cmd/Makefile
+hoot-js/Makefile
+hoot-rnd/Makefile
+hoot-test/Makefile
 hoot-core-test/Makefile
 hoot-core/Makefile
 hoot-core/src/main/cpp/hoot/core/info/VersionDefines.h
@@ -104,6 +108,7 @@ plugins/etds*_rules.js
 plugins/emgcp*_rules.js
 plugins/eggdm*_rules.js
 plugins-local
+.qmake.stash
 translations-local
 **/*.pro.user*
 *.pro.user*

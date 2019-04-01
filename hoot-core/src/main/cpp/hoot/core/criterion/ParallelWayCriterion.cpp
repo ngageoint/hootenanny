@@ -52,8 +52,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
-ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map,
-                                           ConstWayPtr baseWay,
+ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
                                            bool isParallel) :
   _map(map),
   _baseWay(baseWay),
@@ -97,7 +96,6 @@ Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
 
   Radians deltaSum = 0.0;
   int count = 0;
-
 
   for (size_t i = 0; i < _points.size(); i++)
   {

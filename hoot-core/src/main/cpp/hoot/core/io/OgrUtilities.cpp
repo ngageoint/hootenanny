@@ -118,7 +118,7 @@ QSet<QString> OgrUtilities::getSupportedFormats(const bool readOnly)
   {
     if (readOnly || it->_is_rw)
     {
-      formats.insert(QString::fromAscii(it->_indicator));
+      formats.insert(QString::fromLatin1(it->_indicator));
     }
   }
   return formats;
@@ -151,7 +151,7 @@ boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
-  boost::shared_ptr<GDALDataset> result(driver->Create(source.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
+  boost::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
     throw HootException("Unable to create data source: " + source +

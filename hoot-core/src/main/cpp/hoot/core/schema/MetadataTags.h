@@ -114,6 +114,10 @@ public:
 
   inline static const QString HootSource()              { return "hoot:source"; }
 
+  inline static const QString HootSpecial()             { return "hoot:special"; }
+  inline static const QString RoundaboutCenter()        { return "roundabout_center"; }
+  inline static const QString RoundaboutConnector()     { return "roundabout_connector"; }
+
   inline static const QString HootSplitParentId()       { return "hoot:split_parent_id"; }
 
   inline static const QString HootStub()                { return "hoot:stub"; }
@@ -150,6 +154,8 @@ public:
   inline static const QString RoleReviewee()            { return "reviewee"; }
 
   inline static const QString Length()                  { return "length"; }
+
+  inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
 
   /**
    * ID Unique to a training data set with multiary training data.

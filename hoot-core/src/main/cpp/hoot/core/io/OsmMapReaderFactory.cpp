@@ -35,6 +35,7 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -191,6 +192,8 @@ void OsmMapReaderFactory::_read(boost::shared_ptr<OsmMap> map,
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));
+  LOG_INFO(
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements from input.");
 }
 
 }

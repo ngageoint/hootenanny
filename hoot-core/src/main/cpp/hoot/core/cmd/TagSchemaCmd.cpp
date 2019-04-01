@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
@@ -66,11 +66,11 @@ public:
       throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
     }
 
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    boost::shared_ptr<ScriptTranslator> uut(
+    // Great bit of code taken from TranslatedTagDifferencer
+    boost::shared_ptr<ScriptTranslator> schemaPrinter(
       ScriptTranslatorFactory::getInstance().createTranslator(printScript));
 
-    if (!uut)
+    if (!schemaPrinter)
     {
       throw HootException("Unable to find a valid translation format for: " + printScript);
     }

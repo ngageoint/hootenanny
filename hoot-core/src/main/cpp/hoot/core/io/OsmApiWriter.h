@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmApiCapabilites.h>
 #include <hoot/core/io/OsmApiChangeset.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 
 //  Standard
@@ -235,6 +235,10 @@ private:
    *  the entirety of a way or relation, loaded with 'changeset.apidb.max.size' option
    */
   long _maxChangesetSize;
+  /** Flag to turn on OSM API writer throttling */
+  bool _throttleWriters;
+  /** Number of seconds for a writer thread to wait after a successful API writer before continuing, if enabled */
+  int _throttleTime;
   /** Queried capabilities from the target OSM API */
   OsmApiCapabilites _capabilities;
   /** Actual statistics */

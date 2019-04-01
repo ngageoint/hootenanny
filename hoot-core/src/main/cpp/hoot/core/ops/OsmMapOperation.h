@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -50,6 +50,10 @@ class OsmMap;
 
 /**
  * Modifies an OsmMap in some way.
+ *
+ * Due to needing an entire map, this does not support streaming I/O.  If you do not need the
+ * entire input map in memory at one time (operation logic does not require it and you are not
+ * running in the conflate pipeline), consider using ElementVisitor instead.
  */
 class OsmMapOperation : public ApiEntityInfo
 {
@@ -57,7 +61,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() : _numAffected(0) {}
+  OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
   virtual ~OsmMapOperation() {}
 
   /**
@@ -74,10 +78,13 @@ public:
    */
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
+  long getNumAffected() const { return _numAffected; }
+
 protected:
 
-  // This will only be used by those implementing OperationStatusInfo.
-  long _numAffected;
+  // These will only be used by those implementing OperationStatusInfo.
+  long _numAffected;    // how many elements the operation actually counted or did something to
+  long _numProcessed;   // how many elements the operation processed total
 };
 
 }

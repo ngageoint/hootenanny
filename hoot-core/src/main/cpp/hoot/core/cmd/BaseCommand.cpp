@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseCommand.h"
@@ -103,6 +103,12 @@ int BaseCommand::run(char* argv[], int argc)
 
   Settings::parseCommonArguments(args);
   LOG_VARD(args);
+
+  if (ConfigOptions().getHashSeedZero())
+  {
+    qSetGlobalQHashSeed(0);
+    LOG_TRACE("Qt hash seed set to 0");
+  }
 
   return runSimple(args);
 }

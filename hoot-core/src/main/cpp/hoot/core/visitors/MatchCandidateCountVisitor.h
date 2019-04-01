@@ -30,7 +30,9 @@
 // hoot
 #include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -42,13 +44,13 @@ class MatchCreator;
  * of match creators.
  */
 class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public SingleStatistic,
-                                   public DataProducer
+                                   public DataProducer, public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
-  MatchCandidateCountVisitor(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
+  MatchCandidateCountVisitor(const std::vector<boost::shared_ptr<MatchCreator>>& matchCreators);
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
@@ -59,9 +61,16 @@ public:
   virtual QString getDescription() const
   { return "Counts all elements that are candidates for matches given a set of match creators"; }
 
+  virtual QString getInitStatusMessage() const { return "Counting match candidates..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
+  }
+
 private:
 
-  QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
+  QMap<QString, boost::shared_ptr<MatchCreator>> _matchCreatorsByName;
   long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 

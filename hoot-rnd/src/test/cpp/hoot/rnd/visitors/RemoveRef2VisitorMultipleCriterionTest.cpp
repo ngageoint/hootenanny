@@ -77,10 +77,10 @@ public:
                     "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"A\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"REF1\":\"A\",\"building\":\"yes\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"},\n"
                     "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"none\",\"building\":\"yes\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"none\",\"building\":\"yes\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }
@@ -106,10 +106,10 @@ public:
                     "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"none\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"REF1\":\"A\",\"building\":\"yes\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"},\n"
                     "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"C\",\"building\":\"yes\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"B\",\"building\":\"yes\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"C\",\"error:circular\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"B\",\"error:circular\":\"15\"}]\n"
                     "}\n",
                     OsmJsonWriter(8).toString(map));
   }

@@ -36,7 +36,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/conflate/NodeToWayMap.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -136,6 +136,7 @@ void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
 
 void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
+  _numAffected = 0;
   _map = map;
   _buildingRelationIds.clear();
 
@@ -148,7 +149,6 @@ void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
     if (BuildingCriterion().isSatisfied(r))
     {
       _createOutline(r);
-      _buildingRelationIds.insert(r->getElementId());
     }
   }
 
@@ -169,13 +169,14 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
 
 void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 {
-  LOG_VART(building->toString());
+  LOG_TRACE("Input building: " << building->toString());
 
   boost::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
+    LOG_VART(entries[i].role);
     if (entries[i].role == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
@@ -228,6 +229,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       else if (entries[i].getElementId().getType() == ElementType::Relation)
       {
         RelationPtr relation = _map->getRelation(entries[i].getElementId().getId());
+        LOG_VART(relation);
         if (relation->isMultiPolygon())
         {
           LOG_TRACE("Unioning multipoly relation: " << relation << "...");
@@ -296,13 +298,22 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     // We don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
     LOG_VART(outlineElement);
-    if (!_removeBuildingRelations)
+    if (_removeBuildingRelations)
+    {
+      LOG_TRACE("Marking building: " << building->getElementId() << " for deletion...");
+      _buildingRelationIds.insert(building->getElementId());
+    }
+    else
     {
       building->addElement(MetadataTags::RoleOutline(), outlineElement);
     }
   }
+  else
+  {
+    LOG_TRACE("Building outline is empty.  Skipping creation of multipoly relation.");
+  }
 
-  LOG_VART(building);
+  LOG_TRACE("Output building: " << building);
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,

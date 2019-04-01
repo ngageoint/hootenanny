@@ -46,6 +46,13 @@ When(/^I select a node map feature with OSM id "([^"]*)"$/) do |id|
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I select a node map feature ending with OSM id "([^"]*)"$/) do |id|
+  oldTimeout = Capybara.default_max_wait_time
+  Capybara.default_max_wait_time = 10
+  find('div.layer-data').all('g[class$="' + id + '"]').last.click
+  Capybara.default_max_wait_time = oldTimeout
+end
+
 When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -908,12 +915,12 @@ When(/^I click the review item column in the tag table$/) do
 end
 
 Then(/^I should see a node element "([^"]*)" with a selected highlight$/) do |id|
-  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el = find('div.layer-data').first('g[class$="' + id + ' selected"]')
   el[:class].include?('selected').should eq true
 end
 
 Then(/^I should see element "([^"]*)" with a yellow highlight$/) do |id|
-  el = find('div.layer-data').first('g[class*=" ' + id + '"]')
+  el = find('div.layer-data').first('g[class$="' + id + ' edited unsaved"]')
   el[:class].include?('edited').should eq true
   el[:class].include?('unsaved').should eq true
 end
