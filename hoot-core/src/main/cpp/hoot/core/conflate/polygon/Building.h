@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDING_H
 #define BUILDING_H
@@ -41,6 +41,7 @@ class OsmMap;
 class Building
 {
 public:
+
   Building(const OsmMap& map, const ConstElementPtr& e);
 
   /**
@@ -51,6 +52,7 @@ public:
   boost::shared_ptr<geos::geom::Geometry> buildOutline() const;
 
 private:
+
   ConstElementPtr _e;
   const OsmMap& _map;
 };

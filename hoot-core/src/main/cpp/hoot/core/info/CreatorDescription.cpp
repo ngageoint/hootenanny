@@ -71,7 +71,7 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
     case POI:
       return "POI";
     case Highway:
-      return "Highway";
+      return "Road";
     case Building:
       return "Building";
     case Waterway:
@@ -96,7 +96,7 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
   s = s.toLower();
   if (0 == s.compare("poi"))
     return POI;
-  else if (0 == s.compare("highway"))
+  else if (0 == s.compare("road"))
     return Highway;
   else if (0 == s.compare("building"))
     return Building;
