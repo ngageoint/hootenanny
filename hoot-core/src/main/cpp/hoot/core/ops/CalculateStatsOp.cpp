@@ -147,13 +147,13 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   boost::shared_ptr<const OsmMap> constMap = map;
 
-  _stats.append(SingleStat("Node Count",
+  _stats.append(SingleStat("Nodes",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
       ConstElementVisitorPtr(new ElementCountVisitor())))));
-  _stats.append(SingleStat("Way Count",
+  _stats.append(SingleStat("Ways",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
       ConstElementVisitorPtr(new ElementCountVisitor())))));
-  _stats.append(SingleStat("Relation Count",
+  _stats.append(SingleStat("Relations",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
       ConstElementVisitorPtr(new ElementCountVisitor())))));
   _stats.append(SingleStat("Minimum Node ID",
@@ -215,6 +215,16 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     UniqueNamesVisitor v;
     _applyVisitor(constMap, &v);
     _stats.append(SingleStat("Unique Names", v.getStat()));
+    _stats.append(
+      SingleStat("Unique Road Names",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
+    _stats.append(
+      SingleStat("Unique Building Names",
+      _applyVisitor(
+      constMap,
+      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
     _stats.append(
       SingleStat("Meters of Linear Features",
@@ -233,20 +243,10 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         constMap,
         FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
     _stats.append(
-      SingleStat("Road Unique Name Count",
-      _applyVisitor(
-      constMap,
-      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
-    _stats.append(
       SingleStat("Meters Squared of Buildings",
       _applyVisitor(
       constMap,
       FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
-    _stats.append(
-      SingleStat("Building Unique Name Count",
-      _applyVisitor(
-      constMap,
-      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
 
     _stats.append(SingleStat("Bridges",
       _applyVisitor(
@@ -308,7 +308,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _applyVisitor(constMap, &featureCountVisitor);
     const long featureCount = featureCountVisitor.getCount();
     LOG_VART(featureCount);
-    _stats.append(SingleStat("Total Feature Count", featureCount));
+    _stats.append(SingleStat("Total Features", featureCount));
     vector< boost::shared_ptr<MatchCreator> > matchCreators =
       MatchFactory::getInstance().getCreators();
     LOG_VARD(matchCreators.size());
@@ -373,7 +373,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     const double untaggedFeatureCount =
       _applyVisitor(
         constMap, FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
-    _stats.append(SingleStat("Untagged Feature Count", untaggedFeatureCount));
+    _stats.append(SingleStat("Untagged Features", untaggedFeatureCount));
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
     {
@@ -518,9 +518,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       TranslatedTagCountVisitor tcv(st);
       _applyVisitor(constMap, &tcv);
       _stats.append(SingleStat("Translated Populated Tag Percent", tcv.getStat()));
-      _stats.append(SingleStat("Translated Populated Tag Count", tcv.getPopulatedCount()));
-      _stats.append(SingleStat("Translated Default Tag Count", tcv.getDefaultCount()));
-      _stats.append(SingleStat("Translated Null Tag Count", tcv.getNullCount()));
+      _stats.append(SingleStat("Translated Populated Tags", tcv.getPopulatedCount()));
+      _stats.append(SingleStat("Translated Default Tags", tcv.getDefaultCount()));
+      _stats.append(SingleStat("Translated Null Tags", tcv.getNullCount()));
 
       _stats.append(SingleStat("Building Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map),
@@ -682,7 +682,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
     _applyVisitor(
       map, FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(totalFeatures);
-  _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
+  _stats.append(SingleStat(QString("%1s").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
 
   double conflatedFeatureCount =
