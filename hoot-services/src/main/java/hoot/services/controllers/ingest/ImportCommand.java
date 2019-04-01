@@ -115,7 +115,7 @@ class ImportCommand extends ExternalCommand {
             }
             command = hootConvertCommand;
         }
-        else if ((classification == OSM) || (classification == GEONAMES)) {
+        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES)) {
             command = hootConvertCommand;
         }
 
