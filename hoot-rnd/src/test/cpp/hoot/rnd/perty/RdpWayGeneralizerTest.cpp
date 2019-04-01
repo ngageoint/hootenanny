@@ -138,6 +138,7 @@ public:
     TestUtils::mkpath(outDir);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
+    writer.setIncludeCircularError(true);
     const QString outFile = outDir + "/" + outFileName;
     writer.write(map, outFile);
 

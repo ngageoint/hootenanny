@@ -133,6 +133,7 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
+    writer.setIncludeCircularError(true);
     const QString outFile = "test-output/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-2.osm";
     writer.write(map, outFile);
 
