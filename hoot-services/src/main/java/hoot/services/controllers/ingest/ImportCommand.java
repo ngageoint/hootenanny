@@ -74,7 +74,7 @@ class ImportCommand extends ExternalCommand {
         }
 
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
-
+        
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
@@ -115,10 +115,9 @@ class ImportCommand extends ExternalCommand {
             }
             command = hootConvertCommand;
         }
-        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES)) {
+        else if ((classification == OSM) || (classification == GEOJSON) ||(classification == GEONAMES)) {
             command = hootConvertCommand;
         }
-
         super.configureCommand(command, substitutionMap, caller);
     }
 
