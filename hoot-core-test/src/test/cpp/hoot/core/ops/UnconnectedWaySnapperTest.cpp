@@ -96,7 +96,9 @@ public:
     map->visitRw(removeRefVisitor);
 
     MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, outputPath + testName +  + "Out.osm");
+    OsmXmlWriter writer;
+    writer.setIncludeCircularError(true);
+    writer.write(map, outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(uut.getNumAffected(), 41L);
     CPPUNIT_ASSERT_EQUAL(uut.getNumSnappedToWayNodes(), 5L);
