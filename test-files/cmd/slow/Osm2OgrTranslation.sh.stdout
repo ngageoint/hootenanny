@@ -301,13 +301,12 @@ OGRFeature(foo_PAL015):0
  POINT : 
 
 #### Test to make sure all layers are read from a data source. ####
-21:09:28.875 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 159) Truncating the tags attribute (442 characters) to the output field width (254 characters).
-21:09:28.895 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 159) Truncating the tags attribute (333 characters) to the output field width (254 characters).
-21:09:28.908 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 159) Truncating the tags attribute (391 characters) to the output field width (254 characters).
-21:09:28.909 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 163) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-21:09:29.365 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-output/cmd/slow/delaware-tds.shp...
-21:09:29.535 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 5,696 elements from input.
-21:09:29.566 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+14:53:04.385 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (488 characters) to the output field width (254 characters).
+14:53:04.397 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (379 characters) to the output field width (254 characters).
+14:53:04.412 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (437 characters) to the output field width (254 characters).
+14:53:04.414 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 165) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+14:53:04.881 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-output/cmd/slow/delaware-tds.shp...
+14:53:05.174 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
 Stat Name	test-output/cmd/slow/delaware-tds.shp
 Node Count	5664
 Way Count	32

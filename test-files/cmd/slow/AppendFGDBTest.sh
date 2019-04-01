@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-HOOT_OPT="--error -D writer.include.circular.error.tags=true"
+HOOT_OPT="--error"
 
 INPUT_OSM=test-files/OsmMapAppendTest.osm
 
