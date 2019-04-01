@@ -77,9 +77,10 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   int totalProcessed = 0;
   int buildingsAdded = 0;
   //for (size_t i = 0; i < intersectIds.size(); i++)
+  //QElapsedTimer timer;
   for (set<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end(); ++it)
   {
-    timer.restart();
+    //timer.restart();
 
     const long candidateWayId = *it;
     const WayPtr& candidate = _map->getWay(/*intersectIds[i]*/candidateWayId);
