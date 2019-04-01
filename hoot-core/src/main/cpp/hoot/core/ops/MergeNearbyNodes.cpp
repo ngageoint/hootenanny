@@ -164,7 +164,7 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
     {
       PROGRESS_INFO(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " / " <<
-        StringUtils::formatLargeNumber(count) << " nodes; remaining: " <<
+        StringUtils::formatLargeNumber(count) << " nodes processed; remaining: " <<
         (StringUtils::formatLargeNumber((int)cph.size() - count)));
     }
     count++;

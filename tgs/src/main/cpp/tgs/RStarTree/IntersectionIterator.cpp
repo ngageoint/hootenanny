@@ -36,8 +36,9 @@
 
 namespace Tgs
 {
-  IntersectionIterator::IntersectionIterator(const RStarTree *tree, const std::vector<double>& minBounds,
-    const std::vector<double>& maxBounds)
+  IntersectionIterator::IntersectionIterator(const RStarTree *tree,
+                                             const std::vector<double>& minBounds,
+                                             const std::vector<double>& maxBounds)
     : nodeHits(1),
       distCalcs(0),
       _tree(tree),

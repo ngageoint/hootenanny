@@ -47,6 +47,9 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/System/Time.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -76,6 +79,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   // merge with buildings that are contained by this polygon
   const vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
   int totalProcessed = 0;
+  int buildingsAdded = 0;
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
     const WayPtr& candidate = _map->getWay(intersectIds[i]);
@@ -100,18 +104,13 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
       if (contains)
       {
         _ds.joinT(candidate, neighbor);
+        buildingsAdded++;
       }
     }
-
     totalProcessed++;
-    if (totalProcessed % 1000 == 0)
-    {
-//      PROGRESS_INFO(
-//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) <<
-//        " intersecting buildings / " <<
-//        StringUtils::formatLargeNumber(intersectIds.size()) << " total buildings.");
-    }
   }
+  LOG_TRACE(
+    "Added " << buildingsAdded << " buildings to merge set / " << totalProcessed << " processed.");
 }
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
@@ -124,16 +123,9 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
     WayPtr neighbor = _map->getWay(*it);
     // add these two buildings to a set.
     _ds.joinT(neighbor, w);
-
     totalProcessed++;
-    if (totalProcessed % 1000 == 0)
-    {
-//      PROGRESS_INFO(
-//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-//        StringUtils::formatLargeNumber(neighborIds.size()) <<
-//        " way neighbors for building part merging.");
-    }
   }
+  LOG_TRACE("Added " << totalProcessed << " buildings to merge set.");
 }
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
@@ -145,11 +137,14 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
   const vector<RelationData::Entry>& members = r->getMembers();
 
   int totalProcessed = 0;
+  int buildingsAdded = 0;
   for (size_t i = 0; i < members.size(); i++)
   {
-    if (members[i].getElementId().getType() == ElementType::Way)
+    const RelationData::Entry memberEntry = members[i];
+    const ElementId memberElementId = memberEntry.getElementId();
+    if (memberElementId.getType() == ElementType::Way)
     {
-      const WayPtr& member = _map->getWay(members[i].getElementId().getId());
+      const WayPtr& member = _map->getWay(memberElementId.getId());
 
       const set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       // got through each of the neighboring ways.
@@ -158,9 +153,10 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
         WayPtr neighbor = _map->getWay(*it);
         // add these two buildings to a set.
         _ds.joinT(neighbor, r);
+        buildingsAdded++;
       }
     }
-    if (members[i].getElementId().getType() == ElementType::Relation)
+    if (memberElementId.getType() == ElementType::Relation)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
@@ -174,18 +170,15 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     }
 
     totalProcessed++;
-    if (totalProcessed % 1000 == 0)
-    {
-//      PROGRESS_INFO(
-//        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-//        StringUtils::formatLargeNumber(members.size()) <<
-//        " relation members for building part merging.");
-    }
   }
+  LOG_TRACE(
+    "Added " << buildingsAdded << " buildings to merge set / " << totalProcessed << " processed.");
 }
 
 void BuildingPartMergeOp::apply(OsmMapPtr& map)
 {
+  QElapsedTimer timer;
+
   MapProjector::projectToPlanar(map);
   ////
   /// treat the map as read only while we determine building parts.
@@ -196,6 +189,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   int totalProcessed = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
+  timer.restart();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = it->second;
@@ -210,18 +204,20 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
 
     totalProcessed++;
-    if (totalProcessed % 100 == 0)
+    if (totalProcessed % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
         StringUtils::formatLargeNumber(ways.size()) <<
         " ways for building part merging.");
     }
   }
+  LOG_DEBUG("\tProcessed ways in: " << StringUtils::secondsToDhms(timer.elapsed()));
 
   totalProcessed = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
+  timer.restart();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr& r = it->second;
@@ -233,14 +229,15 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
 
     totalProcessed++;
-    if (totalProcessed % 100 == 0)
+    if (totalProcessed % 10 == 0)
     {
       PROGRESS_INFO(
-        "Processed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
         StringUtils::formatLargeNumber(relations.size()) <<
         " relations for building part merging.");
     }
   }
+  LOG_INFO("\tProcessed relations in: " << StringUtils::secondsToDhms(timer.elapsed()));
 
   ////
   /// Time to start making changes to the map.
@@ -248,7 +245,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 
   // go through each of the grouped buildings
   totalProcessed = 0;
+  int numBuildingsMerged = 0;
   const DisjointSetMap<boost::shared_ptr<Element>>::AllGroups& groups = _ds.getAllGroups();
+  timer.restart();
   for (DisjointSetMap<boost::shared_ptr<Element>>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
@@ -257,20 +256,22 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     if (parts.size() > 1)
     {
       _combineParts(parts);
+      numBuildingsMerged++;
     }
 
     totalProcessed++;
     if (totalProcessed % 100 == 0)
     {
       PROGRESS_INFO(
-        "Merged " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-        StringUtils::formatLargeNumber(groups.size()) << " building parts.");
+        "\tMerged " << StringUtils::formatLargeNumber(numBuildingsMerged) << " / " <<
+        StringUtils::formatLargeNumber(totalProcessed) << " building part groups.");
     }
   }
+  LOG_DEBUG("\tCombined building parts in: " << StringUtils::secondsToDhms(timer.elapsed()));
 
-  LOG_INFO(
+  LOG_DEBUG(
     "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
-    " building geometries.");
+    " total building geometries.");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
@@ -314,11 +315,8 @@ void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Ele
 }
 
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
-  const vector< boost::shared_ptr<Element> >& parts)
+  const vector<boost::shared_ptr<Element>>& parts)
 {
-  LOG_DEBUG("Combining building parts...");
-
-  LOG_VARD(parts.size());
   if (parts.size() == 0)
   {
     throw IllegalArgumentException(

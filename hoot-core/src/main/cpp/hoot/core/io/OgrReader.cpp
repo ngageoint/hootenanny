@@ -957,7 +957,7 @@ void OgrReaderInternal::open(const QString path, QString layer)
   _initTranslate();
 
   _path = path;
-  LOG_DEBUG("Opening data source for layer: " << layer);
+  LOG_TRACE("Opening data source for layer: " << layer);
   _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {

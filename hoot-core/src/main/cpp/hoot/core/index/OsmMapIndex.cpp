@@ -393,7 +393,7 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
 
   while (it.next())
   {
-    long wid = _mapToWayId(it.getId());
+    const long wid = _mapToWayId(it.getId());
     // if this way isn't pending removal.
     if (_map.containsWay(wid))
     {
@@ -495,7 +495,8 @@ boost::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   }
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); ++it)
+  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end();
+       ++it)
   {
     if (_map.containsWay(*it))
     {
@@ -525,7 +526,8 @@ void OsmMapIndex::_insertWay(long wid)
 
   Box b(2);
 
-  boost::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+  boost::shared_ptr<LineString> ls =
+    ElementConverter(_map.shared_from_this()).convertToLineString(w);
   const Envelope* e = ls->getEnvelopeInternal();
 
   b.setBounds(0, e->getMinX() - _indexSlush, e->getMaxX() + _indexSlush);
