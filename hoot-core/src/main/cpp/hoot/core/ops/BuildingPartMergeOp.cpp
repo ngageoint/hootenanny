@@ -85,6 +85,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
     const long candidateWayId = *it;
     const WayPtr& candidate = _map->getWay(/*intersectIds[i]*/candidateWayId);
     // if this is another building part totally contained by this building
+    // TODO: move this check to after the cache check
     if (_buildingCrit.isSatisfied(candidate))
     {
       bool contains = false;
@@ -133,6 +134,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
+  // TODO: could also cache this
   const set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   // go through each of the neighboring ways.
   int totalProcessed = 0;

@@ -82,7 +82,7 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
       QString initMessage =
-        QString("\tApplying operation (%1 / %2; %3)")
+        QString("\tApplying operation %1 / %2 (%3)")
         .arg(QString::number(opCount))
         .arg(QString::number(_namedOps.size()))
         .arg(s);
@@ -122,7 +122,7 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
       QString initMessage =
-        QString("\tApplying operation (%1 / %2; %3)")
+        QString("\tApplying operation %1 / %2 (%3)")
         .arg(QString::number(opCount))
         .arg(QString::number(_namedOps.size()))
         .arg(s);
