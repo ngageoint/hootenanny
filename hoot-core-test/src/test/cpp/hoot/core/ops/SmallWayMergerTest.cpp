@@ -70,6 +70,7 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
+    writer.setIncludeCircularError(true);
     writer.write(map, "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
     HOOT_FILE_EQUALS("test-files/ops/SmallWayMerger/SmallWayMergerOutput1.osm",
                      "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");

@@ -170,6 +170,7 @@ public:
       writer.setIncludeCompatibilityTags(false);
       writer.setIncludeHootInfo(false);
       writer.setIncludeIds(false);
+      writer.setIncludeCircularError(true);
       QString fn = QString("test-output/algorithms/MaximalNearestSubline2TestOutput.osm");
       writer.write(wgs84, fn);
     }

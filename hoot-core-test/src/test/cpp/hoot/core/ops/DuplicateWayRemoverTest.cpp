@@ -114,6 +114,7 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
+    writer.setIncludeCircularError(true);
     writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm",
@@ -144,6 +145,7 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
+    writer.setIncludeCircularError(true);
     writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm",

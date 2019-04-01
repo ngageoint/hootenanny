@@ -78,6 +78,8 @@ public:
    */
   virtual void setConfiguration(const Settings &conf);
 
+  void setIncludeCircularError(bool includeCircularError) { _addExportTagsVisitor.setIncludeCircularError(includeCircularError); }
+
   bool getMultipleChangesetsWritten() const { return _multipleChangesetsWritten; }
 
   QString getStatsTable() { return _stats.toTableString(); }
