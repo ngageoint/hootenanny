@@ -30,7 +30,7 @@
 
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 /**
  * A visitor for finding the worst circular error among elements. Worst = greatest.

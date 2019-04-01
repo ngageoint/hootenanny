@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateStatsHelper.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 
 // std
 #include <math.h>
@@ -60,12 +60,12 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
   }
 
   const double numInputFeaturesTotal =
-    getSingleStat("Total Feature Count", _input1Stats) +
-    getSingleStat("Total Feature Count", _input2Stats);
+    getSingleStat("Total Features", _input1Stats) +
+    getSingleStat("Total Features", _input2Stats);
 
   if (numInputFeaturesTotal > 0.0)
   {
-    const double numTotalFeaturesInOutput = getSingleStat("Total Feature Count", _outputStats);
+    const double numTotalFeaturesInOutput = getSingleStat("Total Features", _outputStats);
     LOG_VART(numTotalFeaturesInOutput);
     const double differenceBetweenTotalInputFeaturesAndTotalOutputFeatures =
       numTotalFeaturesInOutput - numInputFeaturesTotal;

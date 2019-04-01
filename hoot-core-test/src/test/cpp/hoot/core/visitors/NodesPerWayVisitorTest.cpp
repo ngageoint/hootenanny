@@ -22,33 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IOSINGLESTAT_H
-#define IOSINGLESTAT_H
 
-#include <hoot/core/ops/stats/SingleStat.h>
+// hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/NodesPerWayVisitor.h>
 
 namespace hoot
 {
 
-class IoSingleStat : public SingleStat
+static const QString input = "test-files/ToyTestA.osm";
+
+class NodesPerWayVisitorTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(NodesPerWayVisitorTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  enum Type {
-    RChar,
-    WChar,
-    SysCr,
-    SysCw,
-    ReadBytes,
-    WriteBytes,
-    CancelledWriteBytes
-  };
+  NodesPerWayVisitorTest()
+  {
+    setResetType(ResetBasic);
+  }
 
-  IoSingleStat(Type t);
+  void runBasicTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+
+    NodesPerWayVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(40, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(3, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(10.0, uut.getAverage());
+  }
 };
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodesPerWayVisitorTest, "quick");
 
 }
 
-#endif // IOSINGLESTAT_H
+

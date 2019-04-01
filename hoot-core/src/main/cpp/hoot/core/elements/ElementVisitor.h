@@ -36,6 +36,10 @@ namespace hoot
 
 /**
  * Visits elements in a collection in a way that they can be modified.
+ *
+ * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this override
+ * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
+ * does not require it and you are not running in the conflate pipeline).
  */
 class ElementVisitor : public ApiEntityInfo
 {
