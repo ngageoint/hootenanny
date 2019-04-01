@@ -33,10 +33,19 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ElementConverter.h>
 
+#include <float.h>
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, LengthOfWaysVisitor)
+
+LengthOfWaysVisitor::LengthOfWaysVisitor() :
+_total(0.0),
+_smallest(0.0),
+_largest(0.0)
+{
+}
 
 Meters LengthOfWaysVisitor::getLengthOfWays(const OsmMapPtr& map, ElementPtr e)
 {
@@ -51,7 +60,21 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
   if (e->getElementType() == ElementType::Way)
   {
     const ConstWayPtr w = _map->getWay(e->getId());
-    _total += ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
+    const Meters length =
+      ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
+
+    _total += length;
+
+    if (_smallest == 0.0 || length < _smallest)
+    {
+      _smallest = length;
+    }
+    if (length > _largest)
+    {
+      _largest = length;
+    }
+
+    _numAffected++;
   }
 }
 

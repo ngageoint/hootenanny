@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCOUNTVISITOR_H
 #define ELEMENTCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {

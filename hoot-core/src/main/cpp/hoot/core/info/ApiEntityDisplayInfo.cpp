@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
