@@ -481,14 +481,14 @@ public:
     map->replace(w1, newWays);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],,\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],,\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }
@@ -558,7 +558,7 @@ public:
     map->replace(n1, newNode);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],]\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
       "}\n",
       OsmJsonWriter().toString(map));
   }

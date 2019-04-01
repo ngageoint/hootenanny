@@ -84,7 +84,6 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.setIncludeCircularError(true);
     writer.write(map, "test-output/conflate/splitter/SimpleSplitterOutput.osm");
 
     HOOT_FILE_EQUALS("test-output/conflate/splitter/SimpleSplitterOutput.osm",

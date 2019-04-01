@@ -53,9 +53,7 @@ public:
   void runSimpleTest()
   {
     boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    OsmXmlChangesetFileWriter writer;
-    writer.setIncludeCircularError(true);
-    writer.write(
+    OsmXmlChangesetFileWriter().write(
       "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
 
     HOOT_STR_EQUALS(
@@ -70,7 +68,6 @@ public:
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
-    writer.setIncludeCircularError(true);
     writer.write(
       "test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc", changesetProvider);
 

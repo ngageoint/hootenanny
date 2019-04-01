@@ -114,7 +114,6 @@ public:
     }
 
     OsmXmlWriter writer;
-    writer.setIncludeCircularError(true);
     writer.write(bounds, "test-output/conflate/TileBounds.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/TileBounds.osm",

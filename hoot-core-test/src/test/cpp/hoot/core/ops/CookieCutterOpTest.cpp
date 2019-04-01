@@ -82,7 +82,6 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.setIncludeCircularError(true);
     writer.write(map, outputPath + "CookieCutterOpTest.osm");
     HOOT_FILE_EQUALS(inputPath + "CookieCutterOpTest.osm",
                      outputPath + "CookieCutterOpTest.osm");
