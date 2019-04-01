@@ -95,46 +95,51 @@ public class ImportResourceUtilsTest {
 
     @Test
     public void testClassifyUploadedFile() throws Exception {
-        int zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt;
+        int zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt;
 
-        shpCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = fgdbCnt = osmCnt = geonamesCnt = 0;
+        shpCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = fgdbCnt = osmCnt = geojsonCnt = geonamesCnt = 0;
         UploadClassification classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                                        geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                                        geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(SHP, classification);
 
-        osmCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = fgdbCnt = geonamesCnt = 0;
+        osmCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = fgdbCnt = geojsonCnt = geonamesCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                                            geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                                            geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(OSM, classification);
 
-        fgdbCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = geonamesCnt = 0;
+        fgdbCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = osmCnt = geojsonCnt = geonamesCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(FGDB, classification);
-
-        geonamesCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = 0;
+        
+        geojsonCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        		geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
+        assertEquals(GEOJSON, classification);
+
+        geonamesCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(GEONAMES, classification);
 
-        zipCnt = 1; fgdbZipCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = geonamesCnt = 0;
+        zipCnt = 1; fgdbZipCnt = 1; shpZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = geojsonCnt = geonamesCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(FGDB, classification);
 
-        zipCnt = 1; shpCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = osmCnt = fgdbZipCnt = fgdbCnt = geonamesCnt = 0;
+        zipCnt = 1; shpCnt = 1; shpZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = osmCnt = fgdbZipCnt = fgdbCnt = geojsonCnt = geonamesCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(SHP, classification);
 
-        zipCnt = 1; osmCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = fgdbZipCnt = fgdbCnt = geonamesCnt = 0;
+        zipCnt = 1; osmCnt = 1; shpZipCnt = osmZipCnt = geojsonZipCnt = geonamesZipCnt = shpCnt = fgdbZipCnt = fgdbCnt = geojsonCnt = geonamesCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(OSM, classification);
 
-        zipCnt = 1; osmZipCnt = 1; shpZipCnt = geonamesCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbZipCnt = fgdbCnt = 0;
+        zipCnt = 1; osmZipCnt = 1; shpZipCnt = geojsonCnt = geojsonZipCnt = geonamesCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbZipCnt = fgdbCnt = 0;
         classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
         assertEquals(ZIP, classification);
     }
 

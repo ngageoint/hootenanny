@@ -29,6 +29,8 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON_ZIP;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES_ZIP;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
@@ -131,8 +133,8 @@ public class ImportResource {
 
             List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-            int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geonamesCnt = 0, zipCnt = 0;
-            int shpZipCnt = 0, osmZipCnt = 0, geonamesZipCnt = 0, fgdbZipCnt = 0;
+            int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geojsonCnt = 0, geonamesCnt = 0, zipCnt = 0;
+            int shpZipCnt = 0, osmZipCnt = 0, geojsonZipCnt = 0, geonamesZipCnt = 0, fgdbZipCnt = 0;
 
             List<File> filesToImport = new LinkedList<>();
             List<String> fileNames = new ArrayList<>();
@@ -172,10 +174,12 @@ public class ImportResource {
                 shpCnt += counts.get(SHP);
                 fgdbCnt += counts.get(FGDB);
                 osmCnt += counts.get(OSM);
+                geojsonCnt +=  counts.get(GEOJSON);
                 geonamesCnt += counts.get(GEONAMES);
                 shpZipCnt += counts.get(SHAPE_ZIP);
                 fgdbZipCnt += counts.get(FGDB_ZIP);
                 osmZipCnt += counts.get(OSM_ZIP);
+                geojsonZipCnt += counts.get(GEOJSON_ZIP);
                 geonamesZipCnt += counts.get(GEONAMES_ZIP);
 
                 if ((geonamesCnt == 1) && (initialUploadClassification == TXT)) {
@@ -200,7 +204,7 @@ public class ImportResource {
             }
 
             UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
-                    shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                    shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geojsonCnt, geonamesCnt);
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);

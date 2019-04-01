@@ -34,6 +34,7 @@ import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
 import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +88,7 @@ class ImportCommand extends ExternalCommand {
             //options.add("convert.ops=hoot::TranslationOp");
             //options.add("translation.script=" + translationPath);
         //}
-
+        
         List<String> hootOptions = toHootOptions(options);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
