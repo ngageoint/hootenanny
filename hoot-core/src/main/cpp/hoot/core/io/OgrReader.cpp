@@ -391,7 +391,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VARD(allLayers);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {

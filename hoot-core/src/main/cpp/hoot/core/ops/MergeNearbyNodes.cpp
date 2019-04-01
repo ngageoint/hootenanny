@@ -160,14 +160,15 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       }
     }
 
+    count++;
     if (count % 10000 == 0)
     {
       PROGRESS_INFO(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " / " <<
         StringUtils::formatLargeNumber(count) << " nodes processed; remaining: " <<
+        // This remaining count isn't right.
         (StringUtils::formatLargeNumber((int)cph.size() - count)));
     }
-    count++;
   }
 }
 

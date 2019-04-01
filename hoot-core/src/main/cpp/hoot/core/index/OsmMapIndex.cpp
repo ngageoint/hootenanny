@@ -404,6 +404,30 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
   return result;
 }
 
+set<long> OsmMapIndex::findWays2(const Envelope& e) const
+{
+  set<long> result;
+
+  vector<double> min(2), max(2);
+  min[0] = e.getMinX();
+  min[1] = e.getMinY();
+  max[0] = e.getMaxX();
+  max[1] = e.getMaxY();
+  IntersectionIterator it(getWayTree().get(), min, max);
+
+  while (it.next())
+  {
+    const long wid = _mapToWayId(it.getId());
+    // if this way isn't pending removal.
+    if (_map.containsWay(wid))
+    {
+      result.insert(wid);
+    }
+  }
+
+  return result;
+}
+
 const boost::shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelationMap() const
 {
   if (_elementToRelationMap == 0)

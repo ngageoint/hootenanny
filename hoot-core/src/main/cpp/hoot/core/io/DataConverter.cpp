@@ -428,7 +428,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       layers = reader.getFilteredLayerNames(input);
       layers.sort();
     }
-    LOG_VARD(layers);
+    LOG_VART(layers);
 
     if (layers.size() == 0)
     {
@@ -508,7 +508,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
-  LOG_INFO("Applying conversion operations...");
+  LOG_INFO("Applying " << _convertOps.size() << " conversion operations...");
   NamedOp(_convertOps).apply(map);
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);

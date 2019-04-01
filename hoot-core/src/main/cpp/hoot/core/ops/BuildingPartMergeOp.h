@@ -34,9 +34,18 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/StringUtils.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
+
+// Qt
+#include <QElapsedTimer>
+#include <QHash>
+
+// geos
+#include <geos/geom/Geometry.h>
 
 namespace __gnu_cxx
 {
@@ -106,7 +115,11 @@ public:
   virtual QString getInitStatusMessage() const { return "Merging building parts..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Processed " + QString::number(_numAffected) + " elements for building part merging."; }
+  {
+    return
+      "Processed " + StringUtils::formatLargeNumber(_numAffected) +
+      " elements for building part merging.";
+  }
 
 private:
 
@@ -115,7 +128,11 @@ private:
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
+  boost::shared_ptr<ElementConverter> _elementConverter;
   int _numGeometriesCleaned;
+  QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
+  int _numGeometryCacheHits;
+  QElapsedTimer _timer;
 
   void _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);

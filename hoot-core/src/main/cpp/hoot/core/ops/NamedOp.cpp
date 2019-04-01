@@ -50,7 +50,7 @@ _conf(&conf())
 {
 }
 
-NamedOp::NamedOp(QStringList namedOps)  :
+NamedOp::NamedOp(QStringList namedOps) :
 _conf(&conf()),
 _namedOps(namedOps)
 {
@@ -67,6 +67,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
   QElapsedTimer timer;
   LOG_VARD(_namedOps);
+  int opCount = 1;
   foreach (QString s, _namedOps)
   {
     if (s.isEmpty())
@@ -80,7 +81,11 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
-      QString initMessage = "\tApplying operation " + s;
+      QString initMessage =
+        QString("\tApplying operation (%1 / %2; %3)")
+        .arg(QString::number(opCount))
+        .arg(QString::number(_namedOps.size()))
+        .arg(s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -116,7 +121,11 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
-      QString initMessage = "\tApplying operation " + s;
+      QString initMessage =
+        QString("\tApplying operation (%1 / %2; %3)")
+        .arg(QString::number(opCount))
+        .arg(QString::number(_namedOps.size()))
+        .arg(s);
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -146,7 +155,7 @@ void NamedOp::apply(OsmMapPtr& map)
     }
     else
     {
-      throw HootException("Unexpected named operation: " + s);
+      throw HootException("Unexpected operation: " + s);
     }
 
     LOG_DEBUG(
@@ -154,6 +163,7 @@ void NamedOp::apply(OsmMapPtr& map)
       StringUtils::formatLargeNumber(map->getElementCount()));
 
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
+    opCount++;
   }
 }
 

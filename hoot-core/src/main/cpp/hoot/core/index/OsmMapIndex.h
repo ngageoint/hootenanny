@@ -35,6 +35,7 @@
 
 // STL
 #include <vector>
+#include <set>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -94,6 +95,8 @@ public:
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
+
+  std::set<long> findWays2(const geos::geom::Envelope& e) const;
 
   Meters getIndexSlush() const { return _indexSlush; }
 
