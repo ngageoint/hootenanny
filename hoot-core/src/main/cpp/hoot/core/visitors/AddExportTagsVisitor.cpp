@@ -49,15 +49,28 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   bool isRelation = type == ElementType::Relation;  
   bool validStatus = status != Status::Invalid;
   bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
+  bool hasMappingTags = tags.getNonDebugCount() > 0;
+
+  // todo in 3076 branch:
+  // - decide on universal status include rules
+  // - revert all test changes
+  // - revert includeCircularError change
+  // - bring stringcompat back
+  // - see if now we can make it through all tests
+  // - then
+  // - set includeCircularError default to false
+  // - fix all tests
+  // - remove stringcompat and use string status enum always
+  // - fix all tests if possible
 
   // deciding on status based on previous OsmXmlWriter implementation
   bool addStatus = _includeDebug ||
-                   (_textStatus && (!isNode || (isNode && tags.getNonDebugCount() > 0))) ||
+                   (_textStatus && (!isNode || (isNode && hasMappingTags))) ||
                    (hasStatus && (isRelation || (!isRelation && validStatus)));
 
   bool addCircularError = _includeCircularError &&
                           pElement->hasCircularError() &&
-                          (!isNode || (isNode && tags.getNonDebugCount() > 0));
+                          (!isNode || (isNode && hasMappingTags));
 
   // HootStatus
   if (addStatus)
@@ -66,7 +79,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   }
 
   // HootId
-  if (_includeDebug &&_includeIds)
+  if (_includeIds)
   {
     tags[MetadataTags::HootId()] = QString::number(pElement->getId());
   }
