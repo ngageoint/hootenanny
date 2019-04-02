@@ -52,16 +52,28 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   bool hasMappingTags = tags.getNonDebugCount() > 0;
 
   // todo in 3076 branch:
-  // - decide on universal status include rules
-  // - revert all test changes
-  // - revert includeCircularError change
-  // - bring stringcompat back
-  // - see if now we can make it through all tests
-  // - then
-  // - set includeCircularError default to false
-  // - fix all tests
-  // - remove stringcompat and use string status enum always
-  // - fix all tests if possible
+  // - decide on universal status include rules:
+  //    - as discussed, we are considering these options:
+  //      - removal of TextStatus config altogether
+  //      - no longer using the includeDebug flag
+  //      - instead individual specific -D flags for each: status, id and circ.error
+  //      - keep the special cases of (!isNode || (isNode && hasMappingTags))
+  //        and (isRelation || (!isRelation && validStatus)) when deciding
+  //        whether we add the tag even when the status flag is on
+  //      - consider an additional verbose flag to turn everything on always,
+  //        no matter node type, etc.
+  // - for now:
+  //    - revert all test changes
+  //    - revert includeCircularError change
+  //    - bring stringcompat back
+  //    - see if now we can make it through all tests
+  //    - if too many issues: only support OsmXmlWriter for now
+  //    - put task on hold until universal status rules clarified
+  // - later (on hold):
+  //    - set includeCircularError default to false
+  //    - fix all tests
+  //    - remove stringcompat and use string status enum always
+  //    - fix all tests if possible
 
   // deciding on status based on previous OsmXmlWriter implementation
   bool addStatus = _includeDebug ||
