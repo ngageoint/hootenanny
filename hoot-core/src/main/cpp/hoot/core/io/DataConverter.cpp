@@ -45,6 +45,7 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
+#include <hoot/core/util/StringUtils.h>
 
 // std
 #include <vector>
@@ -497,6 +498,9 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
     throw HootException("After translation the map is empty. Aborting.");
   }
+
+  LOG_INFO(
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements from input.");
 
   MapProjector::projectToPlanar(map);
   //the ordering for these ogr2osm ops may matter

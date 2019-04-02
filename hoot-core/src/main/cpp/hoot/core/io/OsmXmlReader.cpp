@@ -681,25 +681,27 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
       NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
       //LOG_VART(n);
+      _numRead++;
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
       //LOG_VART(w);
+      _numRead++;
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
       //LOG_VART(r);
+      _numRead++;
     }
-  }
 
-  _numRead++;
-  if (_numRead % (_statusUpdateInterval * 10) == 0)
-  {
-    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+    if (_numRead % (_statusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+    }
   }
 
   return true;

@@ -77,7 +77,7 @@ public:
   long findNearestWay(geos::geom::Coordinate c) const;
 
   /**
-   * Should run in approximately O(lg(n)).
+   * Should run in approximately O(log(n)).
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
   std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
@@ -91,7 +91,7 @@ public:
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
-   * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
+   * Return all ways that intersect the given envelope. This runs in approximately O(log(n)) time.
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
@@ -111,7 +111,7 @@ public:
   boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
-   * Get all the direct parents of a given element. This will not return grand parents, etc.
+   * Get all the direct parents of a given element. This will not return grandparents, etc.
    */
   std::set<ElementId> getParents(ElementId eid) const;
 

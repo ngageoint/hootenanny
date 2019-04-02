@@ -60,10 +60,6 @@ public:
 
   virtual bool next();
 
-  // TODO: remove me
-  int nodeHits;
-  int distCalcs;
-
 protected:
 
   bool _determineIntesection(const Box& box);

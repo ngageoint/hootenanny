@@ -39,9 +39,7 @@ namespace Tgs
   IntersectionIterator::IntersectionIterator(const RStarTree *tree,
                                              const std::vector<double>& minBounds,
                                              const std::vector<double>& maxBounds)
-    : nodeHits(1),
-      distCalcs(0),
-      _tree(tree),
+    : _tree(tree),
       _minBounds(minBounds),
       _maxBounds(maxBounds),
       _done(false)
@@ -54,7 +52,6 @@ namespace Tgs
 
   bool IntersectionIterator::_determineIntesection(const Box& box)
   {
-    distCalcs++;
     // calculate a simple euclidean distance in n dimensional space
     assert((int)_maxBounds.size() == box.getDimensions());
     //double c = 0;
@@ -111,7 +108,6 @@ namespace Tgs
       {
         //Get the first node in the list to examine
         const RTreeNode* node = _tree->getNode(_pendingNodes.front());
-        nodeHits++;
         _pendingNodes.pop_front(); //Remove node from future consideration
         for (int i = 0; i < node->getChildCount(); i++)
         {

@@ -232,11 +232,10 @@ int JavaScriptTranslator::getLogCount(QString log)
   return result;
 }
 
-
 void JavaScriptTranslator::_init()
 {
   //This can be a costly operation, hence putting it at INFO.
-  LOG_INFO("Loading translation script: " << _scriptPath);
+  LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
   _gContext.reset(new PluginContext());

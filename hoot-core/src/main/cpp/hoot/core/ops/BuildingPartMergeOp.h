@@ -129,12 +129,13 @@ private:
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;
+
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
   int _numGeometryCacheHits;
   QElapsedTimer _timer;
 
-  void _addContainedWaysToGroup(
+  int _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);

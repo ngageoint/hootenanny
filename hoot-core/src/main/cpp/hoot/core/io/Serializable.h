@@ -36,6 +36,12 @@ class QDataStream;
 namespace hoot
 {
 
+/**
+ * Note that this interface was primarily in place to support hoot use in Hadoop for serializing
+ * objects between map/reduce conflation steps.  Even with Hadoop support gone, there's no harm in
+ * keeping it around, for now, in case we need to serialize anything in a similar fashion in the
+ * future.
+ */
 class Serializable
 {
 public:
