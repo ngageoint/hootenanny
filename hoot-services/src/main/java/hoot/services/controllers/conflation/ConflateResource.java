@@ -104,10 +104,7 @@ public class ConflateResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response conflate(ConflateParams params, @Context HttpServletRequest request,
                              @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+        Users user = Users.fromRequest(request);
 
         String jobId = UUID.randomUUID().toString();
 

@@ -68,15 +68,6 @@ public class ConflateParams {
     @JsonProperty("CONFLATION_ALGORITHM")
     private String conflateAlgorithm;
 
-    @JsonProperty("GENERATE_REPORT")
-    private String generateReport;
-
-    @JsonProperty("TIME_STAMP")
-    private String timeStamp;
-
-    @JsonProperty("USER_EMAIL")
-    private String userEmail;
-
     @JsonProperty("CONFLATION_COMMAND")
     private String conflationCommand;
 
@@ -172,30 +163,6 @@ public class ConflateParams {
         this.conflationType = conflationType;
     }
 
-    public String getGenerateReport() {
-        return generateReport;
-    }
-
-    public void setGenerateReport(String generateReport) {
-        this.generateReport = generateReport;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
     public String getConflationCommand() {
         return conflationCommand;
     }
@@ -258,9 +225,6 @@ public class ConflateParams {
                 ", collectStats=" + collectStats +
                 ", bounds='" + bounds + '\'' +
                 ", conflationType='" + conflationType + '\'' +
-                ", generateReport='" + generateReport + '\'' +
-                ", timeStamp='" + timeStamp + '\'' +
-                ", userEmail='" + userEmail + '\'' +
                 ", conflationCommand='" + conflationCommand + '\'' +
                 '}';
     }
