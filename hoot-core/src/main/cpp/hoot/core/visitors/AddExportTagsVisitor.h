@@ -63,6 +63,9 @@ private:
   bool _textStatus;
   bool _includeCircularError;
   bool _includeDebug;
+
+  // moved this out of Status.cpp, for local consumption only
+  QString toCompatString( Status status ) const;
 };
 
 }

@@ -63,11 +63,11 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   //      - consider an additional verbose flag to turn everything on always,
   //        no matter node type, etc.
   // - for now:
-  //    - revert all test changes
-  //    - revert includeCircularError change
-  //    - bring stringcompat back
-  //    - see if now we can make it through all tests
-  //    - if too many issues: only support OsmXmlWriter for now
+  //    - revert all test changes (done)
+  //    - revert includeCircularError change (done)
+  //    - bring stringcompat back (done)
+  //    - see if now we can make it through all tests (done)
+  //    - if too many issues: only support OsmXmlWriter for now (done)
   //    - put task on hold until universal status rules clarified
   // - later (on hold):
   //    - set includeCircularError default to false
@@ -87,7 +87,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   // HootStatus
   if (addStatus)
   {
-    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : status.toString();
+    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString( status );
   }
 
   // HootId
@@ -111,5 +111,16 @@ void AddExportTagsVisitor::overrideDebugSettings()
   _includeDebug = true;
 }
 
+QString AddExportTagsVisitor::toCompatString( Status status ) const
+{
+  if (status.getEnum() <= Status::EnumEnd)
+  {
+    return QString::number(status.getEnum());
+  }
+  else
+  {
+    return status.toString();
+  }
+}
 
 }
