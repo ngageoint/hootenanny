@@ -96,8 +96,6 @@ public:
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
-  std::set<long> findWays2(const geos::geom::Envelope& e) const;
-
   Meters getIndexSlush() const { return _indexSlush; }
 
   boost::shared_ptr<NodeToWayMap> getNodeToWayMap() const;

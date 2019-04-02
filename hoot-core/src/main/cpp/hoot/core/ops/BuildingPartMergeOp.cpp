@@ -60,8 +60,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
 BuildingPartMergeOp::BuildingPartMergeOp() :
 _numGeometriesCleaned(0),
-_numGeometryCacheHits(0),
-_numNeighborCacheHits(0)
+_numGeometryCacheHits(0)
 {
   vector<SchemaVertex> buildingPartTags =
     OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
@@ -76,34 +75,23 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   const boost::shared_ptr<Element>& neighbor)
 {
   // merge with buildings that are contained by this polygon
-  //const vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
-  const set<long> intersectIds = _map->getIndex().findWays2(*g.getEnvelopeInternal());
-
+  const vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
   int totalProcessed = 0;
   int buildingsAdded = 0;
-  //for (size_t i = 0; i < intersectIds.size(); i++)
-  //QElapsedTimer timer;
-  //for (vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end(); ++it)
-  for (set<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end(); ++it)
+  for (vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end(); ++it)
   {
-    //timer.restart();
-
     const long candidateWayId = *it;
-    const WayPtr& candidate = _map->getWay(/*intersectIds[i]*/candidateWayId);
+    const WayPtr& candidate = _map->getWay(candidateWayId);
 
     bool contains = false;
     boost::shared_ptr<Geometry> cg;
 
     // if this is another building part totally contained by this building
-    bool cacheHitOccurred = false;
 
     cg = _wayGeometryCache[candidateWayId];
-    //if (_wayGeometryCache.contains(candidateWayId))
     if (cg.get())
     {
-      //cg = _wayGeometryCache[candidateWayId];
       _numGeometryCacheHits++;
-      cacheHitOccurred = true;
     }
     else if (_buildingCrit.isSatisfied(candidate))
     {
@@ -121,10 +109,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
       {
         boost::shared_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
         boost::shared_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
-        if (!cacheHitOccurred)
-        {
-          _wayGeometryCache[candidateWayId] = cleanCandidate;
-        }
+        _wayGeometryCache[candidateWayId] = cleanCandidate;
         contains = cleanG->contains(cleanCandidate.get());
         _numGeometriesCleaned++;
       }
@@ -143,38 +128,18 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
 void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
   const set<long> neighborIds = _calculateNeighbors(w, w->getTags());
-//  QString key;
-//  key.reserve(r->getTags().size() * 20);
-//  /*const QString*/ key.append(w->getElementId().toString() % ";" % w->getTags().toString());
-//  set<long> neighborIds = _wayNeighborCache[key];
-//  //if (_wayNeighborCache.contains(key))
-//  if (neighborIds.size() != 0)
-//  {
-//    //neighborIds = _wayNeighborCache[key];
-//    _numNeighborCacheHits++;
-//  }
-//  else
-//  {
-//    neighborIds = _calculateNeighbors(w, w->getTags());
-//    _wayNeighborCache[key] = neighborIds;
-//  }
-
   // go through each of the neighboring ways
-  int totalProcessed = 0;
   for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
   {
     WayPtr neighbor = _map->getWay(*it);
     // add these two buildings to a set
     _ds.joinT(neighbor, w);
-    totalProcessed++;
   }
-  LOG_TRACE("Added " << totalProcessed << " buildings to merge set.");
 }
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
 {
-  boost::shared_ptr<Geometry> mp = _elementConverter->convertToGeometry(r);
-  _addContainedWaysToGroup(*mp, r);
+  _addContainedWaysToGroup(*(_elementConverter->convertToGeometry(r)), r);
 
   const vector<RelationData::Entry>& members = r->getMembers();
   int totalProcessed = 0;
@@ -186,24 +151,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
     if (memberElementId.getType() == ElementType::Way)
     {
       const WayPtr& member = _map->getWay(memberElementId.getId());
-
       const set<long> neighborIds = _calculateNeighbors(member, r->getTags());
-//      QString key;
-//      key.reserve(r->getTags().size() * 20);
-//      /*const QString*/ key.append(member->getElementId().toString() % ";" % r->getTags().toString());
-//      set<long> neighborIds = _wayNeighborCache[key];
-//      //if (_wayNeighborCache.contains(key))
-//      if (neighborIds.size() != 0)
-//      {
-//        //neighborIds = _wayNeighborCache[key];
-//        _numNeighborCacheHits++;
-//      }
-//      else
-//      {
-//        neighborIds = _calculateNeighbors(member, r->getTags());
-//        _wayNeighborCache[key] = neighborIds;
-//      }
-
       for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
@@ -212,11 +160,11 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
         buildingsAdded++;
       }
     }
-    if (memberElementId.getType() == ElementType::Relation)
+    else if (memberElementId.getType() == ElementType::Relation)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Not expecting relations of relations: " << r->toString());
+        LOG_WARN("Not expecting relations with relation members: " << r->toString());
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -239,12 +187,10 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map = map;
   _elementConverter.reset(new ElementConverter(_map));
   _wayGeometryCache.clear();
-  _wayNeighborCache.clear();
 
   int totalProcessed = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
-  //_timer.restart();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = it->second;
@@ -282,12 +228,10 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         " ways for building part merging.");
     }
   }
-  //LOG_INFO("\tProcessed ways in: " << StringUtils::secondsToDhms(_timer.elapsed()));
 
   totalProcessed = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  //_timer.restart();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr& r = it->second;
@@ -307,13 +251,11 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         " relations for building part merging.");
     }
   }
-  //LOG_INFO("\tProcessed relations in: " << StringUtils::secondsToDhms(_timer.elapsed()));
 
-  LOG_INFO(
+  LOG_DEBUG(
     "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
     " total building geometries.");
-  LOG_INFO("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
-  //LOG_INFO("\tNeighbor cache hits: " << StringUtils::formatLargeNumber(_numNeighborCacheHits));
+  LOG_DEBUG("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
 
   ////
   /// Time to start making changes to the map.
@@ -323,7 +265,6 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   totalProcessed = 0;
   int numBuildingsMerged = 0;
   const DisjointSetMap<boost::shared_ptr<Element>>::AllGroups& groups = _ds.getAllGroups();
-  //_timer.restart();
   for (DisjointSetMap<boost::shared_ptr<Element>>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
@@ -343,7 +284,6 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(totalProcessed) << " building part groups.");
     }
   }
-  //LOG_INFO("\tCombined building parts in: " << StringUtils::secondsToDhms(_timer.elapsed()));
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
@@ -354,25 +294,27 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& tags)
 {
   set<long> neighborIds;
+
   const NodeToWayMap& n2w = *_map->getIndex().getNodeToWayMap();
   long lastId = w->getNodeId(0);
-  // go through each of its nodes and look for commonality with other ways.
+  // go through each of its nodes and look for commonality with other ways
   for (size_t i = 1; i < w->getNodeCount(); i++)
   {
-    // find all other ways that use this node (neighbors).
+    // find all other ways that use this node (neighbors)
     const set<long>& ways = n2w.getWaysByNode(w->getNodeId(i));
 
-    // go through each of the neighboring ways.
+    // go through each of the neighboring ways
     for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      WayPtr neighbor = _map->getWay(*it);
+      const long wayId = *it;
+      WayPtr neighbor = _map->getWay(wayId);
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
       if (neighbor != w && _buildingCrit.isSatisfied(neighbor) &&
           _hasContiguousNodes(neighbor, w->getNodeId(i), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
         // add this to the list of neighbors
-        neighborIds.insert(*it);
+        neighborIds.insert(wayId);
       }
     }
     lastId = w->getNodeId(i);

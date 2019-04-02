@@ -131,9 +131,7 @@ private:
   boost::shared_ptr<ElementConverter> _elementConverter;
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
-  QHash<QString, std::set<long>> _wayNeighborCache;
   int _numGeometryCacheHits;
-  int _numNeighborCacheHits;
   QElapsedTimer _timer;
 
   void _addContainedWaysToGroup(
