@@ -101,24 +101,20 @@ public:
   virtual void apply(OsmMapPtr& map) override;
 
   virtual std::string getClassName() const { return className(); }
-
   virtual void readObject(QDataStream& /*is*/) {}
-
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   RelationPtr combineParts(const OsmMapPtr &map,
     const std::vector< boost::shared_ptr<Element> >& parts);
 
   virtual QString getDescription() const override
-  { return "Implicitly merges individual building parts into a single part"; }
+  { return "Merges individual building parts into a single building"; }
 
   virtual QString getInitStatusMessage() const { return "Merging building parts..."; }
 
   virtual QString getCompletedStatusMessage() const
   {
-    return
-      "Processed " + StringUtils::formatLargeNumber(_numAffected) +
-      " elements for building part merging.";
+    return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " building parts.";
   }
 
 private:
@@ -133,9 +129,9 @@ private:
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
   int _numGeometryCacheHits;
-  //QElapsedTimer _timer;
+  QElapsedTimer _timer;
 
-  int _addContainedWaysToGroup(
+  void _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);

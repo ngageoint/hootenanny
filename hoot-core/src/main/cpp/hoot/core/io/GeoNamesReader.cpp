@@ -40,12 +40,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
-GeoNamesReader::GeoNamesReader()
+GeoNamesReader::GeoNamesReader() :
+_GEONAMESID(0),
+_LATITUDE(4),
+_LONGITUDE(5),
+_maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+_useDataSourceIds(false)
 {
-  _maxSaveMemoryStrings = 100000;
-  _circularError = 15.0;
-  _useDataSourceIds = false;
-
   _columns << "geonameid";
   _columns << "name";
   _columns << "asciiname";
@@ -66,10 +68,7 @@ GeoNamesReader::GeoNamesReader()
   _columns << "timezone";
   _columns << "modification_date";
 
-  _GEONAMESID = 0;
   _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
-  _LATITUDE = 4;
-  _LONGITUDE = 5;
 }
 
 void GeoNamesReader::close()
@@ -150,7 +149,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _defaultCircularError));
 
   if (_columns.size() != fields.size())
   {

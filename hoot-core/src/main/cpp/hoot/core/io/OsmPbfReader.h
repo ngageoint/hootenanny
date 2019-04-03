@@ -73,6 +73,7 @@ public:
   class BlobLocation
   {
   public:
+
     long headerOffset;
     long blobOffset;
     long blobSize;
@@ -183,7 +184,7 @@ public:
 
 private:
 
-  Meters _circularError;
+  Meters _defaultCircularError;
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;

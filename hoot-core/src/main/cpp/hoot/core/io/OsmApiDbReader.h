@@ -68,8 +68,6 @@ private:
 
   boost::shared_ptr<OsmApiDb> _database;
 
-  double _defaultCircularError;
-
   void _parseAndSetTagsOnElement(ElementPtr element);
 };
 

@@ -93,7 +93,6 @@ protected:
   long _maxElementsPerMap;
   long _elementsRead;
   OsmMapPtr _partialMap;
-
 };
 
 }

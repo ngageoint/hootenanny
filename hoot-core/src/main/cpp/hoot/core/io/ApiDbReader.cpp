@@ -52,6 +52,7 @@ ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _returnNodesOnly(false),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),

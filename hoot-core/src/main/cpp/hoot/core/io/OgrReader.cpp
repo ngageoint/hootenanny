@@ -91,7 +91,7 @@ public:
    */
   boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
-  Meters getDefaultCircularError() const { return _circularError; }
+  Meters getDefaultCircularError() const { return _defaultCircularError; }
 
   Status getDefaultStatus() const { return _status; }
 
@@ -117,7 +117,7 @@ public:
    */
   void readNext(const OsmMapPtr& map);
 
-  void setDefaultCircularError(Meters circularError) { _circularError = circularError; }
+  void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
@@ -139,7 +139,7 @@ public:
 
 protected:
 
-  Meters _circularError;
+  Meters _defaultCircularError;
   Status _status;
   OsmMapPtr _map;
   OGRLayer* _layer;
@@ -216,6 +216,7 @@ protected:
 class OgrElementIterator : public ElementIterator
 {
 public:
+
   OgrElementIterator(OgrReaderInternal* d)
   {
     _d = d;
@@ -250,6 +251,7 @@ protected:
   }
 
 private:
+
   OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
@@ -507,7 +509,7 @@ OgrReaderInternal::OgrReaderInternal()
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
-  _circularError = 15.0;
+  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _limit = -1;
   _featureCount = 0;
   _streamFeatureCount = 0;
@@ -1039,7 +1041,7 @@ void OgrReaderInternal::_openNextLayer()
 
 Meters OgrReaderInternal::_parseCircularError(Tags& t)
 {
-  Meters circularError = _circularError;
+  Meters circularError = _defaultCircularError;
 
   // parse the circularError out of the tags.
   if (t.contains(MetadataTags::ErrorCircular()))

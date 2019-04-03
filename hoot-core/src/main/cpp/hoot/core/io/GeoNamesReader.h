@@ -60,7 +60,7 @@ public:
 
   virtual ElementPtr readNextElement();
 
-  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; }
+  void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
@@ -70,19 +70,19 @@ public:
 
 private:
 
-  Meters _circularError;
+  int _GEONAMESID;
+  int _LATITUDE;
+  int _LONGITUDE;
+  int _maxSaveMemoryStrings;
+  Meters _defaultCircularError;
+  bool _useDataSourceIds;
+
   QStringList _columns;
   QList<int> _convertColumns;
   QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
-  int _LATITUDE;
-  int _LONGITUDE;
-  int _GEONAMESID;
-  int _maxSaveMemoryStrings;
-  bool _useDataSourceIds;
   mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
-
 
   QString _saveMemory(const QString& s);
 };

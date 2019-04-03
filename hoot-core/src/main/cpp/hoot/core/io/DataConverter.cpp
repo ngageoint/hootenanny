@@ -50,6 +50,9 @@
 // std
 #include <vector>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -374,23 +377,32 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
-    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-    writer->setScriptPath(_translation);
-    writer->open(output);
-
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
     NamedOp(_convertOps).apply(map);
 
+    QElapsedTimer timer;
+    timer.start();
+
     MapProjector::projectToWgs84(map);
+    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+    writer->setScriptPath(_translation);
+    writer->open(output);
     writer->write(map);
+
+    LOG_INFO(
+      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
   }
 }
 
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
   LOG_TRACE("_convertFromOgr (formerly known as ogr2osm)");
+
+  QElapsedTimer timer;
+  timer.start();
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -500,7 +512,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   }
 
   LOG_INFO(
-    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements from input.");
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 
   MapProjector::projectToPlanar(map);
   //the ordering for these ogr2osm ops may matter
@@ -590,6 +603,9 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
 void DataConverter::_exportToShapeWithCols(const QString output, const QStringList cols,
                                            OsmMapPtr map)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   boost::shared_ptr<OsmMapWriter> writer =
     OsmMapWriterFactory::createWriter(output);
   boost::shared_ptr<ShapefileWriter> shapeFileWriter =
@@ -599,6 +615,10 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
   shapeFileWriter->setColumns(cols);
   shapeFileWriter->open(output);
   shapeFileWriter->write(map, output);
+
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 }
 
 }

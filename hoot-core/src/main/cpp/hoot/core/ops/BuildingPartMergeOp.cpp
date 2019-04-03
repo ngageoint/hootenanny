@@ -39,13 +39,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
-
-// tgs
-#include <tgs/StreamUtils.h>
-#include <tgs/System/Time.h>
-
-// Qt
-#include <QStringBuilder>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -71,7 +65,7 @@ _numGeometryCacheHits(0)
   _buildingPartTagNames.insert(MetadataTags::BuildingPart());
 }
 
-int BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
+void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   const boost::shared_ptr<Element>& neighbor)
 {
   // merge with buildings that are contained by this polygon
@@ -111,16 +105,14 @@ int BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
     }
 
     totalProcessed++;
-    if (totalProcessed % 10 == 0)
+    if (totalProcessed % 1000 == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_DEBUG(
         "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
         StringUtils::formatLargeNumber(intersectIds.size()) <<
-        " intersection buildings for neighbor: " << neighbor->getElementId());
+        " intersecting buildings for: " << neighbor->getElementId());
     }
   }
-
-  return totalProcessed/*buildingsAdded*/;
 }
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
@@ -137,18 +129,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 
 void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
 {
-  //QElapsedTimer timer;
-  //timer.restart();
-  /*const int wayMembersProcessed =*/
-    _addContainedWaysToGroup(*(_elementConverter->convertToGeometry(r)), r);
-  //const QString time = StringUtils::secondsToDhms(timer.elapsed());
-  //TODO: remove
-//  if (time != "00:00")
-//  {
-//    LOG_INFO(
-//      "\tProcessed " << wayMembersProcessed << " way buildings for relation: " << r->getId() <<
-//      " in: " << time);
-//  }
+  _addContainedWaysToGroup(*(_elementConverter->convertToGeometry(r)), r);
 
   const vector<RelationData::Entry>& members = r->getMembers();
   int totalProcessed = 0;
@@ -215,7 +196,6 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _elementConverter.reset(new ElementConverter(_map));
   _wayGeometryCache.clear();
 
-  //_timer.restart();
   int totalProcessed = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
@@ -246,13 +226,8 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         " ways for building part merging.");
     }
   }
-  //TODO: change to debug
-//  LOG_DEBUG(
-//    "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " ways in: " <<
-//    StringUtils::secondsToDhms(_timer.elapsed()));
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " ways.");
 
-  //_timer.restart();
   totalProcessed = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
@@ -275,18 +250,18 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         " relations for building part merging.");
     }
   }
-  //TODO: change to debug
-//  LOG_DEBUG(
-//    "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " relations in: " <<
-//    StringUtils::secondsToDhms(_timer.elapsed()));
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " relations.");
+
+  LOG_DEBUG(
+    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
+    " total building geometries.");
+  LOG_DEBUG("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
 
   ////
   /// Time to start making changes to the map.
   ////
 
   // go through each of the grouped buildings
-  //_timer.restart();
   totalProcessed = 0;
   int numBuildingsMerged = 0;
   const DisjointSetMap<boost::shared_ptr<Element>>::AllGroups& groups = _ds.getAllGroups();
@@ -309,22 +284,12 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(totalProcessed) << " building parts.");
     }
   }
-  //TODO: change to debug
-  //LOG_DEBUG(
-    //"\tMerged " << numBuildingsMerged << " buildings in: " <<
-    //StringUtils::secondsToDhms(_timer.elapsed()));
   LOG_DEBUG("\tMerged " << numBuildingsMerged << " buildings.");
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
   _map->getIndex().clearRelationIndex();
   _map.reset();
-
-  //TODO: change to debug
-  LOG_DEBUG(
-    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
-    " total building geometries.");
-  LOG_INFO("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
 }
 
 set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& tags)
@@ -359,7 +324,7 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
   return neighborIds;
 }
 
-void BuildingPartMergeOp::_combineParts(const std::vector< boost::shared_ptr<Element> >& parts)
+void BuildingPartMergeOp::_combineParts(const std::vector<boost::shared_ptr<Element>>& parts)
 {
   combineParts(_map, parts);
 }
@@ -375,8 +340,8 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
 
   RelationPtr building(
     new Relation(
-      parts[0]->getStatus(), map->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY,
-      MetadataTags::RelationBuilding()));
+      parts[0]->getStatus(), map->createNextRelationId(),
+      WorstCircularErrorVisitor::getWorstCircularError(parts), MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();
   Tags& t = building->getTags();

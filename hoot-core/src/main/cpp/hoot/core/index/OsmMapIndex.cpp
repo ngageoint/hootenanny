@@ -141,7 +141,7 @@ void OsmMapIndex::_buildWayTree() const
   QTime t;
   t.start();
 
-  LOG_INFO("Building way R-Tree index");
+  LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
@@ -175,7 +175,7 @@ void OsmMapIndex::_buildWayTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  Way R-Tree Index: " << count << " / " << ways.size() << "       ");
+      PROGRESS_DEBUG("Way R-Tree Index: " << count << " / " << ways.size() << "       ");
     }
   }
 
@@ -186,7 +186,7 @@ void OsmMapIndex::_buildWayTree() const
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("Way R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_INFO("Way R-Tree index built in: " << StringUtils::secondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const

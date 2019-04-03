@@ -40,6 +40,10 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -214,6 +218,9 @@ void ElementStreamer::stream(const QString input, const QString out, const QStri
 void ElementStreamer::stream(const QStringList inputs, const QString out,
                              const QStringList convertOps)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
   boost::shared_ptr<ElementOutputStream> streamWriter =
@@ -259,6 +266,8 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   {
     partialWriter->finalizePartial();
   }
+
+  LOG_INFO("Streaming element I/O took: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 }
 
 }

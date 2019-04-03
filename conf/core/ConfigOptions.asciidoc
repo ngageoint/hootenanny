@@ -941,6 +941,13 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== geonames.reader.string.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+TODO
+
 === hash.seed.zero
 
 * Data Type: bool
