@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.grail;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,16 +40,6 @@ abstract class GrailCommand extends ExternalCommand {
     GrailCommand(String jobId, GrailParams grailParams) {
         super(jobId);
         this.params = grailParams;
-    }
-
-    GrailCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
-        this(jobId, params);
-
-        java.util.Map<String, Object> substitutionMap = new HashMap<>();
-
-        String command = "echo Grail!!";
-
-        super.configureCommand(command, substitutionMap, caller);
     }
 
 }

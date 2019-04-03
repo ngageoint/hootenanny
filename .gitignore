@@ -172,6 +172,7 @@ coverage/
 userfiles/
 
 ###### hoot-services ignores
+hoot-services/.idea
 hoot-services/db.properties
 hoot-services/src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 hoot-services/src/main/resources/build.info
