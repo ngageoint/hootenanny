@@ -31,9 +31,7 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -50,6 +48,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
+import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
@@ -75,13 +74,29 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
         String obfuscatedCommand = commandTemplate;
 
-        try (OutputStream stdout = new ByteArrayOutputStream();
-             OutputStream stderr = new ByteArrayOutputStream()) {
+        try {
+            CommandResult commandResult = new CommandResult();
 
-            this.stdout = stdout;
-            this.stderr = stderr;
+            this.stdout = new LogOutputStream() {
+                // TODO: will write to database in future
+                @Override
+                protected void processLine(String line, int level) {
+                    String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
+                    currentOut = currentOut.concat(line + "\n");
+                    commandResult.setStdout(currentOut);
+                }
+            };
+            this.stderr = new LogOutputStream() {
+                // TODO: will write to database in future
+                @Override
+                protected void processLine(String line, int level) {
+                    String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
+                    currentErr = currentErr.concat(line + "\n");
+                    commandResult.setStderr(currentErr);
+                }
+            };
 
-            ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
+            ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(this.stdout, this.stderr);
             Executor executor = new DefaultExecutor();
             this.watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
             executor.setWatchdog(this.watchDog);
@@ -94,21 +109,37 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
 
             // Sensitive params obfuscated
-            obfuscatedCommand = Arrays.stream(
-                        parse(commandTemplate, substitutionMap).toStrings()
-                    )
-                    .collect(Collectors.joining(" "));
+            obfuscatedCommand = Arrays.stream(parse(commandTemplate, substitutionMap).toStrings())
+                .collect(Collectors.joining(" "));
 
-            LocalDateTime start = null;
+            LocalDateTime start = LocalDateTime.now();
             Exception exception = null;
             int exitCode;
 
-            try {
-                start = LocalDateTime.now();
+            commandResult.setCommand(obfuscatedCommand);
+            commandResult.setCaller(caller);
+            commandResult.setStart(start);
+            commandResult.setJobId(jobId);
+            commandResult.setWorkingDir(workingDir);
 
+            try {
                 logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
 
-                exitCode = executor.execute(cmdLine); //TODO: should be made async
+                // TODO: Async approach but some commands need to be executed serially
+                // TODO: Will require changing JobRunnable.class processJob() as well because it
+                // executor.execute(cmdLine, new ExecuteResultHandler() {
+                //     @Override
+                //     public void onProcessComplete(int exitValue) {
+                //
+                //     }
+                //
+                //     @Override
+                //     public void onProcessFailed(ExecuteException e) {
+                //
+                //     }
+                // });
+
+                exitCode = executor.execute(cmdLine);
             }
             catch (Exception e) {
                 exitCode = CommandResult.FAILURE;
@@ -122,17 +153,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             LocalDateTime finish = LocalDateTime.now();
 
-            //, exitCode, stdout.toString(), stderr.toString()
-            CommandResult commandResult = new CommandResult();
-            commandResult.setCommand(obfuscatedCommand);
-            commandResult.setCaller(caller);
+            // Need this in case 1 of them is null
+            String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
+            String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
+
+            commandResult.setStdout(currentOut);
+            commandResult.setStderr(currentErr);
             commandResult.setExitCode(exitCode);
-            commandResult.setStderr(stderr.toString());
-            commandResult.setStdout(stdout.toString());
-            commandResult.setStart(start);
             commandResult.setFinish(finish);
-            commandResult.setJobId(jobId);
-            commandResult.setWorkingDir(workingDir);
 
             if (trackable) {
                 updateDatabase(commandResult);
@@ -147,7 +175,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             return commandResult;
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
         }
     }
