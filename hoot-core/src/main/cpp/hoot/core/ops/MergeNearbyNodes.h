@@ -77,7 +77,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Merging nearby nodes..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " nearby nodes."; }
+  { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
 protected:
 

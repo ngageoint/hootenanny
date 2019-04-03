@@ -100,7 +100,8 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to criterion op: " << opName);
+          LOG_INFO(
+            "Unable to stream I/O due to criterion op: " << opName << "; loading entire map...");
           return false;
         }
       }
@@ -111,7 +112,8 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          LOG_INFO(
+            "Unable to stream I/O due to visitor op: " << opName << "; loading entire map...");
           return false;
         }
       }
@@ -122,14 +124,15 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          LOG_INFO(
+            "Unable to stream I/O due to visitor op: " << opName << "; loading entire map...");
           return false;
         }
       }
       // OsmMapOperation isn't streamable.
       else
       {
-        LOG_INFO("Unable to stream I/O due to: " << opName);
+        LOG_INFO("Unable to stream I/O due to: " << opName << "; loading entire map...");
         return false;
       }
     }
@@ -149,7 +152,6 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
     return filteredInputStream;
   }
 
-  LOG_VARD(ops);
   foreach (QString opName, ops)
   {
     LOG_VARD(opName);
@@ -159,7 +161,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
-        LOG_INFO("Filtering input with: " << opName << "...");
+        LOG_INFO("Initializing operation: " << opName << "...");
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
 
@@ -178,7 +180,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
-        LOG_INFO("Visiting input with: " << opName << "...");
+        LOG_INFO("Initializing operation: " << opName << "...");
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
         boost::shared_ptr<Configurable> visConfig;

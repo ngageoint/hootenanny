@@ -133,7 +133,7 @@ private:
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
   int _numGeometryCacheHits;
-  QElapsedTimer _timer;
+  //QElapsedTimer _timer;
 
   int _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
@@ -154,6 +154,9 @@ private:
    * Returns true if the nodes n1 and n2 appear in w in consecutive order.
    */
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+
+  boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
+                                                          const bool checkForBuilding = true);
 };
 
 }

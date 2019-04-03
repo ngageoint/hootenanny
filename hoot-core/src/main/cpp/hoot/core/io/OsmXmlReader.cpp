@@ -698,7 +698,7 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
       _numRead++;
     }
 
-    if (_numRead % (_statusUpdateInterval * 10) == 0)
+    if (_numRead % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
     }

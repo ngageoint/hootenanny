@@ -3311,6 +3311,20 @@ have negative IDs.  Not honored by all readers.
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
+=== relation.with.most.members.op.member.criterion
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== relation.with.most.members.op.relation.criterion
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
 === remove.attributes.visitor.types
 
 * Data Type: list

@@ -182,7 +182,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
-  LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
+  LOG_INFO("Converting " << inputs.join(", ").right(50) << " to " << output.right(50) << "...");
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
@@ -301,13 +301,13 @@ void DataConverter::_fillElementCache(QString inputUrl,
     cachePtr->addElement(constElement);
   }
 
-  LOG_INFO("Done Reading");
-} // end run
+  LOG_DEBUG("Done Reading");
+}
 
 void DataConverter::_transToOgrMT(QString input,
                                   QString output)
 {
-  LOG_INFO("_transToOgrMT");
+  LOG_DEBUG("_transToOgrMT");
 
   QQueue<ElementPtr> elementQ;
   ElementCachePtr pElementCache(new ElementCacheLRU(
@@ -381,8 +381,8 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
-    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
+
     MapProjector::projectToWgs84(map);
     writer->write(map);
   }
@@ -512,8 +512,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
-  LOG_INFO("Applying " << _convertOps.size() << " conversion operations...");
   NamedOp(_convertOps).apply(map);
+
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
 
@@ -527,7 +527,6 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  //LOG_VART(OsmMapReaderFactory::hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
@@ -568,8 +567,8 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     }
 
-    LOG_DEBUG("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
+
     MapProjector::projectToWgs84(map);
 
     if (output.toLower().endsWith(".shp") && _colsArgSpecified)

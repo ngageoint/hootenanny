@@ -99,23 +99,23 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
-  int count = 0;
+  int startNodeCount = 0;
   const NodeMap& nodes = planar->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
-    count++;
+    startNodeCount++;
 
-    if (count % 10000 == 0)
+    if (startNodeCount % 100000 == 0)
     {
       PROGRESS_INFO(
-        "\tInitialized " << StringUtils::formatLargeNumber(count) << " nodes / " <<
+        "\tInitialized " << StringUtils::formatLargeNumber(startNodeCount) << " nodes / " <<
         StringUtils::formatLargeNumber(nodes.size()) << " for merging.");
     }
   }
 
-  count = 0;
+  int processedCount = 0;
   cph.resetIterator();
   while (cph.next())
   {
@@ -160,14 +160,12 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       }
     }
 
-    count++;
-    if (count % 10000 == 0)
+    processedCount++;
+    if (processedCount % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " / " <<
-        StringUtils::formatLargeNumber(count) << " nodes processed; remaining: " <<
-        // TODO: This remaining count isn't right.
-        (StringUtils::formatLargeNumber((int)cph.size() - count)));
+        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node pairs / " <<
+        StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
   }
 }

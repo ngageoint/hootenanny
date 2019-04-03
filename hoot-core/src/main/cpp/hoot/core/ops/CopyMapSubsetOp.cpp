@@ -37,6 +37,7 @@ namespace hoot
 class AddAllVisitor : public ConstElementVisitor
 {
 public:
+
   AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, ElementId exempt = ElementId()) :
     _from(from),
     _to(to),
@@ -74,6 +75,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
+
   ConstOsmMapPtr _from;
   OsmMapPtr _to;
   ElementId _exempt;

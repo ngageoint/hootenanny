@@ -182,11 +182,11 @@ void OsmMapIndex::_buildWayTree() const
   _pendingWayInsert.clear();
   _pendingWayRemoval.clear();
 
-  LOG_DEBUG("  Bulk inserting Way R-Tree...");
+  LOG_DEBUG("Bulk inserting Way R-Tree...");
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("  Way R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_INFO("Way R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const
@@ -334,7 +334,8 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      boost::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < bestDistance)
@@ -365,7 +366,8 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      boost::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < buffer)

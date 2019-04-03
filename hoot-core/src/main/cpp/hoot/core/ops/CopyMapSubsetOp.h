@@ -44,7 +44,7 @@ public:
   static std::string className() { return "hoot::CopyMapSubsetOp"; }
 
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
-  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
   /**

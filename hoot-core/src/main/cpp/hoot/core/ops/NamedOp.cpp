@@ -82,10 +82,9 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<OsmMapOperation>(s));
 
       QString initMessage =
-        QString("\tApplying operation %1 / %2 (%3)")
+        QString("Applying operation %1 / %2")
         .arg(QString::number(opCount))
-        .arg(QString::number(_namedOps.size()))
-        .arg(s);
+        .arg(QString::number(_namedOps.size()));
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -94,7 +93,7 @@ void NamedOp::apply(OsmMapPtr& map)
       }
       else
       {
-        initMessage += "...";
+        initMessage += ": " + s + " ...";
       }
       LOG_INFO(initMessage);
       LOG_DEBUG(
@@ -122,10 +121,9 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
 
       QString initMessage =
-        QString("\tApplying operation %1 / %2 (%3)")
+        QString("Applying operation %1 / %2")
         .arg(QString::number(opCount))
-        .arg(QString::number(_namedOps.size()))
-        .arg(s);
+        .arg(QString::number(_namedOps.size()));
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
       if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
@@ -134,7 +132,7 @@ void NamedOp::apply(OsmMapPtr& map)
       }
       else
       {
-        initMessage += "...";
+        initMessage += ": " + s + " ...";
       }
       LOG_INFO(initMessage);
 
