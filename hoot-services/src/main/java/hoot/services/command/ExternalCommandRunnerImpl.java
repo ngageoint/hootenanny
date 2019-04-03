@@ -81,6 +81,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
+                    logger.info(line);
+
                     String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
                     currentOut = currentOut.concat(line + "\n");
                     commandResult.setStdout(currentOut);
@@ -90,6 +92,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
+                    logger.error(line);
+
                     String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
                     currentErr = currentErr.concat(line + "\n");
                     commandResult.setStderr(currentErr);
