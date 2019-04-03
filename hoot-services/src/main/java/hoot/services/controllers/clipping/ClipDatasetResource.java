@@ -47,6 +47,7 @@ import org.springframework.stereotype.Controller;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -100,7 +101,7 @@ public class ClipDatasetResource {
 
         try {
             ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
-            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params, user, this.getClass());
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getFolderId(), user, this.getClass());
 
             Command[] workflow = { clipCommand, setFolderCommand };
 

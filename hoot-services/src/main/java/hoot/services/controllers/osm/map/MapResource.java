@@ -174,6 +174,7 @@ public class MapResource {
             if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
                 Maps m = t.get(maps);
                 m.setPublicCol(parentFolderIsPublic);
+                m.setFolderId(parentFolder);
                 mapLayersOut.add(m);
             }
         }

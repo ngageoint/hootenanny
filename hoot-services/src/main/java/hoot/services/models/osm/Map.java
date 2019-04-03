@@ -30,14 +30,12 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
-import static hoot.services.HootProperties.replaceSensitiveData;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -636,6 +634,7 @@ public class Map extends Maps {
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
             mapLayer.setPublicCol(mapLayerRecord.getPublicCol());
             mapLayer.setUserId(mapLayerRecord.getUserId());
+            mapLayer.setFolderId(mapLayerRecord.getFolderId());
             java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
             if (tags.containsKey("lastAccessed")) {
                 mapLayer.setLastAccessed(tags.get("lastAccessed"));

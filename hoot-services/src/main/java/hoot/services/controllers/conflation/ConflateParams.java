@@ -56,6 +56,9 @@ public class ConflateParams {
     @JsonProperty("OUTPUT_NAME")
     private String outputName;
 
+    @JsonProperty("OUTPUT_FOLDER")
+    private Long outputFolder;
+
     @JsonProperty("COLLECT_STATS")
     private Boolean collectStats;
 
@@ -139,6 +142,14 @@ public class ConflateParams {
         this.outputName = outputName;
     }
 
+    public Long getOutputFolder() {
+        return outputFolder;
+    }
+
+    public void setOutputFolder(Long outputFolder) {
+        this.outputFolder = outputFolder;
+    }
+
     public Boolean getCollectStats() {
         return collectStats;
     }
@@ -191,7 +202,6 @@ public class ConflateParams {
         return this.conflateAlgorithm;
     }
 
-
     public void setConflateAlgorithm(String algorithm) {
         this.conflateAlgorithm = algorithm;
     }
@@ -222,6 +232,7 @@ public class ConflateParams {
                 ", referenceLayer='" + referenceLayer + '\'' +
                 ", advancedOptions='" + advancedOptions + '\'' +
                 ", outputName='" + outputName + '\'' +
+                ", outputFolder='" + outputFolder + '\'' +
                 ", collectStats=" + collectStats +
                 ", bounds='" + bounds + '\'' +
                 ", conflationType='" + conflationType + '\'' +
