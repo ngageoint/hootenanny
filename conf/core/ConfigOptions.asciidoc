@@ -321,6 +321,14 @@ If true, when building outlines are updated the updater will remove the source b
 used to create the outline multipolygon relation.  If false, both source building relations and
 outline multipolygon relations will remain.
 
+=== building.part.merger.thread.count
+
+* Data Type: int
+* Default Value: `4`
+
+Number of threads used by BuildingPartMergerOp to process buildings.  A value of -1 allows
+Hootenanny to determine the thread count.
+
 === building.review.if.secondary.newer
 
 * Data Type: bool

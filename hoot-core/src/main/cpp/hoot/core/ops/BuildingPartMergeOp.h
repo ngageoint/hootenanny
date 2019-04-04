@@ -36,12 +36,18 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
 
 // Qt
 #include <QHash>
+#include <QRunnable>
+#include <QQueue>
+#include <QMutex>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -61,6 +67,45 @@ template<>
 
 namespace hoot
 {
+
+class RelationBuildingPartProcessor : public QRunnable
+{
+
+public:
+
+  RelationBuildingPartProcessor(QQueue<RelationPtr>* buildingRelationQueue,
+                                QMutex* buildingPartMutex, QMutex* singletonMutex,
+                                QMutex* elementQueueMutex, OsmMapPtr map,
+                                Tgs::DisjointSetMap<ElementPtr>* buildingParts,
+                                std::set<QString>* buildingPartTagNames, TagComparator& tagComp,
+                                OsmSchema& osmSchema,
+                                boost::shared_ptr<ElementConverter> elementConverter,
+                           QHash<long, boost::shared_ptr<geos::geom::Geometry>>* wayGeometryCache);
+  void run() override;
+
+private:
+
+  QQueue<RelationPtr>* _buildingRelationQueue;
+  QMutex* _buildingPartMutex;
+  QMutex* _singletonMutex;
+  QMutex* _elementQueueMutex;
+  OsmMapPtr _map;
+  Tgs::DisjointSetMap<ElementPtr>* _buildingParts;
+  std::set<QString>* _buildingPartTagNames;
+  TagComparator& _tagComp;
+  OsmSchema& _osmSchema;
+  boost::shared_ptr<ElementConverter> _elementConverter;
+  QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
+  BuildingCriterion _buildingCrit;
+
+  void _addNeighborsToGroup(const RelationPtr& r);
+  void _addContainedWaysToGroup(const geos::geom::Geometry& g, const ElementPtr& neighbor);
+  bool _compareTags(Tags t1, Tags t2);
+  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+  boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
+                                                          const bool checkForBuilding = true);
+};
 
 class Relation;
 class OsmSchema;
@@ -87,7 +132,8 @@ class OsmSchema;
  *
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
+class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
+  public Configurable
 {
 public:
 
@@ -99,12 +145,13 @@ public:
 
   virtual void apply(OsmMapPtr& map) override;
 
+  virtual void setConfiguration(const Settings& conf);
+
   virtual std::string getClassName() const { return className(); }
   virtual void readObject(QDataStream& /*is*/) {}
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  RelationPtr combineParts(const OsmMapPtr &map,
-    const std::vector< boost::shared_ptr<Element> >& parts);
+  RelationPtr combineParts(const OsmMapPtr &map, const std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -119,7 +166,7 @@ public:
 private:
 
   /// Used to keep track of which elements make up a building.
-  Tgs::DisjointSetMap<boost::shared_ptr<Element>> _ds;
+  Tgs::DisjointSetMap<ElementPtr> _ds;
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
@@ -131,18 +178,21 @@ private:
   int _totalContainedBuildingsAdded;
   int _totalContainedWaysProcessed;
 
+  int _threadCount;
+
   void _processWays();
   void _processRelations();
+  void _processRelations2();
   void _mergeBuildingParts();
 
   void _addContainedWaysToGroup(
-    const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
+    const geos::geom::Geometry& g, const ElementPtr& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);
 
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 
-  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts);
+  void _combineParts(const std::vector<ElementPtr>& parts);
 
   /**
    * Compares the given tags and determines if the two building parts could be part of the same
@@ -157,6 +207,10 @@ private:
 
   boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
                                                           const bool checkForBuilding = true);
+
+  QQueue<RelationPtr> _getBuildingRelationQueue();
+
+  void _initBuildingPartTagNames();
 };
 
 }
