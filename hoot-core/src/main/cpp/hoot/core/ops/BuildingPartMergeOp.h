@@ -100,6 +100,7 @@ private:
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
   boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
                                                           const bool checkForBuilding = true);
+  bool _isBuilding(const ElementPtr& element) const;
 };
 
 class Relation;

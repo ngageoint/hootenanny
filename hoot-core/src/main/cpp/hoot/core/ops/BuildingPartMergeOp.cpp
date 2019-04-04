@@ -133,11 +133,9 @@ std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& 
     {
       const long wayId = *it;
       WayPtr neighbor = _map->getWay(wayId);
-      _singletonMutex->lock();
-      const bool isBuilding = _buildingCrit.isSatisfied(neighbor);
-      _singletonMutex->unlock();
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
-      if (isBuilding && neighbor != w && _hasContiguousNodes(neighbor, w->getNodeId(i), lastId) &&
+      if (neighbor != w && _isBuilding(neighbor) &&
+          _hasContiguousNodes(neighbor, w->getNodeId(i), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
         // add this to the list of neighbors
@@ -185,20 +183,35 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
 boost::shared_ptr<geos::geom::Geometry> RelationBuildingPartProcessor::_getWayGeometry(
   const WayPtr& way, const bool checkForBuilding)
 {
-  _singletonMutex->lock();
+
   boost::shared_ptr<geos::geom::Geometry> g;
   if (_wayGeometryCache->contains(way->getId()))
   {
-    g = _wayGeometryCache->value(way->getId());
     ////_numGeometryCacheHits++;
+    g = _wayGeometryCache->value(way->getId());
   }
-  else if (!checkForBuilding || _buildingCrit.isSatisfied(way))
+  else if (!checkForBuilding)
   {
     g = _elementConverter->convertToGeometry(way);
     //_wayGeometryCache->insert(way->getId(), g);
   }
-  _singletonMutex->unlock();
+  else
+  {
+    if (_isBuilding(way))
+    {
+      g = _elementConverter->convertToGeometry(way);
+      //_wayGeometryCache->insert(way->getId(), g);
+    }
+  }
   return g;
+}
+
+bool RelationBuildingPartProcessor::_isBuilding(const ElementPtr& element) const
+{
+  _singletonMutex->lock();
+  const bool isBuilding = _buildingCrit.isSatisfied(element);
+  _singletonMutex->unlock();
+  return isBuilding;
 }
 
 void RelationBuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::Geometry& g,
