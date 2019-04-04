@@ -112,9 +112,9 @@ public class ConflateResource {
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
             InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, user.getId(), params, this.getClass());
-            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getOutputFolder(), user, this.getClass());
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getOutputFolder(), params.getOutputName(), user, this.getClass());
 
-            Command[] workflow = { conflateCommand, updateTagsCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand, setFolderCommand };
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE));
         }

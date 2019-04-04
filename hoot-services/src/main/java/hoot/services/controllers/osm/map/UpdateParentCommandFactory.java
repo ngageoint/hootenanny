@@ -34,7 +34,7 @@ import hoot.services.models.db.Users;
 @Component
 public class UpdateParentCommandFactory {
 
-    public UpdateParentCommand build(String jobId, Long folderId, Users user, Class<?> caller) {
-        return new UpdateParentCommand(jobId, folderId, user, caller);
+    public UpdateParentCommand build(String jobId, Long folderId, String mapName, Users user, Class<?> caller) {
+        return new UpdateParentCommand(jobId, folderId, mapName, user, caller);
     }
 }

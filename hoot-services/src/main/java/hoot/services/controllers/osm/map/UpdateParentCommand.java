@@ -36,14 +36,14 @@ import hoot.services.utils.DbUtils;
 
 public class UpdateParentCommand implements InternalCommand {
     private final String jobId;
-    private final Long mapId;
+    private final String mapName;
     private final Long folderId;
     private final Users user;
     private final Class<?> caller;
 
-    UpdateParentCommand( String jobId, Long folderId, Users user, Class<?> caller) {
+    UpdateParentCommand( String jobId, Long folderId, String mapName, Users user, Class<?> caller) {
         this.jobId = jobId;
-        this.mapId = DbUtils.getMapIdByJobId(jobId);
+        this.mapName = mapName;
         this.folderId = folderId;
         this.user = user;
         this.caller = caller;
@@ -53,7 +53,7 @@ public class UpdateParentCommand implements InternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
         commandResult.setJobId(jobId);
-        commandResult.setCommand("[Update Parent Directory] of map with id = " + mapId);
+        commandResult.setCommand("[Update Parent Directory] of map with id = " + mapName);
         commandResult.setStart(LocalDateTime.now());
         commandResult.setCaller(caller.getName());
 
@@ -67,6 +67,7 @@ public class UpdateParentCommand implements InternalCommand {
 
     private void updateParentDirectory() {
         try {
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
 
             // These functions ensure the map + folder are either owned by the user -or- public.
             MapResource.getMapForUser(user, mapId.toString(), false, true);

@@ -43,6 +43,7 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
@@ -56,6 +57,7 @@ import hoot.services.models.db.Users;
 
 @Controller
 @Path("/clipdataset")
+@Transactional
 public class ClipDatasetResource {
     @Autowired
     private JobProcessor jobProcessor;
@@ -101,7 +103,7 @@ public class ClipDatasetResource {
 
         try {
             ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
-            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getFolderId(), user, this.getClass());
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getFolderId(), params.getOutputName(), user, this.getClass());
 
             Command[] workflow = { clipCommand, setFolderCommand };
 
