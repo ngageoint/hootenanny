@@ -28,13 +28,14 @@
 #include "GeometryModifierOp.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace boostPropTree = boost::property_tree;
+namespace bpt = boost::property_tree;
 
 namespace hoot
 {
@@ -43,16 +44,40 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, GeometryModifierOp)
 
 GeometryModifierOp::GeometryModifierOp()
 {
+  _rulesFileName = ConfigOptions().getGeometryModifierRulesFile();
 }
 
 void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
 {
-  MapProjector::projectToPlanar(map);
+  // read the json rules
+  bpt::ptree propPtree;
+  bpt::read_json(_rulesFileName.toLatin1().constData(), propPtree );
 
+  BOOST_FOREACH(bpt::ptree::value_type &v, propPtree)
+  {
+    LOG_VAR(v.first);
+
+    // read command here
+
+    if( !v.second.empty())
+    {
+      BOOST_FOREACH(bpt::ptree::value_type &c, v.second)
+      {
+        // read filter and parameters here
+
+        LOG_VAR(c.first);
+      }
+    }
+  }
+
+  // re-project and set visitor map
+  MapProjector::projectToPlanar(map);
   _geometryModifierVisitor.setOsmMap(map.get());
 
+  // process
   map->visitRw(_geometryModifierVisitor);
 
+  // update operation status info
   _numAffected = _geometryModifierVisitor._numAffected;
   _numProcessed = _geometryModifierVisitor._numProcessed;
 }

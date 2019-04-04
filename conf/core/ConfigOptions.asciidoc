@@ -941,6 +941,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== geometry.modifier.rules.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/GeometryModifierRules.json`
+
+Path to a json file containing the actions, filters and arguments used for the
+hoot::GeometryModifierOp.
+
 === hash.seed.zero
 
 * Data Type: bool

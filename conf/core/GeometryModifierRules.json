@@ -1,0 +1,37 @@
+{
+    "convert_way_to_poly":
+    {
+        "filter":
+        {
+            "aeroway": "runway"
+        },
+        "parameters":
+        {
+            "default_width_m": 10,
+            "width_tag_m" : "width"
+        }
+    },
+    "convert_way_to_poly":
+    {
+        "filter":
+        {
+            "aeroway": "taxiway"
+        },
+        "parameters":
+        {
+            "width_in_m": 5,
+            "width_tag_m" : "width"
+        }
+    },
+    "collapse_poly_to_point":
+    {
+        "filter":
+        {
+            "building": "yes"
+        },
+        "parameters":
+        {
+            "max_area_in_m": 15000
+        }
+    }
+}

@@ -53,6 +53,7 @@ namespace hoot
     virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
   private:
+    QString _rulesFileName;
     GeometryModifierVisitor _geometryModifierVisitor;
   };
 
