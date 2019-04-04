@@ -184,28 +184,18 @@ boost::shared_ptr<Geometry> BuildingPartMergeOp::_getWayGeometry(const WayPtr& w
   return g;
 }
 
-void BuildingPartMergeOp::apply(OsmMapPtr& map)
+void BuildingPartMergeOp::_processWays()
 {
-  MapProjector::projectToPlanar(map);
-
-  ////
-  /// treat the map as read only while we determine building parts.
-  ////
-  _ds.clear();
-  _map = map;
-  _elementConverter.reset(new ElementConverter(_map));
-  _wayGeometryCache.clear();
-
   int totalProcessed = 0;
   // go through all the ways
-  const WayMap& ways = map->getWays();
+  const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = it->second;
     // add the way to a building group, if the way is part of a building
     if (_buildingCrit.isSatisfied(w))
     {
-      _addNeighborsToGroup(w); 
+      _addNeighborsToGroup(w);
 
       // Cache the way geometries now, as that will benefit us when we later process way relation
       // members.
@@ -227,10 +217,13 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
   }
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " ways.");
+}
 
-  totalProcessed = 0;
+void BuildingPartMergeOp::_processRelations()
+{
+  int totalProcessed = 0;
   // go through all the relations
-  const RelationMap& relations = map->getRelations();
+  const RelationMap& relations = _map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr& r = it->second;
@@ -251,18 +244,12 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
   }
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " relations.");
+}
 
-  LOG_DEBUG(
-    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
-    " total building geometries.");
-  LOG_DEBUG("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
-
-  ////
-  /// Time to start making changes to the map.
-  ////
-
+void BuildingPartMergeOp::_mergeBuildingParts()
+{
   // go through each of the grouped buildings
-  totalProcessed = 0;
+  int totalProcessed = 0;
   int numBuildingsMerged = 0;
   const DisjointSetMap<boost::shared_ptr<Element>>::AllGroups& groups = _ds.getAllGroups();
   for (DisjointSetMap<boost::shared_ptr<Element>>::AllGroups::const_iterator it = groups.begin();
@@ -285,6 +272,32 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
     }
   }
   LOG_DEBUG("\tMerged " << numBuildingsMerged << " buildings.");
+}
+
+void BuildingPartMergeOp::apply(OsmMapPtr& map)
+{
+  MapProjector::projectToPlanar(map);
+
+  ////
+  /// treat the map as read only while we determine building parts.
+  ////
+  _ds.clear();
+  _map = map;
+  _elementConverter.reset(new ElementConverter(_map));
+  _wayGeometryCache.clear();
+
+  _processWays();
+  _processRelations();
+
+  LOG_DEBUG(
+    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
+    " total building geometries.");
+  LOG_DEBUG("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
+
+  ////
+  /// Time to start making changes to the map.
+  ////
+  _mergeBuildingParts();
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.

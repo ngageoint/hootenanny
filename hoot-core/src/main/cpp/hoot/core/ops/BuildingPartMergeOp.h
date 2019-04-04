@@ -41,7 +41,6 @@
 #include <tgs/DisjointSet/DisjointSetMap.h>
 
 // Qt
-#include <QElapsedTimer>
 #include <QHash>
 
 // geos
@@ -129,7 +128,10 @@ private:
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
   int _numGeometryCacheHits;
-  QElapsedTimer _timer;
+
+  void _processWays();
+  void _processRelations();
+  void _mergeBuildingParts();
 
   void _addContainedWaysToGroup(
     const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
