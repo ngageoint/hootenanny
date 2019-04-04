@@ -271,9 +271,8 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void DataConverter::_fillElementCache(QString inputUrl,
-                                     ElementCachePtr cachePtr,
-                                     QQueue<ElementPtr> &workQ)
+void DataConverter::_fillElementCache(QString inputUrl, ElementCachePtr cachePtr,
+                                      QQueue<ElementPtr> &workQ)
 {
   // Setup reader
   boost::shared_ptr<OsmMapReader> reader =
@@ -307,8 +306,7 @@ void DataConverter::_fillElementCache(QString inputUrl,
   LOG_DEBUG("Done Reading");
 }
 
-void DataConverter::_transToOgrMT(QString input,
-                                  QString output)
+void DataConverter::_transToOgrMT(QString input, QString output)
 {
   LOG_DEBUG("_transToOgrMT");
 
