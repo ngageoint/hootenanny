@@ -100,7 +100,7 @@ void elementTranslatorThread::run()
     *_pFinishedTranslating = true;
   }
 
-  LOG_INFO("Done Translating");
+  LOG_DEBUG("Done Translating");
 }
 
 void ogrWriterThread::run()
@@ -164,7 +164,7 @@ void ogrWriterThread::run()
   }
   ogrWriter->close();
 
-  LOG_INFO("Done Writing Features");
+  LOG_DEBUG("Done Writing Features");
 }
 
 unsigned int DataConverter::logWarnCount = 0;
@@ -313,19 +313,21 @@ void DataConverter::_transToOgrMT(QString input,
   LOG_DEBUG("_transToOgrMT");
 
   QQueue<ElementPtr> elementQ;
-  ElementCachePtr pElementCache(new ElementCacheLRU(
-                                ConfigOptions().getElementCacheSizeNode(),
-                                ConfigOptions().getElementCacheSizeWay(),
-                                ConfigOptions().getElementCacheSizeRelation()));
+  ElementCachePtr pElementCache(
+    new ElementCacheLRU(
+      ConfigOptions().getElementCacheSizeNode(),
+      ConfigOptions().getElementCacheSizeWay(),
+      ConfigOptions().getElementCacheSizeRelation()));
   QMutex initMutex;
   QMutex transFeaturesMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
   // Read all elements
   // We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
-  LOG_INFO("Element Cache Filled");
+  LOG_DEBUG("Element Cache Filled");
 
   // Note the OGR writer is the slowest part of this whole operation,
   // but it's relatively opaque to us as a 3rd party library. So the best we
@@ -341,7 +343,7 @@ void DataConverter::_transToOgrMT(QString input,
   transThread._pFinishedTranslating = &finishedTranslating;
   transThread._pElementCache = pElementCache;
   transThread.start();
-  LOG_INFO("Translation Thread Started");
+  LOG_DEBUG("Translation Thread Started");
 
   // Setup & start our writer thread
   hoot::ogrWriterThread writerThread;
@@ -352,10 +354,10 @@ void DataConverter::_transToOgrMT(QString input,
   writerThread._pTransFeaturesQ = &transFeaturesQ;
   writerThread._pFinishedTranslating = &finishedTranslating;
   writerThread.start();
-  LOG_INFO("OGR Writer Thread Started");
+  LOG_DEBUG("OGR Writer Thread Started");
 
   // Wait for writer to finish
-  LOG_INFO("Waiting for writer to finish...");
+  LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();
 }
 
@@ -363,12 +365,9 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 {
   LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
 
-  //This entire method could be replaced by _convert, if refactoring of the way OgrWriter handles
-  //translations is done.  Currently, it depends that a translation script is set directly on it
-  //(vs using a translation visitor).  See #2416.
-
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
-      // This ops restriction needs to be removed and the ops applied during streaming.
+      // TODO: I *believe* this ops size restriction needs to be replaced with a check similar to
+      // what is in _convert...but not sure.
       _convertOps.size() == 0 &&
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())

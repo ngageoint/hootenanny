@@ -54,7 +54,9 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
 BuildingPartMergeOp::BuildingPartMergeOp() :
 _numGeometriesCleaned(0),
-_numGeometryCacheHits(0)
+_numGeometryCacheHits(0),
+_totalContainedBuildingsAdded(0),
+_totalContainedWaysProcessed(0)
 {
   vector<SchemaVertex> buildingPartTags =
     OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
@@ -67,7 +69,7 @@ _numGeometryCacheHits(0)
 
 void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   const boost::shared_ptr<Element>& neighbor)
-{
+{ 
   // merge with buildings that are contained by this polygon
 
   const vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
@@ -101,9 +103,11 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
       {
         _ds.joinT(candidate, neighbor);
         buildingsAdded++;
+        _totalContainedBuildingsAdded++;
       }
     }
 
+    _totalContainedWaysProcessed++;
     totalProcessed++;
     if (totalProcessed % 1000 == 0)
     {
@@ -243,6 +247,11 @@ void BuildingPartMergeOp::_processRelations()
         " relations for building part merging.");
     }
   }
+  // TODO: change to debug
+  LOG_INFO(
+    "Added " << StringUtils::formatLargeNumber(_totalContainedBuildingsAdded) << " / " <<
+    StringUtils::formatLargeNumber(_totalContainedWaysProcessed) <<
+    " contained ways as buildings.");
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " relations.");
 }
 

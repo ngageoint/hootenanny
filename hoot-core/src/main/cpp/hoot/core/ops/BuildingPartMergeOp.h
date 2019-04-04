@@ -128,6 +128,8 @@ private:
   int _numGeometriesCleaned;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
   int _numGeometryCacheHits;
+  int _totalContainedBuildingsAdded;
+  int _totalContainedWaysProcessed;
 
   void _processWays();
   void _processRelations();

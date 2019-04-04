@@ -295,7 +295,8 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  boost::shared_ptr<LineString> ls1 = ElementConverter(_map.shared_from_this()).convertToLineString(way);
+  boost::shared_ptr<LineString> ls1 =
+    ElementConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -305,7 +306,8 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     ConstWayPtr n = it->second;
     if (n != 0 && nId != way->getId())
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      boost::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
 
       if (d < buffer)

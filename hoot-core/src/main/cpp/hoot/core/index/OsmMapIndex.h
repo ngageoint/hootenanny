@@ -78,7 +78,7 @@ public:
 
   /**
    * Should run in approximately O(log(n)).
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
@@ -92,7 +92,7 @@ public:
 
   /**
    * Return all ways that intersect the given envelope. This runs in approximately O(log(n)) time.
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
@@ -137,7 +137,7 @@ public:
 
   /**
    * Checks that some of the existing indexes are consistent with the OsmMap backend. Any
-   * inconsitencies will either be logged as warnings or throw exceptions.
+   * inconsistencies will either be logged as warnings or throw exceptions.
    */
   bool validate() const;
 
