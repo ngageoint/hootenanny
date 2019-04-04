@@ -33,6 +33,7 @@
 
 using namespace geos::geom;
 using namespace std;
+using namespace boost;
 
 namespace hoot
 {
@@ -64,9 +65,22 @@ void GeometryModifierVisitor::visit(const ElementPtr& pElement)
   }
 }
 
+double getLength( const Coordinate& c )
+{
+  return sqrt(c.x * c.x + c.y * c.y);
+}
+
+void normalize( Coordinate& c )
+{
+  double len = getLength(c);
+  if( len == 0 ) return;
+  c.x /= len;
+  c.y /= len;
+}
+
 void GeometryModifierVisitor::extrude(const WayPtr& pWay)
 {
-  int nodeCount = pWay->getNodeCount();
+  size_t nodeCount = pWay->getNodeCount();
 
   // too small, nothing to do
   if( nodeCount < 2 ) return;
@@ -77,14 +91,53 @@ void GeometryModifierVisitor::extrude(const WayPtr& pWay)
   _pMap->addElement(pPoly);
 
   // build poly by extruding existing nodes
-  const std::vector<long> nodeIds = pWay->getNodeIds();
-  for (uint i = 0; i < nodeIds.size(); i++)
-  {
-    const NodePtr pNode = _pMap->getNode(nodeIds[i]);
+  const vector<long> nodeIds = pWay->getNodeIds();
+  //bool isLoop = pWay->isSimpleLoop();
 
-    // Coordinate c = pNode->toCoordinate();
-    // boost::shared_ptr<geos::geom::Point> p = pNode->toPoint();
-    // ...
+  assert(nodeCount == nodeIds.size());
+
+  // create coordinate array with two opposing perpendicular points on each side
+  // of original way points plus one more entry for closing the polygon
+  vector<Coordinate> polyPositions(nodeCount * 2 + 1);
+
+  for (size_t i = 0; i < nodeCount; i++)
+  {
+    long currId = nodeIds[i];
+    long prevId = (i > 0) ? nodeIds[i-1] : currId;
+    long nextId = (i < nodeCount-1) ? nodeIds[i+1] : currId;
+
+    const NodePtr pCurrNode = _pMap->getNode(currId);
+    const NodePtr pPrevNode = _pMap->getNode(prevId);
+    const NodePtr pNextNode = _pMap->getNode(nextId);
+
+    Coordinate currCoor( pCurrNode->toCoordinate() );
+    Coordinate prevCoor( pPrevNode->toCoordinate() );
+    Coordinate nextCoor( pNextNode->toCoordinate() );
+
+    Coordinate vector( nextCoor.x - prevCoor.x, nextCoor.y - prevCoor.y );
+    Coordinate perp( vector.y, -vector.x );
+    normalize(perp);
+
+    const double width = .00005;
+
+    perp.x *= width;
+    perp.y *= width;
+
+    polyPositions[i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );
+    perp.x = -perp.x; perp.y = -perp.y;
+    polyPositions[nodeCount*2-1-i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );
+  }
+
+  // close poly
+  polyPositions[nodeCount*2] = polyPositions[0];
+
+  // add nodes to polygon element
+  for( vector<Coordinate>::iterator it = polyPositions.begin(); it != polyPositions.end(); it++)
+  {
+      long nodeId =_pMap->createNextNodeId();
+      NodePtr pNode( new Node(Status::Unknown1, nodeId, *it));
+      _pMap->addElement(pNode);
+      pPoly->addNode(nodeId);
   }
 
   LOG_VAR(nodeCount);
