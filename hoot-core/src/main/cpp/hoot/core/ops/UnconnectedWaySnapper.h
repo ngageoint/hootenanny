@@ -116,7 +116,7 @@ public:
   /**
    * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
    *   the closest node in 'connectTo'
-   * @param map Map
+   * @param map Map containing ways
    * @param disconnected Disconnected way that needs to be connected
    * @param connectTo Way to connect the disconnected way to
    * @returns True if the ways were successfully snapped together
@@ -247,12 +247,20 @@ private:
   bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap);
 
   /**
-   * @brief _snapUnconnectedNodeToWay
-   * @param nodeToSnap
-   * @param wayToSnapTo
-   * @return
+   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting point
+   * @param nodeToSnap Node to snap/add into the way
+   * @param wayToSnapTo Way to connect/add the node into
+   * @return True if successful
    */
   bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap, WayPtr wayToSnapTo);
+
+  /**
+   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
+   *   the closest node in 'connectTo'
+   * @param disconnected Disconnected way that needs to be connected
+   * @param connectTo Way to connect the disconnected way to
+   * @return True if successful
+   */
   bool _snapClosestEndpointToWay(WayPtr disconnected, WayPtr connectTo);
 };
 
