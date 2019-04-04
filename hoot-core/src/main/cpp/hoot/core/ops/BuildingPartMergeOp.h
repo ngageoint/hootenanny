@@ -36,9 +36,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -77,8 +75,7 @@ public:
                                 QMutex* buildingPartMutex, QMutex* singletonMutex,
                                 QMutex* elementQueueMutex, OsmMapPtr map,
                                 Tgs::DisjointSetMap<ElementPtr>* buildingParts,
-                                std::set<QString>* buildingPartTagNames, TagComparator& tagComp,
-                                OsmSchema& osmSchema,
+                                std::set<QString>* buildingPartTagNames,
                                 boost::shared_ptr<ElementConverter> elementConverter,
                            QHash<long, boost::shared_ptr<geos::geom::Geometry>>* wayGeometryCache);
   void run() override;
@@ -92,8 +89,6 @@ private:
   OsmMapPtr _map;
   Tgs::DisjointSetMap<ElementPtr>* _buildingParts;
   std::set<QString>* _buildingPartTagNames;
-  TagComparator& _tagComp;
-  OsmSchema& _osmSchema;
   boost::shared_ptr<ElementConverter> _elementConverter;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
   BuildingCriterion _buildingCrit;
