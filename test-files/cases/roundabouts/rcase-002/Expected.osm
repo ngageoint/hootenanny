@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.34875099833999" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-41780" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381751">
+    <node visible="true" id="-41777" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381751">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-41780"/>
+        <tag k="hoot:id" v="-41777"/>
     </node>
     <node visible="true" id="-41715" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5466478874399954" lon="-72.3473433557199854">
         <tag k="hoot:status" v="1"/>
@@ -171,15 +171,15 @@
     </node>
     <way visible="true" id="-169" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="100"/>
-        <nd ref="-41780"/>
+        <nd ref="-41777"/>
         <nd ref="83"/>
         <nd ref="82"/>
         <nd ref="81"/>
         <nd ref="118"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-169"/>
@@ -190,10 +190,10 @@
         <nd ref="5"/>
         <nd ref="78"/>
         <nd ref="100"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="1"/>
@@ -218,11 +218,11 @@
         <nd ref="13"/>
         <nd ref="-41715"/>
         <nd ref="31"/>
-        <tag k="junction" v="roundabout"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
         <tag k="highway" v="secondary"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z"/>
+        <tag k="junction" v="roundabout"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="6"/>
@@ -236,10 +236,10 @@
         <nd ref="99"/>
         <nd ref="27"/>
         <nd ref="131"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="32"/>
@@ -251,10 +251,10 @@
         <nd ref="110"/>
         <nd ref="84"/>
         <nd ref="132"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="33"/>
@@ -264,10 +264,10 @@
         <nd ref="58"/>
         <nd ref="8"/>
         <nd ref="13"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source" v="Unknown"/>
-        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="36"/>

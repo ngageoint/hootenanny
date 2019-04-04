@@ -113,6 +113,16 @@ public:
   void setSnapWayStatus(const Status& status) { _snapWayStatus = status; }
   void setSnapToWayStatus(const Status& status) { _snapToWayStatus = status; }
 
+  /**
+   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
+   *   the closest node in 'connectTo'
+   * @param map Map
+   * @param disconnected Disconnected way that needs to be connected
+   * @param connectTo Way to connect the disconnected way to
+   * @returns True if the ways were successfully snapped together
+   */
+  static bool snapClosestEndpointToWay(OsmMapPtr map, WayPtr disconnected, WayPtr connectTo);
+
 private:
 
   friend class UnconnectedWaySnapperTest;
@@ -235,6 +245,15 @@ private:
    * @return true if the node was snapped; false otherwise
    */
   bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap);
+
+  /**
+   * @brief _snapUnconnectedNodeToWay
+   * @param nodeToSnap
+   * @param wayToSnapTo
+   * @return
+   */
+  bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap, WayPtr wayToSnapTo);
+  bool _snapClosestEndpointToWay(WayPtr disconnected, WayPtr connectTo);
 };
 
 }

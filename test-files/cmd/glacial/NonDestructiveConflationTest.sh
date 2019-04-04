@@ -5,7 +5,6 @@ mkdir -p test-output/NonDestructiveTest/
 
 # First run the Congo network conflation
 hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
- -D reader.conflate.use.data.source.ids.1=true \
  -D writer.include.debug.tags=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
