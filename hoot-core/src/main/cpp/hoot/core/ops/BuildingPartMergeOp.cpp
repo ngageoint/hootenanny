@@ -50,13 +50,12 @@ namespace hoot
 
 RelationBuildingPartProcessor::RelationBuildingPartProcessor(
   QQueue<RelationPtr>* buildingRelationQueue, QMutex* buildingPartMutex, QMutex* singletonMutex,
-  QMutex* elementQueueMutex, OsmMapPtr map, Tgs::DisjointSetMap<ElementPtr>* buildingParts,
+  OsmMapPtr map, Tgs::DisjointSetMap<ElementPtr>* buildingParts,
   std::set<QString>* buildingPartTagNames, boost::shared_ptr<ElementConverter> elementConverter,
   QHash<long, boost::shared_ptr<geos::geom::Geometry>>* wayGeometryCache) :
 _buildingRelationQueue(buildingRelationQueue),
 _buildingPartMutex(buildingPartMutex),
 _singletonMutex(singletonMutex),
-_elementQueueMutex(elementQueueMutex),
 _map(map),
 _buildingParts(buildingParts),
 _buildingPartTagNames(buildingPartTagNames),
@@ -70,11 +69,8 @@ void RelationBuildingPartProcessor::run()
   int numProcessed = 0;
   while (!_buildingRelationQueue->empty())
   {
-    _elementQueueMutex->lock();
-    RelationPtr buildingRelation = _buildingRelationQueue->dequeue();
-    _elementQueueMutex->unlock();
     //LOG_VAR(buildingRelation);
-    _addNeighborsToGroup(buildingRelation);
+    _addNeighborsToGroup(_buildingRelationQueue->dequeue());
     //LOG_VAR(_buildingRelationQueue->size());
     numProcessed++;
   }
@@ -323,9 +319,8 @@ void BuildingPartMergeOp::_processRelations2()
 {
   QQueue<RelationPtr> buildingRelationQueue = _getBuildingRelationQueue();
   LOG_VAR(buildingRelationQueue.size());
-  QMutex buildingPartMutex(QMutex::/*Non*/Recursive);
-  QMutex singletonMutex(QMutex::/*Non*/Recursive);
-  QMutex elementQueueMutex(QMutex::/*Non*/Recursive);
+  QMutex buildingPartMutex(QMutex::Recursive);
+  QMutex singletonMutex(QMutex::Recursive);
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
@@ -335,7 +330,7 @@ void BuildingPartMergeOp::_processRelations2()
   {
     RelationBuildingPartProcessor* buildingPartTask =
       new RelationBuildingPartProcessor(&buildingRelationQueue, &buildingPartMutex, &singletonMutex,
-                                        &elementQueueMutex, _map, &_ds, &_buildingPartTagNames,
+                                        _map, &_ds, &_buildingPartTagNames,
                                         _elementConverter, &_wayGeometryCache);
     threadPool.start(buildingPartTask);
   }

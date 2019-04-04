@@ -73,7 +73,7 @@ public:
 
   RelationBuildingPartProcessor(QQueue<RelationPtr>* buildingRelationQueue,
                                 QMutex* buildingPartMutex, QMutex* singletonMutex,
-                                QMutex* elementQueueMutex, OsmMapPtr map,
+                                OsmMapPtr map,
                                 Tgs::DisjointSetMap<ElementPtr>* buildingParts,
                                 std::set<QString>* buildingPartTagNames,
                                 boost::shared_ptr<ElementConverter> elementConverter,
@@ -85,7 +85,6 @@ private:
   QQueue<RelationPtr>* _buildingRelationQueue;
   QMutex* _buildingPartMutex;
   QMutex* _singletonMutex;
-  QMutex* _elementQueueMutex;
   OsmMapPtr _map;
   Tgs::DisjointSetMap<ElementPtr>* _buildingParts;
   std::set<QString>* _buildingPartTagNames;
