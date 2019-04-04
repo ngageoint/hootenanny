@@ -56,10 +56,9 @@ public:
   virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
 private:
-  void extrude(const WayPtr& pWay);
+  void extrude(const WayPtr& pWay, double width);
 
   OsmMap* _pMap;
-
 };
 
 }

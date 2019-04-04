@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -46,6 +47,8 @@ GeometryModifierOp::GeometryModifierOp()
 
 void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  MapProjector::projectToPlanar(map);
+
   _geometryModifierVisitor.setOsmMap(map.get());
 
   map->visitRw(_geometryModifierVisitor);

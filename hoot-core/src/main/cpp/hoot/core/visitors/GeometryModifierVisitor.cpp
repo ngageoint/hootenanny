@@ -40,6 +40,38 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 
+class CoordinateExt : public Coordinate
+{
+public:
+  CoordinateExt(Coordinate c) : Coordinate(c) {}
+  CoordinateExt(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber) : Coordinate( xNew, yNew, zNew ) {}
+
+  double getLength() const
+  {
+    return sqrt(x * x + y * y);
+  }
+
+  void normalize()
+  {
+    double len = getLength();
+    if( len == 0 ) return;
+    x /= len;
+    y /= len;
+  }
+
+  CoordinateExt operator + (const CoordinateExt  val) const
+  {
+    CoordinateExt sum( x + val.x, y + val.y, z + val.z );
+    return sum;
+  }
+
+  CoordinateExt operator - (const CoordinateExt val) const
+  {
+    CoordinateExt dif( x - val.x, y - val.y, z - val.z );
+    return dif;
+  }
+};
+
 GeometryModifierVisitor::GeometryModifierVisitor()
 {
 }
@@ -56,29 +88,15 @@ void GeometryModifierVisitor::visit(const ElementPtr& pElement)
   // for now use a hardocded filter to get a basic framework going
   if( tags.find("aeroway") == tags.end() ) return;
 
-  if( tags["aeroway"] == "runway")
-  {
-    extrude( boost::dynamic_pointer_cast<Way>(pElement));
+  double width = (tags["aeroway"] == "runway") ? 10 : 5;
 
-    tags["Test"] = "GeometryModifierVisitor";
-    _numAffected++;
-  }
+  extrude( boost::dynamic_pointer_cast<Way>(pElement), width);
+
+  tags["Test"] = "GeometryModifierVisitor";
+  _numAffected++;
 }
 
-double getLength( const Coordinate& c )
-{
-  return sqrt(c.x * c.x + c.y * c.y);
-}
-
-void normalize( Coordinate& c )
-{
-  double len = getLength(c);
-  if( len == 0 ) return;
-  c.x /= len;
-  c.y /= len;
-}
-
-void GeometryModifierVisitor::extrude(const WayPtr& pWay)
+void GeometryModifierVisitor::extrude(const WayPtr& pWay, double width)
 {
   size_t nodeCount = pWay->getNodeCount();
 
@@ -87,12 +105,9 @@ void GeometryModifierVisitor::extrude(const WayPtr& pWay)
 
   // create poly way and add it to map
   WayPtr pPoly( new Way(Status::Unknown1, _pMap->createNextWayId(), -1) );
-  pPoly->setTag("name", "GeneratedPoly");
-  _pMap->addElement(pPoly);
 
-  // build poly by extruding existing nodes
+  // build poly by 'extruding' existing nodes
   const vector<long> nodeIds = pWay->getNodeIds();
-  //bool isLoop = pWay->isSimpleLoop();
 
   assert(nodeCount == nodeIds.size());
 
@@ -110,20 +125,23 @@ void GeometryModifierVisitor::extrude(const WayPtr& pWay)
     const NodePtr pPrevNode = _pMap->getNode(prevId);
     const NodePtr pNextNode = _pMap->getNode(nextId);
 
-    Coordinate currCoor( pCurrNode->toCoordinate() );
-    Coordinate prevCoor( pPrevNode->toCoordinate() );
-    Coordinate nextCoor( pNextNode->toCoordinate() );
+    CoordinateExt currCoor( pCurrNode->toCoordinate() );
+    CoordinateExt prevCoor( pPrevNode->toCoordinate() );
+    CoordinateExt nextCoor( pNextNode->toCoordinate() );
 
-    Coordinate vector( nextCoor.x - prevCoor.x, nextCoor.y - prevCoor.y );
-    Coordinate perp( vector.y, -vector.x );
-    normalize(perp);
-
-    const double width = .00005;
+    // find perpendicular vector to vector between previous and next point
+    CoordinateExt c1 = currCoor - prevCoor;
+    CoordinateExt c2 = nextCoor - currCoor;
+    c1.normalize();
+    c2.normalize();
+    CoordinateExt vector = c1+c2;
+    CoordinateExt perp( vector.y, -vector.x );
+    perp.normalize();
 
     perp.x *= width;
     perp.y *= width;
 
-    polyPositions[i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );
+    polyPositions[i] = currCoor + perp;
     perp.x = -perp.x; perp.y = -perp.y;
     polyPositions[nodeCount*2-1-i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );
   }
@@ -140,7 +158,11 @@ void GeometryModifierVisitor::extrude(const WayPtr& pWay)
       pPoly->addNode(nodeId);
   }
 
-  LOG_VAR(nodeCount);
+  // copy tags from original way to poly way
+  pPoly->setTags(pWay->getTags());
+
+  // replace original way with poly
+  _pMap->replace(pWay,pPoly);
 }
 
 } // namespace hoot
