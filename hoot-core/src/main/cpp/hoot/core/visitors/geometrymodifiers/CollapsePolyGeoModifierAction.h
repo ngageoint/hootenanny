@@ -39,6 +39,8 @@ public:
 
   QString getCommandName() const { return "collapse_poly"; }
   QList<QString> getParameterNames() const { return QList<QString> {"max_area_in_m"}; }
+
+  bool process( const ElementPtr& pElement, OsmMap* pMap ) const;
 };
 
 }

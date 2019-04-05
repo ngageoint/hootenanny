@@ -28,6 +28,8 @@
 #ifndef GEOMETRYMODIFIERVISITOR_H
 #define GEOMETRYMODIFIERVISITOR_H
 
+#include "GeometryModifierAction.h"
+
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
@@ -46,6 +48,8 @@ public:
 
   virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
+  void setActionDesc( GeometryModifierActionDesc &actionDesc ) { _actionDesc = actionDesc; }
+
   // ElementVisitor
   static std::string className() { return "hoot::GeometryModifierVisitor"; }
   virtual void visit(const ElementPtr& e);
@@ -59,6 +63,7 @@ private:
   void extrude(const WayPtr& pWay, double width);
 
   OsmMap* _pMap;
+  GeometryModifierActionDesc& _actionDesc;
 };
 
 }

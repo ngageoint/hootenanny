@@ -33,12 +33,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 
-// Boost
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 namespace bpt = boost::property_tree;
-
-using namespace std;
+using namespace boost;
 
 namespace hoot
 {
@@ -48,56 +44,121 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, GeometryModifierOp)
 GeometryModifierOp::GeometryModifierOp()
 {
   _rulesFileName = ConfigOptions().getGeometryModifierRulesFile();
+
+  // get and instantiate available actions
+  std::vector<std::string> availableActionTypes = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
+
+  LOG_INFO( "Available Geometry Modifiers:")
+  for( std::vector<std::string>::iterator it = availableActionTypes.begin(); it != availableActionTypes.end(); it++ )
+  {
+    shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(*it) );
+    _actions.append(pAction);
+    LOG_INFO( "class: " << *it << " command: " << pAction->getCommandName());
+  }
 }
 
 void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
 {
-  // get available actions
-  vector<string> availableActions = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
-
-  for( vector<string>::iterator it = availableActions.begin(); it != availableActions.end(); it++ )
-  {
-    LOG_VAR(*it);
-  }
-
-
-  // read the json rules
-  bpt::ptree propPtree;
-  bpt::read_json(_rulesFileName.toLatin1().constData(), propPtree );
-
-  QList<GeometryModifierActionDesc> actions;
-
-  BOOST_FOREACH(bpt::ptree::value_type &v, propPtree)
-  {
-    LOG_VAR(v.first);
-
-    // read command
-    GeometryModifierActionDesc action;
-    action.command = QString::fromStdString(v.first);
-
-    actions.append(action);
-
-    if( !v.second.empty())
-    {
-      BOOST_FOREACH(bpt::ptree::value_type &c, v.second)
-      {
-        // read filter and parameters here
-
-        LOG_VAR(c.first);
-      }
-    }
-  }
+  QList<GeometryModifierActionDesc> actionDescs = _readJsonRules();
 
   // re-project and set visitor map
   MapProjector::projectToPlanar(map);
   _geometryModifierVisitor.setOsmMap(map.get());
 
   // process
-  map->visitRw(_geometryModifierVisitor);
+  foreach (GeometryModifierActionDesc actionDesc, actionDescs)
+  {
+    // visit with specific action
+    LOG_INFO("Processing geometry modifier " + actionDesc.command + "...");
+    _geometryModifierVisitor.setActionDesc(actionDesc);
+    map->visitRw(_geometryModifierVisitor);
+  }
 
   // update operation status info
   _numAffected = _geometryModifierVisitor._numAffected;
   _numProcessed = _geometryModifierVisitor._numProcessed;
+}
+
+QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
+{
+  // read the json rules
+  bpt::ptree propPtree;
+  bpt::read_json(_rulesFileName.toLatin1().constData(), propPtree );
+
+  QList<GeometryModifierActionDesc> actionDescs;
+
+  BOOST_FOREACH(bpt::ptree::value_type &commandLevelValue, propPtree)
+  {
+    // read command
+    GeometryModifierActionDesc actionDesc;
+    actionDesc.command = QString::fromStdString(commandLevelValue.first);
+
+    // check command availability
+    foreach (shared_ptr<GeometryModifierAction> pAction, _actions)
+    {
+      if( pAction->getCommandName() == actionDesc.command )
+      {
+        actionDesc.pAction = pAction;
+        break;
+      }
+    }
+
+    if( !actionDesc.pAction )
+    {
+      throw HootException("Invalid geometry modifier action '" + actionDesc.command + "' in " + _rulesFileName);
+    }
+
+    actionDescs.append(actionDesc);
+
+    if( !commandLevelValue.second.empty())
+    {
+      BOOST_FOREACH(bpt::ptree::value_type &dataLevelValue, commandLevelValue.second)
+      {
+        // read filter
+        if( dataLevelValue.first == GEOMODRULES_FILTER_TAG )
+        {
+          _parseFilter(actionDesc, dataLevelValue.second);
+        }
+        // read arguments
+        else if( dataLevelValue.first == GEOMODRULES_ARGUMENT_TAG )
+        {
+          _parseArguments(actionDesc, dataLevelValue.second);
+        }
+        else
+        {
+          throw HootException("Invalid geometry modifier tag '" + QString::fromStdString(dataLevelValue.first) + "' for action '" + actionDesc.command + "' in " + _rulesFileName);
+        }
+      }
+    }
+  }
+
+  return actionDescs;
+}
+
+void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
+{
+  BOOST_FOREACH(bpt::ptree::value_type &data, ptree)
+  {
+    actionDesc.filter[QString::fromStdString(data.first)] = QString::fromStdString(data.second.data());
+  }
+}
+
+void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree)
+{
+  QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
+
+  BOOST_FOREACH(bpt::ptree::value_type &data, ptree)
+  {
+    QString arg = QString::fromStdString(data.first);
+    if( availableParameters.contains(arg) )
+    {
+      actionDesc.arguments[arg] = QString::fromStdString(data.second.data());
+    }
+    else
+    {
+      throw HootException("Invalid geometry modifier argument '" + arg + "' for action '" + actionDesc.command + "' in " + _rulesFileName);
+    }
+  }
 }
 
 }

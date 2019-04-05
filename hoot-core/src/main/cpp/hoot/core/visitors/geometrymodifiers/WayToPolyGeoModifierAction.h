@@ -39,6 +39,8 @@ public:
 
   QString getCommandName() const { return "way_to_poly"; }
   QList<QString> getParameterNames() const { return QList<QString> {"width_tag_m", "default_width_m"}; }
+
+  bool process( const ElementPtr& pElement, OsmMap* pMap ) const;
 };
 
 }

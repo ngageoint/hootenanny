@@ -22,32 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef COORDINATEEXT_H
+#define COORDINATEEXT_H
 
-#include "GeometryModifierVisitor.h"
-#include "GeometryModifierAction.h"
+#include <geos/geom/Coordinate.h>
 
-// Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-
-using namespace std;
-using namespace boost;
+using namespace geos::geom;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
-
-void GeometryModifierVisitor::visit(const ElementPtr& pElement)
+class CoordinateExt : public Coordinate
 {
-  _numProcessed++;
+public:
+  CoordinateExt(Coordinate c) : Coordinate(c) {}
+  CoordinateExt(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber) : Coordinate( xNew, yNew, zNew ) {}
 
-  if( _actionDesc.pAction->process(pElement, _pMap) )
+  double getLength() const
   {
-    _numAffected++;
+    return sqrt(x * x + y * y);
   }
+
+  void normalize()
+  {
+    double len = getLength();
+    if( len == 0 ) return;
+    x /= len;
+    y /= len;
+  }
+
+  CoordinateExt operator + (const CoordinateExt  val) const
+  {
+    CoordinateExt sum( x + val.x, y + val.y, z + val.z );
+    return sum;
+  }
+
+  CoordinateExt operator - (const CoordinateExt val) const
+  {
+    CoordinateExt dif( x - val.x, y - val.y, z - val.z );
+    return dif;
+  }
+};
+
 }
 
-} // namespace hoot
+#endif // COORDINATEEXT_H

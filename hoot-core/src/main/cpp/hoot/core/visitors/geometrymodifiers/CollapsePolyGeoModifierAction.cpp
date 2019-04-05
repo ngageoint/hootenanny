@@ -36,5 +36,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 
+bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap ) const
+{
+  pElement->className();
+  pMap->getNodes();
+  return false;
+}
 
 }

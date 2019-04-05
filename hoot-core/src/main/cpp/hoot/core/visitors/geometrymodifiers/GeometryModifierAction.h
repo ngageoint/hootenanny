@@ -27,12 +27,34 @@
 #ifndef GEOMETRYMODIFIERACTION_H
 #define GEOMETRYMODIFIERACTION_H
 
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
+
 // Qt
 #include <QString>
 #include <QHash>
 
+// boost
+#include <boost/shared_ptr.hpp>
+
+using namespace boost;
+
 namespace hoot
 {
+
+static const std::string GEOMODRULES_FILTER_TAG = "filter";
+static const std::string GEOMODRULES_ARGUMENT_TAG = "arguments";
+
+class GeometryModifierAction
+{
+public:
+  static std::string className() { return "hoot::GeometryModifierAction"; }
+
+  virtual QString getCommandName() const = 0;
+  virtual QList<QString> getParameterNames() const = 0;
+
+  virtual bool process( const ElementPtr& pElement, OsmMap* pMap ) const = 0;
+};
 
 struct GeometryModifierActionDesc
 {
@@ -40,16 +62,7 @@ public:
   QString command;
   QHash<QString,QString> filter;
   QHash<QString,QString> arguments;
-};
-
-class GeometryModifierAction
-{
-public:
-
-  static std::string className() { return "hoot::GeometryModifierAction"; }
-
-  virtual QString getCommandName() const = 0;
-  virtual QList<QString> getParameterNames() const = 0;
+  shared_ptr<GeometryModifierAction> pAction;
 };
 
 }

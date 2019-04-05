@@ -34,8 +34,14 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/geometrymodifiers/GeometryModifierVisitor.h>
 
+// Boost
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+
 namespace hoot
 {
+  class GeometryModifierAction;
+  struct GeometryModifierActionDesc;
 
   class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo
   {
@@ -54,7 +60,12 @@ namespace hoot
 
   private:
     QString _rulesFileName;
+    QList<boost::shared_ptr<GeometryModifierAction>> _actions;
     GeometryModifierVisitor _geometryModifierVisitor;
+
+    QList<GeometryModifierActionDesc> _readJsonRules();
+    void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+    void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
   };
 
 }
