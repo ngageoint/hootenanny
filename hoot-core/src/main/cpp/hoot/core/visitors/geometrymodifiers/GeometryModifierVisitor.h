@@ -44,11 +44,9 @@ class GeometryModifierVisitor : public ElementVisitor, public OperationStatusInf
   friend class GeometryModifierOp;
 
 public:
-  GeometryModifierVisitor();
-
   virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
-  void setActionDesc( GeometryModifierActionDesc &actionDesc ) { _actionDesc = actionDesc; }
+  void setActionDesc( GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
   static std::string className() { return "hoot::GeometryModifierVisitor"; }
@@ -60,10 +58,8 @@ public:
   virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
 private:
-  void extrude(const WayPtr& pWay, double width);
-
   OsmMap* _pMap;
-  GeometryModifierActionDesc& _actionDesc;
+  GeometryModifierActionDesc _actionDesc;
 };
 
 }
