@@ -150,7 +150,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
     case POI:
       return ElementCriterionPtr(new PoiCriterion());
     case Highway:
-      return ElementCriterionPtr(new HighwayCriterion());
+      return ElementCriterionPtr(new HighwayCriterion(map));
     case Building:
       return ElementCriterionPtr(new BuildingCriterion(map));
     case Waterway:

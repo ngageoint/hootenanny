@@ -1,11 +1,11 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
-Nodes	36	65	38	
-Ways	4	4	5	
+Nodes	36	65	37	
+Ways	4	4	4	
 Relations	0	0	0	
 Least Nodes in a Way	3	4	3	
-Most Nodes in a Way	30	41	24	
-Average Nodes Per Way	10	17	8	
-Total Way Nodes	40	68	43	
+Most Nodes in a Way	30	41	31	
+Average Nodes Per Way	10	17	10	
+Total Way Nodes	40	68	41	
 Least Members in a Relation	0	0	0	
 Most Members in a Relation	0	0	0	
 Average Members Per Relation	0	0	0	
@@ -35,7 +35,7 @@ Features with Addresses	0	0	0
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Features	4	4	5	
+Total Features	4	4	4	
 Total Conflatable Features	4	4	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Features	0	0	0	
@@ -43,13 +43,13 @@ Total Unconflatable Features	0	0	0
 Percentage of Total Features Unconflatable	0	0	0	
 Match Creators	8	8	8	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
-Total Conflated Features	0	0	4	
-Percentage of Total Features Conflated	0	0	80	
+Total Conflated Features	0	0	3	
+Percentage of Total Features Conflated	0	0	75	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Reviews to be Made	0	0	0	
 Total Unmatched Features	4	4	1	
-Percentage of Total Features Unmatched	100	100	20	
+Percentage of Total Features Unmatched	100	100	25	
 POIs	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -59,15 +59,15 @@ Unmatched POIs	0	0	0
 Percentage of POIs Conflated	0	0	0	
 Percentage of POIs Marked for Review	0	0	0	
 Percentage of Unmatched POIs	0	0	0	
-Roads	4	4	5	
+Roads	4	4	4	
 Conflatable Roads	4	4	0	
-Conflated Roads	0	0	4	
+Conflated Roads	0	0	3	
 Roads Marked for Review	0	0	0	
 Road Reviews to be Made	0	0	0	
 Unmatched Roads	4	4	1	
-Percentage of Roads Conflated	0	0	80	
+Percentage of Roads Conflated	0	0	75	
 Percentage of Roads Marked for Review	0	0	0	
-Percentage of Unmatched Roads	100	100	20	
+Percentage of Unmatched Roads	100	100	25	
 Buildings	0	0	0	
 Conflatable Buildings	0	0	0	
 Conflated Buildings	0	0	0	
@@ -135,8 +135,8 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	28	24	35	
-Difference Between Total Features in Output and Total Features in Inputs			-3	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-37.5	
+Translated Populated Tags	28	24	28	
+Difference Between Total Features in Output and Total Features in Inputs			-4	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-50	
 
-18:43:07.740 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
+16:10:04.013 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
