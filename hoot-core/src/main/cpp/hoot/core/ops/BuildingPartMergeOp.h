@@ -73,7 +73,7 @@ public:
 
   RelationBuildingPartProcessor(QQueue<RelationPtr>* buildingRelationQueue,
                                 QMutex* buildingPartMutex, QMutex* singletonMutex,
-                                OsmMapPtr map,
+                                QMutex* buildingPartQueueMutex, OsmMapPtr map,
                                 Tgs::DisjointSetMap<ElementPtr>* buildingParts,
                                 std::set<QString>* buildingPartTagNames,
                                 boost::shared_ptr<ElementConverter> elementConverter,
@@ -85,12 +85,14 @@ private:
   QQueue<RelationPtr>* _buildingRelationQueue;
   QMutex* _buildingPartMutex;
   QMutex* _singletonMutex;
+  QMutex* _buildingPartQueueMutex;
   OsmMapPtr _map;
   Tgs::DisjointSetMap<ElementPtr>* _buildingParts;
   std::set<QString>* _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
   QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
   BuildingCriterion _buildingCrit;
+  QString _id;
 
   void _addNeighborsToGroup(const RelationPtr& r);
   void _addContainedWaysToGroup(const geos::geom::Geometry& g, const ElementPtr& neighbor);

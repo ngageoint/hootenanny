@@ -52,7 +52,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
   bool result = false;
 
-  const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
+  const boost::shared_ptr<ElementToRelationMap>& e2r = _map->getIndex().getElementToRelationMap();
   const set<long>& parents = e2r->getRelationByElement(eid);
   for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
     ++it)
@@ -99,8 +99,7 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
   // There's no option to check the parent in this method, since doing so would require an element
   // ID and callers call this method, because they don't have it in certain circumstances.
   return
-    elementType != ElementType::Node &&
-    OsmSchema::getInstance().hasCategory(tags, "building") == true;
+    elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, "building");
 }
 
 }
