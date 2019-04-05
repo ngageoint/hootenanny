@@ -236,9 +236,9 @@ cd ~
 $HOOT_HOME/scripts/chrome/chrome-install.sh
 $HOOT_HOME/scripts/chrome/driver-install.sh
 
-# # Need to figure out a way to do this automagically
-# #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
-# #PG_VERSION=9.5
+# Need to figure out a way to do this automagically
+# PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
+# PG_VERSION=9.5
 PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
