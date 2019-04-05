@@ -235,7 +235,8 @@ Geometry* GeometryUtils::validateGeometryCollection(
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
 {
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
-  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+  boost::shared_ptr<Point> p(
+    GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
   return ls->Union(p.get());
 }
 
@@ -252,8 +253,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   if (p->isValid() == false)
   {
     boost::shared_ptr<Geometry> tmp;
-    // buffer it by zero to attempt to fix topology errors and store the result in an boost::shared_ptr
-    // that will self delete.
+    // buffer it by zero to attempt to fix topology errors and store the result in an
+    // boost::shared_ptr that will self delete.
     tmp.reset(p->buffer(0));
     // run the new geometry through the whole routine again just in case the type changed.
     result = validateGeometry(tmp.get());
@@ -265,8 +266,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   else
   {
     const LineString* oldShell = p->getExteriorRing();
-    boost::shared_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(
-      *oldShell->getCoordinates()));
+    boost::shared_ptr<LinearRing> oldLinearRing(
+      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());
