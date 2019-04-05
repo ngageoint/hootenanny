@@ -26,6 +26,7 @@
  */
 
 #include "GeometryModifierOp.h"
+#include "hoot-core/src/main/cpp/hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h"
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
@@ -36,6 +37,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 namespace bpt = boost::property_tree;
+
+using namespace std;
 
 namespace hoot
 {
@@ -49,15 +52,30 @@ GeometryModifierOp::GeometryModifierOp()
 
 void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
 {
+  // get available actions
+  vector<string> availableActions = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
+
+  for( vector<string>::iterator it = availableActions.begin(); it != availableActions.end(); it++ )
+  {
+    LOG_VAR(*it);
+  }
+
+
   // read the json rules
   bpt::ptree propPtree;
   bpt::read_json(_rulesFileName.toLatin1().constData(), propPtree );
+
+  QList<GeometryModifierActionDesc> actions;
 
   BOOST_FOREACH(bpt::ptree::value_type &v, propPtree)
   {
     LOG_VAR(v.first);
 
-    // read command here
+    // read command
+    GeometryModifierActionDesc action;
+    action.command = QString::fromStdString(v.first);
+
+    actions.append(action);
 
     if( !v.second.empty())
     {

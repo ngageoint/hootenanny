@@ -25,38 +25,16 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef GEOMETRYMODIFIEROP_H
-#define GEOMETRYMODIFIEROP_H
+#include "WayToPolyGeoModifierAction.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/visitors/geometrymodifiers/GeometryModifierVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-  class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo
-  {
-  public:
+HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToPolyGeoModifierAction)
 
-    GeometryModifierOp();
 
-    // OsmMapOperation
-    static std::string className() { return "hoot::GeometryModifierOp"; }
-    void apply(boost::shared_ptr<OsmMap>& map);
-    QString getDescription() const { return "Modifies map geometry as specified"; }
-
-    // OperationStatusInfo
-    virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-    virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
-
-  private:
-    QString _rulesFileName;
-    GeometryModifierVisitor _geometryModifierVisitor;
-  };
 
 }
-
-#endif // GEOMETRYMODIFIEROP_H
