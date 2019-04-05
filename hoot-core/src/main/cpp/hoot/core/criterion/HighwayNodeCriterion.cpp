@@ -44,7 +44,7 @@ HighwayNodeCriterion::HighwayNodeCriterion()
 
 bool HighwayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   if (e->getElementType() == ElementType::Node)
   {
     const std::set<long>& containingWays =

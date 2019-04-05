@@ -168,7 +168,7 @@ public:
   {
     HighwayMatch* result = 0;
 
-    HighwayCriterion highwayCrit;
+    HighwayCriterion highwayCrit(map);
     if (e1 && e2 &&
         e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
         highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2) &&
@@ -234,7 +234,7 @@ public:
     {
       return false;
     }
-    return HighwayCriterion().isSatisfied(element);
+    return HighwayCriterion(_map).isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
