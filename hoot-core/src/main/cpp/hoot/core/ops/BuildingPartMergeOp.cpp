@@ -437,11 +437,15 @@ void BuildingPartMergeOp::_processBuildingParts()
   QQueue<ElementPtr> wayBuildingPartQueue = _getWayBuildingPartQueue();
   LOG_VAR(wayBuildingPartQueue.size());
 
+  // TODO: may be able to get rid of some of these mutexes
+
   QMutex buildingPartGroupMutex(QMutex::Recursive);
   QMutex schemaMutex(QMutex::Recursive);
+  // TODO: rename to mapMutex
   QMutex mapIndexMutex(QMutex::Recursive);
   QMutex geomUtilsMutex(QMutex::Recursive);
   QMutex buildingPartQueueMutex(QMutex::Recursive);
+  // TODO: get rid of the cache if its not helping after the threading refactor
   QMutex wayGeometryCacheMutex(QMutex::Recursive);
 
   QThreadPool threadPool;
@@ -463,34 +467,6 @@ void BuildingPartMergeOp::_processBuildingParts()
     buildingPartTask->setBuildingPartGroups(&_ds);
     threadPool.start(buildingPartTask);
   }
-//  for (int i = 0; i < _threadCount / 2; i++)
-//  {
-//    RelationBuildingPartProcessor* buildingPartTask1 = new RelationBuildingPartProcessor();
-//    buildingPartTask1->setBuildingPartTagNames(_buildingPartTagNames);
-//    buildingPartTask1->setBuildingPartQueue(&relationBuildingPartQueue);
-//    buildingPartTask1->setBuildingPartGroupMutex(&buildingPartGroupMutex);
-//    buildingPartTask1->setSchemaMutex(&schemaMutex);
-//    buildingPartTask1->setMapIndexMutex(&mapIndexMutex);
-//    buildingPartTask1->setGeomUtilsMutex(&geomUtilsMutex);
-//    buildingPartTask1->setBuildingPartQueueMutex(&buildingPartQueueMutex);
-//    buildingPartTask1->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
-//    buildingPartTask1->setMap(_map);
-//    buildingPartTask1->setBuildingPartGroups(&_ds);
-//    threadPool.start(buildingPartTask1);
-
-//    RelationBuildingPartProcessor* buildingPartTask2 = new RelationBuildingPartProcessor();
-//    buildingPartTask2->setBuildingPartTagNames(_buildingPartTagNames);
-//    buildingPartTask2->setBuildingPartQueue(&wayBuildingPartQueue);
-//    buildingPartTask2->setBuildingPartGroupMutex(&buildingPartGroupMutex);
-//    buildingPartTask2->setSchemaMutex(&schemaMutex);
-//    buildingPartTask2->setMapIndexMutex(&mapIndexMutex);
-//    buildingPartTask2->setGeomUtilsMutex(&geomUtilsMutex);
-//    buildingPartTask2->setBuildingPartQueueMutex(&buildingPartQueueMutex);
-//    buildingPartTask2->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
-//    buildingPartTask2->setMap(_map);
-//    buildingPartTask2->setBuildingPartGroups(&_ds);
-//    threadPool.start(buildingPartTask2);
-//  }
   LOG_VARD(threadPool.activeThreadCount());
   const bool allThreadsRemoved = threadPool.waitForDone();
   LOG_VARD(allThreadsRemoved);
@@ -739,7 +715,10 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   }
   else
   {
-    //_processWays(); //TODO: remove
+    // TODO: move neighbor adding to here as serial; then parallelize contained ways only where
+    // each thread gets an element and a list of candidate way id's and writes to the group
+    // container
+
     _processBuildingParts();
   }
   LOG_VAR(StringUtils::formatLargeNumber(_ds.size()));
