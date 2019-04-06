@@ -55,14 +55,15 @@ _numProcessed(0)
 void RelationBuildingPartProcessor::setMap(OsmMapPtr map)
 {
   _mapIndexMutex->lock();
+
   _map = map;
-  //_map.reset(new OsmMap(map));
   const std::vector<long> intersectIds = _map->getIndex().findWays(geos::geom::Envelope());
   LOG_VART(intersectIds.size());
   const boost::shared_ptr<ElementToRelationMap> e2r = _map->getIndex().getElementToRelationMap();
   LOG_VART(e2r->size());
   _n2w = _map->getIndex().getNodeToWayMap();
   _elementConverter.reset(new ElementConverter(_map));
+
   _mapIndexMutex->unlock();
 }
 
@@ -84,14 +85,7 @@ void RelationBuildingPartProcessor::run()
       }
       else
       {
-        WayPtr wayBuildingPart = boost::dynamic_pointer_cast<Way>(buildingPart);
-        LOG_VART(wayBuildingPart == 0);
-        _addNeighborsToGroup(wayBuildingPart);
-        boost::shared_ptr<geos::geom::Geometry> g = _getWayGeometry(wayBuildingPart, false);
-        if (g)
-        {
-          _addContainedWaysToGroup(*g, wayBuildingPart);
-        }
+        _addNeighborsToGroup(boost::dynamic_pointer_cast<Way>(buildingPart));
       }
       _numProcessed++;
     }
@@ -180,6 +174,15 @@ std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& 
 void RelationBuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
 {
   LOG_VART(w->getElementId());
+
+  _schemaMutex->lock(); // TODO: necessary?
+  boost::shared_ptr<geos::geom::Geometry> g = _getWayGeometry(w, false);
+  _schemaMutex->unlock();
+  if (g)
+  {
+    _addContainedWaysToGroup(*g, w);
+  }
+
   const std::set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   LOG_VARD(neighborIds.size());
   // go through each of the neighboring ways
@@ -188,7 +191,6 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
     _mapIndexMutex->lock();
 
     WayPtr neighbor = _map->getWay(*it);
-    //WayPtr neighbor(new Way(*_map->getWay(*it)));
     // add these two buildings to a set
     _buildingPartGroupMutex->lock();
     _buildingPartGroups->joinT(neighbor, w);
@@ -222,12 +224,10 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
       _mapIndexMutex->lock();
 
       WayPtr member = _map->getWay(memberElementId.getId());
-      //WayPtr member(new Way(*_map->getWay(memberElementId.getId())));
       const std::set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
-        //WayPtr neighbor(new Way(*_map->getWay(*it)));
         // add these two buildings to a set
         _buildingPartGroupMutex->lock();
         _buildingPartGroups->joinT(neighbor, r);
@@ -288,7 +288,6 @@ void RelationBuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::G
     _mapIndexMutex->lock();
 
     WayPtr candidate = _map->getWay(candidateWayId);
-    //WayPtr candidate(new Way(*_map->getWay(candidateWayId)));
     LOG_VART(candidate == 0);
 
     boost::shared_ptr<geos::geom::Geometry> cg = _getWayGeometry(candidate);
