@@ -91,6 +91,7 @@ public:
   void setMapIndexMutex(QMutex* mutex) { _mapIndexMutex = mutex; }
   void setGeomUtilsMutex(QMutex* mutex) { _geomUtilsMutex = mutex; }
   void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
+  void setWayGeometryCacheMutex(QMutex* mutex) { _wayGeometryCacheMutex = mutex; }
 
 private:
 
@@ -101,12 +102,13 @@ private:
   QMutex* _mapIndexMutex;
   QMutex* _geomUtilsMutex;
   QMutex* _buildingPartQueueMutex;
+  QMutex* _wayGeometryCacheMutex;
 
   OsmMapPtr _map;
 
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
 
-  //QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
+  QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
 
   std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
@@ -231,8 +233,9 @@ private:
   boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
                                                           const bool checkForBuilding = true);
 
-  QQueue<RelationPtr> _getBuildingRelationQueue();
   QQueue<ElementPtr> _getBuildingPartQueue();
+  QQueue<ElementPtr> _getRelationBuildingPartQueue();
+  QQueue<ElementPtr> _getWayBuildingPartQueue();
 
   void _initBuildingPartTagNames();
 };

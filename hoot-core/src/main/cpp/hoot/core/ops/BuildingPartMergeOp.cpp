@@ -54,9 +54,16 @@ _numProcessed(0)
 
 void RelationBuildingPartProcessor::setMap(OsmMapPtr map)
 {
+  _mapIndexMutex->lock();
   _map = map;
+  //_map.reset(new OsmMap(map));
+  const std::vector<long> intersectIds = _map->getIndex().findWays(geos::geom::Envelope());
+  LOG_VART(intersectIds.size());
+  const boost::shared_ptr<ElementToRelationMap> e2r = _map->getIndex().getElementToRelationMap();
+  LOG_VART(e2r->size());
   _n2w = _map->getIndex().getNodeToWayMap();
   _elementConverter.reset(new ElementConverter(_map));
+  _mapIndexMutex->unlock();
 }
 
 void RelationBuildingPartProcessor::run()
@@ -70,7 +77,7 @@ void RelationBuildingPartProcessor::run()
     _buildingPartQueueMutex->unlock();
     if (buildingPart)
     {
-      LOG_VARD(buildingPart->getElementId());
+      LOG_VART(buildingPart->getElementId());
       if (buildingPart->getElementType() == ElementType::Relation)
       {
         _addNeighborsToGroup(boost::dynamic_pointer_cast<Relation>(buildingPart));
@@ -146,7 +153,11 @@ std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& 
     for (std::set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       const long wayId = *it;
+
+      _mapIndexMutex->lock();
+
       WayPtr neighbor = _map->getWay(wayId);
+      //WayPtr neighbor(new Way(*_map->getWay(wayId)));
       LOG_VART(neighbor == 0);
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
       if (neighbor != w && _isBuilding(neighbor) &&
@@ -156,6 +167,9 @@ std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& 
         // add this to the list of neighbors
         neighborIds.insert(wayId);
       }
+
+      _mapIndexMutex->unlock();
+
     }
     lastId = w->getNodeId(i);
   }
@@ -171,13 +185,17 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
   // go through each of the neighboring ways
   for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
   {
+    _mapIndexMutex->lock();
+
     WayPtr neighbor = _map->getWay(*it);
-    LOG_VAR(neighbor == 0);
+    //WayPtr neighbor(new Way(*_map->getWay(*it)));
     // add these two buildings to a set
     _buildingPartGroupMutex->lock();
     _buildingPartGroups->joinT(neighbor, w);
     LOG_VARD(_buildingPartGroups->size());
     _buildingPartGroupMutex->unlock();
+
+    _mapIndexMutex->unlock();
   }
 }
 
@@ -188,7 +206,10 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
   _schemaMutex->lock(); // TODO: necessary?
   boost::shared_ptr<geos::geom::Geometry> relationGeom = _elementConverter->convertToGeometry(r);
   _schemaMutex->unlock();
-  _addContainedWaysToGroup(*relationGeom, r);
+  if (relationGeom)
+  {
+    _addContainedWaysToGroup(*relationGeom, r);
+  }
 
   const std::vector<RelationData::Entry> members = r->getMembers();
   LOG_VARD(members.size());
@@ -198,17 +219,23 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
     const ElementId memberElementId = memberEntry.getElementId();
     if (memberElementId.getType() == ElementType::Way)
     {
+      _mapIndexMutex->lock();
+
       WayPtr member = _map->getWay(memberElementId.getId());
+      //WayPtr member(new Way(*_map->getWay(memberElementId.getId())));
       const std::set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
+        //WayPtr neighbor(new Way(*_map->getWay(*it)));
         // add these two buildings to a set
         _buildingPartGroupMutex->lock();
         _buildingPartGroups->joinT(neighbor, r);
         LOG_VARD(_buildingPartGroups->size());
         _buildingPartGroupMutex->unlock();
       }
+
+      _mapIndexMutex->unlock();
     }
   }
 }
@@ -217,11 +244,20 @@ boost::shared_ptr<geos::geom::Geometry> RelationBuildingPartProcessor::_getWayGe
   const WayPtr& way, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  if (!checkForBuilding || _isBuilding(way))
+  if (_wayGeometryCache.contains(way->getId()))
+  {
+    _numGeometryCacheHits++;
+    return _wayGeometryCache[way->getId()];
+  }
+  else if (!checkForBuilding || _isBuilding(way))
   {
     _schemaMutex->lock();
     g = _elementConverter->convertToGeometry(way);
     _schemaMutex->unlock();
+
+    _wayGeometryCacheMutex->lock();
+    _wayGeometryCache[way->getId()] = g;
+    _wayGeometryCacheMutex->unlock();
   }
   return g;
 }
@@ -249,7 +285,10 @@ void RelationBuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::G
     const long candidateWayId = *it;
     LOG_VARD(candidateWayId);
 
+    _mapIndexMutex->lock();
+
     WayPtr candidate = _map->getWay(candidateWayId);
+    //WayPtr candidate(new Way(*_map->getWay(candidateWayId)));
     LOG_VART(candidate == 0);
 
     boost::shared_ptr<geos::geom::Geometry> cg = _getWayGeometry(candidate);
@@ -285,6 +324,8 @@ void RelationBuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::G
         _buildingPartGroupMutex->unlock();
       }
     }
+
+    _mapIndexMutex->unlock();
   }
 }
 
@@ -322,7 +363,7 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
     throw IllegalArgumentException(
       "Invalid BuildingPartMergerOp thread count: " + QString::number(_threadCount));
   }
-  else if (_threadCount < 1)
+  else if (_threadCount < 1 && _threadCount != -2)  //TODO: temp hack
   {
     _threadCount = QThread::idealThreadCount();
   }
@@ -332,6 +373,16 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
 QQueue<ElementPtr> BuildingPartMergeOp::_getBuildingPartQueue()
 {
   QQueue<ElementPtr> buildingPartQueue;
+
+  const WayMap& ways = _map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    const WayPtr& w = it->second;
+    if (_buildingCrit.isSatisfied(w))
+    {
+      buildingPartQueue.enqueue(w);   // TODO: re-enable
+    }
+  }
 
   const RelationMap& relations = _map->getRelations();
   LOG_VAR(relations.size());
@@ -344,16 +395,37 @@ QQueue<ElementPtr> BuildingPartMergeOp::_getBuildingPartQueue()
     }
   }
 
+  return buildingPartQueue;
+}
+
+QQueue<ElementPtr> BuildingPartMergeOp::_getRelationBuildingPartQueue()
+{
+  QQueue<ElementPtr> buildingPartQueue;
+  const RelationMap& relations = _map->getRelations();
+  LOG_VAR(relations.size());
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    const RelationPtr& r = it->second;
+    if (_buildingCrit.isSatisfied(r))
+    {
+      buildingPartQueue.enqueue(r);
+    }
+  }
+  return buildingPartQueue;
+}
+
+QQueue<ElementPtr> BuildingPartMergeOp::_getWayBuildingPartQueue()
+{
+  QQueue<ElementPtr> buildingPartQueue;
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = it->second;
     if (_buildingCrit.isSatisfied(w))
     {
-      //buildingPartQueue.enqueue(w);   // TODO: re-enable
+      buildingPartQueue.enqueue(w);
     }
   }
-
   return buildingPartQueue;
 }
 
@@ -361,12 +433,17 @@ void BuildingPartMergeOp::_processBuildingParts()
 {
   QQueue<ElementPtr> buildingPartQueue = _getBuildingPartQueue();
   LOG_VAR(buildingPartQueue.size());
+  QQueue<ElementPtr> relationBuildingPartQueue = _getRelationBuildingPartQueue();
+  LOG_VAR(relationBuildingPartQueue.size());
+  QQueue<ElementPtr> wayBuildingPartQueue = _getWayBuildingPartQueue();
+  LOG_VAR(wayBuildingPartQueue.size());
 
   QMutex buildingPartGroupMutex(QMutex::Recursive);
   QMutex schemaMutex(QMutex::Recursive);
   QMutex mapIndexMutex(QMutex::Recursive);
   QMutex geomUtilsMutex(QMutex::Recursive);
   QMutex buildingPartQueueMutex(QMutex::Recursive);
+  QMutex wayGeometryCacheMutex(QMutex::Recursive);
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
@@ -375,7 +452,6 @@ void BuildingPartMergeOp::_processBuildingParts()
   for (int i = 0; i < _threadCount; i++)
   {
     RelationBuildingPartProcessor* buildingPartTask = new RelationBuildingPartProcessor();
-
     buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
     buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
     buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
@@ -383,11 +459,39 @@ void BuildingPartMergeOp::_processBuildingParts()
     buildingPartTask->setMapIndexMutex(&mapIndexMutex);
     buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
     buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
-    buildingPartTask->setMap(_map); // TODO: send copy?
+    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+    buildingPartTask->setMap(_map);
     buildingPartTask->setBuildingPartGroups(&_ds);
-
     threadPool.start(buildingPartTask);
   }
+//  for (int i = 0; i < _threadCount / 2; i++)
+//  {
+//    RelationBuildingPartProcessor* buildingPartTask1 = new RelationBuildingPartProcessor();
+//    buildingPartTask1->setBuildingPartTagNames(_buildingPartTagNames);
+//    buildingPartTask1->setBuildingPartQueue(&relationBuildingPartQueue);
+//    buildingPartTask1->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+//    buildingPartTask1->setSchemaMutex(&schemaMutex);
+//    buildingPartTask1->setMapIndexMutex(&mapIndexMutex);
+//    buildingPartTask1->setGeomUtilsMutex(&geomUtilsMutex);
+//    buildingPartTask1->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+//    buildingPartTask1->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+//    buildingPartTask1->setMap(_map);
+//    buildingPartTask1->setBuildingPartGroups(&_ds);
+//    threadPool.start(buildingPartTask1);
+
+//    RelationBuildingPartProcessor* buildingPartTask2 = new RelationBuildingPartProcessor();
+//    buildingPartTask2->setBuildingPartTagNames(_buildingPartTagNames);
+//    buildingPartTask2->setBuildingPartQueue(&wayBuildingPartQueue);
+//    buildingPartTask2->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+//    buildingPartTask2->setSchemaMutex(&schemaMutex);
+//    buildingPartTask2->setMapIndexMutex(&mapIndexMutex);
+//    buildingPartTask2->setGeomUtilsMutex(&geomUtilsMutex);
+//    buildingPartTask2->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+//    buildingPartTask2->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+//    buildingPartTask2->setMap(_map);
+//    buildingPartTask2->setBuildingPartGroups(&_ds);
+//    threadPool.start(buildingPartTask2);
+//  }
   LOG_VARD(threadPool.activeThreadCount());
   const bool allThreadsRemoved = threadPool.waitForDone();
   LOG_VARD(allThreadsRemoved);
@@ -540,10 +644,10 @@ void BuildingPartMergeOp::_processWays()
     totalProcessed++;
     if (totalProcessed % 1000 == 0)
     {
-//      PROGRESS_INFO(
-//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-//        StringUtils::formatLargeNumber(ways.size()) <<
-//        " ways for building part merging.");
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(ways.size()) <<
+        " ways for building part merging.");
     }
   }
   LOG_DEBUG("\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " ways.");
@@ -570,10 +674,10 @@ void BuildingPartMergeOp::_processRelations()
     totalProcessed++;
     if (totalProcessed % 10 == 0)
     {
-//      PROGRESS_INFO(
-//        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
-//        StringUtils::formatLargeNumber(relations.size()) <<
-//        " relations for building part merging.");
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(totalProcessed) << " / " <<
+        StringUtils::formatLargeNumber(relations.size()) <<
+        " relations for building part merging.");
     }
   }
   LOG_VAR(numBuildings);
@@ -636,7 +740,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   }
   else
   {
-    _processWays(); //TODO: remove
+    //_processWays(); //TODO: remove
     _processBuildingParts();
   }
   LOG_VAR(StringUtils::formatLargeNumber(_ds.size()));
