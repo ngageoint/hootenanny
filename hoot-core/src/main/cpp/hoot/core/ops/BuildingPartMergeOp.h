@@ -74,30 +74,49 @@ class RelationBuildingPartProcessor : public QRunnable
 
 public:
 
-  RelationBuildingPartProcessor(QQueue<ElementPtr>* buildingPartQueue,
-                                QMutex* buildingPartGroupMutex, QMutex* singletonMutex,
-                                QMutex* buildingPartQueueMutex, OsmMapPtr map,
-                                Tgs::DisjointSetMap<ElementPtr>* buildingPartGroups);
+  RelationBuildingPartProcessor();
 
   void run() override;
+
+  void setBuildingPartTagNames(const std::set<QString>& tagNames)
+  { _buildingPartTagNames = tagNames; }
+  void setBuildingPartQueue(QQueue<ElementPtr>* queue) { _buildingPartQueue = queue; }
+  void setBuildingPartGroups( Tgs::DisjointSetMap<ElementPtr>* groups)
+  { _buildingPartGroups = groups; }
+
+  void setMap(OsmMapPtr map);
+
+  void setBuildingPartGroupMutex(QMutex* mutex) { _buildingPartGroupMutex = mutex; }
+  void setSchemaMutex(QMutex* mutex) { _schemaMutex = mutex; }
+  void setMapIndexMutex(QMutex* mutex) { _mapIndexMutex = mutex; }
+  void setGeomUtilsMutex(QMutex* mutex) { _geomUtilsMutex = mutex; }
+  void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
 
 private:
 
   QQueue<ElementPtr>* _buildingPartQueue;
+
   QMutex* _buildingPartGroupMutex;
-  QMutex* _singletonMutex;
+  QMutex* _schemaMutex;
+  QMutex* _mapIndexMutex;
+  QMutex* _geomUtilsMutex;
   QMutex* _buildingPartQueueMutex;
+
   OsmMapPtr _map;
+
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
+
+  //QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
+
   std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
-  //QHash<long, boost::shared_ptr<geos::geom::Geometry>>* _wayGeometryCache;
   BuildingCriterion _buildingCrit;
+  boost::shared_ptr<NodeToWayMap> _n2w;
+
   QString _id;
   int _numGeometryCacheHits;
   int _numGeometriesCleaned;
   int _numProcessed;
-  boost::shared_ptr<NodeToWayMap> _n2w;
 
   void _addNeighborsToGroup(const RelationPtr& r);
   void _addNeighborsToGroup(const WayPtr& w);
@@ -108,7 +127,6 @@ private:
   boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
                                                           const bool checkForBuilding = true);
   bool _isBuilding(const ElementPtr& element) const;
-  void _initBuildingPartTagNames();
 };
 
 class Relation;
