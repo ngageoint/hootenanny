@@ -35,6 +35,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -393,11 +394,94 @@ public class GrailResource {
         catch (TransformerException e) {
             throw new RuntimeException("Error invoking XPathAPI!", e);
         }
-        catch (Exception e) {
-            throw new RuntimeException("Error parsing changeset diff data");
+        catch (Exception exc) {
+            String msg = "Error during differential stats! jobid: " + jobDir;
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
         }
 
         return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/differentialpush")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response differentialPush(@Context HttpServletRequest request,
+            GrailParams reqParams,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
+
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+        params.setPushUrl(RAILSPORT_PUSH_URL);
+
+        ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+        params.setConsumerKey(oauthInfo.getConsumerKey());
+        params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+        String jobDir = reqParams.getFolder();
+        File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
+
+        if (!workDir.exists()) {
+            logger.error("ApplyDiff: jobDir {} does not exist.", workDir.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
+        }
+
+        try {
+            APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+            logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+            if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
+            }
+
+            File geomDiffFile = new File(workDir, "diff.osc");
+            List<Command> workflow = new LinkedList<>();
+
+            if (geomDiffFile.exists()) {
+                params.setOutput(geomDiffFile.getAbsolutePath());
+
+                ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
+                workflow.add(applyGeomChange);
+            }
+            else {
+                String msg = "Error during differential push! Could not find differential file ";
+                throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
+            }
+
+            if (reqParams.getApplyTags()) {
+                File tagDiffFile = new File(workDir, "diff.tags.osc");
+
+                if (tagDiffFile.exists()) {
+                    params.setOutput(tagDiffFile.getAbsolutePath());
+
+                    ExternalCommand applyTagChange = grailCommandFactory.build(jobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
+                    workflow.add(applyTagChange);
+                }
+                else {
+                    String msg = "Error during differential push! Could not find differential file ";
+                    throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
+                }
+            }
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
+        catch (Exception e) {
+            String msg = "Error during differential push! Params: " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return Response.ok(json.toJSONString()).build();
     }
 
     @POST
