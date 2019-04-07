@@ -57,9 +57,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.xpath.XPathAPI;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +83,7 @@ import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
+import hoot.services.utils.XmlDocumentBuilder;
 
 
 @Controller
@@ -257,6 +260,144 @@ public class GrailResource {
         }
 
         return Response.ok(json.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/createdifferential")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createDifferential(@Context HttpServletRequest request,
+            GrailParams reqParams,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+
+        File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
+        try {
+            FileUtils.forceMkdir(workDir);
+        }
+        catch (IOException ioe) {
+            logger.error("EverythingByBox: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
+        }
+
+        Users user = Users.fromRequest(request);
+        List<Command> workflow = new LinkedList<>();
+        String bbox = reqParams.getBounds();
+
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("jobid", mainJobId);
+
+        GrailParams params = new GrailParams();
+        params.setBounds(bbox);
+        params.setUser(user);
+
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        logger.info("differentialStats: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
+        }
+
+        // Pull OSM data from the dest OSM API Db
+        File destOSMFile = new File(workDir, "dest.osm");
+        if (destOSMFile.exists()) destOSMFile.delete();
+
+        GrailParams sourceParams = new GrailParams();
+        sourceParams.setUser(user);
+        sourceParams.setBounds(bbox);
+        sourceParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        sourceParams.setOutput(destOSMFile.getAbsolutePath());
+        sourceParams.setPullUrl(RAILSPORT_PULL_URL);
+
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        jobInfo.put("jobid:DestOSM", jobId);
+        // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
+        InternalCommand getDestOSM = apiCommandFactory.build(jobId, sourceParams, this.getClass());
+        workflow.add(getDestOSM);
+
+
+        // Pull OSM data from the source OSM Db using overpass
+        File sourceOSMFile = new File(workDir, "source.osm");
+        if (sourceOSMFile.exists()) sourceOSMFile.delete();
+
+        GrailParams overpassParams = new GrailParams();
+        overpassParams.setUser(user);
+        overpassParams.setBounds(bbox);
+        overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
+        overpassParams.setPullUrl(MAIN_OVERPASS_URL);
+
+        jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        jobInfo.put("jobid:SourceOSM", jobId);
+        InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
+        workflow.add(getOverpassOSM);
+
+        // Run the diff command.
+        params.setInput1(destOSMFile.getAbsolutePath());
+        params.setInput2(sourceOSMFile.getAbsolutePath());
+
+        File geomDiffFile = new File(workDir, "diff.osc");
+        if (geomDiffFile.exists()) geomDiffFile.delete();
+
+        try {
+            geomDiffFile.createNewFile();
+        }
+        catch(IOException exc) {
+            logger.error("createDifferential: Error creating folder: {} ", geomDiffFile.getAbsolutePath(), exc);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
+        }
+
+        params.setOutput(geomDiffFile.getAbsolutePath());
+
+        ExternalCommand makeDiff = grailCommandFactory.build(mainJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
+        workflow.add(makeDiff);
+
+        jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+
+        return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    @GET
+    @Path("/differentialstats/{jobId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response differentialStats(@Context HttpServletRequest request,
+            @PathParam("jobId") String jobDir,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        JSONObject jobInfo = new JSONObject();
+
+        String fileDirectory = TEMP_OUTPUT_PATH + "/" + jobDir + "/diff.osc";
+        File workDir = new File(fileDirectory);
+
+        if(!workDir.exists()) {
+            String message = "Could not find diff.osc file to calculate diff stats from.";
+            logger.error("differentialStats: Error finding diff file: {} ", workDir.getAbsolutePath());
+            return Response.status(Response.Status.NOT_FOUND).entity(message).build();
+        }
+
+        try {
+            String xmlData = FileUtils.readFileToString(workDir, "UTF-8");
+            Document changesetDiffDoc = XmlDocumentBuilder.parse(xmlData);
+            logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(xmlData, 1000));
+
+            NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/node");
+            jobInfo.put("nodeCount", elementXmlNodes.getLength());
+
+            elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/way");
+            jobInfo.put("wayCount", elementXmlNodes.getLength());
+
+            elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/relation");
+            jobInfo.put("relationCount", elementXmlNodes.getLength());
+
+        }
+        catch (TransformerException e) {
+            throw new RuntimeException("Error invoking XPathAPI!", e);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error parsing changeset diff data");
+        }
+
+        return Response.ok(jobInfo.toJSONString()).build();
     }
 
     @POST
