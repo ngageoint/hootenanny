@@ -39,6 +39,12 @@
 namespace hoot
 {
 
+/*
+ * Visitor utilized by the GeometryModifierOp.
+ * Processes an element as requested in the currently set GeometryModifierActionDesc.
+ * Applies the filter to the node and if it matches calls the requested modifier's
+ * process function.
+ */
 class GeometryModifierVisitor : public ElementVisitor, public OperationStatusInfo
 {
   friend class GeometryModifierOp;
@@ -50,8 +56,11 @@ public:
 
   // ElementVisitor
   static std::string className() { return "hoot::GeometryModifierVisitor"; }
-  virtual void visit(const ElementPtr& e);
   QString getDescription() const { return "Modifies map geometry as specified"; }
+
+  // visits the element, checks if it matches the filter set in _actionDesc and
+  // calls the action's process function
+  virtual void visit(const ElementPtr& e);
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }

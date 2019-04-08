@@ -42,26 +42,51 @@ using namespace boost;
 namespace hoot
 {
 
-static const std::string GEOMODRULES_FILTER_TAG = "filter";
-static const std::string GEOMODRULES_ARGUMENT_TAG = "arguments";
-
+/*
+ * Base class for all geometry modifier actions.
+ * Any derived action registered in the hoot catory with this base class will be
+ * available to use by the GeometryModifierOp hoot operation.
+ */
 class GeometryModifierAction
 {
+
 public:
+  // defined in GeometryModifierOp.cpp
+  static const std::string FILTER_TAG;
+  static const std::string ARGUMENT_TAG;
+
+  // Class name for hoot factory
   static std::string className() { return "hoot::GeometryModifierAction"; }
 
+  // Command name and parameter names
   virtual QString getCommandName() const = 0;
   virtual QList<QString> getParameterNames() const = 0;
 
+  // Command function to process a filtered element
   virtual bool process( const ElementPtr& pElement, OsmMap* pMap ) const = 0;
 };
 
+/*
+ * Data of a parsed entry of the GeometryModifierOp's rules file.
+ * The contents define which geometry modifier command to run,
+ * the filter for the targeted nodes and the arguments specific
+ * to the command.
+ * The filter is processed by the GeometryModifierVisitior, the
+ * arguments by the specific command's process function.
+ */
 struct GeometryModifierActionDesc
 {
-public:
+  // Command name
   QString command;
+
+  // Node tag key and value strings that must be present and matching
+  // for the node to be included in the processing.
   QHash<QString,QString> filter;
+
+  // Argument name and value specific to each command.
   QHash<QString,QString> arguments;
+
+  // Instance of the command specific geometry modifier action class implementation.
   shared_ptr<GeometryModifierAction> pAction;
 };
 

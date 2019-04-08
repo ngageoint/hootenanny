@@ -43,6 +43,19 @@ namespace hoot
   class GeometryModifierAction;
   struct GeometryModifierActionDesc;
 
+  /*
+   * Geometry modifier operation used to run specific processes changing the actual
+   * geometry of elements, e.g. turning ways into polygons, collapsing polygons to points, etc.
+   *
+   * Available processes are implemented in GeometryModifierAction classes which are
+   * registered with the hoot factory.
+   * The GeometryModifierOp constructor instantiates all available actions and reads the json
+   * rules file which defines the filter and arguments for each requested action.
+   *
+   * Multiple actions can be specified in the rules file and the apply() method uses the
+   * GeometryModifierVisitor to go through all map elements to apply each specified action.
+   * Each action is performed on the entire map before it moves on to the next action.
+   */
   class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo
   {
   public:
@@ -51,20 +64,31 @@ namespace hoot
 
     // OsmMapOperation
     static std::string className() { return "hoot::GeometryModifierOp"; }
-    void apply(boost::shared_ptr<OsmMap>& map);
     QString getDescription() const { return "Modifies map geometry as specified"; }
+
+    // applies all actions specified in the rules file '_rulesFileName' to the map.
+    // runs through each action in the sequence they appear in the rules file
+    void apply(boost::shared_ptr<OsmMap>& map);
 
     // OperationStatusInfo
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
     virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
   private:
+    // json rules file name
     QString _rulesFileName;
+    // list of instances of all implemented geometry modifier actions
     QList<boost::shared_ptr<GeometryModifierAction>> _actions;
+
     GeometryModifierVisitor _geometryModifierVisitor;
 
+    // json rules file parser, creates a list of 'GeometryModifierActionDesc's
     QList<GeometryModifierActionDesc> _readJsonRules();
+
+    // json filter parser
     void _parseFilter(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+
+    // json action arguments parser
     void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
   };
 

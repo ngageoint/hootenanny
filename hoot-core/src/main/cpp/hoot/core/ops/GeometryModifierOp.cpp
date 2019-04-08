@@ -41,6 +41,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, GeometryModifierOp)
 
+const std::string GeometryModifierAction::FILTER_TAG = "filter";
+const std::string GeometryModifierAction::ARGUMENT_TAG = "arguments";
+
 GeometryModifierOp::GeometryModifierOp()
 {
   _rulesFileName = ConfigOptions().getGeometryModifierRulesFile();
@@ -108,19 +111,17 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
       throw HootException("Invalid geometry modifier action '" + actionDesc.command + "' in " + _rulesFileName);
     }
 
-    actionDescs.append(actionDesc);
-
     if( !commandLevelValue.second.empty())
     {
       BOOST_FOREACH(bpt::ptree::value_type &dataLevelValue, commandLevelValue.second)
       {
         // read filter
-        if( dataLevelValue.first == GEOMODRULES_FILTER_TAG )
+        if( dataLevelValue.first == GeometryModifierAction::FILTER_TAG )
         {
           _parseFilter(actionDesc, dataLevelValue.second);
         }
         // read arguments
-        else if( dataLevelValue.first == GEOMODRULES_ARGUMENT_TAG )
+        else if( dataLevelValue.first == GeometryModifierAction::ARGUMENT_TAG )
         {
           _parseArguments(actionDesc, dataLevelValue.second);
         }
@@ -129,6 +130,8 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
           throw HootException("Invalid geometry modifier tag '" + QString::fromStdString(dataLevelValue.first) + "' for action '" + actionDesc.command + "' in " + _rulesFileName);
         }
       }
+
+      actionDescs.append(actionDesc);
     }
   }
 

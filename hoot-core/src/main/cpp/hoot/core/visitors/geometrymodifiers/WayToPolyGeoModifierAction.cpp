@@ -45,16 +45,15 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   // only process Ways
   if( pElement->getElementType() != ElementType::Way ) return false;
 
-  Tags& tags = pElement->getTags();
-
-  // for now use a hardocded filter to get a basic framework going
-  if( tags.find("aeroway") == tags.end() ) return false;
-  double width = (tags["aeroway"] == "runway") ? 10 : 5;
+  //Tags& tags = pElement->getTags();
 
   // todo: use actual filter and arguments here
 
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  double width = 5;
 
+
+  // process
+  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
   size_t nodeCount = pWay->getNodeCount();
 
   // too small, nothing to do

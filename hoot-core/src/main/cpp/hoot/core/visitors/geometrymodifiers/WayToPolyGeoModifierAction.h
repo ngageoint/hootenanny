@@ -32,6 +32,9 @@
 namespace hoot
 {
 
+/*
+ * Creates a polygon from a way using a specified or default width setting.
+ */
 class WayToPolyGeoModifierAction : public GeometryModifierAction
 {
 public:
