@@ -368,6 +368,10 @@ public class ExportResource {
             String fileToCompress = outputName + "." + outputType;
             return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
         }
+        else if (outputType.equalsIgnoreCase("GEOJSON")) {
+        	String fileToCompress = outputName + "." + outputType;
+        	return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
+        }
         else if (outputType.equalsIgnoreCase("GDB")) {
             return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
         }

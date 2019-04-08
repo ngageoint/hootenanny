@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -74,7 +74,7 @@ class ImportCommand extends ExternalCommand {
         }
 
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
-        
+
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
@@ -88,7 +88,7 @@ class ImportCommand extends ExternalCommand {
             //options.add("convert.ops=hoot::TranslationOp");
             //options.add("translation.script=" + translationPath);
         //}
-        
+
         List<String> hootOptions = toHootOptions(options);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
@@ -115,7 +115,7 @@ class ImportCommand extends ExternalCommand {
             }
             command = hootConvertCommand;
         }
-        else if ((classification == OSM) || (classification == GEOJSON) ||(classification == GEONAMES)) {
+        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES)) {
             command = hootConvertCommand;
         }
         super.configureCommand(command, substitutionMap, caller);
