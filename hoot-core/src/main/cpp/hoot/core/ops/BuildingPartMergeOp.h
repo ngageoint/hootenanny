@@ -194,44 +194,11 @@ private:
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
-  boost::shared_ptr<ElementConverter> _elementConverter;
-
-  int _numGeometriesCleaned;
-  QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
-  int _numGeometryCacheHits;
-  int _totalContainedBuildingsAdded;
-  int _totalContainedWaysProcessed;
 
   int _threadCount;
 
-  void _processWays();
-  void _processRelations();
-  void _processRelations2();
   void _processBuildingParts();
   void _mergeBuildingParts();
-
-  void _addContainedWaysToGroup(
-    const geos::geom::Geometry& g, const ElementPtr& neighbor);
-  void _addNeighborsToGroup(const WayPtr& w);
-  void _addNeighborsToGroup(const RelationPtr& r);
-
-  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
-
-  void _combineParts(const std::vector<ElementPtr>& parts);
-
-  /**
-   * Compares the given tags and determines if the two building parts could be part of the same
-   * builds. Returns true if they could be part of the same building.
-   */
-  bool _compareTags(Tags t1, Tags t2);
-
-  /**
-   * Returns true if the nodes n1 and n2 appear in w in consecutive order.
-   */
-  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
-
-  boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
-                                                          const bool checkForBuilding = true);
 
   QQueue<ElementPtr> _getBuildingPartQueue();
 
