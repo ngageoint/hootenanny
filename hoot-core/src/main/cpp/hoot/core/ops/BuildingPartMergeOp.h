@@ -69,6 +69,26 @@ template<>
 namespace hoot
 {
 
+class BuildingPartDescription
+{
+
+public:
+
+  BuildingPartDescription(ElementPtr part, long neighborId, QString relationType,
+                          boost::shared_ptr<geos::geom::Geometry> partGeom) :
+  _part(part),
+  _neighborId(neighborId),
+  _relationType(relationType),
+  _partGeom(partGeom)
+  {
+  }
+
+  ElementPtr _part;
+  long _neighborId;
+  QString _relationType;
+  boost::shared_ptr<geos::geom::Geometry> _partGeom;
+};
+
 class BuildingPartProcessor : public QRunnable
 {
 
@@ -80,9 +100,11 @@ public:
 
   void setBuildingPartTagNames(const std::set<QString>& tagNames)
   { _buildingPartTagNames = tagNames; }
-  void setBuildingPartQueue(QQueue<ElementPtr>* queue) { _buildingPartQueue = queue; }
-  void setBuildingPartGroups( Tgs::DisjointSetMap<ElementPtr>* groups)
+  void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
+  void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
   { _buildingPartGroups = groups; }
+  void setGeometryCache(QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>>* cache)
+  { _geometryCache = cache; }
 
   void setMap(OsmMapPtr map);
 
@@ -95,7 +117,7 @@ public:
 
 private:
 
-  QQueue<ElementPtr>* _buildingPartQueue;
+  QQueue<BuildingPartDescription>* _buildingPartQueue;
 
   QMutex* _buildingPartGroupMutex;
   QMutex* _schemaMutex;
@@ -108,7 +130,7 @@ private:
 
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
 
-  QHash<long, boost::shared_ptr<geos::geom::Geometry>> _wayGeometryCache;
+  QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>>* _geometryCache;
 
   std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
@@ -120,14 +142,11 @@ private:
   int _numGeometriesCleaned;
   int _numProcessed;
 
-  void _addNeighborsToGroup(const RelationPtr& r);
-  void _addNeighborsToGroup(const WayPtr& w);
-  void _addContainedWaysToGroup(const geos::geom::Geometry& g, const ElementPtr& neighbor);
-  bool _compareTags(Tags t1, Tags t2);
-  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
-  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
-  boost::shared_ptr<geos::geom::Geometry> _getWayGeometry(const WayPtr& way,
-                                                          const bool checkForBuilding = true);
+  void _addNeighborsToGroup(const BuildingPartDescription& buildingPart);
+  void _addContainedWayToGroup(const geos::geom::Geometry& g, const long wayId,
+                               const ElementPtr& part);
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ElementPtr& element,
+                                                       const bool checkForBuilding = true);
   bool _isBuilding(const ElementPtr& element) const;
 };
 
@@ -194,15 +213,25 @@ private:
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
+  boost::shared_ptr<ElementConverter> _elementConverter;
+
+  QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>> _geometryCache;
 
   int _threadCount;
 
   void _processBuildingParts();
   void _mergeBuildingParts();
 
-  QQueue<ElementPtr> _getBuildingPartQueue();
+  QQueue<BuildingPartDescription> _getBuildingPartQueue();
 
   void _initBuildingPartTagNames();
+
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
+    const ElementPtr& element, const bool checkForBuilding = true);
+  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+  bool _compareTags(Tags t1, Tags te);
+  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+  bool _isBuilding(const ElementPtr& element) const;
 };
 
 }
