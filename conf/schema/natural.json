@@ -44,8 +44,7 @@
     {
         "geometries": [
             "node",
-            "linestring",
-            "area"
+            "linestring"
         ],
         "isA": "natural",
         "name": "natural=cliff",
