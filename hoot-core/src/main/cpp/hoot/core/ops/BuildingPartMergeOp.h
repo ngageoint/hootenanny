@@ -69,12 +69,12 @@ template<>
 namespace hoot
 {
 
-class RelationBuildingPartProcessor : public QRunnable
+class BuildingPartProcessor : public QRunnable
 {
 
 public:
 
-  RelationBuildingPartProcessor();
+  BuildingPartProcessor();
 
   void run() override;
 

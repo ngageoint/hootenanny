@@ -45,14 +45,14 @@
 namespace hoot
 {
 
-RelationBuildingPartProcessor::RelationBuildingPartProcessor() :
+BuildingPartProcessor::BuildingPartProcessor() :
 _numGeometryCacheHits(0),
 _numGeometriesCleaned(0),
 _numProcessed(0)
 {
 }
 
-void RelationBuildingPartProcessor::setMap(OsmMapPtr map)
+void BuildingPartProcessor::setMap(OsmMapPtr map)
 {
   _mapIndexMutex->lock();
 
@@ -67,7 +67,7 @@ void RelationBuildingPartProcessor::setMap(OsmMapPtr map)
   _mapIndexMutex->unlock();
 }
 
-void RelationBuildingPartProcessor::run()
+void BuildingPartProcessor::run()
 {
   _id = QUuid::createUuid().toString();
   LOG_INFO("Starting thread: " << _id << "...");
@@ -98,7 +98,7 @@ void RelationBuildingPartProcessor::run()
   LOG_VAR(_numGeometriesCleaned);
 }
 
-bool RelationBuildingPartProcessor::_compareTags(Tags t1, Tags t2)
+bool BuildingPartProcessor::_compareTags(Tags t1, Tags t2)
 {
   // remove all the building tags that are building:part=yes specific.
   for (std::set<QString>::const_iterator it = _buildingPartTagNames.begin();
@@ -115,7 +115,7 @@ bool RelationBuildingPartProcessor::_compareTags(Tags t1, Tags t2)
   return fabs(1.0 - score) < 0.001;
 }
 
-bool RelationBuildingPartProcessor::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
+bool BuildingPartProcessor::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 {
   const std::vector<long> nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size() - 1; i++)
@@ -129,8 +129,7 @@ bool RelationBuildingPartProcessor::_hasContiguousNodes(const WayPtr& w, long n1
   return false;
 }
 
-std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& w,
-                                                                  const Tags& tags)
+std::set<long> BuildingPartProcessor::_calculateNeighbors(const WayPtr& w, const Tags& tags)
 {
   LOG_VARD(w->getElementId());
 
@@ -171,7 +170,7 @@ std::set<long> RelationBuildingPartProcessor::_calculateNeighbors(const WayPtr& 
   return neighborIds;
 }
 
-void RelationBuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
+void BuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
 {
   LOG_VART(w->getElementId());
 
@@ -201,7 +200,7 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const WayPtr& w)
   }
 }
 
-void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
+void BuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
 {
   LOG_VART(r->getElementId());
 
@@ -240,7 +239,7 @@ void RelationBuildingPartProcessor::_addNeighborsToGroup(const RelationPtr& r)
   }
 }
 
-boost::shared_ptr<geos::geom::Geometry> RelationBuildingPartProcessor::_getWayGeometry(
+boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getWayGeometry(
   const WayPtr& way, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
@@ -262,7 +261,7 @@ boost::shared_ptr<geos::geom::Geometry> RelationBuildingPartProcessor::_getWayGe
   return g;
 }
 
-bool RelationBuildingPartProcessor::_isBuilding(const ElementPtr& element) const
+bool BuildingPartProcessor::_isBuilding(const ElementPtr& element) const
 {
   _schemaMutex->lock();
   const bool isBuilding = _buildingCrit.isSatisfied(element);
@@ -270,8 +269,8 @@ bool RelationBuildingPartProcessor::_isBuilding(const ElementPtr& element) const
   return isBuilding;
 }
 
-void RelationBuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::Geometry& g,
-                                                             const ElementPtr& neighbor)
+void BuildingPartProcessor::_addContainedWaysToGroup(const geos::geom::Geometry& g,
+                                                     const ElementPtr& neighbor)
 {
   LOG_VARD(neighbor->getElementId());
 
@@ -353,12 +352,7 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   ConfigOptions confOpts = ConfigOptions(conf);
 
   _threadCount = confOpts.getBuildingPartMergerThreadCount();
-  if (_threadCount < -2)  //TODO: temp hack
-  {
-    throw IllegalArgumentException(
-      "Invalid BuildingPartMergerOp thread count: " + QString::number(_threadCount));
-  }
-  else if (_threadCount < 1 && _threadCount != -2)  //TODO: temp hack
+  if (_threadCount < 1)
   {
     _threadCount = QThread::idealThreadCount();
   }
@@ -375,7 +369,7 @@ QQueue<ElementPtr> BuildingPartMergeOp::_getBuildingPartQueue()
     const WayPtr& w = it->second;
     if (_buildingCrit.isSatisfied(w))
     {
-      buildingPartQueue.enqueue(w);   // TODO: re-enable
+      buildingPartQueue.enqueue(w);
     }
   }
 
@@ -415,7 +409,7 @@ void BuildingPartMergeOp::_processBuildingParts()
   LOG_INFO("Launching " << _threadCount << " processing tasks...");
   for (int i = 0; i < _threadCount; i++)
   {
-    RelationBuildingPartProcessor* buildingPartTask = new RelationBuildingPartProcessor();
+    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
     buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
     buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
     buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
