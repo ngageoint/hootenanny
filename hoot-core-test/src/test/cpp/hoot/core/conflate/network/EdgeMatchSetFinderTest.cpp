@@ -63,7 +63,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum.osm"));
+    OsmMapWriterFactory::write(copy, QString("tmp/EdgeMatchSetFinderTest.osm"));
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)

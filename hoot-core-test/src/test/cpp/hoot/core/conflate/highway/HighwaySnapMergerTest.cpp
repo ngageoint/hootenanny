@@ -304,7 +304,7 @@ public:
 
     TestUtils::mkpath("tmp");
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map, "tmp/dum.osm");
+    OsmMapWriterFactory::write(map, "tmp/HighwaySnapMergerTest.osm");
 
     QString expected = QString("{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
         "{'type':'node','id':-1,'lat':5,'lon':20},\n"

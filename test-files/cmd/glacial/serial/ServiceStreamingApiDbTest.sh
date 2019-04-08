@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-GOLD_DIR=test-files/cmd/glacial/ServiceStreamingApiDbTest
-OUTPUT_DIR=test-output/cmd/glacial/ServiceStreamingApiDbTest
+GOLD_DIR=test-files/cmd/glacial/serial/ServiceStreamingApiDbTest
+OUTPUT_DIR=test-output/cmd/glacial/serial/ServiceStreamingApiDbTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 

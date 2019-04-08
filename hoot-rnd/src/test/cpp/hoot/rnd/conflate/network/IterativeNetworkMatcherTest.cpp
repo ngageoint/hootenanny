@@ -65,7 +65,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/IterativeNetworkMatcherTest-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
