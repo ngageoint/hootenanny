@@ -397,45 +397,10 @@ QQueue<ElementPtr> BuildingPartMergeOp::_getBuildingPartQueue()
   return buildingPartQueue;
 }
 
-QQueue<ElementPtr> BuildingPartMergeOp::_getRelationBuildingPartQueue()
-{
-  QQueue<ElementPtr> buildingPartQueue;
-  const RelationMap& relations = _map->getRelations();
-  LOG_VAR(relations.size());
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    const RelationPtr& r = it->second;
-    if (_buildingCrit.isSatisfied(r))
-    {
-      buildingPartQueue.enqueue(r);
-    }
-  }
-  return buildingPartQueue;
-}
-
-QQueue<ElementPtr> BuildingPartMergeOp::_getWayBuildingPartQueue()
-{
-  QQueue<ElementPtr> buildingPartQueue;
-  const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-  {
-    const WayPtr& w = it->second;
-    if (_buildingCrit.isSatisfied(w))
-    {
-      buildingPartQueue.enqueue(w);
-    }
-  }
-  return buildingPartQueue;
-}
-
 void BuildingPartMergeOp::_processBuildingParts()
 {
   QQueue<ElementPtr> buildingPartQueue = _getBuildingPartQueue();
   LOG_VAR(buildingPartQueue.size());
-  QQueue<ElementPtr> relationBuildingPartQueue = _getRelationBuildingPartQueue();
-  LOG_VAR(relationBuildingPartQueue.size());
-  QQueue<ElementPtr> wayBuildingPartQueue = _getWayBuildingPartQueue();
-  LOG_VAR(wayBuildingPartQueue.size());
 
   // TODO: may be able to get rid of some of these mutexes
 

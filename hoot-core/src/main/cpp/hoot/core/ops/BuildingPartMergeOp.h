@@ -234,8 +234,6 @@ private:
                                                           const bool checkForBuilding = true);
 
   QQueue<ElementPtr> _getBuildingPartQueue();
-  QQueue<ElementPtr> _getRelationBuildingPartQueue();
-  QQueue<ElementPtr> _getWayBuildingPartQueue();
 
   void _initBuildingPartTagNames();
 };
