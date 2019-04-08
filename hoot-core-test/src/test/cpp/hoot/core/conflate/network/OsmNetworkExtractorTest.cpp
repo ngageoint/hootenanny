@@ -54,7 +54,7 @@ public:
 
     OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyInput.osm");
 
-    ElementCriterionPtr c(new HighwayCriterion());
+    ElementCriterionPtr c(new HighwayCriterion(map));
     OsmNetworkExtractor uut;
     uut.setCriterion(c);
     OsmNetworkPtr network = uut.extractNetwork(map);
