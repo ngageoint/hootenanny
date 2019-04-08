@@ -25,8 +25,10 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "WayToPolyGeoModifierAction.h"
+#include <math.h>
+
 #include "CoordinateExt.h"
+#include "WayToPolyGeoModifierAction.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -85,15 +87,26 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     // find perpendicular vector to vector between previous and next point
     CoordinateExt c1 = currCoor - prevCoor;
     CoordinateExt c2 = nextCoor - currCoor;
+    if( c1.length() == 0 ) c1 = c2;          // correction for first way point
     c1.normalize();
     c2.normalize();
     CoordinateExt vector = c1+c2;
-    CoordinateExt perp( vector.y, -vector.x );
+    CoordinateExt perp( vector.y, -vector.x );  // vector perpendicular to sum of both segments
     perp.normalize();
 
-    perp.x *= _width;
-    perp.y *= _width;
+    // fix for collapsing areas in corners with angles greater than 45 degrees,
+    // smaller angles will push the points out too far
+    double angle = fabs(atan2(perp.y,perp.x) - atan2(c1.y,c1.x));
+    if( angle > M_PI_2 ) angle = fabs(angle-M_PI);
+    LOG_VAR(angle);
+    if( angle < M_PI_4) angle = M_PI_4;
 
+    // apply requested width
+    double width = _width / sin(angle);
+    perp.x *= width;
+    perp.y *= width;
+
+    // store positions for both sides (opposite side in reverse order)
     polyPositions[i] = currCoor + perp;
     perp.x = -perp.x; perp.y = -perp.y;
     polyPositions[nodeCount*2-1-i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );

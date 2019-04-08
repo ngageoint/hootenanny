@@ -34,23 +34,31 @@ using namespace geos::geom;
 namespace hoot
 {
 
+/*
+ * Helper for 2D vector math with Coordinates
+ */
 class CoordinateExt : public Coordinate
 {
 public:
   CoordinateExt(Coordinate c) : Coordinate(c) {}
   CoordinateExt(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber) : Coordinate( xNew, yNew, zNew ) {}
 
-  double getLength() const
+  double length() const
   {
     return sqrt(x * x + y * y);
   }
 
   void normalize()
   {
-    double len = getLength();
+    double len = length();
     if( len == 0 ) return;
     x /= len;
     y /= len;
+  }
+
+  float dotproduct(CoordinateExt val)
+  {
+    return x * val.x + y * val.y;
   }
 
   CoordinateExt operator + (const CoordinateExt  val) const
@@ -63,6 +71,12 @@ public:
   {
     CoordinateExt dif( x - val.x, y - val.y, z - val.z );
     return dif;
+  }
+
+  CoordinateExt operator * (const double val) const
+  {
+    CoordinateExt mul( x * val, y * val, z * val );
+    return mul;
   }
 };
 
