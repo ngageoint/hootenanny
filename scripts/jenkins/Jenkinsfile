@@ -129,12 +129,14 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
         }
+/*
         stage("UI Hoot 2 Tests") {
             when { expression { return params.UI_hoot2_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
             }
         }
+*/
         stage("Sonar") {
             when {
                 anyOf {
