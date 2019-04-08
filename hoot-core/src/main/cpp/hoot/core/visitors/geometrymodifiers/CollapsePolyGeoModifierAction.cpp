@@ -36,8 +36,9 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 
-bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap ) const
+bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments )
 {
+  arguments.size();
   pElement->className();
   pMap->getNodes();
   return false;

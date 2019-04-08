@@ -63,7 +63,7 @@ public:
   virtual QList<QString> getParameterNames() const = 0;
 
   // Command function to process a filtered element
-  virtual bool process( const ElementPtr& pElement, OsmMap* pMap ) const = 0;
+  virtual bool process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments ) = 0;
 };
 
 /*

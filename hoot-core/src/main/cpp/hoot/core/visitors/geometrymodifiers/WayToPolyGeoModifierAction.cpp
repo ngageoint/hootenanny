@@ -31,8 +31,6 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 
-//#include <vector>
-
 using namespace std;
 
 namespace hoot
@@ -40,19 +38,18 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToPolyGeoModifierAction)
 
-bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap) const
+const QString WayToPolyGeoModifierAction::WIDTH_TAG_PARAM = "width_tag_m";
+const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m";
+
+bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments)
 {
   // only process Ways
   if( pElement->getElementType() != ElementType::Way ) return false;
 
-  //Tags& tags = pElement->getTags();
+  // process tags to determine desired width
+  checkParameters( arguments, pElement->getTags() );
 
-  // todo: use actual filter and arguments here
-
-  double width = 5;
-
-
-  // process
+  // process the way as requested
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
   size_t nodeCount = pWay->getNodeCount();
 
@@ -94,8 +91,8 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     CoordinateExt perp( vector.y, -vector.x );
     perp.normalize();
 
-    perp.x *= width;
-    perp.y *= width;
+    perp.x *= _width;
+    perp.y *= _width;
 
     polyPositions[i] = currCoor + perp;
     perp.x = -perp.x; perp.y = -perp.y;
@@ -121,6 +118,43 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   pMap->replace(pWay,pPoly);
 
   return true;
+}
+
+void WayToPolyGeoModifierAction::checkParameters(const QHash<QString,QString>& arguments, const Tags& tags)
+{
+  // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use that value in the tag
+  if( arguments.keys().contains(WIDTH_TAG_PARAM) )
+  {
+    QString widthTag = arguments[WIDTH_TAG_PARAM];
+
+    if( !widthTag.isEmpty() )
+    {
+      if( tags.find(widthTag) != tags.end() )
+      {
+        double width = tags[widthTag].toDouble();
+        if( width > 0 )
+        {
+          _width = width;
+          return;
+        }
+      }
+    }
+  }
+
+  // else if DEFAULT_WIDTH_PARAM node tag is found use that value
+  if( arguments.keys().contains(DEFAULT_WIDTH_PARAM) )
+  {
+    double width = arguments[DEFAULT_WIDTH_PARAM].toDouble();
+    if( width > 0 )
+    {
+      _width = width;
+      return;
+    }
+  }
+
+  // else use DEFAULT_WIDTH
+  _width = DEFAULT_WIDTH;
+  return;
 }
 
 }

@@ -38,14 +38,24 @@ namespace hoot
 class WayToPolyGeoModifierAction : public GeometryModifierAction
 {
 public:
+  static const QString WIDTH_TAG_PARAM;
+  static const QString DEFAULT_WIDTH_PARAM;
+
   static std::string className() { return "hoot::WayToPolyGeoModifierAction"; }
 
   QString getCommandName() const { return "way_to_poly"; }
-  QList<QString> getParameterNames() const { return QList<QString> {"width_tag_m", "default_width_m"}; }
+  QList<QString> getParameterNames() const { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
+  bool process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments );
 
-  bool process( const ElementPtr& pElement, OsmMap* pMap ) const;
+private:
+  const double DEFAULT_WIDTH = 5;
+  double _width = DEFAULT_WIDTH;
+
+  void checkParameters(const QHash<QString,QString>& arguments, const Tags& tags);
 };
 
 }
 
 #endif // WAYTOPOLYGEOMODIFIERACTION_H
+
+
