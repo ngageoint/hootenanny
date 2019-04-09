@@ -53,7 +53,7 @@ void MultiaryIngestChangesetReader::open(QString fileName)
   _file.setFileName(fileName);
   if (!_file.open(QIODevice::ReadOnly))
   {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(fileName));
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(fileName));
   }
   LOG_DEBUG("Opened: " << fileName << ".");
 }

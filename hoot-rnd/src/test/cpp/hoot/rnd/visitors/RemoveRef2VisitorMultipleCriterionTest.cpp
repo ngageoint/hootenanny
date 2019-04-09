@@ -51,6 +51,8 @@ class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/visitors/";
+
   RemoveRef2VisitorMultipleCriterionTest()
   {
     setResetType(ResetAll);
@@ -60,7 +62,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
+      map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);
     ElementCriterionPtr buildingCrit(new BuildingCriterion(map));
@@ -89,7 +91,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveRef2VisitorMultipleCriterionInput.osm");
+      map, _inputPath + "RemoveRef2VisitorMultipleCriterionInput.osm");
 
     ElementCriterionPtr poiCrit(new PoiCriterion);
     ElementCriterionPtr buildingCrit(new BuildingCriterion(map));

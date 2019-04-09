@@ -3,7 +3,7 @@ set -e
 
 REF_DIR=test-files/cmd/glacial/RndImplicitTypeDatabaseDeriverTest
 OUTPUT_DIR=test-output/cmd/glacial/RndImplicitTypeDatabaseDeriverTest
-INPUT_DIR=test-files/schema/ImplicitTagRawRulesDeriverTest
+INPUT_DIR=test-files/rnd/schema/ImplicitTagRawRulesDeriverTest
 
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR

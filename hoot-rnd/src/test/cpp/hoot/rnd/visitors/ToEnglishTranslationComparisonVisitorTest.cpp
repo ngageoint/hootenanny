@@ -41,12 +41,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/visitors/ToEnglishTranslationVisitorTest";
-static const QString goldInputRoot =
-  "test-files/visitors/ToEnglishTranslationComparisonVisitorTest";
-static const QString testOutputRoot =
-  "test-output/visitors/ToEnglishTranslationComparisonVisitorTest";
 
 class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 {
@@ -58,27 +52,31 @@ class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/ToEnglishTranslationVisitorTest/";
+  const QString _inputGoldPath = "test-files/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/";
+  const QString _outputPath = "test-output/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/";
+
   ToEnglishTranslationComparisonVisitorTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(testOutputRoot);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, testInputRoot + "/ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
 
     ToEnglishTranslationComparisonVisitor visitor;
     visitor.setConfiguration(_getDefaultConfig());
 
     map->visitRw(visitor);
 
-    const QString outputFile = testOutputRoot + "/runTest.osm";
+    const QString outputFile = _outputPath + "runTest.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
-    HOOT_FILE_EQUALS(goldInputRoot + "/runTest-gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputGoldPath + "runTest-gold.osm", outputFile);
   }
 
   void runInvalidSourceLangsTest()

@@ -48,19 +48,19 @@ class ImplicitTagRulesDatabaseDeriverTest : public HootTestFixture
 
 public:
 
-  static QString inDir() { return "test-files/schema/ImplicitTagRulesDatabaseDeriverTest"; }
-  static QString outDir() { return "test-output/schema/ImplicitTagRulesDatabaseDeriverTest"; }
+  const QString _inputPath = "test-files/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/";
+  const QString _outputPath = "test-output/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/";
 
   ImplicitTagRulesDatabaseDeriverTest()
   {
-    TestUtils::mkpath(outDir());
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runBasicTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -92,8 +92,8 @@ public:
     try
     {
       rulesDeriver.deriveRulesDatabase(
-        inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.txt",
-        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest1-out.sqlite");
+        _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.txt",
+        _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest1-out.sqlite");
     }
     catch (const HootException& e)
     {
@@ -106,8 +106,8 @@ public:
     try
     {
       rulesDeriver.deriveRulesDatabase(
-        inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules",
-        outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest2-out.txt");
+        _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules",
+        _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runBadInputsTest2-out.txt");
     }
     catch (const HootException& e)
     {
@@ -118,9 +118,9 @@ public:
 
   void runMinTagOccurrencePerWordTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runMinTagOccurrencePerWordTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(4);
@@ -139,9 +139,9 @@ public:
 
   void runMinWordLengthTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runMinWordLengthTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runMinWordLengthTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -160,16 +160,16 @@ public:
 
   void runTagIgnoreTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runTagIgnoreTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runTagIgnoreTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile(inDir() + "/ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
+    rulesDeriver.setTagIgnoreFile(_inputPath + "ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
@@ -181,9 +181,9 @@ public:
 
   void runWordIgnoreTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runWordIgnoreTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runWordIgnoreTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -193,7 +193,7 @@ public:
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setWordIgnoreFile(
-      inDir() + "/ImplicitTagRulesDatabaseDeriverTest-word-ignore-list");
+      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-word-ignore-list");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
     ImplicitTagRulesSqliteReader dbReader;
@@ -204,9 +204,9 @@ public:
 
   void runCustomRuleTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runCustomRuleTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runCustomRuleTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);
@@ -215,7 +215,7 @@ public:
     rulesDeriver.setCustomRuleFile("");
     rulesDeriver.setTagIgnoreFile("");
     rulesDeriver.setCustomRuleFile(
-      inDir() + "/ImplicitTagRulesDatabaseDeriverTest-custom-rules-list");
+      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-custom-rules-list");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 
@@ -227,9 +227,9 @@ public:
 
   void runSchemaValuesOnlyOffTest()
   {
-    const QString input = inDir() + "/ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
+    const QString input = _inputPath + "ImplicitTagRulesDatabaseDeriverTest-input.implicitTagRules";
     const QString dbOutputFile =
-      outDir() + "/ImplicitTagRulesDatabaseDeriverTest-runSchemaValuesOnlyOffTest-out.sqlite";
+      _outputPath + "ImplicitTagRulesDatabaseDeriverTest-runSchemaValuesOnlyOffTest-out.sqlite";
 
     ImplicitTagRulesDatabaseDeriver rulesDeriver;
     rulesDeriver.setMinTagOccurrencesPerWord(1);

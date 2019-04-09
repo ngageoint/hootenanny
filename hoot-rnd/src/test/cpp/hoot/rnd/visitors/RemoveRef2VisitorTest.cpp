@@ -50,6 +50,8 @@ class RemoveRef2VisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/visitors/";
+
   RemoveRef2VisitorTest()
   {
     setResetType(ResetAll);
@@ -58,7 +60,7 @@ public:
   void runToyTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/visitors/RemoveRef2VisitorInput.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveRef2VisitorInput.osm");
 
     ElementCriterionPtr c(new PoiCriterion);
     RemoveRef2Visitor v;

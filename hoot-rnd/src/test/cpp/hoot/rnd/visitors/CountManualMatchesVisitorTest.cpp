@@ -47,7 +47,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/visitors/CountManualMatchesVisitorTest.osm",
+      "test-files/rnd/visitors/CountManualMatchesVisitorTest.osm",
       false,
       Status::Unknown2);
 

@@ -40,10 +40,13 @@ class CumulativeConflatorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/conflate/CumulativeConflatorTest/";
+  const QString _outputPath = "test-output/rnd/conflate/CumulativeConflatorTest/";
+
   CumulativeConflatorTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void basicTest()
@@ -53,15 +56,15 @@ public:
       ConfigOptions::getTagMergerDefaultKey(), "hoot::ProvenanceAwareOverwriteTagMerger");
 
     QStringList inputs;
-    inputs.append("test-files/conflate/CumulativeConflatorTest/OakLabsRestaurants_RioSubsetCopy.osm");
-    inputs.append("test-files/conflate/CumulativeConflatorTest/Restaurants_RioSource2.osm");
-    inputs.append("test-files/conflate/CumulativeConflatorTest/Restaurants_RioSource3.osm");
+    inputs.append(_inputPath + "OakLabsRestaurants_RioSubsetCopy.osm");
+    inputs.append(_inputPath + "Restaurants_RioSource2.osm");
+    inputs.append(_inputPath + "Restaurants_RioSource3.osm");
 
-    CumulativeConflator::conflate(inputs, "test-output/conflate/CumulativeConflatorTest.osm");
+    CumulativeConflator::conflate(inputs, _outputPath + "CumulativeConflatorTest.osm");
 
     HOOT_FILE_EQUALS(
-      "test-files/conflate/CumulativeConflatorTest/CumulativeConflatorTest.osm",
-      "test-output/conflate/CumulativeConflatorTest.osm");
+      _inputPath + "CumulativeConflatorTest.osm",
+      _outputPath + "CumulativeConflatorTest.osm");
   }
 
 };

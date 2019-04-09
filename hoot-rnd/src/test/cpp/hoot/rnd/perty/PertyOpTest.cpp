@@ -104,9 +104,9 @@ public:
     qSort(keys);
 
 //    OsmXmlWriter writer;
-//    QDir().mkpath("test-output/perty");
+//    QDir().mkpath("test-output/rnd/perty");
 //    MapProjector::reprojectToWgs84(map);
-//    writer.write(map, "test-output/perty/BasicTest.osm");
+//    writer.write(map, "test-output/rnd/perty/BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)
 //    {
@@ -177,11 +177,11 @@ public:
     }
 
     OsmXmlWriter writer;
-    TestUtils::mkpath("test-output/perty");
+    TestUtils::mkpath("test-output/rnd/perty");
 
     OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);
-    writer.write(original, "test-output/perty/Original.osm");
+    writer.write(original, "test-output/rnd/perty/Original.osm");
 
     PertyOp uut;
     uut.setGridSpacing(gridSpacing);
@@ -208,9 +208,9 @@ public:
 
 
     MapProjector::projectToWgs84(debug);
-    writer.write(debug, "test-output/perty/Debug.osm");
+    writer.write(debug, "test-output/rnd/perty/Debug.osm");
     MapProjector::projectToWgs84(map);
-    writer.write(map, "test-output/perty/Permuted.osm");
+    writer.write(map, "test-output/rnd/perty/Permuted.osm");
   }
 };
 

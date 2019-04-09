@@ -48,6 +48,8 @@ class MapScoringStatusAndRefTagValidatorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/scoring/MapScoringStatusAndRefTagValidatorTest/";
+
   MapScoringStatusAndRefTagValidatorTest()
   {
     setResetType(ResetBasic);
@@ -63,38 +65,30 @@ public:
 
     OsmMapPtr map1(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map1);
+    reader.read(_inputPath + "has-ref1-tags-only.osm", map1);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map1);
+    reader.read(_inputPath + "has-ref2-tags-only.osm", map1);
     CPPUNIT_ASSERT(MapScoringStatusAndRefTagValidator::allTagsAreValid(map1));
 
     OsmMapPtr map2(new OsmMap());
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map2);
+    reader.read(_inputPath + "has-ref1-tags-only.osm", map2);
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map2);
+    reader.read(_inputPath + "has-ref2-tags-only.osm", map2);
     CPPUNIT_ASSERT(!MapScoringStatusAndRefTagValidator::allTagsAreValid(map2));
 
     OsmMapPtr map3(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map3);
+    reader.read(_inputPath + "has-ref1-tags-only.osm", map3);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map3);
+    reader.read(_inputPath + "has-ref1-tags-only.osm", map3);
     CPPUNIT_ASSERT(!MapScoringStatusAndRefTagValidator::allTagsAreValid(map3));
 
     OsmMapPtr map4(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map4);
+    reader.read(_inputPath + "has-ref2-tags-only.osm", map4);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map4);
+    reader.read(_inputPath + "has-ref2-tags-only.osm", map4);
     CPPUNIT_ASSERT(!MapScoringStatusAndRefTagValidator::allTagsAreValid(map4));
   }
 

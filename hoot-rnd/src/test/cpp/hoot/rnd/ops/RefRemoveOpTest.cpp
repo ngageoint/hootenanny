@@ -30,15 +30,16 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/rnd/ops/RefRemoveOp.h>
 #include <hoot/core/util/Log.h>
+
+#include <hoot/rnd/ops/RefRemoveOp.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -55,9 +56,13 @@ class RefRemoveOpTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/ops/RefRemoveOp/";
+  const QString _outputPath = "test-output/rnd/ops/RefRemoveOp/";
+
   RefRemoveOpTest()
   {
     setResetType(ResetBasic);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()
@@ -66,7 +71,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RefRemoveOp/Toy.osm", map);
+    reader.read(_inputPath + "Toy.osm", map);
 
     RefRemoveOp uut;
     uut.addCriterion(ElementCriterionPtr(new BuildingCriterion(map)));
@@ -74,11 +79,10 @@ public:
 
     LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
 
-    TestUtils::mkpath("test-output/ops/RefRemoveOp/");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/RefRemoveOp/Toy.osm");
-    HOOT_FILE_EQUALS("test-files/ops/RefRemoveOp/ToyOutput.osm",
-                     "test-output/ops/RefRemoveOp/Toy.osm");
+    writer.write(map, _outputPath + "Toy.osm");
+    HOOT_FILE_EQUALS(_inputPath + "ToyOutput.osm",
+                     _outputPath + "Toy.osm");
   }
 
 };

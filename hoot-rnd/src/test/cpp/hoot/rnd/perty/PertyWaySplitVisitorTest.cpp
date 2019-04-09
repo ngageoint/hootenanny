@@ -56,10 +56,13 @@ class PertyWaySplitVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/rnd/perty/PertyWaySplitVisitorTest/";
+  const QString _outputPath = "test-output/rnd/perty/PertyWaySplitVisitorTest/";
+
   PertyWaySplitVisitorTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/perty/PertyWaySplitVisitorTest/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runWaySplitTest()
@@ -71,7 +74,7 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-1.osm", map);
+    reader.read(_inputPath + "PertyWaySplitVisitorTest-in-1.osm", map);
     const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
@@ -93,11 +96,11 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = "test-output/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-1.osm";
+    const QString outFile = _outputPath + "PertyWaySplitVisitorTest-out-1.osm";
     writer.write(map, outFile);
 
     HOOT_FILE_EQUALS(
-      "test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-1.osm", outFile);
+      _inputPath + "PertyWaySplitVisitorTest-out-1.osm", outFile);
 
     //Log::getInstance().setLevel(levelBefore);
   }
@@ -111,7 +114,7 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-2.osm", map);
+    reader.read(_inputPath + "PertyWaySplitVisitorTest-in-2.osm", map);
     const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
@@ -133,11 +136,11 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = "test-output/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-2.osm";
+    const QString outFile = _outputPath + "PertyWaySplitVisitorTest-out-2.osm";
     writer.write(map, outFile);
 
     HOOT_FILE_EQUALS(
-      "test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-out-2.osm", outFile);
+      _inputPath + "PertyWaySplitVisitorTest-out-2.osm", outFile);
 
     //Log::getInstance().setLevel(levelBefore);
   }

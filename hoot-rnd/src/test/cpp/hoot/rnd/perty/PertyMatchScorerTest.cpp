@@ -49,8 +49,8 @@ class PertyMatchScorerTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/perty/PertyMatchScorerTest/";
-  const QString outputPath = "test-output/perty/PertyMatchScorerTest/";
+  const QString inputPath = "test-files/rnd/perty/PertyMatchScorerTest/";
+  const QString outputPath = "test-output/rnd/perty/PertyMatchScorerTest/";
 
   PertyMatchScorerTest()
   {
