@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
 import hoot.services.models.db.CommandStatus;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -86,6 +87,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
                     currentOut = currentOut.concat(line + "\n");
                     commandResult.setStdout(currentOut);
+
+                    DbUtils.updateCommandStdout(jobId, currentOut);
                 }
             };
             this.stderr = new LogOutputStream() {
@@ -97,6 +100,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
                     currentErr = currentErr.concat(line + "\n");
                     commandResult.setStderr(currentErr);
+
+                    DbUtils.updateCommandStderr(jobId, currentErr);
                 }
             };
 
@@ -130,7 +135,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
 
                 // TODO: Async approach but some commands need to be executed serially
-                // TODO: Will require changing JobRunnable.class processJob() as well because it
+                // TODO: Will require changing JobRunnable.class processJob() as well because it blocks
                 // executor.execute(cmdLine, new ExecuteResultHandler() {
                 //     @Override
                 //     public void onProcessComplete(int exitValue) {

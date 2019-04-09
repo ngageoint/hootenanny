@@ -27,6 +27,7 @@
 package hoot.services.utils;
 
 
+import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -506,5 +507,41 @@ public class DbUtils {
         }
 
         return -1;
+    }
+
+    public static void updateCommandOutput(String jobId, String out, String err) {
+        long recordCount = createQuery()
+                .from(commandStatus)
+                .where(commandStatus.jobId.eq(jobId))
+                .fetchCount();
+
+        if (recordCount == 0) {
+            throw new NotFoundException("No record exists with jobId = " + jobId +
+                    " in command_status table. Please specify a valid record.");
+        } else {
+            if(out != null) {
+                createQuery()
+                        .update(commandStatus)
+                        .where(commandStatus.jobId.eq(jobId))
+                        .set(commandStatus.stdout, out)
+                        .execute();
+            }
+
+            if(err != null) {
+                createQuery()
+                        .update(commandStatus)
+                        .where(commandStatus.jobId.eq(jobId))
+                        .set(commandStatus.stderr, err)
+                        .execute();
+            }
+        }
+    }
+
+    public static void updateCommandStdout(String jobId, String out) {
+        updateCommandOutput(jobId, out, null);
+    }
+
+    public static void updateCommandStderr(String jobId, String err) {
+        updateCommandOutput(jobId, null, err);
     }
 }
