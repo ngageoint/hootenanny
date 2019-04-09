@@ -1,30 +1,30 @@
 #### Shapefile Output ####
-14:52:58.631 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
-14:52:58.632 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/output.shp, --trans, test-files/io/SampleTranslation.js}
-14:52:58.632 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/output.shp...
-14:52:58.639 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:52:58.639 INFO  ...hoot/core/io/DataConverter.cpp( 308) _transToOgrMT
-14:52:58.640 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:52:58.641 INFO  ...hoot/core/io/DataConverter.cpp( 302) Done Reading
-14:52:58.641 INFO  ...hoot/core/io/DataConverter.cpp( 323) Element Cache Filled
-14:52:58.641 INFO  ...hoot/core/io/DataConverter.cpp( 339) Translation Thread Started
-14:52:58.641 INFO  ...hoot/core/io/DataConverter.cpp( 350) OGR Writer Thread Started
-14:52:58.642 INFO  ...hoot/core/io/DataConverter.cpp( 353) Waiting for writer to finish...
-14:52:58.646 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:52:58.646 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:52:58.663 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:52:58.667 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
-14:52:58.669 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:52:58.669 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:52:58.695 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:52:58.825 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
-14:52:58.898 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: PAL015 not found.  Creating layer...
-14:52:58.908 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: AAL015 not found.  Creating layer...
-14:52:58.909 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: LAP010 not found.  Creating layer...
-14:52:58.910 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: LAP030 not found.  Creating layer...
-14:52:59.012 INFO  ...hoot/core/io/DataConverter.cpp( 162) Done Writing Features
-14:52:59.012 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
-14:52:59.012 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+17:45:28.818 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+17:45:28.819 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/output.shp, --trans, test-files/io/SampleTranslation.js}
+17:45:28.821 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/output.shp...
+17:45:28.849 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:45:28.850 INFO  ...hoot/core/io/DataConverter.cpp( 309) _transToOgrMT
+17:45:28.853 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:45:28.863 INFO  ...hoot/core/io/DataConverter.cpp( 303) Done Reading
+17:45:28.864 INFO  ...hoot/core/io/DataConverter.cpp( 324) Element Cache Filled
+17:45:28.864 INFO  ...hoot/core/io/DataConverter.cpp( 340) Translation Thread Started
+17:45:28.864 INFO  ...hoot/core/io/DataConverter.cpp( 351) OGR Writer Thread Started
+17:45:28.864 INFO  ...hoot/core/io/DataConverter.cpp( 354) Waiting for writer to finish...
+17:45:28.903 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:45:28.910 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:45:28.952 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:45:29.014 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:45:29.016 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:45:29.137 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:45:29.187 DEBUG ...hoot/core/schema/OsmSchema.cpp(1743) Loading translation files...
+17:45:29.981 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
+17:45:30.015 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: PAL015 not found.  Creating layer...
+17:45:30.077 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: AAL015 not found.  Creating layer...
+17:45:30.128 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: LAP010 not found.  Creating layer...
+17:45:30.184 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: LAP030 not found.  Creating layer...
+17:45:30.401 INFO  ...hoot/core/io/DataConverter.cpp( 163) Done Writing Features
+17:45:30.405 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+17:45:30.405 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 1 seconds
 AAL015
 
 Layer name: AAL015
@@ -74,32 +74,32 @@ OGRFeature(PAL015):0
  POINT : 
 
 #### FileGDB Output ####
-14:52:59.861 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
-14:52:59.861 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/output.gdb, --trans, test-files/io/SampleTranslation.js}
-14:52:59.861 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/output.gdb...
-14:52:59.869 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:52:59.870 INFO  ...hoot/core/io/DataConverter.cpp( 308) _transToOgrMT
-14:52:59.870 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:52:59.872 INFO  ...hoot/core/io/DataConverter.cpp( 302) Done Reading
-14:52:59.872 INFO  ...hoot/core/io/DataConverter.cpp( 323) Element Cache Filled
-14:52:59.872 INFO  ...hoot/core/io/DataConverter.cpp( 339) Translation Thread Started
-14:52:59.872 INFO  ...hoot/core/io/DataConverter.cpp( 350) OGR Writer Thread Started
-14:52:59.872 INFO  ...hoot/core/io/DataConverter.cpp( 353) Waiting for writer to finish...
-14:52:59.877 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:52:59.877 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:52:59.897 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:00.002 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:53:00.002 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:53:00.018 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:00.021 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
-14:53:00.161 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
-14:53:00.202 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: PAL015 not found.  Creating layer...
-14:53:00.271 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: AAL015 not found.  Creating layer...
-14:53:00.336 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: LAP010 not found.  Creating layer...
-14:53:00.414 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: LAP030 not found.  Creating layer...
-14:53:00.622 INFO  ...hoot/core/io/DataConverter.cpp( 162) Done Writing Features
-14:53:00.623 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
-14:53:00.623 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+17:45:34.860 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+17:45:34.861 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/output.gdb, --trans, test-files/io/SampleTranslation.js}
+17:45:34.867 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/output.gdb...
+17:45:34.947 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:45:34.954 INFO  ...hoot/core/io/DataConverter.cpp( 309) _transToOgrMT
+17:45:34.967 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:45:34.997 INFO  ...hoot/core/io/DataConverter.cpp( 303) Done Reading
+17:45:34.999 INFO  ...hoot/core/io/DataConverter.cpp( 324) Element Cache Filled
+17:45:34.999 INFO  ...hoot/core/io/DataConverter.cpp( 340) Translation Thread Started
+17:45:34.999 INFO  ...hoot/core/io/DataConverter.cpp( 351) OGR Writer Thread Started
+17:45:34.999 INFO  ...hoot/core/io/DataConverter.cpp( 354) Waiting for writer to finish...
+17:45:35.014 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:45:35.022 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:45:35.093 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:45:44.131 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:45:44.133 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:45:44.178 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:45:44.226 DEBUG ...hoot/core/schema/OsmSchema.cpp(1743) Loading translation files...
+17:45:44.945 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
+17:45:45.032 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: PAL015 not found.  Creating layer...
+17:45:48.330 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: AAL015 not found.  Creating layer...
+17:45:51.790 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: LAP010 not found.  Creating layer...
+17:45:56.238 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: LAP030 not found.  Creating layer...
+17:46:01.840 INFO  ...hoot/core/io/DataConverter.cpp( 163) Done Writing Features
+17:46:01.844 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+17:46:01.844 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 26 seconds
 AAL015
 
 Layer name: AAL015
@@ -145,60 +145,60 @@ OGRFeature(PAL015):1
  POINT : 
 
 #### Test prepending layer names and lazy layer creation ####
-14:53:01.712 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
-14:53:01.712 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/options.shp, --trans, test-files/io/SampleTranslation.js}
-14:53:01.712 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/options.shp...
-14:53:01.720 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:53:01.720 INFO  ...hoot/core/io/DataConverter.cpp( 308) _transToOgrMT
-14:53:01.721 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:53:01.722 INFO  ...hoot/core/io/DataConverter.cpp( 302) Done Reading
-14:53:01.722 INFO  ...hoot/core/io/DataConverter.cpp( 323) Element Cache Filled
-14:53:01.722 INFO  ...hoot/core/io/DataConverter.cpp( 339) Translation Thread Started
-14:53:01.722 INFO  ...hoot/core/io/DataConverter.cpp( 350) OGR Writer Thread Started
-14:53:01.722 INFO  ...hoot/core/io/DataConverter.cpp( 353) Waiting for writer to finish...
-14:53:01.727 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:53:01.727 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:53:01.744 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:01.746 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:53:01.746 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:53:01.747 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
-14:53:01.764 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:01.889 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
-14:53:01.968 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: bar_PAL015 not found.  Creating layer...
-14:53:01.978 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: bar_AAL015 not found.  Creating layer...
-14:53:01.979 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: bar_LAP010 not found.  Creating layer...
-14:53:01.980 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: bar_LAP030 not found.  Creating layer...
-14:53:02.082 INFO  ...hoot/core/io/DataConverter.cpp( 162) Done Writing Features
-14:53:02.082 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
-14:53:02.082 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
-14:53:02.433 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
-14:53:02.433 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/options.shp, --trans, test-files/io/SampleTranslation.js}
-14:53:02.433 INFO  ...hoot/core/io/DataConverter.cpp( 183) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/options.shp...
-14:53:02.441 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:53:02.441 INFO  ...hoot/core/io/DataConverter.cpp( 308) _transToOgrMT
-14:53:02.442 DEBUG ...ore/io/OsmMapReaderFactory.cpp( 112) Using input reader: hoot::OsmXmlReader
-14:53:02.443 INFO  ...hoot/core/io/DataConverter.cpp( 302) Done Reading
-14:53:02.443 INFO  ...hoot/core/io/DataConverter.cpp( 323) Element Cache Filled
-14:53:02.443 INFO  ...hoot/core/io/DataConverter.cpp( 339) Translation Thread Started
-14:53:02.443 INFO  ...hoot/core/io/DataConverter.cpp( 350) OGR Writer Thread Started
-14:53:02.443 INFO  ...hoot/core/io/DataConverter.cpp( 353) Waiting for writer to finish...
-14:53:02.448 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:53:02.448 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:53:02.471 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:02.473 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
-14:53:02.473 INFO  ...ot/js/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
-14:53:02.488 DEBUG ...hoot/core/schema/OsmSchema.cpp(2143) Loading translation files...
-14:53:02.491 DEBUG ...ot/js/JavaScriptTranslator.cpp( 305) Translation script loaded.
-14:53:02.505 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 426) Creating all layers...
-14:53:02.505 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: foo_AAL015 not found.  Creating layer...
-14:53:02.516 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: foo_LAP010 not found.  Creating layer...
-14:53:02.549 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: foo_LAP020 not found.  Creating layer...
-14:53:02.552 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: foo_LAP030 not found.  Creating layer...
-14:53:02.555 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 330) Layer: foo_PAL015 not found.  Creating layer...
-14:53:02.648 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
-14:53:02.762 INFO  ...hoot/core/io/DataConverter.cpp( 162) Done Writing Features
-14:53:02.762 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
-14:53:02.762 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 0 seconds
+17:46:28.839 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+17:46:28.840 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/options.shp, --trans, test-files/io/SampleTranslation.js}
+17:46:28.843 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/options.shp...
+17:46:28.893 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:46:28.895 INFO  ...hoot/core/io/DataConverter.cpp( 309) _transToOgrMT
+17:46:28.901 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:46:28.915 INFO  ...hoot/core/io/DataConverter.cpp( 303) Done Reading
+17:46:28.917 INFO  ...hoot/core/io/DataConverter.cpp( 324) Element Cache Filled
+17:46:28.917 INFO  ...hoot/core/io/DataConverter.cpp( 340) Translation Thread Started
+17:46:28.918 INFO  ...hoot/core/io/DataConverter.cpp( 351) OGR Writer Thread Started
+17:46:28.918 INFO  ...hoot/core/io/DataConverter.cpp( 354) Waiting for writer to finish...
+17:46:28.946 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:46:28.956 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:46:29.017 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:46:29.087 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:46:29.090 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:46:29.124 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:46:29.165 DEBUG ...hoot/core/schema/OsmSchema.cpp(1743) Loading translation files...
+17:46:29.785 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
+17:46:29.788 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: bar_PAL015 not found.  Creating layer...
+17:46:29.846 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: bar_AAL015 not found.  Creating layer...
+17:46:29.893 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: bar_LAP010 not found.  Creating layer...
+17:46:29.939 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: bar_LAP030 not found.  Creating layer...
+17:46:30.127 INFO  ...hoot/core/io/DataConverter.cpp( 163) Done Writing Features
+17:46:30.130 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+17:46:30.130 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 1 seconds
+17:46:32.838 DEBUG src/main/cpp/hoot/core/Hoot.cpp( 152) Hoot instance reinit...
+17:46:32.838 DEBUG .../hoot/core/cmd/BaseCommand.cpp( 105) args: [4]{test-files/io/SampleTranslation.osm, test-output/cmd/slow/Osm2OgrTranslation/options.shp, --trans, test-files/io/SampleTranslation.js}
+17:46:32.843 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/io/SampleTranslation.osm to test-output/cmd/slow/Osm2OgrTranslation/options.shp...
+17:46:32.882 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:46:32.883 INFO  ...hoot/core/io/DataConverter.cpp( 309) _transToOgrMT
+17:46:32.886 DEBUG ...ore/io/OsmMapReaderFactory.cpp(  98) Using input reader: hoot::OsmXmlReader
+17:46:32.894 INFO  ...hoot/core/io/DataConverter.cpp( 303) Done Reading
+17:46:32.895 INFO  ...hoot/core/io/DataConverter.cpp( 324) Element Cache Filled
+17:46:32.895 INFO  ...hoot/core/io/DataConverter.cpp( 340) Translation Thread Started
+17:46:32.895 INFO  ...hoot/core/io/DataConverter.cpp( 351) OGR Writer Thread Started
+17:46:32.896 INFO  ...hoot/core/io/DataConverter.cpp( 354) Waiting for writer to finish...
+17:46:32.910 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:46:32.914 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:46:32.963 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:46:32.996 DEBUG ...io/ScriptTranslatorFactory.cpp(  62) scriptPath: test-files/io/SampleTranslation.js
+17:46:32.998 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: test-files/io/SampleTranslation.js
+17:46:33.022 DEBUG ...hoot/core/schema/OsmSchema.cpp(1743) Loading translation files...
+17:46:33.036 DEBUG ...chema/JavaScriptTranslator.cpp( 305) Translation script loaded.
+17:46:33.058 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 427) Creating all layers...
+17:46:33.059 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: foo_AAL015 not found.  Creating layer...
+17:46:33.144 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: foo_LAP010 not found.  Creating layer...
+17:46:33.184 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: foo_LAP020 not found.  Creating layer...
+17:46:33.224 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: foo_LAP030 not found.  Creating layer...
+17:46:33.271 DEBUG ...cpp/hoot/core/io/OgrWriter.cpp( 331) Layer: foo_PAL015 not found.  Creating layer...
+17:46:33.784 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
+17:46:33.974 INFO  ...hoot/core/io/DataConverter.cpp( 163) Done Writing Features
+17:46:33.977 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 128) Convert operation complete.
+17:46:33.977 DEBUG ...p/hoot/core/cmd/ConvertCmd.cpp( 139) Convert operation took 1 seconds
 bar_AAL015
 
 Layer name: bar_AAL015
@@ -301,16 +301,17 @@ OGRFeature(foo_PAL015):0
  POINT : 
 
 #### Test to make sure all layers are read from a data source. ####
-14:53:04.385 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (488 characters) to the output field width (254 characters).
-14:53:04.397 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (379 characters) to the output field width (254 characters).
-14:53:04.412 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 161) Truncating the tags attribute (437 characters) to the output field width (254 characters).
-14:53:04.414 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 165) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-14:53:04.881 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-output/cmd/slow/delaware-tds.shp...
-14:53:05.174 INFO  .../core/ops/CalculateStatsOp.cpp( 129) Calculating map statistics...
+17:46:40.776 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (488 characters) to the output field width (254 characters).
+17:46:40.792 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (379 characters) to the output field width (254 characters).
+17:46:40.802 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (437 characters) to the output field width (254 characters).
+17:46:40.803 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 166) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:46:44.176 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-output/cmd/slow/delaware-tds.shp...
+17:46:45.168 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 5,696 elements from input.
+17:46:45.230 INFO  .../core/ops/CalculateStatsOp.cpp( 144) Calculating map statistics...
 Stat Name	test-output/cmd/slow/delaware-tds.shp
-Node Count	5664
-Way Count	32
-Relation Count	0
+Nodes	5664
+Ways	32
+Relations	0
 Minimum Node ID	-5664
 Maximum Node ID	-1
 Minimum Way ID	-32

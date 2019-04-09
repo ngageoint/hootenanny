@@ -39,7 +39,7 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/ops/stats/IoSingleStat.h>
+#include <hoot/core/info/IoSingleStat.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>

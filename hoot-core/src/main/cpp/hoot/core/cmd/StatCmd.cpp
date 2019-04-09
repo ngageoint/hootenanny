@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>

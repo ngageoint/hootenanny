@@ -14,7 +14,7 @@
   "license": "GPLv3",
   "dependencies": {
     "node-uuid": "~1.4.7",
-    "debug": "~2.2.0"
+    "debug": "4.1.1"
   },
   "devDependencies": {
     "istanbul": "~0.4.5",

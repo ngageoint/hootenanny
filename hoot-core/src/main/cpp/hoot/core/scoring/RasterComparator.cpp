@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -157,7 +157,7 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, gp, pt, m);
-  HighwayCriterion crit;
+  HighwayCriterion crit(map);
   FilteredVisitor v(crit, pv);
   map->visitRo(v);
 

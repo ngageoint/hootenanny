@@ -83,7 +83,7 @@ fcodeCommon = {
       ['F_CODE','AH055','fortified','yes'], // Fortified Building
       ['F_CODE','AH060','building','underground_shelter'], // Underground Bunker
       ['F_CODE','AH070','barrier','check_point'], // Checkpoint
-      ['F_CODE','AI020','tourism','caravan_site'], // Caravan Park, Mobile Home/Mobile Home Park
+      ['F_CODE','AI020','tourism','caravan_site'], // Caravan Park
       ['F_CODE','AI021','amenity','trailer_park'], // Mobile Home Park / Manufactured Home Park
       ['F_CODE','AI030','camp','yes'], // Camp
       ['F_CODE','AJ030','landuse','holding_pen'], // Feedlot/Stockyard, Holding Pen
