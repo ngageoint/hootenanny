@@ -83,7 +83,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     // if we haven't already merged the way
@@ -130,7 +130,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   boost::shared_ptr<Way> w1 = _map->getWay(*it);
   boost::shared_ptr<Way> w2 = _map->getWay(*(++it));
 
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
