@@ -26,30 +26,34 @@
  */
 
 #include "Roundabout.h"
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
+
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 
 namespace hoot
 {
 
 typedef boost::shared_ptr<geos::geom::Geometry> GeomPtr;
 
-Roundabout::Roundabout():
-  _status(Status::Invalid)
+Roundabout::Roundabout()
+  :  _status(Status::Invalid),
+    _overrideStatus(false)
 {
 }
 
-void Roundabout::setRoundaboutWay (WayPtr pWay)
+void Roundabout::setRoundaboutWay(WayPtr pWay)
 {
   _roundaboutWay = pWay;
   _status = pWay->getStatus();
@@ -60,7 +64,7 @@ void Roundabout::setRoundaboutWay (WayPtr pWay)
     _otherStatus = Status::Unknown1;
 }
 
-void Roundabout::setRoundaboutCenter (NodePtr pNode)
+void Roundabout::setRoundaboutCenter(NodePtr pNode)
 {
   _pCenterNode = pNode;
 }
@@ -90,8 +94,8 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   return pNewNode;
 }
 
-RoundaboutPtr Roundabout::makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
-                                          WayPtr pWay)
+RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap,
+                                         WayPtr pWay)
 {
   RoundaboutPtr rnd(new Roundabout);
 
@@ -122,7 +126,7 @@ namespace // Anonymous
   }
 }
 
-void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
+void Roundabout::handleCrossingWays(OsmMapPtr pMap)
 {
   // Get a center point
   NodePtr pCenterNode = getNewCenter(pMap);
@@ -187,6 +191,8 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
             if (!rndEnv.contains(midpoint))
             {
               pMap->addWay(newWays[j]);
+              // Add the ways outside of the to connect back up if needed
+              _connectingWays.push_back(newWays[j]);
 
               // Now make connector way
               WayPtr pWay(new Way(_otherStatus,
@@ -195,6 +201,8 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
               pWay->addNode(pCenterNode->getId());
               pWay->setTag("highway", "unclassified");
               pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
+              //  Also add in the connector ways to later remove
+              _tempWays.push_back(pWay);
 
               // Take the new way. Whichever is closest, first node or last,
               // connect it to our center point.
@@ -240,7 +248,7 @@ void Roundabout::handleCrossingWays(boost::shared_ptr<OsmMap> pMap)
  * Iterate through the nodes that were kept, and connect them to
  * the centerpoint with temp ways.
  */
-void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
+void Roundabout::removeRoundabout(OsmMapPtr pMap)
 {
   // Find our connecting nodes & extra nodes.
   std::set<long> connectingNodeIDs;
@@ -259,7 +267,8 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
   }
 
   // Find our center coord...
-  _pCenterNode = getNewCenter(pMap);
+  if (!_pCenterNode)
+    _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
   RemoveWayOp::removeWayFully(pMap, _roundaboutWay->getId());
@@ -304,10 +313,10 @@ void Roundabout::removeRoundabout(boost::shared_ptr<OsmMap> pMap)
  * MAYBE: our roundabout nodes might need to be copies, so they don't get moved
  * around during conflation & merging
  */
-void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
+void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 {
-  // Re-add roundabout from the ref dataset, but not secondary dataset
-  if (_status == Status::Unknown1)
+  // Re-add roundabout from the ref dataset or the secondary dataset if it has no match in the reference
+  if (_status == Status::Unknown1 || _overrideStatus)
   {
     std::vector<ConstNodePtr> wayNodes;
     for (size_t i = 0; i < _roundaboutNodes.size(); i++)
@@ -340,24 +349,87 @@ void Roundabout::replaceRoundabout(boost::shared_ptr<OsmMap> pMap)
     }
 
     // All our nodes should be there, now lets add the way back
-    WayPtr pNewWay(new Way(*_roundaboutWay));
+    WayPtr pRoundabout(new Way(*_roundaboutWay));
 
     // Make sure our nodes are set correctly
     std::vector<long> nodeIds;
     for (size_t i = 0; i < wayNodes.size(); i++)
       nodeIds.push_back(wayNodes[i]->getId());
-    pNewWay->setNodes(nodeIds);
-    pMap->addWay(pNewWay);
+    pRoundabout->setNodes(nodeIds);
+    pMap->addWay(pRoundabout);
+
+    //  Convert the roundabout to a geometry for distance checking later
+    ElementConverter converter(pMap);
+    boost::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(pRoundabout);
+    //  Check all of the connecting ways (if they exist) for an endpoint on or near the roundabout
+    for (size_t i = 0; i < _connectingWays.size(); ++i)
+    {
+      WayPtr way = _connectingWays[i];
+      bool foundValidWay = pMap->containsWay(way->getId());
+      //  If the way doesn't exist anymore check for ways with its ID as the parent ID before ignoring it
+      if (!foundValidWay)
+      {
+        //  Check the endpoints against the roundabout
+        const std::vector<long> ids = way->getNodeIds();
+        NodePtr node1 = pMap->getNode(ids[0]);
+        NodePtr node2 = pMap->getNode(ids[ids.size() - 1]);
+        //  Validate the endpoints
+        if (!node1 || !node2)
+          continue;
+        boost::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(node1));
+        boost::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(node2));
+        //  Use the distance to find the right end to use
+        NodePtr endpoint;
+        if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
+          endpoint = node1;
+        else
+          endpoint = node2;
+        //  If the way doesn't exist anymore because of splitting, find the ways with the right endpoint
+        std::vector<long> waysWithNode =
+          FindWaysVisitor::findWaysByNode(pMap, endpoint->getId());
+        if (waysWithNode.size() < 1)
+          continue;
+
+        //  Find the way that contains the correct node endpoint but isn't a 'hoot:special' node
+        for (size_t index = 0; index < waysWithNode.size(); ++index)
+        {
+          WayPtr w = pMap->getWay(waysWithNode[index]);
+          if (w && !w->getTags().contains(MetadataTags::HootSpecial()))
+          {
+            way = w;
+            foundValidWay = true;
+            break;
+          }
+        }
+      }
+      //  No valid way was found, ignore it
+      if (!foundValidWay)
+        continue;
+      //  If the way only contains one node, ignore it
+      const std::vector<long>& nodes = way->getNodeIds();
+      if (nodes.size() < 2)
+        continue;
+      ConstNodePtr endpoint1 = pMap->getNode(nodes[0]);
+      ConstNodePtr endpoint2 = pMap->getNode(nodes[nodes.size() - 1]);
+      //  Validate the endpoints
+      if (!endpoint1 || !endpoint2)
+        continue;
+      //  Check if either of the endpoints are already part of the roundabout
+      if (pRoundabout->containsNodeId(endpoint1->getId()) || pRoundabout->containsNodeId(endpoint2->getId()))
+        continue;
+      //  Snap the closest
+      UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
+    }
+
+    // Need to remove temp parts no matter what
+    // Delete temp ways we added
+    for (size_t i = 0; i < _tempWays.size(); i++)
+      RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());
+
+    // Remove center node if no other ways are using it
+    if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
+      RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
   }
-
-  // Need to remove temp parts no matter what
-  // Delete temp ways we added
-  for (size_t i = 0; i < _tempWays.size(); i++)
-    RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());
-
-  // Remove center node if no other ways are using it
-  if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
-    RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
 }
 
 }

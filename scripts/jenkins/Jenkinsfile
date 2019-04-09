@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 // Load shared libraries
 @Library('radiant-pipeline-library')_
 
