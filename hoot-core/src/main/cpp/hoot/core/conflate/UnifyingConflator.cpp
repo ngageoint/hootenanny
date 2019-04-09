@@ -38,7 +38,6 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>

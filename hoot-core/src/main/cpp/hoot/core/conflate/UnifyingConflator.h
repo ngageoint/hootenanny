@@ -35,7 +35,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 
 // tgs
 #include <tgs/HashMap.h>

@@ -67,7 +67,6 @@ public:
     MapCleaner().apply(map);
 
     MapProjector::projectToWgs84(map);
-
     IoUtils::saveMap(map, args[1]);
 
     return 0;

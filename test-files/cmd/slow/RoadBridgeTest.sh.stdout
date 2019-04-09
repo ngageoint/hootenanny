@@ -1,12 +1,23 @@
-Node Count	19
-Way Count	8
-Relation Count	0
-Node Count	7
-Way Count	3
-Relation Count	0
-Node Count	12
-Way Count	6
-Relation Count	0
-Node Count	40
-Way Count	18
-Relation Count	0
+17:45:27.142 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/RoadBridge.osm to test-output/cmd/slow/RoadBridge.shp...
+17:45:27.196 INFO  ...hoot/core/io/DataConverter.cpp( 309) _transToOgrMT
+17:45:27.222 INFO  ...hoot/core/io/DataConverter.cpp( 303) Done Reading
+17:45:27.224 INFO  ...hoot/core/io/DataConverter.cpp( 324) Element Cache Filled
+17:45:27.224 INFO  ...hoot/core/io/DataConverter.cpp( 340) Translation Thread Started
+17:45:27.225 INFO  ...hoot/core/io/DataConverter.cpp( 351) OGR Writer Thread Started
+17:45:27.225 INFO  ...hoot/core/io/DataConverter.cpp( 354) Waiting for writer to finish...
+17:45:27.244 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/HootTest.js
+17:45:27.359 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/HootTest.js
+17:45:28.063 INFO  ...hoot/core/io/DataConverter.cpp(  99) Done Translating
+17:45:28.316 INFO  ...hoot/core/io/DataConverter.cpp( 163) Done Writing Features
+Nodes	19
+Ways	8
+Relations	0
+Nodes	7
+Ways	3
+Relations	0
+Nodes	12
+Ways	6
+Relations	0
+Nodes	40
+Ways	18
+Relations	0

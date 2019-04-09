@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -51,11 +51,11 @@ public:
   void runTest()
   {
     QList<SingleStat> inputStats1;
-    inputStats1.append(SingleStat("Total Feature Count", 6.0));
+    inputStats1.append(SingleStat("Total Features", 6.0));
     QList<SingleStat> inputStats2;
-    inputStats2.append(SingleStat("Total Feature Count", 4.0));
+    inputStats2.append(SingleStat("Total Features", 4.0));
     QList<SingleStat> outputStats;
-    outputStats.append(SingleStat("Total Feature Count", 12.0));
+    outputStats.append(SingleStat("Total Features", 12.0));
     QList<SingleStat> statsToUpdate;
     statsToUpdate.append(SingleStat("Some Stat", 0.0));
 

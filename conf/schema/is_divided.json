@@ -9,7 +9,7 @@
         "objectType": "tag"
     },
     {
-        "description": "This key indicates that the linestring is part of a dual carrageway",
+        "description": "This key indicates that the linestring is part of a dual carriageway",
         "isA": "is_divided",
         "name": "is_divided=*",
         "objectType": "tag"
