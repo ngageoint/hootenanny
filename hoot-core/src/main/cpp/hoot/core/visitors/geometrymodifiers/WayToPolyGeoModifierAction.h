@@ -51,6 +51,7 @@ private:
   const double DEFAULT_WIDTH = 5;
   double _width = DEFAULT_WIDTH;
 
+  void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly );
   void checkParameters(const QHash<QString,QString>& arguments, const Tags& tags);
 };
 

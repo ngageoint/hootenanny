@@ -53,24 +53,22 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
 
   // process the way as requested
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
-  size_t nodeCount = pWay->getNodeCount();
+  long nodeCount = pWay->getNodeCount();
+  bool isLoop = pWay->isSimpleLoop();
 
   // too small, nothing to do
   if( nodeCount < 2 ) return false;
 
-  // create poly way and add it to map
-  WayPtr pPoly( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
-
   // build poly by 'extruding' existing nodes
   const vector<long> nodeIds = pWay->getNodeIds();
 
-  assert(nodeCount == nodeIds.size());
+  assert(nodeCount == (long)nodeIds.size());
 
-  // create coordinate array with two opposing perpendicular points on each side
-  // of original way points plus one more entry for closing the polygon
-  vector<Coordinate> polyPositions(nodeCount * 2 + 1);
+  // create coordinate arrays
+  Coordinate polyPositions[2][nodeCount];
+  double polyLen[2] = {0};
 
-  for (size_t i = 0; i < nodeCount; i++)
+  for (long i = 0; i < nodeCount; i++)
   {
     long currId = nodeIds[i];
     long prevId = (i > 0) ? nodeIds[i-1] : currId;
@@ -87,7 +85,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     // find perpendicular vector to vector between previous and next point
     CoordinateExt c1 = currCoor - prevCoor;
     CoordinateExt c2 = nextCoor - currCoor;
-    if( c1.length() == 0 ) c1 = c2;          // correction for first way point
+    if( c1.length() == 0 ) c1 = c2;             // correction for first way point
     c1.normalize();
     c2.normalize();
     CoordinateExt vector = c1+c2;
@@ -98,7 +96,6 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     // smaller angles will push the points out too far
     double angle = fabs(atan2(perp.y,perp.x) - atan2(c1.y,c1.x));
     if( angle > M_PI_2 ) angle = fabs(angle-M_PI);
-    LOG_VAR(angle);
     if( angle < M_PI_4) angle = M_PI_4;
 
     // apply requested width
@@ -106,31 +103,81 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     perp.x *= width;
     perp.y *= width;
 
-    // store positions for both sides (opposite side in reverse order)
-    polyPositions[i] = currCoor + perp;
-    perp.x = -perp.x; perp.y = -perp.y;
-    polyPositions[nodeCount*2-1-i] = Coordinate( currCoor.x + perp.x, currCoor.y + perp.y );
+    // store positions for both sides
+    for( int p = 0; p < 2; p++ )
+    {
+      CoordinateExt pos = (p == 0) ? (currCoor + perp) : (currCoor - perp);
+      polyPositions[p][i] = pos;
+
+      // calculate length to determing inner vs outer polygon for loop
+      if( isLoop && i > 0 )
+      {
+        CoordinateExt diff = pos - polyPositions[p][i-1];
+        polyLen[0] += diff.length();
+      }
+    }
   }
 
-  // close poly
-  polyPositions[nodeCount*2] = polyPositions[0];
-
-  // add nodes to polygon element
-  for( vector<Coordinate>::iterator it = polyPositions.begin(); it != polyPositions.end(); it++)
+  if( isLoop )
   {
-      long nodeId =pMap->createNextNodeId();
-      NodePtr pNode( new Node(Status::Unknown1, nodeId, *it));
-      pMap->addElement(pNode);
-      pPoly->addNode(nodeId);
+    // closed loop, creating a multipolygon
+    WayPtr pPoly0( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
+    WayPtr pPoly1( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
+    for( long i = 0; i < nodeCount; i++ )
+    {
+      addNodeToPoly( polyPositions[0][i], pMap, pPoly0 );
+      addNodeToPoly( polyPositions[1][i], pMap, pPoly1 );
+    }
+
+    // duplicate first id to close poly
+    pPoly0->addNode(pPoly0->getNodeId(0));
+    pPoly1->addNode(pPoly1->getNodeId(0));
+
+    // copy tags from original way to poly ways
+    pPoly0->setTags(pWay->getTags());
+    pPoly1->setTags(pWay->getTags());
+
+    // replace original way with poly0 and add poly1
+    pMap->replace(pWay,pPoly0);
+    pMap->addElement(pPoly1);
+
+    // add relation for multipolygon
+    RelationPtr pRelation( new Relation(Status::Unknown1, pMap->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, MetadataTags::RelationMultiPolygon()));
+    bool poly0isOuter = polyLen[0] > polyLen[1];
+    RelationData::Entry entry0(poly0isOuter ? MetadataTags::RelationOuter() : MetadataTags::RelationInner(), pPoly0->getElementId());
+    RelationData::Entry entry1(poly0isOuter ? MetadataTags::RelationInner() : MetadataTags::RelationOuter(), pPoly1->getElementId());
+    vector<RelationData::Entry> members;
+    members.push_back(entry0);
+    members.push_back(entry1);
+    pRelation->setMembers(members);
+    pMap->addElement(pRelation);
   }
+  else
+  {
+    // create poly way and add it to map
+    WayPtr pPoly( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
+    for( long i = 0; i < nodeCount; i++ ) addNodeToPoly( polyPositions[0][i], pMap, pPoly );
+    for( long i = nodeCount-1; i >= 0; i-- ) addNodeToPoly( polyPositions[1][i], pMap, pPoly );
 
-  // copy tags from original way to poly way
-  pPoly->setTags(pWay->getTags());
+    // duplicate first id to close poly
+    pPoly->addNode(pPoly->getNodeId(0));
 
-  // replace original way with poly
-  pMap->replace(pWay,pPoly);
+    // copy tags from original way to poly way
+    pPoly->setTags(pWay->getTags());
+
+    // replace original way with poly
+    pMap->replace(pWay,pPoly);
+  }
 
   return true;
+}
+
+void WayToPolyGeoModifierAction::addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly )
+{
+  long nodeId = pMap->createNextNodeId();
+  NodePtr pNode( new Node(Status::Unknown1, nodeId, pos));
+  pMap->addElement(pNode);
+  pPoly->addNode(nodeId);
 }
 
 void WayToPolyGeoModifierAction::checkParameters(const QHash<QString,QString>& arguments, const Tags& tags)
