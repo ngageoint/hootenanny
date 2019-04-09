@@ -26,9 +26,7 @@
  */
 package hoot.services.controllers.info;
 
-import static hoot.services.HootProperties.CONFLATE_SIZE_THRESHOLD;
-import static hoot.services.HootProperties.EXPORT_SIZE_THRESHOLD;
-import static hoot.services.HootProperties.INGEST_SIZE_THRESHOLD;
+import static hoot.services.HootProperties.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -68,9 +66,9 @@ public class MapInfoResource {
 
     /**
      * Service method endpoint for retrieving the physical size of a map record.
-     *
+     * 
      * GET hoot-services/info/map/size?mapid=1
-     *
+     * 
      * @param mapIds
      *            id of the map for which to retrieve size
      * @return JSON containing size information
@@ -105,9 +103,9 @@ public class MapInfoResource {
 
     /**
      * Service method endpoint for retrieving the physical size of multiple map records.
-     *
+     * 
      * GET hoot-services/info/map/sizes?mapid=54,62
-     *
+     * 
      * @param mapIds
      *            ids of the maps for which to retrieve sizes
      * @return JSON containing a list of size information for all current maps
@@ -145,49 +143,10 @@ public class MapInfoResource {
     }
 
     /**
-     * Service method endpoint for retrieving the physical size of multiple map records.
-     *
-     * GET hoot-services/info/map/sizes?mapid=54,62
-     *
-     * @return JSON containing a list of size information for all current maps
-     */
-//    @GET
-//    @Path("/sizes")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getMapsSize(@Context HttpServletRequest request) {
-//        JSONArray layers = new JSONArray();
-//
-//        try {
-//            String[] mapids = mapIds.split(",");
-//            for (String mapId : mapids) {
-//                long mapSize = 0;
-//                for (String table : maptables) {
-//                    if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-//                        mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
-//                    }
-//                }
-//                JSONObject layer = new JSONObject();
-//                layer.put("id", Long.parseLong(mapId));
-//                layer.put("size", mapSize);
-//                layers.add(layer);
-//            }
-//        }
-//        catch (Exception e) {
-//            String message = "Error getting map size.  Cause: " + e.getMessage();
-//            throw new WebApplicationException(e, Response.serverError().entity(message).build());
-//        }
-//
-//        JSONObject entity = new JSONObject();
-//        entity.put("layers", layers);
-//
-//        return Response.ok(entity.toJSONString()).build();
-//    }
-
-    /**
      * Service endpoint for maximum data size for export conflate and ingest.
-     *
+     * 
      * GET hoot-services/info/map/thresholds
-     *
+     * 
      * @return JSON containing threshold information
      */
     @GET
