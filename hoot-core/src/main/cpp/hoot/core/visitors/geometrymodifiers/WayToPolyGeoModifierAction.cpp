@@ -43,13 +43,10 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToPolyGeoModifierAction)
 const QString WayToPolyGeoModifierAction::WIDTH_TAG_PARAM = "width_tag_m";
 const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m";
 
-bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments)
+bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process Ways
   if( pElement->getElementType() != ElementType::Way ) return false;
-
-  // process tags to determine desired width
-  checkParameters( arguments, pElement->getTags() );
 
   // process the way as requested
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
@@ -58,6 +55,23 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
 
   // too small, nothing to do
   if( nodeCount < 2 ) return false;
+
+  // find out what width to use
+  Tags tags = pElement->getTags();
+  double currWidth = _width;
+
+  // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
+  if( !_widthTag.isEmpty() )
+  {
+    if( tags.find(_widthTag) != tags.end() )
+    {
+      double readWidth = tags[_widthTag].toDouble();
+      if( readWidth > 0 )
+      {
+        currWidth = readWidth;
+      }
+    }
+  }
 
   // build poly by 'extruding' existing nodes
   const vector<long> nodeIds = pWay->getNodeIds();
@@ -101,7 +115,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     if( angle < M_PI_4) angle = M_PI_4;
 
     // apply requested width
-    double width = _width / sin(angle);
+    double width = currWidth / sin(angle);
     perp.x *= width;
     perp.y *= width;
 
@@ -136,8 +150,8 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     pPoly1->addNode(pPoly1->getNodeId(0));
 
     // copy tags from original way to poly ways
-    pPoly0->setTags(pWay->getTags());
-    pPoly1->setTags(pWay->getTags());
+    pPoly0->setTags(tags);
+    pPoly1->setTags(tags);
 
     // replace original way with poly0 and add poly1
     pMap->replace(pWay,pPoly0);
@@ -165,7 +179,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     pPoly->addNode(pPoly->getNodeId(0));
 
     // copy tags from original way to poly way
-    pPoly->setTags(pWay->getTags());
+    pPoly->setTags(tags);
 
     // replace original way with poly
     pMap->replace(pWay,pPoly);
@@ -182,41 +196,26 @@ void WayToPolyGeoModifierAction::addNodeToPoly( const CoordinateExt& pos, OsmMap
   pPoly->addNode(nodeId);
 }
 
-void WayToPolyGeoModifierAction::checkParameters(const QHash<QString,QString>& arguments, const Tags& tags)
+void WayToPolyGeoModifierAction::parseArguments(const QHash<QString,QString>& arguments)
 {
-  // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use that value in the tag
+  _width = DEFAULT_WIDTH;
+  _widthTag = QString();
+
+  // read width tag if specified
   if( arguments.keys().contains(WIDTH_TAG_PARAM) )
   {
-    QString widthTag = arguments[WIDTH_TAG_PARAM];
-
-    if( !widthTag.isEmpty() )
-    {
-      if( tags.find(widthTag) != tags.end() )
-      {
-        double width = tags[widthTag].toDouble();
-        if( width > 0 )
-        {
-          _width = width;
-          return;
-        }
-      }
-    }
+    _widthTag = arguments[WIDTH_TAG_PARAM];
   }
 
-  // else if DEFAULT_WIDTH_PARAM node tag is found use that value
+  // read default width if specified
   if( arguments.keys().contains(DEFAULT_WIDTH_PARAM) )
   {
     double width = arguments[DEFAULT_WIDTH_PARAM].toDouble();
     if( width > 0 )
     {
       _width = width;
-      return;
     }
   }
-
-  // else use DEFAULT_WIDTH
-  _width = DEFAULT_WIDTH;
-  return;
 }
 
 }

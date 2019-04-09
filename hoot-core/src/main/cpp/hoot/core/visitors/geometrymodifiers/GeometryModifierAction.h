@@ -62,8 +62,11 @@ public:
   virtual QString getCommandName() const = 0;
   virtual QList<QString> getParameterNames() const = 0;
 
+  // Parses content of command specific arguments
+  virtual void parseArguments( const QHash<QString, QString>& arguments ) = 0;
+
   // Command function to process a filtered element
-  virtual bool process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments ) = 0;
+  virtual bool process( const ElementPtr& pElement, OsmMap* pMap ) = 0;
 };
 
 /*

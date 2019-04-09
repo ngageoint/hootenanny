@@ -66,7 +66,7 @@ void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 
   if( matches == filterSize )
   {
-    if( _actionDesc.pAction->process(pElement, _pMap, _actionDesc.arguments) )
+    if( _actionDesc.pAction->process(pElement, _pMap) )
     {
       _numAffected++;
     }

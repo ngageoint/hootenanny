@@ -28,20 +28,74 @@
 
 #include "CollapsePolyGeoModifierAction.h"
 
+// geos
+#include <geos/geom/Polygon.h>
+
 // Hoot
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
+
+using namespace  geos::geom;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 
-bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments )
+const QString CollapsePolyGeoModifierAction::MAX_AREA_PARAM = "max_area_in_m";
+
+bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap )
 {
-  arguments.size();
-  pElement->className();
-  pMap->getNodes();
+  // only process closed area ways
+  if( pElement->getElementType() != ElementType::Way ) return false;
+  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  if( !pWay->isClosedArea() ) return false;
+
+  ElementConverter elementConverter(pMap->shared_from_this());
+
+  shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+
+  if( pPoly->getArea() < _area )
+  {
+    Coordinate centroid;
+    if( pPoly->getCentroid(centroid) == false )
+    {
+      // throwing a HootException might be too harsh
+      LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId() );
+      return false;
+    }
+
+    NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), centroid) );
+
+    // copy tags from original way to node
+    pNode->setTags(pWay->getTags());
+
+    // replace original way with node
+    pMap->replace(pWay, pNode);
+
+
+    // todo: remove unused nodes of previous way
+
+
+
+    return true;
+  }
+
   return false;
+}
+
+void CollapsePolyGeoModifierAction::parseArguments(const QHash<QString, QString>& arguments)
+{
+  _area = DEFAULT_AREA;
+
+  if( arguments.keys().contains(MAX_AREA_PARAM) )
+  {
+    double area = arguments[MAX_AREA_PARAM].toDouble();
+    if( area > 0 )
+    {
+      _area = area;
+    }
+  }
 }
 
 }

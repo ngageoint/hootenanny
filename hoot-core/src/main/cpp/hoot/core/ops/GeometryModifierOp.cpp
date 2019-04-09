@@ -71,9 +71,10 @@ void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
   // process
   foreach (GeometryModifierActionDesc actionDesc, actionDescs)
   {
-    // visit with specific action
+    // visit with specific action, using proper arguments
     LOG_INFO("Processing geometry modifier " + actionDesc.command + "...");
     _geometryModifierVisitor.setActionDesc(actionDesc);
+    actionDesc.pAction->parseArguments( actionDesc.arguments );
     map->visitRw(_geometryModifierVisitor);
   }
 

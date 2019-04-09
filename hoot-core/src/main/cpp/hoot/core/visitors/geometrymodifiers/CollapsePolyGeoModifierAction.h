@@ -35,12 +35,19 @@ namespace hoot
 class CollapsePolyGeoModifierAction : public GeometryModifierAction
 {
 public:
+  static const QString MAX_AREA_PARAM;
+
   static std::string className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
   QString getCommandName() const { return "collapse_poly"; }
-  QList<QString> getParameterNames() const { return QList<QString> {"max_area_in_m"}; }
+  QList<QString> getParameterNames() const { return QList<QString> { MAX_AREA_PARAM }; }
 
-  bool process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments );
+  void parseArguments( const QHash<QString, QString>& arguments );
+  bool process( const ElementPtr& pElement, OsmMap* pMap );
+
+private:
+  const double DEFAULT_AREA = 15000;
+  double _area = DEFAULT_AREA;
 };
 
 }

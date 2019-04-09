@@ -45,14 +45,16 @@ public:
 
   QString getCommandName() const { return "way_to_poly"; }
   QList<QString> getParameterNames() const { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
-  bool process( const ElementPtr& pElement, OsmMap* pMap, const QHash<QString,QString> arguments );
+
+  void parseArguments( const QHash<QString, QString>& arguments );
+  bool process( const ElementPtr& pElement, OsmMap* pMap );
 
 private:
   const double DEFAULT_WIDTH = 5;
-  double _width = DEFAULT_WIDTH;
+  double _width = DEFAULT_WIDTH;  
+  QString _widthTag = QString();
 
   void addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly );
-  void checkParameters(const QHash<QString,QString>& arguments, const Tags& tags);
 };
 
 }
