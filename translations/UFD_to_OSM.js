@@ -46,9 +46,11 @@ ufd = {
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
         ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
+        ['F_CODE','AL135','populated_place:type','native_settlement'], // Native Settlement
+        ['F_CODE','AL209','populated_place:type','tent_dwellings'], // Tent Dwellings
         ['F_CODE','AL210','route:protection','yes'], // Snow Shed/Rock Shed - NFDD AL211
-        ['F_CODE','AM031','landuse','depot'], // Timber Yard - NFDD AM010
         ['F_CODE','AL240','man_made','tower'], // Tower (Non-Communication) - NFDD AL241
+        ['F_CODE','AM031','landuse','depot'], // Timber Yard - NFDD AM010
         ['F_CODE','AQ010','cableway','yes'], // Aerial Cableway Lines/Ski Lift Lines - NFDD AT041
         ['F_CODE','AQ020','pylon','yes'], // Aerial Cableway Pylon/Ski Pylon - NFDD AT042
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
@@ -2966,6 +2968,224 @@ ufd = {
         ], // End one2one
     // ##### End of One2One Rules #####
 
+    // Mapping filenames to F_CODES. We need this since some datasets don't have an F_CODE attribute
+    // format: <output F_CODE> [<list of strings to try to match>]
+    fCodeMap : [
+        ['AA010',['aa010','mine_a','mine_p']],
+        ['AA012',['aa012','quarry_a','quarry_p']],
+        ['AA040',['aa040','rig_superstructure_p']],
+        ['AA050',['aa050','well_p']],
+        ['AA052',['aa052','oil_gas_field_a']],
+        ['AB000',['ab000','disposal_site_a']],
+        ['AB010',['ab010','scrap_yard_a','scrap_yard_p']],
+        ['AC000',['ac000','processing_treatment_plant_a']],
+        ['AC010',['ac010','blast_furnace_a','blast_furnace_p']],
+        ['AC020',['ac020','catalytic_cracker_p']],
+        ['AC030',['ac030','settling_basin_sludge_pond_a']],
+        ['AC040',['ac040','oil_gas_facilities_a','oil_gas_facilities_p']],
+        ['AD010',['ad010','power_plant_a']],
+        ['AD020',['ad020','solar_panels_l','solar_panels_p']],
+        ['AD030',['ad030','substation_a']],
+        ['AE010',['ae010','assembly_plant_a']],
+        ['AF010',['af010','chimney_smokestack_p']],
+        ['AF020',['af020','conveyor_l']],
+        ['AF030',['af030','cooling_tower_a','cooling_tower_p']],
+        ['AF040',['af040','crane_a','crane_p']],
+        ['AF070',['af070','flare_pipe_a','flare_pipe_p']],
+        ['AH050',['ah050','fortification_a','fortification_p']],
+        ['AH060',['ah060','underground_bunker_a','underground_bunker_p']],
+        ['AI020',['ai020','mobile_home_park_a']],
+        ['AJ030',['aj030','feedlot_stockyard_a']],
+        ['AJ050',['aj050','windmill_p']],
+        ['AJ051',['aj051','windmotor_p']],
+        ['AK020',['ak020','amusement_park_attraction_p']],
+        ['AK030',['ak030','amusement_park_a','amusement_park_p']],
+        ['AK040',['ak040','athletic_field_a']],
+        ['AK050',['ak050','tennis_courts_a']],
+        ['AK060',['ak060','campground_campsite_a']],
+        ['AK070',['ak070','drive_in_theater_a']],
+        ['AK090',['ak090','fairgrounds_a']],
+        ['AK100',['ak100','golf_course_a']],
+        ['AK101',['AK101','golf_driving_range_a']],
+        ['AK110',['ak110','grandstand_a']],
+        ['AK120',['ak120','park_a']],
+        ['AK130',['ak130','race_track_a','race_track_p']],
+        ['AK160',['ak160','stadium_amphi_a']],
+        ['AK170',['ak170','swimming_pool_a']],
+        ['AK180',['ak180','zoo_a']],
+        ['AK190',['ak190','fishing_pier_a','fishing_pier_l']],
+        ['AL012',['al012','archeological_site_a','archeological_site_p']],
+        ['AL015',['al015','building_a','building_p']],
+        ['AL018',['al018','build_superstr_add_a','build_superstr_add_l','build_superstr_add_p']],
+        ['AL019',['al019','shed_a']],
+        ['AL020',['al020','builtup_area_a','builtup_area_p']],
+        ['AL025',['al025','cairn_p']],
+        ['AL030',['al030','cemetery_a','cemetery_p']],
+        ['AL045',['al045','complex_outline_a']],
+        ['AL060',['al060','dragon_teeth_a','dragon_teeth_l']],
+        ['AL070',['al070','fence_l']],
+        ['AL080',['al080','gantry_l','gantry_p']],
+        ['AL100',['al100','hut_p']],
+        ['AL105',['al105','settlement_a','settlement_p']],
+        ['AL130',['al130','monument_a','monument_p']],
+        ['AL135',['al135','native_settlement_a']],
+        ['AL140',['al140','particle_accelerator_a']],
+        ['AL170',['al170','plaza_city_square_a']],
+        ['AL200',['al200','ruins_a','ruins_p']],
+        ['AL208',['al208','shanty_town_a']],
+        ['AL209',['al209','tent_dwellings_a']],
+        ['AL210',['al210','snow_shed_a','snow_shed_l','snow_shed_p']],
+        ['AL240',['al240','tower_noncomm_a','tower_noncomm_p']],
+        ['AL250',['al250','underground_dwelling_p']],
+        ['AL260',['al260','wall_l','walllines']],
+        ['AM010',['am010','depot_storage_a','depot_storage_p']],
+        ['AM020',['am020','grain_bin_silo_a','grain_bin_silo_p']],
+        ['AM030',['am030','grain_elevator_a','grain_elevator_p']],
+        ['AM031',['am031','timber_yard_a']],
+        ['AM040',['am040','mineral_pile_a','mineral_pile_p']],
+        ['AM060',['am060','storage_bunker_a','storage_bunker_p']],
+        ['AM070',['am070','tank_a','tank_p']],
+        ['AM080',['am080','water_tower_a','water_tower_p']],
+        ['AN010',['an010','railroad_l','railway_l']],
+        ['AN050',['an050','rr_siding_spur_l']],
+        ['AN060',['an060','rr_marshal_yard_a']],
+        ['AN075',['an075','rr_turntable_p','railroad_turntable_p']],
+        ['AP010',['ap010','trackl','track_l','carttrackl','cart_track','carttrack','cart_track_l']],
+        ['AP020',['ap020','interchange_l', 'interchangel']],
+        ['AP030',['ap030','roadnet','road_l','roadl','roadlines']],
+        ['AP040',['ap040','gate_l','gate_p']],
+        ['AP041',['ap041','barrier_a','barrier_l']], // XXX
+        ['AP050',['ap050','traill','trail_l']],
+        ['AQ010',['aq010','aerial_cableway_l','aerial_cableway_ski_lift_lines']],
+        ['AQ020',['aq020','aerial_cableway_pylon_p']],
+        ['AQ035',['aq035','sidewalk_l']],
+        ['AQ040',['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']],
+        ['AQ045',['aq045','bridge_span_l', 'bridge_span_p']],
+        ['AQ050',['aq050','bridge_superstructure_l','bridge_superstructure_p']],
+        ['AQ055',['aq055','bridge_pylon_p']],
+        ['AQ060',['aq060','control_tower_a','control_tower_p']],
+        ['AQ064',['aq064','causeway_a','causeway_l']],
+        ['AQ065',['aq065','culvert_l','culvert_p']],
+        ['AQ070',['aq070','ferry_crossing_l']],
+        ['AQ080',['aq080','ferry_site_p']],
+        ['AQ110',['aq110','mooring_mast_p']],
+        ['AQ113',['aq113','pipeline_pipe_l']],
+        ['AQ116',['aq116','pumping_station_a','pumping_station_p']],
+        ['AQ125',['aq125','station_misc_a','station_misc_p']],
+        ['AQ130',['aq130','tunnell','tunnel_l']],
+        ['AQ135',['aq135','vehicle_stopping_area_a']],
+        ['AQ140',['aq140','vehicle_storage_a']],
+        ['AT010',['at010','disk_dish_p']],
+        ['AT020',['at020','early_warning_radar_site_a','early_warning_radar_site_p']],
+        ['AT030',['at030','power_trans_line_l']],
+        ['AT040',['at040','power_trans_pylon_a','power_trans_pylon_p']],
+        ['AT045',['at045','radar_transmitter_p']],
+        ['AT050',['at050','comm_building_a','comm_building_p','communication_building_a','communication_building_p']],
+        ['AT060',['at060','telephone_line_l']],
+        ['AT070',['at070','telephone_pylon_p']],
+        ['AT080',['at080','comm_tower_p','communication_tower_p']],
+        ['BA010',['ba010','coastline_shoreline_l']],
+        ['BA023',['ba023','foreshore_precise_l']],
+        ['BA030',['ba030','island_a']],
+        ['BA040',['ba040','water_except_inland_a']],
+        ['BB005',['bb005','harbor_a']],
+        ['BB010',['bb010','anchorage_a']],
+        ['BB041',['bb041','breakwater_a','breakwater_l']],
+        ['BB043',['bb043','groin_a','groin_l']],
+        ['BB090',['bb090','drydock_a']],
+        ['BB110',['bb110','fish_traps_p']],
+        ['BB140',['bb140','jetty_a','jetty_l']],
+        ['BB190',['bb190','pier_wharf_quay_a','pier_wharf_quay_l']],
+        ['BB220',['bb220','maritime_ramp_a','maritime_ramp_l']],
+        ['BB230',['bb230','seawall_a','seawall_l']],
+        ['BB240',['bb240','slipway_a','slipway_l']],
+        ['BC010',['bc010','beacon_p']],
+        ['BC050',['bc050','lighthouse_a','lighthouse_p']],
+        ['BH010',['bh010','aqueduct_a','aqueduct_l','aqueduct_p']],
+        ['BH015',['bh015','bog_a']],
+        ['BH020',['bh020','canal_a','canal_l']],
+        ['BH030',['bh030','ditch_l','ditch_a']],
+        ['BH040',['bh040','filtration_beds_a']],
+        ['BH050',['bh050','fish_hatchery_a']],
+        ['BH060',['bh060','flume_l']],
+        ['BH070',['bh070','ford_l','ford_p']],
+        ['BH075',['bh075','fountain_a','fountain_p']],
+        ['BH077',['bh077','hummock_a']],
+        ['BH080',['bh080','lake_pond_a']],
+        ['BH090',['bh090','land_subject_to_inundation_a']],
+        ['BH110',['bh110','penstock_a','penstock_l']],
+        ['BH120',['bh120','rapids_l','rapids_p']],
+        ['BH130',['bh130','reservoir_a']],
+        ['BH135',['bh135','rice_field_a']],
+        ['BH140',['bh140','river_stream_a','river_stream_l']],
+        ['BH145',['bh145','river_vanish_point_p']],
+        ['BH150',['bh150','salt_pan_a']],
+        ['BH155',['bh155','salt_evaporator_a']],
+        ['BH160',['bh160','sebkha_a']],
+        ['BH165',['bh165','spillway_a','spillway_l','spillway_p']],
+        ['BH170',['bh170','spring_water_hole_p']],
+        ['BH171',['bh171','fire_hydrant_p']],
+        ['BH180',['bh180','waterfall_l','waterfall_p']],
+        ['BI010',['bi010','cistern_p']],
+        ['BI020',['bi020','dam_weir_a','dam_weir_p']],
+        ['BI030',['bi030','lock_a','lock_p']],
+        ['BI040',['bi040','sluice_gate_l','sluice_gate_p']],
+        ['BI050',['bi050','water_intake_tower_p']],
+        ['CA030',['ca030','spot_elevation_p']],
+        ['DA005',['da005','asphalt_lake_a']],
+        ['DA010',['da010','ground_surface_element_a']],
+        ['DB010',['db010','bluff_cliff_escarp_l']],
+        ['DB030',['db030','cave_p']],
+        ['DB060',['db060','crevice_a','crevice_l']],
+        ['DB070',['db070','cut_a','cut_l']],
+        ['DB090',['db090','embankment_fill_a','embankment_fill_l']],
+        ['DB110',['db110','fault_l']],
+        ['DB115',['db115','geothermal_feature_p']],
+        ['DB150',['db150','mountain_pass_p']],
+        ['DB170',['db170','sand_dunes_a']],
+        ['DB180',['db180','volcano_p']],
+        ['EA010',['ea010','cropland_a']],
+        ['EA020',['ea020','hedgerow_l']],
+        ['EA030',['ea030','nursery_p']],
+        ['EA040',['ea040','orchard_plantation_a']],
+        ['EA050',['ea050','vinyards_a']],
+        ['EA055',['ea055','hops_a']],
+        ['EB010',['eb010','grassland_a']],
+        ['EB020',['eb020','scrub_brush_bush_a']],
+        ['EC010',['ec010','bamboo_cane_a']],
+        ['EC020',['ec020','oasis_a','oasis_p']],
+        ['EC030',['ec030','trees_a','trees_l','trees_p']],
+        ['EC040',['ec040','cleared_way_a','cleared_way_l']],
+        ['ED010',['ed010','marsh_a']],
+        ['ED020',['ed020','swamp_a']],
+        ['EE010',['ee010','logging_area_a']],
+        ['FA000',['fa000','administrative_boundary_l']],
+        ['FA001',['fa001','administrative_area_a']],
+        ['FA015',['fa015','firing_range_a','firing_range_p']],
+        ['FA020',['fa020','armistice_line_l']],
+        ['FA100',['fa100','test_area_a']],
+        ['FA165',['fa165','training_area_a']],
+        ['GB005',['gb005','airport_airfield_a']],
+        ['GB010',['gb010','airport_lighting_p']],
+        ['GB015',['gb015','apron_hardstand_a']],
+        ['GB030',['gb030','heli_landing_pad_a','heli_landing_pad_p']],
+        ['GB035',['gb035','heliport_a']],
+        ['GB040',['gb040','launch_pad_p']],
+        ['GB045',['gb045','overrun_stopway_a']],
+        ['GB050',['gb050','revetment_a','revetment_l']],
+        ['GB055',['gb055','runway_a']],
+        ['GB065',['gb065','seaplane_base_a']],
+        ['GB075',['gb075','taxiway_a']],
+        ['SU001',['su001','military_base_a']],
+        ['SU002',['su002','subway_l']],
+        ['ZB020',['zb020','benchmark_p']],
+        ['ZB030',['zb030','boundary_monument_p']],
+        ['ZD019',['zd019','general_misc_feature_a','general_misc_feature_l','general_misc_feature_p']],
+        ['ZD020',['zd020','void_collection_area_a']],
+        ['ZD040',['zd040','named_location_p']],
+        ['ZD045',['zd045','text_description_a','text_description_l','text_description_p']],
+        ], // End fCodeMap
+
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -3062,48 +3282,18 @@ ufd = {
         }
         else
         {
-            var fCodeMap = [
-                        ['AA050', ['aa050','well_p']], // Well
-                        ['AL015', ['al015','building_a','building_p']], // Building
-                        ['AL020', ['al020','builtup_area_a']], // Built up area
-                        ['AL030', ['al030','cemetery_a']], // Cemetary
-                        ['AL100', ['al100']], // Hut
-                        ['AL105', ['al105']], // Settlement
-                        ['AL130', ['al130','monument_a','monument_p']], // Memorial Monument
-                        ['AL200', ['al200','ruins_a']], // Ruins
-                        ['AN010', ['an010','railway_l']], // Railway
-                        ['AN050', ['an050','rr_siding_spur_l']], // Railway Sidetrack
-                        ['AN060', ['an060','rr_marshal_yard_a']], // Railway Yard
-                        ['AP010', ['ap010','trackl','track_l','cart_track','carttrack','cart_track_l']], // Cart Track
-                        ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
-                        ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
-                        ['AP050', ['ap050','traill','trail_l']], // Trail
-                        ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
-                        ['AQ045', ['aq045','bridge_span_l', 'bridge_span_p']], // Bridge Span
-                        ['AQ050', ['aq050','bridge_superstructure_p']], // Bridge Superstructure
-                        ['AQ055', ['aq055','bridge_pylon_p']], // Bridge Pylon
-                        ['AQ065', ['aq065','culvert_l']], // Culvert
-                        ['AQ113', ['aq113','pipeline_pipe_l']], // Pipeline
-                        ['AQ130', ['aq130','tunnell','tunnel_l']], // Tunnel
-                        ['AT050', ['at050','comm_building_a']], // Communication Building
-                        ['BH010', ['bh010','aqueduct_l']], // Aqueduct
-                        ['BH020', ['bh020','canal_a','canal_l']], // Canal
-                        ['BH030', ['bh030','ditch_l','ditch_a']], // Ditch
-                        ['BH070', ['bh070','ford_l','ford_p']], // Ford
-                        ['BH140', ['bh140', 'river_stream_a','river_stream_l']], // River
-                        ['DB070', ['db070']], // Cut
-                        ['DB150', ['db150']], // Mountain Pass
-                        ['ZD040', ['zd040','named_location_p']], // Annotated Location
-                    ]
-
             // Funky but it makes life easier
             var llayerName = layerName.toString().toLowerCase();
 
-            for (var row in fCodeMap)
+            for (var row in ufd.fCodeMap)
             {
-                for (var val in fCodeMap[row][1])
+                for (var val in ufd.fCodeMap[row][1])
                 {
-                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
+                    if (llayerName.match(ufd.fCodeMap[row][1][val]))
+                    {
+                        attrs.F_CODE = ufd.fCodeMap[row][0];
+                        break;
+                    }
                 }
             }
         } // End of Find an FCode
