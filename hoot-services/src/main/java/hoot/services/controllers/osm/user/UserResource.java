@@ -72,14 +72,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@Context HttpServletRequest request) {
-         Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-         if(user == null) {
-             user = new Users();
-             user.setDisplayName("Test User");
-             user.setEmail("test@hootenanny");
-             user.setId(-1L);
-             user.setHootservicesCreatedAt(new Timestamp(System.currentTimeMillis()));
-         }
+         Users user = Users.fromRequest(request);
          return Response.ok().entity(user).build();
     }
 
