@@ -72,6 +72,10 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     removed.push_back(rnd);
   }
 
+  //  Exit if there are no roundabouts removed
+  if (removed.size() == 0)
+    return;
+
   // Mangle (in a good way) ways that may cross our roundabouts, provided there
   // is no 'sibling' roundabout in the secondary dataset
   QVector<bool> foundSibling(removed.size(), false);
@@ -92,13 +96,19 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
 
       // If no sibling, do the mangle
       if (!foundSibling[i])
+      {
         removed[i]->handleCrossingWays(_pMap);
+        removed[i]->overrideRoundabout();
+      }
     }
   }
 
   //  Mangle the last way if it doesn't have a sibling
   if (!foundSibling[removed.size() - 1])
+  {
     removed[removed.size() - 1]->handleCrossingWays(_pMap);
+    removed[removed.size() - 1]->overrideRoundabout();
+  }
 
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)

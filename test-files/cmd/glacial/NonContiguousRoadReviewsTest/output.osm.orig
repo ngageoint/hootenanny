@@ -9004,6 +9004,7 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-6055" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-693"/>
         <nd ref="-692"/>
@@ -9012,65 +9013,7 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-6053" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="760"/>
-        <nd ref="1660"/>
-        <nd ref="1659"/>
-        <nd ref="1658"/>
-        <nd ref="1657"/>
-        <nd ref="1656"/>
-        <nd ref="1655"/>
-        <nd ref="1654"/>
-        <nd ref="-4144"/>
-        <nd ref="1653"/>
-        <nd ref="1652"/>
-        <nd ref="1651"/>
-        <nd ref="1650"/>
-        <nd ref="1649"/>
-        <nd ref="1648"/>
-        <nd ref="1647"/>
-        <nd ref="1646"/>
-        <nd ref="1645"/>
-        <nd ref="1644"/>
-        <nd ref="880"/>
-        <nd ref="1643"/>
-        <nd ref="1642"/>
-        <nd ref="1641"/>
-        <nd ref="1640"/>
-        <nd ref="1639"/>
-        <nd ref="1638"/>
-        <nd ref="1637"/>
-        <nd ref="1636"/>
-        <nd ref="1635"/>
-        <nd ref="1634"/>
-        <nd ref="1633"/>
-        <nd ref="1632"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.858Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
     <way visible="true" id="-6047" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="54"/>
-        <nd ref="820"/>
-        <nd ref="819"/>
-        <nd ref="818"/>
         <nd ref="817"/>
         <nd ref="816"/>
         <nd ref="-4136"/>
@@ -9086,6 +9029,73 @@
         <nd ref="807"/>
         <nd ref="806"/>
         <nd ref="805"/>
+=======
+    <way visible="true" id="-6945" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="804"/>
+        <nd ref="803"/>
+        <nd ref="802"/>
+        <nd ref="801"/>
+        <nd ref="30"/>
+        <nd ref="800"/>
+        <nd ref="799"/>
+        <nd ref="798"/>
+        <nd ref="797"/>
+        <nd ref="796"/>
+        <nd ref="795"/>
+        <nd ref="794"/>
+        <nd ref="793"/>
+        <nd ref="792"/>
+        <nd ref="791"/>
+        <nd ref="790"/>
+        <nd ref="789"/>
+        <nd ref="788"/>
+        <nd ref="787"/>
+        <nd ref="786"/>
+        <nd ref="785"/>
+        <nd ref="784"/>
+        <nd ref="783"/>
+        <nd ref="782"/>
+        <nd ref="781"/>
+        <nd ref="780"/>
+        <nd ref="779"/>
+        <nd ref="778"/>
+        <nd ref="777"/>
+        <nd ref="776"/>
+        <nd ref="775"/>
+        <nd ref="774"/>
+        <nd ref="773"/>
+        <nd ref="772"/>
+        <nd ref="771"/>
+        <nd ref="770"/>
+        <nd ref="769"/>
+        <nd ref="768"/>
+        <nd ref="767"/>
+        <nd ref="766"/>
+        <nd ref="765"/>
+        <nd ref="764"/>
+        <nd ref="763"/>
+        <nd ref="-4488"/>
+        <nd ref="762"/>
+        <nd ref="761"/>
+        <nd ref="760"/>
+        <nd ref="759"/>
+        <nd ref="758"/>
+        <nd ref="757"/>
+        <nd ref="756"/>
+        <nd ref="755"/>
+        <nd ref="754"/>
+        <nd ref="-4489"/>
+        <nd ref="753"/>
+        <nd ref="-4490"/>
+        <nd ref="752"/>
+        <nd ref="751"/>
+        <nd ref="-4491"/>
+        <nd ref="750"/>
+        <nd ref="749"/>
+        <nd ref="748"/>
+        <nd ref="747"/>
+        <nd ref="746"/>
+>>>>>>> origin/develop
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -9095,11 +9105,19 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<<<<<<< HEAD
         <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>
         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+=======
+        <tag k="uuid" v="{53FA7AEC-6324-4374-A446-9B3180DF978E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
+>>>>>>> origin/develop
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -9107,8 +9125,13 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-6046" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-4130"/>
+=======
+    <way visible="true" id="-6940" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4474"/>
+>>>>>>> origin/develop
         <nd ref="-142"/>
         <nd ref="-141"/>
         <nd ref="-140"/>
@@ -9242,55 +9265,18 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-6037" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="307"/>
-        <nd ref="856"/>
-        <nd ref="855"/>
-        <nd ref="854"/>
-        <nd ref="853"/>
-        <nd ref="852"/>
-        <nd ref="-3917"/>
-        <nd ref="851"/>
-        <nd ref="850"/>
-        <nd ref="849"/>
-        <nd ref="-3918"/>
-        <nd ref="848"/>
-        <nd ref="-3919"/>
-        <nd ref="847"/>
-        <nd ref="702"/>
-        <nd ref="846"/>
-        <nd ref="845"/>
-        <nd ref="844"/>
-        <nd ref="-3823"/>
-        <nd ref="843"/>
-        <nd ref="-3824"/>
-        <nd ref="842"/>
-        <nd ref="-3825"/>
-        <nd ref="841"/>
-        <nd ref="840"/>
+    <way visible="true" id="-6032" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="320"/>
+        <nd ref="1676"/>
+        <nd ref="-4110"/>
+        <nd ref="1675"/>
+        <nd ref="1674"/>
+        <nd ref="-4111"/>
+        <nd ref="-4112"/>
+        <nd ref="1673"/>
+        <nd ref="-4113"/>
+        <nd ref="1672"/>
         <nd ref="839"/>
-        <nd ref="-4120"/>
-        <nd ref="838"/>
-        <nd ref="-4121"/>
-        <nd ref="-4122"/>
-        <nd ref="837"/>
-        <nd ref="836"/>
-        <nd ref="835"/>
-        <nd ref="834"/>
-        <nd ref="833"/>
-        <nd ref="832"/>
-        <nd ref="831"/>
-        <nd ref="830"/>
-        <nd ref="829"/>
-        <nd ref="828"/>
-        <nd ref="827"/>
-        <nd ref="826"/>
-        <nd ref="825"/>
-        <nd ref="824"/>
-        <nd ref="823"/>
-        <nd ref="822"/>
-        <nd ref="821"/>
-        <nd ref="54"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -9300,11 +9286,11 @@
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
+        <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.858Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -9312,6 +9298,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-6031" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="1302"/>
         <nd ref="-803"/>
@@ -9330,12 +9317,6 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6026" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="1204"/>
-        <nd ref="1348"/>
-        <nd ref="1347"/>
-        <nd ref="1346"/>
-        <nd ref="1345"/>
-        <nd ref="1344"/>
         <nd ref="1343"/>
         <nd ref="1342"/>
         <nd ref="1341"/>
@@ -9429,6 +9410,41 @@
         <nd ref="47"/>
         <nd ref="46"/>
         <nd ref="45"/>
+=======
+    <way visible="true" id="-6921" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="320"/>
+        <nd ref="1676"/>
+        <nd ref="-4452"/>
+        <nd ref="1675"/>
+        <nd ref="1674"/>
+        <nd ref="-4453"/>
+        <nd ref="-4454"/>
+        <nd ref="1673"/>
+        <nd ref="-4455"/>
+        <nd ref="1672"/>
+        <nd ref="839"/>
+        <nd ref="-4298"/>
+        <nd ref="1671"/>
+        <nd ref="1670"/>
+        <nd ref="1669"/>
+        <nd ref="1668"/>
+        <nd ref="1667"/>
+        <nd ref="-4291"/>
+        <nd ref="1666"/>
+        <nd ref="-4292"/>
+        <nd ref="459"/>
+        <nd ref="-4156"/>
+        <nd ref="1665"/>
+        <nd ref="-4157"/>
+        <nd ref="1664"/>
+        <nd ref="1663"/>
+        <nd ref="-4158"/>
+        <nd ref="1662"/>
+        <nd ref="-4159"/>
+        <nd ref="-4160"/>
+        <nd ref="1661"/>
+        <nd ref="760"/>
+>>>>>>> origin/develop
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -9450,6 +9466,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-6020" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="884"/>
         <nd ref="-651"/>
@@ -9470,6 +9487,100 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6014" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1216"/>
+        <nd ref="1215"/>
+        <nd ref="1214"/>
+        <nd ref="1213"/>
+        <nd ref="-4086"/>
+        <nd ref="1212"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+=======
+    <way visible="true" id="-6919" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1204"/>
+        <nd ref="1348"/>
+        <nd ref="1347"/>
+        <nd ref="1346"/>
+        <nd ref="1345"/>
+        <nd ref="1344"/>
+        <nd ref="1343"/>
+        <nd ref="1342"/>
+        <nd ref="1341"/>
+        <nd ref="1340"/>
+        <nd ref="1339"/>
+        <nd ref="1338"/>
+        <nd ref="1337"/>
+        <nd ref="1336"/>
+        <nd ref="1335"/>
+        <nd ref="1334"/>
+        <nd ref="1333"/>
+        <nd ref="1332"/>
+        <nd ref="1331"/>
+        <nd ref="1330"/>
+        <nd ref="1329"/>
+        <nd ref="1328"/>
+        <nd ref="1327"/>
+        <nd ref="1326"/>
+        <nd ref="1325"/>
+        <nd ref="1324"/>
+        <nd ref="1323"/>
+        <nd ref="1322"/>
+        <nd ref="1321"/>
+        <nd ref="1320"/>
+        <nd ref="1319"/>
+        <nd ref="1318"/>
+        <nd ref="1317"/>
+        <nd ref="1316"/>
+        <nd ref="1315"/>
+        <nd ref="1314"/>
+        <nd ref="1313"/>
+        <nd ref="1312"/>
+        <nd ref="1311"/>
+        <nd ref="1310"/>
+        <nd ref="1309"/>
+        <nd ref="-4147"/>
+        <nd ref="1308"/>
+        <nd ref="-4148"/>
+        <nd ref="1307"/>
+        <nd ref="1306"/>
+        <nd ref="1305"/>
+        <nd ref="1304"/>
+        <nd ref="1303"/>
+        <nd ref="1302"/>
+        <nd ref="1301"/>
+        <nd ref="1300"/>
+        <nd ref="817"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>>>>>>> origin/develop
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<<<<<<< HEAD
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+=======
+        <tag k="uuid" v="{24A43D12-8542-458D-AC2C-9D0FC6314056}"/>
+>>>>>>> origin/develop
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-6012" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-621"/>
@@ -9624,6 +9735,29 @@
         <nd ref="2278"/>
         <nd ref="2277"/>
         <nd ref="857"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-6000" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="857"/>
         <nd ref="2276"/>
         <nd ref="2275"/>
         <nd ref="2274"/>
@@ -9665,6 +9799,57 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-5995" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="453"/>
+        <nd ref="-4067"/>
+        <nd ref="1999"/>
+        <nd ref="1998"/>
+        <nd ref="1997"/>
+        <nd ref="1996"/>
+        <nd ref="1995"/>
+        <nd ref="1994"/>
+        <nd ref="1993"/>
+        <nd ref="1992"/>
+        <nd ref="-4068"/>
+        <nd ref="1991"/>
+        <nd ref="1990"/>
+        <nd ref="1989"/>
+        <nd ref="1988"/>
+        <nd ref="746"/>
+        <nd ref="1987"/>
+        <nd ref="1986"/>
+        <nd ref="-4260"/>
+        <nd ref="1985"/>
+        <nd ref="1984"/>
+        <nd ref="1983"/>
+        <nd ref="1982"/>
+        <nd ref="1981"/>
+        <nd ref="1980"/>
+        <nd ref="1979"/>
+        <nd ref="55"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
     <way visible="true" id="-5990" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="459"/>
         <nd ref="458"/>
@@ -9699,60 +9884,6 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5983" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="328"/>
-        <nd ref="327"/>
-        <nd ref="326"/>
-        <nd ref="325"/>
-        <nd ref="-3881"/>
-        <nd ref="-3882"/>
-        <nd ref="324"/>
-        <nd ref="-3883"/>
-        <nd ref="323"/>
-        <nd ref="322"/>
-        <nd ref="-3884"/>
-        <nd ref="321"/>
-        <nd ref="320"/>
-        <nd ref="319"/>
-        <nd ref="-3746"/>
-        <nd ref="318"/>
-        <nd ref="-3747"/>
-        <nd ref="317"/>
-        <nd ref="316"/>
-        <nd ref="-4046"/>
-        <nd ref="315"/>
-        <nd ref="-4047"/>
-        <nd ref="314"/>
-        <nd ref="-4048"/>
-        <nd ref="313"/>
-        <nd ref="-4049"/>
-        <nd ref="312"/>
-        <nd ref="311"/>
-        <nd ref="310"/>
-        <nd ref="309"/>
-        <nd ref="308"/>
-        <nd ref="307"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
     <way visible="true" id="-5980" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="467"/>
         <nd ref="-4042"/>
@@ -9774,6 +9905,77 @@
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
         <tag k="condition" v="functional"/>
+=======
+    <way visible="true" id="-6903" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4420"/>
+        <nd ref="-554"/>
+        <nd ref="-553"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6897" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-621"/>
+        <nd ref="-620"/>
+        <nd ref="-619"/>
+        <nd ref="-618"/>
+        <nd ref="-617"/>
+        <nd ref="497"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6894" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-410"/>
+        <nd ref="7992"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6891" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="8025"/>
+        <nd ref="8024"/>
+        <nd ref="8023"/>
+        <nd ref="8022"/>
+        <nd ref="8021"/>
+        <nd ref="8020"/>
+        <nd ref="8019"/>
+        <nd ref="8018"/>
+        <nd ref="8017"/>
+        <nd ref="8016"/>
+        <nd ref="8015"/>
+        <nd ref="8014"/>
+        <nd ref="8013"/>
+        <nd ref="8012"/>
+        <nd ref="8011"/>
+        <nd ref="8010"/>
+        <nd ref="8009"/>
+        <nd ref="8008"/>
+        <nd ref="8007"/>
+        <nd ref="8006"/>
+        <nd ref="8005"/>
+        <nd ref="8004"/>
+        <nd ref="8003"/>
+        <nd ref="8002"/>
+        <nd ref="8001"/>
+        <nd ref="8000"/>
+        <nd ref="7999"/>
+        <nd ref="7998"/>
+        <nd ref="7997"/>
+        <nd ref="7996"/>
+        <nd ref="-4412"/>
+        <nd ref="7995"/>
+        <nd ref="7994"/>
+        <nd ref="7993"/>
+        <nd ref="-4413"/>
+        <nd ref="7992"/>
+        <nd ref="7991"/>
+        <nd ref="7990"/>
+        <nd ref="7989"/>
+        <nd ref="7988"/>
+        <nd ref="7987"/>
+        <nd ref="1625"/>
+>>>>>>> origin/develop
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -9792,28 +9994,6 @@
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-5978" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="476"/>
-        <nd ref="879"/>
-        <nd ref="-3909"/>
-        <nd ref="878"/>
-        <nd ref="-3910"/>
-        <nd ref="-3911"/>
-        <nd ref="877"/>
-        <nd ref="830"/>
-        <nd ref="-3758"/>
-        <nd ref="876"/>
-        <nd ref="875"/>
-        <nd ref="874"/>
-        <nd ref="873"/>
-        <nd ref="872"/>
-        <nd ref="871"/>
-        <nd ref="870"/>
-        <nd ref="869"/>
-        <nd ref="-3759"/>
-        <nd ref="868"/>
-        <nd ref="-3760"/>
-        <nd ref="-3761"/>
-        <nd ref="867"/>
         <nd ref="328"/>
         <nd ref="-4038"/>
         <nd ref="866"/>
@@ -9888,6 +10068,7 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-5967" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="1943"/>
         <nd ref="-572"/>
@@ -9916,37 +10097,21 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-5959" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="453"/>
-        <nd ref="-4067"/>
-        <nd ref="1999"/>
-        <nd ref="1998"/>
-        <nd ref="1997"/>
-        <nd ref="1996"/>
-        <nd ref="1995"/>
-        <nd ref="1994"/>
-        <nd ref="1993"/>
-        <nd ref="1992"/>
-        <nd ref="-4068"/>
-        <nd ref="1991"/>
-        <nd ref="1990"/>
-        <nd ref="1989"/>
-        <nd ref="1988"/>
-        <nd ref="746"/>
-        <nd ref="1987"/>
-        <nd ref="1986"/>
-        <nd ref="-4007"/>
-        <nd ref="1985"/>
-        <nd ref="1984"/>
-        <nd ref="1983"/>
-        <nd ref="1982"/>
-        <nd ref="1981"/>
-        <nd ref="1980"/>
-        <nd ref="1979"/>
-        <nd ref="55"/>
-        <nd ref="1978"/>
-        <nd ref="1977"/>
-        <nd ref="342"/>
+    <way visible="true" id="-5957" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1807"/>
+        <nd ref="1806"/>
+        <nd ref="1805"/>
+        <nd ref="1804"/>
+        <nd ref="1803"/>
+        <nd ref="1802"/>
+        <nd ref="1801"/>
+        <nd ref="1800"/>
+        <nd ref="1799"/>
+        <nd ref="-4006"/>
+        <nd ref="1798"/>
+        <nd ref="1797"/>
+        <nd ref="1796"/>
+        <nd ref="1795"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="no"/>
@@ -9969,52 +10134,262 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5957" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="342"/>
-        <nd ref="1976"/>
-        <nd ref="1975"/>
-        <nd ref="1974"/>
-        <nd ref="1973"/>
-        <nd ref="1972"/>
-        <nd ref="-4005"/>
-        <nd ref="1971"/>
-        <nd ref="1970"/>
-        <nd ref="1969"/>
-        <nd ref="1968"/>
-        <nd ref="1967"/>
-        <nd ref="1966"/>
-        <nd ref="1965"/>
-        <nd ref="1964"/>
-        <nd ref="1963"/>
-        <nd ref="1962"/>
-        <nd ref="1961"/>
-        <nd ref="1960"/>
-        <nd ref="1959"/>
-        <nd ref="1958"/>
-        <nd ref="1957"/>
-        <nd ref="1956"/>
-        <nd ref="1955"/>
-        <nd ref="1954"/>
-        <nd ref="1953"/>
-        <nd ref="1952"/>
-        <nd ref="1951"/>
-        <nd ref="1950"/>
-        <nd ref="1949"/>
-        <nd ref="1948"/>
-        <nd ref="1947"/>
-        <nd ref="1946"/>
-        <nd ref="1945"/>
-        <nd ref="1944"/>
-        <nd ref="1943"/>
-        <nd ref="1942"/>
-        <nd ref="1941"/>
-        <nd ref="1940"/>
-        <nd ref="1939"/>
-        <nd ref="1938"/>
-        <nd ref="1937"/>
-        <nd ref="1936"/>
-        <nd ref="1935"/>
-        <nd ref="1934"/>
+    <way visible="true" id="-5952" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1887"/>
+        <nd ref="1886"/>
+        <nd ref="1885"/>
+        <nd ref="1884"/>
+        <nd ref="1883"/>
+        <nd ref="1882"/>
+        <nd ref="1881"/>
+        <nd ref="1880"/>
+        <nd ref="1879"/>
+        <nd ref="1878"/>
+        <nd ref="1877"/>
+        <nd ref="1876"/>
+        <nd ref="1875"/>
+        <nd ref="1874"/>
+        <nd ref="1873"/>
+        <nd ref="1872"/>
+        <nd ref="1871"/>
+        <nd ref="1870"/>
+        <nd ref="1869"/>
+        <nd ref="1868"/>
+        <nd ref="1867"/>
+        <nd ref="1866"/>
+        <nd ref="1865"/>
+        <nd ref="1864"/>
+        <nd ref="1863"/>
+        <nd ref="1862"/>
+        <nd ref="1861"/>
+        <nd ref="1860"/>
+        <nd ref="1859"/>
+        <nd ref="1858"/>
+        <nd ref="1857"/>
+        <nd ref="1856"/>
+        <nd ref="1855"/>
+        <nd ref="1854"/>
+        <nd ref="1853"/>
+        <nd ref="1852"/>
+        <nd ref="1851"/>
+        <nd ref="1850"/>
+        <nd ref="1849"/>
+        <nd ref="1848"/>
+        <nd ref="1847"/>
+        <nd ref="1846"/>
+        <nd ref="1845"/>
+        <nd ref="1844"/>
+        <nd ref="1843"/>
+        <nd ref="1842"/>
+        <nd ref="1841"/>
+        <nd ref="1840"/>
+        <nd ref="1839"/>
+        <nd ref="1838"/>
+        <nd ref="1837"/>
+        <nd ref="1836"/>
+        <nd ref="1835"/>
+        <nd ref="1834"/>
+        <nd ref="1833"/>
+        <nd ref="1832"/>
+        <nd ref="1831"/>
+        <nd ref="1830"/>
+        <nd ref="1829"/>
+        <nd ref="1828"/>
+        <nd ref="1827"/>
+        <nd ref="1826"/>
+        <nd ref="1825"/>
+        <nd ref="1824"/>
+        <nd ref="1823"/>
+        <nd ref="1822"/>
+        <nd ref="1821"/>
+        <nd ref="1820"/>
+        <nd ref="1819"/>
+        <nd ref="1818"/>
+        <nd ref="1817"/>
+        <nd ref="1816"/>
+        <nd ref="1815"/>
+        <nd ref="1814"/>
+        <nd ref="1813"/>
+        <nd ref="1812"/>
+        <nd ref="1811"/>
+        <nd ref="1810"/>
+        <nd ref="1809"/>
+        <nd ref="1808"/>
+        <nd ref="1807"/>
+=======
+    <way visible="true" id="-6875" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="988"/>
+        <nd ref="1598"/>
+        <nd ref="1597"/>
+        <nd ref="1596"/>
+        <nd ref="1595"/>
+        <nd ref="1594"/>
+        <nd ref="1593"/>
+        <nd ref="1592"/>
+        <nd ref="1591"/>
+        <nd ref="1590"/>
+        <nd ref="1589"/>
+        <nd ref="1588"/>
+        <nd ref="1587"/>
+        <nd ref="1586"/>
+        <nd ref="-4395"/>
+        <nd ref="1585"/>
+        <nd ref="1584"/>
+        <nd ref="1583"/>
+        <nd ref="1582"/>
+        <nd ref="-4396"/>
+        <nd ref="1581"/>
+        <nd ref="-4397"/>
+        <nd ref="1580"/>
+        <nd ref="1579"/>
+        <nd ref="1578"/>
+        <nd ref="1577"/>
+        <nd ref="1576"/>
+        <nd ref="1575"/>
+        <nd ref="1574"/>
+        <nd ref="1573"/>
+        <nd ref="1572"/>
+        <nd ref="1571"/>
+        <nd ref="1570"/>
+        <nd ref="1569"/>
+        <nd ref="1568"/>
+        <nd ref="1567"/>
+        <nd ref="1566"/>
+        <nd ref="1565"/>
+        <nd ref="1564"/>
+        <nd ref="1563"/>
+        <nd ref="1562"/>
+        <nd ref="1561"/>
+        <nd ref="1560"/>
+        <nd ref="1559"/>
+        <nd ref="1558"/>
+        <nd ref="1557"/>
+        <nd ref="1556"/>
+        <nd ref="1555"/>
+        <nd ref="1554"/>
+        <nd ref="1553"/>
+        <nd ref="1552"/>
+        <nd ref="1551"/>
+        <nd ref="1550"/>
+        <nd ref="-4398"/>
+        <nd ref="1549"/>
+        <nd ref="1548"/>
+        <nd ref="-4399"/>
+        <nd ref="1547"/>
+        <nd ref="1546"/>
+        <nd ref="1545"/>
+        <nd ref="1544"/>
+        <nd ref="1543"/>
+        <nd ref="1542"/>
+        <nd ref="1541"/>
+        <nd ref="1540"/>
+        <nd ref="1539"/>
+        <nd ref="1538"/>
+        <nd ref="1537"/>
+        <nd ref="1536"/>
+        <nd ref="1535"/>
+        <nd ref="1534"/>
+        <nd ref="1533"/>
+        <nd ref="1532"/>
+        <nd ref="1531"/>
+        <nd ref="1530"/>
+        <nd ref="1529"/>
+        <nd ref="1528"/>
+        <nd ref="1527"/>
+        <nd ref="1526"/>
+        <nd ref="1525"/>
+        <nd ref="1524"/>
+        <nd ref="1523"/>
+        <nd ref="1522"/>
+        <nd ref="1521"/>
+        <nd ref="1520"/>
+        <nd ref="1519"/>
+        <nd ref="1518"/>
+        <nd ref="1517"/>
+        <nd ref="1516"/>
+        <nd ref="1515"/>
+        <nd ref="1514"/>
+        <nd ref="1513"/>
+        <nd ref="1512"/>
+        <nd ref="1511"/>
+        <nd ref="1510"/>
+        <nd ref="1509"/>
+        <nd ref="1508"/>
+        <nd ref="1507"/>
+        <nd ref="1506"/>
+        <nd ref="1505"/>
+        <nd ref="1504"/>
+        <nd ref="1503"/>
+        <nd ref="1502"/>
+        <nd ref="1501"/>
+        <nd ref="1500"/>
+        <nd ref="1499"/>
+        <nd ref="1498"/>
+        <nd ref="1497"/>
+        <nd ref="1496"/>
+        <nd ref="1495"/>
+        <nd ref="1494"/>
+        <nd ref="1493"/>
+        <nd ref="1492"/>
+        <nd ref="1491"/>
+        <nd ref="1490"/>
+        <nd ref="1489"/>
+        <nd ref="1488"/>
+        <nd ref="1487"/>
+        <nd ref="1486"/>
+        <nd ref="1485"/>
+        <nd ref="1484"/>
+        <nd ref="1483"/>
+        <nd ref="1482"/>
+        <nd ref="1481"/>
+        <nd ref="1480"/>
+        <nd ref="1479"/>
+        <nd ref="1478"/>
+        <nd ref="1477"/>
+        <nd ref="1476"/>
+        <nd ref="1475"/>
+        <nd ref="1474"/>
+        <nd ref="1473"/>
+        <nd ref="1472"/>
+        <nd ref="1471"/>
+        <nd ref="1470"/>
+        <nd ref="1469"/>
+        <nd ref="1468"/>
+        <nd ref="1467"/>
+        <nd ref="1466"/>
+        <nd ref="1465"/>
+        <nd ref="1464"/>
+        <nd ref="1463"/>
+        <nd ref="1462"/>
+        <nd ref="1461"/>
+        <nd ref="1460"/>
+        <nd ref="1459"/>
+        <nd ref="24"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5944" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="1933"/>
         <nd ref="1932"/>
         <nd ref="1931"/>
@@ -10061,6 +10436,955 @@
         <nd ref="1890"/>
         <nd ref="1889"/>
         <nd ref="1888"/>
+        <nd ref="1887"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5938" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="12"/>
+        <nd ref="1264"/>
+        <nd ref="1263"/>
+        <nd ref="1262"/>
+        <nd ref="-3996"/>
+        <nd ref="1261"/>
+        <nd ref="1260"/>
+        <nd ref="1259"/>
+        <nd ref="1258"/>
+        <nd ref="1257"/>
+        <nd ref="1256"/>
+        <nd ref="1255"/>
+        <nd ref="1254"/>
+=======
+    <way visible="true" id="-6874" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="884"/>
+        <nd ref="-651"/>
+        <nd ref="-650"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6872" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-701"/>
+        <nd ref="-700"/>
+        <nd ref="-699"/>
+        <nd ref="-698"/>
+        <nd ref="-697"/>
+        <nd ref="-654"/>
+        <nd ref="-653"/>
+        <nd ref="886"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6867" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-177"/>
+        <nd ref="-193"/>
+        <nd ref="-176"/>
+        <nd ref="-175"/>
+        <nd ref="-4381"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6864" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1456"/>
+        <nd ref="1455"/>
+        <nd ref="1454"/>
+        <nd ref="1453"/>
+        <nd ref="-4381"/>
+        <nd ref="1452"/>
+        <nd ref="1451"/>
+        <nd ref="-4382"/>
+        <nd ref="1450"/>
+        <nd ref="1449"/>
+        <nd ref="1448"/>
+        <nd ref="1447"/>
+        <nd ref="1444"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5936" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1254"/>
+        <nd ref="1253"/>
+        <nd ref="1252"/>
+        <nd ref="-3995"/>
+        <nd ref="1251"/>
+        <nd ref="-1037"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="oneway" v="yes"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5935" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="334"/>
+        <nd ref="-3760"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5932" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="335"/>
+        <nd ref="-3990"/>
+        <nd ref="334"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5925" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-967"/>
+        <nd ref="-966"/>
+        <nd ref="-3975"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5918" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="695"/>
+        <nd ref="-3970"/>
+        <nd ref="694"/>
+        <nd ref="-3971"/>
+        <nd ref="693"/>
+        <nd ref="692"/>
+        <nd ref="-3972"/>
+        <nd ref="-3973"/>
+        <nd ref="691"/>
+        <nd ref="-3974"/>
+        <nd ref="690"/>
+        <nd ref="689"/>
+        <nd ref="688"/>
+        <nd ref="687"/>
+        <nd ref="686"/>
+        <nd ref="-3975"/>
+        <nd ref="685"/>
+        <nd ref="684"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{DC40BC47-DE8B-43B0-BE69-99134FE561A7}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5914" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1212"/>
+        <nd ref="1299"/>
+        <nd ref="-3962"/>
+        <nd ref="-3963"/>
+        <nd ref="1298"/>
+        <nd ref="-3964"/>
+        <nd ref="1297"/>
+=======
+    <way visible="true" id="-6847" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1216"/>
+        <nd ref="2302"/>
+        <nd ref="2301"/>
+        <nd ref="2300"/>
+        <nd ref="2299"/>
+        <nd ref="2298"/>
+        <nd ref="2297"/>
+        <nd ref="2296"/>
+        <nd ref="2295"/>
+        <nd ref="2294"/>
+        <nd ref="2293"/>
+        <nd ref="2292"/>
+        <nd ref="2291"/>
+        <nd ref="2290"/>
+        <nd ref="2289"/>
+        <nd ref="2288"/>
+        <nd ref="2287"/>
+        <nd ref="2286"/>
+        <nd ref="2285"/>
+        <nd ref="2284"/>
+        <nd ref="2283"/>
+        <nd ref="2282"/>
+        <nd ref="2281"/>
+        <nd ref="2280"/>
+        <nd ref="2279"/>
+        <nd ref="-4358"/>
+        <nd ref="2278"/>
+        <nd ref="2277"/>
+        <nd ref="857"/>
+        <nd ref="2276"/>
+        <nd ref="2275"/>
+        <nd ref="2274"/>
+        <nd ref="-4356"/>
+        <nd ref="2273"/>
+        <nd ref="2272"/>
+        <nd ref="2271"/>
+        <nd ref="-4357"/>
+        <nd ref="2270"/>
+        <nd ref="2269"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5911" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1297"/>
+        <nd ref="-3956"/>
+        <nd ref="1296"/>
+        <nd ref="1295"/>
+        <nd ref="1294"/>
+        <nd ref="1293"/>
+        <nd ref="-3957"/>
+        <nd ref="1292"/>
+        <nd ref="1291"/>
+        <nd ref="1290"/>
+        <nd ref="336"/>
+=======
+    <way visible="true" id="-6843" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="307"/>
+        <nd ref="856"/>
+        <nd ref="855"/>
+        <nd ref="854"/>
+        <nd ref="853"/>
+        <nd ref="852"/>
+        <nd ref="-4480"/>
+        <nd ref="851"/>
+        <nd ref="850"/>
+        <nd ref="849"/>
+        <nd ref="-4481"/>
+        <nd ref="848"/>
+        <nd ref="-4482"/>
+        <nd ref="847"/>
+        <nd ref="702"/>
+        <nd ref="846"/>
+        <nd ref="845"/>
+        <nd ref="844"/>
+        <nd ref="-4348"/>
+        <nd ref="843"/>
+        <nd ref="-4349"/>
+        <nd ref="842"/>
+        <nd ref="-4350"/>
+        <nd ref="841"/>
+        <nd ref="840"/>
+        <nd ref="839"/>
+        <nd ref="-4189"/>
+        <nd ref="838"/>
+        <nd ref="-4190"/>
+        <nd ref="-4191"/>
+        <nd ref="837"/>
+        <nd ref="836"/>
+        <nd ref="835"/>
+        <nd ref="834"/>
+        <nd ref="833"/>
+        <nd ref="832"/>
+        <nd ref="831"/>
+        <nd ref="830"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5907" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="702"/>
+        <nd ref="701"/>
+        <nd ref="700"/>
+<<<<<<< HEAD
+        <nd ref="-3948"/>
+        <nd ref="699"/>
+        <nd ref="698"/>
+        <nd ref="-3949"/>
+        <nd ref="-3950"/>
+=======
+        <nd ref="-4197"/>
+        <nd ref="699"/>
+        <nd ref="698"/>
+        <nd ref="-4198"/>
+        <nd ref="-4199"/>
+>>>>>>> origin/develop
+        <nd ref="697"/>
+        <nd ref="696"/>
+        <nd ref="453"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{C9FE40BD-08A4-4E22-87EC-5EC53C948640}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5904" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-410"/>
+        <nd ref="7992"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5901" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="8025"/>
+        <nd ref="8024"/>
+        <nd ref="8023"/>
+        <nd ref="8022"/>
+        <nd ref="8021"/>
+        <nd ref="8020"/>
+        <nd ref="8019"/>
+        <nd ref="8018"/>
+        <nd ref="8017"/>
+        <nd ref="8016"/>
+        <nd ref="8015"/>
+        <nd ref="8014"/>
+        <nd ref="8013"/>
+        <nd ref="8012"/>
+        <nd ref="8011"/>
+        <nd ref="8010"/>
+        <nd ref="8009"/>
+        <nd ref="8008"/>
+        <nd ref="8007"/>
+        <nd ref="8006"/>
+        <nd ref="8005"/>
+        <nd ref="8004"/>
+        <nd ref="8003"/>
+        <nd ref="8002"/>
+        <nd ref="8001"/>
+        <nd ref="8000"/>
+        <nd ref="7999"/>
+        <nd ref="7998"/>
+        <nd ref="7997"/>
+        <nd ref="7996"/>
+        <nd ref="-3943"/>
+        <nd ref="7995"/>
+        <nd ref="7994"/>
+        <nd ref="7993"/>
+        <nd ref="-3944"/>
+        <nd ref="7992"/>
+        <nd ref="7991"/>
+        <nd ref="7990"/>
+        <nd ref="7989"/>
+        <nd ref="7988"/>
+        <nd ref="7987"/>
+        <nd ref="1625"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="width:minimum_traveled_way" v="2"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.708Z"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="uuid" v="{335661E0-2969-4B34-8A85-19DAE4DB60A5}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5900" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-3937"/>
+        <nd ref="-554"/>
+        <nd ref="-553"/>
+=======
+    <way visible="true" id="-6837" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1635"/>
+        <nd ref="-661"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6832" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-693"/>
+        <nd ref="-692"/>
+        <nd ref="1657"/>
+>>>>>>> origin/develop
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5890" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="-1038"/>
+        <nd ref="1249"/>
+        <nd ref="-3923"/>
+        <nd ref="1248"/>
+        <nd ref="1247"/>
+        <nd ref="1246"/>
+        <nd ref="-3924"/>
+        <nd ref="1245"/>
+        <nd ref="-3925"/>
+        <nd ref="1244"/>
+        <nd ref="1243"/>
+        <nd ref="-3926"/>
+        <nd ref="1242"/>
+        <nd ref="-3927"/>
+        <nd ref="1241"/>
+        <nd ref="1240"/>
+        <nd ref="865"/>
+        <nd ref="1239"/>
+        <nd ref="1238"/>
+        <nd ref="1237"/>
+        <nd ref="1236"/>
+        <nd ref="1235"/>
+        <nd ref="1234"/>
+        <nd ref="1233"/>
+        <nd ref="1232"/>
+        <nd ref="1231"/>
+        <nd ref="341"/>
+        <nd ref="1230"/>
+        <nd ref="1229"/>
+        <nd ref="1228"/>
+        <nd ref="1227"/>
+        <nd ref="1226"/>
+        <nd ref="1225"/>
+        <nd ref="1224"/>
+        <nd ref="1223"/>
+        <nd ref="1222"/>
+        <nd ref="1221"/>
+        <nd ref="1220"/>
+        <nd ref="1219"/>
+        <nd ref="1218"/>
+        <nd ref="1217"/>
+        <nd ref="1216"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+=======
+    <way visible="true" id="-6830" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="760"/>
+        <nd ref="1660"/>
+        <nd ref="1659"/>
+        <nd ref="1658"/>
+        <nd ref="1657"/>
+        <nd ref="1656"/>
+        <nd ref="1655"/>
+        <nd ref="1654"/>
+        <nd ref="-4330"/>
+        <nd ref="1653"/>
+        <nd ref="1652"/>
+        <nd ref="1651"/>
+        <nd ref="1650"/>
+        <nd ref="1649"/>
+        <nd ref="1648"/>
+        <nd ref="1647"/>
+        <nd ref="1646"/>
+        <nd ref="1645"/>
+        <nd ref="1644"/>
+        <nd ref="880"/>
+        <nd ref="1643"/>
+        <nd ref="1642"/>
+        <nd ref="1641"/>
+        <nd ref="1640"/>
+        <nd ref="1639"/>
+        <nd ref="1638"/>
+        <nd ref="1637"/>
+        <nd ref="1636"/>
+        <nd ref="1635"/>
+        <nd ref="1634"/>
+        <nd ref="1633"/>
+        <nd ref="1632"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>>>>>>> origin/develop
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<<<<<<< HEAD
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+=======
+        <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.858Z"/>
+>>>>>>> origin/develop
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5886" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="307"/>
+        <nd ref="856"/>
+        <nd ref="855"/>
+        <nd ref="854"/>
+        <nd ref="853"/>
+        <nd ref="852"/>
+        <nd ref="-3917"/>
+        <nd ref="851"/>
+        <nd ref="850"/>
+        <nd ref="849"/>
+        <nd ref="-3918"/>
+        <nd ref="848"/>
+        <nd ref="-3919"/>
+        <nd ref="847"/>
+        <nd ref="702"/>
+=======
+    <way visible="true" id="-6828" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="341"/>
+        <nd ref="340"/>
+        <nd ref="339"/>
+        <nd ref="-4426"/>
+        <nd ref="338"/>
+        <nd ref="337"/>
+        <nd ref="336"/>
+        <nd ref="335"/>
+        <nd ref="-4324"/>
+        <nd ref="334"/>
+        <nd ref="333"/>
+        <nd ref="332"/>
+        <nd ref="331"/>
+        <nd ref="330"/>
+        <nd ref="329"/>
+        <nd ref="328"/>
+        <nd ref="327"/>
+        <nd ref="326"/>
+        <nd ref="325"/>
+        <nd ref="-4314"/>
+        <nd ref="-4315"/>
+        <nd ref="324"/>
+        <nd ref="-4316"/>
+        <nd ref="323"/>
+        <nd ref="322"/>
+        <nd ref="-4317"/>
+        <nd ref="321"/>
+        <nd ref="320"/>
+        <nd ref="319"/>
+        <nd ref="-4087"/>
+        <nd ref="318"/>
+        <nd ref="-4088"/>
+        <nd ref="317"/>
+        <nd ref="316"/>
+        <nd ref="-4136"/>
+        <nd ref="315"/>
+        <nd ref="-4137"/>
+        <nd ref="314"/>
+        <nd ref="-4138"/>
+        <nd ref="313"/>
+        <nd ref="-4139"/>
+        <nd ref="312"/>
+        <nd ref="311"/>
+        <nd ref="310"/>
+        <nd ref="309"/>
+        <nd ref="308"/>
+        <nd ref="307"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5881" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="476"/>
+        <nd ref="879"/>
+        <nd ref="-3909"/>
+        <nd ref="878"/>
+        <nd ref="-3910"/>
+        <nd ref="-3911"/>
+        <nd ref="877"/>
+        <nd ref="830"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{9A636D64-E57D-4A56-9FB4-0A1CF305759C}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+=======
+    <way visible="true" id="-6827" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="334"/>
+        <nd ref="-4079"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6815" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-967"/>
+        <nd ref="-966"/>
+        <nd ref="-4307"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+>>>>>>> origin/develop
+    </way>
+    <way visible="true" id="-5876" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="316"/>
+        <nd ref="704"/>
+        <nd ref="-3901"/>
+        <nd ref="-3902"/>
+        <nd ref="703"/>
+        <nd ref="-3903"/>
+        <nd ref="702"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{C9FE40BD-08A4-4E22-87EC-5EC53C948640}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5871" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="-1036"/>
+        <nd ref="-3891"/>
+        <nd ref="2265"/>
+        <nd ref="-3892"/>
+        <nd ref="2264"/>
+        <nd ref="-3893"/>
+        <nd ref="-3894"/>
+        <nd ref="2263"/>
+        <nd ref="317"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="oneway" v="no"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5864" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="328"/>
+        <nd ref="327"/>
+        <nd ref="326"/>
+        <nd ref="325"/>
+        <nd ref="-3881"/>
+        <nd ref="-3882"/>
+        <nd ref="324"/>
+        <nd ref="-3883"/>
+        <nd ref="323"/>
+        <nd ref="322"/>
+        <nd ref="-3884"/>
+        <nd ref="321"/>
+        <nd ref="320"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5862" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="341"/>
+        <nd ref="340"/>
+        <nd ref="339"/>
+        <nd ref="-3877"/>
+        <nd ref="338"/>
+        <nd ref="337"/>
+        <nd ref="336"/>
+        <nd ref="335"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5860" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="839"/>
+        <nd ref="-3873"/>
+        <nd ref="1671"/>
+        <nd ref="1670"/>
+        <nd ref="1669"/>
+        <nd ref="1668"/>
+        <nd ref="1667"/>
+=======
+    <way visible="true" id="-6801" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4259"/>
+        <nd ref="-560"/>
+        <nd ref="-559"/>
+        <nd ref="-1029"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6798" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1840"/>
+        <nd ref="-564"/>
+        <nd ref="-563"/>
+        <nd ref="-562"/>
+        <nd ref="1810"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6796" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1874"/>
+        <nd ref="-567"/>
+        <nd ref="-566"/>
+        <nd ref="1855"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6793" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1922"/>
+        <nd ref="-570"/>
+        <nd ref="-569"/>
+        <nd ref="1891"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6791" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1943"/>
+        <nd ref="-572"/>
+        <nd ref="-571"/>
+        <nd ref="1925"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6789" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4258"/>
+        <nd ref="1951"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6785" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-581"/>
+        <nd ref="-580"/>
+        <nd ref="-579"/>
+        <nd ref="-4260"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6781" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="1887"/>
         <nd ref="1886"/>
         <nd ref="1885"/>
@@ -10150,7 +11474,7 @@
         <nd ref="1801"/>
         <nd ref="1800"/>
         <nd ref="1799"/>
-        <nd ref="-4006"/>
+        <nd ref="-4259"/>
         <nd ref="1798"/>
         <nd ref="1797"/>
         <nd ref="1796"/>
@@ -10177,35 +11501,117 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5938" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="12"/>
-        <nd ref="1264"/>
-        <nd ref="1263"/>
-        <nd ref="1262"/>
-        <nd ref="-3996"/>
-        <nd ref="1261"/>
-        <nd ref="1260"/>
-        <nd ref="1259"/>
-        <nd ref="1258"/>
-        <nd ref="1257"/>
-        <nd ref="1256"/>
-        <nd ref="1255"/>
-        <nd ref="1254"/>
+    <way visible="true" id="-6772" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="55"/>
+        <nd ref="1978"/>
+        <nd ref="1977"/>
+        <nd ref="342"/>
+        <nd ref="1976"/>
+        <nd ref="1975"/>
+        <nd ref="1974"/>
+        <nd ref="1973"/>
+        <nd ref="1972"/>
+        <nd ref="-4258"/>
+        <nd ref="1971"/>
+        <nd ref="1970"/>
+        <nd ref="1969"/>
+        <nd ref="1968"/>
+        <nd ref="1967"/>
+        <nd ref="1966"/>
+        <nd ref="1965"/>
+        <nd ref="1964"/>
+        <nd ref="1963"/>
+        <nd ref="1962"/>
+        <nd ref="1961"/>
+        <nd ref="1960"/>
+        <nd ref="1959"/>
+        <nd ref="1958"/>
+        <nd ref="1957"/>
+        <nd ref="1956"/>
+        <nd ref="1955"/>
+        <nd ref="1954"/>
+        <nd ref="1953"/>
+        <nd ref="1952"/>
+        <nd ref="1951"/>
+        <nd ref="1950"/>
+        <nd ref="1949"/>
+        <nd ref="1948"/>
+        <nd ref="1947"/>
+        <nd ref="1946"/>
+        <nd ref="1945"/>
+        <nd ref="1944"/>
+        <nd ref="1943"/>
+        <nd ref="1942"/>
+        <nd ref="1941"/>
+        <nd ref="1940"/>
+        <nd ref="1939"/>
+        <nd ref="1938"/>
+        <nd ref="1937"/>
+        <nd ref="1936"/>
+        <nd ref="1935"/>
+        <nd ref="1934"/>
+        <nd ref="1933"/>
+        <nd ref="1932"/>
+        <nd ref="1931"/>
+        <nd ref="1930"/>
+        <nd ref="1929"/>
+        <nd ref="1928"/>
+        <nd ref="1927"/>
+        <nd ref="1926"/>
+        <nd ref="1925"/>
+        <nd ref="1924"/>
+        <nd ref="1923"/>
+        <nd ref="1922"/>
+        <nd ref="1921"/>
+        <nd ref="1920"/>
+        <nd ref="1919"/>
+        <nd ref="1918"/>
+        <nd ref="1917"/>
+        <nd ref="1916"/>
+        <nd ref="1915"/>
+        <nd ref="1914"/>
+        <nd ref="1913"/>
+        <nd ref="1912"/>
+        <nd ref="1911"/>
+        <nd ref="1910"/>
+        <nd ref="1909"/>
+        <nd ref="1908"/>
+        <nd ref="1907"/>
+        <nd ref="1906"/>
+        <nd ref="1905"/>
+        <nd ref="1904"/>
+        <nd ref="1903"/>
+        <nd ref="1902"/>
+        <nd ref="1901"/>
+        <nd ref="1900"/>
+        <nd ref="1899"/>
+        <nd ref="1898"/>
+        <nd ref="1897"/>
+        <nd ref="1896"/>
+        <nd ref="1895"/>
+        <nd ref="1894"/>
+        <nd ref="1893"/>
+        <nd ref="1892"/>
+        <nd ref="1891"/>
+        <nd ref="1890"/>
+        <nd ref="1889"/>
+        <nd ref="1888"/>
+        <nd ref="1887"/>
+>>>>>>> origin/develop
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="no"/>
+        <tag k="seasonal" v="fair"/>
         <tag k="condition" v="functional"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="ref" v="RN6"/>
         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.858Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -10213,322 +11619,143 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5936" timestamp="2016-04-11T14:26:36Z" version="1">
+<<<<<<< HEAD
+    <way visible="true" id="-5853" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-6761" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-435"/>
+        <nd ref="-434"/>
+        <nd ref="-433"/>
+        <nd ref="-432"/>
+        <nd ref="-431"/>
+        <nd ref="-430"/>
+        <nd ref="-429"/>
+        <nd ref="-428"/>
+        <nd ref="-427"/>
+        <nd ref="-426"/>
+        <nd ref="-425"/>
+        <nd ref="-424"/>
+        <nd ref="-423"/>
+        <nd ref="-422"/>
+        <nd ref="-421"/>
+        <nd ref="-420"/>
+        <nd ref="-419"/>
+        <nd ref="255"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6758" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="282"/>
+        <nd ref="281"/>
+        <nd ref="280"/>
+        <nd ref="279"/>
+        <nd ref="278"/>
+        <nd ref="277"/>
+        <nd ref="276"/>
+        <nd ref="275"/>
+        <nd ref="274"/>
+        <nd ref="273"/>
+        <nd ref="272"/>
+        <nd ref="271"/>
+        <nd ref="270"/>
+        <nd ref="269"/>
+        <nd ref="268"/>
+        <nd ref="267"/>
+        <nd ref="266"/>
+        <nd ref="265"/>
+        <nd ref="264"/>
+        <nd ref="263"/>
+        <nd ref="262"/>
+        <nd ref="261"/>
+        <nd ref="260"/>
+        <nd ref="259"/>
+        <nd ref="258"/>
+        <nd ref="257"/>
+        <nd ref="256"/>
+        <nd ref="255"/>
+        <nd ref="254"/>
+        <nd ref="253"/>
+        <nd ref="252"/>
+        <nd ref="251"/>
+        <nd ref="250"/>
+        <nd ref="249"/>
+        <nd ref="248"/>
+        <nd ref="247"/>
+        <nd ref="246"/>
+        <nd ref="245"/>
+        <nd ref="244"/>
+        <nd ref="243"/>
+        <nd ref="242"/>
+        <nd ref="241"/>
+        <nd ref="240"/>
+        <nd ref="239"/>
+        <nd ref="238"/>
+        <nd ref="237"/>
+        <nd ref="236"/>
+        <nd ref="235"/>
+        <nd ref="234"/>
+        <nd ref="233"/>
+        <nd ref="232"/>
+        <nd ref="231"/>
+        <nd ref="230"/>
+        <nd ref="229"/>
+        <nd ref="228"/>
+        <nd ref="227"/>
+        <nd ref="226"/>
+        <nd ref="225"/>
+        <nd ref="224"/>
+        <nd ref="223"/>
+        <nd ref="222"/>
+        <nd ref="221"/>
+        <nd ref="220"/>
+        <nd ref="219"/>
+        <nd ref="218"/>
+        <nd ref="217"/>
+        <nd ref="216"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{95D9C3B5-225A-461D-AD68-9E67AAEE075D}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.885Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-6751" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="1254"/>
         <nd ref="1253"/>
         <nd ref="1252"/>
-        <nd ref="-3995"/>
+        <nd ref="-4462"/>
         <nd ref="1251"/>
-        <nd ref="-1037"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="ref" v="RN6"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="oneway" v="yes"/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5935" timestamp="2016-04-11T14:26:31Z" version="1">
-        <nd ref="334"/>
-        <nd ref="-3760"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-5932" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="341"/>
-        <nd ref="340"/>
-        <nd ref="339"/>
-        <nd ref="-3877"/>
-        <nd ref="338"/>
-        <nd ref="337"/>
-        <nd ref="336"/>
-        <nd ref="335"/>
-        <nd ref="-3990"/>
-        <nd ref="334"/>
-        <nd ref="333"/>
-        <nd ref="332"/>
-        <nd ref="331"/>
-        <nd ref="330"/>
-        <nd ref="329"/>
-        <nd ref="328"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5925" timestamp="2016-04-11T14:26:31Z" version="1">
-        <nd ref="-967"/>
-        <nd ref="-966"/>
-        <nd ref="-3975"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-5918" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="695"/>
-        <nd ref="-3970"/>
-        <nd ref="694"/>
-        <nd ref="-3971"/>
-        <nd ref="693"/>
-        <nd ref="692"/>
-        <nd ref="-3972"/>
-        <nd ref="-3973"/>
-        <nd ref="691"/>
-        <nd ref="-3974"/>
-        <nd ref="690"/>
-        <nd ref="689"/>
-        <nd ref="688"/>
-        <nd ref="687"/>
-        <nd ref="686"/>
-        <nd ref="-3975"/>
-        <nd ref="685"/>
-        <nd ref="684"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{DC40BC47-DE8B-43B0-BE69-99134FE561A7}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5911" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="1212"/>
-        <nd ref="1299"/>
-        <nd ref="-3962"/>
-        <nd ref="-3963"/>
-        <nd ref="1298"/>
-        <nd ref="-3964"/>
-        <nd ref="1297"/>
-        <nd ref="-3956"/>
-        <nd ref="1296"/>
-        <nd ref="1295"/>
-        <nd ref="1294"/>
-        <nd ref="1293"/>
-        <nd ref="-3957"/>
-        <nd ref="1292"/>
-        <nd ref="1291"/>
-        <nd ref="1290"/>
-        <nd ref="336"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5904" timestamp="2016-04-11T14:26:31Z" version="1">
-        <nd ref="-410"/>
-        <nd ref="7992"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-5901" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="8025"/>
-        <nd ref="8024"/>
-        <nd ref="8023"/>
-        <nd ref="8022"/>
-        <nd ref="8021"/>
-        <nd ref="8020"/>
-        <nd ref="8019"/>
-        <nd ref="8018"/>
-        <nd ref="8017"/>
-        <nd ref="8016"/>
-        <nd ref="8015"/>
-        <nd ref="8014"/>
-        <nd ref="8013"/>
-        <nd ref="8012"/>
-        <nd ref="8011"/>
-        <nd ref="8010"/>
-        <nd ref="8009"/>
-        <nd ref="8008"/>
-        <nd ref="8007"/>
-        <nd ref="8006"/>
-        <nd ref="8005"/>
-        <nd ref="8004"/>
-        <nd ref="8003"/>
-        <nd ref="8002"/>
-        <nd ref="8001"/>
-        <nd ref="8000"/>
-        <nd ref="7999"/>
-        <nd ref="7998"/>
-        <nd ref="7997"/>
-        <nd ref="7996"/>
-        <nd ref="-3943"/>
-        <nd ref="7995"/>
-        <nd ref="7994"/>
-        <nd ref="7993"/>
-        <nd ref="-3944"/>
-        <nd ref="7992"/>
-        <nd ref="7991"/>
-        <nd ref="7990"/>
-        <nd ref="7989"/>
-        <nd ref="7988"/>
-        <nd ref="7987"/>
-        <nd ref="1625"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="width:minimum_traveled_way" v="2"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.708Z"/>
-        <tag k="highway" v="track"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="uuid" v="{335661E0-2969-4B34-8A85-19DAE4DB60A5}"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5900" timestamp="2016-04-11T14:26:31Z" version="1">
-        <nd ref="-3937"/>
-        <nd ref="-554"/>
-        <nd ref="-553"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-5896" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="49"/>
-        <nd ref="497"/>
-        <nd ref="496"/>
-        <nd ref="495"/>
-        <nd ref="494"/>
-        <nd ref="493"/>
-        <nd ref="492"/>
-        <nd ref="-3937"/>
-        <nd ref="491"/>
-        <nd ref="490"/>
-        <nd ref="489"/>
-        <nd ref="488"/>
-        <nd ref="487"/>
-        <nd ref="-3938"/>
-        <nd ref="486"/>
-        <nd ref="485"/>
-        <nd ref="484"/>
-        <nd ref="483"/>
-        <nd ref="482"/>
-        <nd ref="481"/>
-        <nd ref="480"/>
-        <nd ref="479"/>
-        <nd ref="478"/>
-        <nd ref="477"/>
-        <nd ref="476"/>
-        <nd ref="475"/>
-        <nd ref="474"/>
-        <nd ref="473"/>
-        <nd ref="472"/>
-        <nd ref="471"/>
-        <nd ref="470"/>
-        <nd ref="469"/>
-        <nd ref="468"/>
-        <nd ref="467"/>
-        <nd ref="466"/>
-        <nd ref="465"/>
-        <nd ref="464"/>
-        <nd ref="463"/>
-        <nd ref="462"/>
-        <nd ref="-3867"/>
-        <nd ref="461"/>
-        <nd ref="460"/>
-        <nd ref="459"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5890" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="-1038"/>
+        <nd ref="-4463"/>
+        <nd ref="1250"/>
+        <nd ref="-4232"/>
         <nd ref="1249"/>
-        <nd ref="-3923"/>
+        <nd ref="-4233"/>
         <nd ref="1248"/>
         <nd ref="1247"/>
         <nd ref="1246"/>
-        <nd ref="-3924"/>
+        <nd ref="-4234"/>
         <nd ref="1245"/>
-        <nd ref="-3925"/>
+        <nd ref="-4235"/>
         <nd ref="1244"/>
         <nd ref="1243"/>
-        <nd ref="-3926"/>
+        <nd ref="-4236"/>
         <nd ref="1242"/>
-        <nd ref="-3927"/>
+        <nd ref="-4237"/>
         <nd ref="1241"/>
         <nd ref="1240"/>
         <nd ref="865"/>
@@ -10570,97 +11797,19 @@
         <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
         <tag k="oneway" v="yes"/>
+        <tag k="median" v="no"/>
         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="junction" v="roundabout"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
-    <way visible="true" id="-5876" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="316"/>
-        <nd ref="704"/>
-        <nd ref="-3901"/>
-        <nd ref="-3902"/>
-        <nd ref="703"/>
-        <nd ref="-3903"/>
-        <nd ref="702"/>
-        <nd ref="701"/>
-        <nd ref="700"/>
-        <nd ref="-3948"/>
-        <nd ref="699"/>
-        <nd ref="698"/>
-        <nd ref="-3949"/>
-        <nd ref="-3950"/>
-        <nd ref="697"/>
-        <nd ref="696"/>
-        <nd ref="453"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{C9FE40BD-08A4-4E22-87EC-5EC53C948640}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5871" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="-1036"/>
-        <nd ref="-3891"/>
-        <nd ref="2265"/>
-        <nd ref="-3892"/>
-        <nd ref="2264"/>
-        <nd ref="-3893"/>
-        <nd ref="-3894"/>
-        <nd ref="2263"/>
-        <nd ref="317"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="ref" v="RS339"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="oneway" v="no"/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5870" timestamp="2016-04-11T14:26:31Z" version="1">
-        <nd ref="-3881"/>
-        <nd ref="-975"/>
-        <nd ref="-452"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-5853" timestamp="2016-04-11T14:26:36Z" version="1">
+    <way visible="true" id="-6748" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
         <nd ref="2119"/>
         <nd ref="2118"/>
         <nd ref="2117"/>
@@ -10732,6 +11881,8 @@
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="no"/>
         <tag k="condition" v="functional"/>
+<<<<<<< HEAD
+=======
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -10749,39 +11900,501 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+    <way visible="true" id="-6743" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="459"/>
+        <nd ref="458"/>
+        <nd ref="457"/>
+        <nd ref="456"/>
+        <nd ref="-4218"/>
+        <nd ref="-4219"/>
+        <nd ref="455"/>
+        <nd ref="-4220"/>
+        <nd ref="454"/>
+        <nd ref="-4221"/>
+        <nd ref="453"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-6726" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="881"/>
+        <nd ref="-657"/>
+        <nd ref="-656"/>
+        <nd ref="-655"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6724" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-696"/>
+        <nd ref="-660"/>
+        <nd ref="-659"/>
+        <nd ref="883"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6720" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1216"/>
+        <nd ref="1215"/>
+        <nd ref="1214"/>
+        <nd ref="1213"/>
+        <nd ref="-4179"/>
+        <nd ref="1212"/>
+        <nd ref="1211"/>
+        <nd ref="1210"/>
+        <nd ref="-4167"/>
+        <nd ref="1209"/>
+        <nd ref="903"/>
+        <nd ref="1208"/>
+        <nd ref="1207"/>
+        <nd ref="1206"/>
+        <nd ref="1205"/>
+        <nd ref="1204"/>
+        <nd ref="1203"/>
+        <nd ref="1202"/>
+        <nd ref="1201"/>
+        <nd ref="1200"/>
+        <nd ref="1199"/>
+        <nd ref="1198"/>
+        <nd ref="1197"/>
+        <nd ref="-4093"/>
+        <nd ref="1196"/>
+        <nd ref="1195"/>
+        <nd ref="1194"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-6719" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1456"/>
+        <nd ref="-196"/>
+        <nd ref="-162"/>
+        <nd ref="-163"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6716" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1456"/>
+        <nd ref="2634"/>
+        <nd ref="-4175"/>
+        <nd ref="2633"/>
+        <nd ref="2632"/>
+        <nd ref="2631"/>
+        <nd ref="2630"/>
+        <nd ref="2629"/>
+        <nd ref="2628"/>
+        <nd ref="2627"/>
+        <nd ref="2626"/>
+        <nd ref="2625"/>
+        <nd ref="2624"/>
+        <nd ref="2623"/>
+        <nd ref="2622"/>
+        <nd ref="2621"/>
+        <nd ref="2620"/>
+        <nd ref="2619"/>
+        <nd ref="2618"/>
+        <nd ref="2617"/>
+        <nd ref="2616"/>
+        <nd ref="2615"/>
+        <nd ref="2614"/>
+        <nd ref="2613"/>
+        <nd ref="2612"/>
+        <nd ref="2611"/>
+        <nd ref="2610"/>
+        <nd ref="2609"/>
+        <nd ref="2608"/>
+        <nd ref="2607"/>
+        <nd ref="2606"/>
+        <nd ref="2605"/>
+        <nd ref="2604"/>
+        <nd ref="2603"/>
+        <nd ref="2602"/>
+        <nd ref="2601"/>
+        <nd ref="2600"/>
+        <nd ref="2599"/>
+        <nd ref="2598"/>
+        <nd ref="2597"/>
+        <nd ref="2596"/>
+        <nd ref="2595"/>
+        <nd ref="2594"/>
+        <nd ref="2593"/>
+        <nd ref="2592"/>
+        <nd ref="2591"/>
+        <nd ref="2590"/>
+        <nd ref="2589"/>
+        <nd ref="2588"/>
+        <nd ref="2587"/>
+        <nd ref="2586"/>
+        <nd ref="2585"/>
+        <nd ref="2584"/>
+        <nd ref="2583"/>
+        <nd ref="2582"/>
+        <nd ref="2581"/>
+        <nd ref="2580"/>
+        <nd ref="2579"/>
+        <nd ref="2578"/>
+        <nd ref="2577"/>
+        <nd ref="2576"/>
+        <nd ref="2575"/>
+        <nd ref="2574"/>
+        <nd ref="2573"/>
+        <nd ref="2572"/>
+        <nd ref="2571"/>
+        <nd ref="2570"/>
+        <nd ref="2569"/>
+        <nd ref="2568"/>
+        <nd ref="2567"/>
+        <nd ref="2566"/>
+        <nd ref="2565"/>
+        <nd ref="2564"/>
+        <nd ref="2563"/>
+        <nd ref="2562"/>
+        <nd ref="2561"/>
+        <nd ref="2560"/>
+        <nd ref="2559"/>
+        <nd ref="2558"/>
+        <nd ref="2557"/>
+        <nd ref="2556"/>
+        <nd ref="2555"/>
+        <nd ref="2554"/>
+        <nd ref="2553"/>
+        <nd ref="2552"/>
+        <nd ref="2551"/>
+        <nd ref="2550"/>
+        <nd ref="2549"/>
+        <nd ref="2548"/>
+        <nd ref="2547"/>
+        <nd ref="2546"/>
+        <nd ref="2545"/>
+        <nd ref="2544"/>
+        <nd ref="2543"/>
+        <nd ref="2542"/>
+        <nd ref="2541"/>
+        <nd ref="2540"/>
+        <nd ref="2539"/>
+        <nd ref="2538"/>
+        <nd ref="2537"/>
+        <nd ref="2536"/>
+        <nd ref="2535"/>
+        <nd ref="2534"/>
+        <nd ref="2533"/>
+        <nd ref="2532"/>
+        <nd ref="2531"/>
+        <nd ref="2530"/>
+        <nd ref="2529"/>
+        <nd ref="2528"/>
+        <nd ref="2527"/>
+        <nd ref="2526"/>
+        <nd ref="2525"/>
+        <nd ref="2524"/>
+        <nd ref="2523"/>
+        <nd ref="2522"/>
+        <nd ref="2521"/>
+        <nd ref="2520"/>
+        <nd ref="2519"/>
+        <nd ref="2518"/>
+        <nd ref="2517"/>
+        <nd ref="2516"/>
+        <nd ref="2515"/>
+        <nd ref="2514"/>
+        <nd ref="2513"/>
+        <nd ref="2512"/>
+        <nd ref="2511"/>
+        <nd ref="2510"/>
+        <nd ref="2509"/>
+        <nd ref="2508"/>
+        <nd ref="2507"/>
+        <nd ref="2506"/>
+        <nd ref="2505"/>
+        <nd ref="2504"/>
+        <nd ref="2503"/>
+        <nd ref="2502"/>
+        <nd ref="2501"/>
+        <nd ref="2500"/>
+        <nd ref="2499"/>
+        <nd ref="2498"/>
+        <nd ref="2497"/>
+        <nd ref="2496"/>
+        <nd ref="2495"/>
+        <nd ref="2494"/>
+        <nd ref="2493"/>
+        <nd ref="2492"/>
+        <nd ref="2491"/>
+        <nd ref="2490"/>
+        <nd ref="2489"/>
+        <nd ref="2488"/>
+        <nd ref="2487"/>
+        <nd ref="2486"/>
+        <nd ref="2485"/>
+        <nd ref="2484"/>
+        <nd ref="2483"/>
+        <nd ref="2482"/>
+        <nd ref="2481"/>
+        <nd ref="2480"/>
+        <nd ref="2479"/>
+        <nd ref="2478"/>
+        <nd ref="2477"/>
+        <nd ref="2476"/>
+        <nd ref="2475"/>
+        <nd ref="2474"/>
+        <nd ref="2473"/>
+        <nd ref="2472"/>
+        <nd ref="2471"/>
+        <nd ref="2470"/>
+        <nd ref="2469"/>
+        <nd ref="2468"/>
+        <nd ref="2467"/>
+        <nd ref="2466"/>
+        <nd ref="2465"/>
+        <nd ref="2464"/>
+        <nd ref="2463"/>
+        <nd ref="2462"/>
+        <nd ref="2461"/>
+        <nd ref="2460"/>
+        <nd ref="2459"/>
+        <nd ref="2458"/>
+        <nd ref="2457"/>
+        <nd ref="2456"/>
+        <nd ref="2455"/>
+        <nd ref="2454"/>
+        <nd ref="2453"/>
+        <nd ref="2452"/>
+        <nd ref="2451"/>
+        <nd ref="2450"/>
+        <nd ref="2449"/>
+        <nd ref="2448"/>
+        <nd ref="2447"/>
+        <nd ref="2446"/>
+        <nd ref="2445"/>
+        <nd ref="2444"/>
+        <nd ref="2443"/>
+        <nd ref="2442"/>
+        <nd ref="2441"/>
+        <nd ref="2440"/>
+        <nd ref="2439"/>
+        <nd ref="2438"/>
+        <nd ref="2437"/>
+        <nd ref="2436"/>
+        <nd ref="2435"/>
+        <nd ref="2434"/>
+        <nd ref="2433"/>
+        <nd ref="23"/>
+>>>>>>> origin/develop
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5033398B-9C94-4F16-A44B-1287C0316FC5}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5849" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="299"/>
+        <nd ref="432"/>
+        <nd ref="431"/>
+        <nd ref="430"/>
+        <nd ref="429"/>
+        <nd ref="-3859"/>
+        <nd ref="428"/>
+        <nd ref="427"/>
+        <nd ref="426"/>
+        <nd ref="425"/>
+        <nd ref="424"/>
+        <nd ref="423"/>
+        <nd ref="422"/>
+        <nd ref="421"/>
+        <nd ref="420"/>
+        <nd ref="419"/>
+        <nd ref="418"/>
+        <nd ref="417"/>
+        <nd ref="416"/>
+        <nd ref="415"/>
+        <nd ref="414"/>
+        <nd ref="413"/>
+        <nd ref="412"/>
+        <nd ref="411"/>
+        <nd ref="410"/>
+        <nd ref="409"/>
+        <nd ref="408"/>
+        <nd ref="407"/>
+        <nd ref="406"/>
+        <nd ref="405"/>
+        <nd ref="404"/>
+        <nd ref="403"/>
+        <nd ref="402"/>
+        <nd ref="401"/>
+        <nd ref="400"/>
+        <nd ref="399"/>
+        <nd ref="398"/>
+        <nd ref="397"/>
+        <nd ref="396"/>
+        <nd ref="395"/>
+        <nd ref="394"/>
+        <nd ref="393"/>
+        <nd ref="392"/>
+        <nd ref="391"/>
+        <nd ref="390"/>
+        <nd ref="389"/>
+        <nd ref="388"/>
+        <nd ref="387"/>
+        <nd ref="386"/>
+        <nd ref="385"/>
+        <nd ref="384"/>
+        <nd ref="383"/>
+        <nd ref="382"/>
+        <nd ref="381"/>
+        <nd ref="380"/>
+        <nd ref="379"/>
+        <nd ref="378"/>
+        <nd ref="377"/>
+        <nd ref="376"/>
+        <nd ref="375"/>
+        <nd ref="374"/>
+        <nd ref="373"/>
+        <nd ref="372"/>
+        <nd ref="371"/>
+        <nd ref="370"/>
+        <nd ref="369"/>
+        <nd ref="368"/>
+        <nd ref="367"/>
+        <nd ref="366"/>
+        <nd ref="365"/>
+        <nd ref="364"/>
+        <nd ref="363"/>
+        <nd ref="362"/>
+        <nd ref="361"/>
+        <nd ref="360"/>
+        <nd ref="359"/>
+        <nd ref="358"/>
+        <nd ref="357"/>
+        <nd ref="356"/>
+        <nd ref="355"/>
+        <nd ref="354"/>
+        <nd ref="353"/>
+        <nd ref="352"/>
+        <nd ref="351"/>
+        <nd ref="350"/>
+        <nd ref="349"/>
+        <nd ref="348"/>
+        <nd ref="347"/>
+        <nd ref="346"/>
+        <nd ref="345"/>
+        <nd ref="344"/>
+        <nd ref="343"/>
+        <nd ref="342"/>
+=======
+    <way visible="true" id="-6700" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1302"/>
+        <nd ref="-803"/>
+        <nd ref="-802"/>
+        <nd ref="-801"/>
+        <nd ref="-800"/>
+        <nd ref="-799"/>
+        <nd ref="-798"/>
+        <nd ref="-797"/>
+        <nd ref="-796"/>
+        <nd ref="-795"/>
+        <nd ref="-794"/>
+        <nd ref="-4077"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6684" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1212"/>
+        <nd ref="1299"/>
+        <nd ref="-4128"/>
+        <nd ref="-4129"/>
+        <nd ref="1298"/>
+        <nd ref="-4130"/>
+        <nd ref="1297"/>
+        <nd ref="-4385"/>
+        <nd ref="1296"/>
+        <nd ref="1295"/>
+        <nd ref="1294"/>
+        <nd ref="1293"/>
+        <nd ref="-4386"/>
+        <nd ref="1292"/>
+        <nd ref="1291"/>
+        <nd ref="1290"/>
+        <nd ref="336"/>
+>>>>>>> origin/develop
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<<<<<<< HEAD
+        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="-5845" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="320"/>
-        <nd ref="1676"/>
-        <nd ref="-4110"/>
-        <nd ref="1675"/>
-        <nd ref="1674"/>
-        <nd ref="-4111"/>
-        <nd ref="-4112"/>
-        <nd ref="1673"/>
-        <nd ref="-4113"/>
-        <nd ref="1672"/>
-        <nd ref="839"/>
-        <nd ref="-3873"/>
-        <nd ref="1671"/>
-        <nd ref="1670"/>
-        <nd ref="1669"/>
-        <nd ref="1668"/>
         <nd ref="1667"/>
         <nd ref="-3852"/>
         <nd ref="1666"/>
         <nd ref="-3853"/>
         <nd ref="459"/>
-        <nd ref="-3808"/>
-        <nd ref="1665"/>
-        <nd ref="-3809"/>
-        <nd ref="1664"/>
-        <nd ref="1663"/>
-        <nd ref="-3810"/>
-        <nd ref="1662"/>
-        <nd ref="-3811"/>
-        <nd ref="-3812"/>
-        <nd ref="1661"/>
-        <nd ref="760"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -10911,6 +12524,30 @@
         <nd ref="1538"/>
         <nd ref="1537"/>
         <nd ref="1536"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{D80CB063-C703-4393-9698-A8A194A12871}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.860Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5829" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1536"/>
         <nd ref="1535"/>
         <nd ref="1534"/>
         <nd ref="1533"/>
@@ -11030,10 +12667,14 @@
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{5ED38371-5FBA-480B-98AB-A92B85C5C913}"/>
+=======
+        <tag k="uuid" v="{2D2AEF5B-A92C-4EAD-8CF6-31C6C7521C40}"/>
+>>>>>>> origin/develop
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="oneway" v="yes"/>
         <tag k="median" v="no"/>
+<<<<<<< HEAD
         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.829Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
@@ -11042,6 +12683,44 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+    <way visible="true" id="-5822" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="702"/>
+        <nd ref="846"/>
+        <nd ref="845"/>
+        <nd ref="844"/>
+        <nd ref="-3823"/>
+        <nd ref="843"/>
+        <nd ref="-3824"/>
+        <nd ref="842"/>
+        <nd ref="-3825"/>
+        <nd ref="841"/>
+        <nd ref="840"/>
+        <nd ref="839"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+=======
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+>>>>>>> origin/develop
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
     <way visible="true" id="-5820" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-177"/>
         <nd ref="-193"/>
@@ -11087,10 +12766,74 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+    <way visible="true" id="-5809" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="334"/>
+        <nd ref="333"/>
+        <nd ref="332"/>
+        <nd ref="331"/>
+        <nd ref="330"/>
+        <nd ref="329"/>
+        <nd ref="328"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5807" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1204"/>
+        <nd ref="1348"/>
+        <nd ref="1347"/>
+        <nd ref="1346"/>
+        <nd ref="1345"/>
+        <nd ref="1344"/>
+        <nd ref="1343"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{24A43D12-8542-458D-AC2C-9D0FC6314056}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.862Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="-5805" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="1093"/>
         <nd ref="-146"/>
         <nd ref="-3774"/>
+=======
+    <way visible="true" id="-6682" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="1093"/>
+        <nd ref="-146"/>
+        <nd ref="-4099"/>
+>>>>>>> origin/develop
         <tag k="highway" v="primary"/>
         <tag k="ref" v="RN6"/>
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
@@ -11162,75 +12905,10 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-5789" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="1134"/>
-        <nd ref="1133"/>
-        <nd ref="1132"/>
-        <nd ref="1131"/>
-        <nd ref="1130"/>
-        <nd ref="1129"/>
-        <nd ref="1128"/>
-        <nd ref="1127"/>
-        <nd ref="1126"/>
-        <nd ref="1125"/>
-        <nd ref="1124"/>
-        <nd ref="-3771"/>
-        <nd ref="1123"/>
-        <nd ref="1122"/>
-        <nd ref="1121"/>
-        <nd ref="1120"/>
-        <nd ref="-3772"/>
-        <nd ref="1119"/>
-        <nd ref="1118"/>
-        <nd ref="1117"/>
-        <nd ref="1116"/>
-        <nd ref="1115"/>
-        <nd ref="1114"/>
-        <nd ref="1113"/>
-        <nd ref="1112"/>
-        <nd ref="1111"/>
-        <nd ref="1110"/>
-        <nd ref="1109"/>
-        <nd ref="1108"/>
-        <nd ref="1107"/>
-        <nd ref="1106"/>
-        <nd ref="1105"/>
-        <nd ref="1104"/>
-        <nd ref="1103"/>
-        <nd ref="1102"/>
-        <nd ref="1101"/>
-        <nd ref="1100"/>
-        <nd ref="1099"/>
-        <nd ref="-3773"/>
-        <nd ref="1098"/>
-        <nd ref="1097"/>
-        <nd ref="1096"/>
-        <nd ref="1095"/>
-        <nd ref="1094"/>
-        <nd ref="1093"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="ref" v="RN6"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="-5779" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-6663" timestamp="2016-04-11T14:26:36Z" version="1">
         <nd ref="1194"/>
         <nd ref="1193"/>
         <nd ref="1192"/>
@@ -11288,6 +12966,130 @@
         <nd ref="1140"/>
         <nd ref="1139"/>
         <nd ref="1138"/>
+        <nd ref="-4094"/>
+        <nd ref="-4095"/>
+        <nd ref="1137"/>
+        <nd ref="1136"/>
+        <nd ref="1135"/>
+        <nd ref="1134"/>
+        <nd ref="1133"/>
+        <nd ref="1132"/>
+        <nd ref="1131"/>
+        <nd ref="1130"/>
+        <nd ref="1129"/>
+        <nd ref="1128"/>
+        <nd ref="1127"/>
+        <nd ref="1126"/>
+        <nd ref="1125"/>
+        <nd ref="1124"/>
+        <nd ref="-4096"/>
+        <nd ref="1123"/>
+        <nd ref="1122"/>
+        <nd ref="1121"/>
+        <nd ref="1120"/>
+        <nd ref="-4097"/>
+        <nd ref="1119"/>
+        <nd ref="1118"/>
+        <nd ref="1117"/>
+>>>>>>> origin/develop
+        <nd ref="1116"/>
+        <nd ref="1115"/>
+        <nd ref="1114"/>
+        <nd ref="1113"/>
+        <nd ref="1112"/>
+        <nd ref="1111"/>
+        <nd ref="1110"/>
+        <nd ref="1109"/>
+        <nd ref="1108"/>
+        <nd ref="1107"/>
+        <nd ref="1106"/>
+        <nd ref="1105"/>
+        <nd ref="1104"/>
+        <nd ref="1103"/>
+        <nd ref="1102"/>
+        <nd ref="1101"/>
+        <nd ref="1100"/>
+        <nd ref="1099"/>
+        <nd ref="-3773"/>
+        <nd ref="1098"/>
+        <nd ref="1097"/>
+        <nd ref="1096"/>
+        <nd ref="1095"/>
+        <nd ref="1094"/>
+        <nd ref="1093"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-5786" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1134"/>
+        <nd ref="1133"/>
+        <nd ref="1132"/>
+        <nd ref="1131"/>
+        <nd ref="1130"/>
+        <nd ref="1129"/>
+        <nd ref="1128"/>
+        <nd ref="1127"/>
+        <nd ref="1126"/>
+        <nd ref="1125"/>
+        <nd ref="1124"/>
+        <nd ref="-3771"/>
+        <nd ref="1123"/>
+        <nd ref="1122"/>
+        <nd ref="1121"/>
+        <nd ref="1120"/>
+        <nd ref="-3772"/>
+        <nd ref="1119"/>
+        <nd ref="1118"/>
+        <nd ref="1117"/>
+        <nd ref="1116"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5783" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1142"/>
+        <nd ref="1141"/>
+        <nd ref="1140"/>
+        <nd ref="1139"/>
+        <nd ref="1138"/>
         <nd ref="-3769"/>
         <nd ref="-3770"/>
         <nd ref="1137"/>
@@ -11309,6 +13111,96 @@
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>
         <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5779" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1157"/>
+        <nd ref="1156"/>
+        <nd ref="1155"/>
+        <nd ref="1154"/>
+        <nd ref="1153"/>
+        <nd ref="1152"/>
+        <nd ref="1151"/>
+        <nd ref="1150"/>
+        <nd ref="1149"/>
+        <nd ref="1148"/>
+        <nd ref="1147"/>
+        <nd ref="1146"/>
+        <nd ref="1145"/>
+        <nd ref="1144"/>
+        <nd ref="1143"/>
+        <nd ref="1142"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5772" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="830"/>
+        <nd ref="-3758"/>
+=======
+    <way visible="true" id="-6646" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="476"/>
+        <nd ref="879"/>
+        <nd ref="-4250"/>
+        <nd ref="878"/>
+        <nd ref="-4251"/>
+        <nd ref="-4252"/>
+        <nd ref="877"/>
+        <nd ref="830"/>
+        <nd ref="-4077"/>
+>>>>>>> origin/develop
+        <nd ref="876"/>
+        <nd ref="875"/>
+        <nd ref="874"/>
+        <nd ref="873"/>
+        <nd ref="872"/>
+        <nd ref="871"/>
+        <nd ref="870"/>
+        <nd ref="869"/>
+<<<<<<< HEAD
+        <nd ref="-3759"/>
+        <nd ref="868"/>
+        <nd ref="-3760"/>
+        <nd ref="-3761"/>
+        <nd ref="867"/>
+        <nd ref="328"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{9A636D64-E57D-4A56-9FB4-0A1CF305759C}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -11556,15 +13448,6 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5756" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="768"/>
-        <nd ref="767"/>
-        <nd ref="766"/>
-        <nd ref="765"/>
-        <nd ref="764"/>
-        <nd ref="763"/>
-        <nd ref="-3733"/>
-        <nd ref="762"/>
-        <nd ref="761"/>
         <nd ref="760"/>
         <nd ref="759"/>
         <nd ref="758"/>
@@ -11583,6 +13466,57 @@
         <nd ref="748"/>
         <nd ref="747"/>
         <nd ref="746"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{53FA7AEC-6324-4374-A446-9B3180DF978E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-5754" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="768"/>
+        <nd ref="767"/>
+        <nd ref="766"/>
+        <nd ref="765"/>
+        <nd ref="764"/>
+        <nd ref="763"/>
+        <nd ref="-3733"/>
+        <nd ref="762"/>
+        <nd ref="761"/>
+        <nd ref="760"/>
+=======
+        <nd ref="-4078"/>
+        <nd ref="868"/>
+        <nd ref="-4079"/>
+        <nd ref="-4080"/>
+        <nd ref="867"/>
+        <nd ref="328"/>
+        <nd ref="-4205"/>
+        <nd ref="866"/>
+        <nd ref="865"/>
+        <nd ref="864"/>
+        <nd ref="863"/>
+        <nd ref="862"/>
+        <nd ref="861"/>
+        <nd ref="860"/>
+        <nd ref="859"/>
+        <nd ref="858"/>
+        <nd ref="857"/>
+>>>>>>> origin/develop
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -11630,7 +13564,79 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
+    <way visible="true" id="-692" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-680" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
+        <nd ref="497"/>
+        <nd ref="496"/>
+        <nd ref="495"/>
+        <nd ref="494"/>
+        <nd ref="493"/>
+        <nd ref="492"/>
+        <nd ref="-3937"/>
+        <nd ref="491"/>
+        <nd ref="490"/>
+        <nd ref="489"/>
+        <nd ref="488"/>
+        <nd ref="487"/>
+        <nd ref="-3938"/>
+        <nd ref="486"/>
+        <nd ref="485"/>
+        <nd ref="484"/>
+        <nd ref="483"/>
+        <nd ref="482"/>
+        <nd ref="481"/>
+        <nd ref="480"/>
+        <nd ref="479"/>
+        <nd ref="478"/>
+        <nd ref="477"/>
+        <nd ref="476"/>
+        <nd ref="475"/>
+        <nd ref="474"/>
+        <nd ref="473"/>
+        <nd ref="472"/>
+        <nd ref="471"/>
+        <nd ref="470"/>
+        <nd ref="469"/>
+        <nd ref="468"/>
+        <nd ref="467"/>
+        <nd ref="466"/>
+        <nd ref="465"/>
+        <nd ref="464"/>
+        <nd ref="463"/>
+        <nd ref="462"/>
+        <nd ref="-3867"/>
+        <nd ref="461"/>
+        <nd ref="460"/>
+        <nd ref="459"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
     <way visible="true" id="-665" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-653" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
         <nd ref="453"/>
         <nd ref="452"/>
         <nd ref="450"/>
@@ -11652,11 +13658,13 @@
         <nd ref="434"/>
         <nd ref="433"/>
         <nd ref="299"/>
+<<<<<<< HEAD
+=======
         <nd ref="432"/>
         <nd ref="431"/>
         <nd ref="430"/>
         <nd ref="429"/>
-        <nd ref="-3859"/>
+        <nd ref="-4152"/>
         <nd ref="428"/>
         <nd ref="427"/>
         <nd ref="426"/>
@@ -11744,6 +13752,7 @@
         <nd ref="344"/>
         <nd ref="343"/>
         <nd ref="342"/>
+>>>>>>> origin/develop
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="surface" v="unpaved"/>
         <tag k="seasonal" v="fair"/>
@@ -11764,6 +13773,25 @@
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
+<<<<<<< HEAD
+=======
+    </way>
+    <way visible="true" id="-650" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4314"/>
+        <nd ref="-975"/>
+        <nd ref="-452"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
+>>>>>>> origin/develop
+    </way>
+    <way visible="true" id="-662" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-3881"/>
+        <nd ref="-975"/>
+        <nd ref="-452"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-632" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-3972"/>
@@ -11790,7 +13818,102 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
+    <way visible="true" id="-552" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="320"/>
+        <nd ref="319"/>
+        <nd ref="-3746"/>
+        <nd ref="318"/>
+        <nd ref="-3747"/>
+        <nd ref="317"/>
+        <nd ref="316"/>
+        <nd ref="-4046"/>
+        <nd ref="315"/>
+        <nd ref="-4047"/>
+        <nd ref="314"/>
+        <nd ref="-4048"/>
+        <nd ref="313"/>
+        <nd ref="-4049"/>
+        <nd ref="312"/>
+        <nd ref="311"/>
+        <nd ref="310"/>
+        <nd ref="309"/>
+        <nd ref="308"/>
+        <nd ref="307"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1F2D558E-CA6A-4E32-BE3E-4773FEDFA1B0}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-543" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="839"/>
+        <nd ref="-4120"/>
+        <nd ref="838"/>
+        <nd ref="-4121"/>
+        <nd ref="-4122"/>
+        <nd ref="837"/>
+        <nd ref="836"/>
+        <nd ref="835"/>
+        <nd ref="834"/>
+        <nd ref="833"/>
+        <nd ref="832"/>
+        <nd ref="831"/>
+        <nd ref="830"/>
+        <nd ref="829"/>
+        <nd ref="828"/>
+        <nd ref="827"/>
+        <nd ref="826"/>
+        <nd ref="825"/>
+        <nd ref="824"/>
+        <nd ref="823"/>
+        <nd ref="822"/>
+        <nd ref="821"/>
+        <nd ref="54"/>
+        <nd ref="820"/>
+        <nd ref="819"/>
+        <nd ref="818"/>
+        <nd ref="817"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="-541" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-529" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
         <nd ref="307"/>
         <nd ref="306"/>
         <nd ref="305"/>
@@ -11839,7 +13962,76 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
+    <way visible="true" id="-466" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="459"/>
+        <nd ref="-3808"/>
+        <nd ref="1665"/>
+        <nd ref="-3809"/>
+        <nd ref="1664"/>
+        <nd ref="1663"/>
+        <nd ref="-3810"/>
+        <nd ref="1662"/>
+        <nd ref="-3811"/>
+        <nd ref="-3812"/>
+        <nd ref="1661"/>
+        <nd ref="760"/>
+        <nd ref="1660"/>
+        <nd ref="1659"/>
+        <nd ref="1658"/>
+        <nd ref="1657"/>
+        <nd ref="1656"/>
+        <nd ref="1655"/>
+        <nd ref="1654"/>
+        <nd ref="-4144"/>
+        <nd ref="1653"/>
+        <nd ref="1652"/>
+        <nd ref="1651"/>
+        <nd ref="1650"/>
+        <nd ref="1649"/>
+        <nd ref="1648"/>
+        <nd ref="1647"/>
+        <nd ref="1646"/>
+        <nd ref="1645"/>
+        <nd ref="1644"/>
+        <nd ref="880"/>
+        <nd ref="1643"/>
+        <nd ref="1642"/>
+        <nd ref="1641"/>
+        <nd ref="1640"/>
+        <nd ref="1639"/>
+        <nd ref="1638"/>
+        <nd ref="1637"/>
+        <nd ref="1636"/>
+        <nd ref="1635"/>
+        <nd ref="1634"/>
+        <nd ref="1633"/>
+        <nd ref="1632"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{96D24CDC-0F74-4B36-B3A2-0CAA7DE2956D}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.858Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="-453" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-441" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
         <nd ref="1795"/>
         <nd ref="1794"/>
         <nd ref="1793"/>
@@ -11991,6 +14183,7 @@
         <nd ref="99"/>
         <nd ref="98"/>
         <nd ref="97"/>
+<<<<<<< HEAD
         <tag k="surface" v="unpaved"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
         <tag k="seasonal" v="fair"/>
@@ -12013,11 +14206,6 @@
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-385" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="1216"/>
-        <nd ref="1215"/>
-        <nd ref="1214"/>
-        <nd ref="1213"/>
-        <nd ref="-4086"/>
         <nd ref="1212"/>
         <nd ref="1211"/>
         <nd ref="1210"/>
@@ -12041,20 +14229,22 @@
         <nd ref="1195"/>
         <nd ref="1194"/>
         <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+=======
+>>>>>>> origin/develop
         <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="no"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="seasonal" v="fair"/>
         <tag k="condition" v="functional"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="ref" v="RN6"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z"/>
         <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="uuid" v="{95D9C3B5-225A-461D-AD68-9E67AAEE075D}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.885Z"/>
         <tag k="location" v="surface"/>
         <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -12081,7 +14271,201 @@
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+<<<<<<< HEAD
+    <way visible="true" id="-367" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="1194"/>
+        <nd ref="1193"/>
+        <nd ref="1192"/>
+        <nd ref="1191"/>
+        <nd ref="1190"/>
+        <nd ref="1189"/>
+        <nd ref="1188"/>
+        <nd ref="1187"/>
+        <nd ref="1186"/>
+        <nd ref="1185"/>
+        <nd ref="1184"/>
+        <nd ref="1183"/>
+        <nd ref="1182"/>
+        <nd ref="1181"/>
+        <nd ref="1180"/>
+        <nd ref="1179"/>
+        <nd ref="1178"/>
+        <nd ref="1177"/>
+        <nd ref="1176"/>
+        <nd ref="1175"/>
+        <nd ref="1174"/>
+        <nd ref="1173"/>
+        <nd ref="1172"/>
+        <nd ref="1171"/>
+        <nd ref="1170"/>
+        <nd ref="1169"/>
+        <nd ref="1168"/>
+        <nd ref="1167"/>
+        <nd ref="1166"/>
+        <nd ref="1165"/>
+        <nd ref="1164"/>
+        <nd ref="1163"/>
+        <nd ref="1162"/>
+        <nd ref="1161"/>
+        <nd ref="1160"/>
+        <nd ref="1159"/>
+        <nd ref="1158"/>
+        <nd ref="1157"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RN6"/>
+=======
+    <way visible="true" id="-262" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="830"/>
+        <nd ref="829"/>
+        <nd ref="828"/>
+        <nd ref="827"/>
+        <nd ref="826"/>
+        <nd ref="825"/>
+        <nd ref="824"/>
+        <nd ref="823"/>
+        <nd ref="822"/>
+        <nd ref="821"/>
+        <nd ref="54"/>
+        <nd ref="820"/>
+        <nd ref="819"/>
+        <nd ref="818"/>
+        <nd ref="817"/>
+        <nd ref="816"/>
+        <nd ref="-4210"/>
+        <nd ref="815"/>
+        <nd ref="814"/>
+        <nd ref="813"/>
+        <nd ref="812"/>
+        <nd ref="-4211"/>
+        <nd ref="811"/>
+        <nd ref="810"/>
+        <nd ref="809"/>
+        <nd ref="808"/>
+        <nd ref="807"/>
+        <nd ref="806"/>
+        <nd ref="805"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+>>>>>>> origin/develop
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+<<<<<<< HEAD
+        <tag k="uuid" v="{4C002AB7-F093-482F-8F77-99F1FE4FFECD}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.863Z"/>
+=======
+        <tag k="uuid" v="{2EE8AF8A-F80D-47D6-89FF-CFEF440E80E9}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.877Z"/>
+>>>>>>> origin/develop
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+<<<<<<< HEAD
+    <way visible="true" id="-277" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="746"/>
+        <nd ref="1987"/>
+        <nd ref="1986"/>
+        <nd ref="-4007"/>
+        <nd ref="1985"/>
+        <nd ref="1984"/>
+        <nd ref="1983"/>
+        <nd ref="1982"/>
+        <nd ref="1981"/>
+        <nd ref="1980"/>
+        <nd ref="1979"/>
+        <nd ref="55"/>
+        <nd ref="1978"/>
+        <nd ref="1977"/>
+        <nd ref="342"/>
+        <nd ref="1976"/>
+        <nd ref="1975"/>
+        <nd ref="1974"/>
+        <nd ref="1973"/>
+        <nd ref="1972"/>
+        <nd ref="-4005"/>
+        <nd ref="1971"/>
+        <nd ref="1970"/>
+        <nd ref="1969"/>
+        <nd ref="1968"/>
+        <nd ref="1967"/>
+        <nd ref="1966"/>
+        <nd ref="1965"/>
+        <nd ref="1964"/>
+        <nd ref="1963"/>
+        <nd ref="1962"/>
+        <nd ref="1961"/>
+        <nd ref="1960"/>
+        <nd ref="1959"/>
+        <nd ref="1958"/>
+        <nd ref="1957"/>
+        <nd ref="1956"/>
+        <nd ref="1955"/>
+        <nd ref="1954"/>
+        <nd ref="1953"/>
+        <nd ref="1952"/>
+        <nd ref="1951"/>
+        <nd ref="1950"/>
+        <nd ref="1949"/>
+        <nd ref="1948"/>
+        <nd ref="1947"/>
+        <nd ref="1946"/>
+        <nd ref="1945"/>
+        <nd ref="1944"/>
+        <nd ref="1943"/>
+        <nd ref="1942"/>
+        <nd ref="1941"/>
+        <nd ref="1940"/>
+        <nd ref="1939"/>
+        <nd ref="1938"/>
+        <nd ref="1937"/>
+        <nd ref="1936"/>
+        <nd ref="1935"/>
+        <nd ref="1934"/>
+        <nd ref="1933"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="ref" v="RS339"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{8E50E735-D174-4162-9905-B182AA6C1902}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.851Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="-275" timestamp="2016-04-11T14:26:36Z" version="1">
+=======
+    <way visible="true" id="-261" timestamp="2016-04-11T14:26:36Z" version="1">
+>>>>>>> origin/develop
         <nd ref="1093"/>
         <nd ref="1092"/>
         <nd ref="1091"/>
@@ -12169,6 +14553,24 @@
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-227" timestamp="2016-04-11T14:26:31Z" version="1">
+        <nd ref="-4463"/>
+        <nd ref="-532"/>
+        <nd ref="-531"/>
+        <nd ref="-530"/>
+        <nd ref="-529"/>
+        <nd ref="-528"/>
+        <nd ref="-527"/>
+        <nd ref="-526"/>
+        <nd ref="-525"/>
+        <nd ref="-4444"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="highway" v="primary"/>
+        <tag k="ref" v="RN6"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="junction" v="roundabout"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-218" timestamp="2016-04-11T14:26:31Z" version="1">
         <nd ref="-793"/>
@@ -21068,6 +23470,30 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="28.65"/>
     </way>
+    <way visible="true" id="60" timestamp="2016-04-11T14:26:36Z" version="1">
+        <nd ref="49"/>
+        <nd ref="497"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{5E4FEAA0-56F0-41FD-8C02-D7D9F708125E}"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.884Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
     <way visible="true" id="63" timestamp="2016-04-11T14:26:36Z" version="1" changeset="10">
         <nd ref="745"/>
         <nd ref="744"/>
@@ -21120,66 +23546,6 @@
         <tag k="lanes" v="1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="uuid" v="{4D813BFE-B14B-4A76-ADB5-98769C85A300}"/>
-        <tag k="width:minimum_traveled_way" v="3"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.879Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="28.65"/>
-    </way>
-    <way visible="true" id="64" timestamp="2016-04-11T14:26:36Z" version="1">
-        <nd ref="804"/>
-        <nd ref="803"/>
-        <nd ref="802"/>
-        <nd ref="801"/>
-        <nd ref="30"/>
-        <nd ref="800"/>
-        <nd ref="799"/>
-        <nd ref="798"/>
-        <nd ref="797"/>
-        <nd ref="796"/>
-        <nd ref="795"/>
-        <nd ref="794"/>
-        <nd ref="793"/>
-        <nd ref="792"/>
-        <nd ref="791"/>
-        <nd ref="790"/>
-        <nd ref="789"/>
-        <nd ref="788"/>
-        <nd ref="787"/>
-        <nd ref="786"/>
-        <nd ref="785"/>
-        <nd ref="784"/>
-        <nd ref="783"/>
-        <nd ref="782"/>
-        <nd ref="781"/>
-        <nd ref="780"/>
-        <nd ref="779"/>
-        <nd ref="778"/>
-        <nd ref="777"/>
-        <nd ref="776"/>
-        <nd ref="775"/>
-        <nd ref="774"/>
-        <nd ref="773"/>
-        <nd ref="772"/>
-        <nd ref="771"/>
-        <nd ref="770"/>
-        <nd ref="769"/>
-        <nd ref="768"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z;2016-04-11T14:26:31Z"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="lanes" v="1"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{53FA7AEC-6324-4374-A446-9B3180DF978E}"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
         <tag k="median" v="no"/>

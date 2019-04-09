@@ -12,4 +12,4 @@ hoot version --debug
 [ -f ~/ActivateEGDplugin.sh ] && ~/ActivateEGDplugin.sh /var/lib/tomcat8
 
 time -p make -s ui-test
-time -p make -s ui2x-test
+#time -p make -s ui2x-test
