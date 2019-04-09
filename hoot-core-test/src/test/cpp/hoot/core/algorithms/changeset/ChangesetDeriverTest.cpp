@@ -45,16 +45,18 @@ class ChangesetDeriverTest : public HootTestFixture
 
 public:
 
+    const QString _inputPath = "test-files/algorithms/changeset/ChangesetDeriverTest/";
+
     void runTest()
     {
       CalculateHashVisitor2 hashVis;
 
       OsmMapPtr map1(new OsmMap());
-      OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
+      OsmMapReaderFactory::read(map1, _inputPath + "Map1.osm", true);
       map1->visitRw(hashVis);
 
       OsmMapPtr map2(new OsmMap());
-      OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
+      OsmMapReaderFactory::read(map2, _inputPath + "Map2.osm", true);
       map2->visitRw(hashVis);
 
       InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));

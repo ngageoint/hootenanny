@@ -61,10 +61,12 @@ class AlphaShapeTest : public HootTestFixture
 
 public:
 
+  const QString _outputPath = "test-output/algorithms/alpha-shape/";
+
   AlphaShapeTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/algorithms");
+    TestUtils::mkpath(_outputPath);
   }
 
   void createDonut(vector<pair<double, double>>& p, double innerRadius, double outerRadius,
@@ -108,7 +110,7 @@ public:
     }
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/algorithms/AlphaDonut.osm");
+    writer.write(map, _outputPath + "AlphaDonut.osm");
 
     boost::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
@@ -137,7 +139,7 @@ public:
     uut.insert(points);
 
     OsmXmlWriter writer;
-    writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
+    writer.write(uut.toOsmMap(), _outputPath + "AlphaMap.osm");
 
     boost::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);

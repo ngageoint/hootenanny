@@ -55,9 +55,13 @@ class DualWaySplitterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/splitter/";
+  const QString _outputPath = "test-output/algorithms/splitter/";
+
   DualWaySplitterTest()
   {
     setResetType(ResetBasic);
+    TestUtils::mkpath(_outputPath);
   }
 
   void simpleTest()
@@ -66,7 +70,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/DualWaySplitterSimpleInput.osm", map);
+    reader.read(_inputPath + "DualWaySplitterSimpleInput.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
@@ -75,11 +79,10 @@ public:
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, "test-output/DualWaySplitterSimpleOutput.osm");
+    writer.write(after, _outputPath + "DualWaySplitterSimpleOutput.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-output/DualWaySplitterSimpleOutput.osm",
-      "test-files/DualWaySplitterSimpleExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterSimpleExpected.osm",
+                     _outputPath + "DualWaySplitterSimpleOutput.osm");
   }
 
   void allTest()
@@ -97,11 +100,10 @@ public:
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, "test-output/DualWaySplitterTest.osm");
+    writer.write(after, _outputPath + "DualWaySplitterTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-output/DualWaySplitterTest.osm",
-      "test-files/DualWaySplitterTestExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterTestExpected.osm",
+                     _outputPath + "DualWaySplitterTest.osm");
   }
 };
 

@@ -135,7 +135,7 @@ public:
     Settings s;
     OsmMapPtr map(new OsmMap());
     OsmXmlReader reader;
-    reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
+    reader.read("test-files/algorithms/subline-matching/MaximalSublineCircleTestIn.osm", map);
     double score;
 
     MapProjector::projectToPlanar(map);

@@ -79,9 +79,13 @@ class MaximalSublineTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/subline-matching/";
+  const QString _outputPath = "test-output/algorithms/subline-matching/";
+
   MaximalSublineTest()
   {
     setResetType(ResetAll);
+    TestUtils::mkpath(_outputPath);
   }
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)
@@ -123,7 +127,7 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
+    reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
 
     double score;
 
@@ -161,7 +165,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
+    reader.read(_inputPath + "MaximalSublineTestIn.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -176,9 +180,8 @@ public:
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
     addEndNodes(map, m);
 
-    TestUtils::mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
+    OsmXmlWriter().write(map, _outputPath + "MaximalSublineJoinTestOut.osm");
   }
 
   void runDiagonalOffsetTest()

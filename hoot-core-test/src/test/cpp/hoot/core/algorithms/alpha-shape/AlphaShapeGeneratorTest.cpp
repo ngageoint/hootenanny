@@ -54,10 +54,13 @@ class AlphaShapeGeneratorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/alpha-shape/";
+  const QString _outputPath = "test-output/algorithms/alpha-shape/";
+
   AlphaShapeGeneratorTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -72,10 +75,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBasicTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBasicTest.osm",
-                    "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBasicTest.osm",
+                    _outputPath + "AlphaShapeGeneratorBasicTest.osm");
   }
 
   void runBufferTest()
@@ -90,10 +93,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBufferTest.osm",
-                    "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBufferTest.osm",
+                    _outputPath + "AlphaShapeGeneratorBufferTest.osm");
   }
 
   void runNegativeBufferTest()
@@ -108,10 +111,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm",
-                     "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorNegativeBufferTest.osm",
+                    _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
   }
 };
 

@@ -50,10 +50,13 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/splitter/";
+  const QString _outputPath = "test-output/algorithms/splitter/";
+
   IntersectionSplitterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate/splitter");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
@@ -61,16 +64,16 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/splitter/IntersectionSplitter.osm", map);
+    reader.read(_inputPath + "IntersectionSplitter.osm", map);
 
     IntersectionSplitter::splitIntersections(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/splitter/IntersectionSplitterTest.osm");
+    writer.write(map, _outputPath + "IntersectionSplitterTest.osm");
 
-    HOOT_FILE_EQUALS("test-output/conflate/splitter/IntersectionSplitterTest.osm",
-                     "test-files/conflate/splitter/IntersectionSplitterOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "IntersectionSplitterOut.osm",
+                     _outputPath + "IntersectionSplitterTest.osm");
   }
 
   void runTestSimple()
@@ -78,16 +81,17 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/splitter/SimpleSplitter.osm", map);
+    reader.read(_inputPath + "SimpleSplitter.osm", map);
 
     IntersectionSplitter::splitIntersections(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/splitter/SimpleSplitterOutput.osm");
+    writer.write(map, _outputPath + "SimpleSplitterOutput.osm");
 
-    HOOT_FILE_EQUALS("test-output/conflate/splitter/SimpleSplitterOutput.osm",
-                     "test-files/conflate/splitter/SimpleSplitterExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "SimpleSplitterExpected.osm",
+                     _outputPath + "SimpleSplitterOutput.osm");
+
   }
 
 };

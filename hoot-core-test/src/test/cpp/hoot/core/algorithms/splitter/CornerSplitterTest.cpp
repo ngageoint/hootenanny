@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/CornerSplitter.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -53,10 +53,13 @@ class CornerSplitterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/splitter/";
+  const QString _outputPath = "test-output/algorithms/splitter/";
+
   CornerSplitterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate/splitter");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
@@ -65,7 +68,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/splitter/CornerSplitter.osm", map);
+    reader.read(_inputPath + "CornerSplitter.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -75,10 +78,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/splitter/CornerSplitterOut.osm");
+    writer.write(map, _outputPath + "CornerSplitterOut.osm");
 
-    HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterOut.osm",
-                     "test-files/conflate/splitter/CornerSplitterExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterExpected.osm",
+                     _outputPath + "CornerSplitterOut.osm");
   }
 
   void runRoundedTest()
@@ -87,7 +90,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/splitter/CornerSplitter.osm", map);
+    reader.read(_inputPath + "CornerSplitter.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -105,10 +108,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/splitter/CornerSplitterRoundedOut.osm");
+    writer.write(map, _outputPath + "CornerSplitterRoundedOut.osm");
 
-    HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterRoundedOut.osm",
-                     "test-files/conflate/splitter/CornerSplitterRoundedExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterRoundedExpected.osm",
+                     _outputPath + "CornerSplitterRoundedOut.osm");
   }
 
   void runDogLegTest()
@@ -117,7 +120,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/splitter/CornerSplitterDogLeg.osm", map);
+    reader.read(_inputPath + "CornerSplitterDogLeg.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -127,10 +130,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/splitter/CornerSplitterDogLegOut.osm");
+    writer.write(map, _outputPath + "CornerSplitterDogLegOut.osm");
 
-    HOOT_FILE_EQUALS("test-output/conflate/splitter/CornerSplitterDogLegOut.osm",
-                     "test-files/conflate/splitter/CornerSplitterDogLegExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CornerSplitterDogLegExpected.osm",
+                     _outputPath + "CornerSplitterDogLegOut.osm");
   }
 
 };

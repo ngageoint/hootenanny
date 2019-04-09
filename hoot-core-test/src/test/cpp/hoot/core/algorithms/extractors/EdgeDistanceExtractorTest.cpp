@@ -63,6 +63,8 @@ class EdgeDistanceExtractorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/algorithms/extractors/EdgeDistanceExtractor/";
+
   EdgeDistanceExtractorTest()
   {
     setResetType(ResetAll);
@@ -106,9 +108,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestB.osm", map);
+    reader.read(_inputPath + "ToyTestB.osm", map);
 
     MapProjector::projectToPlanar(map);
 
