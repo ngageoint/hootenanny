@@ -61,8 +61,10 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
 
   // build poly by 'extruding' existing nodes
   const vector<long> nodeIds = pWay->getNodeIds();
-
   assert(nodeCount == (long)nodeIds.size());
+
+  // ignore duplicate last node for loops to properly calculate merged ends
+  if( isLoop ) nodeCount--;
 
   // create coordinate arrays
   Coordinate polyPositions[2][nodeCount];
@@ -71,8 +73,8 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   for (long i = 0; i < nodeCount; i++)
   {
     long currId = nodeIds[i];
-    long prevId = (i > 0) ? nodeIds[i-1] : currId;
-    long nextId = (i < nodeCount-1) ? nodeIds[i+1] : currId;
+    long prevId = (i > 0) ? nodeIds[i-1] : (isLoop ? nodeIds[nodeCount-1] : currId);
+    long nextId = (i < nodeCount-1) ? nodeIds[i+1] : (isLoop ? nodeIds[0] : currId);
 
     const NodePtr pCurrNode = pMap->getNode(currId);
     const NodePtr pPrevNode = pMap->getNode(prevId);
