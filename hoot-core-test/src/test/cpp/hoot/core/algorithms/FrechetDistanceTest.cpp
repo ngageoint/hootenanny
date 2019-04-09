@@ -35,15 +35,12 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/FrechetDistance.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
-
 #include <hoot/core/io/OsmXmlReader.h>
-
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
-
-#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
