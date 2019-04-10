@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITER_H
 #define OSMMAPWRITER_H
@@ -39,7 +39,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapWriter"; }
 
-  OsmMapWriter() {}
+  OsmMapWriter() : _debug(false) {}
 
   virtual ~OsmMapWriter() {}
 
@@ -69,6 +69,20 @@ public:
    * @return a formats string
    */
   virtual QString supportedFormats() = 0;
+
+  /**
+   * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is
+   * included in the output
+   */
+  void setIsDebugMap(const bool is_debug = false) { _debug = is_debug; }
+  /**
+   * Gets flag indicating the writer is writing a debug map so that extra debugging metadata can
+   * be included in each implementation of the output formats
+   */
+  bool getIsDebugMap() { return _debug; }
+
+private:
+  bool _debug;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ogr;
 
@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -44,6 +45,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -65,6 +67,8 @@ import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
+import hoot.services.models.db.Users;
 import hoot.services.utils.MultipartSerializer;
 
 
@@ -95,9 +99,11 @@ public class ExtractAttributesResource {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processUpload(@QueryParam("INPUT_TYPE") String inputType,
-                                  @QueryParam("DEBUG_LEVEL") @DefaultValue("error") String debugLevel,
-                                  FormDataMultiPart multiPart) {
+    public Response processUpload(@Context HttpServletRequest request,
+                                @QueryParam("INPUT_TYPE") String inputType,
+                                @QueryParam("DEBUG_LEVEL") @DefaultValue("error") String debugLevel,
+                                FormDataMultiPart multiPart) {
+        Users user = Users.fromRequest(request);
         String jobId = UUID.randomUUID().toString();
 
         try {
@@ -110,7 +116,7 @@ public class ExtractAttributesResource {
 
             Command[] workflow = { getAttributesCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.ATTRIBUTES));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

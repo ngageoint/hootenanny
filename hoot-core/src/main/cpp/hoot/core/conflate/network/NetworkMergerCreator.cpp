@@ -51,11 +51,12 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 NetworkMergerCreator::NetworkMergerCreator()
 {
   _map = 0;
+  _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
 bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
 {
-  LOG_TRACE("Creating mergers with " << className() << "...");
+  LOG_DEBUG("Creating mergers with " << className() << "...");
   LOG_TRACE("Creating mergers for match set: " << matchesIn);
 
   QString matchesList = "";
@@ -70,8 +71,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       }
     }
   }
-  LOG_TRACE(matchesList.size());
-  LOG_TRACE(matchesList);
+  LOG_VART(matchesList.size());
+  LOG_VART(matchesList);
 
   MatchSet matches = matchesIn;
   LOG_VART(matches);
@@ -122,7 +123,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       // reverted as we play with more data, but at this point it seems like a reasonable heuristic.
       if (const NetworkMatch* larger = _getLargestContainer(matches))
       {
-        LOG_TRACE("Adding the larger match to the partial network merger...");
+        LOG_DEBUG("Adding the larger match to the partial network merger...");
         if (!ConfigOptions().getHighwayMergeTagsOnly())
         {
           mergers.push_back(
@@ -139,8 +140,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       else
       {
         const double overlapPercent = _getOverlapPercent(matches);
-        // move value to config - #2913
-        if (overlapPercent > 80.0) // Go ahead and merge largest match
+        if (overlapPercent > _minMatchOverlapPercentage) // Go ahead and merge largest match
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
@@ -159,7 +159,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         }
         else // Throw a review
         {
-          LOG_TRACE("Marking " << matches.size() << " overlapping matches for review...");
+          LOG_DEBUG("Marking " << matches.size() << " overlapping matches for review...");
           int count = 0;
           for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
           {
@@ -196,7 +196,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
   }
   else
   {
-    LOG_TRACE("Match invalid; skipping merge: " << (*matches.begin())->toString());
+    LOG_DEBUG("Match invalid; skipping merge: " << (*matches.begin())->toString());
   }
   LOG_VART(result);
 
@@ -270,13 +270,13 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
       const NetworkMatch* nmj = dynamic_cast<const NetworkMatch*>(*jt);
       LOG_TRACE(nmi->getEdgeMatch()->getUid() << ":" << nmj->getEdgeMatch()->getUid());
       double percent = _getOverlapPercent(nmi, nmj);
-      LOG_TRACE(percent);
+      LOG_VART(percent);
       count += percent;
       total += 100.0;
     }
   }
 
-  return 100.0*count / total;
+  return 100.0 * count / total;
 }
 
 // Tricky: lets approach this from the perspective of the smaller match, not the larger
@@ -311,8 +311,8 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
     m2e2 = m1->getEdgeMatch()->getString2()->getAllEdges();
   }
 
-  double count = 0;
-  double total = 0;
+  double count = 0.0;
+  double total = 0.0;
   foreach (EdgeString::EdgeEntry ee, m1e1)
   {
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);

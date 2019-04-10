@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 
 // Qt
 #include <QList>
@@ -42,6 +42,12 @@ namespace hoot
 {
 class FilteredVisitor;
 
+/**
+ * Calcs the set of stats that feeds the stats command.
+ *
+ * @todo This has grown quite large and could probably be made a little maintenance-prone with some
+ * abstractions. - see #2908
+ */
 class CalculateStatsOp : public ConstOsmMapOperation
 {
 public:

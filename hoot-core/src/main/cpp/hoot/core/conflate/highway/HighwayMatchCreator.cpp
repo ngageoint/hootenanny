@@ -168,7 +168,7 @@ public:
   {
     HighwayMatch* result = 0;
 
-    HighwayCriterion highwayCrit;
+    HighwayCriterion highwayCrit(map);
     if (e1 && e2 &&
         e1->getStatus() != e2->getStatus() && e2->isUnknown() &&
         highwayCrit.isSatisfied(e1) && highwayCrit.isSatisfied(e2) &&
@@ -234,7 +234,7 @@ public:
     {
       return false;
     }
-    return HighwayCriterion().isSatisfied(element);
+    return HighwayCriterion(_map).isSatisfied(element);
   }
 
   boost::shared_ptr<HilbertRTree>& getIndex()
@@ -242,7 +242,7 @@ public:
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
+      // 10 children - 368 - see #3054
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 

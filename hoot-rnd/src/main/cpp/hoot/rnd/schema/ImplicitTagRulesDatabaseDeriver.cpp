@@ -37,7 +37,6 @@
 
 // Qt
 #include <QStringBuilder>
-#include <QRegExp>
 
 namespace hoot
 {

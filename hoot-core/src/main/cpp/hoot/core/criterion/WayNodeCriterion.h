@@ -22,34 +22,40 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SINGLESTAT_H
-#define SINGLESTAT_H
+#ifndef WAY_NODE_CRITERION_H
+#define WAY_NODE_CRITERION_H
 
-// Qt
-#include <QString>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class SingleStat
+class WayNodeCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  QString name;
-  double value;
+  static std::string className() { return "hoot::WayNodeCriterion"; }
 
-  SingleStat() {}
+  WayNodeCriterion();
 
-  SingleStat(const QString& n, double v) : name(n), value(v) {}
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  QString toString() const
-  {
-    return QString("%1: %2").arg(name).arg(value);
-  }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new WayNodeCriterion()); }
+
+  virtual QString getDescription() const { return "Identifies way nodes"; }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // SINGLESTAT_H
+#endif // WAY_NODE_CRITERION_H

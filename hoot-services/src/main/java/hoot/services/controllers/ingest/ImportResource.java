@@ -73,6 +73,7 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.utils.MultipartSerializer;
 
@@ -121,10 +122,7 @@ public class ImportResource {
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
-        Users user = null;
-        if(request != null) {
-            user = Users.fromRequest(request);
-        }
+        Users user = Users.fromRequest(request);
         List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();
 
         try {
@@ -212,7 +210,7 @@ public class ImportResource {
 
             Command[] workflow = { importCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.IMPORT));
 
             Map<String, Object> res = new HashMap<String, Object>();
             res.put("jobid", jobId);

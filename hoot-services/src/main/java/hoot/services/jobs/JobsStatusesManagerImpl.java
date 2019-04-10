@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.jobs;
 
@@ -32,32 +32,108 @@ import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.job.JobType;
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Users;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
 public class JobsStatusesManagerImpl implements JobsStatusesManager {
     public JobsStatusesManagerImpl() {}
+
     @Override
-    public List<JobStatus> getRecentJobs(int limit) {
+    public List<JobStatusResponse> getRecentJobs(Users user, int limit) {
         long past12 = System.currentTimeMillis() - 43200000 /* 12 hours */;
         List<JobStatus> recentJobs = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
-                .where((jobStatus.start.after(new Timestamp(past12))).or(jobStatus.status.eq(RUNNING.ordinal())))
+                .where((jobStatus.start.after(new Timestamp(past12)).and(jobStatus.userId.eq(user.getId())))
+                        .or(jobStatus.status.eq(RUNNING.ordinal())))
                 .orderBy(jobStatus.start.desc())
                 .fetch();
         if(recentJobs.size() < limit) {
-            recentJobs = createQuery().select(jobStatus).from(jobStatus).orderBy(jobStatus.start.desc()).limit(limit).fetch();
+            recentJobs = createQuery().select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.userId.eq(user.getId())
+                            .or(jobStatus.status.eq(RUNNING.ordinal()))
+                    )
+                    .orderBy(jobStatus.start.desc()).limit(limit).fetch();
         }
-        return recentJobs;
+
+
+        //format jobs
+        return recentJobs.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setUserId(j.getUserId());
+            response.setMapId(j.getResourceId());
+            response.setStart(j.getStart().getTime());
+            response.setEnd(j.getEnd().getTime());
+            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+            response.setPercentComplete(j.getPercentComplete());
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<JobStatusResponse> getJobsHistory(Users user) {
+        List<JobStatus> jobsHistory = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.userId.eq(user.getId())
+                    .and(jobStatus.status.gt(0)))
+                .orderBy(jobStatus.start.desc())
+                .fetch();
+
+
+        //format jobs
+        return jobsHistory.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setMapId(j.getResourceId());
+            response.setStart(j.getStart().getTime());
+            response.setEnd(j.getEnd().getTime());
+            response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+
+            return response;
+        }).collect(Collectors.toList());
+    }
+    @Override
+    public List<JobStatusResponse> getRunningJobs() {
+        List<JobStatus> runningJobs = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.status.eq(RUNNING.ordinal()))
+                .orderBy(jobStatus.start.desc())
+                .fetch();
+
+        //format jobs
+        return runningJobs.stream().map(j -> {
+            JobStatusResponse response = new JobStatusResponse();
+            response.setJobId(j.getJobId());
+            response.setJobType(JobType.fromInteger(
+                    (j.getJobType() != null) ? j.getJobType() : JobType.UNKNOWN.ordinal()
+                ).toString());
+            response.setUserId(j.getUserId());
+            response.setStart(j.getStart().getTime());
+            response.setPercentComplete(j.getPercentComplete());
+
+            return response;
+        }).collect(Collectors.toList());
     }
 
 }

@@ -155,6 +155,8 @@ public:
 
   inline static const QString Length()                  { return "length"; }
 
+  inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
+
   /**
    * ID Unique to a training data set with multiary training data.
    * @sa MultiaryMatchComparator

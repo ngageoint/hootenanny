@@ -27,7 +27,17 @@
 package hoot.services.controllers.conflation;
 
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.ASCIIDOC_PATH;
+import static hoot.services.HootProperties.ATTRIBUTE_CONFLATION_PATH;
+import static hoot.services.HootProperties.ATT_OVERRIDE_PATH;
+import static hoot.services.HootProperties.DIFFERENTIAL_CONFLATION_PATH;
+import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.HOOT2_OVERRIDE_PATH;
+import static hoot.services.HootProperties.HORIZONTAL_CONFLATION_PATH;
+import static hoot.services.HootProperties.HORZ_OVERRIDE_PATH;
+import static hoot.services.HootProperties.NETWORK_CONFLATION_PATH;
+import static hoot.services.HootProperties.REF_OVERRIDE_PATH;
+import static hoot.services.HootProperties.TEMPLATE_PATH;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,8 +45,14 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -46,6 +62,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,6 +72,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;;
 
 @Controller
 @Path("/advancedopts")
@@ -65,11 +85,75 @@ public class AdvancedConflationOptionsResource {
     private JSONArray referenceTemplate;
     private JSONArray horizontalTemplate;
     private JSONArray attributeTemplate;
+    private JSONArray hoot2Template;
+    private JSONObject conflationOptionsTemplate;
     private JSONObject referenceOverride;
     private JSONObject horizontalOverride;
     private JSONObject attributeOverride;
+    private JSONObject hoot2Override;
 
-    public AdvancedConflationOptionsResource() {}
+    private static Map<String, String> confMap = new HashMap<String, String>(){{
+        put("attribute", ATTRIBUTE_CONFLATION_PATH);
+        put("horizontal", HORIZONTAL_CONFLATION_PATH);
+        put("network", NETWORK_CONFLATION_PATH);
+        put("differntial", DIFFERENTIAL_CONFLATION_PATH);
+    }};
+
+    private static Map<String, Map<String, String>> confOptionsMap = null;
+
+    private static Map<String, Map<String, String>> buildConfOptionsMap() {
+        Map<String, Map<String, String>> conflationOptions = new HashMap<>();
+
+        // build up map of conflation config maps...
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<Map<String, String>> confSchema = new TypeReference<Map<String, String>>(){};
+        for (Entry<String, String> conf: confMap.entrySet()) {
+            String file;
+            try {
+                file = FileUtils.readFileToString(new File(HOME_FOLDER, conf.getValue()), Charset.defaultCharset());
+                // reduce config option map to only those entries within the list
+                // of options exposed as part of the advanced options ui...
+                Map<String, String> uiConfOptions = new HashMap<>();
+                Map<String, String> confOptions = mapper.readValue(file, confSchema);
+
+                for (Entry<String, String> confOptionEntry: confOptions.entrySet()) {
+                    if (ConflateCommand.isUiOption(confOptionEntry.getKey())) {
+                        uiConfOptions.put(ConflateCommand.getConfigKey(confOptionEntry.getKey()), confOptionEntry.getValue());
+                    }
+                }
+
+                conflationOptions.put(conf.getKey(), uiConfOptions);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return conflationOptions;
+    }
+
+    public AdvancedConflationOptionsResource() {
+        if (confOptionsMap == null) {
+            confOptionsMap = buildConfOptionsMap();
+        }
+    }
+
+    @GET
+    @Path("/conflationtypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response conflationTypes() {
+        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
+        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
+                return WordUtils.capitalizeFully(type);
+            }).collect(Collectors.toList())
+        );
+
+        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
+        conflationTypes.add(0, "Reference");
+
+        JSONArray responseJSON = new JSONArray();
+        responseJSON.addAll(conflationTypes);
+        return Response.ok(responseJSON.toJSONString()).build();
+    }
 
     @GET
     @Path("/getoptions")
@@ -89,7 +173,20 @@ public class AdvancedConflationOptionsResource {
 
             JSONParser parser = new JSONParser();
 
-            if (confType.equalsIgnoreCase("reference")) {
+            if (confType.equalsIgnoreCase("conflationOptions")) {
+                if((conflationOptionsTemplate == null) || doForce) {
+                    conflationOptionsTemplate = new JSONObject(confOptionsMap);
+                }
+                return Response.ok(conflationOptionsTemplate.toJSONString()).build();
+            }
+            else if (confType.equalsIgnoreCase("hoot2")) {
+                if ((hoot2Template == null) || doForce) {
+                    hoot2Template = new JSONArray();
+                    hoot2Template = (JSONArray) hoot2Override.get("hoot2");
+                }
+                template = hoot2Template;
+            }
+            else if (confType.equalsIgnoreCase("reference")) {
                 if ((referenceTemplate == null) || doForce) {
                     referenceTemplate = new JSONArray();
                     referenceTemplate.add(referenceOverride);
@@ -129,8 +226,12 @@ public class AdvancedConflationOptionsResource {
     }
 
     private void getOverrides(Boolean doForce) throws IOException, ParseException {
+        JSONParser parser = new JSONParser();
+
         if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
-            JSONParser parser = new JSONParser();
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))){
+                hoot2Override = (JSONObject) parser.parse(fileReader);
+            }
 
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))){
                 referenceOverride = (JSONObject) parser.parse(fileReader);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
@@ -36,7 +36,9 @@ import hoot.services.models.db.JobStatus;
 
 @Service
 public interface JobStatusManager {
-    void addJob(String jobId);
+    void addJob(Job job);
+
+    void deleteJob(String jobId, Long userId);
 
     void updateJob(String jobId, String statusDetail, Double percentComplete);
 
@@ -48,5 +50,9 @@ public interface JobStatusManager {
 
     JobStatus getJobStatusObj(String jobId);
 
-    List<CommandStatus> getCommandDetail(String jobId);
+    JobStatus getJobStatusObj(String jobId, Long userId);
+
+    List<String> getJobErrors(String jobId, Long userId);
+
+    List<CommandStatus> getCommandDetail(String jobId, Long userId);
 }

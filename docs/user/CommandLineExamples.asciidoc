@@ -17,16 +17,12 @@ See the User Guide for more details on command usage.
 ==== Conflation
 
 -----
-    # Conflate two maps into a single map
+    # Conflate two maps into a single map (Reference Conflation)
     hoot conflate input1.osm input2.osm output.osm
     
     # Conflate, adding data from the second map to output that does not conflict with data in 
     # the first map (Differential Conflation)
     hoot conflate --differential input1.osm input2.osm output.osm
-    
-    # Conflate only tags from a second map into a first map without changing the first map's 
-    # geometry
-    hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
 
     # Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples)
     hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
@@ -179,18 +175,13 @@ See the User Guide for more details on command usage.
     # with data in the first map (Differential Tag Only Conflation; tags may be overwritten)
     hoot conflate --differential --include-tags input1.osm input2.osm output.osm
     
-    # Conflate in a way that brings in tags from the secondary dataset, preserves the geometry 
-    # of the reference dataset, and drops all remaining secondary features and reviews  
-    # (Attribute Conflation)
-    hoot conflate -D highway.merge.tags.only=true -D tag.merger.default=hoot::OverwriteTag1Merger \
-      -D building.keep.more.complex.geometry.when.auto.merging=false \
-      -D conflate.post.ops+=hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor \
-      -D remove.elements.visitor.element.criterion=hoot::ReviewRelationCriterion \
-      -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm
+    # Conflate only tags from a second map into a first map without changing the first map's 
+    # geometry (Attribute Conflation)
+    hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
     
     # Assuming a first map is superior to a second, cut out the shape of the first map out from 
     # the area being conflated so that only data from the second map is stitched in around the 
-    # first map (Cookie Cutter Conflation)
+    # first map (Horizontal Conflation (aka Cookie Cutter))
     hoot conflate -D conflate.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
       -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false
     
@@ -340,6 +331,15 @@ See the User Guide for more details on command usage.
     
     # Add admin boundary level location tags associated with element phone numbers
     hoot convert -D convert.ops="hoot::PhoneNumberLocateVisitor" input.osm output.osm
+
+    # Snap unconnected roads in the second dataset back to neighboring roads in the first dataset
+    hoot convert -D convert.ops="hoot::UnconnectedWaySnapper" \
+      -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion \
+      -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion \
+      -D snap.unconnected.ways.snap.to.way.status=Input1 \
+      -D snap.unconnected.ways.snap.way.status=Input2 \
+      input1.osm input2.osm output.osm
 -----
     
 ==== Statistics

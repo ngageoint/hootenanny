@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SEARCHBOUNDSCALCULATOR_H
 #define SEARCHBOUNDSCALCULATOR_H
@@ -45,13 +45,15 @@ namespace hoot
 class SearchBoundsCalculator
 {
 public:
-  SearchBoundsCalculator(SearchRadiusProviderPtr radiusProvider);
 
-  geos::geom::Envelope calculateSearchBounds(const ConstOsmMapPtr& map, const ConstNodePtr& n)
-    const;
+  SearchBoundsCalculator(boost::shared_ptr<SearchRadiusProvider> radiusProvider);
+
+  geos::geom::Envelope calculateSearchBounds(
+    const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
 
 private:
-  SearchRadiusProviderPtr _radiusProvider;
+
+  boost::shared_ptr<SearchRadiusProvider> _radiusProvider;
 };
 
 typedef boost::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;

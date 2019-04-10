@@ -92,8 +92,9 @@ void OsmMapIndex::_buildNodeTree() const
 {
   QTime t;
   t.start();
-  LOG_INFO("Building node R-Tree index...");
-  // 10 children - 368
+
+  LOG_INFO("Building node R-Tree index");
+  // 10 children - 368 - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _nodeTree.reset(new HilbertRTree(mps, 2));
 
@@ -139,8 +140,9 @@ void OsmMapIndex::_buildWayTree() const
 {
   QTime t;
   t.start();
-  LOG_INFO("Building way R-Tree index...");
-  // 10 children - 368
+
+  LOG_INFO("Building way R-Tree index");
+  // 10 children - 368 - see #3054
   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
 
@@ -591,7 +593,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
 
 void OsmMapIndex::removeNode(ConstNodePtr n)
 {
-  if (_nodeTree)
+  if (_nodeTree && n)
   {
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());

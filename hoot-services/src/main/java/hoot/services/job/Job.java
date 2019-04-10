@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
@@ -32,11 +32,21 @@ import hoot.services.command.Command;
 
 public class Job {
     private String jobId;
+    private Long userId;
+    private Long mapId;
     private Command[] commands;
+    private JobType jobType;
 
-    public Job(String jobId, Command[] commands) {
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
         this.jobId = jobId;
+        this.userId = userId;
         this.commands = commands;
+        this.jobType = jobType;
+        this.mapId = mapId;
+    }
+
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
+        this(jobId, userId, commands, jobType, null);
     }
 
     public Job(String jobId) {
@@ -57,5 +67,29 @@ public class Job {
 
     public void setCommands(Command[] commands) {
         this.commands = commands;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public JobType getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JobType jobType) {
+        this.jobType = jobType;
+    }
+
+    public Long getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(Long mapId) {
+        this.mapId = mapId;
     }
 }

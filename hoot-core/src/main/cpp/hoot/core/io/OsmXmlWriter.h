@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -74,11 +75,8 @@ public:
    * information in the tags.
    */
   void setIncludeCompatibilityTags(bool includeCompatibility);
-
-  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-
-  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
-
+  void setIncludeIds(bool includeIds) { _addExportTagsVisitor.setIncludeIds( includeIds ); }
+  void setIncludeHootInfo(bool includeInfo) { _addExportTagsVisitor.setIncludeHootInfo( includeInfo ); }
   void setIncludePid(bool includePid) { _includePid = includePid; }
 
   /**
@@ -127,21 +125,19 @@ public:
 private:
 
   bool _formatXml;
-  bool _includeIds;
   bool _includeDebug;
   bool _includePointInWays;
   bool _includeCompatibilityTags;
   bool _includePid;
-  bool _textStatus;
   QString _osmSchema;
   int _precision;
   boost::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
-  bool _includeCircularErrorTags;
   long _numWritten;
   long _statusUpdateInterval;
+  AddExportTagsVisitor _addExportTagsVisitor;
 
   static QString _typeName(ElementType e);
 
@@ -160,6 +156,12 @@ private:
    * @param bounds the bounds to write
    */
   void _writeBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Sets debug settings to add extra metadata to output map for debugging purposes
+   * enabled with `debug.maps.write` setting
+   */
+  void _overrideDebugSettings();
 };
 
 }

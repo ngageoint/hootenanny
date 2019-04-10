@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 
 using namespace std;
 
@@ -120,7 +121,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 }
 
 void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QString url,
-                                const bool silent)
+                                const bool silent, const bool is_debug)
 {
   bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
 
@@ -133,6 +134,7 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
   if (!skipEmptyMap)
   {
     boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
+    writer->setIsDebugMap(is_debug);
     writer->open(url);
     writer->write(map);
     LOG_INFO(
@@ -140,7 +142,8 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title)
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title,
+                                        NetworkMatcherPtr matcher)
 {
   if (ConfigOptions().getDebugMapsWrite())
   {
@@ -161,8 +164,15 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
     }
     LOG_DEBUG("Writing debug output to " << debugMapFileName);
     OsmMapPtr copy(new OsmMap(map));
+
+    if (matcher)
+    {
+      DebugNetworkMapCreator()
+        .addDebugElements(copy, matcher->getAllEdgeScores(), matcher->getAllVertexScores());
+    }
+
     MapProjector::projectToWgs84(copy);
-    write(copy, debugMapFileName, true);
+    write(copy, debugMapFileName, true, true);
     _debugMapCount++;
   }
 }

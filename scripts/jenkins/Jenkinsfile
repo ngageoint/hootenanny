@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 // Load shared libraries
 @Library('radiant-pipeline-library')_
 
@@ -105,8 +106,9 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
-                // Configure authentication
+                // Configure authentication and reboot tomcat
                 sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
+                sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
         stage("Core Tests") {
@@ -169,14 +171,14 @@ pipeline {
         }
     }
     post {
-        always {
+        aborted {
             script {
-                // Send build notification
-                notifySlack(currentBuild.currentResult, "#builds_hoot")
+                notifySlack("ABORTED", "#builds_hoot")
             }
         }
         success {
             script {
+                notifySlack("SUCCESS", "#builds_hoot")
                 if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
                     slackSend channel: "#builds_hoot", message: "Release candidate version ${SYS_VER} ready for testing http://${SYS_URL}:8080/hootenanny-id/"
@@ -189,6 +191,7 @@ pipeline {
         }
         failure {
             script {
+                notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")

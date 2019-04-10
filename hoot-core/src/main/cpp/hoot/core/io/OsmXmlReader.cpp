@@ -82,9 +82,9 @@ OsmXmlReader::~OsmXmlReader()
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
-  if ( (attributes.value("timestamp") != "") &&
-       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
-       (_addSourceDateTime == true) )
+  if ((attributes.value("timestamp") != "") &&
+      (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
+      (_addSourceDateTime == true))
   {
     _element->setTag(MetadataTags::SourceDateTime(), attributes.value("timestamp"));
   }
@@ -189,6 +189,11 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
 
+  if( _wayIdMap.contains(_wayId) )
+  {
+    throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+  }
+
   long newId;
   if (_useDataSourceId)
   {
@@ -236,7 +241,8 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 
 bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 {
-  _errorString = QObject::tr("OsmXmlReader: Parse error at line %1, column %2:\n%3")
+  _errorString =
+    QObject::tr("OsmXmlReader: Parse error at line %1, column %2:\n%3")
       .arg(exception.lineNumber())
       .arg(exception.columnNumber())
       .arg(exception.message());
@@ -300,6 +306,11 @@ void OsmXmlReader::read(OsmMapPtr map)
   LOG_VART(_useFileStatus);
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
+
+  // clear node id maps in case the reader is used for mulitple files
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
 
   _numRead = 0;
   finalizePartial();

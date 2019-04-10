@@ -32,45 +32,32 @@ import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.HootProperties;
 import hoot.services.UnitTest;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
-import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.job.Job;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 
@@ -78,7 +65,7 @@ import hoot.services.utils.MapUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class ExportResourceTest extends HootServicesJerseyTestAbstract {
+public class ExportResourceTest extends OSMResourceTestAbstract {
 
     private static String originalTEMP_OUTPUT_PATH;
 
@@ -98,7 +85,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
     public void testExportOSMResource() throws Exception {
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osm");
-        exportParams.setInput("input");
+        exportParams.setInput(String.valueOf(mapId));
         exportParams.setOutputName("output");
         exportParams.setTextStatus(true);
         exportParams.setInputType("file");
@@ -122,7 +109,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
     public void testExportOSMPBFResource() throws Exception {
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osm.pbf");
-        exportParams.setInput("input");
+        exportParams.setInput(String.valueOf(mapId));
         exportParams.setOutputName("output");
         exportParams.setTextStatus(true);
         exportParams.setInputType("file");
@@ -153,7 +140,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         jobParams.setTextStatus(false);
         jobParams.setInputType("file");
         jobParams.setOutputType("tiles");
-        jobParams.setInput("input1;input2");
+        jobParams.setInput(String.valueOf(mapId));
         jobParams.setBounds(aoi);
         jobParams.setMaxNodeCountPerTile(1000);
         jobParams.setPixelSize(0.001);
@@ -178,7 +165,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("shp");
         exportParams.setTranslation("translations/TDSv40.js");
-        exportParams.setInput("input");
+        exportParams.setInput(String.valueOf(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
@@ -204,7 +191,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("gdb");
         exportParams.setTranslation("translations/TDSv40.js");
-        exportParams.setInput("input");
+        exportParams.setInput(String.valueOf(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);

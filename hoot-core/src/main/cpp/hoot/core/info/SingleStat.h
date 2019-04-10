@@ -22,23 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SINGLESTATISTIC_H
-#define SINGLESTATISTIC_H
+#ifndef SINGLESTAT_H
+#define SINGLESTAT_H
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
-class SingleStatistic
+class SingleStat
 {
 public:
 
-  virtual ~SingleStatistic() {}
+  QString name;
+  double value;
 
-  virtual double getStat() const = 0;
+  SingleStat() {}
+
+  SingleStat(const QString& n, double v) : name(n), value(v) {}
+
+  QString toString() const
+  {
+    return QString("%1: %2").arg(name).arg(value);
+  }
 };
 
 }
 
-#endif // SINGLESTATISTIC_H
+#endif // SINGLESTAT_H

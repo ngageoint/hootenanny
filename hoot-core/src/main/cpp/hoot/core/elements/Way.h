@@ -246,7 +246,8 @@ void Way::addNodes(IT start, IT end)
   _postGeometryChange();
 }
 
-struct WayPtrCompare {
+struct WayPtrCompare
+{
   bool operator() (const ConstWayPtr& w1, const ConstWayPtr& w2) const
   {
     return w1->getId() < w2->getId();

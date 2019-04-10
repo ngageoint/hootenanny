@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChainCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -64,7 +65,7 @@ ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child
   _criteria.push_back(boost::shared_ptr<ElementCriterion>(child3));
 }
 
-ChainCriterion::ChainCriterion(vector< boost::shared_ptr<ElementCriterion> > criteria)
+ChainCriterion::ChainCriterion(vector<boost::shared_ptr<ElementCriterion>> criteria)
 {
   for (size_t i = 0; i < criteria.size(); i++)
     _criteria.push_back(boost::shared_ptr<ElementCriterion>(criteria[i]->clone()));
@@ -84,7 +85,6 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
       return false;
     }
   }
-
   return true;
 }
 

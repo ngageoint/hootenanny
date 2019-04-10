@@ -86,12 +86,12 @@ public:
     OsmNetworkExtractor one;
 
     ElementCriterionPtr c1(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown1)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown1)));
     one.setCriterion(c1);
     OsmNetworkPtr network1 = one.extractNetwork(map);
 
     ElementCriterionPtr c2(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown2)));
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
@@ -131,12 +131,12 @@ public:
     OsmNetworkExtractor one;
 
     ElementCriterionPtr c1(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown1)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown1)));
     one.setCriterion(c1);
     OsmNetworkPtr network1 = one.extractNetwork(map);
 
     ElementCriterionPtr c2(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown2)));
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 

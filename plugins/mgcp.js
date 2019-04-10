@@ -43,7 +43,7 @@ mgcp = {
     mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
 
     // Build the MGCP fcode/attrs lookup table. Note: This is <GLOBAL>
-    mgcpAttrLookup = translate.makeAttrLookup(mgcp.rawSchema);
+    mgcp.AttrLookup = translate.makeAttrLookup(mgcp.rawSchema);
 
     // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
     mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
@@ -65,88 +65,50 @@ mgcp = {
     }, // End of getDbSchema
 
 
-    // validateAttrs - Clean up the supplied attr list by dropping anything that should not be part of the
-    //                 feature
+    // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
+    //                feature
     validateAttrs: function(geometryType,attrs) {
 
-        var attrList = mgcpAttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
+        var attrList = mgcp.AttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
 
         if (attrList != undefined)
         {
-            // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (mgcp.configOut.OgrDebugDumpvalidate == 'true')
+            for (var val in attrs)
             {
-                for (var val in attrs)
+                if (attrList.indexOf(val) == -1)
                 {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        hoot.logWarn('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
-                        delete attrs[val];
+                    hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
+                    delete attrs[val];
 
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in mgcp.rules.txtLength)
-                    {
-                        if (attrs[val].length > mgcp.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= mgcp.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
+                    // Since we deleted the attribute, Skip the text check
+                    continue;
                 }
+
+                // Now check the length of the text fields
+                // We need more info from the customer about this: What to do if it is too long
+                if (val in mgcp.rules.txtLength)
+                {
+                    if (attrs[val].length > mgcp.rules.txtLength[val])
+                    {
+                        // First try splitting the attribute and grabbing the first value
+                        var tStr = attrs[val].split(';');
+                        if (tStr[0].length <= mgcp.rules.txtLength[val])
+                        {
+                            attrs[val] = tStr[0];
+                        }
+                        else
+                        {
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
+                            // Still too long. Chop to the maximum length
+                            attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
+                        }
+                    } // End text attr length > max length
+                } // End in txtLength
             }
-            else
-            {
-                for (var val in attrs)
-                {
-                    if (attrList.indexOf(val) == -1)
-                    {
-                        delete attrs[val];
-
-                        // Since we deleted the attribute, Skip the text check
-                        continue;
-                    }
-
-                    // Now check the length of the text fields
-                    // We need more info from the customer about this: What to do if it is too long
-                    if (val in mgcp.rules.txtLength)
-                    {
-                        if (attrs[val].length > mgcp.rules.txtLength[val])
-                        {
-                            // First try splitting the attribute and grabbing the first value
-                            var tStr = attrs[val].split(';');
-                            if (tStr[0].length <= mgcp.rules.txtLength[val])
-                            {
-                                attrs[val] = tStr[0];
-                            }
-                            else
-                            {
-                                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + mgcp.rules.txtLength[val] + ' characters.');
-                                // Still too long. Chop to the maximum length
-                                attrs[val] = tStr[0].substring(0,mgcp.rules.txtLength[val]);
-                            }
-                        } // End text attr length > max length
-                    } // End in txtLength
-                }
-            } // End getOgrDebugDumpvalidate
         }
         else
         {
-            hoot.logWarn('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
+            hoot.logDebug('Validate: No attrList for ' + attrs.FCODE + ' ' + geometryType);
         }
 
         // No quick and easy way to do this unless we build yet another lookup table
@@ -182,7 +144,7 @@ mgcp = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (mgcp.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 // Do we have an "Other" value?
                 if (enumValueList.indexOf('999') == -1)
@@ -190,14 +152,14 @@ mgcp = {
                     // No: Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
                 }
                 else
                 {
                     // Yes: Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
+                    hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to Other (999)');
                 }
             }
         } // End Validate Enumerations
@@ -1318,21 +1280,21 @@ mgcp = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // An "amenitiy" can be a building or a thing
-        // If appropriate, make the "amenity" into a building
-        // This list is taken from the OSM Wiki and Taginfo
-        var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','ferry_terminal'
-            ]; // End bldArray
+        // // An "amenitiy" can be a building or a thing
+        // // If appropriate, make the "amenity" into a building
+        // // This list is taken from the OSM Wiki and Taginfo
+        // var notBuildingList = [
+        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+        //     'trailer_park','game_feeding','ferry_terminal'
+        //     ]; // End bldArray
 
-        if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
 
         // Going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1402,7 +1364,8 @@ mgcp = {
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
                         delete tags.place;
-                    }                break;
+                    }
+                    break;
 
             case 'isolated_dwelling':
                 attrs.F_CODE = 'AL105'; // Settlement
@@ -1495,6 +1458,23 @@ mgcp = {
                 }
             }
         }
+
+        // An "amenitiy" can be a building or a thing
+        // If appropriate, make the "amenity" into a building
+        // This list is taken from the OSM Wiki and Taginfo
+        var notBuildingList = [
+            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
+            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
+            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
+            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
+            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
+            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
+            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
+            'trailer_park','game_feeding','ferry_terminal'
+            ]; // End bldArray
+
+        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
+        if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL015';
 
         // The FCODE for Buildings changed...
         if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
@@ -2103,7 +2083,6 @@ mgcp = {
         {
             mgcp.configOut = {};
             mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            mgcp.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
             mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
             mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
             mgcp.configOut.OgrThrowError = config.getOgrThrowError();
@@ -2202,7 +2181,66 @@ mgcp = {
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
         // push the feature to the o2s layer
-        if (!mgcp.layerNameLookup[tableName])
+        if (mgcp.layerNameLookup[tableName])
+        {
+            // Check if we need to return more than one feature
+            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            returnData = mgcp.manyFeatures(geometryType,tags,attrs);
+
+            // Now go through the features and clean them up
+            var gType = geometryType.toString().charAt(0);
+
+            for (var i = 0, fLen = returnData.length; i < fLen; i++)
+            {
+                returnData[i]['attrs']['FCODE'] = returnData[i]['attrs']['F_CODE'];
+                delete returnData[i]['attrs']['F_CODE'];
+
+                // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
+                // features to return
+                var gFcode = gType + returnData[i]['attrs']['FCODE'];
+                if (mgcp.layerNameLookup[gFcode.toUpperCase()])
+                {
+                    // Validate attrs: remove all that are not supposed to be part of a feature
+                    mgcp.validateAttrs(geometryType,returnData[i]['attrs']);
+
+                    returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
+                }
+                else
+                {
+                    // Debug
+                    // print('## Skipping: ' + gFcode);
+                    returnData.splice(i,1);
+                }
+            } // End returnData loop
+
+            // If we have unused tags, throw them into the "extra" layer
+            if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'file')
+            {
+                var extraFeature = {};
+                extraFeature.tags = JSON.stringify(notUsedTags);
+                extraFeature.uuid = attrs.UID;
+
+                var extraName = 'extra_' + geometryType.toString().charAt(0);
+
+                returnData.push({attrs: extraFeature, tableName: extraName});
+            } // End notUsedTags
+
+            // Look for Review tags and push them to a review layer if found
+            if (tags['hoot:review:needs'] == 'yes')
+            {
+                var reviewAttrs = {};
+
+                // Note: Some of these may be "undefined"
+                reviewAttrs.note = tags['hoot:review:note'];
+                reviewAttrs.score = tags['hoot:review:score'];
+                reviewAttrs.uuid = tags.uuid;
+                reviewAttrs.source = tags['hoot:review:source'];
+
+                var reviewTable = 'review_' + geometryType.toString().charAt(0);
+                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
+            } // End ReviewTags
+        } // End else We have a feature
+        else // We DON'T have a feature
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (mgcp.configOut.OgrThrowError == 'true')
@@ -2271,67 +2309,7 @@ mgcp = {
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
-        }
-        else // We have a feature
-        {
-            // Check if we need to return more than one feature
-            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-            returnData = mgcp.manyFeatures(geometryType,tags,attrs);
-
-            // Now go through the features and clean them up
-            var gType = geometryType.toString().charAt(0);
-
-            for (var i = 0, fLen = returnData.length; i < fLen; i++)
-            {
-                returnData[i]['attrs']['FCODE'] = returnData[i]['attrs']['F_CODE'];
-                delete returnData[i]['attrs']['F_CODE'];
-
-                // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
-                // features to return
-                var gFcode = gType + returnData[i]['attrs']['FCODE'];
-                if (mgcp.layerNameLookup[gFcode.toUpperCase()])
-                {
-                    // Validate attrs: remove all that are not supposed to be part of a feature
-                    mgcp.validateAttrs(geometryType,returnData[i]['attrs']);
-
-                    returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
-                }
-                else
-                {
-                    // Debug
-                    // print('## Skipping: ' + gFcode);
-                    returnData.splice(i,1);
-                }
-
-            } // End returnData loop
-
-            // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'file')
-            {
-                var extraFeature = {};
-                extraFeature.tags = JSON.stringify(notUsedTags);
-                extraFeature.uuid = attrs.UID;
-
-                var extraName = 'extra_' + geometryType.toString().charAt(0);
-
-                returnData.push({attrs: extraFeature, tableName: extraName});
-            } // End notUsedTags
-
-            // Look for Review tags and push them to a review layer if found
-            if (tags['hoot:review:needs'] == 'yes')
-            {
-                var reviewAttrs = {};
-
-                // Note: Some of these may be "undefined"
-                reviewAttrs.note = tags['hoot:review:note'];
-                reviewAttrs.score = tags['hoot:review:score'];
-                reviewAttrs.uuid = tags.uuid;
-                reviewAttrs.source = tags['hoot:review:source'];
-
-                var reviewTable = 'review_' + geometryType.toString().charAt(0);
-                returnData.push({attrs: reviewAttrs, tableName: reviewTable});
-            } // End ReviewTags
-        } // End else We have a feature
+        } // End We DON'T have a feature
 
         // Debug:
         if (mgcp.configOut.OgrDebugDumptags == 'true')

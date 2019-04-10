@@ -28,15 +28,17 @@
 #include "ReplaceRoundabouts.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/FindNodesVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -59,16 +61,23 @@ void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
 
   // Get a list of roundabouts from the map, go through & process them
   std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
-
   for (size_t i = 0; i < roundabouts.size(); i++)
   {
     RoundaboutPtr pRoundabout = roundabouts[i];
     pRoundabout->replaceRoundabout(pMap);
+    _numAffected++;
   }
+
+  //  Clean up any roundabout centers that didn't clean themselves up earlier
+  std::vector<long> centers = FindNodesVisitor::findNodesByTag(pMap, MetadataTags::HootSpecial(), "roundabout_center");
+  foreach (long id, centers)
+    RemoveNodeOp::removeNode(pMap, id, true);
 }
 
 void ReplaceRoundabouts::apply(boost::shared_ptr<OsmMap> &pMap)
 {
+  _numAffected = 0;
+
   replaceRoundabouts(pMap);
 }
 

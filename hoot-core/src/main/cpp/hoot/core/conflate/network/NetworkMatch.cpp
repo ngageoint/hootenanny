@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <math.h>
@@ -45,26 +46,28 @@ Match()
 {
 }
 
-NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr &details, ConstEdgeMatchPtr edgeMatch,
-  double score,
-  ConstMatchThresholdPtr mt) :
+NetworkMatch::NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
+  double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
+  double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness) :
   Match(mt),
   _details(details),
   _edgeMatch(edgeMatch)
 {
   double p;
 
+  // don't know enough about it this constant yet to know if should be a config value (should it be
+  // set the same as x0?)
   if (score > 0.5)
   {
-    // Send the score through a logistic function to keep the values in range. These values are
-    // arbitrary and may need tweaking.
+    // Send the score through a logistic function to keep the values in range.
+    // TODO: These values are arbitrary and may need tweaking. - #3080
 
     // steepness
-    double k = 2.0;
+    double k = scoringFunctionCurveSteepness;
     // max value
-    double L = 1.0;
+    double L = scoringFunctionMax;
     // score of 0.5 gives a probability of 0.5
-    double x0 = 0.5;
+    double x0 = scoringFunctionCurveMidpointX;
     p = L / (1 + pow(M_E, -k * (score - x0)));
   }
   else
@@ -127,18 +130,20 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
         _toElement(string2->getEdge(i))->getElementId()
       ));
   }
+
+  LOG_VART(_pairs);
 }
 
 bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
 {
-  set< pair<ElementId, ElementId> > s = other.getMatchPairs();
+  set<pair<ElementId, ElementId>> s = other.getMatchPairs();
 
   // if any element ids overlap then they're conflicting.
-  for (set< pair<ElementId, ElementId> >::const_iterator it = s.begin(); it != s.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
   {
     const pair<ElementId, ElementId>& ip = *it;
 
-    for (set< pair<ElementId, ElementId> >::const_iterator jt = _pairs.begin(); jt != _pairs.end();
+    for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
       ++jt)
     {
       const pair<ElementId, ElementId>& jp = *jt;

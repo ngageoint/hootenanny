@@ -22,34 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AddExportTagsVisitor.h"
 
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
+// hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/NodesPerWayVisitor.h>
 
 namespace hoot
 {
 
-AddExportTagsVisitor::AddExportTagsVisitor()
-{
-  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _includeCircularError = ConfigOptions().getWriterIncludeCircularErrorTags();
-}
+static const QString input = "test-files/ToyTestA.osm";
 
-void AddExportTagsVisitor::visit(const ElementPtr& e)
+class NodesPerWayVisitorTest : public HootTestFixture
 {
-  if (_includeDebug)
+  CPPUNIT_TEST_SUITE(NodesPerWayVisitorTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  NodesPerWayVisitorTest()
   {
-    e->getTags()[MetadataTags::HootStatus()] = e->getStatus().toString();
-    e->getTags()[MetadataTags::HootId()] = QString::number(e->getId());
+    setResetType(ResetBasic);
   }
 
-  if (_includeCircularError && e->hasCircularError())
+  void runBasicTest()
   {
-    e->getTags()[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+
+    NodesPerWayVisitor uut;
+    map->visitRo(uut);
+
+    CPPUNIT_ASSERT_EQUAL(40, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(3, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(30, (int)uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(10.0, uut.getAverage());
   }
-}
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NodesPerWayVisitorTest, "quick");
 
 }
+
+

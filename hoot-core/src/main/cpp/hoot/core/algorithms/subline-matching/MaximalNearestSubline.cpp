@@ -132,10 +132,8 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   _maxInterval[1] = WayLocation();
 
   /**
-   * The basic strategy is to pick test points on B
-   * and find their nearest point on A.
-   * The interval containing these nearest points
-   * is approximately the MaximalNeareastSubline of A.
+   * The basic strategy is to pick test points on B and find their nearest point on A.
+   * The interval containing these nearest points is approximately the MaximalNeareastSubline of A.
    */
   // Heuristic #1: use every vertex of B as a test point
   for (size_t ib = 0; ib < _b->getNodeCount(); ib++)
@@ -151,13 +149,13 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   /**
    * Heuristic #2:
    *
-   * find the nearest point on B to all vertices of A
-   * and use those points of B as test points.
+   * Find the nearest point on B to all vertices of A and use those points of B as test points.
    * For efficiency use only vertices of A outside current max interval.
    */
   // find all the b points using heuristic 2
   LocationOfPoint bPtLocator(_map, _b);
-  for (size_t ia = 0; ia < _a->getNodeCount(); ia++) {
+  for (size_t ia = 0; ia < _a->getNodeCount(); ia++)
+  {
     WayLocation bLoc = bPtLocator.locate(_map->getNode(_a->getNodeId(ia))->toCoordinate());
     Coordinate bPt = bLoc.getCoordinate();
     WayLocation nearestLocationOnA = _aPtLocator.locate(bPt);
