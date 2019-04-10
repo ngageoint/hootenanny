@@ -175,6 +175,10 @@ class OsmSchema;
  * removed. It is also assumed that all buildings form closed polygons.
  *
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
+ *
+ * 4/10/19 - See notes for this class in the mainline.  This is a less stable multithreaded version
+ * but does not suffer from an unbalanced number of relation members as the 3061-2 version does.
+ * Due to its instability, no actual performance testing has occurred for this yet.
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable
