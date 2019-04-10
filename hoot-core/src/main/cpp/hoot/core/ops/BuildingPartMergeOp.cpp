@@ -52,6 +52,13 @@ _numProcessed(0)
 {
 }
 
+BuildingPartProcessor::~BuildingPartProcessor()
+{
+  //_map.reset();
+  //_n2w.reset();
+  //_elementConverter.reset();
+}
+
 void BuildingPartProcessor::setMap(OsmMapPtr map)
 {
   _mapIndexMutex->lock();
@@ -124,6 +131,8 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
   WayPtr candidate = _map->getWay(wayId);
   LOG_VART(candidate == 0);
 
+  //_mapIndexMutex->lock();
+
   boost::shared_ptr<geos::geom::Geometry> cg = _getGeometry(candidate);
   LOG_VART(cg == 0);
   // if this is another building part totally contained by this building
@@ -138,11 +147,11 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
     catch (const geos::util::TopologyException&)
     {
       LOG_DEBUG("cleaning...");
-      _geomUtilsMutex->lock();
+      //_geomUtilsMutex->lock();
       boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
         GeometryUtils::validateGeometry(cg.get()));
       boost::shared_ptr<geos::geom::Geometry> cleanG(GeometryUtils::validateGeometry(&g));
-      _geomUtilsMutex->unlock();
+      //_geomUtilsMutex->unlock();
       contains = cleanG->contains(cleanCandidate.get());
       LOG_VART(contains);
       _numGeometriesCleaned++;
@@ -151,10 +160,10 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
 
     if (contains)
     {
-      _buildingPartGroupMutex->lock();
+      //_buildingPartGroupMutex->lock();
       _buildingPartGroups->joinT(candidate, part);
       LOG_VARD(_buildingPartGroups->size());
-      _buildingPartGroupMutex->unlock();
+      //_buildingPartGroupMutex->unlock();
     }
   }
 
@@ -165,12 +174,12 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
   const ElementPtr& element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  if (_geometryCache->contains(element->getElementId()))
+  /*if (_geometryCache->contains(element->getElementId()))
   {
     _numGeometryCacheHits++;
     return _geometryCache->value(element->getElementId());
   }
-  else if (!checkForBuilding || _isBuilding(element))
+  else*/ if (!checkForBuilding || _isBuilding(element))
   {
     _schemaMutex->lock();
     if (element->getElementType() == ElementType::Relation)
@@ -181,12 +190,11 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
     {
       g = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
     }
-
     _schemaMutex->unlock();
 
-    _wayGeometryCacheMutex->lock();
-    _geometryCache->insert(element->getElementId(), g);
-    _wayGeometryCacheMutex->unlock();
+    //_wayGeometryCacheMutex->lock();
+    //_geometryCache->insert(element->getElementId(), g);
+    //_wayGeometryCacheMutex->unlock();
   }
   return g;
 }
@@ -449,12 +457,11 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   const ElementPtr& element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  if (_geometryCache.contains(element->getElementId()))
+  /*if (_geometryCache.contains(element->getElementId()))
   {
-    //_numGeometryCacheHits++;
     return _geometryCache[element->getElementId()];
   }
-  else if (!checkForBuilding || _isBuilding(element))
+  else */if (!checkForBuilding || _isBuilding(element))
   {
     if (element->getElementType() == ElementType::Relation)
     {
@@ -464,8 +471,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       g = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
     }
-
-    _geometryCache[element->getElementId()] = g;
+    //_geometryCache[element->getElementId()] = g;
   }
   return g;
 }
@@ -484,11 +490,6 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _processBuildingParts();
   LOG_VAR(StringUtils::formatLargeNumber(_ds.size()));
 
-//  LOG_DEBUG(
-//    "\tCleaned " << StringUtils::formatLargeNumber(_numGeometriesCleaned) <<
-//    " total building geometries.");
-//  LOG_DEBUG("\tGeometry cache hits: " << StringUtils::formatLargeNumber(_numGeometryCacheHits));
-
   ////
   /// Time to start making changes to the map.
   ////
@@ -496,8 +497,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
-  _map->getIndex().clearRelationIndex();
-  _map.reset();
+  // TODO: re-enable
+  //_map->getIndex().clearRelationIndex();
+  //_map.reset();
 }
 
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,

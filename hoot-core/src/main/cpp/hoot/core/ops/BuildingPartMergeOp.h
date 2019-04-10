@@ -95,6 +95,7 @@ class BuildingPartProcessor : public QRunnable
 public:
 
   BuildingPartProcessor();
+  ~BuildingPartProcessor();
 
   void run() override;
 
