@@ -200,6 +200,23 @@
         <tag k="highway" v="road"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+<<<<<<< HEAD
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-148"/>
+    </way>
+    <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
+        <nd ref="18"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="78"/>
+        <nd ref="100"/>
+        <tag k="source" v="Unknown"/>
+        <tag k="highway" v="road"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2017-06-07T15:16:56Z;2017-06-07T15:16:55Z"/>
+=======
+>>>>>>> origin/develop
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="-148"/>

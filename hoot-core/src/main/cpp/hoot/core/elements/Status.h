@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATUS_H
 #define STATUS_H
@@ -70,13 +70,6 @@ public:
    *   E.g. Unknown1 returns 0, Unknown2 return 1, etc.
    */
   int getInput() const;
-
-  /**
-   * @brief toCompatString
-   * @return A backwards compatible string for serializing and testing. Ultimately this
-   *   should be replaced with toString() when the proper refactoring is done.
-   */
-  QString toCompatString() const;
 
   QString toString() const;
 
