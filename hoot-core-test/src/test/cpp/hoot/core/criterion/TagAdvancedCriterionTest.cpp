@@ -63,16 +63,14 @@ class TagAdvancedCriterionTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/criterion/";
+
   /**
    * A note about certain types of "aux matching", including alias, child, ancestor, and associated
    * with: combining string kvp wildcard filters with these type of options is not possible (but may
    * work in certain cases).  See the comments in runAliasTest for more detail.  The same comments
    * apply to tests for the aforementioned aux matching types.
    */
-  TagAdvancedCriterionTest()
-  {
-  }
-
   void runMustTest()
   {
     // element must satisfy all parts of the filter
@@ -709,7 +707,7 @@ public:
 
   void runFileTest()
   {
-    TagAdvancedCriterion uut("test-files/criterion/TagAdvancedCriterionTest.json");
+    TagAdvancedCriterion uut(_inputPath + "TagAdvancedCriterionTest.json");
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
