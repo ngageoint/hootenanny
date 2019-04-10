@@ -233,7 +233,7 @@ public:
   void runRandomQueryTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;
     GetTagValuesVisitor v1("name", bag, true);
