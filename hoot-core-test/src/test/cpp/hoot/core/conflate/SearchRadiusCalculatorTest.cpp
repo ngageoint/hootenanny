@@ -64,6 +64,8 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/conflate/SearchRadiusCalculatorTest/";
+
   SearchRadiusCalculatorTest()
   {
     setResetType(ResetBasic);
@@ -74,11 +76,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
+    reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_osm_waterway_ss_REF2-cropped-2.osm", map);
+    reader.read(_inputPath + "Haiti_osm_waterway_ss_REF2-cropped-2.osm", map);
 
     MapCleaner().apply(map);
 
@@ -141,11 +141,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
+    reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/conflate/SearchRadiusCalculatorTest/Haiti_osm_waterway_ss_REF2-cropped-2.osm", map);
+    reader.read(_inputPath + "Haiti_osm_waterway_ss_REF2-cropped-2.osm", map);
 
     MapCleaner().apply(map);
 

@@ -60,10 +60,13 @@ class PoiPolygonMergerTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/conflate/poi-polygon/";
+  const QString _outputPath = "test-output/conflate/poi-polygon/PoiPolygonMergerTest/";
+
   PoiPolygonMergerTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate/poi-polygon/PoiPolygonMergerTest");
+    TestUtils::mkpath(_outputPath);
   }
 
   void basicTest()
@@ -85,10 +88,10 @@ public:
 
     {
       OsmMapPtr map2(new OsmMap(map));
-      set< pair<ElementId, ElementId> > s;
+      set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
-      vector< pair<ElementId, ElementId> > replaced;
+      vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
       HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -107,10 +110,10 @@ public:
       w1->setStatus(Status::Unknown2);
       n1->setStatus(Status::Unknown1);
       OsmMapPtr map2(new OsmMap(map));
-      set< pair<ElementId, ElementId> > s;
+      set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
-      vector< pair<ElementId, ElementId> > replaced;
+      vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
       HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -188,10 +191,8 @@ public:
   void toyScenario1Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 1", map);
 
@@ -234,10 +235,8 @@ public:
   void toyScenario2Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 2", map);
 
@@ -281,10 +280,8 @@ public:
   void toyScenario3Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 3", map);
 
@@ -328,10 +325,8 @@ public:
   void toyScenario4Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 4", map);
 
@@ -369,10 +364,8 @@ public:
   void toyScenario5Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 5", map);
     // remove the dummy road that is in the test. This isn't getting merged.
@@ -413,10 +406,8 @@ public:
   void toyScenario6Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingA.osm", false,
-                                            Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/PoiBuildingB.osm", false,
-                                            Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingA.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "PoiBuildingB.osm", false, Status::Unknown2);
 
     set<pair<ElementId, ElementId>> s = _addPairs("Toy Scenario 6", map);
 

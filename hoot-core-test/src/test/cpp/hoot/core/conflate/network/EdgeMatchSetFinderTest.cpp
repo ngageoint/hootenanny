@@ -56,14 +56,14 @@ public:
     setResetType(ResetAll);
   }
 
-  void writeDebugMap(OsmMapPtr map)
+  void writeDebugMap(OsmMapPtr map, int testNumber)
   {
     TestUtils::mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/EdgeMatchSetFinderTest.osm"));
+    OsmMapWriterFactory::write(copy, QString("tmp/EdgeMatchSetFinderTest-%1.osm").arg(testNumber));
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
@@ -76,7 +76,7 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    writeDebugMap(map);
+    writeDebugMap(map, testNumber);
 
     OsmNetworkExtractor one;
 

@@ -52,10 +52,13 @@ class TileBoundsCalculatorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/conflate/tile/";
+  const QString _outputPath = "test-output/conflate/tile/";
+
   TileBoundsCalculatorTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate");
+    TestUtils::mkpath(_outputPath);
   }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
@@ -101,7 +104,7 @@ public:
     uut.setSlop(0.10);
     uut.renderImage(map);
 
-    vector< vector<Envelope> > e = uut.calculateTiles();
+    vector<vector<Envelope>> e = uut.calculateTiles();
 
     OsmMapPtr bounds(new OsmMap());
 
@@ -114,10 +117,10 @@ public:
     }
 
     OsmXmlWriter writer;
-    writer.write(bounds, "test-output/conflate/TileBounds.osm");
+    writer.write(bounds, _outputPath + "TileBounds.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/TileBounds.osm",
-                     "test-output/conflate/TileBounds.osm");
+    HOOT_FILE_EQUALS( _inputPath + "TileBounds.osm",
+                     _outputPath + "TileBounds.osm");
 
   }
 };

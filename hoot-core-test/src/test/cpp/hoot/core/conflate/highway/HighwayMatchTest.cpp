@@ -66,6 +66,8 @@ class HighwayMatchTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/conflate/highway/";
+
   HighwayMatchTest()
   {
     setResetType(ResetBasic);
@@ -276,7 +278,7 @@ public:
   void runRealWorld1Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld1Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
 
@@ -303,7 +305,7 @@ public:
   void runRealWorld2Test()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "HighwayMatchRealWorld2Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
 

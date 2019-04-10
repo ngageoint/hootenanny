@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -57,10 +57,13 @@ class CookieCutterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/conflate/";
+  const QString _outputPath = "test-output/conflate/";
+
   CookieCutterTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
@@ -79,10 +82,10 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     OsmXmlWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterTest.osm");
+    writer.write(cookieCutMap, _outputPath + "CookieCutterTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterTest.osm",
-                     "test-output/conflate/CookieCutterTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CookieCutterTest.osm",
+                     _outputPath + "CookieCutterTest.osm");
   }
 
   void runCropTest()
@@ -100,10 +103,10 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     OsmXmlWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropTest.osm");
+    writer.write(cookieCutMap, _outputPath + "CookieCutterCropTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterCropTest.osm",
-                     "test-output/conflate/CookieCutterCropTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropTest.osm",
+                     _outputPath + "CookieCutterCropTest.osm");
   }
 
   void runBufferTest()
@@ -121,10 +124,10 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     OsmXmlWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterBufferTest.osm");
+    writer.write(cookieCutMap, _outputPath + "CookieCutterBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterBufferTest.osm",
-                     "test-output/conflate/CookieCutterBufferTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CookieCutterBufferTest.osm",
+                     _outputPath + "CookieCutterBufferTest.osm");
   }
 
   void runNegativeBufferTest()
@@ -142,10 +145,10 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     OsmXmlWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterNegativeBufferTest.osm");
+    writer.write(cookieCutMap, _outputPath + "CookieCutterNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterNegativeBufferTest.osm",
-                     "test-output/conflate/CookieCutterNegativeBufferTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CookieCutterNegativeBufferTest.osm",
+                     _outputPath + "CookieCutterNegativeBufferTest.osm");
   }
 
   void runCropAndBufferTest()
@@ -163,10 +166,10 @@ public:
     MapProjector::projectToWgs84(cookieCutMap);
 
     OsmXmlWriter writer;
-    writer.write(cookieCutMap, "test-output/conflate/CookieCutterCropAndBufferTest.osm");
+    writer.write(cookieCutMap, _outputPath + "CookieCutterCropAndBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/CookieCutterCropAndBufferTest.osm",
-                     "test-output/conflate/CookieCutterCropAndBufferTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropAndBufferTest.osm",
+                     _outputPath + "CookieCutterCropAndBufferTest.osm");
   }
 };
 

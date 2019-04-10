@@ -81,10 +81,12 @@ class BuildingMergerTest : public HootTestFixture
 
 public:
 
+  const QString _outputPath = "test-output/conflate/polygon/";
+
   BuildingMergerTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate/polygon");
+    TestUtils::mkpath(_outputPath);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
@@ -128,7 +130,7 @@ public:
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
@@ -136,12 +138,12 @@ public:
     }
 
     BuildingMerger bm(pairs);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     bm.apply(map, replaced);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
+    writer.write(map, _outputPath + "BuildingMergerTest-runMatchTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way(-15), Way(-7)), (Way(-14), Way(-7)), (Way(-13), Way(-7))}", replaced);
   }
@@ -214,7 +216,7 @@ public:
     OsmXmlWriter writer;
     writer.write(
       map,
-      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
+      _outputPath + "BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
     HOOT_STR_EQUALS(
       "[3]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-1), Relation(-1))}", replaced);
   }
@@ -233,7 +235,7 @@ public:
     OsmXmlWriter writer;
     writer.write(
       map,
-      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
+      _outputPath + "BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
     HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
   }
 
@@ -252,7 +254,7 @@ private:
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
     vector<long> wids3 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Maid-Rite");
     wids2.insert(wids2.end(), wids3.begin(), wids3.end());
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
