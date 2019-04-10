@@ -82,18 +82,6 @@ int Status::getInput() const
   return result;
 }
 
-QString Status::toCompatString() const
-{
-  if (_type <= EnumEnd)
-  {
-    return QString::number(_type);
-  }
-  else
-  {
-    return toString();
-  }
-}
-
 QString Status::toString() const
 {
   if (_type > EnumEnd)
