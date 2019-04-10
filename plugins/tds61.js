@@ -1417,31 +1417,11 @@ tds61 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // // Some tags imply that they are buildings but don't actually say so
-        // // Most of these are taken from raw OSM and the OSM Wiki
-        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // // are not buildings
-        // // Taking "place_of_worship" out of this and making it a building
-        // var notBuildingList = [
-        //     'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
-        //     'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
-        //     'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
-        //     'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'nameplate', 'park', 'parking',
-        //     'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
-        //     'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
-        //     'water_point', 'watering_place', 'yes', 'ferry_terminal',
-        //     'fuel' // NOTE: Fuel goes to a different F_CODE
-        //     ]; // End notBuildingList
-
-        // if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
-
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
         // - Amenity == The area around a thing
         // Note: amenity=place_of_worship is a special case. It _should_ have an associated building tag
-        var facilityList = {
-            'school':'850', 'university':'855', 'college':'857', 'hospital':'860'
-            };
+        var facilityList = {'school':'850', 'university':'855', 'college':'857', 'hospital':'860'};
 
         if (tags.amenity in facilityList)
         {

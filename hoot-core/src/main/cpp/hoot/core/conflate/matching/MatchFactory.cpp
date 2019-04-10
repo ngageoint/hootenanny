@@ -244,27 +244,6 @@ void MatchFactory::_tempFixDefaults()
     conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
   LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
-
-  //fix use of rubber sheeting and corner splitter - default value coming in from UI with network
-  //will be correct, so just fix for unifying - https://github.com/ngageoint/hootenanny-ui/issues/969
-  QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
-  if (matchCreators.contains("hoot::HighwayMatchCreator") &&
-      (mapCleanerTransforms.contains("hoot::CornerSplitter") ||
-       mapCleanerTransforms.contains("hoot::RubberSheet")))
-  {
-    if (mapCleanerTransforms.contains("hoot::CornerSplitter") &&
-        !ConfigOptions().getHighwayMergeTagsOnly())
-    {
-      mapCleanerTransforms.removeAll("hoot::CornerSplitter");
-    }
-    if (mapCleanerTransforms.contains("hoot::RubberSheet"))
-    {
-      mapCleanerTransforms.removeAll("hoot::RubberSheet");
-    }
-    LOG_DEBUG("Temp fixing map.cleaner.transforms...");
-    conf().set("map.cleaner.transforms", mapCleanerTransforms.join(";"));
-  }
-  LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
 void MatchFactory::setConfiguration(const Settings& s)

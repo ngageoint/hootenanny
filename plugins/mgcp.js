@@ -1364,7 +1364,8 @@ mgcp = {
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
                         delete tags.place;
-                    }                break;
+                    }
+                    break;
 
             case 'isolated_dwelling':
                 attrs.F_CODE = 'AL105'; // Settlement

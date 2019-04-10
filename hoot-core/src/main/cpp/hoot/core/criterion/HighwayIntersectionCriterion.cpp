@@ -62,7 +62,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     ConstWayPtr w = _map->getWay(*it);
-    if (HighwayCriterion().isSatisfied(w))
+    if (HighwayCriterion(_map).isSatisfied(w))
     {
       hwids.insert(*it);
     }
