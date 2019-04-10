@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace  geos::geom;
@@ -51,7 +52,8 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
   if( !pWay->isClosedArea() ) return false;
 
-  ElementConverter elementConverter(pMap->shared_from_this());
+  OsmMapPtr mapPtr = pMap->shared_from_this();
+  ElementConverter elementConverter(mapPtr);
 
   shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
@@ -70,13 +72,17 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
     // copy tags from original way to node
     pNode->setTags(pWay->getTags());
 
+    std::vector<long> nodeIds = pWay->getNodeIds();
+
     // replace original way with node
     pMap->replace(pWay, pNode);
 
-
-    // todo: remove unused nodes of previous way
-
-
+    // remove unused nodes of previous way
+    for( std::vector<long>::iterator it = nodeIds.begin(); it != nodeIds.end(); it++ )
+    {
+      RemoveNodeOp removeOp( *it, true, false, true );
+      removeOp.apply(mapPtr);
+    }
 
     return true;
   }
