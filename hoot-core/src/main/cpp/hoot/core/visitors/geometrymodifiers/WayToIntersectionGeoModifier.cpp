@@ -55,7 +55,6 @@ bool WayToIntersectionGeoModifier::process( const ElementPtr& pElement, OsmMap* 
   // find intersecting ways
   vector<long> intersectIds = pMap->getIndex().findWays(*pEnv);
 
-  long currNodeId = pWay->getId();
   long myNodeCount = pWay->getNodeCount();
   vector<long> myNodeIds = pWay->getNodeIds();
 
