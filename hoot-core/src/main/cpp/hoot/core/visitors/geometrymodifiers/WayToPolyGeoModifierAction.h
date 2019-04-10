@@ -31,6 +31,7 @@
 
 namespace hoot
 {
+struct CoordinateExt;
 
 /*
  * Creates a polygon from a way using a specified or default width setting.

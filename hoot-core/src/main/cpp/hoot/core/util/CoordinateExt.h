@@ -28,8 +28,11 @@
 #define COORDINATEEXT_H
 
 #include <geos/geom/Coordinate.h>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 using namespace geos::geom;
+using namespace boost;
 
 namespace hoot
 {
@@ -56,27 +59,71 @@ public:
     y /= len;
   }
 
-  float dotproduct(CoordinateExt val)
+  double dotProduct(CoordinateExt val)
   {
     return x * val.x + y * val.y;
   }
 
+  double crossProduct(CoordinateExt val)
+  {
+      return x * val.y - y * val.x;
+  }
+
   CoordinateExt operator + (const CoordinateExt  val) const
   {
-    CoordinateExt sum( x + val.x, y + val.y, z + val.z );
+    CoordinateExt sum( x + val.x, y + val.y );
     return sum;
   }
 
   CoordinateExt operator - (const CoordinateExt val) const
   {
-    CoordinateExt dif( x - val.x, y - val.y, z - val.z );
+    CoordinateExt dif( x - val.x, y - val.y );
     return dif;
   }
 
   CoordinateExt operator * (const double val) const
   {
-    CoordinateExt mul( x * val, y * val, z * val );
+    CoordinateExt mul( x * val, y * val );
     return mul;
+  }
+
+  CoordinateExt operator * (const CoordinateExt val) const
+  {
+    CoordinateExt mul( x * val.x, y * val.y );
+    return mul;
+  }
+
+  // https://www.codeproject.com/Tips/862988/Find-the-Intersection-Point-of-Two-Line-Segments
+  static shared_ptr<CoordinateExt> lineSegementsIntersect(const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1, const CoordinateExt& q2)
+  {
+      shared_ptr<CoordinateExt> intersection;
+
+      CoordinateExt r = p2 - p1;
+      CoordinateExt s = q2 - q1;
+      double rxs = r.crossProduct(s);
+      double qpxr = (q1 - p1).crossProduct(r);
+
+      if (isZero(rxs) && isZero(qpxr)) return intersection;
+      if (isZero(rxs) && !isZero(qpxr)) return intersection;
+
+      double t = (q1 - p1).crossProduct(s)/rxs;
+      double u = (q1 - p1).crossProduct(r)/rxs;
+
+      if (!isZero(rxs) && (0 <= t && t <= 1) && (0 <= u && u <= 1))
+      {
+        intersection = shared_ptr<CoordinateExt>( make_shared<CoordinateExt>(p1 + r*t) );
+        return intersection;
+      }
+
+      return intersection;
+  }
+
+private:
+
+  static bool isZero(double d)
+  {
+    const double Epsilon = 1e-10;
+    return fabs(d) < Epsilon;
   }
 };
 

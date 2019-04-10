@@ -1,5 +1,4 @@
- 
-/*
+ /*
  * This file is part of Hootenanny.
  *
  * Hootenanny is free software: you can redistribute it and/or modify
@@ -36,7 +35,7 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
 
-using namespace  geos::geom;
+using namespace geos::geom;
 
 namespace hoot
 {

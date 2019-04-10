@@ -25,13 +25,13 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include <math.h>
-
-#include "CoordinateExt.h"
 #include "WayToPolyGeoModifierAction.h"
 
 // Hoot
+#include <hoot/core/util/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
+
+#include <math.h>
 
 using namespace std;
 
