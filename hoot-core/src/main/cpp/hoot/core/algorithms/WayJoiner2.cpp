@@ -232,7 +232,7 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
 
   LOG_TRACE("Joining unsplit ways at node...");
 
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   OneWayCriterion oneWayCrit;
   boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   const WayMap ways = _map->getWays();
@@ -722,7 +722,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
 
   // If two roads disagree in highway type and aren't generic, don't join back up.
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
       OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {

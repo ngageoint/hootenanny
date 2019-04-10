@@ -270,8 +270,6 @@ void WayJoiner1::rejoinSiblings(deque<long>& way_ids)
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
       joinWays(parent, ways[sorted[i]]);
-    //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
-    parent->resetPid();
   }
 }
 

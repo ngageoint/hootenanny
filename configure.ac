@@ -102,7 +102,7 @@ m4_include([m4/boost.m4])
 AX_LIB_BOOST()
 
 # Qt
-AC_CHECK_HEADERS([qt5/QtCore/QXmlStreamWriter])
+AC_CHECK_HEADERS([qt5/QtCore/QtCoreVersion])
 
 # Protocol Buffers
 AC_SEARCH_LIBS([_ZTIN6google8protobuf20FieldDescriptorProtoE], [protobuf], [], [AC_MSG_ERROR([Protocol buffers library was not found])])

@@ -81,7 +81,7 @@ public:
     OsmMapReaderFactory::read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
-    boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
+    boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion(map));
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(true);
     removeElementsVisitor.setNegateCriterion(false);
