@@ -174,12 +174,12 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
   const ElementPtr& element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  /*if (_geometryCache->contains(element->getElementId()))
+  if (_geometryCache->contains(element->getElementId()))
   {
     _numGeometryCacheHits++;
     return _geometryCache->value(element->getElementId());
   }
-  else*/ if (!checkForBuilding || _isBuilding(element))
+  else if (!checkForBuilding || _isBuilding(element))
   {
     _schemaMutex->lock();
     if (element->getElementType() == ElementType::Relation)
@@ -192,9 +192,9 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
     }
     _schemaMutex->unlock();
 
-    //_wayGeometryCacheMutex->lock();
-    //_geometryCache->insert(element->getElementId(), g);
-    //_wayGeometryCacheMutex->unlock();
+    _wayGeometryCacheMutex->lock();
+    _geometryCache->insert(element->getElementId(), g);
+    _wayGeometryCacheMutex->unlock();
   }
   return g;
 }
