@@ -33,5 +33,15 @@
         {
             "max_area_in_m": 15000
         }
+    },
+    "way_to_intersection":
+    {
+        "filter":
+        {
+            "bridge": "yes"
+        },
+        "arguments":
+        {
+        }
     }
 }
