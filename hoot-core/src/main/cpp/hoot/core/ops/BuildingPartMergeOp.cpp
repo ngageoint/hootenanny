@@ -172,12 +172,14 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
   ElementPtr element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  /*if (_geometryCache->contains(element->getElementId()))
-  {
-    _numGeometryCacheHits++;
-    return _geometryCache->value(element->getElementId());
-  }
-  else*/ if (!checkForBuilding || _isBuilding(element))
+
+//  if (_geometryCache->contains(element->getElementId()))
+//  {
+//    g = _geometryCache->value(element->getElementId());
+//    _numGeometryCacheHits++;
+//  }
+
+  if (!g && (!checkForBuilding || _isBuilding(element)))
   {
     _schemaMutex->lock();
     if (element->getElementType() == ElementType::Relation)
@@ -195,6 +197,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
     //_wayGeometryCacheMutex->unlock();
     _numGeometryCacheMisses++;
   }
+
   return g;
 }
 
@@ -462,7 +465,44 @@ bool BuildingPartMergeOp::_isBuilding(const ElementPtr& element) const
 
 void BuildingPartMergeOp::_processBuildingParts()
 {
-//  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
+  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
+
+  QMutex buildingPartGroupMutex(QMutex::NonRecursive);
+  QMutex schemaMutex(QMutex::NonRecursive);
+  // TODO: rename to mapMutex
+  QMutex mapIndexMutex(QMutex::NonRecursive);
+  QMutex geomUtilsMutex(QMutex::NonRecursive);
+  QMutex buildingPartQueueMutex(QMutex::NonRecursive);
+  // TODO: get rid of the cache if its not helping after the threading refactor
+  QMutex wayGeometryCacheMutex(QMutex::NonRecursive);
+
+  QThreadPool threadPool;
+  threadPool.setMaxThreadCount(_threadCount);
+  LOG_VARD(threadPool.maxThreadCount());
+  LOG_INFO("Launching " << _threadCount << " processing tasks...");
+  for (int i = 0; i < _threadCount; i++)
+  {
+    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
+    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
+    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
+    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+    buildingPartTask->setSchemaMutex(&schemaMutex);
+    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
+    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
+    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+    buildingPartTask->setMap(_map);
+    buildingPartTask->setBuildingPartGroups(&_ds);
+    buildingPartTask->setGeometryCache(&_geometryCache);
+    threadPool.start(buildingPartTask);
+  }
+  LOG_VARD(threadPool.activeThreadCount());
+  const bool allThreadsRemoved = threadPool.waitForDone();
+  LOG_VARD(allThreadsRemoved);
+
+  // separate way and relation threading
+
+//  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue1();
 
 //  // TODO: may be able to get rid of some of these mutexes
 
@@ -496,68 +536,31 @@ void BuildingPartMergeOp::_processBuildingParts()
 //    threadPool.start(buildingPartTask);
 //  }
 //  LOG_VARD(threadPool.activeThreadCount());
-//  const bool allThreadsRemoved = threadPool.waitForDone();
+//  bool allThreadsRemoved = threadPool.waitForDone();
 //  LOG_VARD(allThreadsRemoved);
 
-  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue1();
+//  buildingPartQueue = _getBuildingPartQueue2();
 
-  // TODO: may be able to get rid of some of these mutexes
-
-  QMutex buildingPartGroupMutex(QMutex::Recursive);
-  QMutex schemaMutex(QMutex::Recursive);
-  // TODO: rename to mapMutex
-  QMutex mapIndexMutex(QMutex::Recursive);
-  QMutex geomUtilsMutex(QMutex::Recursive);
-  QMutex buildingPartQueueMutex(QMutex::Recursive);
-  // TODO: get rid of the cache if its not helping after the threading refactor
-  QMutex wayGeometryCacheMutex(QMutex::Recursive);
-
-  QThreadPool threadPool;
-  threadPool.setMaxThreadCount(_threadCount);
-  LOG_VARD(threadPool.maxThreadCount());
-  LOG_INFO("Launching " << _threadCount << " processing tasks...");
-  for (int i = 0; i < _threadCount; i++)
-  {
-    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
-    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
-    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
-    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
-    buildingPartTask->setSchemaMutex(&schemaMutex);
-    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
-    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
-    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
-    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
-    buildingPartTask->setMap(_map);
-    buildingPartTask->setBuildingPartGroups(&_ds);
-    buildingPartTask->setGeometryCache(&_geometryCache);
-    threadPool.start(buildingPartTask);
-  }
-  LOG_VARD(threadPool.activeThreadCount());
-  bool allThreadsRemoved = threadPool.waitForDone();
-  LOG_VARD(allThreadsRemoved);
-
-  buildingPartQueue = _getBuildingPartQueue2();
-
-  LOG_INFO("Launching " << _threadCount << " processing tasks...");
-  for (int i = 0; i < _threadCount; i++)
-  {
-    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
-    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
-    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
-    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
-    buildingPartTask->setSchemaMutex(&schemaMutex);
-    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
-    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
-    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
-    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
-    buildingPartTask->setMap(_map);
-    buildingPartTask->setBuildingPartGroups(&_ds);
-    buildingPartTask->setGeometryCache(&_geometryCache);
-    threadPool.start(buildingPartTask);
-  }
-  LOG_VARD(threadPool.activeThreadCount());
-  allThreadsRemoved = threadPool.waitForDone();
-  LOG_VARD(allThreadsRemoved);
+//  LOG_INFO("Launching " << _threadCount << " processing tasks...");
+//  for (int i = 0; i < _threadCount; i++)
+//  {
+//    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
+//    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
+//    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
+//    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+//    buildingPartTask->setSchemaMutex(&schemaMutex);
+//    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
+//    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
+//    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+//    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+//    buildingPartTask->setMap(_map);
+//    buildingPartTask->setBuildingPartGroups(&_ds);
+//    buildingPartTask->setGeometryCache(&_geometryCache);
+//    threadPool.start(buildingPartTask);
+//  }
+//  LOG_VARD(threadPool.activeThreadCount());
+//  allThreadsRemoved = threadPool.waitForDone();
+//  LOG_VARD(allThreadsRemoved);
 }
 
 void BuildingPartMergeOp::_mergeBuildingParts()

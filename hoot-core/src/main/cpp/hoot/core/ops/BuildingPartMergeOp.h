@@ -99,7 +99,7 @@ public:
 
   void run() override;
 
-  void setBuildingPartTagNames(const std::set<QString>& tagNames)
+  void setBuildingPartTagNames(std::set<QString> tagNames)
   { _buildingPartTagNames = tagNames; }
   void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
   void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
