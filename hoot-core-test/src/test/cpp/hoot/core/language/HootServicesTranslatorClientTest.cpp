@@ -43,9 +43,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/language/HootServicesTranslatorClientTest";
-
 class HootServicesTranslatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslatorClientTest);
@@ -56,13 +53,15 @@ class HootServicesTranslatorClientTest : public HootTestFixture
 
 public:
 
+  const QString _testInputRoot = "test-files/language/HootServicesTranslatorClientTest/";
+
   void runRequestDataTest()
   {
     boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(
-        testInputRoot + "/runRequestDataTest").trimmed(),
+        _testInputRoot + "runRequestDataTest").trimmed(),
         uut->_getRequestData("text to translate").trimmed());
   }
 
@@ -71,7 +70,17 @@ public:
     boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     //see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-    const QString jsonStr = "{ \"translatedText\": \"How%20old%20are%20you\", \"performExhaustiveTranslationSearchWithNoDetection\": false, \"detectorUsed\": \"TikaLanguageDetector\", \"sourceLangCodes\": [ \"de\",\"es\" ], \"detectedLangCode\": \"de\", \"detectedLangAvailableForTranslation\": true, \"translator\": \"HootLanguageTranslator\", \"sourceText\": \"wie alt bist du\", \"detectedLang\": \"German\", \"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
+    const QString jsonStr =
+        "{ \"translatedText\": \"How%20old%20are%20you\", "
+          "\"performExhaustiveTranslationSearchWithNoDetection\": false, "
+          "\"detectorUsed\": \"TikaLanguageDetector\", "
+          "\"sourceLangCodes\": [ \"de\",\"es\" ], "
+          "\"detectedLangCode\": \"de\", "
+          "\"detectedLangAvailableForTranslation\": true, "
+          "\"translator\": \"HootLanguageTranslator\", "
+          "\"sourceText\": \"wie alt bist du\", "
+          "\"detectedLang\": \"German\", "
+          "\"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
     boost::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
     uut->_parseResponse(response);

@@ -44,13 +44,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/language/HootServicesLanguageDetectorClientTest";
-
-//see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-static const QString responseStr =
-  "{ \"detectorUsed\": \"TikaLanguageDetector\", \"detectedLangCode\": \"de\", \"sourceText\": \"wie%20alt%20bist%20du\", \"detectedLang\": \"German\", \"detectionConfidence\": \"medium\" }";
-
 class HootServicesLanguageDetectorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesLanguageDetectorClientTest);
@@ -61,21 +54,30 @@ class HootServicesLanguageDetectorClientTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/language/HootServicesLanguageDetectorClientTest/";
+
+  // see comment in StringUtilsTest::jsonParseTest about the formatting of this string
+  const QString _responseStr =
+    "{ \"detectorUsed\": \"TikaLanguageDetector\", "
+      "\"detectedLangCode\": \"de\", "
+      "\"sourceText\": \"wie%20alt%20bist%20du\", "
+      "\"detectedLang\": \"German\", "
+      "\"detectionConfidence\": \"medium\" }";
+
   void runRequestDataTest()
   {
     boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
-      FileUtils::readFully(
-        testInputRoot + "/runRequestDataTest").trimmed(),
-        uut->_getRequestData("text to detect").trimmed());
+      FileUtils::readFully(_inputPath + "runRequestDataTest").trimmed(),
+      uut->_getRequestData("text to detect").trimmed());
   }
 
   void runParseResponseTest()
   {
     boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(responseStr);
+      StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
     HOOT_STR_EQUALS("de", uut->_parseResponse(response, detectorUsed));
@@ -88,7 +90,7 @@ public:
     uut->_minConfidence = LanguageDetectionConfidenceLevel::High;
 
     boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(responseStr);
+      StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
     HOOT_STR_EQUALS("", uut->_parseResponse(response, detectorUsed));
