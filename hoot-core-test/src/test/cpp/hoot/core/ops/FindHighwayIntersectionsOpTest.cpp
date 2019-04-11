@@ -56,10 +56,13 @@ class FindHighwayIntersectionsOpTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/FindHighwayIntersectionsOp/";
+  const QString _outputPath = "test-output/ops/FindHighwayIntersectionsOp/";
+
   FindHighwayIntersectionsOpTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/ops/FindHighwayIntersectionsOp/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()
@@ -77,9 +80,9 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
-    HOOT_FILE_EQUALS("test-files/ops/FindHighwayIntersectionsOp/ToyTestA_intersections.osm",
-                     "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
+    writer.write(map, _outputPath + "Toy_intersections.osm");
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestA_intersections.osm",
+                     _outputPath + "Toy_intersections.osm");
   }
 
 };

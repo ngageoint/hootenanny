@@ -51,10 +51,13 @@ class SmallWayMergerTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/SmallWayMerger/";
+  const QString _outputPath = "test-output/ops/SmallWayMerger/";
+
   SmallWayMergerTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/ops/SmallWayMerger");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -63,16 +66,16 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/SmallWayMerger/SmallWayMergerInput1.osm", map);
+    reader.read(_inputPath + "SmallWayMergerInput1.osm", map);
 
     MapProjector::projectToPlanar(map);
     SmallWayMerger::mergeWays(map, 15.0);
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
-    HOOT_FILE_EQUALS("test-files/ops/SmallWayMerger/SmallWayMergerOutput1.osm",
-                     "test-output/ops/SmallWayMerger/SmallWayMergerOutput1.osm");
+    writer.write(map, _outputPath + "SmallWayMergerOutput1.osm");
+    HOOT_FILE_EQUALS( _inputPath + "SmallWayMergerOutput1.osm",
+                     _outputPath + "SmallWayMergerOutput1.osm");
   }
 
 };

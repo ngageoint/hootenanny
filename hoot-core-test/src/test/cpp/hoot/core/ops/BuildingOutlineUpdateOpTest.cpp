@@ -52,10 +52,13 @@ class BuildingOutlineUpdateOpTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/BuildingOutlineUpdateOp/";
+  const QString _outputPath = "test-output/ops/BuildingOutlineUpdateOp/";
+
   BuildingOutlineUpdateOpTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/ops/BuildingOutlineUpdateOp/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runSelfIntersectingRelationTest()
@@ -66,7 +69,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsIn.osm", map);
+    reader.read(_inputPath + "SelfIntersectingRelationsIn.osm", map);
 
     BuildingOutlineUpdateOp uut;
     uut.apply(map);
@@ -76,9 +79,9 @@ public:
     // This output includes two reviews instead of the expected 1 review. See ticket #7043 for
     // an idea to clean this up (need to port issue to github).
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
-    HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm",
-                     "test-output/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsOut.osm");
+    writer.write(map, _outputPath + "SelfIntersectingRelationsOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "SelfIntersectingRelationsOut.osm",
+                     _outputPath + "SelfIntersectingRelationsOut.osm");
   }
 
   // see https://github.com/ngageoint/hootenanny/issues/442
@@ -93,7 +96,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesIn.osm", map);
+    reader.read(_inputPath + "UncleanableTopologiesIn.osm", map);
 
     BuildingOutlineUpdateOp uut;
     uut.apply(map);
@@ -101,9 +104,9 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm");
-    HOOT_FILE_EQUALS("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm",
-                     "test-output/ops/BuildingOutlineUpdateOp/UncleanableTopologiesOut.osm");
+    writer.write(map, _outputPath + "UncleanableTopologiesOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "UncleanableTopologiesOut.osm",
+                     _outputPath + "UncleanableTopologiesOut.osm");
   }
 
 };

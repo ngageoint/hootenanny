@@ -42,6 +42,8 @@ class RemoveEmptyRelationsOpTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/RemoveEmptyRelationsOp/";
+
   RemoveEmptyRelationsOpTest()
   {
     setResetType(ResetBasic);
@@ -52,7 +54,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RemoveEmptyRelationsOp/input.osm", map);
+    reader.read(_inputPath + "input.osm", map);
 
     RemoveEmptyRelationsOp uut;
     uut.apply(map);

@@ -71,6 +71,8 @@ class MapCropperTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/";
+
   OsmMapPtr genPoints(int seed)
   {
     Tgs::Random::instance()->seed(seed);
@@ -248,7 +250,7 @@ public:
   void runMultiPolygonTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
+    OsmMapReaderFactory::read(map, _inputPath + "MultipolygonTest.osm", true);
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 

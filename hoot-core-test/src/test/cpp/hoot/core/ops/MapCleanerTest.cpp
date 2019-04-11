@@ -55,10 +55,13 @@ class MapCleanerTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/ops/";
+  const QString _outputPath = "test-output/ops/";
+
   MapCleanerTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -73,10 +76,10 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/MapCleaner.osm");
+    writer.write(map, _outputPath + "MapCleaner.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/MapCleaner.osm",
-                     "test-output/conflate/MapCleaner.osm");
+    HOOT_FILE_EQUALS( _inputPath + "MapCleaner.osm",
+                     _outputPath + "MapCleaner.osm");
   }
 
 };
