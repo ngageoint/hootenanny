@@ -28,12 +28,9 @@ package hoot.services.command;
 
 
 import static hoot.services.HootProperties.replaceSensitiveData;
-import static hoot.services.models.db.QCommandStatus.commandStatus;
-import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,7 +52,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.models.db.CommandStatus;
 import hoot.services.utils.DbUtils;
 
 
@@ -88,7 +84,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     currentOut = currentOut.concat(line + "\n");
                     commandResult.setStdout(currentOut);
 
-                    DbUtils.updateCommandStdout(jobId, currentOut);
+                    if (trackable) {
+                        // update command status table stdout
+                        DbUtils.upsertCommandStatus(jobId, commandResult);
+                    }
                 }
             };
             this.stderr = new LogOutputStream() {
@@ -101,7 +100,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     currentErr = currentErr.concat(line + "\n");
                     commandResult.setStderr(currentErr);
 
-                    DbUtils.updateCommandStderr(jobId, currentErr);
+                    if (trackable) {
+                        // update command status table stderr
+                        DbUtils.upsertCommandStatus(jobId, commandResult);
+                    }
                 }
             };
 
@@ -125,11 +127,18 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             Exception exception = null;
             int exitCode;
 
-            commandResult.setCommand(obfuscatedCommand);
-            commandResult.setCaller(caller);
             commandResult.setStart(start);
+            commandResult.setCommand(obfuscatedCommand);
             commandResult.setJobId(jobId);
+            commandResult.setCaller(caller);
             commandResult.setWorkingDir(workingDir);
+            commandResult.setStdout("");
+            commandResult.setStderr("");
+
+            if (trackable) {
+                // Add the new command to the command status table
+                DbUtils.upsertCommandStatus(jobId, commandResult);
+            }
 
             try {
                 logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
@@ -162,17 +171,11 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             LocalDateTime finish = LocalDateTime.now();
 
-            // Need this in case 1 of them is null
-            String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
-            String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
-
-            commandResult.setStdout(currentOut);
-            commandResult.setStderr(currentErr);
             commandResult.setExitCode(exitCode);
             commandResult.setFinish(finish);
 
             if (trackable) {
-                updateDatabase(commandResult);
+                DbUtils.upsertCommandStatus(jobId, commandResult);
             }
 
             if (commandResult.failed()) {
@@ -254,21 +257,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         }
 
         return newMap;
-    }
-
-    private static void updateDatabase(CommandResult commandResult) {
-        CommandStatus cmdStatus = new CommandStatus();
-        cmdStatus.setCommand(commandResult.getCommand());
-        cmdStatus.setExitCode(commandResult.getExitCode());
-        cmdStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
-        cmdStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
-        cmdStatus.setJobId(commandResult.getJobId());
-        cmdStatus.setStderr(commandResult.getStderr());
-        cmdStatus.setStdout(commandResult.getStdout());
-
-        Long id = createQuery().insert(commandStatus).populate(cmdStatus).executeWithKey(commandStatus.id);
-
-        commandResult.setId(id);
     }
 
     @Override

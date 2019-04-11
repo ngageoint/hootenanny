@@ -39,7 +39,7 @@ public class CommandResult {
 
     private Long id;
     private String command;
-    private int exitCode;
+    private Integer exitCode;
     private String stdout;
     private String stderr;
     private LocalDateTime start;
@@ -54,7 +54,7 @@ public class CommandResult {
         return command;
     }
 
-    public int getExitCode() {
+    public Integer getExitCode() {
         return exitCode;
     }
 
@@ -102,7 +102,7 @@ public class CommandResult {
         this.command = command;
     }
 
-    public void setExitCode(int exitCode) {
+    public void setExitCode(Integer exitCode) {
         this.exitCode = exitCode;
     }
 
