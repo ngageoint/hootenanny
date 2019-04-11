@@ -43,9 +43,11 @@ class RemoveUnknownVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _outputPath = "test-output/visitors/RemoveUnknownVisitorTest/";
+
   RemoveUnknownVisitorTest()
   {
-    TestUtils::mkpath("test-output/visitors");
+    TestUtils::mkpath(_outputPath);
   }
 
   OsmMapPtr loadMap()
@@ -70,9 +72,9 @@ public:
     map->visitRw(visitor);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveUnknown1VisitorOutput.osm");
+    writer.write(map, _outputPath + "RemoveUnknown1VisitorOutput.osm");
     HOOT_FILE_EQUALS("test-files/ToyTestB.osm",
-                     "test-output/visitors/RemoveUnknown1VisitorOutput.osm");
+                     _outputPath + "RemoveUnknown1VisitorOutput.osm");
   }
 
   void runUnknown2Test()
@@ -82,9 +84,9 @@ public:
     map->visitRw(visitor);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveUnknown2VisitorOutput.osm");
+    writer.write(map, _outputPath + "RemoveUnknown2VisitorOutput.osm");
     HOOT_FILE_EQUALS("test-files/ToyTestA.osm",
-                     "test-output/visitors/RemoveUnknown2VisitorOutput.osm");
+                     _outputPath + "RemoveUnknown2VisitorOutput.osm");
   }
 
 };

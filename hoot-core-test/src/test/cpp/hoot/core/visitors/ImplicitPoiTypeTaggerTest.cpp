@@ -29,9 +29,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/language/DictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
-#include <hoot/core/language/DictionaryTranslator.h>
 
 namespace hoot
 {
@@ -51,23 +51,23 @@ class ImplicitPoiTypeTaggerTest : public HootTestFixture
 
 public:
 
-  static QString inDir() { return "test-files/visitors/ImplicitPoiTypeTaggerTest"; }
-  static QString outDir() { return "test-output/visitors/ImplicitPoiTypeTaggerTest"; }
+  const QString _inputPath = "test-files/visitors/ImplicitPoiTypeTaggerTest/";
+  const QString _outputPath = "test-output/visitors/ImplicitPoiTypeTaggerTest/";
 
   ImplicitPoiTypeTaggerTest()
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(outDir());
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTypeTaggerTest-runBasicTest-rules.sqlite";
+      _outputPath + "ImplicitPoiTypeTaggerTest-runBasicTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runBasicTest-ruleWordParts");
+    writer.write(_inputPath + "runBasicTest-ruleWordParts");
     writer.close();
 
     QString testJsonStr = QString::fromUtf8(
@@ -161,10 +161,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTypeTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
+      _outputPath + "ImplicitPoiTypeTaggerTest-runDuplicateTagKeyTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runDuplicateTagKeyTest-ruleWordParts");
+    writer.write(_inputPath + "runDuplicateTagKeyTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());
@@ -197,10 +197,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTypeTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
+      _outputPath + "ImplicitPoiTypeTaggerTest-runLessSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write("test-files/visitors/ImplicitPoiTypeTaggerTest/runLessSpecificImplicitTagTest-ruleWordParts");
+    writer.write(_inputPath + "runLessSpecificImplicitTagTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());
@@ -232,11 +232,10 @@ public:
   {
     //regenerate the db file
     const QString databaseOutFile =
-      outDir() + "/ImplicitPoiTypeTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
+      _outputPath + "ImplicitPoiTypeTaggerTest-runMoreSpecificImplicitTagTest-rules.sqlite";
     ImplicitTagRulesSqliteWriter writer;
     writer.open(databaseOutFile);
-    writer.write(
-      "test-files/visitors/ImplicitPoiTypeTaggerTest/runMoreSpecificImplicitTagTest-ruleWordParts");
+    writer.write(_inputPath + "runMoreSpecificImplicitTagTest-ruleWordParts");
     writer.close();
 
     OsmMapPtr map(new OsmMap());

@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-static const QString outputRoot = "test-output/visitors/NormalizeAddressesVisitorTest";
-
 class NormalizeAddressesVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NormalizeAddressesVisitorTest);
@@ -45,10 +43,13 @@ class NormalizeAddressesVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/NormalizeAddressesVisitorTest/";
+  const QString _outputPath = "test-output/visitors/NormalizeAddressesVisitorTest/";
+
   NormalizeAddressesVisitorTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputRoot);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -63,11 +64,11 @@ public:
     NormalizeAddressesVisitor uut;
     map->visitRw(uut);
 
-    const QString outputFile = outputRoot + "/out.osm";
+    const QString outputFile = _outputPath + "out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(25, uut._addressNormalizer.getNumNormalized());
-    HOOT_FILE_EQUALS("test-files/visitors/NormalizeAddressesVisitorTest/gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
 
 };

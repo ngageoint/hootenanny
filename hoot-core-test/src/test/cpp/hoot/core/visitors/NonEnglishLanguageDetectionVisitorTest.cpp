@@ -42,13 +42,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/visitors/ToEnglishTranslationVisitorTest";
-static const QString testInputRoot2 =
-  "test-files/visitors/NonEnglishLanguageDetectionVisitorTest";
-static const QString testOutputRoot =
-  "test-output/visitors/NonEnglishLanguageDetectionVisitorTest";
-
 class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NonEnglishLanguageDetectionVisitorTest);
@@ -61,10 +54,13 @@ class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/NonEnglishLanguageDetectionVisitorTest/";
+  const QString _outputPath = "test-output/visitors/NonEnglishLanguageDetectionVisitorTest/";
+
   NonEnglishLanguageDetectionVisitorTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(testOutputRoot);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runDetectTest()
@@ -73,8 +69,8 @@ public:
     Settings conf = _getDefaultConfig();
     _runDetectTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot2 + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
   void runIgnorePreTranslatedTagsTest()
@@ -85,15 +81,15 @@ public:
     boost::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
       _runDetectTest(
         conf,
-        testOutputRoot + "/" + testName + ".osm",
-        testInputRoot2 + "/" + testName + "-gold.osm");
+        _outputPath + testName + ".osm",
+        _inputPath + testName + "-gold.osm");
 
     const QString detectionSummaryFile =
-      testOutputRoot + "/runIgnorePreTranslatedTagsTest-DetectionSummary-out";
+      _outputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-out";
     LOG_VART(visitor->_getLangCountsSortedByLangName());
     FileUtils::writeFully(detectionSummaryFile, visitor->_getLangCountsSortedByLangName() + "\n");
     HOOT_FILE_EQUALS(
-      testInputRoot2 + "/runIgnorePreTranslatedTagsTest-DetectionSummary-gold",
+      _inputPath + "runIgnorePreTranslatedTagsTest-DetectionSummary-gold",
       detectionSummaryFile);
   }
 
@@ -107,8 +103,8 @@ public:
     {
       _runDetectTest(
         conf,
-        testOutputRoot + "/" + testName + ".osm",
-        testInputRoot2 + "/" + testName + "-gold.osm");
+        _outputPath + testName + ".osm",
+        _inputPath + testName + "-gold.osm");
     }
     catch (const HootException& e)
     {
@@ -124,8 +120,8 @@ public:
     conf.set("language.parse.names", true);
     _runDetectTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot2 + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
   void runNamesTestWithAdditionalTagKeys()
@@ -136,8 +132,8 @@ public:
     conf.set("language.tag.keys", "tag1;tag2");
     _runDetectTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot2 + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
 private:
@@ -166,7 +162,8 @@ private:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, testInputRoot + "/ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
+      map, "test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm",
+      false, Status::Unknown1);
 
     boost::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor(
       new NonEnglishLanguageDetectionVisitor());

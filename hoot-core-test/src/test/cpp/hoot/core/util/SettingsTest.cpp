@@ -49,6 +49,13 @@ class SettingsTest : public HootTestFixture
 
 public:
 
+  const QString _outputPath = "test-output/utils/";
+
+  SettingsTest()
+  {
+    TestUtils::mkpath(_outputPath);
+  }
+
   void envTest()
   {
     Settings uut;
@@ -93,12 +100,11 @@ public:
     uut.set("osm.map.writer.factory.writer", "1");
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
 
-    TestUtils::mkpath("test-output/utils");
-    uut.storeJson("test-output/utils/SettingsTest.json");
+    uut.storeJson(_outputPath + "SettingsTest.json");
 
     Settings uut2;
     uut2.loadDefaults();
-    uut2.loadJson("test-output/utils/SettingsTest.json");
+    uut2.loadJson(_outputPath + "SettingsTest.json");
     HOOT_STR_EQUALS(uut.getString("perty.csm.D"), "2");
     HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
     HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");

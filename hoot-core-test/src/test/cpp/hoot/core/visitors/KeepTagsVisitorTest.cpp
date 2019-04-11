@@ -49,6 +49,8 @@ class KeepTagsVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/";
+
   KeepTagsVisitorTest()
   {
     setResetType(ResetBasic);
@@ -84,7 +86,7 @@ private:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);
+    reader.read(_inputPath + "TagRenameKeyVisitorTest.osm", map);
     return map;
   }
 

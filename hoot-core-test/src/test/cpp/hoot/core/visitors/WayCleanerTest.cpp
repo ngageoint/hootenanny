@@ -52,6 +52,8 @@ class WayCleanerTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/WayCleanerTest/";
+
   WayCleanerTest()
   {
     setResetType(ResetBasic);
@@ -62,7 +64,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/WayCleanerTest/DuplicateNodesTest.osm", map);
+    reader.read(_inputPath + "DuplicateNodesTest.osm", map);
 
     WayPtr cleanedWay(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));
@@ -103,7 +105,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/WayCleanerTest/DuplicateCoordsTest.osm", map);
+    reader.read(_inputPath + "DuplicateCoordsTest.osm", map);
 
     WayPtr cleanedWay(
       new Way(*map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]).get()));

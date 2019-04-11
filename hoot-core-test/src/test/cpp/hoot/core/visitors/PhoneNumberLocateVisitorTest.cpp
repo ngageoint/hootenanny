@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-static const QString outputRoot = "test-output/visitors/PhoneNumberLocateVisitorTest";
-
 class PhoneNumberLocateVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PhoneNumberLocateVisitorTest);
@@ -45,10 +43,13 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/PhoneNumberLocateVisitorTest/";
+  const QString _outputPath = "test-output/visitors/PhoneNumberLocateVisitorTest/";
+
   PhoneNumberLocateVisitorTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputRoot);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -64,11 +65,11 @@ public:
     uut._phoneNumberLocator.setRegionCode("US");
     map->visitRw(uut);
 
-    const QString outputFile = outputRoot + "/out.osm";
+    const QString outputFile = _outputPath + "out.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     CPPUNIT_ASSERT_EQUAL(12, uut._phoneNumberLocator.getNumLocated());
-    HOOT_FILE_EQUALS("test-files/visitors/PhoneNumberLocateVisitorTest/gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "gold.osm", outputFile);
   }
 
 };

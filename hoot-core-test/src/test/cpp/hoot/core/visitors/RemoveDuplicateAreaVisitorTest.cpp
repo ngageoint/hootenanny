@@ -36,8 +36,8 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
@@ -60,6 +60,8 @@ class RemoveDuplicateAreaVisitorTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/visitors/";
+
   RemoveDuplicateAreaVisitorTest()
   {
     setResetType(ResetBasic);
@@ -71,17 +73,11 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/RemoveDuplicateAreaVisitorTest.osm", map);
+    reader.read(_inputPath + "RemoveDuplicateAreaVisitorTest.osm", map);
     MapProjector::projectToPlanar(map);
 
     RemoveDuplicateAreaVisitor uut;
     map->visitRw(uut);
-
-//#warning debug
-//    MapProjector::reprojectToWgs84(map);
-//    QDir().mkpath("test-output/visitors/");
-//    OsmXmlWriter writer;
-//    writer.write(map, "test-output/visitors/RemoveDuplicateAreaVisitorTest.osm");
 
     // these "duplicates" should not be removed.
     CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "tag difference").size());
