@@ -166,7 +166,7 @@ public class ExportResource {
                 }
 
                 Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
-                workflow.add(zipCommand);
+                    workflow.add(zipCommand);
                 params.setInputType("folder");
 
             } else if (inputType.equalsIgnoreCase("dbs")) {
@@ -176,7 +176,7 @@ public class ExportResource {
                     params.setInput(map);
                     params.setOutputName(map);
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
-                }
+            }
 
                 Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
                 workflow.add(zipCommand);
@@ -186,12 +186,12 @@ public class ExportResource {
 
                 // only try to add zipCommand to workflow if not osm.pbf or tiles...
                 if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
-                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
 
-                    if (zipCommand != null) {
-                        workflow.add(zipCommand);
-                    }
+                if (zipCommand != null) {
+                    workflow.add(zipCommand);
                 }
+            }
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
@@ -399,6 +399,10 @@ public class ExportResource {
             return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
         }
         else if (outputType.equalsIgnoreCase("OSM")) {
+            String fileToCompress = outputName + "." + outputType;
+            return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
+        }
+        else if (outputType.equalsIgnoreCase("GEOJSON")) {
             String fileToCompress = outputName + "." + outputType;
             return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
         }
