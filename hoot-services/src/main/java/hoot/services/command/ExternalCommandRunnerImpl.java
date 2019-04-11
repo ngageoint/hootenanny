@@ -78,15 +78,20 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
-                    logger.info(line);
-
                     String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
-                    currentOut = currentOut.concat(line + "\n");
-                    commandResult.setStdout(currentOut);
+                    String currentLine = line + "\n";
 
-                    if (trackable) {
-                        // update command status table stdout
-                        DbUtils.upsertCommandStatus(jobId, commandResult);
+                    // Had to add because ran into case where same line was processed twice in a row
+                    if(!currentOut.equals(currentLine)) {
+                        logger.info(line);
+
+                        currentOut = currentOut.concat(currentLine);
+                        commandResult.setStdout(currentOut);
+
+                        if (trackable) {
+                            // update command status table stdout
+                            DbUtils.upsertCommandStatus(jobId, commandResult);
+                        }
                     }
                 }
             };
@@ -94,15 +99,20 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
-                    logger.error(line);
-
                     String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
-                    currentErr = currentErr.concat(line + "\n");
-                    commandResult.setStderr(currentErr);
+                    String currentLine = line + "\n";
 
-                    if (trackable) {
-                        // update command status table stderr
-                        DbUtils.upsertCommandStatus(jobId, commandResult);
+                    // Had to add because ran into case where same line was processed twice in a row
+                    if(!currentErr.equals(currentLine)) {
+                        logger.error(line);
+
+                        currentErr = currentErr.concat(currentLine);
+                        commandResult.setStderr(currentErr);
+
+                        if (trackable) {
+                            // update command status table stderr
+                            DbUtils.upsertCommandStatus(jobId, commandResult);
+                        }
                     }
                 }
             };
@@ -173,6 +183,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             commandResult.setExitCode(exitCode);
             commandResult.setFinish(finish);
+
+            this.stdout.close();
+            this.stderr.close();
 
             if (trackable) {
                 DbUtils.upsertCommandStatus(jobId, commandResult);
