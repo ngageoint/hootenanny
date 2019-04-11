@@ -29,12 +29,31 @@
 
 #include "GeometryModifierAction.h"
 
+// Hoot
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/util/CoordinateExt.h>
+
+#include <vector>
+
 namespace hoot
 {
 
+/*
+ * Creates a node at any intersection of the way with another way.
+ * Copies the tag of the original way to the node.
+ * Deletes the original way if able to merge the original way's segments
+ * into an adjacent way.
+ */
 class WayToIntersectionGeoModifier : public GeometryModifierAction
 {
 public:
+
+  struct IntersectionInfo
+  {
+    CoordinateExt intersectionPoint;
+    long segNodeId1, segNodeId2;
+  };
+
   static std::string className() { return "hoot::WayToIntersectionGeoModifier"; }
 
   QString getCommandName() const { return "way_to_intersection"; }
@@ -42,6 +61,10 @@ public:
 
   void parseArguments( const QHash<QString, QString>& arguments ) { (void)arguments; /* unused */ }
   bool process( const ElementPtr& pElement, OsmMap* pMap );
+
+private:
+  void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters );
+  bool assignToAdjacentWay( OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, std::vector<long> nodesToAttach );
 };
 
 }
