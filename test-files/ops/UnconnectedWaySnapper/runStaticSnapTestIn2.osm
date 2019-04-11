@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+  <node id="-31" visible="true" lat="38.89345992709" lon="-77.04133536577">
+    <tag k="hoot:id" v="-31" />
+  </node>
+  <node id="-32" visible="true" lat="38.89360713635" lon="-77.04131694412">
+    <tag k="hoot:id" v="-32" />
+  </node>
+  <node id="-33" visible="true" lat="38.89399650127" lon="-77.04126821910">
+    <tag k="hoot:id" v="-33" />
+  </node>
+  <node id="-34" visible="true" lat="38.89405061596" lon="-77.04125836343">
+    <tag k="hoot:id" v="-34" />
+  </node>
+  <node id="-35" visible="true" lat="38.89460596802" lon="-77.04115721910">
+    <tag k="hoot:id" v="-35" />
+  </node>
+  <node id="-36" visible="true" lat="38.89461480394" lon="-77.04115531816">
+    <tag k="hoot:id" v="-36" />
+  </node>
+  <node id="-37" visible="true" lat="38.89522456172" lon="-77.04102413538">
+    <tag k="hoot:id" v="-37" />
+  </node>
+  <node id="-38" visible="true" lat="38.89525670953" lon="-77.04101721910">
+    <tag k="hoot:id" v="-38" />
+  </node>
+  <node id="-39" visible="true" lat="38.89581943480" lon="-77.04091921910">
+    <tag k="hoot:id" v="-39" />
+  </node>
+  <node id="-40" visible="true" lat="38.88918095700" lon="-77.04216021910">
+    <tag k="hoot:id" v="-40" />
+  </node>
+  <node id="-41" visible="true" lat="38.89112746301" lon="-77.04179271910">
+    <tag k="hoot:id" v="-41" />
+  </node>
+  <node id="-42" visible="true" lat="38.89215132532" lon="-77.04156971910">
+    <tag k="hoot:id" v="-42" />
+  </node>
+  <node id="-43" visible="true" lat="38.89222064680" lon="-77.04155471910">
+    <tag k="hoot:id" v="-43" />
+  </node>
+  <node id="-44" visible="true" lat="38.89279456566" lon="-77.04145111617">
+    <tag k="hoot:id" v="-44" />
+  </node>
+  <node id="-45" visible="true" lat="38.89297157384" lon="-77.04141916275">
+    <tag k="hoot:id" v="-45" />
+  </node>
+  <node id="-46" visible="true" lat="38.89323323007" lon="-77.04137192855">
+    <tag k="hoot:id" v="-46" />
+  </node>
+  <way id="-2" visible="true">
+    <nd ref="-31" />
+    <nd ref="-32" />
+    <nd ref="-33" />
+    <nd ref="-34" />
+    <nd ref="-35" />
+    <nd ref="-36" />
+    <nd ref="-37" />
+    <nd ref="-38" />
+    <nd ref="-39" />
+    <tag k="highway" v="road" />
+    <tag k="hoot:id" v="-2" />
+    <tag k="note" v="way2" />
+  </way>
+  <way id="-3" visible="true">
+    <nd ref="-40" />
+    <nd ref="-41" />
+    <nd ref="-42" />
+    <nd ref="-43" />
+    <nd ref="-44" />
+    <nd ref="-45" />
+    <nd ref="-46" />
+    <tag k="highway" v="road" />
+    <tag k="hoot:id" v="-3" />
+    <tag k="note" v="way3" />
+  </way>
+</osm>
