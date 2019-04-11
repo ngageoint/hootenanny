@@ -45,12 +45,14 @@ class ImplicitTagRulesSqliteReaderTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/ImplicitTagRulesSqliteReaderTest/";
+
   void runTagsTest()
   {
     ImplicitTagRulesSqliteReader reader;
     reader.setAddTopTagOnly(false);
     reader.setAllowWordsInvolvedInMultipleRules(false);
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
+    reader.open(_inputPath + "rules.sqlite");
 
     QSet<QString> words;
     QSet<QString> wordsInvolved;
@@ -160,7 +162,7 @@ public:
     ImplicitTagRulesSqliteReader reader;
     reader.setAddTopTagOnly(false);
     reader.setAllowWordsInvolvedInMultipleRules(false);
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
+    reader.open(_inputPath + "rules.sqlite");
 
     QSet<QString> words;
     QSet<QString> ruleWordsInvolved;

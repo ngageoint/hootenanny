@@ -55,40 +55,43 @@ class OsmGeoJsonReaderTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/GeoJson/";
+  const QString _outputPath = "test-output/io/GeoJson/";
+
   OsmGeoJsonReaderTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/GeoJson");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runAllDataTypesTest()
   {
-    runTest("test-files/io/GeoJson/AllDataTypes.geojson", "AllDataTypes.osm");
+    runTest("AllDataTypes.geojson", "AllDataTypes.osm");
   }
 
   void runDcTigerTest()
   {
-    runTest("test-files/io/GeoJson/DcTigerRoads.geojson", "DcTigerRoads.osm");
+    runTest("DcTigerRoads.geojson", "DcTigerRoads.osm");
   }
 
   void runBostonSubsetRoadBuildingTest()
   {
-    runTest("test-files/io/GeoJson/BostonSubsetRoadBuilding.geojson", "BostonSubsetRoadBuilding.osm");
+    runTest("BostonSubsetRoadBuilding.geojson", "BostonSubsetRoadBuilding.osm");
   }
 
   void runGenericGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/CensusUnitedStates.geojson", "CensusUnitedStates.osm");
+    runTest("CensusUnitedStates.geojson", "CensusUnitedStates.osm");
   }
 
   void runObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/SampleObjectsReader.geojson", "SampleObjectsReader.osm");
+    runTest("SampleObjectsReader.geojson", "SampleObjectsReader.osm");
   }
 
   void runMultiObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/MultiObjectsReader.geojson", "MultiObjectsReader.osm");
+    runTest("MultiObjectsReader.geojson", "MultiObjectsReader.osm");
   }
 
   void runTest(const QString& input, const QString& output)
@@ -97,14 +100,14 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.open(input);
+    reader.open(_inputPath + input);
     reader.read(map);
 
     OsmXmlWriter writer;
-    writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+    writer.open(_outputPath + output);
     writer.write(map);
-    HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
-                     QString("test-output/io/GeoJson/%1").arg(output));
+    HOOT_FILE_EQUALS( _inputPath + output,
+                     _outputPath + output);
   }
 
 };

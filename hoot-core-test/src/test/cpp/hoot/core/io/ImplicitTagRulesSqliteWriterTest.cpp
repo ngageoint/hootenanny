@@ -39,18 +39,21 @@ class ImplicitTagRulesSqliteWriterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/ImplicitTagRulesSqliteWriterTest/";
+  const QString _outputPath = "test-output/io/ImplicitTagRulesSqliteWriterTest/";
+
   ImplicitTagRulesSqliteWriterTest()
   {
-    TestUtils::mkpath("test-output/io/ImplicitTagRulesSqliteWriterTest");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runWriteTest()
   {
-    const QString outputFile = "test-output/io/ImplicitTagRulesSqliteWriterTest/rules-out.sqlite";
+    const QString outputFile = _outputPath + "rules-out.sqlite";
 
     ImplicitTagRulesSqliteWriter writer;
     writer.open(outputFile);
-    writer.write("test-files/io/ImplicitTagRulesSqliteWriterTest/ruleWordParts");
+    writer.write(_inputPath + "ruleWordParts");
     writer.close();
 
     _openDb(outputFile);

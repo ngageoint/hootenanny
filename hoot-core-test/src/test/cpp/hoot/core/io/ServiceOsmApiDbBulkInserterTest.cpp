@@ -60,10 +60,14 @@ class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/ServiceOsmApiDbBulkInserterTest/";
+  const QString _outputPath = "test-output/io/ServiceOsmApiDbBulkInserterTest/";
+  const QString _scriptDir = "test-files/servicesdb/";
+
   ServiceOsmApiDbBulkInserterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/ServiceOsmApiDbBulkInserterTest/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void verifyDatabaseOutputOffline()
@@ -409,11 +413,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile = "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-out.sql";
+    const QString outFile = _outputPath + "psql-offline-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -428,9 +431,7 @@ public:
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql",
-      outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }
 
@@ -438,12 +439,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile =
-      "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-validate-off-out.sql";
+    const QString outFile = _outputPath + "psql-offline-validate-off-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -460,9 +459,7 @@ public:
 
     //the element IDs will be reversed in the sql output with validation off, due to the way the
     //osm data reading works
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline-validate-off.sql",
-      outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline-validate-off.sql", outFile);
     verifyDatabaseOutputOfflineValidateOff();
   }
 
@@ -470,12 +467,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile =
-      "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-stxxl-out.sql";
+    const QString outFile = _outputPath + "psql-offline-stxxl-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -491,8 +486,7 @@ public:
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql", outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }
 
@@ -500,11 +494,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile = "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-online-out.sql";
+    const QString outFile = _outputPath + "psql-online-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(true);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -519,19 +512,18 @@ public:
 
     //write some data from somewhere else while before our writer starts writing data
     ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql"); //1 changeset
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql"); //1 changeset
     ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql"); //2 nodes
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "nodes.sql"); //2 nodes
     ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql"); //1 way
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "ways.sql"); //1 way
     ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql"); //1 relation
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "relations.sql"); //1 relation
 
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-online.sql", outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-online.sql", outFile);
     verifyDatabaseOutputOnline();
   }
 
@@ -539,12 +531,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile =
-      "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-starting-ids-out.sql";
+    const QString outFile = _outputPath + "psql-offline-starting-ids-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -562,9 +552,7 @@ public:
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline-starting-ids.sql",
-      outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline-starting-ids.sql", outFile);
 
     verifyDatabaseOutputOfflineWithCustomStartingIds();
   }
@@ -573,12 +561,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile =
-      "test-output/io/ServiceOsmApiDbBulkInserterTest/psql-offline-large-starting-ids-out.sql";
+    const QString outFile = _outputPath + "psql-offline-large-starting-ids-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -599,9 +585,7 @@ public:
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline-large-starting-ids.sql",
-      outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline-large-starting-ids.sql", outFile);
 
     verifyDatabaseOutputOfflineWithLargeCustomStartingIds();
   }
@@ -610,12 +594,10 @@ public:
   {
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
-    const QString outFile =
-      "test-output/io/ServiceOsmApiDbBulkInserterTest/sql-file-out.sql";
+    const QString outFile = _outputPath + "sql-file-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -627,16 +609,14 @@ public:
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/io/ServiceOsmApiDbBulkInserterTest/psql-offline.sql", outFile);
+    TestUtils::verifyStdMatchesOutputIgnoreDate(_inputPath + "psql-offline.sql", outFile);
     ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 
   void runUserDoesntExistTest()
   {
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbBulkInserter writer;
     writer.setChangesetUserId(-1);

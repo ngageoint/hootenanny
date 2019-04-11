@@ -45,20 +45,21 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/OsmXmlChangesetFileWriterTest/";
+  const QString _outputPath = "test-output/io/OsmXmlChangesetFileWriterTest/";
+
   OsmXmlChangesetFileWriterTest()
   {
-    TestUtils::mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runSimpleTest()
   {
     boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    OsmXmlChangesetFileWriter().write(
-      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
+    OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
 
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc"));
+    HOOT_FILE_EQUALS( _inputPath + "changeset.osc",
+                     _outputPath + "changeset.osc");
   }
 
   void runSplitTest()
@@ -69,14 +70,12 @@ public:
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
     writer.write(
-      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc", changesetProvider);
+      _outputPath + "changeset.split.osc", changesetProvider);
 
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"));
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"));
+    HOOT_FILE_EQUALS( _inputPath + "changeset.split.osc",
+                     _outputPath + "changeset.split.osc");
+    HOOT_FILE_EQUALS( _inputPath + "changeset-001.split.osc",
+                     _outputPath + "changeset-001.split.osc");
   }
 };
 

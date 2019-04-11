@@ -54,10 +54,13 @@ class OsmGeoJsonWriterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/GeoJson/";
+  const QString _outputPath = "test-output/io/GeoJson/";
+
   OsmGeoJsonWriterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/GeoJson");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runAllDataTypesTest()
@@ -82,7 +85,7 @@ public:
 
   void runObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
   }
 
   void runObjectGeoJsonHootTest()
@@ -91,7 +94,7 @@ public:
     s.set(ConfigOptions::getJsonPrettyPrintKey(), true);
     s.set(ConfigOptions::getJsonFormatHootenannyKey(), true);
 
-    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
   }
 
   void runTest(const QString& input, const QString& output, Settings* settings = NULL)
@@ -103,14 +106,14 @@ public:
     reader.read(input, map);
 
     OsmGeoJsonWriter writer;
-    writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+    writer.open(_outputPath + output);
 
     if (settings)
       writer.setConfiguration(*settings);
 
     writer.write(map);
-    HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
-                     QString("test-output/io/GeoJson/%1").arg(output));
+    HOOT_FILE_EQUALS( _inputPath + output,
+                     _outputPath + output);
   }
 
 };

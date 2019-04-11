@@ -48,11 +48,13 @@ class ArffReaderTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/ArffReaderTest/";
+
   void runBasicTest()
   {
     DataSamples samples;
 
-    ArffReader uut("test-files/io/ArffReaderTest/runBasic.arff");
+    ArffReader uut(_inputPath + "runBasic.arff");
     boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.
@@ -65,7 +67,7 @@ public:
   {
     DataSamples samples;
 
-    ArffReader uut("test-files/io/ArffReaderTest/runBz2.arff.bz2");
+    ArffReader uut(_inputPath + "runBz2.arff.bz2");
     boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.

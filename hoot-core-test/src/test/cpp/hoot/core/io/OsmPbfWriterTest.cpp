@@ -60,10 +60,13 @@ class OsmPbfWriterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/";
+  const QString _outputPath = "test-output/io/";
+
   OsmPbfWriterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()
@@ -74,10 +77,10 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
 
     OsmPbfWriter writer;
-    writer.write(map, "test-output/io/OsmPbfWriterTest.pbf");
+    writer.write(map, _outputPath + "OsmPbfWriterTest.pbf");
 
-    HOOT_FILE_EQUALS("test-files/io/OsmPbfWriterTest.pbf",
-                     "test-output/io/OsmPbfWriterTest.pbf");
+    HOOT_FILE_EQUALS( _inputPath + "OsmPbfWriterTest.pbf",
+                     _outputPath + "OsmPbfWriterTest.pbf");
 
   }
 

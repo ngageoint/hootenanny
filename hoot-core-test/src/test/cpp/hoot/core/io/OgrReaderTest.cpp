@@ -164,8 +164,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(1, water);
     }
 
-    void runStreamHasMoreElementsTest(
-        void )
+    void runStreamHasMoreElementsTest()
     {
       OgrReader reader1;
 
@@ -185,8 +184,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
     }
 
-    void runStreamReadNextElementTest(
-        void )
+    void runStreamReadNextElementTest()
     {
       OgrReader reader(QString("test-files/jakarta_raya_coastline.shp"));
 

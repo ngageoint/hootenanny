@@ -37,19 +37,23 @@ namespace hoot
 
 class OsmXmlReaderTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmXmlReaderTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST(runUseIdTest);
-    CPPUNIT_TEST(runUseStatusTest);
-    CPPUNIT_TEST(runUncompressTest);
-    CPPUNIT_TEST(runDecodeCharsTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(OsmXmlReaderTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runUseIdTest);
+  CPPUNIT_TEST(runUseStatusTest);
+  CPPUNIT_TEST(runUncompressTest);
+  CPPUNIT_TEST(runDecodeCharsTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  const QString _inputPath = "test-files/io/OsmXmlReaderTest/";
+  const QString _outputPath = "test-output/io/OsmXmlReaderTest/";
 
   OsmXmlReaderTest()
   {
     setResetType(ResetBasic);
+    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
@@ -101,7 +105,7 @@ public:
     uut.setUseDataSourceIds(true);
     uut.setUseFileStatus(true);
     uut.setDefaultStatus(Status::Invalid);
-    uut.read("test-files/io/OsmXmlReaderUseStatusTest.osm", map);
+    uut.read(_inputPath + "OsmXmlReaderUseStatusTest.osm", map);
 
     CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
@@ -126,7 +130,7 @@ public:
   void runUncompressTest()
   {
     const std::string cmd(
-      "gzip -c test-files/ToyTestA.osm > test-output/ToyTestA_compressed.osm.gz");
+      "gzip -c test-files/ToyTestA.osm > " + _outputPath.toStdString() + "ToyTestA_compressed.osm.gz");
     LOG_DEBUG("Running compress command: " << cmd);
 
     int retVal;
@@ -142,13 +146,13 @@ public:
     uut.setUseDataSourceIds(true);
 
     // Excercise the code
-    uut.read("test-output/ToyTestA_compressed.osm.gz", map);
+    uut.read(_outputPath + "ToyTestA_compressed.osm.gz", map);
 
     // Check a few things
     CPPUNIT_ASSERT_EQUAL(36,(int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
 
-    QFile f("test-output/ToyTestA_compressed.osm.gz");
+    QFile f(_outputPath + "ToyTestA_compressed.osm.gz");
     CPPUNIT_ASSERT(f.exists());
     CPPUNIT_ASSERT(f.remove());
   }
@@ -160,7 +164,7 @@ public:
     OsmXmlReader uut;
 
     OsmMapPtr map(new OsmMap());
-    uut.read("test-files/io/OsmXmlReaderTest/runDecodeCharsTest.osm", map);
+    uut.read(_inputPath + "runDecodeCharsTest.osm", map);
 
     int wayCtr = 0;
     for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)

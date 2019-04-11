@@ -45,9 +45,13 @@ public:
 
   OsmApiDb database;
 
+  const QString _inputPath = "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/";
+  const QString _outputPath = "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/";
+  const QString _scriptDir = "test-files/servicesdb/";
+
   ServiceOsmApiDbSqlChangesetFileWriterTest()
   {
-    TestUtils::mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
+    TestUtils::mkpath(_outputPath);
   }
 
   virtual void tearDown()
@@ -64,20 +68,13 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     writer.setChangesetUserId(1);
-    writer
-      .write(
-        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql",
-        changesetProvider);
-    HOOT_STR_EQUALS(
-      TestUtils::readFile(
-        "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql"),
-      TestUtils::readFile(
-        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql"));
+    writer.write(_outputPath + "changeset.osc.sql", changesetProvider);
+    HOOT_FILE_EQUALS(_inputPath + "changeset.osc.sql",
+                    _outputPath + "changeset.osc.sql");
   }
 
   void runSplitTest()
@@ -87,8 +84,7 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
     OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     //  Set the changeset max size to 5 (half of the changes) for this test only
@@ -96,15 +92,9 @@ public:
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
     writer.setChangesetUserId(1);
-    writer
-      .write(
-        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql",
-        changesetProvider);
-    HOOT_STR_EQUALS(
-      TestUtils::readFile(
-        "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql"),
-      TestUtils::readFile(
-        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql"));
+    writer.write(_outputPath + "changeset.split.osc.sql", changesetProvider);
+    HOOT_FILE_EQUALS(_inputPath + "changeset.split.osc.sql",
+                    _outputPath + "changeset.split.osc.sql");
   }
 };
 

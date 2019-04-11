@@ -44,9 +44,12 @@ class ArffWriterTest : public HootTestFixture
 
 public:
 
+  const QString _inputPath = "test-files/io/ArffWriterTest/";
+  const QString _outputPath = "test-output/io/ArffWriterTest/";
+
   ArffWriterTest()
   {
-    TestUtils::mkpath("test-output/io/ArffWriterTest/");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -68,13 +71,12 @@ public:
     s["b"] = 3.2;
     samples.push_back(s);
 
-    ArffWriter uut("test-output/io/ArffWriterTest/runBasic.arff", true);
+    ArffWriter uut(_outputPath + "runBasic.arff", true);
     uut.write(samples);
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS(
-      "test-files/io/ArffWriterTest/runBasic.arff",
-      "test-output/io/ArffWriterTest/runBasic.arff");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic.arff",
+                     _outputPath + "runBasic.arff");
   }
 };
 

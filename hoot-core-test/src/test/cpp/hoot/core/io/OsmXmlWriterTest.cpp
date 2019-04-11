@@ -37,16 +37,19 @@ namespace hoot
 
 class OsmXmlWriterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmXmlWriterTest);
-    CPPUNIT_TEST(runEncodeCharsTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(OsmXmlWriterTest);
+  CPPUNIT_TEST(runEncodeCharsTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  const QString _inputPath = "test-files/io/OsmXmlWriterTest/";
+  const QString _outputPath = "test-output/io/OsmXmlWriterTest/";
 
   OsmXmlWriterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/OsmXmlWriterTest");
+    TestUtils::mkpath(_outputPath);
   }
 
   void runEncodeCharsTest()
@@ -67,9 +70,9 @@ public:
     tags4.set("note", "<2>");
     TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags4);
 
-    const QString output = "test-output/io/OsmXmlWriterTest/runEncodeCharsTest-out.osm";
+    const QString output = _outputPath + "runEncodeCharsTest-out.osm";
     uut.write(map, output);
-    HOOT_FILE_EQUALS("test-files/io/OsmXmlWriterTest/runEncodeCharsTest.osm", output);
+    HOOT_FILE_EQUALS(_inputPath + "runEncodeCharsTest.osm", output);
   }
 };
 
