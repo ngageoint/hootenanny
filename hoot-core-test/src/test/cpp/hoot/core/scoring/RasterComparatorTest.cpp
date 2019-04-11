@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/scoring/RasterComparator.h>
 
@@ -42,32 +42,32 @@ namespace hoot
 
 class RasterComparatorTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(RasterComparatorTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(RasterComparatorTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    void runTest()
-    {
-        OsmXmlReader reader;
+  void runTest()
+  {
+    OsmXmlReader reader;
 
-        OsmMapPtr map(new OsmMap());
-        reader.read("test-files/ToyTestA.osm", map);
+    OsmMapPtr map(new OsmMap());
+    reader.read("test-files/ToyTestA.osm", map);
 
-        OsmMapPtr map2(new OsmMap());
-        reader.read("test-files/ToyTestB.osm", map2);
+    OsmMapPtr map2(new OsmMap());
+    reader.read("test-files/ToyTestB.osm", map2);
 
-        RasterComparator uut(map, map2);
-        uut.setPixelSize(3);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.891, uut.compareMaps(), 0.0025);
+    RasterComparator uut(map, map2);
+    uut.setPixelSize(3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.891, uut.compareMaps(), 0.0025);
 
-        uut.setPixelSize(2);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.896, uut.compareMaps(), 0.002);
+    uut.setPixelSize(2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.896, uut.compareMaps(), 0.002);
 
-        uut.setPixelSize(1);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.894, uut.compareMaps(), 0.002);
-    }
+    uut.setPixelSize(1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.894, uut.compareMaps(), 0.002);
+  }
 
 };
 

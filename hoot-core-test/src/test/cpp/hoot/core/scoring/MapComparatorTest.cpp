@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
@@ -42,21 +42,11 @@ using namespace hoot;
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Boost
-using namespace boost;
-
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-
-// Qt
-#include <QDebug>
-#include <QThread>
-
-// Standard
-#include <stdio.h>
 
 namespace hoot
 {

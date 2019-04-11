@@ -72,9 +72,6 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 # ifndef HOOT_HAVE_SERVICES
   ignoreList << "hoot-services";
 # endif
-# ifndef HOOT_HAVE_NODEJS
-  ignoreList << "hoot-js";
-# endif
 
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
