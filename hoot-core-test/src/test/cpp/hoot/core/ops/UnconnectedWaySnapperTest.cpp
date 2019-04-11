@@ -26,21 +26,22 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
 
 namespace hoot
 {
@@ -50,6 +51,7 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(UnconnectedWaySnapperTest);
   CPPUNIT_TEST(runSnapTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
+  CPPUNIT_TEST(runStaticSnapTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -98,9 +100,9 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter().write(map, outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(uut.getNumAffected(), 41L);
-    CPPUNIT_ASSERT_EQUAL(uut.getNumSnappedToWayNodes(), 5L);
-    CPPUNIT_ASSERT_EQUAL(uut.getNumSnappedToWays(), 36L);
+    CPPUNIT_ASSERT_EQUAL(43L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
   }
 
@@ -155,6 +157,35 @@ public:
 
     uut.setWayNodeToSnapToCriterionClassName(" ");
     HOOT_STR_EQUALS("hoot::WayNodeCriterion", uut._wayNodeToSnapToCriterionClassName);
+  }
+
+  void runStaticSnapTest()
+  {
+    const QString testName = "runStaticSnapTest";
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setUseDataSourceIds(true);
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(inputPath + testName + "In1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + testName + "In2.osm", map);
+
+    MapProjector::projectToPlanar(map);
+
+    WayPtr way1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way1")[0]);
+    WayPtr way2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way2")[0]);
+    WayPtr way3 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way3")[0]);
+
+    UnconnectedWaySnapper::snapClosestEndpointToWay(map, way2, way1);
+    UnconnectedWaySnapper::snapClosestEndpointToWay(map, way3, way1);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, outputPath + testName +  + "Out.osm");
+
+    HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
   }
 };
 
