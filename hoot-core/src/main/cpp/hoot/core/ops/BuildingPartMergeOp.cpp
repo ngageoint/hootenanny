@@ -47,6 +47,7 @@ namespace hoot
 
 BuildingPartProcessor::BuildingPartProcessor() :
 _numGeometryCacheHits(0),
+_numGeometryCacheMisses(0),
 _numGeometriesCleaned(0),
 _numProcessed(0)
 {
@@ -97,41 +98,38 @@ void BuildingPartProcessor::run()
   LOG_VAR(_buildingPartGroups->size());
   LOG_VAR(_numProcessed);
   LOG_VAR(_numGeometryCacheHits);
+  LOG_VAR(_numGeometryCacheMisses);
   LOG_VAR(_numGeometriesCleaned);
 }
 
-void BuildingPartProcessor::_addNeighborsToGroup(const BuildingPartDescription& buildingPart)
+void BuildingPartProcessor::_addNeighborsToGroup(const BuildingPartDescription buildingPart)
 {
   if (buildingPart._relationType == "containedWay")
   {
     if (buildingPart._partGeom)
     {
       _addContainedWayToGroup(
-        *buildingPart._partGeom, buildingPart._neighborId, buildingPart._part);
+        buildingPart._partGeom, buildingPart._neighborId, buildingPart._part);
     }
   }
   else
   {
-    _mapIndexMutex->lock();
-    WayPtr neighbor = _map->getWay(buildingPart._neighborId);
-    _mapIndexMutex->unlock();
     // add these two buildings to a set
     _buildingPartGroupMutex->lock();
+     WayPtr neighbor = _map->getWay(buildingPart._neighborId);
     _buildingPartGroups->joinT(neighbor, buildingPart._part);
     LOG_VARD(_buildingPartGroups->size());
     _buildingPartGroupMutex->unlock();
   }
 }
 
-void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& g, const long wayId,
-                                                    const ElementPtr& part)
+void BuildingPartProcessor::_addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g,
+                                                    const long wayId, ElementPtr part)
 {
   _mapIndexMutex->lock();
 
   WayPtr candidate = _map->getWay(wayId);
   LOG_VART(candidate == 0);
-
-  //_mapIndexMutex->lock();
 
   boost::shared_ptr<geos::geom::Geometry> cg = _getGeometry(candidate);
   LOG_VART(cg == 0);
@@ -141,17 +139,17 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
     bool contains = false;
     try
     {
-      contains = g.contains(cg.get());
+      contains = g->contains(cg.get());
       LOG_VART(contains);
     }
     catch (const geos::util::TopologyException&)
     {
       LOG_DEBUG("cleaning...");
-      //_geomUtilsMutex->lock();
+      _geomUtilsMutex->lock();
       boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
         GeometryUtils::validateGeometry(cg.get()));
-      boost::shared_ptr<geos::geom::Geometry> cleanG(GeometryUtils::validateGeometry(&g));
-      //_geomUtilsMutex->unlock();
+      boost::shared_ptr<geos::geom::Geometry> cleanG(GeometryUtils::validateGeometry(g.get()));
+      _geomUtilsMutex->unlock();
       contains = cleanG->contains(cleanCandidate.get());
       LOG_VART(contains);
       _numGeometriesCleaned++;
@@ -160,10 +158,10 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
 
     if (contains)
     {
-      //_buildingPartGroupMutex->lock();
+      _buildingPartGroupMutex->lock();
       _buildingPartGroups->joinT(candidate, part);
       LOG_VARD(_buildingPartGroups->size());
-      //_buildingPartGroupMutex->unlock();
+      _buildingPartGroupMutex->unlock();
     }
   }
 
@@ -171,15 +169,15 @@ void BuildingPartProcessor::_addContainedWayToGroup(const geos::geom::Geometry& 
 }
 
 boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
-  const ElementPtr& element, const bool checkForBuilding)
+  ElementPtr element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  if (_geometryCache->contains(element->getElementId()))
+  /*if (_geometryCache->contains(element->getElementId()))
   {
     _numGeometryCacheHits++;
     return _geometryCache->value(element->getElementId());
   }
-  else if (!checkForBuilding || _isBuilding(element))
+  else*/ if (!checkForBuilding || _isBuilding(element))
   {
     _schemaMutex->lock();
     if (element->getElementType() == ElementType::Relation)
@@ -192,14 +190,15 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartProcessor::_getGeometry(
     }
     _schemaMutex->unlock();
 
-    _wayGeometryCacheMutex->lock();
-    _geometryCache->insert(element->getElementId(), g);
-    _wayGeometryCacheMutex->unlock();
+    //_wayGeometryCacheMutex->lock();
+    //_geometryCache->insert(element->getElementId(), g);
+    //_wayGeometryCacheMutex->unlock();
+    _numGeometryCacheMisses++;
   }
   return g;
 }
 
-bool BuildingPartProcessor::_isBuilding(const ElementPtr& element) const
+bool BuildingPartProcessor::_isBuilding(ElementPtr element) const
 {
   _schemaMutex->lock();
   const bool isBuilding = _buildingCrit.isSatisfied(element);
@@ -245,10 +244,10 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
 
   QQueue<BuildingPartDescription> buildingPartQueue;
 
-  const WayMap& ways = _map->getWays();
+  const WayMap ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const WayPtr& w = it->second;
+    const WayPtr w = it->second;
     if (_buildingCrit.isSatisfied(w))
     {
       boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(w, false);
@@ -269,11 +268,93 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
     }
   }
 
-  const RelationMap& relations = _map->getRelations();
+  const RelationMap relations = _map->getRelations();
   LOG_VAR(relations.size());
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    const RelationPtr& r = it->second;
+    const RelationPtr r = it->second;
+    if (_buildingCrit.isSatisfied(r))
+    {
+      boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(r, true);
+      const std::vector<long> intersectIds = _map->getIndex().findWays(*g->getEnvelopeInternal());
+      LOG_VARD(intersectIds.size());
+      for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
+           ++it)
+      {
+        buildingPartQueue.enqueue(BuildingPartDescription(r, *it, "containedWay", g));
+      }
+
+      const std::vector<RelationData::Entry> members = r->getMembers();
+      LOG_VARD(members.size());
+      for (size_t i = 0; i < members.size(); i++)
+      {
+        const RelationData::Entry memberEntry = members[i];
+        const ElementId memberElementId = memberEntry.getElementId();
+        if (memberElementId.getType() == ElementType::Way)
+        {
+          WayPtr member = _map->getWay(memberElementId.getId());
+          const std::set<long> neighborIds = _calculateNeighbors(member, r->getTags());
+          for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end();
+               ++it)
+          {
+            buildingPartQueue.enqueue(BuildingPartDescription(r, *it, "neighbor", g));
+          }
+        }
+      }
+    }
+  }
+
+  LOG_VAR(_geometryCache.size());
+  LOG_VAR(buildingPartQueue.size());
+  return buildingPartQueue;
+}
+
+QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue1()
+{
+  LOG_INFO("Creating building part queue 1...");
+
+  QQueue<BuildingPartDescription> buildingPartQueue;
+
+  const WayMap ways = _map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    const WayPtr w = it->second;
+    if (_buildingCrit.isSatisfied(w))
+    {
+      boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(w, false);
+      const std::vector<long> intersectIds = _map->getIndex().findWays(*g->getEnvelopeInternal());
+      LOG_VARD(intersectIds.size());
+      for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
+           ++it)
+      {
+        buildingPartQueue.enqueue(BuildingPartDescription(w, *it, "containedWay", g));
+      }
+
+      const std::set<long> neighborIds = _calculateNeighbors(w, w->getTags());
+      LOG_VARD(neighborIds.size());
+      for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
+      {
+        buildingPartQueue.enqueue(BuildingPartDescription(w, *it, "neighbor", g));
+      }
+    }
+  }
+
+  LOG_VAR(_geometryCache.size());
+  LOG_VAR(buildingPartQueue.size());
+  return buildingPartQueue;
+}
+
+QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue2()
+{
+  LOG_INFO("Creating building part queue 2...");
+
+  QQueue<BuildingPartDescription> buildingPartQueue;
+
+  const RelationMap relations = _map->getRelations();
+  LOG_VAR(relations.size());
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    const RelationPtr r = it->second;
     if (_buildingCrit.isSatisfied(r))
     {
       boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(r, true);
@@ -329,7 +410,6 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const T
       const long wayId = *it;
 
       WayPtr neighbor = _map->getWay(wayId);
-      //WayPtr neighbor(new Way(*_map->getWay(wayId)));
       LOG_VART(neighbor == 0);
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
       if (neighbor != w && _isBuilding(neighbor) &&
@@ -366,8 +446,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
   const std::vector<long> nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size() - 1; i++)
   {
-    if ((nodes[i] == n1 && nodes[i + 1] == n2) ||
-        (nodes[i] == n2 && nodes[i + 1] == n1))
+    if ((nodes[i] == n1 && nodes[i + 1] == n2) || (nodes[i] == n2 && nodes[i + 1] == n1))
     {
       return true;
     }
@@ -383,7 +462,44 @@ bool BuildingPartMergeOp::_isBuilding(const ElementPtr& element) const
 
 void BuildingPartMergeOp::_processBuildingParts()
 {
-  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
+//  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
+
+//  // TODO: may be able to get rid of some of these mutexes
+
+//  QMutex buildingPartGroupMutex(QMutex::Recursive);
+//  QMutex schemaMutex(QMutex::Recursive);
+//  // TODO: rename to mapMutex
+//  QMutex mapIndexMutex(QMutex::Recursive);
+//  QMutex geomUtilsMutex(QMutex::Recursive);
+//  QMutex buildingPartQueueMutex(QMutex::Recursive);
+//  // TODO: get rid of the cache if its not helping after the threading refactor
+//  QMutex wayGeometryCacheMutex(QMutex::Recursive);
+
+//  QThreadPool threadPool;
+//  threadPool.setMaxThreadCount(_threadCount);
+//  LOG_VARD(threadPool.maxThreadCount());
+//  LOG_INFO("Launching " << _threadCount << " processing tasks...");
+//  for (int i = 0; i < _threadCount; i++)
+//  {
+//    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
+//    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
+//    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
+//    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+//    buildingPartTask->setSchemaMutex(&schemaMutex);
+//    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
+//    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
+//    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+//    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+//    buildingPartTask->setMap(_map);
+//    buildingPartTask->setBuildingPartGroups(&_ds);
+//    buildingPartTask->setGeometryCache(&_geometryCache);
+//    threadPool.start(buildingPartTask);
+//  }
+//  LOG_VARD(threadPool.activeThreadCount());
+//  const bool allThreadsRemoved = threadPool.waitForDone();
+//  LOG_VARD(allThreadsRemoved);
+
+  QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue1();
 
   // TODO: may be able to get rid of some of these mutexes
 
@@ -417,7 +533,30 @@ void BuildingPartMergeOp::_processBuildingParts()
     threadPool.start(buildingPartTask);
   }
   LOG_VARD(threadPool.activeThreadCount());
-  const bool allThreadsRemoved = threadPool.waitForDone();
+  bool allThreadsRemoved = threadPool.waitForDone();
+  LOG_VARD(allThreadsRemoved);
+
+  buildingPartQueue = _getBuildingPartQueue2();
+
+  LOG_INFO("Launching " << _threadCount << " processing tasks...");
+  for (int i = 0; i < _threadCount; i++)
+  {
+    BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
+    buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
+    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
+    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
+    buildingPartTask->setSchemaMutex(&schemaMutex);
+    buildingPartTask->setMapIndexMutex(&mapIndexMutex);
+    buildingPartTask->setGeomUtilsMutex(&geomUtilsMutex);
+    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+    buildingPartTask->setWayGeometryCacheMutex(&wayGeometryCacheMutex);
+    buildingPartTask->setMap(_map);
+    buildingPartTask->setBuildingPartGroups(&_ds);
+    buildingPartTask->setGeometryCache(&_geometryCache);
+    threadPool.start(buildingPartTask);
+  }
+  LOG_VARD(threadPool.activeThreadCount());
+  allThreadsRemoved = threadPool.waitForDone();
   LOG_VARD(allThreadsRemoved);
 }
 
@@ -457,11 +596,11 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   const ElementPtr& element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  /*if (_geometryCache.contains(element->getElementId()))
+  if (_geometryCache.contains(element->getElementId()))
   {
     return _geometryCache[element->getElementId()];
   }
-  else */if (!checkForBuilding || _isBuilding(element))
+  else if (!checkForBuilding || _isBuilding(element))
   {
     if (element->getElementType() == ElementType::Relation)
     {
@@ -471,7 +610,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       g = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
     }
-    //_geometryCache[element->getElementId()] = g;
+    _geometryCache[element->getElementId()] = g;
   }
   return g;
 }

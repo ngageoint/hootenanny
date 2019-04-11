@@ -140,15 +140,16 @@ private:
 
   QString _id;
   int _numGeometryCacheHits;
+  int _numGeometryCacheMisses;
   int _numGeometriesCleaned;
   int _numProcessed;
 
-  void _addNeighborsToGroup(const BuildingPartDescription& buildingPart);
-  void _addContainedWayToGroup(const geos::geom::Geometry& g, const long wayId,
-                               const ElementPtr& part);
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ElementPtr& element,
+  void _addNeighborsToGroup(BuildingPartDescription buildingPart);
+  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g, const long wayId,
+                               ElementPtr part);
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ElementPtr element,
                                                        const bool checkForBuilding = true);
-  bool _isBuilding(const ElementPtr& element) const;
+  bool _isBuilding(ElementPtr element) const;
 };
 
 class Relation;
@@ -228,6 +229,8 @@ private:
   void _mergeBuildingParts();
 
   QQueue<BuildingPartDescription> _getBuildingPartQueue();
+  QQueue<BuildingPartDescription> _getBuildingPartQueue1();
+  QQueue<BuildingPartDescription> _getBuildingPartQueue2();
 
   void _initBuildingPartTagNames();
 
