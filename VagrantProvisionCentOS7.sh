@@ -32,7 +32,7 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
 # check to see if postgres is already installed
 if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
