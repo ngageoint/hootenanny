@@ -86,6 +86,9 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
 
   QQueue<BuildingPartDescription> buildingPartInput;
 
+  // Tried caching all of the geometries and passed them to the task threads to avoid repeated
+  // geometry calcs, but there were no performance gains.
+
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
