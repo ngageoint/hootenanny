@@ -70,12 +70,21 @@ public:
    */
   virtual ElementPtr readNextElement();
 
+  /**
+   * todo
+   *
+   * @param elements
+   */
+  static void sort(std::vector<ElementPtr>& elements);
+
 private:
 
   ConstOsmMapPtr _source;
 
   std::vector<long> _nodeIds, _wayIds, _relationIds;
   size_t _nodeIndex, _wayIndex, _relationIndex;
+
+  static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 
 };
 

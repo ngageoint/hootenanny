@@ -64,9 +64,9 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
       _relationIds.push_back(it->first);
     }
 
-    sort(_nodeIds.begin(), _nodeIds.end());
-    sort(_wayIds.begin(), _wayIds.end());
-    sort(_relationIds.begin(), _relationIds.end());
+    std::sort(_nodeIds.begin(), _nodeIds.end());
+    std::sort(_wayIds.begin(), _wayIds.end());
+    std::sort(_relationIds.begin(), _relationIds.end());
   }
 }
 
@@ -106,6 +106,25 @@ ElementPtr InMemoryElementSorter::readNextElement()
   }
 
   return result;
+}
+
+bool InMemoryElementSorter::_elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  const ElementType::Type type1 = e1->getElementType().getEnum();
+  const ElementType::Type type2 = e2->getElementType().getEnum();
+  if (type1 == type2)
+  {
+    return e1->getId() < e2->getId();
+  }
+  else
+  {
+    return type1 < type2;
+  }
+}
+
+void InMemoryElementSorter::sort(std::vector<ElementPtr>& elements)
+{
+  std::sort(elements.begin(), elements.end(), _elementCompare);
 }
 
 }

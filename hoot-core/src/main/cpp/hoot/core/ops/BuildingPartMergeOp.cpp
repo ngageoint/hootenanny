@@ -39,6 +39,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
 
 // Qt
 #include <QThreadPool>
@@ -67,7 +68,7 @@ void BuildingPartProcessor::setMap(OsmMapPtr map)
 void BuildingPartProcessor::run()
 {
   _id = QUuid::createUuid().toString();
-  LOG_DEBUG("Starting thread: " << _id << "...");
+  LOG_TRACE("Starting thread: " << _id << "...");
 
   while (!_buildingPartQueue->empty())
   {
@@ -87,10 +88,10 @@ void BuildingPartProcessor::run()
     LOG_VART(_buildingPartQueue->size());
   }
 
-  LOG_VARD(_id);
-  LOG_VARD(_buildingPartGroups->size());
-  LOG_VARD(_numProcessed);
-  LOG_VARD(_numGeometriesCleaned);
+  LOG_VART(_id);
+  LOG_VART(_buildingPartGroups->size());
+  LOG_VART(_numProcessed);
+  LOG_VART(_numGeometriesCleaned);
 }
 
 void BuildingPartProcessor::_addNeighborsToGroup(const BuildingPartDescription buildingPart)
@@ -357,8 +358,9 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
-  LOG_VARD(threadPool.maxThreadCount());
-  LOG_INFO("Launching " << _threadCount << " building part processing tasks...");
+  LOG_VART(threadPool.maxThreadCount());
+
+  LOG_DEBUG("Launching " << _threadCount << " building part processing tasks...");
   for (int i = 0; i < _threadCount; i++)
   {
     BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
@@ -371,9 +373,10 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
     buildingPartTask->setBuildingPartGroups(&_ds);
     threadPool.start(buildingPartTask);
   }
-  LOG_VARD(threadPool.activeThreadCount());
+
+  LOG_VART(threadPool.activeThreadCount());
   const bool allThreadsRemoved = threadPool.waitForDone();
-  LOG_VARD(allThreadsRemoved);
+  LOG_VART(allThreadsRemoved);
 
   LOG_VARD(StringUtils::formatLargeNumber(_ds.size()));
 }
@@ -454,20 +457,6 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   //_map.reset();
 }
 
-bool BuildingPartMergeOp::_elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
-{
-  const ElementType::Type type1 = e1->getElementType().getEnum();
-  const ElementType::Type type2 = e2->getElementType().getEnum();
-  if (type1 == type2)
-  {
-    return e1->getId() < e2->getId();
-  }
-  else
-  {
-    return type1 < type2;
-  }
-}
-
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
                                               std::vector<ElementPtr>& parts)
 {
@@ -476,8 +465,7 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
     throw IllegalArgumentException(
       "No building parts passed to BuildingPartMergeOp::combineParts.");
   }
-
-  std::sort(parts.begin(), parts.end(), _elementCompare);
+  InMemoryElementSorter::sort(parts);
 
   RelationPtr building(
     new Relation(

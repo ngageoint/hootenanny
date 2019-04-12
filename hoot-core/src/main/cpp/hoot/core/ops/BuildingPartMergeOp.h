@@ -144,9 +144,6 @@ private:
   void _addBuildingPartGroup(WayPtr building, ElementPtr buildingPart);
 };
 
-class Relation;
-class OsmSchema;
-
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
  * height. While they may represent a single building they're presented in the Shapefile as
@@ -233,8 +230,6 @@ private:
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
   bool _compareTags(Tags t1, Tags te);
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
-
-  static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 };
 
 }
