@@ -30,6 +30,7 @@ package hoot.services.command;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -67,18 +68,34 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
     public ExternalCommandRunnerImpl() {}
 
+    public String obfuscateConsoleLog(String in) {
+        //strip out logging metadata
+        //e.g. 15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184)
+        String out = in.replaceFirst("^.*?\\)\\s", "");
+
+        //strip out db connection string
+        //e.g. hootapidb://hoot:hoottest@localhost:5432/hoot
+        out = out.replaceAll("hootapidb:\\/\\/\\w+:\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
+
+        //strip out hoot path string
+        //e.g. /home/vagrant/hoot/userfiles/tmp/upload
+        //e.g. /home/vagrant/hoot/userfiles/tmp
+        out = out.replaceAll(HootProperties.HOME_FOLDER, "<path>");
+
+        return out;
+    }
+
     @Override
     public CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
         String obfuscatedCommand = commandTemplate;
 
-        try {
             CommandResult commandResult = new CommandResult();
 
             this.stdout = new LogOutputStream() {
                 @Override
                 protected void processLine(String line, int level) {
                     String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
-                    String currentLine = line + "\n";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
                     // Had to add because ran into case where same line was processed twice in a row
                     if(!currentOut.equals(currentLine)) {
@@ -99,7 +116,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 @Override
                 protected void processLine(String line, int level) {
                     String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
-                    String currentLine = line + "\n";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
                     // Had to add because ran into case where same line was processed twice in a row
                     if(!currentErr.equals(currentLine)) {
@@ -169,13 +186,18 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 exitCode = executor.execute(cmdLine);
             }
             catch (Exception e) {
+            logger.error("Error executing ()", obfuscatedCommand, e);
                 exitCode = CommandResult.FAILURE;
                 exception = e;
             }
-            finally {
+        finally {
+            try {
                 this.stdout.close();
                 this.stderr.close();
+            } catch (IOException e) {
+                logger.error("Failed to close output streams", e);
             }
+        }
 
             if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
                 // it was killed on purpose by the watchdog
@@ -199,10 +221,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             }
 
             return commandResult;
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
-        }
     }
 
     private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {
