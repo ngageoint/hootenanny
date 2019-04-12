@@ -50,6 +50,9 @@ import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 
 
+/**
+ * Updates the database by adding the specified jobs folder and mapping the inputs to the folder
+ */
 class UpdateDbCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(UpdateDbCommand.class);
 

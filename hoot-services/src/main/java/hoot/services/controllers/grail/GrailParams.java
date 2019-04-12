@@ -33,6 +33,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import hoot.services.models.db.Users;
 
 
+/**
+ * Used as a more uniform object across all the grail endpoints for when json data is being
+ * consumed by the endpoint but also as a more simple way of transferring data to other classes
+ * with 1 single object instead of multiple parameters
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GrailParams {
 

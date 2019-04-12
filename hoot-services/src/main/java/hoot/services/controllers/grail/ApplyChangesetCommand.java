@@ -33,6 +33,10 @@ import java.util.Map;
 
 import hoot.services.models.db.Users;
 
+
+/**
+ * Used to construct a changeset-apply command
+ */
 class ApplyChangesetCommand extends GrailCommand {
 
     ApplyChangesetCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {

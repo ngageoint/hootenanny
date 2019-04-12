@@ -29,6 +29,9 @@ package hoot.services.controllers.grail;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * Used for constructing a PullApiCommand object that will be used to pull MapEdit data
+ */
 @Component
 class PullApiCommandFactory {
 

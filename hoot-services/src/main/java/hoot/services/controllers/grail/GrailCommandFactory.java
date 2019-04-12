@@ -31,6 +31,10 @@ import java.lang.reflect.Constructor;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * Used for constructing an object from the specified 'grailCommandClass' passed in the constructor
+ * The middle man for constructing the various grail commands
+ */
 @Component
 class GrailCommandFactory {
 

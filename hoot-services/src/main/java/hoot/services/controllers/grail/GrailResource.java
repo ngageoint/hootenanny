@@ -113,6 +113,25 @@ public class GrailResource {
 
     public GrailResource() {}
 
+    /**
+     * Pull the OSM and Mapedit data for a bounding box and run differential on it
+     *
+     * Takes in a json object
+     * POST hoot-services/grail/createdifferential
+     *
+     * {
+     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
+     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
+     * }
+     *
+     * @param reqParams
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
+     * @return Job ID Internally, this is the directory that the files are kept in
+     */
     @POST
     @Path("/createdifferential")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -128,7 +147,7 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("EverythingByBox: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("createdifferential: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
@@ -208,6 +227,21 @@ public class GrailResource {
         return Response.ok(jobInfo.toJSONString()).build();
     }
 
+    /**
+     * Retrieve statistics on the specified differential
+     *
+     * GET hoot-services/grail/differentialstats/{jobId}
+     *
+     * @param jobDir
+     *      Internally, this is the directory that the files are kept in. We expect that the directory
+     *      has dest.osm & source.osm files to run the diff with.
+     *
+     * @param debugLevel
+     *      debug level
+     *
+     * @return JSON object containing info about the differential such as
+     *      the count of new nodes, ways, and relations
+     */
     @GET
     @Path("/differentialstats/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -252,6 +286,28 @@ public class GrailResource {
         return Response.ok(jobInfo.toJSONString()).build();
     }
 
+    /**
+     * Pushes the specified differential to MapEdit
+     *
+     * Takes in a json object
+     * POST hoot-services/grail/differentialpush
+     *
+     * {
+     *   //the job id. We make the directory for the differential with the name of the jobid
+     *   "folder" : "grail_8e8c4681-ead9-4c27-aa2e-80746d627523",
+     *
+     *   //boolean if the user wants to apply the tags when pushing to mapedit
+     *   "APPLY_TAGS" : true
+     * }
+     *
+     * @param reqParams
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
+     * @return Job ID. Can be used to check status of the conflate push
+     */
     @POST
     @Path("/differentialpush")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -334,6 +390,26 @@ public class GrailResource {
         return Response.ok(json.toJSONString()).build();
     }
 
+    /**
+     * Runs changeset-derive and pushes the result to MapEdit
+     *
+     * Takes in a json object
+     * POST hoot-services/grail/conflatepush
+     *
+     * {
+     *   "input1" : // reference dataset name
+     *
+     *   "input2" : // secondary dataset name
+     * }
+     *
+     * @param reqParams
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
+     * @return Job ID. Can be used to check status of the conflate push
+     */
     @POST
     @Path("/conflatepush")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -358,7 +434,7 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("GrailConflate: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("conflatePush: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
@@ -795,17 +871,6 @@ public class GrailResource {
         }
 
         return response;
-    }
-
-    // Get a file if it exists
-    private static File getFile(String jobId, String outputName, String fileExt) {
-        File tmpFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
-
-        if (!tmpFile.exists()) {
-            throw new WebApplicationException("Error.  Missing file: " + outputName + "." + fileExt);
-        }
-
-        return tmpFile;
     }
 
     // Get Capabilities from an OSM API Db

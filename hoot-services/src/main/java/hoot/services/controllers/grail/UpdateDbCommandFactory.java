@@ -29,6 +29,9 @@ package hoot.services.controllers.grail;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * Used for creating of the UpdateDbCommand object
+ */
 @Component
 class UpdateDbCommandFactory {
 

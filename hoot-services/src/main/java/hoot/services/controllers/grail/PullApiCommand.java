@@ -44,6 +44,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.WebApplicationException;
 
 
+/**
+ * Used for pulling MapEdit data
+ */
 class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
 
@@ -84,11 +87,11 @@ class PullApiCommand implements InternalCommand {
             double maxBboxArea = params.getMaxBBoxSize();
 
             if (bboxArea > maxBboxArea) {
-                throw new IllegalArgumentException("The bounding box area (" + bboxArea + 
+                throw new IllegalArgumentException("The bounding box area (" + bboxArea +
                         ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
-            URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) + 
+            URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) +
                 "/mapfull?bbox=" + boundingBox.toServicesString());
 
             File outputFile = new File(params.getOutput());

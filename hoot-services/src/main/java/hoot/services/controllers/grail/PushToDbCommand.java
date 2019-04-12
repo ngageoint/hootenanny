@@ -37,6 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * Used for pushing OSM data to the database
+ */
 class PushToDbCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(PushToDbCommand.class);
 

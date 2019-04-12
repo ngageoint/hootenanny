@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import hoot.services.command.ExternalCommand;
 
 
+/**
+ * Abstract class for various grail command classes to extend from
+ */
 abstract class GrailCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(GrailCommand.class);
 

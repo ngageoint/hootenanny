@@ -26,6 +26,9 @@
  */
 package hoot.services.controllers.grail;
 
+/**
+ * Used to store information for a getCapabilities request results
+ */
 public class APICapabilities {
     private Double minVersion;
     private Double maxVersion;

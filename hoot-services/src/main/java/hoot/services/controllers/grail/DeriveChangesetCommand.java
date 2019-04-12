@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * Used to construct a changeset-derive command
+ */
 class DeriveChangesetCommand extends GrailCommand {
 
     DeriveChangesetCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {

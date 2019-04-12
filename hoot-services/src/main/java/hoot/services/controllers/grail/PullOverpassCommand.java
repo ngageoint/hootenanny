@@ -44,6 +44,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.WebApplicationException;
 
 
+/**
+ * Used for pulling OSM data from Overpass
+ */
 class PullOverpassCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullOverpassCommand.class);
 
@@ -93,11 +96,11 @@ class PullOverpassCommand implements InternalCommand {
     // </osm-script>
 
                 // This is Ugly! It is the encoded version of the compact QL script above
-                URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) + 
-                    "/api/interpreter?data=(node(" + 
-                    boundingBox.getMinLat() + "%2C" + 
-                    boundingBox.getMinLon() + "%2C" + 
-                    boundingBox.getMaxLat() + "%2C" + 
+                URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) +
+                    "/api/interpreter?data=(node(" +
+                    boundingBox.getMinLat() + "%2C" +
+                    boundingBox.getMinLon() + "%2C" +
+                    boundingBox.getMaxLat() + "%2C" +
                     boundingBox.getMaxLon() + ")%3B%3C%3B%3E%3B)%3Bout%20meta%20qt%3B");
 
                 File outputFile = new File(params.getOutput());

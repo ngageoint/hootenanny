@@ -35,6 +35,9 @@ import org.slf4j.LoggerFactory;
 import hoot.services.geo.BoundingBox;
 
 
+/**
+ * Used for pulling OSM data
+ */
 class PullOSMDataCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullOSMDataCommand.class);
 
