@@ -367,18 +367,18 @@
         <tag k="error:circular" v="15"/>
     </relation>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-7" role="part"/>
         <member type="way" ref="-8" role="part"/>
+        <member type="way" ref="-7" role="part"/>
         <tag k="note" v="set 5"/>
         <tag k="building" v="yes"/>
-        <tag k="description" v="inner;big triangle"/>
+        <tag k="description" v="big triangle;inner"/>
         <tag k="type" v="building"/>
         <tag k="error:circular" v="15"/>
     </relation>
     <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-13" role="part"/>
         <member type="way" ref="-15" role="part"/>
         <member type="way" ref="-14" role="part"/>
+        <member type="way" ref="-13" role="part"/>
         <tag k="note" v="set 3"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="building"/>

@@ -184,6 +184,8 @@ unsigned int BuildingPartMergeOp::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
 BuildingPartMergeOp::BuildingPartMergeOp() :
+_totalBuildingGroupsProcessed(0),
+_numBuildingGroupsMerged(0),
 _threadCount(1)
 {
   _initBuildingPartTagNames();
@@ -379,29 +381,28 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
 void BuildingPartMergeOp::_mergeBuildingParts()
 {
   // go through each of the grouped buildings
-  int totalBuildingGroupsProcessed = 0;
-  int numBuildingGroupsMerged = 0;
   const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _ds.getAllGroups();
   for (Tgs::DisjointSetMap<ElementPtr>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
     // combine the group of building parts into a relation.
-    const std::vector<ElementPtr>& parts = it->second;
+    std::vector<ElementPtr> parts = it->second;
     if (parts.size() > 1)
     {
       combineParts(_map, parts);
-      numBuildingGroupsMerged++;
+
+      _numBuildingGroupsMerged++;
       _numAffected += parts.size();
     }
 
-    totalBuildingGroupsProcessed++;
-    if (totalBuildingGroupsProcessed % 100 == 0)
+    _totalBuildingGroupsProcessed++;
+    if (_totalBuildingGroupsProcessed % 100 == 0)
     {
       PROGRESS_INFO(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
         " building parts after processing " <<
-        StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
-        StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
+        StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " / " <<
+        StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) << " building groups.");
     }
   }
 //  LOG_INFO(
@@ -435,6 +436,8 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map = map;
   _elementConverter.reset(new ElementConverter(_map));
   _numAffected = 0;
+  _totalBuildingGroupsProcessed = 0;
+  _numBuildingGroupsMerged = 0;
 
   MapProjector::projectToPlanar(map);
 
@@ -451,14 +454,30 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   //_map.reset();
 }
 
+bool BuildingPartMergeOp::_elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  const ElementType::Type type1 = e1->getElementType().getEnum();
+  const ElementType::Type type2 = e2->getElementType().getEnum();
+  if (type1 == type2)
+  {
+    return e1->getId() < e2->getId();
+  }
+  else
+  {
+    return type1 < type2;
+  }
+}
+
 RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
-                                              const std::vector<ElementPtr>& parts)
+                                              std::vector<ElementPtr>& parts)
 {
   if (parts.size() == 0)
   {
     throw IllegalArgumentException(
       "No building parts passed to BuildingPartMergeOp::combineParts.");
   }
+
+  std::sort(parts.begin(), parts.end(), _elementCompare);
 
   RelationPtr building(
     new Relation(

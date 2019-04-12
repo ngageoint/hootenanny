@@ -190,7 +190,7 @@ public:
   virtual void readObject(QDataStream& /*is*/) {}
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  RelationPtr combineParts(const OsmMapPtr &map, const std::vector<ElementPtr>& parts);
+  RelationPtr combineParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -204,6 +204,9 @@ public:
 
   void setThreadCount(int count) { _threadCount = count; }
 
+  int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }
+  int getNumBuildingGroupsMerged() const { return _numBuildingGroupsMerged; }
+
 private:
 
   /// Used to keep track of which elements make up a building.
@@ -212,6 +215,9 @@ private:
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;
+
+  int _totalBuildingGroupsProcessed;
+  int _numBuildingGroupsMerged;
 
   int _threadCount;
 
@@ -227,6 +233,8 @@ private:
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
   bool _compareTags(Tags t1, Tags te);
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+
+  static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 };
 
 }

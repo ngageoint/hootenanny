@@ -82,6 +82,10 @@ public:
     uut.setThreadCount(1);
     uut.apply(map);
 
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, outputPath + "runToyTestOut.osm");
@@ -99,10 +103,14 @@ public:
     uut.setThreadCount(2);
     uut.apply(map);
 
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "runToyMultithreadTest.osm");
-    HOOT_FILE_EQUALS(inputPath + "runToyTestOut.osm", outputPath + "runToyMultithreadTest.osm");
+    writer.write(map, outputPath + "runToyMultithreadTestOut.osm");
+    HOOT_FILE_EQUALS(inputPath + "runToyTestOut.osm", outputPath + "runToyMultithreadTestOut.osm");
   }
 };
 
