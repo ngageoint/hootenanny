@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKER_H
 #define REVIEWMARKER_H
 
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -110,7 +110,7 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  void mark(const OsmMapPtr &map, std::set<ElementId> ids, const QString& note,
+  void mark(const OsmMapPtr &map, const std::set<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 
@@ -118,6 +118,18 @@ public:
    * Marks a single element as needing review.
    */
   void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
+            const QString& reviewType, double score = -1,
+            std::vector<QString> choices = std::vector<QString>());
+
+  /**
+   * Marks a vector of elements as needing review and sets them to reference each other. If the score
+   * is negative then the score is omitted.
+   *
+   * @param note A human readable note describing the review.
+   * @param reviewType A human readable review type. Typically this is a one word description of
+   *  the feature being reviewed. E.g. "Highway" or "Building".
+   */
+  void mark(const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
             const QString& reviewType, double score = -1,
             std::vector<QString> choices = std::vector<QString>());
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="18.544216" minlon="-72.34882018686" maxlat="18.549036" maxlon="-72.340941"/>
-    <node visible="true" id="-42786" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381893">
+    <node visible="true" id="-42782" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5457702303256262" lon="-72.3442470443381893">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-42786"/>
+        <tag k="hoot:id" v="-42782"/>
     </node>
     <node visible="true" id="-42713" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5479677734299955" lon="-72.3483445972899943">
         <tag k="hoot:status" v="1"/>
@@ -191,7 +191,7 @@
         <nd ref="5"/>
         <nd ref="78"/>
         <nd ref="100"/>
-        <nd ref="-42786"/>
+        <nd ref="-42782"/>
         <nd ref="83"/>
         <nd ref="82"/>
         <nd ref="81"/>

@@ -93,6 +93,7 @@ mgcp.rules = {
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
+    ['F_CODE','AL015','man_made','depot'],
     ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
     ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...

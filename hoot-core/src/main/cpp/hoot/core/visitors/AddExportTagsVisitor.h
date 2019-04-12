@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDEXPORTTAGSVISITOR_H
 #define ADDEXPORTTAGSVISITOR_H
@@ -49,14 +49,23 @@ public:
 
   static std::string className() { return "hoot::AddExportTagsVisitor"; }
 
-  virtual void visit(const ElementPtr& e);
+  virtual void visit(const ElementPtr& pElement);
 
   virtual QString getDescription() const { return "Adds tags needed for exporting"; }
 
+  void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
+  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
+  void overrideDebugSettings();
+
 private:
 
+  bool _includeIds;
+  bool _textStatus;
   bool _includeCircularError;
   bool _includeDebug;
+
+  // moved this out of Status.cpp, for local consumption only
+  QString toCompatString( Status status ) const;
 };
 
 }

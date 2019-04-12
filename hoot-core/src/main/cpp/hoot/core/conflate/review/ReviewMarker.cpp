@@ -27,8 +27,8 @@
 #include "ReviewMarker.h"
 
 #include <hoot/core/ops/RemoveElementOp.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
@@ -159,58 +159,40 @@ bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
   return isReview(map->getElement(uid));
 }
 
-// TODO: consolidate the duplicate code in these mark methods, if possible
-
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
   const QString& note, const QString& reviewType, double score, vector<QString> choices)
 {
-  LOG_TRACE("Marking review...");
-
-  LOG_VART(reviewType);
-  LOG_VART(note);
-  LOG_VART(score);
-
-  if (note.isEmpty())
-  {
-    LOG_VART(e1->toString());
-    LOG_VART(e2->toString());
-    throw IllegalArgumentException("You must specify a review note.");
-  }
-
-  RelationPtr r(
-    new Relation(
-      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
-  r->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  if (_addReviewTagsToFeatures)
-  {
-    e1->getTags().set(MetadataTags::HootReviewNeeds(), true);
-    e2->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  }
-  r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
-  {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
-    r->getTags().set(MetadataTags::HootReviewScore(), score);
-  }
-  r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
-  r->addElement(MetadataTags::RoleReviewee(), e2->getElementId());
-  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
-  r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
-
-  LOG_VART(r->getId());
-  LOG_VART(e1->getElementId());
-  LOG_VART(e2->getElementId());
-
-  for (unsigned int i = 0; i < choices.size(); i++)
-  {
-    r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
-  }
-
-  map->addElement(r);
+  if (!e1 || !e2)
+    return;
+  //  Insert the IDs into a vector and call mark
+  vector<ElementId> ids;
+  ids.push_back(e1->getElementId());
+  ids.push_back(e2->getElementId());
+  mark(map, ids, note, reviewType, score, choices);
 }
 
-void ReviewMarker::mark(const OsmMapPtr& map, set<ElementId> ids, const QString& note,
-   const QString& reviewType, double score, vector<QString> choices)
+void ReviewMarker::mark(const OsmMapPtr& map, const std::set<ElementId>& ids, const QString& note,
+  const QString& reviewType, double score, vector<QString> choices)
+{
+  //  Copy element IDs into a vector to preserve ordering used by other overloads of mark() function
+  vector<ElementId> vids(ids.begin(), ids.end());
+  mark(map, vids, note, reviewType, score, choices);
+}
+
+void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
+  const QString& reviewType, double score, vector<QString> choices)
+{
+  if (!e)
+    return;
+  //  Insert the ID into a vector and call mark
+  vector<ElementId> ids;
+  ids.push_back(e->getElementId());
+  mark(map, ids, note, reviewType, score, choices);
+  LOG_TRACE("Marking review with note: " << note);
+}
+
+void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
+  const QString& reviewType, double score, vector<QString> choices)
 {
   LOG_TRACE("Marking review...");
 
@@ -229,7 +211,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, set<ElementId> ids, const QString&
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   if (_addReviewTagsToFeatures)
   {
-    for (set<ElementId>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+    for (vector<ElementId>::const_iterator itr = ids.begin(); itr != ids.end(); ++itr)
     {
       map->getElement(*itr)->getTags().set(MetadataTags::HootReviewNeeds(), true);
     }
@@ -240,7 +222,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, set<ElementId> ids, const QString&
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
+  for (vector<ElementId>::const_iterator it = ids.begin(); it != ids.end(); ++it)
   {
     ElementId id = *it;
     r->addElement(MetadataTags::RoleReviewee(), id);
@@ -250,50 +232,6 @@ void ReviewMarker::mark(const OsmMapPtr& map, set<ElementId> ids, const QString&
 
   LOG_VART(r->getId());
   LOG_VART(ids);
-
-  for (unsigned int i = 0; i < choices.size(); i++)
-  {
-    r->getTags()[MetadataTags::HootReviewChoices() + ":" + QString::number(i+1)] = choices[i];
-  }
-
-  map->addElement(r);
-}
-
-void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
-  const QString& reviewType, double score, vector<QString> choices)
-{
-  LOG_TRACE("Marking review with note: " << note);
-
-  LOG_VART(reviewType);
-  LOG_VART(note);
-  LOG_VART(score);
-
-  if (note.isEmpty())
-  {
-    LOG_VART(e->toString())
-    throw IllegalArgumentException("You must specify a review note.");
-  }
-
-  RelationPtr r(
-    new Relation(
-      Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
-  r->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  if (_addReviewTagsToFeatures)
-  {
-    e->getTags().set(MetadataTags::HootReviewNeeds(), true);
-  }
-  r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
-  {
-    r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note.simplified());
-    r->getTags().set(MetadataTags::HootReviewScore(), score);
-  }
-  r->addElement(MetadataTags::RoleReviewee(), e->getElementId());
-  r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
-  r->setCircularError(ElementData::CIRCULAR_ERROR_EMPTY);
-
-  LOG_VART(r->getId());
-  LOG_VART(e->getElementId());
 
   for (unsigned int i = 0; i < choices.size(); i++)
   {
