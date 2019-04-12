@@ -140,6 +140,7 @@ private:
 
   OsmMapPtr _map;
 
+  //
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;

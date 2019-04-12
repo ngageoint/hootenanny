@@ -42,7 +42,7 @@ namespace hoot
 
 BuildingPartPreMergeCollector::BuildingPartPreMergeCollector() :
 _numGeometriesCleaned(0),
-_numProcessed(0)
+_numBuildingPartsProcessed(0)
 {
 }
 
@@ -63,85 +63,87 @@ void BuildingPartPreMergeCollector::run()
   _id = QUuid::createUuid().toString();
   LOG_TRACE("Starting thread: " << _id << "...");
 
-  while (!_buildingPartQueue->empty())
+  while (!_buildingPartsInput->empty())
   {
-    _buildingPartQueueMutex->lock();
-    BuildingPartDescription buildingPart = _buildingPartQueue->dequeue();
-    _buildingPartQueueMutex->unlock();
+    _buildingPartInputMutex->lock();
+    BuildingPartDescription buildingPartDesc = _buildingPartsInput->dequeue();
+    _buildingPartInputMutex->unlock();
 
-    if (buildingPart._part) // TODO: necessary?
+    if (buildingPartDesc._part) // TODO: necessary?
     {
-      LOG_VART(buildingPart._part->getElementId());
-      LOG_VART(buildingPart._neighborId);
-      LOG_VART(buildingPart._relationType);
+      LOG_VART(buildingPartDesc._part->getElementId());
+      LOG_VART(buildingPartDesc._neighborId);
+      LOG_VART(buildingPartDesc._relationType);
 
-      _addNeighborsToGroup(buildingPart);
+      _addNeighborsToGroup(buildingPartDesc);
 
-      _numProcessed++;
+      _numBuildingPartsProcessed++;
     }
-    LOG_VART(_buildingPartQueue->size());
+    LOG_VART(_buildingPartsInput->size());
   }
 
   LOG_VART(_id);
-  LOG_VART(_buildingPartGroups->size());
-  LOG_VART(_numProcessed);
+  LOG_VART(_buildingPartGroupsOutput->size());
+  LOG_VART(_numBuildingPartsProcessed);
   LOG_VART(_numGeometriesCleaned);
 }
 
-void BuildingPartPreMergeCollector::_addNeighborsToGroup(const BuildingPartDescription buildingPart)
+void BuildingPartPreMergeCollector::_addNeighborsToGroup(
+  const BuildingPartDescription buildingPartDesc)
 {
-  if (buildingPart._relationType == "containedWay")
+  if (buildingPartDesc._relationType == "containedWay")
   {
-    if (buildingPart._partGeom) // TODO: necessary?
+    if (buildingPartDesc._partGeom) // TODO: necessary?
     {
       _addContainedWayToGroup(
-        buildingPart._partGeom, buildingPart._neighborId, buildingPart._part);
+        buildingPartDesc._partGeom, buildingPartDesc._neighborId, buildingPartDesc._part);
     }
   }
   else
   {
     // add these two buildings to a set
-    WayPtr neighbor = _map->getWay(buildingPart._neighborId);
-    _addBuildingPartGroup(neighbor, buildingPart._part);
+    WayPtr neighbor = _map->getWay(buildingPartDesc._neighborId);
+    _addBuildingPartGroup(neighbor, buildingPartDesc._part);
   }
 }
 
 void BuildingPartPreMergeCollector::_addBuildingPartGroup(WayPtr building, ElementPtr buildingPart)
 {
-  _buildingPartGroupMutex->lock();
-  _buildingPartGroups->joinT(building, buildingPart);
-  LOG_VART(_buildingPartGroups->size());
-  _buildingPartGroupMutex->unlock();
+  _buildingPartOutputMutex->lock();
+  _buildingPartGroupsOutput->joinT(building, buildingPart);
+  LOG_VART(_buildingPartGroupsOutput->size());
+  _buildingPartOutputMutex->unlock();
 }
 
 void BuildingPartPreMergeCollector::_addContainedWayToGroup(
-  boost::shared_ptr<geos::geom::Geometry> g, const long wayId, ElementPtr part)
+  boost::shared_ptr<geos::geom::Geometry> buildingPartGeom, const long wayNeighborId,
+  ElementPtr buildingPart)
 {
-  WayPtr candidate = _map->getWay(wayId);
-
-  boost::shared_ptr<geos::geom::Geometry> cg = _getGeometry(candidate);
+  WayPtr candidate = _map->getWay(wayNeighborId);
+  boost::shared_ptr<geos::geom::Geometry> candidateGeom = _getGeometry(candidate);
   // if this is another building part totally contained by this building
-  if (cg)
+  if (candidateGeom)
   {
     bool contains = false;
     try
     {
-      contains = g->contains(cg.get());
+      contains = buildingPartGeom->contains(candidateGeom.get());
     }
     catch (const geos::util::TopologyException&)
     {
       LOG_TRACE("cleaning...");
       boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
-        GeometryUtils::validateGeometry(cg.get()));
-      boost::shared_ptr<geos::geom::Geometry> cleanG(GeometryUtils::validateGeometry(g.get()));
-      contains = cleanG->contains(cleanCandidate.get());
+        GeometryUtils::validateGeometry(candidateGeom.get()));
+      boost::shared_ptr<geos::geom::Geometry> cleanBuildingPart(
+        GeometryUtils::validateGeometry(buildingPartGeom.get()));
+      contains = cleanBuildingPart->contains(cleanCandidate.get());
       _numGeometriesCleaned++;
      }
      LOG_VART(contains);
 
     if (contains)
     {
-      _addBuildingPartGroup(candidate, part);
+      _addBuildingPartGroup(candidate, buildingPart);
     }
   }
 }
@@ -149,28 +151,28 @@ void BuildingPartPreMergeCollector::_addContainedWayToGroup(
 boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometry(
   ElementPtr element, const bool checkForBuilding)
 {
-  boost::shared_ptr<geos::geom::Geometry> g;
+  boost::shared_ptr<geos::geom::Geometry> geom;
   if (!checkForBuilding || _isBuilding(element))
   {
     if (element->getElementType() == ElementType::Relation)
     {
-      g = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
+      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
     }
     else
     {
-      _schemaMutex->lock();
-      g = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
-      _schemaMutex->unlock();
+      _hootSchemaMutex->lock();
+      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
+      _hootSchemaMutex->unlock();
     }
   }
-  return g;
+  return geom;
 }
 
 bool BuildingPartPreMergeCollector::_isBuilding(ElementPtr element) const
 {
-  _schemaMutex->lock();
+  _hootSchemaMutex->lock();
   const bool isBuilding = _buildingCrit.isSatisfied(element);
-  _schemaMutex->unlock();
+  _hootSchemaMutex->unlock();
   return isBuilding;
 }
 

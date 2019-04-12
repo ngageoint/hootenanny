@@ -217,24 +217,23 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
 {
   QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
 
-  QMutex buildingPartGroupMutex;
-  QMutex schemaMutex;
-  QMutex buildingPartQueueMutex;
+  QMutex buildingPartsInputMutex;
+  QMutex hootSchemaMutex;
+  QMutex buildingPartGroupsOutputMutex;
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
   LOG_VART(threadPool.maxThreadCount());
-
   for (int i = 0; i < _threadCount; i++)
   {
     BuildingPartPreMergeCollector* buildingPartTask = new BuildingPartPreMergeCollector();
     buildingPartTask->setBuildingPartTagNames(_buildingPartTagNames);
-    buildingPartTask->setBuildingPartQueue(&buildingPartQueue);
-    buildingPartTask->setBuildingPartGroupMutex(&buildingPartGroupMutex);
-    buildingPartTask->setSchemaMutex(&schemaMutex);
-    buildingPartTask->setBuildingPartQueueMutex(&buildingPartQueueMutex);
+    buildingPartTask->setBuildingPartsInput(&buildingPartQueue);
+    buildingPartTask->setBuildingPartOutputMutex(&buildingPartGroupsOutputMutex);
+    buildingPartTask->setHootSchemaMutex(&hootSchemaMutex);
+    buildingPartTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
     buildingPartTask->setMap(_map);
-    buildingPartTask->setBuildingPartGroups(&_ds);
+    buildingPartTask->setBuildingPartGroupsOutput(&_ds);
     threadPool.start(buildingPartTask);
   }
   LOG_VART(threadPool.activeThreadCount());

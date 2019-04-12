@@ -64,9 +64,13 @@ struct BuildingPartDescription
   {
   }
 
+  //
   ElementPtr _part;
+  //
   long _neighborId;
+  //
   QString _relationType;
+  //
   boost::shared_ptr<geos::geom::Geometry> _partGeom;
 };
 
@@ -87,47 +91,51 @@ public:
 
   void setBuildingPartTagNames(std::set<QString> tagNames)
   { _buildingPartTagNames = tagNames; }
-  void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
-  void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
-  { _buildingPartGroups = groups; }
+  void setBuildingPartsInput(QQueue<BuildingPartDescription>* queue)
+  { _buildingPartsInput = queue; }
+  void setBuildingPartGroupsOutput(Tgs::DisjointSetMap<ElementPtr>* groups)
+  { _buildingPartGroupsOutput = groups; }
 
   void setMap(OsmMapPtr map);
 
-  void setBuildingPartGroupMutex(QMutex* mutex) { _buildingPartGroupMutex = mutex; }
-  void setSchemaMutex(QMutex* mutex) { _schemaMutex = mutex; }
-  void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
+  void setBuildingPartInputMutex(QMutex* mutex) { _buildingPartInputMutex = mutex; }
+  void setHootSchemaMutex(QMutex* mutex) { _hootSchemaMutex = mutex; }
+  void setBuildingPartOutputMutex(QMutex* mutex) { _buildingPartOutputMutex = mutex; }
 
 private:
 
-  QQueue<BuildingPartDescription>* _buildingPartQueue;
-
-  QMutex* _buildingPartGroupMutex;
-  QMutex* _schemaMutex;
-  QMutex* _buildingPartQueueMutex;
+  //
+  QQueue<BuildingPartDescription>* _buildingPartsInput;
+  //
+  Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroupsOutput;
 
   OsmMapPtr _map;
 
-  Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
-
+  //
   std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
   BuildingCriterion _buildingCrit;
+  //
   boost::shared_ptr<NodeToWayMap> _n2w;
+
+  QMutex* _buildingPartInputMutex;
+  QMutex* _hootSchemaMutex;
+  QMutex* _buildingPartOutputMutex;
 
   QString _id;
   int _numGeometriesCleaned;
-  int _numProcessed;
+  int _numBuildingPartsProcessed;
 
   /*
    * todo
    */
-  void _addNeighborsToGroup(BuildingPartDescription buildingPart);
+  void _addNeighborsToGroup(BuildingPartDescription buildingPartDesc);
 
   /*
    * todo
    */
-  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g, const long wayId,
-                               ElementPtr part);
+  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> buildingPartGeom,
+                               const long wayNeighborId, ElementPtr buildingPart);
   /*
    * todo
    */
