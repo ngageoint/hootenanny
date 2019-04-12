@@ -63,16 +63,13 @@ void BuildingPartPreMergeCollector::run()
     BuildingPartDescription buildingPartDesc = _buildingPartsInput->dequeue();
     _buildingPartInputMutex->unlock();
 
-    if (buildingPartDesc._part) // TODO: necessary?
-    {
-      LOG_VART(buildingPartDesc._part->getElementId());
-      LOG_VART(buildingPartDesc._neighborId);
-      LOG_VART(buildingPartDesc._relationType);
+    LOG_VART(buildingPartDesc._part->getElementId());
+    LOG_VART(buildingPartDesc._neighbor->getElementId());
+    LOG_VART(buildingPartDesc._relationType);
 
-      _addNeighborsToGroup(buildingPartDesc);
+    _addNeighborsToGroup(buildingPartDesc);
 
-      _numBuildingPartsProcessed++;
-    }
+    _numBuildingPartsProcessed++;
     LOG_VART(_buildingPartsInput->size());
   }
 
@@ -87,17 +84,14 @@ void BuildingPartPreMergeCollector::_addNeighborsToGroup(
 {
   if (buildingPartDesc._relationType == "containedWay")
   {
-    if (buildingPartDesc._partGeom) // TODO: necessary?
-    {
-      _addContainedWayToGroup(
-        buildingPartDesc._partGeom, buildingPartDesc._neighborId, buildingPartDesc._part);
-    }
+    assert(buildingPartDesc._partGeom);
+    _addContainedWayToGroup(
+      buildingPartDesc._partGeom, buildingPartDesc._neighbor, buildingPartDesc._part);
   }
   else
   {
     // add these two buildings to a set
-    WayPtr neighbor = _map->getWay(buildingPartDesc._neighborId);
-    _addBuildingPartGroup(neighbor, buildingPartDesc._part);
+    _addBuildingPartGroup(buildingPartDesc._neighbor, buildingPartDesc._part);
   }
 }
 
@@ -110,64 +104,55 @@ void BuildingPartPreMergeCollector::_addBuildingPartGroup(WayPtr building, Eleme
 }
 
 void BuildingPartPreMergeCollector::_addContainedWayToGroup(
-  boost::shared_ptr<geos::geom::Geometry> buildingPartGeom, const long wayNeighborId,
+  boost::shared_ptr<geos::geom::Geometry> buildingPartGeom, WayPtr neighbor,
   ElementPtr buildingPart)
 {
-  WayPtr candidate = _map->getWay(wayNeighborId);
-  boost::shared_ptr<geos::geom::Geometry> candidateGeom = _getGeometry(candidate);
+  boost::shared_ptr<geos::geom::Geometry> candidateGeom = _getGeometry(neighbor);
+  assert(candidateGeom);
   // if this is another building part totally contained by this building
-  if (candidateGeom)
+  bool contains = false;
+  try
   {
-    bool contains = false;
-    try
-    {
-      contains = buildingPartGeom->contains(candidateGeom.get());
-    }
-    catch (const geos::util::TopologyException&)
-    {
-      LOG_TRACE("cleaning...");
-      boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
-        GeometryUtils::validateGeometry(candidateGeom.get()));
-      boost::shared_ptr<geos::geom::Geometry> cleanBuildingPart(
-        GeometryUtils::validateGeometry(buildingPartGeom.get()));
-      contains = cleanBuildingPart->contains(cleanCandidate.get());
-      _numGeometriesCleaned++;
-     }
-     LOG_VART(contains);
+    contains = buildingPartGeom->contains(candidateGeom.get());
+  }
+  catch (const geos::util::TopologyException&)
+  {
+    LOG_TRACE("cleaning...");
+    boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
+      GeometryUtils::validateGeometry(candidateGeom.get()));
+    boost::shared_ptr<geos::geom::Geometry> cleanBuildingPart(
+      GeometryUtils::validateGeometry(buildingPartGeom.get()));
+    contains = cleanBuildingPart->contains(cleanCandidate.get());
+    _numGeometriesCleaned++;
+   }
+   LOG_VART(contains);
 
-    if (contains)
-    {
-      _addBuildingPartGroup(candidate, buildingPart);
-    }
+  if (contains)
+  {
+    _addBuildingPartGroup(neighbor, buildingPart);
   }
 }
 
 boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometry(
-  ElementPtr element, const bool checkForBuilding)
+  ElementPtr element)
 {
   boost::shared_ptr<geos::geom::Geometry> geom;
-  if (!checkForBuilding || _isBuilding(element))
+  switch (element->getElementType().getEnum())
   {
-    if (element->getElementType() == ElementType::Relation)
-    {
-      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
-    }
-    else
-    {
+    case ElementType::Way:
       _hootSchemaMutex->lock();
       geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
       _hootSchemaMutex->unlock();
-    }
+      break;
+
+    case ElementType::Relation:
+      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
+      break;
+
+    default:
+      throw HootException("Unexpected element type: " + element->getElementType().toString());
   }
   return geom;
-}
-
-bool BuildingPartPreMergeCollector::_isBuilding(ElementPtr element) const
-{
-  _hootSchemaMutex->lock();
-  const bool isBuilding = _buildingCrit.isSatisfied(element);
-  _hootSchemaMutex->unlock();
-  return isBuilding;
 }
 
 }

@@ -30,21 +30,16 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/algorithms/merging/BuildingPartPreMergeCollector.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
-
-// Qt
-#include <QHash>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -177,13 +172,12 @@ private:
   /*
    * todo
    */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
-    const ElementPtr& element, const bool checkForBuilding = true) const;
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ElementPtr& element) const;
 
   /*
    * todo
    */
-  static bool _hasContiguousNodes(const WayPtr& way, const long n1, const long n2);
+  static bool _hasContiguousNodes(const WayPtr& way, const long node1Id, const long node2Id);
 
   /*
    * todo

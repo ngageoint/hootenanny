@@ -28,9 +28,7 @@
 #define BUILDING_PART_PRE_MERGE_COLLECTOR_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -38,7 +36,6 @@
 #include <tgs/DisjointSet/DisjointSetMap.h>
 
 // Qt
-#include <QHash>
 #include <QRunnable>
 #include <QQueue>
 #include <QMutex>
@@ -54,10 +51,10 @@ namespace hoot
  */
 struct BuildingPartDescription
 {
-  BuildingPartDescription(ElementPtr part, long neighborId, QString relationType,
+  BuildingPartDescription(ElementPtr part, WayPtr neighbor, QString relationType,
                           boost::shared_ptr<geos::geom::Geometry> partGeom) :
   _part(part),
-  _neighborId(neighborId),
+  _neighbor(neighbor),
   _relationType(relationType),
   _partGeom(partGeom)
   {
@@ -66,7 +63,7 @@ struct BuildingPartDescription
   //
   ElementPtr _part;
   //
-  long _neighborId;
+  WayPtr _neighbor;
   //
   QString _relationType;
   //
@@ -109,7 +106,6 @@ private:
   OsmMapPtr _map;
 
   boost::shared_ptr<ElementConverter> _elementConverter;
-  BuildingCriterion _buildingCrit;
 
   //
   QMutex* _buildingPartInputMutex;
@@ -122,13 +118,10 @@ private:
   int _numGeometriesCleaned;
   int _numBuildingPartsProcessed;
 
-  bool _isBuilding(ElementPtr element) const;
-
   /*
    * todo
    */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
-    ElementPtr element, const bool checkForBuilding = true);
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ElementPtr element);
 
   /*
    * todo
@@ -139,7 +132,7 @@ private:
    * todo
    */
   void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> buildingPartGeom,
-                               const long wayNeighborId, ElementPtr buildingPart);
+                               WayPtr neighbor, ElementPtr buildingPart);
 
   /*
    * todo
