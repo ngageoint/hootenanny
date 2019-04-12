@@ -22,7 +22,7 @@ PGDG_KEY="${PGDG_KEY:-/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-$PG_DOTLESS}"
 PGDG_REPO="${PGDG_REPO:-/etc/yum.repos.d/pgdg-$PG_DOTLESS-centos.repo}"
 
 # Clean up any PGDG repository RPM.
-if rpm -q pgdg-redhat-repo; then
+if rpm -q pgdg-redhat-repo &> /dev/null; then
     yum remove -y -q pgdg-redhat-repo
 fi
 

@@ -238,7 +238,7 @@ $HOOT_HOME/scripts/chrome/driver-install.sh
 PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
-    echo "Adding PostGres path vars to profile..."
+    echo "Adding Postgres path vars to profile..."
     echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
