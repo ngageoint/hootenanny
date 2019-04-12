@@ -163,7 +163,7 @@ private:
   /*
    * todo
    */
-  QQueue<BuildingPartDescription> _getBuildingPartQueue();
+  QQueue<BuildingPartDescription> _getBuildingPartPreProcessingInput();
 
   /*
    * todo
@@ -174,12 +174,12 @@ private:
    * todo
    */
   boost::shared_ptr<geos::geom::Geometry> _getGeometry(
-    const ElementPtr& element, const bool checkForBuilding = true);
+    const ElementPtr& element, const bool checkForBuilding = true) const;
 
   /*
    * todo
    */
-  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+  static bool _hasContiguousNodes(const WayPtr& way, const long n1, const long n2);
 
   /*
    * todo
@@ -189,7 +189,7 @@ private:
   /*
    * todo
    */
-  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+  std::set<long> _calculateNeighbors(const WayPtr& way, const Tags& tags);
 };
 
 }
