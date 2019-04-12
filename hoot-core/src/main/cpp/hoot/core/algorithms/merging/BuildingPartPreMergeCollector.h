@@ -33,7 +33,6 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -89,8 +88,6 @@ public:
    */
   void run() override;
 
-  void setBuildingPartTagNames(std::set<QString> tagNames)
-  { _buildingPartTagNames = tagNames; }
   void setBuildingPartsInput(QQueue<BuildingPartDescription>* queue)
   { _buildingPartsInput = queue; }
   void setBuildingPartGroupsOutput(Tgs::DisjointSetMap<ElementPtr>* groups)
@@ -111,20 +108,27 @@ private:
 
   OsmMapPtr _map;
 
-  //
-  std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
   BuildingCriterion _buildingCrit;
-  //
-  boost::shared_ptr<NodeToWayMap> _n2w;
 
+  //
   QMutex* _buildingPartInputMutex;
+  //
   QMutex* _hootSchemaMutex;
+  //
   QMutex* _buildingPartOutputMutex;
 
   QString _id;
   int _numGeometriesCleaned;
   int _numBuildingPartsProcessed;
+
+  bool _isBuilding(ElementPtr element) const;
+
+  /*
+   * todo
+   */
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
+    ElementPtr element, const bool checkForBuilding = true);
 
   /*
    * todo
@@ -136,13 +140,6 @@ private:
    */
   void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> buildingPartGeom,
                                const long wayNeighborId, ElementPtr buildingPart);
-  /*
-   * todo
-   */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
-    ElementPtr element, const bool checkForBuilding = true);
-
-  bool _isBuilding(ElementPtr element) const;
 
   /*
    * todo

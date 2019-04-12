@@ -116,7 +116,7 @@ public:
    * @param parts
    * @return
    */
-  RelationPtr combineParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
+  RelationPtr combineBuildingParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -136,7 +136,7 @@ public:
 private:
 
   // used to keep track of which elements make up a building
-  Tgs::DisjointSetMap<ElementPtr> _ds;
+  Tgs::DisjointSetMap<ElementPtr> _buildingPartGroups;
 
   OsmMapPtr _map;
 

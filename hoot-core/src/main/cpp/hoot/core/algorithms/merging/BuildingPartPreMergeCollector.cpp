@@ -49,12 +49,6 @@ _numBuildingPartsProcessed(0)
 void BuildingPartPreMergeCollector::setMap(OsmMapPtr map)
 {
   _map = map;
-  // TODO: necessary?
-  const std::vector<long> intersectIds = _map->getIndex().findWays(geos::geom::Envelope());
-  LOG_VART(intersectIds.size());
-  const boost::shared_ptr<ElementToRelationMap> e2r = _map->getIndex().getElementToRelationMap();
-  LOG_VART(e2r->size());
-  _n2w = _map->getIndex().getNodeToWayMap();
   _elementConverter.reset(new ElementConverter(_map));
 }
 

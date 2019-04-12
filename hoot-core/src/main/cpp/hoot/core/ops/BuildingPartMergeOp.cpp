@@ -80,6 +80,30 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   LOG_VARD(_threadCount);
 }
 
+void BuildingPartMergeOp::apply(OsmMapPtr& map)
+{
+  _buildingPartGroups.clear();
+  _map = map;
+  _elementConverter.reset(new ElementConverter(_map));
+  _numAffected = 0;
+  _totalBuildingGroupsProcessed = 0;
+  _numBuildingGroupsMerged = 0;
+
+  MapProjector::projectToPlanar(map);
+
+  // treat the map as read only while we determine building parts
+  _preProcessBuildingParts();
+
+  // time to start making changes to the map
+  _mergeBuildingParts();
+
+  // most other operations don't need this index, so we'll clear it out so it isn't actively
+  // maintained.
+  // TODO: re-enable
+  //_map->getIndex().clearRelationIndex();
+  //_map.reset();
+}
+
 QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
 {
   LOG_INFO("\tCreating building part pre-processing input...");
@@ -170,13 +194,12 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   for (int i = 0; i < _threadCount; i++)
   {
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
-    buildingPartCollectTask->setBuildingPartTagNames(_buildingPartTagNames);
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartQueue);
     buildingPartCollectTask->setBuildingPartOutputMutex(&buildingPartGroupsOutputMutex);
     buildingPartCollectTask->setHootSchemaMutex(&hootSchemaMutex);
     buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
     buildingPartCollectTask->setMap(_map);
-    buildingPartCollectTask->setBuildingPartGroupsOutput(&_ds);
+    buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     threadPool.start(buildingPartCollectTask);
   }
   LOG_VART(threadPool.activeThreadCount());
@@ -185,13 +208,13 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   const bool allThreadsRemoved = threadPool.waitForDone();
   LOG_VART(allThreadsRemoved);
 
-  LOG_VARD(StringUtils::formatLargeNumber(_ds.size()));
+  LOG_VARD(StringUtils::formatLargeNumber(_buildingPartGroups.size()));
 }
 
 void BuildingPartMergeOp::_mergeBuildingParts()
 {
   // go through each of the grouped buildings
-  const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _ds.getAllGroups();
+  const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _buildingPartGroups.getAllGroups();
   for (Tgs::DisjointSetMap<ElementPtr>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
@@ -199,7 +222,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
     std::vector<ElementPtr> parts = it->second;
     if (parts.size() > 1)
     {
-      combineParts(_map, parts);
+      combineBuildingParts(_map, parts);
 
       _numBuildingGroupsMerged++;
       _numAffected += parts.size();
@@ -215,11 +238,11 @@ void BuildingPartMergeOp::_mergeBuildingParts()
         StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) << " building groups.");
     }
   }
-//  LOG_INFO(
-//    "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
-//    " building parts after processing " <<
-//    StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
-//    StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
+  LOG_DEBUG(
+    "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
+    " building parts after processing " <<
+    StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
+    StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
 }
 
 std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& way, const Tags& tags)
@@ -303,31 +326,8 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   return geom;
 }
 
-void BuildingPartMergeOp::apply(OsmMapPtr& map)
-{
-  _ds.clear();
-  _map = map;
-  _elementConverter.reset(new ElementConverter(_map));
-  _numAffected = 0;
-  _totalBuildingGroupsProcessed = 0;
-  _numBuildingGroupsMerged = 0;
-
-  MapProjector::projectToPlanar(map);
-
-  // treat the map as read only while we determine building parts
-  _preProcessBuildingParts();
-
-  // time to start making changes to the map
-  _mergeBuildingParts();
-
-  // most other operations don't need this index, so we'll clear it out so it isn't actively
-  // maintained.
-  // TODO: re-enable
-  //_map->getIndex().clearRelationIndex();
-  //_map.reset();
-}
-
-RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts)
+RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
+                                                      std::vector<ElementPtr>& parts)
 {
   if (parts.size() == 0)
   {
