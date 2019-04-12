@@ -15,7 +15,8 @@ namespace hoot
 
 /**
  * Finds a single relation satisfying a specified criterion that has the most relation members
- * satisfying some other criterion.
+ * satisfying some other criterion. This is useful when you have a large map file from which you
+ * want to find a single large relation meeting some specified criteria.
  */
 class RelationWithMostMembersOp : public OsmMapOperation, public Configurable,
   public OperationStatusInfo

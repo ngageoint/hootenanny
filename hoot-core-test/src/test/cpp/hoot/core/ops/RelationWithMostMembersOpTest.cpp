@@ -25,7 +25,7 @@ class RelationWithMostMembersOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/criterion/";
+  const QString inputPath = "test-files/ops/RelationWithMostMembersOp/";
   const QString outputPath = "test-output/ops/RelationWithMostMembersOp/";
 
   RelationWithMostMembersOpTest()
@@ -39,7 +39,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "ComplexBuildings.osm", map);
+    reader.read("test-files/criterion/ComplexBuildings.osm", map);
 
     RelationWithMostMembersOp uut;
     uut.setCriterion("hoot::BuildingCriterion", "relation", conf());
