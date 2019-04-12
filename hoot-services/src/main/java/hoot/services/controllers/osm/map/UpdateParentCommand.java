@@ -53,7 +53,7 @@ public class UpdateParentCommand implements InternalCommand {
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
         commandResult.setJobId(jobId);
-        commandResult.setCommand("[Update Parent Directory] of map with id = " + mapName);
+        commandResult.setCommand("[Update Parent Directory] of map with name = " + mapName);
         commandResult.setStart(LocalDateTime.now());
         commandResult.setCaller(caller.getName());
 
