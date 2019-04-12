@@ -324,7 +324,7 @@ outline multipolygon relations will remain.
 === building.part.merger.thread.count
 
 * Data Type: int
-* Default Value: `4`
+* Default Value: `8`
 
 Number of threads used by BuildingPartMergerOp to process buildings.  A value of less than one
 allows Hootenanny to automatically determine the thread count.

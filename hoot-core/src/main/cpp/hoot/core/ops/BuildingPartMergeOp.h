@@ -104,17 +104,12 @@ public:
   void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
   void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
   { _buildingPartGroups = groups; }
-  void setGeometryCache(QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>>* cache)
-  { _geometryCache = cache; }
 
   void setMap(OsmMapPtr map);
 
   void setBuildingPartGroupMutex(QMutex* mutex) { _buildingPartGroupMutex = mutex; }
   void setSchemaMutex(QMutex* mutex) { _schemaMutex = mutex; }
-  void setMapIndexMutex(QMutex* mutex) { _mapIndexMutex = mutex; }
-  void setGeomUtilsMutex(QMutex* mutex) { _geomUtilsMutex = mutex; }
   void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
-  void setWayGeometryCacheMutex(QMutex* mutex) { _wayGeometryCacheMutex = mutex; }
 
 private:
 
@@ -122,16 +117,11 @@ private:
 
   QMutex* _buildingPartGroupMutex;
   QMutex* _schemaMutex;
-  QMutex* _mapIndexMutex;
-  QMutex* _geomUtilsMutex;
   QMutex* _buildingPartQueueMutex;
-  QMutex* _wayGeometryCacheMutex;
 
   OsmMapPtr _map;
 
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
-
-  QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>>* _geometryCache;
 
   std::set<QString> _buildingPartTagNames;
   boost::shared_ptr<ElementConverter> _elementConverter;
@@ -139,8 +129,6 @@ private:
   boost::shared_ptr<NodeToWayMap> _n2w;
 
   QString _id;
-  int _numGeometryCacheHits;
-  int _numGeometryCacheMisses;
   int _numGeometriesCleaned;
   int _numProcessed;
 
@@ -221,16 +209,12 @@ private:
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;
 
-  QHash<ElementId, boost::shared_ptr<geos::geom::Geometry>> _geometryCache;
-
   int _threadCount;
 
   void _processBuildingParts();
   void _mergeBuildingParts();
 
   QQueue<BuildingPartDescription> _getBuildingPartQueue();
-  QQueue<BuildingPartDescription> _getBuildingPartQueue1();
-  QQueue<BuildingPartDescription> _getBuildingPartQueue2();
 
   void _initBuildingPartTagNames();
 
