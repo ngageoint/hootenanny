@@ -26,6 +26,11 @@ if rpm -q pgdg-redhat-repo &> /dev/null; then
     yum remove -y -q pgdg-redhat-repo
 fi
 
+# Clean up existing repo files and keys, in case we're
+# upgrading versions.
+find /etc/pki/rpm-gpg -type f -name RPM-GPG-KEY-PGDG-\* -delete
+find /etc/yum.repos.d -type f -name pgdg-\*-centos.repo -delete
+
 cat > "$PGDG_KEY" <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.7 (GNU/Linux)
