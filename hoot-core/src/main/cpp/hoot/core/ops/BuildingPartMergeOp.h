@@ -37,9 +37,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/schema/TagComparator.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
@@ -69,6 +67,9 @@ template<>
 namespace hoot
 {
 
+/**
+ * todo
+ */
 class BuildingPartDescription
 {
 
@@ -89,13 +90,15 @@ public:
   boost::shared_ptr<geos::geom::Geometry> _partGeom;
 };
 
+/**
+ * todo
+ */
 class BuildingPartProcessor : public QRunnable
 {
 
 public:
 
   BuildingPartProcessor();
-  ~BuildingPartProcessor();
 
   void run() override;
 
@@ -135,9 +138,10 @@ private:
   void _addNeighborsToGroup(BuildingPartDescription buildingPart);
   void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g, const long wayId,
                                ElementPtr part);
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ElementPtr element,
-                                                       const bool checkForBuilding = true);
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
+    ElementPtr element, const bool checkForBuilding = true);
   bool _isBuilding(ElementPtr element) const;
+  void _addBuildingPartGroup(WayPtr building, ElementPtr buildingPart);
 };
 
 class Relation;
@@ -198,6 +202,8 @@ public:
     return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " building parts.";
   }
 
+  void setThreadCount(int count) { _threadCount = count; }
+
 private:
 
   /// Used to keep track of which elements make up a building.
@@ -209,7 +215,7 @@ private:
 
   int _threadCount;
 
-  void _processBuildingParts();
+  void _preProcessBuildingParts();
   void _mergeBuildingParts();
 
   QQueue<BuildingPartDescription> _getBuildingPartQueue();
@@ -221,7 +227,6 @@ private:
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
   bool _compareTags(Tags t1, Tags te);
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
-  bool _isBuilding(const ElementPtr& element) const;
 };
 
 }

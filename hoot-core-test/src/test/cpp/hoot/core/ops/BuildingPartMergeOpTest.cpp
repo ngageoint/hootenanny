@@ -57,6 +57,7 @@ class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyMtTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -73,7 +74,6 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(inputPath + "ToyBuildings.osm", map);
@@ -82,16 +82,29 @@ public:
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
-
     OsmXmlWriter writer;
     writer.write(map, outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm",
-                     outputPath + "ToyBuildings.osm");
+    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm", outputPath + "ToyBuildings.osm");
   }
 
+  void runToyMtTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(inputPath + "ToyBuildings.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(2);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, outputPath + "ToyBuildings.osm");
+    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm", outputPath + "ToyBuildings.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "current");
 
 }

@@ -37,6 +37,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/TagComparator.h>
 
 // Qt
 #include <QThreadPool>
@@ -48,10 +50,6 @@ namespace hoot
 BuildingPartProcessor::BuildingPartProcessor() :
 _numGeometriesCleaned(0),
 _numProcessed(0)
-{
-}
-
-BuildingPartProcessor::~BuildingPartProcessor()
 {
 }
 
@@ -69,7 +67,7 @@ void BuildingPartProcessor::setMap(OsmMapPtr map)
 void BuildingPartProcessor::run()
 {
   _id = QUuid::createUuid().toString();
-  LOG_INFO("Starting thread: " << _id << "...");
+  LOG_DEBUG("Starting thread: " << _id << "...");
 
   while (!_buildingPartQueue->empty())
   {
@@ -78,19 +76,21 @@ void BuildingPartProcessor::run()
     _buildingPartQueueMutex->unlock();
     if (buildingPart._part)
     {
-      LOG_VARD(buildingPart._part->getElementId());
-      LOG_VARD(buildingPart._neighborId);
-      LOG_VARD(buildingPart._relationType);
+      LOG_VART(buildingPart._part->getElementId());
+      LOG_VART(buildingPart._neighborId);
+      LOG_VART(buildingPart._relationType);
+
       _addNeighborsToGroup(buildingPart);
+
       _numProcessed++;
     }
     LOG_VART(_buildingPartQueue->size());
   }
 
-  LOG_VAR(_id);
-  LOG_VAR(_buildingPartGroups->size());
-  LOG_VAR(_numProcessed);
-  LOG_VAR(_numGeometriesCleaned);
+  LOG_VARD(_id);
+  LOG_VARD(_buildingPartGroups->size());
+  LOG_VARD(_numProcessed);
+  LOG_VARD(_numGeometriesCleaned);
 }
 
 void BuildingPartProcessor::_addNeighborsToGroup(const BuildingPartDescription buildingPart)
@@ -107,21 +107,24 @@ void BuildingPartProcessor::_addNeighborsToGroup(const BuildingPartDescription b
   {
     // add these two buildings to a set
     WayPtr neighbor = _map->getWay(buildingPart._neighborId);
-    _buildingPartGroupMutex->lock();
-    _buildingPartGroups->joinT(neighbor, buildingPart._part);
-    LOG_VARD(_buildingPartGroups->size());
-    _buildingPartGroupMutex->unlock();
+    _addBuildingPartGroup(neighbor, buildingPart._part);
   }
+}
+
+void BuildingPartProcessor::_addBuildingPartGroup(WayPtr building, ElementPtr buildingPart)
+{
+  _buildingPartGroupMutex->lock();
+  _buildingPartGroups->joinT(building, buildingPart);
+  LOG_VART(_buildingPartGroups->size());
+  _buildingPartGroupMutex->unlock();
 }
 
 void BuildingPartProcessor::_addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g,
                                                     const long wayId, ElementPtr part)
 {
   WayPtr candidate = _map->getWay(wayId);
-  LOG_VART(candidate == 0);
 
   boost::shared_ptr<geos::geom::Geometry> cg = _getGeometry(candidate);
-  LOG_VART(cg == 0);
   // if this is another building part totally contained by this building
   if (cg)
   {
@@ -129,26 +132,21 @@ void BuildingPartProcessor::_addContainedWayToGroup(boost::shared_ptr<geos::geom
     try
     {
       contains = g->contains(cg.get());
-      LOG_VART(contains);
     }
     catch (const geos::util::TopologyException&)
     {
-      LOG_DEBUG("cleaning...");
+      LOG_TRACE("cleaning...");
       boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
         GeometryUtils::validateGeometry(cg.get()));
       boost::shared_ptr<geos::geom::Geometry> cleanG(GeometryUtils::validateGeometry(g.get()));
       contains = cleanG->contains(cleanCandidate.get());
-      LOG_VART(contains);
       _numGeometriesCleaned++;
      }
      LOG_VART(contains);
 
     if (contains)
     {
-      _buildingPartGroupMutex->lock();
-      _buildingPartGroups->joinT(candidate, part);
-      LOG_VARD(_buildingPartGroups->size());
-      _buildingPartGroupMutex->unlock();
+      _addBuildingPartGroup(candidate, part);
     }
   }
 }
@@ -185,7 +183,8 @@ unsigned int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
-BuildingPartMergeOp::BuildingPartMergeOp()
+BuildingPartMergeOp::BuildingPartMergeOp() :
+_threadCount(1)
 {
   _initBuildingPartTagNames();
 }
@@ -215,12 +214,12 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
 
 QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
 {
-  LOG_INFO("Creating building part queue...");
+  LOG_DEBUG("Creating building part queue...");
 
   QQueue<BuildingPartDescription> buildingPartQueue;
 
   const WayMap ways = _map->getWays();
-  LOG_VAR(ways.size());
+  LOG_VARD(ways.size());
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr w = it->second;
@@ -228,7 +227,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
     {
       boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(w, false);
       const std::vector<long> intersectIds = _map->getIndex().findWays(*g->getEnvelopeInternal());
-      LOG_VARD(intersectIds.size());
+      LOG_VART(intersectIds.size());
       for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
            ++it)
       {
@@ -236,7 +235,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
       }
 
       const std::set<long> neighborIds = _calculateNeighbors(w, w->getTags());
-      LOG_VARD(neighborIds.size());
+      LOG_VART(neighborIds.size());
       for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         buildingPartQueue.enqueue(BuildingPartDescription(w, *it, "neighbor", g));
@@ -245,7 +244,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
   }
 
   const RelationMap relations = _map->getRelations();
-  LOG_VAR(relations.size());
+  LOG_VARD(relations.size());
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr r = it->second;
@@ -253,7 +252,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
     {
       boost::shared_ptr<geos::geom::Geometry> g = _getGeometry(r, true);
       const std::vector<long> intersectIds = _map->getIndex().findWays(*g->getEnvelopeInternal());
-      LOG_VARD(intersectIds.size());
+      LOG_VART(intersectIds.size());
       for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
            ++it)
       {
@@ -261,7 +260,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
       }
 
       const std::vector<RelationData::Entry> members = r->getMembers();
-      LOG_VARD(members.size());
+      LOG_VART(members.size());
       for (size_t i = 0; i < members.size(); i++)
       {
         const RelationData::Entry memberEntry = members[i];
@@ -280,13 +279,13 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartQueue()
     }
   }
 
-  LOG_VAR(buildingPartQueue.size());
+  LOG_VARD(buildingPartQueue.size());
   return buildingPartQueue;
 }
 
 std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& tags)
 {
-  LOG_VARD(w->getElementId());
+  LOG_VART(w->getElementId());
 
   std::set<long> neighborIds;
 
@@ -303,9 +302,8 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const T
       const long wayId = *it;
 
       WayPtr neighbor = _map->getWay(wayId);
-      LOG_VART(neighbor == 0);
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
-      if (neighbor != w && _isBuilding(neighbor) &&
+      if (neighbor != w && _buildingCrit.isSatisfied(neighbor) &&
           _hasContiguousNodes(neighbor, w->getNodeId(i), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
@@ -347,24 +345,18 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
   return false;
 }
 
-bool BuildingPartMergeOp::_isBuilding(const ElementPtr& element) const
-{
-  const bool isBuilding = _buildingCrit.isSatisfied(element);
-  return isBuilding;
-}
-
-void BuildingPartMergeOp::_processBuildingParts()
+void BuildingPartMergeOp::_preProcessBuildingParts()
 {
   QQueue<BuildingPartDescription> buildingPartQueue = _getBuildingPartQueue();
 
-  QMutex buildingPartGroupMutex(QMutex::NonRecursive);
-  QMutex schemaMutex(QMutex::NonRecursive);
-  QMutex buildingPartQueueMutex(QMutex::NonRecursive);
+  QMutex buildingPartGroupMutex;
+  QMutex schemaMutex;
+  QMutex buildingPartQueueMutex;
 
   QThreadPool threadPool;
   threadPool.setMaxThreadCount(_threadCount);
   LOG_VARD(threadPool.maxThreadCount());
-  LOG_INFO("Launching " << _threadCount << " processing tasks...");
+  LOG_INFO("Launching " << _threadCount << " building part processing tasks...");
   for (int i = 0; i < _threadCount; i++)
   {
     BuildingPartProcessor* buildingPartTask = new BuildingPartProcessor();
@@ -380,6 +372,8 @@ void BuildingPartMergeOp::_processBuildingParts()
   LOG_VARD(threadPool.activeThreadCount());
   const bool allThreadsRemoved = threadPool.waitForDone();
   LOG_VARD(allThreadsRemoved);
+
+  LOG_VARD(StringUtils::formatLargeNumber(_ds.size()));
 }
 
 void BuildingPartMergeOp::_mergeBuildingParts()
@@ -387,7 +381,6 @@ void BuildingPartMergeOp::_mergeBuildingParts()
   // go through each of the grouped buildings
   int totalBuildingGroupsProcessed = 0;
   int numBuildingGroupsMerged = 0;
-  int numBuildingPartsMerged = 0;
   const Tgs::DisjointSetMap<ElementPtr>::AllGroups& groups = _ds.getAllGroups();
   for (Tgs::DisjointSetMap<ElementPtr>::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
@@ -398,31 +391,31 @@ void BuildingPartMergeOp::_mergeBuildingParts()
     {
       combineParts(_map, parts);
       numBuildingGroupsMerged++;
-      numBuildingPartsMerged += parts.size();
+      _numAffected += parts.size();
     }
 
     totalBuildingGroupsProcessed++;
     if (totalBuildingGroupsProcessed % 100 == 0)
     {
       PROGRESS_INFO(
-        "\tMerged " << StringUtils::formatLargeNumber(numBuildingPartsMerged) <<
+        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
         " building parts after processing " <<
         StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
         StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
     }
   }
-  LOG_INFO(
-    "\tMerged " << StringUtils::formatLargeNumber(numBuildingPartsMerged) <<
-    " building parts after processing " <<
-    StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
-    StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
+//  LOG_INFO(
+//    "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
+//    " building parts after processing " <<
+//    StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
+//    StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
 }
 
 boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   const ElementPtr& element, const bool checkForBuilding)
 {
   boost::shared_ptr<geos::geom::Geometry> g;
-  if (!checkForBuilding || _isBuilding(element))
+  if (!checkForBuilding || _buildingCrit.isSatisfied(element))
   {
     if (element->getElementType() == ElementType::Relation)
     {
@@ -438,21 +431,17 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
 
 void BuildingPartMergeOp::apply(OsmMapPtr& map)
 {
-  MapProjector::projectToPlanar(map);
-
-  ////
-  /// treat the map as read only while we determine building parts.
-  ////
   _ds.clear();
   _map = map;
   _elementConverter.reset(new ElementConverter(_map));
+  _numAffected = 0;
 
-  _processBuildingParts();
-  LOG_VAR(StringUtils::formatLargeNumber(_ds.size()));
+  MapProjector::projectToPlanar(map);
 
-  ////
-  /// Time to start making changes to the map.
-  ////
+  // treat the map as read only while we determine building parts
+  _preProcessBuildingParts();
+
+  // time to start making changes to the map
   _mergeBuildingParts();
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively

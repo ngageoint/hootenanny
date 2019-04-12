@@ -220,16 +220,7 @@ Geometry* GeometryUtils::validateGeometryCollection(
     delete result;
     result = tmp;
   }
-  //return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
   return result;
-
-//  vector<Geometry*>* children = new vector<Geometry*>();
-//  children->reserve(gc->getNumGeometries());
-//  for (size_t i = 0; i < gc->getNumGeometries(); i++)
-//  {
-//    children->push_back(validateGeometry(gc->getGeometryN(i)));
-//  }
-//  return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
 }
 
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
