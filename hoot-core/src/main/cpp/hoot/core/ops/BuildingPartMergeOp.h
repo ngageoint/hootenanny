@@ -38,15 +38,13 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/algorithms/merging/BuildingPartPreMergeCollector.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
 
 // Qt
 #include <QHash>
-#include <QRunnable>
-#include <QQueue>
-#include <QMutex>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -66,83 +64,6 @@ template<>
 
 namespace hoot
 {
-
-/**
- * todo
- */
-class BuildingPartDescription
-{
-
-public:
-
-  BuildingPartDescription(ElementPtr part, long neighborId, QString relationType,
-                          boost::shared_ptr<geos::geom::Geometry> partGeom) :
-  _part(part),
-  _neighborId(neighborId),
-  _relationType(relationType),
-  _partGeom(partGeom)
-  {
-  }
-
-  ElementPtr _part;
-  long _neighborId;
-  QString _relationType;
-  boost::shared_ptr<geos::geom::Geometry> _partGeom;
-};
-
-/**
- * todo
- */
-class BuildingPartProcessor : public QRunnable
-{
-
-public:
-
-  BuildingPartProcessor();
-
-  void run() override;
-
-  void setBuildingPartTagNames(std::set<QString> tagNames)
-  { _buildingPartTagNames = tagNames; }
-  void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
-  void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
-  { _buildingPartGroups = groups; }
-
-  void setMap(OsmMapPtr map);
-
-  void setBuildingPartGroupMutex(QMutex* mutex) { _buildingPartGroupMutex = mutex; }
-  void setSchemaMutex(QMutex* mutex) { _schemaMutex = mutex; }
-  void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
-
-private:
-
-  QQueue<BuildingPartDescription>* _buildingPartQueue;
-
-  QMutex* _buildingPartGroupMutex;
-  QMutex* _schemaMutex;
-  QMutex* _buildingPartQueueMutex;
-
-  OsmMapPtr _map;
-
-  Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
-
-  std::set<QString> _buildingPartTagNames;
-  boost::shared_ptr<ElementConverter> _elementConverter;
-  BuildingCriterion _buildingCrit;
-  boost::shared_ptr<NodeToWayMap> _n2w;
-
-  QString _id;
-  int _numGeometriesCleaned;
-  int _numProcessed;
-
-  void _addNeighborsToGroup(BuildingPartDescription buildingPart);
-  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g, const long wayId,
-                               ElementPtr part);
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
-    ElementPtr element, const bool checkForBuilding = true);
-  bool _isBuilding(ElementPtr element) const;
-  void _addBuildingPartGroup(WayPtr building, ElementPtr buildingPart);
-};
 
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
@@ -184,9 +105,17 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual std::string getClassName() const { return className(); }
+
   virtual void readObject(QDataStream& /*is*/) {}
   virtual void writeObject(QDataStream& /*os*/) const {}
 
+  /**
+   * todo
+   *
+   * @param map
+   * @param parts
+   * @return
+   */
   RelationPtr combineParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
@@ -206,9 +135,11 @@ public:
 
 private:
 
-  /// Used to keep track of which elements make up a building.
+  // used to keep track of which elements make up a building
   Tgs::DisjointSetMap<ElementPtr> _ds;
+
   OsmMapPtr _map;
+
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;
@@ -218,17 +149,45 @@ private:
 
   int _threadCount;
 
+  /*
+   * todo
+   */
   void _preProcessBuildingParts();
+
+  /*
+   * todo
+   */
   void _mergeBuildingParts();
 
+  /*
+   * todo
+   */
   QQueue<BuildingPartDescription> _getBuildingPartQueue();
 
+  /*
+   * todo
+   */
   void _initBuildingPartTagNames();
 
+  /*
+   * todo
+   */
   boost::shared_ptr<geos::geom::Geometry> _getGeometry(
     const ElementPtr& element, const bool checkForBuilding = true);
+
+  /*
+   * todo
+   */
   bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+
+  /*
+   * todo
+   */
   bool _compareTags(Tags t1, Tags te);
+
+  /*
+   * todo
+   */
   std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 };
 

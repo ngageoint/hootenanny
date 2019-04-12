@@ -1,0 +1,147 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+#ifndef BUILDING_PART_PRE_MERGE_COLLECTOR_H
+#define BUILDING_PART_PRE_MERGE_COLLECTOR_H
+
+// Hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+
+// TGS
+#include <tgs/DisjointSet/DisjointSetMap.h>
+
+// Qt
+#include <QHash>
+#include <QRunnable>
+#include <QQueue>
+#include <QMutex>
+
+// geos
+#include <geos/geom/Geometry.h>
+
+namespace hoot
+{
+
+/**
+ * todo
+ */
+struct BuildingPartDescription
+{
+  BuildingPartDescription(ElementPtr part, long neighborId, QString relationType,
+                          boost::shared_ptr<geos::geom::Geometry> partGeom) :
+  _part(part),
+  _neighborId(neighborId),
+  _relationType(relationType),
+  _partGeom(partGeom)
+  {
+  }
+
+  ElementPtr _part;
+  long _neighborId;
+  QString _relationType;
+  boost::shared_ptr<geos::geom::Geometry> _partGeom;
+};
+
+/**
+ * todo
+ */
+class BuildingPartPreMergeCollector : public QRunnable
+{
+
+public:
+
+  BuildingPartPreMergeCollector();
+
+  /**
+   * todo
+   */
+  void run() override;
+
+  void setBuildingPartTagNames(std::set<QString> tagNames)
+  { _buildingPartTagNames = tagNames; }
+  void setBuildingPartQueue(QQueue<BuildingPartDescription>* queue) { _buildingPartQueue = queue; }
+  void setBuildingPartGroups(Tgs::DisjointSetMap<ElementPtr>* groups)
+  { _buildingPartGroups = groups; }
+
+  void setMap(OsmMapPtr map);
+
+  void setBuildingPartGroupMutex(QMutex* mutex) { _buildingPartGroupMutex = mutex; }
+  void setSchemaMutex(QMutex* mutex) { _schemaMutex = mutex; }
+  void setBuildingPartQueueMutex(QMutex* mutex) { _buildingPartQueueMutex = mutex; }
+
+private:
+
+  QQueue<BuildingPartDescription>* _buildingPartQueue;
+
+  QMutex* _buildingPartGroupMutex;
+  QMutex* _schemaMutex;
+  QMutex* _buildingPartQueueMutex;
+
+  OsmMapPtr _map;
+
+  Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroups;
+
+  std::set<QString> _buildingPartTagNames;
+  boost::shared_ptr<ElementConverter> _elementConverter;
+  BuildingCriterion _buildingCrit;
+  boost::shared_ptr<NodeToWayMap> _n2w;
+
+  QString _id;
+  int _numGeometriesCleaned;
+  int _numProcessed;
+
+  /*
+   * todo
+   */
+  void _addNeighborsToGroup(BuildingPartDescription buildingPart);
+
+  /*
+   * todo
+   */
+  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> g, const long wayId,
+                               ElementPtr part);
+  /*
+   * todo
+   */
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(
+    ElementPtr element, const bool checkForBuilding = true);
+
+  bool _isBuilding(ElementPtr element) const;
+
+  /*
+   * todo
+   */
+  void _addBuildingPartGroup(WayPtr building, ElementPtr buildingPart);
+};
+
+}
+
+#endif // BUILDING_PART_PRE_MERGE_COLLECTOR_H
