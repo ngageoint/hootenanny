@@ -34,12 +34,8 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
 sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-# check to see if postgres is already installed
-if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
-  # add the Postgres repo
-  echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
-  sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
-fi
+# configure PGDG repository for PostgreSQL 9.5.
+sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
