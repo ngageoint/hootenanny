@@ -130,7 +130,10 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
         WayPtr neighbor = _map->getWay(*it);
         if (_buildingCrit.isSatisfied(neighbor))
         {
-          buildingPartInput.enqueue(BuildingPartDescription(way, neighbor, "containedWay", geom));
+          buildingPartInput.enqueue(
+            BuildingPartDescription(
+              way, neighbor, BuildingPartDescription::BuildingPartRelationType::ContainedWay,
+              geom));
         }
       }
 
@@ -140,7 +143,9 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
       {
         WayPtr neighbor = _map->getWay(*it);
         // have already checked building status in _calculateNeighbors
-        buildingPartInput.enqueue(BuildingPartDescription(way, neighbor, "neighbor", geom));
+        buildingPartInput.enqueue(
+          BuildingPartDescription(
+            way, neighbor, BuildingPartDescription::BuildingPartRelationType::Neighbor, geom));
       }
     }
   }
@@ -164,7 +169,9 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
         if (_buildingCrit.isSatisfied(neighbor))
         {
           buildingPartInput.enqueue(
-            BuildingPartDescription(relation, neighbor, "containedWay", geom));
+            BuildingPartDescription(
+              relation, neighbor, BuildingPartDescription::BuildingPartRelationType::ContainedWay,
+              geom));
         }
       }
 
@@ -184,7 +191,9 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
             WayPtr neighbor = _map->getWay(*it);
             // have already checked building status in _calculateNeighbors
             buildingPartInput.enqueue(
-              BuildingPartDescription(relation, neighbor, "neighbor", geom));
+              BuildingPartDescription(
+                relation, neighbor, BuildingPartDescription::BuildingPartRelationType::Neighbor,
+                geom));
           }
         }
         else if (members[i].getElementId().getType() == ElementType::Relation)
@@ -344,7 +353,8 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
       case ElementType::Relation:
         return _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
       default:
-        throw HootException("Unexpected element type: " + element->getElementType().toString());
+        throw IllegalArgumentException(
+          "Unexpected element type: " + element->getElementType().toString());
     }
   }
   return boost::shared_ptr<geos::geom::Geometry>();

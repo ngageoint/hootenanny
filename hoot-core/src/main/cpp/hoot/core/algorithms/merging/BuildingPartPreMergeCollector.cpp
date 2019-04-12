@@ -82,16 +82,22 @@ void BuildingPartPreMergeCollector::run()
 void BuildingPartPreMergeCollector::_addNeighborsToGroup(
   const BuildingPartDescription buildingPartDesc)
 {
-  if (buildingPartDesc._relationType == "containedWay")
+  switch (buildingPartDesc._relationType)
   {
-    assert(buildingPartDesc._partGeom);
-    _addContainedWayToGroup(
-      buildingPartDesc._partGeom, buildingPartDesc._neighbor, buildingPartDesc._part);
-  }
-  else
-  {
-    // add these two buildings to a set
-    _addBuildingPartGroup(buildingPartDesc._neighbor, buildingPartDesc._part);
+    case BuildingPartDescription::BuildingPartRelationType::ContainedWay:
+      assert(buildingPartDesc._partGeom);
+      _addContainedWayToGroup(
+        buildingPartDesc._partGeom, buildingPartDesc._neighbor, buildingPartDesc._part);
+      break;
+
+    case BuildingPartDescription::BuildingPartRelationType::Neighbor:
+      // add these two buildings to a set
+      _addBuildingPartGroup(buildingPartDesc._neighbor, buildingPartDesc._part);
+      break;
+
+    default:
+      throw IllegalArgumentException(
+        "Unknown building part description relation type: " + buildingPartDesc._relationType);
   }
 }
 
@@ -140,6 +146,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
   switch (element->getElementType().getEnum())
   {
     case ElementType::Way:
+      // TODO: We could avoid even having to use this mutex by passing in the way geoms...
       _hootSchemaMutex->lock();
       geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
       _hootSchemaMutex->unlock();
@@ -150,7 +157,8 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
       break;
 
     default:
-      throw HootException("Unexpected element type: " + element->getElementType().toString());
+      throw IllegalArgumentException(
+        "Unexpected element type: " + element->getElementType().toString());
   }
   return geom;
 }

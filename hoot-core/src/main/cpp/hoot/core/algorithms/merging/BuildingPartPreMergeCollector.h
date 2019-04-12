@@ -51,7 +51,13 @@ namespace hoot
  */
 struct BuildingPartDescription
 {
-  BuildingPartDescription(ElementPtr part, WayPtr neighbor, QString relationType,
+  enum BuildingPartRelationType
+  {
+    ContainedWay = 1,
+    Neighbor
+  };
+
+  BuildingPartDescription(ElementPtr part, WayPtr neighbor, BuildingPartRelationType relationType,
                           boost::shared_ptr<geos::geom::Geometry> partGeom) :
   _part(part),
   _neighbor(neighbor),
@@ -65,7 +71,7 @@ struct BuildingPartDescription
   //
   WayPtr _neighbor;
   //
-  QString _relationType;
+  BuildingPartRelationType _relationType;
   //
   boost::shared_ptr<geos::geom::Geometry> _partGeom;
 };
