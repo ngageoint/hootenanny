@@ -514,10 +514,10 @@ public class DbUtils {
 
     public static void upsertCommandStatus(String jobId, CommandResult commandResult) {
         long recordCount = 0;
-        if(jobId != null) {
+        if(commandResult.getId() != null) {
             recordCount = createQuery()
                 .from(commandStatus)
-                .where(commandStatus.jobId.eq(jobId))
+                .where(commandStatus.id.eq(commandResult.getId()))
                 .fetchCount();
         }
 
