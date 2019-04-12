@@ -99,9 +99,8 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
   // maintained.
-  // TODO: re-enable
-  //_map->getIndex().clearRelationIndex();
-  //_map.reset();
+  _map->getIndex().clearRelationIndex();
+  _map.reset();
 }
 
 QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
@@ -238,11 +237,6 @@ void BuildingPartMergeOp::_mergeBuildingParts()
         StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) << " building groups.");
     }
   }
-  LOG_DEBUG(
-    "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
-    " building parts after processing " <<
-    StringUtils::formatLargeNumber(numBuildingGroupsMerged) << " / " <<
-    StringUtils::formatLargeNumber(totalBuildingGroupsProcessed) << " building groups.");
 }
 
 std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& way, const Tags& tags)

@@ -125,7 +125,11 @@ public:
 
   virtual QString getCompletedStatusMessage() const
   {
-    return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " building parts.";
+    return
+      "Merged " + StringUtils::formatLargeNumber(_numAffected) +
+      " building parts from " +
+      StringUtils::formatLargeNumber(_numBuildingGroupsMerged) + " valid building groups / " +
+      StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) + " total.";
   }
 
   void setThreadCount(int count) { _threadCount = count; }
