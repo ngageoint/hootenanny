@@ -39,7 +39,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 
 // Qt
 #include <QThreadPool>
