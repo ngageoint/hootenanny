@@ -65,13 +65,11 @@ class RubberSheetTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/rubber-sheet/";
-  const QString _outputPath = "test-output/algorithms/rubber-sheet/";
-
   RubberSheetTest()
+    : HootTestFixture("test-files/algorithms/rubber-sheet/",
+                      "test-output/algorithms/rubber-sheet/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runIoTest()

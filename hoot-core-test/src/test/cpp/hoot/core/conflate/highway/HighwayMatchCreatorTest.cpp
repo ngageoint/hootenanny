@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -53,6 +53,8 @@ class HighwayMatchCreatorTest : public HootTestFixture
 public:
 
   HighwayMatchCreatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -65,7 +67,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(
@@ -74,7 +76,7 @@ public:
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(

@@ -48,15 +48,21 @@ class RasterComparatorTest : public HootTestFixture
 
 public:
 
+  RasterComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
 
     OsmMapPtr map2(new OsmMap());
-    reader.read("test-files/ToyTestB.osm", map2);
+    reader.read(_inputPath + "ToyTestB.osm", map2);
 
     RasterComparator uut(map, map2);
     uut.setPixelSize(3);

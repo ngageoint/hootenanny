@@ -56,13 +56,11 @@ class RefRemoveOpTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/ops/RefRemoveOp/";
-  const QString _outputPath = "test-output/rnd/ops/RefRemoveOp/";
-
   RefRemoveOpTest()
+    : HootTestFixture("test-files/rnd/ops/RefRemoveOp/",
+                      "test-output/rnd/ops/RefRemoveOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()

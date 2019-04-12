@@ -63,7 +63,11 @@ class TagAdvancedCriterionTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/criterion/";
+  TagAdvancedCriterionTest()
+    : HootTestFixture("test-files/criterion/",
+                      UNUSED_PATH)
+  {
+  }
 
   /**
    * A note about certain types of "aux matching", including alias, child, ancestor, and associated

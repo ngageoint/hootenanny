@@ -50,13 +50,11 @@ class RelationCircularRefRemoverTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/RelationCircularRefRemoverTest/";
-  const QString _outputPath = "test-output/ops/RelationCircularRefRemoverTest/";
-
   RelationCircularRefRemoverTest()
+    : HootTestFixture("test-files/ops/RelationCircularRefRemoverTest/",
+                      "test-output/ops/RelationCircularRefRemoverTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()
@@ -65,17 +63,17 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read(_inputPath + "RelationCircularRefRemoverTest-runBasicTest-in.osm", map);
+    reader.read(_inputPath + "RunBasicTestIn.osm", map);
 
     RelationCircularRefRemover uut;
     uut.apply(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, _outputPath + "RelationCircularRefRemoverTest-runBasicTest-out.osm");
+    writer.write(map, _outputPath + "RunBasicTestOut.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "RelationCircularRefRemoverTest-runBasicTest-out.osm",
-                     _outputPath + "RelationCircularRefRemoverTest-runBasicTest-out.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunBasicTestOut.osm",
+                     _outputPath + "RunBasicTestOut.osm");
   }
 };
 

@@ -84,6 +84,8 @@ class OsmMapTest : public HootTestFixture
 public:
 
   OsmMapTest()
+    : HootTestFixture("test-files/elements/",
+                      "test-output/elements/")
   {
     setResetType(ResetBasic);
   }
@@ -172,8 +174,6 @@ public:
 
   void runAppendTest()
   {
-    TestUtils::mkpath("test-output");
-
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
@@ -190,9 +190,9 @@ public:
     MapProjector::projectToWgs84(mapA);
 
     OsmXmlWriter writer;
-    writer.write(mapA, "test-output/OsmMapAppendTest.osm");
-    HOOT_FILE_EQUALS("test-files/OsmMapAppendTest.osm",
-                     "test-output/OsmMapAppendTest.osm");
+    writer.write(mapA, _outputPath + "OsmMapAppendTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OsmMapAppendTest.osm",
+                     _outputPath + "OsmMapAppendTest.osm");
   }
 
   void runAppendDuplicateNodeTest()

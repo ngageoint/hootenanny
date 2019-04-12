@@ -43,13 +43,11 @@ class PhoneNumberLocateVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/PhoneNumberLocateVisitorTest/";
-  const QString _outputPath = "test-output/visitors/PhoneNumberLocateVisitorTest/";
-
   PhoneNumberLocateVisitorTest()
+    : HootTestFixture("test-files/visitors/PhoneNumberLocateVisitorTest/",
+                      "test-output/visitors/PhoneNumberLocateVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

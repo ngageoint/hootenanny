@@ -64,9 +64,9 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/conflate/SearchRadiusCalculatorTest/";
-
   SearchRadiusCalculatorTest()
+    : HootTestFixture("test-files/conflate/SearchRadiusCalculatorTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

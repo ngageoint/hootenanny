@@ -40,13 +40,11 @@ class CumulativeConflatorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/conflate/CumulativeConflatorTest/";
-  const QString _outputPath = "test-output/rnd/conflate/CumulativeConflatorTest/";
-
   CumulativeConflatorTest()
+    : HootTestFixture("test-files/rnd/conflate/CumulativeConflatorTest/",
+                      "test-output/rnd/conflate/CumulativeConflatorTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void basicTest()

@@ -54,10 +54,9 @@ class PertyTestRunnerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/perty/PertyTestRunnerTest/";
-  const QString _outputPath = "test-output/rnd/perty/PertyTestRunnerTest/";
-
   PertyTestRunnerTest()
+    : HootTestFixture("test-files/rnd/perty/PertyTestRunnerTest/",
+                      "test-output/rnd/perty/PertyTestRunnerTest/")
   {
     setResetType(ResetAll);
     TestUtils::mkpath(_outputPath + "Dynamic");

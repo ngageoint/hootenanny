@@ -61,6 +61,12 @@ class PertyOpTest : public HootTestFixture
 
 public:
 
+  PertyOpTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/rnd/perty/")
+  {
+  }
+
   void runDirectSequentialSimulationTest()
   {
     OsmMapPtr map(new OsmMap());
@@ -104,9 +110,8 @@ public:
     qSort(keys);
 
 //    OsmXmlWriter writer;
-//    QDir().mkpath("test-output/rnd/perty");
 //    MapProjector::reprojectToWgs84(map);
-//    writer.write(map, "test-output/rnd/perty/BasicTest.osm");
+//    writer.write(map, _outputPath + "BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)
 //    {
@@ -177,11 +182,10 @@ public:
     }
 
     OsmXmlWriter writer;
-    TestUtils::mkpath("test-output/rnd/perty");
 
     OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);
-    writer.write(original, "test-output/rnd/perty/Original.osm");
+    writer.write(original, _outputPath + "Original.osm");
 
     PertyOp uut;
     uut.setGridSpacing(gridSpacing);
@@ -208,9 +212,9 @@ public:
 
 
     MapProjector::projectToWgs84(debug);
-    writer.write(debug, "test-output/rnd/perty/Debug.osm");
+    writer.write(debug, _outputPath + "Debug.osm");
     MapProjector::projectToWgs84(map);
-    writer.write(map, "test-output/rnd/perty/Permuted.osm");
+    writer.write(map, _outputPath + "Permuted.osm");
   }
 };
 

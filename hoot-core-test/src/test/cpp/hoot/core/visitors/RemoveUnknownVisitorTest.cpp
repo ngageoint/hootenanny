@@ -43,11 +43,10 @@ class RemoveUnknownVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _outputPath = "test-output/visitors/RemoveUnknownVisitorTest/";
-
   RemoveUnknownVisitorTest()
+    : HootTestFixture("test-files/",
+                      "test-output/visitors/RemoveUnknownVisitorTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   OsmMapPtr loadMap()
@@ -57,10 +56,10 @@ public:
     reader.setUseDataSourceIds(true);
     //  Load up ToyTestA as Unknown1
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     //  Load up ToyTestB as Unknown2
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyTestB.osm", map);
+    reader.read(_inputPath + "ToyTestB.osm", map);
 
     return map;
   }
@@ -73,7 +72,7 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "RemoveUnknown1VisitorOutput.osm");
-    HOOT_FILE_EQUALS("test-files/ToyTestB.osm",
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestB.osm",
                      _outputPath + "RemoveUnknown1VisitorOutput.osm");
   }
 
@@ -85,7 +84,7 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "RemoveUnknown2VisitorOutput.osm");
-    HOOT_FILE_EQUALS("test-files/ToyTestA.osm",
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestA.osm",
                      _outputPath + "RemoveUnknown2VisitorOutput.osm");
   }
 

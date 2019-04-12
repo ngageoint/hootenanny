@@ -60,13 +60,11 @@ public:
   { return QString("%1.ServiceHootApiDbBulkInserterTest@hoottestcpp.org").arg(_testName); }
   QString userName()  { return QString("%1.ServiceHootApiDbBulkInserterTest").arg(_testName); }
 
-  const QString _inputPath = "test-files/io/ServiceHootApiDbBulkInserterTest/";
-  const QString _outputPath = "test-output/io/ServiceHootApiDbBulkInserterTest/";
-
   ServiceHootApiDbBulkInserterTest()
+    : HootTestFixture("test-files/io/ServiceHootApiDbBulkInserterTest/",
+                      "test-output/io/ServiceHootApiDbBulkInserterTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void setUpTest(const QString testName)

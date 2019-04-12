@@ -52,13 +52,13 @@ class RemoveTagsVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/RemoveTagsVisitorTest/";
-  const QString _outputPath = "test-output/visitors/RemoveTagsVisitorTest/";
+
 
   RemoveTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
+                      "test-output/visitors/RemoveTagsVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runRemoveTest()
@@ -73,9 +73,8 @@ public:
 
     OsmMapWriterFactory::write(map, _outputPath + "RunRemoveTest.osm");
 
-    HOOT_FILE_EQUALS(
-      _inputPath + "RunRemoveTest.osm",
-      _outputPath + "RunRemoveTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunRemoveTest.osm",
+                     _outputPath + "RunRemoveTest.osm");
   }
 
   void runFilterTest()

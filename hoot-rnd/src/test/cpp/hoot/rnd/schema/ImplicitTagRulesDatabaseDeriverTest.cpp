@@ -48,12 +48,11 @@ class ImplicitTagRulesDatabaseDeriverTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/";
-  const QString _outputPath = "test-output/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/";
 
   ImplicitTagRulesDatabaseDeriverTest()
+    : HootTestFixture("test-files/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/",
+                      "test-output/rnd/schema/ImplicitTagRulesDatabaseDeriverTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

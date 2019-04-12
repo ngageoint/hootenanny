@@ -57,13 +57,19 @@ class ScriptMatchTest : public HootTestFixture
 
 public:
 
+  ScriptMatchTest()
+    : HootTestFixture("test-files/algorithms/js/",
+                      UNUSED_PATH)
+  {
+  }
+
   void conflictTest()
   {
     ConfigOptions co;
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/algorithms/js/ScriptMatchTest.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm",
       true);
     MapProjector::projectToPlanar(map);
 

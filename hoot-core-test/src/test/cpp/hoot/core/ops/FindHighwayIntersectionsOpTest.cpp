@@ -56,13 +56,11 @@ class FindHighwayIntersectionsOpTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/FindHighwayIntersectionsOp/";
-  const QString _outputPath = "test-output/ops/FindHighwayIntersectionsOp/";
-
   FindHighwayIntersectionsOpTest()
+    : HootTestFixture("test-files/ops/FindHighwayIntersectionsOp/",
+                      "test-output/ops/FindHighwayIntersectionsOp/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()

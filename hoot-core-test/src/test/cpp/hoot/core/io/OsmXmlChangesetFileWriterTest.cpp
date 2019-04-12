@@ -45,12 +45,10 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/OsmXmlChangesetFileWriterTest/";
-  const QString _outputPath = "test-output/io/OsmXmlChangesetFileWriterTest/";
-
   OsmXmlChangesetFileWriterTest()
+    : HootTestFixture("test-files/io/OsmXmlChangesetFileWriterTest/",
+                      "test-output/io/OsmXmlChangesetFileWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void runSimpleTest()

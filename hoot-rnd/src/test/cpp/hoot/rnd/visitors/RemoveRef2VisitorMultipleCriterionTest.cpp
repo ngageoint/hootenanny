@@ -51,9 +51,9 @@ class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/visitors/";
-
   RemoveRef2VisitorMultipleCriterionTest()
+    : HootTestFixture("test-files/rnd/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }

@@ -79,13 +79,11 @@ class MaximalSublineTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/subline-matching/";
-  const QString _outputPath = "test-output/algorithms/subline-matching/";
-
   MaximalSublineTest()
+    : HootTestFixture("test-files/algorithms/subline-matching/",
+                      "test-output/algorithms/subline-matching/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void addEndNode(OsmMapPtr map, Coordinate c, QString note)

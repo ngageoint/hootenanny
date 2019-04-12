@@ -51,13 +51,11 @@ class ImplicitPoiTypeTaggerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/ImplicitPoiTypeTaggerTest/";
-  const QString _outputPath = "test-output/visitors/ImplicitPoiTypeTaggerTest/";
-
   ImplicitPoiTypeTaggerTest()
+    : HootTestFixture("test-files/visitors/ImplicitPoiTypeTaggerTest/",
+                      "test-output/visitors/ImplicitPoiTypeTaggerTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

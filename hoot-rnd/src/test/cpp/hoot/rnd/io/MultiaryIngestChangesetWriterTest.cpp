@@ -46,12 +46,10 @@ class MultiaryIngestChangesetWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/io/MultiaryIngestChangesetTests/";
-  const QString _outputPath = "test-output/rnd/io/MultiaryIngestChangesetWriterTest/";
-
   MultiaryIngestChangesetWriterTest()
+    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
+                      "test-output/rnd/io/MultiaryIngestChangesetWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void writeNodes(const QString output, const QString format)

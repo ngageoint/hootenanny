@@ -59,6 +59,8 @@ class MatchComparatorTest : public HootTestFixture
 public:
 
   MatchComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -71,9 +73,9 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
 
     // introduce a false positive in the test data.
     vector<long> wids = FindWaysVisitor::findWaysByTag(map, "name", "Cheddar's Casual Cafe");

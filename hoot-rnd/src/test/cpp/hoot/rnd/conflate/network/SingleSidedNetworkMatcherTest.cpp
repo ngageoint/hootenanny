@@ -50,6 +50,8 @@ class SingleSidedNetworkMatcherTest : public HootTestFixture
 public:
 
   SingleSidedNetworkMatcherTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -74,30 +76,8 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/DcGisRoads.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "tmp/dcperb2.osm", false,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "tmp/sub1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "tmp/sub2.osm", false,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD2.osm", true,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/highway-009/Input1.osm", false,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/highway-009/Input2.osm", false,
-//      Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB1.osm", true, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB2.osm", false, Status::Unknown2);
 
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);

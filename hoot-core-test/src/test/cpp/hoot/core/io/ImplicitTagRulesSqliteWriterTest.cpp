@@ -39,12 +39,10 @@ class ImplicitTagRulesSqliteWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/ImplicitTagRulesSqliteWriterTest/";
-  const QString _outputPath = "test-output/io/ImplicitTagRulesSqliteWriterTest/";
-
   ImplicitTagRulesSqliteWriterTest()
+    : HootTestFixture("test-files/io/ImplicitTagRulesSqliteWriterTest/",
+                      "test-output/io/ImplicitTagRulesSqliteWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void runWriteTest()

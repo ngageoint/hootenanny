@@ -41,7 +41,11 @@ class BuildingCriterionTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/criterion/";
+  BuildingCriterionTest()
+    : HootTestFixture("test-files/criterion/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runBasicTest()
   {

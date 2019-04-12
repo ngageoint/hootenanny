@@ -60,6 +60,8 @@ class GraphComparatorTest : public HootTestFixture
 public:
 
   GraphComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -69,10 +71,10 @@ public:
       OsmXmlReader reader;
 
       OsmMapPtr map(new OsmMap());
-      reader.read("test-files/ToyTestA.osm", map);
+      reader.read(_inputPath + "ToyTestA.osm", map);
 
       OsmMapPtr map2(new OsmMap());
-      reader.read("test-files/ToyTestB.osm", map2);
+      reader.read(_inputPath + "ToyTestB.osm", map2);
 
       const WayMap& w1 = map->getWays();
       for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)

@@ -66,13 +66,11 @@ class DuplicateWayRemoverTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/DuplicateWayRemoverTest/";
-  const QString _outputPath = "test-output/ops/DuplicateWayRemoverTest/";
-
   DuplicateWayRemoverTest()
+    : HootTestFixture("test-files/ops/DuplicateWayRemoverTest/",
+                      "test-output/ops/DuplicateWayRemoverTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()

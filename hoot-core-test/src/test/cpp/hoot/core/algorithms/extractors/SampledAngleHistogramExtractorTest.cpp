@@ -54,9 +54,9 @@ class SampledAngleHistogramExtractorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/";
-
   SampledAngleHistogramExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

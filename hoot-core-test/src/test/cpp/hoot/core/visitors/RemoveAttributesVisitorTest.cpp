@@ -51,13 +51,11 @@ class RemoveAttributesVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/RemoveAttributesVisitorTest/";
-  const QString _outputPath = "test-output/visitors/RemoveAttributesVisitorTest/";
-
   RemoveAttributesVisitorTest()
+    : HootTestFixture("test-files/visitors/RemoveAttributesVisitorTest/",
+                      "test-output/visitors/RemoveAttributesVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runRemoveAttributesTest()

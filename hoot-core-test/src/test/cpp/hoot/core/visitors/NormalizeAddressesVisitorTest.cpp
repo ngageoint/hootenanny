@@ -43,13 +43,11 @@ class NormalizeAddressesVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/NormalizeAddressesVisitorTest/";
-  const QString _outputPath = "test-output/visitors/NormalizeAddressesVisitorTest/";
-
   NormalizeAddressesVisitorTest()
+    : HootTestFixture("test-files/visitors/NormalizeAddressesVisitorTest/",
+                      "test-output/visitors/NormalizeAddressesVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

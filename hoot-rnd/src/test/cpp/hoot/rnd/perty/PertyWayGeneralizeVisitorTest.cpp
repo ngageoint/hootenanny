@@ -64,15 +64,13 @@ class PertyWayGeneralizeVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/perty/PertyWayGeneralizeVisitorTest/";
-  const QString _outputPath = "test-output/rnd/perty/PertyWayGeneralizeVisitorTest/";
-
   QMap<QString, OsmMapPtr> _inputMapCache;
 
   PertyWayGeneralizeVisitorTest()
+    : HootTestFixture("test-files/rnd/perty/PertyWayGeneralizeVisitorTest/",
+                      "test-output/rnd/perty/PertyWayGeneralizeVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
@@ -125,8 +123,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, numWaysRemoved);
     LOG_VARD(numWaysRemoved);
 
-    QFileInfo outputFileInfo(outputFile);
-    TestUtils::mkpath(outputFileInfo.absolutePath());
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, outputFile);

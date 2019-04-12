@@ -51,7 +51,11 @@ class HootServicesLanguageInfoResponseParserTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/language/HootServicesLanguageInfoResponseParserTest/";
+  HootServicesLanguageInfoResponseParserTest()
+    : HootTestFixture("test-files/language/HootServicesLanguageInfoResponseParserTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runParseLangsResponseTest()
   {

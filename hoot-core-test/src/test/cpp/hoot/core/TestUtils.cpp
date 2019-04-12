@@ -62,6 +62,8 @@ const QString TestUtils::STREET_TAG_NAME = "addr:street";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
+const QString HootTestFixture::UNUSED_PATH = "";
+
 TestUtils::TestUtils()
 {
 }

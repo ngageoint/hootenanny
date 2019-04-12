@@ -79,13 +79,11 @@ public:
   QString userEmail()
   { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(_testName); }
 
-  const QString _inputPath = "test-files/io/ServiceHootApiDbReaderTest/";
-  const QString _outputPath = "test-output/io/ServiceHootApiDbReaderTest/";
-
   ServiceHootApiDbReaderTest()
+    : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
+                      "test-output/io/ServiceHootApiDbReaderTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void setUpTest(const QString testName)

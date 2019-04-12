@@ -39,44 +39,48 @@ namespace hoot
 
 class ChangesetDeriverTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(ChangesetDeriverTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(ChangesetDeriverTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-    const QString _inputPath = "test-files/algorithms/changeset/ChangesetDeriverTest/";
+  ChangesetDeriverTest()
+    : HootTestFixture("test-files/algorithms/changeset/ChangesetDeriverTest/",
+                      UNUSED_PATH)
+  {
+  }
 
-    void runTest()
+  void runTest()
+  {
+    CalculateHashVisitor2 hashVis;
+
+    OsmMapPtr map1(new OsmMap());
+    OsmMapReaderFactory::read(map1, _inputPath + "Map1.osm", true);
+    map1->visitRw(hashVis);
+
+    OsmMapPtr map2(new OsmMap());
+    OsmMapReaderFactory::read(map2, _inputPath + "Map2.osm", true);
+    map2->visitRw(hashVis);
+
+    InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
+    InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
+
+    ChangesetDeriverPtr changesetDiff(
+      new ChangesetDeriver(map1SortedElements, map2SortedElements));
+
+    QMap<Change::ChangeType, QList<long> > changeTypeToIds;
+    while (changesetDiff->hasMoreChanges())
     {
-      CalculateHashVisitor2 hashVis;
-
-      OsmMapPtr map1(new OsmMap());
-      OsmMapReaderFactory::read(map1, _inputPath + "Map1.osm", true);
-      map1->visitRw(hashVis);
-
-      OsmMapPtr map2(new OsmMap());
-      OsmMapReaderFactory::read(map2, _inputPath + "Map2.osm", true);
-      map2->visitRw(hashVis);
-
-      InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
-      InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
-
-      ChangesetDeriverPtr changesetDiff(
-        new ChangesetDeriver(map1SortedElements, map2SortedElements));
-
-      QMap<Change::ChangeType, QList<long> > changeTypeToIds;
-      while (changesetDiff->hasMoreChanges())
-      {
-        const Change change = changesetDiff->readNextChange();
-        LOG_VART(change.toString());
-        changeTypeToIds[change.getType()].append(change.getElement()->getElementId().getId());
-      }
-
-      HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
-      HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
-      HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
+      const Change change = changesetDiff->readNextChange();
+      LOG_VART(change.toString());
+      changeTypeToIds[change.getType()].append(change.getElement()->getElementId().getId());
     }
+
+    HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
+    HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
+    HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetDeriverTest, "quick");

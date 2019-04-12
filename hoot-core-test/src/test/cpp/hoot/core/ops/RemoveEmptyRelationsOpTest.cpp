@@ -42,9 +42,9 @@ class RemoveEmptyRelationsOpTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/RemoveEmptyRelationsOp/";
-
   RemoveEmptyRelationsOpTest()
+    : HootTestFixture("test-files/ops/RemoveEmptyRelationsOp/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

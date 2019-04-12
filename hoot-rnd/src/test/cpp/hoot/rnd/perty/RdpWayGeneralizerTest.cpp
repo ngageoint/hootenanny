@@ -62,16 +62,14 @@ class RdpWayGeneralizerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/perty/RdpWayGeneralizerTest/";
-  const QString _outputPath = "test-output/rnd/perty/RdpWayGeneralizerTest/";
-
   QMap<QString, QList<ConstNodePtr>> _inputPointsCache;
   QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
   RdpWayGeneralizerTest()
+    : HootTestFixture("test-files/rnd/perty/RdpWayGeneralizerTest/",
+                      "test-output/rnd/perty/RdpWayGeneralizerTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   QList<ConstNodePtr> readPoints(const QString filePath)
@@ -137,19 +135,14 @@ public:
     return coordinates;
   }
 
-  QString writeMap(OsmMapPtr map, const QString outDir, const QString outFileName)
+  void writeMap(OsmMapPtr map, const QString outFileName)
   {
-    TestUtils::mkpath(outDir);
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = outDir + "/" + outFileName;
-    writer.write(map, outFile);
-
-    return outFile;
+    writer.write(map, outFileName);
   }
 
-  QString writePointOutput(const QList<ConstNodePtr>& points, const QString outDir,
-                           const QString outFileName)
+  void writePointOutput(const QList<ConstNodePtr>& points, const QString outFileName)
   {
     OsmMapPtr map(new OsmMap());
 
@@ -161,7 +154,7 @@ public:
       map->addNode(nodeCopy);
     }
 
-    return writeMap(map, outDir, outFileName);
+    writeMap(map, outFileName);
   }
 
   void runPerpendicularDistanceTest()
@@ -188,11 +181,9 @@ public:
     const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(148, outputPoints.size());
-    QString outFile =
-      writePointOutput(outputPoints, _outputPath, "runCalcPointsInput1aTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runCalcPointsInput1aTest-out.osm",
-      outFile);
+    QString outFile = _outputPath + "runCalcPointsInput1aTest-out.osm";
+    writePointOutput(outputPoints, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runCalcPointsInput1aTest-out.osm", outFile);
   }
 
   void runCalcPointsInput1bTest()
@@ -205,11 +196,9 @@ public:
     const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(22, outputPoints.size());
-    QString outFile =
-      writePointOutput(outputPoints, _outputPath, "runCalcPointsInput1bTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runCalcPointsInput1bTest-out.osm",
-      outFile);
+    QString outFile = _outputPath + "runCalcPointsInput1bTest-out.osm";
+    writePointOutput(outputPoints, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runCalcPointsInput1bTest-out.osm", outFile);
   }
 
   void runCalcPointsInput2aTest()
@@ -222,11 +211,9 @@ public:
     const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(48, outputPoints.size());
-    QString outFile =
-      writePointOutput(outputPoints, _outputPath, "runCalcPointsInput2aTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runCalcPointsInput2aTest-out.osm",
-      outFile);
+    QString outFile = _outputPath + "runCalcPointsInput2aTest-out.osm";
+    writePointOutput(outputPoints, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runCalcPointsInput2aTest-out.osm", outFile);
   }
 
   void runCalcPointsInput2bTest()
@@ -239,11 +226,9 @@ public:
     const QList<ConstNodePtr>& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(4, outputPoints.size());
-    QString outFile =
-      writePointOutput(outputPoints, _outputPath, "runCalcPointsInput2bTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runCalcPointsInput2bTest-out.osm",
-      outFile);
+    QString outFile = _outputPath + "runCalcPointsInput2bTest-out.osm";
+    writePointOutput(outputPoints, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runCalcPointsInput2bTest-out.osm", outFile);
   }
 
   void runGeneralizeWayInput1NoInformationNodesTest()
@@ -261,11 +246,9 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)148, way->getNodeIds().size());
-    const QString outFile =
-      writeMap(map, _outputPath, "runGeneralizeWayInput1NoInformationNodesTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm",
-      outFile);
+    const QString outFile = _outputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm";
+    writeMap(map, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm", outFile);
   }
 
   void runGeneralizeWayInput1WithInformationNodesTest()
@@ -300,11 +283,9 @@ public:
 
     CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)137, way->getNodeIds().size());
-    const QString outFile =
-      writeMap(map, _outputPath, "runGeneralizeWayInput1WithInformationNodesTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm",
-      outFile);
+    const QString outFile = _outputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm";
+    writeMap(map, outFile);
+    HOOT_FILE_EQUALS(_inputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm", outFile);
   }
 
   void runInvalidEpsilonTest()

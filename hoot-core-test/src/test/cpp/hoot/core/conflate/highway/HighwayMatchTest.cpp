@@ -66,9 +66,9 @@ class HighwayMatchTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/conflate/highway/";
-
   HighwayMatchTest()
+    : HootTestFixture("test-files/conflate/highway/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

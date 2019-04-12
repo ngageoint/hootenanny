@@ -43,13 +43,11 @@ class NormalizePhoneNumbersVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/NormalizePhoneNumbersVisitorTest/";
-  const QString _outputPath = "test-output/visitors/NormalizePhoneNumbersVisitorTest/";
-
   NormalizePhoneNumbersVisitorTest()
+    : HootTestFixture("test-files/visitors/NormalizePhoneNumbersVisitorTest/",
+                      "test-output/visitors/NormalizePhoneNumbersVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

@@ -60,13 +60,11 @@ class OsmPbfWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/";
-  const QString _outputPath = "test-output/io/";
-
   OsmPbfWriterTest()
+    : HootTestFixture("test-files/io/",
+                      "test-output/io/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runToyTest()

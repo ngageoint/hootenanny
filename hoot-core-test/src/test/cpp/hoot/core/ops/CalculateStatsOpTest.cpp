@@ -54,9 +54,10 @@ class CalculateStatsOpTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/CalculateStatsOp/";
 
   CalculateStatsOpTest()
+    : HootTestFixture("test-files/ops/CalculateStatsOp/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }

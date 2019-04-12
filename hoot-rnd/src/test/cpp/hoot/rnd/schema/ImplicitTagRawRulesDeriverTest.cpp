@@ -53,12 +53,10 @@ class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/schema/ImplicitTagRawRulesDeriverTest/";
-  const QString _outputPath = "test-output/rnd/schema/ImplicitTagRawRulesDeriverTest/";
-
   ImplicitTagRawRulesDeriverTest()
+    : HootTestFixture("test-files/rnd/schema/ImplicitTagRawRulesDeriverTest/",
+                      "test-output/rnd/schema/ImplicitTagRawRulesDeriverTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicPoiTest()

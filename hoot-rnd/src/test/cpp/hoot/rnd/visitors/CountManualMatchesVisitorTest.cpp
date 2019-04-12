@@ -42,12 +42,18 @@ class CountManualMatchesVisitorTest : public HootTestFixture
 
 public:
 
+  CountManualMatchesVisitorTest()
+    : HootTestFixture("test-files/rnd/visitors/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/rnd/visitors/CountManualMatchesVisitorTest.osm",
+      _inputPath + "CountManualMatchesVisitorTest.osm",
       false,
       Status::Unknown2);
 

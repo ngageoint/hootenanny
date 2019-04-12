@@ -54,13 +54,11 @@ class WayMatchStringMergerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/WayMatchStringMergerTest/";
-  const QString _outputPath = "test-output/algorithms/WayMatchStringMergerTest/";
-
   WayMatchStringMergerTest()
+    : HootTestFixture("test-files/algorithms/WayMatchStringMergerTest/",
+                      "test-output/algorithms/WayMatchStringMergerTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   WayStringPtr createWayString1(OsmMapPtr map)

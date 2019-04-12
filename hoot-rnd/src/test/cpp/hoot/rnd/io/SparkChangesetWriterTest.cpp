@@ -45,12 +45,10 @@ class SparkChangesetWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/io/SparkChangesetWriterTest/";
-  const QString _outputPath = "test-output/rnd/io/SparkChangesetWriterTest/";
-
   SparkChangesetWriterTest()
+    : HootTestFixture("test-files/rnd/io/SparkChangesetWriterTest/",
+                      "test-output/rnd/io/SparkChangesetWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void writeNodes(const QString output, const QString format)

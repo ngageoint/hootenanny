@@ -44,12 +44,10 @@ class ArffWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/ArffWriterTest/";
-  const QString _outputPath = "test-output/io/ArffWriterTest/";
-
   ArffWriterTest()
+    : HootTestFixture("test-files/io/ArffWriterTest/",
+                      "test-output/io/ArffWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

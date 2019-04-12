@@ -48,7 +48,11 @@ class PoiPolygonAlphaShapeDistanceExtractorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/extractors/poi-polygon/";
+  PoiPolygonAlphaShapeDistanceExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/poi-polygon/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runBasicTest()
   {

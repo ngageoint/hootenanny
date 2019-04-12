@@ -42,7 +42,11 @@ class MultiaryIngestChangesetReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/io/MultiaryIngestChangesetTests/";
+  MultiaryIngestChangesetReaderTest()
+    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
+                      UNUSED_PATH)
+  {
+  }
 
   void verifyInput(const QString inputFile)
   {

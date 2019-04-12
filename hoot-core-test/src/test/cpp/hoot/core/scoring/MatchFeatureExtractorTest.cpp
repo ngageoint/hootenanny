@@ -55,13 +55,11 @@ class MatchFeatureExtractorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/scoring/MatchFeatureExtractorTest/";
-  const QString _outputPath = "test-output/scoring/MatchFeatureExtractorTest/";
-
   MatchFeatureExtractorTest()
+    : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
+                      "test-output/scoring/MatchFeatureExtractorTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   OsmMapPtr load(QString s1, QString s2)

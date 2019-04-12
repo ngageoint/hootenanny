@@ -50,13 +50,11 @@ class IntersectionSplitterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/splitter/";
-  const QString _outputPath = "test-output/algorithms/splitter/";
-
   IntersectionSplitterTest()
+    : HootTestFixture("test-files/algorithms/splitter/",
+                      "test-output/algorithms/splitter/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()

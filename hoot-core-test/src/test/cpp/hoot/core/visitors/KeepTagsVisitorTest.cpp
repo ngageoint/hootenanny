@@ -49,9 +49,9 @@ class KeepTagsVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/";
-
   KeepTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

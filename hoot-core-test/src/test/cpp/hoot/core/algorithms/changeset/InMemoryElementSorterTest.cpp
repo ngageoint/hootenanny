@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -38,11 +38,17 @@ namespace hoot
 
 class InMemoryElementSorterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(InMemoryElementSorterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(InMemoryElementSorterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  InMemoryElementSorterTest()
+    : HootTestFixture("test-files/algorithms/changeset/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runTest()
   {
@@ -53,7 +59,7 @@ public:
     OsmMapPtr inputMap(new OsmMap());
     OsmMapReaderFactory::read(
       inputMap,
-      "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm",
+      _inputPath + "ExternalMergeElementSorterTest.osm",
       true);
 
     InMemoryElementSorter elementSorter(inputMap);
