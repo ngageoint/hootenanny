@@ -165,9 +165,9 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + testName + "In1.osm", map);
+    reader.read(_inputPath + testName + "In1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(inputPath + testName + "In2.osm", map);
+    reader.read(_inputPath + testName + "In2.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -181,9 +181,9 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.setIsDebugMap(true);
-    writer.write(map, outputPath + testName +  + "Out.osm");
+    writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };
 
