@@ -76,13 +76,11 @@ class OsmPbfReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/";
-  const QString _outputPath = "test-output/io/";
-
   OsmPbfReaderTest()
+    : HootTestFixture("test-files/io/",
+                      "test-output/io/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runOffsetsTest()

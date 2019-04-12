@@ -54,13 +54,11 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/ToEnglishTranslationVisitorTest/";
-  const QString _outputPath = "test-output/visitors/ToEnglishTranslationVisitorTest/";
-
   ToEnglishTranslationVisitorTest()
+    : HootTestFixture("test-files/visitors/ToEnglishTranslationVisitorTest/",
+                      "test-output/visitors/ToEnglishTranslationVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTranslateTest()

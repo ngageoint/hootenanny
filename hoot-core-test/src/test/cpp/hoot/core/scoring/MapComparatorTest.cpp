@@ -59,6 +59,12 @@ class MapComparatorTest : public HootTestFixture
 
 public:
 
+  MapComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
@@ -66,11 +72,11 @@ public:
 
     OsmMap::resetCounters();
     OsmMapPtr map1(new OsmMap());
-    reader.read("test-files/ToyTestA.osm", map1);
+    reader.read(_inputPath + "ToyTestA.osm", map1);
 
     OsmMap::resetCounters();
     OsmMapPtr map2(new OsmMap());
-    reader.read("test-files/ToyTestA.osm", map2);
+    reader.read(_inputPath + "ToyTestA.osm", map2);
 
     MapComparator uut;
 

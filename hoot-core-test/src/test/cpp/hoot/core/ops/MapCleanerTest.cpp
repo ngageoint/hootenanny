@@ -55,13 +55,11 @@ class MapCleanerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/";
-  const QString _outputPath = "test-output/ops/";
-
   MapCleanerTest()
+    : HootTestFixture("test-files/ops/",
+                      "test-output/ops/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

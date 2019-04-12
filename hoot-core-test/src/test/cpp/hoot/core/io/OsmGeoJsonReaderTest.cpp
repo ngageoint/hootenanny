@@ -55,13 +55,11 @@ class OsmGeoJsonReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/GeoJson/";
-  const QString _outputPath = "test-output/io/GeoJson/";
-
   OsmGeoJsonReaderTest()
+    : HootTestFixture("test-files/io/GeoJson/",
+                      "test-output/io/GeoJson/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runAllDataTypesTest()

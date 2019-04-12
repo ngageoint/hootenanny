@@ -51,12 +51,10 @@ class OgrWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/";
-  const QString _outputPath = "test-output/io/";
-
   OgrWriterTest()
+    : HootTestFixture("test-files/io/",
+                      "test-output/io/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   OsmMapPtr _map;

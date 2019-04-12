@@ -45,13 +45,12 @@ public:
 
   OsmApiDb database;
 
-  const QString _inputPath = "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/";
-  const QString _outputPath = "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/";
   const QString _scriptDir = "test-files/servicesdb/";
 
   ServiceOsmApiDbSqlChangesetFileWriterTest()
+    : HootTestFixture("test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/",
+                      "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   virtual void tearDown()

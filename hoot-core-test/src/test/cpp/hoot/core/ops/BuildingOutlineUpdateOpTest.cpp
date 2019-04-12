@@ -52,13 +52,11 @@ class BuildingOutlineUpdateOpTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/BuildingOutlineUpdateOp/";
-  const QString _outputPath = "test-output/ops/BuildingOutlineUpdateOp/";
-
   BuildingOutlineUpdateOpTest()
+    : HootTestFixture("test-files/ops/BuildingOutlineUpdateOp/",
+                      "test-output/ops/BuildingOutlineUpdateOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runSelfIntersectingRelationTest()

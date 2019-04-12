@@ -55,13 +55,13 @@ class AddAttributesVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/AddAttributesVisitorTest/";
-  const QString _outputPath = "test-output/visitors/AddAttributesVisitorTest/";
+
 
   AddAttributesVisitorTest()
+    : HootTestFixture("test-files/visitors/AddAttributesVisitorTest/",
+                      "test-output/visitors/AddAttributesVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runAddAttributesTest()

@@ -79,6 +79,8 @@ private:
 public:
 
   PoiPolygonMatchVisitorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -98,7 +100,7 @@ public:
     OsmXmlReader reader;
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
       !PoiPolygonMatchVisitor(map, result).isMatchCandidate(

@@ -54,15 +54,11 @@ class HootServicesLanguageDetectorClientTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/language/HootServicesLanguageDetectorClientTest/";
-
-  // see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-  const QString _responseStr =
-    "{ \"detectorUsed\": \"TikaLanguageDetector\", "
-      "\"detectedLangCode\": \"de\", "
-      "\"sourceText\": \"wie%20alt%20bist%20du\", "
-      "\"detectedLang\": \"German\", "
-      "\"detectionConfidence\": \"medium\" }";
+  HootServicesLanguageDetectorClientTest()
+    : HootTestFixture("test-files/language/HootServicesLanguageDetectorClientTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runRequestDataTest()
   {
@@ -98,6 +94,14 @@ public:
   }
 
 private:
+
+  // see comment in StringUtilsTest::jsonParseTest about the formatting of this string
+  const QString _responseStr =
+    "{ \"detectorUsed\": \"TikaLanguageDetector\", "
+      "\"detectedLangCode\": \"de\", "
+      "\"sourceText\": \"wie%20alt%20bist%20du\", "
+      "\"detectedLang\": \"German\", "
+      "\"detectionConfidence\": \"medium\" }";
 
   boost::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
   {

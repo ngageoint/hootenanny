@@ -54,13 +54,13 @@ class NonEnglishLanguageDetectionVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/NonEnglishLanguageDetectionVisitorTest/";
-  const QString _outputPath = "test-output/visitors/NonEnglishLanguageDetectionVisitorTest/";
+
 
   NonEnglishLanguageDetectionVisitorTest()
+    : HootTestFixture("test-files/visitors/NonEnglishLanguageDetectionVisitorTest/",
+                      "test-output/visitors/NonEnglishLanguageDetectionVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runDetectTest()

@@ -69,6 +69,8 @@ class BuildingMatchCreatorTest : public HootTestFixture
 public:
 
   BuildingMatchCreatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -106,9 +108,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     LOG_VARD(targetWaysOnly);
@@ -154,14 +156,14 @@ public:
     OsmMapPtr map(new OsmMap());
 
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));

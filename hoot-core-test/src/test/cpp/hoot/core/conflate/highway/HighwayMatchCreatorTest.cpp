@@ -53,6 +53,8 @@ class HighwayMatchCreatorTest : public HootTestFixture
 public:
 
   HighwayMatchCreatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -65,7 +67,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(
@@ -74,7 +76,7 @@ public:
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(

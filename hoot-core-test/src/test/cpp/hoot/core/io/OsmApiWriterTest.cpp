@@ -57,7 +57,11 @@ public:
   const QString OSM_API_URL = "https://www.openstreetmap.org";
   const QString ME_API_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
 
-  const QString _inputPath = "test-files/io/OsmChangesetElementTest/";
+  OsmApiWriterTest()
+    : HootTestFixture("test-files/io/OsmChangesetElementTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runParseStatusTest()
   {

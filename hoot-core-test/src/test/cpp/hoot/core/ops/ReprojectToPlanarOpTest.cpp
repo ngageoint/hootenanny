@@ -57,10 +57,9 @@ class ReprojectToPlanarOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath  = "test-files/ops/ReprojectToPlanarOp/";
-  const QString outputPath = "test-output/ops/ReprojectToPlanarOp/";
-
   ReprojectToPlanarOpTest()
+    : HootTestFixture("test-files/ops/ReprojectToPlanarOp/",
+                      "test-output/ops/ReprojectToPlanarOp/")
   {
     setResetType(ResetAll);
   }
@@ -73,16 +72,15 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + inputFile, map);
+    reader.read(_inputPath + inputFile, map);
 
     ReprojectToPlanarOp myOp;
     myOp.apply(map);
 
-    TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath + outputFile,
-                     outputPath + outputFile);
+    writer.write(map, _outputPath + outputFile);
+    HOOT_FILE_EQUALS(_inputPath + outputFile,
+                     _outputPath + outputFile);
   }
 
 };

@@ -48,9 +48,9 @@ class MapScoringStatusAndRefTagValidatorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/scoring/MapScoringStatusAndRefTagValidatorTest/";
-
   MapScoringStatusAndRefTagValidatorTest()
+    : HootTestFixture("test-files/rnd/scoring/MapScoringStatusAndRefTagValidatorTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

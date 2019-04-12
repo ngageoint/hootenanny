@@ -48,7 +48,11 @@ class ArffReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/ArffReaderTest/";
+  ArffReaderTest()
+    : HootTestFixture("test-files/io/ArffReaderTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runBasicTest()
   {

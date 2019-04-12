@@ -48,7 +48,11 @@ class OsmApiChangesetTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/OsmChangesetElementTest/";
+  OsmApiChangesetTest()
+    : HootTestFixture("test-files/io/OsmChangesetElementTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runXmlChangesetTest()
   {

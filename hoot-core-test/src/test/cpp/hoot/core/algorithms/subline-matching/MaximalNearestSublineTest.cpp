@@ -63,13 +63,11 @@ class MaximalNearestSublineTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/subline-matching/";
-  const QString _outputPath = "test-output/algorithms/subline-matching/";
-
   MaximalNearestSublineTest()
+    : HootTestFixture("test-files/algorithms/subline-matching/",
+                      "test-output/algorithms/subline-matching/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()

@@ -60,9 +60,9 @@ class RemoveDuplicateAreaVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/";
-
   RemoveDuplicateAreaVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

@@ -49,11 +49,10 @@ class SettingsTest : public HootTestFixture
 
 public:
 
-  const QString _outputPath = "test-output/utils/";
-
   SettingsTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/utils/")
   {
-    TestUtils::mkpath(_outputPath);
   }
 
   void envTest()

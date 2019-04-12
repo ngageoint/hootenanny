@@ -48,10 +48,13 @@ class EdgeMatchSetFinderTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  OsmNetworkPtr network1, network2;
+  OsmNetworkPtr network1;
+  OsmNetworkPtr network2;
   IndexedEdgeMatchSetPtr matchSet;
 
   EdgeMatchSetFinderTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -72,7 +75,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ParitalEdgeMatch.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 

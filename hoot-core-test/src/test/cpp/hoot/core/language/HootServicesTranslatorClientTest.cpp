@@ -53,7 +53,11 @@ class HootServicesTranslatorClientTest : public HootTestFixture
 
 public:
 
-  const QString _testInputRoot = "test-files/language/HootServicesTranslatorClientTest/";
+  HootServicesTranslatorClientTest()
+    : HootTestFixture("test-files/language/HootServicesTranslatorClientTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runRequestDataTest()
   {
@@ -61,7 +65,7 @@ public:
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(
-        _testInputRoot + "runRequestDataTest").trimmed(),
+        _inputPath + "runRequestDataTest").trimmed(),
         uut->_getRequestData("text to translate").trimmed());
   }
 

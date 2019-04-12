@@ -52,13 +52,11 @@ class TileBoundsCalculatorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/conflate/tile/";
-  const QString _outputPath = "test-output/conflate/tile/";
-
   TileBoundsCalculatorTest()
+    : HootTestFixture("test-files/conflate/tile/",
+                      "test-output/conflate/tile/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)

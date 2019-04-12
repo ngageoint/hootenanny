@@ -61,12 +61,11 @@ class AlphaShapeTest : public HootTestFixture
 
 public:
 
-  const QString _outputPath = "test-output/algorithms/alpha-shape/";
-
   AlphaShapeTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/algorithms/alpha-shape/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void createDonut(vector<pair<double, double>>& p, double innerRadius, double outerRadius,

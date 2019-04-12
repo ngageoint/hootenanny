@@ -63,9 +63,9 @@ class EdgeDistanceExtractorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/extractors/EdgeDistanceExtractor/";
-
   EdgeDistanceExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/EdgeDistanceExtractor/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }

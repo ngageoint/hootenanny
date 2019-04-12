@@ -64,6 +64,8 @@ class AttributeComparatorTest : public HootTestFixture
 public:
 
   AttributeComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -73,10 +75,10 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    reader.read("test-files/DcGisRoads.osm", map);
+    reader.read(_inputPath + "DcGisRoads.osm", map);
 
     OsmMapPtr map2(new OsmMap());
-    reader.read("test-files/DcTigerRoads.osm", map2);
+    reader.read(_inputPath + "DcTigerRoads.osm", map2);
 
     AttributeComparator uut(map, map2);
     uut.setIterations(10);

@@ -57,13 +57,11 @@ class CookieCutterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/conflate/";
-  const QString _outputPath = "test-output/conflate/";
-
   CookieCutterTest()
+    : HootTestFixture("test-files/conflate/",
+                      "test-output/conflate/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()

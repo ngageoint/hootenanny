@@ -42,12 +42,18 @@ class PhoneNumberCountVisitorTest : public HootTestFixture
 
 public:
 
+  PhoneNumberCountVisitorTest()
+    : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      _inputPath + "PoiPolygon2.osm",
       false,
       Status::Unknown1);
 

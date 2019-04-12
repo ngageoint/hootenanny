@@ -54,13 +54,11 @@ class AlphaShapeGeneratorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/algorithms/alpha-shape/";
-  const QString _outputPath = "test-output/algorithms/alpha-shape/";
-
   AlphaShapeGeneratorTest()
+    : HootTestFixture("test-files/algorithms/alpha-shape/",
+                      "test-output/algorithms/alpha-shape/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

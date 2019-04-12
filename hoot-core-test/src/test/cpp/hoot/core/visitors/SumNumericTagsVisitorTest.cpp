@@ -42,12 +42,18 @@ class SumNumericTagsVisitorTest : public HootTestFixture
 
 public:
 
+  SumNumericTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/visitors/SumNumericTagsVisitorTest.osm",
+      _inputPath + "SumNumericTagsVisitorTest.osm",
       false,
       Status::Unknown1);
 

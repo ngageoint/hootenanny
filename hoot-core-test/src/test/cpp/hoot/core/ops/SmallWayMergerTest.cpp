@@ -51,13 +51,11 @@ class SmallWayMergerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/SmallWayMerger/";
-  const QString _outputPath = "test-output/ops/SmallWayMerger/";
-
   SmallWayMergerTest()
+    : HootTestFixture("test-files/ops/SmallWayMerger/",
+                      "test-output/ops/SmallWayMerger/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasicTest()

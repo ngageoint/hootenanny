@@ -52,13 +52,19 @@ class MergeNearbyNodesTest : public HootTestFixture
 
 public:
 
+    MergeNearbyNodesTest()
+      : HootTestFixture("test-files/",
+                        UNUSED_PATH)
+    {
+    }
+
     void runBasicTest()
     {
       OgrReader uut;
 
       Progress progress("MergeNearbyNodesTest");
       OsmMapPtr map(new OsmMap());
-      uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map, progress);
 
       MapProjector::projectToOrthographic(map);
 

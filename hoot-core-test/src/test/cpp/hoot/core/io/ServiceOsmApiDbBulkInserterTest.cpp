@@ -60,14 +60,13 @@ class ServiceOsmApiDbBulkInserterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/ServiceOsmApiDbBulkInserterTest/";
-  const QString _outputPath = "test-output/io/ServiceOsmApiDbBulkInserterTest/";
   const QString _scriptDir = "test-files/servicesdb/";
 
   ServiceOsmApiDbBulkInserterTest()
+    : HootTestFixture("test-files/io/ServiceOsmApiDbBulkInserterTest/",
+                      "test-output/io/ServiceOsmApiDbBulkInserterTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void verifyDatabaseOutputOffline()

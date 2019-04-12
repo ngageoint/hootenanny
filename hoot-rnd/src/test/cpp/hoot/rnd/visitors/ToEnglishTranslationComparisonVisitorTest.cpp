@@ -52,21 +52,21 @@ class ToEnglishTranslationComparisonVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/ToEnglishTranslationVisitorTest/";
-  const QString _inputGoldPath = "test-files/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/";
-  const QString _outputPath = "test-output/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/";
-
   ToEnglishTranslationComparisonVisitorTest()
+    : HootTestFixture("test-files/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/",
+                      "test-output/rnd/visitors/ToEnglishTranslationComparisonVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, _inputPath + "ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
+      map,
+      "test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm",
+      false,
+      Status::Unknown1);
 
     ToEnglishTranslationComparisonVisitor visitor;
     visitor.setConfiguration(_getDefaultConfig());
@@ -76,7 +76,7 @@ public:
     const QString outputFile = _outputPath + "runTest.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
-    HOOT_FILE_EQUALS(_inputGoldPath + "runTest-gold.osm", outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "runTest-gold.osm", outputFile);
   }
 
   void runInvalidSourceLangsTest()

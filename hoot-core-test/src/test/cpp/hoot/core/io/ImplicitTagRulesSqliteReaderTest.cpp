@@ -45,7 +45,11 @@ class ImplicitTagRulesSqliteReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/ImplicitTagRulesSqliteReaderTest/";
+  ImplicitTagRulesSqliteReaderTest()
+    : HootTestFixture("test-files/io/ImplicitTagRulesSqliteReaderTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runTagsTest()
   {

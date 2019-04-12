@@ -42,6 +42,8 @@ class OsmMapReaderFactoryTest : public HootTestFixture
 public:
 
   OsmMapReaderFactoryTest()
+    : HootTestFixture("test-files/conflate/highway/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -57,7 +59,7 @@ public:
     try
     {
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/highway/HighwayMatchRealWorld3Test.osm", false, Status::Unknown1);
+        map, _inputPath + "HighwayMatchRealWorld3Test.osm", false, Status::Unknown1);
     }
     catch (const HootException& e)
     {

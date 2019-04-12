@@ -50,9 +50,9 @@ class RemoveRef2VisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/visitors/";
-
   RemoveRef2VisitorTest()
+    : HootTestFixture("test-files/rnd/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }

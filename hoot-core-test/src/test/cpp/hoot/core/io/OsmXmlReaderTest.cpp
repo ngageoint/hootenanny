@@ -47,13 +47,11 @@ class OsmXmlReaderTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/OsmXmlReaderTest/";
-  const QString _outputPath = "test-output/io/OsmXmlReaderTest/";
-
   OsmXmlReaderTest()
+    : HootTestFixture("test-files/io/OsmXmlReaderTest/",
+                      "test-output/io/OsmXmlReaderTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runTest()

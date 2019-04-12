@@ -54,13 +54,11 @@ class SetTagValueVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/SetTagValueVisitorTest/";
-  const QString _outputPath = "test-output/visitors/SetTagValueVisitorTest/";
-
   SetTagValueVisitorTest()
+    : HootTestFixture("test-files/visitors/SetTagValueVisitorTest/",
+                      "test-output/visitors/SetTagValueVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runAddNewTest()

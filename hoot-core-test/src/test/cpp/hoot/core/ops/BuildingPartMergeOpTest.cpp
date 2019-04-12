@@ -61,13 +61,11 @@ class BuildingPartMergeOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/BuildingPartMergeOp/";
-  const QString outputPath = "test-output/ops/BuildingPartMergeOp/";
-
   BuildingPartMergeOpTest()
+    : HootTestFixture("test-files/ops/BuildingPartMergeOp/",
+                      "test-output/ops/BuildingPartMergeOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
   }
 
   void runToyTest()
@@ -76,7 +74,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "ToyBuildings.osm", map);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
     uut.apply(map);
@@ -84,9 +82,9 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm",
-                     outputPath + "ToyBuildings.osm");
+    writer.write(map, _outputPath + "ToyBuildings.osm");
+    HOOT_FILE_EQUALS( _inputPath + "ToyBuildingsOutput.osm",
+                     _outputPath + "ToyBuildings.osm");
   }
 
 };

@@ -50,13 +50,11 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  const QString _inputPath = "test-files/algorithms/wayjoiner/";
-  const QString _outputPath = "test-output/algorithms/wayjoiner/";
-
   WayJoinerTest()
+    : HootTestFixture("test-files/algorithms/wayjoiner/",
+                      "test-output/algorithms/wayjoiner/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runSimpleTest()

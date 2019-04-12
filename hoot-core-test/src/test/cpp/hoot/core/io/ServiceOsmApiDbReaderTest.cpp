@@ -65,14 +65,17 @@ public:
 
   static QString userEmail() { return "ServiceOsmApiDbReaderTest@hoottestcpp.org"; }
 
-  const QString _inputPath = "test-files/io/ServiceOsmApiDbReaderTest/";
-  const QString _outputPath = "test-output/io/ServiceOsmApiDbReaderTest/";
   const QString _scriptDir = "test-files/servicesdb/";
+
+  ServiceOsmApiDbReaderTest()
+    : HootTestFixture("test-files/io/ServiceOsmApiDbReaderTest/",
+                      "test-output/io/ServiceOsmApiDbReaderTest/")
+  {
+  }
 
   virtual void setUp()
   {
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    TestUtils::mkpath(_outputPath);
   }
 
   void insertData()

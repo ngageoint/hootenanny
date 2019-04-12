@@ -49,13 +49,11 @@ class OsmPgCsvWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/PgCsvWriter/";
-  const QString _outputPath = "test-output/io/PgCsvWriter/";
-
   OsmPgCsvWriterTest()
+    : HootTestFixture("test-files/io/PgCsvWriter/",
+                      "test-output/io/PgCsvWriter/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runBasic()

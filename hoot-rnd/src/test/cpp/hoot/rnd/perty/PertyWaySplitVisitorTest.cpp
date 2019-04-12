@@ -56,13 +56,11 @@ class PertyWaySplitVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/rnd/perty/PertyWaySplitVisitorTest/";
-  const QString _outputPath = "test-output/rnd/perty/PertyWaySplitVisitorTest/";
-
   PertyWaySplitVisitorTest()
+    : HootTestFixture("test-files/rnd/perty/PertyWaySplitVisitorTest/",
+                      "test-output/rnd/perty/PertyWaySplitVisitorTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runWaySplitTest()

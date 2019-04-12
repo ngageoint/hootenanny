@@ -60,13 +60,19 @@ class LongestCommonNodeStringTest : public HootTestFixture
 
 public:
 
+  LongestCommonNodeStringTest()
+    : HootTestFixture("test-files/algorithms/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
+    reader.read(_inputPath + "LongestCommonNodeStringTest.osm", map);
 
     {
       WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);

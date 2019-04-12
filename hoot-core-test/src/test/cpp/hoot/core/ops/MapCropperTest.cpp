@@ -71,7 +71,11 @@ class MapCropperTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/ops/";
+  MapCropperTest()
+    : HootTestFixture("test-files/ops/",
+                      UNUSED_PATH)
+  {
+  }
 
   OsmMapPtr genPoints(int seed)
   {

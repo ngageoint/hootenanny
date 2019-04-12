@@ -52,9 +52,9 @@ class WayCleanerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/WayCleanerTest/";
-
   WayCleanerTest()
+    : HootTestFixture("test-files/visitors/WayCleanerTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }

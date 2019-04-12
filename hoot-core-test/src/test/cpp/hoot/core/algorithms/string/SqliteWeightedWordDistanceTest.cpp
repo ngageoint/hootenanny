@@ -44,9 +44,15 @@ class SqliteWordWeightDictionaryTest : public HootTestFixture
 
 public:
 
+  SqliteWordWeightDictionaryTest()
+    : HootTestFixture("test-files/algorithms/string/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
-    SqliteWordWeightDictionary uut("test-files/algorithms/string/WordWeight.sqlite");
+    SqliteWordWeightDictionary uut(_inputPath + "WordWeight.sqlite");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6, uut.getWeight("starbucks"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6, uut.getWeight("starbucks"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, uut.getWeight("bad"), 0.0001);

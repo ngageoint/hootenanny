@@ -50,13 +50,11 @@ class StatusUpdateVisitorTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/visitors/StatusUpdateVisitorTest/";
-  const QString _outputPath = "test-output/visitors/StatusUpdateVisitorTest/";
-
   StatusUpdateVisitorTest()
+    : HootTestFixture("test-files/visitors/StatusUpdateVisitorTest/",
+                      "test-output/visitors/StatusUpdateVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runUpdateTest()

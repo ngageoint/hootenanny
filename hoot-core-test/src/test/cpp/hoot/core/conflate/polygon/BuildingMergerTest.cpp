@@ -81,12 +81,11 @@ class BuildingMergerTest : public HootTestFixture
 
 public:
 
-  const QString _outputPath = "test-output/conflate/polygon/";
-
   BuildingMergerTest()
+    : HootTestFixture("test-files/",
+                      "test-output/conflate/polygon/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
@@ -123,9 +122,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
@@ -153,9 +152,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "conflate/unified/AllDataTypesB.osm", map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
@@ -245,9 +244,9 @@ private:
   {
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");

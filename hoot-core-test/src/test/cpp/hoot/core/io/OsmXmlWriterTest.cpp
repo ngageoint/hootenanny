@@ -43,13 +43,11 @@ class OsmXmlWriterTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/io/OsmXmlWriterTest/";
-  const QString _outputPath = "test-output/io/OsmXmlWriterTest/";
-
   OsmXmlWriterTest()
+    : HootTestFixture("test-files/io/OsmXmlWriterTest/",
+                      "test-output/io/OsmXmlWriterTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void runEncodeCharsTest()

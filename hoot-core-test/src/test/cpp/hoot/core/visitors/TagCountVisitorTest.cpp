@@ -50,6 +50,8 @@ class TagCountVisitorTest : public HootTestFixture
 public:
 
   TagCountVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -89,7 +91,7 @@ private:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/TagCountVisitorTest.osm", map);
+    reader.read(_inputPath + "TagCountVisitorTest.osm", map);
     ConstOsmMapPtr constMap = map;
     return constMap;
   }

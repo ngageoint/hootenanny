@@ -60,13 +60,11 @@ class PoiPolygonMergerTest : public HootTestFixture
 
 public:
 
-  const QString _inputPath = "test-files/conflate/poi-polygon/";
-  const QString _outputPath = "test-output/conflate/poi-polygon/PoiPolygonMergerTest/";
-
   PoiPolygonMergerTest()
+    : HootTestFixture("test-files/conflate/poi-polygon/",
+                      "test-output/conflate/poi-polygon/PoiPolygonMergerTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(_outputPath);
   }
 
   void basicTest()
