@@ -32,14 +32,10 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-# check to see if postgres is already installed
-if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
-  # add the Postgres repo
-  echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
-  sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
-fi
+# configure PGDG repository for PostgreSQL 9.5.
+sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -242,7 +238,7 @@ $HOOT_HOME/scripts/chrome/driver-install.sh
 PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
-    echo "Adding PostGres path vars to profile..."
+    echo "Adding Postgres path vars to profile..."
     echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi

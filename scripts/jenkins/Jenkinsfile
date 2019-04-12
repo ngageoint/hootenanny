@@ -27,7 +27,7 @@ pipeline {
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
-        string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'Box', defaultValue: 'hoot_centos7', description: 'Vagrant Box')
     }
 
     stages {
