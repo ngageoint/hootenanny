@@ -95,7 +95,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "ToyBuildings.osm", map);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
     uut.setThreadCount(2);
