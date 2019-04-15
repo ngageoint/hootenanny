@@ -83,10 +83,14 @@ namespace hoot
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
  *
  * This class has been updated to process building parts in parallel. The bottleneck in the original
- * merging logic has mostly to do with the geometry containment calls to GEOS and to a lesser
- * degree, the inserts into the disjoint set map. This class now collects all building parts up
- * front and sends them off to threads for parallel processing. As of 3/15/19, this resulted in a
- * ~78% performance increase when processing ~500K UFD buildings.
+ * merging logic haf mostly to do with the geometry calls to GEOS to check for building part
+ * containment within buildings, and to a lesser degree, the inserts into the disjoint set map for
+ * the building part groups. This class now collects all building parts beforehand and sends them
+ * off to threads for parallel processing. As of 3/15/19, this resulted in a ~78% performance
+ * increase when processing ~500K UFD buildings. The parallelization must occur at the building
+ * part level, and not at the building level, because a single building relation may have far more
+ * building parts than others, which would cause an imbalance with paralleization made at the
+ * building level.
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable
