@@ -82,7 +82,11 @@ namespace hoot
  *
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
  *
- * TODO: updated notes for mt changes
+ * This class has been updated to process building parts in parallel. The bottleneck in the original
+ * merging logic has mostly to do with the geometry containment calls to GEOS and to a lesser
+ * degree, the inserts into the disjoint set map. This class now collects all building parts up
+ * front and sends them off to threads for parallel processing. As of 3/15/19, this resulted in a
+ * ~78% performance increase when processing ~500K UFD buildings.
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable
@@ -105,11 +109,11 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   /**
-   * todo
+   * Combines building parts into a building relation added to the map
    *
-   * @param map
-   * @param parts
-   * @return
+   * @param map the map to add the building relation to
+   * @param parts the building parts to combine
+   * @return the added building
    */
   RelationPtr combineBuildingParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
@@ -139,7 +143,7 @@ private:
 
   OsmMapPtr _map;
 
-  //
+  // building tag keys that need to be ignored during merging
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   boost::shared_ptr<ElementConverter> _elementConverter;
@@ -150,48 +154,38 @@ private:
   int _threadCount;
 
   void _init(OsmMapPtr& map);
+  void _initBuildingPartTagNames();
+
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 
   /*
-   * todo
+   * Collects building parts and passes them off for parallel processing
    */
   void _preProcessBuildingParts();
 
   /*
-   * todo
-   */
-  void _mergeBuildingParts();
-
-  /*
-   * todo
+   * Groups contained and neighboring building part with the buildings containing them
    */
   QQueue<BuildingPartDescription> _getBuildingPartPreProcessingInput();
   QQueue<BuildingPartDescription> _getBuildingPartWayPreProcessingInput();
   QQueue<BuildingPartDescription> _getBuildingPartRelationPreProcessingInput();
 
   /*
-   * todo
+   * Merges building parts grouped by the parallel processing
    */
-  void _initBuildingPartTagNames();
+  void _mergeBuildingParts();
 
   /*
-   * todo
+   * Determines neighboring building parts for a building
    */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
+  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
 
-  /*
-   * todo
-   */
   static bool _hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id);
 
   /*
-   * todo
+   * Returns a similarity decision by scoring the non-building part tags between two tag sets
    */
   bool _compareTags(Tags t1, Tags te);
-
-  /*
-   * todo
-   */
-  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
 };
 
 }

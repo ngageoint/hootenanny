@@ -244,11 +244,11 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
 
 QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
 {
-  // Tried caching all of the geometries and in order to pass them to the task threads to not only
-  // avoid repeated geometry calcs but also get rid of a call to BuildingCriterion::isSatisified on
-  // the threads, which required an extra mutex. However, 1) there were no performance gains in
-  // using the cache 2) access to the cache caused thread instability as to which I couldn't
-  // determine the cause.
+  // Tried caching all of the geometries beforehand in order to pass them to the task threads to
+  // try to not only avoid repeated geometry calcs but also get rid of an extra call to
+  // BuildingCriterion::isSatisified (protected by a mutex). However, 1) there were no performance
+  // gains in using the cache and 2) access to the cache caused thread instability as to which I
+  // couldn't determine the cause.
 
   QQueue<BuildingPartDescription> buildingPartInput;
   buildingPartInput.append(_getBuildingPartWayPreProcessingInput());

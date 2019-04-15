@@ -47,13 +47,16 @@ namespace hoot
 {
 
 /**
- * todo
+ * Contains information to group a building part either as a contained way or a neighboring part
  */
 struct BuildingPartDescription
 {
   enum BuildingPartRelationType
   {
+    // This is a building part that we need to check for containment within a building before adding
+    // to the group.
     ContainedWay = 1,
+    // This is a building part neighbor that we can add to the group with no further checks.
     Neighbor
   };
 
@@ -77,7 +80,7 @@ struct BuildingPartDescription
 };
 
 /**
- * todo
+ * Building part merge pre-processing thread
  */
 class BuildingPartPreMergeCollector : public QRunnable
 {
@@ -87,7 +90,10 @@ public:
   BuildingPartPreMergeCollector();
 
   /**
-   * todo
+   * Takes building part input from an input queue and adds groups it with a disjoint set as
+   * appropriate
+   *
+   * @see QRunnable
    */
   void run() override;
 
@@ -105,34 +111,31 @@ public:
 
 private:
 
-  //
+  // input data to be grouped
   QQueue<BuildingPartDescription>* _buildingPartsInput;
   int _startingInputSize;
-  // Accessing this as a shared pointer slows down processing by ~60%, so will keep it as a raw
-  // pointer.
+  // Output building part data that can be merged; accessing this as a shared pointer slows down
+  // processing by ~60%, so will keep it as a raw pointer.
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroupsOutput;
 
   ConstOsmMapPtr _map;
 
   boost::shared_ptr<ElementConverter> _elementConverter;
 
-  //
+  // protects the input data
   QMutex* _buildingPartInputMutex;
-  //
+  // protects access to OsmSchema, which is not thread safe
   QMutex* _hootSchemaMutex;
-  //
+  // protects the output data
   QMutex* _buildingPartOutputMutex;
 
   QString _id;
   int _numGeometriesCleaned;
   int _numBuildingPartsProcessed;
 
-  // Don't pass these shared pointers around as refs, as it will disrupt the ref counting and wreak
-  // havoc in the threads.
+  // Don't pass the shared pointers used by these methods around as refs, as it will disrupt the
+  // ref counting and wreak havoc in the threads.
 
-  /*
-   * todo
-   */
   boost::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
   /*

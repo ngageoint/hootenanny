@@ -128,6 +128,7 @@ void BuildingPartPreMergeCollector::_addContainedWayToGroup(
   }
   catch (const geos::util::TopologyException&)
   {
+    // Something is wrong with the geometry, so let's try cleaning it.
     LOG_TRACE("cleaning...");
     boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
       GeometryUtils::validateGeometry(candidateGeom.get()));
@@ -162,9 +163,9 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
 
     case ElementType::Relation:
     {
-      // Interestingly enough, conversion to relation don't make any calls to OsmSchema and,
+      // Interestingly enough, conversion to a relation doesn't make any calls to OsmSchema and,
       // therefore, don't require a mutex lock.  Its not inconceivable that fact could change at
-      // some point and then one would actually be required. here.
+      // some point and then a mutex would have to be added here.
       geom =
         _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Relation>(element));
       break; 
