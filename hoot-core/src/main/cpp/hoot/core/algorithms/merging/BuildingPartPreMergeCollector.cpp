@@ -36,6 +36,7 @@
 
 // Qt
 #include <QUuid>
+#include <QMutexLocker>
 
 namespace hoot
 {
@@ -103,10 +104,9 @@ void BuildingPartPreMergeCollector::_addNeighborsToGroup(
 
 void BuildingPartPreMergeCollector::_addBuildingPartGroup(WayPtr building, ElementPtr buildingPart)
 {
-  _buildingPartOutputMutex->lock();
+  QMutexLocker outputLock(_buildingPartOutputMutex);
   _buildingPartGroupsOutput->joinT(building, buildingPart);
   LOG_VART(_buildingPartGroupsOutput->size());
-  _buildingPartOutputMutex->unlock();
 }
 
 void BuildingPartPreMergeCollector::_addContainedWayToGroup(
@@ -146,19 +146,29 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
   switch (element->getElementType().getEnum())
   {
     case ElementType::Way:
-      // TODO: We could avoid even having to use this mutex by passing in the way geoms...
-      _hootSchemaMutex->lock();
+    {
+      // We could avoid even having to use this mutex by passing in the precomputed element geoms,
+      // but that was causing stability issues as noted in
+      // BuildingPartMergeOp::_getBuildingPartPreProcessingInput.
+      QMutexLocker schemaLock(_hootSchemaMutex);
       geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
-      _hootSchemaMutex->unlock();
       break;
+    }
 
     case ElementType::Relation:
+    {
+      // Interestingly enough, conversion to relation don't make any calls to OsmSchema and,
+      // therefore, don't require a mutex lock.  Its not inconceivable that fact could change at
+      // some point and then one would actually be required. here.
       geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
-      break;
+      break; 
+    }
 
     default:
+    {
       throw IllegalArgumentException(
         "Unexpected element type: " + element->getElementType().toString());
+    }
   }
   return geom;
 }

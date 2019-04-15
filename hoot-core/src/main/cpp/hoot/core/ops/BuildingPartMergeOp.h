@@ -163,6 +163,8 @@ private:
    * todo
    */
   QQueue<BuildingPartDescription> _getBuildingPartPreProcessingInput();
+  QQueue<BuildingPartDescription> _getBuildingPartWayPreProcessingInput();
+  QQueue<BuildingPartDescription> _getBuildingPartRelationPreProcessingInput();
 
   /*
    * todo

@@ -104,14 +104,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map.reset();
 }
 
-QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput()
 {
-  LOG_INFO("\tCreating building part pre-processing input...");
-
   QQueue<BuildingPartDescription> buildingPartInput;
-
-  // Tried caching all of the geometries and passed them to the task threads to avoid repeated
-  // geometry calcs, but there were no performance gains.
 
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
@@ -149,6 +144,14 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
       }
     }
   }
+  LOG_VARD(buildingPartInput.size());
+
+  return buildingPartInput;
+}
+
+QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput()
+{
+  QQueue<BuildingPartDescription> buildingPartInput;
 
   const RelationMap& relations = _map->getRelations();
   LOG_VARD(relations.size());
@@ -211,6 +214,24 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
       }
     }
   }
+  LOG_VARD(buildingPartInput.size());
+
+  return buildingPartInput;
+}
+
+QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+{
+  LOG_INFO("\tCreating building part pre-processing input...");
+
+  // Tried caching all of the geometries and in order to pass them to the task threads to not only
+  // avoid repeated geometry calcs but also get rid of a call to BuildingCriterion::isSatisified on
+  // the threads, which required an extra mutex. However, 1) there were no performance gains in
+  // using the cache 2) access to the cache caused thread instability as to which I couldn't
+  // determine the cause.
+
+  QQueue<BuildingPartDescription> buildingPartInput;
+  buildingPartInput.append(_getBuildingPartWayPreProcessingInput());
+  buildingPartInput.append(_getBuildingPartRelationPreProcessingInput());
 
   LOG_VARD(buildingPartInput.size());
   return buildingPartInput;
