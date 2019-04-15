@@ -29,7 +29,7 @@ sudo -u $USER -g tomcat cp hoot-ui/data/osm-plus-taginfo.csv $TOMCAT8_HOME/webap
 sudo -u $USER -g tomcat cp hoot-ui/data/tdsv61_field_values.json $TOMCAT8_HOME/webapps/hootenanny-id/data
 
 #Copy hootenanny-ui2x we files
-#sudo -u $USER -g tomcat rm -rf $TOMCAT8_HOME/webapps/hootenanny-id2x/
-#sudo -u $USER -g tomcat cp -R hoot-ui-2x/dist $TOMCAT8_HOME/webapps/hootenanny-id2x
+sudo -u $USER -g tomcat rm -rf $TOMCAT8_HOME/webapps/hootenanny-id2x/
+sudo -u $USER -g tomcat cp -R hoot-ui-2x/dist $TOMCAT8_HOME/webapps/hootenanny-id2x
 
 echo Web application files deployed.

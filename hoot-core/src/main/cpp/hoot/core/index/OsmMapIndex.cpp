@@ -599,7 +599,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
 
 void OsmMapIndex::removeNode(ConstNodePtr n)
 {
-  if (_nodeTree)
+  if (_nodeTree && n)
   {
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());
