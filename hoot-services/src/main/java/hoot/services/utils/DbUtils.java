@@ -27,7 +27,6 @@
 package hoot.services.utils;
 
 
-import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -37,7 +36,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,7 +69,6 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
-import hoot.services.models.db.CommandStatus;
 import hoot.services.models.db.QUsers;
 
 
@@ -512,50 +510,62 @@ public class DbUtils {
         return -1;
     }
 
-    public static void upsertCommandStatus(String jobId, CommandResult commandResult) {
-        long recordCount = 0;
-        if(commandResult.getId() != null) {
-            recordCount = createQuery()
-                .from(commandStatus)
-                .where(commandStatus.id.eq(commandResult.getId()))
-                .fetchCount();
+    public static void upsertCommandStatus(CommandResult commandResult){
+        Statement dbQuery = null;
+        ResultSet queryResult = null;
+
+        try (Connection conn = getConnection()) {
+            if(commandResult.getId() == null) {
+                String queryInsert = String.format(
+                        "INSERT INTO command_status(start, command, job_id, stdout, stderr) " +
+                        "VALUES('%s', '%s', '%s', '%s', '%s') ",
+                        commandResult.getStart(), commandResult.getCommand(), commandResult.getJobId(), commandResult.getStdout(), commandResult.getStderr());
+
+                dbQuery = conn.createStatement();
+                dbQuery.executeUpdate(queryInsert, Statement.RETURN_GENERATED_KEYS);
+
+                queryResult = dbQuery.getGeneratedKeys();
+
+                if (queryResult.next()) {
+                    Long id = queryResult.getLong(1);
+                    commandResult.setId(id);
+                }
+            }
+            else {
+                String queryUpdate = String.format(
+                        "UPDATE command_status " +
+                        "SET stdout = '%s', stderr = '%s' " +
+                        "WHERE id=%d",
+                        commandResult.getStdout(), commandResult.getStderr(), commandResult.getId());
+
+                dbQuery = conn.createStatement();
+                dbQuery.executeUpdate(queryUpdate);
+            }
+
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
         }
+        catch(Exception exc) {
+            logger.info("ERROR HERE: " + exc.getMessage());
+        }
+        finally {
+            if (queryResult != null) {
+                try {
+                    queryResult.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
 
-        CommandStatus cmdStatus = generateCommandStatus(commandResult);
-
-        // If record doesnt exist then add it
-        if (recordCount == 0) {
-            Long id = createQuery()
-                .insert(commandStatus)
-                .populate(cmdStatus)
-                .executeWithKey(commandStatus.id);
-
-            commandResult.setId(id);
-        } else {
-            createQuery()
-                .update(commandStatus)
-                .populate(cmdStatus)
-                .where(commandStatus.id.eq(cmdStatus.getId()))
-                .execute();
+            if (dbQuery != null) {
+                try {
+                    dbQuery.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
         }
     }
 
-    public static CommandStatus generateCommandStatus(CommandResult commandResult) {
-        CommandStatus cmdStatus = new CommandStatus();
-        cmdStatus.setId(commandResult.getId());
-        cmdStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
-        cmdStatus.setCommand(commandResult.getCommand());
-        cmdStatus.setJobId(commandResult.getJobId());
-        cmdStatus.setStdout(commandResult.getStdout());
-        cmdStatus.setStderr(commandResult.getStderr());
-        cmdStatus.setExitCode(commandResult.getExitCode());
-
-        Timestamp finishTime = null;
-        if(commandResult.getFinish() != null) {
-            finishTime = Timestamp.valueOf(commandResult.getFinish());
-        }
-        cmdStatus.setFinish(finishTime);
-
-        return cmdStatus;
-    }
 }

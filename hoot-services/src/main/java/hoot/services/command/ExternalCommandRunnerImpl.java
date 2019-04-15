@@ -75,7 +75,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             CommandResult commandResult = new CommandResult();
 
             this.stdout = new LogOutputStream() {
-                // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
                     String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
@@ -90,13 +89,13 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                         if (trackable) {
                             // update command status table stdout
-                            DbUtils.upsertCommandStatus(jobId, commandResult);
+                            DbUtils.upsertCommandStatus(commandResult);
                         }
                     }
                 }
             };
+
             this.stderr = new LogOutputStream() {
-                // TODO: will write to database in future
                 @Override
                 protected void processLine(String line, int level) {
                     String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
@@ -111,7 +110,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                         if (trackable) {
                             // update command status table stderr
-                            DbUtils.upsertCommandStatus(jobId, commandResult);
+                            DbUtils.upsertCommandStatus(commandResult);
                         }
                     }
                 }
@@ -147,7 +146,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             if (trackable) {
                 // Add the new command to the command status table
-                DbUtils.upsertCommandStatus(jobId, commandResult);
+                DbUtils.upsertCommandStatus(commandResult);
             }
 
             try {
@@ -173,6 +172,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 exitCode = CommandResult.FAILURE;
                 exception = e;
             }
+            finally {
+                this.stdout.close();
+                this.stderr.close();
+            }
 
             if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
                 // it was killed on purpose by the watchdog
@@ -184,11 +187,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             commandResult.setExitCode(exitCode);
             commandResult.setFinish(finish);
 
-            this.stdout.close();
-            this.stderr.close();
-
             if (trackable) {
-                DbUtils.upsertCommandStatus(jobId, commandResult);
+                DbUtils.upsertCommandStatus(commandResult);
             }
 
             if (commandResult.failed()) {
