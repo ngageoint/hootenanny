@@ -51,12 +51,12 @@ GeometryModifierOp::GeometryModifierOp()
   // get and instantiate available actions
   std::vector<std::string> availableActionTypes = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
 
-  LOG_INFO( "Available Geometry Modifiers:")
+  LOG_DEBUG( "Available Geometry Modifiers:")
   for( std::vector<std::string>::iterator it = availableActionTypes.begin(); it != availableActionTypes.end(); it++ )
   {
     shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(*it) );
     _actions.append(pAction);
-    LOG_INFO( "class: " << *it << " command: " << pAction->getCommandName());
+    LOG_DEBUG( "class: " << *it << " command: " << pAction->getCommandName());
   }
 }
 
@@ -72,7 +72,7 @@ void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
   foreach (GeometryModifierActionDesc actionDesc, actionDescs)
   {
     // visit with specific action, using proper arguments
-    LOG_INFO("Processing geometry modifier " + actionDesc.command + "...");
+    LOG_DEBUG("Processing geometry modifier " + actionDesc.command + "...");
     _geometryModifierVisitor.setActionDesc(actionDesc);
     actionDesc.pAction->parseArguments( actionDesc.arguments );
     map->visitRw(_geometryModifierVisitor);

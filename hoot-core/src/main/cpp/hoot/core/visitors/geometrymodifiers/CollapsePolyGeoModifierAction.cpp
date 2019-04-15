@@ -28,14 +28,18 @@
 #include "CollapsePolyGeoModifierAction.h"
 
 // geos
+#include <geos/algorithm/MinimumDiameter.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/CoordinateSequence.h>
 
 // Hoot
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/CoordinateExt.h>
 
 using namespace geos::geom;
+using namespace geos::algorithm;
 
 namespace hoot
 {
@@ -43,6 +47,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 
 const QString CollapsePolyGeoModifierAction::MAX_AREA_PARAM = "max_area_in_m";
+const QString CollapsePolyGeoModifierAction::MAX_LENGTH_PARAM = "max_length_in_m";
 
 bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap )
 {
@@ -54,36 +59,80 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
   OsmMapPtr mapPtr = pMap->shared_from_this();
   ElementConverter elementConverter(mapPtr);
 
-  shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+  bool checkLength = _length != 0;
+  bool checkArea = _area != 0;
 
-  if( pPoly->getArea() < _area )
+  if( checkArea || checkLength )
   {
-    Coordinate centroid;
-    if( pPoly->getCentroid(centroid) == false )
+    shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+
+    // calculate poly area only if we need it
+    double polyArea = checkArea ? pPoly->getArea() : 0;
+
+    // calculate polygon length only if we need it
+    double polyLength = 0;
+
+    if( checkLength )
     {
-      // throwing a HootException might be too harsh
-      LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId() );
-      return false;
+      // calculate minimum rectangle/aligned bounding box
+      Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
+      CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+
+      /* Debug polygon
+      WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
+      pMap->addElement(pDebugWay);
+
+      for( size_t i = 0; i < pMinRectCoords->getSize(); i++ )
+      {
+        Coordinate pos = pMinRectCoords->getAt(i);
+        NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
+        pDebugWay->addNode(pNode->getId());
+        pMap->addElement(pNode);
+      }
+      */
+
+      if( pMinRectCoords->getSize() > 2 )
+      {
+        double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
+        double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
+        polyLength = std::max(len1,len2);
+
+        LOG_VAR(len1);
+        LOG_VAR(len2);
+      }
     }
 
-    NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), centroid) );
-
-    // copy tags from original way to node
-    pNode->setTags(pWay->getTags());
-
-    std::vector<long> nodeIds = pWay->getNodeIds();
-
-    // replace original way with node
-    pMap->replace(pWay, pNode);
-
-    // remove unused nodes of previous way
-    for( std::vector<long>::iterator it = nodeIds.begin(); it != nodeIds.end(); it++ )
+    if( (checkArea && (polyArea < _area)) ||
+        (checkLength && (polyLength < _length))
+      )
     {
-      RemoveNodeOp removeOp( *it, true, false, true );
-      removeOp.apply(mapPtr);
-    }
+      Coordinate centroid;
+      if( pPoly->getCentroid(centroid) == false )
+      {
+        // throwing a HootException might be too harsh
+        LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId() );
+        return false;
+      }
 
-    return true;
+      NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), centroid) );
+
+      // copy tags from original way to node
+      pNode->setTags(pWay->getTags());
+
+      std::vector<long> nodeIds = pWay->getNodeIds();
+
+      // replace original way with node
+      pMap->replace(pWay, pNode);
+
+      // remove unused nodes of previous way
+      for( std::vector<long>::iterator it = nodeIds.begin(); it != nodeIds.end(); it++ )
+      {
+        RemoveNodeOp removeOp( *it, true, false, true );
+        removeOp.apply(mapPtr);
+      }
+
+      return true;
+    }
   }
 
   return false;
@@ -92,14 +141,16 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
 void CollapsePolyGeoModifierAction::parseArguments(const QHash<QString, QString>& arguments)
 {
   _area = DEFAULT_AREA;
+  _length = DEFAULT_LENGTH;
 
   if( arguments.keys().contains(MAX_AREA_PARAM) )
   {
-    double area = arguments[MAX_AREA_PARAM].toDouble();
-    if( area > 0 )
-    {
-      _area = area;
-    }
+    _area = arguments[MAX_AREA_PARAM].toDouble();
+  }
+
+  if( arguments.keys().contains(MAX_LENGTH_PARAM) )
+  {
+    _length = arguments[MAX_LENGTH_PARAM].toDouble();
   }
 }
 

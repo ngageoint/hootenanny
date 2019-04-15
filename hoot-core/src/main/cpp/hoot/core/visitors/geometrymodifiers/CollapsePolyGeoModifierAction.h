@@ -32,22 +32,33 @@
 namespace hoot
 {
 
+/*
+ * Collapses a filtered polygon feature to a single point node at the location
+ * of the polygons centroid.
+ * The polygon is collapsed only if its area is smaller than max_area_in_m or its
+ * maximum length is smaller than max_length_in_m.
+ * If either parameter is set to 0, it is ignored.
+ */
 class CollapsePolyGeoModifierAction : public GeometryModifierAction
 {
 public:
   static const QString MAX_AREA_PARAM;
+  static const QString MAX_LENGTH_PARAM;
 
   static std::string className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
   QString getCommandName() const { return "collapse_poly"; }
-  QList<QString> getParameterNames() const { return QList<QString> { MAX_AREA_PARAM }; }
+  QList<QString> getParameterNames() const { return QList<QString> { MAX_AREA_PARAM, MAX_LENGTH_PARAM }; }
 
   void parseArguments( const QHash<QString, QString>& arguments );
   bool process( const ElementPtr& pElement, OsmMap* pMap );
 
 private:
   const double DEFAULT_AREA = 15000;
+  const double DEFAULT_LENGTH = 0;
+
   double _area = DEFAULT_AREA;
+  double _length = DEFAULT_LENGTH;
 };
 
 }
