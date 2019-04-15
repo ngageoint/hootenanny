@@ -74,14 +74,14 @@ void BuildingPartMergeOp::setConfiguration(const Settings& conf)
   ConfigOptions confOpts = ConfigOptions(conf);
 
   _threadCount = confOpts.getBuildingPartMergerThreadCount();
-  if (_threadCount < 1 || QThread::idealThreadCount() < _threadCount)
+  if (_threadCount < 1)
   {
     _threadCount = QThread::idealThreadCount();
   }
   LOG_VARD(_threadCount);
 }
 
-void BuildingPartMergeOp::apply(OsmMapPtr& map)
+void BuildingPartMergeOp::_init(OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
@@ -89,6 +89,11 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;
+}
+
+void BuildingPartMergeOp::apply(OsmMapPtr& map)
+{
+  _init(map);
 
   MapProjector::projectToPlanar(map);
 
@@ -203,7 +208,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
         {
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Not expecting relations of relations: " << relation->toString());
+            LOG_WARN("\tNot expecting relations of relations: " << relation->toString());
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -252,6 +257,8 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   {
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
+    // Passing the groups into the threads as a shared pointer slows down processing by ~60%, so
+    // will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
     buildingPartCollectTask->setMap(_map);
     buildingPartCollectTask->setBuildingPartInputMutex(&buildingPartsInputMutex);
@@ -389,6 +396,7 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
     throw IllegalArgumentException(
       "No building parts passed to BuildingPartMergeOp::combineParts.");
   }
+  // This is primarily in place to support testable output.
   InMemoryElementSorter::sort(parts);
 
   RelationPtr building(

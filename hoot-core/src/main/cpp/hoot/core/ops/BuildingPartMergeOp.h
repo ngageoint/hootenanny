@@ -149,6 +149,8 @@ private:
 
   int _threadCount;
 
+  void _init(OsmMapPtr& map);
+
   /*
    * todo
    */

@@ -47,7 +47,7 @@ _numBuildingPartsProcessed(0)
 {
 }
 
-void BuildingPartPreMergeCollector::setMap(OsmMapPtr map)
+void BuildingPartPreMergeCollector::setMap(ConstOsmMapPtr map)
 {
   _map = map;
   _elementConverter.reset(new ElementConverter(_map));
@@ -147,7 +147,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
   {
     case ElementType::Way:
     {
-      // We could avoid even having to use this mutex by passing in the precomputed element geoms,
+      // We could avoid having to use this mutex by passing in the precomputed element geoms,
       // but that was causing stability issues as noted in
       // BuildingPartMergeOp::_getBuildingPartPreProcessingInput.
       QMutexLocker schemaLock(_hootSchemaMutex);

@@ -96,7 +96,7 @@ public:
   void setBuildingPartGroupsOutput(Tgs::DisjointSetMap<ElementPtr>* groups)
   { _buildingPartGroupsOutput = groups; }
 
-  void setMap(OsmMapPtr map);
+  void setMap(ConstOsmMapPtr map);
 
   void setBuildingPartInputMutex(QMutex* mutex) { _buildingPartInputMutex = mutex; }
   void setHootSchemaMutex(QMutex* mutex) { _hootSchemaMutex = mutex; }
@@ -106,10 +106,11 @@ private:
 
   //
   QQueue<BuildingPartDescription>* _buildingPartsInput;
-  //
+  // Accessing this as a shared pointer slows down processing by ~60%, so will keep it as a raw
+  // pointer.
   Tgs::DisjointSetMap<ElementPtr>* _buildingPartGroupsOutput;
 
-  OsmMapPtr _map;
+  ConstOsmMapPtr _map;
 
   boost::shared_ptr<ElementConverter> _elementConverter;
 
