@@ -140,7 +140,7 @@ void BuildingPartPreMergeCollector::_addContainedWayToGroup(
 }
 
 boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometry(
-  ElementPtr element)
+  ConstElementPtr element)
 {
   boost::shared_ptr<geos::geom::Geometry> geom;
   switch (element->getElementType().getEnum())
@@ -151,7 +151,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
       // but that was causing stability issues as noted in
       // BuildingPartMergeOp::_getBuildingPartPreProcessingInput.
       QMutexLocker schemaLock(_hootSchemaMutex);
-      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
+      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Way>(element));
       break;
     }
 
@@ -160,7 +160,8 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
       // Interestingly enough, conversion to relation don't make any calls to OsmSchema and,
       // therefore, don't require a mutex lock.  Its not inconceivable that fact could change at
       // some point and then one would actually be required. here.
-      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
+      geom =
+        _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Relation>(element));
       break; 
     }
 

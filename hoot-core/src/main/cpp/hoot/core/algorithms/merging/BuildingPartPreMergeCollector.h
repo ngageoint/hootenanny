@@ -128,7 +128,7 @@ private:
   /*
    * todo
    */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ElementPtr element);
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
   /*
    * todo
