@@ -71,9 +71,9 @@ public:
   virtual ElementPtr readNextElement();
 
   /**
-   * todo
+   * Sort a collection of elements to the OSM standard
    *
-   * @param elements
+   * @param elements elements to sort
    */
   static void sort(std::vector<ElementPtr>& elements);
 

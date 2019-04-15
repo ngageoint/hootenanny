@@ -139,20 +139,13 @@ private:
 
   boost::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
-  /*
-   * todo
-   */
   void _processBuildingPart(const BuildingPartRelationship& buildingPartRelationship);
-
-  /*
-   * todo
-   */
   void _addContainedBuildingPartToGroup(ElementPtr building,
                                         boost::shared_ptr<geos::geom::Geometry> buildingGeom,
                                         WayPtr buildingPartNeighbor);
 
   /*
-   * todo
+   * groups a building part with a building so they can later be merged together
    */
   void _groupBuildingParts(ElementPtr building, WayPtr buildingPart);
 };

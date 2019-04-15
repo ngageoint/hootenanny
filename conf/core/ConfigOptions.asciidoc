@@ -958,7 +958,8 @@ See also:
 * Data Type: int
 * Default Value: `100000`
 
-TODO
+The maximum number of parsed tag string values stored in an in-memory cache when reading
+GeoNames data.
 
 === hash.seed.zero
 
