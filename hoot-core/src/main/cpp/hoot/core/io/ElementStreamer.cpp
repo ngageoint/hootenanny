@@ -97,6 +97,9 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
     {
       // Can this be cleaned up?
 
+      const QString unstreamableMsg =
+        "Unable to stream I/O due to criterion op: " << opName << "; loading entire map...";
+
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
         ElementCriterionPtr criterion(
@@ -104,8 +107,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
         {
-          LOG_INFO(
-            "Unable to stream I/O due to criterion op: " << opName << "; loading entire map...");
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
@@ -116,8 +118,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO(
-            "Unable to stream I/O due to visitor op: " << opName << "; loading entire map...");
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
@@ -128,15 +129,14 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO(
-            "Unable to stream I/O due to visitor op: " << opName << "; loading entire map...");
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
       // OsmMapOperation isn't streamable.
       else
       {
-        LOG_INFO("Unable to stream I/O due to: " << opName << "; loading entire map...");
+        LOG_INFO(unstreamableMsg);
         return false;
       }
     }
