@@ -97,10 +97,12 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 
   MapProjector::projectToPlanar(map);
 
-  // treat the map as read only while we determine building parts
+  // Before merging, we'll identify all of the building part candidates and send them to threads
+  // to be processed into mergeable groups, as some of the logic used is intensive. At this point,
+  // treat the map as read only.
   _preProcessBuildingParts();
 
-  // time to start making changes to the map
+  // Now, merge the building part groups into buildings.  Changes to the map will be made.
   _mergeBuildingParts();
 
   // most other operations don't need this index, so we'll clear it out so it isn't actively
@@ -251,9 +253,8 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcess
 {
   // Tried caching all of the geometries beforehand in order to pass them to the task threads to
   // try to not only avoid repeated geometry calcs but also get rid of an extra call to
-  // BuildingCriterion::isSatisified (protected by a mutex). However, 1) there were no performance
-  // gains in using the cache and 2) access to the cache caused thread instability as to which I
-  // couldn't determine the cause.
+  // BuildingCriterion::isSatisified (protected by a mutex). However, there were no performance
+  // gains in using the cache.
 
   QQueue<BuildingPartRelationship> buildingPartInput;
   buildingPartInput.append(_getBuildingPartWayPreProcessingInput());
