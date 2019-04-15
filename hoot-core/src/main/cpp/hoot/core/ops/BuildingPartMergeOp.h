@@ -176,12 +176,12 @@ private:
   /*
    * todo
    */
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ElementPtr& element) const;
+  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 
   /*
    * todo
    */
-  static bool _hasContiguousNodes(const WayPtr& way, const long node1Id, const long node2Id);
+  static bool _hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id);
 
   /*
    * todo
@@ -191,7 +191,7 @@ private:
   /*
    * todo
    */
-  std::set<long> _calculateNeighbors(const WayPtr& way, const Tags& tags);
+  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
 };
 
 }

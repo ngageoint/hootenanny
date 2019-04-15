@@ -125,6 +125,9 @@ private:
   int _numGeometriesCleaned;
   int _numBuildingPartsProcessed;
 
+  // Don't pass these shared pointers around as refs, as it will disrupt the ref counting and wreak
+  // havoc in the threads.
+
   /*
    * todo
    */

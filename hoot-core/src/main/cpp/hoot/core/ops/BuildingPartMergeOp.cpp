@@ -304,7 +304,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
   }
 }
 
-std::set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& way, const Tags& tags)
+std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, const Tags& tags)
 {
   LOG_VART(way->getElementId());
 
@@ -354,7 +354,7 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
   return fabs(1.0 - score) < 0.001;
 }
 
-bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& way, const long node1Id,
+bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long node1Id,
                                               const long node2Id)
 {
   const std::vector<long>& nodes = way->getNodeIds();
@@ -370,16 +370,19 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& way, const long node
 }
 
 boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
-  const ElementPtr& element) const
+  const ConstElementPtr& element) const
 {
   if (_buildingCrit.isSatisfied(element))
   {
     switch (element->getElementType().getEnum())
     {
       case ElementType::Way:
-        return _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Way>(element));
+        return
+          _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Way>(element));
       case ElementType::Relation:
-        return _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<Relation>(element));
+        return
+          _elementConverter->convertToGeometry(
+            boost::dynamic_pointer_cast<const Relation>(element));
       default:
         throw IllegalArgumentException(
           "Unexpected element type: " + element->getElementType().toString());
