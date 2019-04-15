@@ -232,19 +232,8 @@ cd ~
 $HOOT_HOME/scripts/chrome/chrome-install.sh
 $HOOT_HOME/scripts/chrome/driver-install.sh
 
-# Need to figure out a way to do this automagically
-# PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
-# PG_VERSION=9.5
-PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
-
-if ! grep --quiet "psql-" ~/.bash_profile; then
-    echo "Adding Postgres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
-    source ~/.bash_profile
-fi
-
-# Configure Postgresql
-echo "### Configuring Postgres..."
+# Configure PostgreSQL
+echo "### Configuring PostgreSQL..."
 $HOOT_HOME/scripts/database/ConfigurePostgresql.sh
 
 echo "### Createing databases..."
