@@ -98,7 +98,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
       // Can this be cleaned up?
 
       const QString unstreamableMsg =
-        "Unable to stream I/O due to criterion op: " << opName << "; loading entire map...";
+        "Unable to stream I/O due to criterion op: " + opName + "; loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
