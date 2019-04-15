@@ -77,24 +77,19 @@ class OsmPbfReaderTest : public HootTestFixture
 public:
 
   OsmPbfReaderTest()
+    : HootTestFixture("test-files/io/",
+                      "test-output/io/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/io/");
   }
 
   void runOffsetsTest()
   {
     OsmPbfReader uut(false);
-    fstream input("test-files/io/SmallSplits.pbf", ios::in | ios::binary);
+    fstream input(_inputPath.toStdString() + "SmallSplits.pbf", ios::in | ios::binary);
     OsmMapPtr map(new OsmMap());
 
     vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
-
-//    for (size_t i = 0; i < v.size(); i++)
-//    {
-//      printf("CPPUNIT_ASSERT_EQUAL(%dl, v[%d].blobOffset);\n", v[i].blobOffset, i);
-//      printf("CPPUNIT_ASSERT_EQUAL(%dl, v[%d].blobSize);\n", v[i].blobSize, i);
-//    }
 
     CPPUNIT_ASSERT_EQUAL((size_t)12, v.size());
 
@@ -290,16 +285,16 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest_1.osm");
+    writer.write(map, _outputPath + "OsmPbfReaderTest_1.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest_1.osm");
+    HOOT_FILE_EQUALS(_inputPath + "OsmPbfReaderTest.osm",
+                     _outputPath + "OsmPbfReaderTest_1.osm");
   }
 
   void runToyRelationTest()
   {
     OsmPbfReader uut(false);
-    fstream input("test-files/io/OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
+    fstream input(_inputPath.toStdString() + "OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
     OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
@@ -385,10 +380,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest_2.osm");
+    writer.write(map, _outputPath + "OsmPbfReaderTest_2.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest_2.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OsmPbfReaderTest.osm",
+                     _outputPath + "OsmPbfReaderTest_2.osm");
   }
 
   void runFactoryReadMapTest()
@@ -398,10 +393,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(false);
-    writer.write(map, "test-output/io/OsmPbfReaderTest_3.osm");
+    writer.write(map, _outputPath + "OsmPbfReaderTest_3.osm");
 
-    HOOT_FILE_EQUALS("test-files/io/OsmPbfReaderTest.osm",
-                     "test-output/io/OsmPbfReaderTest_3.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OsmPbfReaderTest.osm",
+                     _outputPath + "OsmPbfReaderTest_3.osm");
   }
 
   void runReadMapPartialTest()
@@ -431,9 +426,9 @@ public:
         (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
 
       QString outputFile(
-        "test-output/io/OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
+        _outputPath + "OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
-      HOOT_FILE_EQUALS("test-files/io/OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm",
+      HOOT_FILE_EQUALS(_inputPath + "OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm",
         outputFile);
 
       ctr++;
@@ -474,10 +469,10 @@ public:
         chunkSize);
 
       QString outputFile(
-        "test-output/io/OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
+        _outputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm");
       writer.write(map, outputFile);
       HOOT_FILE_EQUALS(
-        "test-files/io/OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm",
+        _inputPath + "OsmPbfPartialReaderMultipleBlobsTest" + QString::number(ctr + 1) + ".osm",
         outputFile);
 
       ctr++;

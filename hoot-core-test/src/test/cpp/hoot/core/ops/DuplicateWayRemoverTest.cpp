@@ -67,9 +67,10 @@ class DuplicateWayRemoverTest : public HootTestFixture
 public:
 
   DuplicateWayRemoverTest()
+    : HootTestFixture("test-files/ops/DuplicateWayRemoverTest/",
+                      "test-output/ops/DuplicateWayRemoverTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate");
   }
 
   void runTest()
@@ -85,10 +86,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/LongestCommonNodeStringTest.osm");
+    writer.write(map, _outputPath + "LongestCommonNodeStringTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/LongestCommonNodeStringTest.osm",
-                     "test-output/conflate/LongestCommonNodeStringTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "LongestCommonNodeStringTest.osm",
+                     _outputPath + "LongestCommonNodeStringTest.osm");
   }
 
   /*
@@ -114,10 +115,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
+    writer.write(map, _outputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm",
-                     "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOnTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm",
+                     _outputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm");
   }
 
   /*
@@ -144,10 +145,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
+    writer.write(map, _outputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm",
-                     "test-output/conflate/DuplicateWayRemoverStrictTagMatchingOffTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm",
+                     _outputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm");
   }
 };
 

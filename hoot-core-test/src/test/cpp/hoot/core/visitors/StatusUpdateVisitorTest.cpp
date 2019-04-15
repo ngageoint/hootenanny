@@ -51,34 +51,33 @@ class StatusUpdateVisitorTest : public HootTestFixture
 public:
 
   StatusUpdateVisitorTest()
+    : HootTestFixture("test-files/visitors/StatusUpdateVisitorTest/",
+                      "test-output/visitors/StatusUpdateVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/visitors");
   }
 
   void runUpdateTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 
     StatusUpdateVisitor uut(Status::Unknown2);
     map->visitRw(uut);
 
     //All statuses in the file should be updated to Unknown2.
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/StatusUpdateVisitorTest-runUpdateTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunUpdateTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/StatusUpdateVisitorTest-runUpdateTest.osm",
-      "test-output/visitors/StatusUpdateVisitorTest-runUpdateTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunUpdateTest.osm",
+                     _outputPath + "RunUpdateTest.osm");
   }
 
   void runUpdateOnlyIfInvalidTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/StatusUpdateVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "StatusUpdateVisitorTest.osm", false, Status::Unknown1);
 
     //set the status on a couple of elements to invalid
     map->getNode(-1)->setStatus(Status::Invalid);
@@ -90,12 +89,10 @@ public:
     StatusUpdateVisitor uut(Status::Unknown2, true);
     map->visitRw(uut);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/StatusUpdateVisitorTest-runUpdateOnlyIfInvalidTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunUpdateOnlyIfInvalidTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/StatusUpdateVisitorTest-runUpdateOnlyIfInvalidTest.osm",
-      "test-output/visitors/StatusUpdateVisitorTest-runUpdateOnlyIfInvalidTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunUpdateOnlyIfInvalidTest.osm",
+                     _outputPath + "RunUpdateOnlyIfInvalidTest.osm");
   }
 
 };

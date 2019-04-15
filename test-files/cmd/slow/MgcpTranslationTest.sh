@@ -1,19 +1,19 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/translation/
+mkdir -p test-output/cmd/slow/translation/
 
 function compareFiles {
     hoot diff -C Testing.conf $1 $2 || diff $1 $2
 }
 
-hoot convert -C Testing.conf test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp --cols "LTN,WTC,HCT,UID"
-hoot convert -C Testing.conf --warn test-output/translation/MgcpTestLines.shp test-output/translation/MgcpTranslated.osm --trans translations/MgcpTest.js
+hoot convert -C Testing.conf test-files/translation/MgcpTest.osm test-output/cmd/slow/translation/MgcpTest.shp --cols "LTN,WTC,HCT,UID"
+hoot convert -C Testing.conf --warn test-output/cmd/slow/translation/MgcpTestLines.shp test-output/cmd/slow/translation/MgcpTranslated.osm --trans translations/MgcpTest.js
 
 # Un-comment this to update the OSM file
-#cp test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
+#cp test-output/cmd/slow/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
-compareFiles test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
+compareFiles test-output/cmd/slow/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
 #
 # Added commands to build the MGCPv3 OSM test files
@@ -21,7 +21,7 @@ compareFiles test-output/translation/MgcpTranslated.osm test-files/translation/M
 # Mattj Oct 13
 
 function checkMgcpV3 {
-    OUT=test-output/translation/Mgcpv3_$1.osm
+    OUT=test-output/cmd/slow/translation/Mgcpv3_$1.osm
     IN=test-files/MGCPv3/$1.shp
     hoot convert -C Testing.conf --warn $IN $OUT --trans translations/MgcpTest.js
     #echo $IN  $OUT
@@ -29,7 +29,7 @@ function checkMgcpV3 {
     # Uncomment this to update what we compare with.
     #cp $OUT test-files/MGCPv3/$1-output.osm
     # Export as TRDv4
-    OUT4=test-output/translation/$1
+    OUT4=test-output/cmd/slow/translation/$1
     rm -rf $OUT4
     hoot convert -C Testing.conf --debug $OUT $OUT4.shp --trans translations/MGCP_TRD4.js
 }

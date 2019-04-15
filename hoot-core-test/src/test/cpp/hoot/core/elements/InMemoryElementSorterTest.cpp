@@ -38,11 +38,17 @@ namespace hoot
 
 class InMemoryElementSorterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(InMemoryElementSorterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(InMemoryElementSorterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  InMemoryElementSorterTest()
+    : HootTestFixture("test-files/algorithms/changeset/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runTest()
   {
@@ -53,7 +59,7 @@ public:
     OsmMapPtr inputMap(new OsmMap());
     OsmMapReaderFactory::read(
       inputMap,
-      "test-files/elements/ExternalMergeElementSorterTest.osm",
+      _inputPath + "ExternalMergeElementSorterTest.osm",
       true);
 
     InMemoryElementSorter elementSorter(inputMap);

@@ -221,14 +221,26 @@ protected:
     ResetAll
   };
 
-  /** Constructor to set the default reset to none */
-  HootTestFixture() : _reset(ResetNone) { }
+  /** Constructor to set the paths, default reset to none, and create the output path if needed */
+  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH)
+    : _inputPath(inputPath),
+      _outputPath(outputPath),
+      _reset(ResetNone)
+  {
+    if (outputPath != UNUSED_PATH)
+      TestUtils::mkpath(_outputPath);
+  }
 
   /**
    * @brief setResetType Set the reset type to do basic, all, or none
    * @param reset Enum type to resent
    */
   void setResetType(HootTestReset reset) { _reset = reset; }
+
+  /** Path relative from $HOOT_HOME to the input folder of the test */
+  const QString _inputPath;
+  /** Path relative from $HOOT_HOME to the output folder of the test */
+  const QString _outputPath;
 
 public:
 
@@ -243,8 +255,9 @@ public:
       TestUtils::resetEnvironment();
   }
 
-private:
+  static const QString UNUSED_PATH;
 
+private:
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };

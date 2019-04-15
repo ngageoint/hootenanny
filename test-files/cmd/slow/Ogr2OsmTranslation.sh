@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-export OUT=test-output/cmd/Ogr2OsmTranslation
+export OUT=test-output/cmd/slow/Ogr2OsmTranslation
 rm -rf $OUT
 mkdir -p $OUT
 hoot convert test-files/OnePoint.osm $OUT/OnePoint.shp --cols "name,poi"
 hoot convert --warn $OUT/OnePointPoints.shp $OUT/OnePointTranslated.osm --trans translations/Identity.js
-hoot diff test-output/cmd/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
+hoot diff test-output/cmd/slow/Ogr2OsmTranslation/OnePointTranslated.osm test-files/OnePoint.osm
 
 # Make sure we can read all layers from a shapefile
 rm -rf test-output/AllDataTypesA.shp test-output/AllDataTypesA.zip

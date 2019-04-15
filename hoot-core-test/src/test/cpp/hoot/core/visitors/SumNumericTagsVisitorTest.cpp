@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -42,12 +42,18 @@ class SumNumericTagsVisitorTest : public HootTestFixture
 
 public:
 
+  SumNumericTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/visitors/SumNumericTagsVisitorTest.osm",
+      _inputPath + "SumNumericTagsVisitorTest.osm",
       false,
       Status::Unknown1);
 
