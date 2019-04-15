@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QUuid>
@@ -42,6 +43,7 @@ namespace hoot
 {
 
 BuildingPartPreMergeCollector::BuildingPartPreMergeCollector() :
+_startingInputSize(0),
 _numGeometriesCleaned(0),
 _numBuildingPartsProcessed(0)
 {
@@ -62,11 +64,14 @@ void BuildingPartPreMergeCollector::run()
   {
     _buildingPartInputMutex->lock();
     BuildingPartDescription buildingPartDesc = _buildingPartsInput->dequeue();
+    if (_buildingPartsInput->size() % 10000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " <<
+        StringUtils::formatLargeNumber(_startingInputSize - _buildingPartsInput->size()) <<
+        " / " << StringUtils::formatLargeNumber(_startingInputSize) << " building parts.");
+    }
     _buildingPartInputMutex->unlock();
-
-    LOG_VART(buildingPartDesc._part->getElementId());
-    LOG_VART(buildingPartDesc._neighbor->getElementId());
-    LOG_VART(buildingPartDesc._relationType);
 
     _addNeighborsToGroup(buildingPartDesc);
 

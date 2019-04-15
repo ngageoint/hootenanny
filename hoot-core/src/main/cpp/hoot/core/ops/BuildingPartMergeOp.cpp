@@ -115,6 +115,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProce
 
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
+  int numProcessed = 0;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
@@ -148,6 +149,14 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProce
             way, neighbor, BuildingPartDescription::BuildingPartRelationType::Neighbor, geom));
       }
     }
+
+    numProcessed++;
+    if (numProcessed % 10000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        StringUtils::formatLargeNumber(ways.size()) << " ways to building part input.");
+    }
   }
   LOG_VARD(buildingPartInput.size());
 
@@ -160,6 +169,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
 
   const RelationMap& relations = _map->getRelations();
   LOG_VARD(relations.size());
+  int numProcessed = 0;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
@@ -218,6 +228,14 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
         }
       }
     }
+
+    numProcessed++;
+    if (numProcessed % 10000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
+        StringUtils::formatLargeNumber(relations.size()) << " relations to building part input.");
+    }
   }
   LOG_VARD(buildingPartInput.size());
 
@@ -226,8 +244,6 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
 
 QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
 {
-  LOG_INFO("\tCreating building part pre-processing input...");
-
   // Tried caching all of the geometries and in order to pass them to the task threads to not only
   // avoid repeated geometry calcs but also get rid of a call to BuildingCriterion::isSatisified on
   // the threads, which required an extra mutex. However, 1) there were no performance gains in
@@ -257,6 +273,7 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
   {
     BuildingPartPreMergeCollector* buildingPartCollectTask = new BuildingPartPreMergeCollector();
     buildingPartCollectTask->setBuildingPartsInput(&buildingPartsInput);
+    buildingPartCollectTask->setStartingInputSize(buildingPartsInput.size());
     // Passing the groups into the threads as a shared pointer slows down processing by ~60%, so
     // will pass in as a raw pointer.
     buildingPartCollectTask->setBuildingPartGroupsOutput(&_buildingPartGroups);
@@ -267,7 +284,7 @@ void BuildingPartMergeOp::_preProcessBuildingParts()
     threadPool.start(buildingPartCollectTask);
   }
   LOG_VART(threadPool.activeThreadCount());
-  LOG_INFO("\tLaunched " << _threadCount << " building part pre-processing tasks...");
+  LOG_DEBUG("\tLaunched " << _threadCount << " building part pre-processing tasks...");
 
   const bool allThreadsRemoved = threadPool.waitForDone();
   LOG_VART(allThreadsRemoved);
