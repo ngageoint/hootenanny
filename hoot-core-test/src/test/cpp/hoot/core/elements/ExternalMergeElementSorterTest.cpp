@@ -45,9 +45,7 @@ class ExternalMergeElementSorterTest : public HootTestFixture
 
 public:
 
-  ExternalMergeElementSorterTest()
-    : HootTestFixture("test-files/algorithms/changeset/",
-                      UNUSED_PATH)
+  ExternalMergeElementSorterTest() : HootTestFixture("test-files/elements/", UNUSED_PATH)
   {
   }
 

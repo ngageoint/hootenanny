@@ -44,9 +44,7 @@ class InMemoryElementSorterTest : public HootTestFixture
 
 public:
 
-  InMemoryElementSorterTest()
-    : HootTestFixture("test-files/algorithms/changeset/",
-                      UNUSED_PATH)
+  InMemoryElementSorterTest() : HootTestFixture("test-files/elements/", UNUSED_PATH)
   {
   }
 

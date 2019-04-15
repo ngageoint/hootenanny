@@ -85,9 +85,8 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, _outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS(_inputPath + "ToyBuildingsOutput.osm",
-                     _outputPath + "ToyBuildings.osm");
+    writer.write(map, _outputPath + "runToyTestOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runToyTestOut.osm", _outputPath + "runToyTestOut.osm");
   }
 
   void runToyMultithreadTest()
