@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -60,6 +60,12 @@ class PertyOpTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  PertyOpTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/rnd/perty/")
+  {
+  }
 
   void runDirectSequentialSimulationTest()
   {
@@ -104,9 +110,8 @@ public:
     qSort(keys);
 
 //    OsmXmlWriter writer;
-//    QDir().mkpath("test-output/perty");
 //    MapProjector::reprojectToWgs84(map);
-//    writer.write(map, "test-output/perty/BasicTest.osm");
+//    writer.write(map, _outputPath + "BasicTest.osm");
 //    QString result = "";
 //    for (int i = 0; i < keys.size(); i++)
 //    {
@@ -177,11 +182,10 @@ public:
     }
 
     OsmXmlWriter writer;
-    TestUtils::mkpath("test-output/perty");
 
     OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);
-    writer.write(original, "test-output/perty/Original.osm");
+    writer.write(original, _outputPath + "Original.osm");
 
     PertyOp uut;
     uut.setGridSpacing(gridSpacing);
@@ -208,9 +212,9 @@ public:
 
 
     MapProjector::projectToWgs84(debug);
-    writer.write(debug, "test-output/perty/Debug.osm");
+    writer.write(debug, _outputPath + "Debug.osm");
     MapProjector::projectToWgs84(map);
-    writer.write(map, "test-output/perty/Permuted.osm");
+    writer.write(map, _outputPath + "Permuted.osm");
   }
 };
 

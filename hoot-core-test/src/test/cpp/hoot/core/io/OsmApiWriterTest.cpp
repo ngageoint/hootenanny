@@ -57,6 +57,12 @@ public:
   const QString OSM_API_URL = "https://www.openstreetmap.org";
   const QString ME_API_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
 
+  OsmApiWriterTest()
+    : HootTestFixture("test-files/io/OsmChangesetElementTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runParseStatusTest()
   {
     OsmApiWriter writer;
@@ -155,7 +161,7 @@ public:
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
-    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+    changesets.append(_inputPath + "ToyTestA.osc");
 
     OsmApiWriter writer(osm, changesets);
 
@@ -174,7 +180,7 @@ public:
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
-    changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+    changesets.append(_inputPath + "ToyTestA.osc");
 
     OsmApiWriter writer(osm, changesets);
 
@@ -197,7 +203,7 @@ public:
     //  Load up the all-create ToyTestA
     {
       QList<QString> changesets;
-      changesets.append("test-files/io/OsmChangesetElementTest/ToyTestA.osc");
+      changesets.append(_inputPath + "ToyTestA.osc");
 
       OsmApiWriter writer(osm, changesets);
 
@@ -213,7 +219,7 @@ public:
     //  Load up the conflict dataset
     {
       QList<QString> changesets;
-      changesets.append("test-files/io/OsmChangesetElementTest/ToyTestAConflicts.osc");
+      changesets.append(_inputPath + "ToyTestAConflicts.osc");
 
       OsmApiWriter writer(osm, changesets);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,10 +31,10 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
@@ -59,6 +59,8 @@ class MatchComparatorTest : public HootTestFixture
 public:
 
   MatchComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -71,9 +73,9 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
 
     // introduce a false positive in the test data.
     vector<long> wids = FindWaysVisitor::findWaysByTag(map, "name", "Cheddar's Casual Cafe");

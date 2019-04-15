@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -42,6 +42,8 @@ class OsmMapReaderFactoryTest : public HootTestFixture
 public:
 
   OsmMapReaderFactoryTest()
+    : HootTestFixture("test-files/conflate/highway/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -57,7 +59,7 @@ public:
     try
     {
       OsmMapReaderFactory::read(
-        map, "test-files/conflate/highway/HighwayMatchRealWorld3Test.osm", false, Status::Unknown1);
+        map, _inputPath + "HighwayMatchRealWorld3Test.osm", false, Status::Unknown1);
     }
     catch (const HootException& e)
     {

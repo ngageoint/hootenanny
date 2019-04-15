@@ -26,24 +26,30 @@
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 class ExternalMergeElementSorterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(ExternalMergeElementSorterTest);
-    CPPUNIT_TEST(runTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(ExternalMergeElementSorterTest);
+  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  ExternalMergeElementSorterTest()
+    : HootTestFixture("test-files/algorithms/changeset/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runTest()
   {
@@ -52,7 +58,7 @@ public:
     //comment out for debugging only
     DisableLog dl;
 
-    const QString input = "test-files/algorithms/changeset/ExternalMergeElementSorterTest.osm";
+    const QString input = _inputPath + "ExternalMergeElementSorterTest.osm";
 
     boost::shared_ptr<PartialOsmMapReader> reader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(

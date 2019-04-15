@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -37,16 +37,17 @@ namespace hoot
 
 class OsmXmlWriterTest : public HootTestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmXmlWriterTest);
-    CPPUNIT_TEST(runEncodeCharsTest);
-    CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE(OsmXmlWriterTest);
+  CPPUNIT_TEST(runEncodeCharsTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
   OsmXmlWriterTest()
+    : HootTestFixture("test-files/io/OsmXmlWriterTest/",
+                      "test-output/io/OsmXmlWriterTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/OsmXmlWriterTest");
   }
 
   void runEncodeCharsTest()
@@ -67,9 +68,9 @@ public:
     tags4.set("note", "<2>");
     TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags4);
 
-    const QString output = "test-output/io/OsmXmlWriterTest/runEncodeCharsTest-out.osm";
+    const QString output = _outputPath + "runEncodeCharsTest-out.osm";
     uut.write(map, output);
-    HOOT_FILE_EQUALS("test-files/io/OsmXmlWriterTest/runEncodeCharsTest.osm", output);
+    HOOT_FILE_EQUALS(_inputPath + "runEncodeCharsTest.osm", output);
   }
 };
 

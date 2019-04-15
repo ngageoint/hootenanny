@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -54,13 +54,11 @@ class ReprojectToGeographicOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/ReprojectToGeographicOp/";
-  const QString outputPath = "test-output/ops/ReprojectToGeographicOp/";
-
   ReprojectToGeographicOpTest()
+    : HootTestFixture("test-files/ops/ReprojectToGeographicOp/",
+                      "test-output/ops/ReprojectToGeographicOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
   }
 
   void runTest()
@@ -71,16 +69,15 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + inputFile, map);
+    reader.read(_inputPath + inputFile, map);
 
     ReprojectToGeographicOp myOp;
     myOp.apply(map);
 
-    TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath + outputFile,
-                     outputPath + outputFile);
+    writer.write(map, _outputPath + outputFile);
+    HOOT_FILE_EQUALS(_inputPath + outputFile,
+                     _outputPath + outputFile);
   }
 
 };

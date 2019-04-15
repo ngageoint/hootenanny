@@ -34,10 +34,6 @@
 namespace hoot
 {
 
-// reusing BuildingHeightVisitorTest's input
-static const QString input =
-  "test-files/visitors/BuildingHeightVisitorTest/BuildingHeightVisitorTestInput.osm";
-
 class BuildingLevelsVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingLevelsVisitorTest);
@@ -47,6 +43,8 @@ class BuildingLevelsVisitorTest : public HootTestFixture
 public:
 
   BuildingLevelsVisitorTest()
+    : HootTestFixture("test-files/visitors/BuildingHeightVisitorTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -54,7 +52,8 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+    // reusing BuildingHeightVisitorTest's input
+    OsmMapReaderFactory::read(map, _inputPath + "BuildingHeightVisitorTestInput.osm", false, Status::Unknown1);
 
     BuildingLevelsVisitor uut;
     map->visitRo(uut);
@@ -71,5 +70,3 @@ public:
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingLevelsVisitorTest, "quick");
 
 }
-
-

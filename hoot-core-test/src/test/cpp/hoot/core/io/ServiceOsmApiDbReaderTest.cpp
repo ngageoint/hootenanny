@@ -65,6 +65,14 @@ public:
 
   static QString userEmail() { return "ServiceOsmApiDbReaderTest@hoottestcpp.org"; }
 
+  const QString _scriptDir = "test-files/servicesdb/";
+
+  ServiceOsmApiDbReaderTest()
+    : HootTestFixture("test-files/io/ServiceOsmApiDbReaderTest/",
+                      "test-output/io/ServiceOsmApiDbReaderTest/")
+  {
+  }
+
   virtual void setUp()
   {
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -75,23 +83,17 @@ public:
     ////////////////////////////////////////
     // insert simple test data
     ////////////////////////////////////////
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql");
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql");
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "nodes.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "ways.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "relations.sql");
   }
 
   void insertDataForBoundTest()
   {
-    const QString scriptDir = "test-files/servicesdb";
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(),
-      scriptDir + "/postgresql_forbounding_test.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "postgresql_forbounding_test.sql");
   }
 
   void populatePartialMap()
@@ -100,8 +102,7 @@ public:
 
     //It isn't the best thing in the world for this test to have a dependency on
     //OsmApiDbBulkInserter, but it will do for now.
-    ApiDb::execSqlFile(
-      ServicesDbTestUtils::getOsmApiDbUrl().toString(), "test-files/servicesdb/users.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
     OsmApiDbBulkInserter writer;
     writer.setChangesetUserId(1);
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
@@ -202,13 +203,10 @@ public:
     RemoveAttributesVisitor attrVis(types);
     map->visitRw(attrVis);
 
-    TestUtils::mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map,
-      "test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm");
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"),
-      TestUtils::readFile("test-output/io/ServiceOsmApiDbReaderTest/runReadByBoundsTest.osm"));
+    OsmMapWriterFactory::write(map, _outputPath + "runReadByBoundsTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runReadByBoundsTest.osm",
+                    _outputPath + "runReadByBoundsTest.osm");
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds
