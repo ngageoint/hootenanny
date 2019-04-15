@@ -48,26 +48,44 @@ if [ "$flag" = "1" ]; then
   file_date=`date -d "$file_date_str" "+%s"`;
 
   if [ $file_date -ge $db_date ] || [ "$1" = "force" ]; then
-    # Drop the DB
-    # echo "DROPPING $DB_NAME_OSMAPI"
-    dropdb $AUTH $DB_NAME_OSMAPI
-    do_create="true"
-  else
-    # DB exists, and appears to be up to date, do nothing
-    do_create="false"
+    # Debug
+    # echo "--- DB List Drop ---"
+    # psql $AUTH -lqt | cut -d \| -f 1 
+    # echo "---"
+
+    # Sanity check: Make sure the DB exists before trying to delete it
+    if psql $AUTH -lqt | cut -d \| -f 1 | grep -iw --quiet "$DB_NAME_OSMAPI"; then
+      # Debug
+      # echo "  # Dropping $DB_NAME_OSMAPI"
+      dropdb $AUTH $DB_NAME_OSMAPI
+      do_create="true"
+    else
+      # DB exists, and appears to be up to date, do nothing
+      do_create="false"
+    fi
   fi
 fi
 
-# create the osm apu db from the blank osm api db script
-if [ "$do_create" = "true" ]; then
-  #echo "Creating osm api db"
-  #echo "DB_HOST_OSMAPI: " $DB_HOST_OSMAPI
-  #echo "DB_PORT_OSMAPI: " $DB_PORT_OSMAPI
-  #echo "DB_USER_OSMAPI: " $DB_USER_OSMAPI
-  #echo "PGPASSWORD: " $PGPASSWORD
-  #echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
-  createdb $AUTH $DB_NAME_OSMAPI
+# Debug
 
-  psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& /tmp/osmapidb.log
+# create the osm api db from the blank osm api db script
+if [ "$do_create" = "true" ]; then
+  # Debug
+  # echo "--- DB List Create ---"
+  # psql $AUTH -lqt | cut -d \| -f 1 
+  # echo "---"
+
+  # Sanity check: Make sure the DB doesn't exist before trying to create it
+  # if ! psql $AUTH -lqt | cut -d \| -f 1 | grep -w --quiet "^ $DB_NAME_OSMAPI \+"; then
+  if ! psql $AUTH -lqt | cut -d \| -f 1 | grep -w --quiet "$DB_NAME_OSMAPI"; then
+    # echo "  # Createing $DB_NAME_OSMAPI"
+    # echo "DB_HOST_OSMAPI: " $DB_HOST_OSMAPI
+    # echo "DB_PORT_OSMAPI: " $DB_PORT_OSMAPI
+    # echo "DB_USER_OSMAPI: " $DB_USER_OSMAPI
+    # echo "PGPASSWORD: " $PGPASSWORD
+    # echo "DB_NAME_OSMAPI: " $DB_NAME_OSMAPI
+    createdb $AUTH $DB_NAME_OSMAPI
+    psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& /tmp/osmapidb.log
+  fi
 fi
 
