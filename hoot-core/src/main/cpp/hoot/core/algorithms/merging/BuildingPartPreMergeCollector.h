@@ -133,7 +133,7 @@ private:
   /*
    * todo
    */
-  void _addNeighborsToGroup(BuildingPartDescription buildingPartDesc);
+  void _addNeighborsToGroup(const BuildingPartDescription& buildingPartDesc);
 
   /*
    * todo

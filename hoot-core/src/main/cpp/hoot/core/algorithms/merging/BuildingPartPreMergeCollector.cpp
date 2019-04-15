@@ -81,7 +81,7 @@ void BuildingPartPreMergeCollector::run()
 }
 
 void BuildingPartPreMergeCollector::_addNeighborsToGroup(
-  const BuildingPartDescription buildingPartDesc)
+  const BuildingPartDescription& buildingPartDesc)
 {
   switch (buildingPartDesc._relationType)
   {
