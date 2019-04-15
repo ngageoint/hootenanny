@@ -49,34 +49,35 @@ namespace hoot
 /**
  * Contains information to group a building part either as a contained way or a neighboring part
  */
-struct BuildingPartDescription
+struct BuildingPartRelationship
 {
-  enum BuildingPartRelationType
+  enum BuildingPartRelationshipType
   {
-    // This is a building part that we need to check for containment within a building before adding
-    // to the group.
+    // This is a building that we need to check for containment within another building before
+    // adding to the group.
     ContainedWay = 1,
-    // This is a building part neighbor that we can add to the group with no further checks.
+    // This is a building neighbor that we can add to the group with no further checks.
     Neighbor
   };
 
-  BuildingPartDescription(ElementPtr part, WayPtr neighbor, BuildingPartRelationType relationType,
-                          boost::shared_ptr<geos::geom::Geometry> partGeom) :
-  _part(part),
-  _neighbor(neighbor),
-  _relationType(relationType),
-  _partGeom(partGeom)
+  BuildingPartRelationship(ElementPtr building, boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+                           WayPtr buildingPartNeighbor,
+                           BuildingPartRelationshipType relationshipType)
   {
+    this->building = building;
+    this->buildingGeom = buildingGeom;
+    this->buildingPartNeighbor = buildingPartNeighbor;
+    this->relationshipType = relationshipType;
   }
 
-  //
-  ElementPtr _part;
-  //
-  WayPtr _neighbor;
-  //
-  BuildingPartRelationType _relationType;
-  //
-  boost::shared_ptr<geos::geom::Geometry> _partGeom;
+  // building containing building parts
+  ElementPtr building;
+  // the geometry of building
+  boost::shared_ptr<geos::geom::Geometry> buildingGeom;
+  // a neighboring buildin part to building
+  WayPtr buildingPartNeighbor;
+  // the type of relationship between building and buildingPartNeighbor
+  BuildingPartRelationshipType relationshipType;
 };
 
 /**
@@ -97,7 +98,7 @@ public:
    */
   void run() override;
 
-  void setBuildingPartsInput(QQueue<BuildingPartDescription>* queue)
+  void setBuildingPartsInput(QQueue<BuildingPartRelationship>* queue)
   { _buildingPartsInput = queue; }
   void setBuildingPartGroupsOutput(Tgs::DisjointSetMap<ElementPtr>* groups)
   { _buildingPartGroupsOutput = groups; }
@@ -112,7 +113,7 @@ public:
 private:
 
   // input data to be grouped
-  QQueue<BuildingPartDescription>* _buildingPartsInput;
+  QQueue<BuildingPartRelationship>* _buildingPartsInput;
   int _startingInputSize;
   // Output building part data that can be merged; accessing this as a shared pointer slows down
   // processing by ~60%, so will keep it as a raw pointer.
@@ -141,18 +142,19 @@ private:
   /*
    * todo
    */
-  void _addNeighborsToGroup(const BuildingPartDescription& buildingPartDesc);
+  void _processBuildingPart(const BuildingPartRelationship& buildingPartRelationship);
 
   /*
    * todo
    */
-  void _addContainedWayToGroup(boost::shared_ptr<geos::geom::Geometry> buildingPartGeom,
-                               WayPtr neighbor, ElementPtr buildingPart);
+  void _addContainedBuildingPartToGroup(ElementPtr building,
+                                        boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+                                        WayPtr buildingPartNeighbor);
 
   /*
    * todo
    */
-  void _addBuildingPartGroup(WayPtr building, ElementPtr buildingPart);
+  void _groupBuildingParts(ElementPtr building, WayPtr buildingPart);
 };
 
 }

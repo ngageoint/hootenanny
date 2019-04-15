@@ -63,7 +63,7 @@ void BuildingPartPreMergeCollector::run()
   while (!_buildingPartsInput->empty())
   {
     _buildingPartInputMutex->lock();
-    BuildingPartDescription buildingPartDesc = _buildingPartsInput->dequeue();
+    BuildingPartRelationship buildingPartRelationship = _buildingPartsInput->dequeue();
     if (_buildingPartsInput->size() % 10000 == 0)
     {
       PROGRESS_INFO(
@@ -73,7 +73,7 @@ void BuildingPartPreMergeCollector::run()
     }
     _buildingPartInputMutex->unlock();
 
-    _addNeighborsToGroup(buildingPartDesc);
+    _processBuildingPart(buildingPartRelationship);
 
     _numBuildingPartsProcessed++;
     LOG_VART(_buildingPartsInput->size());
@@ -85,63 +85,67 @@ void BuildingPartPreMergeCollector::run()
   LOG_VART(_numGeometriesCleaned);
 }
 
-void BuildingPartPreMergeCollector::_addNeighborsToGroup(
-  const BuildingPartDescription& buildingPartDesc)
+void BuildingPartPreMergeCollector::_processBuildingPart(
+  const BuildingPartRelationship& buildingPartRelationship)
 {
-  switch (buildingPartDesc._relationType)
+  switch (buildingPartRelationship.relationshipType)
   {
-    case BuildingPartDescription::BuildingPartRelationType::ContainedWay:
-      assert(buildingPartDesc._partGeom);
-      _addContainedWayToGroup(
-        buildingPartDesc._partGeom, buildingPartDesc._neighbor, buildingPartDesc._part);
+    case BuildingPartRelationship::BuildingPartRelationshipType::ContainedWay:
+      assert(buildingPartRelationship.buildingGeom);
+      _addContainedBuildingPartToGroup(
+        buildingPartRelationship.building, buildingPartRelationship.buildingGeom,
+        buildingPartRelationship.buildingPartNeighbor);
       break;
 
-    case BuildingPartDescription::BuildingPartRelationType::Neighbor:
+    case BuildingPartRelationship::BuildingPartRelationshipType::Neighbor:
       // add these two buildings to a set
-      _addBuildingPartGroup(buildingPartDesc._neighbor, buildingPartDesc._part);
+      _groupBuildingParts(
+        buildingPartRelationship.building, buildingPartRelationship.buildingPartNeighbor);
       break;
 
     default:
       throw IllegalArgumentException(
-        "Unknown building part description relation type: " + buildingPartDesc._relationType);
+        "Unknown building part description relation type: " +
+        buildingPartRelationship.relationshipType);
   }
 }
 
-void BuildingPartPreMergeCollector::_addBuildingPartGroup(WayPtr building, ElementPtr buildingPart)
+void BuildingPartPreMergeCollector::_groupBuildingParts(ElementPtr building, WayPtr buildingPart)
 {
   QMutexLocker outputLock(_buildingPartOutputMutex);
-  _buildingPartGroupsOutput->joinT(building, buildingPart);
+  _buildingPartGroupsOutput->joinT(buildingPart, building);
   LOG_VART(_buildingPartGroupsOutput->size());
 }
 
-void BuildingPartPreMergeCollector::_addContainedWayToGroup(
-  boost::shared_ptr<geos::geom::Geometry> buildingPartGeom, WayPtr neighbor,
-  ElementPtr buildingPart)
+void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(
+  ElementPtr building, boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+  WayPtr buildingPartNeighbor)
 {
-  boost::shared_ptr<geos::geom::Geometry> candidateGeom = _getGeometry(neighbor);
-  assert(candidateGeom);
+  boost::shared_ptr<geos::geom::Geometry> buildingPartMatchCandidateGeom =
+    _getGeometry(buildingPartNeighbor);
+  assert(buildingPartMatchCandidateGeom);
   // if this is another building part totally contained by this building
   bool contains = false;
   try
   {
-    contains = buildingPartGeom->contains(candidateGeom.get());
+    contains = buildingGeom->contains(buildingPartMatchCandidateGeom.get());
   }
   catch (const geos::util::TopologyException&)
   {
     // Something is wrong with the geometry, so let's try cleaning it.
     LOG_TRACE("cleaning...");
-    boost::shared_ptr<geos::geom::Geometry> cleanCandidate(
-      GeometryUtils::validateGeometry(candidateGeom.get()));
-    boost::shared_ptr<geos::geom::Geometry> cleanBuildingPart(
-      GeometryUtils::validateGeometry(buildingPartGeom.get()));
-    contains = cleanBuildingPart->contains(cleanCandidate.get());
+    boost::shared_ptr<geos::geom::Geometry> cleanMatchCandidate(
+      GeometryUtils::validateGeometry(buildingPartMatchCandidateGeom.get()));
+    boost::shared_ptr<geos::geom::Geometry> cleanBuilding(
+      GeometryUtils::validateGeometry(buildingGeom.get()));
+    contains = cleanBuilding->contains(cleanMatchCandidate.get());
     _numGeometriesCleaned++;
    }
    LOG_VART(contains);
 
   if (contains)
   {
-    _addBuildingPartGroup(neighbor, buildingPart);
+    _groupBuildingParts(building, buildingPartNeighbor);
   }
 }
 

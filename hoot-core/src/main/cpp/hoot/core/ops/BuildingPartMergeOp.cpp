@@ -109,9 +109,9 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   _map.reset();
 }
 
-QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProcessingInput()
 {
-  QQueue<BuildingPartDescription> buildingPartInput;
+  QQueue<BuildingPartRelationship> buildingPartInput;
 
   const WayMap& ways = _map->getWays();
   LOG_VARD(ways.size());
@@ -119,22 +119,24 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProce
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
-    boost::shared_ptr<geos::geom::Geometry> geom = _getGeometry(way);
-    if (geom)
+    boost::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
+    // If the way wasn't a building, this will be null.
+    if (buildingGeom)
     {
       const std::vector<long>& intersectIds =
-        _map->getIndex().findWays(*geom->getEnvelopeInternal());
+        _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
       for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
            ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
+        // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
           buildingPartInput.enqueue(
-            BuildingPartDescription(
-              way, neighbor, BuildingPartDescription::BuildingPartRelationType::ContainedWay,
-              geom));
+            BuildingPartRelationship(
+              way, buildingGeom, neighbor,
+              BuildingPartRelationship::BuildingPartRelationshipType::ContainedWay));
         }
       }
 
@@ -143,10 +145,11 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProce
       for (std::set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
-        // have already checked building status in _calculateNeighbors
+        // have already checked building status for neighbor in _calculateNeighbors
         buildingPartInput.enqueue(
-          BuildingPartDescription(
-            way, neighbor, BuildingPartDescription::BuildingPartRelationType::Neighbor, geom));
+          BuildingPartRelationship(
+            way, buildingGeom, neighbor,
+            BuildingPartRelationship::BuildingPartRelationshipType::Neighbor));
       }
     }
 
@@ -163,9 +166,9 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartWayPreProce
   return buildingPartInput;
 }
 
-QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPreProcessingInput()
 {
-  QQueue<BuildingPartDescription> buildingPartInput;
+  QQueue<BuildingPartRelationship> buildingPartInput;
 
   const RelationMap& relations = _map->getRelations();
   LOG_VARD(relations.size());
@@ -174,22 +177,24 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
   {
     RelationPtr relation = it->second;
 
-    boost::shared_ptr<geos::geom::Geometry> geom = _getGeometry(relation);
-    if (geom)
+    boost::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(relation);
+    // If the relation wasn't a building, this will be null.
+    if (buildingGeom)
     {
       const std::vector<long>& intersectIds =
-        _map->getIndex().findWays(*geom->getEnvelopeInternal());
+        _map->getIndex().findWays(*buildingGeom->getEnvelopeInternal());
       LOG_VART(intersectIds.size());
       for (std::vector<long>::const_iterator it = intersectIds.begin(); it != intersectIds.end();
            ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
+        // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
         if (_buildingCrit.isSatisfied(neighbor))
         {
           buildingPartInput.enqueue(
-            BuildingPartDescription(
-              relation, neighbor, BuildingPartDescription::BuildingPartRelationType::ContainedWay,
-              geom));
+            BuildingPartRelationship(
+              relation, buildingGeom, neighbor,
+              BuildingPartRelationship::BuildingPartRelationshipType::ContainedWay));
         }
       }
 
@@ -207,11 +212,11 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
                ++it)
           {
             WayPtr neighbor = _map->getWay(*it);
-            // have already checked building status in _calculateNeighbors
+            // have already checked building status for neighbor in _calculateNeighbors
             buildingPartInput.enqueue(
-              BuildingPartDescription(
-                relation, neighbor, BuildingPartDescription::BuildingPartRelationType::Neighbor,
-                geom));
+              BuildingPartRelationship(
+                relation, buildingGeom, neighbor,
+                BuildingPartRelationship::BuildingPartRelationshipType::Neighbor));
           }
         }
         else if (members[i].getElementId().getType() == ElementType::Relation)
@@ -242,7 +247,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartRelationPre
   return buildingPartInput;
 }
 
-QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
+QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartPreProcessingInput()
 {
   // Tried caching all of the geometries beforehand in order to pass them to the task threads to
   // try to not only avoid repeated geometry calcs but also get rid of an extra call to
@@ -250,7 +255,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
   // gains in using the cache and 2) access to the cache caused thread instability as to which I
   // couldn't determine the cause.
 
-  QQueue<BuildingPartDescription> buildingPartInput;
+  QQueue<BuildingPartRelationship> buildingPartInput;
   buildingPartInput.append(_getBuildingPartWayPreProcessingInput());
   buildingPartInput.append(_getBuildingPartRelationPreProcessingInput());
 
@@ -260,7 +265,7 @@ QQueue<BuildingPartDescription> BuildingPartMergeOp::_getBuildingPartPreProcessi
 
 void BuildingPartMergeOp::_preProcessBuildingParts()
 {
-  QQueue<BuildingPartDescription> buildingPartsInput = _getBuildingPartPreProcessingInput();
+  QQueue<BuildingPartRelationship> buildingPartsInput = _getBuildingPartPreProcessingInput();
 
   QMutex buildingPartsInputMutex;
   QMutex hootSchemaMutex;
@@ -342,7 +347,10 @@ std::set<long> BuildingPartMergeOp::_calculateNeighbors(const ConstWayPtr& way, 
 
       WayPtr neighbor = _map->getWay(wayId);
       // if the neighbor is a building and it also has the two contiguous nodes we're looking at
-      if (neighbor != way && _buildingCrit.isSatisfied(neighbor) &&
+      if (neighbor != way &&
+          // It seems like maybe this should be more strict and check for building parts, not just
+          // buildings, but that's not how the code was originally written.
+          _buildingCrit.isSatisfied(neighbor) &&
           _hasContiguousNodes(neighbor, way->getNodeId(i), lastId) &&
           _compareTags(tags, neighbor->getTags()))
       {
@@ -389,6 +397,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long
 boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   const ConstElementPtr& element) const
 {
+  // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
   if (_buildingCrit.isSatisfied(element))
   {
     switch (element->getElementType().getEnum())

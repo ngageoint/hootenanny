@@ -166,9 +166,9 @@ private:
   /*
    * Groups contained and neighboring building part with the buildings containing them
    */
-  QQueue<BuildingPartDescription> _getBuildingPartPreProcessingInput();
-  QQueue<BuildingPartDescription> _getBuildingPartWayPreProcessingInput();
-  QQueue<BuildingPartDescription> _getBuildingPartRelationPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartWayPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartRelationPreProcessingInput();
 
   /*
    * Merges building parts grouped by the parallel processing
