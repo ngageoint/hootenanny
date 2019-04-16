@@ -50,11 +50,11 @@ GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
   std::vector<std::string> availableActionTypes = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
 
   LOG_DEBUG( "Available Geometry Modifiers:")
-  for( std::vector<std::string>::iterator it = availableActionTypes.begin(); it != availableActionTypes.end(); it++ )
+  for (std::string availType : availableActionTypes)
   {
-    shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(*it) );
+    shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(availType) );
     _actions.append(pAction);
-    LOG_DEBUG( "class: " << *it << " command: " << pAction->getCommandName());
+    LOG_DEBUG( "class: " << availType << " command: " << pAction->getCommandName());
   }
 }
 

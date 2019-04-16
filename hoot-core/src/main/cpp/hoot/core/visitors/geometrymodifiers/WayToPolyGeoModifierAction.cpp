@@ -120,7 +120,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     perp.y *= width;
 
     // store positions for both sides
-    for( int p = 0; p < 2; p++ )
+    for (int p = 0; p < 2; p++)
     {
       CoordinateExt pos = (p == 0) ? (currCoor + perp) : (currCoor - perp);
       polyPositions[p][i] = pos;
@@ -139,7 +139,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     // closed loop, creating a multipolygon
     WayPtr pPoly0( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
     WayPtr pPoly1( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
-    for( long i = 0; i < nodeCount; i++ )
+    for (long i = 0; i < nodeCount; i++)
     {
       addNodeToPoly( polyPositions[0][i], pMap, pPoly0 );
       addNodeToPoly( polyPositions[1][i], pMap, pPoly1 );
@@ -172,8 +172,8 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   {
     // create poly way and add it to map
     WayPtr pPoly( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
-    for( long i = 0; i < nodeCount; i++ ) addNodeToPoly( polyPositions[0][i], pMap, pPoly );
-    for( long i = nodeCount-1; i >= 0; i-- ) addNodeToPoly( polyPositions[1][i], pMap, pPoly );
+    for (long i = 0; i < nodeCount; i++) addNodeToPoly( polyPositions[0][i], pMap, pPoly );
+    for (long i = nodeCount-1; i >= 0; i--) addNodeToPoly( polyPositions[1][i], pMap, pPoly );
 
     // duplicate first id to close poly
     pPoly->addNode(pPoly->getNodeId(0));

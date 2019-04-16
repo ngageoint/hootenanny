@@ -82,7 +82,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
       pMap->addElement(pDebugWay);
 
-      for( size_t i = 0; i < pMinRectCoords->getSize(); i++ )
+      for (size_t i = 0; i < pMinRectCoords->getSize(); i++)
       {
         Coordinate pos = pMinRectCoords->getAt(i);
         NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
@@ -122,9 +122,9 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       pMap->replace(pWay, pNode);
 
       // remove unused nodes of previous way
-      for( std::vector<long>::iterator it = nodeIds.begin(); it != nodeIds.end(); it++ )
+      for (long nodeId : nodeIds)
       {
-        RemoveNodeOp removeOp( *it, true, false, true );
+        RemoveNodeOp removeOp( nodeId, true, false, true );
         removeOp.apply(mapPtr);
       }
 
