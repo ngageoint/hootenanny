@@ -22,16 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryModifierOp.h"
-#include "hoot-core/src/main/cpp/hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h"
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
+#include "hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h"
 
 namespace bpt = boost::property_tree;
 using namespace boost;
