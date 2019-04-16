@@ -48,22 +48,25 @@ class EdgeMatchSetFinderTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  OsmNetworkPtr network1, network2;
+  OsmNetworkPtr network1;
+  OsmNetworkPtr network2;
   IndexedEdgeMatchSetPtr matchSet;
 
   EdgeMatchSetFinderTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
 
-  void writeDebugMap(OsmMapPtr map)
+  void writeDebugMap(OsmMapPtr map, int testNumber)
   {
     TestUtils::mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum.osm"));
+    OsmMapWriterFactory::write(copy, QString("tmp/EdgeMatchSetFinderTest-%1.osm").arg(testNumber));
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
@@ -72,11 +75,11 @@ public:
 
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ParitalEdgeMatch.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "ParitalEdgeMatch.osm",
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    writeDebugMap(map);
+    writeDebugMap(map, testNumber);
 
     OsmNetworkExtractor one;
 

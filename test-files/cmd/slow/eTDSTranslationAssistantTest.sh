@@ -3,7 +3,7 @@ set -e
 
 export TA_FILE=cali-test
 export TA_IN=test-files/translation_assistant
-export TA_OUT=test-output/cmd/translation_assistant_convert-ogr2osm
+export TA_OUT=test-output/cmd/slow/translation_assistant_convert-ogr2osm
 mkdir -p $TA_OUT
 
 schemas=( "tdsv61" "tdsv40" )

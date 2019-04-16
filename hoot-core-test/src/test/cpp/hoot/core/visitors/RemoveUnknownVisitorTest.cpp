@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // hoot
 #include <hoot/core/TestUtils.h>
@@ -44,8 +44,9 @@ class RemoveUnknownVisitorTest : public HootTestFixture
 public:
 
   RemoveUnknownVisitorTest()
+    : HootTestFixture("test-files/",
+                      "test-output/visitors/RemoveUnknownVisitorTest/")
   {
-    TestUtils::mkpath("test-output/visitors");
   }
 
   OsmMapPtr loadMap()
@@ -55,10 +56,10 @@ public:
     reader.setUseDataSourceIds(true);
     //  Load up ToyTestA as Unknown1
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     //  Load up ToyTestB as Unknown2
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyTestB.osm", map);
+    reader.read(_inputPath + "ToyTestB.osm", map);
 
     return map;
   }
@@ -70,9 +71,9 @@ public:
     map->visitRw(visitor);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveUnknown1VisitorOutput.osm");
-    HOOT_FILE_EQUALS("test-files/ToyTestB.osm",
-                     "test-output/visitors/RemoveUnknown1VisitorOutput.osm");
+    writer.write(map, _outputPath + "RemoveUnknown1VisitorOutput.osm");
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestB.osm",
+                     _outputPath + "RemoveUnknown1VisitorOutput.osm");
   }
 
   void runUnknown2Test()
@@ -82,9 +83,9 @@ public:
     map->visitRw(visitor);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveUnknown2VisitorOutput.osm");
-    HOOT_FILE_EQUALS("test-files/ToyTestA.osm",
-                     "test-output/visitors/RemoveUnknown2VisitorOutput.osm");
+    writer.write(map, _outputPath + "RemoveUnknown2VisitorOutput.osm");
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestA.osm",
+                     _outputPath + "RemoveUnknown2VisitorOutput.osm");
   }
 
 };

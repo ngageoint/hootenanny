@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -43,6 +43,8 @@ class RemoveEmptyRelationsOpTest : public HootTestFixture
 public:
 
   RemoveEmptyRelationsOpTest()
+    : HootTestFixture("test-files/ops/RemoveEmptyRelationsOp/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -52,7 +54,7 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RemoveEmptyRelationsOp/input.osm", map);
+    reader.read(_inputPath + "input.osm", map);
 
     RemoveEmptyRelationsOp uut;
     uut.apply(map);

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/ConflateCmdStatsTest
-STATS_OUT=test-output/cmd/ConflateCmdStatsTest/all-data-types-out
+mkdir -p test-output/cmd/slow/ConflateCmdStatsTest
+STATS_OUT=test-output/cmd/slow/ConflateCmdStatsTest/all-data-types-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 hoot conflate -C Testing.conf -D writer.include.debug.tags=true test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm $STATS_OUT.osm --stats > $STATS_OUT

@@ -102,7 +102,7 @@ public:
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
-  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
+  void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
   virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
@@ -131,7 +131,7 @@ private:
   boost::shared_ptr<Element> _element;
 
   Status _status;
-  Meters _circularError;
+  Meters _defaultCircularError;
 
   int _missingNodeCount;
   int _missingWayCount;

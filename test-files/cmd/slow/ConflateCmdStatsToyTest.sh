@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/ConflateCmdStatsTest
-STATS_OUT=test-output/cmd/ConflateCmdStatsTest/toy-out
+mkdir -p test-output/cmd/slow/ConflateCmdStatsTest
+STATS_OUT=test-output/cmd/slow/ConflateCmdStatsTest/toy-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 HOOT_OPTS="-C Testing.conf -D writer.include.debug.tags=true"

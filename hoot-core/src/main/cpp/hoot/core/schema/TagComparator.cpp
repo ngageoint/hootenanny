@@ -409,22 +409,10 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   }
   else
   {
-//    if (enumWeight <= 0)
-//    {
-//      return nameScore;
-//    }
-//    else if (nameWeight <= 0)
-//    {
-//      return enumScore;
-//    }
-//    else
-    {
-      LOG_VART(nameScore);
-      LOG_VART(enumScore);
-      LOG_VART(textScore);
-      return nameScore * enumScore * textScore;
-    }
-    //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);
+    LOG_VART(nameScore);
+    LOG_VART(enumScore);
+    LOG_VART(textScore);
+    return nameScore * enumScore * textScore;
   }
 }
 

@@ -52,6 +52,8 @@ class IterativeNetworkMatcherTest : public HootTestFixture
 public:
 
   IterativeNetworkMatcherTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -65,7 +67,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/IterativeNetworkMatcherTest-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
@@ -76,9 +78,9 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestE1.osm", true,
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestE1.osm", true,
       Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestE2.osm", true,
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestE2.osm", true,
       Status::Unknown2);
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);
@@ -110,20 +112,10 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/DcGisRoads.osm", false,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "tmp/dcperb-multi10.osm", false,
-//      Status::Unknown2);
-
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB1.osm", false,
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB1.osm", false,
       Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB2.osm", false,
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB2.osm", false,
       Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input1.osm", false,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/iterative/highway-001/Input2.osm", false,
-//      Status::Unknown2);
 
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);

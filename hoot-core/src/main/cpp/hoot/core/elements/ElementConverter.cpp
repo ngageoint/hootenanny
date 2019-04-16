@@ -73,12 +73,12 @@ ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
   _constProvider(provider),
   _spatialReference(provider->getProjection())
 {
-
 }
 
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
+  // TODO: turn this into an exception
   assert(MapProjector::isPlanar(_constProvider));
 
   // if the element is not a point and is not an area.
@@ -87,7 +87,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
   {
-    /// @optimize
+    // TODO: optimize
     // we don't really need to convert first, we can just loop through the nodes and sum up the
     // distance.
     return convertToGeometry(e)->getLength();
@@ -118,7 +118,8 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(
 
 boost::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
 {
-  return boost::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  return
+    boost::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 }
 
 boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
@@ -186,8 +187,8 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
   {
     size = 2;
   }
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(size, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -227,8 +228,8 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
     return boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   }
 
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(size, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
@@ -251,7 +252,8 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   // create the outer line
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
-  boost::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  boost::shared_ptr<Polygon> result(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 
   return result;
 }

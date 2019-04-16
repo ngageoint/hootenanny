@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,6 +55,8 @@ class SampledAngleHistogramExtractorTest : public HootTestFixture
 public:
 
   SampledAngleHistogramExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/SampledAngleHistogramExtractorTest/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -64,13 +66,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(
-      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_CNIGS_Rivers_REF1-cropped.osm",
-      map);
+    reader.read(_inputPath + "Haiti_CNIGS_Rivers_REF1-cropped.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(
-      "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_osm_waterway_ss_REF2-cropped.osm",
-      map);
+    reader.read(_inputPath + "Haiti_osm_waterway_ss_REF2-cropped.osm", map);
     MapProjector::projectToPlanar(map);
 
     SampledAngleHistogramExtractor angleHistogramExtractor;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -64,6 +64,8 @@ class EdgeDistanceExtractorTest : public HootTestFixture
 public:
 
   EdgeDistanceExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/EdgeDistanceExtractor/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -106,9 +108,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestB.osm", map);
+    reader.read(_inputPath + "ToyTestB.osm", map);
 
     MapProjector::projectToPlanar(map);
 
