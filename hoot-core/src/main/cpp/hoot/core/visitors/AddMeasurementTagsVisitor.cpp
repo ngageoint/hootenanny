@@ -27,14 +27,22 @@
 
 #include "AddMeasurementTagsVisitor.h"
 
-#include <geos/algorithm/MinimumDiameter.h>
+// Hoot
 #include <hoot/core/elements/ElementConverter.h>
-#include <geos/geom/Polygon.h>
-#include <boost/shared_ptr.hpp>
+#include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/index/ElementToRelationMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
+
+// Boost
+#include <boost/shared_ptr.hpp>
+
+// Geos
+#include <geos/algorithm/MinimumDiameter.h>
+#include <geos/geom/GeometryFactory.h>
 
 using namespace boost;
 using namespace geos::geom;
@@ -48,19 +56,87 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddMeasurementTagsVisitor)
 void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 {
   if( !_addArea && !_addWidth && !_addArea ) return;
-  // only process area ways
-  if( pElement->getElementType() != ElementType::Way ) return;
+
+  _numProcessed++;
 
   if( !_map->getProjection()->IsProjected() )
   {
     MapProjector::projectToPlanar(_map->shared_from_this());
   }
 
-  _numProcessed++;
-  _numAffected++;
+  if( pElement->getElementType() == ElementType::Relation )
+  {
+    const RelationPtr& pRelation = boost::dynamic_pointer_cast<Relation>(pElement);
+    processRelation( pRelation );
+    _numAffected++;
+  }
 
-  Tags& tags = pElement->getTags();
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  if( pElement->getElementType() == ElementType::Way )
+  {
+    const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+    processWay( pWay );
+    _numAffected++;
+  }
+}
+
+void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation )
+{
+  // for length/width combine all way member polygons
+  boost::shared_ptr<Geometry> pCombined = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
+  ElementConverter elementConverter(_map->shared_from_this());
+
+  // for area add all outer role polys and subtract all inner role polys
+  double totalArea = 0;
+
+  foreach (RelationData::Entry entry, pRelation->getMembers())
+  {
+    ElementPtr pMember =_map->getElement( entry.getElementId());
+    if( pMember->getElementType() == ElementType::Way )
+    {
+      const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pMember);
+      shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+
+      // build a combined polygon for extents
+      if( _addLength || _addWidth )
+      {
+        pCombined = boost::shared_ptr<Geometry>(pCombined->Union(pPoly.get()));
+      }
+
+      // gather all valid areas and their roles to calculate total area
+      if( _addArea && pWay->isClosedArea() )
+      {
+        double area = pPoly->getArea();
+
+        if( entry.getRole() == MetadataTags::RelationOuter() )
+        {
+          totalArea += area;
+        }
+
+        if( entry.getRole() == MetadataTags::RelationInner() )
+        {
+          totalArea -= area;
+        }
+      }
+    }
+  }
+
+  // calculate length and width of combined polygon
+  double polyLength = 0;
+  double polyWidth = 0;
+
+  calculateExtents(pCombined.get(), polyLength, polyWidth);
+
+  // write to tags
+  Tags& tags = pRelation->getTags();
+  if( _addLength ) tags["length"] = QString::number(polyLength);
+  if( _addWidth ) tags["width"] = QString::number(polyWidth);
+  if( _addArea ) tags["area"] = QString::number(totalArea);
+}
+
+void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
+{
+  Tags& tags = pWay->getTags();
+
   ElementConverter elementConverter(_map->shared_from_this());
   shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
@@ -70,17 +146,7 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
     double polyLength = 0;
     double polyWidth = 0;
 
-    // calculate minimum rectangle/aligned bounding box
-    Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
-    CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
-
-    if( pMinRectCoords->getSize() > 2 )
-    {
-      double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
-      double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
-      polyLength = std::max(len1,len2);
-      polyWidth = std::min(len1,len2);
-    }
+    calculateExtents(pPoly.get(), polyLength, polyWidth);
 
     if( _addLength ) tags["length"] = QString::number(polyLength);
     if( _addWidth ) tags["width"] = QString::number(polyWidth);
@@ -91,6 +157,25 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
     // calculate poly area only if we need it
     double polyArea = pPoly->getArea();
     tags["area"] = QString::number(polyArea);
+  }
+}
+
+void AddMeasurementTagsVisitor::calculateExtents( Geometry* pGeometry, double& length, double &width)
+{
+  // calculate polygon length and width
+  length = 0;
+  width = 0;
+
+  // calculate minimum rectangle/aligned bounding box
+  Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pGeometry);
+  CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
+
+  if( pMinRectCoords->getSize() > 2 )
+  {
+    double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
+    double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
+    length = std::max(len1,len2);
+    width = std::min(len1,len2);
   }
 }
 

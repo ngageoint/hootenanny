@@ -27,16 +27,31 @@
 #ifndef ADDMEASUREMENTTAGSVISITOR_H
 #define ADDMEASUREMENTTAGSVISITOR_H
 
-// hoot
+// Hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
+// Geos
+#include <geos/geom/Polygon.h>
+
 namespace hoot
 {
 
+/*
+ * Visitor that calculate specific measurements of a way element and adds them as tags
+ * to the element.
+ * Currently supports:
+ *  length and width of the aligned bounding box for:
+ *    - any open and closed way
+ *    - the combined open and closed way members of a relationship
+ *  area for:
+ *    - any closed way
+ *    - the combined closed way members of a relationship where outer
+ *      entries are added and inner entries are subtracted
+ */
 class AddMeasurementTagsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
@@ -58,6 +73,11 @@ private:
   bool _addArea = true;
   bool _addLength = true;
   bool _addWidth = true;
+
+  void processRelation(const RelationPtr pRelation );
+  void processWay(const WayPtr pWay);
+
+  void calculateExtents( geos::geom::Geometry* pGeometry, double& length, double &width);
 };
 
 } // namespace hoot
