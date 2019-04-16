@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IN_MEMORY_ELEMENT_SORTER_H
 #define IN_MEMORY_ELEMENT_SORTER_H
@@ -70,12 +70,21 @@ public:
    */
   virtual ElementPtr readNextElement();
 
+  /**
+   * Sort a collection of elements to the OSM standard
+   *
+   * @param elements elements to sort
+   */
+  static void sort(std::vector<ElementPtr>& elements);
+
 private:
 
   ConstOsmMapPtr _source;
 
   std::vector<long> _nodeIds, _wayIds, _relationIds;
   size_t _nodeIndex, _wayIndex, _relationIndex;
+
+  static bool _elementCompare(const ConstElementPtr& e1, const ConstElementPtr& e2);
 
 };
 

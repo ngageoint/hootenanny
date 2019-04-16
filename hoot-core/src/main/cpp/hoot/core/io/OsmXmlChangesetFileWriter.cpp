@@ -246,8 +246,8 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
     }
   }
 
-  // turn this on when we start using node circularError.
-  if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0)
+  if (ConfigOptions().getWriterIncludeCircularErrorTags() &&
+      n->hasCircularError() && n->getTags().getNonDebugCount() > 0)
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -326,7 +326,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     }
   }
 
-  if (w->hasCircularError())
+  if (ConfigOptions().getWriterIncludeCircularErrorTags() && w->hasCircularError())
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -422,7 +422,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     writer.writeEndElement();
   }
 
-  if (r->hasCircularError())
+  if (ConfigOptions().getWriterIncludeCircularErrorTags() && r->hasCircularError())
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());

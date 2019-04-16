@@ -149,7 +149,7 @@ void IntersectionSplitter::splitIntersections()
     if (_todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
     {
       PROGRESS_INFO(
-        "\t\tProcessed intersection splits for: " << numProcessed << " / " << totalNodes <<
+        "\tProcessed intersection splits for: " << numProcessed << " / " << totalNodes <<
         " nodes.");
     }
 

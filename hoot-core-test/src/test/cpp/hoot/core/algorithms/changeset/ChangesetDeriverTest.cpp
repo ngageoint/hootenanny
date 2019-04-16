@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>

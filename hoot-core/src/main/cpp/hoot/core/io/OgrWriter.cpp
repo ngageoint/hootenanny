@@ -153,7 +153,8 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
     {
       QByteArray vba = v.toString().toUtf8();
 
-      int fieldWidth = poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
+      int fieldWidth =
+        poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
 
       if (vba.length() > fieldWidth && fieldWidth > 0)
       {

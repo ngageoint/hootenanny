@@ -57,13 +57,13 @@ class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyMultithreadTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  BuildingPartMergeOpTest()
-    : HootTestFixture("test-files/ops/BuildingPartMergeOp/",
-                      "test-output/ops/BuildingPartMergeOp/")
+  BuildingPartMergeOpTest() :
+  HootTestFixture("test-files/ops/BuildingPartMergeOp/", "test-output/ops/BuildingPartMergeOp/")
   {
     setResetType(ResetBasic);
   }
@@ -71,25 +71,47 @@ public:
   void runToyTest()
   {
     OsmXmlReader reader;
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
+    uut.setThreadCount(1);
     uut.apply(map);
 
-    MapProjector::projectToWgs84(map);
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
 
+    MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, _outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS( _inputPath + "ToyBuildingsOutput.osm",
-                     _outputPath + "ToyBuildings.osm");
+    writer.write(map, _outputPath + "runToyTestOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runToyTestOut.osm", _outputPath + "runToyTestOut.osm");
   }
 
+  void runToyMultithreadTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(2);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "runToyMultithreadTestOut.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runToyTestOut.osm", _outputPath + "runToyMultithreadTestOut.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "current");
 
 }

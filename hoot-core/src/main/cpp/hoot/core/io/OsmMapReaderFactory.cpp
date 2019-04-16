@@ -37,6 +37,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 
 namespace hoot
@@ -46,7 +49,8 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<ElementInputStream> eis = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+  boost::shared_ptr<ElementInputStream> eis =
+    boost::dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
   {
     result = true;
@@ -59,7 +63,8 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<PartialOsmMapReader> pr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  boost::shared_ptr<PartialOsmMapReader> pr =
+    boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   if (pr)
   {
     result = true;
@@ -189,11 +194,16 @@ void OsmMapReaderFactory::_read(boost::shared_ptr<OsmMap> map,
       ConfigOptions::getConvertBoundingBoxKey() +
       " configuration option used with unsupported reader for data source: " + url);
   }
+
+  QElapsedTimer timer;
+  timer.start();
+
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));
   LOG_INFO(
-    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements from input.");
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 }
 
 }

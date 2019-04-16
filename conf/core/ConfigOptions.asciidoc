@@ -321,6 +321,16 @@ If true, when building outlines are updated the updater will remove the source b
 used to create the outline multipolygon relation.  If false, both source building relations and
 outline multipolygon relations will remain.
 
+=== building.part.merger.thread.count
+
+* Data Type: int
+* Default Value: `8`
+
+Number of threads used by BuildingPartMergerOp to process buildings.  A value of less than one
+allows Hootenanny to automatically determine the optimal thread count.  The default value
+corresponds to the default number of threads available on the Hootenanny VM and you may obtain
+better performance by changing the value when dealing with other environments.
+
 === building.review.if.secondary.newer
 
 * Data Type: bool
@@ -942,6 +952,14 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== geonames.reader.string.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of parsed tag string values stored in an in-memory cache when reading
+GeoNames data.
 
 === hash.seed.zero
 
@@ -3312,6 +3330,20 @@ have negative IDs.  Not honored by all readers.
 * Default Value: `false`
 
 By default should a reader use the file status from the file. Not honored by all readers.
+
+=== relation.with.most.members.op.member.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relation members.
+
+=== relation.with.most.members.op.relation.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relations.
 
 === remove.attributes.visitor.types
 

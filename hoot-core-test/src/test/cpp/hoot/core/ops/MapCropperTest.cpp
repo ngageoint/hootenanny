@@ -263,7 +263,7 @@ public:
     //compare relations
     const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1";
+    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       const RelationPtr& r = it->second;

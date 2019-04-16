@@ -45,9 +45,13 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
+#include <hoot/core/util/StringUtils.h>
 
 // std
 #include <vector>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -96,7 +100,7 @@ void elementTranslatorThread::run()
     *_pFinishedTranslating = true;
   }
 
-  LOG_INFO("Done Translating");
+  LOG_DEBUG("Done Translating");
 }
 
 void ogrWriterThread::run()
@@ -160,7 +164,7 @@ void ogrWriterThread::run()
   }
   ogrWriter->close();
 
-  LOG_INFO("Done Writing Features");
+  LOG_DEBUG("Done Writing Features");
 }
 
 unsigned int DataConverter::logWarnCount = 0;
@@ -181,7 +185,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
-  LOG_INFO("Converting " << inputs.join(", ").right(100) << " to " << output.right(100) << "...");
+  LOG_INFO("Converting " << inputs.join(", ").right(50) << " to " << output.right(50) << "...");
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
@@ -267,9 +271,8 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void DataConverter::_fillElementCache(QString inputUrl,
-                                     ElementCachePtr cachePtr,
-                                     QQueue<ElementPtr> &workQ)
+void DataConverter::_fillElementCache(QString inputUrl, ElementCachePtr cachePtr,
+                                      QQueue<ElementPtr> &workQ)
 {
   // Setup reader
   boost::shared_ptr<OsmMapReader> reader =
@@ -300,28 +303,29 @@ void DataConverter::_fillElementCache(QString inputUrl,
     cachePtr->addElement(constElement);
   }
 
-  LOG_INFO("Done Reading");
-} // end run
+  LOG_DEBUG("Done Reading");
+}
 
-void DataConverter::_transToOgrMT(QString input,
-                                  QString output)
+void DataConverter::_transToOgrMT(QString input, QString output)
 {
-  LOG_INFO("_transToOgrMT");
+  LOG_DEBUG("_transToOgrMT");
 
   QQueue<ElementPtr> elementQ;
-  ElementCachePtr pElementCache(new ElementCacheLRU(
-                                ConfigOptions().getElementCacheSizeNode(),
-                                ConfigOptions().getElementCacheSizeWay(),
-                                ConfigOptions().getElementCacheSizeRelation()));
+  ElementCachePtr pElementCache(
+    new ElementCacheLRU(
+      ConfigOptions().getElementCacheSizeNode(),
+      ConfigOptions().getElementCacheSizeWay(),
+      ConfigOptions().getElementCacheSizeRelation()));
   QMutex initMutex;
   QMutex transFeaturesMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>, std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
+  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
   // Read all elements
   // We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
-  LOG_INFO("Element Cache Filled");
+  LOG_DEBUG("Element Cache Filled");
 
   // Note the OGR writer is the slowest part of this whole operation,
   // but it's relatively opaque to us as a 3rd party library. So the best we
@@ -337,7 +341,7 @@ void DataConverter::_transToOgrMT(QString input,
   transThread._pFinishedTranslating = &finishedTranslating;
   transThread._pElementCache = pElementCache;
   transThread.start();
-  LOG_INFO("Translation Thread Started");
+  LOG_DEBUG("Translation Thread Started");
 
   // Setup & start our writer thread
   hoot::ogrWriterThread writerThread;
@@ -348,10 +352,10 @@ void DataConverter::_transToOgrMT(QString input,
   writerThread._pTransFeaturesQ = &transFeaturesQ;
   writerThread._pFinishedTranslating = &finishedTranslating;
   writerThread.start();
-  LOG_INFO("OGR Writer Thread Started");
+  LOG_DEBUG("OGR Writer Thread Started");
 
   // Wait for writer to finish
-  LOG_INFO("Waiting for writer to finish...");
+  LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();
 }
 
@@ -359,12 +363,9 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
 {
   LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
 
-  //This entire method could be replaced by _convert, if refactoring of the way OgrWriter handles
-  //translations is done.  Currently, it depends that a translation script is set directly on it
-  //(vs using a translation visitor).  See #2416.
-
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
-      // This ops restriction needs to be removed and the ops applied during streaming.
+      // TODO: I *believe* this ops size restriction needs to be replaced with a check similar to
+      // what is in _convert...but not sure.
       _convertOps.size() == 0 &&
       //none of the convert bounding box supports are able to do streaming I/O at this point
       !ConfigUtils::boundsOptionEnabled())
@@ -373,23 +374,32 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
-    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
-    writer->setScriptPath(_translation);
-    writer->open(output);
-
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
-    LOG_INFO("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
+
+    QElapsedTimer timer;
+    timer.start();
+
     MapProjector::projectToWgs84(map);
+    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+    writer->setScriptPath(_translation);
+    writer->open(output);
     writer->write(map);
+
+    LOG_INFO(
+      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
   }
 }
 
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
   LOG_TRACE("_convertFromOgr (formerly known as ogr2osm)");
+
+  QElapsedTimer timer;
+  timer.start();
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -428,7 +438,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       layers = reader.getFilteredLayerNames(input);
       layers.sort();
     }
-    LOG_VARD(layers);
+    LOG_VART(layers);
 
     if (layers.size() == 0)
     {
@@ -498,6 +508,10 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     throw HootException("After translation the map is empty. Aborting.");
   }
 
+  LOG_INFO(
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+
   MapProjector::projectToPlanar(map);
   //the ordering for these ogr2osm ops may matter
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
@@ -508,8 +522,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
-  LOG_INFO("Applying conversion operations...");
   NamedOp(_convertOps).apply(map);
+
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
 
@@ -523,7 +537,6 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  //LOG_VART(OsmMapReaderFactory::hasElementInputStream(input));
 
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
@@ -564,8 +577,8 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     }
 
-    LOG_DEBUG("Applying conversion operations...");
     NamedOp(_convertOps).apply(map);
+
     MapProjector::projectToWgs84(map);
 
     if (output.toLower().endsWith(".shp") && _colsArgSpecified)
@@ -587,6 +600,9 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
 void DataConverter::_exportToShapeWithCols(const QString output, const QStringList cols,
                                            OsmMapPtr map)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   boost::shared_ptr<OsmMapWriter> writer =
     OsmMapWriterFactory::createWriter(output);
   boost::shared_ptr<ShapefileWriter> shapeFileWriter =
@@ -596,6 +612,10 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
   shapeFileWriter->setColumns(cols);
   shapeFileWriter->open(output);
   shapeFileWriter->write(map, output);
+
+  LOG_INFO(
+    "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 }
 
 }

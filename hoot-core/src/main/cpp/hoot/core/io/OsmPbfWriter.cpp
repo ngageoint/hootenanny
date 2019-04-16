@@ -70,6 +70,7 @@ const char* const OsmPbfWriter::OSM_HEADER = "OSMHeader";
 class OsmPbfWriterData
 {
 public:
+
   Blob blob;
   BlobHeader blobHeader;
   HeaderBlock headerBlock;

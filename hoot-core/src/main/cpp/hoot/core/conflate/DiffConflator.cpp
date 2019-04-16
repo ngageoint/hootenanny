@@ -27,7 +27,7 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
