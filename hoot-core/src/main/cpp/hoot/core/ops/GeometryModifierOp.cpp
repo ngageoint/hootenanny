@@ -34,7 +34,6 @@
 #include "hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h"
 
 namespace bpt = boost::property_tree;
-using namespace boost;
 
 namespace hoot
 {
@@ -103,7 +102,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
     actionDesc.command = QString::fromStdString(commandLevelValue.first);
 
     // check command availability
-    foreach (shared_ptr<GeometryModifierAction> pAction, _actions)
+    foreach (boost::shared_ptr<GeometryModifierAction> pAction, _actions)
     {
       if( pAction->getCommandName() == actionDesc.command )
       {
@@ -119,7 +118,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
     if( !commandLevelValue.second.empty())
     {
-      BOOST_FOREACH(bpt::ptree::value_type &dataLevelValue, commandLevelValue.second)
+      foreach(bpt::ptree::value_type dataLevelValue, commandLevelValue.second)
       {
         // read filter
         if( dataLevelValue.first == GeometryModifierAction::FILTER_TAG )
@@ -146,7 +145,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
 void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
 {
-  BOOST_FOREACH(bpt::ptree::value_type &data, ptree)
+  foreach(bpt::ptree::value_type data, ptree)
   {
     actionDesc.filter[QString::fromStdString(data.first)] = QString::fromStdString(data.second.data());
   }
@@ -156,7 +155,7 @@ void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc,
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 
-  BOOST_FOREACH(bpt::ptree::value_type &data, ptree)
+  foreach(bpt::ptree::value_type data, ptree)
   {
     QString arg = QString::fromStdString(data.first);
     if( availableParameters.contains(arg) )
