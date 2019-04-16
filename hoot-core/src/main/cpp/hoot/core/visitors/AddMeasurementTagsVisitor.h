@@ -40,8 +40,9 @@ namespace hoot
 class AddMeasurementTagsVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
 {
 public:
-  // AddMeasurementTagsVisitor();
-  // AddMeasurementTagsVisitor(bool area, bool length, bool width);
+  AddMeasurementTagsVisitor() {}
+  AddMeasurementTagsVisitor(bool area, bool length, bool width) :
+    _addArea(area), _addLength(length), _addWidth(width) {}
 
   // ElementVisitor
   static std::string className() { return "hoot::AddMeasurementTagsVisitor"; }
@@ -54,9 +55,9 @@ public:
   virtual QString getCompletedStatusMessage() const { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
 private:
+  bool _addArea = true;
   bool _addLength = true;
   bool _addWidth = true;
-  bool _addArea = true;
 };
 
 } // namespace hoot

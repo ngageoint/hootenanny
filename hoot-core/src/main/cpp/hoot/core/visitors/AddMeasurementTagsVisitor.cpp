@@ -33,6 +33,8 @@
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace boost;
 using namespace geos::geom;
@@ -41,11 +43,21 @@ using namespace geos::algorithm;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(ElementVisitor, AddMeasurementTagsVisitor)
+
 void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 {
   if( !_addArea && !_addWidth && !_addArea ) return;
   // only process area ways
   if( pElement->getElementType() != ElementType::Way ) return;
+
+  if( !_map->getProjection()->IsProjected() )
+  {
+    MapProjector::projectToPlanar(_map->shared_from_this());
+  }
+
+  _numProcessed++;
+  _numAffected++;
 
   Tags& tags = pElement->getTags();
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
@@ -70,15 +82,15 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
       polyWidth = std::min(len1,len2);
     }
 
-    if( _addLength ) tags["length"] = polyLength;
-    if( _addWidth ) tags["width"] = polyWidth;
+    if( _addLength ) tags["length"] = QString::number(polyLength);
+    if( _addWidth ) tags["width"] = QString::number(polyWidth);
   }
 
   if( _addArea && pWay->isClosedArea() )
   {
     // calculate poly area only if we need it
     double polyArea = pPoly->getArea();
-    tags["area"] = polyArea;
+    tags["area"] = QString::number(polyArea);
   }
 }
 
