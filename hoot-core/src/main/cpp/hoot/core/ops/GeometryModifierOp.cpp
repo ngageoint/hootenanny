@@ -96,7 +96,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
   QList<GeometryModifierActionDesc> actionDescs;
 
-  BOOST_FOREACH(bpt::ptree::value_type &commandLevelValue, propPtree)
+  foreach (bpt::ptree::value_type commandLevelValue, propPtree)
   {
     // read command
     GeometryModifierActionDesc actionDesc;
