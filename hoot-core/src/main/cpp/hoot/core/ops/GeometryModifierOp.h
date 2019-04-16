@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/geometrymodifiers/GeometryModifierVisitor.h>
 
 // Boost
@@ -56,7 +57,7 @@ namespace hoot
    * GeometryModifierVisitor to go through all map elements to apply each specified action.
    * Each action is performed on the entire map before it moves on to the next action.
    */
-  class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo
+  class GeometryModifierOp : public OsmMapOperation, public OperationStatusInfo, public Configurable
   {
   public:
 
@@ -74,9 +75,13 @@ namespace hoot
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
     virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
+    // Configurable
+    virtual void setConfiguration(const Settings& conf);
+
   private:
     // json rules file name
     QString _rulesFileName;
+
     // list of instances of all implemented geometry modifier actions
     QList<boost::shared_ptr<GeometryModifierAction>> _actions;
 
@@ -90,6 +95,8 @@ namespace hoot
 
     // json action arguments parser
     void _parseArguments(GeometryModifierActionDesc& actionDesc, boost::property_tree::ptree ptree);
+
+    const Settings* _pConf;
   };
 
 }

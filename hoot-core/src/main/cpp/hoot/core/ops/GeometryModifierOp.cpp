@@ -44,10 +44,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, GeometryModifierOp)
 const std::string GeometryModifierAction::FILTER_TAG = "filter";
 const std::string GeometryModifierAction::ARGUMENT_TAG = "arguments";
 
-GeometryModifierOp::GeometryModifierOp()
+GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
 {
-  _rulesFileName = ConfigOptions().getGeometryModifierRulesFile();
-
   // get and instantiate available actions
   std::vector<std::string> availableActionTypes = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
 
@@ -58,6 +56,11 @@ GeometryModifierOp::GeometryModifierOp()
     _actions.append(pAction);
     LOG_DEBUG( "class: " << *it << " command: " << pAction->getCommandName());
   }
+}
+
+void GeometryModifierOp::setConfiguration(const Settings& conf)
+{
+  _pConf = &conf;
 }
 
 void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
@@ -86,6 +89,8 @@ void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
 QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 {
   // read the json rules
+  ConfigOptions opts = ConfigOptions(*_pConf);
+  _rulesFileName = opts.getGeometryModifierRulesFile();
   bpt::ptree propPtree;
   bpt::read_json(_rulesFileName.toLatin1().constData(), propPtree );
 
