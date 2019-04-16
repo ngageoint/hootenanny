@@ -96,9 +96,6 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
         double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
         double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
         polyLength = std::max(len1,len2);
-
-        LOG_VAR(len1);
-        LOG_VAR(len2);
       }
     }
 
