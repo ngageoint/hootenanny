@@ -48,12 +48,18 @@ class OsmApiChangesetTest : public HootTestFixture
 
 public:
 
+  OsmApiChangesetTest()
+    : HootTestFixture("test-files/io/OsmChangesetElementTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runXmlChangesetTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ToyTestAChangeset1.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset1.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -64,9 +70,9 @@ public:
   void runNonAsciiXmlChangesetTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/DjiboutiNonAsciiTest.osc");
+    changeset.loadChangeset(_inputPath + "DjiboutiNonAsciiTest.osc");
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/DjiboutiNonAsciiTestExpected.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "DjiboutiNonAsciiTestExpected.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -80,7 +86,7 @@ public:
     changeset.loadChangeset("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc");
     changeset.loadChangeset("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc");
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetMergeExpected.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "ChangesetMergeExpected.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -91,7 +97,7 @@ public:
   void runXmlChangesetUpdateTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -110,7 +116,7 @@ public:
 
     changeset.updateChangeset(update);
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ToyTestAChangeset2.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "ToyTestAChangeset2.osc");
 
     HOOT_STR_EQUALS(expectedText, changeset.getChangesetString(info, 2));
   }
@@ -118,21 +124,21 @@ public:
   void runXmlChangesetSplitTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
     changeset.setMaxSize(10);
 
     QStringList expectedFiles;
-    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.osc");
-    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.osc");
-    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.osc");
-    expectedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.osc");
+    expectedFiles.append(_inputPath + "ToyTestASplit1.osc");
+    expectedFiles.append(_inputPath + "ToyTestASplit2.osc");
+    expectedFiles.append(_inputPath + "ToyTestASplit3.osc");
+    expectedFiles.append(_inputPath + "ToyTestASplit4.osc");
 
     QStringList updatedFiles;
-    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit1.response.xml");
-    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit2.response.xml");
-    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit3.response.xml");
-    updatedFiles.append("test-files/io/OsmChangesetElementTest/ToyTestASplit4.response.xml");
+    updatedFiles.append(_inputPath + "ToyTestASplit1.response.xml");
+    updatedFiles.append(_inputPath + "ToyTestASplit2.response.xml");
+    updatedFiles.append(_inputPath + "ToyTestASplit3.response.xml");
+    updatedFiles.append(_inputPath + "ToyTestASplit4.response.xml");
 
     long processed[] = { 10, 20, 30, 40 };
 
@@ -166,11 +172,11 @@ public:
   void runXmlChangesetSplitWayTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ToyTestAInput.osc");
+    changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
     //  Split the ways to a max of 8 nodes per way
     changeset.splitLongWays(8);
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetSplitWayExpected.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "ChangesetSplitWayExpected.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -181,11 +187,11 @@ public:
   void runXmlChangesetErrorFixTest()
   {
     XmlChangeset changeset;
-    changeset.loadChangeset("test-files/io/OsmChangesetElementTest/ChangesetErrorFixInput.osc");
+    changeset.loadChangeset(_inputPath + "ChangesetErrorFixInput.osc");
     //  Fix the bad input changeset
     changeset.fixMalformedInput();
 
-    QString expectedText = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixExpected.osc");
+    QString expectedText = FileUtils::readFully(_inputPath + "ChangesetErrorFixExpected.osc");
 
     ChangesetInfoPtr info(new ChangesetInfo());
     changeset.calculateChangeset(info);
@@ -194,7 +200,7 @@ public:
     HOOT_STR_EQUALS(expectedText, change);
 
     QString error = changeset.getFailedChangesetString();
-    QString expectedError = FileUtils::readFully("test-files/io/OsmChangesetElementTest/ChangesetErrorFixErrors.osc");
+    QString expectedError = FileUtils::readFully(_inputPath + "ChangesetErrorFixErrors.osc");
     HOOT_STR_EQUALS(expectedError, error);
   }
 

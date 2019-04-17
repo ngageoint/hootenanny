@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -55,9 +55,10 @@ class OsmGeoJsonWriterTest : public HootTestFixture
 public:
 
   OsmGeoJsonWriterTest()
+    : HootTestFixture("test-files/io/GeoJson/",
+                      "test-output/io/GeoJson/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/GeoJson");
   }
 
   void runAllDataTypesTest()
@@ -82,7 +83,7 @@ public:
 
   void runObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
   }
 
   void runObjectGeoJsonHootTest()
@@ -91,7 +92,7 @@ public:
     s.set(ConfigOptions::getJsonPrettyPrintKey(), true);
     s.set(ConfigOptions::getJsonFormatHootenannyKey(), true);
 
-    runTest("test-files/io/GeoJson/SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
   }
 
   void runTest(const QString& input, const QString& output, Settings* settings = NULL)
@@ -103,14 +104,14 @@ public:
     reader.read(input, map);
 
     OsmGeoJsonWriter writer;
-    writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+    writer.open(_outputPath + output);
 
     if (settings)
       writer.setConfiguration(*settings);
 
     writer.write(map);
-    HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
-                     QString("test-output/io/GeoJson/%1").arg(output));
+    HOOT_FILE_EQUALS( _inputPath + output,
+                     _outputPath + output);
   }
 
 };

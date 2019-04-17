@@ -40,6 +40,7 @@ using namespace boost;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/CoordinateFilter.h>
@@ -588,13 +589,14 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     n->setX(c.x);
     n->setY(c.y);
 
-    if (count % 1000 == 0 && Log::getInstance().isInfoEnabled())
+    if (count % 10000 == 0)
     {
-      PROGRESS_DEBUG("Reprojecting " << count << " / " << nodes.size());
+      PROGRESS_DEBUG(
+        "Reprojecting " << StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(nodes.size()));
     }
     count++;
   }
-  LOG_DEBUG("Reprojecting " << nodes.size() << " / " << nodes.size());
 
   map->setProjection(ref);
 

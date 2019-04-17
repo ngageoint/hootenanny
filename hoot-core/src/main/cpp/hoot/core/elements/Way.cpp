@@ -77,6 +77,14 @@ void Way::addNode(long id)
   _postGeometryChange();
 }
 
+void Way::insertNode(long index, long id)
+{
+  _preGeometryChange();
+  _makeWritable();
+  _wayData->insertNode(index, id);
+  _postGeometryChange();
+}
+
 void Way::addNodes(const vector<long>& ids)
 {
   addNodes(ids.begin(), ids.end());

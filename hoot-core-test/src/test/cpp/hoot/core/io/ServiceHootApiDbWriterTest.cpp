@@ -74,7 +74,6 @@ public:
   ServiceHootApiDbWriterTest()
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbWriterTest");
   }
 
   void setUpTest(const QString testName)

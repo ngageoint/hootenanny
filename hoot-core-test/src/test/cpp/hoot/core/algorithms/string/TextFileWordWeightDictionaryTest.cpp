@@ -44,9 +44,15 @@ class TextFileWordWeightDictionaryTest : public HootTestFixture
 
 public:
 
+  TextFileWordWeightDictionaryTest()
+    : HootTestFixture("test-files/algorithms/string/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
-    TextFileWordWeightDictionary uut("test-files/algorithms/string/WordWeight.tsv");
+    TextFileWordWeightDictionary uut(_inputPath + "WordWeight.tsv");
     HOOT_STR_EQUALS("[7]{(bar, 3), (baar, 1), (foo, 1), (fou, 1), (road, 50), (street, 100), (lane, 25)}", uut._weights);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0055, uut.getWeight("foo"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0166, uut.getWeight("bar"), 0.0001);

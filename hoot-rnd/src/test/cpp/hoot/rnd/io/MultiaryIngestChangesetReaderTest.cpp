@@ -42,6 +42,12 @@ class MultiaryIngestChangesetReaderTest : public HootTestFixture
 
 public:
 
+  MultiaryIngestChangesetReaderTest()
+    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
+                      UNUSED_PATH)
+  {
+  }
+
   void verifyInput(const QString inputFile)
   {
     MultiaryIngestChangesetReader changesetFileReader;
@@ -98,12 +104,12 @@ public:
 
   void elementAsJsonTest()
   {
-    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-1.spark.1");
+    verifyInput(_inputPath + "changeset-1.spark.1");
   }
 
   void elementAsXmlTest()
   {
-    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-2.spark.1");
+    verifyInput(_inputPath + "changeset-2.spark.1");
   }
 
   void wrongElementTypeTest()
@@ -112,7 +118,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      changesetFileReader.open("test-files/io/MultiaryIngestChangesetReaderTest/changeset-3.spark.1");
+      changesetFileReader.open(_inputPath + "changeset-3.spark.1");
       while (changesetFileReader.hasMoreChanges())
       {
         changesetFileReader.readNextChange();

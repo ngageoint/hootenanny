@@ -48,8 +48,8 @@ echo "Building Hoot..."
 make $SILENT_MAKE clean
 make $SILENT_MAKE -j$(nproc)
 # Perform 2x build after so it isn't parallel with legacy ui build
-#echo "Performing ui2x build..."
-#make $SILENT_MAKE ui2x-build
+echo "Performing ui2x build..."
+make $SILENT_MAKE ui2x-build
 echo "Generating Eclipse project files..."
 make $SILENT_MAKE eclipse
 

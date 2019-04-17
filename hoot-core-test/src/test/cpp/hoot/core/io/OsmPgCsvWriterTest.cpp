@@ -50,9 +50,10 @@ class OsmPgCsvWriterTest : public HootTestFixture
 public:
 
   OsmPgCsvWriterTest()
+    : HootTestFixture("test-files/io/PgCsvWriter/",
+                      "test-output/io/PgCsvWriter/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/PgCsvWriter");
   }
 
   void runBasic()
@@ -63,21 +64,21 @@ public:
     reader.read("test-files/ScoreMatchRef1.osm", map);
 
     OsmPgCsvWriter writer;
-    writer.open("test-output/io/PgCsvWriter/runBasic.pgcsv");
+    writer.open(_outputPath + "runBasic.pgcsv");
     writer.write(map);
     writer.close();
 
     //  Check the results
-    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-nodes.pgcsv"),
-                     QString("test-output/io/PgCsvWriter/runBasic-nodes.pgcsv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-ways.pgcsv"),
-                     QString("test-output/io/PgCsvWriter/runBasic-ways.pgcsv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-waynodes.pgcsv"),
-                     QString("test-output/io/PgCsvWriter/runBasic-waynodes.pgcsv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-relations.pgcsv"),
-                     QString("test-output/io/PgCsvWriter/runBasic-relations.pgcsv"));
-    HOOT_FILE_EQUALS(QString("test-files/io/PgCsvWriter/runBasic-relationmembers.pgcsv"),
-                     QString("test-output/io/PgCsvWriter/runBasic-relationmembers.pgcsv"));
+    HOOT_FILE_EQUALS( _inputPath + "runBasic-nodes.pgcsv",
+                     _outputPath + "runBasic-nodes.pgcsv");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic-ways.pgcsv",
+                     _outputPath + "runBasic-ways.pgcsv");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic-waynodes.pgcsv",
+                     _outputPath + "runBasic-waynodes.pgcsv");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic-relations.pgcsv",
+                     _outputPath + "runBasic-relations.pgcsv");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic-relationmembers.pgcsv",
+                     _outputPath + "runBasic-relationmembers.pgcsv");
   }
 
   void runString()

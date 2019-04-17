@@ -91,16 +91,16 @@ public:
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
    * determine the geometry type.
    */
-  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Element>& e,
-                                                            bool throwError=true,
-                                                            const bool statsFlag=false) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(
+    const boost::shared_ptr<const Element>& e, bool throwError = true,
+    const bool statsFlag = false) const;
   boost::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
   boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
   boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
-                                                            const bool statsFlag=false) const;
+                                                            const bool statsFlag = false) const;
   boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
                                                             bool throwError,
-                                                            const bool statsFlag=false) const;
+                                                            const bool statsFlag = false) const;
   boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
   boost::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
   boost::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
@@ -112,11 +112,12 @@ public:
    *  returned on error.
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
-    bool throwError=true, const bool statsFlag=false);
+    bool throwError = true, const bool statsFlag = false);
 
   static const int UNKNOWN_GEOMETRY = -1;
 
 protected:
+
   ConstElementProviderPtr                 _constProvider;
   boost::shared_ptr<OGRSpatialReference>  _spatialReference;
 };

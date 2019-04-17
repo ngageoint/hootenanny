@@ -32,11 +32,11 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -56,6 +56,8 @@ class MatchFeatureExtractorTest : public HootTestFixture
 public:
 
   MatchFeatureExtractorTest()
+    : HootTestFixture("test-files/scoring/MatchFeatureExtractorTest/",
+                      "test-output/scoring/MatchFeatureExtractorTest/")
   {
     setResetType(ResetAll);
   }
@@ -82,22 +84,19 @@ public:
     // This test is primarily useful as an input to Weka for training models.
     MatchFeatureExtractor uut;
     uut.addMatchCreator(boost::shared_ptr<MatchCreator>(new BuildingMatchCreator()));
-    uut.processMap(load("test-files/conflate/extractor/BuildingsA.osm",
-      "test-files/conflate/extractor/BuildingsB.osm"));
+    uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
 
     LOG_TRACE(uut.getResults().toStdString());
 
-    TestUtils::mkpath("test-output/conflate/extractor/MatchFeatureExtractorTest/");
-    QFile fp("test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");
+    QFile fp(_outputPath + "Buildings.arff");
     CPPUNIT_ASSERT(fp.open(QIODevice::WriteOnly | QIODevice::Text));
     QByteArray arr = uut.getResults().toUtf8();
     fp.write(arr);
     fp.close();
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS(
-      "test-files/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff",
-      "test-output/conflate/extractor/MatchFeatureExtractorTest/Buildings.arff");
+    HOOT_FILE_EQUALS( _inputPath + "Buildings.arff",
+                     _outputPath + "Buildings.arff");
   }
 
 };

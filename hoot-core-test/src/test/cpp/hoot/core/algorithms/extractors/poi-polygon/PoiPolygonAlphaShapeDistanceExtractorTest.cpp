@@ -48,6 +48,12 @@ class PoiPolygonAlphaShapeDistanceExtractorTest : public HootTestFixture
 
 public:
 
+  PoiPolygonAlphaShapeDistanceExtractorTest()
+    : HootTestFixture("test-files/algorithms/extractors/poi-polygon/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     PoiPolygonAlphaShapeDistanceExtractor uut;
@@ -55,12 +61,12 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
+      _inputPath + "PoiPolygonAlphaShapeDistanceExtractorTest1.osm",
       false,
       Status::Unknown1);
     OsmMapReaderFactory::read(
       map,
-      "test-files/conflate/poi-polygon/extractors/PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
+      _inputPath + "PoiPolygonAlphaShapeDistanceExtractorTest2.osm",
       false,
       Status::Unknown2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(

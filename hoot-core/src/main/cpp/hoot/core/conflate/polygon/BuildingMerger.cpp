@@ -375,7 +375,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     LOG_VART(parts.size());
     LOG_VART(toRemove.size());
 
-    boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
+    boost::shared_ptr<Element> result = BuildingPartMergeOp().combineBuildingParts(map, parts);
     LOG_VART(result);
 
     // likely create a crit that only matches buildings and building parts and pass that

@@ -3,7 +3,7 @@ set -e
 
 export TA_FILE=caligdb
 export TA_IN=test-files/translation_assistant
-export TA_OUT=test-output/cmd/translation_assistant_ogr2osm
+export TA_OUT=test-output/cmd/slow/translation_assistant_ogr2osm
 mkdir -p $TA_OUT
 
 rm -rf $TA_OUT/caligdb.gdb

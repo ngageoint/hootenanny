@@ -54,6 +54,12 @@ class ScriptMatchCreatorTest : public HootTestFixture
 
 public:
 
+  ScriptMatchCreatorTest()
+    : HootTestFixture("test-files/algorithms/js/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runIsCandidateTest()
   {
     ScriptMatchCreator uut;
@@ -64,7 +70,7 @@ public:
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/algorithms/js/ScriptMatchTest.osm", true);
+      map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
     //to be a candidate: needs to be determined a candidate by the JS rules file...which for this
