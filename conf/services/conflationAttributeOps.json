@@ -64,7 +64,7 @@
       {
         "id": "corner_splitter_rounded_split",
         "elem_type": "bool",
-        "description": "",
+        "description": "Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate",
         "name": "Corner Splitter Rounded Split",
         "defaultvalue": "true",
         "hoot_key": "corner.splitter.rounded.split"
@@ -80,7 +80,7 @@
       {
         "id": "attribute_override_highway_merge_tags_only",
         "elem_type": "bool",
-        "description": "Tag only merger creator",
+        "description": "If true, road conflation merges tag changes into the reference only and makes no geometry changes.",
         "name": "Tag only merger creator",
         "defaultvalue": "true",
         "hoot_key": "highway.merge.tags.only"
@@ -88,7 +88,7 @@
       {
         "id": "reader_conflate_use_data_source_ids_1",
         "elem_type": "bool",
-        "description": "",
+        "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
         "name": "Use Ref IDs During Conflation",
         "defaultvalue": "false",
         "hoot_key": "reader.conflate.use.data.source.ids.1"
@@ -96,7 +96,7 @@
       {
         "id": "remove_elements_visitor_chain.element_criteria",
         "elem_type": "bool",
-        "description": "",
+        "description": "If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria, elements will be removed only if they satisfy all of the criteria.  If set to false, then only one of the specified criteria must be met in order to remove an element.",
         "name": "Chain Together Criteria When Removing Elements",
         "defaultvalue": "false",
         "hoot_key": "remove.elements.visitor.chain.element.criteria"
@@ -144,6 +144,14 @@
         "minvalue":"0.0",
         "maxvalue":"1.0",
         "hoot_key":"review.score.criterion.min.threshold"
+      },
+      {
+        "id": "tag_key_criterion_keys",
+        "elem_type": "string",
+        "description": "Tag keys that TagKeyCriterion uses to filter elements.",
+        "name": "Tag Key Criterion Keys",
+        "defaultvalue": "hoot:multilinestring",
+        "hoot_key": "tag.key.criterion.keys"
       },
       {
         "id": "tag_merger_default",
