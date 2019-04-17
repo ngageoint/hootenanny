@@ -1,8 +1,14 @@
+Test configuration options inherit from each other from the top level parent directory on down.
+
 If you want to base your test configuration off one of the default configuration files, add the option "base.config" with the name of the
-base configuration file as the value. If you do not specify a base configuration file, the base settings will be based off of the option
-values in ConfigOptions.asciidoc.
+base configuration file as the value. If you do not specify a base configuration file, the test's settings will be based off of the default option values in ConfigOptions.asciidoc which are set to use Reference Conflation / Unifying Algorithm options.
 
 To keep the test configuration files manageable, only add configuration options to your test config that differ in value from either those 
-in your base configuration file (if you specified one) or ConfigOptions.asciidoc.
+in your base configuration file (if you specified a base configuration), ConfigOptions.asciidoc (if you didn't specify a base configuration),
+or any configuration file being inherited from (those in a parent directory). If your test only needs configuration options from its parent 
+config or ConfigOptions.asciidoc, you don't need to create a configuration file for it.
 
-For larger config files, try to keep the configuration options in alphabetical order.
+When possible, only use match/merger creators specific to the type of conflation being performed by the test to increase test runtime 
+performance (although, usually not an issue for normal small test files) and reduce dependencies on other matchers/mergers.
+
+For larger config files, keep the configuration options in alphabetical order.
