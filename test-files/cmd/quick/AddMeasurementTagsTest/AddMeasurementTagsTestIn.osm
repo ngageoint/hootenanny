@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='38.8561059' minlon='-104.9111797' maxlat='38.8574705' maxlon='-104.9089132' origin='hootenanny' />
+  <node id='-197316' visible='true' version='1' lat='38.85668636408' lon='-104.91041396657' />
+  <node id='-197318' visible='true' version='1' lat='38.85667776037' lon='-104.91029243233' />
+  <node id='-197320' visible='true' version='1' lat='38.85676666537' lon='-104.91028874947' />
+  <node id='-197322' visible='true' version='1' lat='38.85677240117' lon='-104.91041212514' />
+  <node id='-197324' visible='true' version='1' lat='38.85659459107' lon='-104.91051892795' />
+  <node id='-197326' visible='true' version='1' lat='38.8565716478' lon='-104.91017089809' />
+  <node id='-197328' visible='true' version='1' lat='38.85684123077' lon='-104.91016169095' />
+  <node id='-197330' visible='true' version='1' lat='38.85685270236' lon='-104.91050603796' />
+  <node id='55726529' timestamp='2010-01-01T03:20:54Z' uid='147510' user='woodpeck_fixbot' visible='true' version='4' changeset='3505150' lat='38.8570395926' lon='-104.9100211' />
+  <node id='55726530' timestamp='2010-01-01T03:20:54Z' uid='147510' user='woodpeck_fixbot' visible='true' version='4' changeset='3505150' lat='38.8569325926' lon='-104.9091885' />
+  <node id='55726532' timestamp='2010-01-01T03:20:54Z' uid='147510' user='woodpeck_fixbot' visible='true' version='4' changeset='3505150' lat='38.8568323926' lon='-104.909077' />
+  <node id='55726534' timestamp='2010-01-01T03:20:54Z' uid='147510' user='woodpeck_fixbot' visible='true' version='4' changeset='3505150' lat='38.8566585926' lon='-104.9089225' />
+  <node id='55806816' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='4' changeset='3505150' lat='38.8570996926' lon='-104.9111111' />
+  <node id='55806819' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8569526926' lon='-104.9099009' />
+  <node id='55806820' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8567721926' lon='-104.9097722' />
+  <node id='55806822' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8566050926' lon='-104.9097121' />
+  <node id='55806824' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8564713926' lon='-104.9097207' />
+  <node id='55806826' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8563778926' lon='-104.9097979' />
+  <node id='55806828' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8563043926' lon='-104.9099095' />
+  <node id='55806831' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8562842926' lon='-104.910064' />
+  <node id='55806833' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='2' changeset='3505150' lat='38.8563029926' lon='-104.910281' />
+  <node id='55806834' timestamp='2010-01-01T03:39:27Z' uid='147510' user='woodpeck_fixbot' visible='true' version='3' changeset='3505150' lat='38.8561572926' lon='-104.9111283' />
+  <node id='431719389' timestamp='2009-07-01T19:29:12Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8570462926' lon='-104.9097894' />
+  <node id='431719390' timestamp='2009-07-01T19:29:12Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8570328926' lon='-104.909549' />
+  <node id='431719392' timestamp='2009-07-01T19:29:12Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8569994926' lon='-104.9093602' />
+  <node id='431731325' timestamp='2009-07-01T19:40:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8563978926' lon='-104.9105017' />
+  <node id='431731328' timestamp='2009-07-01T19:40:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8564045926' lon='-104.9106391' />
+  <node id='431731332' timestamp='2009-07-01T19:40:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8563644926' lon='-104.9107249' />
+  <node id='431731335' timestamp='2009-07-01T19:40:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8562909926' lon='-104.9108537' />
+  <node id='431731338' timestamp='2009-07-01T19:40:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='1703227' lat='38.8562174926' lon='-104.9109824' />
+  <node id='734793015' timestamp='2010-05-15T00:00:23Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571398926' lon='-104.9097138' />
+  <node id='734793016' timestamp='2010-05-15T00:00:23Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571231926' lon='-104.9090003' />
+  <node id='734793017' timestamp='2010-05-15T00:00:23Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572067926' lon='-104.9090003' />
+  <node id='734793018' timestamp='2010-05-15T00:00:23Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572109926' lon='-104.9090915' />
+  <node id='734793019' timestamp='2010-05-15T00:00:23Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571795926' lon='-104.9090915' />
+  <node id='734793020' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571795926' lon='-104.9091505' />
+  <node id='734793021' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572150926' lon='-104.9091505' />
+  <node id='734793022' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572192926' lon='-104.9092471' />
+  <node id='734793023' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571900926' lon='-104.9092471' />
+  <node id='734793024' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571900926' lon='-104.9093034' />
+  <node id='734793025' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572171926' lon='-104.9093034' />
+  <node id='734793026' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572192926' lon='-104.909408' />
+  <node id='734793027' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571941926' lon='-104.909408' />
+  <node id='734793028' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571941926' lon='-104.9094617' />
+  <node id='734793029' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572192926' lon='-104.9094617' />
+  <node id='734793030' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572192926' lon='-104.9095609' />
+  <node id='734793031' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571962926' lon='-104.9095609' />
+  <node id='734793032' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571941926' lon='-104.9096173' />
+  <node id='734793033' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572255926' lon='-104.9096173' />
+  <node id='734793034' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572276926' lon='-104.9098023' />
+  <node id='734793035' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572568926' lon='-104.9098023' />
+  <node id='734793036' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572589926' lon='-104.9099847' />
+  <node id='734793037' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572025926' lon='-104.9099901' />
+  <node id='734793038' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572025926' lon='-104.9100384' />
+  <node id='734793039' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571900926' lon='-104.9100384' />
+  <node id='734793040' timestamp='2010-05-15T00:00:24Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571962926' lon='-104.91032' />
+  <node id='734793041' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572150926' lon='-104.91032' />
+  <node id='734793042' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572150926' lon='-104.9103602' />
+  <node id='734793043' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571941926' lon='-104.9103629' />
+  <node id='734793044' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571962926' lon='-104.9105131' />
+  <node id='734793045' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572129926' lon='-104.9105131' />
+  <node id='734793046' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572150926' lon='-104.9105641' />
+  <node id='734793047' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572046926' lon='-104.9105641' />
+  <node id='734793048' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572129926' lon='-104.9108511' />
+  <node id='734793049' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572234926' lon='-104.9108511' />
+  <node id='734793050' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8572234926' lon='-104.9109154' />
+  <node id='734793051' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8573383926' lon='-104.9109154' />
+  <node id='734793052' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8573383926' lon='-104.91102' />
+  <node id='734793053' timestamp='2010-05-15T00:00:25Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571482926' lon='-104.9110281' />
+  <node id='734793054' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571273926' lon='-104.9107116' />
+  <node id='734793055' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571106926' lon='-104.9105212' />
+  <node id='734793056' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571064926' lon='-104.9103575' />
+  <node id='734793057' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571190926' lon='-104.9103575' />
+  <node id='734793058' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571106926' lon='-104.9099928' />
+  <node id='734793059' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571252926' lon='-104.9099928' />
+  <node id='734793060' timestamp='2010-05-15T00:00:26Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701484' lat='38.8571210926' lon='-104.9097111' />
+  <node id='734818900' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8569288926' lon='-104.9093865' />
+  <node id='734818901' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568703926' lon='-104.909357' />
+  <node id='734818902' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568787926' lon='-104.9093382' />
+  <node id='734818903' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568202926' lon='-104.9093034' />
+  <node id='734818904' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8567784926' lon='-104.9094133' />
+  <node id='734818905' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568933926' lon='-104.9094804' />
+  <node id='734818906' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8566071926' lon='-104.909467' />
+  <node id='734818907' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8566176926' lon='-104.9094241' />
+  <node id='734818908' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8565507926' lon='-104.9093999' />
+  <node id='734818909' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8565403926' lon='-104.9094428' />
+  <node id='734818912' timestamp='2010-05-15T01:59:52Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8569476926' lon='-104.909703' />
+  <node id='734818913' timestamp='2010-05-15T01:59:52Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568327926' lon='-104.9096413' />
+  <node id='734818914' timestamp='2010-05-15T01:59:52Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8567993926' lon='-104.9097406' />
+  <node id='734818915' timestamp='2010-05-15T01:59:52Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8569142926' lon='-104.9098103' />
+  <node id='734818916' timestamp='2010-05-15T01:59:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8569204926' lon='-104.9096467' />
+  <node id='734818917' timestamp='2010-05-15T01:59:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8569434926' lon='-104.9095635' />
+  <node id='734818918' timestamp='2010-05-15T01:59:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568619926' lon='-104.9095233' />
+  <node id='734818919' timestamp='2010-05-15T01:59:53Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8568390926' lon='-104.9096011' />
+  <node id='734818930' timestamp='2010-05-15T01:59:54Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8561539926' lon='-104.9095931' />
+  <node id='734818931' timestamp='2010-05-15T01:59:54Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8561998926' lon='-104.9095099' />
+  <node id='734818932' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8561518926' lon='-104.9094616' />
+  <node id='734818933' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8561058926' lon='-104.9095448' />
+  <node id='734818934' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8564943926' lon='-104.9096708' />
+  <node id='734818935' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8564964926' lon='-104.9095609' />
+  <node id='734818936' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8564129926' lon='-104.9095582' />
+  <node id='734818937' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916' lat='38.8564129926' lon='-104.9096708' />
+  <node id='934200721' timestamp='2014-03-31T22:59:08Z' uid='145231' user='woodpeck_repair' visible='true' version='5' changeset='21429982' lat='38.8574103926' lon='-104.9107627'>
+    <tag k='leisure' v='picnic_table' />
+  </node>
+  <node id='934200739' timestamp='2010-10-02T02:51:08Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573497926' lon='-104.9108057' />
+  <node id='934200741' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573372926' lon='-104.9105374' />
+  <node id='934200743' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574311926' lon='-104.9105348' />
+  <node id='934200744' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574395926' lon='-104.9106957' />
+  <node id='934200745' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574228926' lon='-104.9106984' />
+  <node id='934200746' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574249926' lon='-104.9108003' />
+  <node id='934200750' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574019926' lon='-104.9106742' />
+  <node id='934200753' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574082926' lon='-104.9106394' />
+  <node id='934200754' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8574071926' lon='-104.9105924' />
+  <node id='934200755' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573956926' lon='-104.9105669' />
+  <node id='934200756' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573727926' lon='-104.9105669' />
+  <node id='934200757' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573654926' lon='-104.9105924' />
+  <node id='934200758' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573664926' lon='-104.9106474' />
+  <node id='934200759' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782' lat='38.8573748926' lon='-104.9106742' />
+  <node id='988337661' timestamp='2010-11-13T23:42:40Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='6363128' lat='38.8574557926' lon='-104.9111582' />
+  <node id='988337663' timestamp='2010-11-13T23:42:40Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='6363128' lat='38.8570589926' lon='-104.9111797' />
+  <node id='988337732' timestamp='2010-11-13T23:45:36Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6363140' lat='38.8574704926' lon='-104.9110321'>
+    <tag k='power' v='pole' />
+  </node>
+  <node id='988337734' timestamp='2010-11-13T23:45:36Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6363140' lat='38.8574516926' lon='-104.9105467'>
+    <tag k='power' v='pole' />
+  </node>
+  <node id='988337735' timestamp='2010-11-13T23:45:36Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6363140' lat='38.8574077926' lon='-104.9099512'>
+    <tag k='power' v='pole' />
+  </node>
+  <node id='988337737' timestamp='2010-11-13T23:45:38Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6363140' lat='38.8573242926' lon='-104.9093933'>
+    <tag k='power' v='pole' />
+  </node>
+  <node id='988337743' timestamp='2010-11-13T23:45:42Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6363140' lat='38.8572991926' lon='-104.9089132'>
+    <tag k='power' v='pole' />
+  </node>
+  <way id='-197447' timestamp='2017-06-04T03:40:43Z' visible='true' version='5'>
+    <nd ref='55726529' />
+    <nd ref='55806819' />
+    <nd ref='55806820' />
+    <nd ref='55806822' />
+    <nd ref='55806824' />
+    <nd ref='55806826' />
+    <nd ref='55806828' />
+    <nd ref='55806831' />
+    <nd ref='55806833' />
+    <nd ref='431731325' />
+    <nd ref='431731328' />
+    <nd ref='431731332' />
+    <nd ref='431731335' />
+    <nd ref='431731338' />
+    <nd ref='55806834' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Fountain Place' />
+    <tag k='source:datetime' v='2017-06-04T03:40:43Z' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='El Paso, CO' />
+    <tag k='tiger:name_base' v='Fountain' />
+    <tag k='tiger:name_type' v='Pl' />
+  </way>
+  <way id='-197448' visible='true' version='1'>
+    <nd ref='-197322' />
+    <nd ref='-197320' />
+    <nd ref='-197318' />
+    <nd ref='-197316' />
+    <nd ref='-197322' />
+  </way>
+  <way id='-197449' action='modify' visible='true' version='1'>
+    <nd ref='-197330' />
+    <nd ref='-197328' />
+    <nd ref='-197326' />
+    <nd ref='-197324' />
+    <nd ref='-197330' />
+  </way>
+  <way id='7674211' timestamp='2009-07-01T19:29:19Z' uid='4073' user='Jason R Surratt' visible='true' version='3' changeset='1703227'>
+    <nd ref='55726529' />
+    <nd ref='431719389' />
+    <nd ref='431719390' />
+    <nd ref='431719392' />
+    <nd ref='55726530' />
+    <nd ref='55726532' />
+    <nd ref='55726534' />
+    <tag k='highway' v='residential' />
+    <tag k='source:datetime' v='2009-07-01T19:29:19Z' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='El Paso, CO' />
+    <tag k='tiger:separated' v='no' />
+    <tag k='tiger:source' v='tiger_import_dch_v0.6_20070809' />
+    <tag k='tiger:tlid' v='105505984' />
+    <tag k='tiger:upload_uuid' v='bulk_upload.pl-02aee37f-64af-459c-83f5-0bf61b8a4ebe' />
+  </way>
+  <way id='7684858' timestamp='2017-06-04T03:40:43Z' visible='true' version='5'>
+    <nd ref='55806816' />
+    <nd ref='55726529' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Fountain Place' />
+    <tag k='source:datetime' v='2017-06-04T03:40:43Z' />
+    <tag k='tiger:cfcc' v='A41' />
+    <tag k='tiger:county' v='El Paso, CO' />
+    <tag k='tiger:name_base' v='Fountain' />
+    <tag k='tiger:name_type' v='Pl' />
+  </way>
+  <way id='59243163' timestamp='2010-10-02T02:51:14Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='5932782'>
+    <nd ref='734793015' />
+    <nd ref='734793016' />
+    <nd ref='734793017' />
+    <nd ref='734793018' />
+    <nd ref='734793019' />
+    <nd ref='734793020' />
+    <nd ref='734793021' />
+    <nd ref='734793022' />
+    <nd ref='734793023' />
+    <nd ref='734793024' />
+    <nd ref='734793025' />
+    <nd ref='734793026' />
+    <nd ref='734793027' />
+    <nd ref='734793028' />
+    <nd ref='734793029' />
+    <nd ref='734793030' />
+    <nd ref='734793031' />
+    <nd ref='734793032' />
+    <nd ref='734793033' />
+    <nd ref='734793034' />
+    <nd ref='734793035' />
+    <nd ref='734793036' />
+    <nd ref='734793037' />
+    <nd ref='734793038' />
+    <nd ref='734793039' />
+    <nd ref='734793040' />
+    <nd ref='734793041' />
+    <nd ref='734793042' />
+    <nd ref='734793043' />
+    <nd ref='734793044' />
+    <nd ref='734793045' />
+    <nd ref='734793046' />
+    <nd ref='734793047' />
+    <nd ref='734793048' />
+    <nd ref='734793049' />
+    <nd ref='734793050' />
+    <nd ref='734793051' />
+    <nd ref='734793052' />
+    <nd ref='734793053' />
+    <nd ref='734793054' />
+    <nd ref='734793055' />
+    <nd ref='734793056' />
+    <nd ref='734793057' />
+    <nd ref='734793058' />
+    <nd ref='734793059' />
+    <nd ref='734793060' />
+    <nd ref='734793015' />
+    <tag k='addr:housenumber' v='481' />
+    <tag k='addr:street' v='Manitou Avenue' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='Villa Motel' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2010-10-02T02:51:14Z' />
+    <tag k='tourism' v='motel' />
+  </way>
+  <way id='59244363' timestamp='2018-04-17T02:42:24Z' uid='2237750' user='chachafish' visible='true' version='3' changeset='58155212'>
+    <nd ref='734818900' />
+    <nd ref='734818901' />
+    <nd ref='734818902' />
+    <nd ref='734818903' />
+    <nd ref='734818904' />
+    <nd ref='734818905' />
+    <nd ref='734818900' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2018-04-17T02:42:24Z' />
+  </way>
+  <way id='59244364' timestamp='2010-05-15T01:59:51Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916'>
+    <nd ref='734818906' />
+    <nd ref='734818907' />
+    <nd ref='734818908' />
+    <nd ref='734818909' />
+    <nd ref='734818906' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2010-05-15T01:59:51Z' />
+  </way>
+  <way id='59244365' timestamp='2018-04-17T02:42:24Z' uid='2237750' user='chachafish' visible='true' version='3' changeset='58155212'>
+    <nd ref='734818912' />
+    <nd ref='734818913' />
+    <nd ref='734818914' />
+    <nd ref='734818915' />
+    <nd ref='734818912' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2018-04-17T02:42:24Z' />
+  </way>
+  <way id='59244366' timestamp='2018-04-17T02:42:24Z' uid='2237750' user='chachafish' visible='true' version='3' changeset='58155212'>
+    <nd ref='734818916' />
+    <nd ref='734818917' />
+    <nd ref='734818918' />
+    <nd ref='734818919' />
+    <nd ref='734818916' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2018-04-17T02:42:24Z' />
+  </way>
+  <way id='59244369' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916'>
+    <nd ref='734818930' />
+    <nd ref='734818931' />
+    <nd ref='734818932' />
+    <nd ref='734818933' />
+    <nd ref='734818930' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2010-05-15T01:59:55Z' />
+  </way>
+  <way id='59244370' timestamp='2010-05-15T01:59:55Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='4701916'>
+    <nd ref='734818934' />
+    <nd ref='734818935' />
+    <nd ref='734818936' />
+    <nd ref='734818937' />
+    <nd ref='734818934' />
+    <tag k='building' v='yes' />
+    <tag k='source' v='Yahoo' />
+    <tag k='source:datetime' v='2010-05-15T01:59:55Z' />
+  </way>
+  <way id='80097957' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782'>
+    <nd ref='934200739' />
+    <nd ref='934200741' />
+    <nd ref='934200743' />
+    <nd ref='934200744' />
+    <nd ref='934200745' />
+    <nd ref='934200746' />
+    <nd ref='934200739' />
+    <tag k='barrier' v='fence' />
+    <tag k='source:datetime' v='2010-10-02T02:51:09Z' />
+  </way>
+  <way id='80097959' timestamp='2010-10-02T02:51:09Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='5932782'>
+    <nd ref='934200750' />
+    <nd ref='934200753' />
+    <nd ref='934200754' />
+    <nd ref='934200755' />
+    <nd ref='934200756' />
+    <nd ref='934200757' />
+    <nd ref='934200758' />
+    <nd ref='934200759' />
+    <nd ref='934200750' />
+    <tag k='leisure' v='swimming_pool' />
+    <tag k='source:datetime' v='2010-10-02T02:51:09Z' />
+  </way>
+  <way id='85226850' timestamp='2010-12-11T16:25:10Z' uid='4073' user='Jason R Surratt' visible='true' version='2' changeset='6626189'>
+    <nd ref='988337661' />
+    <nd ref='988337663' />
+    <tag k='addr:housenumber' v='513' />
+    <tag k='addr:street' v='Manitou Avenue' />
+    <tag k='building' v='yes' />
+    <tag k='name' v='Studio 513' />
+    <tag k='source:datetime' v='2010-12-11T16:25:10Z' />
+  </way>
+  <relation id='-197450' action='modify' visible='true' version='1'>
+    <member type='way' ref='-197449' role='outer' />
+    <member type='way' ref='-197448' role='inner' />
+    <tag k='building' v='yes' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='1316319' action='delete' timestamp='2010-12-11T16:25:08Z' uid='4073' user='Jason R Surratt' visible='true' version='1' changeset='6626189'>
+    <tag k='name' v='Business of Arts Center' />
+    <tag k='source:datetime' v='2010-12-11T16:25:08Z' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+  <relation id='1544944' action='delete' timestamp='2019-04-02T19:44:10Z' uid='8925500' user='jwbrett' visible='true' version='420' changeset='68810459'>
+    <tag k='name' v='American Discovery Trail' />
+    <tag k='network' v='nwn' />
+    <tag k='operator' v='American Discovery Trail Society' />
+    <tag k='ref' v='ADT' />
+    <tag k='route' v='hiking' />
+    <tag k='source:datetime' v='2019-04-02T19:44:10Z' />
+    <tag k='type' v='route' />
+    <tag k='website' v='http://www.discoverytrail.org/' />
+    <tag k='wikidata' v='Q463893' />
+    <tag k='wikipedia' v='en:American Discovery Trail' />
+  </relation>
+</osm>

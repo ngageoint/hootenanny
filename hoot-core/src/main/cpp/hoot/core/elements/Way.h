@@ -64,6 +64,7 @@ public:
   virtual ~Way();
 
   void addNode(long id);
+  void insertNode(long index, long id);
 
   void addNodes(const std::vector<long>& ids);
 
