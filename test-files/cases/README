@@ -1,0 +1,8 @@
+If you want to base your test configuration off one of the default configuration files, add the option "base.config" with the name of the
+base configuration file as the value. If you do not specify a base configuration file, the base settings will be based off of the option
+values in ConfigOptions.asciidoc.
+
+To keep the test configuration files manageable, only add configuration options to your test config that differ in value from either those 
+in your base configuration file (if you specified one) or ConfigOptions.asciidoc.
+
+For larger config files, try to keep the configuration options in alphabetical order.
