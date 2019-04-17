@@ -44,10 +44,12 @@ namespace hoot
 
 ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
   : AbstractTestSuite(dir),
-    _hideDisableTests(hideDisableTests)
+    _hideDisableTests(hideDisableTests),
+    _numTests(0)
 {
   QStringList confs;
   loadDir(dir, confs);
+  LOG_VART(_numTests);
 }
 
 void ConflateCaseTestSuite::_loadBaseConfig(const QString testConfigFile, QStringList& confs)
@@ -139,6 +141,7 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
   else
   {
     addTest(new ConflateCaseTest(d, confs));
+    _numTests++;
   }
 }
 
