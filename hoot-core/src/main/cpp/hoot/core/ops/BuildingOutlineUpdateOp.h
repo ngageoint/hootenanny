@@ -86,6 +86,7 @@ private:
   std::set<ElementId> _buildingRelationIds;
 
   void _createOutline(const RelationPtr& building);
+  void _unionOutline(const RelationPtr& building, const ElementPtr& element, boost::shared_ptr<geos::geom::Geometry>& outline);
 
   void _extractUsedNodes(const RelationPtr& r, std::set<long>& nodes);
 
