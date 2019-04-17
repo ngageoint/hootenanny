@@ -47,6 +47,8 @@ class RemoveElementsVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runRecursiveTest);
   CPPUNIT_TEST(runNegatedFilterTest);
   CPPUNIT_TEST(runReviewRelationTest);
+  // TODO:
+  //CPPUNIT_TEST(runMultipleCriterionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -63,9 +65,9 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -81,9 +83,9 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion(map));
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(true);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -99,8 +101,9 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
     boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion, true);
+    RemoveElementsVisitor removeElementsVisitor(true);
     removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
@@ -116,9 +119,9 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorTest-reviewRelationTest.osm");
 
     boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);

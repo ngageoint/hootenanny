@@ -62,6 +62,9 @@ protected:
   // tags get removed from the constituent way members.
   bool _removeTagsFromWayMembers;
 
+  //
+  bool _markAddedMultilineStringRelations;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 

@@ -50,7 +50,7 @@ class ExportOSMCommand extends ExportCommand {
 
         if (!params.getTagOverrides().isEmpty() && !params.getIncludeHootTags()) {
             options.add("convert.ops=hoot::TranslationOp;hoot::RemoveElementsVisitor");
-            options.add("remove.elements.visitor.element.criterion=hoot::ReviewRelationCriterion");
+            options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
             options.add("remove.elements.visitor.recursive=false");
         } else if (!params.getTagOverrides().isEmpty()) {
             options.add("convert.ops=hoot::TranslationOp");

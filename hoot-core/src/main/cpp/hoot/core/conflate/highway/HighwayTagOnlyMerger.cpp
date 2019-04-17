@@ -52,6 +52,7 @@ HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(false)
 {
   _removeTagsFromWayMembers = false;
+  _markAddedMultilineStringRelations = true;
 }
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(
@@ -61,6 +62,7 @@ HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(true)
 {
   _removeTagsFromWayMembers = false;
+  _markAddedMultilineStringRelations = true;
 
   // Merging geometries for bridges is governed both by a config option and whether a subline
   // matcher gets passed in, since not all calling merger creators have a subline matcher available
@@ -193,11 +195,18 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   // Reverse the way if way to remove is one way and the two ways aren't in similar directions
   _handleOneWayStreetReversal(elementWithTagsToKeep, elementWithTagsToRemove, map);
 
+  // TODO: This is ignoring the contents of multilinestring relations.
+
   // merge the tags
   Tags mergedTags =
     TagMergerFactory::mergeTags(
       elementWithTagsToKeep->getTags(), elementWithTagsToRemove->getTags(), ElementType::Way);
-  // TODO: This is ignoring the contents of multilinestring relations.
+  // sanity check to prevent the multilinestring tag, later used to remove multilinestring
+  // relations added during conflation, from being added to anything other than relations
+  if (elementWithTagsToKeep->getElementType() != ElementType::Relation)
+  {
+    mergedTags.remove(MetadataTags::HootMultilineString());
+  }
   elementWithTagsToKeep->setTags(mergedTags);
   elementWithTagsToKeep->setStatus(Status::Conflated);
   OsmUtils::logElementDetail(
@@ -252,6 +261,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
           wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
+        wayMember->getTags().remove(MetadataTags::HootMultilineString());
       }
     }
   }

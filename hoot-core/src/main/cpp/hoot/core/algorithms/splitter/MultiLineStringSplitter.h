@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::MultiLineStringSplitter"; }
 
-  MultiLineStringSplitter();
+  MultiLineStringSplitter(const bool markAddedMultilineStringRelations = false);
 
   /**
    * Given a WaySublineCollection, extract all the matching sub-elements.
@@ -89,6 +89,8 @@ public:
              ElementPtr& match) const;
 
 private:
+
+  bool _markAddedMultilineStringRelations;
 
   boost::shared_ptr<FindNodesInWayFactory> _createNodeFactory(
     const WaySublineCollection& string) const;

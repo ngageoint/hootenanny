@@ -53,6 +53,13 @@ TagKeyCriterion::TagKeyCriterion(QString key1, QString key2, QString key3)
   addKey(key3);
 }
 
+void TagKeyCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions confOpts = ConfigOptions(conf);
+  _keys = confOpts.getTagKeyCriterionKeys();
+}
+
+
 TagKeyCriterion::TagKeyCriterion(QStringList keys)
 {
   _keys = keys;

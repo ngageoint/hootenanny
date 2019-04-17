@@ -326,7 +326,7 @@ info --operators
 hoot info --operators
 
 # criterion example - filters only nodes from the map to the output
-hoot convert -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criterion="hoot::NodeCriterion" \ 
+hoot convert -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::NodeCriterion" \ 
 input1.osm input2.osm output.osm
 
 # operation example - writes a map based on the input data with all duplicate ways removed

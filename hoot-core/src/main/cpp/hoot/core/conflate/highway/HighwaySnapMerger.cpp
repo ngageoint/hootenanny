@@ -77,6 +77,7 @@ HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _removeTagsFromWayMembers(true),
+_markAddedMultilineStringRelations(false),
 _sublineMatcher(sublineMatcher)
 {
   _pairs = pairs;
@@ -310,6 +311,27 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     LOG_VART(scraps2->getElementId());
   }
 
+  if (_markAddedMultilineStringRelations)
+  {
+    // sanity check to make sure elements other than relations aren't marked incorrectly
+    if (e1Match && e1Match->getElementType() != ElementType::Relation)
+    {
+      e1Match->getTags().remove(MetadataTags::HootMultilineString());
+    }
+    if (scraps1 && scraps1->getElementType() != ElementType::Relation)
+    {
+      scraps1->getTags().remove(MetadataTags::HootMultilineString());
+    }
+    if (e2Match && e2Match->getElementType() != ElementType::Relation)
+    {
+      e2Match->getTags().remove(MetadataTags::HootMultilineString());
+    }
+    if (scraps2 && scraps2->getElementType() != ElementType::Relation)
+    {
+      scraps2->getTags().remove(MetadataTags::HootMultilineString());
+    }
+  }
+
   // remove the old way that was split and snapped
   if (e1 != e1Match && scraps1)
   {
@@ -523,7 +545,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
 {
   LOG_VART(splitee->getElementId());
 
-  MultiLineStringSplitter().split(map, s, reverse, match, scrap);
+  MultiLineStringSplitter(_markAddedMultilineStringRelations).split(map, s, reverse, match, scrap);
 
   LOG_VART(match->getElementId());
 
@@ -553,6 +575,10 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       if (scrap)
       {
         r->addElement("", scrap);
+      }
+      if (_markAddedMultilineStringRelations)
+      {
+        r->getTags().set(MetadataTags::HootMultilineString(), "yes");
       }
       LOG_DEBUG("Created scrap relation: " << r->getElementId());
       scrap = r;
@@ -607,6 +633,10 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       RelationPtr r(new Relation(splitee->getStatus(), map->createNextRelationId(),
         splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       r->addElement("", scrap->getElementId());
+      if (_markAddedMultilineStringRelations)
+      {
+        r->getTags().set(MetadataTags::HootMultilineString(), "yes");
+      }
       scrap = r;
       LOG_TRACE("Created multilinestring relation for footway: " << r->getElementId());
       map->addElement(r);
@@ -638,8 +668,24 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       }
     }
 
+    bool multiLineStringAdded = false;
+    if (_markAddedMultilineStringRelations &&
+        (match->getTags().contains(MetadataTags::HootMultilineString()) ||
+        scrap->getTags().contains(MetadataTags::HootMultilineString())))
+    {
+      multiLineStringAdded = true;
+    }
+
     // make sure the tags are still legit on the scrap.
     scrap->setTags(splitee->getTags());
+    // With the merging switching between split ways and relations, it gets a little hard to keep
+    // track of where this tags is needed, so one final check here to make sure it gets added
+    // correctly.
+    if (_markAddedMultilineStringRelations && multiLineStringAdded &&
+        scrap->getElementType() == ElementType::Relation)
+    {
+      scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
+    }
     LOG_VART(scrap);
 
     replaced.push_back(

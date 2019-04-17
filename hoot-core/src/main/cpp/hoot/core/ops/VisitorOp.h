@@ -50,7 +50,7 @@ public:
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-  VisitorOp(const boost::shared_ptr<ConstElementVisitor>& v) { _visitor = v; }
+  VisitorOp(const ConstElementVisitorPtr& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.

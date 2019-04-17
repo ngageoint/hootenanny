@@ -43,10 +43,6 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/MultiLineStringCriterion.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 
 #include <unordered_set>
 #include <vector>
@@ -94,35 +90,6 @@ void WayJoiner2::join(const OsmMapPtr& map)
     _joinUnsplitWaysAtNode();
     OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-unsplit-ways");
   }
-
-  // Remove all the multilinestring relations created during conflation.
-
-  // This isn't the best place to do this, but Attribute Conflation is already using
-  // RemoveElementsVisitor with another criterion in its config and RemoveElementsVisitor doesn't
-  // support multiple criteria.  Adding support to it for multiple criteria is an option, but
-  // implementation for it, as well as supporting it in the config file could be messy...want to
-  // think about it more before rushing something.  Also negative about this, is that it assumes
-  // we're always using Attribute Conflation with WayJoiner2, which is currently the case, but
-  // really too tightly coupled of a relationship regardless.
-  // TODO: move this logic somewhere else
-  _removeHootCreatedMultiLineStringRelations(map);
-  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-multilinestring-relations");
-}
-
-void WayJoiner2::_removeHootCreatedMultiLineStringRelations(const OsmMapPtr& map)
-{
-  LOG_TRACE("Removing multilinestring relations created during conflation...");
-  // I don't think this is quite right, b/c if there are any multilinestring relations in the input
-  // data that end up getting conflated with something else, they're going to be dropped and
-  // shouldn't be.  What we really want to do is only drop multilinestring relations created
-  // specifically by hoot during conflation (Attribute Conflation specific).
-  // TODO: #3025
-  ElementCriterionPtr crit(
-    new ChainCriterion(new MultiLineStringCriterion(), new StatusCriterion(Status::Conflated)));
-  RemoveElementsVisitor vis(crit);
-  vis.setRecursive(false);
-  map->visitRw(vis);
-  LOG_VART(vis.getCount());
 }
 
 void WayJoiner2::_resetParents()
