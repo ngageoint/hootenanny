@@ -100,14 +100,18 @@ public:
 
     uut.mark(map, n1, n2, "a note", "test");
 
+    OsmJsonWriter writer;
+    writer.setIncludeCircularError(false);
+    QString result = writer.toString(map);
+
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"-1\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"-1\"}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      result);
   }
 
   /**
@@ -132,17 +136,21 @@ public:
     uut.mark(map, n1, n2, "a note", "test", 0.15);
     uut.mark(map, n1, n2, "a note 2", "test", 0.5);
 
+    OsmJsonWriter writer;
+    writer.setIncludeCircularError(false);
+    QString result = writer.toString(map);
+
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note 2\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.5\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note 2\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.5\"},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\"}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      result);
   }
 
   void runAddReviewTagsToFeaturesTest()

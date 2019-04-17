@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -99,6 +100,8 @@ public:
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
 
+  void setIncludeCircularError(bool includeCircularError) { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
+
   virtual QString supportedFormats() override { return ".json"; }
 
 protected:
@@ -127,6 +130,11 @@ protected:
   bool _hasTags(ConstElementPtr e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(ConstElementPtr e);
+
+private:
+
+  AddExportTagsVisitor _addExportTagsVisitor;
+
 };
 
 } // hoot
