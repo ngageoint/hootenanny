@@ -53,6 +53,8 @@ public:
 private:
 
   bool _hideDisableTests;
+
+  void _loadBaseConfig(const QString testConfigFile, QStringList& confs);
 };
 
 }

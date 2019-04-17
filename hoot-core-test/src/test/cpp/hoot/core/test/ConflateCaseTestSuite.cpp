@@ -50,6 +50,21 @@ ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
   loadDir(dir, confs);
 }
 
+void ConflateCaseTestSuite::_loadBaseConfig(const QString testConfigFile, QStringList& confs)
+{
+  // need to grab the whole current config here to avoid errors when calling loadJson
+  Settings tempConfig = conf();
+  tempConfig.loadJson(ConfPath::search(testConfigFile));
+  if (tempConfig.hasKey(Settings::BASE_CONFIG_OPTION_KEY))
+  {
+    const QString baseConfig = tempConfig.getString(Settings::BASE_CONFIG_OPTION_KEY).trimmed();
+    if (!baseConfig.isEmpty() && !confs.contains(Settings::BASE_CONFIG_OPTION_KEY))
+    {
+      confs.append(baseConfig);
+    }
+  }
+}
+
 void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
@@ -62,32 +77,17 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 
   if (fi.exists())
   {
-    const QString confFile = fi.absoluteFilePath();
-    LOG_VARE(confFile);
+    const QString testConfFile = fi.absoluteFilePath();
 
-    // Check the config file for "base.config", which allows the test to load a separate base
-    // configuration as its starting point. The other settings in its file will override whatever
-    // is in the base configuration
-    Settings tempConfig = conf();
-    LOG_VARE(tempConfig.size());
-    tempConfig.loadJson(ConfPath::search(confFile));
-    LOG_VARE(tempConfig.size());
-    if (tempConfig.hasKey("base.config"))
-    {
-      const QString baseConfig = tempConfig.getString("base.config").trimmed();
-      LOG_VARE(baseConfig);
-      if (!baseConfig.isEmpty())
-      {
-        if (!confs.contains(baseConfig))
-        {
-          confs.append(baseConfig);
-        }
-      }
-    }
+    // Check for a specified base config option, which allows the test to load a separate base
+    // configuration as its starting point. The other settings in its config file will override
+    // whatever is in the base configuration.
+    _loadBaseConfig(testConfFile, confs);
 
-    confs.append(confFile);
+    // load the test's config file
+    confs.append(testConfFile);
 
-    LOG_VARE(confs);
+    LOG_VART(confs);
   }
 
   // a list of strings paths to ignore if this string is found in the path.

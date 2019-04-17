@@ -53,9 +53,12 @@ using namespace std;
 namespace hoot
 {
 
+const QString Settings::BASE_CONFIG_OPTION_KEY = "base.config";
+
 class JsonLoader
 {
 public:
+
   JsonLoader(Settings* s) : _s(s)
   {
   }
@@ -119,8 +122,9 @@ private:
       //  Skip comments
       if (name.startsWith("#"))
         continue;
-      // Ignore base.config, as its used to load a base configuration file which is done elsewhere.
-      if (name != "base.config" && !_s->hasKey(name))
+      // Ignore the base config option, as its used to load a base configuration file and is done
+      // elsewhere.
+      if (name != Settings::BASE_CONFIG_OPTION_KEY && !_s->hasKey(name))
       {
         throw HootException("Unknown JSON setting: (" + name + ")");
       }
