@@ -239,10 +239,9 @@ these 15 roads get conflated properly?" tests. They're intended to test one situ
 correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to
 determine what happened.
 
-These tests are discovered/created from directories. For now, only one directory is searched
-for tests @test-files/cases/unifying/@. The test creation process goes as follows:
+These tests are discovered/created from @test-files/cases@. The test creation process goes as follows:
 
-* Search @test-files/cases/unifying@ for a config file (@Config.conf@), if there is one, push it
+* Search @test-files/cases@ for a config file (@Config.conf@), if there is one, push it
 onto the config file stack.
 * If there are directories, recursively search them for tests, but ignore any directories that end
 with @.off@
@@ -253,11 +252,18 @@ When a test runs it runs as follows:
 
 * Load all the config files in turn starting with the highest level directory config file.
 * Verify that the test has all the required files.
-* Run the equivalent of a "--unify" command on the two input files and put the result in @Output.osm@.
+* Run the equivalent of a conflate command on the two input files and put the result in @Output.osm@.
 * Verify that @Expected.osm@ matches @Output.osm@.
 
 This approach makes it very fast/easy to create new micro tests and run them with the rest of the
 test routines. At this time the micro tests run as part of _quick_ and up.
+
+To only run case tests execute:
+------------
+HootTest --case-only
+------------
+
+See @test-files/cases/README@ for additional information on case tests.
 
 ==== Running Core Unit Tests in Parallel
 
