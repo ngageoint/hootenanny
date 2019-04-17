@@ -42,6 +42,7 @@
 
 // Geos
 #include <geos/algorithm/MinimumDiameter.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 
 using namespace boost;
@@ -146,7 +147,15 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
     double polyLength = 0;
     double polyWidth = 0;
 
-    calculateExtents(pPoly.get(), polyLength, polyWidth);
+    if( pPoly->getNumPoints() == 0 )
+    {
+      shared_ptr<LineString> pLine = elementConverter.convertToLineString(pWay);
+      polyLength = pLine->getLength();
+    }
+    else
+    {
+      calculateExtents(pPoly.get(), polyLength, polyWidth);
+    }
 
     if( _addLength ) tags["length"] = QString::number(polyLength);
     if( _addWidth ) tags["width"] = QString::number(polyWidth);
