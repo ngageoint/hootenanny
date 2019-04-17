@@ -32,6 +32,8 @@
 #include <hoot/core/test/ConflateCaseTest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QDir>
@@ -60,7 +62,32 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 
   if (fi.exists())
   {
-    confs.append(fi.absoluteFilePath());
+    const QString confFile = fi.absoluteFilePath();
+    LOG_VARE(confFile);
+
+    // Check the config file for "base.config", which allows the test to load a separate base
+    // configuration as its starting point. The other settings in its file will override whatever
+    // is in the base configuration
+    Settings tempConfig = conf();
+    LOG_VARE(tempConfig.size());
+    tempConfig.loadJson(ConfPath::search(confFile));
+    LOG_VARE(tempConfig.size());
+    if (tempConfig.hasKey("base.config"))
+    {
+      const QString baseConfig = tempConfig.getString("base.config").trimmed();
+      LOG_VARE(baseConfig);
+      if (!baseConfig.isEmpty())
+      {
+        if (!confs.contains(baseConfig))
+        {
+          confs.append(baseConfig);
+        }
+      }
+    }
+
+    confs.append(confFile);
+
+    LOG_VARE(confs);
   }
 
   // a list of strings paths to ignore if this string is found in the path.

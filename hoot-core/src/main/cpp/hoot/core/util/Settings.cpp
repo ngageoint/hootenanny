@@ -114,11 +114,13 @@ private:
   {
     BOOST_FOREACH(pt::ptree::value_type& element, tree.get_child(""))
     {
-      QString name = QString::fromUtf8(element.first.c_str());
+      const QString name = QString::fromUtf8(element.first.c_str());
+      LOG_VART(name);
       //  Skip comments
       if (name.startsWith("#"))
         continue;
-      if (!_s->hasKey(name))
+      // Ignore base.config, as its used to load a base configuration file which is done elsewhere.
+      if (name != "base.config" && !_s->hasKey(name))
       {
         throw HootException("Unknown JSON setting: (" + name + ")");
       }

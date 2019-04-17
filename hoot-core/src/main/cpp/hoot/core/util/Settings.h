@@ -164,6 +164,8 @@ public:
 
   QString toString() const;
 
+  int size() const { return _settings.size(); }
+
 private:
 
   static boost::shared_ptr<Settings> _theInstance;
