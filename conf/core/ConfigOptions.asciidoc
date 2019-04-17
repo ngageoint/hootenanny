@@ -221,7 +221,7 @@ The precision of numeric values written to Attribute-Relation (.arff) files.
 === attribute.conflation.aggressive.highway.joining
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
 highway attribution into those with less specific highway attribution and no names.  Enabling this
