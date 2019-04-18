@@ -55,23 +55,27 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 
   _negateCriteria = configOptions.getElementCriterionNegate();
 
-  _criteria.clear();
+
   const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
   LOG_VART(critNames);
-  for (int i = 0; i < critNames.size(); i++)
+  if (critNames.size() > 0)
   {
-    const QString critName = critNames.at(i);
-    if (!critName.trimmed().isEmpty())
+    _criteria.clear();
+    for (int i = 0; i < critNames.size(); i++)
     {
-      LOG_VARD(critName);
-      ElementCriterionPtr crit =
-        boost::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
-      addCriterion(crit);
-      Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      const QString critName = critNames.at(i);
+      if (!critName.trimmed().isEmpty())
       {
-        c->setConfiguration(conf);
+        LOG_VARD(critName);
+        ElementCriterionPtr crit =
+          boost::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+        addCriterion(crit);
+        Configurable* c = dynamic_cast<Configurable*>(crit.get());
+        if (c != 0)
+        {
+          c->setConfiguration(conf);
+        }
       }
     }
   }
