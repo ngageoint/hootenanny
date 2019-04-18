@@ -34,85 +34,134 @@
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 
-RemoveElementsVisitor::RemoveElementsVisitor():
-_count(0),
-_negateCriterion(false)
-{
-  setConfiguration(conf());
-}
-
-RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& criterion,
-                                             bool negateCriterion) :
-_criterion(criterion),
+RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria) :
 _recursive(false),
 _count(0),
-_negateCriterion(negateCriterion)
+_negateCriteria(negateCriteria),
+_chainCriteria(false)
 {
-  if (_negateCriterion)
-  {
-    _criterion.reset(new NotCriterion(criterion));
-  }
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _negateCriterion = configOptions.getElementCriterionNegate();
-  LOG_VART(_negateCriterion);
-  const QString critName = configOptions.getRemoveElementsVisitorElementCriterion();
-  LOG_VART(critName);
-  if (!critName.isEmpty())
+
+  _negateCriteria = configOptions.getElementCriterionNegate();
+
+
+  const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
+  LOG_VART(critNames);
+  if (critNames.size() > 0)
   {
-    addCriterion(
-      boost::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed())));
-    Configurable* c = dynamic_cast<Configurable*>(_criterion.get());
-    if (c != 0)
+    _criteria.clear();
+    for (int i = 0; i < critNames.size(); i++)
     {
-      c->setConfiguration(conf);
+      const QString critName = critNames.at(i);
+      if (!critName.trimmed().isEmpty())
+      {
+        LOG_VARD(critName);
+        ElementCriterionPtr crit =
+          boost::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
+        addCriterion(crit);
+        Configurable* c = dynamic_cast<Configurable*>(crit.get());
+        if (c != 0)
+        {
+          c->setConfiguration(conf);
+        }
+      }
     }
   }
+
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
-  LOG_VART(_recursive);
+  _chainCriteria = configOptions.getRemoveElementsVisitorChainElementCriteria();
+  LOG_VARD(_chainCriteria);
 }
 
 void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
-  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(_criterion.get());
-  if (consumer != 0)
-    consumer->setOsmMap(map);
+
+  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+       it != _criteria.end(); ++it)
+  {
+    ElementCriterionPtr crit = *it;
+    OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(crit.get());
+    if (consumer != 0)
+      consumer->setOsmMap(map);
+  }
 }
 
-
-void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& crit)
 {
-  if (!_negateCriterion)
+  LOG_VART(_negateCriteria);
+  LOG_VART(crit.get());
+  if (_negateCriteria)
   {
-    _criterion = e;
+    _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
   }
   else
   {
-    _criterion.reset(new NotCriterion(e));
+    _criteria.push_back(ElementCriterionPtr(crit));
   }
+}
+
+bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
+{
+  bool criteriaSatisfied;
+  if (!_chainCriteria)
+  {
+    criteriaSatisfied = false;
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
+    {
+      ElementCriterionPtr crit = *it;
+      if (crit->isSatisfied(e))
+      {
+        criteriaSatisfied = true;
+        break;
+      }
+    }
+  }
+  else
+  {
+    criteriaSatisfied = true;
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
+    {
+      ElementCriterionPtr crit = *it;
+      if (!crit->isSatisfied(e))
+      {
+        criteriaSatisfied = false;
+        break;
+      }
+    }
+  }
+  return criteriaSatisfied;
 }
 
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
-  assert(_criterion);
-  ElementType type = e->getElementType();
-  long id = e->getId();
-  //LOG_VART(e->getElementId());
+  LOG_VART(_criteria.size());
+  if (_criteria.size() == 0)
+  {
+    throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
+  }
+
+  const ElementType type = e->getElementType();
+  const long id = e->getId();
   const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
-  if (_criterion->isSatisfied(ee))
+  if (_criteriaSatisfied(ee))
   {
+    LOG_DEBUG("Passed filter: " << e);
     _count++;
     if (_recursive)
     {
@@ -128,7 +177,8 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
                                        const boost::shared_ptr<ElementCriterion>& pCrit)
 {
-  RemoveElementsVisitor v(pCrit);
+  RemoveElementsVisitor v;
+  v.addCriterion(pCrit);
   pMap->visitWaysRw(v);
 }
 

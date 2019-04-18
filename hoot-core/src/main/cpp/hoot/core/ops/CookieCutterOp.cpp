@@ -59,8 +59,9 @@ void CookieCutterOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   //remove unknown2 out of the input map and create a new map, which will be our ref map
   boost::shared_ptr<OsmMap> refMap(new OsmMap(map));
-  RemoveElementsVisitor unknown2Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  RemoveElementsVisitor unknown2Remover;
   unknown2Remover.setRecursive(true);
+  unknown2Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
   refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodes().size());
 
@@ -70,8 +71,9 @@ void CookieCutterOp::apply(boost::shared_ptr<OsmMap> &map)
 
   //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
   boost::shared_ptr<OsmMap> doughMap(new OsmMap(map));
-  RemoveElementsVisitor unknown1Remover(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
+  RemoveElementsVisitor unknown1Remover;
   unknown1Remover.setRecursive(true);
+  unknown1Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
   doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodes().size());
 

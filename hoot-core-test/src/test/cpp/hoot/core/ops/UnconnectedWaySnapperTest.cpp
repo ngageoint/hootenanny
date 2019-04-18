@@ -91,8 +91,9 @@ public:
     // Remove the ref data, so its easier to compare the snapped output to the pre-snapped
     // secondary input data.
     ElementCriterionPtr statusCrit(new StatusCriterion(Status::Unknown1));
-    RemoveElementsVisitor removeRefVisitor(statusCrit);
+    RemoveElementsVisitor removeRefVisitor;
     removeRefVisitor.setRecursive(true);
+    removeRefVisitor.addCriterion(statusCrit);
     map->visitRw(removeRefVisitor);
 
     MapProjector::projectToWgs84(map);

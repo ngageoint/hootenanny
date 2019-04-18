@@ -47,15 +47,9 @@ public:
 
   static std::string className() { return "hoot::RemoveElementsVisitor"; }
 
-  RemoveElementsVisitor();
+  RemoveElementsVisitor(bool negateCriteria = false);
 
-  /**
-   * Loads the criterion from the config setting.
-   */
-  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& criterion,
-                        bool negateCriterion = false);
-
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  virtual void addCriterion(const ElementCriterionPtr& crit);
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -66,15 +60,13 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }
+  void setChainCriteria(bool chain) { _chainCriteria = chain; }
 
-  static void removeWays(boost::shared_ptr<OsmMap> pMap,
-                         const boost::shared_ptr<ElementCriterion>& pCrit);
+  static void removeWays(boost::shared_ptr<OsmMap> pMap, const ElementCriterionPtr& pCrit);
 
   int getCount() { return _count; }
 
   virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
-
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
   virtual QString getInitStatusMessage() const { return "Removing elements..."; }
 
@@ -84,11 +76,14 @@ public:
 private:
 
   OsmMap* _map;
-  boost::shared_ptr<ElementCriterion> _criterion;
+  std::vector<ElementCriterionPtr> _criteria;
   bool _recursive;
   int _count;
   //This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriterion;
+  bool _negateCriteria;
+  bool _chainCriteria;
+
+  bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };
 
 

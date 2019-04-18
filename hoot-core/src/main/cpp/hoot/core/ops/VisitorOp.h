@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITOROP_H
 #define VISITOROP_H
@@ -50,7 +50,7 @@ public:
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-  VisitorOp(const boost::shared_ptr<ConstElementVisitor>& v) { _visitor = v; }
+  VisitorOp(const ConstElementVisitorPtr& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.

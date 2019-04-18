@@ -363,8 +363,8 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     // specifying them anyway to harden this a bit.
     if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
         postConflateOps.contains("hoot::RemoveElementsVisitor") &&
-        ConfigOptions().getRemoveElementsVisitorElementCriterion() ==
-          "hoot::ReviewRelationCriterion" &&
+        ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
+          "hoot::ReviewRelationCriterion") &&
         postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
     {
       const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
@@ -381,8 +381,12 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     // thresholding.
     if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
     {
+      QStringList removeElementsCriteria =
+        conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
+      removeElementsCriteria.replaceInStrings(
+        "hoot::ReviewRelationCriterion", "hoot::ReviewScoreCriterion");
       conf().set(
-        ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
+        ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }
 
     LOG_DEBUG(

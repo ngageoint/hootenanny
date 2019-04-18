@@ -225,8 +225,9 @@ private:
     //we don't want to include review relations
     boost::shared_ptr<TagKeyCriterion> elementCriterion(
       new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
 
     //node comparisons require hashes be present on the elements

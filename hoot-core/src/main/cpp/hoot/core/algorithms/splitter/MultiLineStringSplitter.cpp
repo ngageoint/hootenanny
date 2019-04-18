@@ -45,7 +45,8 @@ using namespace std;
 namespace hoot
 {
 
-MultiLineStringSplitter::MultiLineStringSplitter()
+MultiLineStringSplitter::MultiLineStringSplitter(const bool markAddedMultilineStringRelations) :
+_markAddedMultilineStringRelations(markAddedMultilineStringRelations)
 {
 }
 
@@ -123,6 +124,10 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
         " member: " << matches[i]->getElementId());
       LOG_VART(matches[i]);
       r->addElement("", matches[i]);
+      if (_markAddedMultilineStringRelations)
+      {
+        r->getTags().set(MetadataTags::HootMultilineString(), "yes");
+      }
     }
     result = r;
     LOG_TRACE("Multilinestring split relation: " << result);

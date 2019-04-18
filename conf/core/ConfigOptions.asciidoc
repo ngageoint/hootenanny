@@ -221,7 +221,7 @@ The precision of numeric values written to Attribute-Relation (.arff) files.
 === attribute.conflation.aggressive.highway.joining
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
 highway attribution into those with less specific highway attribution and no names.  Enabling this
@@ -3401,13 +3401,23 @@ timestamp, user, uid, or version.
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
 
-=== remove.elements.visitor.element.criterion
+=== remove.elements.visitor.chain.element.criteria
 
-* Data Type: string
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
+elements will be removed only if they satisfy all of the criteria.  If set to false, then only
+one of the specified criteria must be met in order to remove an element.
+
+=== remove.elements.visitor.element.criteria
+
+* Data Type: list
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to delete.  To pass in complex
-nested criteria, use the Hootenanny Javascript interface instead.
+One or more element criteria used for selecting elements to remove. Delimit names with '='. From
+the command line, names with ';' and surround the entire list in double quotes.
+E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 === remove.elements.visitor.recursive
 
@@ -3421,7 +3431,7 @@ Should the element remover remove the elements recursively?
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to delete.  To pass in complex
+The plugin name of an element criterion used to select tags to remove.  To pass in complex
 nested criterion, use the Hootenanny Javascript interface instead.
 
 === remove.tags.visitor.keys
@@ -3829,13 +3839,6 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
-=== tag.key.contains.criterion.text
-
-* Data Type: string
-* Default Value: ``
-
-Text that TagKeyContainsCriterion searches a match for.
-
 === tag.criterion.kvps
 
 * Data Type: list
@@ -3844,6 +3847,21 @@ Text that TagKeyContainsCriterion searches a match for.
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
 delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
+
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion uses to filter elements.
+
+=== tag.key.criterion.keys
+
+* Data Type: list
+* Default Value: ``
+
+Tag keys that TagKeyCriterion uses to filter elements. From the command line, delimit multiple
+key/value pairs with ';' and surround the entire list in double quotes.
 
 === tag.merger.default
 
