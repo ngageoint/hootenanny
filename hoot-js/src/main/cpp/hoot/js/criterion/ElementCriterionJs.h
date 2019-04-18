@@ -42,11 +42,13 @@ namespace hoot
 class ElementCriterionJs : public node::ObjectWrap
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   ElementCriterionPtr getCriterion() { return _c; }
 
 private:
+
   ElementCriterionJs(ElementCriterion* c);
   ~ElementCriterionJs();
 
@@ -54,7 +56,6 @@ private:
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
   ElementCriterionPtr _c;
 };
 

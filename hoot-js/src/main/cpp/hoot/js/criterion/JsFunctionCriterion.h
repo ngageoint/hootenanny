@@ -47,17 +47,20 @@ public:
 
   JsFunctionCriterion() {}
 
-  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func) { _func.Reset(isolate, func); }
+  virtual void addFunction(v8::Isolate* isolate, v8::Local<v8::Function>& func)
+  { _func.Reset(isolate, func); }
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new JsFunctionCriterion(_func)); }
 
   virtual QString getDescription() const { return ""; }
 
 private:
 
-  JsFunctionCriterion(v8::Persistent<v8::Function>& func) { _func.Reset(v8::Isolate::GetCurrent(), func); }
+  JsFunctionCriterion(v8::Persistent<v8::Function>& func)
+  { _func.Reset(v8::Isolate::GetCurrent(), func); }
 
   v8::Persistent<v8::Function> _func;
 };

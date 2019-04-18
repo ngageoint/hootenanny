@@ -98,6 +98,7 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& crit)
 {
   LOG_VART(_negateCriteria);
+  LOG_VART(crit.get());
   if (_negateCriteria)
   {
     _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
@@ -144,12 +145,11 @@ bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
 
 void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 {
-  if (_criteria.size() == 2)
+  LOG_VART(_criteria.size());
+  if (_criteria.size() == 0)
   {
-    LOG_VARD(e);
+    throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
   }
-  //LOG_VARD(_criteria.size());
-  assert(_criteria.size() > 0);
 
   const ElementType type = e->getElementType();
   const long id = e->getId();

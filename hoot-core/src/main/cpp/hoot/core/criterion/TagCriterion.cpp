@@ -67,13 +67,17 @@ void TagCriterion::setConfiguration(const Settings &s)
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e->getTags());
   for (int i = 0; i < _kvps.size(); i++)
   {
     const QStringList kvpParts = _kvps.at(i).split("=");
     const QString key = kvpParts[0];
     const QString val = kvpParts[1];
+    LOG_VART(key);
+    LOG_VART(val);
     if (e->getTags().get(key) == val)
     {
+      LOG_TRACE("crit satisifed");
       return true;
     }
   }

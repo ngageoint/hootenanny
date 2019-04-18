@@ -43,6 +43,7 @@ namespace hoot
 class RelationJs : public ElementJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   virtual ConstElementPtr getConstElement() const { return getConstRelation(); }
@@ -54,6 +55,7 @@ public:
   static v8::Handle<v8::Object> New(RelationPtr relation);
 
 private:
+
   RelationJs(ConstRelationPtr w);
   RelationJs();
   ~RelationJs();
@@ -61,7 +63,6 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceElement(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
   ConstRelationPtr _constRelation;
   RelationPtr _relation;
   static v8::Persistent<v8::Function> _constructor;

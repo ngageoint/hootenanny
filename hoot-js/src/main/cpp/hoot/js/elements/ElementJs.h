@@ -48,6 +48,7 @@ namespace hoot
 class ElementJs : public node::ObjectWrap
 {
 public:
+
   virtual ConstElementPtr getConstElement() const = 0;
   virtual ElementPtr getElement() = 0;
 
@@ -55,6 +56,7 @@ public:
   static v8::Handle<v8::Object> New(ElementPtr e);
 
 protected:
+
   ElementJs();
   virtual ~ElementJs();
   static void _addBaseFunctions(v8::Local<v8::FunctionTemplate> tpl);
@@ -74,7 +76,7 @@ protected:
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
-  QString _className;
+
   static v8::Persistent<v8::Function> _constructor;
 };
 
