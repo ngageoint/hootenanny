@@ -85,14 +85,18 @@ public:
 
     MultiaryUtilities::conflate(map);
 
+    OsmJsonWriter writer;
+    writer.setIncludeCircularError(false);
+    QString result = writer.toString(map);
+
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"My Restaurant\",\"alt_name\":\"my Restaurant\",\"source:hash\":\"AAA;BBB\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"Not the same\",\"source:hash\":\"CCC;DDD\",\"place\":\"locality\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"My Restaurant\",\"alt_name\":\"my Restaurant\",\"source:hash\":\"AAA;BBB\"}},\n"
+                    "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"Not the same\",\"source:hash\":\"CCC;DDD\",\"place\":\"locality\"}},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"node\",\"ref\":-3,\"role\":\"reviewee\"},\n"
-                    "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:type\":\"POI\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"hoot:review:members\":\"2\",\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"-1\",\"error:circular\":\"15\"}]\n"
-                    "}\n", OsmJsonWriter().toString(map));
+                    "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:type\":\"POI\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"hoot:review:members\":\"2\",\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"-1\"}]\n"
+                    "}\n", result);
   }
 
 };

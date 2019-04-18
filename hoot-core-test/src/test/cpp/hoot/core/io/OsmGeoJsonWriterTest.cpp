@@ -109,6 +109,8 @@ public:
     if (settings)
       writer.setConfiguration(*settings);
 
+    writer.setIncludeCircularError(false);
+
     writer.write(map);
     HOOT_FILE_EQUALS( _inputPath + output,
                      _outputPath + output);
