@@ -27,15 +27,14 @@
 #include "NamedOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/VisitorOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -80,21 +79,10 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-
-      QString initMessage =
-        QString("Applying operation %1 / %2")
-        .arg(QString::number(opCount))
-        .arg(QString::number(_namedOps.size()));
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
-      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-      {
-        initMessage += ": " + statusInfo->getInitStatusMessage();
-      }
-      else
-      {
-        initMessage += ": " + s + " ...";
-      }
+
+      QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);
       LOG_DEBUG(
         "\tElement count before operation " << s << ": " <<
@@ -119,21 +107,10 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-
-      QString initMessage =
-        QString("Applying operation %1 / %2")
-        .arg(QString::number(opCount))
-        .arg(QString::number(_namedOps.size()));
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
-      if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-      {
-        initMessage += ": " + statusInfo->getInitStatusMessage();
-      }
-      else
-      {
-        initMessage += ": " + s + " ...";
-      }
+
+      QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -163,6 +140,23 @@ void NamedOp::apply(OsmMapPtr& map)
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
     opCount++;
   }
+}
+
+QString NamedOp::_getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo)
+{
+  QString initMessage =
+    QString("Applying operation %1 / %2")
+    .arg(QString::number(opCount))
+    .arg(QString::number(_namedOps.size()));
+  if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+  {
+    initMessage += ": " + statusInfo->getInitStatusMessage();
+  }
+  else
+  {
+    initMessage += ": " + message + " ...";
+  }
+  return initMessage;
 }
 
 }

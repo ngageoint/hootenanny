@@ -60,7 +60,7 @@ public:
 
   // visits the element, checks if it matches the filter set in _actionDesc and
   // calls the action's process function
-  virtual void visit(const ElementPtr& e);
+  virtual void visit(const ElementPtr& e) override;
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }

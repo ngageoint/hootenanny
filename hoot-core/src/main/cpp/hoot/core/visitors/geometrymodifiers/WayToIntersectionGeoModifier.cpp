@@ -45,14 +45,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToIntersectionGeoModifier)
 
-bool WayToIntersectionGeoModifier::process( const ElementPtr& pElement, OsmMap* pMap )
+bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process ways
-  if( pElement->getElementType() != ElementType::Way ) return false;
+  if (pElement->getElementType() != ElementType::Way) return false;
   const WayPtr pMyWay = boost::dynamic_pointer_cast<Way>(pElement);
 
   // find envelope of nodes
-  boost::shared_ptr<Envelope> pEnv( pMyWay->getEnvelope(pMap->shared_from_this()) );
+  boost::shared_ptr<Envelope> pEnv(pMyWay->getEnvelope(pMap->shared_from_this()));
 
   // find intersecting ways
   vector<long> intersectIds = pMap->getIndex().findWays(*pEnv);
@@ -82,14 +82,14 @@ bool WayToIntersectionGeoModifier::process( const ElementPtr& pElement, OsmMap* 
         long i2Id = interNodeIds[interNodeIx+1];
 
         // don't check if the segments share any nodes
-        if( i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id ) continue;
+        if(i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
 
         CoordinateExt interP1( pMap->getNode(i1Id)->toCoordinate());
         CoordinateExt interP2( pMap->getNode(i2Id)->toCoordinate());
 
         boost::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
-        if( pIntersectionPoint )
+        if (pIntersectionPoint)
         {
           IntersectionInfo intersection = { *pIntersectionPoint, p1Id, p2Id };
           allIntersections.push_back(intersection);
@@ -98,7 +98,7 @@ bool WayToIntersectionGeoModifier::process( const ElementPtr& pElement, OsmMap* 
     }
   }
 
-  if(allIntersections.size() > 0)
+  if (allIntersections.size() > 0)
   {
     processIntersections( pMap, pMyWay, allIntersections );
   }
@@ -106,12 +106,12 @@ bool WayToIntersectionGeoModifier::process( const ElementPtr& pElement, OsmMap* 
   return true;
 }
 
-void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters )
+void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayPtr pWay, vector<IntersectionInfo>& inters)
 {
   for (IntersectionInfo intersInfo : inters)
   {
     // create new node with tags from original way
-    NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint) );
+    NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), intersInfo.intersectionPoint));
     pNode->setTags(pWay->getTags());
     pMap->addNode(pNode);
   }
@@ -121,14 +121,14 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   vector<long> nodesToAttach = pWay->getNodeIds();
   bool attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach);
 
-  if( !attached )   // if not at the beginning...
+  if (!attached)   // if not at the beginning...
   {
     reverse(nodesToAttach.begin(),nodesToAttach.end());
     attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach); // ...try the end
   }
 
   // remove original way
-  if( attached )
+  if (attached)
   {
     RemoveWayOp removeOp(pWay->getId());
     OsmMapPtr mapPtr = pMap->shared_from_this();
@@ -136,27 +136,27 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 }
 
-bool WayToIntersectionGeoModifier::assignToAdjacentWay( OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, vector<long> nodesToAttach )
+bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, vector<long> nodesToAttach)
 {
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);
 
-  if( wayIds.size() > 0)
+  if (wayIds.size() > 0)
   {
     for (long wayId : wayIds)
     {
-      if ( myWayId != wayId )
+      if (myWayId != wayId)
       {
         const WayPtr pWay = pMap->getWay(wayId);
         const vector<long> wayNodes = pWay->getNodeIds();
 
-        if ( wayNodes.front() == nodeId )
+        if (wayNodes.front() == nodeId)
         {
           // insert ids at front
           for (size_t i = 1; i < nodesToAttach.size(); i++) pWay->insertNode(0, nodesToAttach[i]);
           return true;
         }
-        else if (wayNodes.back() == nodeId )
+        else if (wayNodes.back() == nodeId)
         {
           // insert ids at the end
           for (size_t i = 1; i < nodesToAttach.size(); i++) pWay->addNode(nodesToAttach[i]);

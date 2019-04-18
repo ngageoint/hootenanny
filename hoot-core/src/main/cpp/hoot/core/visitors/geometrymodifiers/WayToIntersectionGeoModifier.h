@@ -51,20 +51,21 @@ public:
   struct IntersectionInfo
   {
     CoordinateExt intersectionPoint;
-    long segNodeId1, segNodeId2;
+    long segNodeId1;
+    long segNodeId2;
   };
 
   static std::string className() { return "hoot::WayToIntersectionGeoModifier"; }
 
-  QString getCommandName() const { return "way_to_intersection"; }
-  QList<QString> getParameterNames() const { return QList<QString> {}; }
+  virtual QString getCommandName() const override { return "way_to_intersection"; }
+  virtual QList<QString> getParameterNames() const override { return QList<QString>(); }
 
-  void parseArguments( const QHash<QString, QString>& arguments ) { (void)arguments; /* unused */ }
-  bool process( const ElementPtr& pElement, OsmMap* pMap );
+  virtual void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
+  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
-  void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters );
-  bool assignToAdjacentWay( OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, std::vector<long> nodesToAttach );
+  void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);
+  bool assignToAdjacentWay(OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, std::vector<long> nodesToAttach);
 };
 
 }

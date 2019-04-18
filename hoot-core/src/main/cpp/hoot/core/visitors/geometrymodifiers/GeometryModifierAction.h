@@ -37,8 +37,6 @@
 // boost
 #include <boost/shared_ptr.hpp>
 
-using namespace boost;
-
 namespace hoot
 {
 
@@ -63,10 +61,10 @@ public:
   virtual QList<QString> getParameterNames() const = 0;
 
   // Parses content of command specific arguments
-  virtual void parseArguments( const QHash<QString, QString>& arguments ) = 0;
+  virtual void parseArguments(const QHash<QString, QString>& arguments) = 0;
 
   // Command function to process a filtered element
-  virtual bool process( const ElementPtr& pElement, OsmMap* pMap ) = 0;
+  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) = 0;
 };
 
 /*
@@ -84,13 +82,13 @@ struct GeometryModifierActionDesc
 
   // Node tag key and value strings that must be present and matching
   // for the node to be included in the processing.
-  QHash<QString,QString> filter;
+  QHash<QString, QString> filter;
 
   // Argument name and value specific to each command.
-  QHash<QString,QString> arguments;
+  QHash<QString, QString> arguments;
 
   // Instance of the command specific geometry modifier action class implementation.
-  shared_ptr<GeometryModifierAction> pAction;
+  boost::shared_ptr<GeometryModifierAction> pAction;
 };
 
 }

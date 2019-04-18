@@ -46,7 +46,7 @@ const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m
 bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process Ways
-  if( pElement->getElementType() != ElementType::Way ) return false;
+  if (pElement->getElementType() != ElementType::Way) return false;
 
   // process the way as requested
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
@@ -54,22 +54,19 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   bool isLoop = pWay->isSimpleLoop();
 
   // too small, nothing to do
-  if( nodeCount < 2 ) return false;
+  if (nodeCount < 2) return false;
 
   // find out what width to use
   Tags tags = pElement->getTags();
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
-  if( !_widthTag.isEmpty() )
+  if(!_widthTag.isEmpty() && tags.find(_widthTag) != tags.end())
   {
-    if( tags.find(_widthTag) != tags.end() )
+    double readWidth = tags[_widthTag].toDouble();
+    if (readWidth > 0)
     {
-      double readWidth = tags[_widthTag].toDouble();
-      if( readWidth > 0 )
-      {
-        currWidth = readWidth;
-      }
+      currWidth = readWidth;
     }
   }
 
@@ -78,7 +75,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   assert(nodeCount == (long)nodeIds.size());
 
   // ignore duplicate last node for loops to properly calculate merged ends
-  if( isLoop ) nodeCount--;
+  if(isLoop) nodeCount--;
 
   // create coordinate arrays
   Coordinate polyPositions[2][nodeCount];
@@ -94,25 +91,25 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     const NodePtr pPrevNode = pMap->getNode(prevId);
     const NodePtr pNextNode = pMap->getNode(nextId);
 
-    CoordinateExt currCoor( pCurrNode->toCoordinate() );
-    CoordinateExt prevCoor( pPrevNode->toCoordinate() );
-    CoordinateExt nextCoor( pNextNode->toCoordinate() );
+    CoordinateExt currCoor(pCurrNode->toCoordinate());
+    CoordinateExt prevCoor(pPrevNode->toCoordinate());
+    CoordinateExt nextCoor(pNextNode->toCoordinate());
 
     // find perpendicular vector to vector between previous and next point
     CoordinateExt c1 = currCoor - prevCoor;
     CoordinateExt c2 = nextCoor - currCoor;
-    if( c1.length() == 0 ) c1 = c2;             // correction for first way point
+    if (c1.length() == 0) c1 = c2;             // correction for first way point
     c1.normalize();
     c2.normalize();
-    CoordinateExt vector = c1+c2;
-    CoordinateExt perp( vector.y, -vector.x );  // vector perpendicular to sum of both segments
+    CoordinateExt vector = c1 + c2;
+    CoordinateExt perp(vector.y, -vector.x);  // vector perpendicular to sum of both segments
     perp.normalize();
 
     // fix for collapsing areas in corners with angles greater than 45 degrees,
     // smaller angles will push the points out too far
     double angle = fabs(atan2(perp.y,perp.x) - atan2(c1.y,c1.x));
-    if( angle > M_PI_2 ) angle = fabs(angle-M_PI);
-    if( angle < M_PI_4) angle = M_PI_4;
+    if (angle > M_PI_2) angle = fabs(angle-M_PI);
+    if (angle < M_PI_4) angle = M_PI_4;
 
     // apply requested width
     double width = currWidth / sin(angle);
@@ -126,7 +123,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
       polyPositions[p][i] = pos;
 
       // calculate length to determing inner vs outer polygon for loop
-      if( isLoop && i > 0 )
+      if(isLoop && i > 0)
       {
         CoordinateExt diff = pos - polyPositions[p][i-1];
         polyLen[0] += diff.length();
@@ -134,15 +131,15 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     }
   }
 
-  if( isLoop )
+  if (isLoop)
   {
     // closed loop, creating a multipolygon
-    WayPtr pPoly0( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
-    WayPtr pPoly1( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
+    WayPtr pPoly0(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
+    WayPtr pPoly1(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
     for (long i = 0; i < nodeCount; i++)
     {
-      addNodeToPoly( polyPositions[0][i], pMap, pPoly0 );
-      addNodeToPoly( polyPositions[1][i], pMap, pPoly1 );
+      addNodeToPoly(polyPositions[0][i], pMap, pPoly0);
+      addNodeToPoly(polyPositions[1][i], pMap, pPoly1);
     }
 
     // duplicate first id to close poly
@@ -158,7 +155,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
     pMap->addElement(pPoly1);
 
     // add relation for multipolygon
-    RelationPtr pRelation( new Relation(Status::Unknown1, pMap->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, MetadataTags::RelationMultiPolygon()));
+    RelationPtr pRelation(new Relation(Status::Unknown1, pMap->createNextRelationId(), ElementData::CIRCULAR_ERROR_EMPTY, MetadataTags::RelationMultiPolygon()));
     bool poly0isOuter = polyLen[0] > polyLen[1];
     RelationData::Entry entry0(poly0isOuter ? MetadataTags::RelationOuter() : MetadataTags::RelationInner(), pPoly0->getElementId());
     RelationData::Entry entry1(poly0isOuter ? MetadataTags::RelationInner() : MetadataTags::RelationOuter(), pPoly1->getElementId());
@@ -171,9 +168,9 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   else
   {
     // create poly way and add it to map
-    WayPtr pPoly( new Way(Status::Unknown1, pMap->createNextWayId(), -1) );
-    for (long i = 0; i < nodeCount; i++) addNodeToPoly( polyPositions[0][i], pMap, pPoly );
-    for (long i = nodeCount-1; i >= 0; i--) addNodeToPoly( polyPositions[1][i], pMap, pPoly );
+    WayPtr pPoly(new Way(Status::Unknown1, pMap->createNextWayId(), -1));
+    for (long i = 0; i < nodeCount; i++) addNodeToPoly(polyPositions[0][i], pMap, pPoly);
+    for (long i = nodeCount-1; i >= 0; i--) addNodeToPoly(polyPositions[1][i], pMap, pPoly);
 
     // duplicate first id to close poly
     pPoly->addNode(pPoly->getNodeId(0));
@@ -188,30 +185,30 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   return true;
 }
 
-void WayToPolyGeoModifierAction::addNodeToPoly( const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly )
+void WayToPolyGeoModifierAction::addNodeToPoly(const CoordinateExt& pos, OsmMap* pMap, WayPtr pPoly)
 {
   long nodeId = pMap->createNextNodeId();
-  NodePtr pNode( new Node(Status::Unknown1, nodeId, pos));
+  NodePtr pNode(new Node(Status::Unknown1, nodeId, pos));
   pMap->addElement(pNode);
   pPoly->addNode(nodeId);
 }
 
-void WayToPolyGeoModifierAction::parseArguments(const QHash<QString,QString>& arguments)
+void WayToPolyGeoModifierAction::parseArguments(const QHash<QString, QString>& arguments)
 {
   _width = DEFAULT_WIDTH;
   _widthTag = QString();
 
   // read width tag if specified
-  if( arguments.keys().contains(WIDTH_TAG_PARAM) )
+  if (arguments.keys().contains(WIDTH_TAG_PARAM))
   {
     _widthTag = arguments[WIDTH_TAG_PARAM];
   }
 
   // read default width if specified
-  if( arguments.keys().contains(DEFAULT_WIDTH_PARAM) )
+  if (arguments.keys().contains(DEFAULT_WIDTH_PARAM))
   {
     double width = arguments[DEFAULT_WIDTH_PARAM].toDouble();
-    if( width > 0 )
+    if (width > 0)
     {
       _width = width;
     }

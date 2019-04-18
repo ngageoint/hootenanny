@@ -63,11 +63,11 @@ struct BuildingPartRelationship
   BuildingPartRelationship(ElementPtr building, boost::shared_ptr<geos::geom::Geometry> buildingGeom,
                            WayPtr buildingPartNeighbor,
                            BuildingPartRelationshipType relationshipType)
+    : building(building),
+      buildingGeom(buildingGeom),
+      buildingPartNeighbor(buildingPartNeighbor),
+      relationshipType(relationshipType)
   {
-    this->building = building;
-    this->buildingGeom = buildingGeom;
-    this->buildingPartNeighbor = buildingPartNeighbor;
-    this->relationshipType = relationshipType;
   }
 
   // building containing building parts
