@@ -97,6 +97,7 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 
 void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& crit)
 {
+  LOG_VART(_negateCriteria);
   if (_negateCriteria)
   {
     _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
