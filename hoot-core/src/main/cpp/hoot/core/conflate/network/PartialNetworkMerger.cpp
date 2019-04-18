@@ -49,16 +49,17 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, PartialNetworkMerger)
 
 PartialNetworkMerger::PartialNetworkMerger() :
-MergerBase()
+MergerBase(),
+_needsReview(false)
 {
 }
 
 PartialNetworkMerger::PartialNetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
-  QSet<ConstEdgeMatchPtr> edgeMatches,
-  ConstNetworkDetailsPtr details) :
-  _pairs(pairs),
-  _edgeMatches(edgeMatches),
-  _details(details)
+  QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details) :
+_pairs(pairs),
+_edgeMatches(edgeMatches),
+_details(details),
+_needsReview(false)
 {
   assert(_pairs.size() >= 1);
 }
@@ -72,6 +73,7 @@ void PartialNetworkMerger::_appendSublineMappings(
     {
       if (other->getSubline1().overlaps(sm->getSubline1()))
       {
+        // We punt on this review, so no point in updating _needsReview.
         throw NeedsReviewException("Internal Error: Overlapping partial matches were found. To "
           "resolve please make the logical conflation operations manually. Please report this as "
           "an error and include sample data to recreate.");
@@ -82,7 +84,7 @@ void PartialNetworkMerger::_appendSublineMappings(
 }
 
 void PartialNetworkMerger::apply(const OsmMapPtr& map,
-                                 vector< pair<ElementId, ElementId>>& replaced)
+                                 vector<pair<ElementId, ElementId>>& replaced)
 {
   _mergerList.clear();
 
@@ -168,7 +170,7 @@ ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
 }
 
 void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId> > &replaced)
+  vector<pair<ElementId, ElementId>>& replaced)
 {
   LOG_DEBUG("Processing full match...");
 
@@ -227,7 +229,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   catch (NeedsReviewException& e)
   {
     set<ElementId> reviews;
-
     foreach (WayMatchStringMerger::SublineMappingPtr mapping, _allSublineMappings)
     {
       if (mapping->getNewWay2())
@@ -250,11 +251,12 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
     }
 
     ReviewMarker().mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
+    _needsReview = true;
   }
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch) const
+  vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
 {
   LOG_DEBUG("Processing stub match...");
   LOG_VART(edgeMatch);
@@ -278,11 +280,12 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     LOG_VART(edgeMatch->getString2()->getMembers().size());
     LOG_VART(edgeMatch->getString2()->getMembers());
 
-    // if the feature we're merging is a stub, then things get a little more complicated. So far
+    // If the feature we're merging is a stub, then things get a little more complicated. So far
     // our best option is to disconnect the intersection that is being merged. Then the edges should
     // be merged for us properly as long as all the ways have matches. If they don't have matches
     // we've got a problem and they should be reviewed. Possibly identify these situations in the
     // match creator?
+
     // TODO: add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
@@ -296,8 +299,11 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
       LOG_VART(e);
       eids.insert(mapEid(e->getElementId()));
     }
-    ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "
-      "segment? Please verify merge and fix as needed.", HighwayMatch::getHighwayMatchName());
+    ReviewMarker().mark(
+      map, eids,
+      "Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge "
+      "and fix as needed.", HighwayMatch::getHighwayMatchName());
+    _needsReview = true;
   }
   else
   {

@@ -47,9 +47,12 @@ HighwaySnapMerger()
 {
 }
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs) :
+HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                                           boost::shared_ptr<PartialNetworkMerger> networkMerger) :
 HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
-_performBridgeGeometryMerging(false)
+_performBridgeGeometryMerging(
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+_networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
@@ -59,18 +62,11 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 HighwaySnapMerger(pairs, sublineMatcher),
-_performBridgeGeometryMerging(true)
+_performBridgeGeometryMerging(
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
-
-  // Merging geometries for bridges is governed both by a config option and whether a subline
-  // matcher gets passed in, since not all calling merger creators have a subline matcher available
-  // to pass in at this point.
-  if (!ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
-  {
-    _performBridgeGeometryMerging = false;
-  }
 }
 
 HighwayTagOnlyMerger::~HighwayTagOnlyMerger()
@@ -119,67 +115,65 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
-  //if (e1 && e2)
-  //{
-    //LOG_VART(e1->getElementId());
-    //LOG_VART(e2->getElementId());
-    OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
-    OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
+  //LOG_VART(e1->getElementId());
+  //LOG_VART(e2->getElementId());
+  OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
+  OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
-    // If just one of the features is a bridge, we want the bridge feature to separate from the road
-    // feature its being merged with.  So, use the normal geometry AND tag merger.
+  // If just one of the features is a bridge, we want the bridge feature to separate from the road
+  // feature its being merged with.  So, use the normal geometry AND tag merger.
 
-    std::vector<ConstElementPtr> elements;
-    elements.push_back(e1);
-    elements.push_back(e2);
-    const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
-    if (onlyOneIsABridge)
+  std::vector<ConstElementPtr> elements;
+  elements.push_back(e1);
+  elements.push_back(e2);
+  const bool onlyOneIsABridge = OsmUtils::isSatisfied<BridgeCriterion>(elements, 1, true);
+  if (onlyOneIsABridge)
+  {
+    LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
+
+    bool needsReview = false;
+    std::string mergerName;
+    if (!_networkMerger)
     {
-      if (!_performBridgeGeometryMerging)
-      {
-        LOG_TRACE(
-          "Unable to perform geometric bridge merging due to invalid subline string matcher.  " <<
-          "Performing tag only merge...");
-      }
-      else
-      {
-        LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
-        const bool needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
-        if (needsReview)
-        {
-          LOG_TRACE("HighwaySnapMerger returned review.");
-        }
-        LOG_VART(map->getElement(eid1));
-        LOG_VART(map->getElement(eid2));
-        return needsReview;
-      }
-    //}
-
-    // Otherwise, proceed with tag only merging.
-
-    // copy relation tags back to their way members
-    _copyTagsToWayMembers(e1, e2, map);
-
-    // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
-
-    ElementPtr elementWithTagsToKeep;
-    ElementPtr elementWithTagsToRemove;
-    bool removeSecondaryElement;
-    _determineKeeperFeature(
-      e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
-    //LOG_VART(elementWithTagsToKeep->getElementId());
-    //LOG_VART(elementWithTagsToRemove->getElementId());
-    OsmUtils::logElementDetail(
-      elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
-    OsmUtils::logElementDetail(
-      elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
-
-    return
-      _mergeWays(
-        elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
+      mergerName = HighwaySnapMerger::className();
+      needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+    }
+    else
+    {
+      mergerName = PartialNetworkMerger::className();
+      _networkMerger->apply(map, replaced);
+    }
+    if (needsReview)
+    {
+      LOG_TRACE(mergerName << " returned review.");
+    }
+    LOG_VART(map->getElement(eid1));
+    LOG_VART(map->getElement(eid2));
+    return needsReview;
   }
 
-  return false;
+  // Otherwise, proceed with tag only merging.
+
+  // copy relation tags back to their way members
+  _copyTagsToWayMembers(e1, e2, map);
+
+  // Merge the ways, bringing the secondary feature's attributes over to the reference feature.
+
+  ElementPtr elementWithTagsToKeep;
+  ElementPtr elementWithTagsToRemove;
+  bool removeSecondaryElement;
+  _determineKeeperFeature(
+    e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
+  //LOG_VART(elementWithTagsToKeep->getElementId());
+  //LOG_VART(elementWithTagsToRemove->getElementId());
+  OsmUtils::logElementDetail(
+    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+  OsmUtils::logElementDetail(
+    elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+
+  return
+    _mergeWays(
+      elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
 }
 
 bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
@@ -261,6 +255,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
           wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
+        // safety check to make sure we didn't mark any ways as added multilinestring relations
         wayMember->getTags().remove(MetadataTags::HootMultilineString());
       }
     }
