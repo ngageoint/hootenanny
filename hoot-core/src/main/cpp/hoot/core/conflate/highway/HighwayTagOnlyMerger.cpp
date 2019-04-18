@@ -255,7 +255,10 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
           wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
+<<<<<<< HEAD
         // safety check to make sure we didn't mark any ways as added multilinestring relations
+=======
+>>>>>>> develop
         wayMember->getTags().remove(MetadataTags::HootMultilineString());
       }
     }
