@@ -301,9 +301,9 @@ OGRFeature(foo_PAL015):0
  POINT : 
 
 #### Test to make sure all layers are read from a data source. ####
-17:46:40.776 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (488 characters) to the output field width (254 characters).
-17:46:40.792 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (379 characters) to the output field width (254 characters).
-17:46:40.802 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (437 characters) to the output field width (254 characters).
+17:46:40.776 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (442 characters) to the output field width (254 characters).
+17:46:40.792 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (333 characters) to the output field width (254 characters).
+17:46:40.802 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 162) Truncating the tags attribute (391 characters) to the output field width (254 characters).
 17:46:40.803 WARN  ...cpp/hoot/core/io/OgrWriter.cpp( 166) hoot::OgrWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 17:46:44.176 INFO  ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from test-output/cmd/slow/delaware-tds.shp...
 17:46:45.168 INFO  ...ore/io/OsmMapReaderFactory.cpp( 196) Read 5,696 elements from input.
