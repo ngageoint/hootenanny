@@ -121,7 +121,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
-  // feature its being merged with.  So, use the normal geometry AND tag merger.
+  // feature its being merged with.  So, use a geometry AND tag merger.
 
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
@@ -255,10 +255,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
           wayMember->getElementId() << "...");
         wayMember->setTags(
           TagMergerFactory::mergeTags(wayMember->getTags(), relation->getTags(), ElementType::Way));
-<<<<<<< HEAD
         // safety check to make sure we didn't mark any ways as added multilinestring relations
-=======
->>>>>>> develop
         wayMember->getTags().remove(MetadataTags::HootMultilineString());
       }
     }
