@@ -1,7 +1,9 @@
 Test configuration options inherit from each other from the top level parent directory on down.
 
-If you want to base your test configuration off one of the default configuration files, add the option "base.config" with the name of the
-base configuration file as the value. If you do not specify a base configuration file, the test's settings will be based off of the default option values in ConfigOptions.asciidoc which are set to use Reference Conflation / Unifying Algorithm options.
+If you want to base your test configuration off one or more of the default configuration files, add the option "base.config" with the name(s) 
+of the base configuration file(s) as the value. Delimit multiple file names with a comma. If you do not specify any base configuration 
+file(s), the test's settings will be based off of the default option values in ConfigOptions.asciidoc which are set to use Reference 
+Conflation / Unifying Algorithm options.
 
 To keep the test configuration files manageable, only add configuration options to your test config that differ in value from either those 
 in your base configuration file (if you specified a base configuration), ConfigOptions.asciidoc (if you didn't specify a base configuration),

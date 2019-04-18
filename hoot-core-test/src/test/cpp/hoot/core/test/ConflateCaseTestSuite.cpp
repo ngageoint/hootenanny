@@ -59,10 +59,15 @@ void ConflateCaseTestSuite::_loadBaseConfig(const QString testConfigFile, QStrin
   tempConfig.loadJson(ConfPath::search(testConfigFile));
   if (tempConfig.hasKey(Settings::BASE_CONFIG_OPTION_KEY))
   {
-    const QString baseConfig = tempConfig.getString(Settings::BASE_CONFIG_OPTION_KEY).trimmed();
-    if (!baseConfig.isEmpty() && !confs.contains(Settings::BASE_CONFIG_OPTION_KEY))
+    const QStringList baseConfigs =
+      tempConfig.getString(Settings::BASE_CONFIG_OPTION_KEY).trimmed().split(",");
+    for (int i = 0; i < baseConfigs.size(); i++)
     {
-      confs.append(baseConfig);
+      const QString baseConfig = baseConfigs.at(i);
+      if (!baseConfig.isEmpty() && !confs.contains(baseConfig))
+      {
+        confs.append(baseConfig);
+      }
     }
   }
 }
