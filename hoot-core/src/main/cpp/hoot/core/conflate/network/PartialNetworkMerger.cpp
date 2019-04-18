@@ -82,7 +82,7 @@ void PartialNetworkMerger::_appendSublineMappings(
 }
 
 void PartialNetworkMerger::apply(const OsmMapPtr& map,
-                                 vector< pair<ElementId, ElementId> >& replaced)
+                                 vector< pair<ElementId, ElementId>>& replaced)
 {
   _mergerList.clear();
 
@@ -138,7 +138,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
 }
 
 WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced, ConstEdgeMatchPtr edgeMatch) const
+  vector<pair<ElementId, ElementId>>& replaced, ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
   WayStringPtr str1 = _details->toWayString(edgeMatch->getString1(), *this);
@@ -254,7 +254,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 }
 
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId> > &/*replaced*/, ConstEdgeMatchPtr edgeMatch) const
+  vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch) const
 {
   LOG_DEBUG("Processing stub match...");
   LOG_VART(edgeMatch);

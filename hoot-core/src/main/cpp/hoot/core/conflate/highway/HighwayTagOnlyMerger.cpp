@@ -119,8 +119,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
-  if (e1 && e2)
-  {
+  //if (e1 && e2)
+  //{
     //LOG_VART(e1->getElementId());
     //LOG_VART(e2->getElementId());
     OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
@@ -153,7 +153,7 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
         LOG_VART(map->getElement(eid2));
         return needsReview;
       }
-    }
+    //}
 
     // Otherwise, proceed with tag only merging.
 
