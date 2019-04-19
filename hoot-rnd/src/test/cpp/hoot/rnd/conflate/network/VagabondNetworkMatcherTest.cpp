@@ -50,6 +50,8 @@ class VagabondNetworkMatcherTest : public HootTestFixture
 public:
 
   VagabondNetworkMatcherTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      "test-output/conflate/network/")
   {
     setResetType(ResetAll);
   }
@@ -124,6 +126,15 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
+
+    // write final map and compare
+    DebugNetworkMapCreator().addDebugElements(map, uut->getAllEdgeScores(), uut->getAllVertexScores());
+    MapProjector::projectToWgs84(map);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    OsmMapWriterFactory::write(map, QString(_outputPath + "VagabondNetworkMatcherTestFinal.osm"));
+
+    HOOT_FILE_EQUALS(_inputPath + "VagabondNetworkMatcherTestExpected.osm",
+                    _outputPath + "VagabondNetworkMatcherTestFinal.osm");
   }
 };
 

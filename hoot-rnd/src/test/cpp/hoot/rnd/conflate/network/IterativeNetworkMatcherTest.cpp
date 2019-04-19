@@ -143,7 +143,7 @@ public:
       writeDebugMap(map, *uut, i);
     }
 
-    // write final map
+    // write final map and compare
     DebugNetworkMapCreator().addDebugElements(map, uut->getAllEdgeScores(), uut->getAllVertexScores());
     MapProjector::projectToWgs84(map);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
