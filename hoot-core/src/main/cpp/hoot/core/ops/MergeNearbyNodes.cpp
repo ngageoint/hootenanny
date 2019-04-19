@@ -56,11 +56,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MergeNearbyNodes)
 
-double calcDistance(const NodePtr& n1, const NodePtr& n2)
+double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
 {
   double dx = n1->getX() - n2->getX();
   double dy = n1->getY() - n2->getY();
-  return sqrt(dx * dx + dy * dy);
+  return dx * dx + dy * dy;
 }
 
 MergeNearbyNodes::MergeNearbyNodes(Meters distance)
@@ -115,6 +115,8 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
     }
   }
 
+  double distanceSquared = _distance * _distance;
+
   int processedCount = 0;
   cph.resetIterator();
   while (cph.next())
@@ -123,14 +125,16 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
     for (size_t i = 0; i < v.size(); i++)
     {
+      if(!map->containsNode(v[i])) continue;
+
       for (size_t j = 0; j < v.size(); j++)
       {
-        if (v[i] != v[j] && map->containsNode(v[i]) && map->containsNode(v[j]))
+        if (v[i] != v[j] && map->containsNode(v[j]))
         {
           const NodePtr& n1 = planar->getNode(v[i]);
           const NodePtr& n2 = planar->getNode(v[j]);
-          double d = calcDistance(n1, n2);
-          if (d < _distance && n1->getStatus() == n2->getStatus())
+
+          if (distanceSquared > calcDistanceSquared(n1, n2) && n1->getStatus() == n2->getStatus())
           {
             bool replace = false;
             // if the geographic bounds are not specified.
