@@ -3604,9 +3604,9 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 === search.radius.railway
 
 * Data Type: double
-* Default Value: `15`
+* Default Value: `${search.radius.default}`
 
-The search radius to use when conflating railways.
+The search radius to use when conflating railways.  See `search.radius.default`.
 
 === search.radius.waterway
 
