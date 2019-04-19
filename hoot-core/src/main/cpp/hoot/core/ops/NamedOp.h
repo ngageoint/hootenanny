@@ -28,6 +28,7 @@
 #define NAMEDOP_H
 
 // hoot
+#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -57,6 +58,8 @@ public:
   virtual QString getDescription() const override { return ""; }
 
 private:
+
+  QString _getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo);
 
   const Settings* _conf;
   QStringList _namedOps;

@@ -31,7 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include "hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h"
+#include <hoot/core/visitors/geometrymodifiers/GeometryModifierAction.h>
 
 namespace bpt = boost::property_tree;
 
@@ -51,7 +51,7 @@ GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
   LOG_DEBUG( "Available Geometry Modifiers:")
   for (std::string availType : availableActionTypes)
   {
-    shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(availType) );
+    boost::shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(availType) );
     _actions.append(pAction);
     LOG_DEBUG( "class: " << availType << " command: " << pAction->getCommandName());
   }
@@ -104,29 +104,29 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
     // check command availability
     foreach (boost::shared_ptr<GeometryModifierAction> pAction, _actions)
     {
-      if( pAction->getCommandName() == actionDesc.command )
+      if (pAction->getCommandName() == actionDesc.command)
       {
         actionDesc.pAction = pAction;
         break;
       }
     }
 
-    if( !actionDesc.pAction )
+    if (!actionDesc.pAction)
     {
       throw HootException("Invalid geometry modifier action '" + actionDesc.command + "' in " + _rulesFileName);
     }
 
-    if( !commandLevelValue.second.empty())
+    if (!commandLevelValue.second.empty())
     {
-      foreach(bpt::ptree::value_type dataLevelValue, commandLevelValue.second)
+      foreach (bpt::ptree::value_type dataLevelValue, commandLevelValue.second)
       {
         // read filter
-        if( dataLevelValue.first == GeometryModifierAction::FILTER_TAG )
+        if (dataLevelValue.first == GeometryModifierAction::FILTER_TAG)
         {
           _parseFilter(actionDesc, dataLevelValue.second);
         }
         // read arguments
-        else if( dataLevelValue.first == GeometryModifierAction::ARGUMENT_TAG )
+        else if (dataLevelValue.first == GeometryModifierAction::ARGUMENT_TAG)
         {
           _parseArguments(actionDesc, dataLevelValue.second);
         }
@@ -145,7 +145,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
 void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
 {
-  foreach(bpt::ptree::value_type data, ptree)
+  foreach (bpt::ptree::value_type data, ptree)
   {
     actionDesc.filter[QString::fromStdString(data.first)] = QString::fromStdString(data.second.data());
   }
@@ -155,10 +155,10 @@ void GeometryModifierOp::_parseArguments(GeometryModifierActionDesc& actionDesc,
 {
   QList<QString> availableParameters = actionDesc.pAction->getParameterNames();
 
-  foreach(bpt::ptree::value_type data, ptree)
+  foreach (bpt::ptree::value_type data, ptree)
   {
     QString arg = QString::fromStdString(data.first);
-    if( availableParameters.contains(arg) )
+    if (availableParameters.contains(arg))
     {
       actionDesc.arguments[arg] = QString::fromStdString(data.second.data());
     }

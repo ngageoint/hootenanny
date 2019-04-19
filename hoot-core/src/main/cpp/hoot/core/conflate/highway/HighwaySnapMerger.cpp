@@ -193,9 +193,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwaySnapMerger: e1");
   OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwaySnapMerger: e2");
 
-  // This doesn't seem to always be true.
-  //assert(e1->getStatus() == Status::Unknown1);
-
   // split w2 into sublines
   WaySublineMatchString match;
   try
@@ -219,8 +216,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
 
   LOG_VART(match.toString());
-  ElementPtr e1Match, e2Match;
-  ElementPtr scraps1, scraps2;
+  ElementPtr e1Match;
+  ElementPtr e2Match;
+  ElementPtr scraps1;
+  ElementPtr scraps2;
   // split the first element and don't reverse any of the geometries.
   _splitElement(map, match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match,
                 scraps1);

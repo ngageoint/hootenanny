@@ -33,7 +33,6 @@
 #include <hoot/core/util/Log.h>
 
 using namespace std;
-using namespace boost;
 
 namespace hoot
 {
@@ -42,9 +41,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 
 void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 {
-  if( _actionDesc.pAction == NULL ) return;
+  if (_actionDesc.pAction == NULL) return;
   int filterSize = _actionDesc.filter.size();
-  if( filterSize == 0 ) return;
+  if (filterSize == 0) return;
 
   _numProcessed++;
 
@@ -57,16 +56,16 @@ void GeometryModifierVisitor::visit(const ElementPtr& pElement)
   {
     foreach (QString tagKey, tags.keys())
     {
-      if( tagKey == filterKey && tags[tagKey] == _actionDesc.filter[filterKey])
+      if (tagKey == filterKey && tags[tagKey] == _actionDesc.filter[filterKey])
       {
         matches++;
       }
     }
   }
 
-  if( matches == filterSize )
+  if (matches == filterSize)
   {
-    if( _actionDesc.pAction->process(pElement, _pMap) )
+    if (_actionDesc.pAction->process(pElement, _pMap))
     {
       _numAffected++;
     }
