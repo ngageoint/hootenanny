@@ -55,7 +55,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, AddMeasurementTagsVisitor)
 
 void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 {
-  if (!_addArea && !_addWidth) return;
+  if (!_addArea && !_addWidth && !_addLength) return;
 
   _numProcessed++;
 
