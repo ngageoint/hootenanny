@@ -130,7 +130,7 @@ public class ExternalCommandRunnerImplTest {
         assertEquals(expected3, runner.obfuscateConsoleLog(test3));
 
         String test4 = "14:13:54.011 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 3 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 4 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 5 / 17 to a merger...";
-        String expected4 = "Converting match set 3 / 17 to a merger...";
+        String expected4 = "Converting match set 3 / 17 to a merger...\nConverting match set 4 / 17 to a merger...\nConverting match set 5 / 17 to a merger...";
         assertEquals(expected4, runner.obfuscateConsoleLog(test4));
 
 

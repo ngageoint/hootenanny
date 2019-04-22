@@ -71,7 +71,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public String obfuscateConsoleLog(String in) {
         //strip out logging metadata
         //e.g. 15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184)
-        String out = in.replaceFirst("^.*?\\)\\s", "");
+        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+ \\w+ .+?\\( \\d+\\)\\s+", "\n");
+
+        //string out leading newlines
+        out = out.replaceFirst("^\\n", "");
 
         //strip out db connection string
         //e.g. hootapidb://hoot:hoottest@localhost:5432/hoot
