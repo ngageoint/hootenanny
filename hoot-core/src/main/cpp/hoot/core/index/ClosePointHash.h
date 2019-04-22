@@ -39,8 +39,8 @@ namespace hoot
 {
 
 /**
- * Creates a hash with the explicit purpose of finding that are within a predefined distance. This
- * is re-entrant, but not thread safe.
+ * Creates a hash with the explicit purpose of finding points which are within a predefined distance.
+ * This is re-entrant, but not thread safe.
  */
 class ClosePointHash
 {

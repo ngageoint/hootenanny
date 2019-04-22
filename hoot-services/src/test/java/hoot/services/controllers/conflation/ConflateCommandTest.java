@@ -57,7 +57,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
 
@@ -122,7 +121,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -153,7 +151,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -175,7 +172,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -221,7 +217,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);

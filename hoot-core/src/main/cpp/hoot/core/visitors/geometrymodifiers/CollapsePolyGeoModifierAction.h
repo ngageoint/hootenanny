@@ -47,11 +47,11 @@ public:
 
   static std::string className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
-  QString getCommandName() const { return "collapse_poly"; }
-  QList<QString> getParameterNames() const { return QList<QString> { MAX_AREA_PARAM, MAX_LENGTH_PARAM }; }
+  virtual QString getCommandName() const override { return "collapse_poly"; }
+  virtual QList<QString> getParameterNames() const override { return QList<QString> { MAX_AREA_PARAM, MAX_LENGTH_PARAM }; }
 
-  void parseArguments( const QHash<QString, QString>& arguments );
-  bool process( const ElementPtr& pElement, OsmMap* pMap );
+  virtual void parseArguments(const QHash<QString, QString>& arguments) override;
+  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
   const double DEFAULT_AREA = 15000;

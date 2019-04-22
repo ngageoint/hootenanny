@@ -44,6 +44,7 @@ public class MapLayer {
     private boolean canExportToOsmApiDb;
     private Boolean isPublic;
     private long userId;
+    private long folderId;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -103,5 +104,13 @@ public class MapLayer {
     }
     public void setPublicCol(Boolean publicCol) {
         this.isPublic = publicCol;
+    }
+
+    public long getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(long folderId) {
+        this.folderId = folderId;
     }
 }

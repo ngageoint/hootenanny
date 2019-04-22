@@ -52,9 +52,9 @@ const QString CollapsePolyGeoModifierAction::MAX_LENGTH_PARAM = "max_length_in_m
 bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap )
 {
   // only process closed area ways
-  if( pElement->getElementType() != ElementType::Way ) return false;
+  if (pElement->getElementType() != ElementType::Way) return false;
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
-  if( !pWay->isClosedArea() ) return false;
+  if (!pWay->isClosedArea()) return false;
 
   OsmMapPtr mapPtr = pMap->shared_from_this();
   ElementConverter elementConverter(mapPtr);
@@ -62,7 +62,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
   bool checkLength = _length != 0;
   bool checkArea = _area != 0;
 
-  if( checkArea || checkLength )
+  if (checkArea || checkLength)
   {
     shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
@@ -72,7 +72,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
     // calculate polygon length only if we need it
     double polyLength = 0;
 
-    if( checkLength )
+    if (checkLength)
     {
       // calculate minimum rectangle/aligned bounding box
       Geometry* pMinRect = MinimumDiameter::getMinimumRectangle(pPoly.get());
@@ -91,7 +91,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       }
       */
 
-      if( pMinRectCoords->getSize() > 2 )
+      if (pMinRectCoords->getSize() > 2)
       {
         double len1 = (CoordinateExt(pMinRectCoords->getAt(0)) - CoordinateExt(pMinRectCoords->getAt(1))).length();
         double len2 = (CoordinateExt(pMinRectCoords->getAt(1)) - CoordinateExt(pMinRectCoords->getAt(2))).length();
@@ -99,19 +99,18 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       }
     }
 
-    if( (checkArea && (polyArea < _area)) ||
-        (checkLength && (polyLength < _length))
-      )
+    if((checkArea && (polyArea < _area)) ||
+       (checkLength && (polyLength < _length)))
     {
       Coordinate centroid;
-      if( pPoly->getCentroid(centroid) == false )
+      if (pPoly->getCentroid(centroid) == false)
       {
         // throwing a HootException might be too harsh
-        LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId() );
+        LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId());
         return false;
       }
 
-      NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), centroid) );
+      NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), centroid));
 
       // copy tags from original way to node
       pNode->setTags(pWay->getTags());
@@ -124,7 +123,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       // remove unused nodes of previous way
       for (long nodeId : nodeIds)
       {
-        RemoveNodeOp removeOp( nodeId, true, false, true );
+        RemoveNodeOp removeOp(nodeId, true, false, true);
         removeOp.apply(mapPtr);
       }
 
@@ -140,12 +139,12 @@ void CollapsePolyGeoModifierAction::parseArguments(const QHash<QString, QString>
   _area = DEFAULT_AREA;
   _length = DEFAULT_LENGTH;
 
-  if( arguments.keys().contains(MAX_AREA_PARAM) )
+  if (arguments.keys().contains(MAX_AREA_PARAM))
   {
     _area = arguments[MAX_AREA_PARAM].toDouble();
   }
 
-  if( arguments.keys().contains(MAX_LENGTH_PARAM) )
+  if (arguments.keys().contains(MAX_LENGTH_PARAM))
   {
     _length = arguments[MAX_LENGTH_PARAM].toDouble();
   }
