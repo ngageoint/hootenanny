@@ -60,7 +60,7 @@ pipeline {
                     SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
                     SYS_URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
                     SYS_URL = SYS_URL.trim()
-                    echo "System under test version ${SYS_VER}  http://${SYS_URL}:8080/hootenanny-id/"
+                    echo "System under test version ${SYS_VER}  http://${SYS_URL}:8080/hootenanny-id2x/"
                 }
             }
         }
@@ -107,7 +107,7 @@ pipeline {
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
                 // Configure authentication and reboot tomcat
-                sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
+                sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id2x/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
                 sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
@@ -181,7 +181,7 @@ pipeline {
                 notifySlack("SUCCESS", "#builds_hoot")
                 if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
-                    slackSend channel: "#builds_hoot", message: "Release candidate version ${SYS_VER} ready for testing http://${SYS_URL}:8080/hootenanny-id/"
+                    slackSend channel: "#builds_hoot", message: "Release candidate version ${SYS_VER} ready for testing http://${SYS_URL}:8080/hootenanny-id2x/"
                 } else {
                     // If all tests passed, clean everything up
                     sh "vagrant destroy -f ${params.Box}"

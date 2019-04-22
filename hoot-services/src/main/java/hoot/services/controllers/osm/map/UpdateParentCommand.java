@@ -24,30 +24,28 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.clipping;
+package hoot.services.controllers.osm.map;
 
 import java.time.LocalDateTime;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.osm.map.FolderResource;
-import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.models.db.Users;
 import hoot.services.utils.DbUtils;
 
 
-class UpdateParentCommand implements InternalCommand {
-    private final String mapName;
+public class UpdateParentCommand implements InternalCommand {
     private final String jobId;
-    private final Users user;
+    private final String mapName;
     private final Long folderId;
+    private final Users user;
     private final Class<?> caller;
 
-    UpdateParentCommand( String jobId, ClipDatasetParams params, Users user, Class<?> caller) {
-        this.mapName = params.getOutputName();
+    UpdateParentCommand( String jobId, Long folderId, String mapName, Users user, Class<?> caller) {
         this.jobId = jobId;
+        this.mapName = mapName;
+        this.folderId = folderId;
         this.user = user;
-        this.folderId = params.getFolderId();
         this.caller = caller;
     }
 
