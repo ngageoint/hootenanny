@@ -46,7 +46,7 @@ public:
 
   static std::string className() { return "hoot::RfExtractorClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   RfExtractorClassifier();
 

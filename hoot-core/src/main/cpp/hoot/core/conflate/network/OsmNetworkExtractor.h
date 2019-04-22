@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::OsmNetworkExtractor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmNetworkExtractor();
 

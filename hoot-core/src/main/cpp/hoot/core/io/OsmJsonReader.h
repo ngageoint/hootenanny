@@ -111,7 +111,7 @@ public:
 
   static std::string className() { return "hoot::OsmJsonReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmJsonReader();
   virtual ~OsmJsonReader();

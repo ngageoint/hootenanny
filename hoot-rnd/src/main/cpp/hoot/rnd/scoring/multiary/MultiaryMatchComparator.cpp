@@ -52,7 +52,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MultiaryMatchComparator::logWarnCount = 0;
+int MultiaryMatchComparator::logWarnCount = 0;
 
 const QString matchMatchStr = "missMatch";
 const QString matchMissStr = "matchMiss";

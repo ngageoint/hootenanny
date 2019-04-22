@@ -58,7 +58,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int HighwayMergerAbstract::logWarnCount = 0;
+int HighwayMergerAbstract::logWarnCount = 0;
 
 void HighwayMergerAbstract::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
   QString note, QString reviewType)

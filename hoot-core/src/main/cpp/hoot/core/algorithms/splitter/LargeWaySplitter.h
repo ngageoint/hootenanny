@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::LargeWaySplitter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   LargeWaySplitter(double threshold);
 

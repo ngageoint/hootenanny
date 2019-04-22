@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::NetworkDetails"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 

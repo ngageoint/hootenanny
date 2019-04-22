@@ -67,7 +67,7 @@ public:
 
   static std::string className() { return "hoot::GeometryConverter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   GeometryConverter(const OsmMapPtr& map);
   GeometryConverter(const ConstOsmMapPtr& map);

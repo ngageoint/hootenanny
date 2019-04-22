@@ -53,7 +53,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, ScriptMatch)
 
-unsigned int ScriptMatch::logWarnCount = 0;
+int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch() :
 Match()

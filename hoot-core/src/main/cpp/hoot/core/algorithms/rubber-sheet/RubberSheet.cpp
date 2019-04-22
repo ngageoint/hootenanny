@@ -54,7 +54,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int RubberSheet::logWarnCount = 0;
+int RubberSheet::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RubberSheet)
 

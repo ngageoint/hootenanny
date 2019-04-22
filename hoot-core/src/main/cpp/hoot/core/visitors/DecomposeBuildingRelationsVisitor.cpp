@@ -37,7 +37,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
+int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 

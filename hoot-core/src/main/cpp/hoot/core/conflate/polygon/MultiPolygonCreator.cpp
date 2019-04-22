@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MultiPolygonCreator::logWarnCount = 0;
+int MultiPolygonCreator::logWarnCount = 0;
 
 MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
   const ConstRelationPtr& r) :

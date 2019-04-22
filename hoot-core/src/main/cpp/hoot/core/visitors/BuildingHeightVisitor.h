@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::BuildingHeightVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   BuildingHeightVisitor();
 

@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::HighwayRfClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   HighwayRfClassifier();
 

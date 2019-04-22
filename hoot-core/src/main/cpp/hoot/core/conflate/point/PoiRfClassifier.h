@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::PoiRfClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   PoiRfClassifier();
 

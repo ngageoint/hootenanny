@@ -54,7 +54,7 @@ public:
 
   static std::string className() { return "hoot::NodeMatcher"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   // exposed for white box testing.
   friend class NodeMatcherTest;

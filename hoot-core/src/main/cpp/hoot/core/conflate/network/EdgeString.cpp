@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-unsigned int EdgeString::logWarnCount = 0;
+int EdgeString::logWarnCount = 0;
 
 bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
 {

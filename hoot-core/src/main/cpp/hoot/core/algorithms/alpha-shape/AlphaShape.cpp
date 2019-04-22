@@ -60,7 +60,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int AlphaShape::logWarnCount = 0;
+int AlphaShape::logWarnCount = 0;
 
 class FaceGroup
 {

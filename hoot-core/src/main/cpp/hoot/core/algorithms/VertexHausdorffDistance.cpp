@@ -88,7 +88,7 @@ private:
   const Geometry& _g;
 
   //this should be static, but there's no header file
-  unsigned int _logWarnCount;
+  int _logWarnCount;
 };
 
 VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geometry& g2)

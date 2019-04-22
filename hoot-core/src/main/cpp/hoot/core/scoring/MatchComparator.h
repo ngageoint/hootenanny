@@ -55,7 +55,7 @@ public:
 
   static std::string className() { return "hoot::MatchComparator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   typedef QMultiMap<QString, ElementId> UuidToEid;
 

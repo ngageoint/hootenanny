@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmNetworkExtractor::logWarnCount = 0;
+int OsmNetworkExtractor::logWarnCount = 0;
 
 class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {

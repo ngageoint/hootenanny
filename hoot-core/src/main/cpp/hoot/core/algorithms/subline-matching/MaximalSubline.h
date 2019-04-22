@@ -56,7 +56,7 @@ public:
 
   static std::string className() { return "hoot::MaximalSubline"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   class MatchCriteria
   {

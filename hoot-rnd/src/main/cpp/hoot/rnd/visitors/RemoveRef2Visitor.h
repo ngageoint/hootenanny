@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::RemoveRef2Visitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   RemoveRef2Visitor();
   virtual ~RemoveRef2Visitor() {}

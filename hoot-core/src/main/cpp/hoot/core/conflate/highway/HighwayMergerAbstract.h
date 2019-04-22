@@ -85,7 +85,7 @@ public:
 
   static std::string className() { return "hoot::HighwayMergerAbstract"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   virtual ~HighwayMergerAbstract() {}
 

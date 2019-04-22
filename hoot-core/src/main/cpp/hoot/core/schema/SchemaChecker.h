@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::SchemaChecker"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   SchemaChecker(OsmSchema& osmSchema);
 

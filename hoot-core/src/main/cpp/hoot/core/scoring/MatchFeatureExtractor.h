@@ -69,7 +69,7 @@ public:
 
   static std::string className() { return "hoot::MatchFeatureExtractor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   MatchFeatureExtractor(bool evenClasses=false);
 

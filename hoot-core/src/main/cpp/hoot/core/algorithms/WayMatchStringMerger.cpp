@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int WayMatchStringMerger::logWarnCount = 0;
+int WayMatchStringMerger::logWarnCount = 0;
 
 QString WayMatchStringMerger::SublineMapping::toString() const
 {

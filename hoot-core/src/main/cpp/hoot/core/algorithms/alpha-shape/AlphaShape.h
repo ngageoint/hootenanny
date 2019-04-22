@@ -71,7 +71,7 @@ public:
 
   static std::string className() { return "hoot::AlphaShape"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   AlphaShape(double alpha);
 

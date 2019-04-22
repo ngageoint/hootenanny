@@ -43,7 +43,7 @@ using namespace v8;
 namespace hoot
 {
 
-unsigned int JsonOsmSchemaLoader::logWarnCount = 0;
+int JsonOsmSchemaLoader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmSchemaLoader, JsonOsmSchemaLoader)
 

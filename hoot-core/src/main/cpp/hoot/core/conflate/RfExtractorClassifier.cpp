@@ -44,7 +44,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int RfExtractorClassifier::logWarnCount = 0;
+int RfExtractorClassifier::logWarnCount = 0;
 
 RfExtractorClassifier::RfExtractorClassifier()
 {

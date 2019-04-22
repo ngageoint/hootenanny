@@ -31,7 +31,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int WaySublineCollection::logWarnCount = 0;
+int WaySublineCollection::logWarnCount = 0;
 
 WaySublineCollection::WaySublineCollection()
 {

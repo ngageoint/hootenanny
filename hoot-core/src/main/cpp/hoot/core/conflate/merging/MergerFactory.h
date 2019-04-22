@@ -54,7 +54,7 @@ public:
 
   static std::string className() { return "hoot::ScriptMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static QString mergerCreatorsKey() { return "merger.creators"; }
 

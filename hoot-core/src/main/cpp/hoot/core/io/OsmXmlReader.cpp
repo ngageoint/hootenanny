@@ -56,7 +56,7 @@
 namespace hoot
 {
 
-unsigned int OsmXmlReader::logWarnCount = 0;
+int OsmXmlReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 

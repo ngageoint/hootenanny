@@ -83,7 +83,7 @@ class DataConverter : public Configurable
 
 public:
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   DataConverter();
 

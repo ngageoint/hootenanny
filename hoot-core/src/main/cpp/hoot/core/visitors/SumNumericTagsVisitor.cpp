@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-unsigned int SumNumericTagsVisitor::logWarnCount = 0;
+int SumNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
 

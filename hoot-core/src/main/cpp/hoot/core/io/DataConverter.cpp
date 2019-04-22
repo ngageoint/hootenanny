@@ -167,7 +167,7 @@ void ogrWriterThread::run()
   LOG_DEBUG("Done Writing Features");
 }
 
-unsigned int DataConverter::logWarnCount = 0;
+int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
 _colsArgSpecified(false),

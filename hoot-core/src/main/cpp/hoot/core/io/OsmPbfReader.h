@@ -85,7 +85,7 @@ public:
 
   static std::string className() { return "hoot::OsmPbfReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);

@@ -43,7 +43,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MostEnglishName::logWarnCount = 0;
+int MostEnglishName::logWarnCount = 0;
 
 MostEnglishNamePtr MostEnglishName::_theInstance;
 

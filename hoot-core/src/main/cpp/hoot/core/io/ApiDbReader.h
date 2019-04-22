@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::ApiDbReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   ApiDbReader();
   virtual ~ApiDbReader() {}

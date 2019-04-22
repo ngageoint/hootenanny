@@ -49,7 +49,7 @@
 namespace hoot
 {
 
-unsigned int HootApiDbBulkInserter::logWarnCount = 0;
+int HootApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbBulkInserter)
 

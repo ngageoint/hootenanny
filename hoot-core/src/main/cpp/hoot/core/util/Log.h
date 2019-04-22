@@ -126,7 +126,7 @@ public:
 
   void setLevel(WarningLevel l);
 
-  static unsigned int getWarnMessageLimit();
+  static int getWarnMessageLimit();
 
 #if HOOT_HAVE_LIBLOG4CXX
   log4cxx::LoggerPtr _logger;
@@ -138,7 +138,7 @@ private:
 
   WarningLevel _level;
   static boost::shared_ptr<Log> _theInstance;
-  static unsigned int _warnMessageLimit;
+  static int _warnMessageLimit;
 
   Log();
 };

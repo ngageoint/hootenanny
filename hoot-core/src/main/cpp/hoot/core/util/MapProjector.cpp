@@ -55,7 +55,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MapProjector::logWarnCount = 0;
+int MapProjector::logWarnCount = 0;
 
 boost::shared_ptr<MapProjector> MapProjector::_theInstance;
 
@@ -96,7 +96,7 @@ void ReprojectCoordinateFilter::project(Coordinate* c) const
   {
     QString err = QString("Error projecting point. Is the point outside of the projection's "
                           "bounds?");
-    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
     if (MapProjector::logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN(err);
@@ -573,7 +573,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRS
     }
     catch(const IllegalArgumentException&)
     {
-      const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+      const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
       if (logWarnCount < logWarnMessageLimit)
       {
         LOG_WARN("Failure projecting node: " << n->toString());

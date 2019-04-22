@@ -69,7 +69,7 @@ public:
 
   static std::string className() { return "hoot::MostEnglishName"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static const MostEnglishNamePtr& getInstance();
 

@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-unsigned int AverageNumericTagsVisitor::logWarnCount = 0;
+int AverageNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AverageNumericTagsVisitor)
 

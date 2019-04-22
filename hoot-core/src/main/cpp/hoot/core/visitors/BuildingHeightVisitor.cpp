@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-unsigned int BuildingHeightVisitor::logWarnCount = 0;
+int BuildingHeightVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, BuildingHeightVisitor)
 

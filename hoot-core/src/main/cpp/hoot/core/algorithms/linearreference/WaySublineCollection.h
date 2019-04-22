@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::WaySublineCollection"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   typedef std::vector<WaySubline> SublineCollection;
 

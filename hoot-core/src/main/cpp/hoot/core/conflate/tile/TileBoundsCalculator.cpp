@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int TileBoundsCalculator::logWarnCount = 0;
+int TileBoundsCalculator::logWarnCount = 0;
 
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {

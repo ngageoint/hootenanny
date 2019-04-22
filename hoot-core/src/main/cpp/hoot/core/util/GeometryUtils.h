@@ -63,7 +63,7 @@ public:
 
   static std::string className() { return "hoot::GeometryUtils"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static double MEAN_EARTH_RADIUS;
 

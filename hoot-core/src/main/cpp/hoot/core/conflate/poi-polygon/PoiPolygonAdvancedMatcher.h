@@ -68,7 +68,7 @@ private:
 
   QStringList _genericLandUseTagVals;
 
-  unsigned int _badGeomCount;
+  int _badGeomCount;
 
   AddressParser _addressParser;
 };

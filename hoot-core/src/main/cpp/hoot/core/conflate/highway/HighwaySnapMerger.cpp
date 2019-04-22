@@ -66,7 +66,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, HighwaySnapMerger)
 
-unsigned int HighwaySnapMerger::logWarnCount = 0;
+int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger() :
 HighwayMergerAbstract()

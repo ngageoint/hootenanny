@@ -49,7 +49,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, PoiPolygonMerger)
 
-unsigned int PoiPolygonMerger::logWarnCount = 0;
+int PoiPolygonMerger::logWarnCount = 0;
 
 PoiPolygonMerger::PoiPolygonMerger() :
 MergerBase()

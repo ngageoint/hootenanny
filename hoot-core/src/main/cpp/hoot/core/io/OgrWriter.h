@@ -65,7 +65,7 @@ public:
 
   static std::string className() { return "hoot::OgrWriter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   /**
    * A true/false value to determine whether or not all layers are created.

@@ -52,7 +52,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MatchFeatureExtractor::logWarnCount = 0;
+int MatchFeatureExtractor::logWarnCount = 0;
 
 MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
 {
