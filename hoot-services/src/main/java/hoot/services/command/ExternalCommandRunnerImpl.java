@@ -71,9 +71,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public String obfuscateConsoleLog(String in) {
         //strip out logging metadata
         //e.g. 15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184)
-        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+ \\w+ .+?\\( \\d+\\)\\s+", "\n");
+        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+\\w+\\s+.+?\\(\\s+\\d+\\)\\s", "\n");
 
-        //string out leading newlines
+        //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
 
         //strip out db connection string
@@ -98,7 +98,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             @Override
             protected void processLine(String line, int level) {
                 String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
-                String currentLine = obfuscateConsoleLog(line);// + "\n";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentOut.equals(currentLine)) {
@@ -119,7 +119,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             @Override
             protected void processLine(String line, int level) {
                 String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
-                String currentLine = obfuscateConsoleLog(line);// + "\n";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentErr.equals(currentLine)) {

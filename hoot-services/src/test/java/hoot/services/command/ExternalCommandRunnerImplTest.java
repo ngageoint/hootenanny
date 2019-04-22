@@ -115,13 +115,13 @@ public class ExternalCommandRunnerImplTest {
 
         ExternalCommandRunnerImpl runner = new ExternalCommandRunnerImpl();
 
-        String test1 = "15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting hootapidb://hoot:hoottest@localhost:5432/hoot/Merged_ToyTest_4a3300b3 to /home/vagrant/hoot/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...";
-        String expected1 = "Converting <hootapidb>/Merged_ToyTest_4a3300b3 to <path>/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...";
+        String test1 = "15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting hootapidb://hoot:hoottest@localhost:5432/hoot/Merged_ToyTest_4a3300b3 to /home/vagrant/hoot/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...\n";
+        String expected1 = "Converting <hootapidb>/Merged_ToyTest_4a3300b3 to <path>/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...\n";
         assertEquals(expected1, runner.obfuscateConsoleLog(test1));
 
 
-        String test2 = "20:14:57.252 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting /home/vagrant/hoot/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to hootapidb://hoot:hoottest@localhost:5432/hoot/mapgeojson...";
-        String expected2 = "Converting <path>/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to <hootapidb>/mapgeojson...";
+        String test2 = "20:14:57.252 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting /home/vagrant/hoot/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to hootapidb://hoot:hoottest@localhost:5432/hoot/mapgeojson...\n";
+        String expected2 = "Converting <path>/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to <hootapidb>/mapgeojson...\n";
         assertEquals(expected2, runner.obfuscateConsoleLog(test2));
 
 
@@ -129,11 +129,15 @@ public class ExternalCommandRunnerImplTest {
         String expected3 = "Unable to stream I/O due to input: -756de217ad82/map.geojson and/or output: host:5432/hoot/mapgeojson";
         assertEquals(expected3, runner.obfuscateConsoleLog(test3));
 
-        String test4 = "14:13:54.011 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 3 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 4 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 5 / 17 to a merger...";
-        String expected4 = "Converting match set 3 / 17 to a merger...\nConverting match set 4 / 17 to a merger...\nConverting match set 5 / 17 to a merger...";
+        String test4 = "14:13:54.011 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 3 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 4 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 5 / 17 to a merger...\n";
+        String expected4 = "Converting match set 3 / 17 to a merger...\nConverting match set 4 / 17 to a merger...\nConverting match set 5 / 17 to a merger...\n";
         assertEquals(expected4, runner.obfuscateConsoleLog(test4));
 
+        String test5 = "17:48:57.817 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  83)  Applying operation: hoot::BuildingOutlineRemoveOp...\n";
+        String expected5 = " Applying operation: hoot::BuildingOutlineRemoveOp...\n";
+        assertEquals(expected5, runner.obfuscateConsoleLog(test5));
 
+//
     }
 
 }
