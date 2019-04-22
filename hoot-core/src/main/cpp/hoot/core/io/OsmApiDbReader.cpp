@@ -48,8 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmApiDbReader)
 
 OsmApiDbReader::OsmApiDbReader() :
-_database(new OsmApiDb()),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue())
+_database(new OsmApiDb())
 {
   setConfiguration(conf());
 }

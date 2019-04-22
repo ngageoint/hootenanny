@@ -78,7 +78,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
   if (_numProcessed % 10000 == 0)
   {
     PROGRESS_INFO(
-      "\t\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
+      "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
       " elements for empty area removal.");
   }
 }

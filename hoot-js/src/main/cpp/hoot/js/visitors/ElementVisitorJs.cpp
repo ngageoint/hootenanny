@@ -80,8 +80,8 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
-
+  const QString className = str(args.This()->GetConstructorName());
+  LOG_VART(className);
   ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
   ConstElementVisitor* constVis = dynamic_cast<ConstElementVisitor*>(vis);
   if (!constVis)

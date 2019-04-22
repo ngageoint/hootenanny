@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -57,41 +57,61 @@ class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyMultithreadTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  const QString inputPath = "test-files/ops/BuildingPartMergeOp/";
-  const QString outputPath = "test-output/ops/BuildingPartMergeOp/";
-
-  BuildingPartMergeOpTest()
+  BuildingPartMergeOpTest() :
+  HootTestFixture("test-files/ops/BuildingPartMergeOp/", "test-output/ops/BuildingPartMergeOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
   }
 
   void runToyTest()
   {
     OsmXmlReader reader;
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "ToyBuildings.osm", map);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
+    uut.setThreadCount(1);
     uut.apply(map);
 
-    MapProjector::projectToWgs84(map);
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
 
+    MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm",
-                     outputPath + "ToyBuildings.osm");
+    writer.write(map, _outputPath + "runToyTestOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "runToyTestOut.osm", _outputPath + "runToyTestOut.osm");
   }
 
+  void runToyMultithreadTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(2);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "runToyMultithreadTestOut.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runToyTestOut.osm", _outputPath + "runToyMultithreadTestOut.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "current");
 
 }

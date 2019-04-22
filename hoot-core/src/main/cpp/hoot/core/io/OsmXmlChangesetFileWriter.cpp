@@ -186,8 +186,6 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
   }
 }
 
-// Consolidate redundant tag code in these element write methods - #2942
-
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   LOG_TRACE("Writing change for " << n << "...");
@@ -226,34 +224,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   }
 
   Tags tags = n->getTags();
-  if (_includeDebugTags)
-  {
-    tags.set(MetadataTags::HootStatus(), QString::number(n->getStatus().getEnum()));
-  }
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-  {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false &&
-        it.key() != MetadataTags::HootHash())
-    {
-      writer.writeStartElement("tag");
-      writer.writeAttribute(
-        "k",
-        _invalidCharacterHandler.removeInvalidCharacters(it.key()));
-      writer.writeAttribute(
-        "v",
-        _invalidCharacterHandler.removeInvalidCharacters(it.value()));
-      writer.writeEndElement();
-    }
-  }
-
-  // turn this on when we start using node circularError.
-  if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0)
-  {
-    writer.writeStartElement("tag");
-    writer.writeAttribute("k", MetadataTags::ErrorCircular());
-    writer.writeAttribute("v", QString("%1").arg(n->getCircularError()));
-    writer.writeEndElement();
-  }
+  _writeTags(writer, tags, n.get());
 
   writer.writeEndElement();
 }
@@ -307,32 +278,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   }
 
   Tags tags = w->getTags();
-  if (_includeDebugTags)
-  {
-    tags.set(MetadataTags::HootStatus(), QString::number(w->getStatus().getEnum()));
-  }
-  for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
-  {
-    if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
-    {
-      writer.writeStartElement("tag");
-      writer.writeAttribute(
-        "k",
-        _invalidCharacterHandler.removeInvalidCharacters(tit.key()));
-      writer.writeAttribute(
-        "v",
-        _invalidCharacterHandler.removeInvalidCharacters(tit.value()));
-      writer.writeEndElement();
-    }
-  }
-
-  if (w->hasCircularError())
-  {
-    writer.writeStartElement("tag");
-    writer.writeAttribute("k", MetadataTags::ErrorCircular());
-    writer.writeAttribute("v", QString("%1").arg(w->getCircularError()));
-    writer.writeEndElement();
-  }
+  _writeTags(writer, tags, w.get());
 
   writer.writeEndElement();
 }
@@ -393,24 +339,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   }
 
   Tags tags = r->getTags();
-  if (_includeDebugTags)
-  {
-    tags.set(MetadataTags::HootStatus(), QString::number(r->getStatus().getEnum()));
-  }
-  for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
-  {
-    if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
-    {
-      writer.writeStartElement("tag");
-      writer.writeAttribute(
-        "k",
-        _invalidCharacterHandler.removeInvalidCharacters(tit.key()));
-      writer.writeAttribute(
-        "v",
-        _invalidCharacterHandler.removeInvalidCharacters(tit.value()));
-      writer.writeEndElement();
-    }
-  }
+  _writeTags(writer, tags, r.get());
 
   if (r->getType() != "")
   {
@@ -422,14 +351,6 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     writer.writeEndElement();
   }
 
-  if (r->hasCircularError())
-  {
-    writer.writeStartElement("tag");
-    writer.writeAttribute("k", MetadataTags::ErrorCircular());
-    writer.writeAttribute("v", QString("%1").arg(r->getCircularError()));
-    writer.writeEndElement();
-  }
-
   writer.writeEndElement();
 }
 
@@ -438,6 +359,42 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();
   _changesetMaxSize = co.getChangesetMaxSize();
+}
+
+void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
+{
+  if (_includeDebugTags)
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+  }
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  {
+    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    {
+      //  Ignore 'hoot:hash' for nodes
+      if (it.key() == MetadataTags::HootHash() && element->getElementType() == ElementType::Node)
+        continue;
+      writer.writeStartElement("tag");
+      writer.writeAttribute(
+        "k",
+        _invalidCharacterHandler.removeInvalidCharacters(it.key()));
+      writer.writeAttribute(
+        "v",
+        _invalidCharacterHandler.removeInvalidCharacters(it.value()));
+      writer.writeEndElement();
+    }
+  }
+  //  Non-nodes always report circular error when requested but nodes only report circular error
+  //  when there are other tags that aren't debug tags
+  if (ConfigOptions().getWriterIncludeCircularErrorTags() && element->hasCircularError() &&
+      (element->getElementType() != ElementType::Node ||
+      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)))
+  {
+    writer.writeStartElement("tag");
+    writer.writeAttribute("k", MetadataTags::ErrorCircular());
+    writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
+    writer.writeEndElement();
+  }
 }
 
 }

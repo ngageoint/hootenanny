@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -56,6 +56,8 @@ class DualWaySplitterTest : public HootTestFixture
 public:
 
   DualWaySplitterTest()
+    : HootTestFixture("test-files/algorithms/splitter/",
+                      "test-output/algorithms/splitter/")
   {
     setResetType(ResetBasic);
   }
@@ -66,7 +68,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/DualWaySplitterSimpleInput.osm", map);
+    reader.read(_inputPath + "DualWaySplitterSimpleInput.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
@@ -75,11 +77,10 @@ public:
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, "test-output/DualWaySplitterSimpleOutput.osm");
+    writer.write(after, _outputPath + "DualWaySplitterSimpleOutput.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-output/DualWaySplitterSimpleOutput.osm",
-      "test-files/DualWaySplitterSimpleExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterSimpleExpected.osm",
+                     _outputPath + "DualWaySplitterSimpleOutput.osm");
   }
 
   void allTest()
@@ -97,11 +98,10 @@ public:
     MapProjector::projectToWgs84(after);
 
     OsmXmlWriter writer;
-    writer.write(after, "test-output/DualWaySplitterTest.osm");
+    writer.write(after, _outputPath + "DualWaySplitterTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-output/DualWaySplitterTest.osm",
-      "test-files/DualWaySplitterTestExpected.osm");
+    HOOT_FILE_EQUALS( _inputPath + "DualWaySplitterTestExpected.osm",
+                     _outputPath + "DualWaySplitterTest.osm");
   }
 };
 

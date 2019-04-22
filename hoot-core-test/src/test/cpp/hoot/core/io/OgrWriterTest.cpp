@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -52,8 +52,9 @@ class OgrWriterTest : public HootTestFixture
 public:
 
   OgrWriterTest()
+    : HootTestFixture("test-files/io/",
+                      "test-output/io/")
   {
-    TestUtils::mkpath("test-output/io");
   }
 
   OsmMapPtr _map;
@@ -124,32 +125,32 @@ public:
 
   void runShpTest()
   {
-    FileUtils::removeDir("test-output/io/OgrWriterShpTest");
+    FileUtils::removeDir(_outputPath + "OgrWriterShpTest");
     OgrWriter uut;
-    uut.setScriptPath("test-files/io/SampleTranslation.js");
-    uut.open("test-output/io/OgrWriterShpTest.shp");
+    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.open(_outputPath + "OgrWriterShpTest.shp");
     uut.write(createTestMap());
     QStringList nameFilter;
     nameFilter << "*.shp";
 
     // make sure it created the shapefiles, we aren't actually testing for correct output.
     HOOT_STR_EQUALS("[4]{AAL015.shp, LAP010.shp, LAP030.shp, PAL015.shp}",
-                    QDir("test-output/io/OgrWriterShpTest").entryList(nameFilter));
+                    QDir(_outputPath + "OgrWriterShpTest").entryList(nameFilter));
   }
 
   void runGdbTest()
   {
-    FileUtils::removeDir("test-output/io/OgrWriterTest.gdb");
+    FileUtils::removeDir(_outputPath + "OgrWriterTest.gdb");
     OgrWriter uut;
-    uut.setScriptPath("test-files/io/SampleTranslation.js");
-    uut.open("test-output/io/OgrWriterTest.gdb");
+    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.open(_outputPath + "OgrWriterTest.gdb");
     uut.write(createTestMap());
 
     TestUtils::mkpath("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
 
     // make sure it created a bunch of files. We aren't testing for correct output.
-    CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterTest.gdb").entryList().size() > 10);
+    CPPUNIT_ASSERT(QDir(_outputPath + "OgrWriterTest.gdb").entryList().size() > 10);
   }
 
   //We're testing here that the writer properly writes the relations in two passes (not checking
@@ -168,14 +169,14 @@ public:
 
     map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));
 
-    FileUtils::removeDir("test-output/io/OgrWriterRelationTest.gdb");
+    FileUtils::removeDir(_outputPath + "OgrWriterRelationTest.gdb");
     OgrWriter uut;
-    uut.setScriptPath("test-files/io/SampleTranslation.js");
-    uut.open("test-output/io/OgrWriterRelationTest.gdb");
+    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.open(_outputPath + "OgrWriterRelationTest.gdb");
     uut.write(map);
 
     // make sure it created a bunch of files. We aren't testing for correct output.
-    CPPUNIT_ASSERT(QDir("test-output/io/OgrWriterRelationTest.gdb").entryList().size() > 10);
+    CPPUNIT_ASSERT(QDir(_outputPath + "OgrWriterRelationTest.gdb").entryList().size() > 10);
   }
 };
 

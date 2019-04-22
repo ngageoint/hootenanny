@@ -54,6 +54,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
@@ -90,7 +91,7 @@ public:
    */
   boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
-  Meters getDefaultCircularError() const { return _circularError; }
+  Meters getDefaultCircularError() const { return _defaultCircularError; }
 
   Status getDefaultStatus() const { return _status; }
 
@@ -116,7 +117,7 @@ public:
    */
   void readNext(const OsmMapPtr& map);
 
-  void setDefaultCircularError(Meters circularError) { _circularError = circularError; }
+  void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
@@ -138,7 +139,7 @@ public:
 
 protected:
 
-  Meters _circularError;
+  Meters _defaultCircularError;
   Status _status;
   OsmMapPtr _map;
   OGRLayer* _layer;
@@ -215,6 +216,7 @@ protected:
 class OgrElementIterator : public ElementIterator
 {
 public:
+
   OgrElementIterator(OgrReaderInternal* d)
   {
     _d = d;
@@ -249,6 +251,7 @@ protected:
   }
 
 private:
+
   OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
@@ -390,7 +393,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VARD(allLayers);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -506,7 +509,7 @@ OgrReaderInternal::OgrReaderInternal()
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
-  _circularError = 15.0;
+  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _limit = -1;
   _featureCount = 0;
   _streamFeatureCount = 0;
@@ -956,7 +959,7 @@ void OgrReaderInternal::open(const QString path, QString layer)
   _initTranslate();
 
   _path = path;
-  LOG_DEBUG("Opening data source for layer: " << layer);
+  LOG_TRACE("Opening data source for layer: " << layer);
   _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {
@@ -1038,7 +1041,7 @@ void OgrReaderInternal::_openNextLayer()
 
 Meters OgrReaderInternal::_parseCircularError(Tags& t)
 {
-  Meters circularError = _circularError;
+  Meters circularError = _defaultCircularError;
 
   // parse the circularError out of the tags.
   if (t.contains(MetadataTags::ErrorCircular()))
@@ -1113,7 +1116,8 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     if (_count % 1000 == 0)
     {
       PROGRESS_INFO(
-        "\tRead from layer: " << _count << " / " << _featureCount << " features from layer: " <<
+        "\tRead: " << StringUtils::formatLargeNumber(_count) << " / " <<
+        StringUtils::formatLargeNumber(_featureCount) << " features from layer: " <<
         _layerName.toLatin1().data());
     }
 

@@ -47,88 +47,101 @@ class RemoveElementsVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runRecursiveTest);
   CPPUNIT_TEST(runNegatedFilterTest);
   CPPUNIT_TEST(runReviewRelationTest);
+  CPPUNIT_TEST(runMultipleCriterionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   RemoveElementsVisitorTest()
+    : HootTestFixture("test-files/visitors/RemoveElementsVisitorTest/",
+                      "test-output/visitors/RemoveElementsVisitorTest/")
   {
-    TestUtils::mkpath("test-output/visitors");
   }
 
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveElementsVisitorInput.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
-    boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveElementsVisitorOutput.osm");
-    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorOutput.osm",
-                     "test-output/visitors/RemoveElementsVisitorOutput.osm");
+    writer.write(map, _outputPath + "RemoveElementsVisitorOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorOutput.osm",
+                     _outputPath + "RemoveElementsVisitorOutput.osm");
   }
 
   void runRecursiveTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveElementsVisitorInput.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
-    boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion(map));
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(true);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
-    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorRecursiveOutput.osm",
-                     "test-output/visitors/RemoveElementsVisitorRecursiveOutput.osm");
+    writer.write(map, _outputPath + "RemoveElementsVisitorRecursiveOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorRecursiveOutput.osm",
+                     _outputPath + "RemoveElementsVisitorRecursiveOutput.osm");
   }
 
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveElementsVisitorInput.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
 
-    boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion, true);
+    RemoveElementsVisitor removeElementsVisitor(true);
     removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
-    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorNegatedFilterOutput.osm",
-                     "test-output/visitors/RemoveElementsVisitorNegatedFilterOutput.osm");
+    writer.write(map, _outputPath + "RemoveElementsVisitorNegatedFilterOutput.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorNegatedFilterOutput.osm",
+                     _outputPath + "RemoveElementsVisitorNegatedFilterOutput.osm");
   }
 
   void runReviewRelationTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveElementsVisitorTest-reviewRelationTest.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorTest-reviewRelationTest.osm");
 
-    boost::shared_ptr<ReviewRelationCriterion> elementCriterion(new ReviewRelationCriterion());
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    RemoveElementsVisitor removeElementsVisitor(false);
     removeElementsVisitor.setRecursive(false);
-    removeElementsVisitor.setNegateCriterion(false);
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new ReviewRelationCriterion()));
     map->visitRw(removeElementsVisitor);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm");
-    HOOT_FILE_EQUALS("test-files/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm",
-                     "test-output/visitors/RemoveElementsVisitorTest-reviewRelationTestOut.osm");
+    writer.write(map, _outputPath + "RemoveElementsVisitorTest-reviewRelationTestOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RemoveElementsVisitorTest-reviewRelationTestOut.osm",
+                     _outputPath + "RemoveElementsVisitorTest-reviewRelationTestOut.osm");
+  }
+
+  void runMultipleCriterionTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
+
+    RemoveElementsVisitor removeElementsVisitor(false);
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new PoiCriterion()));
+    removeElementsVisitor.addCriterion(ElementCriterionPtr(new HighwayCriterion(map)));
+    map->visitRw(removeElementsVisitor);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm",
+                     _outputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm");
   }
 
 };

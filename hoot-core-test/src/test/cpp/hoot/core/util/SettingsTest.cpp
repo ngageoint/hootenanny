@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,6 +48,12 @@ class SettingsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  SettingsTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/utils/")
+  {
+  }
 
   void envTest()
   {
@@ -93,12 +99,11 @@ public:
     uut.set("osm.map.writer.factory.writer", "1");
     uut.set("osm.map.reader.factory.reader", "${perty.csm.D}");
 
-    TestUtils::mkpath("test-output/utils");
-    uut.storeJson("test-output/utils/SettingsTest.json");
+    uut.storeJson(_outputPath + "SettingsTest.json");
 
     Settings uut2;
     uut2.loadDefaults();
-    uut2.loadJson("test-output/utils/SettingsTest.json");
+    uut2.loadJson(_outputPath + "SettingsTest.json");
     HOOT_STR_EQUALS(uut.getString("perty.csm.D"), "2");
     HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
     HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");

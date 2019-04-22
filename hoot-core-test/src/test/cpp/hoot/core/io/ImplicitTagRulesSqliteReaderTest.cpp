@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,12 +45,18 @@ class ImplicitTagRulesSqliteReaderTest : public HootTestFixture
 
 public:
 
+  ImplicitTagRulesSqliteReaderTest()
+    : HootTestFixture("test-files/io/ImplicitTagRulesSqliteReaderTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTagsTest()
   {
     ImplicitTagRulesSqliteReader reader;
     reader.setAddTopTagOnly(false);
     reader.setAllowWordsInvolvedInMultipleRules(false);
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
+    reader.open(_inputPath + "rules.sqlite");
 
     QSet<QString> words;
     QSet<QString> wordsInvolved;
@@ -160,7 +166,7 @@ public:
     ImplicitTagRulesSqliteReader reader;
     reader.setAddTopTagOnly(false);
     reader.setAllowWordsInvolvedInMultipleRules(false);
-    reader.open("test-files/io/ImplicitTagRulesSqliteReaderTest/rules.sqlite");
+    reader.open(_inputPath + "rules.sqlite");
 
     QSet<QString> words;
     QSet<QString> ruleWordsInvolved;

@@ -3,8 +3,8 @@ set -e
 
 # Test the GGDMv30 Translation
 
-inputDir=test-files/GGDMv30
-outputDir=test-output/ggdm30_translation
+inputDir=test-files/cmd/slow/GGDMv30
+outputDir=test-output/cmd/slow/ggdm30_translation
 
 TRANS=$HOOT_HOME/translations/GGDMv30.js
 

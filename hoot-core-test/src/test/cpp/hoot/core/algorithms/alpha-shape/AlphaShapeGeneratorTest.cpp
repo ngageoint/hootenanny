@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,9 +55,10 @@ class AlphaShapeGeneratorTest : public HootTestFixture
 public:
 
   AlphaShapeGeneratorTest()
+    : HootTestFixture("test-files/algorithms/alpha-shape/",
+                      "test-output/algorithms/alpha-shape/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate/");
   }
 
   void runBasicTest()
@@ -72,10 +73,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBasicTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBasicTest.osm",
-                    "test-output/conflate/AlphaShapeGeneratorBasicTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBasicTest.osm",
+                    _outputPath + "AlphaShapeGeneratorBasicTest.osm");
   }
 
   void runBufferTest()
@@ -90,10 +91,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorBufferTest.osm",
-                    "test-output/conflate/AlphaShapeGeneratorBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorBufferTest.osm",
+                    _outputPath + "AlphaShapeGeneratorBufferTest.osm");
   }
 
   void runNegativeBufferTest()
@@ -108,10 +109,10 @@ public:
     MapProjector::projectToWgs84(cutShapeMap);
 
     OsmXmlWriter writer;
-    writer.write(cutShapeMap, "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
+    writer.write(cutShapeMap, _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm",
-                     "test-output/conflate/AlphaShapeGeneratorNegativeBufferTest.osm");
+    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorNegativeBufferTest.osm",
+                    _outputPath + "AlphaShapeGeneratorNegativeBufferTest.osm");
   }
 };
 

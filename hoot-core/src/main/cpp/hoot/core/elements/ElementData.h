@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <set>
@@ -57,13 +58,13 @@ public:
   static long UID_EMPTY;
   static bool VISIBLE_EMPTY;
   static double CIRCULAR_ERROR_EMPTY;
-  static double CIRCULAR_ERROR_DEFAULT;
 
   virtual ~ElementData() {}
 
   virtual void clear() { _tags.clear(); }
 
-  Meters getCircularError() const { return _circularError >= 0 ? _circularError : CIRCULAR_ERROR_DEFAULT; }
+  Meters getCircularError() const
+  { return _circularError >= 0 ? _circularError : _defaultCircularError; }
 
   bool hasCircularError() const { return _circularError >= 0; }
 
@@ -103,7 +104,8 @@ protected:
   // Please don't add any additional constructors. Multiple constructors has lead to a large number
   // of errors in the past. If you need more parameters please just add them to the end with a
   // sensible default value.
-  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(), Meters circularError = CIRCULAR_ERROR_EMPTY,
+  ElementData(long id = LLONG_MIN, const Tags& tags = Tags(),
+              Meters circularError = CIRCULAR_ERROR_EMPTY,
               long changeset = ElementData::CHANGESET_EMPTY,
               long version = ElementData::VERSION_EMPTY,
               quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
@@ -120,11 +122,16 @@ protected:
   long _uid;
   bool _visible;
 
+private:
+
+  // This needs to be a mem var vs being static or it can't be read from a config that's passed in
+  // from the command line.
+  Meters _defaultCircularError;
 };
 
 inline ElementData::ElementData(long id, const Tags& tags, Meters circularError, long changeset,
-                         long version, quint64 timestamp, QString user, long uid,
-                         bool visible)
+                                long version, quint64 timestamp, QString user, long uid,
+                                bool visible)
   : _id(id),
     _tags(tags),
     _circularError(circularError),
@@ -133,7 +140,8 @@ inline ElementData::ElementData(long id, const Tags& tags, Meters circularError,
     _timestamp(timestamp),
     _user(user),
     _uid(uid),
-    _visible(visible)
+    _visible(visible),
+    _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue())
 {
 }
 

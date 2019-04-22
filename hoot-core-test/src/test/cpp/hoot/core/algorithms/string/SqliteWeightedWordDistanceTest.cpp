@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -44,9 +44,15 @@ class SqliteWordWeightDictionaryTest : public HootTestFixture
 
 public:
 
+  SqliteWordWeightDictionaryTest()
+    : HootTestFixture("test-files/algorithms/string/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
-    SqliteWordWeightDictionary uut("test-files/algorithms/string/WordWeight.sqlite");
+    SqliteWordWeightDictionary uut(_inputPath + "WordWeight.sqlite");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6, uut.getWeight("starbucks"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6, uut.getWeight("starbucks"), 0.0001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, uut.getWeight("bad"), 0.0001);

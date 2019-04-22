@@ -86,6 +86,7 @@ enum _TestType
   GLACIAL_ONLY  = 0x08,
   GLACIAL       = 0x0f,
   SERIAL        = 0x10,
+  CASE_ONLY     = 0x11,
   ALL           = 0x1f
 };
 
@@ -369,6 +370,11 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
   }
+
+  if (t == CASE_ONLY)
+  {
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+  }
 }
 
 int main(int argc, char *argv[])
@@ -388,6 +394,7 @@ int main(int argc, char *argv[])
             "--quick-only - Run the quick (unnamed) tests only.\n"
             "--slow-only - Run the 'slow' tests only.\n"
             "--glacial-only - Run the 'glacial' tests only.\n"
+            "--case-only - Run the case tests only.\n"
             "--single [test name] - Run only the test specified.\n"
             "--names - Show the names of all the tests as they run.\n"
             "--all-names - Only print the names of all the tests.\n"
@@ -536,6 +543,11 @@ int main(int argc, char *argv[])
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
         populateTests(GLACIAL_ONLY, vAllTests, printDiff);
+      }
+      else if (args.contains("--case-only"))
+      {
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        populateTests(CASE_ONLY, vAllTests, printDiff);
       }
 
       vector<CppUnit::Test*> vTests;

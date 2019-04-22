@@ -77,8 +77,9 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
 
   // #5891 if the feature is marked as todo then there is no need to conflate & evaluate it.
   boost::shared_ptr<TagCriterion> isTodo(new TagCriterion(MetadataTags::Ref2(), "todo"));
-  RemoveElementsVisitor remover(isTodo);
+  RemoveElementsVisitor remover;
   remover.setRecursive(true);
+  remover.addCriterion(isTodo);
   map->visitRw(remover);
 
   // add a uuid to all elements with a REF tag.

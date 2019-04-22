@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
@@ -48,11 +48,17 @@ class ArffReaderTest : public HootTestFixture
 
 public:
 
+  ArffReaderTest()
+    : HootTestFixture("test-files/io/ArffReaderTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     DataSamples samples;
 
-    ArffReader uut("test-files/io/ArffReaderTest/runBasic.arff");
+    ArffReader uut(_inputPath + "runBasic.arff");
     boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.
@@ -65,7 +71,7 @@ public:
   {
     DataSamples samples;
 
-    ArffReader uut("test-files/io/ArffReaderTest/runBz2.arff.bz2");
+    ArffReader uut(_inputPath + "runBz2.arff.bz2");
     boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.

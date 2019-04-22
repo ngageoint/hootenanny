@@ -61,6 +61,8 @@ class MatchCandidateCountVisitorTest : public HootTestFixture
 public:
 
   MatchCandidateCountVisitorTest()
+    : HootTestFixture("test-files/conflate/unified/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -70,9 +72,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -94,9 +96,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -118,9 +120,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -154,9 +156,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -179,9 +181,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -206,9 +208,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
@@ -278,9 +280,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "AllDataTypesB.osm", map);
     MapProjector::projectToPlanar(map);
 
     QStringList matchCreators;
