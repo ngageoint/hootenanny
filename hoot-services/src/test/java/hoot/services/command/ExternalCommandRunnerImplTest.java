@@ -27,12 +27,10 @@
 package hoot.services.command;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
-import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static org.junit.Assert.assertEquals;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +39,6 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
