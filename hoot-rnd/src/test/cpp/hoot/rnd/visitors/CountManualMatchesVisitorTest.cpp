@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -42,12 +42,18 @@ class CountManualMatchesVisitorTest : public HootTestFixture
 
 public:
 
+  CountManualMatchesVisitorTest()
+    : HootTestFixture("test-files/rnd/visitors/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/visitors/CountManualMatchesVisitorTest.osm",
+      _inputPath + "CountManualMatchesVisitorTest.osm",
       false,
       Status::Unknown2);
 

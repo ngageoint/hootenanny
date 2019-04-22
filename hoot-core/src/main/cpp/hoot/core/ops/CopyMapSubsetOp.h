@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COPYMAPSUBSETOP_H
 #define COPYMAPSUBSETOP_H
@@ -44,7 +44,7 @@ public:
   static std::string className() { return "hoot::CopyMapSubsetOp"; }
 
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
-  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
   /**

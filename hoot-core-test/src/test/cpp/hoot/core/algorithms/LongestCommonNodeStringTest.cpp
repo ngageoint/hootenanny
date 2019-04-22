@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -60,13 +60,19 @@ class LongestCommonNodeStringTest : public HootTestFixture
 
 public:
 
+  LongestCommonNodeStringTest()
+    : HootTestFixture("test-files/algorithms/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
+    reader.read(_inputPath + "LongestCommonNodeStringTest.osm", map);
 
     {
       WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -54,10 +54,9 @@ class WaySplitterOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath  = "test-files/ops/WaySplitterOp/";
-  const QString outputPath = "test-output/ops/WaySplitterOp/";
-
   WaySplitterOpTest()
+    : HootTestFixture("test-files/ops/WaySplitterOp/",
+                      "test-output/ops/WaySplitterOp/")
   {
     setResetType(ResetAll);
   }
@@ -71,17 +70,16 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + inputFile, map);
+    reader.read(_inputPath + inputFile, map);
 
     WaySplitterOp myOp;
     myOp.setMaxLength(20);
     myOp.apply(map);
 
-    TestUtils::mkpath(outputPath);
     OsmXmlWriter writer;
-    writer.write(map, outputPath + outputFile);
-    HOOT_FILE_EQUALS(inputPath + outputFile,
-                     outputPath + outputFile);
+    writer.write(map, _outputPath + outputFile);
+    HOOT_FILE_EQUALS(_inputPath + outputFile,
+                     _outputPath + outputFile);
   }
 
 };
@@ -90,5 +88,3 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "quick");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WaySplitterOpTest, "current");
 
 }
-
-

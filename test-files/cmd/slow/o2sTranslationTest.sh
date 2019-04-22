@@ -11,7 +11,7 @@ inputFile=test-files/o2s_test.osm
 tds40File=test-files/o2s_tds40.osm
 ggdmFile=test-files/o2s_ggdm.osm
 
-outputDir=test-output/o2s
+outputDir=test-output/cmd/slow/o2s
 mkdir -p $outputDir
 rm -rf $outputDir/*
 

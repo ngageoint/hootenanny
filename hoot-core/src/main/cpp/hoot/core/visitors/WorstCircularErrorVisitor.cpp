@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WorstCircularErrorVisitor.h"
 
@@ -54,6 +54,16 @@ Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& ma
   WorstCircularErrorVisitor v;
   map->visitNodesRo(v);
   map->visitWaysRo(v);
+  return v.getWorstCircularError();
+}
+
+Meters WorstCircularErrorVisitor::getWorstCircularError(const std::vector<ElementPtr>& elements)
+{
+  WorstCircularErrorVisitor v;
+  for (vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    v.visit(*it);
+  }
   return v.getWorstCircularError();
 }
 

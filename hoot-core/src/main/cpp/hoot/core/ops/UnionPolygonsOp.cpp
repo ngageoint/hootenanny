@@ -32,6 +32,7 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -59,7 +60,7 @@ void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
 
   OsmMapPtr result(new OsmMap());
   GeometryConverter(result).convertGeometryToElement(
-    g.get(), Status::Unknown1, ElementData::CIRCULAR_ERROR_EMPTY);
+    g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
   map.reset(new OsmMap(result));
   LOG_VART(map.get());

@@ -71,6 +71,12 @@ class MapCropperTest : public HootTestFixture
 
 public:
 
+  MapCropperTest()
+    : HootTestFixture("test-files/ops/",
+                      UNUSED_PATH)
+  {
+  }
+
   OsmMapPtr genPoints(int seed)
   {
     Tgs::Random::instance()->seed(seed);
@@ -248,7 +254,7 @@ public:
   void runMultiPolygonTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
+    OsmMapReaderFactory::read(map, _inputPath + "MultipolygonTest.osm", true);
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 
@@ -257,7 +263,7 @@ public:
     //compare relations
     const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1";
+    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       const RelationPtr& r = it->second;

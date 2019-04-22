@@ -37,7 +37,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QTime>
@@ -57,17 +56,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MergeNearbyNodes)
 
-double calcDistance(const NodePtr& n1, const NodePtr& n2)
+double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
 {
   double dx = n1->getX() - n2->getX();
   double dy = n1->getY() - n2->getY();
-  return sqrt(dx * dx + dy * dy);
+  return dx * dx + dy * dy;
 }
 
 MergeNearbyNodes::MergeNearbyNodes(Meters distance)
 {
   _distance = distance;
-
   if (_distance < 0.0)
   {
     _distance = ConfigOptions().getMergeNearbyNodesDistance();
@@ -101,15 +99,25 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
+  int startNodeCount = 0;
   const NodeMap& nodes = planar->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
+    startNodeCount++;
+
+    if (startNodeCount % 100000 == 0)
+    {
+      PROGRESS_INFO(
+        "\tInitialized " << StringUtils::formatLargeNumber(startNodeCount) << " nodes / " <<
+        StringUtils::formatLargeNumber(nodes.size()) << " for merging.");
+    }
   }
 
-  int count = 0;
+  double distanceSquared = _distance * _distance;
 
+  int processedCount = 0;
   cph.resetIterator();
   while (cph.next())
   {
@@ -117,14 +125,16 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 
     for (size_t i = 0; i < v.size(); i++)
     {
+      if(!map->containsNode(v[i])) continue;
+
       for (size_t j = 0; j < v.size(); j++)
       {
-        if (v[i] != v[j] && map->containsNode(v[i]) && map->containsNode(v[j]))
+        if (v[i] != v[j] && map->containsNode(v[j]))
         {
           const NodePtr& n1 = planar->getNode(v[i]);
           const NodePtr& n2 = planar->getNode(v[j]);
-          double d = calcDistance(n1, n2);
-          if (d < _distance && n1->getStatus() == n2->getStatus())
+
+          if (distanceSquared > calcDistanceSquared(n1, n2) && n1->getStatus() == n2->getStatus())
           {
             bool replace = false;
             // if the geographic bounds are not specified.
@@ -154,14 +164,13 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       }
     }
 
-    if (count % 10000 == 0)
+    processedCount++;
+    if (processedCount % 10000 == 0)
     {
       PROGRESS_INFO(
-        "Merged " << StringUtils::formatLargeNumber(_numAffected) << " nearby nodes / " <<
-        StringUtils::formatLargeNumber(count) << " nodes processed. Nodes remaining: " <<
-        (StringUtils::formatLargeNumber((int)nodes.size() - count)));
+        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node groups / " <<
+        StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
-    count++;
   }
 }
 
@@ -180,6 +189,5 @@ void MergeNearbyNodes::writeObject(QDataStream& os) const
 {
   os << _distance;
 }
-
 
 }

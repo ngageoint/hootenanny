@@ -3,8 +3,8 @@ set -e
 
 # Test to make sure gdal2tiles.py works
 
-INPUT_DIR=test-files/gdal2tiles
-OUTPUT_DIR=test-output/gdal2tiles
+INPUT_DIR=test-files/cmd/slow/gdal2tiles
+OUTPUT_DIR=test-output/cmd/slow/gdal2tiles
 
 INPUT_FILE=$INPUT_DIR/RomanColosseum_WV2naturalcolor_clip.tif
 OUTPUT_TILES=$OUTPUT_DIR/new_tiles

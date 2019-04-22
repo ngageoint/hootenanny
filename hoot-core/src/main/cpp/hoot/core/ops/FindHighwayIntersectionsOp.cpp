@@ -61,9 +61,10 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
-  boost::shared_ptr<ElementTypeCriterion> relationCrit(
-    new ElementTypeCriterion(ElementType::Relation));
-  VisitorOp(new RemoveElementsVisitor(relationCrit)).apply(map);
+  boost::shared_ptr<RemoveElementsVisitor> removeRelationsVis(new RemoveElementsVisitor());
+  removeRelationsVis->addCriterion(
+    ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)));
+  VisitorOp(removeRelationsVis).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   // pragmatically remove "bad" data in OSM afghanistan
@@ -87,8 +88,9 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  boost::shared_ptr<ElementTypeCriterion> wayCrit(new ElementTypeCriterion(ElementType::Way));
-  VisitorOp(new RemoveElementsVisitor(wayCrit)).apply(map);
+  boost::shared_ptr<RemoveElementsVisitor> removeWaysVis(new RemoveElementsVisitor());
+  removeWaysVis->addCriterion(ElementCriterionPtr(new ElementTypeCriterion(ElementType::Way)));
+  VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
   boost::shared_ptr<NotCriterion> intersectionCrit(
@@ -97,7 +99,9 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
         boost::shared_ptr<ElementInIdListCriterion>(
           new ElementInIdListCriterion(v->getIntersections())),
         boost::shared_ptr<NodeCriterion>(new NodeCriterion()))));
-  VisitorOp(new RemoveElementsVisitor(intersectionCrit)).apply(map);
+  boost::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
+  removeIntersectionsVis->addCriterion(intersectionCrit);
+  VisitorOp(removeIntersectionsVis).apply(map);
 
   MapCleaner().apply(map);
 }

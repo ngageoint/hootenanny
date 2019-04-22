@@ -56,6 +56,8 @@ class Settings
 {
 public:
 
+  static const QString BASE_CONFIG_OPTION_KEY;
+
   // Technically, this is a Singleton and this constructor should not be publicly accessible.  There
   // does seem to be a use case for passing around temporary settings, though, which then makes
   // sense for it to remain public.  Possibly, we need a separate class for HootSettings that would
@@ -163,6 +165,8 @@ public:
   void storeJson(const QString& path) const;
 
   QString toString() const;
+
+  int size() const { return _settings.size(); }
 
 private:
 

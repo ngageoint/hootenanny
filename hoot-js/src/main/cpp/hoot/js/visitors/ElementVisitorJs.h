@@ -57,7 +57,6 @@ private:
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
   boost::shared_ptr<ConstElementVisitor> _v;
 };
 

@@ -58,6 +58,8 @@ public:
   // Handle const pointers to const
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
+  static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
+
   virtual QString getDescription() const
   { return "Determines the highest circular error value"; }
 

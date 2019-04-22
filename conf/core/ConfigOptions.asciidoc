@@ -221,7 +221,7 @@ The precision of numeric values written to Attribute-Relation (.arff) files.
 === attribute.conflation.aggressive.highway.joining
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
 highway attribution into those with less specific highway attribution and no names.  Enabling this
@@ -320,6 +320,16 @@ See also:
 If true, when building outlines are updated the updater will remove the source building relations
 used to create the outline multipolygon relation.  If false, both source building relations and
 outline multipolygon relations will remain.
+
+=== building.part.merger.thread.count
+
+* Data Type: int
+* Default Value: `8`
+
+Number of threads used by BuildingPartMergerOp to process buildings.  A value of less than one
+allows Hootenanny to automatically determine the optimal thread count.  The default value
+corresponds to the default number of threads available on the Hootenanny VM and you may obtain
+better performance by changing the value when dealing with other environments.
 
 === building.review.if.secondary.newer
 
@@ -942,6 +952,53 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== geometry.modifier.rules.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/GeometryModifierRules.json`
+
+Path to a json file containing the actions, filters and arguments used for the
+hoot::GeometryModifierOp.
+
+==== Rule File Format
+-----
+{
+    "way_to_poly":    // command: way_to_poly, collapse_poly, etc.,
+                      // see implementations of GeometryModifierAction
+    {
+        "filter":     // filter for matching elements to process, element must
+                      // have all tags with matching keys/values to be processed
+        {
+            "aeroway": "runway"
+        },
+        "arguments":  // arguments specific to the selected command
+        {
+            "default_width_m": 10,
+            "width_tag_m" : "width"
+        }
+    },
+    "collapse_poly":  // next command: all commands defined are processed in sequence
+    {
+        "filter":
+        {
+            "building": "yes"
+        },
+        "arguments":
+        {
+            "max_area_in_m": 15000
+        }
+    }
+}
+-----
+
+=== geonames.reader.string.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of parsed tag string values stored in an in-memory cache when reading
+GeoNames data.
 
 === hash.seed.zero
 
@@ -3313,6 +3370,20 @@ have negative IDs.  Not honored by all readers.
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
+=== relation.with.most.members.op.member.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relation members.
+
+=== relation.with.most.members.op.relation.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relations.
+
 === remove.attributes.visitor.types
 
 * Data Type: list
@@ -3330,13 +3401,23 @@ timestamp, user, uid, or version.
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
 
-=== remove.elements.visitor.element.criterion
+=== remove.elements.visitor.chain.element.criteria
 
-* Data Type: string
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
+elements will be removed only if they satisfy all of the criteria.  If set to false, then only
+one of the specified criteria must be met in order to remove an element.
+
+=== remove.elements.visitor.element.criteria
+
+* Data Type: list
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to delete.  To pass in complex
-nested criteria, use the Hootenanny Javascript interface instead.
+One or more element criteria used for selecting elements to remove. Delimit names with '='. From
+the command line, names with ';' and surround the entire list in double quotes.
+E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 === remove.elements.visitor.recursive
 
@@ -3350,7 +3431,7 @@ Should the element remover remove the elements recursively?
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to delete.  To pass in complex
+The plugin name of an element criterion used to select tags to remove.  To pass in complex
 nested criterion, use the Hootenanny Javascript interface instead.
 
 === remove.tags.visitor.keys
@@ -3758,13 +3839,6 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
-=== tag.key.contains.criterion.text
-
-* Data Type: string
-* Default Value: ``
-
-Text that TagKeyContainsCriterion searches a match for.
-
 === tag.criterion.kvps
 
 * Data Type: list
@@ -3773,6 +3847,21 @@ Text that TagKeyContainsCriterion searches a match for.
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
 delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
+
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion uses to filter elements.
+
+=== tag.key.criterion.keys
+
+* Data Type: list
+* Default Value: ``
+
+Tag keys that TagKeyCriterion uses to filter elements. From the command line, delimit multiple
+key/value pairs with ';' and surround the entire list in double quotes.
 
 === tag.merger.default
 

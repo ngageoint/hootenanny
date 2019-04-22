@@ -41,11 +41,16 @@ class BuildingWayNodeCriterionTest : public HootTestFixture
 
 public:
 
+  BuildingWayNodeCriterionTest()
+    : HootTestFixture("test-files/criterion/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, "test-files/criterion/BuildingWayNodeCriterionTest.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "BuildingWayNodeCriterionTest.osm");
 
     BuildingWayNodeCriterion uut;
     uut.setOsmMap(map.get());

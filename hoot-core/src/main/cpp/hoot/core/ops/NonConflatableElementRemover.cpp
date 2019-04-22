@@ -49,8 +49,9 @@ void NonConflatableElementRemover::apply(boost::shared_ptr<OsmMap>& map)
   _map = map;
 
   boost::shared_ptr<NonConflatableCriterion> pNonConflateCrit(new NonConflatableCriterion());
-  RemoveElementsVisitor removeElementsVisitor(pNonConflateCrit);
+  RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
+  removeElementsVisitor.addCriterion(pNonConflateCrit);
   _map->visitRw(removeElementsVisitor);
 }
 

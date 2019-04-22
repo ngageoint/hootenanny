@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERIALIZABLE_H
 #define SERIALIZABLE_H
@@ -36,6 +36,12 @@ class QDataStream;
 namespace hoot
 {
 
+/**
+ * Note that this interface was primarily in place to support hoot use in Hadoop for serializing
+ * objects between map/reduce conflation steps.  Even with Hadoop support gone, there's no harm in
+ * keeping it around, for now, in case we need to serialize anything in a similar fashion in the
+ * future.
+ */
 class Serializable
 {
 public:

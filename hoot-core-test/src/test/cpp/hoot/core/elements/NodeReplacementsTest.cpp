@@ -50,8 +50,9 @@ class NodeReplacementsTest : public HootTestFixture
 public:
 
   NodeReplacementsTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/elements/")
   {
-    TestUtils::mkpath("test-output/elements");
   }
 
   void runIoTest()
@@ -63,10 +64,10 @@ public:
     m[1] = 2;
     m[2] = 3;
 
-    uut.write("test-output/elements/Node.replacements");
+    uut.write(_outputPath + "Node.replacements");
 
     NodeReplacements uut2;
-    uut2.read("test-output/elements/Node.replacements");
+    uut2.read(_outputPath + "Node.replacements");
 
     CPPUNIT_ASSERT_EQUAL(std::string("0 : 3\n1 : 3\n2 : 3\n"), uut2.toString().toStdString());
   }

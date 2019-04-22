@@ -57,7 +57,7 @@ hoot conflate -D match.creators="hoot::BuildingMatchCreator" \
   
 # Filter maps down to POIs only before conflating them
 hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \ 
-  -D remove.elements.visitor.element.criterion="hoot::PoiCriterion" input1.osm input2.osm \
+  -D remove.elements.visitor.element.criteria="hoot::PoiCriterion" input1.osm input2.osm \
   output.osm
 
 # Translate features to a schema before conflating them

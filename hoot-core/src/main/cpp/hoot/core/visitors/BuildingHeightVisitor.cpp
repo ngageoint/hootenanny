@@ -195,7 +195,7 @@ Meters BuildingHeightVisitor::_parseFeetVal(const QString heightStr,
   }
 
   // return height in meters
-  return ((feet + (inches / 12))) / 3.2808;
+  return (feet + (inches / 12)) / 3.2808;
 }
 
 Meters BuildingHeightVisitor::_parseFeetToken(const QString type,

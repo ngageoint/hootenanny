@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -35,6 +35,7 @@
 
 // STL
 #include <vector>
+#include <set>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -76,8 +77,8 @@ public:
   long findNearestWay(geos::geom::Coordinate c) const;
 
   /**
-   * Should run in approximately O(lg(n)).
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Should run in approximately O(log(n)).
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
@@ -90,8 +91,8 @@ public:
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
-   * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Return all ways that intersect the given envelope. This runs in approximately O(log(n)) time.
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
@@ -110,7 +111,7 @@ public:
   boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
-   * Get all the direct parents of a given element. This will not return grand parents, etc.
+   * Get all the direct parents of a given element. This will not return grandparents, etc.
    */
   std::set<ElementId> getParents(ElementId eid) const;
 
@@ -136,7 +137,7 @@ public:
 
   /**
    * Checks that some of the existing indexes are consistent with the OsmMap backend. Any
-   * inconsitencies will either be logged as warnings or throw exceptions.
+   * inconsistencies will either be logged as warnings or throw exceptions.
    */
   bool validate() const;
 

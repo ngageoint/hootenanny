@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IntersectionIterator.h"
@@ -36,11 +36,10 @@
 
 namespace Tgs
 {
-  IntersectionIterator::IntersectionIterator(const RStarTree *tree, const std::vector<double>& minBounds,
-    const std::vector<double>& maxBounds)
-    : nodeHits(1),
-      distCalcs(0),
-      _tree(tree),
+  IntersectionIterator::IntersectionIterator(const RStarTree* tree,
+                                             const std::vector<double>& minBounds,
+                                             const std::vector<double>& maxBounds)
+    : _tree(tree),
       _minBounds(minBounds),
       _maxBounds(maxBounds),
       _done(false)
@@ -53,10 +52,9 @@ namespace Tgs
 
   bool IntersectionIterator::_determineIntesection(const Box& box)
   {
-    distCalcs++;
     // calculate a simple euclidean distance in n dimensional space
     assert((int)_maxBounds.size() == box.getDimensions());
-    //double c = 0;
+
     for (unsigned int i = 0; i < _maxBounds.size(); i++)
     {
       assert(box.getUpperBound(i) >= box.getLowerBound(i));
@@ -110,11 +108,9 @@ namespace Tgs
       {
         //Get the first node in the list to examine
         const RTreeNode* node = _tree->getNode(_pendingNodes.front());
-        nodeHits++;
         _pendingNodes.pop_front(); //Remove node from future consideration
         for (int i = 0; i < node->getChildCount(); i++)
         {
-
           Box b = node->getChildEnvelope(i).toBox();
           bool intersects = _determineIntesection(b);
           if (intersects)

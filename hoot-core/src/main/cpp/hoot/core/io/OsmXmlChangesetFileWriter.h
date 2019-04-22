@@ -107,7 +107,8 @@ private:
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
   void _writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
-  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
+  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r);
+  void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
 };

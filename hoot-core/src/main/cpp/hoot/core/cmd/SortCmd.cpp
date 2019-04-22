@@ -29,9 +29,9 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/algorithms/changeset/ExternalMergeElementSorter.h>
+#include <hoot/core/elements/ExternalMergeElementSorter.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>

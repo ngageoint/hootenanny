@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -41,9 +41,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/language/HootServicesLanguageInfoResponseParserTest";
-
 class HootServicesLanguageInfoResponseParserTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesLanguageInfoResponseParserTest);
@@ -53,6 +50,12 @@ class HootServicesLanguageInfoResponseParserTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  HootServicesLanguageInfoResponseParserTest()
+    : HootTestFixture("test-files/language/HootServicesLanguageInfoResponseParserTest/",
+                      UNUSED_PATH)
+  {
+  }
 
   void runParseLangsResponseTest()
   {
@@ -64,7 +67,7 @@ public:
         "detectable", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-detectable").trimmed(),
+      FileUtils::readFully(_inputPath + "runParseLangsResponseTest-detectable").trimmed(),
       responseStr.trimmed());
 
     responseStr =
@@ -72,7 +75,7 @@ public:
         "translatable", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runParseLangsResponseTest-translatable").trimmed(),
+      FileUtils::readFully(_inputPath + "runParseLangsResponseTest-translatable").trimmed(),
       responseStr.trimmed());
   }
 
@@ -85,7 +88,7 @@ public:
         "detectors", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-detectors").trimmed(),
+      FileUtils::readFully(_inputPath + "runParseAppsResponseTest-detectors").trimmed(),
       responseStr.trimmed());
 
     response =
@@ -95,7 +98,7 @@ public:
         "translators", response);
     LOG_VART(responseStr);
     HOOT_STR_EQUALS(
-      FileUtils::readFully(testInputRoot + "/runParseAppsResponseTest-translators").trimmed(),
+      FileUtils::readFully(_inputPath + "runParseAppsResponseTest-translators").trimmed(),
       responseStr.trimmed());
   }
 

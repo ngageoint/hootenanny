@@ -14,60 +14,12 @@
         "hoot_key": "hoot.road.opt.engine"
       },
       {
-        "id":"attribute_override_conflate_post_ops",
-        "elem_type":"string",
-        "description":"Remove review relations and unmatched features in secondary dataset.",
-        "name":"Conflate Post Ops",
-        "hoot_key":"conflate.post.ops",
-        "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
-      },
-      {
-        "id": "attribute_override_visitor_criterion",
-        "elem_type": "string",
-        "description": "The criterion for the RemoveElementsVisitor above",
-        "name": "Remove Elements Visitor Criterion",
-        "defaultvalue": "hoot::ReviewRelationCriterion",
-        "hoot_key": "remove.elements.visitor.element.criterion"
-      },
-      {
-        "id": "attribute_override_remove_elements_visitor_recursive",
+        "id": "attribute_aggressive_highway_joining",
         "elem_type": "bool",
-        "description": "Remove elements recusively",
-        "name": "Remove elements recusively",
+        "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
+        "name": "Aggressively Join Unmerged Roads",
         "defaultvalue": "false",
-        "hoot_key": "remove.elements.visitor.recursive",
-      },
-      {
-        "id": "attribute_override_highway_merge_tags_only",
-        "elem_type": "bool",
-        "description": "Tag only merger creator",
-        "name": "Tag only merger creator",
-        "defaultvalue": "true",
-        "hoot_key": "highway.merge.tags.only"
-      },
-      {
-        "id": "attribute_building_keep_ref_geom",
-        "elem_type": "bool",
-        "description": "Keep building ref geom",
-        "name": "Keep building ref geom",
-        "defaultvalue": "false",
-        "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
-      },
-      {
-        "id": "tag_merger_default",
-        "elem_type": "string",
-        "description": "The tag merging strategy to use",
-        "name": "Tag Merger",
-        "defaultvalue": "hoot::OverwriteTag1Merger",
-        "hoot_key": "tag.merger.default"
-      },
-      {
-        "id": "way_joiner",
-        "elem_type": "string",
-        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
-        "name": "WayJoiner",
-        "defaultvalue": "hoot::WayJoiner2",
-        "hoot_key": "way.joiner"
+        "hoot_key": "attribute.conflation.aggressive.highway.joining"
       },
       {
         "id": "attribute_allow_ref_geometry_bridge_changes",
@@ -78,6 +30,46 @@
         "hoot_key": "attribute.conflation.allow.ref.geometry.changes.for.bridges"
       },
       {
+        "id": "attribute_allow_reviews_by_score",
+        "elem_type": "bool",
+        "description": "If true, all reviews outside of the score range established by the configuration options review.score.criterion.max/min.threshold will be removed.",
+        "name": "Allow Reviews By Score",
+        "defaultvalue": "false",
+        "hoot_key": "attribute.conflation.allow.reviews.by.score"
+      },
+      {
+        "id": "attribute_building_keep_ref_geom",
+        "elem_type": "bool",
+        "description": "Keep building ref geom",
+        "name": "Keep building ref geom",
+        "defaultvalue": "false",
+        "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
+      },
+      {
+        "id": "remove_building_relations",
+        "elem_type": "bool",
+        "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
+        "name": "Remove Building Relations",
+        "defaultvalue": "true",
+        "hoot_key": "building.outline.update.op.remove.building.relations"
+      },
+      {
+        "id":"attribute_override_conflate_post_ops",
+        "elem_type":"string",
+        "description":"Remove review relations and unmatched features in secondary dataset.",
+        "name":"Conflate Post Ops",
+        "hoot_key":"conflate.post.ops",
+        "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
+      },
+      {
+        "id": "corner_splitter_rounded_split",
+        "elem_type": "bool",
+        "description": "Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate",
+        "name": "Corner Splitter Rounded Split",
+        "defaultvalue": "true",
+        "hoot_key": "corner.splitter.rounded.split"
+      },
+      {
         "id": "duplicate_name_preserve_original_name",
         "elem_type": "bool",
         "description": "If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it will treat name and alternate name tags equally.",
@@ -86,20 +78,52 @@
         "hoot_key": "duplicate.name.preserve.original.name"
       },
       {
-        "id": "attribute_aggressive_highway_joining",
+        "id": "attribute_override_highway_merge_tags_only",
         "elem_type": "bool",
-        "description": "If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific highway attribution into those with less specific highway attribution and no names.  Enabling this option may result in some false positive road joining.",
-        "name": "Aggressively Join Unmerged Roads",
-        "defaultvalue": "false",
-        "hoot_key": "attribute.conflation.aggressive.highway.joining"
+        "description": "If true, road conflation merges tag changes into the reference only and makes no geometry changes.",
+        "name": "Tag only merger creator",
+        "defaultvalue": "true",
+        "hoot_key": "highway.merge.tags.only"
       },
       {
-        "id": "attribute_allow_reviews_by_score",
+        "id": "reader_conflate_use_data_source_ids_1",
         "elem_type": "bool",
-        "description": "If true, all reviews outside of the score range established by the configuration options review.score.criterion.max/min.threshold will be removed.",
-        "name": "Allow Reviews By Score",
+        "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+        "name": "Use Ref IDs During Conflation",
         "defaultvalue": "false",
-        "hoot_key": "attribute.conflation.allow.reviews.by.score"
+        "hoot_key": "reader.conflate.use.data.source.ids.1"
+      },
+      {
+        "id": "remove_elements_visitor_chain.element_criteria",
+        "elem_type": "bool",
+        "description": "If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria, elements will be removed only if they satisfy all of the criteria.  If set to false, then only one of the specified criteria must be met in order to remove an element.",
+        "name": "Chain Together Criteria When Removing Elements",
+        "defaultvalue": "false",
+        "hoot_key": "remove.elements.visitor.chain.element.criteria"
+      },
+      {
+        "id": "attribute_override_visitor_criteria",
+        "elem_type": "string",
+        "description": "The criteria for the RemoveElementsVisitor above",
+        "name": "Remove Elements Visitor Criteria",
+        "defaultvalue": "hoot::TagKeyCriterion;hoot::ReviewRelationCriterion",
+        "hoot_key": "remove.elements.visitor.element.criteria"
+      },
+      {
+        "id": "attribute_override_remove_elements_visitor_recursive",
+        "elem_type": "bool",
+        "description": "Remove elements recusively",
+        "name": "Remove elements recusively",
+        "defaultvalue": "false",
+        "hoot_key": "remove.elements.visitor.recursive",
+      },
+      {
+        "id": "review_score_invert_thresholding",
+        "elem_type": "bool",
+        "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
+        "name": "Invert Review Score Thresholding",
+        "defaultvalue": "true",
+        "hoot_key": "review.score.criterion.invert.thresholding"
       },
       {
         "id":"review_score_max_threshold",
@@ -122,20 +146,28 @@
         "hoot_key":"review.score.criterion.min.threshold"
       },
       {
-        "id": "review_score_invert_thresholding",
-        "elem_type": "bool",
-        "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
-        "name": "Invert Review Score Thresholding",
-        "defaultvalue": "true",
-        "hoot_key": "review.score.criterion.invert.thresholding"
+        "id": "tag_key_criterion_keys",
+        "elem_type": "string",
+        "description": "Tag keys that TagKeyCriterion uses to filter elements.",
+        "name": "Tag Key Criterion Keys",
+        "defaultvalue": "hoot:multilinestring",
+        "hoot_key": "tag.key.criterion.keys"
       },
       {
-        "id": "remove_building_relations",
-        "elem_type": "bool",
-        "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-        "name": "Remove Building Relations",
-        "defaultvalue": "true",
-        "hoot_key": "building.outline.update.op.remove.building.relations"
+        "id": "tag_merger_default",
+        "elem_type": "string",
+        "description": "The tag merging strategy to use",
+        "name": "Tag Merger",
+        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "hoot_key": "tag.merger.default"
+      },
+      {
+        "id": "way_joiner",
+        "elem_type": "string",
+        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
+        "name": "WayJoiner",
+        "defaultvalue": "hoot::WayJoiner2",
+        "hoot_key": "way.joiner"
       }
     ]
 }

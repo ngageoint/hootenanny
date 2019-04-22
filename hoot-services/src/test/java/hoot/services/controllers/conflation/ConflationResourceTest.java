@@ -27,29 +27,22 @@
 package hoot.services.controllers.conflation;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.UnitTest;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.job.Job;
-import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 
 
@@ -70,7 +63,6 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
         conflateParams.setInput2(String.valueOf(mapId));
         conflateParams.setOutputName("OutputLayer");
         conflateParams.setConflationType("Reference");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setBounds("20,30,40,50");
         conflateParams.setReferenceLayer("1");

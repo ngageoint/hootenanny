@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,18 +55,20 @@ class PertyTestRunnerTest : public HootTestFixture
 public:
 
   PertyTestRunnerTest()
+    : HootTestFixture("test-files/rnd/perty/PertyTestRunnerTest/",
+                      "test-output/rnd/perty/PertyTestRunnerTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Dynamic");
-    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Static");
-    TestUtils::mkpath("test-output/perty/PertyTestRunnerTest/Variance");
+    TestUtils::mkpath(_outputPath + "Dynamic");
+    TestUtils::mkpath(_outputPath + "Static");
+    TestUtils::mkpath(_outputPath + "Variance");
   }
 
   void runDynamicVariablesTest()
   {
-    QFile resultsFile("test-output/perty/PertyTestRunnerTest/Dynamic/results");
+    QFile resultsFile(_outputPath + "Dynamic/results");
     resultsFile.remove();
-    QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Dynamic/results-plot.dat");
+    QFile resultsPlotFile(_outputPath + "Dynamic/results-plot.dat");
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
@@ -104,8 +106,8 @@ public:
 
     const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
-        "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
-        "test-output/perty/PertyTestRunnerTest/Dynamic");
+        _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
+        _outputPath + "Dynamic");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
@@ -154,9 +156,9 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Dynamic", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Dynamic", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15, result->getScoreVariance(), 0.00001);
 
@@ -172,18 +174,18 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.1, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Dynamic", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Dynamic", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, result->getScoreVariance(), 0.00001);
   }
 
   void runNoDynamicVariablesTest()
   {
-    QFile resultsFile("test-output/perty/PertyTestRunnerTest/Static/results");
+    QFile resultsFile(_outputPath + "Static/results");
     resultsFile.remove();
-    QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Static/results-plot.dat");
+    QFile resultsPlotFile(_outputPath + "Static/results-plot.dat");
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
@@ -218,8 +220,8 @@ public:
 
     const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
-        "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
-        "test-output/perty/PertyTestRunnerTest/Static");
+        _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
+        _outputPath + "Static");
     QString testRunResultsStr = "";
     for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
@@ -252,9 +254,9 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Static", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Static", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
@@ -271,9 +273,9 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Static", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Static", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.2, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
@@ -283,9 +285,9 @@ public:
 
   void runHigherScoresOutsideOfVarianceAllowedToPassTest()
   {
-    QFile resultsFile("test-output/perty/PertyTestRunnerTest/Variance/results");
+    QFile resultsFile(_outputPath + "Variance/results");
     resultsFile.remove();
-    QFile resultsPlotFile("test-output/perty/PertyTestRunnerTest/Variance/results-plot.dat");
+    QFile resultsPlotFile(_outputPath + "Variance/results-plot.dat");
     resultsPlotFile.remove();
 
     Settings testSettings = conf();
@@ -318,8 +320,8 @@ public:
 
     const QList<boost::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
-        "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
-        "test-output/perty/PertyTestRunnerTest/Variance");
+        _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
+        _outputPath + "Variance");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
@@ -357,9 +359,9 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.69, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Variance", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Variance", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.16, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());
@@ -376,9 +378,9 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableStartingValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, result->getDynamicVariableValue(), 0.00001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.75, result->getExpectedScore(), 0.00001);
-    //HOOT_STR_EQUALS("test-output/perty/PertyTestRunnerTest/Variance", result->getOutputDir());
+    //HOOT_STR_EQUALS(_outputPath + "Variance", result->getOutputDir());
     //HOOT_STR_EQUALS(
-      //"test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
+      //_inputPath + "PertyTestRunnerTest-reference-in-1.osm",
       //result->getReferenceInput());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.05, result->getScoreVariance(), 0.00001);
     CPPUNIT_ASSERT_EQUAL(2, result->getSimulationScores().size());

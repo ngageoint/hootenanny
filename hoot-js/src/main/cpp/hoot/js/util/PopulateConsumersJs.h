@@ -121,6 +121,8 @@ public:
   template <typename T>
   static void populateConfigurable(T* consumer, const v8::Local<v8::Object>& obj)
   {
+    LOG_TRACE("Populating configurable...");
+
     Settings settings = conf();
 
     v8::Local<v8::Array> keys = obj->GetPropertyNames();
@@ -133,6 +135,8 @@ public:
     {
       v8::Local<v8::String> k = keys->Get(i)->ToString();
       v8::Local<v8::String> v = obj->Get(k)->ToString();
+      LOG_VART(str(k));
+      LOG_VART(str(v));
       settings.set(str(k), str(v));
     }
 
@@ -148,6 +152,8 @@ public:
   template <typename T>
   static void populateCriterionConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
+    LOG_TRACE("Populating criterion consumer...");
+
     ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
 
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
@@ -165,6 +171,8 @@ public:
   template <typename T>
   static void populateElementConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
+    LOG_TRACE("Populating element consumer...");
+
     ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
 
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
@@ -187,6 +195,8 @@ public:
       throw IllegalArgumentException("Expected the argument to be a valid function.");
     }
 
+    LOG_TRACE("Populating function consumer...");
+
     v8::Isolate* current = v8::Isolate::GetCurrent();
     v8::Local<v8::Function> func(v8::Local<v8::Function>::Cast(v));
     JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
@@ -196,8 +206,8 @@ public:
     {
       // At the time of this writing this isn't possible. Give a good hard think about how the code
       // should respond before you change it.
-      throw IllegalArgumentException("Ambiguous consumption of both a function and an "
-        "ElementCriterionConsumer.");
+      throw IllegalArgumentException(
+        "Ambiguous consumption of both a function and an ElementCriterionConsumer.");
     }
     else if (c != 0)
     {
@@ -218,6 +228,8 @@ public:
   template <typename T>
   static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
+    LOG_TRACE("Populating osm map consumer...");
+
     OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
 
     if (obj->isConst())
@@ -252,6 +264,8 @@ public:
   template <typename T>
   static void populateStringDistanceConsumer(T* consumer, const v8::Local<v8::Value>& value)
   {
+    LOG_TRACE("Populating string distance consumer...");
+
     StringDistancePtr sd = toCpp<StringDistancePtr>(value);
 
     StringDistanceConsumer* c = dynamic_cast<StringDistanceConsumer*>(consumer);
@@ -269,6 +283,8 @@ public:
   template <typename T>
   static void populateValueAggregatorConsumer(T* consumer, const v8::Local<v8::Value>& value)
   {
+    LOG_TRACE("Populating aggregator consumer...");
+
     ValueAggregatorPtr va = toCpp<ValueAggregatorPtr>(value);
 
     ValueAggregatorConsumer* c = dynamic_cast<ValueAggregatorConsumer*>(consumer);
@@ -286,6 +302,8 @@ public:
   template <typename T>
   static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
+    LOG_TRACE("Populating visitor consumer...");
+
     ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
