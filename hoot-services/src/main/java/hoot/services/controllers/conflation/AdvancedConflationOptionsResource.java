@@ -96,7 +96,7 @@ public class AdvancedConflationOptionsResource {
         put("attribute", ATTRIBUTE_CONFLATION_PATH);
         put("horizontal", HORIZONTAL_CONFLATION_PATH);
         put("network", NETWORK_CONFLATION_PATH);
-        put("differntial", DIFFERENTIAL_CONFLATION_PATH);
+        put("differential", DIFFERENTIAL_CONFLATION_PATH);
     }};
 
     private static Map<String, Map<String, String>> confOptionsMap = null;

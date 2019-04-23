@@ -73,7 +73,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OgrWriter::logWarnCount = 0;
+int OgrWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OgrWriter)
 

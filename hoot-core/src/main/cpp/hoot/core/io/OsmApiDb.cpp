@@ -58,7 +58,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmApiDb::logWarnCount = 0;
+int OsmApiDb::logWarnCount = 0;
 
 const QString OsmApiDb::TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.zzz";
 const QString OsmApiDb::TIMESTAMP_FUNCTION = "(now() at time zone 'utc')";

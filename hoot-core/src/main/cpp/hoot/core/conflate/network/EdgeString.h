@@ -91,7 +91,7 @@ public:
 
   static std::string className() { return "hoot::EdgeString"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   EdgeString();
 

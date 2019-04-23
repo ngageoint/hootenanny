@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.user;
 
@@ -72,14 +72,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@Context HttpServletRequest request) {
-         Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-         if(user == null) {
-             user = new Users();
-             user.setDisplayName("Test User");
-             user.setEmail("test@hootenanny");
-             user.setId(-1L);
-             user.setHootservicesCreatedAt(new Timestamp(System.currentTimeMillis()));
-         }
+         Users user = Users.fromRequest(request);
          return Response.ok().entity(user).build();
     }
 

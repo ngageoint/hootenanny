@@ -34,7 +34,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int WayCleaner::logWarnCount = 0;
+int WayCleaner::logWarnCount = 0;
 
 WayCleaner::WayCleaner()
 {
@@ -106,7 +106,7 @@ bool WayCleaner::_hasDuplicateCoords(ConstWayPtr way, const OsmMap& map,
 {
   const vector<long> nodeIds = way->getNodeIds();
 
-  const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+  const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
 
   if (nodeIds.size() == 2 &&
       map.getNode(nodeIds.at(0))->toCoordinate() == map.getNode(nodeIds.at(1))->toCoordinate())
@@ -180,7 +180,7 @@ bool WayCleaner::_hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
 {
   const vector<long> nodeIds = way->getNodeIds();
 
-  const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+  const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
 
   if (nodeIds.size() == 2 && nodeIds.at(0) == nodeIds.at(1))
   {

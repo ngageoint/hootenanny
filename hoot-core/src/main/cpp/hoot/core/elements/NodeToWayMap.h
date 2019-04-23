@@ -52,7 +52,7 @@ public:
 
   static std::string className() { return "hoot::NodeToWayMap"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   NodeToWayMap(const OsmMap& map);
 

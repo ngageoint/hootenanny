@@ -45,7 +45,7 @@ namespace hoot
 {
 
 QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...";
-unsigned int Log::_warnMessageLimit = 0;
+int Log::_warnMessageLimit = 0;
 
 boost::shared_ptr<Log> Log::_theInstance = NULL;
 
@@ -107,7 +107,7 @@ Log::Log()
   CPLSetErrorHandler(cplErrorHandler);
 }
 
-unsigned int Log::getWarnMessageLimit()
+int Log::getWarnMessageLimit()
 {
   if (_warnMessageLimit == 0)
   {

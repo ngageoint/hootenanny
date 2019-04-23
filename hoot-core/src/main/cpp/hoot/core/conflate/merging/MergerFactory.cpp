@@ -41,7 +41,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MergerFactory::logWarnCount = 0;
+int MergerFactory::logWarnCount = 0;
 
 boost::shared_ptr<MergerFactory> MergerFactory::_theInstance;
 

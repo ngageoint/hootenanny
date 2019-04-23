@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::AverageNumericTagsVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   AverageNumericTagsVisitor();
   explicit AverageNumericTagsVisitor(const QStringList keys);

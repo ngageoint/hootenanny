@@ -69,7 +69,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmPbfReader::logWarnCount = 0;
+int OsmPbfReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 

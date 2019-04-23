@@ -46,7 +46,7 @@
 namespace hoot
 {
 
-unsigned int BuildingPartMergeOp::logWarnCount = 0;
+int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 

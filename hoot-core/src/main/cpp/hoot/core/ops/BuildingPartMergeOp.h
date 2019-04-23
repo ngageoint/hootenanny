@@ -99,7 +99,7 @@ public:
 
   static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   BuildingPartMergeOp();
 

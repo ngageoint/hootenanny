@@ -51,7 +51,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MatchComparator::logWarnCount = 0;
+int MatchComparator::logWarnCount = 0;
 
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.

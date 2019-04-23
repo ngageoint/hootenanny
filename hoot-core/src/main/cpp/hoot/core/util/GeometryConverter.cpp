@@ -55,7 +55,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-unsigned int GeometryConverter::logWarnCount = 0;
+int GeometryConverter::logWarnCount = 0;
 
 GeometryConverter::GeometryConverter(const OsmMapPtr& map) :
 _constMap(map),

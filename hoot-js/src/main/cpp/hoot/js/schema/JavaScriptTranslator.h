@@ -67,7 +67,7 @@ public:
 
   static std::string className() { return "hoot::JavaScriptTranslator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   JavaScriptTranslator();
 

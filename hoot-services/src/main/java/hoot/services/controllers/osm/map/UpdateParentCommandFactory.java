@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.clipping;
+package hoot.services.controllers.osm.map;
 
 import org.springframework.stereotype.Component;
 
@@ -32,9 +32,9 @@ import hoot.services.models.db.Users;
 
 
 @Component
-class UpdateParentCommandFactory {
+public class UpdateParentCommandFactory {
 
-    UpdateParentCommand build(String jobId, ClipDatasetParams params, Users user, Class<?> caller) {
-        return new UpdateParentCommand(jobId, params, user, caller);
+    public UpdateParentCommand build(String jobId, Long folderId, String mapName, Users user, Class<?> caller) {
+        return new UpdateParentCommand(jobId, folderId, mapName, user, caller);
     }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOG_H
@@ -126,7 +126,7 @@ public:
 
   void setLevel(WarningLevel l);
 
-  static unsigned int getWarnMessageLimit();
+  static int getWarnMessageLimit();
 
 #if HOOT_HAVE_LIBLOG4CXX
   log4cxx::LoggerPtr _logger;
@@ -138,7 +138,7 @@ private:
 
   WarningLevel _level;
   static boost::shared_ptr<Log> _theInstance;
-  static unsigned int _warnMessageLimit;
+  static int _warnMessageLimit;
 
   Log();
 };

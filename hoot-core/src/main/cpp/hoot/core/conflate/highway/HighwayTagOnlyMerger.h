@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/network/PartialNetworkMerger.h>
 
 namespace hoot
 {
@@ -47,9 +48,15 @@ public:
   static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
 
   HighwayTagOnlyMerger();
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
   HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                        const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  // This is definitely not ideal to be passing a Network Conflation merger in here like this to
+  // deal with bridge merging. At the very least, passing in a MergerPtr would be less brittle.
+  // Lots of refactoring would likely need to be done to avoid this, however.
+  HighwayTagOnlyMerger(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    boost::shared_ptr<PartialNetworkMerger> networkMerger);
+
   ~HighwayTagOnlyMerger();
 
   virtual QString getDescription() const
@@ -64,6 +71,7 @@ protected:
 private:
 
   bool _performBridgeGeometryMerging;
+  boost::shared_ptr<PartialNetworkMerger> _networkMerger;
 
   void _determineKeeperFeature(ElementPtr element1, ElementPtr element2, ElementPtr& keeper,
                                ElementPtr& toRemove, bool& removeSecondaryElement);

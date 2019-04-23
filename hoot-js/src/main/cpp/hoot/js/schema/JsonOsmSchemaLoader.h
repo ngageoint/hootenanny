@@ -42,7 +42,7 @@ public:
 
   static std::string className() { return "hoot::JsonOsmSchemaLoader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   JsonOsmSchemaLoader();
 

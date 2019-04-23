@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 

@@ -47,7 +47,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int LargeWaySplitter::logWarnCount = 0;
+int LargeWaySplitter::logWarnCount = 0;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
 {

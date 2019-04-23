@@ -76,7 +76,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int DualWaySplitter::logWarnCount = 0;
+int DualWaySplitter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DualWaySplitter)
 

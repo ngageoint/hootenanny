@@ -69,7 +69,7 @@ using namespace v8;
 namespace hoot
 {
 
-unsigned int JavaScriptTranslator::logWarnCount = 0;
+int JavaScriptTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 

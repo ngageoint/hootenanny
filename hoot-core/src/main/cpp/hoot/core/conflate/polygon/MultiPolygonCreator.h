@@ -69,7 +69,7 @@ public:
 
   static std::string className() { return "hoot::MultiPolygonCreator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
 
