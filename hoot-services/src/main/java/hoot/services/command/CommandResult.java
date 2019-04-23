@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
@@ -39,7 +39,7 @@ public class CommandResult {
 
     private Long id;
     private String command;
-    private int exitCode;
+    private Integer exitCode;
     private String stdout;
     private String stderr;
     private LocalDateTime start;
@@ -54,7 +54,7 @@ public class CommandResult {
         return command;
     }
 
-    public int getExitCode() {
+    public Integer getExitCode() {
         return exitCode;
     }
 
@@ -102,7 +102,7 @@ public class CommandResult {
         this.command = command;
     }
 
-    public void setExitCode(int exitCode) {
+    public void setExitCode(Integer exitCode) {
         this.exitCode = exitCode;
     }
 
