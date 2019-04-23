@@ -589,14 +589,9 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     //  Line string is a single array of coordinates (array)
     pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
-    {
-      for (pt::ptree::const_iterator coord = it->second.begin(); coord != it->second.end(); ++coord)
-      {
-        double x = coord->second.get_value<double>();
-        ++coord;
-        double y = coord->second.get_value<double>();
-        results.push_back(Coordinate(x, y));
-      }
+    {    
+      boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
+      if (pCoord) results.push_back(*pCoord);
     }
   }
   else if (type == "Polygon")
@@ -606,13 +601,8 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     {
       for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
       {
-        for (pt::ptree::const_iterator coord = array->second.begin(); coord != array->second.end(); ++coord)
-        {
-          double x = coord->second.get_value<double>();
-          ++coord;
-          double y = coord->second.get_value<double>();
-          results.push_back(Coordinate(x, y));
-        }
+        boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
+        if (pCoord) results.push_back(*pCoord);
       }
     }
   }
@@ -635,13 +625,8 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates point;
-      for (pt::ptree::const_iterator coord = it->second.begin(); coord != it->second.end(); ++coord)
-      {
-        double x = coord->second.get_value<double>();
-        ++coord;
-        double y = coord->second.get_value<double>();
-        point.push_back(Coordinate(x, y));
-      }
+      boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
+      if (pCoord) point.push_back(*pCoord);
       results.push_back(point);
     }
   }
@@ -653,13 +638,8 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
       JsonCoordinates line;
       for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
       {
-        for (pt::ptree::const_iterator coord = array->second.begin(); coord != array->second.end(); ++coord)
-        {
-          double x = coord->second.get_value<double>();
-          ++coord;
-          double y = coord->second.get_value<double>();
-          line.push_back(Coordinate(x, y));
-        }
+        boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
+        if (pCoord) line.push_back(*pCoord);
       }
       results.push_back(line);
     }
@@ -674,13 +654,8 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
       {
         for (pt::ptree::const_iterator poly = array->second.begin(); poly != array->second.end(); ++poly)
         {
-          for (pt::ptree::const_iterator coord = poly->second.begin(); coord != poly->second.end(); ++coord)
-          {
-            double x = coord->second.get_value<double>();
-            ++coord;
-            double y = coord->second.get_value<double>();
-            polygon.push_back(Coordinate(x, y));
-          }
+          boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(poly->second);
+          if (pCoord) polygon.push_back(*pCoord);
         }
       }
       results.push_back(polygon);
@@ -742,6 +717,32 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
     return "[" + ss.str() + "]";
   else
     return ss.str();
+}
+
+boost::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate( const pt::ptree& coordsIt )
+{
+  boost::shared_ptr<Coordinate> pCoord;
+
+  double x = 0;
+  double y = 0;
+
+  pt::ptree::const_iterator coord = coordsIt.begin();
+
+  // according to GeoJson specs, RFC7946, Section 9 we need to expect x,y,z and unc values but we
+  // only care about x and y
+  if (coord != coordsIt.end())
+  {
+    x = coord->second.get_value<double>();
+    ++coord;
+
+    if (coord != coordsIt.end())
+    {
+      y = coord->second.get_value<double>();
+      pCoord = boost::shared_ptr<Coordinate>( new Coordinate(x, y) );
+    }
+  }
+
+  return pCoord;
 }
 
 } //  namespace hoot

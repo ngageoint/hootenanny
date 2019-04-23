@@ -197,6 +197,8 @@ private:
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
+
+  boost::shared_ptr<geos::geom::Coordinate> ReadCoordinate( const boost::property_tree::ptree& coordsIt );
 };
 
 } // end namespace hoot
