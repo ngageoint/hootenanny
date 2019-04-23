@@ -59,7 +59,7 @@ public:
 
   static std::string className() { return "hoot::OsmXmlReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmXmlReader();
   virtual ~OsmXmlReader();

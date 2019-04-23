@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::ScriptMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   ScriptMerger();
   ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AverageNumericTagsVisitor.h"
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-unsigned int AverageNumericTagsVisitor::logWarnCount = 0;
+int AverageNumericTagsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AverageNumericTagsVisitor)
 

@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.5063" minlon="-66.90266" maxlat="10.50933" maxlon="-66.897947"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.9001776895871814"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.8993437981101806"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.9011125992666820"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.8984462481496678"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5069729286564932" lon="-66.9026599999999974"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.9003284747380604"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5082281497036973" lon="-66.9026599999999974"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5062999999999995" lon="-66.9023145890520965"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5093300000000003" lon="-66.9021468873523162"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5088619095409896" lon="-66.9026599999999974"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5093300000000003" lon="-66.8987901743431763"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5093300000000003" lon="-66.9003953972457026"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5093300000000003" lon="-66.9006735384839999"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5093300000000003" lon="-66.9012373024223024"/>
+    <node visible="true" id="549" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5074017596899996" lon="-66.8990010867999985"/>
+    <node visible="true" id="550" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5074678007200006" lon="-66.8989864619200034"/>
+    <node visible="true" id="551" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075332964000001" lon="-66.8989695169999976"/>
+    <node visible="true" id="552" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075981669399994" lon="-66.8989502726900014"/>
+    <node visible="true" id="553" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076623333000008" lon="-66.8989287524299954"/>
+    <node visible="true" id="554" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5077257173100005" lon="-66.8989049824500057"/>
+    <node visible="true" id="555" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5077882417299993" lon="-66.8988789917100064"/>
+    <node visible="true" id="556" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5078498304100005" lon="-66.8988508118600009"/>
+    <node visible="true" id="557" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5079104082800008" lon="-66.8988204772399939"/>
+    <node visible="true" id="558" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5079699015599992" lon="-66.8987880248100026"/>
+    <node visible="true" id="559" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083496723199996" lon="-66.8985560080299990"/>
+    <node visible="true" id="560" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084822232100006" lon="-66.8985161486299944"/>
+    <node visible="true" id="561" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5091240928200005" lon="-66.8980745550099982"/>
+    <node visible="true" id="562" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5091399855100001" lon="-66.8980650612299996"/>
+    <node visible="true" id="563" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5091812193800003" lon="-66.8980390555200017"/>
+    <node visible="true" id="564" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5092215299599996" lon="-66.8980116115399994"/>
+    <node visible="true" id="565" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5092608681200002" lon="-66.8979827626999963"/>
+    <node visible="true" id="566" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5092991859399998" lon="-66.8979525441699963"/>
+    <node visible="true" id="567" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072735327399993" lon="-66.8979470000000020"/>
+    <node visible="true" id="568" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072800635700006" lon="-66.8983993553400040"/>
+    <node visible="true" id="569" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5073355844799998" lon="-66.8983959509299950"/>
+    <node visible="true" id="570" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5079621843600002" lon="-66.8980172303800060"/>
+    <node visible="true" id="571" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080166959699994" lon="-66.8979470000000020"/>
+    <node visible="true" id="572" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5078442156499996" lon="-66.8979470000000020"/>
+    <node visible="true" id="573" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5089872306800007" lon="-66.9011045272900020"/>
+    <node visible="true" id="579" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5091938274400007" lon="-66.9008290948000024"/>
+    <node visible="true" id="582" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5092547383599992" lon="-66.8988241885100052"/>
+    <node visible="true" id="583" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087553998800001" lon="-66.8994564539499947"/>
+    <node visible="true" id="584" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087284703399995" lon="-66.8994975605500031"/>
+    <node visible="true" id="585" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087062979700008" lon="-66.8995414724900002"/>
+    <node visible="true" id="586" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086891653900008" lon="-66.8995876300299983"/>
+    <node visible="true" id="587" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086772909799997" lon="-66.8996354448299968"/>
+    <node visible="true" id="588" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086708260999995" lon="-66.8996843073999941"/>
+    <node visible="true" id="589" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086698531699998" lon="-66.8997335949199936"/>
+    <node visible="true" id="590" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086743845699999" lon="-66.8997826791299985"/>
+    <node visible="true" id="591" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086771310000007" lon="-66.8997959613599988"/>
+    <node visible="true" id="592" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086843625499995" lon="-66.8998309343899962"/>
+    <node visible="true" id="593" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086996599300004" lon="-66.8998777455900040"/>
+    <node visible="true" id="594" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087200817199999" lon="-66.8999225160499975"/>
+    <node visible="true" id="595" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087453675999996" lon="-66.8999646751099988"/>
+    <node visible="true" id="596" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5087751952800001" lon="-66.9000036853699953"/>
+    <node visible="true" id="597" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5088091845400005" lon="-66.9000390495800019"/>
+    <node visible="true" id="598" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5088469021400002" lon="-66.9000703169800062"/>
+    <node visible="true" id="599" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5088878673099995" lon="-66.9000970889999991"/>
+    <node visible="true" id="604" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082851248800004" lon="-66.9023496594799951"/>
+    <node visible="true" id="605" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5088045681099995" lon="-66.9026277258600004"/>
+    <node visible="true" id="666" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083125509399995" lon="-66.9022836681899946"/>
+    <node visible="true" id="667" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5086704276400003" lon="-66.9021656548400045"/>
+    <node visible="true" id="668" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5088988646400008" lon="-66.9021110002500023"/>
+    <node visible="true" id="669" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5091091437100008" lon="-66.9021158291200067"/>
+    <node visible="true" id="730" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5085450696200002" lon="-66.8997414667800001"/>
+    <node visible="true" id="731" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076767757899994" lon="-66.8998738871599983"/>
+    <node visible="true" id="732" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076185124600006" lon="-66.8999166434399939"/>
+    <node visible="true" id="733" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5085709375000000" lon="-66.8998653134499932"/>
+    <node visible="true" id="734" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5077129303400003" lon="-66.9000381607200012"/>
+    <node visible="true" id="735" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076487450999991" lon="-66.9000524823700005"/>
+    <node visible="true" id="736" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5081310488199993" lon="-66.9019488675299954"/>
+    <node visible="true" id="737" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5078674621299992" lon="-66.9008672305400012"/>
+    <node visible="true" id="738" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076342153300004" lon="-66.8999983574800012"/>
+    <node visible="true" id="739" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075177010100003" lon="-66.8993920471500019"/>
+    <node visible="true" id="740" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075193946700001" lon="-66.8992887276699975"/>
+    <node visible="true" id="741" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075162741099994" lon="-66.8992688663099955"/>
+    <node visible="true" id="742" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075150094400005" lon="-66.8992487968399985"/>
+    <node visible="true" id="743" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075156117800006" lon="-66.8992286959399962"/>
+    <node visible="true" id="744" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075180758400002" lon="-66.8992087405599989"/>
+    <node visible="true" id="745" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075223799300002" lon="-66.8991891063700024"/>
+    <node visible="true" id="746" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075284861499991" lon="-66.8991699662099961"/>
+    <node visible="true" id="747" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075363407599998" lon="-66.8991514885699985"/>
+    <node visible="true" id="748" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075458745900008" lon="-66.8991338361200008"/>
+    <node visible="true" id="749" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075570037400006" lon="-66.8991171642500007"/>
+    <node visible="true" id="750" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075696302299999" lon="-66.8991016197300041"/>
+    <node visible="true" id="751" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075836429000002" lon="-66.8990873393999976"/>
+    <node visible="true" id="752" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075989183999994" lon="-66.8990744489599933"/>
+    <node visible="true" id="753" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076153222500004" lon="-66.8990630618999944"/>
+    <node visible="true" id="754" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076327100599993" lon="-66.8990532784499976"/>
+    <node visible="true" id="755" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5076509287499995" lon="-66.8990451847499941"/>
+    <node visible="true" id="756" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5077623694300009" lon="-66.8989987836200015"/>
+    <node visible="true" id="757" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5079992294599993" lon="-66.8988626414400045"/>
+    <node visible="true" id="982" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064920993000008" lon="-66.9024114261700049"/>
+    <node visible="true" id="983" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065192730600003" lon="-66.9024236189400057"/>
+    <node visible="true" id="984" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065469062699997" lon="-66.9024347073600012"/>
+    <node visible="true" id="985" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065749549799996" lon="-66.9024446738000051"/>
+    <node visible="true" id="986" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066033745999992" lon="-66.9024535024200020"/>
+    <node visible="true" id="987" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066321199499999" lon="-66.9024611791700039"/>
+    <node visible="true" id="988" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066611453200007" lon="-66.9024676918500063"/>
+    <node visible="true" id="989" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066904045600005" lon="-66.9024730300999977"/>
+    <node visible="true" id="990" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067198511599997" lon="-66.9024771854400058"/>
+    <node visible="true" id="991" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067494382800000" lon="-66.9024801512699980"/>
+    <node visible="true" id="992" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067791189000008" lon="-66.9024819228500007"/>
+    <node visible="true" id="993" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068088458200002" lon="-66.9024824973800065"/>
+    <node visible="true" id="994" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068385717700004" lon="-66.9024818739499949"/>
+    <node visible="true" id="995" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068682494899992" lon="-66.9024800535400033"/>
+    <node visible="true" id="996" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068978317999999" lon="-66.9024770390499981"/>
+    <node visible="true" id="997" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5069272716600004" lon="-66.9024728352599993"/>
+    <node visible="true" id="998" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5078633333100004" lon="-66.9023475808800043"/>
+    <node visible="true" id="1001" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082208136300004" lon="-66.9023667924499961"/>
+    <node visible="true" id="1002" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080058559099996" lon="-66.9023323085500010"/>
+    <node visible="true" id="1003" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082880034400006" lon="-66.9022063841899950"/>
+    <node visible="true" id="1004" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5081916148999994" lon="-66.9021967271600033"/>
+    <node visible="true" id="1005" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080246836499995" lon="-66.9021427997700044"/>
+    <node visible="true" id="1230" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082147959000007" lon="-66.9025298977699947"/>
+    <node visible="true" id="1296" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075739354000000" lon="-66.9000768396799970"/>
+    <node visible="true" id="1298" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5085585902500007" lon="-66.9016759834800041"/>
+    <node visible="true" id="1314" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5069578427000003" lon="-66.9025617388099931"/>
+    <node visible="true" id="1315" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5069241426100000" lon="-66.9024637357100005"/>
+    <node visible="true" id="1316" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064527761799997" lon="-66.9017459060000022"/>
+    <node visible="true" id="1317" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064296942999995" lon="-66.9017120701799968"/>
+    <node visible="true" id="1318" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064091590200004" lon="-66.9016765979999946"/>
+    <node visible="true" id="1319" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063912833999993" lon="-66.9016396847899983"/>
+    <node visible="true" id="1320" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063761658800008" lon="-66.9016015337900001"/>
+    <node visible="true" id="1321" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063638896900002" lon="-66.9015623550899932"/>
+    <node visible="true" id="1322" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063545224200006" lon="-66.9015223644099990"/>
+    <node visible="true" id="1323" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063481156700007" lon="-66.9014817819400065"/>
+    <node visible="true" id="1324" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063447047000000" lon="-66.9014408311499977"/>
+    <node visible="true" id="1325" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063443082900001" lon="-66.9013997375199949"/>
+    <node visible="true" id="1326" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063469286300002" lon="-66.9013587273300061"/>
+    <node visible="true" id="1327" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063525512999991" lon="-66.9013180263900011"/>
+    <node visible="true" id="1328" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063611453199997" lon="-66.9012778588000003"/>
+    <node visible="true" id="1329" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063726633800005" lon="-66.9012384457499962"/>
+    <node visible="true" id="1330" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063870420499992" lon="-66.9012000042399961"/>
+    <node visible="true" id="1331" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064042021800006" lon="-66.9011627459599936"/>
+    <node visible="true" id="1332" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064175260900008" lon="-66.9011488079799932"/>
+    <node visible="true" id="1333" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064393765799995" lon="-66.9011272129699961"/>
+    <node visible="true" id="1334" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064619595999993" lon="-66.9011064016600017"/>
+    <node visible="true" id="1335" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064852476400006" lon="-66.9010863994100049"/>
+    <node visible="true" id="1336" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065092123199992" lon="-66.9010672305900016"/>
+    <node visible="true" id="1337" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065338244599999" lon="-66.9010489185500035"/>
+    <node visible="true" id="1338" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065590540699993" lon="-66.9010314856100052"/>
+    <node visible="true" id="1339" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065848703999993" lon="-66.9010149530000007"/>
+    <node visible="true" id="1340" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066112420100009" lon="-66.9009993408800057"/>
+    <node visible="true" id="1341" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066381367599995" lon="-66.9009846682399996"/>
+    <node visible="true" id="1342" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066655218899996" lon="-66.9009709529899936"/>
+    <node visible="true" id="1343" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066933640299993" lon="-66.9009582118199972"/>
+    <node visible="true" id="1344" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067216292700003" lon="-66.9009464602499975"/>
+    <node visible="true" id="1345" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5074846600500003" lon="-66.9007861025600050"/>
+    <node visible="true" id="1346" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082595245399997" lon="-66.9006512038099999"/>
+    <node visible="true" id="1347" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082771477199994" lon="-66.9006502124399987"/>
+    <node visible="true" id="1348" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5082930577799996" lon="-66.9006499101599985"/>
+    <node visible="true" id="1349" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083089685799997" lon="-66.9006501691300031"/>
+    <node visible="true" id="1350" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083248607400002" lon="-66.9006509890400025"/>
+    <node visible="true" id="1351" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083407149100001" lon="-66.9006523688800030"/>
+    <node visible="true" id="1352" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083565117600006" lon="-66.9006543069800017"/>
+    <node visible="true" id="1353" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083722320500002" lon="-66.9006568009800020"/>
+    <node visible="true" id="1354" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5083878566299997" lon="-66.9006598478400036"/>
+    <node visible="true" id="1355" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084033664500005" lon="-66.9006634438400027"/>
+    <node visible="true" id="1356" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084187426400000" lon="-66.9006675846000007"/>
+    <node visible="true" id="1357" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084339664400002" lon="-66.9006722650899945"/>
+    <node visible="true" id="1358" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084490193099995" lon="-66.9006774795900014"/>
+    <node visible="true" id="1359" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5084638829199992" lon="-66.9006832217600049"/>
+    <node visible="true" id="1360" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5089760357599999" lon="-66.9011001908299932"/>
+    <node visible="true" id="1362" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066152618600004" lon="-66.8984401191300009"/>
+    <node visible="true" id="1363" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072803441799998" lon="-66.8984187934500056"/>
+    <node visible="true" id="1364" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5073261783799996" lon="-66.8987263520100015"/>
+    <node visible="true" id="1421" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067556583900004" lon="-66.9013769333299990"/>
+    <node visible="true" id="1422" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072674942200006" lon="-66.9016812216199952"/>
+    <node visible="true" id="1423" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5077602018099991" lon="-66.9019608399800063"/>
+    <node visible="true" id="1424" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080274654399997" lon="-66.9021554377300021"/>
+    <node visible="true" id="1425" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080296747399995" lon="-66.9021681905900039"/>
+    <node visible="true" id="1426" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080313069500004" lon="-66.9021810318999997"/>
+    <node visible="true" id="1427" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080323586999995" lon="-66.9021939349899952"/>
+    <node visible="true" id="1428" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080328278100001" lon="-66.9022068730999990"/>
+    <node visible="true" id="1429" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080327132899995" lon="-66.9022198193700035"/>
+    <node visible="true" id="1430" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080320153900004" lon="-66.9022327469400011"/>
+    <node visible="true" id="1431" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080307355600002" lon="-66.9022456289699932"/>
+    <node visible="true" id="1432" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080288764500001" lon="-66.9022584387400059"/>
+    <node visible="true" id="1433" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080264419200002" lon="-66.9022711496699998"/>
+    <node visible="true" id="1434" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080234370099994" lon="-66.9022837353600011"/>
+    <node visible="true" id="1435" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080198679799999" lon="-66.9022961697200031"/>
+    <node visible="true" id="1436" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080157422199996" lon="-66.9023084269200012"/>
+    <node visible="true" id="1437" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5080110683000001" lon="-66.9023204815299977"/>
+    <node visible="true" id="1450" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063016847400004" lon="-66.8993424101300036"/>
+    <node visible="true" id="1451" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5063583844000004" lon="-66.8992989363299984"/>
+    <node visible="true" id="1452" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064165510100000" lon="-66.8992574884999982"/>
+    <node visible="true" id="1453" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5064761136999998" lon="-66.8992181171399949"/>
+    <node visible="true" id="1454" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065369998999998" lon="-66.8991808702199933"/>
+    <node visible="true" id="1455" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5065991354400001" lon="-66.8991457931099944"/>
+    <node visible="true" id="1456" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066330451599992" lon="-66.8991339754799981"/>
+    <node visible="true" id="1457" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5066981389500000" lon="-66.8991132323200048"/>
+    <node visible="true" id="1458" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5067639095099992" lon="-66.8990947973099992"/>
+    <node visible="true" id="1459" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068302767099997" lon="-66.8990786929099954"/>
+    <node visible="true" id="1460" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5068971596799994" lon="-66.8990649387500014"/>
+    <node visible="true" id="1461" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5069644769600004" lon="-66.8990535515700060"/>
+    <node visible="true" id="1462" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5070321465099994" lon="-66.8990445452599971"/>
+    <node visible="true" id="1463" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5071000858999994" lon="-66.8990379307799969"/>
+    <node visible="true" id="1464" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5071682123500008" lon="-66.8990337162099991"/>
+    <node visible="true" id="1465" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072011718899994" lon="-66.8990308773600049"/>
+    <node visible="true" id="1466" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5072683640100006" lon="-66.8990233080599950"/>
+    <node visible="true" id="1467" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5073352537800009" lon="-66.8990133738400061"/>
+    <node visible="true" id="1469" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5075377200200002" lon="-66.8999424799399947"/>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="1469"/>
+        <nd ref="732"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.682Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{8216f6ed-220f-46a4-bc23-8d7fbd8c6096}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="549"/>
+        <nd ref="1467"/>
+        <nd ref="1466"/>
+        <nd ref="1465"/>
+        <nd ref="1464"/>
+        <nd ref="1463"/>
+        <nd ref="1462"/>
+        <nd ref="1461"/>
+        <nd ref="1460"/>
+        <nd ref="1459"/>
+        <nd ref="1458"/>
+        <nd ref="1457"/>
+        <nd ref="1456"/>
+        <nd ref="1455"/>
+        <nd ref="1454"/>
+        <nd ref="1453"/>
+        <nd ref="1452"/>
+        <nd ref="1451"/>
+        <nd ref="1450"/>
+        <nd ref="-13"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.682Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{4ac922de-397e-4108-bb88-c474be633e7e}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="998"/>
+        <nd ref="1002"/>
+        <nd ref="1437"/>
+        <nd ref="1436"/>
+        <nd ref="1435"/>
+        <nd ref="1434"/>
+        <nd ref="1433"/>
+        <nd ref="1432"/>
+        <nd ref="1431"/>
+        <nd ref="1430"/>
+        <nd ref="1429"/>
+        <nd ref="1428"/>
+        <nd ref="1427"/>
+        <nd ref="1426"/>
+        <nd ref="1425"/>
+        <nd ref="1424"/>
+        <nd ref="1005"/>
+        <nd ref="1423"/>
+        <nd ref="1422"/>
+        <nd ref="1421"/>
+        <nd ref="-12"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.683Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{5ee48c4d-213f-4ef9-84c5-9de9189b059d}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="568"/>
+        <nd ref="1362"/>
+        <nd ref="-11"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.686Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{41d4846b-b90b-4201-b1c3-6762482781a6}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="573"/>
+        <nd ref="1360"/>
+        <nd ref="1359"/>
+        <nd ref="1358"/>
+        <nd ref="1357"/>
+        <nd ref="1356"/>
+        <nd ref="1355"/>
+        <nd ref="1354"/>
+        <nd ref="1353"/>
+        <nd ref="1352"/>
+        <nd ref="1351"/>
+        <nd ref="1350"/>
+        <nd ref="1349"/>
+        <nd ref="1348"/>
+        <nd ref="1347"/>
+        <nd ref="1346"/>
+        <nd ref="1345"/>
+        <nd ref="1344"/>
+        <nd ref="1343"/>
+        <nd ref="1342"/>
+        <nd ref="1341"/>
+        <nd ref="1340"/>
+        <nd ref="1339"/>
+        <nd ref="1338"/>
+        <nd ref="1337"/>
+        <nd ref="1336"/>
+        <nd ref="1335"/>
+        <nd ref="1334"/>
+        <nd ref="1333"/>
+        <nd ref="1332"/>
+        <nd ref="1331"/>
+        <nd ref="1330"/>
+        <nd ref="1329"/>
+        <nd ref="1328"/>
+        <nd ref="1327"/>
+        <nd ref="1326"/>
+        <nd ref="1325"/>
+        <nd ref="1324"/>
+        <nd ref="1323"/>
+        <nd ref="1322"/>
+        <nd ref="1321"/>
+        <nd ref="1320"/>
+        <nd ref="1319"/>
+        <nd ref="1318"/>
+        <nd ref="1317"/>
+        <nd ref="1316"/>
+        <nd ref="1315"/>
+        <nd ref="997"/>
+        <nd ref="1314"/>
+        <nd ref="-10"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.686Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{b1425c50-fb2e-4126-b6ec-a89f09d0f018}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="1296"/>
+        <nd ref="735"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.687Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{a99c21f0-9fb5-483a-863d-44554e3acc76}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="1230"/>
+        <nd ref="1001"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.690Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{e7702591-e5cb-4327-b1db-b460daebea57}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="998"/>
+        <nd ref="997"/>
+        <nd ref="996"/>
+        <nd ref="995"/>
+        <nd ref="994"/>
+        <nd ref="993"/>
+        <nd ref="992"/>
+        <nd ref="991"/>
+        <nd ref="990"/>
+        <nd ref="989"/>
+        <nd ref="988"/>
+        <nd ref="987"/>
+        <nd ref="986"/>
+        <nd ref="985"/>
+        <nd ref="984"/>
+        <nd ref="983"/>
+        <nd ref="982"/>
+        <nd ref="-7"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.699Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{dba47928-0f15-4818-a0cc-a2a9ca31af5d}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="669"/>
+        <nd ref="668"/>
+        <nd ref="667"/>
+        <nd ref="666"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.703Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{a3b42bcf-8c21-4490-997b-c89e30fdf213}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="605"/>
+        <nd ref="604"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.705Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{faf5da74-68a5-4e0c-b0a8-16eeaddc10ba}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="599"/>
+        <nd ref="598"/>
+        <nd ref="597"/>
+        <nd ref="596"/>
+        <nd ref="595"/>
+        <nd ref="594"/>
+        <nd ref="593"/>
+        <nd ref="592"/>
+        <nd ref="591"/>
+        <nd ref="590"/>
+        <nd ref="589"/>
+        <nd ref="588"/>
+        <nd ref="587"/>
+        <nd ref="586"/>
+        <nd ref="585"/>
+        <nd ref="584"/>
+        <nd ref="583"/>
+        <nd ref="582"/>
+        <nd ref="-4"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.705Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{107ebc5f-b346-4cc5-b826-b11beec19cc4}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="573"/>
+        <nd ref="579"/>
+        <nd ref="-2"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.705Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{4db3121f-d384-4ab6-acfb-4df9f98984ea}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="573"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.706Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{c7d8cb44-5c28-4bc3-a670-8079088ad5a2}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="450" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="566"/>
+        <nd ref="566"/>
+        <nd ref="565"/>
+        <nd ref="564"/>
+        <nd ref="563"/>
+        <nd ref="562"/>
+        <nd ref="561"/>
+        <nd ref="560"/>
+        <nd ref="559"/>
+        <nd ref="558"/>
+        <nd ref="557"/>
+        <nd ref="556"/>
+        <nd ref="555"/>
+        <nd ref="554"/>
+        <nd ref="553"/>
+        <nd ref="552"/>
+        <nd ref="551"/>
+        <nd ref="550"/>
+        <nd ref="549"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.706Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{b523db3f-f1e1-428b-98b0-7a7ebb41d081}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="451" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="568"/>
+        <nd ref="567"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.706Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{0b4417a0-bbc5-44db-87f8-346150a3c499}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="452" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="571"/>
+        <nd ref="570"/>
+        <nd ref="569"/>
+        <nd ref="568"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.706Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{c10b9054-e0ba-402c-92b0-d7440aaeb30c}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="453" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="570"/>
+        <nd ref="572"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.706Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{c9ef4822-ea03-48cd-8878-41a8214dcd9e}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="477" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="732"/>
+        <nd ref="731"/>
+        <nd ref="730"/>
+        <nd ref="591"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.702Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{9ae6dc04-2cd3-4bec-b4d4-065d76631678}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="478" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="735"/>
+        <nd ref="734"/>
+        <nd ref="733"/>
+        <nd ref="591"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.702Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{2a41df55-8b90-43dc-98e5-d4d685716783}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="479" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="560"/>
+        <nd ref="757"/>
+        <nd ref="756"/>
+        <nd ref="755"/>
+        <nd ref="754"/>
+        <nd ref="753"/>
+        <nd ref="752"/>
+        <nd ref="751"/>
+        <nd ref="750"/>
+        <nd ref="749"/>
+        <nd ref="748"/>
+        <nd ref="747"/>
+        <nd ref="746"/>
+        <nd ref="745"/>
+        <nd ref="744"/>
+        <nd ref="743"/>
+        <nd ref="742"/>
+        <nd ref="741"/>
+        <nd ref="740"/>
+        <nd ref="739"/>
+        <nd ref="732"/>
+        <nd ref="738"/>
+        <nd ref="735"/>
+        <nd ref="737"/>
+        <nd ref="736"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.702Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{c3ebab6b-1ff5-4824-98c7-e1cb35e68b6e}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="502" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="1002"/>
+        <nd ref="1001"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.699Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{e6345511-b279-4ad6-b6a3-a74e013e4a31}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="503" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="604"/>
+        <nd ref="1001"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{92b34cef-2a96-4143-8222-83a6836ecbe4}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="504" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="604"/>
+        <nd ref="666"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{bbd46957-74bf-4942-8ce7-cc9763ce1c89}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="505" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="666"/>
+        <nd ref="1003"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{97c786e4-418b-41f2-95e9-de855060fd96}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="506" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="1005"/>
+        <nd ref="1004"/>
+        <nd ref="1003"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{aacc4e7a-d622-499b-86c7-837fdbc1409e}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="507" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="1004"/>
+        <nd ref="736"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.698Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{a7d782db-4c62-48d0-bf4c-962db1dd717d}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="583" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="739"/>
+        <nd ref="549"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.687Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{1b715755-566c-4390-8057-da195ad4be34}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="584" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="1003"/>
+        <nd ref="1298"/>
+        <nd ref="573"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.687Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{e38c5179-c190-4c82-b23a-ed238baa6be7}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="587" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="549"/>
+        <nd ref="1364"/>
+        <nd ref="1363"/>
+        <nd ref="568"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.686Z"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="uuid" v="{687f45bc-1a13-43d8-aa49-e5fed619e8bb}"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

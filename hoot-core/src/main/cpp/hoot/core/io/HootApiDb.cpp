@@ -61,7 +61,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int HootApiDb::logWarnCount = 0;
+int HootApiDb::logWarnCount = 0;
 
 HootApiDb::HootApiDb() :
 _precision(ConfigOptions().getWriterPrecision()),

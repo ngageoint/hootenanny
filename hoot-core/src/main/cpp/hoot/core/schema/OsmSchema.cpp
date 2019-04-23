@@ -918,7 +918,7 @@ private:
   TagGraph _graph;
 
   //this should be static, but there's no header file
-  unsigned int _logWarnCount;
+  int _logWarnCount;
 
   VertexId _addVertex(const SchemaVertex& v)
   {

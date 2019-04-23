@@ -89,7 +89,7 @@ private:
   BuildingPartCriterion _buildingPartCrit;
 };
 
-unsigned int BuildingMerger::logWarnCount = 0;
+int BuildingMerger::logWarnCount = 0;
 
 BuildingMerger::BuildingMerger() :
 MergerBase()

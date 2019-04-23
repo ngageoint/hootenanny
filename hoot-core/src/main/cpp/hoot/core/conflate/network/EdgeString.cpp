@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeString.h"
 
@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-unsigned int EdgeString::logWarnCount = 0;
+int EdgeString::logWarnCount = 0;
 
 bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
 {

@@ -50,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int Relation::logWarnCount = 0;
+int Relation::logWarnCount = 0;
 
 /**
  * This is a convenience class to handle cases when exceptions are thrown.

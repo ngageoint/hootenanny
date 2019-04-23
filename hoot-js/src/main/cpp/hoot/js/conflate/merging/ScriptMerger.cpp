@@ -49,7 +49,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, ScriptMerger)
 
-unsigned int ScriptMerger::logWarnCount = 0;
+int ScriptMerger::logWarnCount = 0;
 
 ScriptMerger::ScriptMerger() :
 MergerBase()

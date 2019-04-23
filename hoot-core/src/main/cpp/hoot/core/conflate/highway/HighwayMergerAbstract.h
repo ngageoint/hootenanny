@@ -85,12 +85,12 @@ public:
 
   static std::string className() { return "hoot::HighwayMergerAbstract"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   virtual ~HighwayMergerAbstract() {}
 
   virtual void apply(const OsmMapPtr& map,
-                     std::vector< std::pair<ElementId, ElementId> >& replaced) override = 0;
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override = 0;
 
   virtual QString toString() const override;
 

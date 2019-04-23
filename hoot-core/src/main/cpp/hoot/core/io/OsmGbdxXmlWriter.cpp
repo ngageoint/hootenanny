@@ -59,7 +59,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmGbdxXmlWriter::logWarnCount = 0;
+int OsmGbdxXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 

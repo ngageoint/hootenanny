@@ -50,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MaximalSublineStringMatcher::logWarnCount = 0;
+int MaximalSublineStringMatcher::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(SublineStringMatcher, MaximalSublineStringMatcher)
 

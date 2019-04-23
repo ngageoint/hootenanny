@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::WayString"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   WayString();
 

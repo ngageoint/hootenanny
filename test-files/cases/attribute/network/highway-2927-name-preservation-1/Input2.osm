@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.5053" minlon="-66.91540000000001" maxlat="10.509974" maxlon="-66.9121"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5096479042315138" lon="-66.9120999999999952"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5099739999999997" lon="-66.9154000000000053"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5092080815024982" lon="-66.9154000000000053"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5066286931167596" lon="-66.9154000000000053"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5053000000000001" lon="-66.9130197150654311"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5073142244505497" lon="-66.9120999999999952"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5079994058417903" lon="-66.9154000000000053"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5053000000000001" lon="-66.9151998221860538"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5056610968119735" lon="-66.9154000000000053"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5060350187970553" lon="-66.9120999999999952"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5053000000000001" lon="-66.9135553375471659"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5053000000000001" lon="-66.9143250522412387"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5072414397864087" lon="-66.9120999999999952"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5079027944603549" lon="-66.9154000000000053"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5085000317245711" lon="-66.9120999999999952"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5091225233927830" lon="-66.9154000000000053"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5097193508716309" lon="-66.9120999999999952"/>
+    <node visible="true" id="2" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5076034000000007" lon="-66.9138903000000056">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-04-28T19:27:00.000Z"/>
+        <tag k="designation" v="esquina de Veroes"/>
+    </node>
+    <node visible="true" id="107" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5089404000000002" lon="-66.9145165000000048">
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+        <tag k="designation" v="esquina Mijares"/>
+    </node>
+    <node visible="true" id="108" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5087822000000006" lon="-66.9136392000000058">
+        <tag k="source:datetime" v="2014-04-28T19:27:01.000Z"/>
+        <tag k="designation" v="esquina Jesuitas"/>
+    </node>
+    <node visible="true" id="109" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5085598999999998" lon="-66.9124025999999930">
+        <tag k="source:datetime" v="2015-06-26T16:18:08.000Z"/>
+        <tag k="designation" v="esquina de Maturín"/>
+    </node>
+    <node visible="true" id="126" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5099739999999997" lon="-66.9133431999999999">
+        <tag k="source:datetime" v="2014-12-23T13:09:19.000Z"/>
+        <tag k="designation" v="esquina Tienda Honda"/>
+    </node>
+    <node visible="true" id="142" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5073658999999999" lon="-66.9126940999999960">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-04-28T19:27:01.000Z"/>
+        <tag k="designation" v="esquina de Ibarras"/>
+    </node>
+    <node visible="true" id="148" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5065395000000006" lon="-66.9149385999999993">
+        <tag k="source:datetime" v="2015-08-18T17:18:40.000Z"/>
+        <tag k="designation" v="Esquina de Principal"/>
+    </node>
+    <node visible="true" id="149" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5063720000000007" lon="-66.9141137999999955">
+        <tag k="source:datetime" v="2015-08-18T17:18:41.000Z"/>
+        <tag k="designation" v="Esquina de La Torre"/>
+    </node>
+    <node visible="true" id="150" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5061762000000005" lon="-66.9128637999999967">
+        <tag k="source:datetime" v="2015-08-18T17:18:40.000Z"/>
+        <tag k="designation" v="Esquina de Madríces"/>
+    </node>
+    <node visible="true" id="166" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5054555000000001" lon="-66.9142882999999955">
+        <tag k="source:datetime" v="2014-04-17T22:53:50.000Z"/>
+        <tag k="designation" v="esquina Las Gradillas"/>
+    </node>
+    <node visible="true" id="167" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5056101999999996" lon="-66.9151368999999931">
+        <tag k="source:datetime" v="2014-07-30T11:54:37.000Z"/>
+        <tag k="designation" v="esquina Monjas"/>
+    </node>
+    <node visible="true" id="215" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5077651999999997" lon="-66.9147404999999935">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-09-04T18:34:00.000Z"/>
+        <tag k="designation" v="esquina de Santa Capilla"/>
+    </node>
+    <node visible="true" id="506" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5099739999999997" lon="-66.9143612328000046"/>
+    <node visible="true" id="541" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5099739999999997" lon="-66.9143087232200031"/>
+    <node visible="true" id="786" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5091651000000006" lon="-66.9152016999999972"/>
+    <node visible="true" id="787" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5095483999999999" lon="-66.9151283000000063"/>
+    <node visible="true" id="1030" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5077160000000003" lon="-66.9147641999999934"/>
+    <node visible="true" id="1031" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.5080667999999999" lon="-66.9128324999999933"/>
+    <node visible="true" id="1532" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5080045000000002" lon="-66.9125525000000039"/>
+    <node visible="true" id="1533" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5074146000000006" lon="-66.9129619999999932"/>
+    <node visible="true" id="1890" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5085856999999994" lon="-66.9148883000000012"/>
+    <node visible="true" id="1891" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5095284000000007" lon="-66.9144665000000032"/>
+    <node visible="true" id="1892" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5088550000000005" lon="-66.9148419999999930"/>
+    <node visible="true" id="1893" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5099304999999994" lon="-66.9143045999999941"/>
+    <node visible="true" id="1985" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5099193999999994" lon="-66.9143636000000015"/>
+    <node visible="true" id="1986" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5097261999999994" lon="-66.9144060999999937"/>
+    <node visible="true" id="1987" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5094703999999997" lon="-66.9147332999999946"/>
+    <node visible="true" id="1988" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5094410000000007" lon="-66.9146374999999978"/>
+    <node visible="true" id="2114" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5078923000000000" lon="-66.9148222999999973">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2117" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5076549000000004" lon="-66.9137815999999930">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2123" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5078150000000008" lon="-66.9144871999999964"/>
+    <node visible="true" id="2126" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5074544999999997" lon="-66.9127864999999957">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2129" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5076772999999992" lon="-66.9138745000000057">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2134" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5074368000000007" lon="-66.9126784000000043">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2135" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5074149000000006" lon="-66.9125745999999992">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2137" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5078720000000008" lon="-66.9147221999999999">
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2138" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5077049999999996" lon="-66.9139854999999955">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2139" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5078540000000000" lon="-66.9146468999999939">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:27.000Z"/>
+    </node>
+    <node visible="true" id="2142" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5074851000000002" lon="-66.9129386000000039"/>
+    <node visible="true" id="2193" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5079361000000002" lon="-66.9147090999999961">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2194" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5077493999999998" lon="-66.9146707000000021">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2195" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5077843000000009" lon="-66.9148428999999965">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2196" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5076228000000000" lon="-66.9139938999999941">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2197" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5075827000000004" lon="-66.9137882999999931">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2198" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5073848000000005" lon="-66.9127983000000057">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2199" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5073445000000003" lon="-66.9125918999999953">
+        <tag k="highway" v="crossing"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:26.000Z"/>
+    </node>
+    <node visible="true" id="2299" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5055005000000001" lon="-66.9143234000000007"/>
+    <node visible="true" id="2300" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5056270999999999" lon="-66.9144662000000068"/>
+    <node visible="true" id="2301" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5056566999999994" lon="-66.9151018999999962"/>
+    <node visible="true" id="2302" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5056630999999996" lon="-66.9146480999999937"/>
+    <node visible="true" id="2303" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5056811000000003" lon="-66.9144534999999934"/>
+    <node visible="true" id="2304" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5056811000000003" lon="-66.9147284000000013"/>
+    <node visible="true" id="2305" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5057019000000000" lon="-66.9143492000000037"/>
+    <node visible="true" id="2306" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5057130000000001" lon="-66.9144035000000059"/>
+    <node visible="true" id="2307" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5057150999999998" lon="-66.9149172000000050"/>
+    <node visible="true" id="2308" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5057794999999992" lon="-66.9149045999999998"/>
+    <node visible="true" id="2309" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058219000000008" lon="-66.9149453999999935"/>
+    <node visible="true" id="2310" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058328999999997" lon="-66.9149912000000029"/>
+    <node visible="true" id="2311" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058495000000001" lon="-66.9145549999999929"/>
+    <node visible="true" id="2312" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058571000000001" lon="-66.9146072000000061"/>
+    <node visible="true" id="2313" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058731000000005" lon="-66.9145218999999969"/>
+    <node visible="true" id="2314" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058752000000002" lon="-66.9146867999999984"/>
+    <node visible="true" id="2315" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5058842000000006" lon="-66.9147312000000056"/>
+    <node visible="true" id="2316" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059000999999999" lon="-66.9143047999999965"/>
+    <node visible="true" id="2317" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059251000000007" lon="-66.9147628000000054"/>
+    <node visible="true" id="2318" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059457999999992" lon="-66.9145007999999990"/>
+    <node visible="true" id="2319" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059606999999993" lon="-66.9146032999999960"/>
+    <node visible="true" id="2320" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059682999999993" lon="-66.9146412999999995"/>
+    <node visible="true" id="2321" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059714000000000" lon="-66.9142889000000025"/>
+    <node visible="true" id="2322" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5059915999999998" lon="-66.9147494000000052"/>
+    <node visible="true" id="2323" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060157000000007" lon="-66.9144904999999994"/>
+    <node visible="true" id="2324" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060237000000001" lon="-66.9145903000000004"/>
+    <node visible="true" id="2325" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060313000000001" lon="-66.9146283000000039"/>
+    <node visible="true" id="2326" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060331999999992" lon="-66.9149488999999988"/>
+    <node visible="true" id="2327" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060628000000005" lon="-66.9147343000000063"/>
+    <node visible="true" id="2328" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5060836000000002" lon="-66.9144763999999981"/>
+    <node visible="true" id="2329" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061099999999996" lon="-66.9149373000000054"/>
+    <node visible="true" id="2330" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061196999999993" lon="-66.9147202999999990"/>
+    <node visible="true" id="2331" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061224000000006" lon="-66.9144933000000037"/>
+    <node visible="true" id="2332" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061330000000002" lon="-66.9145477000000000"/>
+    <node visible="true" id="2333" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061543000000004" lon="-66.9146314000000046"/>
+    <node visible="true" id="2334" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061625999999997" lon="-66.9142480000000006"/>
+    <node visible="true" id="2335" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061640000000001" lon="-66.9146836000000036"/>
+    <node visible="true" id="2336" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5061751000000001" lon="-66.9143030000000039"/>
+    <node visible="true" id="2337" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5062098000000006" lon="-66.9143480999999980"/>
+    <node visible="true" id="2338" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5062485999999993" lon="-66.9145242999999965"/>
+    <node visible="true" id="2339" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5062666000000000" lon="-66.9146089000000046"/>
+    <node visible="true" id="2340" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5062832000000004" lon="-66.9148428999999965"/>
+    <node visible="true" id="2341" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5062929000000000" lon="-66.9148964999999976"/>
+    <node visible="true" id="2342" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5063025999999997" lon="-66.9147794999999945"/>
+    <node visible="true" id="2343" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5063420999999995" lon="-66.9141486999999984"/>
+    <node visible="true" id="2344" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5064983000000005" lon="-66.9149273000000022"/>
+    <node visible="true" id="2393" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5066199000000005" lon="-66.9143624000000017"/>
+    <node visible="true" id="2394" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5068698000000005" lon="-66.9143095000000017"/>
+    <node visible="true" id="2395" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5068128999999999" lon="-66.9140337999999986"/>
+    <node visible="true" id="2396" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5068269999999995" lon="-66.9141024000000044">
+        <tag k="barrier" v="lift_gate"/>
+        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z"/>
+    </node>
+    <node visible="true" id="2650" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5087174000000001" lon="-66.9146297000000061">
+        <tag k="fee" v="no"/>
+        <tag k="parking" v="underground"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:street" v="Av. Norte 2"/>
+        <tag k="access" v="private"/>
+        <tag k="park_ride" v="no"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="opening_hours" v="Mo-Fr 08:00-16:00; Jan 1,Apr 19,May 1,Jun 24,Jul 5,Jul 24,Oct 12,Dec 24,Dec 25,Dec 31 off"/>
+        <tag k="capacity" v="120"/>
+        <tag k="name" v="BCV, Edoval"/>
+        <tag k="amenity" v="parking_entrance"/>
+        <tag k="supervised" v="yes"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:41.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="2651" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5084738000000009" lon="-66.9149739000000068"/>
+    <node visible="true" id="2652" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5085958000000002" lon="-66.9149491000000012"/>
+    <node visible="true" id="2653" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5090938999999999" lon="-66.9149110999999976"/>
+    <node visible="true" id="2654" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5082258999999993" lon="-66.9151561999999984"/>
+    <node visible="true" id="2655" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5090760999999997" lon="-66.9148040000000037"/>
+    <node visible="true" id="2657" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5090857000000000" lon="-66.9148615999999947"/>
+    <node visible="true" id="2658" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5096342000000007" lon="-66.9144589999999937">
+        <tag k="fee" v="no"/>
+        <tag k="parking" v="underground"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:street" v="Av. Norte 2"/>
+        <tag k="access" v="private"/>
+        <tag k="park_ride" v="no"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="opening_hours" v="Mo-Fr 08:00-16:00; Jan 1,Apr 19,May 1,Jun 24,Jul 5,Jul 24,Oct 12,Dec 24,Dec 25,Dec 31 off"/>
+        <tag k="capacity" v="120"/>
+        <tag k="name" v="BCV, Av. Norte 2"/>
+        <tag k="amenity" v="parking_entrance"/>
+        <tag k="supervised" v="yes"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:39.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </node>
+    <node visible="true" id="2659" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5081995999999993" lon="-66.9150221000000016"/>
+    <node visible="true" id="2660" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5087060000000001" lon="-66.9145613999999966"/>
+    <node visible="true" id="2661" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5096150000000002" lon="-66.9143720999999942"/>
+    <node visible="true" id="2663" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5086034999999995" lon="-66.9149953999999951"/>
+    <node visible="true" id="2664" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749" lat="10.5081071000000001" lon="-66.9151803999999970"/>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="109"/>
+        <nd ref="1532"/>
+        <nd ref="2134"/>
+        <nd ref="142"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Norte 1"/>
+        <tag k="source:datetime" v="2015-10-16T14:01:16.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="506"/>
+        <nd ref="1985"/>
+        <nd ref="1986"/>
+        <nd ref="1891"/>
+        <nd ref="1988"/>
+        <nd ref="1987"/>
+        <nd ref="787"/>
+        <nd ref="786"/>
+        <nd ref="-15"/>
+        <nd ref="-16"/>
+        <nd ref="506"/>
+        <tag k="lit" v="yes"/>
+        <tag k="internet_access:operator" v="CANTV WiFi Para Todos"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="addr:street" v="Av. Norte 4"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="internet_access" v="wlan"/>
+        <tag k="internet_access:fee" v="no"/>
+        <tag k="horse" v="no"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="Plaza Juan Pedro López"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:42.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="addr:postcode" v="1010"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="148"/>
+        <tag k="lit" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Oeste 0"/>
+        <tag k="source:datetime" v="2015-08-11T16:12:27.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="150"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur 1"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-06-01T18:12:03.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="2135"/>
+        <nd ref="2134"/>
+        <nd ref="2126"/>
+        <nd ref="2142"/>
+        <nd ref="2117"/>
+        <nd ref="2129"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:39.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="2137"/>
+        <nd ref="2114"/>
+        <nd ref="-11"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:38.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10"/>
+        <nd ref="167"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur 2"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-02-08T15:54:54.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="167"/>
+        <nd ref="166"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="horse" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="name" v="Av. Oeste 2"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-12-19T16:36:19.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="150"/>
+        <nd ref="-8"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Este 0"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="166"/>
+        <nd ref="-7"/>
+        <tag k="lit" v="yes"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="horse" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="name" v="Av. Este 2"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-06-22T20:55:22.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="149"/>
+        <nd ref="166"/>
+        <nd ref="-6"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-11-14T15:44:07.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="142"/>
+        <nd ref="2199"/>
+        <nd ref="-5"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-05-07T19:27:30.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="2195"/>
+        <nd ref="215"/>
+        <nd ref="2194"/>
+        <nd ref="2196"/>
+        <nd ref="2"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T18:34:00.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="108"/>
+        <nd ref="109"/>
+        <nd ref="-3"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Este 3"/>
+        <tag k="source:datetime" v="2014-08-12T06:42:46.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="107"/>
+        <nd ref="108"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Oeste 3"/>
+        <tag k="source:datetime" v="2014-04-16T15:31:08.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="126"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Este 5"/>
+        <tag k="source:datetime" v="2013-11-13T13:09:28.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="27" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="167"/>
+        <nd ref="148"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Sur 2"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-08-21T19:56:06.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="166" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="149"/>
+        <nd ref="150"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Este 0"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="concrete"/>
+    </way>
+    <way visible="true" id="252" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2142"/>
+        <nd ref="1031"/>
+        <nd ref="1532"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="name" v="Pasaje La Segurida"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-09-28T14:26:08.000Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="387" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="142"/>
+        <nd ref="150"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Norte 1"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2013-11-14T15:44:06.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paving_stones"/>
+    </way>
+    <way visible="true" id="505" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="148"/>
+        <nd ref="1030"/>
+        <nd ref="215"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Norte 2"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-06-01T03:39:28.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="506" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="148"/>
+        <nd ref="149"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Oeste 0"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="concrete"/>
+    </way>
+    <way visible="true" id="519" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2137"/>
+        <nd ref="215"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Norte 2"/>
+        <tag k="source:datetime" v="2014-04-28T19:26:58.000Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="521" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2129"/>
+        <nd ref="2"/>
+        <tag k="lit" v="yes"/>
+        <tag k="motor_vehicle" v="permissive"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="alt_name" v="Avenida Norte"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Bulevar Panteón"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T18:34:00.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="522" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2129"/>
+        <nd ref="2138"/>
+        <nd ref="2123"/>
+        <nd ref="2139"/>
+        <nd ref="2137"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="motor_vehicle:conditional" v="no @ (21:00-05:59)"/>
+        <tag k="source:datetime" v="2014-04-28T19:26:59.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="555" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2332"/>
+        <nd ref="2338"/>
+        <nd ref="2337"/>
+        <nd ref="2331"/>
+        <nd ref="2332"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="556" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2344"/>
+        <nd ref="2343"/>
+        <nd ref="2299"/>
+        <nd ref="2301"/>
+        <nd ref="2344"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="557" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2342"/>
+        <nd ref="2339"/>
+        <nd ref="2333"/>
+        <nd ref="2335"/>
+        <nd ref="2342"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="558" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2318"/>
+        <nd ref="2316"/>
+        <nd ref="2305"/>
+        <nd ref="2306"/>
+        <nd ref="2313"/>
+        <nd ref="2318"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="559" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2326"/>
+        <nd ref="2322"/>
+        <nd ref="2317"/>
+        <nd ref="2309"/>
+        <nd ref="2310"/>
+        <nd ref="2326"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="560" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2304"/>
+        <nd ref="2314"/>
+        <nd ref="2315"/>
+        <nd ref="2308"/>
+        <nd ref="2307"/>
+        <nd ref="2304"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="561" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2312"/>
+        <nd ref="2311"/>
+        <nd ref="2303"/>
+        <nd ref="2300"/>
+        <nd ref="2302"/>
+        <nd ref="2312"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="562" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2328"/>
+        <nd ref="2336"/>
+        <nd ref="2334"/>
+        <nd ref="2321"/>
+        <nd ref="2323"/>
+        <nd ref="2328"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="563" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2329"/>
+        <nd ref="2341"/>
+        <nd ref="2340"/>
+        <nd ref="2330"/>
+        <nd ref="2327"/>
+        <nd ref="2329"/>
+        <tag k="source:datetime" v="2016-02-03T09:50:40Z"/>
+    </way>
+    <way visible="true" id="564" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2325"/>
+        <nd ref="2324"/>
+        <nd ref="2319"/>
+        <nd ref="2320"/>
+        <nd ref="2325"/>
+        <tag k="addr:street" v="Av. Sur"/>
+        <tag k="addr:city" v="Caracas"/>
+        <tag k="name" v="Estatua del Libertador"/>
+        <tag k="tourism" v="attraction"/>
+        <tag k="source:datetime" v="2014-08-22T18:51:33.000Z"/>
+        <tag k="addr:postcode" v="1010"/>
+    </way>
+    <way visible="true" id="581" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2393"/>
+        <nd ref="2394"/>
+        <nd ref="2396"/>
+        <nd ref="2395"/>
+        <tag k="access" v="private"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="582" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2395"/>
+        <nd ref="149"/>
+        <tag k="lit" v="yes"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="alt_name" v="Avenida Norte"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Bulevar Panteón"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="583" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2"/>
+        <nd ref="2197"/>
+        <nd ref="1533"/>
+        <nd ref="2198"/>
+        <nd ref="142"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="3"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="584" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2"/>
+        <nd ref="2395"/>
+        <tag k="lit" v="yes"/>
+        <tag k="motor_vehicle" v="permissive"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="alt_name" v="Av. Norte"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Bulevar Panteón"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-07-01T16:10:50.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="670" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2663"/>
+        <nd ref="2652"/>
+        <nd ref="1890"/>
+        <nd ref="1892"/>
+        <nd ref="2655"/>
+        <nd ref="2657"/>
+        <nd ref="2653"/>
+        <nd ref="2663"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="access" v="private"/>
+        <tag k="oneway" v="no"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:40.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="671" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2664"/>
+        <nd ref="2654"/>
+        <nd ref="2659"/>
+        <nd ref="2651"/>
+        <nd ref="2652"/>
+        <nd ref="2657"/>
+        <tag k="access" v="private"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:40.000Z"/>
+        <tag k="highway" v="footway"/>
+    </way>
+    <way visible="true" id="672" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2650"/>
+        <nd ref="2660"/>
+        <tag k="access" v="private"/>
+        <tag k="oneway" v="no"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="foot" v="no"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:40.000Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="673" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="2658"/>
+        <nd ref="2661"/>
+        <tag k="access" v="private"/>
+        <tag k="oneway" v="no"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="foot" v="no"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:40.000Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="752" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="126"/>
+        <nd ref="108"/>
+        <nd ref="2129"/>
+        <tag k="lit" v="yes"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="alt_name" v="Av. Norte"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Bulevar Panteón"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:datetime" v="2015-07-01T16:10:48.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="781" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <nd ref="541"/>
+        <nd ref="1893"/>
+        <nd ref="2661"/>
+        <nd ref="107"/>
+        <nd ref="2660"/>
+        <nd ref="2193"/>
+        <nd ref="2137"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="name" v="Av. Norte 2"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:42.000Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="2" timestamp="2019-01-10T17:16:06Z" version="1" changeset="749">
+        <member type="way" ref="556" role="outer"/>
+        <member type="way" ref="563" role="inner"/>
+        <member type="way" ref="557" role="inner"/>
+        <member type="way" ref="555" role="inner"/>
+        <member type="way" ref="562" role="inner"/>
+        <member type="way" ref="558" role="inner"/>
+        <member type="way" ref="561" role="inner"/>
+        <member type="way" ref="560" role="inner"/>
+        <member type="way" ref="559" role="inner"/>
+        <member type="way" ref="564" role="inner"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2014-08-22T18:51:34.000Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+</osm>

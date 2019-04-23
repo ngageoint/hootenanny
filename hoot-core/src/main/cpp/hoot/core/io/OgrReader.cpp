@@ -78,7 +78,7 @@ public:
 
   static std::string className() { return "hoot::OgrReaderInternal"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OgrReaderInternal();
 
@@ -498,7 +498,7 @@ Progress OgrReader::streamGetProgress() const
   return _d->streamGetProgress();
 }
 
-unsigned int OgrReaderInternal::logWarnCount = 0;
+int OgrReaderInternal::logWarnCount = 0;
 
 OgrReaderInternal::OgrReaderInternal()
 {

@@ -105,16 +105,18 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
             "Added match " << count << " / " << matches.size() << " to partial network merger...");
         }
       }
+
       if (!ConfigOptions().getHighwayMergeTagsOnly())
       {
         mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
       }
       else
       {
-        // TODO: We need to allow for HighwayTagOnlyMerger to spawn off PartialNetworkMerger here,
-        // I guess...but that's kind of nasty... (applies to the rest of the calls to
-        // HighwayTagOnlyMerger in this class as well).
-        mergers.push_back(new HighwayTagOnlyMerger(pairs));
+        mergers.push_back(
+          new HighwayTagOnlyMerger(
+            pairs,
+            boost::shared_ptr<PartialNetworkMerger>(
+              new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()))));
       }
     }
     else
@@ -124,17 +126,23 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       if (const NetworkMatch* larger = _getLargestContainer(matches))
       {
         LOG_DEBUG("Adding the larger match to the partial network merger...");
+
         if (!ConfigOptions().getHighwayMergeTagsOnly())
         {
           mergers.push_back(
             new PartialNetworkMerger(
-              larger->getMatchPairs(),
-              QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+              larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
               larger->getNetworkDetails()));
         }
         else
         {
-          mergers.push_back(new HighwayTagOnlyMerger(larger->getMatchPairs()));
+          mergers.push_back(
+            new HighwayTagOnlyMerger(
+              larger->getMatchPairs(),
+              boost::shared_ptr<PartialNetworkMerger>(
+                new PartialNetworkMerger(
+                  larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+                  larger->getNetworkDetails()))));
         }
       }
       else
@@ -144,17 +152,23 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
+
           if (!ConfigOptions().getHighwayMergeTagsOnly())
           {
             mergers.push_back(
               new PartialNetworkMerger(
-                largest->getMatchPairs(),
-                QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
                 largest->getNetworkDetails()));
           }
           else
           {
-            mergers.push_back(new HighwayTagOnlyMerger(largest->getMatchPairs()));
+            mergers.push_back(
+              new HighwayTagOnlyMerger(
+                largest->getMatchPairs(),
+                boost::shared_ptr<PartialNetworkMerger>(
+                  new PartialNetworkMerger(
+                    largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                    largest->getNetworkDetails()))));
           }
         }
         else // Throw a review

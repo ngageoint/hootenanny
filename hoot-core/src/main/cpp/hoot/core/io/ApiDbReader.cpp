@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int ApiDbReader::logWarnCount = 0;
+int ApiDbReader::logWarnCount = 0;
 
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
