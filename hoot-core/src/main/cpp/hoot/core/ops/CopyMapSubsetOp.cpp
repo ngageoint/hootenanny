@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CopyMapSubsetOp.h"
 
@@ -37,6 +37,7 @@ namespace hoot
 class AddAllVisitor : public ConstElementVisitor
 {
 public:
+
   AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, ElementId exempt = ElementId()) :
     _from(from),
     _to(to),
@@ -74,6 +75,7 @@ public:
   virtual QString getDescription() const { return ""; }
 
 private:
+
   ConstOsmMapPtr _from;
   OsmMapPtr _to;
   ElementId _exempt;

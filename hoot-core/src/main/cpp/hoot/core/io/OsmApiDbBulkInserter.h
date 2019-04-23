@@ -136,7 +136,7 @@ public:
 
   static std::string className() { return "hoot::OsmApiDbBulkInserter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();

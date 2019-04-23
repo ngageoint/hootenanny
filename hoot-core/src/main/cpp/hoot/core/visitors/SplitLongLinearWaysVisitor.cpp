@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
+int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 

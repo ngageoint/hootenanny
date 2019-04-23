@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="7.6988" minlon="-72.36539999999999" maxlat="7.703" maxlon="-72.3584"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6993496781890292" lon="-72.3653999999999940"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3644787420011681"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3629452807197424"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7015088046775988" lon="-72.3584000000000032"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3643512063687098"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3637796458907303"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3648859018905597"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007272651847867" lon="-72.3653999999999940"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3653926608560312"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7018943890223062" lon="-72.3653999999999940"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7025029585310847" lon="-72.3653999999999940"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7024825200851161" lon="-72.3584000000000032"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3587106953146844"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6999900845270197" lon="-72.3584000000000032"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3587116743013610"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6991873324809683" lon="-72.3584000000000032"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3595823073225688"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7007645665161064" lon="-72.3584000000000032"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3609797338233705"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7008309776751851" lon="-72.3653999999999940"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.6988000000000003" lon="-72.3592763131976824"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="7.7030000000000003" lon="-72.3604420629120284"/>
+    <node visible="true" id="1820404968" timestamp="2012-07-10T14:55:52Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7006731999999998" lon="-72.3622761999999966">
+        <tag k="bdw-id" v="{1f6e83dc-8eed-4011-9c22-6a01cd9f548b}"/>
+    </node>
+    <node visible="true" id="1820405011" timestamp="2012-07-10T14:55:54Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6989386000000000" lon="-72.3592828000000026">
+        <tag k="bdw-id" v="{5a7de74e-2ada-4d6c-acdf-6a17a8b950dc}"/>
+    </node>
+    <node visible="true" id="1820405014" timestamp="2012-07-10T14:55:54Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7006252999999996" lon="-72.3618845999999962">
+        <tag k="bdw-id" v="{f302ecab-f75b-43dc-a73f-4a34012e3ef7}"/>
+    </node>
+    <node visible="true" id="1820405039" timestamp="2012-07-10T14:55:55Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7006413000000000" lon="-72.3616592999999995">
+        <tag k="bdw-id" v="{e5b2c0cd-d8ba-4cc7-b325-67c9d49414ce}"/>
+    </node>
+    <node visible="true" id="1820405161" timestamp="2012-07-12T16:14:19Z" version="2" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7013509999999998" lon="-72.3648144000000002">
+        <tag k="bdw-id" v="{82e8cfed-6e89-48c3-a903-c3df50d72758}"/>
+    </node>
+    <node visible="true" id="1820405164" timestamp="2012-07-10T14:56:00Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7006413000000000" lon="-72.3620722999999941">
+        <tag k="bdw-id" v="{297b891c-b3f1-4647-a704-a2bdf767ad75}"/>
+    </node>
+    <node visible="true" id="1820405168" timestamp="2012-07-10T14:56:00Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6999449000000002" lon="-72.3601464999999990">
+        <tag k="bdw-id" v="{38cf8a6e-cf44-471a-a913-bb44c573f289}"/>
+    </node>
+    <node visible="true" id="1820405170" timestamp="2012-07-10T14:56:00Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6993159999999996" lon="-72.3595241999999956">
+        <tag k="bdw-id" v="{63412952-8be3-4953-b4b6-aae2aa8131c7}"/>
+    </node>
+    <node visible="true" id="1820405176" timestamp="2012-07-10T16:22:24Z" version="2" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7012346999999997" lon="-72.3606920000000002">
+        <tag k="bdw-id" v="{74d94055-e32a-448f-ae0c-f623710810d3}"/>
+    </node>
+    <node visible="true" id="1820405231" timestamp="2012-07-10T14:56:03Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6998226000000001" lon="-72.3600713999999954">
+        <tag k="bdw-id" v="{13f1ac6c-03a1-4d25-b703-37c2db9c9458}"/>
+    </node>
+    <node visible="true" id="1820405256" timestamp="2012-07-10T14:56:04Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7015009000000001" lon="-72.3607365999999956">
+        <tag k="bdw-id" v="{fd3863a4-07b8-42e9-ae6a-691b4d2dab8f}"/>
+    </node>
+    <node visible="true" id="1820405260" timestamp="2012-07-10T14:56:04Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6992308999999999" lon="-72.3593955000000051">
+        <tag k="bdw-id" v="{d81d1af9-4cdf-43bd-99d9-76223c762cc7}"/>
+    </node>
+    <node visible="true" id="1820405272" timestamp="2012-07-10T14:56:04Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7008380000000001" lon="-72.3605756999999983">
+        <tag k="bdw-id" v="{eea94d88-5c86-4c2c-9588-3ac4770b8aa1}"/>
+    </node>
+    <node visible="true" id="1820405295" timestamp="2012-07-10T14:56:05Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7008007999999997" lon="-72.3608171000000056">
+        <tag k="bdw-id" v="{4de83773-cb12-4014-a352-9a3186263975}"/>
+    </node>
+    <node visible="true" id="1820405299" timestamp="2012-07-10T14:56:06Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6991353000000000" lon="-72.3593256999999994">
+        <tag k="bdw-id" v="{5e492a53-fdd2-4159-961e-8a3d92720740}"/>
+    </node>
+    <node visible="true" id="1820405384" timestamp="2012-07-10T14:56:09Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.6997004000000002" lon="-72.3599640999999991">
+        <tag k="bdw-id" v="{a21f226c-69ef-4232-ad2a-379d12d58b14}"/>
+    </node>
+    <node visible="true" id="1820408539" timestamp="2012-07-10T15:00:02Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7013626999999998" lon="-72.3649316000000056">
+        <tag k="bdw-id" v="{a1465586-01ff-44e6-a6cf-3872220b3dd3}"/>
+    </node>
+    <node visible="true" id="1820408549" timestamp="2012-07-10T15:00:02Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7013429999999996" lon="-72.3650066999999950">
+        <tag k="bdw-id" v="{bc1179b2-fd96-48cb-8f35-377dcd797735}"/>
+    </node>
+    <node visible="true" id="1820408573" timestamp="2012-07-10T15:00:03Z" version="1" changeset="12174490" user="punkadiddle" uid="152973" lat="7.7012564000000001" lon="-72.3650925000000029">
+        <tag k="bdw-id" v="{da726b02-94e6-401c-97bf-03dcdb9bd313}"/>
+    </node>
+    <node visible="true" id="1820435849" timestamp="2012-07-10T15:32:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7008099999999997" lon="-72.3597467999999964">
+        <tag k="bdw-id" v="{be5a7fc4-e6c6-4020-a67b-340a790a7d97}"/>
+    </node>
+    <node visible="true" id="1820435857" timestamp="2012-07-10T15:32:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7007813000000001" lon="-72.3588957000000050">
+        <tag k="bdw-id" v="{3bac7789-4ee8-4bc1-9c2b-1befc3e23ea3}"/>
+    </node>
+    <node visible="true" id="1820435867" timestamp="2012-07-10T15:32:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7024869999999996" lon="-72.3608964999999955">
+        <tag k="bdw-id" v="{8e91fdec-9fd6-43bb-978a-19079185ecb1}"/>
+    </node>
+    <node visible="true" id="1820435871" timestamp="2012-07-10T15:32:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7025126999999998" lon="-72.3604737999999941">
+        <tag k="bdw-id" v="{db115e1b-9576-4de1-8fd7-48626ba906c9}"/>
+    </node>
+    <node visible="true" id="1820435874" timestamp="2012-07-10T15:32:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.6992152999999997" lon="-72.3590379999999982">
+        <tag k="bdw-id" v="{635bb2ff-c0c4-4892-b3d9-738943b616e9}"/>
+    </node>
+    <node visible="true" id="1820435895" timestamp="2012-07-10T15:32:17Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.6996168999999997" lon="-72.3598685999999987">
+        <tag k="bdw-id" v="{8a2c24fc-c18d-4373-abb2-cfdefe7d2655}"/>
+    </node>
+    <node visible="true" id="1820435901" timestamp="2012-07-10T15:32:17Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7013246000000004" lon="-72.3588591000000037">
+        <tag k="bdw-id" v="{7e7990c2-c3d0-4047-b412-ba27be9cca7f}"/>
+    </node>
+    <node visible="true" id="1820435906" timestamp="2012-07-10T15:32:17Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7025141000000001" lon="-72.3596188000000069">
+        <tag k="bdw-id" v="{2d4d3c8d-1a3c-48c3-b77b-f5e07fd50338}"/>
+    </node>
+    <node visible="true" id="1820435939" timestamp="2012-07-10T15:32:19Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7000663999999999" lon="-72.3598226999999952">
+        <tag k="bdw-id" v="{d42708f7-1048-40cd-a12e-f0da58edae6b}"/>
+    </node>
+    <node visible="true" id="1820435946" timestamp="2012-07-10T15:32:19Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.6992000999999997" lon="-72.3586920000000049">
+        <tag k="bdw-id" v="{a20193d9-8bee-4c97-89b9-3b82fce972da}"/>
+    </node>
+    <node visible="true" id="1820435969" timestamp="2012-07-10T15:32:20Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7024888000000002" lon="-72.3587517999999932">
+        <tag k="bdw-id" v="{e6bdfa28-fafb-4376-9960-3e2166d7fbce}"/>
+    </node>
+    <node visible="true" id="1820435973" timestamp="2012-07-10T15:32:20Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7000140999999998" lon="-72.3589690999999959">
+        <tag k="bdw-id" v="{e5f35c32-05ed-45a7-8006-663ea98ddea2}"/>
+    </node>
+    <node visible="true" id="1820492625" timestamp="2012-07-10T16:22:03Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7014015999999996" lon="-72.3616753000000017">
+        <tag k="bdw-id" v="{eef519b5-7a1e-4101-9627-7014a8403704}"/>
+    </node>
+    <node visible="true" id="1820492696" timestamp="2012-07-10T16:22:04Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7020607999999999" lon="-72.3640838999999971">
+        <tag k="bdw-id" v="{0a9a5054-0c23-4892-a544-627bf3e91883}"/>
+    </node>
+    <node visible="true" id="1820492708" timestamp="2012-07-10T16:22:04Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7002227999999997" lon="-72.3637343999999985">
+        <tag k="bdw-id" v="{079e9059-3230-4e5d-bc73-dcbead5b9f75}"/>
+    </node>
+    <node visible="true" id="1820492713" timestamp="2012-07-10T16:22:04Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7029486000000000" lon="-72.3642557000000011">
+        <tag k="bdw-id" v="{9d588c68-1ee1-4ef0-92cd-dba27f0adfb3}"/>
+    </node>
+    <node visible="true" id="1820492756" timestamp="2012-07-10T16:22:04Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7012261999999998" lon="-72.3610046999999952">
+        <tag k="bdw-id" v="{e3af4f8e-5eec-4c79-aab4-56fe2420d431}"/>
+    </node>
+    <node visible="true" id="1820492969" timestamp="2012-07-10T16:22:07Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7018428999999999" lon="-72.3632738999999958">
+        <tag k="bdw-id" v="{f0354675-42d7-4f2f-9a8d-ad61303f5fce}"/>
+    </node>
+    <node visible="true" id="1820493287" timestamp="2012-07-10T16:22:12Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.6999582999999996" lon="-72.3624640000000028">
+        <tag k="bdw-id" v="{3c009153-1faf-4559-b170-21a9f572ba2a}"/>
+    </node>
+    <node visible="true" id="1820493361" timestamp="2012-07-10T16:22:14Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7028742000000001" lon="-72.3638238999999999">
+        <tag k="bdw-id" v="{196daf4f-1a5f-4cf5-abd3-680cf7a7ebef}"/>
+    </node>
+    <node visible="true" id="1820493438" timestamp="2012-07-10T16:22:14Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7015079999999996" lon="-72.3620614999999958">
+        <tag k="bdw-id" v="{ab76e169-e37a-41a4-9338-a8af40ccc6a2}"/>
+    </node>
+    <node visible="true" id="1820493523" timestamp="2012-07-10T16:22:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7022389000000002" lon="-72.3616753999999958">
+        <tag k="bdw-id" v="{8b815147-285e-455a-bb83-9d7c45f1e1cc}"/>
+    </node>
+    <node visible="true" id="1820493537" timestamp="2012-07-10T16:22:16Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7012647000000003" lon="-72.3597127000000029">
+        <tag k="bdw-id" v="{af91d14a-aea8-49bc-89b5-cee3c3fc5429}"/>
+    </node>
+    <node visible="true" id="1820493639" timestamp="2012-07-10T16:22:17Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7026316000000001" lon="-72.3630498999999929">
+        <tag k="bdw-id" v="{23cd73fd-366f-4baa-a202-4f082d6c66d6}"/>
+    </node>
+    <node visible="true" id="1820493769" timestamp="2012-07-10T16:22:18Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7006714000000001" lon="-72.3622646999999972">
+        <tag k="bdw-id" v="{6b516707-6a19-438f-970b-64ffc0b96007}"/>
+    </node>
+    <node visible="true" id="1820493818" timestamp="2012-07-10T16:22:18Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7010059999999996" lon="-72.3635120999999941">
+        <tag k="bdw-id" v="{d548a3e6-0d9d-45ac-89bb-c4d4cf56073c}"/>
+    </node>
+    <node visible="true" id="1820493852" timestamp="2012-07-10T16:22:19Z" version="1" changeset="12175062" user="punkadiddle" uid="152973" lat="7.7012634000000002" lon="-72.3611657000000008">
+        <tag k="bdw-id" v="{6e6f4cd8-5809-48d4-83fc-129aa455a20b}"/>
+    </node>
+    <node visible="true" id="1823084449" timestamp="2012-07-12T16:14:11Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7002082999999999" lon="-72.3632364999999993">
+        <tag k="bdw-id" v="{f2514c9d-9626-46db-a063-38fe25b5459b}"/>
+    </node>
+    <node visible="true" id="1823084456" timestamp="2012-07-12T16:14:11Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7012222000000001" lon="-72.3643282000000028">
+        <tag k="bdw-id" v="{aa065ab8-0b34-4a2e-a54e-462590c0a9c1}"/>
+    </node>
+    <node visible="true" id="1823084458" timestamp="2012-07-12T16:14:11Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7021193999999999" lon="-72.3643844999999999">
+        <tag k="bdw-id" v="{101207c3-02e5-4543-b6d6-b58911752862}"/>
+    </node>
+    <node visible="true" id="1823084460" timestamp="2012-07-12T16:14:11Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7001764000000001" lon="-72.3633813999999944">
+        <tag k="bdw-id" v="{bf8533a2-eba9-4f3e-b5fb-fc91ec08037a}"/>
+    </node>
+    <node visible="true" id="1823084479" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7019174000000001" lon="-72.3653742999999992">
+        <tag k="bdw-id" v="{4e0a8795-5359-4df2-8834-d97269c2d364}"/>
+    </node>
+    <node visible="true" id="1823084483" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7002747999999999" lon="-72.3620403000000039">
+        <tag k="bdw-id" v="{a9a65f8c-0819-4829-ae40-9546ed6e98f5}"/>
+    </node>
+    <node visible="true" id="1823084485" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7018509999999996" lon="-72.3650121999999953">
+        <tag k="bdw-id" v="{ed933c58-2c54-4b5d-a461-945d115eb62b}"/>
+    </node>
+    <node visible="true" id="1823084486" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7001694000000001" lon="-72.3635014000000041">
+        <tag k="bdw-id" v="{9b74c24f-12c6-412a-ba0d-1383cb49a4ec}"/>
+    </node>
+    <node visible="true" id="1823084487" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7001403000000002" lon="-72.3624130999999977">
+        <tag k="bdw-id" v="{0cf4c464-11bc-4e2b-8e20-c207bf257bd0}"/>
+    </node>
+    <node visible="true" id="1823084488" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7019387000000004" lon="-72.3652615999999966">
+        <tag k="bdw-id" v="{291cd272-9362-4cb9-a672-f3200434b0cf}"/>
+    </node>
+    <node visible="true" id="1823084490" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7002296000000001" lon="-72.3628503000000052">
+        <tag k="bdw-id" v="{bd5d9739-1363-41d8-ab51-82bdf6c62239}"/>
+    </node>
+    <node visible="true" id="1823084493" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7019121000000004" lon="-72.3651356000000021">
+        <tag k="bdw-id" v="{31525ef8-dd39-4210-a10a-9617307f7f0f}"/>
+    </node>
+    <node visible="true" id="1823084495" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7000595000000001" lon="-72.3652266999999938">
+        <tag k="bdw-id" v="{b9901714-4f6c-4881-9513-18046a95110e}"/>
+    </node>
+    <node visible="true" id="1823084497" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7021050000000004" lon="-72.3644306000000057">
+        <tag k="bdw-id" v="{7b827e91-151a-48d1-a4c5-61ef3cf94a8b}"/>
+    </node>
+    <node visible="true" id="1823084503" timestamp="2012-07-12T16:14:12Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6995651000000001" lon="-72.3620832000000007">
+        <tag k="bdw-id" v="{e140c8f2-5ceb-41bb-be29-89d63872b9ce}"/>
+    </node>
+    <node visible="true" id="1823084512" timestamp="2012-07-12T16:14:13Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7027387000000003" lon="-72.3651677000000007">
+        <tag k="bdw-id" v="{5585b341-d1c5-4660-839c-f95833c32eeb}"/>
+    </node>
+    <node visible="true" id="1823084513" timestamp="2012-07-12T16:14:13Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7002278000000004" lon="-72.3630696000000029">
+        <tag k="bdw-id" v="{22862a37-6013-4d97-bde3-384b3ea106c4}"/>
+    </node>
+    <node visible="true" id="1823084514" timestamp="2012-07-12T16:14:13Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6996900000000004" lon="-72.3647466000000037">
+        <tag k="bdw-id" v="{9bbfbe91-9c29-41a6-ab8c-1d59f681efed}"/>
+    </node>
+    <node visible="true" id="1823084534" timestamp="2012-07-12T16:14:13Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6994800000000003" lon="-72.3653421000000066">
+        <tag k="bdw-id" v="{bb884b94-e5d2-42f0-af54-212d2499f05e}"/>
+    </node>
+    <node visible="true" id="1823084552" timestamp="2012-07-12T16:14:13Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7013593000000000" lon="-72.3648830000000061">
+        <tag k="bdw-id" v="{b6e54d01-c110-4dc8-8fc0-72dc7cea08e8}"/>
+    </node>
+    <node visible="true" id="1823084559" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7006546000000000" lon="-72.3621574000000010">
+        <tag k="bdw-id" v="{32de3d30-84d3-4478-bb8b-2c0f560a6a7d}"/>
+    </node>
+    <node visible="true" id="1823084562" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7006256000000004" lon="-72.3650872999999990">
+        <tag k="bdw-id" v="{a112837a-b796-4007-9ba1-60b16e0f3812}"/>
+    </node>
+    <node visible="true" id="1823084602" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7026669999999999" lon="-72.3650872999999990">
+        <tag k="bdw-id" v="{f6e71fb0-4f48-4153-b1b9-954e778b3f66}"/>
+    </node>
+    <node visible="true" id="1823084614" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7029167999999997" lon="-72.3653340000000043">
+        <tag k="bdw-id" v="{c167c2b7-712d-4e29-b882-80d3b711a7dc}"/>
+    </node>
+    <node visible="true" id="1823084617" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6993958999999998" lon="-72.3620477000000051">
+        <tag k="bdw-id" v="{02be8f4a-815b-4f04-b0a3-70bfa27bb342}"/>
+    </node>
+    <node visible="true" id="1823084626" timestamp="2012-07-12T16:14:14Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6994384000000000" lon="-72.3620824999999996">
+        <tag k="bdw-id" v="{01fcfd79-4d1d-44bd-abc7-dd63e3cb9f20}"/>
+    </node>
+    <node visible="true" id="1823084637" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7001816999999999" lon="-72.3626035000000059">
+        <tag k="bdw-id" v="{bea15c49-f3b5-4836-b6b3-e0b19383f854}"/>
+    </node>
+    <node visible="true" id="1823084646" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7016147000000004" lon="-72.3647526999999968">
+        <tag k="bdw-id" v="{01bf0fd7-c3f0-45ef-9565-1c25f24b0446}"/>
+    </node>
+    <node visible="true" id="1823084647" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6998388000000002" lon="-72.3619946999999968">
+        <tag k="bdw-id" v="{2b65b630-0b42-4715-9290-c164a5660436}"/>
+    </node>
+    <node visible="true" id="1823084652" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7004568999999998" lon="-72.3645204999999976">
+        <tag k="bdw-id" v="{d6399947-b1bc-45e6-85ef-9183d48f7124}"/>
+    </node>
+    <node visible="true" id="1823084653" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6999452000000002" lon="-72.3619812999999965">
+        <tag k="bdw-id" v="{269ded8c-88fd-4792-bcbb-6b71cfeb3454}"/>
+    </node>
+    <node visible="true" id="1823084654" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7021034999999998" lon="-72.3642504000000031">
+        <tag k="bdw-id" v="{37d8e45b-f9ad-4855-8a81-c754a1eaaa73}"/>
+    </node>
+    <node visible="true" id="1823084656" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6996510999999996" lon="-72.3620503000000070">
+        <tag k="bdw-id" v="{b6af514b-2a6e-47fb-ab24-aa8dae8659f3}"/>
+    </node>
+    <node visible="true" id="1823084657" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6995022000000004" lon="-72.3620932999999980">
+        <tag k="bdw-id" v="{3ead34c4-3fc1-45a7-a454-48558ab75c82}"/>
+    </node>
+    <node visible="true" id="1823084658" timestamp="2012-07-12T16:14:15Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6997786000000001" lon="-72.3638607999999977">
+        <tag k="bdw-id" v="{8e060d49-8fea-423a-b1a5-64b1c2aa0c3a}"/>
+    </node>
+    <node visible="true" id="1823084662" timestamp="2012-07-12T16:14:16Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7020875000000002" lon="-72.3644864999999982">
+        <tag k="bdw-id" v="{c963c8a0-9a16-4320-a258-e8a954beb213}"/>
+    </node>
+    <node visible="true" id="1823084663" timestamp="2012-07-12T16:14:16Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7025394000000000" lon="-72.3653689000000071">
+        <tag k="bdw-id" v="{874ecff1-cb06-4c18-a406-8ea7bcde36c3}"/>
+    </node>
+    <node visible="true" id="1823084666" timestamp="2012-07-12T16:14:16Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7020210999999996" lon="-72.3645455000000055">
+        <tag k="bdw-id" v="{08ee57e7-a0ed-4638-bc6a-712c3f2ec97c}"/>
+    </node>
+    <node visible="true" id="1823084667" timestamp="2012-07-12T16:14:16Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.7027248999999998" lon="-72.3651523000000054">
+        <tag k="bdw-id" v="{06d350c2-280a-4fad-bb5a-f7824a6e2c8b}"/>
+    </node>
+    <node visible="true" id="1823090941" timestamp="2012-07-12T16:24:50Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6995570999999998" lon="-72.3649128999999931">
+        <tag k="bdw-id" v="{bd073eba-e2ec-439b-ab14-25d8bcfdba1c}"/>
+    </node>
+    <node visible="true" id="1823091058" timestamp="2012-07-12T16:24:53Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6996687000000001" lon="-72.3644354999999990">
+        <tag k="bdw-id" v="{4081d661-1b1d-4971-9c0f-a4de8c741727}"/>
+    </node>
+    <node visible="true" id="1823091068" timestamp="2012-07-12T16:24:53Z" version="1" changeset="12197232" user="punkadiddle" uid="152973" lat="7.6989546000000004" lon="-72.3645448000000044">
+        <tag k="bdw-id" v="{11128e1b-8895-4039-8ab4-79114b0ff723}"/>
+    </node>
+    <way visible="true" id="-142061" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1823084534"/>
+        <nd ref="-22"/>
+        <tag k="bdw-id" v="{a75e6ced-a4d7-4938-ada2-b39e0974dc3e}"/>
+        <tag k="source:datetime" v="2012-07-12T16:24:57Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142060" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1823090941"/>
+        <nd ref="1823091068"/>
+        <nd ref="-21"/>
+        <tag k="bdw-id" v="{d6bb5ef0-cba5-4f65-bb54-309479757568}"/>
+        <tag k="source:datetime" v="2012-07-12T16:24:57Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142059" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20"/>
+        <nd ref="1820493639"/>
+        <nd ref="1820492969"/>
+        <nd ref="1820493818"/>
+        <nd ref="1820492708"/>
+        <nd ref="1823084658"/>
+        <tag k="bdw-id" v="{f91dbab1-668f-46c8-9e15-8682f41aa02f}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142058" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19"/>
+        <nd ref="1820435901"/>
+        <nd ref="1820493537"/>
+        <nd ref="1820405176"/>
+        <nd ref="1820492756"/>
+        <nd ref="1820493852"/>
+        <tag k="bdw-id" v="{ef7b4cf9-7bd7-4c8b-af43-343bb12118f2}"/>
+        <tag k="source:datetime" v="2012-07-10T16:22:23Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142057" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820493523"/>
+        <nd ref="1820493639"/>
+        <nd ref="1820493361"/>
+        <nd ref="1820492713"/>
+        <nd ref="-18"/>
+        <tag k="bdw-id" v="{3c7f6574-477c-46c6-89b0-71e0ed7944b8}"/>
+        <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142056" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820492696"/>
+        <nd ref="1820493361"/>
+        <nd ref="-17"/>
+        <tag k="bdw-id" v="{260cc32c-6acc-4c50-b63e-6eeec120615b}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142055" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1823084602"/>
+        <nd ref="-16"/>
+        <tag k="bdw-id" v="{efc93331-7a05-42f4-a7fc-78ab5793d04d}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142054" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1823084487"/>
+        <nd ref="1823084637"/>
+        <nd ref="1823084490"/>
+        <nd ref="1823084513"/>
+        <nd ref="1823084449"/>
+        <nd ref="1823084460"/>
+        <nd ref="1823084486"/>
+        <nd ref="1820492708"/>
+        <nd ref="1823084652"/>
+        <nd ref="1823084562"/>
+        <nd ref="-15"/>
+        <tag k="bdw-id" v="{0e4a3555-a203-4f60-930f-2453ea55da17}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:18Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142053" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="1823084614"/>
+        <nd ref="1823084512"/>
+        <nd ref="1823084667"/>
+        <nd ref="1823084602"/>
+        <nd ref="1823084497"/>
+        <tag k="bdw-id" v="{45f42e2c-f3f1-4fbe-a174-6cb6857349fe}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142052" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1823084646"/>
+        <nd ref="1823084485"/>
+        <nd ref="1823084493"/>
+        <nd ref="1823084488"/>
+        <nd ref="1823084479"/>
+        <nd ref="-13"/>
+        <tag k="bdw-id" v="{6cdcf24d-4846-4e30-9360-c782f3239ee5}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142051" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="1823084663"/>
+        <nd ref="1823084667"/>
+        <tag k="bdw-id" v="{e1882670-308b-4243-9802-b0f59e00fcd8}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142050" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820435969"/>
+        <nd ref="-11"/>
+        <tag k="bdw-id" v="{7b9e474f-b2b4-4427-bae9-a57622382722}"/>
+        <tag k="name" v="Calle 16"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:25Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142049" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10"/>
+        <nd ref="1820435946"/>
+        <tag k="bdw-id" v="{6e1509b9-a960-4bd6-845e-6ac143dc8d18}"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142048" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820435939"/>
+        <nd ref="1820435973"/>
+        <nd ref="-9"/>
+        <tag k="bdw-id" v="{2809ebbe-7b86-4049-a8dc-d5f32d26d181}"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142047" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820435874"/>
+        <nd ref="1820435973"/>
+        <nd ref="1820435857"/>
+        <nd ref="1820435901"/>
+        <nd ref="1820435969"/>
+        <nd ref="-8"/>
+        <tag k="bdw-id" v="{8d570128-1cda-4e73-ae68-a45e8ea56df2}"/>
+        <tag k="name" v="Avenida 9"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:24Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142046" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="1820435946"/>
+        <nd ref="1820435874"/>
+        <nd ref="1820405260"/>
+        <tag k="bdw-id" v="{be45bbff-72c6-44ab-865d-da9ccb9aeb14}"/>
+        <tag k="name" v="Avenida Los Leones"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:11Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142045" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-6"/>
+        <nd ref="1820435906"/>
+        <nd ref="1820493537"/>
+        <nd ref="1820435849"/>
+        <nd ref="1820435939"/>
+        <nd ref="1820435895"/>
+        <tag k="bdw-id" v="{efdc47f0-b9fa-48e7-b7a1-d5bee0cd35d8}"/>
+        <tag k="name" v="Avenida 10"/>
+        <tag k="source:datetime" v="2013-11-11T14:00:58Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142044" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820405272"/>
+        <nd ref="1820435849"/>
+        <nd ref="1820435857"/>
+        <nd ref="-5"/>
+        <tag k="bdw-id" v="{28cdb02b-9f22-4d16-93ea-7bcf3230d333}"/>
+        <tag k="source:datetime" v="2012-07-13T01:28:03Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142043" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820405272"/>
+        <nd ref="1820405176"/>
+        <nd ref="1820405256"/>
+        <nd ref="1820435867"/>
+        <nd ref="-4"/>
+        <tag k="bdw-id" v="{8a1fd2bd-e512-4b92-9a5c-37688bf5241b}"/>
+        <tag k="name" v="Avenida 12"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:21Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820405161"/>
+        <nd ref="1823084552"/>
+        <nd ref="1820408539"/>
+        <nd ref="1820408549"/>
+        <nd ref="1820408573"/>
+        <nd ref="-3"/>
+        <tag k="oneway" v="no"/>
+        <tag k="bdw-id" v="{d1b83733-2e73-430d-a3c0-1327c4352912}"/>
+        <tag k="source:datetime" v="2013-12-04T07:47:26Z"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1820405260"/>
+        <nd ref="1820405299"/>
+        <nd ref="1820405011"/>
+        <nd ref="-2"/>
+        <tag k="bdw-id" v="{841e511f-12b8-465b-8dcf-3f2e88245c4f}"/>
+        <tag k="source:datetime" v="2012-07-10T16:30:24Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-142040" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="1820435871"/>
+        <tag k="bdw-id" v="{d3f5dac4-74c6-42fe-b0bf-bad11de41657}"/>
+        <tag k="name" v="Avenida 11"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:23Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="74377404" timestamp="2013-10-26T16:12:18Z" version="6" changeset="18553695" user="Schandlers" uid="51690">
+        <nd ref="1820405161"/>
+        <nd ref="1823084456"/>
+        <nd ref="1820493818"/>
+        <nd ref="1820404968"/>
+        <nd ref="1820493769"/>
+        <nd ref="1823084559"/>
+        <nd ref="1820405164"/>
+        <nd ref="1820405014"/>
+        <nd ref="1820405039"/>
+        <tag k="bdw-id" v="{23973f69-7830-4ee2-be77-9592a2c17bf3}"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:18Z"/>
+        <tag k="highway" v="secondary"/>
+    </way>
+    <way visible="true" id="170931982" timestamp="2018-05-22T21:24:39Z" version="4" changeset="59192855" user="happy-camper" uid="6346054">
+        <nd ref="1820405039"/>
+        <nd ref="1820405295"/>
+        <tag k="bdw-id" v="{206c3cb6-55ad-4745-95a6-7b713f797b58}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="layer" v="1"/>
+        <tag k="source:datetime" v="2018-05-22T21:24:39Z"/>
+        <tag k="highway" v="secondary"/>
+    </way>
+    <way visible="true" id="170931988" timestamp="2013-10-26T16:12:16Z" version="4" changeset="18553695" user="Schandlers" uid="51690">
+        <nd ref="1820405295"/>
+        <nd ref="1820405272"/>
+        <tag k="bdw-id" v="{ce5ed05b-ab6e-4533-becd-513a7bbb445a}"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:16Z"/>
+        <tag k="highway" v="secondary"/>
+    </way>
+    <way visible="true" id="170934989" timestamp="2012-07-10T15:32:23Z" version="1" changeset="12175062" user="punkadiddle" uid="152973">
+        <nd ref="1820435969"/>
+        <nd ref="1820435906"/>
+        <nd ref="1820435871"/>
+        <nd ref="1820435867"/>
+        <tag k="bdw-id" v="{e7159cc3-10a3-4162-bd74-91a42efcf54a}"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:23Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="170939196" timestamp="2018-05-22T21:24:39Z" version="2" changeset="59192855" user="happy-camper" uid="6346054">
+        <nd ref="1820493852"/>
+        <nd ref="1820492625"/>
+        <tag k="bdw-id" v="{40ea34f9-03b9-46b5-b9ad-7e71a1b00175}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="layer" v="1"/>
+        <tag k="source:datetime" v="2018-05-22T21:24:39Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="170939204" timestamp="2012-07-12T16:14:21Z" version="2" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1820492625"/>
+        <nd ref="1820493438"/>
+        <nd ref="1820492969"/>
+        <nd ref="1820492696"/>
+        <nd ref="1823084654"/>
+        <nd ref="1823084458"/>
+        <nd ref="1823084497"/>
+        <nd ref="1823084662"/>
+        <nd ref="1823084666"/>
+        <nd ref="1823084646"/>
+        <nd ref="1823084552"/>
+        <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="170939257" timestamp="2012-07-12T16:14:21Z" version="2" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1820493287"/>
+        <nd ref="1823084487"/>
+        <nd ref="1820493769"/>
+        <nd ref="1820493438"/>
+        <tag k="bdw-id" v="{60de46a5-bb9b-48ea-b3b9-abdd7e0438d5}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171245959" timestamp="2012-07-12T16:14:16Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823084617"/>
+        <nd ref="1823084626"/>
+        <nd ref="1823084657"/>
+        <nd ref="1823084503"/>
+        <nd ref="1823084656"/>
+        <tag k="bdw-id" v="{7a909337-b6e1-43dc-bd38-80f089cc6bbb}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:16Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171245963" timestamp="2012-07-12T16:14:17Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823084656"/>
+        <nd ref="1823084647"/>
+        <tag k="bdw-id" v="{607c2a36-d410-462c-bcfe-cf528efb36d2}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171245967" timestamp="2012-07-12T16:14:17Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823084647"/>
+        <nd ref="1823084653"/>
+        <nd ref="1823084483"/>
+        <nd ref="1823084559"/>
+        <tag k="bdw-id" v="{05125c57-c79d-4118-98f5-342027ffbd88}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171245979" timestamp="2012-07-12T16:14:19Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823084514"/>
+        <nd ref="1823084652"/>
+        <nd ref="1823084456"/>
+        <tag k="bdw-id" v="{b63b8bca-9850-40b8-a253-3bbd2aca3dd2}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171245988" timestamp="2012-07-12T16:14:19Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823084534"/>
+        <nd ref="1823084495"/>
+        <nd ref="1823084562"/>
+        <nd ref="1820405161"/>
+        <tag k="bdw-id" v="{5e17d515-6288-4493-9e60-c6039b5fce66}"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171246612" timestamp="2012-07-12T16:24:56Z" version="1" changeset="12197232" user="punkadiddle" uid="152973">
+        <nd ref="1823091058"/>
+        <nd ref="1823084514"/>
+        <nd ref="1823090941"/>
+        <tag k="bdw-id" v="{2e8b1339-e4e5-46d5-afbf-cc79343d33bd}"/>
+        <tag k="source:datetime" v="2012-07-12T16:24:56Z"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="171301179" timestamp="2013-10-26T16:12:21Z" version="2" changeset="18553695" user="Schandlers" uid="51690">
+        <nd ref="1820405260"/>
+        <nd ref="1820405170"/>
+        <nd ref="1820435895"/>
+        <nd ref="1820405384"/>
+        <nd ref="1820405231"/>
+        <nd ref="1820405168"/>
+        <nd ref="1820405272"/>
+        <tag k="bdw-id" v="{8986acfd-bf44-4e51-9398-980476ee46f3}"/>
+        <tag k="name" v="Avenida 12"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:21Z"/>
+        <tag k="highway" v="secondary"/>
+    </way>
+</osm>

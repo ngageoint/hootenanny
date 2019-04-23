@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-unsigned int BuildingHeightVisitor::logWarnCount = 0;
+int BuildingHeightVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, BuildingHeightVisitor)
 
@@ -195,7 +195,7 @@ Meters BuildingHeightVisitor::_parseFeetVal(const QString heightStr,
   }
 
   // return height in meters
-  return ((feet + (inches / 12))) / 3.2808;
+  return (feet + (inches / 12)) / 3.2808;
 }
 
 Meters BuildingHeightVisitor::_parseFeetToken(const QString type,

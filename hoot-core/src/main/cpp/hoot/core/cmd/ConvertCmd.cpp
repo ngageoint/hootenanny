@@ -125,8 +125,7 @@ public:
 
     converter.convert(inputs, output);
 
-    LOG_DEBUG("Convert operation complete.");
-    QString msg = "Convert operation took ";
+    QString msg = "Convert operation completed in ";
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
     {

@@ -50,12 +50,12 @@ class elementTranslatorThread : public QThread
 public:
 
   QString _translation;
-  QQueue<ElementPtr> * _pElementQ;
-  QMutex * _pTransFeaturesQMutex;
-  QMutex * _pInitMutex;
+  QQueue<ElementPtr>* _pElementQ;
+  QMutex* _pTransFeaturesQMutex;
+  QMutex* _pInitMutex;
   QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-  bool * _pFinishedTranslating;
+         std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+  bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
 };
 
@@ -68,13 +68,12 @@ public:
 
   QString _translation;
   QString _output;
-  QMutex * _pTransFeaturesQMutex;
-  QMutex * _pInitMutex;
+  QMutex* _pTransFeaturesQMutex;
+  QMutex* _pInitMutex;
   QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> * _pTransFeaturesQ;
-  bool * _pFinishedTranslating;
+         std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+  bool* _pFinishedTranslating;
 };
-
 
 /**
  * Converts data from one Hootenanny supported format to another
@@ -84,7 +83,7 @@ class DataConverter : public Configurable
 
 public:
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   DataConverter();
 

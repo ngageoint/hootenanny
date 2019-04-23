@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int NodeToWayMap::logWarnCount = 0;
+int NodeToWayMap::logWarnCount = 0;
 
 NodeToWayMap::NodeToWayMap(const OsmMap& map)
 {

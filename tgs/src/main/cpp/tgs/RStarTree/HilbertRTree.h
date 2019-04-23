@@ -65,10 +65,10 @@ namespace Tgs
       int hilbertValue;
 
       UserBoxHolder(const Box& b, int f, int hv) :
-        box(&b)
+        box(&b),
+        fid(f),
+        hilbertValue(hv)
       {
-        fid = f;
-        hilbertValue = hv;
       }
 
       bool operator<(const UserBoxHolder& b) const

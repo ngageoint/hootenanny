@@ -66,9 +66,10 @@ class RubberSheetTest : public HootTestFixture
 public:
 
   RubberSheetTest()
+    : HootTestFixture("test-files/algorithms/rubber-sheet/",
+                      "test-output/algorithms/rubber-sheet/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate");
   }
 
   void runIoTest()
@@ -132,10 +133,10 @@ public:
       OsmXmlWriter writer;
       // for testing we don't need a high precision.
       writer.setPrecision(7);
-      writer.write(map, "test-output/conflate/RubberSheetIo.osm");
+      writer.write(map, _outputPath + "RubberSheetIo.osm");
 
-      HOOT_FILE_EQUALS("test-files/conflate/RubberSheetIo.osm",
-                       "test-output/conflate/RubberSheetIo.osm");
+      HOOT_FILE_EQUALS( _inputPath + "RubberSheetIo.osm",
+                       _outputPath + "RubberSheetIo.osm");
     }
   }
 
@@ -158,10 +159,10 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/RubberSheetSimple.osm");
+    writer.write(map, _outputPath + "RubberSheetSimple.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/RubberSheetSimple.osm",
-                     "test-output/conflate/RubberSheetSimple.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RubberSheetSimple.osm",
+                     _outputPath + "RubberSheetSimple.osm");
   }
 
   void runCalculateTiePointDistancesTest()

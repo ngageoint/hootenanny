@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -53,9 +53,10 @@ class LargeWaySplitterTest : public HootTestFixture
 public:
 
   LargeWaySplitterTest()
+    : HootTestFixture("test-files/algorithms/splitter/",
+                      "test-output/algorithms/splitter/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/conflate");
   }
 
   void runToyTest()
@@ -70,10 +71,10 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
+    writer.write(map, _outputPath + "LargeWaySplitterOutput1.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/LargeWaySplitterOutput1.osm",
-                     "test-output/conflate/LargeWaySplitterOutput1.osm");
+    HOOT_FILE_EQUALS( _inputPath + "LargeWaySplitterOutput1.osm",
+                     _outputPath + "LargeWaySplitterOutput1.osm");
   }
 
 };

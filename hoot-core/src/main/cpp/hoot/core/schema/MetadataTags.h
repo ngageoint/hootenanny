@@ -157,6 +157,9 @@ public:
 
   inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
 
+  // identifies multilinestring relations hoot adds during conflation
+  inline static const QString HootMultilineString()      { return "hoot:multilinestring"; }
+
   /**
    * ID Unique to a training data set with multiary training data.
    * @sa MultiaryMatchComparator

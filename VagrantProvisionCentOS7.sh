@@ -32,14 +32,10 @@ sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
 # add Hoot repo for our pre-built dependencies.
 echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/hoot-repo/yum-configure.sh
+sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-# check to see if postgres is already installed
-if ! rpm -qa | grep -q pgdg-centos95-9.5-3 ; then
-  # add the Postgres repo
-  echo "### Add Postgres repo ###" >> CentOS_upgrade.txt
-  sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm  >> CentOS_upgrade.txt 2>&1
-fi
+# configure PGDG repository for PostgreSQL 9.5.
+sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
@@ -236,16 +232,12 @@ cd ~
 $HOOT_HOME/scripts/chrome/chrome-install.sh
 $HOOT_HOME/scripts/chrome/driver-install.sh
 
-# Need to figure out a way to do this automagically
-#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}')
-#PG_VERSION=9.5
-PG_VERSION=$(psql --version | egrep -o '[0-9]{1,}\.[0-9]{1,}')
+# Configure PostgreSQL
+echo "### Configuring PostgreSQL..."
+$HOOT_HOME/scripts/database/ConfigurePostgresql.sh
 
-if ! grep --quiet "psql-" ~/.bash_profile; then
-    echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
-    source ~/.bash_profile
-fi
+echo "### Createing databases..."
+$HOOT_HOME/scripts/database/SetupHootDb.sh
 
 if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
@@ -254,80 +246,7 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf ~/tmp
 fi
 
-echo "### Configuring Postgres..."
-cd /tmp # Stop postgres "could not change directory to" warnings
-
-# Test to see if postgres cluster already created
-if ! sudo -u postgres test -f /var/lib/pgsql/$PG_VERSION/data/PG_VERSION; then
-  sudo PGSETUP_INITDB_OPTIONS="-E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'" /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
-fi
-sudo systemctl start postgresql-$PG_VERSION
-sudo systemctl enable postgresql-$PG_VERSION
-
-# Get the configuration for the Database
-source $HOOT_HOME/conf/database/DatabaseConfig.sh
-
-# See if we already have a dB user
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
-    echo "### Adding a Services Database user..."
-    sudo -u postgres createuser --superuser $DB_USER
-    sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
-fi
-
-# Check that the OsmApiDb user exists
-# NOTE:
-#  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
-#  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
-    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
-    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
-fi
-
-# Check for a hoot Db
-if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
-    echo "### Creating Main Services Database..."
-    sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
-fi
-
-if ! sudo -u postgres psql -lqt | grep -iw --quiet $WFS_DB_NAME; then
-    echo "### Creating WFS Services Database..."
-    sudo -u postgres createdb $WFS_DB_NAME --owner=$DB_USER
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='$WFS_DB_NAME'" > /dev/null
-    sudo -u postgres psql -d $WFS_DB_NAME -c 'create extension postgis;' > /dev/null
-fi
-
-# configure Postgres settings
-PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
-if ! sudo -u postgres grep -i --quiet hoot $PG_HB_CONF; then
-    sudo -u postgres cp $PG_HB_CONF $PG_HB_CONF.orig
-    sudo -u postgres sed -i '1ihost    all            hoot            127.0.0.1/32            md5' $PG_HB_CONF
-    sudo -u postgres sed -i '1ihost    all            hoot            ::1/128                 md5' $PG_HB_CONF
-fi
-POSTGRES_CONF=/var/lib/pgsql/$PG_VERSION/data/postgresql.conf
-if ! sudo -u postgres grep -i --quiet HOOT $POSTGRES_CONF; then
-    sudo -u postgres cp $POSTGRES_CONF $POSTGRES_CONF.orig
-    sudo -u postgres sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
-    sudo -u postgres sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
-    sudo -u postgres bash -c "cat >> $POSTGRES_CONF" <<EOT
-#--------------
-# Hoot Settings
-#--------------
-max_connections = 1000
-shared_buffers = 1024MB
-max_files_per_process = 1000
-work_mem = 16MB
-maintenance_work_mem = 256MB
-#checkpoint_segments = 20
-autovacuum = off
-EOT
-fi
-
-echo "Restarting postgres"
-sudo systemctl restart postgresql-$PG_VERSION
-
 # Get ready to build Hoot
-
 echo "SetupEnv.sh"
 cd $HOOT_HOME
 echo "$HOOT_HOME"

@@ -51,7 +51,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int NetworkDetails::logWarnCount = 0;
+int NetworkDetails::logWarnCount = 0;
 
 static double min(double a, double b, double c) { return std::min(a, std::min(b, c)); }
 

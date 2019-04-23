@@ -56,6 +56,9 @@ public class ConflateParams {
     @JsonProperty("OUTPUT_NAME")
     private String outputName;
 
+    @JsonProperty("OUTPUT_FOLDER")
+    private Long outputFolder;
+
     @JsonProperty("COLLECT_STATS")
     private Boolean collectStats;
 
@@ -67,15 +70,6 @@ public class ConflateParams {
 
     @JsonProperty("CONFLATION_ALGORITHM")
     private String conflateAlgorithm;
-
-    @JsonProperty("GENERATE_REPORT")
-    private String generateReport;
-
-    @JsonProperty("TIME_STAMP")
-    private String timeStamp;
-
-    @JsonProperty("USER_EMAIL")
-    private String userEmail;
 
     @JsonProperty("CONFLATION_COMMAND")
     private String conflationCommand;
@@ -148,6 +142,14 @@ public class ConflateParams {
         this.outputName = outputName;
     }
 
+    public Long getOutputFolder() {
+        return outputFolder;
+    }
+
+    public void setOutputFolder(Long outputFolder) {
+        this.outputFolder = outputFolder;
+    }
+
     public Boolean getCollectStats() {
         return collectStats;
     }
@@ -170,30 +172,6 @@ public class ConflateParams {
 
     public void setConflationType(String conflationType) {
         this.conflationType = conflationType;
-    }
-
-    public String getGenerateReport() {
-        return generateReport;
-    }
-
-    public void setGenerateReport(String generateReport) {
-        this.generateReport = generateReport;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     public String getConflationCommand() {
@@ -223,7 +201,6 @@ public class ConflateParams {
     public String getConflateAlgorithm() {
         return this.conflateAlgorithm;
     }
-
 
     public void setConflateAlgorithm(String algorithm) {
         this.conflateAlgorithm = algorithm;
@@ -255,12 +232,10 @@ public class ConflateParams {
                 ", referenceLayer='" + referenceLayer + '\'' +
                 ", advancedOptions='" + advancedOptions + '\'' +
                 ", outputName='" + outputName + '\'' +
+                ", outputFolder='" + outputFolder + '\'' +
                 ", collectStats=" + collectStats +
                 ", bounds='" + bounds + '\'' +
                 ", conflationType='" + conflationType + '\'' +
-                ", generateReport='" + generateReport + '\'' +
-                ", timeStamp='" + timeStamp + '\'' +
-                ", userEmail='" + userEmail + '\'' +
                 ", conflationCommand='" + conflationCommand + '\'' +
                 '}';
     }

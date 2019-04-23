@@ -56,13 +56,11 @@ class UnconnectedWaySnapperTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/UnconnectedWaySnapper/";
-  const QString outputPath = "test-output/ops/UnconnectedWaySnapper/";
-
   UnconnectedWaySnapperTest()
+    : HootTestFixture("test-files/ops/UnconnectedWaySnapper/",
+                      "test-output/ops/UnconnectedWaySnapper/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
   }
 
   void runSnapTest()
@@ -72,9 +70,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + testName + "In1.osm", map);
+    reader.read(_inputPath + testName + "In1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(inputPath + testName + "In2.osm", map);
+    reader.read(_inputPath + testName + "In2.osm", map);
 
     UnconnectedWaySnapper uut;
     uut.setAddCeToSearchDistance(false);
@@ -93,17 +91,18 @@ public:
     // Remove the ref data, so its easier to compare the snapped output to the pre-snapped
     // secondary input data.
     ElementCriterionPtr statusCrit(new StatusCriterion(Status::Unknown1));
-    RemoveElementsVisitor removeRefVisitor(statusCrit);
+    RemoveElementsVisitor removeRefVisitor;
     removeRefVisitor.setRecursive(true);
+    removeRefVisitor.addCriterion(statusCrit);
     map->visitRw(removeRefVisitor);
 
     MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, outputPath + testName +  + "Out.osm");
+    OsmXmlWriter().write(map, _outputPath + testName +  + "Out.osm");
 
     CPPUNIT_ASSERT_EQUAL(43L, uut.getNumAffected());
     CPPUNIT_ASSERT_EQUAL(5L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
-    HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 
   void runConfigOptionsValidationTest()
@@ -167,9 +166,9 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + testName + "In1.osm", map);
+    reader.read(_inputPath + testName + "In1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(inputPath + testName + "In2.osm", map);
+    reader.read(_inputPath + testName + "In2.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -183,9 +182,9 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.setIsDebugMap(true);
-    writer.write(map, outputPath + testName +  + "Out.osm");
+    writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    HOOT_FILE_EQUALS(inputPath + testName +  + "Out.osm", outputPath + testName +  + "Out.osm");
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };
 

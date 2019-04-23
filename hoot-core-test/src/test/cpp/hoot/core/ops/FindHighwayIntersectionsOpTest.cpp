@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -57,9 +57,10 @@ class FindHighwayIntersectionsOpTest : public HootTestFixture
 public:
 
   FindHighwayIntersectionsOpTest()
+    : HootTestFixture("test-files/ops/FindHighwayIntersectionsOp/",
+                      "test-output/ops/FindHighwayIntersectionsOp/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/ops/FindHighwayIntersectionsOp/");
   }
 
   void runToyTest()
@@ -77,9 +78,9 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
-    HOOT_FILE_EQUALS("test-files/ops/FindHighwayIntersectionsOp/ToyTestA_intersections.osm",
-                     "test-output/ops/FindHighwayIntersectionsOp/Toy_intersections.osm");
+    writer.write(map, _outputPath + "Toy_intersections.osm");
+    HOOT_FILE_EQUALS( _inputPath + "ToyTestA_intersections.osm",
+                     _outputPath + "Toy_intersections.osm");
   }
 
 };

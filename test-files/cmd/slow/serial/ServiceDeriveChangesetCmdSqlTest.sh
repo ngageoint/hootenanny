@@ -2,8 +2,8 @@
 set -e
 
 INPUT_DIR=test-files/cmd/slow/DeriveChangesetCmdTest
-INPUT_DIR_2=test-files/cmd/slow/ServiceDeriveChangesetCmdSqlTest
-OUTPUT_DIR=test-output/cmd/ServiceDeriveChangesetCmdSqlTest
+INPUT_DIR_2=test-files/cmd/slow/serial/ServiceDeriveChangesetCmdSqlTest
+OUTPUT_DIR=test-output/cmd/slow/serial/ServiceDeriveChangesetCmdSqlTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,8 +45,9 @@ class ArffWriterTest : public HootTestFixture
 public:
 
   ArffWriterTest()
+    : HootTestFixture("test-files/io/ArffWriterTest/",
+                      "test-output/io/ArffWriterTest/")
   {
-    TestUtils::mkpath("test-output/io/ArffWriterTest/");
   }
 
   void runBasicTest()
@@ -68,13 +69,12 @@ public:
     s["b"] = 3.2;
     samples.push_back(s);
 
-    ArffWriter uut("test-output/io/ArffWriterTest/runBasic.arff", true);
+    ArffWriter uut(_outputPath + "runBasic.arff", true);
     uut.write(samples);
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS(
-      "test-files/io/ArffWriterTest/runBasic.arff",
-      "test-output/io/ArffWriterTest/runBasic.arff");
+    HOOT_FILE_EQUALS( _inputPath + "runBasic.arff",
+                     _outputPath + "runBasic.arff");
   }
 };
 

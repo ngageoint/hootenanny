@@ -49,7 +49,7 @@ public:
 
   static std::string className() { return "hoot::OsmApiDb"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static const QString TIME_FORMAT;
   static const QString TIMESTAMP_FUNCTION;

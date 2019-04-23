@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
@@ -42,21 +42,11 @@ using namespace hoot;
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Boost
-using namespace boost;
-
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-
-// Qt
-#include <QDebug>
-#include <QThread>
-
-// Standard
-#include <stdio.h>
 
 namespace hoot
 {
@@ -69,6 +59,12 @@ class MapComparatorTest : public HootTestFixture
 
 public:
 
+  MapComparatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runTest()
   {
     OsmXmlReader reader;
@@ -76,11 +72,11 @@ public:
 
     OsmMap::resetCounters();
     OsmMapPtr map1(new OsmMap());
-    reader.read("test-files/ToyTestA.osm", map1);
+    reader.read(_inputPath + "ToyTestA.osm", map1);
 
     OsmMap::resetCounters();
     OsmMapPtr map2(new OsmMap());
-    reader.read("test-files/ToyTestA.osm", map2);
+    reader.read(_inputPath + "ToyTestA.osm", map2);
 
     MapComparator uut;
 

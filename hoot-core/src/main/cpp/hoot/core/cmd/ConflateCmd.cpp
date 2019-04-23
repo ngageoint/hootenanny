@@ -214,7 +214,6 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  LOG_INFO("Applying pre-conflation operations...");
   NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
@@ -242,7 +241,6 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Apply any user specified operations.
   _updateConfigOptionsForAttributeConflation();
-  LOG_INFO("Applying post-conflation operations...");
   LOG_VART(ConfigOptions().getConflatePostOps());
   NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
@@ -365,8 +363,8 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     // specifying them anyway to harden this a bit.
     if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
         postConflateOps.contains("hoot::RemoveElementsVisitor") &&
-        ConfigOptions().getRemoveElementsVisitorElementCriterion() ==
-          "hoot::ReviewRelationCriterion" &&
+        ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
+          "hoot::ReviewRelationCriterion") &&
         postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
     {
       const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
@@ -383,8 +381,12 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     // thresholding.
     if (ConfigOptions().getAttributeConflationAllowReviewsByScore())
     {
+      QStringList removeElementsCriteria =
+        conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
+      removeElementsCriteria.replaceInStrings(
+        "hoot::ReviewRelationCriterion", "hoot::ReviewScoreCriterion");
       conf().set(
-        ConfigOptions::getRemoveElementsVisitorElementCriterionKey(), "hoot::ReviewScoreCriterion");
+        ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }
 
     LOG_DEBUG(

@@ -71,13 +71,14 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   boost::function<bool (ConstElementPtr e)> f =
     boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
   boost::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
-  RemoveElementsVisitor removeEVisitor(pBuildingCrit);
+  RemoveElementsVisitor removeEVisitor;
+  removeEVisitor.addCriterion(pBuildingCrit);
 
   // Visit the map once, execute all visitors on each element
   MultiVisitor multiVtor;
   multiVtor.addVisitor(&removeTagVtor);
-  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&replaceTagVtor));
-  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&removeEVisitor));
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor*>(&replaceTagVtor));
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor*>(&removeEVisitor));
   map->visitRw(multiVtor);
 }
 

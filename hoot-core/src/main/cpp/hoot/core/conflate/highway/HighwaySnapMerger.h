@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::HighwaySnapMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   HighwaySnapMerger();
   HighwaySnapMerger(
@@ -61,6 +61,10 @@ protected:
   // When roads are split and the pieces stored in multilinestring relations, this decides if the
   // tags get removed from the constituent way members.
   bool _removeTagsFromWayMembers;
+
+  // Determines whether we add a custom tag to any multilinestring relation created during merging.
+  // This is useful for getting rid of them later, if necessary.
+  bool _markAddedMultilineStringRelations;
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);

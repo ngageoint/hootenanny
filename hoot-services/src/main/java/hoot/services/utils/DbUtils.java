@@ -36,6 +36,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,6 +68,7 @@ import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
+import hoot.services.command.CommandResult;
 import hoot.services.models.db.QUsers;
 
 
@@ -507,4 +509,63 @@ public class DbUtils {
 
         return -1;
     }
+
+    public static void upsertCommandStatus(CommandResult commandResult){
+        Statement dbQuery = null;
+        ResultSet queryResult = null;
+
+        try (Connection conn = getConnection()) {
+            if(commandResult.getId() == null) {
+                String queryInsert = String.format(
+                        "INSERT INTO command_status(start, command, job_id, stdout, stderr) " +
+                        "VALUES('%s', '%s', '%s', '%s', '%s') ",
+                        commandResult.getStart(), commandResult.getCommand(), commandResult.getJobId(), commandResult.getStdout(), commandResult.getStderr());
+
+                dbQuery = conn.createStatement();
+                dbQuery.executeUpdate(queryInsert, Statement.RETURN_GENERATED_KEYS);
+
+                queryResult = dbQuery.getGeneratedKeys();
+
+                if (queryResult.next()) {
+                    Long id = queryResult.getLong(1);
+                    commandResult.setId(id);
+                }
+            }
+            else {
+                String queryUpdate = String.format(
+                        "UPDATE command_status " +
+                        "SET stdout = '%s', stderr = '%s' " +
+                        "WHERE id=%d",
+                        commandResult.getStdout(), commandResult.getStderr(), commandResult.getId());
+
+                dbQuery = conn.createStatement();
+                dbQuery.executeUpdate(queryUpdate);
+            }
+
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+        catch(Exception exc) {
+            logger.info("ERROR HERE: " + exc.getMessage());
+        }
+        finally {
+            if (queryResult != null) {
+                try {
+                    queryResult.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+
+            if (dbQuery != null) {
+                try {
+                    dbQuery.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+    }
+
 }

@@ -39,7 +39,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -104,7 +103,8 @@ public:
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    _customSearchRadius =
+      getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VART(_customSearchRadius);
 
     Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
@@ -311,7 +311,9 @@ public:
     func->Call(ToLocal(&plugin), argc, jsArgs);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius = getNumber(ToLocal(&plugin), "searchRadius", -1.0, 15.0);
+    _customSearchRadius =
+      getNumber(
+        ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
 
     QFileInfo scriptFileInfo(_scriptPath);
     LOG_DEBUG(

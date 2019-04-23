@@ -86,6 +86,7 @@ enum _TestType
   GLACIAL_ONLY  = 0x08,
   GLACIAL       = 0x0f,
   SERIAL        = 0x10,
+  CASE_ONLY     = 0x11,
   ALL           = 0x1f
 };
 
@@ -128,7 +129,7 @@ public:
     return _success;
   }
 
-  virtual void endTest(CppUnit::Test * test )
+  virtual void endTest(CppUnit::Test* test )
   {
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
@@ -167,6 +168,7 @@ public:
   double getTestTimeout() { return _testTimeout; }
 
 private:
+
   bool _success;
   bool _showTestName;
   bool _showElapsed;
@@ -200,7 +202,7 @@ void getTestVector(const vector<TestPtr>& from, vector<CppUnit::Test*>& to)
   }
 }
 
-void filterPattern(const std::vector<CppUnit::Test*> &from, std::vector<CppUnit::Test*> &to,
+void filterPattern(const std::vector<CppUnit::Test*>& from, std::vector<CppUnit::Test*>& to,
                    QString pattern, bool includeOnMatch)
 {
   QRegExp regex(pattern);
@@ -283,7 +285,7 @@ void getNames(vector<string>& names, CppUnit::Test* t)
   }
 }
 
-void getNames(vector<string>& names, const std::vector<TestPtr> &vTests)
+void getNames(vector<string>& names, const std::vector<TestPtr>& vTests)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
@@ -304,13 +306,13 @@ void getNames(vector<string>& names, const std::vector<TestPtr> &vTests)
   }
 }
 
-void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*> &vTests)
+void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
 {
   for (size_t i = 0; i < vTests.size(); i++)
     names.push_back(vTests[i]->getName());
 }
 
-void printNames(const std::vector<TestPtr> &vTests)
+void printNames(const std::vector<TestPtr>& vTests)
 {
   vector<string> names;
   getNames(names, vTests);
@@ -318,7 +320,7 @@ void printNames(const std::vector<TestPtr> &vTests)
     cout << *it << endl;
 }
 
-void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestResult * pResult)
+void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestResult* pResult)
 {
   // clear all user configuration so we have consistent tests.
   conf().clear();
@@ -328,7 +330,8 @@ void runSingleTest(CppUnit::Test * pTest, QStringList &args, CppUnit::TextTestRe
   pTest->run(pResult);
 }
 
-void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bool hideDisableTests = false)
+void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
+                   bool hideDisableTests = false)
 {
   //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
   //  Add current tests if the bit flag is set
@@ -369,9 +372,14 @@ void populateTests(_TestType t, std::vector<TestPtr> &vTests, bool printDiff, bo
     vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
   }
+
+  if (t == CASE_ONLY)
+  {
+    vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
+  }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
   conf().set(ConfigOptions().getHashSeedZeroKey(), true);
@@ -388,6 +396,7 @@ int main(int argc, char *argv[])
             "--quick-only - Run the quick (unnamed) tests only.\n"
             "--slow-only - Run the 'slow' tests only.\n"
             "--glacial-only - Run the 'glacial' tests only.\n"
+            "--case-only - Run the case tests only.\n"
             "--single [test name] - Run only the test specified.\n"
             "--names - Show the names of all the tests as they run.\n"
             "--all-names - Only print the names of all the tests.\n"
@@ -536,6 +545,11 @@ int main(int argc, char *argv[])
       {
         listener.reset(new HootTestListener(false, GLACIAL_WAIT));
         populateTests(GLACIAL_ONLY, vAllTests, printDiff);
+      }
+      else if (args.contains("--case-only"))
+      {
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        populateTests(CASE_ONLY, vAllTests, printDiff);
       }
 
       vector<CppUnit::Test*> vTests;

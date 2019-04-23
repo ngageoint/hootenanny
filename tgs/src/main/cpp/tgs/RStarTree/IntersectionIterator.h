@@ -46,6 +46,7 @@ class RStarTree;
 class TGS_EXPORT IntersectionIterator : public Iterator
 {
 public:
+
   IntersectionIterator(const RStarTree* tree, const std::vector<double>& minBounds,
                        const std::vector<double>& maxBounds);
 
@@ -59,14 +60,12 @@ public:
 
   virtual bool next();
 
-  // TODO: remove me
-  int nodeHits;
-  int distCalcs;
-
 protected:
+
   bool _determineIntesection(const Box& box);
 
 private:
+
   class Result
   {
   public:

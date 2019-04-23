@@ -52,7 +52,7 @@ public:
 
   static std::string className() { return "hoot::Relation"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   explicit Relation(const Relation& from);
 

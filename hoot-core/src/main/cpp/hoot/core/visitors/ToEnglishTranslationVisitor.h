@@ -54,17 +54,17 @@ public:
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Translates selected tag values to English"; }
 
-  virtual QString getInitStatusMessage() const
+  virtual QString getInitStatusMessage() const override
   { return "Translating tags to English..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   {
     return
       "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +

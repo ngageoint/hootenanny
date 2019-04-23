@@ -27,7 +27,7 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -105,7 +105,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   LOG_DEBUG("\tDiscarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
-  RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
+  RemoveElementsVisitor removeRelationsVisitor;
+  removeRelationsVisitor.addCriterion(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
   _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-discarding-relations");
@@ -175,8 +176,9 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Now remove input1 elements
   LOG_DEBUG("\tRemoving all reference elements...");
   boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-  RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
+  RemoveElementsVisitor removeRef1Visitor;
   removeRef1Visitor.setRecursive(true);
+  removeRef1Visitor.addCriterion(pTagKeyCrit);
   _pMap->visitRw(removeRef1Visitor);
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
 }

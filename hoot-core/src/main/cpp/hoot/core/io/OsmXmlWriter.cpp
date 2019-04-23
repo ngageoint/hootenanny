@@ -56,7 +56,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmXmlWriter::logWarnCount = 0;
+int OsmXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 

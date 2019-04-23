@@ -54,7 +54,10 @@ class CalculateStatsOpTest : public HootTestFixture
 
 public:
 
+
   CalculateStatsOpTest()
+    : HootTestFixture("test-files/ops/CalculateStatsOp/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -76,15 +79,13 @@ public:
   // to this test.
   void runStatsNumTest()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
-      _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
     CPPUNIT_ASSERT_EQUAL(172, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
-      _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Nodes"));
     CPPUNIT_ASSERT_EQUAL(22.0, calcStatsOp->getSingleStat("Ways"));
@@ -345,8 +346,7 @@ public:
 
   void runStatsTestWithReviews()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
-      _calcStats("test-files/ops/CalculateStatsOp/all-data-types-with-reviews.osm");
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types-with-reviews.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Nodes"));
     CPPUNIT_ASSERT_EQUAL(21.0, calcStatsOp->getSingleStat("Ways"));

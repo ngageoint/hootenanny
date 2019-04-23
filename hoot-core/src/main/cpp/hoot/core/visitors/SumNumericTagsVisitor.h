@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::SumNumericTagsVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   SumNumericTagsVisitor();
   explicit SumNumericTagsVisitor(const QStringList keys);

@@ -918,7 +918,7 @@ private:
   TagGraph _graph;
 
   //this should be static, but there's no header file
-  unsigned int _logWarnCount;
+  int _logWarnCount;
 
   VertexId _addVertex(const SchemaVertex& v)
   {
@@ -1194,7 +1194,7 @@ private:
     else
     {
       // check to see if any of the regular expressions match
-      for (QList< pair<QRegExp, VertexId> >::const_iterator it = _regexKeys.begin();
+      for (QList<pair<QRegExp, VertexId>>::const_iterator it = _regexKeys.begin();
            it != _regexKeys.end(); ++it)
       {
         const QRegExp& re = it->first;
@@ -1211,7 +1211,7 @@ private:
 
   void _percolateInheritance()
   {
-    graph_traits < TagGraph >::vertex_iterator vi, vend;
+    graph_traits <TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       if (_graph[*vi].childWeight > 0.0)

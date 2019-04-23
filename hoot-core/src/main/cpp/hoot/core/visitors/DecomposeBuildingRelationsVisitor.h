@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   DecomposeBuildingRelationsVisitor();
 

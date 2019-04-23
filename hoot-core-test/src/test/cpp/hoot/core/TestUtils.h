@@ -117,17 +117,19 @@ public:
   static bool compareMaps(const QString& map1, const QString map2);
 
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
-    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
   static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[],
-    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, const QString& note = "");
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), const QString& note = "");
 
-  static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
-    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT, Tags tags = Tags());
+  static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes,
+                          Status status = Status::Unknown1,
+                          Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                          Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = ElementData::CIRCULAR_ERROR_DEFAULT);
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue());
 
   static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
 
@@ -219,14 +221,26 @@ protected:
     ResetAll
   };
 
-  /** Constructor to set the default reset to none */
-  HootTestFixture() : _reset(ResetNone) { }
+  /** Constructor to set the paths, default reset to none, and create the output path if needed */
+  HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH)
+    : _inputPath(inputPath),
+      _outputPath(outputPath),
+      _reset(ResetNone)
+  {
+    if (outputPath != UNUSED_PATH)
+      TestUtils::mkpath(_outputPath);
+  }
 
   /**
    * @brief setResetType Set the reset type to do basic, all, or none
    * @param reset Enum type to resent
    */
   void setResetType(HootTestReset reset) { _reset = reset; }
+
+  /** Path relative from $HOOT_HOME to the input folder of the test */
+  const QString _inputPath;
+  /** Path relative from $HOOT_HOME to the output folder of the test */
+  const QString _outputPath;
 
 public:
 
@@ -241,8 +255,9 @@ public:
       TestUtils::resetEnvironment();
   }
 
-private:
+  static const QString UNUSED_PATH;
 
+private:
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };

@@ -121,7 +121,7 @@ void MapCropper::setConfiguration(const Settings& conf)
 }
 
 void MapCropper::apply(OsmMapPtr& map)
-{;
+{
   _numAffected = 0;
   OsmMapPtr result = map;
 

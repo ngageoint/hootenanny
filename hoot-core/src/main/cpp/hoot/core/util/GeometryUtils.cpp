@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int GeometryUtils::logWarnCount = 0;
+int GeometryUtils::logWarnCount = 0;
 
 union DoubleCast
 {
@@ -195,7 +195,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
     if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
@@ -220,22 +220,14 @@ Geometry* GeometryUtils::validateGeometryCollection(
     delete result;
     result = tmp;
   }
-  //return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
   return result;
-
-//  vector<Geometry*>* children = new vector<Geometry*>();
-//  children->reserve(gc->getNumGeometries());
-//  for (size_t i = 0; i < gc->getNumGeometries(); i++)
-//  {
-//    children->push_back(validateGeometry(gc->getGeometryN(i)));
-//  }
-//  return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
 }
 
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
 {
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
-  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+  boost::shared_ptr<Point> p(
+    GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
   return ls->Union(p.get());
 }
 
@@ -252,8 +244,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   if (p->isValid() == false)
   {
     boost::shared_ptr<Geometry> tmp;
-    // buffer it by zero to attempt to fix topology errors and store the result in an boost::shared_ptr
-    // that will self delete.
+    // buffer it by zero to attempt to fix topology errors and store the result in an
+    // boost::shared_ptr that will self delete.
     tmp.reset(p->buffer(0));
     // run the new geometry through the whole routine again just in case the type changed.
     result = validateGeometry(tmp.get());
@@ -265,8 +257,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   else
   {
     const LineString* oldShell = p->getExteriorRing();
-    boost::shared_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(
-      *oldShell->getCoordinates()));
+    boost::shared_ptr<LinearRing> oldLinearRing(
+      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());

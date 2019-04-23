@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -52,16 +52,17 @@ class RemoveAttributesVisitorTest : public HootTestFixture
 public:
 
   RemoveAttributesVisitorTest()
+    : HootTestFixture("test-files/visitors/RemoveAttributesVisitorTest/",
+                      "test-output/visitors/RemoveAttributesVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/visitors");
   }
 
   void runRemoveAttributesTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "RemoveAttributesVisitorTest.osm", false, Status::Unknown1);
 
     QStringList attributesToRemove;
     attributesToRemove.append("version");
@@ -74,12 +75,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(
-      map, "test-output/visitors/RemoveAttributesVisitorTest-runRemoveAttributesTest.osm");
+    writer.write(map, _outputPath + "RunRemoveAttributesTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/RemoveAttributesVisitorTest-runRemoveAttributesTest.osm",
-      "test-output/visitors/RemoveAttributesVisitorTest-runRemoveAttributesTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunRemoveAttributesTest.osm",
+                     _outputPath + "RunRemoveAttributesTest.osm");
   }
 
   void runRemoveInvalidAttributeKeyTest()

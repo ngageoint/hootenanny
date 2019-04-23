@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int WayString::logWarnCount = 0;
+int WayString::logWarnCount = 0;
 
 // if the difference is smaller than this we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;

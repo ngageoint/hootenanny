@@ -17,8 +17,7 @@
 "alt_name":null,
 "building":"yes",
 "REF1":"Panera",
-"access":{"groups":[],"users":[]},
-"error:circular":"15"}
+"access":{"groups":[],"users":[]}}
 ,
 "geometry": {
 "type":"Polygon",
@@ -48,8 +47,7 @@
 "name":"Bad Pair",
 "building":"yes",
 "REF2":"Convoluted No Match 2",
-"access":{"groups":[],"users":[]},
-"error:circular":"15"}
+"access":{"groups":[],"users":[]}}
 ,
 "geometry": {
 "type":"Polygon",

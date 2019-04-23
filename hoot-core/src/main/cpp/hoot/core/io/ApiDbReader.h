@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::ApiDbReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   ApiDbReader();
   virtual ~ApiDbReader() {}
@@ -124,6 +124,7 @@ protected:
   bool _open;
   QString _email;
   QString _url;
+  double _defaultCircularError;
 
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;

@@ -59,7 +59,7 @@ public:
 
   static std::string className() { return "hoot::DualWaySplitter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   typedef enum DrivingSide
   {

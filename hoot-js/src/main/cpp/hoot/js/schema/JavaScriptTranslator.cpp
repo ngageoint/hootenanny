@@ -69,7 +69,7 @@ using namespace v8;
 namespace hoot
 {
 
-unsigned int JavaScriptTranslator::logWarnCount = 0;
+int JavaScriptTranslator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
 
@@ -232,11 +232,10 @@ int JavaScriptTranslator::getLogCount(QString log)
   return result;
 }
 
-
 void JavaScriptTranslator::_init()
 {
   //This can be a costly operation, hence putting it at INFO.
-  LOG_INFO("Loading translation script: " << _scriptPath);
+  LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
   _gContext.reset(new PluginContext());

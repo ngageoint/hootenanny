@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __MAP_PROJECTOR_H__
 #define __MAP_PROJECTOR_H__
@@ -65,7 +65,7 @@ public:
 
   static std::string className() { return "hoot::MapProjector"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   /**
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The

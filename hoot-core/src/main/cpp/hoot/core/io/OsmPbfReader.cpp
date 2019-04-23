@@ -69,7 +69,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmPbfReader::logWarnCount = 0;
+int OsmPbfReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmPbfReader)
 
@@ -107,7 +107,7 @@ void OsmPbfReader::_init(bool useFileId)
   _d = new OsmPbfReaderData();
   _useFileId = useFileId;
   _status = hoot::Status::Invalid;
-  _circularError = 15.0;
+  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _useFileStatus = false;
   _permissive = true;
   _in = NULL;
@@ -190,7 +190,7 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
 
       if (isBad)
       {
-        e->setCircularError(_circularError);
+        e->setCircularError(_defaultCircularError);
 
         if (logWarnCount < Log::getWarnMessageLimit())
         {
@@ -408,7 +408,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _circularError);
+    _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _defaultCircularError);
     if (_map->containsNode(newId))
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -512,7 +512,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _circularError));
+  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -658,7 +658,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  boost::shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Relation> newRelation(
+    new hoot::Relation(_status, newId, _defaultCircularError));
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
@@ -809,7 +810,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
 
   // if the cached envelope is valid
   if (w.has_bbox())

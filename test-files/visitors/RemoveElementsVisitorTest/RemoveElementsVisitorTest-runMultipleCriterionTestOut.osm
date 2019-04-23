@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.80115755378895" minlon="-122.4170845206333" maxlat="37.80132046235925" maxlon="-122.416889983239"/>
+    <node visible="true" id="-861038" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8012941868076950" lon="-122.4169415273349699"/>
+    <node visible="true" id="-861035" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011785742698052" lon="-122.4170288197554868"/>
+    <node visible="true" id="-861032" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8013204623592500" lon="-122.4168899832390451"/>
+    <node visible="true" id="-861027" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011575537889470" lon="-122.4170845206333098"/>
+</osm>

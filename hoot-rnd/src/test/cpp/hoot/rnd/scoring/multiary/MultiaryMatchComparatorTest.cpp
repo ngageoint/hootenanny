@@ -529,6 +529,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryMatchComparatorTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryMatchComparatorTest, "quick");
 
 }

@@ -37,6 +37,9 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 
 namespace hoot
@@ -133,12 +136,16 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
 
   if (!skipEmptyMap)
   {
+    QElapsedTimer timer;
+    timer.start();
+
     boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
     writer->write(map);
     LOG_INFO(
-      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) << " elements to output.");
+      "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
   }
 }
 

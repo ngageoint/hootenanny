@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDbReader.h"
 
@@ -46,12 +46,13 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int ApiDbReader::logWarnCount = 0;
+int ApiDbReader::logWarnCount = 0;
 
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _returnNodesOnly(false),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),

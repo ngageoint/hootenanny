@@ -44,7 +44,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-unsigned int WayLocation::logWarnCount = 0;
+int WayLocation::logWarnCount = 0;
 
 Coordinate c;
 

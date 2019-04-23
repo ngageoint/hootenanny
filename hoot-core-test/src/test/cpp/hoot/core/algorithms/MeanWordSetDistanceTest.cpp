@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -36,9 +36,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 

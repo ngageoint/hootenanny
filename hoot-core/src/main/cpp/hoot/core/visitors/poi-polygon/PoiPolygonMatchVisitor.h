@@ -64,11 +64,11 @@ public:
    *
    * @param e element to examine
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   bool isMatchCandidate(ConstElementPtr element);
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const override { return ""; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
