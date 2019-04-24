@@ -92,4 +92,6 @@ def createUiJSON(groups, options):
     finally:
         return json.dumps({ 'hoot2': uiGroupsArray })
 
-open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))
+#open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))
+finalJSON = createUiJSON(uiGroups, configOptions)
+open(headerFn, 'w').write(finalJSON)
