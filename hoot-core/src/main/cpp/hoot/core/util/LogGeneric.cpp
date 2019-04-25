@@ -82,7 +82,8 @@ bool Log::notFiltered(const string& prettyFunction)
   // init here instead of in init() since some logs are being produced before the init() call
   if (!_classFilterInitialized)
   {
-    _classFilter = ConfigOptions().getLogClassFilter();
+    _classFilter = ConfigOptions().getLogClassFilter().split(";");
+    _classFilter.removeAll(QString(""));
     _classFilterInitialized = true;
   }
 
@@ -94,7 +95,7 @@ bool Log::notFiltered(const string& prettyFunction)
   nameParts = nameParts[0].split("::");
   int listLen = nameParts.length();
 
-  return _classFilter == "" || (listLen > 1 && nameParts[listLen-2] == _classFilter);
+  return _classFilter.empty() || (listLen > 1 && _classFilter.contains( nameParts[listLen-2] ));
 }
 
 void Log::setLevel(WarningLevel l)

@@ -1788,8 +1788,8 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 * Data Type: string
 * Default Value: ``
 
-Filter for limiting log output to the class matching the specified name. An empty string (default)
-disables the filtering.
+A semicolon delimited list of class names used for limiting the log output. An empty string
+(default) disables the filtering.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
