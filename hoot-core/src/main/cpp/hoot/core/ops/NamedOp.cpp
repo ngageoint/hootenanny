@@ -57,7 +57,7 @@ _namedOps(namedOps)
 
 //NamedOp::NamedOp(QStringList namedOps, Progress progress) :
 //_conf(&conf()),
-//_namedOps(namedOps)
+//_namedOps(namedOps),
 //_progress(progress)
 //{
 //}
@@ -92,7 +92,7 @@ void NamedOp::apply(OsmMapPtr& map)
       const QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);
       //_progress.setFromRelative(
-      //  (float)opCount / (float)_namedOps.size(), "Running", false, initMessage);
+        //(float)opCount / (float)_namedOps.size(), "Running", false, initMessage);
       LOG_DEBUG(
         "\tElement count before operation " << s << ": " <<
         StringUtils::formatLargeNumber(map->getElementCount()));

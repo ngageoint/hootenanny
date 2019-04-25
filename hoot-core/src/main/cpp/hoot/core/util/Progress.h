@@ -61,8 +61,6 @@ public:
   void setState(QString state) { _state = state; }
   void setJobFinished(bool jobFinished) { _jobFinished = jobFinished; }
   void setUserMessage(QString userMessage) { _userMessage = userMessage; }
-  void setProgressReportingGranularity(float granularity)
-  { _progressReportingGranularity = granularity; }
 
   // the task method generally uses this setter
   void set(float percentComplete, QString state, bool jobFinished, QString userMessage);
@@ -96,8 +94,6 @@ protected:
 
   // resulting message
   QString _userMessage;
-
-  float _progressReportingGranularity;
 
   // methods
   // output JSON version of message
