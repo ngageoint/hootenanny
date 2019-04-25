@@ -1,9 +1,9 @@
 Given(/^I am on Hootenanny$/) do
-  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id" # may need to change URL
+  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id-legacy" # may need to change URL
 end
 
 Given(/^I am on Hootenanny at location "([^"]*)"$/) do |location|
-  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id/#map=" + location # may need to change URL
+  visit "http://localhost:" + (ENV['TOMCAT_PORT'] ? ENV['TOMCAT_PORT'] : "8080") + "/hootenanny-id-legacy/#map=" + location # may need to change URL
 end
 
 When(/^I click Get Started$/) do
