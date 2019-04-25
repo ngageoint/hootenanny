@@ -83,6 +83,10 @@ public:
      */
     Info = 2000,
     Warn = 3000,
+    /**
+     * Log level specific to hoot-services job status consumption
+     */
+    Status = 3500,
     Error = 4000,
     Fatal = 5000
   };
@@ -196,6 +200,7 @@ private:
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
 #define LOG_VARV(var) LOG_VERBOSE(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))
+#define LOG_VARS(var) LOG_STATUS(#var << ": " << (var))
 #define LOG_VARW(var) LOG_WARN(#var << ": " << (var))
 #define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))
 #define LOG_VAR(var) LOG_VARI(var)

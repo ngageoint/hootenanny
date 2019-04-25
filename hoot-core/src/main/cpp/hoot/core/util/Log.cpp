@@ -135,6 +135,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   {
     return Info;
   }
+  if (l == "status")
+  {
+    return Status;
+  }
   if (l == "warn")
   {
     return Warn;
@@ -165,6 +169,8 @@ QString Log::getLevelString(WarningLevel l)
     return "VERBOSE";
   case Info:
     return "INFO";
+  case Status:
+    return "STATUS";
   case Warn:
     return "WARN";
   case Error:

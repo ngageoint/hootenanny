@@ -28,6 +28,9 @@
 #ifndef HOOT_PROGRESS_H
 #define HOOT_PROGRESS_H
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -35,31 +38,37 @@ class Progress
 {
 public:
 
-  Progress(QString source);
+  Progress(QString source = "");
 
-  QString getSource() { return _source; }
-  QString getReportType() { return _reportType; }
-  float getPercentComplete() { return _percentComplete; }
-  float getTaskWeight() { return _taskWeight; }
-  QString getState() { return _state; }
-  bool getJobFinished() { return _jobFinished; }
-  QString getUserMessage() { return _userMessage; }
+  QString getSource() const { return _source; }
+  QString getReportType() const { return _reportType; }
+  float getPercentComplete() const { return _percentComplete; }
+  float getTaskWeight() const { return _taskWeight; }
+  QString getState() const { return _state; }
+  bool getJobFinished() const { return _jobFinished; }
+  QString getUserMessage() const { return _userMessage; }
 
-  // the polling method calls this getter
-  QString getMessage();
+  // the polling method calls this getter; get the message in report type's format
+  // - this will be called by the polling method
+  QString getMessage() const;
 
   void setSource(QString source) { _source = source; }
-  void setReportType(QString reportType) { _reportType = reportType; }
+  void setReportType(QString reportType) { _reportType = reportType.toLower(); }
   void setPercentComplete(float percentComplete) { _percentComplete = percentComplete; }
+  // sets the task weight for the next subtask in range of 0...p(x) where p(x) is progress
+  // percentage leftover for completing the current overall task
   void setTaskWeight(float taskWeight);
   void setState(QString state) { _state = state; }
   void setJobFinished(bool jobFinished) { _jobFinished = jobFinished; }
   void setUserMessage(QString userMessage) { _userMessage = userMessage; }
+  void setProgressReportingGranularity(float granularity)
+  { _progressReportingGranularity = granularity; }
 
   // the task method generally uses this setter
   void set(float percentComplete, QString state, bool jobFinished, QString userMessage);
 
-  // really cool method to do the absolute percent complete from the relative percent
+  // really cool method to do the absolute percent complete from the relative percent;
+  // set from relative values updates the absolute values automatically
   void setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
                        QString userMessage);
 
@@ -79,7 +88,7 @@ protected:
   // task weight
   float _taskWeight;
 
-  // task's state (Pending, NotRunning, Running, Successful, Failed)
+  // task's state (Pending, NotRunning, Running, Successful, Failed); TODO: change to enum
   QString _state;
 
   // task's finish status
@@ -88,12 +97,16 @@ protected:
   // resulting message
   QString _userMessage;
 
+  float _progressReportingGranularity;
+
   // methods
   // output JSON version of message
-  QString _toJson();
+  QString _toJson() const;
+  QString _toText() const;
 
-  // processing for getMessage() to send messages when a metric met (for now every 0.1 units)
-  bool _readyToSend();
+  // processing for getMessage() to send messages when a metric met (for now every 0.1 units);
+  // check if ready to send message or not
+  bool _readyToSend() const;
 };
 
 }

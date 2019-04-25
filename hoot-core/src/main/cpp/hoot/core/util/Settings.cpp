@@ -514,6 +514,11 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Warn);
       args = args.mid(1);
     }
+    else if (args[0] == "--status")
+    {
+      Log::getInstance().setLevel(Log::Status);
+      args = args.mid(1);
+    }
     else if (args[0] == "--error")
     {
       Log::getInstance().setLevel(Log::Error);

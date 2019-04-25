@@ -90,12 +90,6 @@ int main(int argc, char *argv[])
       return -1;
     }
   }
-  // Yep, a juvenile easter egg. :)
-  else if (QString(argv[1]) == "whoami")
-  {
-    cout << "Papa Smurf" << endl;
-    return 0;
-  }
   else
   {
     c.reset(Factory::getInstance().constructObject<Command>(string("hoot::HelpCmd")));

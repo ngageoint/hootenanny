@@ -3228,11 +3228,10 @@ A quantile value from 0.0 to 1.0 for the QuantileAggregator.
 === progress.reporting.format
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `text`
 
 Sets the progress reporting format to the type specified for classes that support progress
-reporting.  Currently, 'json' is the only valid reporting format. If left blank, progress is not
-reported.
+reporting.  Valid values are, 'json' and 'text'. If left blank, progress is not reported.
 
 === railway.angle.sample.distance
 

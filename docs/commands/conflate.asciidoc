@@ -4,7 +4,7 @@
 === Description
 
 The +conflate+ command conflates two maps into a single map.  If the specified output file name ends with the extension .osc, an OSM 
-                     changeset will be written, instead of an OSM map.
+changeset will be written, instead of an OSM map.
 
 * +input1+         - First input (e.g. OSM file).
 * +input2+         - Second input (e.g. OSM file, XML changeset file (.osc)).

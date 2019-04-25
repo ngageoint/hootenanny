@@ -48,6 +48,7 @@
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Progress.h>
 
 // Standard
 #include <fstream>
@@ -136,22 +137,28 @@ int ConflateCmd::runSimple(QStringList args)
     throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
   }
 
+  // TODO: check this; why would there ever not be a second input?
   QString input1 = args[0];
   QString input2, output;
 
-  if (args.size() == 3)
+  if (args.size() != 3)
   {
-    input2 = args[1];
-    output = args[2];
-  }
-  else
-  {
-    output = args[1];
+    throw IllegalArgumentException("TODO");
   }
 
+  //if (args.size() == 3)
+  //{
+    input2 = args[1];
+    output = args[2];
+  //}
+  //else
+  //{
+    //output = args[1];
+  //}
+
   QString msg =
-    "Conflating " + input1.right(50) + " with " + input2.right(50) + " and writing the output to " +
-     output.right(50);
+    "Conflating " + input1.right(40) + " with " + input2.right(40) + " and writing the output to " +
+     output.right(40);
   if (isDiffConflate)
   {
     msg = msg.prepend("Differentially ");
@@ -162,11 +169,29 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  // read input 1
+  // This is being made to work with non-Differential conflate only for now.
+  Progress progress("Conflate");
+  // TODO: this would only work if NamedOp knows about progress; let's try that later
+  //int numTotalTasks =
+    //5 + ConfigOptions.getConflatePreOps().size() + ConfigOptions.getConflatePostOps().size();
+  int numTotalTasks = 7;
+  if (displayStats)
+  {
+    numTotalTasks += 3;
+  }
+  int currentTask = 1;
+  //progress.setReportType(configOptions.getProgressReportingFormat());
+  progress.setReportType("text");
+  //progress.setTaskWeight(1.0 / numTasks);
+  //progress.setState("Running");
+
+  // read input 1 - #1
   OsmMapPtr map(new OsmMap());
-  IoUtils::loadMap(map, input1,
-                   ConfigOptions().getReaderConflateUseDataSourceIds1(),
+  IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
                    Status::Unknown1);
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false, "Loaded reference data");
+  currentTask++;
 
   ChangesetProviderPtr pTagChanges;
   if (isDiffConflate)
@@ -176,12 +201,15 @@ int ConflateCmd::runSimple(QStringList args)
     diffConflator.markInputElements(map);
   }
 
-  // read input 2
-  if (!input2.isEmpty())
-  {
+  // read input 2 - #2
+  //if (!input2.isEmpty())
+  //{
     IoUtils::loadMap(
       map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
-  }
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false, "Loaded secondary data");
+    currentTask++;
+  //}
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -196,17 +224,25 @@ int ConflateCmd::runSimple(QStringList args)
     ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
   if (displayStats)
   {
-    input1Cso.apply(map);
+    input1Cso.apply(map); // #3 optional
     allStats.append(input1Cso.getStats());
     stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false,
+      "Calculated reference data statistics.");
+    currentTask++;
 
-    if (input2 != "")
-    {
-      input2Cso.apply(map);
+    //if (input2 != "")
+    //{
+      input2Cso.apply(map); // #4 optional
       allStats.append(input2Cso.getStats());
       stats.append(SingleStat("Time to Calculate Stats for Input 2 (sec)",
         t.getElapsedAndRestart()));
-    }
+      progress.set(
+        (float)currentTask / (float)numTotalTasks, "Running", false,
+        "Calculated secondary data statistics");
+      currentTask++;
+    //}
   }
 
   size_t initialElementCount = map->getElementCount();
@@ -214,15 +250,18 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+  NamedOp(ConfigOptions().getConflatePreOps()).apply(map);  // #5-x; optional
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false,
+    "Executed pre-conflation operations");
+  currentTask++;
 
   OsmMapPtr result = map;
 
   if (isDiffConflate)
   {
-    // call the diff conflator
     diffConflator.apply(result);
     if (diffConflator.conflatingTags())
     {
@@ -234,21 +273,32 @@ int ConflateCmd::runSimple(QStringList args)
   else
   {
     UnifyingConflator conflator;
-    conflator.apply(result);
+    conflator.apply(result);    // #6; optional
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false, "Finished conflation");
+    currentTask++;
   }
 
   // Apply any user specified operations.
-  _updateConfigOptionsForAttributeConflation();
+  _updatePostConfigOptionsForAttributeConflation();
   LOG_VART(ConfigOptions().getConflatePostOps());
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+  NamedOp(ConfigOptions().getConflatePostOps()).apply(result);  // #7-x; optional
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false,
+    "Executed post-conflation operations");
+  currentTask++;
 
   // doing this after the conflate post ops run, since some invalid reviews are removed by them
   CountUniqueReviewsVisitor countReviewsVis;
-  result->visitRo(countReviewsVis);
+  result->visitRo(countReviewsVis); // #8
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false,
+    "Counted feature reviews");
+  currentTask++;
 
   MapProjector::projectToWgs84(result);
   stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
@@ -267,15 +317,16 @@ int ConflateCmd::runSimple(QStringList args)
       // Add tag changes to our map
       diffConflator.addChangesToMap(result, pTagChanges);
     }
-    IoUtils::saveMap(result, output);
+    IoUtils::saveMap(result, output);   // #9
     OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false, "Wrote conflated output");
+    currentTask++;
   }
 
   // Do the tags if we need to
   if (isDiffConflate && diffConflator.conflatingTags())
   {
-    LOG_INFO("Generating tag changeset...");
-    // Write the file!
     QString outFileName = output;
     outFileName.replace(".osm", "");
   }
@@ -285,17 +336,21 @@ int ConflateCmd::runSimple(QStringList args)
   if (displayStats)
   {
     CalculateStatsOp outputCso("output map", true);
-    outputCso.apply(result);
+    outputCso.apply(result);    // #10; optional
     QList<SingleStat> outputStats = outputCso.getStats();
-    if (input2 != "")
-    {
+    //if (input2 != "")
+    //{
       ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
         .updateStats(
           outputStats,
           outputCso.indexOfSingleStat("Total Unmatched Features"));
-    }
+    //}
     allStats.append(outputStats);
     stats.append(SingleStat("Time to Calculate Stats for Output (sec)", t.getElapsedAndRestart()));
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false,
+      "Calculated output data statistics");
+    currentTask++;
   }
 
   double totalElapsed = totalTime.getElapsed();
@@ -343,7 +398,7 @@ int ConflateCmd::runSimple(QStringList args)
   return 0;
 }
 
-void ConflateCmd::_updateConfigOptionsForAttributeConflation()
+void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.

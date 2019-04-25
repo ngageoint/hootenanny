@@ -60,7 +60,7 @@ public:
 
 private:
 
-  void _updateConfigOptionsForAttributeConflation();
+  void _updatePostConfigOptionsForAttributeConflation();
 };
 
 }
