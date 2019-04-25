@@ -55,6 +55,13 @@ _namedOps(namedOps)
 {
 }
 
+//NamedOp::NamedOp(QStringList namedOps, Progress progress) :
+//_conf(&conf()),
+//_namedOps(namedOps)
+//_progress(progress)
+//{
+//}
+
 void NamedOp::setConfiguration(const Settings& conf)
 {
   _conf = &conf;
@@ -82,8 +89,10 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      QString initMessage = _getInitMessage(s, opCount, statusInfo);
+      const QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);
+      //_progress.setFromRelative(
+      //  (float)opCount / (float)_namedOps.size(), "Running", false, initMessage);
       LOG_DEBUG(
         "\tElement count before operation " << s << ": " <<
         StringUtils::formatLargeNumber(map->getElementCount()));

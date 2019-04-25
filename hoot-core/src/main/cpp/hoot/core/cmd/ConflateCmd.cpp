@@ -131,20 +131,16 @@ int ConflateCmd::runSimple(QStringList args)
     args.removeAt(args.indexOf("--separate-output"));
   }
 
-  if (args.size() < 2 || args.size() > 3)
+  //if (args.size() < 2 || args.size() > 3)
+  if (args.size() != 3)
   {
     cout << getHelp() << endl << endl;
-    throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+    throw HootException(QString("%1 takes three parameters.").arg(getName()));
   }
 
   // TODO: check this; why would there ever not be a second input?
   QString input1 = args[0];
   QString input2, output;
-
-  if (args.size() != 3)
-  {
-    throw IllegalArgumentException("TODO");
-  }
 
   //if (args.size() == 3)
   //{
@@ -189,7 +185,7 @@ int ConflateCmd::runSimple(QStringList args)
   //progress.setTaskWeight(1.0 / numTasks);
   //progress.setState("Running");
 
-  // read input 1 - #1
+  // read input 1
   progress.set(
     (float)currentTask / (float)numTotalTasks, "Running", false, "Loading reference data");
   OsmMapPtr map(new OsmMap());
@@ -209,7 +205,7 @@ int ConflateCmd::runSimple(QStringList args)
     currentTask++;
   }
 
-  // read input 2 - #2
+  // read input 2
   //if (!input2.isEmpty())
   //{
     progress.set(
@@ -235,7 +231,7 @@ int ConflateCmd::runSimple(QStringList args)
     progress.set(
       (float)currentTask / (float)numTotalTasks, "Running", false,
       "Calculating reference data statistics");
-    input1Cso.apply(map); // #3 optional
+    input1Cso.apply(map);
     allStats.append(input1Cso.getStats());
     stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
     currentTask++;
@@ -245,7 +241,7 @@ int ConflateCmd::runSimple(QStringList args)
       progress.set(
         (float)currentTask / (float)numTotalTasks, "Running", false,
         "Calculating secondary data statistics");
-      input2Cso.apply(map); // #4 optional
+      input2Cso.apply(map);
       allStats.append(input2Cso.getStats());
       stats.append(SingleStat("Time to Calculate Stats for Input 2 (sec)",
         t.getElapsedAndRestart()));
@@ -261,7 +257,12 @@ int ConflateCmd::runSimple(QStringList args)
   progress.set(
     (float)currentTask / (float)numTotalTasks, "Running", false,
     "Executing pre-conflation operations");
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(map);  // #5-x; optional
+  //Progress preOpsProgress("Conflate");
+  //preOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
+  //preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
+  //NamedOp preOps(ConfigOptions().getConflatePreOps());
+  //preOps.setProgress(preOpsProgress);
+  NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
   currentTask++;
@@ -283,7 +284,7 @@ int ConflateCmd::runSimple(QStringList args)
   else
   {
     UnifyingConflator conflator;
-    conflator.apply(result);    // #6; optional
+    conflator.apply(result);
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart())); 
   }
@@ -295,7 +296,7 @@ int ConflateCmd::runSimple(QStringList args)
     "Executing post-conflation operations");
   _updatePostConfigOptionsForAttributeConflation();
   LOG_VART(ConfigOptions().getConflatePostOps());
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(result);  // #7-x; optional
+  NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
   currentTask++;
 
@@ -304,7 +305,7 @@ int ConflateCmd::runSimple(QStringList args)
     (float)currentTask / (float)numTotalTasks, "Running", false,
     "Counting feature reviews");
   CountUniqueReviewsVisitor countReviewsVis;
-  result->visitRo(countReviewsVis); // #8
+  result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
   currentTask++;
 
@@ -328,7 +329,7 @@ int ConflateCmd::runSimple(QStringList args)
       diffConflator.addChangesToMap(result, pTagChanges);
       currentTask++;
     }
-    IoUtils::saveMap(result, output);   // #9
+    IoUtils::saveMap(result, output);
     OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
   }
   currentTask++;
@@ -348,7 +349,7 @@ int ConflateCmd::runSimple(QStringList args)
       (float)currentTask / (float)numTotalTasks, "Running", false,
       "Calculating output data statistics");
     CalculateStatsOp outputCso("output map", true);
-    outputCso.apply(result);    // #10; optional
+    outputCso.apply(result);
     QList<SingleStat> outputStats = outputCso.getStats();
     //if (input2 != "")
     //{

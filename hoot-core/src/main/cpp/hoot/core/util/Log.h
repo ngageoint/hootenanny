@@ -82,11 +82,12 @@ public:
      * completion of phases of processing, or the number of features being processed.
      */
     Info = 2000,
-    Warn = 3000,
     /**
-     * Log level specific to hoot-services job status consumption
+     * Log level specific to hoot-services job status consumption; keeping this below warn to reduce
+     * the impact on test output
      */
-    Status = 3500,
+    Status = 2500,
+    Warn = 3000,
     Error = 4000,
     Fatal = 5000
   };

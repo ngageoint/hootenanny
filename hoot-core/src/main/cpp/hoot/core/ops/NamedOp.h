@@ -31,6 +31,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+//#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QStringList>
@@ -50,6 +51,7 @@ public:
 
   NamedOp();
   NamedOp(QStringList namedOps);
+  //NamedOp(QStringList namedOps, Progress progress);
 
   virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
@@ -59,10 +61,12 @@ public:
 
 private:
 
-  QString _getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo);
+  QString _getInitMessage(const QString& message, int opCount,
+                          boost::shared_ptr<OperationStatusInfo> statusInfo);
 
   const Settings* _conf;
   QStringList _namedOps;
+  //Progress _progress;
 };
 
 }

@@ -77,7 +77,7 @@ protected:
   // source command
   QString _source;
 
-  // report format (json, ...)
+  // report format (json, text)
   QString _reportType;
 
   // progress for current task & extra storage variables
@@ -103,10 +103,6 @@ protected:
   // output JSON version of message
   QString _toJson() const;
   QString _toText() const;
-
-  // processing for getMessage() to send messages when a metric met (for now every 0.1 units);
-  // check if ready to send message or not
-  bool _readyToSend() const;
 };
 
 }

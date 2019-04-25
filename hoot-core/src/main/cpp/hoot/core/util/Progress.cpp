@@ -57,22 +57,18 @@ _progressReportingGranularity(1.0)
 QString Progress::getMessage() const
 {
   QString msg = "";
-  // send message only if exceeds some range (e.g., every 10%)
-  //if (_readyToSend())
-  //{
-    if (_reportType == "json")
-    {
-      msg.append(_toJson());
-    }
-    else if (_reportType == "text") //TODO: update config opts with this
-    {
-      msg.append(_toText());
-    }
-    else
-    {
-      // do nothing
-    }
-  //}
+  if (_reportType == "json")
+  {
+    msg.append(_toJson());
+  }
+  else if (_reportType == "text")
+  {
+    msg.append(_toText());
+  }
+  else
+  {
+    // do nothing
+  }
   return msg;
 }
 
@@ -91,16 +87,11 @@ void Progress::set(float percentComplete, QString state, bool jobFinished, QStri
   _state = state;
   _jobFinished = jobFinished;
   _userMessage = userMessage;
-  //temporary force getMessage call
-  //if (_reportType == "json")
-  //{
-    QString msg = getMessage();
-    if (msg != "")
-    {
-      //cout << getMessage().toStdString() << endl;
-      LOG_STATUS(getMessage());
-    }
-  //}
+  QString msg = getMessage();
+  if (msg != "")
+  {
+    LOG_STATUS(getMessage());
+  }
 }
 
 void Progress::setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
@@ -112,16 +103,11 @@ void Progress::setFromRelative(float relativePercentComplete, QString state, boo
   _state = state;
   _jobFinished = jobFinished;
   _userMessage = userMessage;
-  //temporary force getMessage call
-  //if (_reportType == "json")
-  //{
-    QString msg = getMessage();
-    if (msg != "")
-    {
-      //cout << getMessage().toStdString() << endl;
-      LOG_STATUS(getMessage());
-    }
-  //}
+  QString msg = getMessage();
+  if (msg != "")
+  {
+    LOG_STATUS(getMessage());
+  }
 }
 
 QString Progress::_toJson() const
@@ -143,18 +129,8 @@ QString Progress::_toText() const
   QString js = "";
     js.append(_source % ": ");
       js.append(_userMessage % "; ");
-      //js.append("state: " % _state % ", ");
       js.append(QString("%1").arg((int)(_percentComplete * 100.)) % "% complete");
   return js;
-}
-
-bool Progress::_readyToSend() const
-{
-  int last = (int)(_lastPercentComplete * _progressReportingGranularity);
-  //LOG_VARS(last);
-  int current = (int)(_percentComplete * _progressReportingGranularity);
-  //LOG_VARS(current);
-  return (current - last > 0 ? true : false);
 }
 
 }
