@@ -53,19 +53,12 @@
 	<oauth:resource-details-service
 		id="resourceDetails">
 		<!-- When editing, also see hoot-services/src/main/resources/conf/hoot-services.conf.in -->
-    <!-- oauth:resource id="openStreetMap"
+		<oauth:resource id="openStreetMap"
 			key="4aiqf3gHIWVcKDu0V8Xx6h6I2QYfJ7ClCK8xhj2Z"
 			secret="glOzMrdYh86WbLbMsPP6uXC4gWR4ccDrDdY5LBwj"
 			request-token-url="https://www.openstreetmap.org/oauth/request_token"
 			user-authorization-url="https://www.openstreetmap.org/oauth/authorize"
 			access-token-url="https://www.openstreetmap.org/oauth/access_token"
-      user-authorization-token-param="oauth_token" / -->
-        <oauth:resource id="openStreetMap"
-            key="yyawGlA9IeCxK8eDgkInh3lB9EgGDyXECmlv6es6"
-            secret="1YT1f1aLhIDCloSYkOnwZRfTVH5tl9BIKwQ300eR"
-            request-token-url="http://192.168.33.12:3000/oauth/request_token"
-            user-authorization-url="http://localhost:3000/oauth/authorize"
-            access-token-url="http://192.168.33.12:3000/oauth/access_token"
 			user-authorization-token-param="oauth_token" />
 	</oauth:resource-details-service>
 

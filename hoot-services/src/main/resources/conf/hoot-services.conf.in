@@ -181,8 +181,7 @@ oauthRedirectURL=http://localhost:8080/login.html
 
 # oAuth Provider
 # Also see hoot-services/src/main/resources/security-applicationContext.xml
-#oauthProviderURL=https://api.openstreetmap.org
-oauthProviderURL=http://localhost:3000
+oauthProviderURL=https://api.openstreetmap.org
 
 # oAuth Methods
 oauthPathsUser=/api/0.6/user/details
