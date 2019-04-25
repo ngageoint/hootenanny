@@ -177,10 +177,10 @@ QString Log::getLevelString(WarningLevel l)
 }
 
 void Log::log(WarningLevel level, const QString& str, const QString& filename,
-  const QString& functionName, int lineNumber)
+  const QString& prettyFunction, int lineNumber)
 {
   log(level, string(str.toUtf8().data()), string(filename.toUtf8().data()),
-      string(functionName.toUtf8().data()), lineNumber);
+      string(prettyFunction.toUtf8().data()), lineNumber);
 }
 
 string Log::ellipsisStr(const string& str, uint count)
