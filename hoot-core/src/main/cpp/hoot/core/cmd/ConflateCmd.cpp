@@ -179,6 +179,10 @@ int ConflateCmd::runSimple(QStringList args)
   {
     numTotalTasks += 3;
   }
+  if (isDiffConflate)
+  {
+    numTotalTasks += 2;
+  }
   int currentTask = 1;
   //progress.setReportType(configOptions.getProgressReportingFormat());
   progress.setReportType("text");
@@ -199,6 +203,10 @@ int ConflateCmd::runSimple(QStringList args)
     // Store original IDs for tag diff
     diffConflator.storeOriginalMap(map);
     diffConflator.markInputElements(map);
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false,
+      "Storing original features for tag differential");
+    currentTask++;
   }
 
   // read input 2 - #2
@@ -229,7 +237,7 @@ int ConflateCmd::runSimple(QStringList args)
     stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
     progress.set(
       (float)currentTask / (float)numTotalTasks, "Running", false,
-      "Calculated reference data statistics.");
+      "Calculated reference data statistics");
     currentTask++;
 
     //if (input2 != "")
@@ -275,11 +283,11 @@ int ConflateCmd::runSimple(QStringList args)
     UnifyingConflator conflator;
     conflator.apply(result);    // #6; optional
     stats.append(conflator.getStats());
-    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
-    progress.set(
-      (float)currentTask / (float)numTotalTasks, "Running", false, "Finished conflation");
-    currentTask++;
+    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart())); 
   }
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false, "Finished conflation");
+  currentTask++;
 
   // Apply any user specified operations.
   _updatePostConfigOptionsForAttributeConflation();
@@ -316,13 +324,16 @@ int ConflateCmd::runSimple(QStringList args)
     {
       // Add tag changes to our map
       diffConflator.addChangesToMap(result, pTagChanges);
+      progress.set(
+        (float)currentTask / (float)numTotalTasks, "Running", false, "Adding changes to map");
+      currentTask++;
     }
     IoUtils::saveMap(result, output);   // #9
     OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
-    progress.set(
-      (float)currentTask / (float)numTotalTasks, "Running", false, "Wrote conflated output");
-    currentTask++;
   }
+  progress.set(
+    (float)currentTask / (float)numTotalTasks, "Running", false, "Wrote conflated output");
+  currentTask++;
 
   // Do the tags if we need to
   if (isDiffConflate && diffConflator.conflatingTags())
@@ -373,6 +384,10 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     diffConflator.calculateStats(result, stats);
+    progress.set(
+      (float)currentTask / (float)numTotalTasks, "Running", false,
+      "Calculated differential output statistics");
+    currentTask++;
   }
 
   if (displayStats)
