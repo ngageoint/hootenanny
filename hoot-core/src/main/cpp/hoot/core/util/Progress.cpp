@@ -48,7 +48,7 @@ _percentComplete(0.0),
 _taskStartPercentComplete(0.0),
 _lastPercentComplete(0.0),
 _taskWeight(0.0),
-_state("Pending"),
+_state("PENDING"),
 _jobFinished(false),
 _userMessage("")
 {
@@ -95,7 +95,7 @@ void Progress::set(float percentComplete, QString state, bool jobFinished, QStri
 }
 
 void Progress::setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
-                               QString userMessage)
+                               QString userMessage, bool logMessage)
 {
   // update absolute percent weight
   _lastPercentComplete = _percentComplete;
@@ -104,7 +104,7 @@ void Progress::setFromRelative(float relativePercentComplete, QString state, boo
   _jobFinished = jobFinished;
   _userMessage = userMessage;
   QString msg = getMessage();
-  if (msg != "")
+  if (logMessage && msg != "")
   {
     LOG_STATUS(getMessage());
   }

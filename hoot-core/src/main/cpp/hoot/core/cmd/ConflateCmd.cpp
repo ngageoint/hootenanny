@@ -252,16 +252,14 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
+  // apply any user specified pre-conflate operations
   Progress preOpsProgress("Conflate");
   preOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
   preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.setProgress(preOpsProgress);
-  preOps.apply(map);
-  //progress.set((float)currentTask / (float)numTotalTasks, "Running", false,
-    //"Executing pre-conflation operations...");
-  //NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
-  stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
+  preOps.apply(map);;
+  stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
   currentTask++;
 
@@ -288,10 +286,7 @@ int ConflateCmd::runSimple(QStringList args)
   }
   currentTask++;
 
-  // Apply any user specified operations.
-//  progress.set(
-//    (float)currentTask / (float)numTotalTasks, "Running", false,
-//    "Executing post-conflation operations...");
+  // apply any user specified post-conflate operations
   _updatePostConfigOptionsForAttributeConflation();
   Progress postOpsProgress("Conflate");
   postOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
@@ -299,7 +294,7 @@ int ConflateCmd::runSimple(QStringList args)
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.setProgress(postOpsProgress);
   postOps.apply(map);
-  //NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+  stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
   currentTask++;
 

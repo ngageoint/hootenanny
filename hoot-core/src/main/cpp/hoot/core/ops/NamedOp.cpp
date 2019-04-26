@@ -91,13 +91,21 @@ void NamedOp::apply(OsmMapPtr& map)
 
       if (!_containerOps.contains(s))
       {
-        const QString initMessage = _getInitMessage(s, opCount, statusInfo);
-        LOG_INFO(initMessage);
-        if (_progress.getTaskWeight() != 0.0)
+        LOG_INFO(_getInitMessage(s, opCount, statusInfo));
+      }
+
+      if (_progress.getTaskWeight() != 0.0)
+      {
+        ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+        if (reporter != 0)
+        {
+          reporter->setProgress(_progress);
+        }
+        else
         {
           _progress.setFromRelative(
             (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
-            _getInitMessage2(s, statusInfo));
+            _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
         }
       }
 
@@ -109,12 +117,6 @@ void NamedOp::apply(OsmMapPtr& map)
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
-      }
-
-      ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
-      if (_progress.getTaskWeight() != 0.0 && reporter != 0)
-      {
-        reporter->setProgress(_progress);
       }
 
       t->apply(map);
@@ -135,13 +137,21 @@ void NamedOp::apply(OsmMapPtr& map)
 
       if (!_containerOps.contains(s))
       {
-        QString initMessage = _getInitMessage(s, opCount, statusInfo);
-        LOG_INFO(initMessage);
-        if (_progress.getTaskWeight() != 0.0)
+        LOG_INFO(_getInitMessage(s, opCount, statusInfo));
+      }
+
+      if (_progress.getTaskWeight() != 0.0)
+      {
+        ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+        if (reporter != 0)
+        {
+          reporter->setProgress(_progress);
+        }
+        else
         {
           _progress.setFromRelative(
             (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
-            _getInitMessage2(s, statusInfo));
+            _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
         }
       }
 
@@ -149,12 +159,6 @@ void NamedOp::apply(OsmMapPtr& map)
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
-      }
-
-      ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
-      if (_progress.getTaskWeight() != 0.0 && reporter != 0)
-      {
-        reporter->setProgress(_progress);
       }
 
       map->visitRw(*t);

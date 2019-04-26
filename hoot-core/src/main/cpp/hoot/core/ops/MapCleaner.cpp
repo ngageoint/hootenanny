@@ -44,9 +44,17 @@ MapCleaner::MapCleaner()
 
 void MapCleaner::apply(boost::shared_ptr<OsmMap>& map)
 {
-  //NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
   NamedOp cleaningOps(ConfigOptions().getMapCleanerTransforms());
-  cleaningOps.setProgress(_progress);
+  // This is a bit of hack. MapCleaner is called from the clean command and other places
+  // besides conflate/convert commands, etc, which are the only places we're tracking status for
+  // now. This check will prevent inaccurate status progress from being logged. If at a later
+  // point we want to track status for all calls to the clean command, then the Progress class will
+  // need to be integrated into those spots.
+  if (_progress.getState() == "RUNNING")
+  {
+    _progress.setTaskWeight(1.0 / (float)ConfigOptions().getMapCleanerTransforms().size());
+    cleaningOps.setProgress(_progress);
+  }
   cleaningOps.apply(map);
 }
 

@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * TODO
+ */
 class Progress
 {
 public:
@@ -58,19 +61,19 @@ public:
   // sets the task weight for the next subtask in range of 0...p(x) where p(x) is progress
   // percentage leftover for completing the current overall task
   void setTaskWeight(float taskWeight);
-  void setState(QString state) { _state = state; }
+  void setState(QString state) { _state = state.toUpper(); }
   void setJobFinished(bool jobFinished) { _jobFinished = jobFinished; }
   void setUserMessage(QString userMessage) { _userMessage = userMessage; }
 
   // the task method generally uses this setter
   void set(float percentComplete, QString state, bool jobFinished, QString userMessage);
 
-  // really cool method to do the absolute percent complete from the relative percent;
+  // method to do the absolute percent complete from the relative percent;
   // set from relative values updates the absolute values automatically
   void setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
-                       QString userMessage);
+                       QString userMessage, bool logMessage = true);
 
-protected:
+private:
 
   // source command
   QString _source;
@@ -90,7 +93,6 @@ protected:
 
   bool _jobFinished;
 
-  // resulting message
   QString _userMessage;
 
   QString _toJson() const;
