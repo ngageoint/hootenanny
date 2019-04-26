@@ -73,10 +73,7 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
     return Level::getInfo();
     break;
   case Log::Status:
-    return Level::getInfo();
-    break;
-  case Log::Verbose:
-    return Level::getInfo();
+    return Level::getStatus();
     break;
   case Log::Warn:
     return Level::getWarn();

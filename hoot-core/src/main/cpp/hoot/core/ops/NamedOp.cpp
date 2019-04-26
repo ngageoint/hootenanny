@@ -35,6 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -47,14 +48,13 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
 NamedOp::NamedOp() :
 _conf(&conf())
 {
-  _init();
 }
 
 NamedOp::NamedOp(QStringList namedOps) :
 _conf(&conf()),
 _namedOps(namedOps)
 {
-  _init();
+  LOG_VART(_namedOps);
 }
 
 void NamedOp::setConfiguration(const Settings& conf)
@@ -62,17 +62,41 @@ void NamedOp::setConfiguration(const Settings& conf)
   _conf = &conf;
 }
 
-void NamedOp::_init()
+void NamedOp::_substituteForContainingOps()
 {
-  _containerOps.append("hoot::MapCleaner");
+  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  if (_namedOps.contains(mapCleanerName))
+  {
+    int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);
+    LOG_VART(cleaningOpIndex);
+    const QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
+    LOG_VART(mapCleanerTransforms);
+    for (int i = 0; i < mapCleanerTransforms.size(); i++)
+    {
+      LOG_VART(i);
+      LOG_VART(cleaningOpIndex);
+      LOG_VART(mapCleanerTransforms.at(i));
+      _namedOps.insert(cleaningOpIndex, mapCleanerTransforms.at(i));
+      cleaningOpIndex++;
+    }
+    _namedOps.removeAll(mapCleanerName);
+    LOG_VART(_progress.getTaskWeight());
+    LOG_VART(_progress.getState());
+    if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+    {
+      _progress.setTaskWeight(1.0 / (float)_namedOps.size());
+    }
+    LOG_VART(_namedOps);
+    LOG_VART(_progress.getTaskWeight());
+  }
 }
 
 void NamedOp::apply(OsmMapPtr& map)
 {
   Factory& f = Factory::getInstance();
-
   QElapsedTimer timer;
-  LOG_VARD(_namedOps);
+
+  _substituteForContainingOps();
   int opCount = 1;
   foreach (QString s, _namedOps)
   {
@@ -96,28 +120,16 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      if (!_containerOps.contains(s))
-      {
-        LOG_INFO(_getInitMessage(s, opCount, statusInfo));
-      }
+      LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
-      LOG_VARD(_progress.getTaskWeight());
-      LOG_VARD(_progress.getState());
-      LOG_VARD(_progress.getPercentComplete());
-      ProgressReporter* reporter = 0;
+      LOG_VART(_progress.getTaskWeight());
+      LOG_VART(_progress.getState());
+      LOG_VART(_progress.getPercentComplete());
       if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
-        reporter = dynamic_cast<ProgressReporter*>(t.get());
-        if (reporter != 0)
-        {
-          reporter->setProgress(_progress);
-        }
-        else
-        {
-          _progress.setFromRelative(
-            (float)(opCount - 1) / (float)_namedOps.size()/*_progress.getPercentComplete()*/, "Running", false,
-            _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
-        }
+        _progress.setFromRelative(
+          (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+          _getInitMessage2(s, statusInfo));
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -129,16 +141,6 @@ void NamedOp::apply(OsmMapPtr& map)
       // end TODO
 
       t->apply(map);
-
-//      if (reporter != 0)
-//      {
-//        LOG_VARD(reporter->getPercentComplete());
-//        _progress.setPercentComplete(reporter->getPercentComplete());
-//      }
-//      else
-//      {
-//        _progress.setPercentComplete((float)(opCount - 1) / (float)_namedOps.size());
-//      }
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
@@ -148,28 +150,16 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      if (!_containerOps.contains(s))
-      {
-        LOG_INFO(_getInitMessage(s, opCount, statusInfo));
-      }
+      LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
       LOG_VARD(_progress.getTaskWeight());
       LOG_VARD(_progress.getState());
       LOG_VARD(_progress.getPercentComplete());
-      ProgressReporter* reporter = 0;
       if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
-        reporter = dynamic_cast<ProgressReporter*>(t.get());
-        if (reporter != 0)
-        {
-          reporter->setProgress(_progress);
-        }
-        else
-        {
-          _progress.setFromRelative(
-            (float)(opCount - 1) / (float)_namedOps.size()/*_progress.getPercentComplete()*/, "Running", false,
-            _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
-        }
+        _progress.setFromRelative(
+          (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+          _getInitMessage2(s, statusInfo));
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -181,16 +171,6 @@ void NamedOp::apply(OsmMapPtr& map)
       // end TODO
 
       map->visitRw(*t);
-
-//      if (reporter != 0)
-//      {
-//        LOG_VARD(reporter->getPercentComplete());
-//        _progress.setPercentComplete(reporter->getPercentComplete());
-//      }
-//      else
-//      {
-//        _progress.setPercentComplete((float)(opCount - 1) / (float)_namedOps.size());
-//      }
     }
     else
     {

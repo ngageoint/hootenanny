@@ -44,7 +44,7 @@ public:
   virtual ~ProgressReporter() {}
 
   virtual void setProgress(Progress progress) = 0;
-  virtual float getPercentComplete() const = 0;
+  //virtual float getPercentComplete() const = 0;
 };
 
 }
