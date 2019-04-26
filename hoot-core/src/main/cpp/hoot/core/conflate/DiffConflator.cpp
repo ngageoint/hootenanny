@@ -99,9 +99,16 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   Timer timer;
   _reset();
+  int currentStep = 1;
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
+
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, "Matching features...");
+  }
 
   LOG_DEBUG("\tDiscarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
@@ -142,10 +149,31 @@ void DiffConflator::apply(OsmMapPtr& map)
     (double)_matches.size() / findMatchesTime));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
 
+  currentStep++;
+
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
+    "Storing tag differentials...");
+  }
   _calcAndStoreTagChanges();
+  currentStep++;
+
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    QString message = "Dropping match conflicts";
+    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+    {
+      message += " and snapping roads";
+    }
+    message += "...";
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, message);
+  }
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
@@ -181,6 +209,8 @@ void DiffConflator::apply(OsmMapPtr& map)
   removeRef1Visitor.addCriterion(pTagKeyCrit);
   _pMap->visitRw(removeRef1Visitor);
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+
+  currentStep++;
 }
 
 void DiffConflator::_snapSecondaryRoadsBackToRef()

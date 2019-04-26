@@ -101,8 +101,7 @@ public:
   virtual QString getDescription() const
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
-  virtual void setProgress(Progress progress);
-
+  virtual void setProgress(Progress progress) { _progress = progress; }
   virtual int getNumSteps() const { return 3; }
 
 private:
@@ -118,7 +117,6 @@ private:
   QList<SingleStat> _stats;
   int _taskStatusUpdateInterval;
   Progress _progress;
-  int _numSteps;
 
   void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);

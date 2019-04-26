@@ -63,8 +63,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 UnifyingConflator::UnifyingConflator() :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-  _numSteps(0)
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
@@ -72,8 +71,7 @@ UnifyingConflator::UnifyingConflator() :
 UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-  _numSteps(0)
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -82,13 +80,6 @@ UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThre
 UnifyingConflator::~UnifyingConflator()
 {
   _reset();
-}
-
-void UnifyingConflator::setProgress(Progress progress)
-{
-  _progress = progress;
-  _numSteps = 3;
-  _progress.setTaskWeight(1.0 / (float)(_numSteps * 7));
 }
 
 void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
@@ -147,7 +138,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
   {
     _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)_numSteps, "Running", false, "Matching features...");
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, "Matching features...");
   }
 
   OsmMapWriterFactory::writeDebugMap(map, "before-matching");
@@ -194,7 +185,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
   {
     _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)_numSteps, "Running", false,
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
       "Optimizing feature matches...");
   }
 
@@ -270,7 +261,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
   {
     _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)_numSteps, "Running", false, "Merging feature matches...");
+      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
+      "Merging feature matches...");
   }
 
   // Would it help to sort the matches so the biggest or best ones get merged first?

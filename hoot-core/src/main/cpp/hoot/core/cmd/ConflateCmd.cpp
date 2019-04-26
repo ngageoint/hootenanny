@@ -273,6 +273,8 @@ int ConflateCmd::runSimple(QStringList args)
   conflateProgress.setState("Running");
   if (isDiffConflate)
   {
+    conflateProgress.setTaskWeight(1.0 / (float)(diffConflator.getNumSteps() * numTotalTasks));
+    diffConflator.setProgress(conflateProgress);
     diffConflator.apply(result);
     if (diffConflator.conflatingTags())
     {
@@ -285,7 +287,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     UnifyingConflator conflator;
     conflateProgress.setTaskWeight(1.0 / (float)(conflator.getNumSteps() * numTotalTasks));
-    conflator.setProgress(conflateProgress);    // sets its own task weighting
+    conflator.setProgress(conflateProgress);
     conflator.apply(result);
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart())); 

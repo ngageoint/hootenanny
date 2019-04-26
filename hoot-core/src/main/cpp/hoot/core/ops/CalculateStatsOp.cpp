@@ -109,9 +109,9 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
 }
 
 boost::shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-    const vector<boost::shared_ptr<MatchCreator>>& matchCreators,
-    const QString& matchCreatorName,
-    CreatorDescription::BaseFeatureType& featureType)
+  const vector<boost::shared_ptr<MatchCreator>>& matchCreators,
+  const QString& matchCreatorName,
+  CreatorDescription::BaseFeatureType& featureType)
 {
   for (vector<boost::shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
