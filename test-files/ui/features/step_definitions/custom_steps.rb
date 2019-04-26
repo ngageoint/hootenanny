@@ -912,6 +912,7 @@ Then(/^I wait ([0-9]+) seconds to see "([^"]*)" on the map$/) do |wait, el|
 end
 
 When(/^I click the review item column in the tag table$/) do
+  page.should have_no_css('#processingDiv', :visible => true)
   page.all('td.f1').first.click
 end
 
