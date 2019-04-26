@@ -63,7 +63,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 UnifyingConflator::UnifyingConflator() :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+  _numSteps(0)
 {
   _reset();
 }
@@ -71,7 +72,8 @@ UnifyingConflator::UnifyingConflator() :
 UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+  _numSteps(0)
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -80,6 +82,13 @@ UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThre
 UnifyingConflator::~UnifyingConflator()
 {
   _reset();
+}
+
+void UnifyingConflator::setProgress(Progress progress)
+{
+  _progress = progress;
+  _numSteps = 3;
+  _progress.setTaskWeight(1.0 / (float)_numSteps);
 }
 
 void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
@@ -126,6 +135,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();
+  int currentStep = 1;
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -133,6 +143,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(map);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
+
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)_numSteps, "Running", false, "Matching features...");
+  }
 
   OsmMapWriterFactory::writeDebugMap(map, "before-matching");
   // find all the matches in this map
@@ -172,6 +188,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
   LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
+
+  currentStep++;
+
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)_numSteps, "Running", false,
+      "Optimizing feature matches...");
+  }
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -230,7 +255,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
-    // matches are interrelated by element id
+    // matches are inter-related by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
     vector<set<const Match*, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
@@ -239,6 +264,14 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
   LOG_DEBUG("Match sets count: " << matchSets.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
+
+  currentStep++;
+
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)(currentStep - 1) / (float)_numSteps, "Running", false, "Merging feature matches...");
+  }
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
@@ -274,7 +307,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _replaceElementIds(replaced);
     replaced.clear();
 
-    // Enabling this can result in a lot of files being generated.
+    // Enabling this may result in a lot of files being generated.
 //    if (i % 10 == 0)
 //    {
 //      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
@@ -291,6 +324,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  currentStep++;
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,

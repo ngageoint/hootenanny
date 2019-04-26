@@ -152,7 +152,7 @@ int ConflateCmd::runSimple(QStringList args)
     //output = args[1];
   //}
 
-  const int maxFilePrintLength = 25;
+  const int maxFilePrintLength = 30;
   QString msg =
     "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength) +
     " and writing the output to " + output.right(maxFilePrintLength);
@@ -256,10 +256,9 @@ int ConflateCmd::runSimple(QStringList args)
   // apply any user specified pre-conflate operations
   Progress preOpsProgress("Conflate");
   preOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
-  preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
   preOpsProgress.setState("Running");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
-  preOps.setProgress(preOpsProgress);
+  preOps.setProgress(preOpsProgress);   // sets its own task weighting
   preOps.apply(map);
   stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
@@ -283,7 +282,11 @@ int ConflateCmd::runSimple(QStringList args)
   }
   else
   {
+    Progress conflateProgress("Conflate");
+    conflateProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
+    conflateProgress.setState("Running");
     UnifyingConflator conflator;
+    conflator.setProgress(conflateProgress);    // sets its own task weighting
     conflator.apply(result);
     stats.append(conflator.getStats());
     stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart())); 
@@ -294,10 +297,9 @@ int ConflateCmd::runSimple(QStringList args)
   _updatePostConfigOptionsForAttributeConflation();
   Progress postOpsProgress("Conflate");
   postOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
-  postOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePostOps().size());
   postOpsProgress.setState("Running");
   NamedOp postOps(ConfigOptions().getConflatePostOps());
-  postOps.setProgress(postOpsProgress);
+  postOps.setProgress(postOpsProgress); // sets its own task weighting
   postOps.apply(map);
   stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
