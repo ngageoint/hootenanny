@@ -52,6 +52,7 @@ void MapCleaner::apply(boost::shared_ptr<OsmMap>& map)
   // want to track status for these other calls to the clean command, then the Progress class will
   // need to be properly integrated into those areas.
   LOG_VARD(_progress.getState());
+  LOG_VARD(_progress.getPercentComplete());
   if (_progress.getState() == "RUNNING")
   {
     _progress.setTaskWeight(1.0 / (float)ConfigOptions().getMapCleanerTransforms().size());

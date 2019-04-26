@@ -254,7 +254,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // apply any user specified pre-conflate operations
   Progress preOpsProgress("Conflate");
-  preOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
+  preOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
   preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
   preOpsProgress.setState("Running");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
@@ -294,7 +294,7 @@ int ConflateCmd::runSimple(QStringList args)
   // apply any user specified post-conflate operations
   _updatePostConfigOptionsForAttributeConflation();
   Progress postOpsProgress("Conflate");
-  postOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
+  postOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
   postOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePostOps().size());
   postOpsProgress.setState("Running");
   NamedOp postOps(ConfigOptions().getConflatePostOps());

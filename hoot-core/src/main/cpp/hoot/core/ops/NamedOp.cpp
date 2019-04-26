@@ -103,6 +103,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       LOG_VARD(_progress.getTaskWeight());
       LOG_VARD(_progress.getState());
+      LOG_VARD(_progress.getPercentComplete());
       ProgressReporter* reporter = 0;
       if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
@@ -154,6 +155,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       LOG_VARD(_progress.getTaskWeight());
       LOG_VARD(_progress.getState());
+      LOG_VARD(_progress.getPercentComplete());
       ProgressReporter* reporter = 0;
       if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
