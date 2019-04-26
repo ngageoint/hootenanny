@@ -194,10 +194,4 @@ string Log::ellipsisStr(const string& str, uint count)
   return (str.length() <= count) ? str : ("..." + str.substr(str.length() - count + 3));
 }
 
-string Log::fileNameStr2(const string& str)
-{
-  const QStringList fileNameParts = QString::fromStdString(str).split("/");
-  return fileNameParts[fileNameParts.size() - 1].toStdString();
-}
-
 }

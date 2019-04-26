@@ -138,7 +138,6 @@ public:
 #endif
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
-  static std::string fileNameStr2(const std::string& str);
 
 private:
 

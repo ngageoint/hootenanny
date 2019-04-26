@@ -152,10 +152,9 @@ int ConflateCmd::runSimple(QStringList args)
     //output = args[1];
   //}
 
-  const int maxFilePrintLength = 40;
   QString msg =
-    "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength) +
-    " and writing the output to: " + output.right(maxFilePrintLength);
+    "Conflating " + input1.right(40) + " with " + input2.right(40) + " and writing the output to " +
+     output.right(40);
   if (isDiffConflate)
   {
     msg = msg.prepend("Differentially ");
@@ -186,8 +185,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-    "Loading reference data: " + input1.right(maxFilePrintLength) + "...");
+    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false, "Loading reference data...");
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
                    Status::Unknown1);
@@ -209,8 +207,7 @@ int ConflateCmd::runSimple(QStringList args)
   //if (!input2.isEmpty())
   //{
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-      "Loading secondary data: " + input2.right(maxFilePrintLength) + "...");
+      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false, "Loading secondary data...");
     IoUtils::loadMap(
       map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
@@ -231,7 +228,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     progress.set(
       (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-      "Calculating reference data statistics for: " + input1.right(maxFilePrintLength) + "...");
+      "Calculating reference data statistics...");
     input1Cso.apply(map);
     allStats.append(input1Cso.getStats());
     stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
@@ -241,7 +238,7 @@ int ConflateCmd::runSimple(QStringList args)
     //{
       progress.set(
         (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-        "Calculating secondary data statistics for: " + input2.right(maxFilePrintLength) + "...");
+        "Calculating secondary data statistics...");
       input2Cso.apply(map);
       allStats.append(input2Cso.getStats());
       stats.append(SingleStat("Time to Calculate Stats for Input 2 (sec)",
@@ -274,9 +271,7 @@ int ConflateCmd::runSimple(QStringList args)
   OsmMapPtr result = map;
 
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-    "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength) +
-    "...");
+    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false, "Conflating data...");
   if (isDiffConflate)
   {
     diffConflator.apply(result);
@@ -328,8 +323,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Figure out what to write
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-    "Writing conflated output to: " + output.right(maxFilePrintLength) + "...");
+    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false, "Writing conflated output...");
   if (isDiffConflate && output.endsWith(".osc"))
   {
     diffConflator.writeChangeset(result, output, separateOutput);
@@ -361,7 +355,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     progress.set(
       (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-      "Calculating output statistics for: " + output.right(maxFilePrintLength) + "...");
+      "Calculating output data statistics...");
     CalculateStatsOp outputCso("output map", true);
     outputCso.apply(result);
     QList<SingleStat> outputStats = outputCso.getStats();
@@ -398,7 +392,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     progress.set(
       (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-      "Calculating differential output statistics for: " + output.right(maxFilePrintLength) + "...");
+      "Calculating differential output statistics...");
     diffConflator.calculateStats(result, stats);
     currentTask++;
   }
