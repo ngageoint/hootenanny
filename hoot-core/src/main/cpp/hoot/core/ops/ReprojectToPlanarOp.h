@@ -31,6 +31,7 @@
 // hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -41,7 +42,7 @@ namespace hoot
  *
  * This is compatible with fourpass.
  */
-class ReprojectToPlanarOp : public OsmMapOperation, public Serializable
+class ReprojectToPlanarOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
 {
 public:
 
@@ -58,6 +59,12 @@ public:
   virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Reprojecting map to planar coordinates..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return  "Reprojected map to planar coordinates"; }
 };
 
 }

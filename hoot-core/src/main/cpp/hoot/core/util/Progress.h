@@ -78,25 +78,21 @@ protected:
   // report format (json, text)
   QString _reportType;
 
-  // progress for current task & extra storage variables
+  // progress for current task
   float _percentComplete;
   float _taskStartPercentComplete;
   float _lastPercentComplete;
 
-  // task weight
   float _taskWeight;
 
-  // task's state (Pending, NotRunning, Running, Successful, Failed); TODO: change to enum
-  QString _state;
+  // task's state (Pending, NotRunning, Running, Successful, Failed);
+  QString _state;   //TODO: change to enum
 
-  // task's finish status
   bool _jobFinished;
 
   // resulting message
   QString _userMessage;
 
-  // methods
-  // output JSON version of message
   QString _toJson() const;
   QString _toText() const;
 };

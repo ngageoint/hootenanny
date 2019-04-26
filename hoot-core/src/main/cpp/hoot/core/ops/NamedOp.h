@@ -31,7 +31,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-//#include <hoot/core/util/Progress.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // Qt
 #include <QStringList>
@@ -43,7 +43,7 @@ namespace hoot
  * Applies a list of named operations to the given map. The named operations must implement either
  * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
  */
-class NamedOp : public OsmMapOperation, public Configurable
+class NamedOp : public OsmMapOperation, public Configurable, public ProgressReporter
 {
 public:
 
@@ -51,7 +51,6 @@ public:
 
   NamedOp();
   NamedOp(QStringList namedOps);
-  //NamedOp(QStringList namedOps, Progress progress);
 
   virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
@@ -59,14 +58,21 @@ public:
 
   virtual QString getDescription() const override { return ""; }
 
+  virtual void setProgress(Progress progress) { _progress = progress; }
+
 private:
 
+  void _init();
+
   QString _getInitMessage(const QString& message, int opCount,
-                          boost::shared_ptr<OperationStatusInfo> statusInfo);
+                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
+  QString _getInitMessage2(const QString& message,
+                           boost::shared_ptr<OperationStatusInfo> statusInfo) const;
 
   const Settings* _conf;
   QStringList _namedOps;
-  //Progress _progress;
+  Progress _progress;
+  QStringList _containerOps;
 };
 
 }

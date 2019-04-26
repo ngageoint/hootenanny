@@ -47,6 +47,7 @@ _reportType(ConfigOptions().getProgressReportingFormat()),
 _percentComplete(0.0),
 _taskStartPercentComplete(0.0),
 _lastPercentComplete(0.0),
+_taskWeight(0.0),
 _state("Pending"),
 _jobFinished(false),
 _userMessage("")
@@ -127,7 +128,7 @@ QString Progress::_toText() const
 {
   QString js = "";
     js.append(_source % ": ");
-      js.append(_userMessage % " - ");
+      js.append(_userMessage % " ");
       js.append(QString("%1").arg((int)(_percentComplete * 100.)) % "% complete");
   return js;
 }

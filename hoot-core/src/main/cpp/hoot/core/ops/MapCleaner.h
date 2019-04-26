@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // Qt
 #include <QString>
@@ -41,7 +42,7 @@ namespace hoot
  * A composite class for cleaning maps and prepping them for conflation. This performs operations
  * like splitting intersections, fixing some common errors, etc.
  */
-class MapCleaner : public OsmMapOperation
+class MapCleaner : public OsmMapOperation, public ProgressReporter
 {
 public:
 
@@ -56,6 +57,12 @@ public:
   virtual void apply(boost::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override { return "Cleans map data"; }
+
+  virtual void setProgress(Progress progress) { _progress = progress; }
+
+private:
+
+  Progress _progress;
 };
 
 }

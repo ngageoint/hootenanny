@@ -47,24 +47,24 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
 NamedOp::NamedOp() :
 _conf(&conf())
 {
+  _init();
 }
 
 NamedOp::NamedOp(QStringList namedOps) :
 _conf(&conf()),
 _namedOps(namedOps)
 {
+  _init();
 }
-
-//NamedOp::NamedOp(QStringList namedOps, Progress progress) :
-//_conf(&conf()),
-//_namedOps(namedOps),
-//_progress(progress)
-//{
-//}
 
 void NamedOp::setConfiguration(const Settings& conf)
 {
   _conf = &conf;
+}
+
+void NamedOp::_init()
+{
+  _containerOps.append("hoot::MapCleaner");
 }
 
 void NamedOp::apply(OsmMapPtr& map)
@@ -89,10 +89,18 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      const QString initMessage = _getInitMessage(s, opCount, statusInfo);
-      LOG_INFO(initMessage);
-      //_progress.setFromRelative(
-        //(float)opCount / (float)_namedOps.size(), "Running", false, initMessage);
+      if (!_containerOps.contains(s))
+      {
+        const QString initMessage = _getInitMessage(s, opCount, statusInfo);
+        LOG_INFO(initMessage);
+        if (_progress.getTaskWeight() != 0.0)
+        {
+          _progress.setFromRelative(
+            (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+            _getInitMessage2(s, statusInfo));
+        }
+      }
+
       LOG_DEBUG(
         "\tElement count before operation " << s << ": " <<
         StringUtils::formatLargeNumber(map->getElementCount()));
@@ -101,6 +109,12 @@ void NamedOp::apply(OsmMapPtr& map)
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
+      }
+
+      ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+      if (_progress.getTaskWeight() != 0.0 && reporter != 0)
+      {
+        reporter->setProgress(_progress);
       }
 
       t->apply(map);
@@ -119,13 +133,28 @@ void NamedOp::apply(OsmMapPtr& map)
       boost::shared_ptr<OperationStatusInfo> statusInfo =
         boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      QString initMessage = _getInitMessage(s, opCount, statusInfo);
-      LOG_INFO(initMessage);
+      if (!_containerOps.contains(s))
+      {
+        QString initMessage = _getInitMessage(s, opCount, statusInfo);
+        LOG_INFO(initMessage);
+        if (_progress.getTaskWeight() != 0.0)
+        {
+          _progress.setFromRelative(
+            (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+            _getInitMessage2(s, statusInfo));
+        }
+      }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
+      }
+
+      ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+      if (_progress.getTaskWeight() != 0.0 && reporter != 0)
+      {
+        reporter->setProgress(_progress);
       }
 
       map->visitRw(*t);
@@ -151,7 +180,8 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo)
+QString NamedOp::_getInitMessage(const QString& message, int opCount,
+                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
 {
   QString initMessage =
     QString("Applying operation %1 / %2")
@@ -163,7 +193,22 @@ QString NamedOp::_getInitMessage(const QString& message, int opCount, boost::sha
   }
   else
   {
-    initMessage += ": " + message + " ...";
+    initMessage += ": " + message + "...";
+  }
+  return initMessage;
+}
+
+QString NamedOp::_getInitMessage2(const QString& message,
+                                  boost::shared_ptr<OperationStatusInfo> statusInfo) const
+{
+  QString initMessage;
+  if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+  {
+    initMessage += statusInfo->getInitStatusMessage();
+  }
+  else
+  {
+    initMessage += message + "...";
   }
   return initMessage;
 }

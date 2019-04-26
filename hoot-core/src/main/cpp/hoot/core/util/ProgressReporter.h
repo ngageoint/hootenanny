@@ -22,32 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "MapCleaner.h"
+#ifndef PROGRESS_REPORTER_H
+#define PROGRESS_REPORTER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Progress.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, MapCleaner)
-
-MapCleaner::MapCleaner()
+class ProgressReporter
 {
-}
+public:
 
-void MapCleaner::apply(boost::shared_ptr<OsmMap>& map)
-{
-  //NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
-  NamedOp cleaningOps(ConfigOptions().getMapCleanerTransforms());
-  cleaningOps.setProgress(_progress);
-  cleaningOps.apply(map);
-}
+  virtual ~ProgressReporter() {}
+
+  virtual void setProgress(Progress progress) = 0;
+};
 
 }
+
+#endif // PROGRESS_REPORTER_H

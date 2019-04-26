@@ -252,13 +252,15 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  progress.set((float)currentTask / (float)numTotalTasks, "Running", false,
-    "Executing pre-conflation operations...");
-  //Progress preOpsProgress("Conflate");
-  //preOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
-  //preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
-  //NamedOp preOps(ConfigOptions().getConflatePreOps(), preOpsProgress).apply(map);
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+  Progress preOpsProgress("Conflate");
+  preOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
+  preOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePreOps().size());
+  NamedOp preOps(ConfigOptions().getConflatePreOps());
+  preOps.setProgress(preOpsProgress);
+  preOps.apply(map);
+  //progress.set((float)currentTask / (float)numTotalTasks, "Running", false,
+    //"Executing pre-conflation operations...");
+  //NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
   currentTask++;
@@ -287,12 +289,17 @@ int ConflateCmd::runSimple(QStringList args)
   currentTask++;
 
   // Apply any user specified operations.
-  progress.set(
-    (float)currentTask / (float)numTotalTasks, "Running", false,
-    "Executing post-conflation operations...");
+//  progress.set(
+//    (float)currentTask / (float)numTotalTasks, "Running", false,
+//    "Executing post-conflation operations...");
   _updatePostConfigOptionsForAttributeConflation();
-  LOG_VART(ConfigOptions().getConflatePostOps());
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+  Progress postOpsProgress("Conflate");
+  postOpsProgress.setPercentComplete((float)currentTask / (float)numTotalTasks);
+  postOpsProgress.setTaskWeight(1.0 / (float)ConfigOptions().getConflatePostOps().size());
+  NamedOp postOps(ConfigOptions().getConflatePostOps());
+  postOps.setProgress(postOpsProgress);
+  postOps.apply(map);
+  //NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
   OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
   currentTask++;
 
