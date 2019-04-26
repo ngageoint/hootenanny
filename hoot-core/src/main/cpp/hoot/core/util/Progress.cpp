@@ -136,9 +136,9 @@ QString Progress::_toJson() const
 QString Progress::_toText() const
 {
   QString js = "";
-    js.append(_source % ": ");
-      js.append(_userMessage % " ");
-      js.append(QString("%1").arg((int)(_percentComplete * 100.)) % "% complete");
+  js.append(_source);
+  js.append(" (" % QString("%1").arg((int)(_percentComplete * 100.)) % "%): ");
+  js.append(_userMessage);
   return js;
 }
 
