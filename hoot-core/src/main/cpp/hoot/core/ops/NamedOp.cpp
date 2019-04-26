@@ -62,6 +62,12 @@ void NamedOp::setConfiguration(const Settings& conf)
   _conf = &conf;
 }
 
+void NamedOp::setProgress(Progress progress)
+{
+  _progress = progress;
+  _progress.setTaskWeight(1.0 / (float)_namedOps.size());
+}
+
 void NamedOp::_substituteForContainingOps()
 {
   const QString mapCleanerName = QString::fromStdString(MapCleaner::className());

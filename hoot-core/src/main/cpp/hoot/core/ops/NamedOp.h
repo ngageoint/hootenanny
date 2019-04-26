@@ -58,12 +58,10 @@ public:
 
   virtual QString getDescription() const override { return ""; }
 
-  virtual void setProgress(Progress progress) { _progress = progress; }
-  //virtual float getPercentComplete() const { return _progress.getPercentComplete(); }
+  virtual void setProgress(Progress progress);
 
 private:
 
-  //void _init();
   void _substituteForContainingOps();
 
   QString _getInitMessage(const QString& message, int opCount,
@@ -74,7 +72,6 @@ private:
   const Settings* _conf;
   QStringList _namedOps;
   Progress _progress;
-  //QStringList _containerOps;
 };
 
 }
