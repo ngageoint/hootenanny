@@ -39,6 +39,7 @@ namespace hoot
 class BufferedLineSegmentIntersector
 {
 public:
+
   BufferedLineSegmentIntersector();
 
   /**
