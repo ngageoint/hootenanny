@@ -59,6 +59,7 @@ public:
   virtual QString getDescription() const override { return "Cleans map data"; }
 
   virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual float getPercentComplete() const { return _progress.getPercentComplete(); }
 
 private:
 

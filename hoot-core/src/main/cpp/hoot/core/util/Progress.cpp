@@ -65,10 +65,7 @@ QString Progress::getMessage() const
   {
     msg.append(_toText());
   }
-  else
-  {
-    // do nothing
-  }
+  // do nothing if report type is empty
   return msg;
 }
 
@@ -84,9 +81,14 @@ void Progress::set(float percentComplete, QString state, bool jobFinished, QStri
   _percentComplete = percentComplete;
   // reset the start percent complete value to current value
   _taskStartPercentComplete = percentComplete;
-  _state = state;
+  LOG_VARD(_lastPercentComplete);
+  LOG_VARD(_percentComplete);
+  LOG_VARD(_taskStartPercentComplete);
+
+  _state = state.toUpper();
   _jobFinished = jobFinished;
   _userMessage = userMessage;
+  LOG_VARD(_userMessage);
   QString msg = getMessage();
   if (msg != "")
   {
@@ -100,9 +102,16 @@ void Progress::setFromRelative(float relativePercentComplete, QString state, boo
   // update absolute percent weight
   _lastPercentComplete = _percentComplete;
   _percentComplete = _taskStartPercentComplete + (relativePercentComplete * _taskWeight);
-  _state = state;
+  LOG_VARD(_taskWeight);
+  LOG_VARD(relativePercentComplete);
+  LOG_VARD(_lastPercentComplete);
+  LOG_VARD(_percentComplete);
+  LOG_VARD(_taskStartPercentComplete);
+
+  _state = state.toUpper();
   _jobFinished = jobFinished;
   _userMessage = userMessage;
+  LOG_VARD(_userMessage);
   QString msg = getMessage();
   if (logMessage && msg != "")
   {

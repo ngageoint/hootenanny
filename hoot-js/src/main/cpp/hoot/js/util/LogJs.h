@@ -54,6 +54,8 @@ private:
   static void logTrace(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logDebug(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logInfo(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void status(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logWarn(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logError(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logFatal(const v8::FunctionCallbackInfo<v8::Value>& args);

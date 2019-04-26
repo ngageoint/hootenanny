@@ -76,27 +76,37 @@ void NamedOp::apply(OsmMapPtr& map)
   int opCount = 1;
   foreach (QString s, _namedOps)
   {
+    LOG_VARD(s);
     if (s.isEmpty())
     {
       return;
     }
 
     timer.restart();
+    LOG_DEBUG(
+      "\tElement count before operation " << s << ": " <<
+      StringUtils::formatLargeNumber(map->getElementCount()));
+
+    boost::shared_ptr<OperationStatusInfo> statusInfo;
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+
+      // TODO: move into templated method
 
       if (!_containerOps.contains(s))
       {
         LOG_INFO(_getInitMessage(s, opCount, statusInfo));
       }
 
-      if (_progress.getTaskWeight() != 0.0)
+      LOG_VARD(_progress.getTaskWeight());
+      LOG_VARD(_progress.getState());
+      ProgressReporter* reporter = 0;
+      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
-        ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+        reporter = dynamic_cast<ProgressReporter*>(t.get());
         if (reporter != 0)
         {
           reporter->setProgress(_progress);
@@ -104,14 +114,10 @@ void NamedOp::apply(OsmMapPtr& map)
         else
         {
           _progress.setFromRelative(
-            (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+            (float)(opCount - 1) / (float)_namedOps.size()/*_progress.getPercentComplete()*/, "Running", false,
             _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
         }
       }
-
-      LOG_DEBUG(
-        "\tElement count before operation " << s << ": " <<
-        StringUtils::formatLargeNumber(map->getElementCount()));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -119,30 +125,39 @@ void NamedOp::apply(OsmMapPtr& map)
         c->setConfiguration(*_conf);
       }
 
+      // end TODO
+
       t->apply(map);
 
-      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-          StringUtils::secondsToDhms(timer.elapsed()));
-      }
+//      if (reporter != 0)
+//      {
+//        LOG_VARD(reporter->getPercentComplete());
+//        _progress.setPercentComplete(reporter->getPercentComplete());
+//      }
+//      else
+//      {
+//        _progress.setPercentComplete((float)(opCount - 1) / (float)_namedOps.size());
+//      }
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+
+      // TODO: move into templated method
 
       if (!_containerOps.contains(s))
       {
         LOG_INFO(_getInitMessage(s, opCount, statusInfo));
       }
 
-      if (_progress.getTaskWeight() != 0.0)
+      LOG_VARD(_progress.getTaskWeight());
+      LOG_VARD(_progress.getState());
+      ProgressReporter* reporter = 0;
+      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
-        ProgressReporter* reporter = dynamic_cast<ProgressReporter*>(t.get());
+        reporter = dynamic_cast<ProgressReporter*>(t.get());
         if (reporter != 0)
         {
           reporter->setProgress(_progress);
@@ -150,7 +165,7 @@ void NamedOp::apply(OsmMapPtr& map)
         else
         {
           _progress.setFromRelative(
-            (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
+            (float)(opCount - 1) / (float)_namedOps.size()/*_progress.getPercentComplete()*/, "Running", false,
             _getInitMessage2(s, statusInfo), !_containerOps.contains(s));
         }
       }
@@ -161,14 +176,19 @@ void NamedOp::apply(OsmMapPtr& map)
         c->setConfiguration(*_conf);
       }
 
+      // end TODO
+
       map->visitRw(*t);
 
-      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-          StringUtils::secondsToDhms(timer.elapsed()));
-      }
+//      if (reporter != 0)
+//      {
+//        LOG_VARD(reporter->getPercentComplete());
+//        _progress.setPercentComplete(reporter->getPercentComplete());
+//      }
+//      else
+//      {
+//        _progress.setPercentComplete((float)(opCount - 1) / (float)_namedOps.size());
+//      }
     }
     else
     {
@@ -178,9 +198,15 @@ void NamedOp::apply(OsmMapPtr& map)
     LOG_DEBUG(
       "\tElement count after operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
+    if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
+    {
+      LOG_INFO(
+        "\t" << statusInfo->getCompletedStatusMessage() + " in " +
+        StringUtils::secondsToDhms(timer.elapsed()));
+    }
 
-    OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
     opCount++;
+    OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
   }
 }
 
