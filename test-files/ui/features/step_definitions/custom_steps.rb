@@ -15,8 +15,9 @@ When(/^I click Get Started$/) do
     # In Capybara 0.4+ #find_field raises an error instead of returning nil
     el = nil
   end
-  Capybara.default_max_wait_time = oldTimeout
   el.click unless el.nil?
+  page.should have_no_css('div.shaded', :visible => true)
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I click the "([^"]*)" icon$/) do |cls|
