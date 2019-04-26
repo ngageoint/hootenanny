@@ -50,7 +50,7 @@ class RunDiffCommand extends GrailCommand {
         substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
-        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C GrailDifferentialConflation.conf ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";
+        String command = "hoot conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output --stats";
 
         super.configureCommand(command, substitutionMap, caller);
     }
