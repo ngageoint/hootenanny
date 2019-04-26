@@ -62,12 +62,6 @@ void NamedOp::setConfiguration(const Settings& conf)
   _conf = &conf;
 }
 
-void NamedOp::setProgress(Progress progress)
-{
-  _progress = progress;
-  _progress.setTaskWeight(1.0 / (float)_namedOps.size());
-}
-
 void NamedOp::_substituteForContainingOps()
 {
   const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
@@ -158,9 +152,9 @@ void NamedOp::apply(OsmMapPtr& map)
 
       LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
-      LOG_VARD(_progress.getTaskWeight());
-      LOG_VARD(_progress.getState());
-      LOG_VARD(_progress.getPercentComplete());
+      LOG_VART(_progress.getTaskWeight());
+      LOG_VART(_progress.getState());
+      LOG_VART(_progress.getPercentComplete());
       if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
       {
         _progress.setFromRelative(

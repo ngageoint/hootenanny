@@ -58,7 +58,8 @@ public:
 
   virtual QString getDescription() const override { return ""; }
 
-  virtual void setProgress(Progress progress);
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual int getNumSteps() const { return _namedOps.size(); }
 
 private:
 

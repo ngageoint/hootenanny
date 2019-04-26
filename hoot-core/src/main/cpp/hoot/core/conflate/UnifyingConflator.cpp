@@ -88,7 +88,7 @@ void UnifyingConflator::setProgress(Progress progress)
 {
   _progress = progress;
   _numSteps = 3;
-  _progress.setTaskWeight(1.0 / (float)_numSteps);
+  _progress.setTaskWeight(1.0 / (float)(_numSteps * 7));
 }
 
 void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)

@@ -103,6 +103,8 @@ public:
 
   virtual void setProgress(Progress progress);
 
+  virtual int getNumSteps() const { return 3; }
+
 private:
 
   geos::geom::Envelope _bounds;

@@ -44,6 +44,7 @@ public:
   virtual ~ProgressReporter() {}
 
   virtual void setProgress(Progress progress) = 0;
+  virtual int getNumSteps() const = 0;
 };
 
 }
