@@ -129,7 +129,7 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << getLevelString(level) << " " <<
             ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str <<
             "        \r" << flush;
   }
