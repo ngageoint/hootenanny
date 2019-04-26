@@ -72,7 +72,9 @@ QString Progress::getMessage() const
 void Progress::setTaskWeight(float taskWeight)
 {
   _taskWeight = taskWeight;
+  LOG_VAR(_taskWeight);
   _taskStartPercentComplete = _percentComplete;
+  LOG_VAR(_taskStartPercentComplete);
 }
 
 void Progress::set(float percentComplete, QString state, bool jobFinished, QString userMessage)

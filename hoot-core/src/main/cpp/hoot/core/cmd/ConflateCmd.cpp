@@ -258,6 +258,8 @@ int ConflateCmd::runSimple(QStringList args)
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   Progress preOpsProgress(jobName);
   preOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
+  LOG_VAR(preOps.getNumSteps());
+  LOG_VAR(1.0 / (float)(preOps.getNumSteps() * numTotalTasks));
   preOpsProgress.setTaskWeight(1.0 / (float)(preOps.getNumSteps() * numTotalTasks));
   preOpsProgress.setState("Running");
   preOps.setProgress(preOpsProgress);
