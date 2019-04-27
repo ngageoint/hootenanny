@@ -128,6 +128,7 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 2 (Resolved: 6)"
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 1 (Resolved: 7)"
+    Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Merge"
     Then I wait 30 "seconds" to not see "Please wait while merging review items."
     And I click on "a.next"
