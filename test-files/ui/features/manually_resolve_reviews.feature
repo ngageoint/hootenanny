@@ -120,12 +120,16 @@ Feature: Manually resolve reviews feature
     Then I wait 30 "seconds" to see "Reviews remaining: 5 (Resolved: 3)"
     Then I wait 5 seconds to see "g.activeReviewFeature" on the map
     Then I should see a "g.activeReviewFeature2" on the map
+    Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 4 (Resolved: 4)"
+    Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 3 (Resolved: 5)"
+    Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 2 (Resolved: 6)"
+    Then I wait 30 "seconds" to not see "Please wait while loading missing features."
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 1 (Resolved: 7)"
     Then I wait 30 "seconds" to not see "Please wait while loading missing features."
