@@ -116,6 +116,7 @@ Feature: Manually resolve reviews feature
     Then I should not see "Edit feature: "
     #Click the review against item box
     #Click random feature
+    Then I should not see the "#processingDiv" on the page
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 5 (Resolved: 3)"
     Then I wait 5 seconds to see "g.activeReviewFeature" on the map
