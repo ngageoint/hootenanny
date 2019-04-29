@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -427,6 +426,60 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
 }
 
+std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
+                                                              const QString input,
+                                                              const QStringList layers)
+{
+  std::vector<float> progressWeights;
+  LOG_VART(layers.size());
+
+  // process the completion status report information first
+  long featureCountTotal = 0;
+  int undefinedCounts = 0;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_VART(layers[i]);
+    // simply open the file, get the meta feature count value, and close
+    int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
+    LOG_VART(featuresPerLayer);
+    progressWeights.push_back((float)featuresPerLayer);
+    // cover the case where no feature count available efficiently
+    if (featuresPerLayer /*== -1*/ < 1) undefinedCounts++;
+    else featureCountTotal += featuresPerLayer;
+  }
+  LOG_VART(featureCountTotal);
+  LOG_VART(undefinedCounts);
+
+  int definedCounts = layers.size() - undefinedCounts;
+  LOG_VART(definedCounts);
+
+  // determine weights for 3 possible cases
+  if (undefinedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
+  }
+  else if (definedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+  else
+  {
+    for (int i = 0; i<layers.size(); i++)
+      if (progressWeights[i] == -1)
+      {
+        progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
+      }
+    // reset featurecount total and recalculate
+    featureCountTotal = 0;
+    for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
+    LOG_VART(progressWeights);
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+
+  LOG_VART(progressWeights);
+  return progressWeights;
+}
+
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
   LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
@@ -442,15 +495,28 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   }
   reader.setTranslationFile(_translation);
 
-  const int numTasks = 3;
+  // The ordering for these ogr2osm ops matters.
+  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  {
+    _convertOps.prepend("hoot::BuildingPartMergeOp");
+  }
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  {
+    _convertOps.prepend("hoot::MergeNearbyNodes");
+  }
+
+  int numTasks = 2;
+  if (_convertOps.size() > 0)
+  {
+    numTasks++;
+  }
   int currentTask = 1;
   const float taskWeight = 1.0 / (float)numTasks;
 
-  Progress progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight);
   for (int i = 0; i < inputs.size(); i++)
   {
     QString input = inputs[i].trimmed();
-    LOG_VART(input);
+    LOG_VARD(input);
 
     if (input.trimmed().isEmpty())
     {
@@ -470,7 +536,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       layers = reader.getFilteredLayerNames(input);
       layers.sort();
     }
-    LOG_VART(layers);
+    LOG_VARD(layers);
 
     if (layers.size() == 0)
     {
@@ -485,59 +551,24 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       logWarnCount++;
     }
 
-    // process the completion status report information first
-    long featureCountTotal = 0;
-    int undefinedCounts = 0;
-    std::vector<float> progressWeights;
-    for (int i = 0; i < layers.size(); i++)
-    {
-      LOG_VART(layers[i]);
-      // simply open the file, get the meta feature count value, and close
-      int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
-      progressWeights.push_back((float)featuresPerLayer);
-      // cover the case where no feature count available efficiently
-      if (featuresPerLayer == -1) undefinedCounts++;
-      else featureCountTotal += featuresPerLayer;
-    }
-
-    int definedCounts = layers.size() - undefinedCounts;
-
-    // determine weights for 3 possible cases
-    if (undefinedCounts == layers.size())
-    {
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
-    }
-    else if(definedCounts == layers.size())
-    {
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-    }
-    else
-    {
-      for (int i = 0; i<layers.size(); i++)
-        if (progressWeights[i] == -1)
-        {
-          progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
-        }
-      // reset featurecount total and recalculate
-      featureCountTotal = 0;
-      for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-    }
-
+    const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      PROGRESS_STATUS(
+      PROGRESS_INFO(
         "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
-      progress.setTaskWeight(progressWeights[i]);
-      reader.read(input, layers[i], map, progress);
+      LOG_VART(progressWeights[i]);
+      reader.setProgress(
+        Progress(JOB_SOURCE, "Running", (float)i / (float)layers.size(), progressWeights[i]));
+      reader.read(input, layers[i], map);
     }
   }
 
   if (map->getNodes().size() == 0)
   {
-    progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
-    throw HootException("After translation the map is empty. Aborting.");
+    const QString msg = "After translation the map is empty. Aborting.";
+    _progress.set(1.0, "Failed", true, msg);
+    throw HootException(msg);
   }
 
   LOG_INFO(
@@ -546,20 +577,14 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   currentTask++;
 
   MapProjector::projectToPlanar(map);
-  //the ordering for these ogr2osm ops may matter
-  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  if (_convertOps.size() > 0)
   {
-    _convertOps.prepend("hoot::BuildingPartMergeOp");
+    NamedOp convertOps(_convertOps);
+    convertOps.setProgress(
+      Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
+    convertOps.apply(map);
+    currentTask++;
   }
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
-  {
-    _convertOps.prepend("hoot::MergeNearbyNodes");
-  }
-  NamedOp convertOps(_convertOps);
-  convertOps.setProgress(
-    Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
-  convertOps.apply(map);
-  currentTask++;
 
   _progress.set(
     (float)(currentTask - 1) / (float)numTasks, "Running", false,

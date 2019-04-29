@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // Qt
 #include <QHash>
@@ -56,7 +57,7 @@ class Settings;
  * This class is broken out into an internal and external class to avoid issues with Python's
  * include file approach.
  */
-class OgrReader : public PartialOsmMapReader
+class OgrReader : public PartialOsmMapReader, public ProgressReporter
 {
 public:
 
@@ -89,9 +90,8 @@ public:
    * @param layer Read only from this layer. If no layer is specified then read from all geometry
    *  layers.
    * @param map Put what we read in this map.
-   * @param progress Report progress to this object.
    */
-  void read(QString path, QString layer, OsmMapPtr map, Progress progress);
+  void read(QString path, QString layer, OsmMapPtr map);
 
   void setDefaultCircularError(Meters circularError);
 
@@ -109,7 +109,7 @@ public:
 
   virtual ElementPtr readNextElement();
 
-  Progress streamGetProgress() const;
+  //Progress streamGetProgress() const;
 
   virtual void close();
 
@@ -133,9 +133,15 @@ public:
   //leaving this empty for the time being
   virtual QString supportedFormats() { return ""; }
 
+  virtual void setProgress(Progress progress);
+  //TODO: fix
+  virtual int getNumSteps() const { return 0; }
+
 protected:
 
   OgrReaderInternal* _d;
+
+  Progress _progress;
 };
 
 }

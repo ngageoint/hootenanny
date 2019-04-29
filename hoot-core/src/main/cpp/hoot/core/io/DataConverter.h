@@ -33,6 +33,7 @@
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QStringList>
@@ -122,6 +123,9 @@ private:
                          ElementCachePtr cachePtr,
                          QQueue<ElementPtr> &workQ);
   void _transToOgrMT(QString input, QString output);
+
+  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString input,
+                                                 const QStringList layers);
 };
 
 }

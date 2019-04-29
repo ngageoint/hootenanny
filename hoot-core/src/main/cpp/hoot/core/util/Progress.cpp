@@ -46,12 +46,18 @@ _source(source),
 _reportType(ConfigOptions().getProgressReportingFormat()),
 _percentComplete(percentComplete),
 _taskStartPercentComplete(percentComplete),
-_lastPercentComplete(0.0),
+_lastPercentComplete(percentComplete),
 _taskWeight(taskWeight),
 _state(jobState.toUpper()),
 _jobFinished(false),
 _userMessage("")
 {
+  LOG_VART(_source);
+  LOG_VART(_percentComplete);
+  LOG_VART(_taskStartPercentComplete);
+  LOG_VART(_lastPercentComplete);
+  LOG_VART(_taskWeight);
+  LOG_VART(_state);
 }
 
 QString Progress::getMessage() const
