@@ -99,11 +99,11 @@ class UpdateDbCommand implements InternalCommand {
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
             long userId = (params.getUser() != null) ? params.getUser().getId() : 1;
-
+          //TODO: replace with call to create folder
             createQuery().insert(folders)
                     .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                             folders.parentId)
-                    .values(folderId, now, params.getFolder(), true, userId, parentId)
+                    .values(folderId, now, params.getFolder(), false, userId, parentId)
                     .execute();
         }
         catch (Exception e) {
