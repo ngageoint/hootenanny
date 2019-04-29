@@ -41,14 +41,14 @@ using namespace std;
 namespace hoot
 {
 
-Progress::Progress(QString source) :
+Progress::Progress(QString source, QString jobState, float percentComplete, float taskWeight) :
 _source(source),
 _reportType(ConfigOptions().getProgressReportingFormat()),
-_percentComplete(0.0),
-_taskStartPercentComplete(0.0),
+_percentComplete(percentComplete),
+_taskStartPercentComplete(percentComplete),
 _lastPercentComplete(0.0),
-_taskWeight(0.0),
-_state("PENDING"),
+_taskWeight(taskWeight),
+_state(jobState.toUpper()),
 _jobFinished(false),
 _userMessage("")
 {

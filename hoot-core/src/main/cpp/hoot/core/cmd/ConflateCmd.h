@@ -35,6 +35,9 @@
 // Standard
 #include <fstream>
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -46,6 +49,8 @@ class ConflateCmd : public BaseCommand
 public:
 
   static std::string className() { return "hoot::ConflateCmd"; }
+
+  static const QString JOB_SOURCE;
 
   ConflateCmd();
 

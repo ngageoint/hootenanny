@@ -85,6 +85,7 @@ class DataConverter : public Configurable
 public:
 
   static int logWarnCount;
+  static const QString JOB_SOURCE;
 
   DataConverter();
 

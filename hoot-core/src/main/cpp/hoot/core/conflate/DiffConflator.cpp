@@ -93,6 +93,15 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
+void DiffConflator::_updateProgress(const int currentStep, const QString message)
+{
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), "Running", false, message);
+  }
+}
+
 void DiffConflator::apply(OsmMapPtr& map)
 {
   LOG_INFO("Calculating differential output...");
@@ -104,11 +113,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Store the map - we might need it for tag diff later.
   _pMap = map;
 
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-  {
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, "Matching features...");
-  }
+  _updateProgress(currentStep - 1, "Matching features...");
 
   LOG_DEBUG("\tDiscarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
@@ -154,26 +159,17 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-  {
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
-    "Storing tag differentials...");
-  }
+  _updateProgress(currentStep - 1, "Storing tag differentials...");
   _calcAndStoreTagChanges();
   currentStep++;
 
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  QString message = "Dropping match conflicts";
+  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
-    QString message = "Dropping match conflicts";
-    if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
-    {
-      message += " and snapping roads";
-    }
-    message += "...";
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, message);
+    message += " and snapping roads";
   }
+  message += "...";
+  _updateProgress(currentStep - 1, message);
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.

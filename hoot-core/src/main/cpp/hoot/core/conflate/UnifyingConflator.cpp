@@ -122,6 +122,15 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
   }
 }
 
+void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
+{
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), "Running", false, message);
+  }
+}
+
 void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
@@ -135,11 +144,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-  {
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false, "Matching features...");
-  }
+  _updateProgress(currentStep - 1, "Matching features...");
 
   OsmMapWriterFactory::writeDebugMap(map, "before-matching");
   // find all the matches in this map
@@ -182,12 +187,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-  {
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
-      "Optimizing feature matches...");
-  }
+  _updateProgress(currentStep - 1, "Optimizing feature matches...");
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -258,12 +258,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-  {
-    _progress.setFromRelative(
-      (float)(currentStep - 1) / (float)getNumSteps(), "Running", false,
-      "Merging feature matches...");
-  }
+  _updateProgress(currentStep - 1, "Merging feature matches...");
 
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912

@@ -55,6 +55,8 @@
 namespace hoot
 {
 
+const QString DataConverter::JOB_SOURCE = "Convert";
+
 void elementTranslatorThread::run()
 {
   //  Create an isolate for the thread
@@ -184,9 +186,9 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
-  //_progress.setSource("Convert");
-  //_progress.setReportType("text");
-  //_progress.setState("Running");
+  _progress.setSource(JOB_SOURCE);
+  _progress.setReportType("text");
+  _progress.setState("Running");
 
   LOG_INFO("Converting " << inputs.join(", ").right(50) << " to " << output.right(50) << "...");
 
@@ -377,7 +379,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
-    //_progress.set(0.0, "Running", false, "Loading map: " + input.right(25) + "...");
+    _progress.set(0.0, "Running", false, "Loading map: " + input.right(25) + "...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 

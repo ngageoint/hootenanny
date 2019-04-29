@@ -43,6 +43,9 @@
 // tgs
 #include <tgs/HashMap.h>
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -246,6 +249,8 @@ private:
   void _removeMatches(const Status& status);
 
   void _snapSecondaryRoadsBackToRef();
+
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

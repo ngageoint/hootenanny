@@ -41,7 +41,8 @@ class Progress
 {
 public:
 
-  Progress(QString source = "");
+  Progress(QString source = "", QString jobState = "PENDING", float percentComplete = 0.0,
+           float taskWeight = 0.0);
 
   QString getSource() const { return _source; }
   QString getReportType() const { return _reportType; }
