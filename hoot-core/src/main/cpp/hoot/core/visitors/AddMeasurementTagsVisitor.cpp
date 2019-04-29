@@ -103,7 +103,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
       }
 
       // gather all valid areas and their roles to calculate total area
-      if(_addArea && pWay->isClosedArea())
+      if (_addArea && pWay->isClosedArea())
       {
         double area = pPoly->getArea();
 

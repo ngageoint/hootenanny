@@ -65,6 +65,9 @@ public:
 
   // Command function to process a filtered element
   virtual bool process(const ElementPtr& pElement, OsmMap* pMap) = 0;
+
+  // Command function called after processing all individual elements
+  virtual void processFinalize(boost::shared_ptr<OsmMap>& ) {}
 };
 
 /*

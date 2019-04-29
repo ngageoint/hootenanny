@@ -78,6 +78,9 @@ void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
     _geometryModifierVisitor.setActionDesc(actionDesc);
     actionDesc.pAction->parseArguments( actionDesc.arguments );
     map->visitRw(_geometryModifierVisitor);
+
+    // finalize processing
+    actionDesc.pAction->processFinalize(map);
   }
 
   // update operation status info
