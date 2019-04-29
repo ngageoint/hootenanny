@@ -1113,18 +1113,13 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     f = 0;
 
     _count++;
-    if (_count % 1000 == 0)
-    {
-      PROGRESS_INFO(
-        "\tRead: " << StringUtils::formatLargeNumber(_count) << " / " <<
-        StringUtils::formatLargeNumber(_featureCount) << " features from layer: " <<
-        _layerName.toLatin1().data());
-    }
-
-    if (progress.getState() != "Pending")
+    if (progress.getState() != "Pending" && _count % 1000 == 0)
     {
       progress.setFromRelative(
-        (double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
+        (float)_count / (float)_featureCount, "Running", false,
+        "Read " + StringUtils::formatLargeNumber(_count) + " / " +
+        StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
+        _layerName.toLatin1().data(), true);
     }
   }
 }
@@ -1341,7 +1336,7 @@ Progress OgrReaderInternal::streamGetProgress() const
 
   const float floatCount = _streamFeatureCount;
   const float percentComplete = floatCount / _featureCount * 100;
-  streamProgress.setPercentComplete( percentComplete );
+  streamProgress.setPercentComplete(percentComplete);
 
   return streamProgress;
 }

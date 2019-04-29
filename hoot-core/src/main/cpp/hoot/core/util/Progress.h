@@ -72,7 +72,7 @@ public:
   // method to do the absolute percent complete from the relative percent;
   // set from relative values updates the absolute values automatically
   void setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
-                       QString userMessage);
+                       QString userMessage, bool logAsProgress = false);
 
 private:
 

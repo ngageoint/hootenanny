@@ -159,7 +159,7 @@ int ConflateCmd::runSimple(QStringList args)
     //output = args[1];
   //}
 
-  const int maxFilePrintLength = 30;
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
     "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength) +
     " and writing the output to " + output.right(maxFilePrintLength);
@@ -167,7 +167,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     msg = msg.prepend("Differentially ");
   }
-  LOG_INFO(msg);
+  LOG_STATUS(msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
@@ -176,17 +176,24 @@ int ConflateCmd::runSimple(QStringList args)
   Progress progress(JOB_SOURCE);
   // The number of steps here must be updated as you add/remove conflation steps (don't count
   // tasks which you pass in the progress).
-  _numTotalTasks = 7;
+  _numTotalTasks = 5;
   if (displayStats)
   {
     _numTotalTasks += 3;
   }
   if (isDiffConflate)
   {
-    _numTotalTasks += 1;
+    _numTotalTasks++;
+  }
+  if (ConfigOptions().getConflatePreOps().size() > 0)
+  {
+    _numTotalTasks++;
+  }
+  if (ConfigOptions().getConflatePostOps().size() > 0)
+  {
+    _numTotalTasks++;
   }
   int currentTask = 1;
-  //progress.setState("Running");
 
   // read input 1
   progress.set(
@@ -259,14 +266,17 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  // apply any user specified pre-conflate operations
-  NamedOp preOps(ConfigOptions().getConflatePreOps());
-  preOps.setProgress(
-    Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
-  preOps.apply(map);
-  stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
-  currentTask++;
+  if (ConfigOptions().getConflatePreOps().size() > 0)
+  {
+    // apply any user specified pre-conflate operations
+    NamedOp preOps(ConfigOptions().getConflatePreOps());
+    preOps.setProgress(
+      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+    preOps.apply(map);
+    stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
+    OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
+    currentTask++;
+  }
 
   OsmMapPtr result = map;
 
@@ -293,15 +303,18 @@ int ConflateCmd::runSimple(QStringList args)
   }
   currentTask++;
 
-  // apply any user specified post-conflate operations
   _updatePostConfigOptionsForAttributeConflation();
-  NamedOp postOps(ConfigOptions().getConflatePostOps());
-  postOps.setProgress(
-    Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
-  postOps.apply(map);
-  stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
-  currentTask++;
+  if (ConfigOptions().getConflatePostOps().size() > 0)
+  {
+    // apply any user specified post-conflate operations
+    NamedOp postOps(ConfigOptions().getConflatePostOps());
+    postOps.setProgress(
+      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+    postOps.apply(map);
+    stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
+    OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
+    currentTask++;
+  }
 
   // doing this after the conflate post ops run, since some invalid reviews are removed by them
   progress.set(

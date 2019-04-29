@@ -210,13 +210,14 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
   return filteredInputStream;
 }
 
-void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps)
+void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps,
+                             Progress progress)
 {
-  stream(QStringList(input), out, convertOps);
+  stream(QStringList(input), out, convertOps, progress);
 }
 
 void ElementStreamer::stream(const QStringList inputs, const QString out,
-                             const QStringList convertOps)
+                             const QStringList convertOps, Progress progress)
 {
   QElapsedTimer timer;
   timer.start();
@@ -231,7 +232,15 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
-    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
+    const QString message = "Streaming data conversion from " + in + " to " + out + "...";
+    if (progress.getTaskWeight() != 0.0 && progress.getState() == "RUNNING")
+    {
+      progress.setFromRelative((float)i / (float)inputs.size(), "Running", false, message);
+    }
+    else
+    {
+      LOG_STATUS(message);
+    }
 
     boost::shared_ptr<OsmMapReader> reader =
       OsmMapReaderFactory::createReader(

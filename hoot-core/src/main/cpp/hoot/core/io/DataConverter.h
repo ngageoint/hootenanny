@@ -86,6 +86,7 @@ public:
 
   static int logWarnCount;
   static const QString JOB_SOURCE;
+  static const int MAX_FILE_PRINT_LENGTH;
 
   DataConverter();
 
@@ -106,7 +107,9 @@ private:
   bool _colsArgSpecified;
   int _featureReadLimit;
   QStringList _convertOps;
+
   Progress _progress;
+  int _printLengthMax;
 
   void _validateInput(const QStringList inputs, const QString output);
 
