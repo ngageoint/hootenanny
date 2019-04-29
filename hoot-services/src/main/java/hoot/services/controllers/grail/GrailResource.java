@@ -369,7 +369,7 @@ public class GrailResource {
                     workflow.add(applyTagChange);
                 }
                 else {
-                    String msg = "Error during differential push! Could not find differential file ";
+                    String msg = "Error during differential push! Could not find differential tags file ";
                     throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
                 }
             }
