@@ -127,8 +127,8 @@ Feature: OSM/TDS Switcher
         # And I click the "div.label" with text "Built-up Area (AL020)"
         # And I should see a "path.tag-landuse-built_up_area" on the map
 
-        # # Save the features
-        # When I press "Save"
-        # Then I click the "save-button" button
-        # Then I click the "trash" button
-        # And I accept the alert
+        # Save the features
+        When I press "Save"
+        Then I click the "save-button" button
+        Then I click the "trash" button
+        And I accept the alert
