@@ -124,17 +124,17 @@ public final class HootProperties {
     private static final String OSMAPI_DB_HOST;
     private static final String OSMAPI_DB_PORT;
 
-    public static final String MAIN_OSMAPI_PULL_URL;
-    public static final String MAIN_OSMAPI_CAPABILITIES_URL;
+    public static final String PUBLIC_OSMAPI_PULL_URL;
+    public static final String PUBLIC_OSMAPI_CAPABILITIES_URL;
 
-    public static final String MAIN_OVERPASS_URL;
+    public static final String PUBLIC_OVERPASS_URL;
 
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
     public static final String RAILSPORT_CAPABILITIES_URL;
 
-    private static final String MAIN_OSMAPI_URL;
-    private static final String MAIN_OSMAPI_VERSION;
+    private static final String PUBLIC_OSMAPI_URL;
+    private static final String PUBLIC_OSMAPI_VERSION;
 
     private static final String RAILSPORT_PROTOCOL;
     private static final String RAILSPORT_HOST;
@@ -288,13 +288,13 @@ public final class HootProperties {
         OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
 
         // The base URL for pulling OSM data
-        MAIN_OSMAPI_URL = "${MAIN_OSMAPI_URL}";
-        MAIN_OSMAPI_VERSION = "${MAIN_OSMAPI_VERSION}";
-        MAIN_OSMAPI_PULL_URL = MAIN_OSMAPI_URL + "/api/" + MAIN_OSMAPI_VERSION;
-        MAIN_OSMAPI_CAPABILITIES_URL = MAIN_OSMAPI_URL + "/api/capabilities";
+        PUBLIC_OSMAPI_URL = "${PUBLIC_OSMAPI_URL}";
+        PUBLIC_OSMAPI_VERSION = "${PUBLIC_OSMAPI_VERSION}";
+        PUBLIC_OSMAPI_PULL_URL = PUBLIC_OSMAPI_URL + "/api/" + PUBLIC_OSMAPI_VERSION;
+        PUBLIC_OSMAPI_CAPABILITIES_URL = PUBLIC_OSMAPI_URL + "/api/capabilities";
 
         // The URL for the main Overpass server
-        MAIN_OVERPASS_URL = "${MAIN_OVERPASS_URL}";
+        PUBLIC_OVERPASS_URL = "${PUBLIC_OVERPASS_URL}";
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";

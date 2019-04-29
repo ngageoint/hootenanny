@@ -27,7 +27,7 @@
 package hoot.services.controllers.grail;
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.MAIN_OVERPASS_URL;
+import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
@@ -195,7 +195,7 @@ public class GrailResource {
         overpassParams.setBounds(bbox);
         overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
         overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
-        overpassParams.setPullUrl(MAIN_OVERPASS_URL);
+        overpassParams.setPullUrl(PUBLIC_OVERPASS_URL);
 
         jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         jobInfo.put("jobid:SourceOSM", jobId);
@@ -482,9 +482,16 @@ public class GrailResource {
     }
 
     /**
-     * Pull the OSM data for a bounding box.abd put it in the DB
+     * Pull the remote data for a bounding box and write
+     * to Hoot map datasets
      *
-     * This is not good but it works for a proof of concept
+     * Remote data may be OSM API or Overpass API
+     * This implementation uses the public Overpass API
+     * and a configured private OSM Rails port API
+     *
+     * The purpose of conflating these datasets is to update
+     * a private OSM instance that has diverged from the public OSM
+     * with private changes.
      *
      * POST hoot-services/grail/pullosmtodb?BBOX=left,bottom,right,top&DEBUG_LEVEL=<error,info,debug,verbose,trace>
      *        left is the longitude of the left (west) side of the bounding box
@@ -540,7 +547,7 @@ public class GrailResource {
         overpassParams.setUser(user);
         overpassParams.setBounds(reqParams.getBounds());
         overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        overpassParams.setPullUrl(MAIN_OVERPASS_URL);
+        overpassParams.setPullUrl(PUBLIC_OVERPASS_URL);
 
         List<Command> workflow = new LinkedList<>();
 
