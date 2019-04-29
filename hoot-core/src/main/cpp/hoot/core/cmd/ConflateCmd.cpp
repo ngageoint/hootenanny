@@ -66,6 +66,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
+ConflateCmd::ConflateCmd() :
+_numTotalTasks(0)
+{
+}
+
 void ConflateCmd::printStats(const QList<SingleStat>& stats)
 {
   QString sep = "\t";
@@ -170,14 +175,14 @@ int ConflateCmd::runSimple(QStringList args)
   Progress progress(jobName);
   // The number of steps here must be updated as you add/remove conflation steps (don't count
   // tasks which you pass in the progress).
-  int numTotalTasks = 7;
+  _numTotalTasks = 7;
   if (displayStats)
   {
-    numTotalTasks += 3;
+    _numTotalTasks += 3;
   }
   if (isDiffConflate)
   {
-    numTotalTasks += 1;
+    _numTotalTasks += 1;
   }
   int currentTask = 1;
   progress.setReportType("text");
@@ -185,7 +190,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+    _getJobPercentComplete(currentTask - 1), "Running", false,
     "Loading reference map: " + input1.right(maxFilePrintLength) + "...");
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
@@ -197,7 +202,7 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // Store original IDs for tag diff
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+      _getJobPercentComplete(currentTask - 1), "Running", false,
       "Storing original features for tag differential...");
     diffConflator.storeOriginalMap(map);
     diffConflator.markInputElements(map);
@@ -208,7 +213,7 @@ int ConflateCmd::runSimple(QStringList args)
   //if (!input2.isEmpty())
   //{
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+      _getJobPercentComplete(currentTask - 1), "Running", false,
       "Loading secondary map: " + input2.right(maxFilePrintLength) + "...");
     IoUtils::loadMap(
       map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
@@ -229,7 +234,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (displayStats)
   {
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+      _getJobPercentComplete(currentTask - 1), "Running", false,
       "Calculating reference statistics for: " + input1.right(maxFilePrintLength) + "...");
     input1Cso.apply(map);
     allStats.append(input1Cso.getStats());
@@ -239,7 +244,7 @@ int ConflateCmd::runSimple(QStringList args)
     //if (input2 != "")
     //{
       progress.set(
-        (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+        _getJobPercentComplete(currentTask - 1), "Running", false,
         "Calculating secondary data statistics for: " + input2.right(maxFilePrintLength) + "...");
       input2Cso.apply(map);
       allStats.append(input2Cso.getStats());
@@ -257,10 +262,8 @@ int ConflateCmd::runSimple(QStringList args)
   // apply any user specified pre-conflate operations
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   Progress preOpsProgress(jobName);
-  preOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
-  LOG_VAR(preOps.getNumSteps());
-  LOG_VAR(1.0 / (float)(preOps.getNumSteps() * numTotalTasks));
-  preOpsProgress.setTaskWeight(1.0 / (float)(preOps.getNumSteps() * numTotalTasks));
+  preOpsProgress.setPercentComplete(_getJobPercentComplete(currentTask - 1));
+  preOpsProgress.setTaskWeight(_getTaskWeight());
   preOpsProgress.setState("Running");
   preOps.setProgress(preOpsProgress);
   preOps.apply(map);
@@ -271,11 +274,11 @@ int ConflateCmd::runSimple(QStringList args)
   OsmMapPtr result = map;
 
   Progress conflateProgress(jobName);
-  conflateProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
+  conflateProgress.setPercentComplete(_getJobPercentComplete(currentTask - 1));
   conflateProgress.setState("Running");
   if (isDiffConflate)
   {
-    conflateProgress.setTaskWeight(1.0 / (float)(diffConflator.getNumSteps() * numTotalTasks));
+    conflateProgress.setTaskWeight(_getTaskWeight());
     diffConflator.setProgress(conflateProgress);
     diffConflator.apply(result);
     if (diffConflator.conflatingTags())
@@ -288,7 +291,7 @@ int ConflateCmd::runSimple(QStringList args)
   else
   {
     UnifyingConflator conflator;
-    conflateProgress.setTaskWeight(1.0 / (float)(conflator.getNumSteps() * numTotalTasks));
+    conflateProgress.setTaskWeight(_getTaskWeight());
     conflator.setProgress(conflateProgress);
     conflator.apply(result);
     stats.append(conflator.getStats());
@@ -300,8 +303,8 @@ int ConflateCmd::runSimple(QStringList args)
   _updatePostConfigOptionsForAttributeConflation();
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   Progress postOpsProgress(jobName);
-  postOpsProgress.setPercentComplete((float)(currentTask - 1) / (float)numTotalTasks);
-  postOpsProgress.setTaskWeight(1.0 / (float)(postOps.getNumSteps() * numTotalTasks));
+  postOpsProgress.setPercentComplete(_getJobPercentComplete(currentTask - 1));
+  postOpsProgress.setTaskWeight(_getTaskWeight());
   postOpsProgress.setState("Running");
   postOps.setProgress(postOpsProgress);
   postOps.apply(map);
@@ -311,8 +314,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // doing this after the conflate post ops run, since some invalid reviews are removed by them
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
-    "Counting feature reviews...");
+    _getJobPercentComplete(currentTask - 1), "Running", false, "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
@@ -324,7 +326,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Figure out what to write
   progress.set(
-    (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+    _getJobPercentComplete(currentTask - 1), "Running", false,
     "Writing conflated output: " + output.right(maxFilePrintLength) + "...");
   if (isDiffConflate && output.endsWith(".osc"))
   {
@@ -356,7 +358,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (displayStats)
   {
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+      _getJobPercentComplete(currentTask - 1), "Running", false,
       "Calculating output data statistics for: " + output.right(maxFilePrintLength) + "...");
     CalculateStatsOp outputCso("output map", true);
     outputCso.apply(result);
@@ -393,7 +395,7 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     progress.set(
-      (float)(currentTask - 1) / (float)numTotalTasks, "Running", false,
+      _getJobPercentComplete(currentTask - 1), "Running", false,
       "Calculating differential output statistics for: " + output.right(maxFilePrintLength) +
       "...");
     diffConflator.calculateStats(result, stats);
@@ -425,6 +427,16 @@ int ConflateCmd::runSimple(QStringList args)
     " and secondary: " + input2.right(maxFilePrintLength));
 
   return 0;
+}
+
+float ConflateCmd::_getTaskWeight() const
+{
+  return 1.0 / (float)_numTotalTasks;
+}
+
+float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
+{
+  return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
 void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()

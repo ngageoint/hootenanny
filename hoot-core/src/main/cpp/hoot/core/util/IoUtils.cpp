@@ -113,7 +113,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
   if (OgrReader::isReasonablePath(justPath))
   {
     OgrReader reader;
-    Progress progress("OsmUtils");
+    Progress progress("LoadMap");
     reader.setDefaultStatus(defaultStatus);
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
   }

@@ -54,9 +54,9 @@ NamedOp::NamedOp(QStringList namedOps) :
 _conf(&conf()),
 _namedOps(namedOps)
 {
-  LOG_VAR(_namedOps);
+  LOG_VART(_namedOps);
   _substituteForContainingOps();
-  LOG_VAR(_namedOps);
+  LOG_VART(_namedOps);
 }
 
 void NamedOp::setConfiguration(const Settings& conf)
@@ -93,11 +93,6 @@ void NamedOp::apply(OsmMapPtr& map)
 {
   Factory& f = Factory::getInstance();
   QElapsedTimer timer;
-
-//  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
-//  {
-//    _progress.setTaskWeight(1.0 / (float)_namedOps.size());
-//  }
 
   int opCount = 1;
   foreach (QString s, _namedOps)

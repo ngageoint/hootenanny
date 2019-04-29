@@ -191,6 +191,7 @@ private:
     hoot::Log::getInstance().progress((level), ss_.str(), __FILE__, "", __LINE__); \
   }}
 
+#define PROGRESS_STATUS(str) { PROGRESS_LEVEL(hoot::Log::Status, str) }
 #define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
 #define PROGRESS_DEBUG(str) { PROGRESS_LEVEL(hoot::Log::Debug, str) }
 #define PROGRESS_TRACE(str) { PROGRESS_LEVEL(hoot::Log::Trace, str) }

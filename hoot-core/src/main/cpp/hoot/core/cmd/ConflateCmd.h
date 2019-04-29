@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::ConflateCmd"; }
 
-  ConflateCmd() {}
+  ConflateCmd();
 
   virtual QString getName() const { return "conflate"; }
 
@@ -60,7 +60,12 @@ public:
 
 private:
 
+  int _numTotalTasks;
+
   void _updatePostConfigOptionsForAttributeConflation();
+
+  float _getJobPercentComplete(const int currentTaskNum) const;
+  float _getTaskWeight() const;
 };
 
 }

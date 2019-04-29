@@ -42,7 +42,6 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
@@ -184,6 +183,10 @@ void DataConverter::setConfiguration(const Settings& conf)
 void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
+
+  //_progress.setSource("Convert");
+  //_progress.setReportType("text");
+  //_progress.setState("Running");
 
   LOG_INFO("Converting " << inputs.join(", ").right(50) << " to " << output.right(50) << "...");
 
@@ -374,10 +377,17 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
+    //_progress.set(0.0, "Running", false, "Loading map: " + input.right(25) + "...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
 
-    NamedOp(_convertOps).apply(map);
+    //Progress convertOpsProgress(jobName);
+    //convertOpsProgress.setPercentComplete(1.0 / 3.0);
+    //convertOpsProgress.setState("Running");
+    NamedOp convertOps(_convertOps);
+    //convertOpsProgress.setTaskWeight(1.0 / (float)(convertOps.getNumSteps() * 3.0));
+    //convertOps.setProgress(convertOpsProgress);
+    convertOps.apply(map);
 
     QElapsedTimer timer;
     timer.start();

@@ -32,6 +32,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QStringList>
@@ -104,6 +105,7 @@ private:
   bool _colsArgSpecified;
   int _featureReadLimit;
   QStringList _convertOps;
+  Progress _progress;
 
   void _validateInput(const QStringList inputs, const QString output);
 
