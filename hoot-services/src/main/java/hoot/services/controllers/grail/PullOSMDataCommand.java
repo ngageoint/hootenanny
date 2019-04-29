@@ -57,7 +57,7 @@ class PullOSMDataCommand extends GrailCommand {
                     ") is too large. It must be less than " + maxBboxArea + " degrees");
         }
 
-        // NOTE: This is for MapEdit!
+        // NOTE: This is for Private Rails Port API!
         // String fullUrl = params.getPullUrl() + "/map?bbox=" + boundingBox.toServicesString();
         String fullUrl = params.getPullUrl() + "/mapfull?bbox=" + boundingBox.toServicesString();
 

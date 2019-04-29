@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * Used for constructing a PullOverpassCommand object that will be used to pull MapEdit data
+ * Used for constructing a PullOverpassCommand
  */
 @Component
 class PullOverpassCommandFactory {

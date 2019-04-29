@@ -114,7 +114,7 @@ public class GrailResource {
     public GrailResource() {}
 
     /**
-     * Pull the OSM and Mapedit data for a bounding box and run differential on it
+     * Pull the Public Overpass and Private Rails Port data for a bounding box and run differential on it
      *
      * Takes in a json object
      * POST hoot-services/grail/createdifferential
@@ -287,7 +287,8 @@ public class GrailResource {
     }
 
     /**
-     * Pushes the specified differential to MapEdit
+     * Pushes the specified differential changeset back to the
+     * reference dataset API
      *
      * Takes in a json object
      * POST hoot-services/grail/differentialpush
@@ -296,7 +297,7 @@ public class GrailResource {
      *   //the job id. We make the directory for the differential with the name of the jobid
      *   "folder" : "grail_8e8c4681-ead9-4c27-aa2e-80746d627523",
      *
-     *   //boolean if the user wants to apply the tags when pushing to mapedit
+     *   //boolean if the user wants to apply the tags when pushing to reference API
      *   "APPLY_TAGS" : true
      * }
      *
@@ -391,7 +392,8 @@ public class GrailResource {
     }
 
     /**
-     * Runs changeset-derive and pushes the result to MapEdit
+     * Runs changeset-derive and pushes the result back to the reference
+     * dataset API
      *
      * Takes in a json object
      * POST hoot-services/grail/conflatepush
