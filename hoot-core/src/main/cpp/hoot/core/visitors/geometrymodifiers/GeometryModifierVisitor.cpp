@@ -42,28 +42,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, GeometryModifierVisitor)
 void GeometryModifierVisitor::visit(const ElementPtr& pElement)
 {
   if (_actionDesc.pAction == NULL) return;
-  int filterSize = _actionDesc.filter.size();
-  if (filterSize == 0) return;
 
   _numProcessed++;
 
   // apply _actionDesc filter
-  Tags& tags = pElement->getTags();
-
-  int matches = 0;
-
-  foreach (QString filterKey, _actionDesc.filter.keys())
-  {
-    foreach (QString tagKey, tags.keys())
-    {
-      if (tagKey == filterKey && tags[tagKey] == _actionDesc.filter[filterKey])
-      {
-        matches++;
-      }
-    }
-  }
-
-  if (matches == filterSize)
+  if (_actionDesc.filter.isSatisfied(pElement))
   {
     if (_actionDesc.pAction->processElement(pElement, _pMap))
     {

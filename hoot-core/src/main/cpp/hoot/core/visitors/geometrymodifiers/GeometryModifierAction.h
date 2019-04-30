@@ -27,6 +27,8 @@
 #ifndef GEOMETRYMODIFIERACTION_H
 #define GEOMETRYMODIFIERACTION_H
 
+// Hoot
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -86,9 +88,8 @@ struct GeometryModifierActionDesc
   // Command name
   QString command;
 
-  // Node tag key and value strings that must be present and matching
-  // for the node to be included in the processing.
-  QHash<QString, QString> filter;
+  // TagAdvancedCriterion for filtering (see FeatureFiltering.asciidoc)
+  TagAdvancedCriterion filter;
 
   // Argument name and value specific to each command.
   QHash<QString, QString> arguments;

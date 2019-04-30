@@ -153,9 +153,20 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
 
 void GeometryModifierOp::_parseFilter(GeometryModifierActionDesc& actionDesc, bpt::ptree ptree)
 {
-  foreach (bpt::ptree::value_type data, ptree)
+  // turn the filter part of the rules file entry back to a json string
+  std::stringstream stringStream;
+  bpt::json_parser::write_json(stringStream, ptree);
+  QString jsonFilter = QString::fromStdString(stringStream.str());
+
+  // create a TagAdvancedCriterion for filtering from the json string
+  try
   {
-    actionDesc.filter[QString::fromStdString(data.first)] = QString::fromStdString(data.second.data());
+    actionDesc.filter = TagAdvancedCriterion(jsonFilter);
+  }
+  catch (const HootException& e)
+  {
+    QString exceptionMsg = QString(e.what());
+    throw HootException("Invalid filter for action '" + actionDesc.command + "' in " + _rulesFileName + ": '" + exceptionMsg + "'");
   }
 }
 
