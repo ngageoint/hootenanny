@@ -68,7 +68,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
       {
         LOG_VARD(critName);
         ElementCriterionPtr crit =
-          boost::shared_ptr<ElementCriterion>(
+          std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
         addCriterion(crit);
         Configurable* c = dynamic_cast<Configurable*>(crit.get());

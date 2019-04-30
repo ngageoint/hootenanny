@@ -59,7 +59,7 @@ public:
 
 private:
 
-  QString _getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo);
+  QString _getInitMessage(const QString& message, int opCount, std::shared_ptr<OperationStatusInfo> statusInfo);
 
   const Settings* _conf;
   QStringList _namedOps;

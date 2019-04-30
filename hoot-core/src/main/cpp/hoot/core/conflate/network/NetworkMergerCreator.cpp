@@ -115,7 +115,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         mergers.push_back(
           new HighwayTagOnlyMerger(
             pairs,
-            boost::shared_ptr<PartialNetworkMerger>(
+            std::shared_ptr<PartialNetworkMerger>(
               new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()))));
       }
     }
@@ -139,7 +139,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
           mergers.push_back(
             new HighwayTagOnlyMerger(
               larger->getMatchPairs(),
-              boost::shared_ptr<PartialNetworkMerger>(
+              std::shared_ptr<PartialNetworkMerger>(
                 new PartialNetworkMerger(
                   larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
                   larger->getNetworkDetails()))));
@@ -165,7 +165,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
             mergers.push_back(
               new HighwayTagOnlyMerger(
                 largest->getMatchPairs(),
-                boost::shared_ptr<PartialNetworkMerger>(
+                std::shared_ptr<PartialNetworkMerger>(
                   new PartialNetworkMerger(
                     largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
                     largest->getNetworkDetails()))));

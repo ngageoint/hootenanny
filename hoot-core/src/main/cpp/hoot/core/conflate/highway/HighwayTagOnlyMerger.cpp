@@ -49,9 +49,10 @@ HighwaySnapMerger()
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                                            std::shared_ptr<PartialNetworkMerger> networkMerger) :
-_performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-_networkMerger(networkMerger)
+  HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
+  _performBridgeGeometryMerging(
+    ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+  _networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
