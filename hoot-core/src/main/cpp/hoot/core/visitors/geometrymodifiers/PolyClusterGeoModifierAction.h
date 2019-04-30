@@ -29,6 +29,9 @@
 
 #include "GeometryModifierAction.h"
 
+// Geos
+#include <geos/geom/Polygon.h>
+
 namespace hoot
 {
 
@@ -41,11 +44,14 @@ public:
   virtual QList<QString> getParameterNames() const override { return QList<QString> { }; }
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) override;
+  virtual void processStart(boost::shared_ptr<OsmMap>& ) override;
+  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
   virtual void processFinalize(boost::shared_ptr<OsmMap>& pMap) override;
 
 private:
   QList<WayPtr> _ways;
+
+  void _generateClusters(QList<boost::shared_ptr<geos::geom::Polygon>>& geoms);
 
 };
 

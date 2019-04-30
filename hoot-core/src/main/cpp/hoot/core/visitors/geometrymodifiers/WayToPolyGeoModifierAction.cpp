@@ -43,7 +43,7 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToPolyGeoModifierAction)
 const QString WayToPolyGeoModifierAction::WIDTH_TAG_PARAM = "width_tag_m";
 const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m";
 
-bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap)
+bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process Ways
   if (pElement->getElementType() != ElementType::Way) return false;

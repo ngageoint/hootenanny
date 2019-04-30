@@ -45,7 +45,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToIntersectionGeoModifier)
 
-bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* pMap)
+bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process ways
   if (pElement->getElementType() != ElementType::Way) return false;

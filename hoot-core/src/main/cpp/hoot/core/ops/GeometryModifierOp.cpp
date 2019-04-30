@@ -77,6 +77,11 @@ void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
     LOG_DEBUG("Processing geometry modifier " + actionDesc.command + "...");
     _geometryModifierVisitor.setActionDesc(actionDesc);
     actionDesc.pAction->parseArguments( actionDesc.arguments );
+
+    // start processing
+    actionDesc.pAction->processStart(map);
+
+    // process elements with the visitor
     map->visitRw(_geometryModifierVisitor);
 
     // finalize processing

@@ -34,7 +34,6 @@
 #include <hoot/core/util/CoordinateExt.h>
 
 // Geos
-#include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryFactory.h>
 
 using namespace geos::geom;
@@ -48,7 +47,12 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
 {
 }
 
-bool PolyClusterGeoModifierAction::process( const ElementPtr& pElement, OsmMap* )
+void PolyClusterGeoModifierAction::processStart(boost::shared_ptr<OsmMap>& )
+{
+  _ways.clear();
+}
+
+bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, OsmMap* )
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
@@ -66,11 +70,23 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
   boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   ElementConverter elementConverter(pMap);
 
+  QList<shared_ptr<Polygon>> geoms;
+
   foreach (WayPtr pWay, _ways)
   {
     shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
     pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(pPoly.get()));
+
+    geoms.push_back(pPoly);
+
   }
+
+  _generateClusters(geoms);
+
+
+
+
+
 
   Geometry* pHull = pCombinedPoly->convexHull();
 
@@ -81,16 +97,28 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
   pDebugWay->getTags()["Test"] = "Debug";
   pMap->addElement(pDebugWay);
 
-  for (size_t i = 0; i < pHullCoords->size(); i++ )
+  for (size_t i = 0; i < pHullCoords->size(); i++)
   {
     Coordinate pos = pHullCoords->getAt(i);
     NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
     pDebugWay->addNode(pNode->getId());
     pMap->addElement(pNode);
   }
-
-
 }
 
+void PolyClusterGeoModifierAction::_generateClusters(QList<shared_ptr<Polygon>>& geoms)
+{
+  foreach (shared_ptr<Polygon> inner, geoms)
+  {
+    foreach (shared_ptr<Polygon> outer, geoms)
+    {
+      if (inner != outer)
+      {
+
+      }
+    }
+  }
+
+}
 
 }

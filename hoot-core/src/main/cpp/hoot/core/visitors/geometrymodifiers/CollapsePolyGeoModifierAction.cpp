@@ -49,7 +49,7 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 const QString CollapsePolyGeoModifierAction::MAX_AREA_PARAM = "max_area_in_m";
 const QString CollapsePolyGeoModifierAction::MAX_LENGTH_PARAM = "max_length_in_m";
 
-bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap )
+bool CollapsePolyGeoModifierAction::processElement( const ElementPtr& pElement, OsmMap* pMap )
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
