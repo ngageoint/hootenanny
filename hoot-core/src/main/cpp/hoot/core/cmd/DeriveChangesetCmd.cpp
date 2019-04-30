@@ -164,8 +164,8 @@ public:
     currentTaskNum++;
 
     progress.set(
-      1.0, Progress::JobState::Successful, false, "Changeset written to: ..." +
-      output.right(maxFilePrintLength));
+      1.0, Progress::JobState::Successful,
+      "Changeset written to: ..." + output.right(maxFilePrintLength));
 
     return 0;
   }

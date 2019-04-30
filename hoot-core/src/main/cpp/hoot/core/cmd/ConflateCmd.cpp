@@ -410,7 +410,7 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   progress.set(
-    1.0, Progress::JobState::Successful, true,
+    1.0, Progress::JobState::Successful,
     "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
     " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
     output.right(maxFilePrintLength));

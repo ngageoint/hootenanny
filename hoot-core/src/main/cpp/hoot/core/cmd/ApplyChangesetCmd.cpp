@@ -119,7 +119,6 @@ public:
 
       progress.set(
         1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
-        false,
         "Changeset(s) applied to: ..." + printableUrl.toString().right(maxFilePrintLength));
 
       //  Write out the failed changeset if there is one

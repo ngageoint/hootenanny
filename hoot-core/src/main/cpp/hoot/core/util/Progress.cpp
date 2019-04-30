@@ -50,7 +50,6 @@ _taskStartPercentComplete(percentComplete),
 _lastPercentComplete(percentComplete),
 _taskWeight(taskWeight),
 _jobState(jobState),
-_jobFinished(false),
 _userMessage("")
 {
   LOG_VART(_source);
@@ -72,20 +71,12 @@ QString Progress::_getMessage() const
   return msg;
 }
 
-//void Progress::setTaskWeight(float taskWeight)
-//{
-//  _taskWeight = taskWeight;
-//  LOG_VART(_taskWeight);
-//  _taskStartPercentComplete = _percentComplete;
-//  LOG_VART(_taskStartPercentComplete);
-//}
-
 void Progress::set(float percentComplete, QString userMessage)
 {
-  set(percentComplete, _jobState, _jobFinished, userMessage);
+  set(percentComplete, _jobState, userMessage);
 }
 
-void Progress::set(float percentComplete, JobState jobState, bool jobFinished, QString userMessage)
+void Progress::set(float percentComplete, JobState jobState, QString userMessage)
 {
   _lastPercentComplete = _percentComplete;
   _percentComplete = percentComplete;
@@ -96,7 +87,6 @@ void Progress::set(float percentComplete, JobState jobState, bool jobFinished, Q
   LOG_VART(_taskStartPercentComplete);
 
   _jobState = jobState;
-  _jobFinished = jobFinished;
   _userMessage = userMessage;
   LOG_VART(_userMessage);
   const QString msg = _getMessage();
@@ -112,7 +102,7 @@ void Progress::setFromRelative(float relativePercentComplete, QString userMessag
   setFromRelative(relativePercentComplete, userMessage, logAsProgress);
 }
 
-void Progress::setFromRelative(float relativePercentComplete, JobState jobState, bool jobFinished,
+void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
                                QString userMessage, bool logAsProgress)
 {
   // update absolute percent weight
@@ -125,7 +115,6 @@ void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
   LOG_VART(_taskStartPercentComplete);
 
   _jobState = jobState;
-  _jobFinished = jobFinished;
   _userMessage = userMessage;
   LOG_VART(_userMessage);
   const QString msg = _getMessage();
@@ -142,24 +131,10 @@ void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
   }
 }
 
-//QString Progress::jobStateToString(JobState jobState) const
-//{
-//  switch (jobState)
-//  {
-//    case JobState::Pending:
-//      return "Pending";
-//    case JobState::NotRunning:
-//      return "Not Running";
-//    case JobState::Running:
-//      return "Running";
-//    case JobState::Successful:
-//      return "Successful";
-//    case JobState::Failed:
-//      return "Failed";
-//    default:
-//      throw IllegalArgumentException(QString("Unknown (%1)").arg(jobState));
-//  }
-//}
+bool Progress::getJobFinished() const
+{
+  return _jobState == JobState::Successful || _jobState == JobState::Failed;
+}
 
 QString Progress::_toText() const
 {

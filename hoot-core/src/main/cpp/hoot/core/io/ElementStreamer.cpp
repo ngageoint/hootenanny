@@ -238,7 +238,7 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
     if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
     {
       progress.setFromRelative(
-        (float)i / (float)inputs.size(), Progress::JobState::Running, false, message);
+        (float)i / (float)inputs.size(), Progress::JobState::Running, message);
     }
     else
     {

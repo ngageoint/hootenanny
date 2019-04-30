@@ -54,68 +54,65 @@ public:
            float taskWeight = 0.0);
 
   /**
+   * Logs a progress status message
    *
-   *
-   * @param percentComplete
-   * @param state
-   * @param jobFinished
-   * @param userMessage
+   * @param percentComplete completion percentage of the job
+   * @param state the job's state
+   * @param userMessage descriptive message for the job
    */
-  void set(float percentComplete, JobState state, bool jobFinished, QString userMessage);
+  void set(float percentComplete, JobState state, QString userMessage);
 
   /**
+   * Logs a progress status message
    *
-   *
-   * @param percentComplete
-   * @param userMessage
+   * @param percentComplete completion percentage of the job
+   * @param userMessage descriptive message for the job
    */
   void set(float percentComplete, QString userMessage);
 
-  // method to do the absolute percent complete from the relative percent;
-  // set from relative values updates the absolute values automatically
   /**
+   * Logs a progress status message as a child subtask of a job
    *
-   *
-   * @param relativePercentComplete
-   * @param state
-   * @param jobFinished
-   * @param userMessage
-   * @param logAsProgress
+   * @param relativePercentComplete the starting completion percentage point the subtask should
+   * calculate its completion percentage from
+   * @param state the job's state
+   * @param userMessage whether the job has completed or not
+   * @param logAsProgress if true; uses status logging which allows for re-uses the same output
+   * line in the log display
    */
-  void setFromRelative(float relativePercentComplete, JobState state, bool jobFinished,
-                       QString userMessage, bool logAsProgress = false);
+  void setFromRelative(float relativePercentComplete, JobState state, QString userMessage,
+                       bool logAsProgress = false);
 
   /**
+   * Logs a progress status message as a child subtask of a job
    *
-   *
-   * @param relativePercentComplete
-   * @param userMessage
-   * @param logAsProgress
+   * @param relativePercentComplete the starting completion percentage point the subtask should
+   * calculate its completion percentage from
+   * @param userMessage whether the job has completed or not
+   * @param logAsProgress if true; uses status logging which allows for re-uses the same output
+   * line in the log display
    */
   void setFromRelative(float relativePercentComplete, QString userMessage,
                        bool logAsProgress = false);
 
-  //QString getSource() const { return _source; }
-  //QString getReportType() const { return _reportType; }
+  /**
+   * Determines if a job is finished
+   *
+   * @return true if the job is finished; false otherwise
+   */
+  bool getJobFinished() const;
+
   float getPercentComplete() const { return _percentComplete; }
   float getTaskWeight() const { return _taskWeight; }
   JobState getState() const { return _jobState; }
-  bool getJobFinished() const { return _jobFinished; }
-  //QString getUserMessage() const { return _userMessage; }
 
   void setSource(QString source) { _source = source; }
-  //void setReportType(QString reportType) { _reportType = reportType.toLower(); }
-  //void setPercentComplete(float percentComplete) { _percentComplete = percentComplete; }
-  // sets the task weight for the next subtask in range of 0...p(x) where p(x) is progress
-  // percentage leftover for completing the current overall task
-  //void setTaskWeight(float taskWeight);
   void setState(JobState state) { _jobState = state; }
-  //void setJobFinished(bool jobFinished) { _jobFinished = jobFinished; }
-  //void setUserMessage(QString userMessage) { _userMessage = userMessage; }
-
-  //QString jobStateToString(JobState jobState) const;
 
 private:
+
+  // unique ID of the job; currently only applicable when jobs use the Hoot API DB as a data source
+  QString _jobId;
 
   // type of job; set at the command level
   QString _source;
@@ -133,8 +130,6 @@ private:
   float _taskWeight;
 
   JobState _jobState;
-
-  bool _jobFinished;
 
   QString _userMessage;
 

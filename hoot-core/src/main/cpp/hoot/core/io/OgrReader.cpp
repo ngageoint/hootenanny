@@ -1129,7 +1129,7 @@ void OgrReaderInternal::read(OsmMapPtr map)
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
       _progress.setFromRelative(
-        (float)_count / (float)_featureCount, Progress::JobState::Running, false,
+        (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +
         StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
         _layerName.toLatin1().data(), true);

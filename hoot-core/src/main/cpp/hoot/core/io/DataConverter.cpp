@@ -217,7 +217,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   }
 
   _progress.set(
-    1.0, Progress::JobState::Successful, true,
+    1.0, Progress::JobState::Successful,
     "Converted ..." + inputs.join(", ").right(_printLengthMax) + " to: ..." +
     output.right(_printLengthMax));
 }
@@ -581,7 +581,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   if (map->getNodes().size() == 0)
   {
     const QString msg = "After translation the map is empty. Aborting.";
-    _progress.set(1.0, Progress::JobState::Failed, true, msg);
+    _progress.set(1.0, Progress::JobState::Failed, msg);
     throw HootException(msg);
   }
 
@@ -676,7 +676,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
-        (float)i / (float)inputs.size(), Progress::JobState::Running, false,
+        (float)i / (float)inputs.size(), Progress::JobState::Running,
         "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
       IoUtils::loadMap(
         map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),

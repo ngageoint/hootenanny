@@ -100,7 +100,7 @@ void DiffConflator::_updateProgress(const int currentStep, const QString message
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
   {
     _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, false, message);
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
   }
 }
 
