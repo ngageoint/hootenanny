@@ -109,8 +109,6 @@ public:
 
   virtual ElementPtr readNextElement();
 
-  //Progress streamGetProgress() const;
-
   virtual void close();
 
   virtual bool isSupported(QString url);

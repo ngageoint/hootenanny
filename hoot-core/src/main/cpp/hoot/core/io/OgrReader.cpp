@@ -138,8 +138,6 @@ public:
 
   boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  //Progress streamGetProgress() const;
-
 protected:
 
   Meters _defaultCircularError;
@@ -156,7 +154,6 @@ protected:
   OGRCoordinateTransformation* _transform;
   boost::shared_ptr<OGRSpatialReference> _wgs84;
   boost::shared_ptr<ScriptTranslator> _translator;
-  //long _streamFeatureCount;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -252,7 +249,6 @@ protected:
     {
       _addElement(_map->getWay(it->first));
     }
-
   }
 
 private:
@@ -508,11 +504,6 @@ boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
   return _d->getProjection();
 }
 
-//Progress OgrReader::streamGetProgress() const
-//{
-//  return _d->streamGetProgress();
-//}
-
 int OgrReaderInternal::logWarnCount = 0;
 
 OgrReaderInternal::OgrReaderInternal()
@@ -527,7 +518,6 @@ OgrReaderInternal::OgrReaderInternal()
   _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _limit = -1;
   _featureCount = 0;
-  //_streamFeatureCount = 0;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
   _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
@@ -1296,8 +1286,8 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ( (_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelations().end()) )
+  if ((_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelations().end()))
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
@@ -1333,8 +1323,6 @@ void OgrReaderInternal::populateElementMap()
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-
-  //_streamFeatureCount++;
 }
 
 boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
@@ -1347,17 +1335,6 @@ boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 
   return wgs84;
 }
-
-//Progress OgrReaderInternal::streamGetProgress() const
-//{
-//  Progress streamProgress("OGRReader");
-
-//  const float floatCount = _streamFeatureCount;
-//  const float percentComplete = floatCount / _featureCount * 100;
-//  streamProgress.setPercentComplete(percentComplete);
-
-//  return streamProgress;
-//}
 
 QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)
 {

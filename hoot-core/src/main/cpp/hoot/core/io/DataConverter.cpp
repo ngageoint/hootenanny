@@ -487,6 +487,9 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   QElapsedTimer timer;
   timer.start();
 
+  _progress.set(
+    0.0, "Running", false, "Loading maps: " + inputs.join(",").right(_printLengthMax) + "...");
+
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
   if (_featureReadLimit > 0)
@@ -559,7 +562,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
         "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
       LOG_VART(progressWeights[i]);
       reader.setProgress(
-        Progress(JOB_SOURCE, "Running", (float)i / (float)layers.size(), progressWeights[i]));
+        Progress(
+          JOB_SOURCE, "Running", (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
       reader.read(input, layers[i], map);
     }
   }
