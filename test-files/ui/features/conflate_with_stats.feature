@@ -20,6 +20,7 @@ Feature: Conflate feature with stats
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "AllDataTypesMergedCucumber"
     And I wait 30 "seconds" to not see "Please wait while panning to review item."
+    Then I should not see the "#processingDiv" on the page
     Then I click the "info" button
     And I wait 5 seconds
     When I press "Statistics"
