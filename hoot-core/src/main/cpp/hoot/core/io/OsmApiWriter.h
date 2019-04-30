@@ -129,7 +129,7 @@ public:
   /**
    * @see ProgressReporter
    */
-  virtual int getNumSteps() const { return 0; } // N/A for now
+  virtual unsigned int getNumSteps() const { return 1; }
 
 private:
   /**

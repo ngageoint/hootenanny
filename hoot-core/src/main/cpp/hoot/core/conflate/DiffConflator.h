@@ -177,12 +177,12 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool separateOutput);
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
   virtual void setProgress(Progress progress) { _progress = progress; }
-  virtual int getNumSteps() const { return 3; }
+  virtual unsigned int getNumSteps() const { return 3; }
 
 private:
 

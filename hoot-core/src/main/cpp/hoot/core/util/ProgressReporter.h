@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Simple interface for reporting job status from commands
  */
 class ProgressReporter
 {
@@ -43,8 +43,20 @@ public:
 
   virtual ~ProgressReporter() {}
 
+  /**
+   * Allows for passing in progress info for status updates.
+   *
+   * @param progress progress info; A copy initialized to the most recent progress state is passed
+   * in to avoid maintaining progress with the same information across the entire application.
+   */
   virtual void setProgress(Progress progress) = 0;
-  virtual int getNumSteps() const = 0;
+
+  /**
+   * The number of job task steps performed by the implementer related to status progress reporting
+   *
+   * @return number of job steps for the progress task
+   */
+  virtual unsigned int getNumSteps() const = 0;
 };
 
 }

@@ -95,10 +95,12 @@ DiffConflator::~DiffConflator()
 
 void DiffConflator::_updateProgress(const int currentStep, const QString message)
 {
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
   {
     _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), "Running", false, message);
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, false, message);
   }
 }
 
@@ -490,7 +492,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   return pDeriver;
 }
 
-void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool separateOutput)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
   // Write a changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);

@@ -233,9 +233,12 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   {
     const QString in = inputs.at(i);
     const QString message = "Streaming data conversion from " + in + " to " + out + "...";
-    if (progress.getTaskWeight() != 0.0 && progress.getState() == "RUNNING")
+    // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+    // just an empty progress object, and we shouldn't log progress.
+    if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
     {
-      progress.setFromRelative((float)i / (float)inputs.size(), "Running", false, message);
+      progress.setFromRelative(
+        (float)i / (float)inputs.size(), Progress::JobState::Running, false, message);
     }
     else
     {

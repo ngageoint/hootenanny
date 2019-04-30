@@ -105,7 +105,7 @@ public:
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
   virtual void setProgress(Progress progress) { _progress = progress; }
-  virtual int getNumSteps() const { return 3; }
+  virtual unsigned int getNumSteps() const { return 3; }
 
 private:
 

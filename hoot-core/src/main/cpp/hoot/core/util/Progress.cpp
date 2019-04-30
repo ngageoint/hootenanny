@@ -37,18 +37,19 @@ using namespace std;
 // hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
 
-Progress::Progress(QString source, QString jobState, float percentComplete, float taskWeight) :
+Progress::Progress(QString source, JobState jobState, float percentComplete, float taskWeight) :
 _source(source),
 _reportType(ConfigOptions().getProgressReportingFormat()),
 _percentComplete(percentComplete),
 _taskStartPercentComplete(percentComplete),
 _lastPercentComplete(percentComplete),
 _taskWeight(taskWeight),
-_state(jobState.toUpper()),
+_jobState(jobState),
 _jobFinished(false),
 _userMessage("")
 {
@@ -57,17 +58,13 @@ _userMessage("")
   LOG_VART(_taskStartPercentComplete);
   LOG_VART(_lastPercentComplete);
   LOG_VART(_taskWeight);
-  LOG_VART(_state);
+  LOG_VART(_jobState);
 }
 
-QString Progress::getMessage() const
+QString Progress::_getMessage() const
 {
   QString msg = "";
-  if (_reportType == "json")
-  {
-    msg.append(_toJson());
-  }
-  else if (_reportType == "text")
+  if (_reportType == "text")
   {
     msg.append(_toText());
   }
@@ -75,15 +72,20 @@ QString Progress::getMessage() const
   return msg;
 }
 
-void Progress::setTaskWeight(float taskWeight)
+//void Progress::setTaskWeight(float taskWeight)
+//{
+//  _taskWeight = taskWeight;
+//  LOG_VART(_taskWeight);
+//  _taskStartPercentComplete = _percentComplete;
+//  LOG_VART(_taskStartPercentComplete);
+//}
+
+void Progress::set(float percentComplete, QString userMessage)
 {
-  _taskWeight = taskWeight;
-  LOG_VART(_taskWeight);
-  _taskStartPercentComplete = _percentComplete;
-  LOG_VART(_taskStartPercentComplete);
+  set(percentComplete, _jobState, _jobFinished, userMessage);
 }
 
-void Progress::set(float percentComplete, QString state, bool jobFinished, QString userMessage)
+void Progress::set(float percentComplete, JobState jobState, bool jobFinished, QString userMessage)
 {
   _lastPercentComplete = _percentComplete;
   _percentComplete = percentComplete;
@@ -93,18 +95,24 @@ void Progress::set(float percentComplete, QString state, bool jobFinished, QStri
   LOG_VART(_percentComplete);
   LOG_VART(_taskStartPercentComplete);
 
-  _state = state.toUpper();
+  _jobState = jobState;
   _jobFinished = jobFinished;
   _userMessage = userMessage;
   LOG_VART(_userMessage);
-  const QString msg = getMessage();
-  if (msg != "")
+  const QString msg = _getMessage();
+  if (!msg.trimmed().isEmpty())
   {
-    LOG_STATUS(getMessage());
+    LOG_STATUS(msg);
   }
 }
 
-void Progress::setFromRelative(float relativePercentComplete, QString state, bool jobFinished,
+void Progress::setFromRelative(float relativePercentComplete, QString userMessage,
+                               bool logAsProgress)
+{
+  setFromRelative(relativePercentComplete, userMessage, logAsProgress);
+}
+
+void Progress::setFromRelative(float relativePercentComplete, JobState jobState, bool jobFinished,
                                QString userMessage, bool logAsProgress)
 {
   // update absolute percent weight
@@ -116,37 +124,42 @@ void Progress::setFromRelative(float relativePercentComplete, QString state, boo
   LOG_VART(_percentComplete);
   LOG_VART(_taskStartPercentComplete);
 
-  _state = state.toUpper();
+  _jobState = jobState;
   _jobFinished = jobFinished;
   _userMessage = userMessage;
   LOG_VART(_userMessage);
-  const QString msg = getMessage();
-  if (msg != "")
+  const QString msg = _getMessage();
+  if (!msg.trimmed().isEmpty())
   {
     if (!logAsProgress)
     {
-      LOG_STATUS(getMessage());
+      LOG_STATUS(msg);
     }
     else
     {
-      PROGRESS_STATUS(getMessage());
+      PROGRESS_STATUS(msg);
     }
   }
 }
 
-QString Progress::_toJson() const
-{
-  QString js = "{ ";
-    js.append("\"source\": \"" % _source % "\", ");
-    js.append("\"status\": { ");
-      js.append("\"message\": \"" % _userMessage % "\", ");
-      js.append("\"state\": \"" % _state % "\", ");
-      js.append("\"jobFinished\": \"" % QString("%1").arg(_jobFinished ? "true" : "false") % "\", ");
-      js.append("\"percentComplete\" : " % QString("%1").arg((int)(_percentComplete * 100.)));
-    js.append(" }");
-  js.append(" }");
-  return js;
-}
+//QString Progress::jobStateToString(JobState jobState) const
+//{
+//  switch (jobState)
+//  {
+//    case JobState::Pending:
+//      return "Pending";
+//    case JobState::NotRunning:
+//      return "Not Running";
+//    case JobState::Running:
+//      return "Running";
+//    case JobState::Successful:
+//      return "Successful";
+//    case JobState::Failed:
+//      return "Failed";
+//    default:
+//      throw IllegalArgumentException(QString("Unknown (%1)").arg(jobState));
+//  }
+//}
 
 QString Progress::_toText() const
 {

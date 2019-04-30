@@ -82,8 +82,7 @@ public:
      */
     Info = 2000,
     /**
-     * Log level specific to hoot-services job status consumption; keeping this below warn to reduce
-     * the impact on test output
+     * log level specific to job status updates; This is more coarse than INFO.
      */
     Status = 2500,
     Warn = 3000,

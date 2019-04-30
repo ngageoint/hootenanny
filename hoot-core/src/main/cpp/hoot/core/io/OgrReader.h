@@ -131,9 +131,14 @@ public:
   //leaving this empty for the time being
   virtual QString supportedFormats() { return ""; }
 
+  /**
+   * @see ProgressReporter
+   */
   virtual void setProgress(Progress progress);
-  //TODO: fix
-  virtual int getNumSteps() const { return 0; }
+  /**
+   * @see ProgressReporter
+   */
+  virtual unsigned int getNumSteps() const { return 1; }
 
 protected:
 

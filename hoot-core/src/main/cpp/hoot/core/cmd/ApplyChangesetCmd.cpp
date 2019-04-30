@@ -81,7 +81,7 @@ public:
           .arg(args.size()));
     }
 
-    Progress progress("Apply Changeset");
+    Progress progress("Apply Changeset", Progress::JobState::Running);
 
     //  Write changeset/OSM XML to OSM API
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
@@ -101,7 +101,7 @@ public:
       for (int i = 0; i < args.size() - 1; ++i)
       {
         LOG_STATUS(
-          "Applying changeset " << args[i].right(maxFilePrintLength) << " to " <<
+          "Applying changeset: ..." << args[i].right(maxFilePrintLength) << " to: ..." <<
           printableUrl.toString().right(maxFilePrintLength) << "...");
         changesets.append(args[i]);
       }
@@ -118,8 +118,9 @@ public:
       writer.apply();
 
       progress.set(
-        1.0, writer.containsFailed() ? "Failed" : "Successful", false,
-        "Changeset(s) applied to: " + printableUrl.toString().right(maxFilePrintLength));
+        1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
+        false,
+        "Changeset(s) applied to: ..." + printableUrl.toString().right(maxFilePrintLength));
 
       //  Write out the failed changeset if there is one
       if (writer.containsFailed())

@@ -125,22 +125,21 @@ public:
 
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     LOG_STATUS(
-      "Deriving output changeset: " << output.right(maxFilePrintLength) << " from inputs: " <<
-      input1.right(maxFilePrintLength) << " and " << input2.right(maxFilePrintLength) << "...");
+      "Deriving output changeset: ..." << output.right(maxFilePrintLength) << " from inputs: ..." <<
+      input1.right(maxFilePrintLength) << " and ..." << input2.right(maxFilePrintLength) << "...");
 
     const QString jobSource = "Derive Changeset";
     // The number of steps here must be updated as you add/remove job steps (don't count
     // tasks where you pass in the progress).
     const int numTotalTasks = 2;
     int currentTaskNum = 1;
-    Progress progress(jobSource);
+    Progress progress(jobSource, Progress::JobState::Running);
 
     _parseBuffer();
 
     const bool singleInput = input2.trimmed().isEmpty();
 
-    progress.set(
-      (float)(currentTaskNum - 1) / (float)numTotalTasks, "Running", false, "Sorting features...");
+    progress.set((float)(currentTaskNum - 1) / (float)numTotalTasks, "Sorting features...");
     ElementInputStreamPtr sortedElements1;
     ElementInputStreamPtr sortedElements2;
     if (!singleInput)
@@ -160,13 +159,13 @@ public:
     currentTaskNum++;
 
     // We could make this progress reporting more granular, but for in-memory changesets only.
-    progress.set(
-      (float)(currentTaskNum - 1) / (float)numTotalTasks, "Running", false, "Writing changeset...");
+    progress.set((float)(currentTaskNum - 1) / (float)numTotalTasks, "Writing changeset...");
     _streamChangesetOutput(sortedElements1, sortedElements2, output);
     currentTaskNum++;
 
     progress.set(
-      1.0, "Successful", false, "Changeset written to: " + output.right(maxFilePrintLength));
+      1.0, Progress::JobState::Successful, false, "Changeset written to: ..." +
+      output.right(maxFilePrintLength));
 
     return 0;
   }

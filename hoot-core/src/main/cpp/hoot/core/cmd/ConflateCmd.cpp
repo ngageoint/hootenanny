@@ -145,24 +145,15 @@ int ConflateCmd::runSimple(QStringList args)
     throw HootException(QString("%1 takes three parameters.").arg(getName()));
   }
 
-  // TODO: check this; why would there ever not be a second input?
-  QString input1 = args[0];
-  QString input2, output;
-
-  //if (args.size() == 3)
-  //{
-    input2 = args[1];
-    output = args[2];
-  //}
-  //else
-  //{
-    //output = args[1];
-  //}
+  const QString input1 = args[0];
+  const QString input2 = args[1];
+  QString output = args[2];
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength) +
-    " and writing the output to " + output.right(maxFilePrintLength);
+    "Conflating ..." + input1.right(maxFilePrintLength) + " with ..." +
+    input2.right(maxFilePrintLength) + " and writing the output to ..." +
+    output.right(maxFilePrintLength);
   if (isDiffConflate)
   {
     msg = msg.prepend("Differentially ");
@@ -173,7 +164,7 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  Progress progress(JOB_SOURCE);
+  Progress progress(JOB_SOURCE, Progress::JobState::Running);
   // The number of steps here must be updated as you add/remove job steps (don't count
   // tasks where you pass in the progress).
   _numTotalTasks = 5;
@@ -197,8 +188,8 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   progress.set(
-    _getJobPercentComplete(currentTask - 1), "Running", false,
-    "Loading reference map: " + input1.right(maxFilePrintLength) + "...");
+    _getJobPercentComplete(currentTask - 1),
+    "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
                    Status::Unknown1);
@@ -209,23 +200,18 @@ int ConflateCmd::runSimple(QStringList args)
   {
     // Store original IDs for tag diff
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Running", false,
-      "Storing original features for tag differential...");
+      _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
     diffConflator.storeOriginalMap(map);
     diffConflator.markInputElements(map);
     currentTask++;
   }
 
-  // read input 2
-  //if (!input2.isEmpty())
-  //{
-    progress.set(
-      _getJobPercentComplete(currentTask - 1), "Running", false,
-      "Loading secondary map: " + input2.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
-    currentTask++;
-  //}
+  progress.set(
+    _getJobPercentComplete(currentTask - 1),
+    "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
+  IoUtils::loadMap(
+    map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+  currentTask++;
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -241,24 +227,20 @@ int ConflateCmd::runSimple(QStringList args)
   if (displayStats)
   {
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Running", false,
-      "Calculating reference statistics for: " + input1.right(maxFilePrintLength) + "...");
+      _getJobPercentComplete(currentTask - 1),
+      "Calculating reference statistics for: ..." + input1.right(maxFilePrintLength) + "...");
     input1Cso.apply(map);
     allStats.append(input1Cso.getStats());
-    stats.append(SingleStat("Time to Calculate Stats for Input 1 (sec)", t.getElapsedAndRestart()));
+    stats.append(SingleStat("Calculate Stats for Input 1 Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
 
-    //if (input2 != "")
-    //{
-      progress.set(
-        _getJobPercentComplete(currentTask - 1), "Running", false,
-        "Calculating secondary data statistics for: " + input2.right(maxFilePrintLength) + "...");
-      input2Cso.apply(map);
-      allStats.append(input2Cso.getStats());
-      stats.append(SingleStat("Time to Calculate Stats for Input 2 (sec)",
-        t.getElapsedAndRestart()));
-      currentTask++;
-    //}
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Calculating secondary data statistics for: ..." + input2.right(maxFilePrintLength) + "...");
+    input2Cso.apply(map);
+    allStats.append(input2Cso.getStats());
+    stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
+    currentTask++;
   }
 
   size_t initialElementCount = map->getElementCount();
@@ -271,7 +253,9 @@ int ConflateCmd::runSimple(QStringList args)
     // apply any user specified pre-conflate operations
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.setProgress(
-      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
+        _getTaskWeight()));
     preOps.apply(map);
     stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
@@ -283,24 +267,27 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     diffConflator.setProgress(
-      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
+        _getTaskWeight()));
     diffConflator.apply(result);
     if (diffConflator.conflatingTags())
     {
       pTagChanges = diffConflator.getTagDiff();
     }
     stats.append(diffConflator.getStats());
-    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   }
   else
   {
     UnifyingConflator conflator;
     conflator.setProgress(
-      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
+        _getTaskWeight()));
     conflator.apply(result);
     stats.append(conflator.getStats());
-    stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart())); 
   }
+  stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   currentTask++;
 
   _updatePostConfigOptionsForAttributeConflation();
@@ -309,7 +296,9 @@ int ConflateCmd::runSimple(QStringList args)
     // apply any user specified post-conflate operations
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.setProgress(
-      Progress(JOB_SOURCE, "Running", _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
+        _getTaskWeight()));
     postOps.apply(map);
     stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
@@ -317,8 +306,7 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   // doing this after the conflate post ops run, since some invalid reviews are removed by them
-  progress.set(
-    _getJobPercentComplete(currentTask - 1), "Running", false, "Counting feature reviews...");
+  progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
   LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
@@ -330,8 +318,8 @@ int ConflateCmd::runSimple(QStringList args)
 
   // Figure out what to write
   progress.set(
-    _getJobPercentComplete(currentTask - 1), "Running", false,
-    "Writing conflated output: " + output.right(maxFilePrintLength) + "...");
+    _getJobPercentComplete(currentTask - 1),
+    "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
   if (isDiffConflate && output.endsWith(".osc"))
   {
     diffConflator.writeChangeset(result, output, separateOutput);
@@ -362,20 +350,17 @@ int ConflateCmd::runSimple(QStringList args)
   if (displayStats)
   {
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Running", false,
-      "Calculating output data statistics for: " + output.right(maxFilePrintLength) + "...");
+      _getJobPercentComplete(currentTask - 1),
+      "Calculating output data statistics for: ..." + output.right(maxFilePrintLength) + "...");
     CalculateStatsOp outputCso("output map", true);
     outputCso.apply(result);
     QList<SingleStat> outputStats = outputCso.getStats();
-    //if (input2 != "")
-    //{
-      ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
-        .updateStats(
-          outputStats,
-          outputCso.indexOfSingleStat("Total Unmatched Features"));
-    //}
+    ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
+      .updateStats(
+        outputStats,
+        outputCso.indexOfSingleStat("Total Unmatched Features"));
     allStats.append(outputStats);
-    stats.append(SingleStat("Time to Calculate Stats for Output (sec)", t.getElapsedAndRestart()));
+    stats.append(SingleStat("Calculate Stats for Output Time (sec)", t.getElapsedAndRestart()));
     currentTask++;
   }
 
@@ -399,8 +384,8 @@ int ConflateCmd::runSimple(QStringList args)
   if (isDiffConflate)
   {
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Running", false,
-      "Calculating differential output statistics for: " + output.right(maxFilePrintLength) +
+      _getJobPercentComplete(currentTask - 1),
+      "Calculating differential output statistics for: ..." + output.right(maxFilePrintLength) +
       "...");
     diffConflator.calculateStats(result, stats);
     currentTask++;
@@ -425,9 +410,10 @@ int ConflateCmd::runSimple(QStringList args)
   }
 
   progress.set(
-    1.0, "Successful", true,
-    "Conflation job completed for reference: " + input1.right(maxFilePrintLength) +
-    " and secondary: " + input2.right(maxFilePrintLength));
+    1.0, Progress::JobState::Successful, true,
+    "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
+    " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
+    output.right(maxFilePrintLength));
 
   return 0;
 }

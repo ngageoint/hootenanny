@@ -316,7 +316,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
     }
 
     _totalBuildingGroupsProcessed++;
-    if (_totalBuildingGroupsProcessed % 100 == 0)
+    if (_totalBuildingGroupsProcessed % 10000 == 0)
     {
       PROGRESS_STATUS(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<

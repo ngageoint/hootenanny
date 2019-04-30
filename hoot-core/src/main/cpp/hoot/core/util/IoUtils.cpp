@@ -124,7 +124,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
 
 void IoUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
-  // TODO: We could pass a progress in here to get more granular write status feedback.
+  // We could pass a progress in here to get more granular write status feedback.
   OsmMapWriterFactory::write(map, path);
 }
 

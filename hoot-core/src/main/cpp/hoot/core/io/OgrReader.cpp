@@ -85,9 +85,14 @@ public:
 
   void close();
 
+  /**
+   * @see ProgressReporter
+   */
   virtual void setProgress(Progress progress) { _progress = progress; }
-  //TODO: fix
-  virtual int getNumSteps() const { return 0; }
+  /**
+   * @see ProgressReporter
+   */
+  virtual unsigned int getNumSteps() const { return 1; }
 
   /**
    * See the associated configuration options text for details.
@@ -1118,13 +1123,13 @@ void OgrReaderInternal::read(OsmMapPtr map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != "Pending" && _count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
       _progress.setFromRelative(
-        (float)_count / (float)_featureCount, "Running", false,
+        (float)_count / (float)_featureCount, Progress::JobState::Running, false,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +
         StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
         _layerName.toLatin1().data(), true);

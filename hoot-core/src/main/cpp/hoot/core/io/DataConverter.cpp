@@ -189,7 +189,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   _validateInput(inputs, output);
 
   _progress.setSource(JOB_SOURCE);
-  _progress.setState("Running");
+  _progress.setState(Progress::JobState::Running);
 
    LOG_STATUS(
     "Converting " << inputs.join(", ").right(_printLengthMax) << " to " <<
@@ -217,7 +217,8 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   }
 
   _progress.set(
-    1.0, "Successful", true, "Converted " + inputs.join(", ").right(_printLengthMax) + " to " +
+    1.0, Progress::JobState::Successful, true,
+    "Converted ..." + inputs.join(", ").right(_printLengthMax) + " to: ..." +
     output.right(_printLengthMax));
 }
 
@@ -393,7 +394,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     }
     int currentStep = 1;
 
-    _progress.set(0.0, "Running", false, "Loading map: " + input.right(_printLengthMax) + "...");
+    _progress.set(0.0, "Loading map: ..." + input.right(_printLengthMax) + "...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
     currentStep++;
@@ -403,7 +404,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
-          JOB_SOURCE, "Running",
+          JOB_SOURCE, Progress::JobState::Running,
           (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
       convertOps.apply(map);
       currentStep++;
@@ -412,8 +413,8 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     QElapsedTimer timer;
     timer.start();
     _progress.set(
-      (float)(currentStep - 1) / (float)numSteps, "Running", false,
-      "Writing map: " + output.right(_printLengthMax) + "...");
+      (float)(currentStep - 1) / (float)numSteps,
+      "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     boost::shared_ptr<OgrWriter> writer(new OgrWriter());
     writer->setScriptPath(_translation);
@@ -521,8 +522,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   QElapsedTimer timer;
   timer.start();
 
-  _progress.set(
-    0.0, "Running", false, "Loading maps: " + inputs.join(",").right(_printLengthMax) + "...");
+  _progress.set(0.0, "Loading maps: ..." + inputs.join(",").right(_printLengthMax) + "...");
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -572,7 +572,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       LOG_VART(progressWeights[i]);
       reader.setProgress(
         Progress(
-          JOB_SOURCE, "Running", (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
+          JOB_SOURCE, Progress::JobState::Running, (float)i / (float)(layers.size() * numTasks),
+          progressWeights[i]));
       reader.read(input, layers[i], map);
     }
   }
@@ -580,7 +581,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   if (map->getNodes().size() == 0)
   {
     const QString msg = "After translation the map is empty. Aborting.";
-    _progress.set(1.0, "Failed", true, msg);
+    _progress.set(1.0, Progress::JobState::Failed, true, msg);
     throw HootException(msg);
   }
 
@@ -594,14 +595,16 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     NamedOp convertOps(_convertOps);
     convertOps.setProgress(
-      Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
+        taskWeight));
     convertOps.apply(map);
     currentTask++;
   }
 
   _progress.set(
-    (float)(currentTask - 1) / (float)numTasks, "Running", false,
-    "Writing map: " + output.right(_printLengthMax) + "...");
+    (float)(currentTask - 1) / (float)numTasks,
+    "Writing map: ..." + output.right(_printLengthMax) + "...");
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
   currentTask++;
@@ -661,18 +664,20 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     //stream the i/o
     ElementStreamer::stream(
       inputs, output, QStringList(),
-      Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
+      Progress(
+        JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
+        taskWeight));
     currentTask++;
   }
   else
   {
-    Progress inputLoadProgress(JOB_SOURCE, "Running", 0.0, taskWeight);
+    Progress inputLoadProgress(JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
       inputLoadProgress.setFromRelative(
-        (float)i / (float)inputs.size(), "Running", false,
-        "Loading map: " + inputs.at(i).right(_printLengthMax) + "...");
+        (float)i / (float)inputs.size(), Progress::JobState::Running, false,
+        "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
       IoUtils::loadMap(
         map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
@@ -683,14 +688,16 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     {
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
-        Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
+        Progress(
+          JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
+          taskWeight));
       convertOps.apply(map);
       currentTask++;
     }
 
     _progress.set(
-      (float)(currentTask - 1) / (float)numTasks, "Running", false,
-      "Writing map: " + output.right(_printLengthMax) + "...");
+      (float)(currentTask - 1) / (float)numTasks,
+      "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     if (output.toLower().endsWith(".shp") && _colsArgSpecified)
     {

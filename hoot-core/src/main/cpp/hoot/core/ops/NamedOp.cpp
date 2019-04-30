@@ -117,18 +117,18 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      //LOG_INFO(_getInitMessage(s, opCount, statusInfo));
-
-      // TODO: We could benefit from passing progress into some of the ops to get more granular
+      // We could benefit from passing progress into some of the ops to get more granular
       // feedback.
       LOG_VART(_progress.getTaskWeight());
       LOG_VART(_progress.getState());
       LOG_VART(_progress.getPercentComplete());
-      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+      // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+      // just an empty progress object, and we shouldn't log progress.
+      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
       {
         _progress.setFromRelative(
-          (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
-          _getInitMessage2(s, statusInfo));
+          (float)(opCount - 1) / (float)_namedOps.size(), Progress::JobState::Running, false,
+          _getInitMessage(s, statusInfo));
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -149,16 +149,14 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      //LOG_INFO(_getInitMessage(s, opCount, statusInfo));
-
       LOG_VART(_progress.getTaskWeight());
       LOG_VART(_progress.getState());
       LOG_VART(_progress.getPercentComplete());
-      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == "RUNNING")
+      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
       {
         _progress.setFromRelative(
-          (float)(opCount - 1) / (float)_namedOps.size(), "Running", false,
-          _getInitMessage2(s, statusInfo));
+          (float)(opCount - 1) / (float)_namedOps.size(), Progress::JobState::Running, false,
+          _getInitMessage(s, statusInfo));
       }
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
@@ -191,26 +189,8 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-//QString NamedOp::_getInitMessage(const QString& message, int opCount,
-//                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
-//{
-//  QString initMessage =
-//    QString("Applying operation %1 / %2")
-//    .arg(QString::number(opCount))
-//    .arg(QString::number(_namedOps.size()));
-//  if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-//  {
-//    initMessage += ": " + statusInfo->getInitStatusMessage();
-//  }
-//  else
-//  {
-//    initMessage += ": " + message + "...";
-//  }
-//  return initMessage;
-//}
-
-QString NamedOp::_getInitMessage2(const QString& message,
-                                  boost::shared_ptr<OperationStatusInfo> statusInfo) const
+QString NamedOp::_getInitMessage(const QString& message,
+                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
 {
   QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
