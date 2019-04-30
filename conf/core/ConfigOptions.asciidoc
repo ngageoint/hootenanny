@@ -540,6 +540,7 @@ List of operations to run in the conflate command after data is conflated, but b
 ** `hoot::BuildingOutlineRemoveOp`
 ** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
+** `hoot::CornerSplitter`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
@@ -1803,7 +1804,6 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 ** `hoot::RemoveEmptyRelationsOp`
 ** `hoot::RemoveDuplicateAreaVisitor`
 ** `hoot::NoInformationElementRemover`
-** `hoot::CornerSplitter`
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
