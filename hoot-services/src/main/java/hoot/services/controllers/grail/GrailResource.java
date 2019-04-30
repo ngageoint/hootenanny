@@ -120,7 +120,7 @@ public class GrailResource {
     private Command getRailsPortApiCommand(String jobId, Users user, String bounds, String output) throws UnavailableException {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         if (railsPortCapabilities.getApiStatus() == null
-                | railsPortCapabilities.getApiStatus().equals("offline")) {
+                || railsPortCapabilities.getApiStatus().equals("offline")) {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
@@ -128,7 +128,7 @@ public class GrailResource {
         params.setUser(user);
         params.setBounds(bounds);
         params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        params.setPullUrl(PUBLIC_OVERPASS_URL);
+        params.setPullUrl(RAILSPORT_PULL_URL);
         params.setOutput(output);
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
         return command;
@@ -346,7 +346,7 @@ public class GrailResource {
         try {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-            if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
+            if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline. Try again later").build();
             }
 
