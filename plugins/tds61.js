@@ -1613,14 +1613,12 @@ tds61 = {
                 case 'neighbourhood':
                 case 'quarter':
                 case 'village':
-                    if (geometryType == 'Point')
-                    {
-                        attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;
-                    }
+                case 'hamlet':
+                case 'yes':  // We set this as a default when going to OSM
+                    attrs.F_CODE = 'AL020'; // Built Up Area
+                    delete tags.place;
                     break;
 
-                case 'hamlet':
                 case 'isolated_dwelling':
                     attrs.F_CODE = 'AL105'; // Settlement
                     delete tags.place;
