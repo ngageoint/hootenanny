@@ -70,6 +70,7 @@ public:
       showProgress = true;
       args.removeAll("--progress");
     }
+
     //  Make sure that there are at least two other arguments
     if (args.size() < 2)
     {
@@ -79,26 +80,47 @@ public:
           .arg(getName())
           .arg(args.size()));
     }
+
+    Progress progress("Apply Changeset");
+
     //  Write changeset/OSM XML to OSM API
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
     {
       //  Get the endpoint URL
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
+
       //  Create a URL without user info for logging
       QUrl printableUrl = osm;
       printableUrl.setUserInfo("");
+
+      const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+
       //  Grab all the changeset files
       QList<QString> changesets;
       for (int i = 0; i < args.size() - 1; ++i)
       {
-        LOG_INFO("Applying changeset " << args[i] << " to " << printableUrl.toString() << "...");
+        LOG_STATUS(
+          "Applying changeset " << args[i].right(maxFilePrintLength) << " to " <<
+          printableUrl.toString().right(maxFilePrintLength) << "...");
         changesets.append(args[i]);
       }
+
       //  Do the actual splitting and uploading
       OsmApiWriter writer(osm, changesets);
       writer.showProgress(showProgress);
+      if (showProgress)
+      {
+        // OsmApiWriter is doing all the progress reporting but will pass a progress object in
+        // anyway, just in case we ever add any extra job steps outside of it.
+        writer.setProgress(progress);
+      }
       writer.apply();
+
+      progress.set(
+        1.0, writer.containsFailed() ? "Failed" : "Successful", false,
+        "Changeset(s) applied to: " + printableUrl.toString().right(maxFilePrintLength));
+
       //  Write out the failed changeset if there is one
       if (writer.containsFailed())
       {
@@ -107,9 +129,11 @@ public:
         QString errorFilename =
           path.absolutePath() + QDir::separator() +
           path.baseName() + "-error." + path.completeSuffix();
-        LOG_ERROR(QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
+        LOG_ERROR(
+          QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
         FileUtils::writeFully(errorFilename, writer.getFailedChangeset());
       }
+
       //  Output the stats if requested
       if (showStats)
       {
@@ -123,6 +147,9 @@ public:
     //  Write changeset SQL directly to the database
     else if (args[0].endsWith(".osc.sql"))
     {
+      // Not worrying about progress updates for SQL changesets, since those will eventually go
+      // away (#3156).
+
       if (args.size() != 2 && args.size() != 4)
       {
         cout << getHelp() << endl << endl;
@@ -162,7 +189,6 @@ public:
 
     return 0;
   }
-
 };
 
 HOOT_FACTORY_REGISTER(Command, ApplyChangesetCmd)

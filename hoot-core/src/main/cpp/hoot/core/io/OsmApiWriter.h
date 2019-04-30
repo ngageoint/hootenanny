@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 //  Standard
 #include <mutex>
@@ -51,7 +52,7 @@ namespace hoot
 //  Forward declarations
 class OsmApiWriterTest;
 
-class OsmApiWriter : public Configurable
+class OsmApiWriter : public Configurable, public ProgressReporter
 {
   /** OSM API URL paths */
   const QString API_PATH_CAPABILITIES = "/api/capabilities/";
@@ -120,6 +121,15 @@ public:
    * @param show True shows an adaptive, granular progress
    */
   void showProgress(bool show) { _showProgress = show; }
+
+  /**
+   * @see ProgressReporter
+   */
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  /**
+   * @see ProgressReporter
+   */
+  virtual int getNumSteps() const { return 0; } // N/A for now
 
 private:
   /**
@@ -245,6 +255,7 @@ private:
   QList<SingleStat> _stats;
   /** Progress flag */
   bool _showProgress;
+  Progress _progress;
   /** OAuth 1.0 consumer key registered with OpenstreetMap */
   QString _consumerKey;
   /** OAuth 1.0 consumer secred registered with OpenstreetMap */

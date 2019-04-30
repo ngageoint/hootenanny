@@ -169,7 +169,7 @@ bool OsmApiWriter::apply()
       if (_changeset.getProcessedCount() / (double)total * 100.0 >= progress + increment)
       {
         progress += increment;
-        PROGRESS_INFO("Upload progress: " << progress << "%");
+        _progress.set((float)progress, "Running", false, "Uploading changeset...");
       }
     }
   }

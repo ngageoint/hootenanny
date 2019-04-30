@@ -124,7 +124,6 @@ public:
     LOG_VARD(_osmApiDbUrl);
 
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-
     LOG_STATUS(
       "Deriving output changeset: " << output.right(maxFilePrintLength) << " from inputs: " <<
       input1.right(maxFilePrintLength) << " and " << input2.right(maxFilePrintLength) << "...");
@@ -167,7 +166,7 @@ public:
     currentTaskNum++;
 
     progress.set(
-      1.0, "Succesful", false, "Changeset written to: " + output.right(maxFilePrintLength));
+      1.0, "Successful", false, "Changeset written to: " + output.right(maxFilePrintLength));
 
     return 0;
   }
