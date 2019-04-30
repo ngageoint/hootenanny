@@ -4338,6 +4338,20 @@
     <node visible="true" id="-2182" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9017115550575667" lon="-77.0345958424248352"/>
     <node visible="true" id="-2181" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9015453837132767" lon="-77.0345952430533885"/>
     <node visible="true" id="-2180" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013355347201326" lon="-77.0345929530444522"/>
+    <way visible="true" id="-13601" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-120396"/>
+        <nd ref="-80631"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-13600" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-80630"/>
+        <nd ref="-80631"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-13599" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13592"/>
         <nd ref="-13593"/>
@@ -10174,7 +10188,6 @@
         <nd ref="-80628"/>
         <nd ref="-80629"/>
         <nd ref="-80630"/>
-        <nd ref="-80631"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="error:circular" v="5"/>
@@ -10803,7 +10816,6 @@
         <nd ref="-120394"/>
         <nd ref="-120395"/>
         <nd ref="-120396"/>
-        <nd ref="-80631"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="error:circular" v="5"/>

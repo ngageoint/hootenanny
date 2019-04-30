@@ -181,6 +181,7 @@ void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
+  LOG_VARD(_convertOps);
 }
 
 void DataConverter::convert(const QStringList inputs, const QString output)
@@ -540,6 +541,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
+  LOG_VARD(_convertOps);
 
   int numTasks = 2;
   if (_convertOps.size() > 0)
@@ -624,7 +626,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
            _convertOps.contains("hoot::TranslationVisitor"));
 
     _convertOps.prepend("hoot::TranslationOp");
-    LOG_VART(_convertOps);
+    LOG_VARD(_convertOps);
     conf().set(ConfigOptions::getTranslationScriptKey(), _translation);
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
@@ -681,7 +683,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     {
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
-        Progress(JOB_SOURCE, "Running", (float)currentTask / (float)numTasks, taskWeight));
+        Progress(JOB_SOURCE, "Running", (float)(currentTask - 1) / (float)numTasks, taskWeight));
       convertOps.apply(map);
       currentTask++;
     }

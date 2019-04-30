@@ -117,7 +117,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      LOG_INFO(_getInitMessage(s, opCount, statusInfo));
+      //LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
       // TODO: We could benefit from passing progress into some of the ops to get more granular
       // feedback.
@@ -149,7 +149,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // TODO: move into templated method
 
-      LOG_INFO(_getInitMessage(s, opCount, statusInfo));
+      //LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
       LOG_VART(_progress.getTaskWeight());
       LOG_VART(_progress.getState());
@@ -191,23 +191,23 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message, int opCount,
-                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
-{
-  QString initMessage =
-    QString("Applying operation %1 / %2")
-    .arg(QString::number(opCount))
-    .arg(QString::number(_namedOps.size()));
-  if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
-  {
-    initMessage += ": " + statusInfo->getInitStatusMessage();
-  }
-  else
-  {
-    initMessage += ": " + message + "...";
-  }
-  return initMessage;
-}
+//QString NamedOp::_getInitMessage(const QString& message, int opCount,
+//                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
+//{
+//  QString initMessage =
+//    QString("Applying operation %1 / %2")
+//    .arg(QString::number(opCount))
+//    .arg(QString::number(_namedOps.size()));
+//  if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
+//  {
+//    initMessage += ": " + statusInfo->getInitStatusMessage();
+//  }
+//  else
+//  {
+//    initMessage += ": " + message + "...";
+//  }
+//  return initMessage;
+//}
 
 QString NamedOp::_getInitMessage2(const QString& message,
                                   boost::shared_ptr<OperationStatusInfo> statusInfo) const

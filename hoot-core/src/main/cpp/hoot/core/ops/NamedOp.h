@@ -65,8 +65,8 @@ private:
 
   void _substituteForContainingOps();
 
-  QString _getInitMessage(const QString& message, int opCount,
-                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
+//  QString _getInitMessage(const QString& message, int opCount,
+//                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
   QString _getInitMessage2(const QString& message,
                            boost::shared_ptr<OperationStatusInfo> statusInfo) const;
 
