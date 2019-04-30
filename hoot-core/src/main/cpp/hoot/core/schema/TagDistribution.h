@@ -94,7 +94,7 @@ private:
   QRegExp _nonWord;
 
   void _countTags(const QString input, std::map<QString, int>& tagCounts);
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input);
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString input);
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream);
   ElementCriterionPtr _getCriterion();
 };

@@ -36,9 +36,6 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace v8;
 
 namespace hoot

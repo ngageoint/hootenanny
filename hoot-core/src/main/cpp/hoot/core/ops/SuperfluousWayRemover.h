@@ -28,17 +28,13 @@
 #ifndef SUPERFLUOUSWAYREMOVER_H
 #define SUPERFLUOUSWAYREMOVER_H
 
-
 // Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <set>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -56,14 +52,14 @@ public:
   static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
-  SuperfluousWayRemover(boost::shared_ptr<OsmMap> map);
+  SuperfluousWayRemover(std::shared_ptr<OsmMap> map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeWays(boost::shared_ptr<OsmMap> map);
+  static void removeWays(std::shared_ptr<OsmMap> map);
 
   void removeWays();
 
@@ -77,7 +73,7 @@ public:
 
 protected:
 
-  boost::shared_ptr<OsmMap> _inputMap;
+  std::shared_ptr<OsmMap> _inputMap;
 };
 
 }

@@ -43,12 +43,12 @@ NonConflatableElementRemover::NonConflatableElementRemover()
 
 }
 
-void NonConflatableElementRemover::apply(boost::shared_ptr<OsmMap>& map)
+void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;
 
-  boost::shared_ptr<NonConflatableCriterion> pNonConflateCrit(new NonConflatableCriterion());
+  std::shared_ptr<NonConflatableCriterion> pNonConflateCrit(new NonConflatableCriterion());
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
   removeElementsVisitor.addCriterion(pNonConflateCrit);

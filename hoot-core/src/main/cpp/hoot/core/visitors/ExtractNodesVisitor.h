@@ -43,7 +43,7 @@ public:
 
   ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   virtual QString getDescription() const { return "Returns the node IDs visited"; }
 

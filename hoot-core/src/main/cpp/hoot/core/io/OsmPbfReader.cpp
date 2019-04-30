@@ -56,8 +56,6 @@ using namespace hoot::pb;
 // TGS
 #include <tgs/System/Time.h>
 
-#include <boost/shared_ptr.hpp>
-
 #include <ogr_spatialref.h>
 
 // ZLib Includes
@@ -137,7 +135,7 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
-void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
+void OsmPbfReader::_addTag(std::shared_ptr<Element> e, QString key, QString value)
 {
   key = key.trimmed();
   value = value.trimmed();
@@ -210,7 +208,7 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
   }
   else if (key == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
   {
-    (boost::dynamic_pointer_cast<Relation>(e))->setType(value);
+    (std::dynamic_pointer_cast<Relation>(e))->setType(value);
   }
   else if (value != "")
   {
@@ -512,7 +510,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
+  std::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -658,7 +656,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  boost::shared_ptr<hoot::Relation> newRelation(
+  std::shared_ptr<hoot::Relation> newRelation(
     new hoot::Relation(_status, newId, _defaultCircularError));
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
@@ -810,7 +808,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -1294,7 +1292,7 @@ bool OsmPbfReader::hasMoreElements()
   return false;
 }
 
-boost::shared_ptr<Element> OsmPbfReader::readNextElement()
+std::shared_ptr<Element> OsmPbfReader::readNextElement()
 {
   if (!hasMoreElements())
   {
@@ -1348,7 +1346,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   //read nodes, then ways, then relations
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
-  boost::shared_ptr<Element> element;
+  std::shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodes().size()))
   {
     /// @optimize
@@ -1423,9 +1421,9 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

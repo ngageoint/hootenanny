@@ -37,7 +37,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
+std::shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
 
 ScriptTranslatorFactory::ScriptTranslatorFactory()
 {

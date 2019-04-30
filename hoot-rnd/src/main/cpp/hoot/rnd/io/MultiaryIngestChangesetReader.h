@@ -53,7 +53,7 @@ public:
   /**
    * @see ChangesetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   void open(QString fileName);
 
@@ -75,7 +75,7 @@ public:
 private:
 
   QFile _file;
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
   OsmJsonReader _jsonReader;
   OsmXmlReader _xmlReader;
 

@@ -135,7 +135,7 @@ void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& out
   outputMap = tmpMap;
 }
 
-void RelationWithMostMembersOp::apply(boost::shared_ptr<OsmMap>& map)
+void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _maxNumCritSatisifed = 0;
   _totalRelations = 0;

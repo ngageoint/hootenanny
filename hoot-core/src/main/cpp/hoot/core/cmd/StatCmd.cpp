@@ -86,12 +86,12 @@ private:
 
   int _taskStatusUpdateInterval;
 
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
     LOG_TRACE("Getting reader...");
 
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
@@ -101,7 +101,7 @@ private:
 
   ElementVisitorPtr _getStatCollector(const QString visClassName)
   {
-    boost::shared_ptr<ElementVisitor> statsCollector;
+    std::shared_ptr<ElementVisitor> statsCollector;
 
     try
     {
@@ -113,8 +113,8 @@ private:
       throw IllegalArgumentException("Invalid visitor: " + visClassName);
     }
 
-    boost::shared_ptr<Configurable> visConfig =
-      boost::dynamic_pointer_cast<Configurable>(statsCollector);
+    std::shared_ptr<Configurable> visConfig =
+      std::dynamic_pointer_cast<Configurable>(statsCollector);
     LOG_VART(visConfig.get());
     if (visConfig.get())
     {
@@ -128,16 +128,16 @@ private:
   {
     double stat;
 
-    boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+    std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
     ElementVisitorPtr statCollector = _getStatCollector(visClassName);
 
     ElementInputStreamPtr filteredInputStream(
       new ElementVisitorInputStream(
-        boost::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
+        std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
 
-    boost::shared_ptr<SingleStatistic> counter =
-      boost::dynamic_pointer_cast<SingleStatistic>(statCollector);
+    std::shared_ptr<SingleStatistic> counter =
+      std::dynamic_pointer_cast<SingleStatistic>(statCollector);
     LOG_VART(counter.get());
 
     LOG_TRACE("Calculating statistic...");

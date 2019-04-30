@@ -28,9 +28,6 @@
 #ifndef __RANDOM_FOREST_MANAGER_H__
 #define __RANDOM_FOREST_MANAGER_H__
 
-//Boost Includes
-#include <boost/shared_ptr.hpp>
-
 //STD Includes
 #include <fstream>
 #include <map>

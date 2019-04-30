@@ -99,7 +99,7 @@ protected:
   int _testCount;
 
   //test suite run by this fitness function
-  boost::shared_ptr<AbstractTestSuite> _testSuite;
+  std::shared_ptr<AbstractTestSuite> _testSuite;
 
   //name of the temporary settings file generated for the current test run
   QString _settingsFileName;

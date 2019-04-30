@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
+std::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
 
 OsmChangeWriterFactory::OsmChangeWriterFactory()
 {
@@ -51,7 +51,7 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url,
+std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url,
                                                                         QString elementPayloadFormat)
 {
   LOG_VART(url);
@@ -59,7 +59,7 @@ boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString 
 
   vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangeWriter::className());
-  boost::shared_ptr<OsmChangeWriter> writer;
+  std::shared_ptr<OsmChangeWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);

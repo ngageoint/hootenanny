@@ -28,9 +28,6 @@
 #ifndef LONGESTCOMMONNODESTRING_H
 #define LONGESTCOMMONNODESTRING_H
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
   class Way;
@@ -41,7 +38,7 @@ namespace hoot
 class LongestCommonNodeString
 {
 public:
-  LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
+  LongestCommonNodeString(std::shared_ptr<Way> w1, std::shared_ptr<Way> w2);
 
   /**
    * Returns the length of the common substring. Zero if no common substring was found.
@@ -59,7 +56,7 @@ public:
   int getW2Index() { return _i2; }
 
 private:
-  boost::shared_ptr<Way> _w1, _w2;
+  std::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };
 

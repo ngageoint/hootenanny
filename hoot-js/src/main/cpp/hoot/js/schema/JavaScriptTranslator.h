@@ -89,7 +89,7 @@ public:
    */
   int getLogCount(QString log);
 
-  virtual boost::shared_ptr<const Schema> getOgrOutputSchema();
+  virtual std::shared_ptr<const Schema> getOgrOutputSchema();
 
   // Filter for file names
   virtual const QString getLayerNameFilter() override;
@@ -109,11 +109,11 @@ public:
 
 protected:
 
-  boost::shared_ptr<PluginContext> _gContext;
+  std::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
 
   bool _error;
-  boost::shared_ptr<Schema> _schema;
+  std::shared_ptr<Schema> _schema;
   QString _scriptText;
   Tags* _tags;
   std::vector<double> _timing;
@@ -123,7 +123,7 @@ protected:
   Settings _conf;
 
   std::vector<TranslatedFeature> _createAllFeatures(QVariantList vm);
-  boost::shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
+  std::shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
 
   virtual void _init();
 
@@ -143,9 +143,9 @@ protected:
 
   void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
-  boost::shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
+  std::shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
 
-  boost::shared_ptr<Layer> _parseLayer(QVariant layer) const;
+  std::shared_ptr<Layer> _parseLayer(QVariant layer) const;
 
   double _toDouble(const QVariant& v) const;
 

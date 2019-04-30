@@ -67,16 +67,16 @@ public:
 
   MapCropper();
   MapCropper(const geos::geom::Envelope& envelope);
-  MapCropper(const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual void setConfiguration(const Settings& conf);
 
-  static void crop(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
+  static void crop(std::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
 
-  static void crop(boost::shared_ptr<OsmMap> map,
-                   const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  static void crop(std::shared_ptr<OsmMap> map,
+                   const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
   virtual std::string getClassName() const { return className(); }
 
@@ -101,19 +101,19 @@ public:
 private:
 
   geos::geom::Envelope _envelope;
-  boost::shared_ptr<const geos::geom::Geometry> _envelopeG;
+  std::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
   bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
   int _statusUpdateInterval;
 
-  void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
+  void _cropWay(std::shared_ptr<OsmMap> map, long wid);
 
   /**
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
    */
-  long _findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w, const geos::geom::Coordinate& c);
+  long _findNodeId(std::shared_ptr<const OsmMap> map, std::shared_ptr<const Way> w, const geos::geom::Coordinate& c);
 
   /**
    * Returns true if the specified envelope is wholly inside the region that will be kept. If
@@ -131,7 +131,7 @@ private:
    */
   bool _isWhollyOutside(const geos::geom::Envelope& e);
 
-  boost::shared_ptr<Way> _reintroduceWay(boost::shared_ptr<OsmMap> map, boost::shared_ptr<const Way> w,
+  std::shared_ptr<Way> _reintroduceWay(std::shared_ptr<OsmMap> map, std::shared_ptr<const Way> w,
     const geos::geom::LineString* ls);
 
   friend class MapCropperTest;

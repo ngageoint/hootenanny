@@ -27,28 +27,25 @@
 
 #include "OsmMap.h"
 
-// Boost
-using namespace boost;
-
 // GEOS
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMapListener.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/SignalCatcher.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveElementOp.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/SignalCatcher.h>
+#include <hoot/core/util/Validate.h>
 using namespace hoot::elements;
 
 // Qt
@@ -59,7 +56,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
+std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
 {
@@ -83,14 +80,14 @@ OsmMap::OsmMap(OsmMapPtr map)
   _copy(map);
 }
 
-OsmMap::OsmMap(boost::shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(std::shared_ptr<OGRSpatialReference> srs)
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
 }
 
-OsmMap::OsmMap(ConstOsmMapPtr map, boost::shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(ConstOsmMapPtr map, std::shared_ptr<OGRSpatialReference> srs)
 {
   _copy(map);
   _srs = srs;
@@ -160,23 +157,23 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
 
   for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
   {
-    boost::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
+    std::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
     _listeners.push_back(l->clone());
   }
 }
 
-void OsmMap::addElement(const boost::shared_ptr<Element>& e)
+void OsmMap::addElement(const std::shared_ptr<Element>& e)
 {
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    addNode(boost::dynamic_pointer_cast<Node>(e));
+    addNode(std::dynamic_pointer_cast<Node>(e));
     break;
   case ElementType::Way:
-    addWay(boost::dynamic_pointer_cast<Way>(e));
+    addWay(std::dynamic_pointer_cast<Way>(e));
     break;
   case ElementType::Relation:
-    addRelation(boost::dynamic_pointer_cast<Relation>(e));
+    addRelation(std::dynamic_pointer_cast<Relation>(e));
     break;
   default:
     throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
@@ -281,7 +278,7 @@ bool OsmMap::containsElement(ElementType type, long id) const
   }
 }
 
-bool OsmMap::containsElement(const boost::shared_ptr<const Element>& e) const
+bool OsmMap::containsElement(const std::shared_ptr<const Element>& e) const
 {
   return containsElement(e->getElementType(), e->getId());
 }
@@ -325,7 +322,7 @@ void OsmMap::_copy(ConstOsmMapPtr from)
 
   for (size_t i = 0; i < from->getListeners().size(); i++)
   {
-    boost::shared_ptr<OsmMapListener> l = from->getListeners()[i];
+    std::shared_ptr<OsmMapListener> l = from->getListeners()[i];
     _listeners.push_back(l->clone());
   }
 }
@@ -393,12 +390,12 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::replace(const boost::shared_ptr<const Element>& from,
-                     const boost::shared_ptr<Element>& to)
+void OsmMap::replace(const std::shared_ptr<const Element>& from,
+                     const std::shared_ptr<Element>& to)
 {
   LOG_TRACE("Replacing: " << from->getElementId() << " with: " << to->getElementId() << "...");
 
-  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
@@ -433,9 +430,9 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from,
   }
 }
 
-void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
+void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
 {
-  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node &&
@@ -492,7 +489,7 @@ void OsmMap::replaceNode(long oldId, long newId)
     _listeners[i]->replaceNodePre(oldId, newId);
   }
 
-  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // get a copy of the ways so our changes below don't modify the working set.
   const set<long> ways = n2w->getWaysByNode(oldId);
@@ -524,7 +521,7 @@ void OsmMap::replaceNode(long oldId, long newId)
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
 }
 
-void OsmMap::setProjection(boost::shared_ptr<OGRSpatialReference> srs)
+void OsmMap::setProjection(std::shared_ptr<OGRSpatialReference> srs)
 {
   _srs = srs;
   _index->reset();
@@ -624,7 +621,7 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
   {
     if (containsNode(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
     }
   }
 }
@@ -643,7 +640,7 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
   {
     if (containsWay(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 }
@@ -662,7 +659,7 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }
@@ -681,7 +678,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsNode(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Node>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
     }
   }
 
@@ -691,7 +688,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 
@@ -701,7 +698,7 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }
@@ -759,7 +756,7 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Way>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
     }
   }
 }
@@ -778,7 +775,7 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(boost::dynamic_pointer_cast<const Relation>(it->second));
+      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
     }
   }
 }

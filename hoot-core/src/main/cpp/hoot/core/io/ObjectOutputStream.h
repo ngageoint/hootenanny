@@ -80,8 +80,8 @@ public:
 
 public:
   QDataStream* _stream;
-  boost::shared_ptr<QDataStream> _stream2Delete;
-  boost::shared_ptr<QByteArray> _array;
+  std::shared_ptr<QDataStream> _stream2Delete;
+  std::shared_ptr<QByteArray> _array;
   std::ostream* _ostream;
 };
 

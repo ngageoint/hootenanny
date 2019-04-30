@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<ToEnglishTranslator> AddressTranslator::_translator;
+std::shared_ptr<ToEnglishTranslator> AddressTranslator::_translator;
 
 AddressTranslator::AddressTranslator()
 {

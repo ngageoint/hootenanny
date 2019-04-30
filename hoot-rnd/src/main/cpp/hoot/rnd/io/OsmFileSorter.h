@@ -66,7 +66,7 @@ private:
 
   static void _checkForOsmosis();
   static void _sortPbf(const QString input, const QString output);
-  static boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
+  static std::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
 
 };
 

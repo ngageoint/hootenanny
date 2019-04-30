@@ -29,14 +29,13 @@
 #define __TGC_KNN_ITERATOR_H__
 
 // Standard Includes
-#include <limits.h>
+#include <climits>
+#include <cmath>
 #include <list>
 #include <queue>
 #include <set>
-#include <math.h>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>
 #include <tgs/RStarTree/RStarTree.h>

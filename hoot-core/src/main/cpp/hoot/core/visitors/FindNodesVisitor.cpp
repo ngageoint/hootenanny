@@ -40,7 +40,7 @@ FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
 {
 }
 
-void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
+void FindNodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {

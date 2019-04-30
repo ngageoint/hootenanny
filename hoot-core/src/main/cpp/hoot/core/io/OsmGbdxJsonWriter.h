@@ -31,9 +31,6 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QDir>
 #include <QString>

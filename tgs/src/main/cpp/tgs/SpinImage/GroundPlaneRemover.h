@@ -32,7 +32,6 @@
 #include <queue>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/SpinImage/NormalEstimator.h>
 

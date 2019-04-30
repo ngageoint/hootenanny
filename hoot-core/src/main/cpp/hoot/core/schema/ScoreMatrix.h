@@ -162,7 +162,7 @@ private:
     }
   };
 
-  std::vector< std::vector<_type> > _v;
+  std::vector<std::vector<_type>> _v;
   std::vector<QString> _labelRows;
   std::vector<QString> _labelCols;
 

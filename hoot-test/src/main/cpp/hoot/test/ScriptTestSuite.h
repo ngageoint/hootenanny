@@ -30,10 +30,8 @@
 #include <hoot/test/ScriptTest.h>
 
 // Standard
+#include <memory>
 #include <vector>
-
-// tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -44,7 +42,7 @@ public:
   ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests);
 
 private:
-  std::vector<boost::shared_ptr<ScriptTest> > _tests;
+  std::vector<std::shared_ptr<ScriptTest>> _tests;
 };
 
 }

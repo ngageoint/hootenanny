@@ -70,7 +70,7 @@ public:
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
-  UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
+  UnifyingConflator(std::shared_ptr<MatchThreshold> matchThreshold);
 
   ~UnifyingConflator();
 
@@ -93,7 +93,7 @@ public:
   /**
    * Set the factory to use when creating mergers. This method is likely only useful when testing.
    */
-  void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
+  void setMergerFactory(std::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
@@ -104,8 +104,8 @@ private:
 
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
-  boost::shared_ptr<MergerFactory> _mergerFactory;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
   HashMap<ElementId, std::vector<Merger*>> _e2m;
   std::vector<const Match*> _matches;
@@ -139,7 +139,7 @@ private:
   void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
     const OsmMapPtr &map);
 
-  void _replaceElementIds(const std::vector< std::pair<ElementId, ElementId> >& replaced);
+  void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that

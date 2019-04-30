@@ -47,9 +47,9 @@ public:
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();
 
-  void initialize(boost::shared_ptr<OGRSpatialReference>& projection);
+  void initialize(std::shared_ptr<OGRSpatialReference>& projection);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
@@ -57,7 +57,7 @@ public:
 private:
 
   OGRCoordinateTransformation* _transform;
-  boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
+  std::shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }

@@ -58,8 +58,8 @@ public:
 
     const QString input = _inputPath + "ExternalMergeElementSorterTest.osm";
 
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
@@ -69,7 +69,7 @@ public:
     elementSorter.setMaxElementsPerFile(5);
     //only enable this for debugging
     //elementSorter.setRetainTempFiles(true);
-    elementSorter.sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
+    elementSorter.sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     int index = 0;
     long lastId = 0;

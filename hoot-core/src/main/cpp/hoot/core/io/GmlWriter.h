@@ -28,9 +28,6 @@
 #ifndef GMLWRITER_H
 #define GMLWRITER_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
@@ -65,9 +62,9 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeInfo = includeInfo; }
 
-  void write(boost::shared_ptr<const OsmMap> map, QString path);
+  void write(std::shared_ptr<const OsmMap> map, QString path);
 
-  void writePoints(boost::shared_ptr<const OsmMap> map, const QString& path);
+  void writePoints(std::shared_ptr<const OsmMap> map, const QString& path);
 
 protected:
 
@@ -75,10 +72,10 @@ protected:
   bool _includeIds;
   bool _includeInfo;
 
-  void _writeRelationPolygon(const boost::shared_ptr<Relation> &relation, OGRLayer *poLayer,
+  void _writeRelationPolygon(const std::shared_ptr<Relation> &relation, OGRLayer *poLayer,
     const QStringList &shpColumns);
 
-  void _writeWayPolygon(const boost::shared_ptr<Way>& way, OGRLayer *poLayer,
+  void _writeWayPolygon(const std::shared_ptr<Way>& way, OGRLayer *poLayer,
     const QStringList& shpColumns);
 };
 

@@ -54,7 +54,7 @@ public:
   /**
    * Remove all the ops that meet the given criterion.
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const
   { return "Removes elements meeting a criterion and updates REF tags"; }

@@ -93,7 +93,7 @@ private:
   //of them as necessary to detect the language
   QStringList _detectors;
 
-  boost::shared_ptr<QCache<QString, DetectionResult>> _cache;
+  std::shared_ptr<QCache<QString, DetectionResult>> _cache;
 
   int _statusUpdateInterval;
 
@@ -119,12 +119,12 @@ private:
   static bool _loggedCacheMaxReached;
 
   //persistent session is required by hoot services
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getDetectUrl();
 
   QString _getRequestData(const QString text) const;
-  QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+  QString _parseResponse(std::shared_ptr<boost::property_tree::ptree> replyObj,
                          QString& detectorUsed);
 
   QString _getLangFromCache(const QString text);

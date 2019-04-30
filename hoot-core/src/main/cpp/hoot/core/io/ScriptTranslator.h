@@ -27,9 +27,6 @@
 #ifndef SCRIPTTRANSLATOR_H
 #define SCRIPTTRANSLATOR_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // geos
 #include <geos/geom/Geometry.h>
 
@@ -131,7 +128,7 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef boost::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
+typedef std::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
 
 }
 

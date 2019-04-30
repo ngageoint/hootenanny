@@ -60,13 +60,13 @@ MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
   _matchFactory = &MatchFactory::getInstance();
 }
 
-void MatchFeatureExtractor::addMatchCreator(const boost::shared_ptr<MatchCreator> &m)
+void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator> &m)
 {
   _creators.push_back(m);
 }
 
 MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
-  const boost::shared_ptr<const OsmMap>& map) const
+  const std::shared_ptr<const OsmMap>& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -87,7 +87,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
   // go through the set of provided elements
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
-    const boost::shared_ptr<const Element>& e = map->getElement(*it);
+    const std::shared_ptr<const Element>& e = map->getElement(*it);
     if (e->getStatus() == Status::Unknown1)
     {
       QString r = e->getTags()[MetadataTags::Ref1()];
@@ -246,12 +246,12 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
   return result;
 }
 
-void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &map)
+void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap> &map)
 {
   vector<const Match*> matches;
   Envelope bounds;
   bounds.setToNull();
-  boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
+  std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
@@ -276,7 +276,7 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
         Sample s = d->getFeatures(map);
         LOG_VART(s.size());
 
-        set< pair<ElementId, ElementId> > pairs = matches[i]->getMatchPairs();
+        set<pair<ElementId, ElementId>> pairs = matches[i]->getMatchPairs();
         if (pairs.size() != 1)
         {
           if (logWarnCount < Log::getWarnMessageLimit())

@@ -31,12 +31,9 @@
 // Qt
 #include <QString>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -55,12 +52,12 @@ public:
 
   DuplicateNameRemover();
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Remove alternate names that are duplicates.
    */
-  static void removeDuplicates(boost::shared_ptr<OsmMap> map);
+  static void removeDuplicates(std::shared_ptr<OsmMap> map);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -82,7 +79,7 @@ private:
   // point.
   bool _preserveOriginalName;
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   QString _getBestName(QString n1, QString n2);
 };

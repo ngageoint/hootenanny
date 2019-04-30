@@ -60,7 +60,7 @@ struct BuildingPartRelationship
     Neighbor
   };
 
-  BuildingPartRelationship(ElementPtr building, boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+  BuildingPartRelationship(ElementPtr building, std::shared_ptr<geos::geom::Geometry> buildingGeom,
                            WayPtr buildingPartNeighbor,
                            BuildingPartRelationshipType relationshipType)
     : building(building),
@@ -73,7 +73,7 @@ struct BuildingPartRelationship
   // building containing building parts
   ElementPtr building;
   // the geometry of building
-  boost::shared_ptr<geos::geom::Geometry> buildingGeom;
+  std::shared_ptr<geos::geom::Geometry> buildingGeom;
   // a neighboring buildin part to building
   WayPtr buildingPartNeighbor;
   // the type of relationship between building and buildingPartNeighbor
@@ -121,7 +121,7 @@ private:
 
   ConstOsmMapPtr _map;
 
-  boost::shared_ptr<ElementConverter> _elementConverter;
+  std::shared_ptr<ElementConverter> _elementConverter;
 
   // protects the input data
   QMutex* _buildingPartInputMutex;
@@ -137,11 +137,11 @@ private:
   // Don't pass the shared pointers used by these methods around as refs, as it will disrupt the
   // ref counting and wreak havoc in the threads.
 
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
+  std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
   void _processBuildingPart(const BuildingPartRelationship& buildingPartRelationship);
   void _addContainedBuildingPartToGroup(ElementPtr building,
-                                        boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+                                        std::shared_ptr<geos::geom::Geometry> buildingGeom,
                                         WayPtr buildingPartNeighbor);
 
   /*

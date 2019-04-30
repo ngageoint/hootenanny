@@ -488,23 +488,23 @@ namespace Tgs
     unsigned int _qSortPartition(std::vector<unsigned int> & indices, unsigned int posP, 
       unsigned int posR, unsigned int fIdx) const;
 
-    std::vector< std::string > _trainingLabels;  ///The class labels corresponding to the training data vectors
-    std::vector< std::string > _trainingLabelsBak;  ///The class labels backup corresponding to the training data vectors
-    std::set< std::string> _classSet; ///The set of unique class labels for all the training data
-    std::vector< std::string > _factorLabels;  ///The factor labels corresponding to the data vectors
-    std::vector< unsigned int > _activeFactorIndices;  ///The indices corresponding to the currently active factors
-    std::vector< std::vector< double > > _data; ///The set of data vectors
-    std::vector< int > _factorType; ///< Numeric or Nominal
+    std::vector<std::string> _trainingLabels;  ///The class labels corresponding to the training data vectors
+    std::vector<std::string> _trainingLabelsBak;  ///The class labels backup corresponding to the training data vectors
+    std::set<std::string> _classSet; ///The set of unique class labels for all the training data
+    std::vector<std::string> _factorLabels;  ///The factor labels corresponding to the data vectors
+    std::vector<unsigned int> _activeFactorIndices;  ///The indices corresponding to the currently active factors
+    std::vector<std::vector<double>> _data; ///The set of data vectors
+    std::vector<int> _factorType; /// Numeric or Nominal
     std::map<std::string, int> _trainingLabelEnum;
-    std::vector<std::map<std::string, double> > _medianMaps;  //For each factor a map of each class to its median value
+    std::vector<std::map<std::string, double>> _medianMaps;  ///For each factor a map of each class to its median value
 
     /**
      * true if nulls should be interpreted as values, false if nulls should be interpreted as 
      * missing values. See http://en.wikipedia.org/wiki/Missing_value for a discussion.
      */ 
-    std::vector< int > _nullTreatment;
+    std::vector<int> _nullTreatment;
 
-    std::vector< double > _weights; ///weight for each row
+    std::vector<double> _weights; ///weight for each row
 
     int _trainingEnumCnt;
 

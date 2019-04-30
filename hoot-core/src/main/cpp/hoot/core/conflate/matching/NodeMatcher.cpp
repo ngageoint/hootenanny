@@ -53,7 +53,7 @@ namespace hoot
 {
 
 int NodeMatcher::logWarnCount = 0;
-QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
+QList<std::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
@@ -74,7 +74,7 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
     for (int i = 0; i < critClasses.size(); i++)
     {
       _networkFeatureTypeCriterion.append(
-        boost::shared_ptr<ElementCriterion>(
+        std::shared_ptr<ElementCriterion>(
           Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
     }
   }

@@ -137,7 +137,7 @@ public:
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "changesets.sql");
 
-    boost::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    std::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
 

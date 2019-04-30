@@ -80,7 +80,7 @@ void MedianNodeVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     _nodes.append(n);
   }
 }

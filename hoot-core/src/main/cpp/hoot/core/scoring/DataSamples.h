@@ -30,10 +30,10 @@
 
 // Standard
 #include <map>
+#include <memory>
 #include <vector>
 
 // Tgs
-#include <tgs/SharedPtr.h>
 #include <tgs/RandomForest/DataFrame.h>
 
 namespace hoot
@@ -52,7 +52,7 @@ public:
 
   std::vector<std::string> getUniqueLabels() const;
 
-  boost::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
+  std::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
 

@@ -55,7 +55,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<TestUtils> TestUtils::_theInstance;
+std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString TestUtils::STREET_TAG_NAME = "addr:street";
@@ -183,7 +183,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-boost::shared_ptr<TestUtils> TestUtils::getInstance()
+std::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {

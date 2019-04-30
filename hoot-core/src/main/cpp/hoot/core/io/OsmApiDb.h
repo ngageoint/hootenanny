@@ -76,7 +76,7 @@ public:
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
+  virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -100,13 +100,13 @@ public:
    * @param Type
    * @return
    */
-  QString extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+  QString extractTagFromRow(std::shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
-  boost::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
+  std::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
-  boost::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
+  std::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
-  boost::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
+  std::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
    * Increment the sequence ID for the given sequence and return it
@@ -197,12 +197,12 @@ protected:
 
 private:
 
-  boost::shared_ptr<QSqlQuery> _selectTagsForNode;
-  boost::shared_ptr<QSqlQuery> _selectTagsForWay;
-  boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
-  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  std::shared_ptr<QSqlQuery> _selectTagsForNode;
+  std::shared_ptr<QSqlQuery> _selectTagsForWay;
+  std::shared_ptr<QSqlQuery> _selectTagsForRelation;
+  std::shared_ptr<QSqlQuery> _selectMembersForRelation;
 
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _seqQueries;
 
   void _init();
 

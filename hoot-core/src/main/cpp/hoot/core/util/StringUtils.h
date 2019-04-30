@@ -84,7 +84,7 @@ public:
    * @param jsonStr the string to convert
    * @return a Boost property tree
    */
-  static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
+  static std::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
 
   /**
    * Creates a JSON array from a list of strings
@@ -92,7 +92,7 @@ public:
    * @param stringList a list of strings
    * @return a Boost JSON property tree containing a string array
    */
-  static boost::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
     const QStringList stringList);
 
   /**

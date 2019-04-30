@@ -28,13 +28,10 @@
 #ifndef SMALLWAYMERGER_H
 #define SMALLWAYMERGER_H
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Units.h>
 
 // Std
 #include <set>
@@ -70,12 +67,12 @@ public:
 
   SmallWayMerger(Meters threshold = -1);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
+  static void mergeWays(std::shared_ptr<OsmMap> map, Meters threshold);
 
   virtual QString getInitStatusMessage() const { return "Merging very small ways..."; }
 
@@ -86,13 +83,13 @@ public:
 
 protected:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   double _threshold;
   NodeToWayMap* _n2w;
-  boost::shared_ptr<TagDifferencer> _diff;
+  std::shared_ptr<TagDifferencer> _diff;
 
-  void _mergeNeighbors(boost::shared_ptr<Way> w);
+  void _mergeNeighbors(std::shared_ptr<Way> w);
 
   void _mergeWays(const std::set<long>& ids);
 };

@@ -54,7 +54,7 @@ public:
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual void setConfiguration(const Settings& conf) override;
 
@@ -73,7 +73,7 @@ public:
 
 protected:
 
-  boost::shared_ptr<ToEnglishTranslator> _translatorClient;
+  std::shared_ptr<ToEnglishTranslator> _translatorClient;
 
   QSet<QString> _tagKeys;
   QString _toTranslateTagKey;

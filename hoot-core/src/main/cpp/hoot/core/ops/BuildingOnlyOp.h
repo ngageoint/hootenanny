@@ -71,7 +71,7 @@ public:
    * @brief apply - perform the operation on the map (see class description)
    * @param map - map to operate on
    */
-  virtual void apply(boost::shared_ptr<OsmMap> &map) override;
+  virtual void apply(std::shared_ptr<OsmMap> &map) override;
 
   /**
    * @brief getClassName - get the namespace-qualified class name
@@ -84,7 +84,7 @@ public:
 
 private:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   bool _isBuildingRelation(ConstElementPtr e);
 };

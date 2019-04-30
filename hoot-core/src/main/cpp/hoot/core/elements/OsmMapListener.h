@@ -28,6 +28,8 @@
 #ifndef OSMMAPLISTENER_H
 #define OSMMAPLISTENER_H
 
+#include <memory>
+
 namespace hoot
 {
 
@@ -37,7 +39,7 @@ public:
 
   virtual ~OsmMapListener() {}
 
-  virtual boost::shared_ptr<OsmMapListener> clone() const = 0;
+  virtual std::shared_ptr<OsmMapListener> clone() const = 0;
 
   /**
    * Gets called before a node is replaced.

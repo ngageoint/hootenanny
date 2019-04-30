@@ -43,8 +43,8 @@ public:
 
 };
 
-typedef boost::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
-typedef boost::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
+typedef std::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
+typedef std::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);

@@ -34,7 +34,8 @@
 // Qt
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Represents common element properties that get serialized as XML attributes when writing to file.

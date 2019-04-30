@@ -132,7 +132,7 @@ void ImplicitTagUtils::_filterOutStreets(QString& name)
 }
 
 QStringList ImplicitTagUtils::translateNamesToEnglish(const QStringList names, const Tags& tags,
-                                                 boost::shared_ptr<ToEnglishTranslator> translator)
+                                                      std::shared_ptr<ToEnglishTranslator> translator)
 {
   LOG_VART(translator.get());
   QStringList filteredNames;

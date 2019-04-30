@@ -39,7 +39,7 @@ namespace hoot
 
 class AddressTagKeys;
 
-typedef boost::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
+typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
  * Allows for mapping an address part type to a range of valid OSM tag keys (Singleton)

@@ -77,12 +77,12 @@ private:
 
   // one filter for each type: must, must_not, and should
   QMap<QString, QList<TagFilter>> _tagFilters;
-  boost::shared_ptr<QRegExp> _keyMatcher;
-  boost::shared_ptr<QRegExp> _valueMatcher;
+  std::shared_ptr<QRegExp> _keyMatcher;
+  std::shared_ptr<QRegExp> _valueMatcher;
 
   void _parseFilterString(const QString filterJsonStringOrPath);
   void _loadTagFilters(const QString tagFilterType,
-                       boost::shared_ptr<boost::property_tree::ptree> propTree);
+                       std::shared_ptr<boost::property_tree::ptree> propTree);
 
   bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
   bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;

@@ -95,7 +95,7 @@ public:
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
 
     //  Check the geometry of a node
-    boost::shared_ptr<Geometry> geometry = ec.convertToGeometry(ElementPtr(nodes[0]));
+    std::shared_ptr<Geometry> geometry = ec.convertToGeometry(ElementPtr(nodes[0]));
     HOOT_STR_EQUALS("Point", geometry->getGeometryType());
 
     //  Check the geometry of a way
@@ -140,7 +140,7 @@ public:
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
     WayPtr way = TestUtils::createWay(map, nodes);
     //  Check the convert to linestring method
-    boost::shared_ptr<LineString> ls = ec.convertToLineString(way);
+    std::shared_ptr<LineString> ls = ec.convertToLineString(way);
     CPPUNIT_ASSERT_EQUAL(Dimension::L, ls->getDimension());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, ls->getLength(), 1e-3);
     HOOT_STR_EQUALS("LineString", ls->getGeometryType());
@@ -158,7 +158,7 @@ public:
     nodes.push_back(nodes[0]);
     WayPtr way = TestUtils::createWay(map, nodes);
     //  Check the covert to polygon method
-    boost::shared_ptr<Polygon> poly = ec.convertToPolygon(way);
+    std::shared_ptr<Polygon> poly = ec.convertToPolygon(way);
     CPPUNIT_ASSERT_EQUAL(Dimension::A, poly->getDimension());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, poly->getArea(), 1e-3);
     HOOT_STR_EQUALS("Polygon", poly->getGeometryType());

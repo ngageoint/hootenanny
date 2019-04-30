@@ -27,12 +27,12 @@
 #ifndef STXXL_H
 #define STXXL_H
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QTemporaryFile>
 #include <QString>
+
+// Standard
+#include <memory>
 
 namespace Tgs
 {
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  static boost::shared_ptr<Stxxl> _theInstance;
+  static std::shared_ptr<Stxxl> _theInstance;
   QTemporaryFile _configFileTmp;
 
   Stxxl();

@@ -27,9 +27,6 @@
 #ifndef SCRIPTTRANSLATORFACTORY_H
 #define SCRIPTTRANSLATORFACTORY_H
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QString>
 
@@ -61,7 +58,7 @@ public:
 
 private:
 
-  static boost::shared_ptr<ScriptTranslatorFactory> _theInstance;
+  static std::shared_ptr<ScriptTranslatorFactory> _theInstance;
 
   ScriptTranslatorFactory();
 

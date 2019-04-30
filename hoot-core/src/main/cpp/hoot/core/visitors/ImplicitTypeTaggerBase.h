@@ -73,7 +73,7 @@ protected:
   bool _elementIsASpecificFeature;
 
   //reads implicit tag rules from the configured rules database
-  boost::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
+  std::shared_ptr<ImplicitTagRulesSqliteReader> _ruleReader;
 
 private:
 
@@ -109,7 +109,7 @@ private:
   int _maxNameLength;
 
   //translates names to English
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  std::shared_ptr<ToEnglishTranslator> _translator;
 
   QStringList _getNameTokens(const QStringList names) const;
   QStringList _getTranslatedNames(const QStringList names, const Tags& tags);

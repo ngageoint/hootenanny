@@ -53,7 +53,7 @@ public:
    * A list of links from this cluster to other clusters. These links refer to some kind of
    * non-miss relationship between the clusters.
    */
-  QList< boost::shared_ptr<MultiaryCluster> > links;
+  QList<std::shared_ptr<MultiaryCluster>> links;
 
   /**
    * A single element that represents the merged result of all the cluster's members.
@@ -65,7 +65,7 @@ public:
   QString toString() const;
 };
 
-typedef boost::shared_ptr<MultiaryCluster> MultiaryClusterPtr;
+typedef std::shared_ptr<MultiaryCluster> MultiaryClusterPtr;
 
 }
 

@@ -146,7 +146,7 @@ protected:
    * All of this order silliness maintains a consistent ordering of matches when they're placed
    * into a set as pointers.
    */
-  Match(const boost::shared_ptr<const MatchThreshold> threshold) :
+  Match(const std::shared_ptr<const MatchThreshold> threshold) :
     _order(_orderCount++), _threshold(threshold) {}
 
   friend class MatchPtrComparator;
@@ -154,7 +154,7 @@ protected:
   static long _orderCount;
   long _order;
 
-  const boost::shared_ptr<const MatchThreshold> _threshold;
+  const std::shared_ptr<const MatchThreshold> _threshold;
 };
 
 inline std::ostream& operator<<(std::ostream & o, const Match* m)

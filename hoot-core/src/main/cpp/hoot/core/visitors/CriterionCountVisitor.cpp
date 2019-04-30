@@ -39,7 +39,7 @@ _pCrit()
 {
 }
 
-CriterionCountVisitor::CriterionCountVisitor(const boost::shared_ptr<ElementCriterion>& pCrit):
+CriterionCountVisitor::CriterionCountVisitor(const std::shared_ptr<ElementCriterion>& pCrit):
 _count(0),
 _visited(0),
 _pCrit(pCrit)

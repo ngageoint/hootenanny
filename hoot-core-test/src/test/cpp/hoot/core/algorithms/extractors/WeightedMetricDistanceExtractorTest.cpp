@@ -91,12 +91,12 @@ public:
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00384111,
-                                 uut.extract(*constMap, boost::const_pointer_cast<const Way>(w1), boost::const_pointer_cast<const Way>(w2)),
+                                 uut.extract(*constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)),
                                  0.00001);
 
    //test same features, should return 0
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0,
-                                 uut.extract(*constMap, boost::const_pointer_cast<const Way>(w1), boost::const_pointer_cast<const Way>(w3)),
+                                 uut.extract(*constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w3)),
                                  0.0);
   }
 };

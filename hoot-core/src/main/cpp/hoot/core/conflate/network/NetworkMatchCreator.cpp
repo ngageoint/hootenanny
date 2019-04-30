@@ -92,7 +92,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   // use another class to extract graph nodes and graph edges.
   OsmNetworkExtractor e1;
-  boost::shared_ptr<ChainCriterion> c1(
+  std::shared_ptr<ChainCriterion> c1(
     new ChainCriterion(
       ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), _userCriterion));
   if (_filter)
@@ -104,7 +104,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   LOG_TRACE("Extracted Network 1: " << n1->toString());
 
   OsmNetworkExtractor e2;
-  boost::shared_ptr<ChainCriterion> c2(
+  std::shared_ptr<ChainCriterion> c2(
     new ChainCriterion(
       ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), _userCriterion));
   if (_filter)
@@ -183,7 +183,7 @@ bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstO
   return _userCriterion->isSatisfied(element);
 }
 
-boost::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
+std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {

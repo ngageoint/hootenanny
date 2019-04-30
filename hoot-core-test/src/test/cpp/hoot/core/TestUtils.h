@@ -146,7 +146,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static boost::shared_ptr<TestUtils> getInstance();
+  static std::shared_ptr<TestUtils> getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -185,7 +185,7 @@ private:
 
   QList<RegisteredReset*> _resets;
 
-  static boost::shared_ptr<TestUtils> _theInstance;
+  static std::shared_ptr<TestUtils> _theInstance;
 };
 
 /**

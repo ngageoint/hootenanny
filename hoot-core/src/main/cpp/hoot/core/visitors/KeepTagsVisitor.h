@@ -50,7 +50,7 @@ public:
 
   void setConfiguration(const Settings& conf);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Keeps only tags with specified keys"; }
 

@@ -44,10 +44,11 @@ namespace Tgs
  * Similar to the DisjointSet, but can use a class other than an int for defining groups.
  */
 template<class T>
-class DisjointSetMap {
+class DisjointSetMap
+{
 public:
   typedef typename HashMap<T, int> UserMap;
-  typedef HashMap< int, std::vector<T> > AllGroups;
+  typedef HashMap<int, std::vector<T>> AllGroups;
 
   void clear()
   {
@@ -122,7 +123,8 @@ private:
 };
 
 template<class T>
-inline int DisjointSetMap<T>::find(int x) {
+inline int DisjointSetMap<T>::find(int x)
+{
   int y = x;
   while (y != _e[y].p)
     y = _e[y].p;
@@ -131,12 +133,15 @@ inline int DisjointSetMap<T>::find(int x) {
 }
 
 template<class T>
-inline void DisjointSetMap<T>::join(int x, int y) {
+inline void DisjointSetMap<T>::join(int x, int y)
+{
   x = find(x);
   y = find(y);
-  if (x < y) {
+  if (x < y)
+  {
     _e[y].p = x;
-  } else {
+  } else
+  {
     _e[x].p = y;
   }
 }

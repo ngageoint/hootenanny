@@ -36,11 +36,9 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
 // Standard
+#include <cassert>
+#include <memory>
 #include <set>
 #include <string>
 
@@ -93,7 +91,7 @@ public:
    * envelope.
    */
   virtual geos::geom::Envelope* getEnvelope(
-    const boost::shared_ptr<const ElementProvider>& ep) const = 0;
+    const std::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }
@@ -198,8 +196,8 @@ protected:
   void _preGeometryChange();
 };
 
-typedef boost::shared_ptr<Element> ElementPtr;
-typedef boost::shared_ptr<const Element> ConstElementPtr;
+typedef std::shared_ptr<Element> ElementPtr;
+typedef std::shared_ptr<const Element> ConstElementPtr;
 
 }
 

@@ -35,7 +35,8 @@
 #include <vector>
 
 // newmat Includes
-namespace NEWMAT {
+namespace NEWMAT
+{
   class DiagonalMatrix;
   class Matrix;
 }
@@ -85,7 +86,7 @@ namespace Tgs
     /**
      * Returns the calculated components
      */
-    const std::vector< std::vector<double> >& getComponents() const { return _components; }
+    const std::vector<std::vector<double>>& getComponents() const { return _components; }
 
     /**
     * Reprojects the given point from the PCA space into normal space
@@ -99,7 +100,7 @@ namespace Tgs
 
   private:
 
-    std::vector< std::vector<double> > _components;
+    std::vector<std::vector<double>> _components;
     std::vector<double> _tmp;
 
     /**

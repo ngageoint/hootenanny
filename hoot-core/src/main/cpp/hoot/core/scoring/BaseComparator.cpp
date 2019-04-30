@@ -53,7 +53,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2)
+BaseComparator::BaseComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2)
 {
   _init(map1, map2);
 }
@@ -143,7 +143,7 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, Coordinate c)
+Coordinate BaseComparator::_findNearestPointOnFeature(std::shared_ptr<OsmMap> map, Coordinate c)
 {
   Coordinate result;
 
@@ -152,8 +152,8 @@ Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> 
   WayPtr w = map->getWay(wId);
 
   // find the nearest point on that feature.
-  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
-  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+  std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
   CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
 
   cs->getAt(0, result);
@@ -163,7 +163,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> 
   return result;
 }
 
-void BaseComparator::_init(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2)
+void BaseComparator::_init(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2)
 {
   _map1 = map1;
   _map2 = map2;

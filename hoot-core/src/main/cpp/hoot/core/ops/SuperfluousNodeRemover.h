@@ -41,9 +41,6 @@
 // Standard
 #include <set>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -65,15 +62,15 @@ public:
 
   SuperfluousNodeRemover();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 
-  static boost::shared_ptr<OsmMap> removeNodes(boost::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<OsmMap> removeNodes(std::shared_ptr<const OsmMap> map);
 
-  static void removeNodes(boost::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
+  static void removeNodes(std::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
 
   virtual void setBounds(const geos::geom::Envelope &bounds);
 

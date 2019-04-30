@@ -118,7 +118,7 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   return result;
 }
 
-boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString &tableName)
+std::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString &tableName)
 {
   if (vm.contains("attrs") == false)
   {
@@ -133,14 +133,14 @@ boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, 
   if (tableName.length() < 1)
   {
     LOG_WARN("_createFeature: Empty tableName");
-    return boost::shared_ptr<Feature>(); // Null feature
+    return std::shared_ptr<Feature>(); // Null feature
   }
 
   // figure out which layer this feature belongs in.
-  boost::shared_ptr<const Layer> layer;
+  std::shared_ptr<const Layer> layer;
   for (size_t i = 0; i < _schema->getLayerCount(); ++i)
   {
-    boost::shared_ptr<const Layer> l = _schema->getLayer(i);
+    std::shared_ptr<const Layer> l = _schema->getLayer(i);
 
     if (l->getName() == tableName)
     {
@@ -161,7 +161,7 @@ boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, 
 
   QVariantMap attrs = vm["attrs"].toMap();
 
-  boost::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
+  std::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
 
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
@@ -379,7 +379,7 @@ void JavaScriptTranslator::_featureWarn(QString message, QString fileName, QStri
                          functionName.toStdString(), lineNumber);
 }
 
-boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
+std::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
@@ -407,7 +407,7 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     if (schemaJs->IsArray())
     {
 
-      boost::shared_ptr<Schema> schema(new Schema());
+      std::shared_ptr<Schema> schema(new Schema());
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -552,9 +552,9 @@ void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QV
   }
 }
 
-boost::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
+std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
 {
-  boost::shared_ptr<FieldDefinition> result;
+  std::shared_ptr<FieldDefinition> result;
 
   if (fieldV.canConvert(QVariant::Map) == false)
   {
@@ -709,9 +709,9 @@ boost::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(Q
   return result;
 }
 
-boost::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
+std::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
 {
-  boost::shared_ptr<Layer> newLayer(new Layer());
+  std::shared_ptr<Layer> newLayer(new Layer());
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -765,10 +765,10 @@ boost::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
-  boost::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+  std::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
   for (int i = 0; i < columns.size(); i++)
   {
-    boost::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
+    std::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
     if (names.find(fd->getName()) != names.end())
     {
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");

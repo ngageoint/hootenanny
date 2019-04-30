@@ -50,7 +50,7 @@ public:
   void basicTest()
   {
     Isolate* current = v8::Isolate::GetCurrent();
-    boost::shared_ptr<PluginContext> _pc(new PluginContext());
+    std::shared_ptr<PluginContext> _pc(new PluginContext());
     HandleScope handleScope(current);
     Context::Scope context_scope(_pc->getContext(current));
 

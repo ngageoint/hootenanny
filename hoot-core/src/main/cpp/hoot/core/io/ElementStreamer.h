@@ -103,7 +103,7 @@ public:
 private:
 
   static ElementInputStreamPtr _getFilteredInputStream(
-    boost::shared_ptr<OsmMapReader> reader, const QStringList ops);
+    std::shared_ptr<OsmMapReader> reader, const QStringList ops);
 };
 
 }

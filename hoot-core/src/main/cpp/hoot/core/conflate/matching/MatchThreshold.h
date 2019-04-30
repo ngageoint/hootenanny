@@ -79,8 +79,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<MatchThreshold> MatchThresholdPtr;
-typedef boost::shared_ptr<const MatchThreshold> ConstMatchThresholdPtr;
+typedef std::shared_ptr<MatchThreshold> MatchThresholdPtr;
+typedef std::shared_ptr<const MatchThreshold> ConstMatchThresholdPtr;
 
 }
 

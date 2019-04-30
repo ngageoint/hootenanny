@@ -46,7 +46,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 
-boost::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
+std::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 QSet<QString> PoiPolygonTypeScoreExtractor::_allTagKeys;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;

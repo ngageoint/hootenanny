@@ -219,7 +219,7 @@ namespace SaUrgent
 //         std::cout << "F " << itr->first << " " << itr->second << std::endl;
 //       }
 // 
-//       std::vector<std::pair<std::string, std::vector<double> > > results;
+//       std::vector<std::pair<std::string, std::vector<double>>> results;
 //       std::map<std::string, unsigned int> classLabels = rf.getClassLabels();
 // 
 //       std::fstream inStream2;
@@ -227,7 +227,7 @@ namespace SaUrgent
 //       std::string inBuffer2;
 // 
 //       std::map<std::string, unsigned int>::iterator mapItr;
-//       //std::map<std:string, std:map<std:string, unsigned int> > > confusionMatrix;
+//       //std::map<std:string, std:map<std:string, unsigned int>>> confusionMatrix;
 // 
 // 
 //       std::fstream outStream;

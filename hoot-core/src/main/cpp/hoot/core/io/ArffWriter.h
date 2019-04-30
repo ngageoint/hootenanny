@@ -74,7 +74,7 @@ public:
 private:
 
   QString _path;
-  boost::shared_ptr<std::fstream> _autoStrm;
+  std::shared_ptr<std::fstream> _autoStrm;
   std::ostream* _strm;
   bool _useNulls;
 

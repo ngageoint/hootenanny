@@ -48,8 +48,8 @@ public:
 
   virtual std::string getName() const;
 
-  virtual double extract(const OsmMap& /*map*/, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const;
 
   virtual double extract(const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;

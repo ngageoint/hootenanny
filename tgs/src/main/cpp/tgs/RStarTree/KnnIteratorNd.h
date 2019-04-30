@@ -30,14 +30,14 @@
 #define __TGS__KNN_ITERATOR_ND_H__
 
 // Standard Includes
-#include <limits.h>
+#include <cassert>
+#include <climits>
 #include <list>
 #include <queue>
 #include <set>
 #include <math.h>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>
 #include <tgs/RStarTree/RStarTree.h>

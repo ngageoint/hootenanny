@@ -51,9 +51,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   bool result = false;
   assert(matches.size() > 0);
 
-  set< pair<ElementId, ElementId> > eids;
+  set<pair<ElementId, ElementId>> eids;
 
-  boost::shared_ptr<PluginContext> script;
+  std::shared_ptr<PluginContext> script;
   Persistent<Object> plugin;
   QStringList matchType;
 
@@ -80,7 +80,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
       Context::Scope context_scope(script->getContext(current));
 
       plugin.Reset(current, sm->getPlugin());
-      set< pair<ElementId, ElementId> > s = sm->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
       if (matchType.contains(sm->getMatchName()) == false)
       {

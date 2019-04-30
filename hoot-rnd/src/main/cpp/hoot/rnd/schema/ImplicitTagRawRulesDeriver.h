@@ -105,13 +105,13 @@ private:
 
   //contains the word/tag occurrence counts at various stages; line format:
   //<count>\t<word>\t<key=value>
-  boost::shared_ptr<QTemporaryFile> _countFile;
-  boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
-  boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
+  std::shared_ptr<QTemporaryFile> _countFile;
+  std::shared_ptr<QTemporaryFile> _sortedCountFile;
+  std::shared_ptr<QTemporaryFile> _dedupedCountFile;
+  std::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
 
   //final output file
-  boost::shared_ptr<QFile> _output;
+  std::shared_ptr<QFile> _output;
 
   //maps the a name token concatenated with a tag key to a tag value
   QHash<QString, QString> _wordKeysToCountsValues;
@@ -120,18 +120,18 @@ private:
 
   StringTokenizer _tokenizer;
 
-  boost::shared_ptr<PartialOsmMapReader> _inputReader;
+  std::shared_ptr<PartialOsmMapReader> _inputReader;
 
   //controls which elements have tags harvested from them
-  boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
+  std::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
 
   //translates names to English
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  std::shared_ptr<ToEnglishTranslator> _translator;
 
   void _init();
   void _validateInputs(const QStringList inputs, const QStringList translationScripts,
                        const QString output);
-  boost::shared_ptr<ElementInputStream> _getInputStream(const QString input,
+  std::shared_ptr<ElementInputStream> _getInputStream(const QString input,
                                                         const QString translationScript);
 
   /*
@@ -158,7 +158,7 @@ private:
    * In cases where these is a word/tag key occurrence count tie, this resolves the tie.
    */
   void _resolveCountTies();
-  void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
+  void _sortByWord(std::shared_ptr<QTemporaryFile> input);
 };
 
 }

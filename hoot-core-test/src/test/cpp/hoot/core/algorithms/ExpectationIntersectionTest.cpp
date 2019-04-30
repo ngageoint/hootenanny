@@ -71,7 +71,7 @@ public:
     boost::minstd_rand rng;
     rng.seed(42);
     boost::normal_distribution<> ndx;
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
 
     int set1 = 10;
     int set2 = 20;
@@ -104,7 +104,7 @@ public:
     boost::minstd_rand rng;
     rng.seed(42);
     boost::normal_distribution<> ndx;
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
 
     int set1 = 10;
     int set2 = 20;

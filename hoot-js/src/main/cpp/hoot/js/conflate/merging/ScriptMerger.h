@@ -46,7 +46,7 @@ public:
   static int logWarnCount;
 
   ScriptMerger();
-  ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,
+  ScriptMerger(std::shared_ptr<PluginContext> script, v8::Persistent<v8::Object>& plugin,
     const std::set<std::pair<ElementId, ElementId>>& pairs);
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
@@ -65,7 +65,7 @@ protected:
 
   PairsSet _pairs;
   v8::Persistent<v8::Object> _plugin;
-  boost::shared_ptr<PluginContext> _script;
+  std::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
 
   /**

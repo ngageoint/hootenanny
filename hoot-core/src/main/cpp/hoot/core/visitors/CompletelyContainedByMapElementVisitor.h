@@ -36,9 +36,6 @@
 // standard
 #include <string>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -75,11 +72,11 @@ protected:
 
   bool _complete;
 
-  bool _isComplete(const boost::shared_ptr<const Element>& e);
+  bool _isComplete(const std::shared_ptr<const Element>& e);
 
-  void _visit(const boost::shared_ptr<const Way>& w);
+  void _visit(const std::shared_ptr<const Way>& w);
 
-  void _visit(const boost::shared_ptr<const Relation> &r);
+  void _visit(const std::shared_ptr<const Relation> &r);
 };
 
 }

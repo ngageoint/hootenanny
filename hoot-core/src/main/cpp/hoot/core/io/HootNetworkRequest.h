@@ -28,9 +28,6 @@
 #ifndef HOOT_NETWORK_REQUEST_H
 #define HOOT_NETWORK_REQUEST_H
 
-//  Boost
-#include <boost/shared_ptr.hpp>
-
 //  Qt
 #include <QList>
 #include <QNetworkAccessManager>
@@ -110,13 +107,13 @@ public:
    * @brief getCookies
    * @return the cookies used by the request
    */
-  boost::shared_ptr<HootNetworkCookieJar> getCookies() const { return _cookies; }
+  std::shared_ptr<HootNetworkCookieJar> getCookies() const { return _cookies; }
 
   /**
    * @brief setCookies
    * @param cookies sets the cookies for the request
    */
-  void setCookies(boost::shared_ptr<HootNetworkCookieJar> cookies) { _cookies = cookies; }
+  void setCookies(std::shared_ptr<HootNetworkCookieJar> cookies) { _cookies = cookies; }
   /**
    * @brief setOAuthKeys Enable OAuth authentication
    * @param consumer_key - OAuth consumer key
@@ -162,18 +159,18 @@ private:
   /** Error string */
   QString _error;
   /** cookies to pass in with the request */
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
   /** Flag for using OAuth 1.0, all four of the keys/tokens (two in each object)
    *  below must be valid for `_useOAuth` to be true.
    */
   bool _useOAuth;
   /** OAuth 1.0 consumer object */
-  boost::shared_ptr<OAuth::Consumer> _consumer;
+  std::shared_ptr<OAuth::Consumer> _consumer;
   /** OAuth 1.0 request token object */
-  boost::shared_ptr<OAuth::Token> _tokenRequest;
+  std::shared_ptr<OAuth::Token> _tokenRequest;
 };
 
-typedef boost::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
+typedef std::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
 
 }
 

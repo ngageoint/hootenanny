@@ -193,8 +193,10 @@ private:
   bool _atEnd;
 };
 
-struct FaceCompare {
-  bool operator() (const Face* lhs, const Face* rhs) const{
+struct FaceCompare
+{
+  bool operator() (const Face* lhs, const Face* rhs) const
+  {
     return *lhs < *rhs;
   }
 };
@@ -273,7 +275,7 @@ private:
   double _x[3], _y[3];
   int _pointCount;
   std::vector<Face> _faces;
-  std::map< Edge, std::pair<int, int> > _edgeToFace;
+  std::map<Edge, std::pair<int, int>> _edgeToFace;
 
   EdgeIterator _edgeEnd;
   FaceIterator _faceEnd;

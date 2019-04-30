@@ -93,10 +93,10 @@ public:
 private:
 
   const ElementCriterion* _criterion;
-  boost::shared_ptr<ElementCriterion> _criterionDelete;
+  std::shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;
   ConstElementVisitor* _visitor;
-  boost::shared_ptr<ConstElementVisitor> _visitDelete;
+  std::shared_ptr<ConstElementVisitor> _visitDelete;
 };
 
 }

@@ -112,7 +112,7 @@ private:
 
   bool _inMemory;
   std::map<K,V> _smallMap;
-  boost::shared_ptr< BigMapStxxl<K,V> > _bigMap;
+  std::shared_ptr<BigMapStxxl<K,V>> _bigMap;
   size_t _maxEntriesInRam;
 
   void _checkSize()

@@ -92,7 +92,7 @@ Relation::Relation(const Relation& from)
 {
 }
 
-void Relation::addElement(const QString& role, const boost::shared_ptr<const Element>& e)
+void Relation::addElement(const QString& role, const std::shared_ptr<const Element>& e)
 {
   addElement(role, e->getElementType(), e->getId());
 }
@@ -146,12 +146,12 @@ int Relation::numElementsByRole(const QString role) const
   return roleCtr;
 }
 
-Envelope* Relation::getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
+Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProvider>& ep) const
+Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
 {
   LOG_VART(ep.get());
 
@@ -173,9 +173,9 @@ Envelope Relation::getEnvelopeInternal(const boost::shared_ptr<const ElementProv
       return result;
     }
 
-    const boost::shared_ptr<const Element> e = ep->getElement(m.getElementId());
+    const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
     LOG_VART(e.get())
-    boost::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
+    std::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
     if (childEnvelope->isNull())
     {
@@ -200,7 +200,7 @@ void Relation::_makeWritable()
   }
 }
 
-void Relation::removeElement(const QString& role, const boost::shared_ptr<const Element>& e)
+void Relation::removeElement(const QString& role, const std::shared_ptr<const Element>& e)
 {
   removeElement(role, e->getElementId());
 }
@@ -221,8 +221,8 @@ void Relation::removeElement(ElementId eid)
   _postGeometryChange();
 }
 
-void Relation::replaceElement(const boost::shared_ptr<const Element>& from,
-  const boost::shared_ptr<const Element> &to)
+void Relation::replaceElement(const std::shared_ptr<const Element>& from,
+  const std::shared_ptr<const Element> &to)
 {
   _preGeometryChange();
   _makeWritable();
@@ -360,7 +360,7 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 
   AddToVisitedRelationsList addTo(visitedRelations, getId());
 
-  filter.visit(boost::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
+  filter.visit(std::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
 
   const vector<RelationData::Entry>& members = getMembers();
 

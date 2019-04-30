@@ -28,15 +28,12 @@
 #ifndef SIGNALCATCHER_H
 #define SIGNALCATCHER_H
 
-#include <iostream>
 #include <csignal>
-#include <stdio.h>
-
+#include <cstdio>
+#include <iostream>
 #include <map>
+#include <memory>
 #include <stack>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -49,7 +46,7 @@ class SignalCatcher
 {
 public:
 
-  static boost::shared_ptr<SignalCatcher> getInstance();
+  static std::shared_ptr<SignalCatcher> getInstance();
 
   void registerDefaultHandlers();
 
@@ -66,9 +63,9 @@ private:
   static void default_handler(int sig);
   static void terminateHandler();
 
-  static boost::shared_ptr<SignalCatcher> _instance;
+  static std::shared_ptr<SignalCatcher> _instance;
 
-  std::map<unsigned int, std::stack<__sighandler_t> > _handlers;
+  std::map<unsigned int, std::stack<__sighandler_t>> _handlers;
 
   bool _defaultSet;
 

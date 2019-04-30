@@ -45,10 +45,8 @@
 // Qt
 #include <QLibrary>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // System
+#include <memory>
 #include <sys/resource.h>
 
 // Tgs
@@ -62,7 +60,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<Hoot> Hoot::_theInstance;
+std::shared_ptr<Hoot> Hoot::_theInstance;
 
 Hoot::Hoot()
 {

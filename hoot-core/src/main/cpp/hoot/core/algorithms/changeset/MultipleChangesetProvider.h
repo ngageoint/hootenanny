@@ -41,9 +41,9 @@ class MultipleChangesetProvider : public ChangesetProvider
 
 public:
 
-  explicit MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
+  explicit MultipleChangesetProvider(std::shared_ptr<OGRSpatialReference> pProjection);
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~MultipleChangesetProvider();
 
@@ -67,11 +67,11 @@ public:
   size_t getNumChangesets();
 
 private:
-  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::shared_ptr<OGRSpatialReference> _projection;
   std::list<ChangesetProviderPtr> _changesets;
 };
 
-typedef boost::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
+typedef std::shared_ptr<MultipleChangesetProvider> MultipleChangesetProviderPtr;
 
 }
 

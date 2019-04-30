@@ -47,7 +47,7 @@ bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   return
     DirectionFinder::isSimilarDirection(
-      _map, _baseWay, boost::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
+      _map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
 }
 
 }

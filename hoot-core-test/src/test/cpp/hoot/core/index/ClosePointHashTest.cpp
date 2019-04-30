@@ -93,7 +93,7 @@ public:
     ClosePointHash cph(neighborDistance);
 
     vector<double> x, y;
-    vector< set<int> > neighbors1, neighbors2;
+    vector<set<int>> neighbors1, neighbors2;
     const size_t SIZE = 100;
     const double range = 10;
     neighbors1.resize(SIZE);

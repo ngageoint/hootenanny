@@ -121,7 +121,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
-    boost::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
+    std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(way);
     // If the way wasn't a building, this will be null.
     if (buildingGeom)
     {
@@ -179,7 +179,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
   {
     RelationPtr relation = it->second;
 
-    boost::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(relation);
+    std::shared_ptr<geos::geom::Geometry> buildingGeom = _getGeometry(relation);
     // If the relation wasn't a building, this will be null.
     if (buildingGeom)
     {
@@ -395,7 +395,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const ConstWayPtr& way, const long
   return false;
 }
 
-boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
+std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
   const ConstElementPtr& element) const
 {
   // see related note about _buildingCrit in BuildingPartMergeOp::_calculateNeighbors
@@ -405,17 +405,17 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       case ElementType::Way:
         return
-          _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Way>(element));
+          _elementConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
       case ElementType::Relation:
         return
           _elementConverter->convertToGeometry(
-            boost::dynamic_pointer_cast<const Relation>(element));
+            std::dynamic_pointer_cast<const Relation>(element));
       default:
         throw IllegalArgumentException(
           "Unexpected element type: " + element->getElementType().toString());
     }
   }
-  return boost::shared_ptr<geos::geom::Geometry>();
+  return std::shared_ptr<geos::geom::Geometry>();
 }
 
 RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,

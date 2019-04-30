@@ -44,7 +44,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
+std::shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
 
 void OgrUtilities::loadDriverInfo()
 {
@@ -137,7 +137,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
   return OgrDriverInfo();
 }
 
-boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
+std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url, false);
@@ -151,7 +151,7 @@ boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
-  boost::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, NULL));
+  std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
     throw HootException("Unable to create data source: " + source +
@@ -174,7 +174,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   return getDriverInfo(url, true)._driverName != NULL;
 }
 
-boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, bool readonly)
+std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
@@ -212,7 +212,7 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, b
     options["OGR_OGDI_LAUNDER_LAYER_NAMES"] = ConfigOptions().getOgrReaderOgdiLaunderLayerNames();
   }
 
-  boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
+  std::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
     driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), options.getCrypticOptions(), NULL)));
 
   if (!result)

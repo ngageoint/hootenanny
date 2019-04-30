@@ -40,9 +40,9 @@ WayCleaner::WayCleaner()
 {
 }
 
-void WayCleaner::visit(const boost::shared_ptr<Element>& e)
+void WayCleaner::visit(const std::shared_ptr<Element>& e)
 {
-  WayPtr way = boost::dynamic_pointer_cast<Way>(e);
+  WayPtr way = std::dynamic_pointer_cast<Way>(e);
   const vector<long> nodeIds = way->getNodeIds();
 
   if (_isZeroLengthWay(way, *_map))

@@ -53,7 +53,7 @@ public:
    */
   OsmMapPtr generateMap(OsmMapPtr inputMap);
 
-  boost::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
+  std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
 private:
 

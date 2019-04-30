@@ -33,9 +33,6 @@
 #include <hoot/core/util/Exception.h>
 using namespace hoot::elements;
 
-// Boost
-using namespace boost;
-
 // GDAL Includes
 #include <ogrsf_frmts.h>
 

@@ -34,7 +34,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FeatureCountVisitor)
 
-void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
+void FeatureCountVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {

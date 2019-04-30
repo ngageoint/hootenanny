@@ -144,7 +144,7 @@ public:
 
   // Functions from ElementProvider
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   virtual bool containsElement(const ElementId& eid) const = 0;
 
@@ -182,7 +182,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ElementCache> ElementCachePtr;
+typedef std::shared_ptr<ElementCache> ElementCachePtr;
 
 }
 

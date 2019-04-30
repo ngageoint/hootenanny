@@ -56,7 +56,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = boost::dynamic_pointer_cast<const Way>(e);
+      const ConstWayPtr& w = std::dynamic_pointer_cast<const Way>(e);
 
       vector<long> nodes = w->getNodeIds();
       if (nodes[0] != nodes[nodes.size() - 1])
@@ -118,8 +118,8 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
 double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  boost::shared_ptr<Histogram> h1(_createHistogram(map, target));
-  boost::shared_ptr<Histogram> h2(_createHistogram(map, candidate));
+  std::shared_ptr<Histogram> h1(_createHistogram(map, target));
+  std::shared_ptr<Histogram> h2(_createHistogram(map, candidate));
   if (_smoothing > 0.0)
   {
     h1->smooth(_smoothing);

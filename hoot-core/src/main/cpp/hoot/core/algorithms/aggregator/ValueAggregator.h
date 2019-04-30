@@ -36,9 +36,6 @@
 // Standard
 #include <vector>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -62,7 +59,7 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;
+typedef std::shared_ptr<ValueAggregator> ValueAggregatorPtr;
 
 }
 

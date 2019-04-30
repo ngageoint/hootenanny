@@ -46,7 +46,7 @@ namespace Tgs
     /**
      * @brief RandomForestThread Constructor
      */
-    RandomForestThread(boost::shared_ptr<DataFrame> data, boost::shared_ptr<RandomTree> tree,
+    RandomForestThread(std::shared_ptr<DataFrame> data, std::shared_ptr<RandomTree> tree,
       unsigned int numFactors, unsigned int nodeSize = 1, bool makeBalanced = false);
 
     /**
@@ -68,8 +68,8 @@ namespace Tgs
     void run();
 
   private:
-    boost::shared_ptr<RandomTree> _tree;
-    boost::shared_ptr<DataFrame> _data;
+    std::shared_ptr<RandomTree> _tree;
+    std::shared_ptr<DataFrame> _data;
     unsigned int _numFactors;
     unsigned int _nodeSize;
     bool _makeBalanced;

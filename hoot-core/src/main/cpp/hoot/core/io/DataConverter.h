@@ -53,7 +53,7 @@ public:
   QQueue<ElementPtr>* _pElementQ;
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
@@ -70,7 +70,7 @@ public:
   QString _output;
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
 };

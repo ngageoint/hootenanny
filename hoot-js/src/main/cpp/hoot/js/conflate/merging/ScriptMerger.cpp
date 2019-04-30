@@ -56,7 +56,7 @@ MergerBase()
 {
 }
 
-ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
+ScriptMerger::ScriptMerger(std::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :
   _pairs(pairs),
   _script(script)
@@ -68,7 +68,7 @@ ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<O
   _eid2 = _pairs.begin()->second;
 }
 
-void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+void ScriptMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   bool hasMergeSet = hasFunction("mergeSets");
   bool hasMergePair = hasFunction("mergePair");
@@ -88,7 +88,7 @@ void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId
 }
 
 void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_VART(_eid1);
   LOG_VART(_eid2);
@@ -168,7 +168,7 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
 }
 
 void ScriptMerger::_applyMergeSets(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   _callMergeSets(map, replaced);
 
@@ -213,7 +213,7 @@ Handle<Value> ScriptMerger::_callMergePair(const OsmMapPtr& map) const
 }
 
 void ScriptMerger::_callMergeSets(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);

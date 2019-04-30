@@ -98,7 +98,7 @@ void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
   }
 }
 
-boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableApps(
+std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableApps(
  const QString type)
 {
  LOG_DEBUG("Checking apps available for: " << type << "...");
@@ -138,7 +138,7 @@ boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::g
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-boost::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableLanguages(
+std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableLanguages(
   const QString type)
 {
   LOG_DEBUG("Checking languages available for: " << type << "...");

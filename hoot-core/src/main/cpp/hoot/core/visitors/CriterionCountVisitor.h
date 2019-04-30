@@ -64,7 +64,7 @@ private:
 
   uint64_t _count;
   uint64_t _visited;
-  boost::shared_ptr<ElementCriterion> _pCrit;
+  std::shared_ptr<ElementCriterion> _pCrit;
 };
 
 }

@@ -134,7 +134,7 @@ void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
     ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations();
 }
 
-void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
+void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap> &map)
 {
   _numAffected = 0;
   _map = map;
@@ -167,9 +167,9 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
   }
 }
 
-void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building, const ElementPtr& element, boost::shared_ptr<Geometry>& outline)
+void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building, const ElementPtr& element, std::shared_ptr<Geometry>& outline)
 {
-  boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(element);
+  std::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(element);
   try
   {
     outline.reset(outline->Union(g.get()));
@@ -207,7 +207,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 {
   LOG_TRACE("Input building: " << building->toString());
 
-  boost::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+  std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
@@ -260,7 +260,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
   {
     LOG_TRACE("Adding building outline element...");
 
-    const boost::shared_ptr<Element> outlineElement =
+    const std::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
     _mergeNodes(outlineElement, building);
@@ -286,7 +286,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
   LOG_TRACE("Output building: " << building);
 }
 
-void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,
+void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,
   const RelationPtr& reference)
 {
   set<long> changedNodes;

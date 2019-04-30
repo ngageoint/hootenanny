@@ -78,7 +78,7 @@ public:
     const QString testName = "runIgnorePreTranslatedTagsTest";
     Settings conf = _getDefaultConfig();
     conf.set("language.ignore.pre.translated.tags", true);
-    boost::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
+    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor =
       _runDetectTest(
         conf,
         _outputPath + testName + ".osm",
@@ -156,7 +156,7 @@ private:
     return conf;
   }
 
-  boost::shared_ptr<NonEnglishLanguageDetectionVisitor> _runDetectTest(Settings config,
+  std::shared_ptr<NonEnglishLanguageDetectionVisitor> _runDetectTest(Settings config,
                                                                        const QString outputFile,
                                                                        const QString goldFile)
   {
@@ -165,7 +165,7 @@ private:
       map, "test-files/visitors/ToEnglishTranslationVisitorTest/ToEnglishTranslationVisitorTest.osm",
       false, Status::Unknown1);
 
-    boost::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor(
+    std::shared_ptr<NonEnglishLanguageDetectionVisitor> visitor(
       new NonEnglishLanguageDetectionVisitor());
     visitor->setConfiguration(config);
 

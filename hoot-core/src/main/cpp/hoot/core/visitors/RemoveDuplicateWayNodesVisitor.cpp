@@ -49,7 +49,7 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
   {
     LOG_TRACE("Looking for duplicate way nodes...");
 
-    WayPtr way = boost::dynamic_pointer_cast<Way>(e);
+    WayPtr way = std::dynamic_pointer_cast<Way>(e);
     assert(way.get());
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     LOG_VART(wayNodeIds);

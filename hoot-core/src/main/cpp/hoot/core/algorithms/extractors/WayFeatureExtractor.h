@@ -52,8 +52,8 @@ public:
 
   WayFeatureExtractor();
 
-  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return className(); }
 

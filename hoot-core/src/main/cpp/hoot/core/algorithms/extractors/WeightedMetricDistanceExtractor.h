@@ -66,7 +66,7 @@ protected:
 
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
-  boost::shared_ptr<ValueAggregator> _pointAgg;
+  std::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;
 };
 

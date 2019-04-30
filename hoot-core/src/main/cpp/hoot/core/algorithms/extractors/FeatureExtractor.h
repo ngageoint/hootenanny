@@ -37,7 +37,6 @@
 #include <string>
 
 // tgs
-#include <tgs/SharedPtr.h>
 #include <tgs/RandomForest/DataFrame.h>
 
 namespace hoot
@@ -62,8 +61,8 @@ public:
    * Extracts a feature from a given pair of elements. The feature may be something like the
    * distance between colors, the overlap of two polygons, etc.
    */
-  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const = 0;
+  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const = 0;
 
   virtual std::string getClassName() const = 0;
 
@@ -82,7 +81,7 @@ public:
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 };
 
-typedef boost::shared_ptr<FeatureExtractor> FeatureExtractorPtr;
+typedef std::shared_ptr<FeatureExtractor> FeatureExtractorPtr;
 
 }
 

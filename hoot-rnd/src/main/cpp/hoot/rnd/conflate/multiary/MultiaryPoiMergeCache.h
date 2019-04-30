@@ -57,19 +57,19 @@ public:
    * @param matchCreator
    * @param mergerCreator
    */
-  MultiaryPoiMergeCache(ConstOsmMapPtr map, boost::shared_ptr<MatchCreator> matchCreator,
-    boost::shared_ptr<MergerCreator> mergerCreator);
+  MultiaryPoiMergeCache(ConstOsmMapPtr map, std::shared_ptr<MatchCreator> matchCreator,
+    std::shared_ptr<MergerCreator> mergerCreator);
 
   MultiaryClusterPtr merge(MultiaryClusterPtr c1, MultiaryClusterPtr c2);
 
 private:
 
   ConstOsmMapPtr _map;
-  boost::shared_ptr<MatchCreator> _matchCreator;
-  boost::shared_ptr<MergerCreator> _mergerCreator;
+  std::shared_ptr<MatchCreator> _matchCreator;
+  std::shared_ptr<MergerCreator> _mergerCreator;
 };
 
-typedef boost::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
+typedef std::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
 
 }
 

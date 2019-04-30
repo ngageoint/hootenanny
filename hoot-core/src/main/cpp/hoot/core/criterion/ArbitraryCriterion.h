@@ -34,8 +34,8 @@
 // Qt
 #include <QString>
 
-// Boost
-#include <boost/function.hpp>
+// Standard
+#include <functional>
 
 namespace hoot
 {
@@ -47,19 +47,19 @@ public:
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
   // Do something like:
-  // boost::function<bool (ConstElementPtr e)> f =
-  //  boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-  explicit ArbitraryCriterion(boost::function<bool (ConstElementPtr e)> f)
+  // std::function<bool (ConstElementPtr e)> f =
+  //  std::bind(&ScriptMatchVisitor::isMatchCandidate, this, std::placeholders::_1);
+  explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
   {
     _f = f;
   }
 
-  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
+  explicit ArbitraryCriterion(std::function<bool (const std::shared_ptr<const Element> &e)> f)
   {
     _f = f;
   }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const std::shared_ptr<const Element> &e) const
   {
     return _f(e);
   }
@@ -70,7 +70,7 @@ public:
 
 private:
 
-  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
+  std::function<bool (const std::shared_ptr<const Element> &e)> _f;
 };
 
 }

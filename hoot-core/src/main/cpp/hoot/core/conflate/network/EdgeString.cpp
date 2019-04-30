@@ -185,14 +185,14 @@ Meters EdgeString::calculateLength(const ConstElementProviderPtr& provider) cons
   return result;
 }
 
-boost::shared_ptr<EdgeString> EdgeString::clone() const
+std::shared_ptr<EdgeString> EdgeString::clone() const
 {
   EdgeStringPtr result(new EdgeString());
   result->_edges = _edges;
   return result;
 }
 
-bool EdgeString::contains(const boost::shared_ptr<const EdgeString> other) const
+bool EdgeString::contains(const std::shared_ptr<const EdgeString> other) const
 {
   foreach (const EdgeEntry& ee, other->_edges)
   {
@@ -378,7 +378,7 @@ bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
   return result;
 }
 
-bool EdgeString::overlaps(boost::shared_ptr<const EdgeString> other) const
+bool EdgeString::overlaps(std::shared_ptr<const EdgeString> other) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
@@ -547,7 +547,7 @@ bool EdgeString::touches(const ConstEdgeSublinePtr& es) const
   return false;
 }
 
-bool EdgeString::touches(const boost::shared_ptr<const EdgeString>& es) const
+bool EdgeString::touches(const std::shared_ptr<const EdgeString>& es) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {

@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

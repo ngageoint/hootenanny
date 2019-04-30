@@ -79,7 +79,7 @@ public:
     map->visitRo(uut);
     CPPUNIT_ASSERT_EQUAL((int)36, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
-      boost::any_cast<QMap<QString, long> >(uut.getData());
+      boost::any_cast<QMap<QString, long>>(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
     CPPUNIT_ASSERT_EQUAL((long)36, matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL(

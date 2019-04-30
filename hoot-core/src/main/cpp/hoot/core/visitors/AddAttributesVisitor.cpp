@@ -56,7 +56,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
 }
 
-void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
+void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _attributes.length(); i++)
   {

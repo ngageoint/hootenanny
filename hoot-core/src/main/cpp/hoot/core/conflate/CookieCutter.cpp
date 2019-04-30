@@ -61,7 +61,7 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;
   cutterShapeMap->visitRo(v);
-  boost::shared_ptr<Geometry> cutterShape = v.getUnion();
+  std::shared_ptr<Geometry> cutterShape = v.getUnion();
 
   if (_outputBuffer != 0.0)
   {

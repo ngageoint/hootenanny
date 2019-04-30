@@ -58,7 +58,7 @@ public:
    * @param outputFile file path which to write the optimization summary to
    */
   void runOptimization(
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+    std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
     const QString testSettingsFile, const QString outputFile);
 
 private:
@@ -73,7 +73,7 @@ private:
   /*
    * Writes a summary of the optimization results to file
    */
-  void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
+  void _writeOutput(std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
     const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile);
 };
 

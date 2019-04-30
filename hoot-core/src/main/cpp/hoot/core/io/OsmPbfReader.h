@@ -28,9 +28,6 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL
 class OGRSpatialReference;
 
@@ -158,7 +155,7 @@ public:
 
   virtual bool hasMoreElements();
 
-  virtual boost::shared_ptr<Element> readNextElement();
+  virtual std::shared_ptr<Element> readNextElement();
 
   virtual void finalizePartial();
 
@@ -166,7 +163,7 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
@@ -189,7 +186,7 @@ private:
   std::istream* _in;
   bool _needToCloseInput;
 
-  std::vector< boost::shared_ptr<hoot::Node> > _denseNodeTmp;
+  std::vector<std::shared_ptr<hoot::Node>> _denseNodeTmp;
 
   /// The last position of the pointer while reading data.
   long _lastPosition;
@@ -243,7 +240,7 @@ private:
 
   void _init(bool useFileId);
 
-  void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
+  void _addTag(std::shared_ptr<Element> n, QString k, QString v);
 
   double _convertLon(long lon);
 

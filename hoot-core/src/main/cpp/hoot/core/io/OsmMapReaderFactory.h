@@ -30,11 +30,11 @@
 // Qt
 #include <QString>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 // hoot
 #include <hoot/core/elements/Status.h>
+
+// Standard
+#include <memory>
 
 namespace hoot
 {
@@ -50,12 +50,12 @@ class OsmMapReaderFactory
 
 public:
 
-  static boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
+  static std::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                                       Status defaultStatus = Status::Invalid);
   //Note the url as the last param here...was getting runtime overlap between these two where
   //bools were being passed as status ints and vice versa.  May need to do some more refactoring
   //here to make things cleaner.
-  static boost::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus,
+  static std::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus,
                                                       QString url);
 
   /**
@@ -65,10 +65,10 @@ public:
 
   static bool hasElementInputStream(QString url);
 
-  static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
+  static void read(std::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
   //see note for createReader
-  static void read(boost::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
+  static void read(std::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
 
   static QString getReaderName(const QString url);
 
@@ -77,9 +77,9 @@ public:
 private:
 
   static void _read(
-    boost::shared_ptr<OsmMap> map, boost::shared_ptr<OsmMapReader> reader, const QString url);
+    std::shared_ptr<OsmMap> map, std::shared_ptr<OsmMapReader> reader, const QString url);
 
-  static boost::shared_ptr<OsmMapReader> _createReader(const QString url);
+  static std::shared_ptr<OsmMapReader> _createReader(const QString url);
 };
 
 }

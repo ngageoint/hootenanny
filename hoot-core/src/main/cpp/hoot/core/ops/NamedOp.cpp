@@ -77,10 +77,10 @@ void NamedOp::apply(OsmMapPtr& map)
     timer.restart();
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
-      boost::shared_ptr<OsmMapOperation> t(
+      std::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      std::shared_ptr<OperationStatusInfo> statusInfo =
+        std::dynamic_pointer_cast<OperationStatusInfo>(t);
 
       QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);
@@ -105,10 +105,10 @@ void NamedOp::apply(OsmMapPtr& map)
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
-      boost::shared_ptr<ElementVisitor> t(
+      std::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      std::shared_ptr<OperationStatusInfo> statusInfo =
+        std::dynamic_pointer_cast<OperationStatusInfo>(t);
 
       QString initMessage = _getInitMessage(s, opCount, statusInfo);
       LOG_INFO(initMessage);

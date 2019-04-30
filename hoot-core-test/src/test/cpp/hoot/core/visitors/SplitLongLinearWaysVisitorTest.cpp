@@ -70,7 +70,7 @@ public:
   }
 
 private:
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   void _createWay(const long wayId, const unsigned int startNodeId, const unsigned int endNodeId)
   {
@@ -86,8 +86,9 @@ private:
       for ( unsigned int i = startNodeId; i <= endNodeId; i++ )
       {
         // Make sure map does not already have node in question
-        if ( _map->containsNode(i) == false ) {
-          boost::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
+        if ( _map->containsNode(i) == false )
+        {
+          std::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
           _map->addNode(createNode);
         }
 

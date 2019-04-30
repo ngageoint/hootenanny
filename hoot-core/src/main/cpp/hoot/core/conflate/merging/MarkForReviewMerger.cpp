@@ -42,7 +42,7 @@ MarkForReviewMerger::MarkForReviewMerger()
 {
 }
 
-MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs,
+MarkForReviewMerger::MarkForReviewMerger(const set<pair<ElementId, ElementId>>& pairs,
                                          QString note, QString reviewType, double score) :
   _pairs(pairs),
   _note(note),
@@ -63,7 +63,7 @@ MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString not
 }
 
 void MarkForReviewMerger::apply(const OsmMapPtr& map,
-                                vector< pair<ElementId, ElementId> >& /*replaced*/)
+                                vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   assert(!(_eids.size() >=1 && _pairs.size() >= 1));
 
@@ -73,7 +73,7 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
   }
   else
   {
-    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
       it != _pairs.end(); ++it)
     {
       ElementId eid1 = it->first;
@@ -101,7 +101,7 @@ set<ElementId> MarkForReviewMerger::getImpactedElementIds() const
   else
   {
     // make sure the map contains all our elements and they aren't conflated.
-    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
       it != _pairs.end(); ++it)
     {
       result.insert(it->first);
@@ -119,7 +119,7 @@ bool MarkForReviewMerger::isValid(const ConstOsmMapPtr& /*map*/) const
 
 void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
 {
-  set< pair<ElementId, ElementId> >::iterator it = _pairs.begin();
+  set<pair<ElementId, ElementId>>::iterator it = _pairs.begin();
   while (it != _pairs.end())
   {
     if (it->first == oldEid)

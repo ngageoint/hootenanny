@@ -306,7 +306,7 @@ namespace Tgs
     const int col = p.col;
     const int index = _toIndex(p);
     const float f = _currentValues[index];
-    vector< MyHeap::JHeapNode >& nodes = q.getNodes();
+    vector<MyHeap::JHeapNode>& nodes = q.getNodes();
 
     // this pixel is impassible
     if (_baseValues[index] < 0)
@@ -573,7 +573,7 @@ namespace Tgs
 
   void ProbablePathCalculator::_surround(int index, float cost, MyHeap& q)
   {    
-    vector< MyHeap::JHeapNode >& nodes = q.getNodes();
+    vector<MyHeap::JHeapNode>& nodes = q.getNodes();
 
     int row = index / _cols;
     int col = index % _cols;

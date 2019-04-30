@@ -158,7 +158,7 @@ public:
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
@@ -168,7 +168,7 @@ public:
     RemoveMissVisitor v(map, "Panera");
     map->visitRw(v);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
 
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);

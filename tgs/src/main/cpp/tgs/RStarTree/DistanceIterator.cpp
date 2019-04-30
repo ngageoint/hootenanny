@@ -27,7 +27,8 @@
 #include "DistanceIterator.h"
 
 // Standard Includes
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>

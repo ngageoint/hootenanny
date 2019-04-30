@@ -35,14 +35,14 @@ namespace hoot
 {
 
 QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
-  const QString type,  boost::shared_ptr<boost::property_tree::ptree> response)
+  const QString type,  std::shared_ptr<boost::property_tree::ptree> response)
 {
   QString displayStr;
 
   displayStr += type + " languages:\n\n";
   int langCtr = 0;
   int availableCtr = 0;
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& language, response->get_child("languages"))
+  for (boost::property_tree::ptree::value_type& language : response->get_child("languages"))
   {
     LOG_VART(language.second.get<std::string>("name"));
     LOG_VART(QString::fromStdString(language.second.get<std::string>("name")));
@@ -79,13 +79,13 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
 }
 
 QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const QString type,
-  boost::shared_ptr<boost::property_tree::ptree> response)
+  std::shared_ptr<boost::property_tree::ptree> response)
 {
   QString displayStr;
 
   displayStr += "Available language " + type + ":\n\n";
   int appCtr = 0;
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& app, response->get_child("apps"))
+  for (boost::property_tree::ptree::value_type& app : response->get_child("apps"))
   {
     displayStr += "Name: " + QString::fromStdString(app.second.get<std::string>("name")) + "\n";
     displayStr += "Description: " +
@@ -107,10 +107,10 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const
 }
 
 QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
-  boost::shared_ptr<boost::property_tree::ptree> response)
+  std::shared_ptr<boost::property_tree::ptree> response)
 {
   QMap<QString, QString> langCodesToLangs;
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& language, response->get_child("languages"))
+  for (boost::property_tree::ptree::value_type& language : response->get_child("languages"))
   {
     const QString langCode =
       QString::fromStdString(language.second.get<std::string>("iso6391Code"));

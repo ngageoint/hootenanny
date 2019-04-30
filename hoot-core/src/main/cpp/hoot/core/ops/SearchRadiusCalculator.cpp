@@ -61,11 +61,11 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   _elementCriterion = config.getSearchRadiusCalculatorElementCriterion().trimmed();
 }
 
-void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
+void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 {
   //make a copy of the map with previously conflated data removed, as the rubber sheeting can't
   //use it
-  boost::shared_ptr<OsmMap> mapWithOnlyUnknown1And2(new OsmMap(map));
+  std::shared_ptr<OsmMap> mapWithOnlyUnknown1And2(new OsmMap(map));
 
   LOG_VARD(map->getElementCount());
   LOG_DEBUG(
@@ -101,7 +101,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
     LOG_INFO(
       "Removing elements not satisfying: " << _elementCriterion <<
       " for search radius calculation...");
-    boost::shared_ptr<ElementCriterion> candidateCriterion(
+    std::shared_ptr<ElementCriterion> candidateCriterion(
       Factory::getInstance().constructObject<ElementCriterion>(_elementCriterion));
     RemoveElementsVisitor elementRemover3(true);
     elementRemover3.setRecursive(true);
@@ -140,7 +140,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap>& map)
     "Element count after search radius calculation filtering: " <<
     StringUtils::formatLargeNumber(mapWithOnlyUnknown1And2->getElementCount()));
 
-  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  std::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
   rubberSheet->setFailWhenMinimumTiePointsNotFound(false);

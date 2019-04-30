@@ -27,9 +27,6 @@
 #ifndef BASERANDOMFOREST_H
 #define BASERANDOMFOREST_H
 
-//Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // Qt includes
 #include <QFile>
 
@@ -52,7 +49,7 @@ namespace Tgs
       balanced = false;
     }
 
-    boost::shared_ptr<DataFrame> data;
+    std::shared_ptr<DataFrame> data;
     unsigned int numFactors;
     unsigned int nodeSize;
     bool balanced;
@@ -122,7 +119,7 @@ namespace Tgs
     * @param average variable to hold the computed average error
     * @param stdDev variable to hold the computed standard deviation
     */
-    void findAverageError(boost::shared_ptr<DataFrame> data, double & average, double & stdDev);
+    void findAverageError(std::shared_ptr<DataFrame> data, double & average, double & stdDev);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the
@@ -132,7 +129,7 @@ namespace Tgs
     * @param data the set of data vectors
     * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
     */
-    void findProximity(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
+    void findProximity(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
 
     /**
     * This generates a text file containing the raw probability scores and a text file
@@ -147,7 +144,7 @@ namespace Tgs
     *  @param data the original data set
     *  @param factorImportance a map of factor labels to purity improvement
     */
-    void getFactorImportance(boost::shared_ptr<DataFrame> data,
+    void getFactorImportance(std::shared_ptr<DataFrame> data,
       std::map<std::string, double> & factorImportance);
 
     /**
@@ -195,7 +192,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainBinary(std::shared_ptr<DataFrame> data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, unsigned int nodeSize = 1,
       double retrain = 1.0, bool balanced = false) = 0;
 
@@ -209,7 +206,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numTrees,
       unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
       bool balanced = false) = 0;
 
@@ -225,12 +222,12 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, std::string negClass,
       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
 
   protected:
-    std::vector<boost::shared_ptr<RandomTree> > _forest; /// A container for the random forest
+    std::vector<std::shared_ptr<RandomTree>> _forest; /// A container for the random forest
 
     unsigned int _numSplitFactors;  /// The number of factors to test to split a node
     unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node

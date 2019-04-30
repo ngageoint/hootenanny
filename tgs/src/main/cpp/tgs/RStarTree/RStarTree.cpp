@@ -28,10 +28,11 @@
 #include "RStarTree.h"
 
 // Standard Includes
+#include <cassert>
+#include <cfloat>
+#include <cmath>
 #include <exception>
-#include <float.h>
 #include <iostream>
-#include <math.h>
 using namespace std;
 
 #include <tgs/StreamUtils.h>
@@ -41,7 +42,7 @@ using namespace std;
 
 using namespace Tgs;
 
-RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions)
+RStarTree::RStarTree(std::shared_ptr<PageStore> ps, int dimensions)
   : _store(dimensions, ps)
 {
   RTreeNode* root;
@@ -393,7 +394,7 @@ void RStarTree::_reinsert(RTreeNode* node, int level)
   // cout << "  " << *node << endl;
 
   // compute distances of child node's centroids to envelope's centroids
-  std::vector< DistancePair > distances;
+  std::vector<DistancePair> distances;
   distances.resize(node->getChildCount());
   Box envelope = node->calculateEnvelope();
   for (int i = 0; i < node->getChildCount(); i++)
@@ -507,7 +508,7 @@ void RStarTree::_split(RTreeNode* node, RTreeNode*& newNode)
 
   if (leaf)
   {
-    std::vector< std::pair<Box, int> > tmp;
+    std::vector<std::pair<Box, int>> tmp;
     tmp.reserve(boxes.size());
     // we need to copy the interesting data before we clear the node b/c boxes contains pointers
     // to BoxInternal which references node. More complicated than I'd like, but it is more

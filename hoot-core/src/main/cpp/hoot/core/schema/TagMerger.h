@@ -51,8 +51,8 @@ public:
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 };
 
-typedef boost::shared_ptr<TagMerger> TagMergerPtr;
-typedef boost::shared_ptr<const TagMerger> ConstTagMergerPtr;
+typedef std::shared_ptr<TagMerger> TagMergerPtr;
+typedef std::shared_ptr<const TagMerger> ConstTagMergerPtr;
 
 }
 

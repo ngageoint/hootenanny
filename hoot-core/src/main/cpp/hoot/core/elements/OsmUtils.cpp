@@ -56,45 +56,45 @@ namespace hoot
 {
 
 void OsmUtils::printNodes(const QString nodeCollectionName,
-                          const QList<boost::shared_ptr<const Node> >& nodes)
+                          const QList<std::shared_ptr<const Node>>& nodes)
 {
   if (Log::getInstance().getLevel() == Log::Trace)
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());
-    for (QList<boost::shared_ptr<const Node>>::const_iterator it = nodes.begin();
+    for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.begin();
          it != nodes.end(); ++it)
     {
-      boost::shared_ptr<const Node> node = *it;
+      std::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
     }
   }
 }
 
-const QList<long> OsmUtils::nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes)
+const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes)
 {
   QList<long> nodeIds;
-  for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.constBegin();
+  for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.constBegin();
        it != nodes.constEnd(); ++it)
   {
-    boost::shared_ptr<const Node> node = *it;
+    std::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
   }
   return nodeIds;
 }
 
-QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
-                                                       boost::shared_ptr<const OsmMap> map)
+QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
+                                                       std::shared_ptr<const OsmMap> map)
 {
-  QList<boost::shared_ptr<const Node> > nodes;
+  QList<std::shared_ptr<const Node>> nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
   {
-    nodes.append(boost::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
+    nodes.append(std::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
   }
   return nodes;
 }
 
-Coordinate OsmUtils::nodeToCoord(boost::shared_ptr<const Node> node)
+Coordinate OsmUtils::nodeToCoord(std::shared_ptr<const Node> node)
 {
   return Coordinate(node->getX(), node->getY());
 }
@@ -182,7 +182,7 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
     LOG_VAR(element);
     if (element->getElementType() == ElementType::Relation)
     {
-      ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
       LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
     }
   }

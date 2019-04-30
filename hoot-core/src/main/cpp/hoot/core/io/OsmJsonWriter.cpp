@@ -26,21 +26,18 @@
  */
 #include "OsmJsonWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QBuffer>
@@ -51,7 +48,8 @@ using namespace boost;
 
 using namespace std;
 
-namespace hoot {
+namespace hoot
+{
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 

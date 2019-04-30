@@ -36,9 +36,6 @@
 // Standard
 #include <vector>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -49,13 +46,13 @@ class Layer
 public:
   Layer();
 
-  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   geos::geom::GeometryTypeId getGeometryType() const { return _geometryType; }
 
   QString getName() const { return _name; }
 
-  void setFeatureDefinition(boost::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
+  void setFeatureDefinition(std::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
 
   void setGeometryType(geos::geom::GeometryTypeId geometryType) { _geometryType = geometryType; }
 
@@ -66,7 +63,7 @@ public:
   void setFdName(QString name) { _fdname = name; }
 
 private:
-  boost::shared_ptr<const FeatureDefinition> _definition;
+  std::shared_ptr<const FeatureDefinition> _definition;
   geos::geom::GeometryTypeId _geometryType;
   QString _name;
   QString _fdname;

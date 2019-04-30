@@ -78,8 +78,8 @@ public:
 
 private:
 
-  boost::shared_ptr<QFile> _addFile;
-  boost::shared_ptr<QFile> _deleteFile;
+  std::shared_ptr<QFile> _addFile;
+  std::shared_ptr<QFile> _deleteFile;
   SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;

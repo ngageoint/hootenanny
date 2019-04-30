@@ -89,7 +89,7 @@ void SetTagValueVisitor::_setCriterion(const QString criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      boost::shared_ptr<ElementCriterion>(
+      std::shared_ptr<ElementCriterion>(
         Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
   }
 }
@@ -145,7 +145,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
   _numAffected++;
 }
 
-void SetTagValueVisitor::visit(const boost::shared_ptr<Element>& e)
+void SetTagValueVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _k.size(); i++)
   {

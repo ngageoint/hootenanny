@@ -69,7 +69,7 @@ void elementTranslatorThread::run()
   ElementProviderPtr cacheProvider(_pElementCache);
 
   // Setup writer used for translation
-  boost::shared_ptr<OgrWriter> ogrWriter;
+  std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
     // We use this init mutex as a bandaid. Hoot uses a lot of problematic
     // singletons that cause issues when you try to multithread stuff.
@@ -84,13 +84,13 @@ void elementTranslatorThread::run()
   {
     pNewElement = _pElementQ->dequeue();
 
-    boost::shared_ptr<geos::geom::Geometry> g;
+    std::shared_ptr<geos::geom::Geometry> g;
     std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
     ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
 
     { // Mutex Scope
       QMutexLocker lock(_pTransFeaturesQMutex);
-      _pTransFeaturesQ->enqueue(std::pair<boost::shared_ptr<geos::geom::Geometry>,
+      _pTransFeaturesQ->enqueue(std::pair<std::shared_ptr<geos::geom::Geometry>,
                                 std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
     }
   }
@@ -118,11 +118,11 @@ void ogrWriterThread::run()
   v8::Locker v8Lock(threadIsolate);
 
   bool done = false;
-  std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  std::pair<std::shared_ptr<geos::geom::Geometry>,
     std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
 
   // Setup writer
-  boost::shared_ptr<OgrWriter> ogrWriter;
+  std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
     QMutexLocker lock(_pInitMutex);
     ogrWriter.reset(new OgrWriter());
@@ -275,13 +275,13 @@ void DataConverter::_fillElementCache(QString inputUrl, ElementCachePtr cachePtr
                                       QQueue<ElementPtr> &workQ)
 {
   // Setup reader
-  boost::shared_ptr<OsmMapReader> reader =
+  std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(inputUrl);
   reader->open(inputUrl);
-  boost::shared_ptr<ElementInputStream> streamReader =
-    boost::dynamic_pointer_cast<ElementInputStream>(reader);
+  std::shared_ptr<ElementInputStream> streamReader =
+    std::dynamic_pointer_cast<ElementInputStream>(reader);
 
-  boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+  std::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
   ProjectToGeographicVisitor visitor;
   bool notGeographic = !projection->IsGeographic();
 
@@ -318,7 +318,7 @@ void DataConverter::_transToOgrMT(QString input, QString output)
       ConfigOptions().getElementCacheSizeRelation()));
   QMutex initMutex;
   QMutex transFeaturesMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
@@ -383,7 +383,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
     timer.start();
 
     MapProjector::projectToWgs84(map);
-    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
+    std::shared_ptr<OgrWriter> writer(new OgrWriter());
     writer->setScriptPath(_translation);
     writer->open(output);
     writer->write(map);
@@ -603,10 +603,10 @@ void DataConverter::_exportToShapeWithCols(const QString output, const QStringLi
   QElapsedTimer timer;
   timer.start();
 
-  boost::shared_ptr<OsmMapWriter> writer =
+  std::shared_ptr<OsmMapWriter> writer =
     OsmMapWriterFactory::createWriter(output);
-  boost::shared_ptr<ShapefileWriter> shapeFileWriter =
-    boost::dynamic_pointer_cast<ShapefileWriter>(writer);
+  std::shared_ptr<ShapefileWriter> shapeFileWriter =
+    std::dynamic_pointer_cast<ShapefileWriter>(writer);
   //currently only one shape file writer, and this is it
   assert(shapeFileWriter.get());
   shapeFileWriter->setColumns(cols);

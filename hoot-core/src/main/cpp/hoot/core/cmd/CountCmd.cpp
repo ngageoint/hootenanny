@@ -106,12 +106,12 @@ private:
   long _total;
   int _taskStatusUpdateInterval;
 
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
   {
     LOG_TRACE("Getting reader...");
 
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
@@ -141,10 +141,10 @@ private:
     }
     LOG_VART(crit.get());
 
-    boost::shared_ptr<Configurable> critConfig;
+    std::shared_ptr<Configurable> critConfig;
     if (crit.get())
     {
-      critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
+      critConfig = std::dynamic_pointer_cast<Configurable>(crit);
     }
     LOG_VART(critConfig.get());
     if (critConfig.get())
@@ -197,18 +197,18 @@ private:
   {
     long inputTotal = 0;
 
-    boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+    std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
     ElementVisitorPtr countVis = _getCountVis(countFeaturesOnly);
 
     ElementInputStreamPtr filteredInputStream =
       _getFilteredInputStream(
-        boost::dynamic_pointer_cast<ElementInputStream>(reader),
+        std::dynamic_pointer_cast<ElementInputStream>(reader),
         criterionClassName,
         countVis);
 
-    boost::shared_ptr<SingleStatistic> counter =
-      boost::dynamic_pointer_cast<SingleStatistic>(countVis);
+    std::shared_ptr<SingleStatistic> counter =
+      std::dynamic_pointer_cast<SingleStatistic>(countVis);
     LOG_VART(counter.get());
 
     LOG_TRACE("Counting...");

@@ -34,9 +34,6 @@
 // Standard
 #include <vector>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -100,7 +97,7 @@ private:
 
   OsmMapPtr _map;
   WayPtr _a;
-  boost::shared_ptr<FindNodesInWayFactory> _nf;
+  std::shared_ptr<FindNodesInWayFactory> _nf;
 
   NodePtr _createNode(const geos::geom::Coordinate& c);
 };

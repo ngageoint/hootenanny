@@ -103,7 +103,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
 
   _validateRanges(matches.rows, ranges);
 
-  set< vector<int> > visitedSplits;
+  set<vector<int>> visitedSplits;
   vector<int> splitsInt(ranges.rows - 1);
   vector<double> splits(ranges.rows - 1);
 

@@ -374,7 +374,7 @@ public:
 
   void runSimilarityTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -413,7 +413,7 @@ public:
 
   void runAliasTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -456,7 +456,7 @@ public:
 
   void runChildTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -497,7 +497,7 @@ public:
 
   void runAncestorTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -538,7 +538,7 @@ public:
 
   void runAssociatedWithTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -604,7 +604,7 @@ public:
 
   void runCategoryTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -619,7 +619,7 @@ public:
 
   void runContradictoryFilterTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -642,7 +642,7 @@ public:
 
   void runCaseSensitivityTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -721,7 +721,7 @@ public:
 
   void runInvalidFilterTagJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try
@@ -779,7 +779,7 @@ public:
 
   void runInvalidFilterSimilarityThresholdJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     // Thresholds must be a positive number <= 1.0.
@@ -811,7 +811,7 @@ public:
 
   void runInvalidFilterFormatJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try
@@ -866,7 +866,7 @@ public:
 
   void runInvalidFilterCategoryJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try

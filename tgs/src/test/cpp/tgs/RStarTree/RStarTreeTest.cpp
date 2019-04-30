@@ -64,7 +64,7 @@ public:
 
    void test1()
    {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
      RStarTree uut(mps, 2);
      int maxChildCount = uut.getRoot()->getMaxChildCount();
 
@@ -122,7 +122,7 @@ public:
 
    void test2()
    {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
      RStarTree uut(mps, 2);
 
      Box b(2);
@@ -148,7 +148,7 @@ public:
          QFile::remove("fileTest.dat");
        }
 
-      boost::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
+      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
        RStarTree uut(mps, 2);
 
        Box b(2);
@@ -165,7 +165,7 @@ public:
        validateTreeBounds(uut);
      }
      {
-      boost::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
+      std::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
        RStarTree uut(mps, 2);
 
        validateTreeBounds(uut);
@@ -175,8 +175,8 @@ public:
 
    void timingTest()
    {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    boost::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    std::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
      RStarTree& uut = *rst;
 
 //      Timer t;

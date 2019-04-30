@@ -57,7 +57,7 @@ public:
    * See parent class.
    */
   virtual ClusterList calculateClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId> > &pairs);
+    std::set<std::pair<ElementId, ElementId>> &pairs);
 
   /**
    * See parent class.
@@ -80,7 +80,7 @@ protected:
    * @param pairs Pairs that represent links in the subgraph.
    */
   void _initializeClusters(OsmMapPtr map,
-    std::set< std::pair<ElementId, ElementId> >& pairs);
+    std::set<std::pair<ElementId, ElementId>>& pairs);
 
 };
 

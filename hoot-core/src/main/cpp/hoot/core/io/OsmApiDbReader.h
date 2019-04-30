@@ -57,7 +57,7 @@ protected:
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
 private:
 
@@ -66,7 +66,7 @@ private:
   friend class ServicesDbTestUtils;
   friend class ServiceWriteOsmSqlStatementsDriverTest;
 
-  boost::shared_ptr<OsmApiDb> _database;
+  std::shared_ptr<OsmApiDb> _database;
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

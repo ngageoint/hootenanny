@@ -85,7 +85,7 @@ public:
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
+  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) override;
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -566,67 +566,67 @@ private:
   friend class ServiceHootApiDbReaderTest;
   friend class ServiceHootApiDbWriterTest;
 
-  boost::shared_ptr<QSqlQuery> _closeChangeSet;
-  boost::shared_ptr<QSqlQuery> _insertChangeSet;
-  boost::shared_ptr<QSqlQuery> _insertChangeSetTag;
-  boost::shared_ptr<QSqlQuery> _insertMap;
-  boost::shared_ptr<QSqlQuery> _insertRelationMembers;
-  boost::shared_ptr<QSqlQuery> _insertWayNodes;
-  boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
-  boost::shared_ptr<QSqlQuery> _mapExistsById;
-  boost::shared_ptr<QSqlQuery> _changesetExists;
-  boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
-  boost::shared_ptr<QSqlQuery> _selectPublicMapIds;
-  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
-  boost::shared_ptr<QSqlQuery> _updateNode;
-  boost::shared_ptr<QSqlQuery> _updateRelation;
-  boost::shared_ptr<QSqlQuery> _updateWay;
-  boost::shared_ptr<QSqlQuery> _mapExistsByName;
-  boost::shared_ptr<QSqlQuery> _getMapIdByName;
-  boost::shared_ptr<QSqlQuery> _insertChangeSet2;
-  boost::shared_ptr<QSqlQuery> _numChangesets;
-  boost::shared_ptr<QSqlQuery> _getSessionIdByUserId;
-  boost::shared_ptr<QSqlQuery> _accessTokensAreValid;
-  boost::shared_ptr<QSqlQuery> _getAccessTokenByUserId;
-  boost::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
-  boost::shared_ptr<QSqlQuery> _insertUserSession;
-  boost::shared_ptr<QSqlQuery> _updateUserAccessTokens;
-  boost::shared_ptr<QSqlQuery> _insertFolder;
-  boost::shared_ptr<QSqlQuery> _insertFolderMapMapping;
-  boost::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
-  boost::shared_ptr<QSqlQuery> _deleteFolders;
-  boost::shared_ptr<QSqlQuery> _selectMapIds;
-  boost::shared_ptr<QSqlQuery> _getMapPermissionsById;
-  boost::shared_ptr<QSqlQuery> _getMapPermissionsByName;
-  boost::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
-  boost::shared_ptr<QSqlQuery> _getMapIdByNameForCurrentUser;
-  boost::shared_ptr<QSqlQuery> _updateJobStatusResourceId;
-  boost::shared_ptr<QSqlQuery> _insertJob;
-  boost::shared_ptr<QSqlQuery> _deleteJobById;
-  boost::shared_ptr<QSqlQuery> _getJobStatusResourceId;
-  boost::shared_ptr<QSqlQuery> _updateIdSequence;
+  std::shared_ptr<QSqlQuery> _closeChangeSet;
+  std::shared_ptr<QSqlQuery> _insertChangeSet;
+  std::shared_ptr<QSqlQuery> _insertChangeSetTag;
+  std::shared_ptr<QSqlQuery> _insertMap;
+  std::shared_ptr<QSqlQuery> _insertRelationMembers;
+  std::shared_ptr<QSqlQuery> _insertWayNodes;
+  std::shared_ptr<QSqlQuery> _selectHootDbVersion;
+  std::shared_ptr<QSqlQuery> _mapExistsById;
+  std::shared_ptr<QSqlQuery> _changesetExists;
+  std::shared_ptr<QSqlQuery> _selectReserveNodeIds;
+  std::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
+  std::shared_ptr<QSqlQuery> _selectPublicMapIds;
+  std::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  std::shared_ptr<QSqlQuery> _updateNode;
+  std::shared_ptr<QSqlQuery> _updateRelation;
+  std::shared_ptr<QSqlQuery> _updateWay;
+  std::shared_ptr<QSqlQuery> _mapExistsByName;
+  std::shared_ptr<QSqlQuery> _getMapIdByName;
+  std::shared_ptr<QSqlQuery> _insertChangeSet2;
+  std::shared_ptr<QSqlQuery> _numChangesets;
+  std::shared_ptr<QSqlQuery> _getSessionIdByUserId;
+  std::shared_ptr<QSqlQuery> _accessTokensAreValid;
+  std::shared_ptr<QSqlQuery> _getAccessTokenByUserId;
+  std::shared_ptr<QSqlQuery> _getAccessTokenSecretByUserId;
+  std::shared_ptr<QSqlQuery> _insertUserSession;
+  std::shared_ptr<QSqlQuery> _updateUserAccessTokens;
+  std::shared_ptr<QSqlQuery> _insertFolder;
+  std::shared_ptr<QSqlQuery> _insertFolderMapMapping;
+  std::shared_ptr<QSqlQuery> _folderIdsAssociatedWithMap;
+  std::shared_ptr<QSqlQuery> _deleteFolders;
+  std::shared_ptr<QSqlQuery> _selectMapIds;
+  std::shared_ptr<QSqlQuery> _getMapPermissionsById;
+  std::shared_ptr<QSqlQuery> _getMapPermissionsByName;
+  std::shared_ptr<QSqlQuery> _currentUserHasMapWithName;
+  std::shared_ptr<QSqlQuery> _getMapIdByNameForCurrentUser;
+  std::shared_ptr<QSqlQuery> _updateJobStatusResourceId;
+  std::shared_ptr<QSqlQuery> _insertJob;
+  std::shared_ptr<QSqlQuery> _deleteJobById;
+  std::shared_ptr<QSqlQuery> _getJobStatusResourceId;
+  std::shared_ptr<QSqlQuery> _updateIdSequence;
 
-  boost::shared_ptr<BulkInsert> _nodeBulkInsert;
+  std::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
-  boost::shared_ptr<BulkDelete> _nodeBulkDelete;
+  std::shared_ptr<BulkDelete> _nodeBulkDelete;
   long _nodesPerBulkDelete;
   double _nodesDeleteElapsed;
-  boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
+  std::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
-  boost::shared_ptr<BulkInsert> _wayBulkInsert;
+  std::shared_ptr<BulkInsert> _wayBulkInsert;
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
-  boost::shared_ptr<InternalIdReserver> _wayIdReserver;
+  std::shared_ptr<InternalIdReserver> _wayIdReserver;
 
-  boost::shared_ptr<BulkInsert> _wayNodeBulkInsert;
+  std::shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
   double _wayNodesInsertElapsed;
 
-  boost::shared_ptr<BulkInsert> _relationBulkInsert;
+  std::shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
-  boost::shared_ptr<InternalIdReserver> _relationIdReserver;
+  std::shared_ptr<InternalIdReserver> _relationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;

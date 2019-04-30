@@ -71,10 +71,10 @@ private:
 
   TranslateDictionary();
 
-  static boost::shared_ptr<TranslateDictionary> _theInstance;
+  static std::shared_ptr<TranslateDictionary> _theInstance;
 
   QMap<QString, QStringList> _translations;
-  boost::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
+  std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
   Transliterator* _transliterator;
   Transliterator* _titler;
   bool _transliterationCachingEnabled;

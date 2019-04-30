@@ -94,7 +94,7 @@ public:
 
 private:
 
-  boost::shared_ptr<QFile> _fp;
+  std::shared_ptr<QFile> _fp;
 
   SearchBoundsCalculatorPtr _bounds;
   AddExportTagsVisitor _addExportTagsVisitor;

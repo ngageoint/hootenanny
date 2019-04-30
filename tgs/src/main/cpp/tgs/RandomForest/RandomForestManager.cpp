@@ -59,7 +59,7 @@ namespace Tgs
     {
       for(unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
-        _rfList.push_back(boost::shared_ptr<RandomForest>(new RandomForest()));
+        _rfList.push_back(std::shared_ptr<RandomForest>(new RandomForest()));
       }
     }
     catch(const Exception & e)
@@ -78,7 +78,7 @@ namespace Tgs
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
         _rfList.push_back(
-          boost::shared_ptr<RandomForest>(new RandomForest()));
+          std::shared_ptr<RandomForest>(new RandomForest()));
         _rfList.back()->importModel(forestElement);
       }
     }

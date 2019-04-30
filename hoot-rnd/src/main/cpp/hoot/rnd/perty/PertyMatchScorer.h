@@ -54,8 +54,8 @@ public:
     @param outputPath output directory
     @returns a match comparator from which the PERTY score can be retrieved
     */
-  boost::shared_ptr<MatchComparator> scoreMatches(const QString referenceMapInputPath,
-                                           const QString outputPath);
+  std::shared_ptr<MatchComparator> scoreMatches(const QString referenceMapInputPath,
+                                                const QString outputPath);
 
   /**
     @see Configurable
@@ -106,13 +106,13 @@ private:
   Settings _settings;
 
   OsmMapPtr _loadReferenceMap(const QString referenceMapInputPath,
-                                       const QString referenceMapOutputPath);
+                              const QString referenceMapOutputPath);
   void _loadPerturbedMap(const QString perturbedMapInputPath,
                          const QString perturbedMapOutputPath);
   OsmMapPtr _combineMapsAndPrepareForConflation(OsmMapPtr referenceMap,
-                                                         const QString perturbedMapInputPath);
-  boost::shared_ptr<MatchComparator> _conflateAndScoreMatches(OsmMapPtr combinedDataToConflate,
-                                                       const QString conflatedMapOutputPath);
+                                                const QString perturbedMapInputPath);
+  std::shared_ptr<MatchComparator> _conflateAndScoreMatches(OsmMapPtr combinedDataToConflate,
+                                                            const QString conflatedMapOutputPath);
 
   /**
    * Prepares map for saving and saves the map. The map will be modified.

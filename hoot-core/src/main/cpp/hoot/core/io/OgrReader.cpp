@@ -27,9 +27,6 @@
 
 #include "OgrReader.h"
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
@@ -89,7 +86,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
 
@@ -133,7 +130,7 @@ public:
 
   bool hasMoreElements();
 
-  boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   Progress streamGetProgress() const;
 
@@ -147,12 +144,12 @@ protected:
   long _count;
   long _featureCount;
   bool _useFileId;
-  boost::shared_ptr<GDALDataset> _dataSource;
+  std::shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
-  boost::shared_ptr<OGRSpatialReference> _wgs84;
-  boost::shared_ptr<ScriptTranslator> _translator;
+  std::shared_ptr<OGRSpatialReference> _wgs84;
+  std::shared_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
@@ -191,7 +188,7 @@ protected:
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
    */
-  boost::shared_ptr<OGRSpatialReference> _fixProjection(boost::shared_ptr<OGRSpatialReference> srs);
+  std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs);
 
   void _initTranslate();
 
@@ -296,9 +293,9 @@ ElementIterator* OgrReader::createIterator(QString path, QString layer) const
   return new OgrElementIterator(d);
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::shared_ptr<OGRSpatialReference> srs)
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs)
 {
-  boost::shared_ptr<OGRSpatialReference> result;
+  std::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
@@ -355,7 +352,7 @@ boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::
   return result;
 }
 
-boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   return _d->getBoundingBoxFromConfig(s, srs);
@@ -367,7 +364,7 @@ boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& 
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -488,7 +485,7 @@ void OgrReader::open(QString url)
   _d->open(url, "");
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
 {
   return _d->getProjection();
 }
@@ -531,7 +528,7 @@ QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
 {
   QStringList result;
   LOG_DEBUG("Opening layers with geometry: " << path);
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   LOG_VART(count);
   for (int i = 0; i < count; i++)
@@ -857,11 +854,11 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
-boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   ConfigOptions co(s);
-  boost::shared_ptr<Envelope> result;
+  std::shared_ptr<Envelope> result;
   QString bboxStrRaw = co.getOgrReaderBoundingBox();
   QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
@@ -918,8 +915,8 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     }
 
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
-    boost::shared_ptr<OGRCoordinateTransformation> transform(
+    std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+    std::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)
@@ -990,7 +987,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     throw HootException("Failed to identify source layer from data source.");
   }
 
-  boost::shared_ptr<OGRSpatialReference> sourceSrs;
+  std::shared_ptr<OGRSpatialReference> sourceSrs;
 
   if (_layer->GetSpatialRef())
   {
@@ -1015,7 +1012,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     }
   }
 
-  boost::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
+  std::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
   if (filter.get())
   {
     _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
@@ -1324,9 +1321,9 @@ void OgrReaderInternal::populateElementMap()
   _streamFeatureCount++;
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

@@ -30,8 +30,8 @@
 // Qt
 #include <QString>
 
-// Tgs
-#include <tgs/SharedPtr.h>
+// Standard
+#include <memory>
 
 namespace Tgs
 {
@@ -71,8 +71,8 @@ private:
   VariableType _type;
 };
 
-typedef boost::shared_ptr<VariableDescription> VariableDescriptionPtr;
-typedef boost::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
+typedef std::shared_ptr<VariableDescription> VariableDescriptionPtr;
+typedef std::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
 
 }
 

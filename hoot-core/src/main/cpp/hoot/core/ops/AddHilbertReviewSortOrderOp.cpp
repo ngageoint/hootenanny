@@ -81,7 +81,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 
   const RelationMap& relations = map->getRelations();
 
-  vector< pair<ElementId, int64_t> > reviewOrder;
+  vector<pair<ElementId, int64_t>> reviewOrder;
   // reserves at least as much as we need.
   reviewOrder.reserve(relations.size());
 
@@ -123,7 +123,7 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr &map,
   const set<ElementId> eids)
 {
-  boost::shared_ptr<Envelope> env;
+  std::shared_ptr<Envelope> env;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
     Envelope::AutoPtr te(map->getElement(*it)->getEnvelope(map));

@@ -31,9 +31,6 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QFile>
 #include <QHash>
@@ -131,9 +128,9 @@ private:
   bool _includePid;
   QString _osmSchema;
   int _precision;
-  boost::shared_ptr<QIODevice> _fp;
+  std::shared_ptr<QIODevice> _fp;
   int _encodingErrorCount;
-  boost::shared_ptr<QXmlStreamWriter> _writer;
+  std::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
   long _numWritten;
   long _statusUpdateInterval;

@@ -118,7 +118,7 @@ private:
   bool _overwriteMap;
 
   HootApiDb _database;
-  boost::shared_ptr<HootApiDbSqlStatementFormatter> _sqlFormatter;
+  std::shared_ptr<HootApiDbSqlStatementFormatter> _sqlFormatter;
 
   bool _copyBulkInsertActivated;
 

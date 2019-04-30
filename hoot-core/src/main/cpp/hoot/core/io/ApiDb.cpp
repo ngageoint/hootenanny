@@ -111,27 +111,27 @@ void ApiDb::_resetQueries()
   _getUserIdByName.reset();
   _getUserNameById.reset();
 
-  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _maxIdQueries.begin();
        itr != _maxIdQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numElementsQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _numElementsQueries.begin();
        itr != _numElementsQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numEstimatedElementsQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _numEstimatedElementsQueries.begin();
        itr != _numEstimatedElementsQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _selectQueries.begin();
        itr != _selectQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectAllQueries.begin();
+  for (QHash<QString, std::shared_ptr<QSqlQuery>>::iterator itr = _selectAllQueries.begin();
        itr != _selectAllQueries.end(); ++itr)
   {
     itr.value().reset();
@@ -474,7 +474,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
+std::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -593,7 +593,7 @@ long ApiDb::round(double x)
   return (long)(x + 0.5);
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
+std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 {
   LOG_VARD(bounds);
   const vector<Range> tileRanges = _getTileRanges(bounds);
@@ -641,7 +641,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   return _selectNodesByBounds;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
+std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
   if (nodeIds.size() == 0)
   {
@@ -670,7 +670,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>
   return _selectWayIdsByWayNodeIds;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
+std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                                   const TableType& tableType)
 {
   if (elementIds.size() == 0)
@@ -701,7 +701,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QSt
   return _selectElementsByElementIdList;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
+std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
   if (wayIds.size() == 0)
   {
@@ -730,7 +730,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>
   return _selectWayNodeIdsByWayIds;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                                const ElementType& memberElementType)
 {
   if (memberIds.size() == 0)
@@ -817,7 +817,7 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
   return sql;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
   LOG_VARD(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
@@ -1038,7 +1038,7 @@ long ApiDb::numEstimatedElements(const ElementType& elementType)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
+std::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
 {
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectAllQueries[elementTableName])
@@ -1065,7 +1065,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& element
   return _selectAllQueries[elementTableName];
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType, const long minId)
+std::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType, const long minId)
 {
   const QString elementTableName = elementTypeToElementTableName(elementType);
   if (!_selectQueries[elementTableName])

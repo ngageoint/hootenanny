@@ -30,8 +30,6 @@
 
 // TGS
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
   typedef HashMap<long, NodePtr> NodeMap;

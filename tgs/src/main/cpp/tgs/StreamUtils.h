@@ -39,7 +39,8 @@
 
 #if HAVE_LIBNEWMAT
 // newmat
-namespace NEWMAT {
+namespace NEWMAT
+{
   class Matrix;
 }
 #endif

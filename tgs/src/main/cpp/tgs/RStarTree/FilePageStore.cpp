@@ -71,7 +71,7 @@ namespace Tgs
     fclose(_pageFile);
   }
 
-  boost::shared_ptr<Page> FilePageStore::createPage()
+  std::shared_ptr<Page> FilePageStore::createPage()
   {
     if (_readOnly == true)
     {
@@ -80,7 +80,7 @@ namespace Tgs
     // first create in file
     char * pData = Page::allocateAligned(_pageSize);
     _writePage(_pageCount, pData);
-    boost::shared_ptr<Page> newPage(_createPage(this, _pageCount, pData,
+    std::shared_ptr<Page> newPage(_createPage(this, _pageCount, pData,
       _pageSize));
 
     _pagesMap[_pageCount] = newPage;
@@ -104,7 +104,7 @@ namespace Tgs
     return 0;
   }
 
-  boost::shared_ptr<Page> FilePageStore::getPage(int id)
+  std::shared_ptr<Page> FilePageStore::getPage(int id)
   {
     // If the page does not resides in memory then get it from file and call createPage()
 
@@ -118,7 +118,7 @@ namespace Tgs
 
     char * pData = Page::allocateAligned(_pageSize);
     _readPage(id, pData);
-    boost::shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
+    std::shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
     _pagesMap[id] = newPage;
     return newPage;
   }

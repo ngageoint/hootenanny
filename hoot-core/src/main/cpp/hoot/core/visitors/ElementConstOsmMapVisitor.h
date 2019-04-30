@@ -27,9 +27,6 @@
 #ifndef ELEMENTCONSTOSMMAPVISITOR_H
 #define ELEMENTCONSTOSMMAPVISITOR_H
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
@@ -52,7 +49,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e) = 0;
+  virtual void visit(const std::shared_ptr<const Element>& e) = 0;
 
 protected:
 

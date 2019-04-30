@@ -91,14 +91,14 @@ public:
     matchFactory.reset();
     matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
 
-    boost::shared_ptr<MergerCreator> mergerCreator(
+    std::shared_ptr<MergerCreator> mergerCreator(
       Factory::getInstance().constructObject<MergerCreator>(
         QString("hoot::ScriptMergerCreator")));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
     mergerFactory.registerCreator(mergerCreator.get());
 
-    boost::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
+    std::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
 
     MultiaryScoreCachePtr scoreCache(new MultiaryScoreCache(map, matchCreator));
     MultiaryPoiMergeCachePtr mergeCache(
@@ -109,7 +109,7 @@ public:
     // compare a cluster of 2 to a cluster of 1. This isn't strictly the way it will operate
     // under real conditions, but it makes a reasonable test.
     {
-      std::set< pair<ElementId, ElementId> > pairs;
+      std::set<pair<ElementId, ElementId>> pairs;
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-1), ElementId::node(-2)));
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-1), ElementId::node(-3)));
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-2), ElementId::node(-3)));

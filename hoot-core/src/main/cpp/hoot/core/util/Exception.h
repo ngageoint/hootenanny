@@ -33,7 +33,8 @@
 // Standard Includes
 #include <exception>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * The Exception class is intended to be the base class for all exceptions

@@ -49,7 +49,7 @@ public:
 
   TranslationOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf);
 

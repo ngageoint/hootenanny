@@ -28,9 +28,6 @@
 
 #include <hoot/core/elements/Way.h>
 
-// Boost
-using namespace boost;
-
 namespace hoot
 {
 

@@ -113,7 +113,7 @@ Mat DirectSequentialSimulation::_gm2dPerturb2(geos::geom::Envelope env, Meters s
   Mat Pb = Mat::zeros(rows, cols, CV_64F);
 
   boost::normal_distribution<> nd;
-  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(rng, nd);
+  boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(rng, nd);
 
   // first do first corner cell
   Pb.at<double>(0, 0) = N() * sigma;

@@ -73,7 +73,7 @@ private:
   const std::vector<long>& _treeIdToWid;
 
   long _wayId;
-  boost::shared_ptr<geos::geom::LineString> _ls;
+  std::shared_ptr<geos::geom::LineString> _ls;
   const geos::geom::LineString* _lsFast;
 };
 

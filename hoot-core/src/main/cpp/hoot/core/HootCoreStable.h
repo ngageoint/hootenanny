@@ -27,11 +27,6 @@
 #ifndef HOOTCORESTABLE_H
 #define HOOTCORESTABLE_H
 
-// Boost
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
 // GEOS Includes
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>

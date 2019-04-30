@@ -70,8 +70,8 @@ private:
   ObjectInputStream(const ObjectInputStream&) { }
 
   std::istream* _istream;
-  boost::shared_ptr<Tgs::StdIoDevice> _stdIoDevice;
-  boost::shared_ptr<QDataStream> _streamDelete;
+  std::shared_ptr<Tgs::StdIoDevice> _stdIoDevice;
+  std::shared_ptr<QDataStream> _streamDelete;
   QDataStream* _stream;
 };
 

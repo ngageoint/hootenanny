@@ -141,7 +141,7 @@ public:
   static QList<hoot::MultiarySimpleMatch> findMatches(QByteArray checkElement,
     QList<QByteArray> againstElements);
 
-  boost::shared_ptr<SearchBoundsCalculator> getBoundsCalculator();
+  std::shared_ptr<SearchBoundsCalculator> getBoundsCalculator();
 
   static MultiaryUtilities& getInstance();
 
@@ -149,9 +149,9 @@ private:
 
   MultiaryUtilities() {}
 
-  static boost::shared_ptr<MultiaryUtilities> _theInstance;
+  static std::shared_ptr<MultiaryUtilities> _theInstance;
 
-  boost::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;
+  std::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;
 };
 
 }

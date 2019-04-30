@@ -51,7 +51,7 @@ _translateAll(true),
 //DictionaryTranslator and they populate this class with a translator implemenation, the default
 //is hardcoded.  That supports for cases where the caller doesn't specify a translator
 //(PoiGeneric.js, some classifiers, etc.).
-_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
 {
   setConfiguration(conf());
 }
@@ -61,13 +61,13 @@ _d(d),
 _tokenize(true),
 _translateAll(true),
 //see comments above
-_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
 {
   setConfiguration(conf());
 }
 
 TranslateStringDistance::TranslateStringDistance(StringDistancePtr d,
-                                                 boost::shared_ptr<ToEnglishTranslator> translator) :
+                                                 std::shared_ptr<ToEnglishTranslator> translator) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
@@ -94,8 +94,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   QString best1;
   QString best2;
 
-  boost::shared_ptr<DictionaryTranslator> dictTranslator =
-    boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);
+  std::shared_ptr<DictionaryTranslator> dictTranslator =
+    std::dynamic_pointer_cast<DictionaryTranslator>(_translator);
   if (_translateAll && dictTranslator)
   {
     // This deals with translations that may return more than one result.

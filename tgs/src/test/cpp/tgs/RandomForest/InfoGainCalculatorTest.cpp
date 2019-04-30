@@ -131,7 +131,7 @@ namespace SaUrgent
       double splitVal = 0.0;
       double purityDelta = 0.0;
 
-      std::vector <unsigned int> fIndices(3);
+      std::vector<unsigned int> fIndices(3);
       for(unsigned int k = 0; k < 3; k++)
       {
         fIndices[k] = k;

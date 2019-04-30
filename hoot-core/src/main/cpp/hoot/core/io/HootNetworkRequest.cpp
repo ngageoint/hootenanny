@@ -94,7 +94,7 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
   _content.clear();
   _error.clear();
   //  Do HTTP request
-  boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
 
   if (url.scheme().toLower() == "https")

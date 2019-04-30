@@ -27,9 +27,6 @@
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 
@@ -84,12 +81,12 @@ public:
 
   void initAll(v8::Handle<v8::Object> exports);
 
-  void registerInitializer(boost::shared_ptr<ClassInitializer> ci);
+  void registerInitializer(std::shared_ptr<ClassInitializer> ci);
 
 private:
 
-  std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
-  static boost::shared_ptr<JsRegistrar> _theInstance;
+  std::vector<std::shared_ptr<ClassInitializer>> _initializers;
+  static std::shared_ptr<JsRegistrar> _theInstance;
 
   JsRegistrar();
 };
@@ -103,7 +100,7 @@ public:
    */
   AutoJsRegister()
   {
-    boost::shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
+    std::shared_ptr<ClassInitializerTemplate<T>> p(new ClassInitializerTemplate<T>());
     JsRegistrar::getInstance().registerInitializer(p);
   }
 };

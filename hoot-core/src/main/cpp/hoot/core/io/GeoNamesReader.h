@@ -50,7 +50,7 @@ public:
 
   virtual void finalizePartial() {}
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual bool hasMoreElements();
 
@@ -82,7 +82,7 @@ private:
   QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
 
   QString _saveMemory(const QString& s);
 };

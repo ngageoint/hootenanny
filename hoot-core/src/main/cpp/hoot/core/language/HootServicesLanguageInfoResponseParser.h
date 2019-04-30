@@ -55,7 +55,7 @@ public:
    * @return a display string
    */
   static QString parseAvailableLanguagesResponse(const QString type,
-                                               boost::shared_ptr<boost::property_tree::ptree> response);
+                                                 std::shared_ptr<boost::property_tree::ptree> response);
 
   /**
    * Returns an available language apps response string
@@ -65,7 +65,7 @@ public:
    * @return a display string
    */
   static QString parseAvailableAppsResponse(const QString type,
-                                          boost::shared_ptr<boost::property_tree::ptree> response);
+                                            std::shared_ptr<boost::property_tree::ptree> response);
 
   /**
    * Returns a mapping of ISO-6391-1 language codes to language names
@@ -74,7 +74,7 @@ public:
    * @return a mapping of ISO-6391-1 language codes to language names
    */
   static QMap<QString, QString> getLangCodesToLangs(
-    boost::shared_ptr<boost::property_tree::ptree> response);
+    std::shared_ptr<boost::property_tree::ptree> response);
 };
 
 }

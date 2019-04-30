@@ -47,7 +47,7 @@ bool CollectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
     // This list could get HUGE.
     if (r->getType() == MetadataTags::RelationWaterway() ||

@@ -30,6 +30,7 @@
 
 // Standard Includes
 #include <list>
+#include <memory>
 
 #include <tgs/HashMap.h>
 #include <tgs/RStarTree/RTreeNode.h>
@@ -48,7 +49,7 @@ class TGS_EXPORT RTreeNodeStore
 {
 public:
 
-  RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps);
+  RTreeNodeStore(int dimensions, std::shared_ptr<PageStore> ps);
 
   ~RTreeNodeStore();
 
@@ -84,12 +85,12 @@ protected:
     RTreeNode * pNode;
   };
 
-  typedef HashMap< int, RecItem* > NodeMap;
+  typedef HashMap<int, RecItem*> NodeMap;
 
   // mutable cache
   NodeMap _availableNodes;
   int _dimensions;
-  boost::shared_ptr<PageStore> _storeSp;
+  std::shared_ptr<PageStore> _storeSp;
   /// pointer to the same thing as above, only faster. Zoom zoom!
   PageStore* _store;
 

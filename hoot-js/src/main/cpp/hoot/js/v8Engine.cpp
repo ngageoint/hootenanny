@@ -32,7 +32,7 @@ using namespace v8;
 namespace hoot
 {
 
-boost::shared_ptr<v8Engine> v8Engine::_theInstance;
+std::shared_ptr<v8Engine> v8Engine::_theInstance;
 
 bool v8Engine::_needPlatform = false;
 

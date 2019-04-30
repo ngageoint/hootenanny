@@ -37,7 +37,7 @@ namespace hoot
 {
 
 MultiaryScoreCache::MultiaryScoreCache(ConstOsmMapPtr map,
-  boost::shared_ptr<MatchCreator> matchCreator) :
+  std::shared_ptr<MatchCreator> matchCreator) :
   _map(map),
   _matchCreator(matchCreator)
 {
@@ -70,7 +70,7 @@ MatchClassification MultiaryScoreCache::getScore(ConstElementPtr e1, ConstElemen
   tmp->addElement(ElementPtr(e1->clone()));
   tmp->addElement(ElementPtr(e2->clone()));
 
-  boost::scoped_ptr<Match> m(
+  const std::unique_ptr<Match> m(
     _matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
 
   // default to a hard miss.

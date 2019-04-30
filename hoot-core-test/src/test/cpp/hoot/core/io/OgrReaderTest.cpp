@@ -86,7 +86,7 @@ public:
       Coordinate c2(1, 84);
 
       {
-        boost::shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
+        std::shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
 
         Settings s;
         // 15512.4m wide at the top

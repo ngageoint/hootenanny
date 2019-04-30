@@ -60,11 +60,11 @@ public:
 
   MergeNearbyNodes(Meters distance = -1);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
 
-  static void mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance = -1);
+  static void mergeNodes(std::shared_ptr<OsmMap> map, Meters distance = -1);
 
   virtual void readObject(QDataStream& is);
 
@@ -81,7 +81,7 @@ public:
 
 protected:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
   Meters _distance;
   geos::geom::Envelope _bounds;
 };

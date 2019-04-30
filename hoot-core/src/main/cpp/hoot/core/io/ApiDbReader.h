@@ -33,9 +33,6 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QtSql/QSqlQuery>
 
@@ -110,12 +107,12 @@ public:
   /**
    * @see PartialOsmMapReader
    */
-  virtual boost::shared_ptr<Element> readNextElement();
+  virtual std::shared_ptr<Element> readNextElement();
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
 
@@ -138,8 +135,8 @@ protected:
   bool _keepStatusTag;
 
   ElementType _selectElementType;
-  boost::shared_ptr<QSqlQuery> _elementResultIterator;
-  boost::shared_ptr<Element> _nextElement;
+  std::shared_ptr<QSqlQuery> _elementResultIterator;
+  std::shared_ptr<Element> _nextElement;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -147,7 +144,7 @@ protected:
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const = 0;
+  virtual std::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
    * This is the same logic as in the Map.java query method.
@@ -190,7 +187,7 @@ private:
    * 
    * This will advance the results iterator *before* reading each element.
    */
-  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);
 
   /*
@@ -199,7 +196,7 @@ private:
    */
   ElementType _getCurrentSelectElementType();
 
-  boost::shared_ptr<Element> _getElementUsingIterator();
+  std::shared_ptr<Element> _getElementUsingIterator();
 };
 
 }

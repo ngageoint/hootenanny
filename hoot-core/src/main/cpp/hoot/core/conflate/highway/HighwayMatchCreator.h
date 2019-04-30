@@ -69,14 +69,14 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 
-  boost::shared_ptr<HighwayClassifier> _classifier;
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
-  boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  std::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };
 
 }

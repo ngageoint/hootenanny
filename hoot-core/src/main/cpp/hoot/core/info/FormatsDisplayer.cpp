@@ -48,7 +48,7 @@ QString getFormats(const std::string& className, const QStringList extraFormats 
   QSet<QString> formats;
   for (size_t i = 0; i < readerNames.size(); i++)
   {
-    boost::shared_ptr<IoClass> c(
+    std::shared_ptr<IoClass> c(
       Factory::getInstance().constructObject<IoClass>(readerNames[i]));
     const QString supportedFormats = c->supportedFormats();
     if (!supportedFormats.isEmpty())

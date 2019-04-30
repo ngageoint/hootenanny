@@ -44,9 +44,6 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace v8;
 
 namespace hoot
@@ -154,19 +151,19 @@ Handle<Object> ElementJs::New(ConstElementPtr e)
   {
   case ElementType::Node:
     {
-      ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+      ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
       result = NodeJs::New(n);
       break;
     }
   case ElementType::Way:
     {
-      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
       result = WayJs::New(w);
       break;
     }
   case ElementType::Relation:
     {
-      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
       result = RelationJs::New(r);
       break;
     }
@@ -187,19 +184,19 @@ Handle<Object> ElementJs::New(ElementPtr e)
   {
   case ElementType::Node:
     {
-      NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+      NodePtr n = std::dynamic_pointer_cast<Node>(e);
       result = NodeJs::New(n);
       break;
     }
   case ElementType::Way:
     {
-      WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+      WayPtr w = std::dynamic_pointer_cast<Way>(e);
       result = WayJs::New(w);
       break;
     }
   case ElementType::Relation:
     {
-      RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
+      RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
       result = RelationJs::New(r);
       break;
     }

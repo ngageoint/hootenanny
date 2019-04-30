@@ -83,9 +83,9 @@ Meters EdgeSubline::calculateLength(const ConstElementProviderPtr& provider) con
   return (getLatter()->getPortion() - getFormer()->getPortion()) * l;
 }
 
-boost::shared_ptr<EdgeSubline> EdgeSubline::clone() const
+std::shared_ptr<EdgeSubline> EdgeSubline::clone() const
 {
-  return boost::shared_ptr<EdgeSubline>(new EdgeSubline(_start, _end));
+  return std::shared_ptr<EdgeSubline>(new EdgeSubline(_start, _end));
 }
 
 bool EdgeSubline::contains(ConstNetworkVertexPtr v) const
@@ -104,7 +104,7 @@ bool EdgeSubline::contains(ConstNetworkVertexPtr v) const
   return result;
 }
 
-bool EdgeSubline::contains(boost::shared_ptr<const EdgeSubline> es) const
+bool EdgeSubline::contains(std::shared_ptr<const EdgeSubline> es) const
 {
   bool result = false;
 
@@ -124,12 +124,12 @@ bool EdgeSubline::contains(ConstEdgeLocationPtr el) const
   return el->getEdge() == _start->getEdge() && el >= _start && el <= _end;
 }
 
-boost::shared_ptr<EdgeSubline> EdgeSubline::createFullSubline(ConstNetworkEdgePtr e)
+std::shared_ptr<EdgeSubline> EdgeSubline::createFullSubline(ConstNetworkEdgePtr e)
 {
-  return boost::shared_ptr<EdgeSubline>(new EdgeSubline(e, 0.0, 1.0));
+  return std::shared_ptr<EdgeSubline>(new EdgeSubline(e, 0.0, 1.0));
 }
 
-bool EdgeSubline::intersects(boost::shared_ptr<const EdgeSubline> other) const
+bool EdgeSubline::intersects(std::shared_ptr<const EdgeSubline> other) const
 {
   bool result;
 
@@ -156,7 +156,7 @@ bool EdgeSubline::intersects(ConstEdgeLocationPtr el) const
 }
 
 // Figure out if other goes in the same direction that we do
-bool EdgeSubline::isSameDirection(boost::shared_ptr<const EdgeSubline> other) const
+bool EdgeSubline::isSameDirection(std::shared_ptr<const EdgeSubline> other) const
 {
   // We need this & other to be on the same edge
   if (other->getEdge() != getEdge())
@@ -181,7 +181,7 @@ bool EdgeSubline::isSameDirection(boost::shared_ptr<const EdgeSubline> other) co
   return result;
 }
 
-bool EdgeSubline::overlaps(boost::shared_ptr<const EdgeSubline> other) const
+bool EdgeSubline::overlaps(std::shared_ptr<const EdgeSubline> other) const
 {
   bool result = false;
 
@@ -211,7 +211,7 @@ QString EdgeSubline::toString() const
   return QString("{ _start: %1, _end: %2 }").arg(hoot::toString(_start)).arg(hoot::toString(_end));
 }
 
-boost::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(boost::shared_ptr<const EdgeSubline> other) const
+std::shared_ptr<EdgeSubline> EdgeSubline::unionSubline(std::shared_ptr<const EdgeSubline> other) const
 {
   if (!intersects(other))
   {

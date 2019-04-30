@@ -66,9 +66,9 @@ public:
 
   ~TestOsmChangesetProvider() { }
 
-  boost::shared_ptr<OGRSpatialReference> getProjection() const
+  std::shared_ptr<OGRSpatialReference> getProjection() const
   {
-    return boost::shared_ptr<OGRSpatialReference>();
+    return std::shared_ptr<OGRSpatialReference>();
   }
 
   void close() { }

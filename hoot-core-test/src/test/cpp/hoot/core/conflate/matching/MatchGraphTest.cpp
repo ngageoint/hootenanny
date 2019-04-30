@@ -70,8 +70,8 @@ class FakeMatch : public Match
 {
 public:
 
-  FakeMatch() : Match(boost::shared_ptr<MatchThreshold>()) {}
-  FakeMatch(ElementId eid1, ElementId eid2, double p, const boost::shared_ptr<const MatchThreshold> mt) :
+  FakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
+  FakeMatch(ElementId eid1, ElementId eid2, double p, const std::shared_ptr<const MatchThreshold> mt) :
     Match(mt),
     _eid1(eid1),
     _eid2(eid2),
@@ -95,9 +95,9 @@ public:
     return false;
   }
 
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const
+  virtual set<pair<ElementId, ElementId>> getMatchPairs() const
   {
-    set< pair<ElementId, ElementId> > result;
+    set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
     return result;
   }
@@ -127,7 +127,7 @@ private:
   mutable MatchClassification _c;
   ElementId _eid1, _eid2;
   double _p;
-  boost::shared_ptr<const MatchThreshold> _threshold;
+  std::shared_ptr<const MatchThreshold> _threshold;
 };
 
 class MatchGraphTest : public HootTestFixture
@@ -147,7 +147,7 @@ public:
     ElementId e = ElementId::way(5);
     ElementId f = ElementId::way(6);
     vector<const Match*> matches;
-    boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
+    std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
 
     // force the pointers to be in order which forces the set to be consistent between runs.
     FakeMatch* fm = new FakeMatch[7];
@@ -168,7 +168,7 @@ public:
 
     ConstOsmMapPtr empty;
 
-    vector< set<const Match*, MatchPtrComparator> > subgraphs = uut.findSubgraphs(empty);
+    vector<set<const Match*, MatchPtrComparator>> subgraphs = uut.findSubgraphs(empty);
 
     stringstream ss;
     ss << subgraphs;

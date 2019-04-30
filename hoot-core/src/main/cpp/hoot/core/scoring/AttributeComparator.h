@@ -37,7 +37,7 @@ class AttributeComparator : public BaseComparator
 {
 public:
 
-  AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
+  AttributeComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2);
 
   virtual ~AttributeComparator() {}
 

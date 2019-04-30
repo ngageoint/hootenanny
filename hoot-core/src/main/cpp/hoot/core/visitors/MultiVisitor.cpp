@@ -38,7 +38,7 @@ MultiVisitor::MultiVisitor()
 {
 }
 
-void MultiVisitor::visit(const boost::shared_ptr<Element>& e)
+void MultiVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (size_t i = 0; i < _visitors.size(); i++)
   {

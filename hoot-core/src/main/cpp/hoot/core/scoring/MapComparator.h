@@ -27,8 +27,7 @@
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace hoot
 {
@@ -48,7 +47,7 @@ public:
    * Returns true if the maps are essentially the same. Minor differences in node locations are
    * ignored.
    */
-  bool isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test);
+  bool isMatch(std::shared_ptr<OsmMap> ref, std::shared_ptr<OsmMap> test);
 
   void setIgnoreUUID() { _ignoreUUID = true; }
 

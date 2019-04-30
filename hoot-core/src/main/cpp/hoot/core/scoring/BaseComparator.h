@@ -43,8 +43,10 @@
 #include <QString>
 
 // TGS
-#include <tgs/SharedPtr.h>
 #include <tgs/RasterOps/Image.hpp>
+
+// Standard
+#include <memory>
 
 namespace hoot
 {
@@ -61,7 +63,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  BaseComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
+  BaseComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2);
 
   virtual ~BaseComparator() {}
 
@@ -72,8 +74,8 @@ public:
 protected:
 
   int _width, _height;
-  boost::shared_ptr<OsmMap> _map1, _map2;
-  boost::shared_ptr<OsmMap> _mapP1, _mapP2;
+  std::shared_ptr<OsmMap> _map1, _map2;
+  std::shared_ptr<OsmMap> _mapP1, _mapP2;
   Meters _pixelSize;
   OGREnvelope _worldBounds;
   OGREnvelope _projectedBounds;
@@ -81,9 +83,9 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
 
-  geos::geom::Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, geos::geom::Coordinate c);
+  geos::geom::Coordinate _findNearestPointOnFeature(std::shared_ptr<OsmMap> map, geos::geom::Coordinate c);
 
-  virtual void _init(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
+  virtual void _init(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2);
 
   void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
 

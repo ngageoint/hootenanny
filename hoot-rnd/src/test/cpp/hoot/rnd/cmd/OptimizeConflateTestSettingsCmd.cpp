@@ -86,7 +86,7 @@ public:
       configFilePath = args[6];
     }
 
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
+    std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
     if (testType == "case")
     {
       fitnessFunction.reset(new CaseTestFitnessFunction(testsDir, configFilePath));

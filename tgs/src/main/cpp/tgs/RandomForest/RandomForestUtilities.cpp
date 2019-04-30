@@ -39,14 +39,14 @@
 
 namespace Tgs
 {
-  std::vector<std::map<std::string, std::pair<unsigned int, unsigned int> > > RandomForestUtilities::createDataSets(
+  std::vector<std::map<std::string, std::pair<unsigned int, unsigned int>>> RandomForestUtilities::createDataSets(
     RandomForestInputs rfInputs, std::vector<double> splitPercentages)
   {
     try
     {
-      std::vector<std::map<std::string, std::pair<unsigned int, unsigned int> > > dataSets(splitPercentages.size());
+      std::vector<std::map<std::string, std::pair<unsigned int, unsigned int>>> dataSets(splitPercentages.size());
 
-      std::map<std::string, std::vector<std::vector<double> > >::iterator trainItr;
+      std::map<std::string, std::vector<std::vector<double>>>::iterator trainItr;
 
       for(trainItr = rfInputs.trainingVectors.begin(); trainItr != rfInputs.trainingVectors.end(); ++trainItr)
       {
@@ -82,7 +82,7 @@ namespace Tgs
 
   RandomForestManager RandomForestUtilities::generateModel(RandomForestInputs & rfInputs,
     unsigned int numTrees,
-    std::map<std::string, std::pair<unsigned int, unsigned int> > & trainingRangeMap)
+    std::map<std::string, std::pair<unsigned int, unsigned int>> & trainingRangeMap)
   {
     try
     {
@@ -90,7 +90,7 @@ namespace Tgs
 
       initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
-      std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
+      std::map<std::string, std::vector<std::vector<double>>>::iterator mapItr;
 
       for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {
@@ -117,7 +117,7 @@ namespace Tgs
 
   MultithreadedRandomForestManager RandomForestUtilities::generateMultithreadModel(
     RandomForestInputs & rfInputs, unsigned int numTrees,
-    std::map<std::string, std::pair<unsigned int, unsigned int> > & trainingRangeMap)
+    std::map<std::string, std::pair<unsigned int, unsigned int>> & trainingRangeMap)
   {
     try
     {
@@ -127,7 +127,7 @@ namespace Tgs
 
       initialModel.init(BaseRandomForestManager::MULTICLASS, rfInputs.featureLabels);
 
-      std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
+      std::map<std::string, std::vector<std::vector<double>>>::iterator mapItr;
 
       for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {

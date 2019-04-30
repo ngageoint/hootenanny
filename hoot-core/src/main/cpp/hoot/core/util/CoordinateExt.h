@@ -28,11 +28,8 @@
 #define COORDINATEEXT_H
 
 #include <geos/geom/Coordinate.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 using namespace geos::geom;
-using namespace boost;
 
 namespace hoot
 {
@@ -44,7 +41,8 @@ class CoordinateExt : public Coordinate
 {
 public:
   CoordinateExt(Coordinate c) : Coordinate(c) {}
-  CoordinateExt(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber) : Coordinate( xNew, yNew, zNew ) {}
+  CoordinateExt(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber)
+    : Coordinate( xNew, yNew, zNew ) {}
 
   double length() const
   {
@@ -94,28 +92,28 @@ public:
   }
 
   // https://www.codeproject.com/Tips/862988/Find-the-Intersection-Point-of-Two-Line-Segments
-  static shared_ptr<CoordinateExt> lineSegementsIntersect(const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1, const CoordinateExt& q2)
+  static std::shared_ptr<CoordinateExt> lineSegementsIntersect(const CoordinateExt& p1, const CoordinateExt& p2, const CoordinateExt& q1, const CoordinateExt& q2)
   {
-      shared_ptr<CoordinateExt> intersection;
+    std::shared_ptr<CoordinateExt> intersection;
 
-      CoordinateExt r = p2 - p1;
-      CoordinateExt s = q2 - q1;
-      double rxs = r.crossProduct(s);
-      double qpxr = (q1 - p1).crossProduct(r);
+    CoordinateExt r = p2 - p1;
+    CoordinateExt s = q2 - q1;
+    double rxs = r.crossProduct(s);
+    double qpxr = (q1 - p1).crossProduct(r);
 
-      if (isZero(rxs) && isZero(qpxr)) return intersection;
-      if (isZero(rxs) && !isZero(qpxr)) return intersection;
+    if (isZero(rxs) && isZero(qpxr)) return intersection;
+    if (isZero(rxs) && !isZero(qpxr)) return intersection;
 
-      double t = (q1 - p1).crossProduct(s)/rxs;
-      double u = (q1 - p1).crossProduct(r)/rxs;
+    double t = (q1 - p1).crossProduct(s)/rxs;
+    double u = (q1 - p1).crossProduct(r)/rxs;
 
-      if (!isZero(rxs) && (0 <= t && t <= 1) && (0 <= u && u <= 1))
-      {
-        intersection = shared_ptr<CoordinateExt>( make_shared<CoordinateExt>(p1 + r*t) );
-        return intersection;
-      }
-
+    if (!isZero(rxs) && (0 <= t && t <= 1) && (0 <= u && u <= 1))
+    {
+      intersection = std::shared_ptr<CoordinateExt>(std::make_shared<CoordinateExt>(p1 + r*t));
       return intersection;
+    }
+
+    return intersection;
   }
 
 private:

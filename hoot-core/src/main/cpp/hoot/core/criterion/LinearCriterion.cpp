@@ -51,7 +51,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     result |= r->getType() == MetadataTags::RelationMultilineString();
     result |= r->getType() == MetadataTags::RelationRoute();
     result |= r->getType() == MetadataTags::RelationBoundary();

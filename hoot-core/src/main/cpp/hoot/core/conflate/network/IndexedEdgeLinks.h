@@ -44,8 +44,8 @@ public:
   IndexedEdgeLinks();
 };
 
-typedef boost::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
-typedef boost::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
+typedef std::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
+typedef std::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
 
 // not implemented
 bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);

@@ -31,9 +31,6 @@
 #include <vector>
 #include <map>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 #include <hoot/core/io/schema/Layer.h>
 
 namespace hoot
@@ -44,18 +41,18 @@ class Schema
 public:
   Schema();
 
-  void addLayer(boost::shared_ptr<Layer> l);
+  void addLayer(std::shared_ptr<Layer> l);
 
-  boost::shared_ptr<const Layer> getLayer(size_t i) const;
+  std::shared_ptr<const Layer> getLayer(size_t i) const;
 
-  boost::shared_ptr<const Layer> getLayer(QString name) const;
+  std::shared_ptr<const Layer> getLayer(QString name) const;
 
   bool hasLayer(QString name) const;
 
   size_t getLayerCount() const { return _layers.size(); }
 
 private:
-  std::vector< boost::shared_ptr<Layer> > _layers;
+  std::vector<std::shared_ptr<Layer>> _layers;
   std::map<QString, size_t> _layerNameMap;
 };
 

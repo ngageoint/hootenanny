@@ -94,7 +94,7 @@ bool StringUtils::isNumber(const QString input)
   return isNumber;
 }
 
-boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(QString jsonStr)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(QString jsonStr)
 {
   LOG_VART(jsonStr);
   std::stringstream strStrm(jsonStr.toUtf8().constData(), std::ios::in);
@@ -102,7 +102,7 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
   {
     throw HootException(QString("Error reading from reply string:\n%1").arg(jsonStr));
   }
-  boost::shared_ptr<boost::property_tree::ptree> jsonObj(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> jsonObj(new boost::property_tree::ptree());
   try
   {
     boost::property_tree::read_json(strStrm, *jsonObj);
@@ -116,10 +116,10 @@ boost::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree
   return jsonObj;
 }
 
-boost::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
   const QStringList stringList)
 {
-  boost::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
+  std::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
   for (int i = 0; i < stringList.size(); i++)
   {
     boost::property_tree::ptree str;

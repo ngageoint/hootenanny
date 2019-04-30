@@ -33,9 +33,6 @@
 // Qt
 #include <QString>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 // v8
 #include <hoot/js/HootJsStable.h>
 

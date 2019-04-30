@@ -74,8 +74,8 @@ public:
     }
     else
     {
-      boost::shared_ptr<PartialOsmMapReader> reader =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(
+      std::shared_ptr<PartialOsmMapReader> reader =
+        std::dynamic_pointer_cast<PartialOsmMapReader>(
           OsmMapReaderFactory::createReader(input));
       reader->setUseDataSourceIds(true);
       reader->open(input);

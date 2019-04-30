@@ -54,7 +54,7 @@ Match()
 }
 
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
-                             boost::shared_ptr<const BuildingRfClassifier> rf,
+                             std::shared_ptr<const BuildingRfClassifier> rf,
                              const ElementId& eid1, const ElementId& eid2,
                              ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
                              QString dateTagKey, QString dateFormat) :
@@ -210,9 +210,9 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
   return _rf->getFeatures(m, _eid1, _eid2);
 }
 
-set< pair<ElementId, ElementId> > BuildingMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }

@@ -64,7 +64,7 @@ geos::geom::Coordinate NetworkVertex::getCentroid() const
 {
   if (ElementType::Node == _e->getElementType().getEnum())
   {
-    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(_e);
+    ConstNodePtr pNode = std::dynamic_pointer_cast<const Node>(_e);
     return pNode->toCoordinate();
   }
   else

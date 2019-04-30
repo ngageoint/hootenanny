@@ -40,7 +40,7 @@ bool MultiLineStringCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     return r->getType() == MetadataTags::RelationMultilineString();
   }
   return false;

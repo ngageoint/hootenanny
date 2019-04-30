@@ -39,9 +39,6 @@
 #include <QVector>
 #include <QXmlStreamReader>
 
-//  Boost
-#include <boost/shared_ptr.hpp>
-
 //  Standard
 #include <unordered_set>
 
@@ -163,7 +160,7 @@ protected:
   ElementStatus _status;
 };
 /** Handy typedef for element shared pointer */
-typedef boost::shared_ptr<XmlElement> XmlElementPtr;
+typedef std::shared_ptr<XmlElement> XmlElementPtr;
 
 /** Simplified changeset node abstraction */
 class XmlNode : public XmlElement
@@ -190,7 +187,7 @@ public:
   virtual QString toString(long changesetId) const;
 };
 /** Handy typedef for node shared pointer */
-typedef boost::shared_ptr<XmlNode> XmlNodePtr;
+typedef std::shared_ptr<XmlNode> XmlNodePtr;
 
 /** Simplified changeset way abstraction */
 class XmlWay : public XmlElement
@@ -243,7 +240,7 @@ private:
   QVector<long> _nodes;
 };
 /** Handy typedef for way shared pointer */
-typedef boost::shared_ptr<XmlWay> XmlWayPtr;
+typedef std::shared_ptr<XmlWay> XmlWayPtr;
 
 /** Simplified changeset relation member abstraction */
 class XmlMember
@@ -346,7 +343,7 @@ private:
   QList<XmlMember> _members;
 };
 /** Handy typedef for relation shared pointer */
-typedef boost::shared_ptr<XmlRelation> XmlRelationPtr;
+typedef std::shared_ptr<XmlRelation> XmlRelationPtr;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
 class osm_id_sort

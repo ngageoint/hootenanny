@@ -102,9 +102,9 @@ private:
 
   //file which has been thresholded at a word/tag occurrence count equal to or greater than
   //_minTagOccurrencesPerWord
-  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
+  std::shared_ptr<QTemporaryFile> _thresholdedCountFile;
   //file which has had filtering applied to it based on _customRules
-  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
+  std::shared_ptr<QTemporaryFile> _filteredCountFile;
 
   void _validateInputs(const QString input, const QString output);
 

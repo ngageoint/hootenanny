@@ -76,7 +76,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
   {
-    if (_addressParser.hasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
+    if (_addressParser.hasAddress(*std::dynamic_pointer_cast<const Node>(e)))
     {
       isPoi = true;
     }

@@ -27,8 +27,8 @@
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
 
-// boost
-#include <boost/shared_ptr.hpp>
+// std
+#include <memory>
 
 // GDAL
 class OGRSpatialReference;
@@ -48,7 +48,7 @@ public:
 
   virtual ~ElementProvider() {}
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   virtual bool containsElement(const ElementId& eid) const = 0;
 
@@ -73,8 +73,8 @@ public:
   virtual bool containsWay(long id) const = 0;
 };
 
-typedef boost::shared_ptr<const ElementProvider> ConstElementProviderPtr;
-typedef boost::shared_ptr<ElementProvider> ElementProviderPtr;
+typedef std::shared_ptr<const ElementProvider> ConstElementProviderPtr;
+typedef std::shared_ptr<ElementProvider> ElementProviderPtr;
 
 }
 

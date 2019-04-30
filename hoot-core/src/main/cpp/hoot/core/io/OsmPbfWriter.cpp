@@ -434,14 +434,14 @@ void OsmPbfWriter::_writeMap()
 
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const boost::shared_ptr<const hoot::Way>& w = it->second;
+    const std::shared_ptr<const hoot::Way>& w = it->second;
     wids.push_back(w->getId());
   }
   sort(wids.begin(), wids.end());
 
   for (size_t i = 0; i < wids.size(); i++)
   {
-    const boost::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
+    const std::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
     _writeWay(w);
 
     if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -476,7 +476,7 @@ void OsmPbfWriter::_writeMap()
   }
 }
 
-void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 {
   _elementsWritten++;
   if (_pg == 0)
@@ -528,7 +528,7 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
   }
 }
 
-void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
 
@@ -692,7 +692,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
   }
 }
 
-void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
+void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r)
 {
   LOG_TRACE("Writing relation: " << r->getElementId() << "...");
 
@@ -762,7 +762,7 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
   _dirty = true;
 }
 
-void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
+void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
 {
   LOG_TRACE("Writing way: " << w->getElementId() << "...");
 

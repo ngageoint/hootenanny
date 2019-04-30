@@ -43,10 +43,12 @@
 # define HashMap __gnu_cxx::hash_map
 # define HashSet __gnu_cxx::hash_set
 
+// Qt
 #include <QHash>
 #include <QString>
 
-#include <tgs/SharedPtr.h>
+// Standard
+#include <memory>
 
 namespace Tgs
 {
@@ -77,57 +79,63 @@ namespace __gnu_cxx
  * which just uses the internal char* representation as a wrapper.
  */
 template <>
-struct hash<std::string> {
-  size_t operator() (const std::string& x) const {
+struct hash<std::string>
+{
+  size_t operator() (const std::string& x) const
+  {
     return hash<const char*>()(x.c_str());
   }
 };
 
 template <>
-struct hash<QString> {
-  size_t operator() (const QString& x) const {
+struct hash<QString>
+{
+  size_t operator() (const QString& x) const
+  {
     return qHash(x);
   }
 };
 
 template <typename T>
-struct hash< boost::shared_ptr<T> > {
-  size_t operator() (const boost::shared_ptr<T>& x) const {
+struct hash<std::shared_ptr<T>>
+{
+  size_t operator() (const std::shared_ptr<T>& x) const
+  {
     return qHash(x.get());
   }
 };
 
 template<>
-  struct hash<std::pair<long, long> >
-  {
-    size_t
-    operator()(const std::pair<long, long>& k) const
-    { return Tgs::cantorPairing(k); }
-  };
+struct hash<std::pair<long, long>>
+{
+  size_t
+  operator()(const std::pair<long, long>& k) const
+  { return Tgs::cantorPairing(k); }
+};
 
 template<>
-  struct hash<std::pair<unsigned long, unsigned long> >
-  {
-    size_t
-    operator()(const std::pair<unsigned long, unsigned long>& k) const
-    { return Tgs::cantorPairing(k); }
-  };
+ struct hash<std::pair<unsigned long, unsigned long>>
+{
+  size_t
+  operator()(const std::pair<unsigned long, unsigned long>& k) const
+  { return Tgs::cantorPairing(k); }
+};
 
 template<>
-  struct hash<std::pair<int, int> >
-  {
-    size_t
-    operator()(const std::pair<int, int>& k) const
-    { return Tgs::cantorPairing(k); }
-  };
+struct hash<std::pair<int, int>>
+{
+  size_t
+  operator()(const std::pair<int, int>& k) const
+  { return Tgs::cantorPairing(k); }
+};
 
 template<>
-  struct hash<std::pair<unsigned int, unsigned int> >
-  {
-    size_t
-    operator()(const std::pair<unsigned int, unsigned int>& k) const
-    { return Tgs::cantorPairing(k); }
-  };
+struct hash<std::pair<unsigned int, unsigned int>>
+{
+  size_t
+  operator()(const std::pair<unsigned int, unsigned int>& k) const
+  { return Tgs::cantorPairing(k); }
+};
 
 /**
  * Does a fast, but inexact hash. This should work on all platforms, but not all instances of
@@ -158,21 +166,18 @@ struct fastHashDouble
 };
 
 template<>
-  struct hash<std::pair<double, double> >
+struct hash<std::pair<double, double>>
+{
+  size_t
+  operator()(const std::pair<double, double>& k) const
   {
-    size_t
-    operator()(const std::pair<double, double>& k) const
-    {
-      size_t long1 = fastHashDouble().operator ()(k.first);
-      size_t long2 = fastHashDouble().operator ()(k.first);
-      return Tgs::cantorPairing(long1, long2);
-    }
-  };
-
+    size_t long1 = fastHashDouble().operator ()(k.first);
+    size_t long2 = fastHashDouble().operator ()(k.first);
+    return Tgs::cantorPairing(long1, long2);
+  }
+};
 
 }
 #endif
 
-
 #endif
-

@@ -51,12 +51,12 @@ void ArffToRfConverter::convert(const QString input, const QString output)
 
   ArffReader ar(input);
 
-  boost::shared_ptr<Tgs::DataFrame> df = ar.read()->toDataFrame(-1);
+  std::shared_ptr<Tgs::DataFrame> df = ar.read()->toDataFrame(-1);
 
   Tgs::Random::instance()->seed(0);
   LOG_INFO("Building Random Forest...");
   Tgs::RandomForest rf;
-  boost::shared_ptr<Tgs::DisableCout> dc;
+  std::shared_ptr<Tgs::DisableCout> dc;
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."

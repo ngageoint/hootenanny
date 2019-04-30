@@ -40,9 +40,6 @@ namespace geos
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

@@ -39,9 +39,6 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/Way.h>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -51,7 +48,7 @@ typedef std::pair<int, int> vertex_match;
 typedef std::vector<vertex_match> subline_entry;
 typedef std::pair<Meters, subline_entry> frechet_subline;
 
-typedef boost::shared_ptr<geos::geom::LineString> LineStringPtr;
+typedef std::shared_ptr<geos::geom::LineString> LineStringPtr;
 
 /** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
  *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"

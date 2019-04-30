@@ -55,10 +55,10 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
   setCrop(config.getCookieCutterOutputCrop());
 }
 
-void CookieCutterOp::apply(boost::shared_ptr<OsmMap> &map)
+void CookieCutterOp::apply(std::shared_ptr<OsmMap> &map)
 {
   //remove unknown2 out of the input map and create a new map, which will be our ref map
-  boost::shared_ptr<OsmMap> refMap(new OsmMap(map));
+  std::shared_ptr<OsmMap> refMap(new OsmMap(map));
   RemoveElementsVisitor unknown2Remover;
   unknown2Remover.setRecursive(true);
   unknown2Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
@@ -66,11 +66,11 @@ void CookieCutterOp::apply(boost::shared_ptr<OsmMap> &map)
   LOG_VARD(refMap->getNodes().size());
 
   //create an alpha shape based on the ref map (unknown1)
-  boost::shared_ptr<OsmMap> cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
+  std::shared_ptr<OsmMap> cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
   LOG_VARD(cutShapeMap->getNodes().size());
 
   //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
-  boost::shared_ptr<OsmMap> doughMap(new OsmMap(map));
+  std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
   RemoveElementsVisitor unknown1Remover;
   unknown1Remover.setRecursive(true);
   unknown1Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
@@ -79,14 +79,14 @@ void CookieCutterOp::apply(boost::shared_ptr<OsmMap> &map)
 
   //cookie cut the alpha shape obtained from the ref map out of the source map
   CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
-  boost::shared_ptr<OsmMap> cookieCutMap = doughMap;
+  std::shared_ptr<OsmMap> cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
 
   //combine the ref map back with the source map; Effectively, we've replaced all of the data in the
   //source map whose AOI coincides with the ref map with the ref map's data.
   refMap->setProjection(cookieCutMap->getProjection());
   refMap->append(cookieCutMap);
-  boost::shared_ptr<OsmMap> result = refMap;
+  std::shared_ptr<OsmMap> result = refMap;
   LOG_VARD(result->getNodes().size());
   map.reset(new OsmMap(result));
 }

@@ -28,10 +28,8 @@
 #ifndef __TREE_NODE_H__
 #define __TREE_NODE_H__
 
-//Boost Includes
-#include <boost/shared_ptr.hpp>
-
 //STL Includes
+#include <memory>
 #include <vector>
 
 namespace Tgs
@@ -46,8 +44,8 @@ namespace Tgs
   */
   struct TreeNode
   {
-    boost::shared_ptr<TreeNode> leftChild;  //The right child of a split node else NULL
-    boost::shared_ptr<TreeNode> rightChild; //The left child of a split node else NULL
+    std::shared_ptr<TreeNode> leftChild;  //The right child of a split node else NULL
+    std::shared_ptr<TreeNode> rightChild; //The left child of a split node else NULL
 
     double splitValue;      //The factor value used to split a node
     double purityDelta;     //For a split node the information gain improvement derived from splitting the data by a factor

@@ -27,9 +27,8 @@
 #ifndef ELEMENTCRITERIONINPUTSTREAM_H
 #define ELEMENTCRITERIONINPUTSTREAM_H
 
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -58,7 +57,7 @@ public:
   /**
    * Returns the source's projection.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   /**
    * @brief hasMoreElements

@@ -78,7 +78,7 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) = 0;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 
   virtual void setCriterion(const ElementCriterionPtr& filter) { _filter = filter; }
 
@@ -108,8 +108,8 @@ protected:
   ElementCriterionPtr _filter;
 };
 
-typedef boost::shared_ptr<MatchCreator> MatchCreatorPtr;
-typedef boost::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
+typedef std::shared_ptr<MatchCreator> MatchCreatorPtr;
+typedef std::shared_ptr<const MatchCreator> ConstMatchCreatorPtr;
 
 }
 

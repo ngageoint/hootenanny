@@ -43,7 +43,7 @@ public:
 
   MultiVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   void addVisitor(ElementOsmMapVisitor *v) { _visitors.push_back(v); }
 

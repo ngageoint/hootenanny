@@ -84,14 +84,14 @@ QString TagInfo::_getInfo(QString input)
   LOG_VART(_exactKeyMatch);
   QString finalText;
 
-  boost::shared_ptr<OsmMapReader> reader =
+  std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(
       input, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
   //Using a different code path for the OGR inputs to handle the layer syntax.  There may be
   //a way to combine the two logic paths...not sure, though.
-  boost::shared_ptr<OgrReader> ogrReader = boost::dynamic_pointer_cast<OgrReader>(reader);
+  std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
     ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
@@ -118,10 +118,10 @@ QString TagInfo::_getInfo(QString input)
       LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
 
       TagInfoHash result;
-      boost::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
+      std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
       while (iterator->hasNext())
       {
-        boost::shared_ptr<Element> e = iterator->next();
+        std::shared_ptr<Element> e = iterator->next();
 
         //        // Interesting problem: If there are no elements in the file, e == 0
         //        // Need to look at the ElementIterator.cpp file to fix this.
@@ -161,8 +161,8 @@ QString TagInfo::_getInfo(QString input)
     LOG_DEBUG("Reading: " << input << "...");
 
     reader->open(input);
-    boost::shared_ptr<ElementInputStream> streamReader =
-      boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    std::shared_ptr<ElementInputStream> streamReader =
+      std::dynamic_pointer_cast<ElementInputStream>(reader);
 
     TagInfoHash result;
     while (streamReader->hasMoreElements())
@@ -174,8 +174,8 @@ QString TagInfo::_getInfo(QString input)
         _parseElement(e, result);
       }
     }
-    boost::shared_ptr<PartialOsmMapReader> partialReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    std::shared_ptr<PartialOsmMapReader> partialReader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();

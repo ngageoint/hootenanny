@@ -62,7 +62,7 @@ public:
    * @return a collection of translated name strings
    */
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
-                                             boost::shared_ptr<ToEnglishTranslator> translator);
+                                             std::shared_ptr<ToEnglishTranslator> translator);
 
 private:
 

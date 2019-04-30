@@ -45,7 +45,7 @@ UnionPolygonsVisitor::UnionPolygonsVisitor()
   _result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 }
 
-void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
+void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
@@ -54,7 +54,7 @@ void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
 
   if (AreaCriterion().isSatisfied(e))
   {
-    boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+    std::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));
     _numAffected++;
   }

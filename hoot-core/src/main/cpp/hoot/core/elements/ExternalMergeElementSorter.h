@@ -95,7 +95,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ElementInputStream
@@ -121,7 +121,7 @@ private:
   static const QString SORT_TEMP_FILE_BASE_NAME;
 
   //the final merged sorted element output
-  boost::shared_ptr<QTemporaryFile> _sortFinalOutput;
+  std::shared_ptr<QTemporaryFile> _sortFinalOutput;
 
   //a stream of sorted elements to serve up
   ElementInputStreamPtr _sortedElements;
@@ -133,7 +133,7 @@ private:
   bool _retainTempFiles;
 
   //pre-merged temp files; auto-deleted on exit
-  QList<boost::shared_ptr<QTemporaryFile>> _tempOutputFiles;
+  QList<std::shared_ptr<QTemporaryFile>> _tempOutputFiles;
 
   long _logUpdateInterval;
 
@@ -164,13 +164,13 @@ private:
    * Adds the first member from each temp file to the priority queue
    */
   ElementPriorityQueue _getInitializedPriorityQueue(
-    QList<boost::shared_ptr<PartialOsmMapReader>>& readers);
+    QList<std::shared_ptr<PartialOsmMapReader>>& readers);
 
   void _mergeSortedElements(ElementPriorityQueue& priorityQueue,
-                            boost::shared_ptr<PartialOsmMapWriter> writer,
-                            QList<boost::shared_ptr<PartialOsmMapReader>> readers);
+                            std::shared_ptr<PartialOsmMapWriter> writer,
+                            QList<std::shared_ptr<PartialOsmMapReader>> readers);
 
-  boost::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
+  std::shared_ptr<PartialOsmMapWriter> _getFinalOutputWriter();
 
   void _printPriorityQueue(ElementPriorityQueue priorityQueue);
 };

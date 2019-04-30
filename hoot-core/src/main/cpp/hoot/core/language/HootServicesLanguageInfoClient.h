@@ -56,12 +56,12 @@ public:
   /**
    * @see LanguageInfoProvider
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) override;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) override;
 
   /**
    * @see LanguageInfoProvider
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) override;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) override;
 
 protected:
 
@@ -82,7 +82,7 @@ private:
   QString _detectorsUrl;
   QString _translatorsUrl;
 
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getBaseUrl();
   static QString _getDetectableUrl();

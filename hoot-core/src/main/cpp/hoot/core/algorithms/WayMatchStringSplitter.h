@@ -43,7 +43,7 @@ public:
    * place.
    * Throws NeedsReviewException
    */
-  void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
+  void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
 private:
@@ -53,7 +53,7 @@ private:
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
-  void _splitWay(WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
+  void _splitWay(WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
 };

@@ -48,8 +48,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, SparkJsonWriter)
 
-using namespace boost;
-
 SparkJsonWriter::SparkJsonWriter() :
   _precision(round(ConfigOptions().getWriterPrecision()))
 {
@@ -68,9 +66,9 @@ void SparkJsonWriter::open(QString fileName)
   }
 
   // find a match creator that can provide the search bounds.
-  foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
+  foreach (std::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
-    SearchRadiusProviderPtr sbc = dynamic_pointer_cast<SearchRadiusProvider>(mc);
+    SearchRadiusProviderPtr sbc = std::dynamic_pointer_cast<SearchRadiusProvider>(mc);
 
     if (sbc.get())
     {

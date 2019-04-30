@@ -54,7 +54,7 @@ namespace Tgs
 
   }
 
-  void RandomForest::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+  void RandomForest::trainBinary(std::shared_ptr<DataFrame> data, unsigned int numTrees,
     unsigned int numFactors, std::string posClass, unsigned int nodeSize, double retrain,
     bool balanced)
   {
@@ -74,7 +74,7 @@ namespace Tgs
 
         for(unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
           std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
           std::cout.flush();
@@ -129,7 +129,7 @@ namespace Tgs
 
           for(unsigned int i = 0; i < numTrees; i++)
           {
-            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainBinary(data,
               (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), posClass, 1 , balanced);
           }
@@ -149,7 +149,7 @@ namespace Tgs
     }
   }
 
-  void RandomForest::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+  void RandomForest::trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numTrees,
     unsigned int numFactors, unsigned int nodeSize, double retrain, bool balanced)
   {
     try
@@ -170,7 +170,7 @@ namespace Tgs
 
         for(unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
           std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
           std::cout.flush();
@@ -226,7 +226,7 @@ namespace Tgs
 
           for(unsigned int i = 0; i < numTrees; i++)
           {
-            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,
               (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
           }
@@ -245,7 +245,7 @@ namespace Tgs
     }
   }
 
-  void RandomForest::trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+  void RandomForest::trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numTrees,
     unsigned int numFactors, std::string posClass, std::string negClass, unsigned int nodeSize,
     double retrain, bool balanced)
   {
@@ -263,7 +263,7 @@ namespace Tgs
 
         for(unsigned int i = 0; i < numTrees; i++)
         {
-          _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+          _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
           std::cout << "Trained Tree # " << i + 1 << " / " << numTrees << "     \r";
           std::cout.flush();
@@ -319,7 +319,7 @@ namespace Tgs
 
           for(unsigned int i = 0; i < numTrees; i++)
           {
-            _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+            _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,
               (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx)), 1, balanced);
           }

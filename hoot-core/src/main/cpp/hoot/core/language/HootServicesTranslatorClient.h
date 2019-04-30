@@ -103,7 +103,7 @@ protected:
   bool _skipWordsInEnglishDict;
 
   //used to retrieve info about what languages are translatable, etc.
-  boost::shared_ptr<LanguageInfoProvider> _infoClient;
+  std::shared_ptr<LanguageInfoProvider> _infoClient;
 
 private:
 
@@ -121,7 +121,7 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  boost::shared_ptr<QCache<QString, TranslationResult>> _cache;
+  std::shared_ptr<QCache<QString, TranslationResult>> _cache;
 
   int _statusUpdateInterval;
 
@@ -140,7 +140,7 @@ private:
   QString _id;
 
   //persistent session is required by hoot services
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getTranslateUrl();
 
@@ -153,11 +153,11 @@ private:
    */
   void _checkLangsAvailable(const QString type);
 
-  void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+  void _validateAvailableLangs(std::shared_ptr<boost::property_tree::ptree> replyObj,
                                const QString type);
 
   QString _getRequestData(const QString text);
-  void _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+  void _parseResponse(std::shared_ptr<boost::property_tree::ptree> replyObj);
 
   bool _getTranslationFromCache(const QString text);
   void _insertTranslationIntoCache(const QString text, const QString translatedText,

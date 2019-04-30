@@ -29,10 +29,13 @@
 
 #include <hoot/core/scoring/DirectedGraph.h>
 
+// Standard
+#include <cassert>
+
 namespace hoot
 {
 
-ShortestPath::ShortestPath(boost::shared_ptr<const DirectedGraph> graph)
+ShortestPath::ShortestPath(std::shared_ptr<const DirectedGraph> graph)
 {
   _graph = graph;
 }

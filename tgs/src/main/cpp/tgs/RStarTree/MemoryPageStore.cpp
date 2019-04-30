@@ -29,6 +29,9 @@
 
 #include <tgs/RStarTree/Page.h>
 
+// Standard
+#include <cassert>
+
 namespace Tgs
 {
   MemoryPageStore::MemoryPageStore(int pageSize)
@@ -40,15 +43,15 @@ namespace Tgs
   {
   }
 
-  boost::shared_ptr<Page> MemoryPageStore::createPage()
+  std::shared_ptr<Page> MemoryPageStore::createPage()
   {
     char* data = Page::allocateAligned(_pageSize);
-    boost::shared_ptr<Page> newPage(_createPage(this, (int)_pages.size(), data, _pageSize));
+    std::shared_ptr<Page> newPage(_createPage(this, (int)_pages.size(), data, _pageSize));
     _pages.push_back(newPage);
     return newPage;
   }
 
-  boost::shared_ptr<Page> MemoryPageStore::getPage(int id)
+  std::shared_ptr<Page> MemoryPageStore::getPage(int id)
   {
     assert(id >= 0 && id <= (int)_pages.size());
     return _pages[id];

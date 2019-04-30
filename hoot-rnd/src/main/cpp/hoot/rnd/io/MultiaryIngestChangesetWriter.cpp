@@ -129,7 +129,7 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
     LOG_VART(change.getElement());
   }
 
-  NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
+  NodePtr nodeCopy = (std::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
 
   nodeCopy->getTags().remove(MetadataTags::HootHash());
   _exportTagsVisitor.visit(nodeCopy);

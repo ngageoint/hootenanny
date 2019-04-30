@@ -35,9 +35,6 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // GEOS
 #include <geos/geom/Coordinate.h>
 
@@ -65,7 +62,7 @@ public:
     @param nodes
     */
   static void printNodes(const QString nodeCollectionName,
-                         const QList<boost::shared_ptr<const Node>>& nodes);
+                         const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of node ID's for a collection of nodes
@@ -73,7 +70,7 @@ public:
     @param nodes a collection of nodes
     @return a collection of node ID's
     */
-  static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node>>& nodes);
+  static const QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of nodes given a collection of node ID's
@@ -82,8 +79,8 @@ public:
     @param map the map owning the nodes with the given ID's
     @return a collection of nodes
     */
-  static QList<boost::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
-                                                             boost::shared_ptr<const OsmMap> map);
+  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
+                                                             std::shared_ptr<const OsmMap> map);
 
   /**
     Converts a OSM node to a coordinate
@@ -91,7 +88,7 @@ public:
     @param node the node to convert
     @returns a coordinate
     */
-  static geos::geom::Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
+  static geos::geom::Coordinate nodeToCoord(std::shared_ptr<const Node> node);
 
   /**
     Converts OSM nodes to a coordinates
@@ -100,7 +97,7 @@ public:
     @returns coordinates
     */
   static QList<geos::geom::Coordinate> nodesToCoords(
-    const QList<boost::shared_ptr<const Node> >& nodes);
+    const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Converts a coordinate to an OSM node
@@ -109,8 +106,8 @@ public:
     @param map the map owning the node to be created
     @returns a node
     */
-  static boost::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
-                                                   boost::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
+                                                 std::shared_ptr<const OsmMap> map);
 
   /**
     Converts coordinates to OSM nodes
@@ -119,8 +116,8 @@ public:
     @param map the map owning the nodes to be created
     @returns nodes
     */
-  static QList<boost::shared_ptr<const Node> > coordsToNodes(
-    const QList<geos::geom::Coordinate>& coords, boost::shared_ptr<const OsmMap> map);
+  static QList<std::shared_ptr<const Node>> coordsToNodes(
+    const QList<geos::geom::Coordinate>& coords, std::shared_ptr<const OsmMap> map);
 
   /**
     Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)

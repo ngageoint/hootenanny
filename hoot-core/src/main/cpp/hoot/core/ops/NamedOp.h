@@ -51,7 +51,7 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual void setConfiguration(const Settings& conf);
 

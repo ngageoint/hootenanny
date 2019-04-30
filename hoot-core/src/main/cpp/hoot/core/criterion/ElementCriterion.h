@@ -27,9 +27,13 @@
 #ifndef ELEMENTCRITERION_H
 #define ELEMENTCRITERION_H
 
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/info/ApiEntityInfo.h>
+// hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
+#include <hoot/core/util/NotImplementedException.h>
+
+// Standard
+#include <memory>
 
 namespace hoot
 {
@@ -66,10 +70,10 @@ public:
   /**
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
-  virtual boost::shared_ptr<ElementCriterion> clone() = 0;
+  virtual std::shared_ptr<ElementCriterion> clone() = 0;
 };
 
-typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;
+typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;
 
 }
 

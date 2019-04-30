@@ -64,7 +64,7 @@ public:
    *
    * The default write function writes nodes, ways, then relations.
    */
-  virtual void writePartial(const boost::shared_ptr<const Element>& e);
+  virtual void writePartial(const std::shared_ptr<const Element>& e);
   virtual void writePartial(const ConstOsmMapPtr& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.

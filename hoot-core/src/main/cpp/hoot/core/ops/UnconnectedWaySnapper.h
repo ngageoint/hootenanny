@@ -154,11 +154,11 @@ private:
   Status _snapToWayStatus;
 
   // feature indexes used for way nodes being snapped to
-  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
+  std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
   std::deque<ElementId> _snapToWayNodeIndexToEid;
 
   // feature indexes used for ways being snapped to
-  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
+  std::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
   // keep track of the way nodes that are snapped
@@ -198,7 +198,7 @@ private:
    * @param elementType the element type of the criterion class; either Way or Node
    */
   void _createFeatureIndex(ElementCriterionPtr featureCrit,
-                           boost::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+                           std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
                            std::deque<ElementId>& featureIndexToEid,
                            const ElementType& elementType);
 

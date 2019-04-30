@@ -86,9 +86,9 @@ bool ArffReader::_eof()
   return result;
 }
 
-boost::shared_ptr<DataSamples> ArffReader::read()
+std::shared_ptr<DataSamples> ArffReader::read()
 {
-  boost::shared_ptr<DataSamples> result(new DataSamples());
+  std::shared_ptr<DataSamples> result(new DataSamples());
   DataSamples& ds = *result;
   QStringList columnNames;
 

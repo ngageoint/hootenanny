@@ -123,7 +123,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
   }
 }
 
-void IoUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
+void IoUtils::saveMap(OsmMapPtr map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
 }

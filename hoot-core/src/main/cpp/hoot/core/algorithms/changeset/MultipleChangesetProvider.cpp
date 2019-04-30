@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-MultipleChangesetProvider::MultipleChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection):
+MultipleChangesetProvider::MultipleChangesetProvider(std::shared_ptr<OGRSpatialReference> pProjection):
   _projection(pProjection)
 {
 }
@@ -45,7 +45,7 @@ void MultipleChangesetProvider::close()
   // nothing to do here
 }
 
-boost::shared_ptr<OGRSpatialReference> MultipleChangesetProvider::getProjection() const
+std::shared_ptr<OGRSpatialReference> MultipleChangesetProvider::getProjection() const
 {
   return _projection;
 }

@@ -78,7 +78,7 @@ public:
 
 private:
 
-  boost::shared_ptr<QFile> _fp;
+  std::shared_ptr<QFile> _fp;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;

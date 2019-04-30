@@ -92,7 +92,7 @@ void RemoveTagsVisitor::_setCriterion(const QString criterionName)
   {
     LOG_VART(criterionName);
     addCriterion(
-      boost::shared_ptr<ElementCriterion>(
+      std::shared_ptr<ElementCriterion>(
         Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
   }
 }
@@ -102,7 +102,7 @@ void RemoveTagsVisitor::addKey(QString key)
   _keys.append(key);
 }
 
-void RemoveTagsVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_criterion.get() && !_criterion->isSatisfied(e))
   {

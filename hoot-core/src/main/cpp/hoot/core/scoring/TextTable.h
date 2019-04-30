@@ -37,7 +37,7 @@ namespace hoot
 class TextTable
 {
 public:
-  typedef QHash< QString, QHash<QString, QVariant> > Data;
+  typedef QHash<QString, QHash<QString, QVariant>> Data;
 
   TextTable(const Data& d) : _data(d) {}
 

@@ -298,7 +298,7 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) 
 }
 
 QString HootServicesLanguageDetectorClient::_parseResponse(
-  boost::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed)
+  std::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed)
 {
   QString detectedLangCode =
     QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();

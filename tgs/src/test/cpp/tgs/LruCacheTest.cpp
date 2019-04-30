@@ -50,12 +50,12 @@ namespace Tgs
     CPPUNIT_TEST_SUITE_END();
   public:
 
-    void log(std::map<int, std::list< pair<int, int> >::iterator>& map)
+    void log(std::map<int, std::list<pair<int, int>>::iterator>& map)
     {
       int n = map.size();
       cout << "[" << n << "]{";
 
-      for (std::map<int, std::list< pair<int, int> >::iterator>::const_iterator it = map.begin(); it != map.end();)
+      for (std::map<int, std::list<pair<int, int>>::iterator>::const_iterator it = map.begin(); it != map.end();)
       {
         cout << "(" << it->first << ", " << *(it->second) << ")";
         ++it;

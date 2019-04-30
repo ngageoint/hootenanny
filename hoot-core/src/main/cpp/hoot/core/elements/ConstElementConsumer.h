@@ -38,7 +38,7 @@ public:
   virtual void addElement(const ConstElementPtr& e) = 0;
   virtual void addElement(const ElementPtr& e)
   {
-    addElement(boost::dynamic_pointer_cast<const Element>(e));
+    addElement(std::dynamic_pointer_cast<const Element>(e));
   }
 };
 

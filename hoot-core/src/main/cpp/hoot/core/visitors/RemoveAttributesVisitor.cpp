@@ -68,7 +68,7 @@ void RemoveAttributesVisitor::setTypes(const QStringList types)
   LOG_VART(_types);
 }
 
-void RemoveAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _types.length(); i++)
   {

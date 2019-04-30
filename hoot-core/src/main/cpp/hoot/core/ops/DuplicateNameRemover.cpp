@@ -62,7 +62,7 @@ void DuplicateNameRemover::setConfiguration(const Settings& conf)
   _preserveOriginalName = opts.getDuplicateNamePreserveOriginalName();
 }
 
-void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
+void DuplicateNameRemover::apply(std::shared_ptr<OsmMap> &map)
 {
   _numAffected = 0;
   _map = map;
@@ -203,7 +203,7 @@ QString DuplicateNameRemover::_getBestName(QString n1, QString n2)
   }
 }
 
-void DuplicateNameRemover::removeDuplicates(boost::shared_ptr<OsmMap> map)
+void DuplicateNameRemover::removeDuplicates(std::shared_ptr<OsmMap> map)
 {
   DuplicateNameRemover a;
   a.apply(map);

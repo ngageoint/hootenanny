@@ -181,7 +181,7 @@ HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requ
 long HootServicesLoginManager::_parseLoginResponse(const QString response) const
 {
   LOG_VART(response);
-  boost::shared_ptr<boost::property_tree::ptree> replyObj =
+  std::shared_ptr<boost::property_tree::ptree> replyObj =
     StringUtils::jsonStringToPropTree(response);
   const long userId = replyObj->get<long>("id");
   LOG_VARD(userId);

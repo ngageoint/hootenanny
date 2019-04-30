@@ -31,9 +31,6 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -51,14 +48,14 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
 
   virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const boost::shared_ptr<Element>& e) = 0;
+  virtual void visit(const std::shared_ptr<Element>& e) = 0;
 
 protected:
 
   OsmMap* _map;
 };
 
-typedef boost::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
+typedef std::shared_ptr<ElementOsmMapVisitor> ElementOsmMapVisitorPtr;
 }
 
 #endif // ELEMENTOSMMAPVISITOR_H

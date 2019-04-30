@@ -56,7 +56,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Adds or updates one or more tags with a specified key/value combination"; }
@@ -74,7 +74,7 @@ private:
   //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
   //a customizable filter
-  boost::shared_ptr<ElementCriterion> _criterion;
+  std::shared_ptr<ElementCriterion> _criterion;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
   //This allows for negating the criterion as an option sent in from the command line.

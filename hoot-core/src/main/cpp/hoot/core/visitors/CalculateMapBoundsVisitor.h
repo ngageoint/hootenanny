@@ -50,7 +50,7 @@ public:
   OGREnvelope getBounds() { return _envelope; }
 
   // Note: should only visit nodes when calculating bounds
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   // Convenient way to get bounds
   static OGREnvelope getBounds(const OsmMapPtr& map);

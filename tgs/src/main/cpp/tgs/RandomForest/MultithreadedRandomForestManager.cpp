@@ -51,7 +51,7 @@ namespace Tgs
       for(unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
         _rfList.push_back(
-          boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+          std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
       }
     }
     catch(const Exception & e)
@@ -70,7 +70,7 @@ namespace Tgs
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
         _rfList.push_back(
-          boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+          std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
         _rfList.back()->importModel(forestElement);
       }
     }
@@ -101,7 +101,7 @@ namespace Tgs
       std::cerr << "DEBUG _TRAIN MT" << std::endl;
       _rfList.clear();
       _rfList.push_back(
-        boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+        std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
       _rfList[0]->trainMulticlass(_data, numTrees, numFactors, nodeSize, retrain, balanced);
     }
     catch(const Exception & e)

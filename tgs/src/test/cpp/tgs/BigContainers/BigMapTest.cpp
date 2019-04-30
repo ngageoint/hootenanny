@@ -106,7 +106,7 @@ public:
 //    size_t iterations = 10000000;
 //    bool doReadTest = false;
 //    map<long, long> bax;
-//    vector< pair<long, long> > pairs;
+//    vector<pair<long, long>> pairs;
 //    if (doReadTest)
 //    {
 //      pairs.reserve(iterations);
@@ -190,7 +190,7 @@ public:
 //    typedef stxxl::VECTOR_GENERATOR<long>::result VectorType;
 //    VectorType v;
 
-//    vector< pair<long, long> > pairs;
+//    vector<pair<long, long>> pairs;
 //    if (doReadTest)
 //    {
 //      pairs.reserve(iterations);

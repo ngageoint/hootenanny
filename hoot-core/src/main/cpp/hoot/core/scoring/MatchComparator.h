@@ -132,12 +132,12 @@ private:
   /**
    * Confusion matrix with [actual][expected]
    */
-  std::vector< std::vector<int> > _confusion;
+  std::vector<std::vector<int>> _confusion;
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
    */
-  QHash< QString, QHash<QString, QVariant> > _wrongBreakdown;
+  QHash<QString, QHash<QString, QVariant>> _wrongBreakdown;
 
   int _tp, _fp, _fn;
   bool _tagErrors;

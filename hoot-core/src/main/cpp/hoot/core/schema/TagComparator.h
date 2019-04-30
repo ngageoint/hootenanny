@@ -36,9 +36,6 @@
 #include <QString>
 #include <QSet>
 
-//  Boost
-#include <boost/shared_ptr.hpp>
-
 namespace hoot
 {
 
@@ -136,7 +133,7 @@ private:
 
   TagComparator();
 
-  static boost::shared_ptr<TagComparator> _theInstance;
+  static std::shared_ptr<TagComparator> _theInstance;
 
   void _addDefaults(Tags& t);
 

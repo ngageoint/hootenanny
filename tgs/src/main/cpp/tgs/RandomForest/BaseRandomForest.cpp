@@ -148,7 +148,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findAverageError(boost::shared_ptr<DataFrame> data, double & average,
+  void BaseRandomForest::findAverageError(std::shared_ptr<DataFrame> data, double & average,
     double & stdDev)
   {
     try
@@ -182,7 +182,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findProximity(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::findProximity(std::shared_ptr<DataFrame> data,
     std::vector<unsigned int> & proximity)
   {
     try
@@ -210,7 +210,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::getFactorImportance(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::getFactorImportance(std::shared_ptr<DataFrame> data,
     std::map<std::string, double> & factorImportance)
   {
     try
@@ -308,7 +308,7 @@ namespace Tgs
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
 
-              _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
               _forest.back()->import(treeElement);
             }
           }

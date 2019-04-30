@@ -112,7 +112,7 @@ namespace Tgs
       infoGain.resize(fIndices.size());
       std::vector<unsigned int> splitIndices;
       splitIndices.resize(fIndices.size());
-      std::vector<std::vector<unsigned int> > sortedIndices;
+      std::vector<std::vector<unsigned int>> sortedIndices;
       sortedIndices.resize(fIndices.size());
 
       //Sort each indices set based on the factor values

@@ -57,7 +57,7 @@ public:
   virtual void insert(const QList<QVariant> l);
 
 private:
-  QList< QList<QVariant> > _pending;
+  QList<QList<QVariant>> _pending;
   QSqlQuery _query;
   QSqlDatabase _db;
   QString _tableName;

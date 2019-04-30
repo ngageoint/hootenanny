@@ -57,7 +57,7 @@ public:
 
   void addKey(QString key);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Removes tags by key"; }
 
@@ -76,7 +76,7 @@ public:
 private:
 
   QStringList _keys;
-  boost::shared_ptr<ElementCriterion> _criterion;
+  std::shared_ptr<ElementCriterion> _criterion;
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
   long _numTagsRemoved;

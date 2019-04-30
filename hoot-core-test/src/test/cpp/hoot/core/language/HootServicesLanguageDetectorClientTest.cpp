@@ -62,7 +62,7 @@ public:
 
   void runRequestDataTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(_inputPath + "runRequestDataTest").trimmed(),
@@ -71,8 +71,8 @@ public:
 
   void runParseResponseTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
@@ -82,10 +82,10 @@ public:
 
   void runConfidenceTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
     uut->_minConfidence = LanguageDetectionConfidenceLevel::High;
 
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
@@ -103,9 +103,9 @@ private:
       "\"detectedLang\": \"German\", "
       "\"detectionConfidence\": \"medium\" }";
 
-  boost::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
+  std::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> client(
+    std::shared_ptr<HootServicesLanguageDetectorClient> client(
       new HootServicesLanguageDetectorMockClient());
 
     Settings conf;

@@ -98,15 +98,15 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > nodeIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > wayIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > relationIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> relationIdMap;
   };
 
   struct ChangesetData
@@ -129,7 +129,7 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    boost::shared_ptr<std::map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    std::shared_ptr<std::map<ElementId, UnresolvedRelationReference>> unresolvedRelationRefs;
   };
 
 public:
@@ -205,14 +205,14 @@ protected:
   QString _outputFilesCopyLocation;
   QString _outputUrl;
   QString _outputDelimiter;
-  boost::shared_ptr<QFile> _sqlOutputCombinedFile;
+  std::shared_ptr<QFile> _sqlOutputCombinedFile;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
   bool _includeDebugTags;
-  std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
+  std::map<QString, std::shared_ptr<QTemporaryFile>> _outputSections;
   QStringList _sectionNames;
-  boost::shared_ptr<QElapsedTimer> _timer;
+  std::shared_ptr<QElapsedTimer> _timer;
   long _maxChangesetSize;
 
   void _reset();
@@ -243,8 +243,8 @@ protected:
   virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
   virtual void _writeTags(const Tags& tags, const ElementType::Type& elementType,
-                  const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
-                  boost::shared_ptr<QFile> historicalTableFile);
+                  const unsigned long dbId, std::shared_ptr<QFile> currentTableFile,
+                  std::shared_ptr<QFile> historicalTableFile);
 
   virtual void _incrementChangesInChangeset();
 
@@ -281,7 +281,7 @@ private:
   bool _writeIdSequenceUpdates;
 
   OsmApiDb _database;
-  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  std::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
   void _verifyOutputCopySettings();
   void _verifyFileOutputs();

@@ -49,7 +49,7 @@ public:
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
 

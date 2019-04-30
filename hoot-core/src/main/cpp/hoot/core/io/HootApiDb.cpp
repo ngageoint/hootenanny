@@ -1971,7 +1971,7 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-boost::shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
+std::shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
 {
   const long mapId = _currMapId;
   _checkLastMapId(mapId);

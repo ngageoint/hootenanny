@@ -41,11 +41,11 @@ FindWaysVisitor::FindWaysVisitor (ElementCriterion* pCrit):
 {
 }
 
-void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
+void FindWaysVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
     if (_pCrit->isSatisfied(e))
     {
       _wayIds.push_back(e->getId());

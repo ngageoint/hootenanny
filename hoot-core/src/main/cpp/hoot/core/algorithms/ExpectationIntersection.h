@@ -33,9 +33,6 @@
 // Tbs
 #include <tbs/stats/TDistribution.h>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

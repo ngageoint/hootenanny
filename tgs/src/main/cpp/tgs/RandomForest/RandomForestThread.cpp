@@ -30,8 +30,8 @@
 
 namespace Tgs
 {
-  RandomForestThread::RandomForestThread(boost::shared_ptr<DataFrame> data,
-    boost::shared_ptr<RandomTree> tree, unsigned int numFactors, unsigned int nodeSize,
+  RandomForestThread::RandomForestThread(std::shared_ptr<DataFrame> data,
+    std::shared_ptr<RandomTree> tree, unsigned int numFactors, unsigned int nodeSize,
     bool makeBalanced)
   {
     _data = data;

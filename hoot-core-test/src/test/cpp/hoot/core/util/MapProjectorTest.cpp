@@ -91,9 +91,9 @@ public:
     return theta1 - theta2;
   }
 
-  void evaluateProjection(const OGREnvelope& env, boost::shared_ptr<OGRSpatialReference> srs)
+  void evaluateProjection(const OGREnvelope& env, std::shared_ptr<OGRSpatialReference> srs)
   {
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+    std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
     OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(wgs84.get(), srs.get()));
 
@@ -112,7 +112,7 @@ public:
     int stepsY = (height) / stepSize;
     double stepSizeX = (width) / (double)stepsX;
     double stepSizeY = (height) / (double)stepsY;
-    boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+    std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 
     vector<double> errors;
     vector<double> deltaErrors;
@@ -202,21 +202,21 @@ public:
 
   void testRegion(const OGREnvelope& env, QString name)
   {
-    boost::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
-    boost::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> sinusoidal = MapProjector::createSinusoidalProjection(env);
+    std::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
     if (mollweide->importFromEPSG(54009) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
-    boost::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
+    std::shared_ptr<OGRSpatialReference> orthographic = MapProjector::createOrthographic(env);
 
-    boost::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
     if (eckertVI->importFromEPSG(53010) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
     }
 
-    boost::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
+    std::shared_ptr<OGRSpatialReference> sphereBoone(new OGRSpatialReference());
     if (sphereBoone->importFromEPSG(53024) != OGRERR_NONE)
     {
       throw HootException("Error creating mollweide projection.");
@@ -239,7 +239,7 @@ public:
 //    fs << 5 + o << "\tAEAC";
 //    if ((env.MinY >= 0 && env.MaxY >= 0) || (env.MinY <= 0 && env.MaxY <= 0))
 //    {
-//      boost::shared_ptr<OGRSpatialReference> aeac = MapProjector::createAeacProjection(env);
+//      std::shared_ptr<OGRSpatialReference> aeac = MapProjector::createAeacProjection(env);
 //      evaluateProjection(env, aeac);
 //    }
 //    else
@@ -269,7 +269,7 @@ public:
       env.MaxX = 160;
       env.MaxY = 65;
 
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
           createPlanarProjection(env, toRadians(2), 61);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapProjector::toWkt(srs).contains("Lambert_Conformal_Conic"));
@@ -282,7 +282,7 @@ public:
       env.MaxX = 160;
       env.MaxY = 71;
 
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapProjector::toWkt(srs).contains("Orthographic"));
@@ -295,7 +295,7 @@ public:
       env.MaxX = 150;
       env.MaxY = 85;
 
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapProjector::toWkt(srs).contains("Polyconic"));
@@ -308,7 +308,7 @@ public:
       env.MaxX = 130;
       env.MaxY = 65;
 
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapProjector::toWkt(srs).contains("Orthographic"));
@@ -323,7 +323,7 @@ public:
       env.MaxX = -30;
       env.MaxY = 6;
 
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::getInstance().
         createPlanarProjection(env, toRadians(45), 10.0);
       CPPUNIT_ASSERT_EQUAL(true,
         (bool)MapProjector::toWkt(srs).contains("Lambert_Azimuthal_Equal_Area"));
@@ -339,7 +339,7 @@ public:
 //      env.MaxX = 1.0;
 //      env.MaxY = 81.0;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "SmallNorth");
 //    }
@@ -350,7 +350,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 89.5;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "BigNorth");
 //    }
@@ -364,7 +364,7 @@ public:
       env.MinY = 0.0;
       env.MaxX = 180.0;
       env.MaxY = 89.5;
-      boost::shared_ptr<OGRSpatialReference> srs = MapProjector::createOrthographic(env);
+      std::shared_ptr<OGRSpatialReference> srs = MapProjector::createOrthographic(env);
       Coordinate c(500, 200);
       CPPUNIT_ASSERT_THROW(MapProjector::project(c, MapProjector::createWgs84Projection(), srs),
                            IllegalArgumentException);
@@ -377,7 +377,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 65.0;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "ReasonableNorth");
 //    }
@@ -389,7 +389,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 89.5;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "AlmostGlobe");
 //    }
@@ -401,7 +401,7 @@ public:
 //      env.MaxX = 180.0;
 //      env.MaxY = 65;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "ReasonableGlobe");
 //    }
@@ -413,7 +413,7 @@ public:
 //      env.MaxX = 1.0;
 //      env.MaxY = 1;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "SmallMiddle");
 //    }
@@ -425,7 +425,7 @@ public:
 //      env.MaxX = 5.0;
 //      env.MaxY = 10;
 
-//      boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
+//      std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(env));
 //      LOG_INFO("Envelope:" << e->toString())
 //      testRegion(env, "MediumMiddle");
 //    }

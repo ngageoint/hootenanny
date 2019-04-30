@@ -34,9 +34,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -53,7 +50,7 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
-  BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
+  BuildingMatch(const ConstOsmMapPtr& map, std::shared_ptr<const BuildingRfClassifier> rf,
                 const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt,
                 bool reviewIfSecondaryFeatureNewer, QString dateTagKey, QString dateFormat);
 
@@ -75,7 +72,7 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   virtual QString toString() const;
 
@@ -89,7 +86,7 @@ private:
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
-  boost::shared_ptr<const BuildingRfClassifier> _rf;
+  std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
   bool _reviewIfSecondaryFeatureNewer;

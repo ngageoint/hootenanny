@@ -44,12 +44,9 @@
 #include <QMap>
 
 // Standard
-#include <vector>
 #include <map>
 #include <set>
-
-// Tgs
-#include <tgs/SharedPtr.h>
+#include <vector>
 
 namespace hoot
 {
@@ -152,7 +149,7 @@ public:
    * @param elementType the type of element to return
    * @return a result iterator to the elements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
+  virtual std::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
   /**
    * Returns a paged results iterator to all OSM elements for a given element type in the services
@@ -163,7 +160,7 @@ public:
    * dealing with very large record sets
    * @return a result iterator to the elements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
+  virtual std::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
                                                       const long minId = 0);
 
   /**
@@ -176,9 +173,9 @@ public:
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
+  virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
+  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -236,7 +233,7 @@ public:
    * @param bounds the query bounds
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const geos::geom::Envelope& bounds);
+  std::shared_ptr<QSqlQuery> selectNodesByBounds(const geos::geom::Envelope& bounds);
 
   /**
    * Returns the IDs of all ways that own the input node IDs
@@ -244,7 +241,7 @@ public:
    * @param nodeIds a collection of node IDs
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
+  std::shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
 
   /**
    * Returns all elements by type with IDs in the input ID list
@@ -253,7 +250,7 @@ public:
    * @param tableType the type of database table to query
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
+  std::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                              const TableType& tableType);
 
   /**
@@ -262,7 +259,7 @@ public:
    * @param wayIds a collection of way IDs
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
+  std::shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
 
   /**
    * Returns the IDs of all relations which own the typed input member IDs
@@ -271,7 +268,7 @@ public:
    * @param memberElementType the element type of the associated relation member
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+  std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                      const ElementType& memberElementType);
 
   virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
@@ -283,7 +280,7 @@ public:
    * format specified by the TIME_FORMAT constant
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+  std::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
   /**
    * Gets the next sequence ID for the given element type
@@ -451,9 +448,9 @@ protected:
 
   QSqlDatabase _db;
 
-  boost::shared_ptr<QSqlQuery> _selectUserByEmail;
-  boost::shared_ptr<QSqlQuery> _insertUser;
-  boost::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  std::shared_ptr<QSqlQuery> _selectUserByEmail;
+  std::shared_ptr<QSqlQuery> _insertUser;
+  std::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
 
   bool _inTransaction;
 
@@ -468,21 +465,21 @@ protected:
 
 private:
 
-  boost::shared_ptr<QSqlQuery> _selectNodesByBounds;
-  boost::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectElementsByElementIdList;
-  boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
-  boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
-  boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
-  boost::shared_ptr<QSqlQuery> _userExists;
-  boost::shared_ptr<QSqlQuery> _getUserIdByName;
-  boost::shared_ptr<QSqlQuery> _getUserNameById;
+  std::shared_ptr<QSqlQuery> _selectNodesByBounds;
+  std::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  std::shared_ptr<QSqlQuery> _selectElementsByElementIdList;
+  std::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  std::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+  std::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+  std::shared_ptr<QSqlQuery> _userExists;
+  std::shared_ptr<QSqlQuery> _getUserIdByName;
+  std::shared_ptr<QSqlQuery> _getUserNameById;
 
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _numEstimatedElementsQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _maxIdQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _numElementsQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _numEstimatedElementsQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _selectQueries;
+  QHash<QString, std::shared_ptr<QSqlQuery>> _selectAllQueries;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;

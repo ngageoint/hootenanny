@@ -38,9 +38,6 @@
 #include <QXmlDefaultHandler>
 #include <QXmlStreamReader>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Standard
 #include <deque>
 
@@ -77,7 +74,7 @@ public:
 
   virtual void finalizePartial();
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual bool hasMoreElements();
 
@@ -128,7 +125,7 @@ private:
 
   QString _errorString;
   OsmMapPtr _map;
-  boost::shared_ptr<Element> _element;
+  std::shared_ptr<Element> _element;
 
   Status _status;
   Meters _defaultCircularError;
@@ -146,7 +143,7 @@ private:
   long _wayId;
   long _relationId;
 
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
 
   bool _inputCompressed;
 

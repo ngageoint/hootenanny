@@ -33,7 +33,7 @@
 
 namespace Tgs
 {
-  boost::shared_ptr<Random> Random::_instance;
+  std::shared_ptr<Random> Random::_instance;
 
   Random::Random(unsigned int s)
     : _is_single(false)

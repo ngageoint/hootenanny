@@ -138,7 +138,7 @@ private:
   // PoiPolygonMatch and then set on each score extractor individually.  However, doing that won't
   // allow you to see the the final statistics printed out individually by translators, like
   // HootServicesTranslatorClient.
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  static std::shared_ptr<ToEnglishTranslator> _translator;
   //maps an OSM kvp to multiple possible strings such a feature's name might contain
   static QMultiHash<QString, QString> _typeToNames;
 

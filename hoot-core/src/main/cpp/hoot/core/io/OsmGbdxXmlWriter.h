@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QDir>
 #include <QFile>
@@ -112,8 +109,8 @@ private:
   int _encodingErrorCount;
   int _fileNumber;
 
-  boost::shared_ptr<QIODevice> _fp;
-  boost::shared_ptr<QXmlStreamWriter> _writer;
+  std::shared_ptr<QIODevice> _fp;
+  std::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
 
   static QString _typeName(ElementType e);

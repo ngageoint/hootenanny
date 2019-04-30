@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<PoiPolygonTagIgnoreListReader> PoiPolygonTagIgnoreListReader::_theInstance;
+std::shared_ptr<PoiPolygonTagIgnoreListReader> PoiPolygonTagIgnoreListReader::_theInstance;
 
 PoiPolygonTagIgnoreListReader::PoiPolygonTagIgnoreListReader()
 {

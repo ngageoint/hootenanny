@@ -78,7 +78,7 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
   }
 
   Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& setting, propTree.get_child("settings"))
+  for (boost::property_tree::ptree::value_type& setting : propTree.get_child("settings"))
   {
     const QString settingName = QString::fromStdString(setting.second.get<std::string>("name", ""));
     LOG_VART(settingName);
@@ -100,7 +100,7 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
 }
 
 void ConflateTestSettingsOptimizer::runOptimization(
-  boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+  std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
   const QString testSettingsFile, const QString outputFile)
 {
   Tgs::SimulatedAnnealing sa(_initStateDescription(testSettingsFile), fitnessFunction);
@@ -111,7 +111,7 @@ void ConflateTestSettingsOptimizer::runOptimization(
 }
 
 void ConflateTestSettingsOptimizer::_writeOutput(
-  boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
+  std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
   const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile)
 {
   QString output =
@@ -135,8 +135,8 @@ void ConflateTestSettingsOptimizer::_writeOutput(
   LOG_INFO(temp);
   output += temp + "\n\n";
 
-  boost::shared_ptr<AbstractRegressionTestFitnessFunction> regressionTestFitnessFunction =
-    boost::dynamic_pointer_cast<AbstractRegressionTestFitnessFunction>(fitnessFunction);
+  std::shared_ptr<AbstractRegressionTestFitnessFunction> regressionTestFitnessFunction =
+    std::dynamic_pointer_cast<AbstractRegressionTestFitnessFunction>(fitnessFunction);
   if (regressionTestFitnessFunction)
   {
     temp = regressionTestFitnessFunction->bestScoresPerTestToString();

@@ -46,17 +46,17 @@ class SearchBoundsCalculator
 {
 public:
 
-  SearchBoundsCalculator(boost::shared_ptr<SearchRadiusProvider> radiusProvider);
+  SearchBoundsCalculator(std::shared_ptr<SearchRadiusProvider> radiusProvider);
 
   geos::geom::Envelope calculateSearchBounds(
     const ConstOsmMapPtr& map, const ConstNodePtr& n) const;
 
 private:
 
-  boost::shared_ptr<SearchRadiusProvider> _radiusProvider;
+  std::shared_ptr<SearchRadiusProvider> _radiusProvider;
 };
 
-typedef boost::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
+typedef std::shared_ptr<SearchBoundsCalculator> SearchBoundsCalculatorPtr;
 
 }
 

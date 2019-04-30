@@ -29,7 +29,7 @@
 
 #include <map>
 #include <utility>
-#include <boost/shared_ptr.hpp>
+
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <hoot/core/elements/ElementType.h>
@@ -99,7 +99,7 @@ public:
 
   // Functions for ElementProvider
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual bool containsElement(const ElementId& eid) const;
 
@@ -144,34 +144,34 @@ private:
   unsigned long _maxWayCount;
   unsigned long _maxRelationCount;
 
-  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::shared_ptr<OGRSpatialReference> _projection;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _nodeList;
 
   // Nodes in the cache (key is node ID, then value is pair for node and its pos in the nodeList)
-  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> > _nodes;
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>> _nodes;
 
   // Iterator used to walk nodes in cache
-  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> >::iterator _nodesIter;
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator _nodesIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _wayList;
 
   // Ways in the cache (key is way ID, then value is pair for way and its pos in the wayList)
-  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> > _ways;
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>> _ways;
 
   // Iterator used to walk ways in cache
-  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> >::iterator _waysIter;
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator _waysIter;
 
   // List used to keep track of least-recently used nodes
   std::list<long> _relationList;
 
   // Relations in the cache (key is relation ID, then value is pair for relation and access time)
-  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >  _relations;
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>  _relations;
 
   // Iterator used to walk relations in cache
-  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >::iterator _relationsIter;
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator _relationsIter;
 
   // Removes the least recently used item from the cache
   void _removeOldest(const ElementType::Type typeToRemove);
@@ -183,7 +183,7 @@ private:
   void _updateRelationAccess(long id);
 };
 
-typedef boost::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
+typedef std::shared_ptr<ElementCacheLRU> ElementCacheLRUPtr;
 
 }
 

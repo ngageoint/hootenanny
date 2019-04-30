@@ -73,7 +73,7 @@ namespace Tgs
     * @param data this data frame contains all the data vectors in the training set
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     */
-    void buildTest(boost::shared_ptr<DataFrame> data, unsigned int numFactors);
+    void buildTest(std::shared_ptr<DataFrame> data, unsigned int numFactors);
 
     /**
     *  This classifies a data vector against the trained tree
@@ -92,7 +92,7 @@ namespace Tgs
     *
     * @param data this data frame contains all the data vectors in the training set
     */
-    double computeErrorRate(boost::shared_ptr<DataFrame> data);
+    double computeErrorRate(std::shared_ptr<DataFrame> data);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the 
@@ -102,7 +102,7 @@ namespace Tgs
     * @param data the set of data vectors
     * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
     */
-    void findProximity(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
+    void findProximity(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
 
     /**
     * Finds the factor importance as the sum of the info gain at each tree node per factor
@@ -148,7 +148,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
+    void trainBinary(std::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
       unsigned int nodeSize = 1, bool balanced = false);
 
     /**
@@ -159,7 +159,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+    void trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numFactors,
       unsigned int nodeSize = 1, bool balanced = false);
 
     /**
@@ -172,7 +172,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
+    void trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
       std::string negClass, unsigned int nodeSize = 1, bool balanced = false);
     /**
     * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
@@ -185,8 +185,8 @@ namespace Tgs
     /**
     * Recursive function for building random tree nodes
     */
-    void _build(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
-      boost::shared_ptr<TreeNode> &node, unsigned int nodeSize);
+    void _build(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
+      std::shared_ptr<TreeNode> &node, unsigned int nodeSize);
 
     /**
     * A recursive function to sum the purity gain per node based for its splitting factor
@@ -195,7 +195,7 @@ namespace Tgs
     *  @param factorPurity the results container as a map of factor index to current purity gain 
     *  sum
     */
-    void _calcFactorPurity(boost::shared_ptr<TreeNode> &node,
+    void _calcFactorPurity(std::shared_ptr<TreeNode> &node,
       std::map<unsigned int, double> & factorPurity);
     
     /**
@@ -203,7 +203,7 @@ namespace Tgs
     *
     * @param node the node to consider
     */
-    void _destroyTree(boost::shared_ptr<TreeNode> &node);
+    void _destroyTree(std::shared_ptr<TreeNode> &node);
 
     /**
     *  A recursive method for exporting nodes for writing
@@ -212,7 +212,7 @@ namespace Tgs
     * @param node the current node under consideration
     * @param tabDepth set of tabs to indent the exported content
     */
-    void _exportNode(std::ostream & fileStream, boost::shared_ptr<TreeNode> &node, std::string tabDepth);
+    void _exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> &node, std::string tabDepth);
 
     /**
      * @brief _exportNode a recursive function to write a trees nodes
@@ -224,7 +224,7 @@ namespace Tgs
      * @param node the current tree node
      */
     void _exportNode(QDomDocument & modelDoc, QDomElement & parentNode,
-      boost::shared_ptr<TreeNode> & node);
+      std::shared_ptr<TreeNode> & node);
 
     /**
     *  Exports the out of bag set indices
@@ -240,14 +240,14 @@ namespace Tgs
     * @param fileStream the stream to import the data
     * @param node the current node under consideration
     */
-    void _importNode(std::istream & fileStream, boost::shared_ptr<TreeNode> &node);
+    void _importNode(std::istream & fileStream, std::shared_ptr<TreeNode> &node);
 
     /**
      * @brief _importNode imports nodes for creation
      * @param treeNode the XML DOM node containing a tree node
      * @param node the tree node object to fill
      */
-    QDomElement _importNode(QDomElement & treeNode, boost::shared_ptr<TreeNode> &node);
+    QDomElement _importNode(QDomElement & treeNode, std::shared_ptr<TreeNode> &node);
 
     /**
     * Imports the out of bag set indices
@@ -273,7 +273,7 @@ namespace Tgs
 
     unsigned int _treeId;  ///A unique id for this tree and used to set the random seed
 
-    boost::shared_ptr<TreeNode> _root; /// The root node for the tree
+    std::shared_ptr<TreeNode> _root; /// The root node for the tree
 
     static unsigned int _idCtr;  //Each new tree is assigned a unique id
     

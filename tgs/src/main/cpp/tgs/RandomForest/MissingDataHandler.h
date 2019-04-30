@@ -48,7 +48,7 @@ namespace Tgs
      * @param data the input data set object
      */
     static void replaceMissingValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data);
+      std::shared_ptr<DataFrame> data);
 
   private:
 
@@ -58,7 +58,7 @@ namespace Tgs
      * @param factorIndex the index of the factor of interest
      */
     static void _replaceMissingNominalValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data, unsigned int factorIndex);
+      std::shared_ptr<DataFrame> data, unsigned int factorIndex);
 
     /**
      * @brief _replaceMissingNumericValuesFast
@@ -66,7 +66,7 @@ namespace Tgs
      * @param factorIndex the index of the factor of interest
      */
     static void _replaceMissingNumericValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data, unsigned int factorIndex);
+      std::shared_ptr<DataFrame> data, unsigned int factorIndex);
 
 
   };

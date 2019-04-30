@@ -62,9 +62,9 @@ public:
         boost::bloom_filters::boost_hash<size_t, 0x41B71EFB2EB141F2>,
         boost::bloom_filters::boost_hash<size_t, 0x7545E14679E2A9E3>,
         boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
-        boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854> > > Bloom;
+        boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854>>> Bloom;
     //  NOTE: Bloom must be created on the heap and not the stack, thus the "new Bloom()"
-    boost::shared_ptr<Bloom> b(new Bloom());
+    std::shared_ptr<Bloom> b(new Bloom());
 
     b->insert(5);
     CPPUNIT_ASSERT_EQUAL(true, b->probably_contains(5));

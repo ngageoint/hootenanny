@@ -66,7 +66,7 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 

@@ -146,10 +146,10 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
 }
 
 ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
-  boost::shared_ptr<OsmMapReader> reader, const QStringList ops)
+  std::shared_ptr<OsmMapReader> reader, const QStringList ops)
 {
   ElementInputStreamPtr filteredInputStream =
-    boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    std::dynamic_pointer_cast<ElementInputStream>(reader);
 
   if (ops.size() == 0)
   {
@@ -169,10 +169,10 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
 
-        boost::shared_ptr<Configurable> critConfig;
+        std::shared_ptr<Configurable> critConfig;
         if (criterion.get())
         {
-          critConfig = boost::dynamic_pointer_cast<Configurable>(criterion);
+          critConfig = std::dynamic_pointer_cast<Configurable>(criterion);
         }
         LOG_VART(critConfig.get());
         if (critConfig.get())
@@ -187,10 +187,10 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
         LOG_INFO("Initializing operation: " << opName << "...");
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
-        boost::shared_ptr<Configurable> visConfig;
+        std::shared_ptr<Configurable> visConfig;
         if (visitor.get())
         {
-          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
+          visConfig = std::dynamic_pointer_cast<Configurable>(visitor);
         }
         LOG_VART(visConfig.get());
         if (visConfig.get())
@@ -221,19 +221,19 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   QElapsedTimer timer;
   timer.start();
 
-  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
+  std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
-  boost::shared_ptr<ElementOutputStream> streamWriter =
-    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-  boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  std::shared_ptr<ElementOutputStream> streamWriter =
+    std::dynamic_pointer_cast<ElementOutputStream>(writer);
+  std::shared_ptr<PartialOsmMapWriter> partialWriter =
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
 
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
-    boost::shared_ptr<OsmMapReader> reader =
+    std::shared_ptr<OsmMapReader> reader =
       OsmMapReaderFactory::createReader(
         in, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
@@ -254,8 +254,8 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
-    boost::shared_ptr<PartialOsmMapReader> partialReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    std::shared_ptr<PartialOsmMapReader> partialReader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();

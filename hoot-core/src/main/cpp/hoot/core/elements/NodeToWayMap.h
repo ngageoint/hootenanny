@@ -28,11 +28,9 @@
 #ifndef NODETOWAYMAP_H
 #define NODETOWAYMAP_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Standard
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 
@@ -56,7 +54,7 @@ public:
 
   NodeToWayMap(const OsmMap& map);
 
-  void addWay(boost::shared_ptr<const Way> w);
+  void addWay(std::shared_ptr<const Way> w);
 
   /**
    * Returns all the ways that use the given node ID. If the given node ID isn't found an empty
@@ -67,7 +65,7 @@ public:
   /**
    * This function assumes that the nodes in the way haven't changed since it was last added.
    */
-  void removeWay(boost::shared_ptr<const Way> w);
+  void removeWay(std::shared_ptr<const Way> w);
 
   bool validate(const OsmMap& map);
 

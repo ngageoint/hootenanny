@@ -31,10 +31,8 @@
 #include <QString>
 
 // Standard
+#include <memory>
 #include <vector>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -46,17 +44,17 @@ class FeatureDefinition
 public:
   FeatureDefinition();
 
-  void addField(boost::shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
+  void addField(std::shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
 
   bool hasField(const QString& name) const;
 
   size_t getFieldCount() const { return _fields.size(); }
 
-  boost::shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
+  std::shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
 
 private:
 
-  std::vector< boost::shared_ptr<FieldDefinition> > _fields;
+  std::vector<std::shared_ptr<FieldDefinition>> _fields;
 };
 
 }

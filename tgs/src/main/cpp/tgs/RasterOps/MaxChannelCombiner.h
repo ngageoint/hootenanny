@@ -65,7 +65,7 @@ namespace Tgs
      * @returns The combined image.
      */
     static Tgs::Image<unsigned char> combineChannels(
-      const std::vector< const Tgs::Image<unsigned char>* >& channels);
+      const std::vector<const Tgs::Image<unsigned char>*>& channels);
    
     static Tgs::Image<unsigned char> combine3Channels(const Tgs::Image<unsigned char>& c1,
       const Tgs::Image<unsigned char>& c2, const Tgs::Image<unsigned char>& c3);

@@ -138,7 +138,7 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   long totalFeatureCount = 0;
   for (int i = 0; i < inputs.size(); i++)
   {
-    boost::shared_ptr<ElementInputStream> inputStream =
+    std::shared_ptr<ElementInputStream> inputStream =
       _getInputStream(inputs.at(i), translationScripts.at(i));
     while (inputStream->hasMoreElements())
     {
@@ -296,22 +296,22 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString k
   }
 }
 
-boost::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
+std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   const QString input, const QString translationScript)
 {
   LOG_INFO("Parsing: " << input << "...");
 
   _inputReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));
   _inputReader->open(input);
-  boost::shared_ptr<ElementInputStream> inputStream =
-    boost::dynamic_pointer_cast<ElementInputStream>(_inputReader);
+  std::shared_ptr<ElementInputStream> inputStream =
+    std::dynamic_pointer_cast<ElementInputStream>(_inputReader);
   LOG_VARD(translationScript);
   //"none" allows for bypassing translation for an input; e.g. OSM data
   if (translationScript.toLower() != "none")
   {
-    boost::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+    std::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
     translationVisitor->setPath(translationScript);
     inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
   }
@@ -623,7 +623,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
   _tieResolvedCountFile->close();
 }
 
-void ImplicitTagRawRulesDeriver::_sortByWord(boost::shared_ptr<QTemporaryFile> input)
+void ImplicitTagRawRulesDeriver::_sortByWord(std::shared_ptr<QTemporaryFile> input)
 {
   LOG_INFO("Sorting output by word...");
   if (!input->exists())

@@ -102,16 +102,16 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
   {
-    return hasAddress(*boost::dynamic_pointer_cast<const Node>(element));
+    return hasAddress(*std::dynamic_pointer_cast<const Node>(element));
   }
   else if (element->getElementType() == ElementType::Way)
   {
-    addresses = parseAddressesFromWayNodes(*boost::dynamic_pointer_cast<const Way>(element), map);
+    addresses = parseAddressesFromWayNodes(*std::dynamic_pointer_cast<const Way>(element), map);
   }
   else if (element->getElementType() == ElementType::Relation)
   {
     addresses =
-      parseAddressesFromRelationMembers(*boost::dynamic_pointer_cast<const Relation>(element), map);
+      parseAddressesFromRelationMembers(*std::dynamic_pointer_cast<const Relation>(element), map);
   }
   if (translateModified)
   {
@@ -231,7 +231,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
       }
       else if (member->getElementType() == ElementType::Way)
       {
-        ConstWayPtr wayMember = boost::dynamic_pointer_cast<const Way>(member);
+        ConstWayPtr wayMember = std::dynamic_pointer_cast<const Way>(member);
         addresses = parseAddressesFromWayNodes(*wayMember, map, skipElementId);
       }
     }

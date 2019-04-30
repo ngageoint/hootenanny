@@ -31,9 +31,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QFile>
 #include <QTextStream>
@@ -133,7 +130,7 @@ private:
   /** Array of streams, one for each output file type */
   std::array<QTextStream, FileType::MaxFileType> _streams;
   /** Array of files, one for each output file type */
-  std::array<boost::shared_ptr<QFile>, FileType::MaxFileType> _files;
+  std::array<std::shared_ptr<QFile>, FileType::MaxFileType> _files;
 };
 
 }

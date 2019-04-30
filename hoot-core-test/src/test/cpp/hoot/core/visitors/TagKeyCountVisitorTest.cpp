@@ -59,7 +59,7 @@ public:
   {
     OsmMapPtr map = _loadMap();
 
-    boost::shared_ptr<TagKeyCountVisitor> visitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> visitor(new TagKeyCountVisitor("source"));
     map->visitRo(*visitor);
 
     CPPUNIT_ASSERT_EQUAL((long)6, (long)visitor->getStat());

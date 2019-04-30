@@ -36,9 +36,6 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 #include <unordered_set>
 
 namespace hoot
@@ -68,14 +65,14 @@ public:
   } DrivingSide;
 
   DualWaySplitter();
-  DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
+  DualWaySplitter(std::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
 
-  boost::shared_ptr<OsmMap> splitAll();
+  std::shared_ptr<OsmMap> splitAll();
 
-  static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map,
+  static std::shared_ptr<OsmMap> splitAll(std::shared_ptr<const OsmMap> map,
                                             DrivingSide drivingSide, Meters defaultSplitSize);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getInitStatusMessage() const
   { return "Splitting divided highways into two one way streets..."; }
@@ -90,35 +87,35 @@ private:
 
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;
-  boost::shared_ptr<const OsmMap> _map;
-  boost::shared_ptr<OsmMap> _result;
+  std::shared_ptr<const OsmMap> _map;
+  std::shared_ptr<OsmMap> _result;
   std::unordered_set<long> _nodes;
 
   // temporary variables for convenience
-  boost::shared_ptr<Way> _left, _right;
-  boost::shared_ptr<const Way> _working;
+  std::shared_ptr<Way> _left, _right;
+  std::shared_ptr<const Way> _working;
   Meters _splitSize;
 
   void _addConnector(long nodeId);
 
-  boost::shared_ptr<Way> _createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize, bool left);
+  std::shared_ptr<Way> _createOneWay(std::shared_ptr<const Way> w, Meters bufferSize, bool left);
 
-  void _createStub(boost::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
+  void _createStub(std::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
 
   double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
 
-  void _fixLanes(boost::shared_ptr<Way> w);
+  void _fixLanes(std::shared_ptr<Way> w);
 
   /**
    * Returns the node id of the nearest node to nid on w
    */
-  long _nearestNode(long nid, boost::shared_ptr<const Way> w);
+  long _nearestNode(long nid, std::shared_ptr<const Way> w);
 
   geos::geom::Coordinate _normalizedVector(long nid1, long nid2);
 
-  bool _onRight(long intersectionId, boost::shared_ptr<Way> inbound, long leftNn, long rightNn);
+  bool _onRight(long intersectionId, std::shared_ptr<Way> inbound, long leftNn, long rightNn);
 
-  void _reconnectEnd(long centerNodeId, boost::shared_ptr<Way> edge);
+  void _reconnectEnd(long centerNodeId, std::shared_ptr<Way> edge);
 
   void _splitIntersectingWays(long nid);
 

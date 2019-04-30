@@ -54,12 +54,12 @@ private:
   //comparisons
   Meters _threshold;
 
-  bool _compareNode(const boost::shared_ptr<const Element>& re,
-                    const boost::shared_ptr<const Element>& e) const;
-  bool _compareWay(const boost::shared_ptr<const Element>& re,
-                   const boost::shared_ptr<const Element>& e) const;
-  bool _compareRelation(const boost::shared_ptr<const Element>& re,
-                        const boost::shared_ptr<const Element>& e) const;
+  bool _compareNode(const std::shared_ptr<const Element>& re,
+                    const std::shared_ptr<const Element>& e) const;
+  bool _compareWay(const std::shared_ptr<const Element>& re,
+                   const std::shared_ptr<const Element>& e) const;
+  bool _compareRelation(const std::shared_ptr<const Element>& re,
+                        const std::shared_ptr<const Element>& e) const;
 
   void _removeTagsNotImportantForComparison(Tags& tags) const;
 

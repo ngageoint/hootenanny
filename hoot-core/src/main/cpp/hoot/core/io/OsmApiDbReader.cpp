@@ -82,7 +82,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   //We should see if these tags can be read out at the same time the element itself is read out...
 
   QStringList tags;
-  boost::shared_ptr<QSqlQuery> tagItr;
+  std::shared_ptr<QSqlQuery> tagItr;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:

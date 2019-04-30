@@ -104,7 +104,7 @@ private:
 
   MergerFactory();
 
-  static boost::shared_ptr<MergerFactory> _theInstance;
+  static std::shared_ptr<MergerFactory> _theInstance;
 
   std::vector<MergerCreator*> _creators;
 };

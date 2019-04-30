@@ -27,9 +27,6 @@
 #ifndef TRANSLATEDTAGDIFFERENCER_H
 #define TRANSLATEDTAGDIFFERENCER_H
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // hoot
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/schema/TagDifferencer.h>
@@ -74,7 +71,7 @@ public:
 private:
   QSet<QString> _ignoreList;
   QString _script;
-  mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  mutable std::shared_ptr<ScriptToOgrTranslator> _translator;
 
   class Comparison
   {
@@ -93,7 +90,7 @@ private:
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
-  boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+  std::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.

@@ -30,7 +30,6 @@
 
 // boost
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -65,12 +64,12 @@ public:
   /**
    * @brief Reads data samples from the given input stream.
    */
-  boost::shared_ptr<DataSamples> read();
+  std::shared_ptr<DataSamples> read();
 
 private:
 
-  boost::shared_ptr<std::fstream> _autoStrm;
-  boost::shared_ptr<boost::iostreams::filtering_istream> _bstrm;
+  std::shared_ptr<std::fstream> _autoStrm;
+  std::shared_ptr<boost::iostreams::filtering_istream> _bstrm;
   std::istream* _strm;
   char _buffer[2048];
 

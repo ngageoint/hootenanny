@@ -44,7 +44,7 @@ namespace Tgs
   {
     try
     {
-      _data = boost::shared_ptr<DataFrame>(new DataFrame);
+      _data = std::shared_ptr<DataFrame>(new DataFrame);
     }
     catch(const Exception & e)
     {
@@ -182,7 +182,7 @@ namespace Tgs
   }
 
   void BaseRandomForestManager::generateRemappedReports(std::string reportName,
-    std::map<std::string, std::vector<std::string> > & classMap)
+    std::map<std::string, std::vector<std::string>>& classMap)
   {
     try
     {
@@ -260,7 +260,7 @@ namespace Tgs
           confStream << std::endl;
 
           //Initialize the confusion matrix with zeros
-          std::map< std::string, std::map< std::string, int> > confusionCount;
+          std::map<std::string, std::map<std::string, int>> confusionCount;
           for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
@@ -873,7 +873,7 @@ namespace Tgs
 
 
   void BaseRandomForestManager::_generateRemappedResults(std::string filename,
-    std::map<std::string, std::vector<std::string> > & classMap)
+    std::map<std::string, std::vector<std::string>> & classMap)
   {
     try
     {
@@ -909,7 +909,7 @@ namespace Tgs
           confStream << std::endl;
 
           //Initialize the confusion matrix with zeros
-          std::map< std::string, std::map< std::string, int> > confusionCount;
+          std::map<std::string, std::map<std::string, int>> confusionCount;
           for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)

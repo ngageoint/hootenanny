@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
+std::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
 
 TagMergerFactory::TagMergerFactory()
 {
@@ -54,7 +54,7 @@ TagMergerFactory& TagMergerFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
+std::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
 {
   if (!_default)
   {
@@ -66,10 +66,10 @@ boost::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
   return _default;
 }
 
-boost::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
+std::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
-  boost::shared_ptr<const TagMerger> result;
-  QHash<QString, boost::shared_ptr<const TagMerger> >::const_iterator it = _mergers.find(name);
+  std::shared_ptr<const TagMerger> result;
+  QHash<QString, std::shared_ptr<const TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
     result.reset(Factory::getInstance().constructObject<TagMerger>(name.toStdString()));

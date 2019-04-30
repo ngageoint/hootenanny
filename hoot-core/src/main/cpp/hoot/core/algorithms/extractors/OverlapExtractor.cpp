@@ -53,15 +53,15 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {
     return nullValue();
   }
 
-  boost::shared_ptr<Geometry> overlap;
+  std::shared_ptr<Geometry> overlap;
   try
   {
     overlap.reset(g1->intersection(g2.get()));

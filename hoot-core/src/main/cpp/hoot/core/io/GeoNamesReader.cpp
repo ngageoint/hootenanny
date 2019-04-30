@@ -76,7 +76,7 @@ void GeoNamesReader::close()
   _fp.close();
 }
 
-boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
   {

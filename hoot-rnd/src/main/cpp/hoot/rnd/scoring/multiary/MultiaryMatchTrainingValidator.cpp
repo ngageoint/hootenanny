@@ -85,7 +85,7 @@ MultiaryMatchTrainingValidator::MultiaryMatchTrainingValidator()
 {
 }
 
-void MultiaryMatchTrainingValidator::apply(boost::shared_ptr<OsmMap>& map)
+void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   CheckRelationshipsVisitor v;
   map->visitRo(v);

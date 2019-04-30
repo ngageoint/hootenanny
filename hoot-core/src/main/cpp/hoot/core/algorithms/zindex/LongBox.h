@@ -33,9 +33,6 @@
 //Qt includes
 #include <QString>
 
-//boost includes
-#include <boost/shared_ptr.hpp>
-
 namespace hoot
 {
 
@@ -52,7 +49,7 @@ public:
 
   LongBox(std::vector<long int> min, std::vector<long int> max);
 
-  boost::shared_ptr<LongBox> copy();
+  std::shared_ptr<LongBox> copy();
 
   virtual ~LongBox();
 

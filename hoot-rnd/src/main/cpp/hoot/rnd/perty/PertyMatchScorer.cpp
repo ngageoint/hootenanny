@@ -81,7 +81,7 @@ QString PertyMatchScorer::toString()
   return str;
 }
 
-boost::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString referenceMapInputPath,
+std::shared_ptr<MatchComparator> PertyMatchScorer::scoreMatches(const QString referenceMapInputPath,
                                                                   const QString outputPath)
 {
   LOG_INFO(toString());
@@ -121,9 +121,9 @@ OsmMapPtr PertyMatchScorer::_loadReferenceMap(const QString referenceMapInputPat
   IoUtils::loadMap(referenceMap, referenceMapInputPath, false, Status::Unknown1);
   MapCleaner().apply(referenceMap);
 
-  boost::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
+  std::shared_ptr<AddRef1Visitor> addRef1Visitor(new AddRef1Visitor());
   referenceMap->visitRw(*addRef1Visitor);
-  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   referenceMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(referenceMap->getNodes().size());
@@ -155,12 +155,12 @@ void PertyMatchScorer::_loadPerturbedMap(const QString perturbedMapInputPath,
   IoUtils::loadMap(perturbedMap, perturbedMapInputPath, false, Status::Unknown2);
   MapCleaner().apply(perturbedMap);
 
-  boost::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
+  std::shared_ptr<TagRenameKeyVisitor> tagRenameKeyVisitor(
     new TagRenameKeyVisitor(MetadataTags::Ref1(), MetadataTags::Ref2()));
   perturbedMap->visitRw(*tagRenameKeyVisitor);
   // This could be replaced with a SetTagValueVisitor passed in from the command line
   // instead.
-  boost::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
+  std::shared_ptr<SetTagValueVisitor> setAccuracyVisitor(
     new SetTagValueVisitor(MetadataTags::ErrorCircular(), QString::number(_searchDistance)));
   perturbedMap->visitRw(*setAccuracyVisitor);
   LOG_VARD(perturbedMap->getNodes().size());
@@ -245,7 +245,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
     //move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
-    boost::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
+    std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
     rubberSheetOp->apply(combinedMap);
 
     LOG_VARD(combinedMap->getNodes().size());
@@ -266,13 +266,13 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
   return combinedMap;
 }
 
-boost::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
+std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   OsmMapPtr combinedDataToConflate, const QString conflatedMapOutputPath)
 {
   LOG_DEBUG("Conflating the reference data with the perturbed data, scoring the matches, and " <<
             "saving the conflated output to: " << conflatedMapOutputPath);
 
-  boost::shared_ptr<MatchComparator> comparator(new MatchComparator());
+  std::shared_ptr<MatchComparator> comparator(new MatchComparator());
   //shared_ptr<MatchThreshold> matchThreshold;
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 

@@ -28,9 +28,8 @@
 #ifndef IDGENERATOR_H
 #define IDGENERATOR_H
 
-#include <tgs/SharedPtr.h>
-
 // standard
+#include <memory>
 #include <string>
 
 namespace hoot
@@ -45,7 +44,7 @@ public:
 
   virtual ~IdGenerator() {}
 
-  virtual boost::shared_ptr<IdGenerator> clone() const = 0;
+  virtual std::shared_ptr<IdGenerator> clone() const = 0;
 
   virtual long createNodeId() = 0;
 
@@ -59,15 +58,15 @@ public:
 
   virtual void ensureWayBounds(long wid) = 0;
 
-  static boost::shared_ptr<IdGenerator> getInstance();
+  static std::shared_ptr<IdGenerator> getInstance();
 
   virtual void reset() = 0;
 
 private:
-  static boost::shared_ptr<IdGenerator> _theInstance;
+  static std::shared_ptr<IdGenerator> _theInstance;
 };
 
-typedef boost::shared_ptr<IdGenerator> IdGeneratorPtr;
+typedef std::shared_ptr<IdGenerator> IdGeneratorPtr;
 
 }
 

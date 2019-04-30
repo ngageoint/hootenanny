@@ -50,7 +50,7 @@ private:
 
   PoiPolygonTagIgnoreListReader();
 
-  static boost::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
+  static std::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
 
   QStringList _poiTagIgnoreList;
   QStringList _polyTagIgnoreList;

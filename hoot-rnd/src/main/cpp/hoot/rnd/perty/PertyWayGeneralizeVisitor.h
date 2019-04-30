@@ -66,7 +66,7 @@ public:
 
     @see ConstElementVisitor
     */
-  virtual void visit(const boost::shared_ptr<Element>& element);
+  virtual void visit(const std::shared_ptr<Element>& element);
 
   /**
     @see RngConsumer
@@ -97,12 +97,12 @@ public:
 private:
 
   boost::minstd_rand* _rng;
-  boost::shared_ptr<boost::minstd_rand> _localRng;
+  std::shared_ptr<boost::minstd_rand> _localRng;
 
   double _wayGeneralizeProbability;
   double _epsilon;
 
-  boost::shared_ptr<RdpWayGeneralizer> _generalizer;
+  std::shared_ptr<RdpWayGeneralizer> _generalizer;
 
   void _generalize(const WayPtr& way);
 

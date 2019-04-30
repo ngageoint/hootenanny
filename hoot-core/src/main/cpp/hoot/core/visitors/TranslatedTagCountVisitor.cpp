@@ -46,13 +46,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
 
-TranslatedTagCountVisitor::TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t) :
+TranslatedTagCountVisitor::TranslatedTagCountVisitor(std::shared_ptr<ScriptTranslator> t) :
   _map(),
   _populatedCount(),
   _defaultCount(),
   _nullCount()
 {
-  _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(t);
+  _translator = std::dynamic_pointer_cast<ScriptToOgrTranslator>(t);
   if (!_translator)
   {
     throw HootException("Error allocating translator, the translation script must support "
@@ -62,13 +62,13 @@ TranslatedTagCountVisitor::TranslatedTagCountVisitor(boost::shared_ptr<ScriptTra
   _schema = _translator->getOgrOutputSchema();
 }
 
-void TranslatedTagCountVisitor::_countTags(boost::shared_ptr<Feature>& f)
+void TranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
 {
-  const boost::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
+  const std::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
 
   for (size_t i = 0; i < defn->getFieldCount(); i++)
   {
-    boost::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
+    std::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
 
     const QVariantMap& vm = f->getValues();
 
@@ -100,7 +100,7 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {
-    boost::shared_ptr<Geometry> g =
+    std::shared_ptr<Geometry> g =
       ElementConverter(_map->shared_from_this()).convertToGeometry(e, false);
 
     Tags t = e->getTags();

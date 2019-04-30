@@ -52,7 +52,7 @@ public:
 
   SearchRadiusCalculator();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual boost::any getResult() override { boost::any result = _result; return result; }
 

@@ -34,9 +34,6 @@
 // Qt
 #include <QSet>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 // Std
 #include <string>
 
@@ -46,7 +43,7 @@ namespace hoot
 class MostEnglishName;
 class Tags;
 
-typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
+typedef std::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 
 /**
  * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.

@@ -51,9 +51,9 @@ public:
 
   UnionPolygonsVisitor();
 
-  const boost::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
+  const std::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e) override;
+  virtual void visit(const std::shared_ptr<const Element>& e) override;
 
   virtual QString getDescription() const
   { return "Combines all areas together into a single area"; }
@@ -66,7 +66,7 @@ public:
 
 private:
 
-  boost::shared_ptr<geos::geom::Geometry> _result;
+  std::shared_ptr<geos::geom::Geometry> _result;
 };
 
 }

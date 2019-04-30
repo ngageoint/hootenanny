@@ -53,7 +53,7 @@ public:
 
   RelationWithMostMembersOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap> &map) override;
+  virtual void apply(std::shared_ptr<OsmMap> &map) override;
 
   virtual QString getDescription() const override
   { return "Finds relation with most members satisfying a criterion"; }

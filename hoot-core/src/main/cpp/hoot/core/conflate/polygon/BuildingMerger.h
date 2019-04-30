@@ -52,11 +52,11 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  explicit BuildingMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
+  explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) override;
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
-  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
+  static std::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
                                                   const std::set<ElementId>& eids);
 
   virtual QString toString() const override;
@@ -83,14 +83,14 @@ protected:
 
 private:
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;
 
-  boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
-  boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+  std::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
+  std::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
 };

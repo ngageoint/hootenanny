@@ -88,7 +88,7 @@ bool DistanceNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() != ElementType::Node)
     return false;
 
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
   return _center.distance(n->toCoordinate()) < _distance;
 }
 

@@ -37,8 +37,6 @@
 #include <QStringList>
 #include <QXmlDefaultHandler>
 
-#include <boost/shared_ptr.hpp>
-
 #include <ogr_spatialref.h>
 
 // Standard
@@ -125,10 +123,10 @@ public:
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual boost::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
+  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   //leaving this empty for the time being
   virtual QString supportedFormats() { return ""; }

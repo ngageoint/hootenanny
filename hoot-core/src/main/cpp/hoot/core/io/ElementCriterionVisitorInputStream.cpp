@@ -67,7 +67,7 @@ void ElementCriterionVisitorInputStream::close()
   _numFeaturesPassingCriterion = 0;
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
+std::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
 {
   return _elementSource->getProjection();
 }

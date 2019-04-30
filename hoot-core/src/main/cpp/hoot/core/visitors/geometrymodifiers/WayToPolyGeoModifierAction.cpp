@@ -49,7 +49,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   if (pElement->getElementType() != ElementType::Way) return false;
 
   // process the way as requested
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
   long nodeCount = pWay->getNodeCount();
   bool isLoop = pWay->isSimpleLoop();
 

@@ -31,10 +31,10 @@
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -49,7 +49,10 @@
 // GEOS
 #include <geos/geom/Coordinate.h>
 
-#include <float.h>
+// Standard
+#include <cfloat>
+#include <functional>
+using namespace std;
 
 namespace hoot
 {
@@ -285,48 +288,48 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
       status.toString() << "...");
     ElementCriterionPtr critTemp(
       Factory::getInstance().constructObject<ElementCriterion>(critClass));
-    boost::shared_ptr<Configurable> configurable =
-      boost::dynamic_pointer_cast<Configurable>(critTemp);
+    std::shared_ptr<Configurable> configurable =
+      std::dynamic_pointer_cast<Configurable>(critTemp);
     if (configurable)
     {
       configurable->setConfiguration(_conf);
     }
-    boost::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      boost::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
     if (mapConsumer)
     {
       mapConsumer->setOsmMap(_map.get());
     }
     return
-      boost::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
+      std::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
   }
   return ElementCriterionPtr();
 }
 
 void UnconnectedWaySnapper::_createFeatureIndex(ElementCriterionPtr featureCrit,
-                                                boost::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+                                                std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
                                                 std::deque<ElementId>& featureIndexToEid,
                                                 const ElementType& elementType)
 {
   LOG_TRACE("Creating feature index of type: " << elementType << "...");
 
   // TODO: tune these indexes? - see #3054
-  boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
+  std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   featureIndex.reset(new Tgs::HilbertRTree(mps, 2));
-  boost::shared_ptr<IndexElementsVisitor> spatialIndexer;
+  std::shared_ptr<IndexElementsVisitor> spatialIndexer;
   if (elementType == ElementType::Node)
   {
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, _1), _map));
+        std::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, placeholders::_1), _map));
   }
   else
   {
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, _1), _map));
+        std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map));
   }
   LOG_TRACE(spatialIndexer->getInitStatusMessage());
   if (elementType == ElementType::Node)
@@ -396,7 +399,7 @@ std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   // output quality so far but may need some attention later.
 
   std::set<ElementId> neighborIds;
-  boost::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
+  std::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
   if (elementType == ElementType::Node)
   {
     env->expandBy(_getWayNodeSearchRadius(node));
@@ -590,12 +593,12 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(WayPtr disconnected, WayPt
   //  Get the endpoint closest to the way to connect to it
   const std::vector<long> nodeIds = disconnected->getNodeIds();
   ElementConverter converter(_map);
-  boost::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
+  std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
 
   NodePtr endpoint1 = _map->getNode(nodeIds[0]);
-  boost::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
+  std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
   NodePtr endpoint2 = _map->getNode(nodeIds[nodeIds.size() - 1]);
-  boost::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
+  std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
 
   NodePtr endpoint;
   if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))

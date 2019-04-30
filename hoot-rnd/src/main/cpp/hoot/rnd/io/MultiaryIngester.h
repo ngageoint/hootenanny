@@ -81,26 +81,26 @@ public:
 private:
 
   QString _sortedNewInput;
-  boost::shared_ptr<QTemporaryFile> _sortTempFile;
+  std::shared_ptr<QTemporaryFile> _sortTempFile;
 
   long _logUpdateInterval;
 
   QElapsedTimer _timer;
 
-  boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
+  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
 
   /*
    * Writes data to the reference layer when no data exists there (no changeset derivation)
    */
-  void _writeNewReferenceData(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
+  void _writeNewReferenceData(std::shared_ptr<ElementInputStream> filteredNewInputStream,
                               const QString referenceOutput, const QString changesetOutput);
 
   /*
    * Derives a changeset between the ref layer and another source; writes the output to a changeset
    * file; returns the changeset file
    */
-  boost::shared_ptr<QTemporaryFile> _deriveAndWriteChangesToChangeset(
-    boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
+  std::shared_ptr<QTemporaryFile> _deriveAndWriteChangesToChangeset(
+    std::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
     const QString changesetOutput);
 
   /*

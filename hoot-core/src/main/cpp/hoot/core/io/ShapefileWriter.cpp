@@ -66,7 +66,7 @@ public:
 
   ColumnVisitor(ElementType type) : _type(type) {}
 
-  virtual void visit(const boost::shared_ptr<const Element>& e)
+  virtual void visit(const std::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == _type || _type == ElementType::Unknown)
     {
@@ -366,7 +366,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
       }
 
       // convert the geometry.
-      boost::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
+      std::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
 
       if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {
@@ -536,7 +536,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const WayPtr &
   }
 
   // convert the geometry.
-  boost::shared_ptr<Geometry> p = ElementConverter(map).convertToGeometry(way);
+  std::shared_ptr<Geometry> p = ElementConverter(map).convertToGeometry(way);
   if (p->getGeometryTypeId() != GEOS_POLYGON)
   {
     throw InternalErrorException("Expected a polygon geometry, but got a: " +

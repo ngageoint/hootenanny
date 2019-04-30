@@ -63,7 +63,7 @@ protected:
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
   virtual QString supportedFormats() { return "hootapidb://"; }
 
@@ -72,7 +72,7 @@ private:
   //for white box testing
   friend class ServiceHootApiDbBulkInserterTest;
 
-  boost::shared_ptr<HootApiDb> _database;
+  std::shared_ptr<HootApiDb> _database;
 };
 
 }

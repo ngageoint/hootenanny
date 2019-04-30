@@ -27,13 +27,13 @@
 #ifndef RELATION_H
 #define RELATION_H
 
-#include <tgs/SharedPtr.h>
-
+// hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/RelationData.h>
-
-// hoot
 #include <hoot/core/schema/MetadataTags.h>
+
+// Standard
+#include <memory>
 
 namespace hoot
 {
@@ -65,7 +65,7 @@ public:
 
   virtual ~Relation() {}
 
-  void addElement(const QString& role, const boost::shared_ptr<const Element>& e);
+  void addElement(const QString& role, const std::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
 
@@ -94,10 +94,10 @@ public:
   { return _relationData->getElements(); }
 
   virtual geos::geom::Envelope* getEnvelope(
-    const boost::shared_ptr<const ElementProvider>& ep) const;
+    const std::shared_ptr<const ElementProvider>& ep) const;
 
   geos::geom::Envelope getEnvelopeInternal(
-    const boost::shared_ptr<const ElementProvider>& ep) const;
+    const std::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
 
@@ -122,7 +122,7 @@ public:
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
    * no changes are made.
    */
-  void removeElement(const QString& role, const boost::shared_ptr<const Element>& e);
+  void removeElement(const QString& role, const std::shared_ptr<const Element>& e);
   void removeElement(const QString& role, ElementId eid);
   void removeElement(ElementId eid);
 
@@ -130,8 +130,8 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const boost::shared_ptr<const Element>& from,
-                      const boost::shared_ptr<const Element>& to);
+  void replaceElement(const std::shared_ptr<const Element>& from,
+                      const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**
@@ -166,7 +166,7 @@ public:
 
 private:
 
-  boost::shared_ptr<RelationData> _relationData;
+  std::shared_ptr<RelationData> _relationData;
 
   virtual ElementData& _getElementData() { _makeWritable(); return *_relationData; }
 
@@ -190,8 +190,8 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
   _postGeometryChange();
 }
 
-typedef boost::shared_ptr<Relation> RelationPtr;
-typedef boost::shared_ptr<const Relation> ConstRelationPtr;
+typedef std::shared_ptr<Relation> RelationPtr;
+typedef std::shared_ptr<const Relation> ConstRelationPtr;
 
 }
 

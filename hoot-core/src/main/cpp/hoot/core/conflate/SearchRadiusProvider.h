@@ -48,7 +48,7 @@ public:
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) = 0;
 };
 
-typedef boost::shared_ptr<SearchRadiusProvider> SearchRadiusProviderPtr;
+typedef std::shared_ptr<SearchRadiusProvider> SearchRadiusProviderPtr;
 
 }
 

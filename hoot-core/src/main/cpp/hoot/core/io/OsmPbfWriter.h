@@ -212,10 +212,10 @@ private:
   long _nodeIdDelta;
   long _relationIdDelta;
 
-  boost::shared_ptr<std::fstream> _openStream;
+  std::shared_ptr<std::fstream> _openStream;
   bool _needToCloseInput;
 
-  void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
+  void _addTag(std::shared_ptr<Element> n, QString k, QString v);
 
   long _convertLon(double lon);
 
@@ -241,17 +241,17 @@ private:
   /**
    * Writes a node using the non-dense format.
    */
-  void _writeNode(const boost::shared_ptr<const hoot::Node>& n);
+  void _writeNode(const std::shared_ptr<const hoot::Node>& n);
 
-  void _writeNodeDense(const boost::shared_ptr<const hoot::Node>& n);
+  void _writeNodeDense(const std::shared_ptr<const hoot::Node>& n);
 
   void _writeOsmHeader(bool includeBounds = true, bool sorted = true);
 
   void _writePrimitiveBlock();
 
-  void _writeRelation(const boost::shared_ptr<const hoot::Relation>& r);
+  void _writeRelation(const std::shared_ptr<const hoot::Relation>& r);
 
-  void _writeWay(const boost::shared_ptr<const hoot::Way>& w);
+  void _writeWay(const std::shared_ptr<const hoot::Way>& w);
 
   void _open(QString url);
 };

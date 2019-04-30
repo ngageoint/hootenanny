@@ -59,7 +59,7 @@ public:
 
   void runParseLangsResponseTest()
   {
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::LANGS_STR);
 
     QString responseStr =
@@ -81,7 +81,7 @@ public:
 
   void runParseAppsResponseTest()
   {
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::DETECTORS_STR);
     QString responseStr =
       HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
@@ -104,7 +104,7 @@ public:
 
   void runLangCodesToLangsTest()
   {
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(HootServicesLanguageInfoMockClient::LANGS_STR);
     const QMap<QString, QString> langCodesToLangs =
       HootServicesLanguageInfoResponseParser::getLangCodesToLangs(response);

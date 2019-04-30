@@ -53,7 +53,7 @@ SuperfluousNodeRemover::SuperfluousNodeRemover()
 {
 }
 
-void SuperfluousNodeRemover::apply(boost::shared_ptr<OsmMap> &map)
+void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap> &map)
 {
   _numAffected = 0;
   _usedNodes.clear();
@@ -77,7 +77,7 @@ void SuperfluousNodeRemover::apply(boost::shared_ptr<OsmMap> &map)
     }
   }
 
-  boost::shared_ptr<OsmMap> reprojected;
+  std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
   // if the map is not in WGS84
   if (MapProjector::isGeographic(map) == false)
@@ -122,14 +122,14 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
   }
 }
 
-boost::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(boost::shared_ptr<const OsmMap> map)
+std::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(std::shared_ptr<const OsmMap> map)
 {
-  boost::shared_ptr<OsmMap> result(new OsmMap(map));
+  std::shared_ptr<OsmMap> result(new OsmMap(map));
   SuperfluousNodeRemover().apply(result);
   return result;
 }
 
-void SuperfluousNodeRemover::removeNodes(boost::shared_ptr<OsmMap> &map, const Envelope& e)
+void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap> &map, const Envelope& e)
 {
   SuperfluousNodeRemover s;
   s.setBounds(e);

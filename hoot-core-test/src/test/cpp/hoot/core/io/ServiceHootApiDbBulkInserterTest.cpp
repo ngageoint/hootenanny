@@ -122,7 +122,7 @@ public:
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = _outputPath + "psqlOffline-out.osm";
-    boost::shared_ptr<OsmMapWriter> actualMapWriter =
+    std::shared_ptr<OsmMapWriter> actualMapWriter =
       OsmMapWriterFactory::createWriter(actualOutputFile);
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);

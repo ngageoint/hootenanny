@@ -35,9 +35,6 @@
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -74,7 +71,7 @@ protected:
   virtual QString _getHelpPath() const;
 };
 
-typedef boost::shared_ptr<BaseCommand> BaseCommandPtr;
+typedef std::shared_ptr<BaseCommand> BaseCommandPtr;
 
 }
 

@@ -37,6 +37,9 @@
 // Qt
 #include <QFileInfo>
 
+// Standard
+#include <cassert>
+
 namespace hoot
 {
 
@@ -128,7 +131,7 @@ void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(
 QString AbstractRegressionTestFitnessFunction::bestScoresPerTestToString() const
 {
   QString str = "Best scores:\n";
-  for (QMap< QString, double >::const_iterator it = _testsToBestScores.begin();
+  for (QMap<QString, double>::const_iterator it = _testsToBestScores.begin();
        it != _testsToBestScores.end(); ++it)
   {
     str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";

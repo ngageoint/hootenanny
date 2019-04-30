@@ -38,13 +38,15 @@ namespace Tgs
 {
 // disjoint-set forests using union-by-rank and path compression (sort of).
 
-typedef struct {
+typedef struct
+{
   int rank;
   int p;
   int size;
 } uni_elt;
 
-class DisjointSet {
+class DisjointSet
+{
 public:
   DisjointSet(int elements);
   ~DisjointSet();
@@ -61,21 +63,25 @@ private:
   int num;
 };
 
-inline DisjointSet::DisjointSet(int elements) {
+inline DisjointSet::DisjointSet(int elements)
+{
   elts = new uni_elt[elements];
   num = elements;
-  for (int i = 0; i < elements; i++) {
+  for (int i = 0; i < elements; i++)
+  {
     elts[i].rank = 0;
     elts[i].size = 1;
     elts[i].p = i;
   }
 }
 
-inline DisjointSet::~DisjointSet() {
+inline DisjointSet::~DisjointSet()
+{
   delete [] elts;
 }
 
-inline int DisjointSet::find(int x) {
+inline int DisjointSet::find(int x)
+{
   int y = x;
   while (y != elts[y].p)
     y = elts[y].p;
@@ -83,13 +89,17 @@ inline int DisjointSet::find(int x) {
   return y;
 }
 
-inline void DisjointSet::join(int x, int y) {
+inline void DisjointSet::join(int x, int y)
+{
   x = find(x);
   y = find(y);
-  if (elts[x].rank > elts[y].rank) {
+  if (elts[x].rank > elts[y].rank)
+  {
     elts[y].p = x;
     elts[x].size += elts[y].size;
-  } else {
+  }
+  else
+  {
     elts[x].p = y;
     elts[y].size += elts[x].size;
     if (elts[x].rank == elts[y].rank)

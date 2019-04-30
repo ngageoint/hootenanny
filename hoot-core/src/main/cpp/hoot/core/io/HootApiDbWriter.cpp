@@ -65,7 +65,7 @@ HootApiDbWriter::~HootApiDbWriter()
   close();
 }
 
-void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e, Tags& t)
+void HootApiDbWriter::_addElementTags(const std::shared_ptr<const Element> &e, Tags& t)
 {
   LOG_TRACE("Adding element tags to: " << e->getElementId());
   if (!t.contains(MetadataTags::HootStatus()))
@@ -378,7 +378,7 @@ void HootApiDbWriter::_createElement(ConstElementPtr element)
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _hootdb.insertNode(boost::dynamic_pointer_cast<const Node>(element));
+      _hootdb.insertNode(std::dynamic_pointer_cast<const Node>(element));
       break;
     //only supporting nodes for now
     default:
@@ -391,7 +391,7 @@ void HootApiDbWriter::_modifyElement(ConstElementPtr element)
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _hootdb.updateNode(boost::dynamic_pointer_cast<const Node>(element));
+      _hootdb.updateNode(std::dynamic_pointer_cast<const Node>(element));
       break;
     //only supporting nodes for now
     default:
@@ -404,7 +404,7 @@ void HootApiDbWriter::_deleteElement(ConstElementPtr element)
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      _hootdb.deleteNode(boost::dynamic_pointer_cast<const Node>(element));
+      _hootdb.deleteNode(std::dynamic_pointer_cast<const Node>(element));
       break;
     //only supporting nodes for now
     default:

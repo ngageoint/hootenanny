@@ -32,9 +32,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QString>
 

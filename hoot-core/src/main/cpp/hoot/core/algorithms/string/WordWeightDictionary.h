@@ -31,9 +31,6 @@
 // Qt
 #include <QString>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -62,7 +59,7 @@ public:
   virtual double getWeight(const QString& word) const = 0;
 };
 
-typedef boost::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
+typedef std::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
 
 }
 

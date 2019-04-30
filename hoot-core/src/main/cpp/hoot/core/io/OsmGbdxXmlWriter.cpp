@@ -26,26 +26,23 @@
  */
 #include "OsmGbdxXmlWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -210,7 +207,7 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
 {
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp boost::shared_ptr
+  // this will be deleted by the _fp std::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -330,7 +327,7 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
 //  // This is the next to fix.
 //  if (type == ElementType::Relation)
 //  {
-//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
 //    if (relation->getType() != "")
 //    {
 //      _writer->writeStartElement("Got Relation");

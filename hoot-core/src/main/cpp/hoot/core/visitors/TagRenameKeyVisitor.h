@@ -49,7 +49,7 @@ public:
 
   TagRenameKeyVisitor(const QString oldKey, const QString newKey);
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 

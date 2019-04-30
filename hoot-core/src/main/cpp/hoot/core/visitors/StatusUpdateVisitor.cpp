@@ -67,7 +67,7 @@ void StatusUpdateVisitor::setConfiguration(const Settings& conf)
   LOG_VART(_onlyUpdateIfStatusInvalid);
 }
 
-void StatusUpdateVisitor::visit(const boost::shared_ptr<Element>& e)
+void StatusUpdateVisitor::visit(const std::shared_ptr<Element>& e)
 {
   LOG_VART(e->getStatus());
   if (_onlyUpdateIfStatusInvalid && e->getStatus() != Status::Invalid)

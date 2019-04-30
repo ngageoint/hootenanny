@@ -230,7 +230,7 @@ bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString boundsStr
       "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
   }
 
-  boost::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
+  std::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
     LOG_VARD(changesetItr->value(0).toLongLong());

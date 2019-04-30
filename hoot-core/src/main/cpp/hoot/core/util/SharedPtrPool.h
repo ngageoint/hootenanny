@@ -36,6 +36,7 @@
 
 // Standard
 #include <deque>
+#include <memory>
 
 namespace hoot
 {
@@ -50,11 +51,11 @@ class SharedPtrPool
 {
 public:
 
-  boost::shared_ptr<T> allocate()
+  std::shared_ptr<T> allocate()
   {
     T* v = new (_pool.allocate()) T();
 
-    return boost::shared_ptr<T>(v,
+    return std::shared_ptr<T>(v,
       boost::bind(&SharedPtrPool<T>::_destroy, this, _1));
   }
 

@@ -34,7 +34,8 @@
 // Qt
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 class TableType
 {

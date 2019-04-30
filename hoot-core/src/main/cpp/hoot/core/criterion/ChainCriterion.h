@@ -59,9 +59,9 @@ public:
 
 protected:
 
-  ChainCriterion(std::vector<boost::shared_ptr<ElementCriterion>> criteria);
+  ChainCriterion(std::vector<std::shared_ptr<ElementCriterion>> criteria);
 
-  std::vector<boost::shared_ptr<ElementCriterion>> _criteria;
+  std::vector<std::shared_ptr<ElementCriterion>> _criteria;
 
 private:
 

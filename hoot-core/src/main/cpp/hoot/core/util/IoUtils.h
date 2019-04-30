@@ -73,7 +73,7 @@ public:
     element ID's
     @param defaultStatus the hoot status to assign to all elements
     */
-  static void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
+  static void loadMap(OsmMapPtr map, QString path, bool useFileId,
                       Status defaultStatus = Status::Invalid);
 
   /**
@@ -82,7 +82,7 @@ public:
     @param map the map object to save
     @param path the file path to save the map to
     */
-  static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
+  static void saveMap(OsmMapPtr map, QString path);
 };
 
 }

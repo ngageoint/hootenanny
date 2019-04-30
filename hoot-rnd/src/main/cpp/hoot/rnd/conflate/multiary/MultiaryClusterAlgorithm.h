@@ -89,7 +89,7 @@ public:
     }
   };
 
-  typedef boost::shared_ptr<ClusterLink> ClusterLinkPtr;
+  typedef std::shared_ptr<ClusterLink> ClusterLinkPtr;
 
   /**
    * A list of clusters that represent a subgraph.
@@ -150,7 +150,7 @@ public:
    * @return A list of clusters that were found in the 'pairs' subgraph.
    */
   virtual ClusterList calculateClusters(OsmMapPtr map,
-    std::set<std::pair<ElementId, ElementId> > &pairs) = 0;
+    std::set<std::pair<ElementId, ElementId>> &pairs) = 0;
 
   /**
    * Returns reviews for the current cluster. Must be called after cluster and can only be called

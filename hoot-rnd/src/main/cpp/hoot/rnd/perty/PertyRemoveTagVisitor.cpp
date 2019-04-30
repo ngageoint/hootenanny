@@ -73,7 +73,7 @@ void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
   _replacementTagValues = configOptions.getPertyRemoveTagVisitorSubstitutionValues();
 }
 
-void PertyRemoveTagVisitor::visit(const boost::shared_ptr<Element>& e)
+void PertyRemoveTagVisitor::visit(const std::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
 

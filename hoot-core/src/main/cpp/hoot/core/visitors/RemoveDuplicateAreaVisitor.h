@@ -62,7 +62,7 @@ public:
   RemoveDuplicateAreaVisitor();
 
   virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const boost::shared_ptr<Element>& e1) override;
+  virtual void visit(const std::shared_ptr<Element>& e1) override;
 
   virtual QString getInitStatusMessage() const { return "Removing duplicate areas..."; }
 
@@ -73,12 +73,12 @@ public:
 
 private:
 
-  boost::shared_ptr<TagDifferencer> _diff;
-  QHash<ElementId, boost::shared_ptr<geos::geom::Geometry> > _geoms;
+  std::shared_ptr<TagDifferencer> _diff;
+  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geoms;
 
-  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
-  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
-  void _removeOne(boost::shared_ptr<Element> e1, boost::shared_ptr<Element> e2);
+  std::shared_ptr<geos::geom::Geometry> _convertToGeometry(const std::shared_ptr<Element>& e1);
+  bool _equals(const std::shared_ptr<Element>& e1, const std::shared_ptr<Element> &e2);
+  void _removeOne(std::shared_ptr<Element> e1, std::shared_ptr<Element> e2);
 };
 
 }

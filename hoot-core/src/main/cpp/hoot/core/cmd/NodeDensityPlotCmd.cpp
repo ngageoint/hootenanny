@@ -61,12 +61,12 @@ class NodeDensityPlotCmd : public BaseCommand
 
     virtual QString getDescription() const { return "Creates a node density plot for a map"; }
 
-    Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
+    Envelope getEnvelope(std::shared_ptr<OsmMapReader> reader)
     {
-      boost::shared_ptr<EnvelopeProvider> ep =
-        boost::dynamic_pointer_cast<EnvelopeProvider>(reader);
-      boost::shared_ptr<PartialOsmMapReader> r =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      std::shared_ptr<EnvelopeProvider> ep =
+        std::dynamic_pointer_cast<EnvelopeProvider>(reader);
+      std::shared_ptr<PartialOsmMapReader> r =
+        std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
       if (ep)
       {
@@ -85,7 +85,7 @@ class NodeDensityPlotCmd : public BaseCommand
           if (e->getElementType() == ElementType::Node)
           {
             nodeCount++;
-            NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+            NodePtr n = std::dynamic_pointer_cast<Node>(e);
             if (result.isNull())
             {
               result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
@@ -110,10 +110,10 @@ class NodeDensityPlotCmd : public BaseCommand
     }
 
     cv::Mat calculateDensity(Envelope envelope, double pixelSize,
-                             boost::shared_ptr<OsmMapReader> reader)
+                             std::shared_ptr<OsmMapReader> reader)
     {
-      boost::shared_ptr<PartialOsmMapReader> r =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      std::shared_ptr<PartialOsmMapReader> r =
+        std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
 
       int width = ceil(envelope.getWidth() / pixelSize);
@@ -128,7 +128,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
         if (e.get() && e->getElementType() == ElementType::Node)
         {
-          NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+          NodePtr n = std::dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
           int py = int((n->getY() - envelope.getMinY()) / pixelSize);
           px = std::min(width - 1, std::max(0, px));
@@ -209,7 +209,7 @@ class NodeDensityPlotCmd : public BaseCommand
         colorMultiplier[3] = toColorPortion(bs[3]);
       }
 
-      boost::shared_ptr<OsmMapReader> reader =
+      std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true);
       reader->open(input);
       Envelope e = getEnvelope(reader);

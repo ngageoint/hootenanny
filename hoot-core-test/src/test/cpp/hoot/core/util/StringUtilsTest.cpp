@@ -68,7 +68,7 @@ public:
     //simplified.
     const QString jsonInput =
       "{ \"apps\": [ { \"name\": \"TikaLanguageDetector\", \"description\": \"blah\", \"url\": \"https://tika.apache.org\" }, { \"name\": \"OpenNlpLanguageDetector\", \"description\": \"more blah\", \"url\": \"https://opennlp.apache.org\" } ] }";
-    boost::shared_ptr<boost::property_tree::ptree> propTree =
+    std::shared_ptr<boost::property_tree::ptree> propTree =
       StringUtils::jsonStringToPropTree(jsonInput);
     std::stringstream outputStrStream;
     boost::property_tree::json_parser::write_json(outputStrStream, *propTree);

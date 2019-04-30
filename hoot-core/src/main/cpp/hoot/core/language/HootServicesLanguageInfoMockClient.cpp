@@ -50,7 +50,7 @@ HootServicesLanguageInfoClient()
   _useCookies = false;
 }
 
-boost::shared_ptr<boost::property_tree::ptree>
+std::shared_ptr<boost::property_tree::ptree>
   HootServicesLanguageInfoMockClient::getAvailableApps(const QString type)
 {
   if (type == "detectors")
@@ -63,7 +63,7 @@ boost::shared_ptr<boost::property_tree::ptree>
   }
 }
 
-boost::shared_ptr<boost::property_tree::ptree>
+std::shared_ptr<boost::property_tree::ptree>
   HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString /*type*/)
 {
   return StringUtils::jsonStringToPropTree(LANGS_STR);

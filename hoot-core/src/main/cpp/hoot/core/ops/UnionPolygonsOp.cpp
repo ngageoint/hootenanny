@@ -50,12 +50,12 @@ UnionPolygonsOp::UnionPolygonsOp()
   _combiner.reset(new UnionPolygonsVisitor());
 }
 
-void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
+void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
   map->visitRo(*_combiner);
-  boost::shared_ptr<Geometry> g = _combiner->getUnion();
+  std::shared_ptr<Geometry> g = _combiner->getUnion();
   LOG_VART(g.get());
 
   OsmMapPtr result(new OsmMap());

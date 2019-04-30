@@ -71,7 +71,7 @@ void TagAdvancedCriterion::setConfiguration(const Settings& s)
 
 void TagAdvancedCriterion::_parseFilterString(const QString filterJsonStringOrPath)
 {
-  boost::shared_ptr<boost::property_tree::ptree> propTree;
+  std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!filterJsonStringOrPath.toLower().endsWith(".json"))
   {
     propTree = StringUtils::jsonStringToPropTree(filterJsonStringOrPath);
@@ -110,7 +110,7 @@ void TagAdvancedCriterion::_parseFilterString(const QString filterJsonStringOrPa
 }
 
 void TagAdvancedCriterion::_loadTagFilters(const QString tagFilterType,
-                                           boost::shared_ptr<boost::property_tree::ptree> propTree)
+                                           std::shared_ptr<boost::property_tree::ptree> propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 

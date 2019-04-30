@@ -31,10 +31,6 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
-
 namespace hoot
 {
 

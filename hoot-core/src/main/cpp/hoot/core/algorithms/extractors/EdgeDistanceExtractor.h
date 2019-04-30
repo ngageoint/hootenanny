@@ -58,8 +58,8 @@ public:
 
   static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const;
+  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const;
 
   virtual std::string getClassName() const { return EdgeDistanceExtractor::className(); }
 
@@ -79,12 +79,12 @@ private:
   ValueAggregatorPtr _aggregator;
   double _spacing;
 
-  double _oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
-    const boost::shared_ptr<const Element>& e2) const;
+  double _oneDistance(const OsmMap& map, const std::shared_ptr<const Element>& e1,
+    const std::shared_ptr<const Element>& e2) const;
 
-  std::vector<geos::geom::Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
+  std::vector<geos::geom::Coordinate> _discretize(const OsmMap &map, const std::shared_ptr<const Element> &e) const;
 
-  boost::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
+  std::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap &map, const std::shared_ptr<const Element> &e) const;
 };
 
 }
