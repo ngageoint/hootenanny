@@ -63,14 +63,15 @@ public:
 
 private:
 
-  void _substituteForContainingOps();
-
-  QString _getInitMessage(const QString& message,
-                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
-
   const Settings* _conf;
   QStringList _namedOps;
   Progress _progress;
+
+  void _substituteForContainingOps();
+
+  QString _getInitMessage(const QString message,
+                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

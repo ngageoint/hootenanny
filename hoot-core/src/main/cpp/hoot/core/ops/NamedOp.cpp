@@ -108,6 +108,8 @@ void NamedOp::apply(OsmMapPtr& map)
       "\tElement count before operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
 
+    // We could benefit from passing progress into some of the ops to get more granular feedback.
+
     boost::shared_ptr<OperationStatusInfo> statusInfo;
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
@@ -115,29 +117,13 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<OsmMapOperation>(s));
       statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      // TODO: move into templated method
-
-      // We could benefit from passing progress into some of the ops to get more granular
-      // feedback.
-      LOG_VART(_progress.getTaskWeight());
-      LOG_VART(_progress.getState());
-      LOG_VART(_progress.getPercentComplete());
-      // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-      // just an empty progress object, and we shouldn't log progress.
-      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-      {
-        _progress.setFromRelative(
-          (float)(opCount - 1) / (float)_namedOps.size(), Progress::JobState::Running, false,
-          _getInitMessage(s, statusInfo));
-      }
+      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
       }
-
-      // end TODO
 
       t->apply(map);
     }
@@ -147,25 +133,13 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
       statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      // TODO: move into templated method
-
-      LOG_VART(_progress.getTaskWeight());
-      LOG_VART(_progress.getState());
-      LOG_VART(_progress.getPercentComplete());
-      if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-      {
-        _progress.setFromRelative(
-          (float)(opCount - 1) / (float)_namedOps.size(), Progress::JobState::Running, false,
-          _getInitMessage(s, statusInfo));
-      }
+      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
       {
         c->setConfiguration(*_conf);
       }
-
-      // end TODO
 
       map->visitRw(*t);
     }
@@ -189,7 +163,18 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message,
+void NamedOp::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, false, message);
+  }
+}
+
+QString NamedOp::_getInitMessage(const QString message,
                                  boost::shared_ptr<OperationStatusInfo> statusInfo) const
 {
   QString initMessage;
