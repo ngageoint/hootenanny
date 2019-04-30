@@ -3,7 +3,12 @@
     {
         "filter":
         {
-            "aeroway": "runway"
+            "must":
+            [
+                {
+                    "tag": "aeroway=runway"
+                }
+            ]
         },
         "arguments":
         {
@@ -15,7 +20,12 @@
     {
         "filter":
         {
-            "aeroway": "taxiway"
+            "must":
+            [
+                {
+                    "tag": "aeroway=taxiway"
+                }
+            ]
         },
         "arguments":
         {
@@ -27,7 +37,12 @@
     {
         "filter":
         {
-            "building": "yes"
+            "must":
+            [
+                {
+                    "tag": "building=yes"
+                }
+            ]
         },
         "arguments":
         {
@@ -38,7 +53,12 @@
     {
         "filter":
         {
-            "bridge": "yes"
+            "must":
+            [
+                {
+                    "tag": "bridge=yes"
+                }
+            ]
         },
         "arguments":
         {
