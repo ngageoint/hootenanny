@@ -38,8 +38,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.UnavailableException;
@@ -81,6 +83,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -102,6 +105,9 @@ public class GrailResource {
 
     @Autowired
     private GrailCommandFactory grailCommandFactory;
+
+    @Autowired
+    private SetMapTagsCommandFactory setMapTagsCommandFactory;
 
     @Autowired
     private PullOverpassCommandFactory overpassCommandFactory;
@@ -518,6 +524,9 @@ public class GrailResource {
 
         Users user = Users.fromRequest(request);
 
+        //TODO: Split the download into two parallel jobs
+
+
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
 
@@ -568,6 +577,12 @@ public class GrailResource {
             ExternalCommand pushReference = grailCommandFactory.build(jobId, referencePushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushReference);
 
+            // Set map tags marking dataset as eligible for derive changeset
+            Map<String, String> tags = new HashMap<>();
+            tags.put("grail", "true");
+            InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+            workflow.add(setMapTags);
+
             secondaryPushParams.setInput1(secondaryOSMFile.getAbsolutePath());
             secondaryPushParams.setOutput(SECONDARY);
             ExternalCommand pushSecondary = grailCommandFactory.build(jobId, secondaryPushParams, debugLevel, PushToDbCommand.class, this.getClass());
@@ -581,6 +596,9 @@ public class GrailResource {
             workflow.add(updateDb);
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+
+            //After job completion the download folder can be removed
+            //workflow.add(removeFolder);
 
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
