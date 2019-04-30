@@ -28,7 +28,6 @@
 #define SHAREDPTRPOOL_H
 
 // Boost
-#include <boost/bind.hpp>
 #include <boost/pool/pool_alloc.hpp>
 
 // Hoot
@@ -36,6 +35,7 @@
 
 // Standard
 #include <deque>
+#include <functional>
 #include <memory>
 
 namespace hoot
@@ -56,7 +56,7 @@ public:
     T* v = new (_pool.allocate()) T();
 
     return std::shared_ptr<T>(v,
-      std::bind(&SharedPtrPool<T>::_destroy, this, _1));
+      std::bind(&SharedPtrPool<T>::_destroy, this, std::placeholders::_1));
   }
 
   static SharedPtrPool<T>& getInstance() { return _theInstance; }
