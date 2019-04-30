@@ -53,7 +53,7 @@ public:
 
   static std::string className() { return "hoot::BuildingOutlineUpdateOp"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   BuildingOutlineUpdateOp();
 

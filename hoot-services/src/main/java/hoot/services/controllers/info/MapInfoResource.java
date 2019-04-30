@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -66,9 +66,9 @@ public class MapInfoResource {
 
     /**
      * Service method endpoint for retrieving the physical size of a map record.
-     * 
+     *
      * GET hoot-services/info/map/size?mapid=1
-     * 
+     *
      * @param mapIds
      *            id of the map for which to retrieve size
      * @return JSON containing size information
@@ -103,9 +103,9 @@ public class MapInfoResource {
 
     /**
      * Service method endpoint for retrieving the physical size of multiple map records.
-     * 
+     *
      * GET hoot-services/info/map/sizes?mapid=54,62
-     * 
+     *
      * @param mapIds
      *            ids of the maps for which to retrieve sizes
      * @return JSON containing a list of size information for all current maps
@@ -144,9 +144,9 @@ public class MapInfoResource {
 
     /**
      * Service endpoint for maximum data size for export conflate and ingest.
-     * 
+     *
      * GET hoot-services/info/map/thresholds
-     * 
+     *
      * @return JSON containing threshold information
      */
     @GET

@@ -57,7 +57,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmJsonReader::logWarnCount = 0;
+int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 

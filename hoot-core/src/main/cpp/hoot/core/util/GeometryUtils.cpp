@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int GeometryUtils::logWarnCount = 0;
+int GeometryUtils::logWarnCount = 0;
 
 union DoubleCast
 {
@@ -195,7 +195,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
     if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());

@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-unsigned int RemoveRef2Visitor::logWarnCount = 0;
+int RemoveRef2Visitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveRef2Visitor)
 

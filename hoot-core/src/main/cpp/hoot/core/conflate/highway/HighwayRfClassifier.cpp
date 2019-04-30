@@ -70,7 +70,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int HighwayRfClassifier::logWarnCount = 0;
+int HighwayRfClassifier::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(HighwayClassifier, HighwayRfClassifier)
 

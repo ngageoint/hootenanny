@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-unsigned int IndexedEdgeMatchSet::logWarnCount = 0;
+int IndexedEdgeMatchSet::logWarnCount = 0;
 
 IndexedEdgeMatchSet::IndexedEdgeMatchSet()
 {

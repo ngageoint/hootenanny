@@ -70,7 +70,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int PoiRfClassifier::logWarnCount = 0;
+int PoiRfClassifier::logWarnCount = 0;
 
 PoiRfClassifier::PoiRfClassifier()
 {

@@ -53,7 +53,7 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   PoiPolygonMerger();
   /**

@@ -242,7 +242,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     const ElementToRelationMap& _mapping;
     bool _good;
     //this should be static, but there's no header file
-    unsigned int _logWarnCount;
+    int _logWarnCount;
   };
 
   CheckVisitor visitor(map, *this);

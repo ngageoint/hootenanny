@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int BuildingOutlineUpdateOp::logWarnCount = 0;
+int BuildingOutlineUpdateOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 

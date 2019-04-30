@@ -49,7 +49,7 @@ public:
 
   static std::string className() { return "hoot::ScriptMatch"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   ScriptMatch();
   /**

@@ -45,7 +45,7 @@ public:
 
   static std::string className() { return "hoot::BuildingMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   BuildingMerger();
   /**

@@ -1,4 +1,5 @@
-Attribute Conflation test for bridge merging into a reference dataset without bridges identified.  The reference geometry will potentially be changed where there are bridges (see option attribute.conflation.allow.ref.geometry.changes.for.bridges).
+Attribute Conflation test with the Unifying Roads Algorithm for bridge merging into a reference dataset without bridges identified.  The 
+reference geometry will potentially be changed where there are bridges (see option attribute.conflation.allow.ref.geometry.changes.for.bridges).
 
 The divided bridges named Puente: Llaguno should overwrite the divided highway named Av. Urdaneta.
 

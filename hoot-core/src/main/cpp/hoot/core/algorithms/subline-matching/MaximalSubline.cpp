@@ -47,7 +47,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MaximalSubline::logWarnCount = 0;
+int MaximalSubline::logWarnCount = 0;
 
 MaximalSubline::ThresholdMatchCriteria::ThresholdMatchCriteria(Meters maxDistance,
   Radians maxAngleDiff)

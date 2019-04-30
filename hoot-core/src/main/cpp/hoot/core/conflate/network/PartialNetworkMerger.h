@@ -52,10 +52,10 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId> > &pairs,
+  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
     QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
@@ -68,6 +68,8 @@ public:
   virtual QString toString() const;
 
   virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
+
+  bool getNeedsReview() const { return _needsReview; }
 
 protected:
 
@@ -82,21 +84,22 @@ private:
   QHash<ElementId, ElementId> _substitions;
   mutable QList<WayMatchStringMerger::SublineMappingPtr> _allSublineMappings;
   mutable QList<WayMatchStringMergerPtr> _mergerList;
+  bool _needsReview;
 
   void _appendSublineMappings(QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
   void _applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const;
 
   WayMatchStringMergerPtr _createMatchStringMerger(const OsmMapPtr &map,
-    std::vector<std::pair<ElementId, ElementId> > &replaced,
+    std::vector<std::pair<ElementId, ElementId>>& replaced,
     ConstEdgeMatchPtr edgeMatch) const;
 
   void _processFullMatch(const OsmMapPtr& map,
-                         std::vector<std::pair<ElementId, ElementId> > &replaced);
+                         std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   void _processStubMatch(const OsmMapPtr& map,
-                         std::vector<std::pair<ElementId, ElementId> > &replaced,
-                         ConstEdgeMatchPtr edgeMatch) const;
+                         std::vector<std::pair<ElementId, ElementId>>& replaced,
+                         ConstEdgeMatchPtr edgeMatch);
 };
 
 }

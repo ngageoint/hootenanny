@@ -52,7 +52,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int NodeMatcher::logWarnCount = 0;
+int NodeMatcher::logWarnCount = 0;
 QList<boost::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
 
 NodeMatcher::NodeMatcher() :

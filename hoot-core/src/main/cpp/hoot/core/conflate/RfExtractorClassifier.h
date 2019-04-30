@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RFEXTRACTORCLASSIFIER_H
 #define RFEXTRACTORCLASSIFIER_H
@@ -46,7 +46,7 @@ public:
 
   static std::string className() { return "hoot::RfExtractorClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   RfExtractorClassifier();
 

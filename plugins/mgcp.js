@@ -1360,11 +1360,8 @@ mgcp = {
             case 'village':
             case 'hamlet':
             case 'yes':  // We set this as a default when going to OSM
-                    if (geometryType == 'Point')
-                    {
-                        attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;
-                    }
+                    attrs.F_CODE = 'AL020'; // Built Up Area
+                    delete tags.place;
                     break;
 
             case 'isolated_dwelling':

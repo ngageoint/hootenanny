@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::SplitLongLinearWaysVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   SplitLongLinearWaysVisitor();
 
