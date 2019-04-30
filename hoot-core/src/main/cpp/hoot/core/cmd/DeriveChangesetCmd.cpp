@@ -45,6 +45,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/Progress.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -122,10 +123,25 @@ public:
     }
     LOG_VARD(_osmApiDbUrl);
 
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+
+    LOG_STATUS(
+      "Deriving output changeset: " << output.right(maxFilePrintLength) << " from inputs: " <<
+      input1.right(maxFilePrintLength) << " and " << input2.right(maxFilePrintLength) << "...");
+
+    const QString jobSource = "Derive Changeset";
+    // The number of steps here must be updated as you add/remove job steps (don't count
+    // tasks where you pass in the progress).
+    const int numTotalTasks = 2;
+    int currentTaskNum = 1;
+    Progress progress(jobSource);
+
     _parseBuffer();
 
     const bool singleInput = input2.trimmed().isEmpty();
 
+    progress.set(
+      (float)(currentTaskNum - 1) / (float)numTotalTasks, "Running", false, "Sorting features...");
     ElementInputStreamPtr sortedElements1;
     ElementInputStreamPtr sortedElements2;
     if (!singleInput)
@@ -142,7 +158,16 @@ public:
       sortedElements1 = _getEmptyInputStream();
       sortedElements2 = _getSortedElements(input1, Status::Unknown2);
     }
+    currentTaskNum++;
+
+    // We could make this progress reporting more granular, but for in-memory changesets only.
+    progress.set(
+      (float)(currentTaskNum - 1) / (float)numTotalTasks, "Running", false, "Writing changeset...");
     _streamChangesetOutput(sortedElements1, sortedElements2, output);
+    currentTaskNum++;
+
+    progress.set(
+      1.0, "Succesful", false, "Changeset written to: " + output.right(maxFilePrintLength));
 
     return 0;
   }

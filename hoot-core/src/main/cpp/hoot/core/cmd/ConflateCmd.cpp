@@ -174,8 +174,8 @@ int ConflateCmd::runSimple(QStringList args)
   QList<QList<SingleStat>> allStats;
 
   Progress progress(JOB_SOURCE);
-  // The number of steps here must be updated as you add/remove conflation steps (don't count
-  // tasks which you pass in the progress).
+  // The number of steps here must be updated as you add/remove job steps (don't count
+  // tasks where you pass in the progress).
   _numTotalTasks = 5;
   if (displayStats)
   {
