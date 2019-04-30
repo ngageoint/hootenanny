@@ -45,7 +45,7 @@ import javax.ws.rs.WebApplicationException;
 
 
 /**
- * Used for pulling MapEdit data
+ * Used for pulling Private Rails Port API data
  */
 class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
