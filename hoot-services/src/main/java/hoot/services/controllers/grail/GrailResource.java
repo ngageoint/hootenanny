@@ -42,6 +42,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -84,6 +85,7 @@ import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
+import hoot.services.models.osm.User;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -92,6 +94,8 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Transactional
 public class GrailResource {
     private static final Logger logger = LoggerFactory.getLogger(GrailResource.class);
+    private static final String REFERENCE = "reference";
+    private static final String SECONDARY = "secondary";
 
     @Autowired
     private JobProcessor jobProcessor;
@@ -112,6 +116,34 @@ public class GrailResource {
     private OAuthRestTemplate oauthRestTemplate;
 
     public GrailResource() {}
+
+    private Command getRailsPortApiCommand(String jobId, Users user, String bounds, String output) throws UnavailableException {
+        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+        if (railsPortCapabilities.getApiStatus() == null
+                | railsPortCapabilities.getApiStatus().equals("offline")) {
+            throw new UnavailableException("The Rails port API is offline.");
+        }
+
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+        params.setBounds(bounds);
+        params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+        params.setPullUrl(PUBLIC_OVERPASS_URL);
+        params.setOutput(output);
+        InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
+        return command;
+    }
+
+    private Command getPublicOverpassCommand(String jobId, Users user, String bounds, String output) {
+        //TODO: is there an availability check for overpass?
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+        params.setBounds(bounds);
+        params.setPullUrl(PUBLIC_OVERPASS_URL);
+        params.setOutput(output);
+        InternalCommand command = overpassCommandFactory.build(jobId, params, this.getClass());
+        return command;
+    }
 
     /**
      * Pull the Public Overpass and Private Rails Port data for a bounding box and run differential on it
@@ -140,9 +172,9 @@ public class GrailResource {
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
-        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
-        File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
+        File workDir = new File(TEMP_OUTPUT_PATH, jobId);
         try {
             FileUtils.forceMkdir(workDir);
         }
@@ -156,55 +188,26 @@ public class GrailResource {
         String bbox = reqParams.getBounds();
 
         JSONObject jobInfo = new JSONObject();
-        jobInfo.put("jobid", mainJobId);
+        jobInfo.put("jobid", jobId);
 
-        GrailParams params = new GrailParams();
-        params.setBounds(bbox);
-        params.setUser(user);
-
-        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-        logger.info("differentialStats: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
+        // Pull reference data from Rails port OSM API
+        File referenceOSMFile = new File(workDir, REFERENCE + ".osm");
+        if (referenceOSMFile.exists()) referenceOSMFile.delete();
+        try {
+            workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
+        } catch (UnavailableException ex) {
+            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
-        // Pull OSM data from the dest OSM API Db
-        File destOSMFile = new File(workDir, "dest.osm");
-        if (destOSMFile.exists()) destOSMFile.delete();
+        // Pull secondary data from the Public Overpass API
+        File secondaryOSMFile = new File(workDir, SECONDARY + ".osm");
+        if (secondaryOSMFile.exists()) secondaryOSMFile.delete();
+        workflow.add(getPublicOverpassCommand(jobId, user, bbox, secondaryOSMFile.getAbsolutePath()));
 
-        GrailParams sourceParams = new GrailParams();
-        sourceParams.setUser(user);
-        sourceParams.setBounds(bbox);
-        sourceParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        sourceParams.setOutput(destOSMFile.getAbsolutePath());
-        sourceParams.setPullUrl(RAILSPORT_PULL_URL);
-
-        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        jobInfo.put("jobid:DestOSM", jobId);
-        // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-        InternalCommand getDestOSM = apiCommandFactory.build(jobId, sourceParams, this.getClass());
-        workflow.add(getDestOSM);
-
-
-        // Pull OSM data from the source OSM Db using overpass
-        File sourceOSMFile = new File(workDir, "source.osm");
-        if (sourceOSMFile.exists()) sourceOSMFile.delete();
-
-        GrailParams overpassParams = new GrailParams();
-        overpassParams.setUser(user);
-        overpassParams.setBounds(bbox);
-        overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
-        overpassParams.setPullUrl(PUBLIC_OVERPASS_URL);
-
-        jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        jobInfo.put("jobid:SourceOSM", jobId);
-        InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
-        workflow.add(getOverpassOSM);
-
-        // Run the diff command.
-        params.setInput1(destOSMFile.getAbsolutePath());
-        params.setInput2(sourceOSMFile.getAbsolutePath());
+        // Run the differential conflate command.
+        GrailParams params = new GrailParams();
+        params.setInput1(referenceOSMFile.getAbsolutePath());
+        params.setInput2(secondaryOSMFile.getAbsolutePath());
 
         File geomDiffFile = new File(workDir, "diff.osc");
         if (geomDiffFile.exists()) geomDiffFile.delete();
@@ -213,16 +216,16 @@ public class GrailResource {
             geomDiffFile.createNewFile();
         }
         catch(IOException exc) {
-            logger.error("createDifferential: Error creating folder: {} ", geomDiffFile.getAbsolutePath(), exc);
+            logger.error("createDifferential: Error creating file: {} ", geomDiffFile.getAbsolutePath(), exc);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exc.getMessage()).build();
         }
 
         params.setOutput(geomDiffFile.getAbsolutePath());
 
-        ExternalCommand makeDiff = grailCommandFactory.build(mainJobId, params, debugLevel, RunDiffCommand.class, this.getClass());
+        ExternalCommand makeDiff = grailCommandFactory.build(jobId, params, debugLevel, RunDiffCommand.class, this.getClass());
         workflow.add(makeDiff);
 
-        jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -245,6 +248,7 @@ public class GrailResource {
     @GET
     @Path("/differentialstats/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
+    //TODO: make this generic to report stats on any folder of osc files
     public Response differentialStats(@Context HttpServletRequest request,
             @PathParam("jobId") String jobDir,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
@@ -343,7 +347,7 @@ public class GrailResource {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
             if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline. Try again later").build();
             }
 
             File geomDiffFile = new File(workDir, "diff.osc");
@@ -458,7 +462,7 @@ public class GrailResource {
             params.setOutput(changeSet.getAbsolutePath());
             ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
-
+//TODO: split this up into separeate derive step and apply step
             // Apply changeset
             params.setPushUrl(RAILSPORT_PUSH_URL);
             ExternalCommand applyChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
@@ -530,76 +534,49 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
-        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-        logger.info("PullOSM: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-        if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The dest OSM API server is offline. Try again later").build();
-        }
-
-        GrailParams apiParams = new GrailParams();
-        GrailParams overpassParams = new GrailParams();
-
-        apiParams.setUser(user);
-        apiParams.setBounds(reqParams.getBounds());
-        apiParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        apiParams.setPullUrl(RAILSPORT_PULL_URL);
-
-        overpassParams.setUser(user);
-        overpassParams.setBounds(reqParams.getBounds());
-        overpassParams.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        overpassParams.setPullUrl(PUBLIC_OVERPASS_URL);
-
         List<Command> workflow = new LinkedList<>();
 
         try {
-            // Pull data from the dest OSM API Db
-            File destOSMFile = new File(workDir, "dest.osm");
-            if (destOSMFile.exists()) { destOSMFile.delete(); }
+            // Pull data from the reference OSM API
+            File referenceOSMFile = new File(workDir, REFERENCE +".osm");
+            if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
 
-            apiParams.setOutput(destOSMFile.getAbsolutePath());
-            // ExternalCommand getDestOSM = grailCommandFactory.build(jobId,params,debugLevel,PullOSMDataCommand.class,this.getClass());
-            InternalCommand getDestOSM = apiCommandFactory.build(jobId, apiParams, this.getClass());
-            workflow.add(getDestOSM);
+            try {
+                workflow.add(getRailsPortApiCommand(jobId, user, reqParams.getBounds(), referenceOSMFile.getAbsolutePath()));
+            } catch (UnavailableException ex) {
+                Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+            }
 
             // Pull OSM data from the real source OSM Db using overpass
-            File sourceOSMFile = new File(workDir, "source.osm");
-            if (sourceOSMFile.exists()) { sourceOSMFile.delete(); }
+            File secondaryOSMFile = new File(workDir, SECONDARY + ".osm");
+            if (secondaryOSMFile.exists()) { secondaryOSMFile.delete(); }
 
-            overpassParams.setOutput(sourceOSMFile.getAbsolutePath());
+            workflow.add(getPublicOverpassCommand(jobId, user, reqParams.getBounds(), secondaryOSMFile.getAbsolutePath()));
 
-            InternalCommand getOverpassOSM = overpassCommandFactory.build(jobId, overpassParams, this.getClass());
-            workflow.add(getOverpassOSM);
-
-            // Now we paste in the "pushtodb"
-            // the first 10 digits of a random UUID _should_ be unique....
-            String randomString = "_" + StringUtils.left(UUID.randomUUID().toString().replace("-", ""), 10);
-            String destDbFile = "dest" + randomString;
-            String sourceDbFile = "source" + randomString;
-
-            GrailParams apiPushParams = new GrailParams();
-            GrailParams overpassPushParams = new GrailParams();
+            GrailParams referencePushParams = new GrailParams();
+            GrailParams secondaryPushParams = new GrailParams();
             GrailParams linkParams = new GrailParams();
 
-            apiPushParams.setUser(user);
-            overpassPushParams.setUser(user);
+            referencePushParams.setUser(user);
+            secondaryPushParams.setUser(user);
             linkParams.setUser(user);
 
             // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
             // Till I figure out a better way to do this, we will use our version.
-            apiPushParams.setInput1(destOSMFile.getAbsolutePath());
-            apiPushParams.setOutput(destDbFile);
-            ExternalCommand pushApi = grailCommandFactory.build(jobId, apiPushParams, debugLevel, PushToDbCommand.class, this.getClass());
-            workflow.add(pushApi);
+            referencePushParams.setInput1(referenceOSMFile.getAbsolutePath());
+            referencePushParams.setOutput(REFERENCE);
+            ExternalCommand pushReference = grailCommandFactory.build(jobId, referencePushParams, debugLevel, PushToDbCommand.class, this.getClass());
+            workflow.add(pushReference);
 
-            overpassPushParams.setInput1(sourceOSMFile.getAbsolutePath());
-            overpassPushParams.setOutput(sourceDbFile);
-            ExternalCommand pushOverpass = grailCommandFactory.build(jobId, overpassPushParams, debugLevel, PushToDbCommand.class, this.getClass());
-            workflow.add(pushOverpass);
+            secondaryPushParams.setInput1(secondaryOSMFile.getAbsolutePath());
+            secondaryPushParams.setOutput(SECONDARY);
+            ExternalCommand pushSecondary = grailCommandFactory.build(jobId, secondaryPushParams, debugLevel, PushToDbCommand.class, this.getClass());
+            workflow.add(pushSecondary);
 
             // Now create a folder and link the uploaded layers to it
             linkParams.setFolder(jobId);
-            linkParams.setInput1(destDbFile);
-            linkParams.setInput2(sourceDbFile);
+            linkParams.setInput1(REFERENCE);
+            linkParams.setInput2(SECONDARY);
             InternalCommand updateDb = updateDbCommandFactory.build(jobId, linkParams, this.getClass());
             workflow.add(updateDb);
 
