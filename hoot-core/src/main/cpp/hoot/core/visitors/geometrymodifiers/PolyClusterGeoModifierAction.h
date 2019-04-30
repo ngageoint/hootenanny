@@ -51,8 +51,7 @@ public:
 private:
   QList<WayPtr> _ways;
 
-  void _generateClusters(QList<boost::shared_ptr<geos::geom::Polygon>>& geoms);
-
+  QList<QList<long>> _generateClusters(const QList<boost::shared_ptr<geos::geom::Polygon>>& geoms);
 };
 
 }

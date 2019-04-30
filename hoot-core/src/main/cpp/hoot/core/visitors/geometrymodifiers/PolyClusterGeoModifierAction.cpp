@@ -32,10 +32,12 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/index/ClosePointHash.h>
 
 // Geos
 #include <geos/geom/GeometryFactory.h>
 
+using namespace std;
 using namespace geos::geom;
 
 namespace hoot
@@ -59,6 +61,7 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
   const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
   if (!pWay->isClosedArea()) return false;
 
+  // store for use in processFinalize
   _ways.push_back(pWay);
   return true;
 }
@@ -67,58 +70,137 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
 {
   LOG_INFO( "finalizing " << _ways.length() << " ways");
 
-  boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   ElementConverter elementConverter(pMap);
 
-  QList<shared_ptr<Polygon>> geoms;
+  // create a polygon from each building/way
+  QList<boost::shared_ptr<Polygon>> geoms;
+  QHash<long,boost::shared_ptr<Polygon>> polyLookup;
 
   foreach (WayPtr pWay, _ways)
   {
-    shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
-    pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(pPoly.get()));
-
+    boost::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    long wayId = pWay->getId();
+    pPoly->setUserData((void*)wayId);
+    polyLookup[wayId] = pPoly;
     geoms.push_back(pPoly);
-
   }
 
-  _generateClusters(geoms);
+  // get clusters
+  QList<QList<long>> clusters = _generateClusters(geoms);
 
-
-
-
-
-
-  Geometry* pHull = pCombinedPoly->convexHull();
-
-  CoordinateSequence* pHullCoords = pHull->getCoordinates();
-
-
-  WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
-  pDebugWay->getTags()["Test"] = "Debug";
-  pMap->addElement(pDebugWay);
-
-  for (size_t i = 0; i < pHullCoords->size(); i++)
+  // draw debug way around each cluster
+  foreach (QList<long> cluster, clusters)
   {
-    Coordinate pos = pHullCoords->getAt(i);
-    NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
-    pDebugWay->addNode(pNode->getId());
-    pMap->addElement(pNode);
+    boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
+
+    foreach (long wayId, cluster)
+    {
+      pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(polyLookup[wayId].get()));
+    }
+
+    // create hull
+    Geometry* pHull = pCombinedPoly->convexHull();
+    CoordinateSequence* pHullCoords = pHull->getCoordinates();
+
+    WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
+    pDebugWay->getTags()["Test"] = "Debug";
+    pMap->addElement(pDebugWay);
+
+    for (size_t i = 0; i < pHullCoords->size(); i++)
+    {
+      Coordinate pos = pHullCoords->getAt(i);
+      NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
+      pDebugWay->addNode(pNode->getId());
+      pMap->addElement(pNode);
+    }
   }
 }
 
-void PolyClusterGeoModifierAction::_generateClusters(QList<shared_ptr<Polygon>>& geoms)
+QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<boost::shared_ptr<Polygon>>& geoms)
 {
-  foreach (shared_ptr<Polygon> inner, geoms)
-  {
-    foreach (shared_ptr<Polygon> outer, geoms)
-    {
-      if (inner != outer)
-      {
+  double distance = 15;
+  ClosePointHash cph(distance);
 
+  foreach (boost::shared_ptr<Polygon> poly, geoms)
+  {
+    Point *p = poly->getCentroid();
+    cph.addPoint(p->getX(), p->getY(), (long)poly->getUserData());
+  }
+
+  QList<QList<long>> clusters;
+
+  cph.resetIterator();
+
+  while (cph.next())
+  {
+    LOG_INFO("Matches");
+    const vector<long>& matches = cph.getMatch();
+
+    // see if we already have a cluster with any entry of this match list
+    QList<int> clusterIndices;
+    foreach (long id, matches)
+    {
+      LOG_INFO(id);
+
+      for (int i = 0; i < clusters.length(); i++)
+      {
+        if (clusters[i].contains(id))
+        {
+          if (!clusterIndices.contains(i)) clusterIndices.push_back(i);
+        }
       }
+    }
+
+    int clusterIndexCount = clusterIndices.length();
+    int clusterIndex;
+
+    if (clusterIndexCount == 0)
+    {
+      LOG_INFO("make new cluster");
+      clusters.push_back(QList<long>());
+      clusterIndex = clusters.length()-1;
+    }
+    else if (clusterIndexCount == 1)
+    {
+      clusterIndex = clusterIndices[0];
+    }
+    else
+    {
+      // merge clusters
+      sort(clusterIndices.begin(), clusterIndices.end());
+      int destIx = clusterIndices[0];
+
+      for (int i = clusterIndexCount-1; i > 0; i-- )
+      {
+        int sourceIx = clusterIndices[i];
+
+        foreach (long id, clusters[sourceIx])
+        {
+          if (!clusters[destIx].contains(id)) clusters[destIx].push_back(id);
+        }
+
+        clusters.removeAt(sourceIx);
+      }
+
+      clusterIndex = destIx;
+    }
+
+    foreach (long id, matches)
+    {
+      if (!clusters[clusterIndex].contains(id)) clusters[clusterIndex].push_back(id);
     }
   }
 
+  foreach (QList<long> cluster, clusters)
+  {
+    LOG_INFO("Cluster");
+    foreach (long id, cluster)
+    {
+      LOG_INFO(id);
+    }
+  }
+
+  return clusters;
 }
 
 }
