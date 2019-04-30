@@ -29,6 +29,7 @@ package hoot.services.controllers.grail;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 
@@ -98,9 +99,8 @@ class PullApiCommand implements InternalCommand {
 
             FileUtils.copyURLToFile(requestUrl,outputFile, 10000, 10000);
             }
-            catch (Exception ex) {
-                String msg = "Failure to pull data from the OSM Api DB" + ex.getMessage();
-                // throw new RuntimeException(msg, ex);
+            catch (IOException ex) {
+                String msg = "Failure to pull data from the OSM API" + ex.getMessage();
                 throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
     }
