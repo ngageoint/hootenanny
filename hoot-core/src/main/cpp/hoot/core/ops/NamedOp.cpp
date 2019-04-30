@@ -119,6 +119,8 @@ void NamedOp::apply(OsmMapPtr& map)
 
       LOG_INFO(_getInitMessage(s, opCount, statusInfo));
 
+      // TODO: We could benefit from passing progress into some of the ops to get more granular
+      // feedback.
       LOG_VART(_progress.getTaskWeight());
       LOG_VART(_progress.getState());
       LOG_VART(_progress.getPercentComplete());

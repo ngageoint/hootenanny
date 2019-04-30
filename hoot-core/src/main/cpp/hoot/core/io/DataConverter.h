@@ -126,6 +126,7 @@ private:
 
   std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString input,
                                                  const QStringList layers);
+  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 };
 
 }

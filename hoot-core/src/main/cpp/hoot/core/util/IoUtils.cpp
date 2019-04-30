@@ -113,10 +113,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
   if (OgrReader::isReasonablePath(justPath))
   {
     OgrReader reader;
-    // TODO: fix
-    Progress progress("LoadMap");
     reader.setDefaultStatus(defaultStatus);
-    reader.setProgress(progress);
     reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
   }
   else
@@ -127,6 +124,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
 
 void IoUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
+  // TODO: We could pass a progress in here to get more granular write status feedback.
   OsmMapWriterFactory::write(map, path);
 }
 

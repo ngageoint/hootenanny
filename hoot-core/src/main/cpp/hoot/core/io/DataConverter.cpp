@@ -480,6 +480,39 @@ std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
   return progressWeights;
 }
 
+QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& input)
+{
+  QStringList layers;
+
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = reader.getFilteredLayerNames(input);
+    layers.sort();
+  }
+  LOG_VARD(layers);
+
+  if (layers.size() == 0)
+  {
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  return layers;
+}
+
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
   LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
@@ -527,38 +560,12 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
       continue;
     }
 
-    QStringList layers;
-    if (input.contains(";"))
-    {
-      QStringList list = input.split(";");
-      input = list.at(0);
-      layers.append(list.at(1));
-    }
-    else
-    {
-      layers = reader.getFilteredLayerNames(input);
-      layers.sort();
-    }
-    LOG_VARD(layers);
-
-    if (layers.size() == 0)
-    {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN("Could not find any valid layers to read from in " + input + ".");
-      }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-
+    const QStringList layers = _getOgrLayersFromPath(reader, input);
     const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
       LOG_VART(progressWeights[i]);
       reader.setProgress(

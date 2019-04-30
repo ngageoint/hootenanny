@@ -158,7 +158,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     numProcessed++;
     if (numProcessed % 10000 == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways to building part input.");
     }
@@ -239,7 +239,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartRelationPr
     numProcessed++;
     if (numProcessed % 10000 == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
         StringUtils::formatLargeNumber(relations.size()) << " relations to building part input.");
     }
@@ -318,7 +318,7 @@ void BuildingPartMergeOp::_mergeBuildingParts()
     _totalBuildingGroupsProcessed++;
     if (_totalBuildingGroupsProcessed % 100 == 0)
     {
-      PROGRESS_INFO(
+      PROGRESS_STATUS(
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) <<
         " building parts after processing " <<
         StringUtils::formatLargeNumber(_numBuildingGroupsMerged) << " / " <<
