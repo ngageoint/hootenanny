@@ -81,7 +81,7 @@ public:
           .arg(args.size()));
     }
 
-    Progress progress("Apply Changeset", Progress::JobState::Running);
+    Progress progress(ConfigOptions().getJobId(), "Apply Changeset", Progress::JobState::Running);
 
     //  Write changeset/OSM XML to OSM API
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
@@ -100,9 +100,10 @@ public:
       QList<QString> changesets;
       for (int i = 0; i < args.size() - 1; ++i)
       {
-        LOG_STATUS(
-          "Applying changeset: ..." << args[i].right(maxFilePrintLength) << " to: ..." <<
-          printableUrl.toString().right(maxFilePrintLength) << "...");
+        progress.set(
+          0.0,
+          "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: ..." +
+          printableUrl.toString().right(maxFilePrintLength) + "...", true);
         changesets.append(args[i]);
       }
 

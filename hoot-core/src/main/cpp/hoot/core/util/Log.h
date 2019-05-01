@@ -67,26 +67,39 @@ public:
   {
     None = 0,
     /**
-     * Used for logging variable states and other info for tracing code. You want to know the value
-     * of 'i'? Use trace.
+     * Used for logging variable states and other info for tracing code, often when inside loops.
+     * You want to know the value of 'i'? Use trace.
      */
     Trace = 500,
     /**
-     * Used for program state information that may be useful when debugging other parts of the code.
-     * E.g. noting the projection or bounds of a map.
+     * Used for program state information that may be useful when debugging parts of the code not
+     * inside a loop. E.g. noting the projection or bounds of a map.
      */
     Debug = 1000,
     /**
      * Status information that would be useful to a user while the application is running. E.g.
-     * completion of phases of processing, or the number of features being processed.
+     * the number of features being processed.
      */
     Info = 2000,
     /**
-     * log level specific to job status updates; This is more coarse than INFO.
+     * Information specific to a command job's status; This generally is only used with a Progress
+     * object and is a coarser log level than INFO.
      */
     Status = 2500,
+    /**
+     * Warn about anomalous situations, including input data encountered, that may cause logic to
+     * produce incorrect results. Be judicious about what is included here and use a warning
+     * message limit when possible.
+     */
     Warn = 3000,
+    /**
+     * Describes anomalous situations, including data encountered, that definitely will cause logic
+     * to produce incorrect results but is not fatal to the application.
+     */
     Error = 4000,
+    /**
+     * Describes an unrecoverable situation
+     */
     Fatal = 5000
   };
 

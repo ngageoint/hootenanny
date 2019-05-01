@@ -158,7 +158,7 @@ QQueue<BuildingPartRelationship> BuildingPartMergeOp::_getBuildingPartWayPreProc
     numProcessed++;
     if (numProcessed % 10000 == 0)
     {
-      PROGRESS_STATUS(
+      PROGRESS_INFO(
         "\tAdded " << StringUtils::formatLargeNumber(numProcessed) << " / " <<
         StringUtils::formatLargeNumber(ways.size()) << " ways to building part input.");
     }

@@ -50,8 +50,8 @@ public:
     Failed
   } JobState;
 
-  Progress(QString source = "", JobState jobState = JobState::Pending, float percentComplete = 0.0,
-           float taskWeight = 0.0);
+  Progress(QString jobId = "", QString source = "", JobState jobState = JobState::Pending,
+           float percentComplete = 0.0, float taskWeight = 0.0);
 
   /**
    * Logs a progress status message
@@ -59,16 +59,20 @@ public:
    * @param percentComplete completion percentage of the job
    * @param state the job's state
    * @param userMessage descriptive message for the job
+   * @param logAsProgress if true; uses status logging which allows for re-uses the same output
+   * line in the log display
    */
-  void set(float percentComplete, JobState state, QString userMessage);
+  void set(float percentComplete, JobState state, QString userMessage, bool logAsProgress = false);
 
   /**
    * Logs a progress status message
    *
    * @param percentComplete completion percentage of the job
    * @param userMessage descriptive message for the job
+   * @param logAsProgress if true; uses status logging which allows for re-uses the same output
+   * line in the log display
    */
-  void set(float percentComplete, QString userMessage);
+  void set(float percentComplete, QString userMessage, bool logAsProgress = false);
 
   /**
    * Logs a progress status message as a child subtask of a job
@@ -106,6 +110,7 @@ public:
   float getTaskWeight() const { return _taskWeight; }
   JobState getState() const { return _jobState; }
 
+  void setJobId(QString id) { _jobId = id; }
   void setSource(QString source) { _source = source; }
   void setState(JobState state) { _jobState = state; }
 

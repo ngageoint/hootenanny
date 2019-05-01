@@ -42,7 +42,9 @@ using namespace std;
 namespace hoot
 {
 
-Progress::Progress(QString source, JobState jobState, float percentComplete, float taskWeight) :
+Progress::Progress(QString jobId, QString source, JobState jobState, float percentComplete,
+                   float taskWeight) :
+_jobId(jobId.trimmed()),
 _source(source),
 _reportType(ConfigOptions().getProgressReportingFormat()),
 _percentComplete(percentComplete),
@@ -52,12 +54,6 @@ _taskWeight(taskWeight),
 _jobState(jobState),
 _userMessage("")
 {
-  LOG_VART(_source);
-  LOG_VART(_percentComplete);
-  LOG_VART(_taskStartPercentComplete);
-  LOG_VART(_lastPercentComplete);
-  LOG_VART(_taskWeight);
-  LOG_VART(_jobState);
 }
 
 QString Progress::_getMessage() const
@@ -71,28 +67,32 @@ QString Progress::_getMessage() const
   return msg;
 }
 
-void Progress::set(float percentComplete, QString userMessage)
+void Progress::set(float percentComplete, QString userMessage, bool logAsProgress)
 {
-  set(percentComplete, _jobState, userMessage);
+  set(percentComplete, _jobState, userMessage, logAsProgress);
 }
 
-void Progress::set(float percentComplete, JobState jobState, QString userMessage)
+void Progress::set(float percentComplete, JobState jobState, QString userMessage,
+                   bool logAsProgress)
 {
   _lastPercentComplete = _percentComplete;
   _percentComplete = percentComplete;
   // reset the start percent complete value to current value
   _taskStartPercentComplete = percentComplete;
-  LOG_VART(_lastPercentComplete);
-  LOG_VART(_percentComplete);
-  LOG_VART(_taskStartPercentComplete);
-
   _jobState = jobState;
   _userMessage = userMessage;
-  LOG_VART(_userMessage);
+
   const QString msg = _getMessage();
   if (!msg.trimmed().isEmpty())
   {
-    LOG_STATUS(msg);
+    if (!logAsProgress)
+    {
+      LOG_STATUS(msg);
+    }
+    else
+    {
+      PROGRESS_STATUS(msg);
+    }
   }
 }
 
@@ -108,15 +108,9 @@ void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
   // update absolute percent weight
   _lastPercentComplete = _percentComplete;
   _percentComplete = _taskStartPercentComplete + (relativePercentComplete * _taskWeight);
-  LOG_VART(_taskWeight);
-  LOG_VART(relativePercentComplete);
-  LOG_VART(_lastPercentComplete);
-  LOG_VART(_percentComplete);
-  LOG_VART(_taskStartPercentComplete);
-
   _jobState = jobState;
   _userMessage = userMessage;
-  LOG_VART(_userMessage);
+
   const QString msg = _getMessage();
   if (!msg.trimmed().isEmpty())
   {
@@ -139,6 +133,10 @@ bool Progress::getJobFinished() const
 QString Progress::_toText() const
 {
   QString js = "";
+  if (!_jobId.isEmpty())
+  {
+    js.append(_jobId % " - ");
+  }
   js.append(_source);
   js.append(" (" % QString("%1").arg((int)(_percentComplete * 100.)) % "%): ");
   js.append(_userMessage);

@@ -188,12 +188,14 @@ void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
+  _progress.setJobId(ConfigOptions().getJobId());
   _progress.setSource(JOB_SOURCE);
   _progress.setState(Progress::JobState::Running);
 
-   LOG_STATUS(
-    "Converting " << inputs.join(", ").right(_printLengthMax) << " to " <<
-    output.right(_printLengthMax) << "...");
+   _progress.set(
+    0.0,
+    "Converting " + inputs.join(", ").right(_printLengthMax) + " to " +
+    output.right(_printLengthMax) + "...");
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
@@ -404,7 +406,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
-          JOB_SOURCE, Progress::JobState::Running,
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
           (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
       convertOps.apply(map);
       currentStep++;
@@ -445,8 +447,10 @@ std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
     int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
     LOG_VART(featuresPerLayer);
     progressWeights.push_back((float)featuresPerLayer);
-    // cover the case where no feature count available efficiently
-    if (featuresPerLayer /*== -1*/ < 1) undefinedCounts++;
+    // cover the case where no feature count available efficiently; Despite the documentation
+    // saying "-1" should be returned for layers without the number of features calculated, a size
+    // of zero has been seen with some layers.
+    if (featuresPerLayer < 1) undefinedCounts++;
     else featureCountTotal += featuresPerLayer;
   }
   LOG_VART(featureCountTotal);
@@ -567,13 +571,13 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     // read each layer's data
     for (int i = 0; i < layers.size(); i++)
     {
-      PROGRESS_STATUS(
+      PROGRESS_INFO(
         "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
       LOG_VART(progressWeights[i]);
       reader.setProgress(
         Progress(
-          JOB_SOURCE, Progress::JobState::Running, (float)i / (float)(layers.size() * numTasks),
-          progressWeights[i]));
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
       reader.read(input, layers[i], map);
     }
   }
@@ -596,8 +600,8 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     NamedOp convertOps(_convertOps);
     convertOps.setProgress(
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
-        taskWeight));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(currentTask - 1) / (float)numTasks, taskWeight));
     convertOps.apply(map);
     currentTask++;
   }
@@ -665,13 +669,14 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     ElementStreamer::stream(
       inputs, output, QStringList(),
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
-        taskWeight));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(currentTask - 1) / (float)numTasks, taskWeight));
     currentTask++;
   }
   else
   {
-    Progress inputLoadProgress(JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
+    Progress inputLoadProgress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
@@ -689,8 +694,8 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
       NamedOp convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
-          JOB_SOURCE, Progress::JobState::Running, (float)(currentTask - 1) / (float)numTasks,
-          taskWeight));
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(currentTask - 1) / (float)numTasks, taskWeight));
       convertOps.apply(map);
       currentTask++;
     }

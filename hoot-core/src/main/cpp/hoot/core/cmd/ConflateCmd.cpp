@@ -149,6 +149,7 @@ int ConflateCmd::runSimple(QStringList args)
   const QString input2 = args[1];
   QString output = args[2];
 
+  Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
     "Conflating ..." + input1.right(maxFilePrintLength) + " with ..." +
@@ -158,13 +159,12 @@ int ConflateCmd::runSimple(QStringList args)
   {
     msg = msg.prepend("Differentially ");
   }
-  LOG_STATUS(msg);
+  progress.set(0.0, msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  Progress progress(JOB_SOURCE, Progress::JobState::Running);
   // The number of steps here must be updated as you add/remove job steps (don't count
   // tasks where you pass in the progress).
   _numTotalTasks = 5;
@@ -254,8 +254,8 @@ int ConflateCmd::runSimple(QStringList args)
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.setProgress(
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
-        _getTaskWeight()));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
     preOps.apply(map);
     stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
@@ -268,8 +268,8 @@ int ConflateCmd::runSimple(QStringList args)
   {
     diffConflator.setProgress(
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
-        _getTaskWeight()));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
     diffConflator.apply(result);
     if (diffConflator.conflatingTags())
     {
@@ -282,8 +282,8 @@ int ConflateCmd::runSimple(QStringList args)
     UnifyingConflator conflator;
     conflator.setProgress(
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
-        _getTaskWeight()));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
     conflator.apply(result);
     stats.append(conflator.getStats());
   }
@@ -297,8 +297,8 @@ int ConflateCmd::runSimple(QStringList args)
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.setProgress(
       Progress(
-        JOB_SOURCE, Progress::JobState::Running, _getJobPercentComplete(currentTask - 1),
-        _getTaskWeight()));
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(currentTask - 1), _getTaskWeight()));
     postOps.apply(map);
     stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");

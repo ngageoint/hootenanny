@@ -123,17 +123,17 @@ public:
     }
     LOG_VARD(_osmApiDbUrl);
 
-    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-    LOG_STATUS(
-      "Deriving output changeset: ..." << output.right(maxFilePrintLength) << " from inputs: ..." <<
-      input1.right(maxFilePrintLength) << " and ..." << input2.right(maxFilePrintLength) << "...");
-
     const QString jobSource = "Derive Changeset";
     // The number of steps here must be updated as you add/remove job steps (don't count
     // tasks where you pass in the progress).
     const int numTotalTasks = 2;
     int currentTaskNum = 1;
-    Progress progress(jobSource, Progress::JobState::Running);
+    Progress progress(ConfigOptions().getJobId(), jobSource, Progress::JobState::Running);
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+    progress.set(
+      0.0,
+      "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
+      input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength) + "...");
 
     _parseBuffer();
 

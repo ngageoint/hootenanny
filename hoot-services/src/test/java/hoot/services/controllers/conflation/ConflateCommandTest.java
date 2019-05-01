@@ -101,7 +101,7 @@ public class ConflateCommandTest {
                                     "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
                                     "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                                     "hoot::NoInformationElementRemover\"]"));
-        assertTrue(command.contains("-D, hootapi.db.writer.job.id="));
+        assertTrue(command.contains("-D, job.id="));
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));

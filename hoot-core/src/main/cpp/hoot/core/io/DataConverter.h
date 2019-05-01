@@ -124,6 +124,11 @@ private:
                          QQueue<ElementPtr> &workQ);
   void _transToOgrMT(QString input, QString output);
 
+  /*
+   * Attempts to determine the relative weighting of each layer in an OGR data source based on
+   * feature size. If the feature size hasn't already been calculated for each layer, then a even
+   * distribution of weighting between layers is returned.
+   */
   std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString input,
                                                  const QStringList layers);
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
