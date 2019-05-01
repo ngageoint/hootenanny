@@ -2524,8 +2524,8 @@ The default is to write a file even if the map is empty.
 * Data Type: string
 * Default Value: `overpass-api.de`
 
-Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON sources from
-GeoJSON sources.
+Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
+GeoJSON web sources.
 
 === perty.apply.rubber.sheet
 

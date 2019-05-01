@@ -530,8 +530,6 @@ void OsmJsonReader::_readFromHttp()
     LOG_VART(response.left(200));
     _results.append(response);
   }
-
-  LOG_DEBUG("end _readFromHttp");
 }
 
 void OsmJsonReader::_doHttpRequestFunc()
