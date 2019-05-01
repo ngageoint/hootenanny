@@ -2392,7 +2392,7 @@ this to true can be useful when conforming to strict specifications.
 * Data Type: string
 * Default Value: ``
 
-TODO: description
+Text prepended to a layer name when writing an OGR format.
 
 === ogr.writer.script
 

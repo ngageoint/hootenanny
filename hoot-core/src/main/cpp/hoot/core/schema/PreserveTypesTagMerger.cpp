@@ -98,7 +98,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         //can be merged into it.  Something similar to PoiPolygonTypeScoreExtractor::hasType but
         //looser could be used...or pass in a type def function to this class.
 
-        if(it.key() != ALT_TYPES_TAG_KEY)
+        if (it.key() != ALT_TYPES_TAG_KEY)
         {
           //arbitrarily use first one and add second to an alt_types field
           LOG_TRACE(

@@ -61,7 +61,6 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-// Default constructor
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
@@ -79,7 +78,6 @@ OsmJsonReader::OsmJsonReader()
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount())
 {
-  // Do nothing special
 }
 
 OsmJsonReader::~OsmJsonReader()
