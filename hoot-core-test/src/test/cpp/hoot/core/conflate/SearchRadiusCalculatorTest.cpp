@@ -56,7 +56,6 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
-  CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);
   CPPUNIT_TEST_SUITE_END();
@@ -90,28 +89,6 @@ public:
 
     searchRadiusCalculator.apply(map);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
-  }
-
-  void runBadPreOpTest()
-  {
-    Settings testSettings = conf();
-    testSettings.set("conflate.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
-    SearchRadiusCalculator searchRadiusCalculator;
-
-    QString exceptionMsg("");
-    try
-    {
-      //The existence of the rubber sheet op having been previously applied is the first thing
-      //checked for, so it doesn't matter that we're passing an empty map in here.
-      searchRadiusCalculator.setConfiguration(testSettings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Rubber sheeting cannot be used when automatically calculating search radius.").toStdString(),
-      exceptionMsg.toStdString());
   }
 
   void runNotEnoughTiePointsTest()
