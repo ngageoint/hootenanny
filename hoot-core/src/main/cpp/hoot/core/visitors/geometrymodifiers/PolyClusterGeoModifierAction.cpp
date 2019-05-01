@@ -37,6 +37,9 @@
 // Geos
 #include <geos/geom/GeometryFactory.h>
 
+// std
+#include <algorithm>
+
 using namespace std;
 using namespace geos::geom;
 
@@ -80,6 +83,7 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
   {
     boost::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
+    // set id as user data
     pPoly->setUserData((void*)wayId);
     polyLookup[wayId] = pPoly;
     geoms.push_back(pPoly);
@@ -118,13 +122,22 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
 
 QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<boost::shared_ptr<Polygon>>& geoms)
 {
+  const int MAX_PROCESSED_NODES_PER_POLY = 100;
+
   double distance = 15;
   ClosePointHash cph(distance);
 
   foreach (boost::shared_ptr<Polygon> poly, geoms)
   {
-    Point *p = poly->getCentroid();
-    cph.addPoint(p->getX(), p->getY(), (long)poly->getUserData());
+    long wayId = (long)poly->getUserData();
+    CoordinateSequence* pCoords = poly->getCoordinates();
+    int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
+
+    for (int i = 0; i < coordCount; i++)
+    {
+      Coordinate c = pCoords->getAt(i);
+      cph.addPoint(c.x, c.y, wayId * MAX_PROCESSED_NODES_PER_POLY + i );
+    }
   }
 
   QList<QList<long>> clusters;
@@ -141,6 +154,7 @@ QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<b
     foreach (long id, matches)
     {
       LOG_INFO(id);
+      id /= MAX_PROCESSED_NODES_PER_POLY;
 
       for (int i = 0; i < clusters.length(); i++)
       {
@@ -187,6 +201,7 @@ QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<b
 
     foreach (long id, matches)
     {
+      id /= MAX_PROCESSED_NODES_PER_POLY;
       if (!clusters[clusterIndex].contains(id)) clusters[clusterIndex].push_back(id);
     }
   }
