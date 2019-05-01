@@ -159,13 +159,13 @@ void DiffConflator::apply(OsmMapPtr& map)
     _snapSecondaryRoadsBackToRef();
   }
 
-  // _pMap at this point contains all of input1, we are going to delete everything left that
-  // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
-  // differential that we want.
-  _removeMatches(Status::Unknown1);
-
   if (ConfigOptions().getDifferentialRemoveReferenceData())
   {
+    // _pMap at this point contains all of input1, we are going to delete everything left that
+    // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
+    // differential that we want.
+    _removeMatches(Status::Unknown1);
+
     // Now remove input1 elements
     LOG_DEBUG("\tRemoving all reference elements...");
     ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
