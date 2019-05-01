@@ -123,9 +123,12 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
 QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<boost::shared_ptr<Polygon>>& geoms)
 {
   const int MAX_PROCESSED_NODES_PER_POLY = 100;
+  double distance = 17;
+  double distanceSquared = distance * distance;
 
-  double distance = 15;
+  // build the ClosePointHash
   ClosePointHash cph(distance);
+  QHash<long, CoordinateExt> coordinateByNodeIx;
 
   foreach (boost::shared_ptr<Polygon> poly, geoms)
   {
@@ -135,74 +138,57 @@ QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<b
 
     for (int i = 0; i < coordCount; i++)
     {
-      Coordinate c = pCoords->getAt(i);
-      cph.addPoint(c.x, c.y, wayId * MAX_PROCESSED_NODES_PER_POLY + i );
+      CoordinateExt c = pCoords->getAt(i);
+      // The 'node index' calculated here is used just for processing here with the ClosePointHash
+      // and based on the way id. It is not related to the actual node id.
+      long nodeIndex = wayId * MAX_PROCESSED_NODES_PER_POLY + i;
+      cph.addPoint(c.x, c.y, nodeIndex);
+      coordinateByNodeIx[nodeIndex] = c;
     }
   }
 
   QList<QList<long>> clusters;
+  QHash<long,int> clusterIndexByWayId;
 
-  cph.resetIterator();
-
-  while (cph.next())
+  // find matches by building, checking each individual building node
+  foreach (boost::shared_ptr<Polygon> poly, geoms)
   {
-    LOG_INFO("Matches");
-    const vector<long>& matches = cph.getMatch();
+    long thisWayId = (long)poly->getUserData();
+    CoordinateSequence* pCoords = poly->getCoordinates();
+    int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
 
-    // see if we already have a cluster with any entry of this match list
-    QList<int> clusterIndices;
-    foreach (long id, matches)
+    // create new cluster if needed
+    int clusterIndex = -1;
+
+    if(!clusterIndexByWayId.contains(thisWayId))
     {
-      LOG_INFO(id);
-      id /= MAX_PROCESSED_NODES_PER_POLY;
-
-      for (int i = 0; i < clusters.length(); i++)
-      {
-        if (clusters[i].contains(id))
-        {
-          if (!clusterIndices.contains(i)) clusterIndices.push_back(i);
-        }
-      }
-    }
-
-    int clusterIndexCount = clusterIndices.length();
-    int clusterIndex;
-
-    if (clusterIndexCount == 0)
-    {
-      LOG_INFO("make new cluster");
       clusters.push_back(QList<long>());
       clusterIndex = clusters.length()-1;
-    }
-    else if (clusterIndexCount == 1)
-    {
-      clusterIndex = clusterIndices[0];
+      clusterIndexByWayId[thisWayId] = clusterIndex;
+      // enter this building in new cluster
+      clusters[clusterIndexByWayId[thisWayId]].push_back(thisWayId);
     }
     else
     {
-      // merge clusters
-      sort(clusterIndices.begin(), clusterIndices.end());
-      int destIx = clusterIndices[0];
-
-      for (int i = clusterIndexCount-1; i > 0; i-- )
-      {
-        int sourceIx = clusterIndices[i];
-
-        foreach (long id, clusters[sourceIx])
-        {
-          if (!clusters[destIx].contains(id)) clusters[destIx].push_back(id);
-        }
-
-        clusters.removeAt(sourceIx);
-      }
-
-      clusterIndex = destIx;
+      clusterIndex = clusterIndexByWayId[thisWayId];
     }
 
-    foreach (long id, matches)
+    for (int i = 0; i < coordCount; i++)
     {
-      id /= MAX_PROCESSED_NODES_PER_POLY;
-      if (!clusters[clusterIndex].contains(id)) clusters[clusterIndex].push_back(id);
+      long thisNodeIndex = thisWayId * MAX_PROCESSED_NODES_PER_POLY + i;
+      CoordinateExt thisCoord = coordinateByNodeIx[thisNodeIndex];
+      vector<long> matches = cph.getMatchesFor(thisNodeIndex);
+
+      foreach (long otherNodeIndex, matches)
+      {
+        long otherWayId = otherNodeIndex / MAX_PROCESSED_NODES_PER_POLY;
+
+        if (otherWayId == thisWayId || (thisCoord-coordinateByNodeIx[otherNodeIndex]).lengthSquared() <= distanceSquared )
+        {
+          if (!clusters[clusterIndex].contains(otherWayId)) clusters[clusterIndex].push_back(otherWayId);
+          if (!clusterIndexByWayId.contains(otherWayId)) clusterIndexByWayId[otherWayId] = clusterIndex;
+        }
+      }
     }
   }
 
