@@ -86,7 +86,8 @@ bool OsmGeoJsonReader::isSupported(QString url)
   }
 
   //  Is it a web address?
-  if ("http" == myUrl.scheme() || "https" == myUrl.scheme())
+  if (myUrl.host().toLower() != ConfigOptions().getOverpassApiHost() &&
+      ("http" == myUrl.scheme() || "https" == myUrl.scheme()))
   {
     return true;
   }
@@ -109,7 +110,7 @@ void OsmGeoJsonReader::read(OsmMapPtr map)
   }
   else
     _readFromHttp();
-  //  Process all of the result strings
+  //  Process all of the result strings;
   for (int i = 0; i < _results.size(); ++i)
   {
     // This will throw a hoot exception if JSON is invalid
@@ -148,7 +149,7 @@ void OsmGeoJsonReader::_parseGeoJson()
   QString type = QString::fromStdString(_propTree.get("type", string("")));
   if (_propTree.not_found() != _propTree.find("bbox"))
   {
-    Envelope env = _parseBbox(_propTree.get_child("bbox"));
+    /*Envelope env = */_parseBbox(_propTree.get_child("bbox"));
   }
 
   // If we don't have a "features" child then we should just have a single feature
@@ -165,7 +166,6 @@ void OsmGeoJsonReader::_parseGeoJson()
     _parseGeoJsonFeature(_propTree);
   }
 }
-
 
 void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& feature)
 {
@@ -234,7 +234,6 @@ void OsmGeoJsonReader::_parseGeoJsonFeature(const boost::property_tree::ptree& f
   }
 }
 
-
 geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
 {
   pt::ptree::const_iterator bboxIt = bbox.begin();
@@ -250,7 +249,8 @@ geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::pt
   return Envelope(minX, maxX, minY, maxY);
 }
 
-void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
+void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& properties,
+                                         const pt::ptree& geometry)
 {
   //  Get info we need to construct our node
   long node_id = -1;
@@ -288,7 +288,8 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   _map->addNode(pNode);
 }
 
-void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
+void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties,
+                                        const pt::ptree& geometry)
 {
   vector<Coordinate> coords = _parseGeometry(geometry);
 
@@ -341,7 +342,8 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   _map->addWay(way);
 }
 
-void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
+void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties,
+                                             const pt::ptree& geometry)
 {
   //  Get info we need to construct our relation
   long relation_id = -1;
@@ -504,7 +506,8 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   _map->addRelation(relation);
 }
 
-void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
+void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry,
+                                                const RelationPtr& relation)
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
   vector<JsonCoordinates>::const_iterator multi = multigeo.begin();
@@ -521,7 +524,8 @@ void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptre
   }
 }
 
-void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
+void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree& geometry,
+                                               const RelationPtr& relation)
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
   for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
@@ -543,7 +547,8 @@ void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree
   }
 }
 
-void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
+void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
+                                                  const RelationPtr& relation)
 {
   vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
   for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
@@ -668,7 +673,6 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   return results;
 }
 
-
 void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
 {
   //  Starts with the "properties" tree, use the "tags" subtree if it exists
@@ -745,5 +749,5 @@ boost::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate( const pt::ptree&
   return pCoord;
 }
 
-} //  namespace hoot
+}
 

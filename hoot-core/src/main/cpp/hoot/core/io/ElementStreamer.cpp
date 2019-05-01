@@ -81,7 +81,7 @@ bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString ou
     {
       LOG_INFO(
         "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
-        output.right(25));
+        output.right(25) << ". Loading entire map...");
       return false;
     }
   }
@@ -98,7 +98,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
       // Can this be cleaned up?
 
       const QString unstreamableMsg =
-        "Unable to stream I/O due to criterion op: " + opName + "; loading entire map...";
+        "Unable to stream I/O due to criterion op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
