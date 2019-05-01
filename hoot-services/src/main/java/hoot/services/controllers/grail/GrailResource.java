@@ -38,8 +38,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.UnavailableException;
@@ -81,6 +83,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -104,6 +107,9 @@ public class GrailResource {
     private GrailCommandFactory grailCommandFactory;
 
     @Autowired
+    private SetMapTagsCommandFactory setMapTagsCommandFactory;
+
+    @Autowired
     private PullOverpassCommandFactory overpassCommandFactory;
 
     @Autowired
@@ -120,7 +126,7 @@ public class GrailResource {
     private Command getRailsPortApiCommand(String jobId, Users user, String bounds, String output) throws UnavailableException {
         APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
         if (railsPortCapabilities.getApiStatus() == null
-                | railsPortCapabilities.getApiStatus().equals("offline")) {
+                || railsPortCapabilities.getApiStatus().equals("offline")) {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
@@ -128,7 +134,7 @@ public class GrailResource {
         params.setUser(user);
         params.setBounds(bounds);
         params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        params.setPullUrl(PUBLIC_OVERPASS_URL);
+        params.setPullUrl(RAILSPORT_PULL_URL);
         params.setOutput(output);
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
         return command;
@@ -346,7 +352,7 @@ public class GrailResource {
         try {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
-            if (railsPortCapabilities.getApiStatus() == null | railsPortCapabilities.getApiStatus().equals("offline")) {
+            if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline. Try again later").build();
             }
 
@@ -518,6 +524,9 @@ public class GrailResource {
 
         Users user = Users.fromRequest(request);
 
+        //TODO: Split the download into two parallel jobs
+
+
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
 
@@ -568,6 +577,12 @@ public class GrailResource {
             ExternalCommand pushReference = grailCommandFactory.build(jobId, referencePushParams, debugLevel, PushToDbCommand.class, this.getClass());
             workflow.add(pushReference);
 
+            // Set map tags marking dataset as eligible for derive changeset
+            Map<String, String> tags = new HashMap<>();
+            tags.put("grail", "true");
+            InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+            workflow.add(setMapTags);
+
             secondaryPushParams.setInput1(secondaryOSMFile.getAbsolutePath());
             secondaryPushParams.setOutput(SECONDARY);
             ExternalCommand pushSecondary = grailCommandFactory.build(jobId, secondaryPushParams, debugLevel, PushToDbCommand.class, this.getClass());
@@ -581,6 +596,9 @@ public class GrailResource {
             workflow.add(updateDb);
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+
+            //After job completion the download folder can be removed
+            //workflow.add(removeFolder);
 
             ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
             response = responseBuilder.build();
