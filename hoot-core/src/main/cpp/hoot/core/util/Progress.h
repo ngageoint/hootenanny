@@ -122,9 +122,6 @@ private:
   // type of job; set at the command level
   QString _source;
 
-  // reporting format (text)
-  QString _reportType;
-
   // progress state for current task
   float _percentComplete;
   float _taskStartPercentComplete;

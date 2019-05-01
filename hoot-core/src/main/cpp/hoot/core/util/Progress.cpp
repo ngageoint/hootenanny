@@ -46,7 +46,6 @@ Progress::Progress(QString jobId, QString source, JobState jobState, float perce
                    float taskWeight) :
 _jobId(jobId.trimmed()),
 _source(source),
-_reportType(ConfigOptions().getProgressReportingFormat()),
 _percentComplete(percentComplete),
 _taskStartPercentComplete(percentComplete),
 _lastPercentComplete(percentComplete),
@@ -58,13 +57,9 @@ _userMessage("")
 
 QString Progress::_getMessage() const
 {
-  QString msg = "";
-  if (_reportType == "text")
-  {
-    msg.append(_toText());
-  }
-  // do nothing if report type is empty
-  return msg;
+  // In case we need other logging formats at some point, moving the text building logic to a
+  // separate method.
+  return _toText();
 }
 
 void Progress::set(float percentComplete, QString userMessage, bool logAsProgress)

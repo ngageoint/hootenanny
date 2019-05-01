@@ -137,7 +137,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();
-  int currentStep = 1;
+  int currentStep = 1;  // tracks the current job task step for progress reporting
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -145,6 +145,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(map);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
+
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
 
   _updateProgress(currentStep - 1, "Matching features...");
 
@@ -248,7 +251,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
-    // matches are inter-related by element id
+    // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
     vector<set<const Match*, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);

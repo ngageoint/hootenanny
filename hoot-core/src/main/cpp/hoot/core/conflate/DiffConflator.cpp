@@ -110,10 +110,13 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   Timer timer;
   _reset();
-  int currentStep = 1;
+  int currentStep = 1;  // tracks the current job task step for progress reporting
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
+
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
 
   _updateProgress(currentStep - 1, "Matching features...");
 
@@ -274,8 +277,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
   if (countVtor.getCount() > 0)
   {
-    // Not something a user can generally cause - more likely it's a misuse
-    // of this class.
+    // Not something a user can generally cause - more likely it's a misuse of this class.
     LOG_ERROR("Map elements with Status::Unknown2 found when storing "
               "original map for diff conflation. This can cause unpredictable "
               "results. The original map should contain only Status::Unknown1 "
@@ -398,9 +400,10 @@ void DiffConflator::_calcAndStoreTagChanges()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
-// See if tags are the same
 bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
 {
+  // See if tags are the same
+
   QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
@@ -429,8 +432,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
 
   assert(pChangeElement->getId() == pOldElement->getId());
 
-  // Need to merge tags into the new element
-  // Keeps all names, chooses tags1 in event of a conflict.
+  // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
   Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
                                                              pOldElement->getTags());
   pChangeElement->setTags(newTags);
@@ -482,14 +484,7 @@ boost::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, 
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  // Make empty map
-  OsmMapPtr pEmptyMap(new OsmMap());
-
-  // Get Changeset Deriver
-  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
-
-  // Return the provider
-  return pDeriver;
+  return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
 }
 
 void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)

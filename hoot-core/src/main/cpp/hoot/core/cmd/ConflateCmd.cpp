@@ -138,7 +138,6 @@ int ConflateCmd::runSimple(QStringList args)
     args.removeAt(args.indexOf("--separate-output"));
   }
 
-  //if (args.size() < 2 || args.size() > 3)
   if (args.size() != 3)
   {
     cout << getHelp() << endl << endl;
@@ -165,8 +164,7 @@ int ConflateCmd::runSimple(QStringList args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
-  // The number of steps here must be updated as you add/remove job steps (don't count
-  // tasks where you pass in the progress).
+  // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
   if (displayStats)
   {

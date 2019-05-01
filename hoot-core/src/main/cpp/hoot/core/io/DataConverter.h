@@ -87,7 +87,6 @@ public:
 
   static int logWarnCount;
   static const QString JOB_SOURCE;
-  static const int MAX_FILE_PRINT_LENGTH;
 
   DataConverter();
 

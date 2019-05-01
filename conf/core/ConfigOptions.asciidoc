@@ -3225,15 +3225,6 @@ Sets that maximum angle that is still considered a power line match. Units in de
 
 A quantile value from 0.0 to 1.0 for the QuantileAggregator.
 
-=== progress.reporting.format
-
-* Data Type: string
-* Default Value: `text`
-
-Sets the progress reporting format to the type specified for classes that support progress
-reporting "--status" logging level is used.  Valid values are: 'text'. If left blank, progress is
-not reported.
-
 === progress.var.print.length.max
 
 * Data Type: int

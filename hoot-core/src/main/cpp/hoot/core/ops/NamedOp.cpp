@@ -70,22 +70,13 @@ void NamedOp::_substituteForContainingOps()
   if (_namedOps.contains(mapCleanerName))
   {
     int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);
-    LOG_VART(cleaningOpIndex);
     const QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
-    LOG_VART(mapCleanerTransforms);
     for (int i = 0; i < mapCleanerTransforms.size(); i++)
     {
-      LOG_VART(i);
-      LOG_VART(cleaningOpIndex);
-      LOG_VART(mapCleanerTransforms.at(i));
       _namedOps.insert(cleaningOpIndex, mapCleanerTransforms.at(i));
       cleaningOpIndex++;
     }
     _namedOps.removeAll(mapCleanerName);
-    LOG_VART(_progress.getTaskWeight());
-    LOG_VART(_progress.getState());
-    LOG_VART(_namedOps);
-    LOG_VART(_progress.getTaskWeight());
   }
 }
 

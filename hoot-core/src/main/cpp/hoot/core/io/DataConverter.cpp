@@ -55,7 +55,6 @@ namespace hoot
 {
 
 const QString DataConverter::JOB_SOURCE = "Convert";
-const int DataConverter::MAX_FILE_PRINT_LENGTH = 30;
 
 void elementTranslatorThread::run()
 {
@@ -389,6 +388,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
+    // The number of steps here must be updated as you add/remove job steps in the logic.
     int numSteps = 2;
     if (_convertOps.size() > 0)
     {
@@ -547,6 +547,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   }
   LOG_VARD(_convertOps);
 
+  // The number of steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 2;
   if (_convertOps.size() > 0)
   {
@@ -643,6 +644,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     ElementStreamer::areValidStreamingOps(_convertOps) &&
     ElementStreamer::areStreamableIo(inputs, output);
 
+  // The number of steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 0;
   if (isStreamable)
   {

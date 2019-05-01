@@ -67,6 +67,12 @@ private:
   QStringList _namedOps;
   Progress _progress;
 
+  /*
+   * If an op is made of a list of other ops, then this will substitute those ops in from the list.
+   * This makes it easier to handle progress updates for ops. The only op that fits this case
+   * currently is MapCleaner. If more are created like MapCleaner, then we may want to rethink using
+   * this.
+   */
   void _substituteForContainingOps();
 
   QString _getInitMessage(const QString message,
