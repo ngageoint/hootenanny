@@ -57,9 +57,12 @@ public:
   void addPoint(double x, double y, long id);
 
   /**
-   * Returns the ids of the current match. This may have more ids than actually match.
+   * Returns the ids of the current match during iteration. This may have more ids than actually match.
    */
   const std::vector<long>& getMatch();
+
+  // Returns all potential matches for a specific id, works outside of the iteration method.
+  std::vector<long> getMatchesFor( long id);
 
   /**
    * Returns true if there is another match in the hash. A match may be returned multiple times
@@ -93,6 +96,8 @@ private:
 
   HashMap<int64_t, std::vector<long>> _bins;
   HashMap<int64_t, std::vector<long>>::const_iterator _it;
+
+  HashMap<long, std::vector<int64_t>> _idTobin;
 
   int64_t _toBin(double x, double y);
 };
