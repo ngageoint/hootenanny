@@ -719,6 +719,14 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== differential.remove.reference.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, when running Differential Conflation the reference elements will not be dropped from the
+output.
+
 === differential.snap.unconnected.roads
 
 * Data Type: bool
@@ -2384,7 +2392,7 @@ this to true can be useful when conforming to strict specifications.
 * Data Type: string
 * Default Value: ``
 
-TODO: description
+Text prepended to a layer name when writing an OGR format.
 
 === ogr.writer.script
 
