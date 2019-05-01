@@ -63,8 +63,7 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 public:
 
   SearchRadiusCalculatorTest()
-    : HootTestFixture("test-files/conflate/SearchRadiusCalculatorTest/",
-                      UNUSED_PATH)
+    : HootTestFixture("test-files/ops/SearchRadiusCalculatorTest/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -88,7 +87,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -125,8 +125,12 @@ public:
 
     //If any data in the dataset has already been conflated (or is invalid), the operation
     //shouldn't fail.  The data should just be skipped.
-    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001952")[0])->setStatus(Status::Conflated);
-    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])->setStatus(Status::Invalid);
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001952")[0])
+        ->setStatus(Status::Conflated);
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])
+        ->setStatus(Status::Invalid);
 
     Settings testSettings = conf();
     testSettings.set("rubber.sheet.ref", "true");
@@ -136,7 +140,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };
