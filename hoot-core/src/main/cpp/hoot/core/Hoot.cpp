@@ -149,7 +149,7 @@ void Hoot::loadLibrary(const QString& name)
 
 void Hoot::reinit()
 {
-  LOG_DEBUG("Hoot instance reinit...");
+  LOG_TRACE("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)

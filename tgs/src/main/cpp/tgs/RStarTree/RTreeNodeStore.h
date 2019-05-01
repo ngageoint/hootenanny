@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_STORE_H__
@@ -93,7 +93,6 @@ protected:
   /// pointer to the same thing as above, only faster. Zoom zoom!
   PageStore* _store;
 
- //  void _addNode(RTreeNode* node) const;
   void _addNode(RecItem * item, int key);
   mutable std::list<int>_nodesList;
 };
