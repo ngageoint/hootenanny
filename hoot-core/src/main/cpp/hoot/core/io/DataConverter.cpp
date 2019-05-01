@@ -648,7 +648,7 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   int numTasks = 0;
   if (isStreamable)
   {
-    numTasks = 1;
+    numTasks = 1;   // Streaming combines reading/writing into a single step.
   }
   else
   {
