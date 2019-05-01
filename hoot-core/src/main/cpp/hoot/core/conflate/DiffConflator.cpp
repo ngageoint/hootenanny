@@ -185,33 +185,25 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
-
-    // One big weakness here is that if the map was rubbersheeted beforehand (e.g. as a pre
-    // conflation op when using the Network alg), we'll be snapping back to the rubbersheeted
-    // ref data, which never actually makes it to the output since we drop out ref matches. So,
-    // in places where the rubbersheeting severely moved ref ways, it may not appear that the
-    // snapping did very well.  Since the rubbersheeting potentially makes the matching better,
-    // which directly feeds this operation, there's really no other recourse other than to try
-    // diff conflate both with and w/o rubbersheeting to see which yields better overall results.
-
     _snapSecondaryRoadsBackToRef();
   }
 
-  // _pMap at this point contains all of input1, we are going to delete everything left that
-  // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
-  // differential that we want.
-  _removeMatches(Status::Unknown1);
+  if (ConfigOptions().getDifferentialRemoveReferenceData())
+  {
+    // _pMap at this point contains all of input1, we are going to delete everything left that
+    // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
+    // differential that we want.
+    _removeMatches(Status::Unknown1);
 
-  // Now remove input1 elements
-  LOG_DEBUG("\tRemoving all reference elements...");
-  boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-  RemoveElementsVisitor removeRef1Visitor;
-  removeRef1Visitor.setRecursive(true);
-  removeRef1Visitor.addCriterion(pTagKeyCrit);
-  _pMap->visitRw(removeRef1Visitor);
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
-
-  currentStep++;
+    // Now remove input1 elements
+    LOG_DEBUG("\tRemoving all reference elements...");
+    ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+    RemoveElementsVisitor removeRef1Visitor;
+    removeRef1Visitor.setRecursive(true);
+    removeRef1Visitor.addCriterion(pTagKeyCrit);
+    _pMap->visitRw(removeRef1Visitor);
+    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+  }
 }
 
 void DiffConflator::_snapSecondaryRoadsBackToRef()
