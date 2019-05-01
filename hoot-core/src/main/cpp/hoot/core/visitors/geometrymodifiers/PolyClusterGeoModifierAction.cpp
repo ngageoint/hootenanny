@@ -32,7 +32,7 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
-#include <hoot/core/index/ClosePointHash.h>
+
 
 // Geos
 #include <geos/geom/GeometryFactory.h>
@@ -54,7 +54,7 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
 
 void PolyClusterGeoModifierAction::processStart(boost::shared_ptr<OsmMap>& )
 {
-  _ways.clear();
+  _ways.clear();  
 }
 
 bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, OsmMap* )
@@ -73,10 +73,13 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
 {
   LOG_INFO( "finalizing " << _ways.length() << " ways");
 
+  _clearProcessData();
+
   ElementConverter elementConverter(pMap);
 
   // create a polygon from each building/way
-  QList<boost::shared_ptr<Polygon>> geoms;
+  _polys.clear();
+
   QHash<long,boost::shared_ptr<Polygon>> polyLookup;
 
   foreach (WayPtr pWay, _ways)
@@ -86,14 +89,16 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
     // set id as user data
     pPoly->setUserData((void*)wayId);
     polyLookup[wayId] = pPoly;
-    geoms.push_back(pPoly);
+    _polys.push_back(pPoly);
   }
 
   // get clusters
-  QList<QList<long>> clusters = _generateClusters(geoms);
+  _generateClusters();
+
+  LOG_INFO( "Generated " << _clusters.length() << " clusters.");
 
   // draw debug way around each cluster
-  foreach (QList<long> cluster, clusters)
+  foreach (QList<long> cluster, _clusters)
   {
     boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
 
@@ -117,22 +122,33 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
       pDebugWay->addNode(pNode->getId());
       pMap->addElement(pNode);
     }
-  }
+  }  
+
+  // cleanup
+  _clearProcessData();
 }
 
-QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<boost::shared_ptr<Polygon>>& geoms)
+void PolyClusterGeoModifierAction::_clearProcessData()
 {
-  const int MAX_PROCESSED_NODES_PER_POLY = 100;
-  double distance = 17;
-  double distanceSquared = distance * distance;
+  _processedPolys.clear();
+  _clusters.clear();
+  _coordinateByNodeIx.clear();
+  _polyByWayId.clear();
+  _pClosePointHash.reset();
+}
+
+void PolyClusterGeoModifierAction::_generateClusters()
+{   
+  _distanceSquared = _distance * _distance;
 
   // build the ClosePointHash
-  ClosePointHash cph(distance);
-  QHash<long, CoordinateExt> coordinateByNodeIx;
+  _pClosePointHash = boost::shared_ptr<ClosePointHash>(new ClosePointHash(_distance));
 
-  foreach (boost::shared_ptr<Polygon> poly, geoms)
+  // gather coordinates and build lookups
+  foreach (boost::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
+    _polyByWayId[wayId] = poly;
     CoordinateSequence* pCoords = poly->getCoordinates();
     int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
 
@@ -142,57 +158,25 @@ QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<b
       // The 'node index' calculated here is used just for processing here with the ClosePointHash
       // and based on the way id. It is not related to the actual node id.
       long nodeIndex = wayId * MAX_PROCESSED_NODES_PER_POLY + i;
-      cph.addPoint(c.x, c.y, nodeIndex);
-      coordinateByNodeIx[nodeIndex] = c;
+      _pClosePointHash->addPoint(c.x, c.y, nodeIndex);
+      _coordinateByNodeIx[nodeIndex] = c;
     }
   }
 
-  QList<QList<long>> clusters;
-  QHash<long,int> clusterIndexByWayId;
-
-  // find matches by building, checking each individual building node
-  foreach (boost::shared_ptr<Polygon> poly, geoms)
+  // recursively build clusters
+  foreach (boost::shared_ptr<Polygon> poly, _polys)
   {
-    long thisWayId = (long)poly->getUserData();
-    CoordinateSequence* pCoords = poly->getCoordinates();
-    int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
+    long wayId = (long)poly->getUserData();
+    if( _processedPolys.contains(wayId) ) continue;
 
-    // create new cluster if needed
-    int clusterIndex = -1;
+    _clusters.push_back(QList<long>());
+    _clusterIndex = _clusters.length()-1;
 
-    if(!clusterIndexByWayId.contains(thisWayId))
-    {
-      clusters.push_back(QList<long>());
-      clusterIndex = clusters.length()-1;
-      clusterIndexByWayId[thisWayId] = clusterIndex;
-      // enter this building in new cluster
-      clusters[clusterIndexByWayId[thisWayId]].push_back(thisWayId);
-    }
-    else
-    {
-      clusterIndex = clusterIndexByWayId[thisWayId];
-    }
-
-    for (int i = 0; i < coordCount; i++)
-    {
-      long thisNodeIndex = thisWayId * MAX_PROCESSED_NODES_PER_POLY + i;
-      CoordinateExt thisCoord = coordinateByNodeIx[thisNodeIndex];
-      vector<long> matches = cph.getMatchesFor(thisNodeIndex);
-
-      foreach (long otherNodeIndex, matches)
-      {
-        long otherWayId = otherNodeIndex / MAX_PROCESSED_NODES_PER_POLY;
-
-        if (otherWayId == thisWayId || (thisCoord-coordinateByNodeIx[otherNodeIndex]).lengthSquared() <= distanceSquared )
-        {
-          if (!clusters[clusterIndex].contains(otherWayId)) clusters[clusterIndex].push_back(otherWayId);
-          if (!clusterIndexByWayId.contains(otherWayId)) clusterIndexByWayId[otherWayId] = clusterIndex;
-        }
-      }
-    }
+    _recursePolygons(poly);
   }
 
-  foreach (QList<long> cluster, clusters)
+  // show clusters for debug
+  foreach (QList<long> cluster, _clusters)
   {
     LOG_INFO("Cluster");
     foreach (long id, cluster)
@@ -200,8 +184,39 @@ QList<QList<long>> PolyClusterGeoModifierAction::_generateClusters(const QList<b
       LOG_INFO(id);
     }
   }
+}
 
-  return clusters;
+void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Polygon>& poly)
+{
+  long thisWayId = (long)poly->getUserData();
+  assert(_processedPolys.contains(thisWayId) == false);
+
+  // add this poly to current cluster and mark as processed
+  _clusters[_clusterIndex].push_back(thisWayId);
+  _processedPolys.push_back(thisWayId);
+
+  // go through each node and find its matches
+  int coordCount = min((int)poly->getNumPoints(), MAX_PROCESSED_NODES_PER_POLY-1);
+
+  for (int i = 0; i < coordCount; i++)
+  {
+    long thisNodeIndex = thisWayId * MAX_PROCESSED_NODES_PER_POLY + i;
+    CoordinateExt thisCoord = _coordinateByNodeIx[thisNodeIndex];
+    vector<long> matches = _pClosePointHash->getMatchesFor(thisNodeIndex);
+
+    foreach (long otherNodeIndex, matches)
+    {
+      long otherWayId = otherNodeIndex / MAX_PROCESSED_NODES_PER_POLY;
+
+      // if the match is from another poly and within distance, process it
+      if (otherWayId != thisWayId &&
+         !_processedPolys.contains(otherWayId) &&
+         (thisCoord-_coordinateByNodeIx[otherNodeIndex]).lengthSquared() <= _distanceSquared )
+      {
+        _recursePolygons(_polyByWayId[otherWayId]);
+      }
+    }
+  }
 }
 
 }

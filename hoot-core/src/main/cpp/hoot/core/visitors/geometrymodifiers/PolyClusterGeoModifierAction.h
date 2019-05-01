@@ -29,6 +29,10 @@
 
 #include "GeometryModifierAction.h"
 
+// Hoot
+#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/index/ClosePointHash.h>
+
 // Geos
 #include <geos/geom/Polygon.h>
 
@@ -49,9 +53,25 @@ public:
   virtual void processFinalize(boost::shared_ptr<OsmMap>& pMap) override;
 
 private:
-  QList<WayPtr> _ways;
+  const int MAX_PROCESSED_NODES_PER_POLY = 1000;
+  double _distance = 17;
+  double _distanceSquared;
 
-  QList<QList<long>> _generateClusters(const QList<boost::shared_ptr<geos::geom::Polygon>>& geoms);
+  QList<WayPtr> _ways;
+  QList<boost::shared_ptr<geos::geom::Polygon>> _polys;
+
+
+  // cluster generation data
+  int _clusterIndex;
+  QList<QList<long>> _clusters;
+  QList<long> _processedPolys;
+  QHash<long, CoordinateExt> _coordinateByNodeIx;
+  QHash<long, boost::shared_ptr<Polygon>> _polyByWayId;
+  boost::shared_ptr<ClosePointHash> _pClosePointHash;
+
+  void _generateClusters();
+  void _clearProcessData();
+  void _recursePolygons(const boost::shared_ptr<geos::geom::Polygon>& poly);
 };
 
 }
