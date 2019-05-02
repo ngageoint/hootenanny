@@ -51,6 +51,7 @@ class OsmGeoJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runGenericGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runMultiObjectGeoJsonTest);
+  CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

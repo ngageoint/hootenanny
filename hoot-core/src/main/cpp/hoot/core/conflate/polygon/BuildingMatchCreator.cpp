@@ -115,6 +115,8 @@ public:
 
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
+    LOG_VART(e->getElementId());
+
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
 

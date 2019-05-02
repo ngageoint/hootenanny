@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -54,6 +54,7 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(urlTest);
   CPPUNIT_TEST(scrubQuoteTest);
   CPPUNIT_TEST(scrubBigIntsTest);
+  CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -334,8 +335,9 @@ public:
   void urlTest()
   {
     OsmMapPtr pMap;
-    QString urlNodes = "http://overpass-api.de/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
-    QString urlWays  = "http://overpass-api.de/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+    QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
+    QString urlWays  = "http://" + overpassHost + "/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
     OsmJsonReader uut;
 
     const uint32_t RETRY_SECS = 30;
