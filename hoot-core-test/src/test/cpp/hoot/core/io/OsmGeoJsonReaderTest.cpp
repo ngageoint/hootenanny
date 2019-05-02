@@ -51,6 +51,7 @@ class OsmGeoJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runGenericGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runMultiObjectGeoJsonTest);
+  CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -108,6 +109,23 @@ public:
                      _outputPath + output);
   }
 
+  void isSupportedTest()
+  {
+    OsmGeoJsonReader uut;
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+
+    // The files passed in must actually exist in order for a postive match.
+    CPPUNIT_ASSERT(!uut.isSupported("test-files/nodes.json"));
+    CPPUNIT_ASSERT(uut.isSupported(_inputPath + "/AllDataTypes.geojson"));
+    CPPUNIT_ASSERT(!uut.isSupported("blah.geojson"));
+    CPPUNIT_ASSERT(!uut.isSupported("http://" + overpassHost));
+    CPPUNIT_ASSERT(!uut.isSupported("https://" + overpassHost));
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://blah"));
+    // Non-Overpass API url's with the correct scheme can point to anything for GeoJSON reading.
+    CPPUNIT_ASSERT(uut.isSupported("http://blah"));
+    CPPUNIT_ASSERT(uut.isSupported("https://blah"));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "slow");

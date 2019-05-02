@@ -198,9 +198,9 @@ private:
    */
   std::queue<std::string> _roles;
 
-  boost::shared_ptr<geos::geom::Coordinate> ReadCoordinate( const boost::property_tree::ptree& coordsIt );
+  boost::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_GEOJSON_READER_H

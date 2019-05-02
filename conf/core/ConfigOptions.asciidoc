@@ -2527,6 +2527,14 @@ written if the value is not empty.
 If true, the OSM map writer will NOT write a file if the map is empty.
 The default is to write a file even if the map is empty.
 
+=== overpass.api.host
+
+* Data Type: string
+* Default Value: `overpass-api.de`
+
+Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
+GeoJSON web sources.
+
 === perty.apply.rubber.sheet
 
 * Data Type: bool
