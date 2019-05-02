@@ -38,9 +38,13 @@
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // tgs
 #include <tgs/HashMap.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
@@ -74,7 +78,7 @@ class MatchThreshold;
  *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable
+    public Configurable, public ProgressReporter
 {
 public:
 
@@ -173,9 +177,12 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool separateOutput);
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
+
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual unsigned int getNumSteps() const { return 3; }
 
 private:
 
@@ -201,6 +208,8 @@ private:
   // for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
+
+  Progress _progress;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
@@ -240,6 +249,8 @@ private:
   void _removeMatches(const Status& status);
 
   void _snapSecondaryRoadsBackToRef();
+
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

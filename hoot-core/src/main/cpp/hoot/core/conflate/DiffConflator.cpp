@@ -93,15 +93,32 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
+void DiffConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
+}
+
 void DiffConflator::apply(OsmMapPtr& map)
 {
   LOG_INFO("Calculating differential output...");
 
   Timer timer;
   _reset();
+  int currentStep = 1;  // tracks the current job task step for progress reporting
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
+
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
+
+  _updateProgress(currentStep - 1, "Matching features...");
 
   LOG_DEBUG("\tDiscarding relations...");
   boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
@@ -142,10 +159,22 @@ void DiffConflator::apply(OsmMapPtr& map)
     (double)_matches.size() / findMatchesTime));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
 
+  currentStep++;
+
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
+  _updateProgress(currentStep - 1, "Storing tag differentials...");
   _calcAndStoreTagChanges();
+  currentStep++;
+
+  QString message = "Dropping match conflicts";
+  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+  {
+    message += " and snapping roads";
+  }
+  message += "...";
+  _updateProgress(currentStep - 1, message);
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
@@ -240,8 +269,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
   if (countVtor.getCount() > 0)
   {
-    // Not something a user can generally cause - more likely it's a misuse
-    // of this class.
+    // Not something a user can generally cause - more likely it's a misuse of this class.
     LOG_ERROR("Map elements with Status::Unknown2 found when storing "
               "original map for diff conflation. This can cause unpredictable "
               "results. The original map should contain only Status::Unknown1 "
@@ -364,9 +392,10 @@ void DiffConflator::_calcAndStoreTagChanges()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
-// See if tags are the same
 bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
 {
+  // See if tags are the same
+
   QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
@@ -395,8 +424,7 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement,
 
   assert(pChangeElement->getId() == pOldElement->getId());
 
-  // Need to merge tags into the new element
-  // Keeps all names, chooses tags1 in event of a conflict.
+  // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
   Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
                                                              pOldElement->getTags());
   pChangeElement->setTags(newTags);
@@ -448,17 +476,10 @@ boost::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, 
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  // Make empty map
-  OsmMapPtr pEmptyMap(new OsmMap());
-
-  // Get Changeset Deriver
-  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
-
-  // Return the provider
-  return pDeriver;
+  return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
 }
 
-void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool separateOutput)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
   // Write a changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);

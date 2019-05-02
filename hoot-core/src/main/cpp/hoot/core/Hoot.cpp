@@ -159,7 +159,7 @@ void Hoot::reinit()
     rl.rlim_cur = max;
     setrlimit(RLIMIT_AS, &rl);
     getrlimit(RLIMIT_AS, &rl);
-    LOG_INFO("Set max memory usage to: " << rl.rlim_cur << "bytes.");
+    LOG_DEBUG("Set max memory usage to: " << rl.rlim_cur << "bytes.");
   }
 
   Log::getInstance().init();

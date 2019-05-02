@@ -35,6 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCleaner.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -53,6 +54,9 @@ NamedOp::NamedOp(QStringList namedOps) :
 _conf(&conf()),
 _namedOps(namedOps)
 {
+  LOG_VART(_namedOps);
+  _substituteForContainingOps();
+  LOG_VART(_namedOps);
 }
 
 void NamedOp::setConfiguration(const Settings& conf)
@@ -60,33 +64,51 @@ void NamedOp::setConfiguration(const Settings& conf)
   _conf = &conf;
 }
 
+void NamedOp::_substituteForContainingOps()
+{
+  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  if (_namedOps.contains(mapCleanerName))
+  {
+    int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);
+    const QStringList mapCleanerTransforms = ConfigOptions().getMapCleanerTransforms();
+    for (int i = 0; i < mapCleanerTransforms.size(); i++)
+    {
+      _namedOps.insert(cleaningOpIndex, mapCleanerTransforms.at(i));
+      cleaningOpIndex++;
+    }
+    _namedOps.removeAll(mapCleanerName);
+  }
+}
+
 void NamedOp::apply(OsmMapPtr& map)
 {
   Factory& f = Factory::getInstance();
-
   QElapsedTimer timer;
-  LOG_VARD(_namedOps);
+
   int opCount = 1;
   foreach (QString s, _namedOps)
   {
+    LOG_VARD(s);
     if (s.isEmpty())
     {
       return;
     }
 
     timer.restart();
+    LOG_DEBUG(
+      "\tElement count before operation " << s << ": " <<
+      StringUtils::formatLargeNumber(map->getElementCount()));
+
+    // We could benefit from passing progress into some of the ops to get more granular feedback.
+
+    boost::shared_ptr<OperationStatusInfo> statusInfo;
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
       boost::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      QString initMessage = _getInitMessage(s, opCount, statusInfo);
-      LOG_INFO(initMessage);
-      LOG_DEBUG(
-        "\tElement count before operation " << s << ": " <<
-        StringUtils::formatLargeNumber(map->getElementCount()));
+      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -95,23 +117,14 @@ void NamedOp::apply(OsmMapPtr& map)
       }
 
       t->apply(map);
-
-      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-          StringUtils::secondsToDhms(timer.elapsed()));
-      }
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
       boost::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      boost::shared_ptr<OperationStatusInfo> statusInfo =
-        boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
 
-      QString initMessage = _getInitMessage(s, opCount, statusInfo);
-      LOG_INFO(initMessage);
+      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
       Configurable* c = dynamic_cast<Configurable*>(t.get());
       if (_conf != 0 && c != 0)
@@ -120,13 +133,6 @@ void NamedOp::apply(OsmMapPtr& map)
       }
 
       map->visitRw(*t);
-
-      if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
-      {
-        LOG_INFO(
-          "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-          StringUtils::secondsToDhms(timer.elapsed()));
-      }
     }
     else
     {
@@ -136,25 +142,40 @@ void NamedOp::apply(OsmMapPtr& map)
     LOG_DEBUG(
       "\tElement count after operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
+    if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
+    {
+      LOG_INFO(
+        "\t" << statusInfo->getCompletedStatusMessage() + " in " +
+        StringUtils::secondsToDhms(timer.elapsed()));
+    }
 
-    OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
     opCount++;
+    OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message, int opCount, boost::shared_ptr<OperationStatusInfo> statusInfo)
+void NamedOp::_updateProgress(const int currentStep, const QString message)
 {
-  QString initMessage =
-    QString("Applying operation %1 / %2")
-    .arg(QString::number(opCount))
-    .arg(QString::number(_namedOps.size()));
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
+}
+
+QString NamedOp::_getInitMessage(const QString message,
+                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
+{
+  QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())
   {
-    initMessage += ": " + statusInfo->getInitStatusMessage();
+    initMessage += statusInfo->getInitStatusMessage();
   }
   else
   {
-    initMessage += ": " + message + " ...";
+    initMessage += message + "...";
   }
   return initMessage;
 }

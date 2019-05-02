@@ -68,7 +68,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     uint16_t g = tv.geometries;
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
-      //LOG_VERBOSE("Area: " << it.key() << "=" << it.value());
+      //LOG_TRACE("Area: " << it.key() << "=" << it.value());
       result = true;
       break;
     }

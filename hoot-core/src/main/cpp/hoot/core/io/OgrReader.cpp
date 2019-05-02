@@ -52,7 +52,6 @@ using namespace geos::geom;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -72,7 +71,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
  * I've put this in the C++ to avoid too much header nastiness for the classes that use the
  * OgrReader.
  */
-class OgrReaderInternal
+class OgrReaderInternal : public ProgressReporter
 {
 public:
 
@@ -85,6 +84,15 @@ public:
   virtual ~OgrReaderInternal();
 
   void close();
+
+  /**
+   * @see ProgressReporter
+   */
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  /**
+   * @see ProgressReporter
+   */
+  virtual unsigned int getNumSteps() const { return 1; }
 
   /**
    * See the associated configuration options text for details.
@@ -110,7 +118,7 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(OsmMapPtr map, Progress progress);
+  void read(OsmMapPtr map);
 
   /**
    * Reads the next feature into the given map.
@@ -135,8 +143,6 @@ public:
 
   boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-  Progress streamGetProgress() const;
-
 protected:
 
   Meters _defaultCircularError;
@@ -153,7 +159,6 @@ protected:
   OGRCoordinateTransformation* _transform;
   boost::shared_ptr<OGRSpatialReference> _wgs84;
   boost::shared_ptr<ScriptTranslator> _translator;
-  long _streamFeatureCount;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -168,6 +173,8 @@ protected:
   QHash<QString, QString> _strings;
 
   QString _translatePath;
+
+  Progress _progress;
 
   void _addFeature(OGRFeature* f);
 
@@ -247,7 +254,6 @@ protected:
     {
       _addElement(_map->getWay(it->first));
     }
-
   }
 
 private:
@@ -283,6 +289,16 @@ OgrReader::OgrReader(QString path, QString layer)
 OgrReader::~OgrReader()
 {
   delete _d;
+}
+
+void OgrReader::setProgress(Progress progress)
+{
+  if (_d == 0)
+  {
+    throw IllegalArgumentException(
+      "Internal reader must be initialized before setting progress on OgrReader.");
+  }
+  _d->setProgress(progress);
 }
 
 ElementIterator* OgrReader::createIterator(QString path, QString layer) const
@@ -421,10 +437,10 @@ long OgrReader::getFeatureCount(QString path, QString layer)
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, OsmMapPtr map, Progress progress)
+void OgrReader::read(QString path, QString layer, OsmMapPtr map)
 {
   _d->open(path, layer);
-  _d->read(map, progress);
+  _d->read(map);
   _d->close();
 }
 
@@ -493,11 +509,6 @@ boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
   return _d->getProjection();
 }
 
-Progress OgrReader::streamGetProgress() const
-{
-  return _d->streamGetProgress();
-}
-
 int OgrReaderInternal::logWarnCount = 0;
 
 OgrReaderInternal::OgrReaderInternal()
@@ -512,7 +523,6 @@ OgrReaderInternal::OgrReaderInternal()
   _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _limit = -1;
   _featureCount = 0;
-  _streamFeatureCount = 0;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
   _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
@@ -1092,7 +1102,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
+void OgrReaderInternal::read(OsmMapPtr map)
 {
   _map = map;
   _count = 0;
@@ -1113,18 +1123,16 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     f = 0;
 
     _count++;
-    if (_count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
     {
-      PROGRESS_INFO(
-        "\tRead: " << StringUtils::formatLargeNumber(_count) << " / " <<
-        StringUtils::formatLargeNumber(_featureCount) << " features from layer: " <<
-        _layerName.toLatin1().data());
-    }
-
-    if (progress.getState() != "Pending")
-    {
-      progress.setFromRelative(
-        (double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
+      LOG_VART(_count);
+      LOG_VART(_featureCount);
+      LOG_VART(_layerName.toLatin1().data());
+      _progress.setFromRelative(
+        (float)_count / (float)_featureCount, Progress::JobState::Running,
+        "Read " + StringUtils::formatLargeNumber(_count) + " / " +
+        StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
+        _layerName.toLatin1().data(), true);
     }
   }
 }
@@ -1283,8 +1291,8 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ( (_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelations().end()) )
+  if ((_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelations().end()))
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
@@ -1320,8 +1328,6 @@ void OgrReaderInternal::populateElementMap()
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-
-  _streamFeatureCount++;
 }
 
 boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
@@ -1333,17 +1339,6 @@ boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   }
 
   return wgs84;
-}
-
-Progress OgrReaderInternal::streamGetProgress() const
-{
-  Progress streamProgress("OGRReader");
-
-  const float floatCount = _streamFeatureCount;
-  const float percentComplete = floatCount / _featureCount * 100;
-  streamProgress.setPercentComplete( percentComplete );
-
-  return streamProgress;
 }
 
 QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)

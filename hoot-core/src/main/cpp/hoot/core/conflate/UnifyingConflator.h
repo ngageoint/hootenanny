@@ -36,9 +36,13 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/info/SingleStat.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // tgs
 #include <tgs/HashMap.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
@@ -63,7 +67,7 @@ class ElementId;
  * works fine for now.
  */
 class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable
+    public Configurable, public ProgressReporter
 {
 public:
 
@@ -100,6 +104,9 @@ public:
   virtual QString getDescription() const
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual unsigned int getNumSteps() const { return 3; }
+
 private:
 
   geos::geom::Envelope _bounds;
@@ -112,6 +119,7 @@ private:
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
   int _taskStatusUpdateInterval;
+  Progress _progress;
 
   void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
@@ -152,6 +160,8 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
   QString _matchSetToString(const MatchSet& matchSet) const;
+
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

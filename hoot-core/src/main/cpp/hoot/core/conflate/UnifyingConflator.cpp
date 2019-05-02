@@ -122,10 +122,22 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
   }
 }
 
+void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
+}
+
 void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();
+  int currentStep = 1;  // tracks the current job task step for progress reporting
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -133,6 +145,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   MapProjector::projectToPlanar(map);
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
+
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
+
+  _updateProgress(currentStep - 1, "Matching features...");
 
   OsmMapWriterFactory::writeDebugMap(map, "before-matching");
   // find all the matches in this map
@@ -172,6 +189,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
   LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
+
+  currentStep++;
+
+  _updateProgress(currentStep - 1, "Optimizing feature matches...");
 
   // Globally optimize the set of matches to maximize the conflation score.
   {
@@ -240,6 +261,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_DEBUG("Match sets count: " << matchSets.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization-2");
 
+  currentStep++;
+
+  _updateProgress(currentStep - 1, "Merging feature matches...");
+
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
   for (size_t i = 0; i < matchSets.size(); ++i)
@@ -274,7 +299,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _replaceElementIds(replaced);
     replaced.clear();
 
-    // Enabling this can result in a lot of files being generated.
+    // Enabling this may result in a lot of files being generated.
 //    if (i % 10 == 0)
 //    {
 //      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
@@ -291,6 +316,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  currentStep++;
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
