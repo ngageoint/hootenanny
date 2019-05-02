@@ -194,12 +194,6 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
 void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids, const QString& note,
   const QString& reviewType, double score, vector<QString> choices)
 {
-  LOG_TRACE("Marking review...");
-
-  LOG_VART(reviewType);
-  LOG_VART(note);
-  LOG_VART(score);
-
   if (note.isEmpty())
   {
     throw IllegalArgumentException("You must specify a review note.");
@@ -239,6 +233,8 @@ void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids,
   }
 
   map->addElement(r);
+
+  LOG_TRACE("Marked review: " << r);
 }
 
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)

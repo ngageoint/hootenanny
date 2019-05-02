@@ -426,6 +426,7 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
     throw IllegalArgumentException(
       "No building parts passed to BuildingPartMergeOp::combineParts.");
   }
+
   // This is primarily in place to support testable output.
   InMemoryElementSorter::sort(parts);
 

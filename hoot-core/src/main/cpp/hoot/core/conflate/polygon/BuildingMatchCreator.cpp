@@ -116,15 +116,15 @@ public:
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     LOG_VART(e->getElementId());
+    //LOG_VART(e);
 
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
 
     // find other nearby candidates
-    std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                        getIndex(),
-                                                                        _indexToEid,
-                                                                        getMap());
+    std::set<ElementId> neighbors =
+      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -139,15 +139,15 @@ public:
         if (isRelated(n, e))
         {
           // score each candidate and push it on the result vector
-          BuildingMatch* m = createMatch(from, *it);
+          BuildingMatch* match = createMatch(from, *it);
           // if we're confident this is a miss
-          if (m->getType() == MatchType::Miss)
+          if (match->getType() == MatchType::Miss)
           {
-            delete m;
+            delete match;
           }
           else
           {
-            tempMatches.push_back(m);
+            tempMatches.push_back(match);
             neighborCount++;
           }
         }

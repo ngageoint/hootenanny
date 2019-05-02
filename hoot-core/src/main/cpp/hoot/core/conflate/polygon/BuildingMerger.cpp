@@ -44,6 +44,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 using namespace std;
 
@@ -96,21 +97,21 @@ MergerBase()
 {
 }
 
-BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
+BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _keepMoreComplexGeometryWhenAutoMerging(
   ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
 {
 }
 
-void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   //check if it is many to many
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
   ReviewMarker reviewMarker;
-  for (set< pair<ElementId, ElementId> >::const_iterator sit = _pairs.begin(); sit != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
     firstPairs.insert(sit->first);
@@ -120,23 +121,23 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
-    QString note =
+    const QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
     reviewMarker.mark(map, combined, note, "Building", 1);
   }
   else
   {
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
-    LOG_VART(e1.get());
     if (e1.get())
     {
-      LOG_VART(e1->getTags().get("uuid"));
+      LOG_VART(e1->getElementId());
+      //OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
     }
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
-    LOG_VART(e2.get());
     if (e2.get())
     {
-      LOG_VART(e2->getTags().get("uuid"));
+      LOG_VART(e2->getElementId());
+      //OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
     }
 
     boost::shared_ptr<Element> keeper;
@@ -202,7 +203,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
         scrap = e2;
         LOG_TRACE(
           "Buildings have equally complex geometries.  Keeping the first building geometry: " <<
-          keeper << "...");
+          keeper << "; scrap: " << scrap->getElementId() << "...");
       }
       else
       {
@@ -216,14 +217,18 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
           keeper = e2;
           scrap = e1;
         }
-        LOG_TRACE("Keeping the more complex building geometry: " << keeper << "...");
+        LOG_TRACE(
+          "Keeping the more complex building geometry: " << keeper << "; scrap: " <<
+          scrap->getElementId() << "...");
       }
     }
     else
     {
       keeper = e1;
       scrap = e2;
-      LOG_TRACE("Keeping the first building geometry: " << keeper << "...");
+      LOG_TRACE(
+        "Keeping the first building geometry: " << keeper->getElementId() << "; scrap: " <<
+        scrap->getElementId() << "...");
     }
 
     // use the default tag merging mechanism
@@ -254,11 +259,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     LOG_VART(keeper->getElementId());
     LOG_VART(scrap->getElementId());
+    //OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
+    //OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
 
     //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
     //relation members, need to be removed as well.
     const QSet<ElementId> multiPolyMemberIds = _getMultiPolyMemberIds(scrap);
-    LOG_VART(multiPolyMemberIds);
 
     // remove the duplicate element
     DeletableBuildingCriterion crit;
@@ -267,6 +273,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     scrap->getTags().clear();
 
     //delete any multipoly members
+    LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
     for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
          it != multiPolyMemberIds.end(); ++it)
     {
@@ -318,14 +325,16 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
                                                          const set<ElementId>& eid)
 {
-  LOG_TRACE("Build the building...");
+  if (eid.size() > 0)
+  {
+    LOG_TRACE("Creating building for eid's: " << eid << "...");
+  }
 
-  LOG_VART(eid);
   if (eid.size() == 0)
   {
-    throw IllegalArgumentException("No element ID passed to buildBuilding.");
+    throw IllegalArgumentException("No element ID passed to building builder.");
   }
-  if (eid.size() == 1)
+  else if (eid.size() == 1)
   {
     return map->getElement(*eid.begin());
   }
@@ -355,11 +364,14 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
           {
             if (m[i].getRole() == MetadataTags::RolePart())
             {
-              boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
+              boost::shared_ptr<Element> buildingPart = map->getElement(m[i].getElementId());
+              LOG_TRACE("Building part before tag update: " << buildingPart);
               // Push any non-conflicting tags in the parent relation down into the building part.
-              em->setTags(
-                OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(), em->getElementType()));
-              parts.push_back(em);
+              buildingPart->setTags(
+                OverwriteTagMerger().mergeTags(
+                  buildingPart->getTags(), r->getTags(), buildingPart->getElementType()));
+              LOG_TRACE("Building part after tag update: " << buildingPart);
+              parts.push_back(buildingPart);
             }
           }
 
@@ -369,14 +381,17 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 
       if (!isBuilding)
       {
+        LOG_TRACE("Non-building part: " << e->getElementId());
         parts.push_back(e);
       }
     }
     LOG_VART(parts.size());
+    LOG_VART(parts);
     LOG_VART(toRemove.size());
+    LOG_VART(toRemove);
 
     boost::shared_ptr<Element> result = BuildingPartMergeOp().combineBuildingParts(map, parts);
-    LOG_VART(result);
+    LOG_TRACE("Combined building parts into: " << result);
 
     // likely create a crit that only matches buildings and building parts and pass that
     DeletableBuildingCriterion crit;
@@ -399,26 +414,22 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
 {
   set<ElementId> e;
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     e.insert(it->first);
   }
-
   return buildBuilding(map, e);
 }
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
   set<ElementId> e;
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     e.insert(it->second);
   }
-
   return buildBuilding(map, e);
 }
 
