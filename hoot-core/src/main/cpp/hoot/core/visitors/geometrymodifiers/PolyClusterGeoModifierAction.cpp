@@ -28,6 +28,7 @@
 #include "PolyClusterGeoModifierAction.h"
 
 // Hoot
+#include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/Factory.h>
@@ -73,56 +74,34 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
 {
   LOG_INFO( "finalizing " << _ways.length() << " ways");
 
+  _pMap = pMap;
+
+  // make sure we work from a fresh data set
   _clearProcessData();
 
-  ElementConverter elementConverter(pMap);
+  // generate geos::geom::Polygons for source buildings
+  _createWayPolygons();
 
-  // create a polygon from each building/way
-  _polys.clear();
-
-  QHash<long,boost::shared_ptr<Polygon>> polyLookup;
-
-  foreach (WayPtr pWay, _ways)
-  {
-    boost::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
-    long wayId = pWay->getId();
-    // set id as user data
-    pPoly->setUserData((void*)wayId);
-    polyLookup[wayId] = pPoly;
-    _polys.push_back(pPoly);
-  }
-
-  // get clusters
+  // genberate clusters from building polys
   _generateClusters();
 
+  // create cluster representations on the map
+  _createClusterPolygons();
+
+  _createDebugConvexHull();
+
+  // debug info
   LOG_INFO( "Generated " << _clusters.length() << " clusters.");
 
-  // draw debug way around each cluster
+  // show clusters for debug
   foreach (QList<long> cluster, _clusters)
   {
-    boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
-
-    foreach (long wayId, cluster)
+    LOG_INFO("Cluster");
+    foreach (long id, cluster)
     {
-      pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(polyLookup[wayId].get()));
+      LOG_INFO(id);
     }
-
-    // create hull
-    Geometry* pHull = pCombinedPoly->convexHull();
-    CoordinateSequence* pHullCoords = pHull->getCoordinates();
-
-    WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
-    pDebugWay->getTags()["Test"] = "Debug";
-    pMap->addElement(pDebugWay);
-
-    for (size_t i = 0; i < pHullCoords->size(); i++)
-    {
-      Coordinate pos = pHullCoords->getAt(i);
-      NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
-      pDebugWay->addNode(pNode->getId());
-      pMap->addElement(pNode);
-    }
-  }  
+  }
 
   // cleanup
   _clearProcessData();
@@ -137,6 +116,24 @@ void PolyClusterGeoModifierAction::_clearProcessData()
   _pClosePointHash.reset();
 }
 
+void PolyClusterGeoModifierAction::_createWayPolygons()
+{
+  ElementConverter elementConverter(_pMap);
+
+  // create a polygon from each building/way
+  _polys.clear();
+
+  foreach (WayPtr pWay, _ways)
+  {
+    boost::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    long wayId = pWay->getId();
+    // set id as user data
+    pPoly->setUserData((void*)wayId);
+    _polyByWayId[wayId] = pPoly;
+    _polys.push_back(pPoly);
+  }
+}
+
 void PolyClusterGeoModifierAction::_generateClusters()
 {   
   _distanceSquared = _distance * _distance;
@@ -148,7 +145,6 @@ void PolyClusterGeoModifierAction::_generateClusters()
   foreach (boost::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
-    _polyByWayId[wayId] = poly;
     CoordinateSequence* pCoords = poly->getCoordinates();
     int coordCount = min((int)pCoords->size(), MAX_PROCESSED_NODES_PER_POLY-1);
 
@@ -173,16 +169,6 @@ void PolyClusterGeoModifierAction::_generateClusters()
     _clusterIndex = _clusters.length()-1;
 
     _recursePolygons(poly);
-  }
-
-  // show clusters for debug
-  foreach (QList<long> cluster, _clusters)
-  {
-    LOG_INFO("Cluster");
-    foreach (long id, cluster)
-    {
-      LOG_INFO(id);
-    }
   }
 }
 
@@ -215,6 +201,80 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
       {
         _recursePolygons(_polyByWayId[otherWayId]);
       }
+    }
+  }
+}
+
+void PolyClusterGeoModifierAction::_createClusterPolygons()
+{
+  foreach (QList<long> cluster, _clusters)
+  {
+    // create alpha shape for each cluster
+    AlphaShape alphashape(_alpha);
+
+    // put all nodes of all buildings into an alpha shape
+    std::vector<std::pair<double, double>> points;
+
+    foreach (long wayId, cluster)
+    {
+      CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
+
+      for (size_t i = 0; i < pCoords->size(); i++)
+      {
+        Coordinate c = pCoords->getAt(i);
+        std::pair<double, double> point( c.x, c.y );
+        points.push_back(point);
+      }
+    }
+
+    alphashape.insert(points);
+
+    // generate geometry
+    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
+
+    // create way from geometry
+    CoordinateSequence* pAlphaCoords = pAlphaGeom->getCoordinates();
+
+    WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
+    pAlphaShapeWay->getTags()["PolyCluster"] = "Alpha";
+    _pMap->addElement(pAlphaShapeWay);
+
+    for (size_t i = 0; i < pAlphaCoords->size(); i++)
+    {
+      Coordinate pos = pAlphaCoords->getAt(i);
+      NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
+      pAlphaShapeWay->addNode(pNode->getId());
+      _pMap->addElement(pNode);
+    }
+  }
+}
+
+void PolyClusterGeoModifierAction::_createDebugConvexHull()
+{
+  // create a convex hull way for each cluster
+  foreach (QList<long> cluster, _clusters)
+  {
+    boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
+
+    foreach (long wayId, cluster)
+    {
+      pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(_polyByWayId[wayId].get()));
+    }
+
+    // create hull
+    Geometry* pHull = pCombinedPoly->convexHull();
+    CoordinateSequence* pHullCoords = pHull->getCoordinates();
+
+    WayPtr pHullWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
+    pHullWay->getTags()["PolyCluster"] = "ConvexHull";
+    _pMap->addElement(pHullWay);
+
+    for (size_t i = 0; i < pHullCoords->size(); i++)
+    {
+      Coordinate pos = pHullCoords->getAt(i);
+      NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
+      pHullWay->addNode(pNode->getId());
+      _pMap->addElement(pNode);
     }
   }
 }

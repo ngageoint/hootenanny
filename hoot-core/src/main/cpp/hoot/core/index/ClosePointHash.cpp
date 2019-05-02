@@ -74,6 +74,9 @@ vector<long> ClosePointHash::getMatchesFor(long id)
     ids.insert( ids.end(), _bins[binIx].begin(), _bins[binIx].end() );
   }
 
+  // remove duplicates
+  sort( ids.begin(), ids.end() );
+  ids.erase( unique( ids.begin(), ids.end() ), ids.end() );
   return ids;
 }
 

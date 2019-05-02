@@ -55,11 +55,12 @@ public:
 private:
   const int MAX_PROCESSED_NODES_PER_POLY = 1000;
   double _distance = 17;
+  double _alpha = _distance / 2.0;
   double _distanceSquared;
 
+  boost::shared_ptr<OsmMap> _pMap;
   QList<WayPtr> _ways;
   QList<boost::shared_ptr<geos::geom::Polygon>> _polys;
-
 
   // cluster generation data
   int _clusterIndex;
@@ -69,9 +70,13 @@ private:
   QHash<long, boost::shared_ptr<Polygon>> _polyByWayId;
   boost::shared_ptr<ClosePointHash> _pClosePointHash;
 
-  void _generateClusters();
   void _clearProcessData();
+  void _createWayPolygons();
+  void _generateClusters();
   void _recursePolygons(const boost::shared_ptr<geos::geom::Polygon>& poly);
+  void _createClusterPolygons();
+
+  void _createDebugConvexHull();
 };
 
 }
