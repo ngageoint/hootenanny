@@ -73,16 +73,17 @@ bool OsmGeoJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
 
-  bool isRelativeUrl = myUrl.isRelative();
-  bool isLocalFile =  myUrl.isLocalFile();
+  const bool isRelativeUrl = myUrl.isRelative();
+  const bool isLocalFile =  myUrl.isLocalFile();
 
   //  Is it a file?
   if (isRelativeUrl || isLocalFile)
   {
-    QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
-
+    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
     if (QFile::exists(filename) && url.endsWith(".geojson", Qt::CaseInsensitive))
+    {
       return true;
+    }
   }
 
   //  Is it a web address?

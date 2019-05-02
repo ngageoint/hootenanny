@@ -89,13 +89,17 @@ bool OsmJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
 
-  // Is it a file?
-  if (myUrl.isLocalFile())
-  {
-    QString filename = myUrl.toLocalFile();
+  const bool isRelativeUrl = myUrl.isRelative();
+  const bool isLocalFile =  myUrl.isLocalFile();
 
+  // Is it a file?
+  if (isRelativeUrl || isLocalFile)
+  {
+    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
     if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
+    {
       return true;
+    }
   }
 
   // Is it a web address?
