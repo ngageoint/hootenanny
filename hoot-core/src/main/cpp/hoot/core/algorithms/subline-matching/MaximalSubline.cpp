@@ -213,7 +213,7 @@ void MaximalSubline::_calculateSublineScores(const ConstOsmMapPtr& map, const Co
   }
 }
 
-vector< pair<WayLocation, WayLocation> > MaximalSubline::_discretizePointPairs(
+vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
   const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
   vector<WaySublineMatch>& rawSublineMatches)
 {
