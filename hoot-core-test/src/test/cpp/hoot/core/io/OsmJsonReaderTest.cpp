@@ -514,8 +514,26 @@ public:
     HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
   }
 
-}; // class OsmJsonReaderTest
-} // namespace hoot
+  void isSupportedTest()
+  {
+    OsmJsonReader uut;
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+
+    // The files passed in must actually exist in order for a postive match.
+    CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
+    CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
+    CPPUNIT_ASSERT(!uut.isSupported("blah.json"));
+    // If the url is of the correct scheme and matches the host, we use it.
+    CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
+    CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
+    // wrong scheme
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
+    // If the url doesn't match with our configured Overpass host, skip it.
+    CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
+    CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
+  }
+};
+}
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");
