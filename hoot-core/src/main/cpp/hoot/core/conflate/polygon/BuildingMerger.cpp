@@ -44,15 +44,8 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/util/Factory.h>
-<<<<<<< Updated upstream
-#include <hoot/core/elements/OsmUtils.h>
-=======
-<<<<<<< Updated upstream
-=======
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 using namespace std;
 
