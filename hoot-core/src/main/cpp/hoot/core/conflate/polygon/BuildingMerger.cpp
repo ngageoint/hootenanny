@@ -435,56 +435,25 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
 {
-<<<<<<< Updated upstream
-  set<ElementId> e;
-<<<<<<< Updated upstream
-=======
-
-=======
   set<ElementId> eids;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     eids.insert(it->first);
   }
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-
->>>>>>> Stashed changes
-  return buildBuilding(map, e);
-=======
   return buildBuilding(map, eids);
->>>>>>> Stashed changes
 }
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
-<<<<<<< Updated upstream
-  set<ElementId> e;
-<<<<<<< Updated upstream
-=======
-
-=======
-  set<ElementId> eids;
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+  set<ElementId> eids;s
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
     eids.insert(it->second);
   }
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-
->>>>>>> Stashed changes
-  return buildBuilding(map, e);
-=======
   return buildBuilding(map, eids);
->>>>>>> Stashed changes
 }
 
 void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
