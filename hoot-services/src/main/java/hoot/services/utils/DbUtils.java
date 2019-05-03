@@ -318,6 +318,13 @@ public class DbUtils {
                 .execute();
     }
 
+    public static boolean grailEligible(long inputId) {
+        Map<String, String> tags = getMapsTableTags(inputId);
+        String sourceInfo = tags.get("source");
+
+        return sourceInfo != null && sourceInfo.equals("rails");
+    }
+
     /**
      * Inserts a mapid to the folder mapping table if it doesn't exist
      * Updates mapid's parent if it does exist

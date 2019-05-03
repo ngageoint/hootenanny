@@ -64,6 +64,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.json.simple.JSONObject;
@@ -89,6 +90,7 @@ import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.User;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -212,6 +214,7 @@ public class GrailResource {
 
         // Run the differential conflate command.
         GrailParams params = new GrailParams();
+        params.setUser(user);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setInput2(secondaryOSMFile.getAbsolutePath());
 
@@ -261,29 +264,37 @@ public class GrailResource {
 
         JSONObject jobInfo = new JSONObject();
 
-        String fileDirectory = TEMP_OUTPUT_PATH + "/" + jobDir + "/diff.osc";
+        String fileDirectory = TEMP_OUTPUT_PATH + "/" + jobDir;
         File workDir = new File(fileDirectory);
 
-        if(!workDir.exists()) {
-            String message = "Could not find diff.osc file to calculate diff stats from.";
-            logger.error("differentialStats: Error finding diff file: {} ", workDir.getAbsolutePath());
-            return Response.status(Response.Status.NOT_FOUND).entity(message).build();
-        }
-
         try {
-            String xmlData = FileUtils.readFileToString(workDir, "UTF-8");
-            Document changesetDiffDoc = XmlDocumentBuilder.parse(xmlData);
-            logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(xmlData, 1000));
+            List<File> oscFilesList = (List<File>) FileUtils.listFiles(workDir, new WildcardFileFilter("*.osc"), null);
 
-            NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/node");
-            jobInfo.put("nodeCount", elementXmlNodes.getLength());
+            for(File currentOsc : oscFilesList) {
+                String xmlData = FileUtils.readFileToString(currentOsc, "UTF-8");
+                Document changesetDiffDoc = XmlDocumentBuilder.parse(xmlData);
+                logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(xmlData, 1000));
 
-            elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/way");
-            jobInfo.put("wayCount", elementXmlNodes.getLength());
+                for (DbUtils.EntityChangeType entityChangeType : DbUtils.EntityChangeType.values()) {
+                    String changeTypeName = entityChangeType.toString().toLowerCase();
 
-            elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc, "//osmChange/create/relation");
-            jobInfo.put("relationCount", elementXmlNodes.getLength());
+                    for (DbUtils.nwr_enum elementType : DbUtils.nwr_enum.values()) {
+                        String elementTypeName = elementType.toString();
 
+                        NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc,
+                                "//osmChange/" + changeTypeName +"/" + elementTypeName);
+
+                        String key = changeTypeName + "-" + elementTypeName;
+                        int count = jobInfo.get(key) == null ? elementXmlNodes.getLength() :
+                                (int) jobInfo.get(key) + elementXmlNodes.getLength();
+
+                        jobInfo.put(key, count);
+                    }
+                }
+            }
+
+            File tagDiffFile = new File(workDir, "diff.tags.osc");
+            jobInfo.put("hasTags", tagDiffFile.exists());
         }
         catch (TransformerException e) {
             throw new RuntimeException("Error invoking XPathAPI!", e);
@@ -402,11 +413,10 @@ public class GrailResource {
     }
 
     /**
-     * Runs changeset-derive and pushes the result back to the reference
-     * dataset API
+     * Runs changeset-derive on the two input layers
      *
      * Takes in a json object
-     * POST hoot-services/grail/conflatepush
+     * POST hoot-services/grail/conflatedifferential
      *
      * {
      *   "input1" : // reference dataset name
@@ -423,10 +433,10 @@ public class GrailResource {
      * @return Job ID. Can be used to check status of the conflate push
      */
     @POST
-    @Path("/conflatepush")
+    @Path("/conflatedifferential")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflatePush(@Context HttpServletRequest request,
+    public Response conflateDifferential(@Context HttpServletRequest request,
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -446,7 +456,7 @@ public class GrailResource {
             FileUtils.forceMkdir(workDir);
         }
         catch (IOException ioe) {
-            logger.error("conflatePush: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
+            logger.error("conflateDifferential: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
@@ -454,28 +464,19 @@ public class GrailResource {
         params.setUser(user);
 
         try {
-
-            ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-            params.setConsumerKey(oauthInfo.getConsumerKey());
-            params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
-
             // Run changeset-derive
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
             params.setInput2(HOOTAPI_DB_URL + "/" + input2);
 
             File changeSet = new File(workDir, "diff.osc");
             if (changeSet.exists()) { changeSet.delete(); }
+
             params.setOutput(changeSet.getAbsolutePath());
             ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
-//TODO: split this up into separeate derive step and apply step
-            // Apply changeset
-            params.setPushUrl(RAILSPORT_PUSH_URL);
-            ExternalCommand applyChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
-            workflow.add(applyChange);
 
             // Now roll the dice and run everything.....
-            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -484,7 +485,82 @@ public class GrailResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error during grail conflate! Params: " + params;
+            String msg = "Error during conflate differential! Params: " + params;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        return Response.ok(json.toJSONString()).build();
+    }
+
+    /**
+     * Pushes the conflation result back to the reference dataset API
+     *
+     * Takes in a json object
+     * POST hoot-services/grail/conflatepush
+     *
+     * {
+     *   "folder" : // jobId name
+     * }
+     *
+     * @param reqParams
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
+     * @return Job ID. Can be used to check status of the conflate push
+     */
+    @POST
+    @Path("/conflatepush")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response conflatePush(@Context HttpServletRequest request,
+            GrailParams reqParams,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        String jobDir = reqParams.getFolder();
+        File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
+        if (!workDir.exists()) {
+            logger.error("conflatePush: jobDir {} does not exist.", workDir.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
+        }
+
+        Users user = Users.fromRequest(request);
+
+        JSONObject json = new JSONObject();
+        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        json.put("jobid", mainJobId);
+
+        List<Command> workflow = new LinkedList<>();
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+
+        try {
+            ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
+            params.setConsumerKey(oauthInfo.getConsumerKey());
+            params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
+
+            File geomDiffFile = new File(workDir, "diff.osc");
+            if (geomDiffFile.exists()) {
+                params.setOutput(geomDiffFile.getAbsolutePath());
+
+                // Apply changeset
+                params.setPushUrl(RAILSPORT_PUSH_URL);
+                ExternalCommand applyChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
+                workflow.add(applyChange);
+
+                jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
+            }
+            else {
+                String msg = "Error during conflate push! Could not find osc file ";
+                throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
+            }
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
+        catch (Exception e) {
+            String msg = "Error during conflate push! Could not find osc file ";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -579,7 +655,7 @@ public class GrailResource {
 
             // Set map tags marking dataset as eligible for derive changeset
             Map<String, String> tags = new HashMap<>();
-            tags.put("grail", "true");
+            tags.put("source", "rails");
             InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
             workflow.add(setMapTags);
 

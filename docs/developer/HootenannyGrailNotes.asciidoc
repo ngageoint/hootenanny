@@ -1,0 +1,9 @@
+
+== Grail work notes
+
+There are various operations we labeled as 'grail' work and these notes should be used as a reminder of implementation
+implementation decisions.
+
+=== Grail pull from OSM and MapEdit
+
+
