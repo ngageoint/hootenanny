@@ -440,7 +440,7 @@ boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map)
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
-  set<ElementId> eids;s
+  set<ElementId> eids;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
