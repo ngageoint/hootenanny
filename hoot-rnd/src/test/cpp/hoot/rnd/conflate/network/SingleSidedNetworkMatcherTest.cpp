@@ -51,7 +51,7 @@ public:
 
   SingleSidedNetworkMatcherTest()
     : HootTestFixture("test-files/conflate/network/",
-                      UNUSED_PATH)
+                      "test-output/conflate/network/")
   {
     setResetType(ResetAll);
   }
@@ -104,6 +104,15 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
+
+    // write final map and compare
+    DebugNetworkMapCreator().addDebugElements(map, uut->getAllEdgeScores(), uut->getAllVertexScores());
+    MapProjector::projectToWgs84(map);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    OsmMapWriterFactory::write(map, QString(_outputPath + "SingleSidedNetworkMatcherTestFinal.osm"));
+
+    HOOT_FILE_EQUALS(_inputPath + "SingleSidedNetworkMatcherTestExpected.osm",
+                    _outputPath + "SingleSidedNetworkMatcherTestFinal.osm");
   }
 };
 

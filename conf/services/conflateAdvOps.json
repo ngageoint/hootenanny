@@ -672,6 +672,14 @@
                 "hoot_key":"differential.snap.unconnected.roads"
             },
             {
+            	"id":"differential_road_remove_reference_data",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If false, when running Differential Conflation the reference elements will not be dropped from the output.",
+                "name":"Remove Reference Data",
+                "hoot_key":"differential.remove.reference.data"
+            },
+            {
             	"id":"differential_road_snap_tolerance",
                 "elem_type":"double",
                 "description":"Maximum distance, in meters, allowed between an unconnected road and a neighboring road for the unconnected road to be snapped to the closest section of the neighboring road.",

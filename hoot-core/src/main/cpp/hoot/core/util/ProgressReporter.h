@@ -22,30 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef LOGGENERIC_H
-#define LOGGENERIC_H
 
-// Standard
-#include <sstream>
+#ifndef PROGRESS_REPORTER_H
+#define PROGRESS_REPORTER_H
 
-#include <hoot/core/util/Log.h>
+// Hoot
+#include <hoot/core/util/Progress.h>
 
-#define LOG_LEVEL(level, message) {\
-  if ((level) >= hoot::Log::getInstance().getLevel()) \
-  { \
-    std::stringstream ss_; \
-    ss_ << message; \
-    hoot::Log::getInstance().log((level), ss_.str(), __FILE__, "", __LINE__); \
-  }}
+namespace hoot
+{
 
-#define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }
-#define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
-#define LOG_INFO(str) { LOG_LEVEL(hoot::Log::Info, str) }
-#define LOG_STATUS(str) { LOG_LEVEL(hoot::Log::Status, str) }
-#define LOG_WARN(str) { LOG_LEVEL(hoot::Log::Warn, str) }
-#define LOG_ERROR(str) { LOG_LEVEL(hoot::Log::Error, str) }
-#define LOG_FATAL(str) { LOG_LEVEL(hoot::Log::Fatal, str) }
+/**
+ * Simple interface for reporting job status from commands
+ */
+class ProgressReporter
+{
+public:
 
-#endif // LOGGENERIC_H
+  virtual ~ProgressReporter() {}
+
+  /**
+   * Allows for passing in progress info for status updates.
+   *
+   * @param progress progress info; A copy initialized to the most recent progress state is passed
+   * in to avoid maintaining progress with the same information across the entire application.
+   */
+  virtual void setProgress(Progress progress) = 0;
+
+  /**
+   * The number of job task steps performed by the implementer related to status progress reporting
+   *
+   * @return number of job steps for the progress task
+   */
+  virtual unsigned int getNumSteps() const = 0;
+};
+
+}
+
+#endif // PROGRESS_REPORTER_H

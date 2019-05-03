@@ -64,8 +64,7 @@ describe('TranslationServer', function () {
 
         var tags = gj.features[0].properties;
         assert.equal(tags["F_CODE"], 'BH082');
-        // TEMPORARILY DISABLED until TDSv61 sort order issues are resolved
-        //assert.equal(tags["IWT"], '5'); 
+        assert.equal(tags["IWT"], '5'); 
     });
 
     it('should translate Reservoir (F_CODE=BH082 & IWT=4) from tdsv61 -> osm -> tdsv61', function() {

@@ -56,8 +56,6 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(SearchRadiusCalculatorTest);
   CPPUNIT_TEST(runCalcResultTest);
-  // TODO: temp disabling this
-  //CPPUNIT_TEST(runBadPreOpTest);
   CPPUNIT_TEST(runNotEnoughTiePointsTest);
   CPPUNIT_TEST(runPreviouslyConflatedDataTest);
   CPPUNIT_TEST_SUITE_END();
@@ -65,8 +63,7 @@ class SearchRadiusCalculatorTest : public HootTestFixture
 public:
 
   SearchRadiusCalculatorTest()
-    : HootTestFixture("test-files/conflate/SearchRadiusCalculatorTest/",
-                      UNUSED_PATH)
+    : HootTestFixture("test-files/ops/SearchRadiusCalculatorTest/", UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -90,29 +87,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
-  }
-
-  void runBadPreOpTest()
-  {
-    Settings testSettings = conf();
-    testSettings.set("conflate.pre.ops", "hoot::SetTagValueVisitor;hoot::RubberSheet");
-    SearchRadiusCalculator searchRadiusCalculator;
-
-    QString exceptionMsg("");
-    try
-    {
-      //The existence of the rubber sheet op having been previously applied is the first thing
-      //checked for, so it doesn't matter that we're passing an empty map in here.
-      searchRadiusCalculator.setConfiguration(testSettings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("Rubber sheeting cannot be used when automatically calculating search radius.").toStdString(),
-      exceptionMsg.toStdString());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      34.334710, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
   void runNotEnoughTiePointsTest()
@@ -149,8 +125,12 @@ public:
 
     //If any data in the dataset has already been conflated (or is invalid), the operation
     //shouldn't fail.  The data should just be skipped.
-    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001952")[0])->setStatus(Status::Conflated);
-    map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])->setStatus(Status::Invalid);
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001952")[0])
+        ->setStatus(Status::Conflated);
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])
+        ->setStatus(Status::Invalid);
 
     Settings testSettings = conf();
     testSettings.set("rubber.sheet.ref", "true");
@@ -160,7 +140,8 @@ public:
     searchRadiusCalculator.setConfiguration(testSettings);
 
     searchRadiusCalculator.apply(map);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      32.675054, boost::any_cast<double>(searchRadiusCalculator.getResult()), 1e-6);
   }
 
 };

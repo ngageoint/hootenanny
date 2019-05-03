@@ -66,6 +66,8 @@ void LogJs::Init(Handle<Object> exports)
   exports->Set(String::NewFromUtf8(current, "logTrace"), FunctionTemplate::New(current, logTrace)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "logDebug"), FunctionTemplate::New(current, logDebug)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "logInfo"), FunctionTemplate::New(current, logInfo)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "logStatus"), FunctionTemplate::New(current, logStatus)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "status"), FunctionTemplate::New(current, logStatus)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "warn"), FunctionTemplate::New(current, logWarn)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "logWarn"), FunctionTemplate::New(current, logWarn)->GetFunction());
   exports->Set(String::NewFromUtf8(current, "logError"), FunctionTemplate::New(current, logError)->GetFunction());
@@ -144,7 +146,6 @@ void LogJs::logTrace(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(current->GetCurrentContext());
   log(args, Log::Trace);
   args.GetReturnValue().SetUndefined();
 }
@@ -153,7 +154,6 @@ void LogJs::logDebug(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(current->GetCurrentContext());
   log(args, Log::Debug);
   args.GetReturnValue().SetUndefined();
 }
@@ -162,8 +162,15 @@ void LogJs::logInfo(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(Context::GetCurrent());
   log(args, Log::Info);
+  args.GetReturnValue().SetUndefined();
+}
+
+void LogJs::logStatus(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+  log(args, Log::Status);
   args.GetReturnValue().SetUndefined();
 }
 
@@ -171,7 +178,6 @@ void LogJs::logWarn(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(Context::GetCurrent());
   log(args, Log::Warn);
   args.GetReturnValue().SetUndefined();
 }
@@ -180,7 +186,6 @@ void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
-//  Context::Scope context_scope(Context::GetCurrent());
   log(args, Log::Error);
   args.GetReturnValue().SetUndefined();
 }
@@ -188,8 +193,7 @@ void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 void LogJs::logFatal(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-//  Context::Scope context_scope(Context::GetCurrent());
+  HandleScope scope(current);;
   log(args, Log::Fatal);
   args.GetReturnValue().SetUndefined();
 }

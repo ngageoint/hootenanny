@@ -61,7 +61,6 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-// Default constructor
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
@@ -79,7 +78,6 @@ OsmJsonReader::OsmJsonReader()
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount())
 {
-  // Do nothing special
 }
 
 OsmJsonReader::~OsmJsonReader()
@@ -91,17 +89,22 @@ bool OsmJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
 
-  // Is it a file?
-  if (myUrl.isLocalFile())
-  {
-    QString filename = myUrl.toLocalFile();
+  const bool isRelativeUrl = myUrl.isRelative();
+  const bool isLocalFile =  myUrl.isLocalFile();
 
+  // Is it a file?
+  if (isRelativeUrl || isLocalFile)
+  {
+    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
     if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
+    {
       return true;
+    }
   }
 
   // Is it a web address?
-  if ("http" == myUrl.scheme() || "https" == myUrl.scheme())
+  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() ||
+      "https" == myUrl.scheme()))
   {
     return true;
   }
@@ -141,6 +144,8 @@ void OsmJsonReader::open(QString url)
     {
       _isWeb = true;
     }
+    LOG_VARD(_isFile);
+    LOG_VARD(_isWeb);
   }
   catch (const std::exception& ex)
   {
@@ -461,6 +466,7 @@ void OsmJsonReader::_readFromHttp()
     urlQuery.addQueryItem("srsname", "EPSG:4326");
     _url.setQuery(urlQuery);
   }
+
   bool split = false;
   int numSplits = 1;
   vector<thread> threads;
@@ -511,6 +517,7 @@ void OsmJsonReader::_readFromHttp()
       }
     }
   }
+
   if (split)
   {
     //  Wait on the work to be completed
@@ -523,7 +530,9 @@ void OsmJsonReader::_readFromHttp()
     //  Do HTTP GET request without splitting
     HootNetworkRequest request;
     request.networkRequest(_url);
-    _results.append(QString::fromUtf8(request.getResponseContent().data()));
+    const QString response = QString::fromUtf8(request.getResponseContent().data());
+    LOG_VART(response.left(200));
+    _results.append(response);
   }
 }
 

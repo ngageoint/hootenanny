@@ -15,8 +15,9 @@ When(/^I click Get Started$/) do
     # In Capybara 0.4+ #find_field raises an error instead of returning nil
     el = nil
   end
-  Capybara.default_max_wait_time = oldTimeout
   el.click unless el.nil?
+  page.should have_no_css('div.shaded', :visible => true)
+  Capybara.default_max_wait_time = oldTimeout
 end
 
 When(/^I click the "([^"]*)" icon$/) do |cls|
@@ -911,6 +912,7 @@ Then(/^I wait ([0-9]+) seconds to see "([^"]*)" on the map$/) do |wait, el|
 end
 
 When(/^I click the review item column in the tag table$/) do
+  page.should have_no_css('#processingDiv', :visible => true)
   page.all('td.f1').first.click
 end
 
