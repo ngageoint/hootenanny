@@ -50,9 +50,10 @@ void Log::log(WarningLevel level, const string& str)
 }
 
 void Log::log(WarningLevel level, const string& str, const string& filename,
-  const string& /*functionName*/, int lineNumber)
-{
-  if (level >= _level)
+  const string& prettyFunction, int lineNumber)
+{  
+
+  if (level >= _level && notFiltered(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
@@ -63,9 +64,9 @@ void Log::log(WarningLevel level, const string& str, const string& filename,
 }
 
 void Log::progress(WarningLevel level, const string& str, const string& filename,
-  const string& /*functionName*/, int lineNumber)
+  const string& prettyFunction, int lineNumber)
 {
-  if (level >= _level)
+  if (level >= _level && notFiltered(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
@@ -74,6 +75,27 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
             ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str <<
             "        \r" << flush;
   }
+}
+
+bool Log::notFiltered(const string& prettyFunction)
+{
+  // init here instead of in init() since some logs are being produced before the init() call
+  if (!_classFilterInitialized)
+  {
+    _classFilter = ConfigOptions().getLogClassFilter().split(";");
+    _classFilter.removeAll(QString(""));
+    _classFilterInitialized = true;
+  }
+
+  // split arguments from function call name
+  QStringList nameParts = QString::fromStdString(prettyFunction).split("(");
+  if (nameParts.length() < 1) return true;
+
+  // split class name from function name
+  nameParts = nameParts[0].split("::");
+  int listLen = nameParts.length();
+
+  return _classFilter.empty() || (listLen > 1 && _classFilter.contains( nameParts[listLen-2] ));
 }
 
 void Log::setLevel(WarningLevel l)
