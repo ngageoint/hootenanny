@@ -22,29 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "MapCleaner.h"
+#ifndef PROGRESS_REPORTER_H
+#define PROGRESS_REPORTER_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Progress.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, MapCleaner)
-
-MapCleaner::MapCleaner()
+/**
+ * Simple interface for reporting job status from commands
+ */
+class ProgressReporter
 {
+public:
+
+  virtual ~ProgressReporter() {}
+
+  /**
+   * Allows for passing in progress info for status updates.
+   *
+   * @param progress progress info; A copy initialized to the most recent progress state is passed
+   * in to avoid maintaining progress with the same information across the entire application.
+   */
+  virtual void setProgress(Progress progress) = 0;
+
+  /**
+   * The number of job task steps performed by the implementer related to status progress reporting
+   *
+   * @return number of job steps for the progress task
+   */
+  virtual unsigned int getNumSteps() const = 0;
+};
+
 }
 
-void MapCleaner::apply(boost::shared_ptr<OsmMap>& map)
-{
-  NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
-}
-
-}
+#endif // PROGRESS_REPORTER_H

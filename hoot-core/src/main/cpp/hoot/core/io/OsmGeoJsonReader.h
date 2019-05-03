@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -197,8 +197,10 @@ private:
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
+
+  boost::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_GEOJSON_READER_H

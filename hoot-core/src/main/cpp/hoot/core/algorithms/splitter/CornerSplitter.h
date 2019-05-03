@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiHash>
@@ -49,7 +50,7 @@ class Way;
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
-class CornerSplitter : public OsmMapOperation, Configurable
+class CornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
 {
 public:
 
@@ -71,7 +72,13 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
+  virtual QString getInitStatusMessage() const { return "Splitting sharp road corners..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Split " + QString::number(_numAffected) + " road corners"; }
+
 private:
+
   /**
    * @brief _splitRoundedCorners Split rounded corners in the middle just like a non-rounded corner
    */

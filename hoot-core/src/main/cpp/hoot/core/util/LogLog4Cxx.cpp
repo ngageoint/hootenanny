@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -72,8 +72,8 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
   case Log::Info:
     return Level::getInfo();
     break;
-  case Log::Verbose:
-    return Level::getInfo();
+  case Log::Status:
+    return Level::getStatus();
     break;
   case Log::Warn:
     return Level::getWarn();
@@ -126,7 +126,7 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << getLevelString(level) << " " <<
             ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str <<
             "        \r" << flush;
   }

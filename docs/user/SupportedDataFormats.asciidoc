@@ -5,10 +5,10 @@
 **Hootenanny can import from:**
 
 * ESRI File Geodatabase (.gdb)
-* GeoJSON (.geojson) (M1)
+* GeoJSON (.geojson file or GeoJSON URL) (M1)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* JSON file (.json; similar to Overpass JSON) (M1)
+* JSON (Overpass JSON (http://overpass-api.de/output_formats.html#json): .json file or JSON URL) (M1)
 * OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
@@ -21,7 +21,7 @@
 * ESRI File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
 * Hootenanny API Database (hootapidb://)
-* JSON file (.json; similar to Overpass JSON) (M1)
+* JSON file (Overpass JSON: .json file) (M1)
 * OpenStreetMap XML file (.osm) (M2)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
