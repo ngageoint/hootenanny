@@ -37,7 +37,7 @@
   { \
     std::stringstream ss_; \
     ss_ << message; \
-    hoot::Log::getInstance().log((level), ss_.str(), __FILE__, "", __LINE__); \
+    hoot::Log::getInstance().log((level), ss_.str(), __FILE__, __PRETTY_FUNCTION__, __LINE__); \
   }}
 
 #define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }

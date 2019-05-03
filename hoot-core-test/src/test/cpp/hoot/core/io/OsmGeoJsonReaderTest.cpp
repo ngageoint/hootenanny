@@ -118,11 +118,12 @@ public:
     CPPUNIT_ASSERT(!uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(uut.isSupported(_inputPath + "/AllDataTypes.geojson"));
     CPPUNIT_ASSERT(!uut.isSupported("blah.geojson"));
+
     // We skip Overpass urls to let the OsmJsonReader handle them.
     CPPUNIT_ASSERT(!uut.isSupported("http://" + overpassHost));
     CPPUNIT_ASSERT(!uut.isSupported("https://" + overpassHost));
-    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
     // wrong scheme
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
     CPPUNIT_ASSERT(!uut.isSupported("ftp://blah"));
     // Non-Overpass API url's with the correct scheme can point to anything for GeoJSON reading.
     CPPUNIT_ASSERT(uut.isSupported("http://blah"));
