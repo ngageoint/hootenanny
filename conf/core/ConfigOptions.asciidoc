@@ -301,6 +301,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.merge.many.to.many.matches
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, many to many building matches will result in a review. If true, they will all be merged
+together when matched.
+
 === building.miss.threshold
 
 * Data Type: double
@@ -1747,6 +1755,14 @@ details.  The "best" value varies depending on the input data as well as how the
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
+=== log.class.filter
+
+* Data Type: string
+* Default Value: ``
+
+A semicolon delimited list of class names used for limiting the log output. An empty string
+(default) disables the filtering.
+
 === log.format
 
 * Data Type: string
@@ -1790,14 +1806,6 @@ Foo: Pre-constraining match count: 11
 The maximum number of warn log messages that will be emitted per class before they are silenced.
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
 A setting of -1 is useful for tests where you do not have granular enough logging control.
-
-=== log.class.filter
-
-* Data Type: string
-* Default Value: ``
-
-A semicolon delimited list of class names used for limiting the log output. An empty string
-(default) disables the filtering.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms

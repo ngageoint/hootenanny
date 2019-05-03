@@ -514,6 +514,19 @@ public:
 
     OsmJsonReader::scrubBigInts(bigIntMultiline);
     HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
+
+    // One of the regex's to clean big ints originally had a leading semicolon in it (see related
+    // note in OsmJsonReader::scrubBigInts), which would add double quotes to the text below within
+    // a single json value and break it. Haven't encountered any data instances to be cleaned so far
+    // that would require the semicolon to be in the regex, so removed it. If any instances do exist,
+    // then we need to rethink that regex to correctly parse this.
+    QString bigIntEmbedded =
+      "{\n"
+      " \"fixme\": \"DUPLICATE [Facebook:1477777628952292, Facebook:1477777665618955]\"\n"
+      "}";
+    const QString bigIntEmbeddedCorrect(bigIntEmbedded);
+    OsmJsonReader::scrubBigInts(bigIntEmbedded);
+    HOOT_STR_EQUALS(bigIntEmbeddedCorrect, bigIntEmbedded);
   }
 
   void isSupportedTest()

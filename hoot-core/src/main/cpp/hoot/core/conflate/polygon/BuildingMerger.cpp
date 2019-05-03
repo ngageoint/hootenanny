@@ -44,7 +44,15 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/util/Factory.h>
+<<<<<<< Updated upstream
 #include <hoot/core/elements/OsmUtils.h>
+=======
+<<<<<<< Updated upstream
+=======
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/schema/PreserveTypesTagMerger.h>
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 using namespace std;
 
@@ -100,17 +108,18 @@ MergerBase()
 BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _keepMoreComplexGeometryWhenAutoMerging(
-  ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging())
+  ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
+_mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches())
 {
 }
 
 void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  //check if it is many to many
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
-  ReviewMarker reviewMarker;
+
+  //check if it is many to many
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
@@ -119,7 +128,11 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     combined.insert(sit->first);
     combined.insert(sit->second);
   }
-  if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
+  const bool manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
+  //const bool manyToOneMatch = firstPairs.size() > 1 || secondPairs.size() > 1;
+
+  ReviewMarker reviewMarker;
+  if (manyToManyMatch && !_mergeManyToManyMatches)
   {
     const QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
@@ -231,8 +244,17 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
         scrap->getElementId() << "...");
     }
 
-    // use the default tag merging mechanism
-    Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+    Tags newTags;
+    if (manyToManyMatch && _mergeManyToManyMatches)
+    {
+      // preserve type tags
+      newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+    }
+    else
+    {
+      // use the default tag merging mechanism
+      newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+    }
 
     QStringList ref1;
     e1->getTags().readValues(MetadataTags::Ref1(), ref1);
@@ -413,24 +435,56 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
 {
+<<<<<<< Updated upstream
   set<ElementId> e;
+<<<<<<< Updated upstream
+=======
+
+=======
+  set<ElementId> eids;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
-    e.insert(it->first);
+    eids.insert(it->first);
   }
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+
+>>>>>>> Stashed changes
   return buildBuilding(map, e);
+=======
+  return buildBuilding(map, eids);
+>>>>>>> Stashed changes
 }
 
 boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
+<<<<<<< Updated upstream
   set<ElementId> e;
+<<<<<<< Updated upstream
+=======
+
+=======
+  set<ElementId> eids;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
-    e.insert(it->second);
+    eids.insert(it->second);
   }
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+
+>>>>>>> Stashed changes
   return buildBuilding(map, e);
+=======
+  return buildBuilding(map, eids);
+>>>>>>> Stashed changes
 }
 
 void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)

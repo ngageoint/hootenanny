@@ -220,7 +220,7 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 set< pair<ElementId, ElementId> > BuildingMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }

@@ -43,6 +43,7 @@ HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
 PreserveTypesTagMerger::PreserveTypesTagMerger()
 {
+  LOG_VART(ConfigOptions().getTagMergerDefault());
 }
 
 Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
@@ -51,8 +52,16 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   Tags t1Copy = t1;
   Tags t2Copy = t2;
 
-  TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
-  TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
+  if (ConfigOptions().getTagMergerDefault() == "hoot::OverwriteTag1Merger")
+  {
+    TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);
+    TagComparator::getInstance().mergeText(t2Copy, t1Copy, result);
+  }
+  else
+  {
+    TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
+    TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
+  }
 
   //retain any previously set alt_types
   if (!t1Copy[ALT_TYPES_TAG_KEY].trimmed().isEmpty())

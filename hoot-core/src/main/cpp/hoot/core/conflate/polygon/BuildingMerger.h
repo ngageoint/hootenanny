@@ -52,9 +52,9 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  explicit BuildingMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
+  explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) override;
+  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
                                                   const std::set<ElementId>& eids);
@@ -88,6 +88,10 @@ private:
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;
+  // The default behavior is to review many to many matches. Setting this to true allows them to
+  // all be merged together.
+  // TODO: add to tests
+  bool _mergeManyToManyMatches;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
