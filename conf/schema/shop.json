@@ -5,6 +5,11 @@
             "node",
             "area"
         ],
+        "categories": [
+            "poi",
+            "building",
+            "use"
+        ],
         "influence": 1,
         "isA": "hgispoi",
         "name": "shop",
@@ -2133,14 +2138,6 @@
     {
         "#": "Count in tag info is 2406 on 2015-09-01",
         "description": "A shop selling tickets for concerts, events, public transport, ...",
-         "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "use",
-            "poi"
-        ],
         "isA": "shop",
         "name": "shop=ticket",
 	"aliases": [

@@ -27,7 +27,6 @@
 #include "PreserveTypesTagMerger.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
 
@@ -41,8 +40,10 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys) :
-_skipTagKeys(skipTagKeys)
+PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys,
+                                               const OsmSchemaCategory& categoryFilter) :
+_skipTagKeys(skipTagKeys),
+_categoryFilter(categoryFilter)
 {
 }
 
@@ -91,10 +92,11 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       LOG_TRACE("Skipping metadata tag: " << it.key() << "=" <<  it.value() << "...");
       continue;
     }
-    // TODO: need a stricter check here to just use type related tags
-    if (!schema.hasTagKey(it.key()))
+    if (_categoryFilter != OsmSchemaCategory::Empty &&
+        !schema.getCategories(it.key(), it.value()).intersects(_categoryFilter))
     {
-      LOG_TRACE("Skipping tag key not in schema: " << it.key() << "...");
+      LOG_TRACE(
+        "Skipping tag not passing category filter: " << it.key() << "=" << it.value() << "...");
       continue;
     }
 

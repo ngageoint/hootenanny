@@ -241,7 +241,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     if (_manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
-      newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+      newTags =
+        PreserveTypesTagMerger(std::set<QString>(), OsmSchemaCategory::building())
+          .mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
       _removeRedundantAltTypeTags(newTags);
     }
     else
@@ -319,7 +321,8 @@ void BuildingMerger::_removeRedundantAltTypeTags(Tags& tags)
   if (tags.contains("alt_types"))
   {
     // Remove anything in alt_types that's also in the building (may be able to handle this within
-    // PreserveTypesTagMerger instead).
+    // PreserveTypesTagMerger instead). So far, this has primarily been done to keep building=yes
+    // out of alt_types.
     const QStringList altTypes = tags.get("alt_types").split(";");
     LOG_VART(altTypes);
     QStringList altTypesCopy = altTypes;
