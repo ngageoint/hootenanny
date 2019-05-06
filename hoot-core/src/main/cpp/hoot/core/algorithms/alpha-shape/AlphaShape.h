@@ -82,6 +82,9 @@ public:
 
   boost::shared_ptr<OsmMap> toOsmMap();
 
+
+  std::vector<boost::shared_ptr<geos::geom::Polygon>> _debugPolys;
+
 private:
 
   double _alpha;

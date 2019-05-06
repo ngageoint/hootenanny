@@ -354,6 +354,8 @@ boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 
 boost::shared_ptr<Geometry> AlphaShape::toGeometry2()
 {
+  _debugPolys.clear();
+
   const vector<Face>& faces = getInsideFaces();
   vector<bool> processedFaces(faces.size());
 
@@ -367,10 +369,14 @@ boost::shared_ptr<Geometry> AlphaShape::toGeometry2()
       vector<Face> cluster;
       recurseAdjacentFaces(faces, processedFaces, faceIndex, cluster);
 
+      LOG_INFO("cluster size: " << cluster.size());
+
       foreach (Face face, cluster)
       {
         boost::shared_ptr<Polygon> p = _convertFaceToPolygon(face);
         pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(p.get()));
+
+        _debugPolys.push_back(p);
       }
 
       break;
@@ -386,6 +392,8 @@ void AlphaShape::recurseAdjacentFaces( const vector<Face>& faces, vector<bool>& 
 
   cluster.push_back(faces[faceIndex]);
   processedFaces[faceIndex] = true;
+
+  LOG_INFO("Face: " << faceIndex);
 
 //  if( cluster.size() > 56 )
 //  {

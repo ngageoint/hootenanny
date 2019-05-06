@@ -219,12 +219,12 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     {
       CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
 
-      Coordinate last;
+      CoordinateExt last;
       bool hasLast = false;
 
       for (size_t i = 0; i < pCoords->size(); i++)
       {
-        Coordinate c = pCoords->getAt(i);
+        CoordinateExt c = pCoords->getAt(i);
         std::pair<double, double> point( c.x, c.y );
         points.push_back(point);
 
@@ -232,7 +232,24 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
         {
           // if the this and the last point are further apart than distance,
           // split it up in distance or smaller length points
-          //todo
+          CoordinateExt delta = last - c;
+          double len = delta.length();
+          double testDist = _alpha / 2.0;
+
+          if (len > testDist)
+          {
+            double factor = testDist / len;
+            int count = (int)(1.0 / factor);
+
+            for (int p = 1; p <= count; p++)
+            {
+              double inc = (double)p * factor;
+              CoordinateExt vInc = delta * inc;
+              CoordinateExt add = c + vInc;
+              std::pair<double, double> addPoint( add.x, add.y );
+              points.push_back(addPoint);
+            }
+          }
         }
 
         last = c;
@@ -242,16 +259,17 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     alphashape.insert(points);
 
-    if (false)
-    {
-      // generate geometry
-      boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry2();
+    // generate geometry
+    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry2();
 
+    if (true)
+    {
       // create way from geometry
       CoordinateSequence* pAlphaCoords = pAlphaGeom->getCoordinates();
 
       WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
       pAlphaShapeWay->getTags()["PolyCluster"] = "Alpha";
+      pAlphaShapeWay->getTags()["leisure"] = "common";
       _pMap->addElement(pAlphaShapeWay);
 
       for (size_t i = 0; i < pAlphaCoords->size(); i++)
@@ -266,6 +284,9 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     {
       // add all the inside faces as individual polygons for debugging
       std::vector<boost::shared_ptr<Polygon>> tris = alphashape.getInsidePolys();
+      // add only the individual tris of the toGeometry2 cluster result
+      // std::vector<boost::shared_ptr<Polygon>> tris = _debugPolys;
+
       int index = 0;
 
       foreach (boost::shared_ptr<Polygon> ptri, tris)
@@ -275,6 +296,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
         WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
         pAlphaShapeWay->getTags()["PolyCluster"] = "Triangle";
         pAlphaShapeWay->getTags()["Index"] = QString::number(index);
+        pAlphaShapeWay->getTags()["leisure"] = "common";
 
         _pMap->addElement(pAlphaShapeWay);
 
