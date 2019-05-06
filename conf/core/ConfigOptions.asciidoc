@@ -1760,8 +1760,8 @@ data.
 * Data Type: string
 * Default Value: ``
 
-A semicolon delimited list of class names used for limiting the log output. An empty string
-(default) disables the filtering.
+A semicolon delimited list of class names used for limiting the log output. Do not prepend class
+names with their namespace. An empty string (default) disables the filtering.
 
 === log.format
 

@@ -68,10 +68,8 @@ _reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
 _dateTagKey(dateTagKey),
 _dateFormat(dateFormat)
 {  
-  LOG_VART(_eid1);
-  LOG_VART(_eid2);
-  //OsmUtils::logElementDetail(map->getElement(_eid1), map, Log::Trace, "BuildingMatch: e1");
-  //OsmUtils::logElementDetail(map->getElement(_eid2), map, Log::Trace, "BuildingMatch: e2");
+  OsmUtils::logElementDetail(map->getElement(_eid1), map, Log::Trace, "BuildingMatch: e1");
+  OsmUtils::logElementDetail(map->getElement(_eid2), map, Log::Trace, "BuildingMatch: e2");
 
   _p = _rf->classify(map, _eid1, _eid2);
 

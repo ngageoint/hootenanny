@@ -50,7 +50,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   bool result = false;
   assert(matches.size() > 0);
 
-  set< pair<ElementId, ElementId> > eids;
+  set<pair<ElementId, ElementId>> eids;
 
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
@@ -68,7 +68,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
     // add all the element to element pairs to a set
     else
     {
-      set< pair<ElementId, ElementId> > s = bm->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = bm->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
   }

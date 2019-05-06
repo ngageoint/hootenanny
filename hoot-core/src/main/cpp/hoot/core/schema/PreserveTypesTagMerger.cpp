@@ -52,6 +52,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   Tags t1Copy = t1;
   Tags t2Copy = t2;
 
+  // TODO: not certain about this yet
   if (ConfigOptions().getTagMergerDefault() == "hoot::OverwriteTag1Merger")
   {
     TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);

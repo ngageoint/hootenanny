@@ -122,7 +122,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     combined.insert(sit->second);
   }
   const bool manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
-  //const bool manyToOneMatch = firstPairs.size() > 1 || secondPairs.size() > 1;
 
   ReviewMarker reviewMarker;
   if (manyToManyMatch && !_mergeManyToManyMatches)
@@ -136,14 +135,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     boost::shared_ptr<Element> e1 = _buildBuilding1(map);
     if (e1.get())
     {
-      LOG_VART(e1->getElementId());
-      //OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
+      OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
     }
     boost::shared_ptr<Element> e2 = _buildBuilding2(map);
     if (e2.get())
     {
-      LOG_VART(e2->getElementId());
-      //OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
+      OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
     }
 
     boost::shared_ptr<Element> keeper;
@@ -238,6 +235,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     }
 
     Tags newTags;
+    LOG_TRACE("e1 tags before merging and after built building tag merge: " << e1->getTags());
+    LOG_TRACE("e2 tags before merging and after built building tag merge: " << e2->getTags());
     if (manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
@@ -248,6 +247,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       // use the default tag merging mechanism
       newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
     }
+    LOG_TRACE("tags after merging: " << newTags);
 
     QStringList ref1;
     e1->getTags().readValues(MetadataTags::Ref1(), ref1);
@@ -272,10 +272,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     keeper->setTags(newTags);
     keeper->setStatus(Status::Conflated);
 
-    LOG_VART(keeper->getElementId());
-    LOG_VART(scrap->getElementId());
-    //OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
-    //OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
+    OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
+    OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
 
     //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
     //relation members, need to be removed as well.
@@ -287,7 +285,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
     scrap->getTags().clear();
 
-    //delete any multipoly members
+    // delete any multipoly members
     LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
     for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
          it != multiPolyMemberIds.end(); ++it)
@@ -295,8 +293,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       RecursiveElementRemover(*it).apply(map);
     }
 
-    set< pair<ElementId, ElementId> > replacedSet;
-    for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
+    set<pair<ElementId, ElementId>> replacedSet;
+    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
          it != _pairs.end(); ++it)
     {
       // if we replaced the second group of buildings
@@ -396,7 +394,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 
       if (!isBuilding)
       {
-        LOG_TRACE("Non-building part: " << e->getElementId());
+        OsmUtils::logElementDetail(e, map, Log::Trace, "BuildingMerger: Non-building part");
         parts.push_back(e);
       }
     }

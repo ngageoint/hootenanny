@@ -37,6 +37,7 @@
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/schema/BuildingPartTagMerger.h>
 
 // Qt
 #include <QThreadPool>
@@ -50,10 +51,11 @@ int BuildingPartMergeOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingPartMergeOp)
 
-BuildingPartMergeOp::BuildingPartMergeOp() :
+BuildingPartMergeOp::BuildingPartMergeOp(bool preserveTypes) :
 _totalBuildingGroupsProcessed(0),
 _numBuildingGroupsMerged(0),
-_threadCount(1)
+_threadCount(1),
+_preserveTypes(preserveTypes)
 {
   _initBuildingPartTagNames();
 }
@@ -430,74 +432,38 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
   // This is primarily in place to support testable output.
   InMemoryElementSorter::sort(parts);
 
+  // put the building parts into a building relation
   RelationPtr building(
     new Relation(
       parts[0]->getStatus(), map->createNextRelationId(),
       WorstCircularErrorVisitor::getWorstCircularError(parts), MetadataTags::RelationBuilding()));
 
-  OsmSchema& schema = OsmSchema::getInstance();
-  Tags& tags = building->getTags();
+  Tags& buildingTags = building->getTags();
+  LOG_TRACE("Building relation starting tags:" << buildingTags);
 
+  BuildingPartTagMerger tagMerger(_buildingPartTagNames);
   for (size_t i = 0; i < parts.size(); i++)
   {
-    building->addElement(MetadataTags::RolePart(), parts[i]);
-
-    Tags partTags = parts[i]->getTags();
-
-    Tags tagsCopy = tags;
-    Tags names;
-    TagComparator::getInstance().mergeNames(tagsCopy, partTags, names);
-    tags.set(names);
-
-    // go through all the tags.
-    for (Tags::const_iterator it = partTags.begin(); it != partTags.end(); ++it)
-    {
-      // ignore all keys that are building:part specific.
-      if (_buildingPartTagNames.find(it.key()) == _buildingPartTagNames.end())
-      {
-        // if the tag isn't already in the relation
-        if (tags.contains(it.key()) == false)
-        {
-          tags[it.key()] = it.value();
-        }
-        // if this is an arbitrary text value, then concatenate the values.
-        else if (schema.isTextTag(it.key()))
-        {
-          tags.appendValueIfUnique(it.key(), it.value());
-        }
-        // if the tag is in the relation and the tags differ.
-        else if (tags[it.key()] != it.value())
-        {
-          tags[it.key()] = "";
-        }
-      }
-    }
+    ElementPtr buildingPart = parts[i];
+    building->addElement(MetadataTags::RolePart(), buildingPart);
+    buildingTags =
+      tagMerger.mergeTags(building->getTags(), buildingPart->getTags(), ElementType::Relation);
+    building->setTags(buildingTags);
   }
+  buildingTags = building->getTags();
+  LOG_VART(buildingTags);
 
-  // go through all the keys that were consistent for each of the parts and move them into the
-  // relation.
-  Tags tagsCopy = tags;
-  for (Tags::const_iterator it = tagsCopy.begin(); it != tagsCopy.end(); ++it)
+  for (Tags::const_iterator it = buildingTags.begin(); it != buildingTags.end(); ++it)
   {
-    // if the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
-    // parts.
-    if (it.value() == "")
-    {
-      tags.remove(it.key());
-    }
     // if the tag isn't empty, remove it from each of the parts.
-    else
+    for (size_t i = 0; i < parts.size(); i++)
     {
-      for (size_t i = 0; i < parts.size(); i++)
+      ElementPtr buildingPart = parts[i];
+      if (buildingPart->getTags().contains(it.key()))
       {
-        parts[i]->getTags().remove(it.key());
+        buildingPart->getTags().remove(it.key());
       }
     }
-  }
-
-  if (tags.contains("building") == false)
-  {
-    tags["building"] = "yes";
   }
 
   // replace the building tag with building:part tags.
@@ -505,6 +471,12 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
   {
     parts[i]->getTags().remove("building");
     parts[i]->getTags()[MetadataTags::BuildingPart()] = "yes";
+  }
+
+  LOG_VART(building);
+  for (size_t i = 0; i < parts.size(); i++)
+  {
+    LOG_VART(parts[i]);
   }
 
   map->addRelation(building);

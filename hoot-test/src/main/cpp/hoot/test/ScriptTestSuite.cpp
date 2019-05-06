@@ -49,9 +49,6 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec
     ignorePrefix << "Service";
     ignorePrefix << "RndService";
 # endif
-# ifndef HOOT_HAVE_HADOOP
-    ignorePrefix << "Big";
-# endif
 # ifndef HOOT_HAVE_RND
     ignorePrefix << "Rnd";
 # endif

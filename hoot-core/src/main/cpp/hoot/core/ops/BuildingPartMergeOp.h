@@ -101,7 +101,7 @@ public:
 
   static int logWarnCount;
 
-  BuildingPartMergeOp();
+  BuildingPartMergeOp(bool preserveTypes = false);
 
   virtual void apply(OsmMapPtr& map) override;
 
@@ -156,6 +156,9 @@ private:
   int _numBuildingGroupsMerged;
 
   int _threadCount;
+
+  // TODO
+  bool _preserveTypes;
 
   void _init(OsmMapPtr& map);
   void _initBuildingPartTagNames();
