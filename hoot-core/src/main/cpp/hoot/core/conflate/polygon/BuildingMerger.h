@@ -56,8 +56,17 @@ public:
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
+  /**
+   * TODO
+   *
+   * @param map
+   * @param eids
+   * @param preserveTypes
+   * @return
+   */
   static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
-                                                  const std::set<ElementId>& eids);
+                                                  const std::set<ElementId>& eids,
+                                                  const bool preserveTypes = false);
 
   virtual QString toString() const override;
 
@@ -92,11 +101,17 @@ private:
   // all be merged together.
   // TODO: add to tests
   bool _mergeManyToManyMatches;
+  // TODO
+  bool _manyToManyMatch;
 
-  boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
-  boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+  /*
+   * TODO
+   */
+  boost::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
+
+  void _removeRedundantAltTypeTags(Tags& tags);
 };
 
 }

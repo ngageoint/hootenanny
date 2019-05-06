@@ -45,7 +45,7 @@ public:
 
   static std::string className() { return "hoot::PreserveTypesTagMerger"; }
 
-  PreserveTypesTagMerger();
+  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>());
 
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
@@ -53,6 +53,8 @@ public:
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
 private:
+
+  std::set<QString> _skipTagKeys;
 
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
 };

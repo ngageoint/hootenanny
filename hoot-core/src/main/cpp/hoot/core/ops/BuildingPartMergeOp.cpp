@@ -38,6 +38,7 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/schema/BuildingPartTagMerger.h>
+#include <hoot/core/schema/PreserveTypesTagMerger.h>
 
 // Qt
 #include <QThreadPool>
@@ -438,24 +439,37 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
       parts[0]->getStatus(), map->createNextRelationId(),
       WorstCircularErrorVisitor::getWorstCircularError(parts), MetadataTags::RelationBuilding()));
 
+  TagMergerPtr tagMerger;
+  LOG_VARD(_preserveTypes);
+  if (!_preserveTypes)
+  {
+    tagMerger.reset(new BuildingPartTagMerger(_buildingPartTagNames));
+  }
+  else
+  {
+    tagMerger.reset(new PreserveTypesTagMerger(_buildingPartTagNames));
+  }
+
   Tags& buildingTags = building->getTags();
   LOG_TRACE("Building relation starting tags:" << buildingTags);
-
-  BuildingPartTagMerger tagMerger(_buildingPartTagNames);
   for (size_t i = 0; i < parts.size(); i++)
   {
-    ElementPtr buildingPart = parts[i];
+   ElementPtr buildingPart = parts[i];
     building->addElement(MetadataTags::RolePart(), buildingPart);
     buildingTags =
-      tagMerger.mergeTags(building->getTags(), buildingPart->getTags(), ElementType::Relation);
+      tagMerger->mergeTags(building->getTags(), buildingPart->getTags(), ElementType::Relation);
     building->setTags(buildingTags);
+  }
+  if (!building->getTags().contains("building"))
+  {
+   building->getTags()["building"] = "yes";
   }
   buildingTags = building->getTags();
   LOG_VART(buildingTags);
 
   for (Tags::const_iterator it = buildingTags.begin(); it != buildingTags.end(); ++it)
   {
-    // if the tag isn't empty, remove it from each of the parts.
+    // Remove any tags in the building from each of the parts.
     for (size_t i = 0; i < parts.size(); i++)
     {
       ElementPtr buildingPart = parts[i];
@@ -466,7 +480,7 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
     }
   }
 
-  // replace the building tag with building:part tags.
+  // Replace the building tag with building:part tags.
   for (size_t i = 0; i < parts.size(); i++)
   {
     parts[i]->getTags().remove("building");

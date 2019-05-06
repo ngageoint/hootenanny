@@ -30,7 +30,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/PreserveTypesTagMerger.h>
 
 // Qt
 #include <QStringBuilder>
@@ -38,15 +37,13 @@
 namespace hoot
 {
 
-QString BuildingPartTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
-
 HOOT_FACTORY_REGISTER(TagMerger, BuildingPartTagMerger)
 
 BuildingPartTagMerger::BuildingPartTagMerger()
 {
 }
 
-BuildingPartTagMerger::BuildingPartTagMerger(std::set<QString> buildingPartTagNames) :
+BuildingPartTagMerger::BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames) :
 _buildingPartTagNames(buildingPartTagNames)
 {
 }
@@ -78,15 +75,15 @@ Tags BuildingPartTagMerger::mergeTags(const Tags& buildingTags, const Tags& buil
       {
         mergedTags[it.key()] = it.value();
       }
-      // if this is an arbitrary text value, then concatenate the values.
+      // If this is an arbitrary text value, then concatenate the values.
       else if (schema.isTextTag(it.key()))
       {
         mergedTags.appendValueIfUnique(it.key(), it.value());
       }
-      // if the tag is in the relation and the tags differ.
+      // If the tag is in the relation and the tags differ, mark it empty.
       else if (mergedTags[it.key()] != it.value())
       {
-        mergedTags[it.key()] = "";  // TODO: this breaks type preservation
+        mergedTags[it.key()] = "";
       }
     }
   }
@@ -94,21 +91,16 @@ Tags BuildingPartTagMerger::mergeTags(const Tags& buildingTags, const Tags& buil
 
   // go through all the keys that were consistent for each of the parts and move them into the
   // relation.
+
   buildingTagsCopy = mergedTags;
   for (Tags::const_iterator it = buildingTagsCopy.begin(); it != buildingTagsCopy.end(); ++it)
   {
-    // if the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
-    // parts.
-    if (it.value() == "")   // TODO: this breaks type preservation
+    // If the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
+    // parts...remove it.
+    if (it.value() == "")
     {
       mergedTags.remove(it.key());
     }
-    LOG_VART(mergedTags);
-  }
-
-  if (!mergedTags.contains("building"))
-  {
-    mergedTags["building"] = "yes";
   }
 
   LOG_VART(mergedTags);

@@ -39,12 +39,10 @@ class BuildingPartTagMerger : public TagMerger
 {
 public:
 
-  static QString ALT_TYPES_TAG_KEY;
-
   static std::string className() { return "hoot::BuildingPartTagMerger"; }
 
   BuildingPartTagMerger();
-  BuildingPartTagMerger(std::set<QString> buildingPartTagNames);
+  BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames);
 
   virtual Tags mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
                          ElementType et) const override;

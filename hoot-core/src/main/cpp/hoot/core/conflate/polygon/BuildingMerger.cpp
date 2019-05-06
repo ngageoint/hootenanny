@@ -102,7 +102,8 @@ BuildingMerger::BuildingMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _keepMoreComplexGeometryWhenAutoMerging(
   ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging()),
-_mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches())
+_mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
+_manyToManyMatch(false)
 {
 }
 
@@ -121,10 +122,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     combined.insert(sit->first);
     combined.insert(sit->second);
   }
-  const bool manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
+  _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
   ReviewMarker reviewMarker;
-  if (manyToManyMatch && !_mergeManyToManyMatches)
+  if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
     const QString note =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
@@ -132,12 +133,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
   else
   {
-    boost::shared_ptr<Element> e1 = _buildBuilding1(map);
+    boost::shared_ptr<Element> e1 = _buildBuilding(map, true);
     if (e1.get())
     {
       OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
     }
-    boost::shared_ptr<Element> e2 = _buildBuilding2(map);
+    boost::shared_ptr<Element> e2 = _buildBuilding(map, false);
     if (e2.get())
     {
       OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
@@ -237,10 +238,11 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     Tags newTags;
     LOG_TRACE("e1 tags before merging and after built building tag merge: " << e1->getTags());
     LOG_TRACE("e2 tags before merging and after built building tag merge: " << e2->getTags());
-    if (manyToManyMatch && _mergeManyToManyMatches)
+    if (_manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
       newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+      _removeRedundantAltTypeTags(newTags);
     }
     else
     {
@@ -311,6 +313,38 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 }
 
+void BuildingMerger::_removeRedundantAltTypeTags(Tags& tags)
+{
+  LOG_VART(tags.contains("alt_types"));
+  if (tags.contains("alt_types"))
+  {
+    // Remove anything in alt_types that's also in the building (may be able to handle this within
+    // PreserveTypesTagMerger instead).
+    const QStringList altTypes = tags.get("alt_types").split(";");
+    LOG_VART(altTypes);
+    QStringList altTypesCopy = altTypes;
+    for (int i = 0; i < altTypes.size(); i++)
+    {
+      LOG_VART(altTypes[i]);
+      assert(altTypes[i].contains("="));
+      const QStringList tagParts = altTypes[i].split("=");
+      assert(tagParts.size() == 2);
+      LOG_VART(tagParts);
+      LOG_VART(tags.get(tagParts[0]) == tagParts[1]);
+      if (tags.get(tagParts[0]) == tagParts[1])
+      {
+        altTypesCopy.removeAll(tagParts[0] + "=" + tagParts[1]);
+      }
+    }
+    LOG_VART(altTypesCopy);
+    if (altTypes.size() != altTypesCopy.size())
+    {
+      LOG_VART(altTypesCopy.join(";"));
+      tags.set("alt_types", altTypesCopy.join(";"));
+    }
+  }
+}
+
 QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& element) const
 {
   QSet<ElementId> relationMemberIdsToRemove;
@@ -336,7 +370,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 }
 
 boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
-                                                         const set<ElementId>& eid)
+                                                         const set<ElementId>& eid,
+                                                         const bool preserveTypes)
 {
   if (eid.size() > 0)
   {
@@ -403,7 +438,8 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     LOG_VART(toRemove.size());
     LOG_VART(toRemove);
 
-    boost::shared_ptr<Element> result = BuildingPartMergeOp().combineBuildingParts(map, parts);
+    boost::shared_ptr<Element> result =
+      BuildingPartMergeOp(preserveTypes).combineBuildingParts(map, parts);
     LOG_TRACE("Combined building parts into: " << result);
 
     // likely create a crit that only matches buildings and building parts and pass that
@@ -424,27 +460,23 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
 }
 
-boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
-{
-  set<ElementId> eids;
-
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
-  {
-    eids.insert(it->first);
-  }
-  return buildBuilding(map, eids);
-}
-
-boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
+boost::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
+                                                          const bool unknown1) const
 {
   set<ElementId> eids;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
     it != _pairs.end(); ++it)
   {
-    eids.insert(it->second);
+    if (unknown1)
+    {
+      eids.insert(it->first);
+    }
+    else
+    {
+      eids.insert(it->second);
+    }
   }
-  return buildBuilding(map, eids);
+  return buildBuilding(map, eids, _manyToManyMatch && _mergeManyToManyMatches);
 }
 
 void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
