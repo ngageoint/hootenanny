@@ -882,7 +882,10 @@ const vector<Face>& DelaunayTriangulation::getFaces()
 {
   if (_faces.size() == 0)
   {
-    _initFaces();
+    for (FaceIterator fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
+    {
+      _faces.push_back(*fi);
+    }
   }
   return _faces;
 }
@@ -899,12 +902,6 @@ const Edge DelaunayTriangulation::getStartingEdge() const
     throw Exception("You must add at least three points to create a triangulation.");
   }
   return Edge(_subdivision->getStartingEdge());
-}
-
-void DelaunayTriangulation::_initFaces()
-{
-  _faces.clear();
-
 }
 
 void DelaunayTriangulation::insert(double x, double y)

@@ -54,8 +54,8 @@ public:
 
 private:
   const int MAX_PROCESSED_NODES_PER_POLY = 1000;
-  double _distance = 17;
-  double _alpha = _distance / 2.0;
+  double _distance = 20;
+  double _alpha = _distance * 0.75;
   double _distanceSquared;
 
   boost::shared_ptr<OsmMap> _pMap;

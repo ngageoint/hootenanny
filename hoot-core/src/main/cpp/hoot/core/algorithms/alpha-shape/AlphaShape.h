@@ -45,13 +45,8 @@
 #include <set>
 #include <vector>
 
-namespace Tgs
-{
-class DelaunayTriangulation;
-class DisjointSet;
-class Edge;
-class Face;
-}
+// TGS
+#include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 
 namespace hoot
 {
@@ -76,6 +71,10 @@ public:
   AlphaShape(double alpha);
 
   boost::shared_ptr<geos::geom::Geometry> toGeometry();
+  boost::shared_ptr<geos::geom::Geometry> toGeometry2();
+
+  const std::vector<Tgs::Face> getInsideFaces();
+  const std::vector<boost::shared_ptr<geos::geom::Polygon>> getInsidePolys();
 
   void insert(const std::vector< std::pair<double, double> >& points);
 
@@ -87,8 +86,9 @@ private:
 
   double _alpha;
 
-  boost::shared_ptr<Tgs::DelaunayTriangulation> _dt;
+  boost::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
   std::set< std::pair<double, double> > _outsidePoint;
+  std::vector<Tgs::Face> _insideFaces;
 
   boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);
 
@@ -116,6 +116,8 @@ private:
   bool _isTooLong(const Tgs::Edge& e) const;
 
   boost::shared_ptr<geos::geom::Geometry> _validateGeometry(const boost::shared_ptr<geos::geom::Geometry>& g);
+
+  void recurseAdjacentFaces( const std::vector<Tgs::Face>& faces, std::vector<bool>& processedFaces, size_t faceIndex, std::vector<Tgs::Face>& cluster );
 };
 
 }

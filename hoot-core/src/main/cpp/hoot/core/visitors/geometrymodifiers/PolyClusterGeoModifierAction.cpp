@@ -88,7 +88,7 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
   // create cluster representations on the map
   _createClusterPolygons();
 
-  _createDebugConvexHull();
+  //_createDebugConvexHull();
 
   // debug info
   LOG_INFO( "Generated " << _clusters.length() << " clusters.");
@@ -219,32 +219,75 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     {
       CoordinateSequence* pCoords = _polyByWayId[wayId]->getCoordinates();
 
+      Coordinate last;
+      bool hasLast = false;
+
       for (size_t i = 0; i < pCoords->size(); i++)
       {
         Coordinate c = pCoords->getAt(i);
         std::pair<double, double> point( c.x, c.y );
         points.push_back(point);
+
+        if (hasLast)
+        {
+          // if the this and the last point are further apart than distance,
+          // split it up in distance or smaller length points
+          //todo
+        }
+
+        last = c;
+        hasLast = true;
       }
     }
 
     alphashape.insert(points);
 
-    // generate geometry
-    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
-
-    // create way from geometry
-    CoordinateSequence* pAlphaCoords = pAlphaGeom->getCoordinates();
-
-    WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
-    pAlphaShapeWay->getTags()["PolyCluster"] = "Alpha";
-    _pMap->addElement(pAlphaShapeWay);
-
-    for (size_t i = 0; i < pAlphaCoords->size(); i++)
+    if (false)
     {
-      Coordinate pos = pAlphaCoords->getAt(i);
-      NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
-      pAlphaShapeWay->addNode(pNode->getId());
-      _pMap->addElement(pNode);
+      // generate geometry
+      boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry2();
+
+      // create way from geometry
+      CoordinateSequence* pAlphaCoords = pAlphaGeom->getCoordinates();
+
+      WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
+      pAlphaShapeWay->getTags()["PolyCluster"] = "Alpha";
+      _pMap->addElement(pAlphaShapeWay);
+
+      for (size_t i = 0; i < pAlphaCoords->size(); i++)
+      {
+        Coordinate pos = pAlphaCoords->getAt(i);
+        NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
+        pAlphaShapeWay->addNode(pNode->getId());
+        _pMap->addElement(pNode);
+      }
+    }
+    else
+    {
+      // add all the inside faces as individual polygons for debugging
+      std::vector<boost::shared_ptr<Polygon>> tris = alphashape.getInsidePolys();
+      int index = 0;
+
+      foreach (boost::shared_ptr<Polygon> ptri, tris)
+      {
+        CoordinateSequence* pAlphaCoords = ptri->getCoordinates();
+
+        WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
+        pAlphaShapeWay->getTags()["PolyCluster"] = "Triangle";
+        pAlphaShapeWay->getTags()["Index"] = QString::number(index);
+
+        _pMap->addElement(pAlphaShapeWay);
+
+        for (size_t i = 0; i < pAlphaCoords->size(); i++)
+        {
+          Coordinate pos = pAlphaCoords->getAt(i);
+          NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
+          pAlphaShapeWay->addNode(pNode->getId());
+          _pMap->addElement(pNode);
+        }
+
+        index++;
+      }
     }
   }
 }
