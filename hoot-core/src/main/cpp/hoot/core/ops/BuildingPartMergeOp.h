@@ -139,6 +139,7 @@ public:
 
   int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }
   int getNumBuildingGroupsMerged() const { return _numBuildingGroupsMerged; }
+  void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
 

@@ -39,6 +39,7 @@
     <tag k='feature_area' v='5028.9' />
     <tag k='length' v='114.7' />
     <tag k='width' v='48.3' />
+    <tag k='name' v='Building 1' />
   </way>
   <way id='-22982062' action='modify'>
     <nd ref='-22974826' />
@@ -71,5 +72,6 @@
     <tag k='feature_area' v='19983.0' />
     <tag k='length' v='177.1' />
     <tag k='width' v='156.0' />
+    <tag k='name' v='Building 2' />
   </way>
 </osm>

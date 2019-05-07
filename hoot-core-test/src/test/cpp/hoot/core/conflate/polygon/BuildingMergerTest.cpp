@@ -77,14 +77,12 @@ class BuildingMergerTest : public HootTestFixture
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
-  //TODO: _mergeManyToManyMatches
+  //CPPUNIT_TEST(runManyToManyMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  BuildingMergerTest()
-    : HootTestFixture("test-files/",
-                      "test-output/conflate/polygon/")
+  BuildingMergerTest() : HootTestFixture("test-files/", "test-output/conflate/polygon/")
   {
     setResetType(ResetBasic);
   }
@@ -239,6 +237,24 @@ public:
     HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
   }
 
+  void runManyToManyMergeTest()
+  {
+    // TODO: finish
+
+    OsmMapPtr map(new OsmMap());
+    set<pair<ElementId, ElementId>> pairs = getPairsForManyToManyMergingTest(map);
+
+    BuildingMerger bm(pairs);
+    bm.setMergeManyToManyMatches(true);
+    vector<pair<ElementId, ElementId>> replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "BuildingMergerTest-runManyToManyMergeTest.osm");
+    //HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
+  }
+
 private:
 
   set<pair<ElementId, ElementId>> getPairsForComplexAutoMergingTests(OsmMapPtr map)
@@ -248,6 +264,33 @@ private:
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
     reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
+    vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
+    vector<long> wids3 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Maid-Rite");
+    wids2.insert(wids2.end(), wids3.begin(), wids3.end());
+    set<pair<ElementId, ElementId>> pairs;
+
+    for (size_t i = 0; i < wids2.size(); i++)
+    {
+      pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
+    }
+
+    return pairs;
+  }
+
+  set<pair<ElementId, ElementId>> getPairsForManyToManyMergingTest(OsmMapPtr map)
+  {
+    // TODO: finish
+
+    OsmXmlReader reader;
+    reader.setDefaultStatus(Status::Unknown1);
+    const QString inputPath =
+      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+    reader.read(inputPath + "/Input1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + "/Input2.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");

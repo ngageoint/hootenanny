@@ -81,10 +81,11 @@ public:
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 
+  virtual QString getDescription() const { return "Merges buildings"; }
+
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
-
-  virtual QString getDescription() const { return "Merges buildings"; }
+  void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }
 
 protected:
 

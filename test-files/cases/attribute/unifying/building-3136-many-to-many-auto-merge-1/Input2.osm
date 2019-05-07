@@ -47,7 +47,7 @@
     <tag k='building' v='yes' />
     <tag k='feature_area' v='39128.8' />
     <tag k='length' v='338.1' />
-    <tag k='name' v='Test' />
+    <tag k='name' v='Building 3' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='shop' v='mall' />
     <tag k='source:imagery' v='Unknown' />
@@ -66,7 +66,7 @@
     <tag k='building' v='yes' />
     <tag k='feature_area' v='1511.7' />
     <tag k='length' v='41.3' />
-    <tag k='name' v='Test' />
+    <tag k='name' v='Building 4' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='shop' v='supermarket' />
     <tag k='source:imagery' v='Unknown' />
@@ -85,7 +85,7 @@
     <tag k='building' v='yes' />
     <tag k='feature_area' v='1602.1' />
     <tag k='length' v='63.2' />
-    <tag k='name' v='Test' />
+    <tag k='name' v='Building 5' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
     <tag k='width' v='33.8' />
