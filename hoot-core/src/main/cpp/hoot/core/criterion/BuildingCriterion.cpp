@@ -54,6 +54,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
 
   const boost::shared_ptr<ElementToRelationMap>& e2r = _map->getIndex().getElementToRelationMap();
   const set<long>& parents = e2r->getRelationByElement(eid);
+  LOG_VART(parents);
   for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
     ++it)
   {
@@ -61,10 +62,12 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     if (isSatisfied(e))
     {
       result = true;
+      LOG_TRACE("isSatisfied=true: " << e->getElementId());
     }
     else
     {
       result = isParentABuilding(e->getElementId());
+      LOG_TRACE("isParentABuilding result: " << result << ";" << e->getElementId());
     }
   }
 
@@ -76,6 +79,8 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
   bool result = false;
 
   // if it is a building
+  LOG_VART(e->getElementType() == ElementType::Node);
+  LOG_VART(OsmSchema::getInstance().hasCategory(e->getTags(), "building"));
   if ((e->getElementType() != ElementType::Node) &&
       (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
@@ -83,6 +88,7 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
     // messy but reflects how the logic worked before moving OsmSchema feature type method logic
     // out to criterion.  Another option could be to make two separate criteria, one that checks
     // the parent and one that doesn't.
+    LOG_VART(_map.get());
     if (!_map || isParentABuilding(e->getElementId()) == false)
     {
       // see ticket #5952. If the building has a parent relation that is also a building then this
