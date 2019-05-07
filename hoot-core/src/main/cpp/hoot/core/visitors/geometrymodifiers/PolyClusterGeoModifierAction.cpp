@@ -31,12 +31,16 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
-
+#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Geos
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 
 // std
 #include <algorithm>
@@ -260,56 +264,53 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     alphashape.insert(points);
 
     // generate geometry
-    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry2();
+    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
 
-    if (true)
+    // combine polys from this cluster with AlphaShape
+    vector<Geometry*> geomvect;
+    geomvect.push_back(pAlphaGeom.get());
+
+    foreach (long wayId, cluster)
     {
-      // create way from geometry
-      CoordinateSequence* pAlphaCoords = pAlphaGeom->getCoordinates();
-
-      WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
-      pAlphaShapeWay->getTags()["PolyCluster"] = "Alpha";
-      pAlphaShapeWay->getTags()["leisure"] = "common";
-      _pMap->addElement(pAlphaShapeWay);
-
-      for (size_t i = 0; i < pAlphaCoords->size(); i++)
-      {
-        Coordinate pos = pAlphaCoords->getAt(i);
-        NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
-        pAlphaShapeWay->addNode(pNode->getId());
-        _pMap->addElement(pNode);
-      }
+      geomvect.push_back(_polyByWayId[wayId].get());
     }
-    else
+
+    MultiPolygon *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect);
+    //boost::shared_ptr<MultiPolygon> mp = boost::shared_ptr<MultiPolygon>(GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect));
+    boost::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
+
+    // create a new element with cluster representation
+    GeometryConverter gc(_pMap);
+    boost::shared_ptr<Element> pElem = gc.convertGeometryToElement(pCombinedPoly.get(),
+                                                                   Status::Unknown1,
+                                                                   WorstCircularErrorVisitor::getWorstCircularError(_pMap));
+    pElem->getTags()["PolyCluster"] = "Alpha";
+    pElem->getTags()["leisure"] = "common";
+    _pMap->addElement(pElem);
+
+    // remove cluster polys
+
+    // find all nodes from polys in this cluster
+    std::vector<long> nodeIds;
+
+    foreach (WayPtr pWay, _ways)
     {
-      // add all the inside faces as individual polygons for debugging
-      std::vector<boost::shared_ptr<Polygon>> tris = alphashape.getInsidePolys();
-      // add only the individual tris of the toGeometry2 cluster result
-      // std::vector<boost::shared_ptr<Polygon>> tris = _debugPolys;
+      const std::vector<long> wayNodes = pWay->getNodeIds();
+      nodeIds.insert(nodeIds.end(), wayNodes.begin(), wayNodes.end());
+    }
 
-      int index = 0;
+    // remove polys
+    foreach (long wayId, cluster)
+    {
+      RemoveWayOp::removeWayFully(_pMap, wayId);// removeOp(wayId, true);
+      _polyByWayId[wayId];
+    }
 
-      foreach (boost::shared_ptr<Polygon> ptri, tris)
-      {
-        CoordinateSequence* pAlphaCoords = ptri->getCoordinates();
-
-        WayPtr pAlphaShapeWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
-        pAlphaShapeWay->getTags()["PolyCluster"] = "Triangle";
-        pAlphaShapeWay->getTags()["Index"] = QString::number(index);
-        pAlphaShapeWay->getTags()["leisure"] = "common";
-
-        _pMap->addElement(pAlphaShapeWay);
-
-        for (size_t i = 0; i < pAlphaCoords->size(); i++)
-        {
-          Coordinate pos = pAlphaCoords->getAt(i);
-          NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
-          pAlphaShapeWay->addNode(pNode->getId());
-          _pMap->addElement(pNode);
-        }
-
-        index++;
-      }
+    // remove nodes
+    foreach (long nodeId, nodeIds)
+    {
+      RemoveNodeOp removeOp(nodeId, true, false, true);
+      removeOp.apply(_pMap);
     }
   }
 }

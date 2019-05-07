@@ -51,6 +51,7 @@ using namespace geos::geom;
 using namespace std;
 
 // TGS
+#include <tgs/DelaunayTriangulation/DelaunayTriangulation.h>
 #include <tgs/DisjointSet/DisjointSet.h>
 #include <tgs/RStarTree/HilbertCurve.h>
 #include <tgs/Statistics/Random.h>
@@ -332,8 +333,6 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
   }
   LOG_TRACE("Progress: " << randomized.size() - 1 << " of " << randomized.size() - 1 << "          ");
-
-  _insideFaces.clear();
 }
 
 boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()
@@ -350,122 +349,6 @@ boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()
   }
 
   return result;
-}
-
-boost::shared_ptr<Geometry> AlphaShape::toGeometry2()
-{
-  _debugPolys.clear();
-
-  const vector<Face>& faces = getInsideFaces();
-  vector<bool> processedFaces(faces.size());
-
-  boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
-
-  for (size_t faceIndex = 0; faceIndex < faces.size(); faceIndex++)
-  {
-    if (!processedFaces[faceIndex])
-    {
-
-      vector<Face> cluster;
-      recurseAdjacentFaces(faces, processedFaces, faceIndex, cluster);
-
-      LOG_INFO("cluster size: " << cluster.size());
-
-      foreach (Face face, cluster)
-      {
-        boost::shared_ptr<Polygon> p = _convertFaceToPolygon(face);
-        pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(p.get()));
-
-        _debugPolys.push_back(p);
-      }
-
-      break;
-    }
-  }
-
-  return pCombinedPoly;
-}
-
-void AlphaShape::recurseAdjacentFaces( const vector<Face>& faces, vector<bool>& processedFaces, size_t faceIndex, vector<Face>& cluster )
-{
-  assert(processedFaces[faceIndex] == false);
-
-  cluster.push_back(faces[faceIndex]);
-  processedFaces[faceIndex] = true;
-
-  LOG_INFO("Face: " << faceIndex);
-
-//  if( cluster.size() > 56 )
-//  {
-//    return;
-//  }
-
-  const Face* pThisFace = &faces[faceIndex];
-
-  for( size_t otherIndex = 0; otherIndex < faces.size(); otherIndex++ )
-  {
-    const Face* pOtherFace = &faces[otherIndex];
-
-    if (!processedFaces[otherIndex])
-    {
-      bool adjacent = false;
-
-      assert(pOtherFace != pThisFace);
-
-      // see if the face is adjacent by sharing at least 2 points
-      if (pOtherFace != pThisFace)
-      {
-        for (int i = 0; i < 6; i++)
-        {
-          Edge thisEdge = pThisFace->getEdge(i);
-
-          for (int j = 0; j < 6; j++)
-          {
-            Edge otherEdge = pOtherFace->getEdge(j);
-            if (thisEdge == otherEdge)
-            {
-                adjacent = true;
-                break;
-            }
-          }
-
-          if (adjacent) break;
-        }
-
-        if (adjacent)
-        {
-          recurseAdjacentFaces(faces, processedFaces, otherIndex, cluster);
-        }
-      }
-    }
-  }
-}
-
-const std::vector<Face> AlphaShape::getInsideFaces()
-{
-  if (_insideFaces.size() == 0)
-  {
-    const vector<Face>& faces = _pDelauneyTriangles->getFaces();
-
-    foreach (Face f, faces)
-    {
-      if (_isInside(f))_insideFaces.push_back(f);
-    }
-  }
-
-  return _insideFaces;
-}
-
-const std::vector<boost::shared_ptr<geos::geom::Polygon>> AlphaShape::getInsidePolys()
-{
-  std::vector<boost::shared_ptr<geos::geom::Polygon>> polys;
-
-  foreach (Face f, getInsideFaces())
-  {
-    polys.push_back( _convertFaceToPolygon(f) );
-  }
-
-  return polys;
 }
 
 boost::shared_ptr<Geometry> AlphaShape::toGeometry()
