@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 if (len(sys.argv) != 5):
     print "Usage:"
-    print sys.argv[0] + " (config file) (output file)"
+    print sys.argv[0] + " (UI Groups file) (Config Options file) (Group Defaults file) (output file)"
     sys.exit(-1)
 
 fn = sys.argv[1]
@@ -92,4 +92,6 @@ def createUiJSON(groups, options):
     finally:
         return json.dumps({ 'hoot2': uiGroupsArray })
 
-open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))
+#open(headerFn, 'w').write(createUiJSON(uiGroups, configOptions))
+finalJSON = createUiJSON(uiGroups, configOptions)
+open(headerFn, 'w').write(finalJSON)

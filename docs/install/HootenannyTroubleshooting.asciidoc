@@ -7,7 +7,7 @@
 Hootenanny installations from the install target path when run, but its possible this did not occur.  The following commands will completely clean Hootenanny core from the system (paths are dependent upon the
 settings used in the UpdateHoot-CentOS6.sh script):
 	** sudo rm -rf $HOOT_CORE_INSTALL_DIR/hootenanny-$NEW_VERSION
-	** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot 
+	** sudo rm -f $HOOT_CORE_INSTALL_DIR/hoot
 	** sudo rm -f $HOOT_CORE_INSTALL_DIR/bin/hoot
 
 * *Don't think the correct version of Hootenanny core is installed?* --> You can check the version of the core by clicking on the "Hootenanny | Innovision" logo from within the UI.  Or as a sanity check, type 'hoot version' from the command line.  The version displayed should match the version you installed.  Finally, the core version used by the services can be found by navigating to the following URLs:
@@ -140,35 +140,9 @@ installations:
 		. HOOTAPI_CONNECTION_POOL_MAX_IDLE=30
 	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
 
-* *Having problems with the WFS?* -->
-	** Verify wfsstoredb has been properly set up (see database troubleshooting section).
-	** Check +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
-	** Verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has had its permissions set correctly.
-
-* *Seeing this WFS error?* -->
-
---------------------------------------
-2014-09-11 10:26:27 ERROR AbstractResourceManager:268 - Could not create resource web services: Error initializing WFS/FeatureStores: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
-2014-09-11 10:26:27 ERROR AbstractResourceManager:270 - Cause was: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
---------------------------------------
-
-You're seeing expired WFS links. To remove them:
-
---------------------------------------
-cd /var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace
-sudo rm -f datasources/feature/ex_*.xml 
-sudo rm -f datasources/feature/*.properties
-sudo rm -f services/ex_*.xml
---------------------------------------
-
 * *Seeing this error: "convert Unable to open /path/to/file.shp"* --> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 
 [[HootUITroubleshoot]]
 === UI
 
-* *Not sure the correct version of the user interface is installed?* --> You can check the version of the user interface by clicking on the "Hootenanny | Innovision| logo from within the UI.
-
-* *Trouble seeing your base map?* -->
-	** In +/var/lib/tomcat8/webapps/hootenanny-id/data/imagery.json+ , verify that the base map URLs for all your layers are correct.
-	** You may also need to tweak the "source.url" variable in +/var/lib/tomcat8/webapps/hootenanny-id/js/id/renderer/background_source.js+ depending on how the base maps are to be parsed. Make sure the url produced by iD.BackgroundSource. <your layer> function is correct by cut and pasting the url on browser and see if that returns image.
-	** If changes are made to the imagery.json file, always then clear the browser history, close the browser, and open a new browser pointed to the Hootenanny UI application.
+* *Authentication issues?* See `docs/developer/OAUTH.md`
