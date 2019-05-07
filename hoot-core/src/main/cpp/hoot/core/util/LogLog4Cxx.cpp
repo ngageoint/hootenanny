@@ -73,7 +73,9 @@ LevelPtr toLog4CxxLevel(Log::WarningLevel l)
     return Level::getInfo();
     break;
   case Log::Status:
-    return Level::getStatus();
+    // There's no "status" level in log4cxx, so we may have to rethink --status logging depending
+    // on if we deploy with log4cxx or not (not sure).
+    return Level::getInfo();
     break;
   case Log::Warn:
     return Level::getWarn();
