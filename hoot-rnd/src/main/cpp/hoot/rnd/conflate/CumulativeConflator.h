@@ -47,7 +47,7 @@ public:
    * @param inputs input file paths to conflate
    * @param output output file path to write conflated data
    */
-  static void conflate(const QStringList inputs, const QString output);
+  static void conflate(const QStringList& inputs, const QString& output);
 };
 
 }

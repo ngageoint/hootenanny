@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-void CumulativeConflator::conflate(const QStringList inputs, const QString output)
+void CumulativeConflator::conflate(const QStringList& inputs, const QString& output)
 {
   assert(inputs.size() >= 3);
 

@@ -54,8 +54,7 @@ _verbose(verbose)
 {
 }
 
-Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
-  const QString testSettingsFile)
+Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(const QString& testSettingsFile)
 {
   LOG_VARD(testSettingsFile);
 
@@ -99,9 +98,8 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
   return stateDescription;
 }
 
-void ConflateTestSettingsOptimizer::runOptimization(
-  std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
-  const QString testSettingsFile, const QString outputFile)
+void ConflateTestSettingsOptimizer::runOptimization(std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+  const QString& testSettingsFile, const QString& outputFile)
 {
   Tgs::SimulatedAnnealing sa(_initStateDescription(testSettingsFile), fitnessFunction);
   sa.setPickFromBestScores(true);
@@ -110,9 +108,8 @@ void ConflateTestSettingsOptimizer::runOptimization(
   _writeOutput(fitnessFunction, sa.getBestStates(), numIterations, outputFile);
 }
 
-void ConflateTestSettingsOptimizer::_writeOutput(
-  std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-  const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile)
+void ConflateTestSettingsOptimizer::_writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+  const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile)
 {
   QString output =
     "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";

@@ -119,7 +119,7 @@ namespace Tgs
     * @param average variable to hold the computed average error
     * @param stdDev variable to hold the computed standard deviation
     */
-    void findAverageError(std::shared_ptr<DataFrame> data, double & average, double & stdDev);
+    void findAverageError(const std::shared_ptr<DataFrame>& data, double & average, double & stdDev);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the
@@ -129,7 +129,7 @@ namespace Tgs
     * @param data the set of data vectors
     * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
     */
-    void findProximity(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
+    void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & proximity);
 
     /**
     * This generates a text file containing the raw probability scores and a text file
@@ -144,7 +144,7 @@ namespace Tgs
     *  @param data the original data set
     *  @param factorImportance a map of factor labels to purity improvement
     */
-    void getFactorImportance(std::shared_ptr<DataFrame> data,
+    void getFactorImportance(const std::shared_ptr<DataFrame>& data,
       std::map<std::string, double> & factorImportance);
 
     /**
@@ -192,7 +192,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainBinary(std::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, unsigned int nodeSize = 1,
       double retrain = 1.0, bool balanced = false) = 0;
 
@@ -206,7 +206,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
       bool balanced = false) = 0;
 
@@ -222,7 +222,7 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    virtual void trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, std::string negClass,
       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
 

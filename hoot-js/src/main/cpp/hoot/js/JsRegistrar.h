@@ -81,7 +81,7 @@ public:
 
   void initAll(v8::Handle<v8::Object> exports);
 
-  void registerInitializer(std::shared_ptr<ClassInitializer> ci);
+  void registerInitializer(const std::shared_ptr<ClassInitializer>& ci);
 
 private:
 

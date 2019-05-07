@@ -36,8 +36,8 @@
 namespace hoot
 {
 
-MultiaryScoreCache::MultiaryScoreCache(ConstOsmMapPtr map,
-  std::shared_ptr<MatchCreator> matchCreator) :
+MultiaryScoreCache::MultiaryScoreCache(const ConstOsmMapPtr& map,
+  const std::shared_ptr<MatchCreator>& matchCreator) :
   _map(map),
   _matchCreator(matchCreator)
 {

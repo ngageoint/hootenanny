@@ -84,21 +84,21 @@ EdgeString::EdgeString()
 {
 }
 
-void EdgeString::addFirstEdge(ConstNetworkEdgePtr e)
+void EdgeString::addFirstEdge(const ConstNetworkEdgePtr& e)
 {
   assert(_edges.size() == 0);
   _edges.append(EdgeEntry(EdgeSubline::createFullSubline(e)));
   assert(validate());
 }
 
-void EdgeString::addFirstEdge(ConstEdgeSublinePtr subline)
+void EdgeString::addFirstEdge(const ConstEdgeSublinePtr& subline)
 {
   assert(_edges.size() == 0);
   _edges.append(EdgeEntry(subline));
   assert(validate());
 }
 
-void EdgeString::appendEdge(ConstNetworkEdgePtr e)
+void EdgeString::appendEdge(const ConstNetworkEdgePtr& e)
 {
   if (_edges.size() == 0)
   {
@@ -129,7 +129,7 @@ void EdgeString::appendEdge(ConstNetworkEdgePtr e)
   assert(validate());
 }
 
-void EdgeString::appendEdge(ConstEdgeSublinePtr subline)
+void EdgeString::appendEdge(const ConstEdgeSublinePtr& subline)
 {
   if (_edges.size() == 0)
   {
@@ -192,7 +192,7 @@ std::shared_ptr<EdgeString> EdgeString::clone() const
   return result;
 }
 
-bool EdgeString::contains(const std::shared_ptr<const EdgeString> other) const
+bool EdgeString::contains(const std::shared_ptr<const EdgeString>& other) const
 {
   foreach (const EdgeEntry& ee, other->_edges)
   {
@@ -204,7 +204,7 @@ bool EdgeString::contains(const std::shared_ptr<const EdgeString> other) const
   return true;
 }
 
-bool EdgeString::contains(ConstNetworkEdgePtr e) const
+bool EdgeString::contains(const ConstNetworkEdgePtr& e) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
@@ -228,7 +228,7 @@ bool EdgeString::contains(const ConstEdgeSublinePtr& e) const
   return false;
 }
 
-bool EdgeString::contains(ConstNetworkVertexPtr v) const
+bool EdgeString::contains(const ConstNetworkVertexPtr& v) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
@@ -252,12 +252,12 @@ bool EdgeString::contains(const ConstEdgeLocationPtr& el) const
   return false;
 }
 
-bool EdgeString::containsInteriorVertex(ConstNetworkVertexPtr v) const
+bool EdgeString::containsInteriorVertex(const ConstNetworkVertexPtr& v) const
 {
   return contains(v) && isAtExtreme(v) == false;
 }
 
-ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(ConstOsmMapPtr map, Meters offset) const
+ConstNetworkEdgePtr EdgeString::getEdgeAtOffset(const ConstOsmMapPtr& map, Meters offset) const
 {
   Meters d = 0.0;
   foreach (EdgeEntry ee, _edges)
@@ -292,7 +292,7 @@ ConstNetworkVertexPtr EdgeString::getFromVertex() const
   return getFrom()->getVertex(EdgeLocation::SLOPPY_EPSILON);
 }
 
-ConstEdgeLocationPtr EdgeString::getLocationAtOffset(ConstElementProviderPtr map,
+ConstEdgeLocationPtr EdgeString::getLocationAtOffset(const ConstElementProviderPtr& map,
                                                      Meters offset) const
 {
   Meters d = 0.0;
@@ -362,7 +362,7 @@ bool EdgeString::isEdgeClosed() const
   return result;
 }
 
-bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
+bool EdgeString::isAtExtreme(const ConstNetworkVertexPtr& v) const
 {
   bool result = false;
 
@@ -378,7 +378,7 @@ bool EdgeString::isAtExtreme(ConstNetworkVertexPtr v) const
   return result;
 }
 
-bool EdgeString::overlaps(std::shared_ptr<const EdgeString> other) const
+bool EdgeString::overlaps(const std::shared_ptr<const EdgeString>& other) const
 {
   for (int i = 0; i < _edges.size(); ++i)
   {
@@ -416,7 +416,7 @@ bool EdgeString::overlaps(const ConstEdgeSublinePtr& es) const
   return false;
 }
 
-void EdgeString::prependEdge(ConstEdgeSublinePtr subline)
+void EdgeString::prependEdge(const ConstEdgeSublinePtr& subline)
 {
   if (_edges.size() == 0)
   {

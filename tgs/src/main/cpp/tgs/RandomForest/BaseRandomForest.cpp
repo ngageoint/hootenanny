@@ -148,7 +148,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findAverageError(std::shared_ptr<DataFrame> data, double & average,
+  void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
     double & stdDev)
   {
     try
@@ -182,7 +182,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findProximity(std::shared_ptr<DataFrame> data,
+  void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
     std::vector<unsigned int> & proximity)
   {
     try
@@ -210,7 +210,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::getFactorImportance(std::shared_ptr<DataFrame> data,
+  void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
     std::map<std::string, double> & factorImportance)
   {
     try

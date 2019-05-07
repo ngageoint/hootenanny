@@ -41,13 +41,13 @@ class StringTokenizer : public Configurable
 {
 public:
 
-  StringTokenizer(QString sepRegex);
+  StringTokenizer(const QString& sepRegex);
 
   StringTokenizer();
 
   void setConfiguration(const Settings& conf);
 
-  QStringList tokenize(const QString s) const;
+  QStringList tokenize(const QString& s) const;
 
 private:
 

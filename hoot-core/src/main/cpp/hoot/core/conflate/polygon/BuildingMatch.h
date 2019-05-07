@@ -50,9 +50,9 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
-  BuildingMatch(const ConstOsmMapPtr& map, std::shared_ptr<const BuildingRfClassifier> rf,
-                const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt,
-                bool reviewIfSecondaryFeatureNewer, QString dateTagKey, QString dateFormat);
+  BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
+                const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt,
+                bool reviewIfSecondaryFeatureNewer, const QString& dateTagKey, const QString& dateFormat);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -95,9 +95,9 @@ private:
 
   void _calculateClassification(const ConstOsmMapPtr& map);
   QStringList _getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                   ConstElementPtr element1, ConstElementPtr element2);
-  QStringList _createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                   ConstElementPtr element2);
+                                   const ConstElementPtr& element1, const ConstElementPtr& element2);
+  QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
+                                                   const ConstElementPtr& element2);
 };
 
 }

@@ -46,7 +46,7 @@ namespace Tgs
     /**
      * @brief RandomForestThread Constructor
      */
-    RandomForestThread(std::shared_ptr<DataFrame> data, std::shared_ptr<RandomTree> tree,
+    RandomForestThread(const std::shared_ptr<DataFrame>& data, const std::shared_ptr<RandomTree>& tree,
       unsigned int numFactors, unsigned int nodeSize = 1, bool makeBalanced = false);
 
     /**

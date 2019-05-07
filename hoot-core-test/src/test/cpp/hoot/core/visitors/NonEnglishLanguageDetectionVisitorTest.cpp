@@ -157,8 +157,8 @@ private:
   }
 
   std::shared_ptr<NonEnglishLanguageDetectionVisitor> _runDetectTest(Settings config,
-                                                                       const QString outputFile,
-                                                                       const QString goldFile)
+                                                                     const QString& outputFile,
+                                                                     const QString& goldFile)
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(

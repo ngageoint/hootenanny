@@ -59,14 +59,14 @@ public:
 
   ImpliedDividedMarker();
 
-  ImpliedDividedMarker(std::shared_ptr<const OsmMap> map);
+  ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
 
   void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static std::shared_ptr<OsmMap> markDivided(std::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<OsmMap> markDivided(const std::shared_ptr<const OsmMap>& map);
 
   std::shared_ptr<OsmMap> markDivided();
 
@@ -88,7 +88,7 @@ private:
   /**
    * Returns true if the given way has a divider highway connected on both ends.
    */
-  bool _dividerSandwhich(std::shared_ptr<Way> w);
+  bool _dividerSandwich(const std::shared_ptr<Way>& w);
 
   bool _hasDividerConnected(long nodeId, long excludedWayId);
 };

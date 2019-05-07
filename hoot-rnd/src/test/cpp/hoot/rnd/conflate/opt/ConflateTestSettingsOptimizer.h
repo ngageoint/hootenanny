@@ -59,7 +59,7 @@ public:
    */
   void runOptimization(
     std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
-    const QString testSettingsFile, const QString outputFile);
+    const QString& testSettingsFile, const QString& outputFile);
 
 private:
 
@@ -68,13 +68,13 @@ private:
   /*
    * Configure hardcoded option value ranges here per test (could move this to a file)
    */
-  Tgs::StateDescriptionPtr _initStateDescription(const QString testSettingsFile);
+  Tgs::StateDescriptionPtr _initStateDescription(const QString& testSettingsFile);
 
   /*
    * Writes a summary of the optimization results to file
    */
-  void _writeOutput(std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile);
+  void _writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile);
 };
 
 }

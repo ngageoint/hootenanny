@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-MemChangesetProvider::MemChangesetProvider(std::shared_ptr<OGRSpatialReference> pProjection):
+MemChangesetProvider::MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection):
   _projection(pProjection)
 {
 }

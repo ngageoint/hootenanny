@@ -80,7 +80,7 @@ DiffConflator::DiffConflator() :
   _reset();
 }
 
-DiffConflator::DiffConflator(std::shared_ptr<MatchThreshold> matchThreshold) :
+DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance())
 {

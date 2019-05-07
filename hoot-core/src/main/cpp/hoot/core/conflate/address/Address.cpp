@@ -39,7 +39,7 @@ _allowLenientHouseNumberMatching(true)
 {
 }
 
-Address::Address(const QString address, const bool allowLenientHouseNumberMatching) :
+Address::Address(const QString& address, const bool allowLenientHouseNumberMatching) :
 _address(address),
 _allowLenientHouseNumberMatching(allowLenientHouseNumberMatching)
 {

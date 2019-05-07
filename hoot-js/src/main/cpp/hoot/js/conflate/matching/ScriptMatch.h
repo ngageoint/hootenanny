@@ -56,9 +56,9 @@ public:
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
    */
-  ScriptMatch(std::shared_ptr<PluginContext> script, const v8::Persistent<v8::Object>& plugin,
-              const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-              const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
+  ScriptMatch(const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
+              const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj,
+              const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 

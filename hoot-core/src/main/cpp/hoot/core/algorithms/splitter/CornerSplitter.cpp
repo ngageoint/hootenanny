@@ -63,7 +63,7 @@ CornerSplitter::CornerSplitter()
 {
 }
 
-CornerSplitter::CornerSplitter(std::shared_ptr<OsmMap> map)
+CornerSplitter::CornerSplitter(const std::shared_ptr<OsmMap>& map)
   : _map(map),
     _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
     _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
@@ -72,7 +72,7 @@ CornerSplitter::CornerSplitter(std::shared_ptr<OsmMap> map)
 {
 }
 
-void CornerSplitter::splitCorners(std::shared_ptr<OsmMap> map)
+void CornerSplitter::splitCorners(const std::shared_ptr<OsmMap>& map)
 {
   CornerSplitter splitter(map);
   return splitter.splitCorners();

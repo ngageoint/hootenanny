@@ -456,7 +456,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
   }
 }
 
-void TileBoundsCalculator::renderImage(std::shared_ptr<OsmMap> map)
+void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
@@ -469,7 +469,7 @@ void TileBoundsCalculator::renderImage(std::shared_ptr<OsmMap> map)
   _exportImage(_min, "tmp/min.png");
 }
 
-void TileBoundsCalculator::renderImage(std::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
+void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
   if (Log::getInstance().getLevel() <= Log::Debug)

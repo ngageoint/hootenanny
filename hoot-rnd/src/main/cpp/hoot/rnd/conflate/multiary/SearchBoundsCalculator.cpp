@@ -34,7 +34,7 @@ namespace hoot
 
 using namespace geos::geom;
 
-SearchBoundsCalculator::SearchBoundsCalculator(SearchRadiusProviderPtr radiusProvider)
+SearchBoundsCalculator::SearchBoundsCalculator(const SearchRadiusProviderPtr& radiusProvider)
 {
   _radiusProvider = radiusProvider;
 }

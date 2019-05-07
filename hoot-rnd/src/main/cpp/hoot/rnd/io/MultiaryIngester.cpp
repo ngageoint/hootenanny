@@ -66,9 +66,9 @@ _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
-void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QString translationScript,
-                                             const QString referenceOutput,
-                                             const QString changesetOutput)
+void MultiaryIngester::_doInputErrorChecking(const QString& newInput, const QString& translationScript,
+                                             const QString& referenceOutput,
+                                             const QString& changesetOutput)
 {
   if (!OsmMapReaderFactory::hasElementInputStream(newInput))
   {
@@ -107,8 +107,8 @@ void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QStri
   }
 }
 
-void MultiaryIngester::ingest(const QString newInput, const QString translationScript,
-                              const QString referenceOutput, const QString changesetOutput)
+void MultiaryIngester::ingest(const QString& newInput, const QString& translationScript,
+                              const QString& referenceOutput, const QString& changesetOutput)
 {
   LOG_INFO("Ingesting Multiary data from " << newInput << "...");
 
@@ -156,7 +156,7 @@ void MultiaryIngester::ingest(const QString newInput, const QString translationS
   }
 }
 
-void MultiaryIngester::_sortInputFile(const QString input)
+void MultiaryIngester::_sortInputFile(const QString& input)
 {
   _timer.restart();
   LOG_INFO("Sorting " << input << " by POI ID...");
@@ -192,8 +192,7 @@ void MultiaryIngester::_sortInputFile(const QString input)
   LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
 }
 
-std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
-  const QString sortedNewInput)
+std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(const QString& sortedNewInput)
 {
   std::shared_ptr<PartialOsmMapReader> newInputReader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -213,9 +212,9 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
   return filteredNewInputStream;
 }
 
-void MultiaryIngester::_writeNewReferenceData(
-  std::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceOutput,
-  const QString changesetOutput)
+void MultiaryIngester::_writeNewReferenceData(const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
+                                              const QString& referenceOutput,
+                                              const QString& changesetOutput)
 {
   _timer.restart();
   LOG_INFO("Writing POIs to reference layer: " << referenceOutput << "...");
@@ -278,8 +277,8 @@ void MultiaryIngester::_writeNewReferenceData(
 }
 
 std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChangeset(
-  std::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
-  const QString changesetOutput)
+    const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
+    const QString& referenceInput, const QString& changesetOutput)
 {
   //The changeset file changes and reference layer POI updates are written in two separate steps.
   //If we tried to write the POI changes to the reference layer as we streamed in the POIs
@@ -395,8 +394,8 @@ std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChange
   return tmpChangeset;
 }
 
-void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutput,
-                                                     const QString referenceOutput)
+void MultiaryIngester::_writeChangesToReferenceLayer(const QString& changesetOutput,
+                                                     const QString& referenceOutput)
 {
   _timer.restart();
   LOG_INFO("Writing changes to reference layer: " << referenceOutput << "...");

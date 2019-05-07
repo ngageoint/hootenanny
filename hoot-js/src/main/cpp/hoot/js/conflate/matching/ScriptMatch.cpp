@@ -60,9 +60,9 @@ Match()
 {
 }
 
-ScriptMatch::ScriptMatch(std::shared_ptr<PluginContext> script, const Persistent<Object>& plugin,
-  const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
-  const ElementId& eid2, ConstMatchThresholdPtr mt) :
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+  const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj, const ElementId& eid1,
+  const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),

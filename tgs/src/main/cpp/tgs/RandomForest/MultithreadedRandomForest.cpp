@@ -52,7 +52,7 @@ namespace Tgs
     }
   }
 
-  std::shared_ptr<RandomTree> MultithreadedRandomForest::train(const std::shared_ptr<RandomTree> &tree)
+  std::shared_ptr<RandomTree> MultithreadedRandomForest::train(const std::shared_ptr<RandomTree>& tree)
   {
     try
     {
@@ -67,7 +67,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainBinary(std::shared_ptr<DataFrame> /*data*/,
+  void MultithreadedRandomForest::trainBinary(const std::shared_ptr<DataFrame>& /*data*/,
     unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, unsigned int /*nodeSize*/,
     double /*retrain*/, bool /*balanced*/)
   {
@@ -81,7 +81,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainMulticlass(std::shared_ptr<DataFrame> data,
+  void MultithreadedRandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data,
     unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
     bool balanced)
   {
@@ -200,7 +200,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainRoundRobin(std::shared_ptr<DataFrame> /*data*/,
+  void MultithreadedRandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& /*data*/,
     unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, std::string /*negClass*/,
     unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
   {

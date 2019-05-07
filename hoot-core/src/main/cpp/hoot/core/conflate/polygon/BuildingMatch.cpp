@@ -54,10 +54,10 @@ Match()
 }
 
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
-                             std::shared_ptr<const BuildingRfClassifier> rf,
+                             const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,
-                             ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
-                             QString dateTagKey, QString dateFormat) :
+                             const ConstMatchThresholdPtr& mt, bool reviewIfSecondaryFeatureNewer,
+                             const QString& dateTagKey, const QString& dateFormat) :
 Match(mt),
 _eid1(eid1),
 _eid2(eid2),
@@ -92,8 +92,8 @@ _dateFormat(dateFormat)
   LOG_VART(toString());
 }
 
-QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                                ConstElementPtr element2)
+QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
+                                                                const ConstElementPtr& element2)
 {
   LOG_VART(_dateTagKey);
   LOG_VART(_dateFormat);
@@ -165,7 +165,7 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr 
 }
 
 QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                                ConstElementPtr element1, ConstElementPtr element2)
+                                                const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   QStringList description;
 

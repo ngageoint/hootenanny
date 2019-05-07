@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-TextFileWordWeightDictionary::TextFileWordWeightDictionary(const QString filePath)
+TextFileWordWeightDictionary::TextFileWordWeightDictionary(const QString& filePath)
 {
   _count = 0;
   _loadFile(filePath);
@@ -60,7 +60,7 @@ double TextFileWordWeightDictionary::getWeight(const QString& word) const
   }
 }
 
-void TextFileWordWeightDictionary::_loadFile(QString path)
+void TextFileWordWeightDictionary::_loadFile(const QString& path)
 {
   QFile fp(path);
 

@@ -95,7 +95,7 @@ DualWaySplitter::DualWaySplitter()
   _defaultSplitSize = ConfigOptions::getDualWaySplitterSplitSizeDefaultValue();
 }
 
-DualWaySplitter::DualWaySplitter(std::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
+DualWaySplitter::DualWaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide,
   Meters defaultSplitSize) :
 _defaultSplitSize(defaultSplitSize),
 _drivingSide(drivingSide),
@@ -103,8 +103,8 @@ _map(map)
 {
 }
 
-std::shared_ptr<Way> DualWaySplitter::_createOneWay(std::shared_ptr<const Way> w,
-                                                      Meters bufferSize, bool left)
+std::shared_ptr<Way> DualWaySplitter::_createOneWay(const std::shared_ptr<const Way>& w,
+                                                    Meters bufferSize, bool left)
 {
   std::shared_ptr<const LineString> ls = ElementConverter(_result).convertToLineString(w);
 
@@ -176,7 +176,7 @@ double DualWaySplitter::_dotProduct(const Coordinate& c1, const Coordinate& c2) 
   return c1.x * c2.x + c1.y * c2.y;
 }
 
-long DualWaySplitter::_nearestNode(long nid, std::shared_ptr<const Way> w)
+long DualWaySplitter::_nearestNode(long nid, const std::shared_ptr<const Way>& w)
 {
   std::shared_ptr<Node> src = _result->getNode(nid);
   const vector<long>& nids = w->getNodeIds();
@@ -213,7 +213,7 @@ Coordinate DualWaySplitter::_normalizedVector(long nid1, long nid2)
   return result;
 }
 
-bool DualWaySplitter::_onRight(long intersectionId, std::shared_ptr<Way> inbound, long leftNn,
+bool DualWaySplitter::_onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn,
                                long rightNn)
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
@@ -256,9 +256,9 @@ bool DualWaySplitter::_onRight(long intersectionId, std::shared_ptr<Way> inbound
   }
 }
 
-std::shared_ptr<OsmMap> DualWaySplitter::splitAll(std::shared_ptr<const OsmMap> map,
-                                                    DrivingSide drivingSide,
-                                                    Meters defaultSplitSize)
+std::shared_ptr<OsmMap> DualWaySplitter::splitAll(const std::shared_ptr<const OsmMap>& map,
+                                                  DrivingSide drivingSide,
+                                                  Meters defaultSplitSize)
 {
   DualWaySplitter dws(map, drivingSide, defaultSplitSize);
   return dws.splitAll();
@@ -298,7 +298,7 @@ std::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   return result;
 }
 
-void DualWaySplitter::_fixLanes(std::shared_ptr<Way> w)
+void DualWaySplitter::_fixLanes(const std::shared_ptr<Way>& w)
 {
   QString lanesStr = w->getTags()["lanes"];
 
@@ -323,7 +323,7 @@ void DualWaySplitter::_fixLanes(std::shared_ptr<Way> w)
   }
 }
 
-void DualWaySplitter::_reconnectEnd(long centerNodeId, std::shared_ptr<Way> edge)
+void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge)
 {
   Coordinate centerNodeC = _result->getNode(centerNodeId)->toCoordinate();
   // determine which end of edge we're operating on

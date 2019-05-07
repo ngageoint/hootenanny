@@ -106,7 +106,7 @@ private:
   long _total;
   int _taskStatusUpdateInterval;
 
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input)
   {
     LOG_TRACE("Getting reader...");
 
@@ -119,7 +119,7 @@ private:
     return reader;
   }
 
-  ElementCriterionPtr _getCriterion(const QString criterionClassName, const bool negate)
+  ElementCriterionPtr _getCriterion(const QString& criterionClassName, const bool negate)
   {
     LOG_TRACE("Getting criterion...");
 
@@ -156,7 +156,7 @@ private:
   }
 
   ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream,
-                                                const QString criterionClassName,
+                                                const QString& criterionClassName,
                                                 ElementVisitorPtr countVis)
   {
     LOG_TRACE("Getting filtered input stream...");
@@ -193,7 +193,7 @@ private:
     return countVis;
   }
 
-  long _count(const QString input, const bool countFeaturesOnly, const QString criterionClassName)
+  long _count(const QString& input, const bool countFeaturesOnly, const QString& criterionClassName)
   {
     long inputTotal = 0;
 

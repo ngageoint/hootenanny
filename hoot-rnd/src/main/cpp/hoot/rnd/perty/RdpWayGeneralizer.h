@@ -73,14 +73,14 @@ public:
 
   RdpWayGeneralizer(double epsilon);
 
-  RdpWayGeneralizer(std::shared_ptr<OsmMap> map, double epsilon);
+  RdpWayGeneralizer(const std::shared_ptr<OsmMap>& map, double epsilon);
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
     */
-  void generalize(std::shared_ptr<Way> way);
+  void generalize(const std::shared_ptr<Way>& way);
 
   /**
     Generates a set of points that make up a generalized set of the input points

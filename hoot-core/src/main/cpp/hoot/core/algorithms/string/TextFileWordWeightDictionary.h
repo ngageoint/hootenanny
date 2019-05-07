@@ -64,11 +64,11 @@ namespace hoot
 class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
-  TextFileWordWeightDictionary(const QString filePath);
+  TextFileWordWeightDictionary(const QString& filePath);
 
-  virtual double getMinWeight() const { return 1.0 / (double)_count; }
+  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
 
-  virtual double getWeight(const QString& word) const;
+  virtual double getWeight(const QString& word) const override;
 
 private:
   // some white box testing.
@@ -89,7 +89,7 @@ private:
   long _count;
   QRegExp _nonWord;
 
-  void _loadFile(QString path);
+  void _loadFile(const QString& path);
 };
 
 }

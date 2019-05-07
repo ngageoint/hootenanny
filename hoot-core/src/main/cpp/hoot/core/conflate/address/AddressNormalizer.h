@@ -61,7 +61,7 @@ public:
    * @param address the address to normalize
    * @return a collection of normalized addresses
    */
-  QSet<QString> normalizeAddress(const QString address) const;
+  QSet<QString> normalizeAddress(const QString& address) const;
 
   int getNumNormalized() const { return _numNormalized; }
 
@@ -69,8 +69,8 @@ private:
 
   mutable int _numNormalized;
 
-  static bool _isValidNormalizedAddress(const QString inputAddress,
-                                        const QString normalizedAddress);
+  static bool _isValidNormalizedAddress(const QString& inputAddress,
+                                        const QString& normalizedAddress);
 };
 
 }

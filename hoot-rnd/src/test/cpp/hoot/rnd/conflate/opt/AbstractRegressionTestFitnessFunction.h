@@ -54,7 +54,8 @@ class AbstractRegressionTestFitnessFunction : public AbstractTestFitnessFunction
 
 public:
 
-    AbstractRegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension);
+    AbstractRegressionTestFitnessFunction(const QString& dir, const QString& configFile,
+                                          const QString& testDirExtension);
 
     /**
      * Fitness function that determines the performance based on the test output
@@ -88,7 +89,7 @@ protected:
 
 private:
 
-    void _createConfig(const QString testName, Settings& testSettings);
+    void _createConfig(const QString& testName, Settings& testSettings);
     void _checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest);
 };
 

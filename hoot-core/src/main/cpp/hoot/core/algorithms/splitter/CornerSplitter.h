@@ -57,11 +57,11 @@ public:
 
   CornerSplitter();
 
-  CornerSplitter(std::shared_ptr<OsmMap> map);
+  CornerSplitter(const std::shared_ptr<OsmMap>& map);
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  static void splitCorners(std::shared_ptr<OsmMap> map);
+  static void splitCorners(const std::shared_ptr<OsmMap>& map);
 
   void splitCorners();
 

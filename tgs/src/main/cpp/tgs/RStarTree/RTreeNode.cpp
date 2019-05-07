@@ -160,7 +160,7 @@ bool BoxInternalData::isContained(const Box& b) const
 }
 
 
-RTreeNode::RTreeNode(int dimensions, std::shared_ptr<Page> page)
+RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
 {
   _dimensions = dimensions;
   _pageSp = page;

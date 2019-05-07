@@ -147,9 +147,9 @@ public:
 
   std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
 
-  void renderImage(std::shared_ptr<OsmMap> map);
+  void renderImage(const std::shared_ptr<OsmMap>& map);
 
-  void renderImage(std::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 

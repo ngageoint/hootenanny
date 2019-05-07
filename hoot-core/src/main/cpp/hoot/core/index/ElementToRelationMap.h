@@ -73,7 +73,7 @@ public:
    * This function assumes that the elements that make up the relation haven't changed since it was
    * last added.
    */
-  void removeRelation(const OsmMap &map, const std::shared_ptr<const Relation> &r);
+  void removeRelation(const OsmMap &map, const std::shared_ptr<const Relation>& r);
 
   /**
    * Checks to make sure the index is consistent with the specified map. All inconsistencies are

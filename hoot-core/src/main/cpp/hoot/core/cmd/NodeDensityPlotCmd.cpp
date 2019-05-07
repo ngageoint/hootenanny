@@ -61,7 +61,7 @@ class NodeDensityPlotCmd : public BaseCommand
 
     virtual QString getDescription() const { return "Creates a node density plot for a map"; }
 
-    Envelope getEnvelope(std::shared_ptr<OsmMapReader> reader)
+    Envelope getEnvelope(const std::shared_ptr<OsmMapReader>& reader)
     {
       std::shared_ptr<EnvelopeProvider> ep =
         std::dynamic_pointer_cast<EnvelopeProvider>(reader);

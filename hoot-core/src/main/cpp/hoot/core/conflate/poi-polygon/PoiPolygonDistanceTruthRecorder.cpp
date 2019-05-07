@@ -42,8 +42,8 @@ QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyReviewRefIdsToD
 
 void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(ConstElementPtr poi,
                                                           ConstElementPtr poly,
-                                                          const QString poiBestKvp,
-                                                          const QString polyBestKvp,
+                                                          const QString& poiBestKvp,
+                                                          const QString& polyBestKvp,
                                                           const double elementDistance)
 {
   //output feature distances for all feature types which fell within the match threshold
@@ -78,7 +78,7 @@ void PoiPolygonDistanceTruthRecorder::printMatchDistanceInfo()
 }
 
 
-void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString matchType,
+void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString& matchType,
   const QMultiMap<QString, double>& distanceInfo)
 {
   foreach (QString type, distanceInfo.uniqueKeys())

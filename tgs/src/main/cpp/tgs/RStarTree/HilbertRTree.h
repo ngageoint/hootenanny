@@ -42,7 +42,7 @@ namespace Tgs
   {
   public:
 
-    HilbertRTree(std::shared_ptr<PageStore> ps, int dimensions);
+    HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
     virtual ~HilbertRTree();
 

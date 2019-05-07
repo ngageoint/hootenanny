@@ -65,12 +65,12 @@ public:
   } DrivingSide;
 
   DualWaySplitter();
-  DualWaySplitter(std::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
+  DualWaySplitter(const std::shared_ptr<const OsmMap>& map, DrivingSide drivingSide, Meters splitSize);
 
   std::shared_ptr<OsmMap> splitAll();
 
-  static std::shared_ptr<OsmMap> splitAll(std::shared_ptr<const OsmMap> map,
-                                            DrivingSide drivingSide, Meters defaultSplitSize);
+  static std::shared_ptr<OsmMap> splitAll(const std::shared_ptr<const OsmMap>& map,
+                                          DrivingSide drivingSide, Meters defaultSplitSize);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -98,24 +98,24 @@ private:
 
   void _addConnector(long nodeId);
 
-  std::shared_ptr<Way> _createOneWay(std::shared_ptr<const Way> w, Meters bufferSize, bool left);
+  std::shared_ptr<Way> _createOneWay(const std::shared_ptr<const Way>& w, Meters bufferSize, bool left);
 
-  void _createStub(std::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
+  void _createStub(const std::shared_ptr<Way>& dividedWay, long centerNodeId, long edgeNodeId);
 
   double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
 
-  void _fixLanes(std::shared_ptr<Way> w);
+  void _fixLanes(const std::shared_ptr<Way>& w);
 
   /**
    * Returns the node id of the nearest node to nid on w
    */
-  long _nearestNode(long nid, std::shared_ptr<const Way> w);
+  long _nearestNode(long nid, const std::shared_ptr<const Way>& w);
 
   geos::geom::Coordinate _normalizedVector(long nid1, long nid2);
 
-  bool _onRight(long intersectionId, std::shared_ptr<Way> inbound, long leftNn, long rightNn);
+  bool _onRight(long intersectionId, const std::shared_ptr<Way>& inbound, long leftNn, long rightNn);
 
-  void _reconnectEnd(long centerNodeId, std::shared_ptr<Way> edge);
+  void _reconnectEnd(long centerNodeId, const std::shared_ptr<Way>& edge);
 
   void _splitIntersectingWays(long nid);
 

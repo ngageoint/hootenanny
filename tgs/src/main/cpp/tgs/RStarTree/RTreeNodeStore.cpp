@@ -35,7 +35,7 @@ namespace Tgs
 {
   const int MAX_NODE_COUNT = 100000;
 
-  RTreeNodeStore::RTreeNodeStore(int dimensions, std::shared_ptr<PageStore> ps)
+  RTreeNodeStore::RTreeNodeStore(int dimensions, const std::shared_ptr<PageStore>& ps)
   {
     _dimensions = dimensions;
     _storeSp = ps;

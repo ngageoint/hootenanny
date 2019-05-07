@@ -86,7 +86,7 @@ public:
     testPageStore(uut);
   }
 
-  void populatePage(std::shared_ptr<Page> p)
+  void populatePage(const std::shared_ptr<Page>& p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)
@@ -142,7 +142,7 @@ public:
     }
   }
 
-  void verifyPage(std::shared_ptr<Page> p)
+  void verifyPage(const std::shared_ptr<Page>& p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)

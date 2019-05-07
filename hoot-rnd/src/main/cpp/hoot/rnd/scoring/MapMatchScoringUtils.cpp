@@ -37,7 +37,7 @@ MapMatchScoringUtils::MapMatchScoringUtils()
 
 }
 
-QString MapMatchScoringUtils::getMatchScoringString(std::shared_ptr<const MatchComparator> matchComparator)
+QString MapMatchScoringUtils::getMatchScoringString(const std::shared_ptr<const MatchComparator>& matchComparator)
 {
   QString result;
   result += matchComparator->toString() + "\n";

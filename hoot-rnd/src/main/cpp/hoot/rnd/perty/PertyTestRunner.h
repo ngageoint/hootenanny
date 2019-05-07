@@ -60,10 +60,10 @@ public:
       @param referenceMapInputPath Path to the input OSM map file to run PERTY against
       @param outputPath Output path for file and results
     */
-  QList<std::shared_ptr<const PertyTestRunResult>> runTest(const QString referenceMapInputPath,
-                                                           const QString outputPath);
+  QList<std::shared_ptr<const PertyTestRunResult>> runTest(const QString& referenceMapInputPath,
+                                                           const QString& outputPath);
 
-  virtual void setConfiguration(const Settings &conf) { _settings = conf; }
+  virtual void setConfiguration(const Settings& conf) { _settings = conf; }
 
   /**
     Sets the number of PERTY test runs
@@ -92,7 +92,7 @@ public:
   /**
      Sets the PERTY input variables to receive changing values per test run
    */
-  void setDynamicVariables(QStringList dynamicVariables)
+  void setDynamicVariables(const QStringList& dynamicVariables)
   {
     _dynamicVariables.clear();
     foreach (QString var, dynamicVariables)
@@ -129,7 +129,7 @@ public:
   /**
     Sets a list of expected scores for each test run
    */
-  void setExpectedScores(const QStringList scores)
+  void setExpectedScores(const QStringList& scores)
   {
     if (scores.size() < 1)
     {
@@ -190,8 +190,8 @@ private:
 
   std::shared_ptr<PertyMatchScorer> _matchScorer;
 
-  void _writeStatsForOutputFiles(const QString& inputMapPath, QString sep);
-  void _writePlotFile(const QString outputPath,
+  void _writeStatsForOutputFiles(const QString& inputMapPath, const QString& sep);
+  void _writePlotFile(const QString& outputPath,
                       const QList<std::shared_ptr<const PertyTestRunResult>>& testRunResults);
 
   //for testing purposes only

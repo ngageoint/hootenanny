@@ -194,7 +194,7 @@ private:
 
   geos::geom::Coordinate _translate(const geos::geom::Coordinate& c, Status s);
 
-  void _writeInterpolator(std::shared_ptr<const Tgs::Interpolator> interpolator,
+  void _writeInterpolator(const std::shared_ptr<const Tgs::Interpolator>& interpolator,
                           QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;

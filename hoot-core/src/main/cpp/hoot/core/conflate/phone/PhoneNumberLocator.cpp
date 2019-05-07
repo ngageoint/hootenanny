@@ -45,7 +45,7 @@ _numLocated(0)
 {
 }
 
-PhoneNumberLocator::PhoneNumberLocator(const QString regionCode) :
+PhoneNumberLocator::PhoneNumberLocator(const QString& regionCode) :
 _regionCode(regionCode),
 _numLocated(0)
 {
@@ -57,23 +57,22 @@ void PhoneNumberLocator::setConfiguration(const Settings& conf)
   setRegionCode(config.getPhoneNumberRegionCode());
 }
 
-void PhoneNumberLocator::setRegionCode(QString code)
+void PhoneNumberLocator::setRegionCode(const QString& code)
 {
-  code = code.trimmed().toUpper();
-  if (!code.isEmpty())
+  _regionCode = code.trimmed().toUpper();
+  if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
       PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(code.toStdString());
+    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
     if (it == regions.end())
     {
-      throw HootException("Invalid phone number region code: " + code);
+      throw HootException("Invalid phone number region code: " + _regionCode);
     }
   }
-  _regionCode = code;
 }
 
-QString PhoneNumberLocator::getLocationDescription(const QString phoneNumber) const
+QString PhoneNumberLocator::getLocationDescription(const QString& phoneNumber) const
 {
   LOG_VART(phoneNumber);
 

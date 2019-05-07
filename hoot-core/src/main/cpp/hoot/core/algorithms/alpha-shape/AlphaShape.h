@@ -87,7 +87,7 @@ private:
   std::shared_ptr<Tgs::DelaunayTriangulation> _dt;
   std::set<std::pair<double, double>> _outsidePoint;
 
-  std::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, std::shared_ptr<OsmMap> map);
+  std::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face* face, const std::shared_ptr<OsmMap>& map);
 
   std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 

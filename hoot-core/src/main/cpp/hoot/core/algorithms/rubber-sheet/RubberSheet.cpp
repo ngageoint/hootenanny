@@ -545,7 +545,7 @@ Coordinate RubberSheet::_translate(const Coordinate& c, Status s)
   return Coordinate(c.x + (*delta)[0], c.y + (*delta)[1]);
 }
 
-void RubberSheet::_writeInterpolator(std::shared_ptr<const Interpolator> interpolator, QIODevice& os)
+void RubberSheet::_writeInterpolator(const std::shared_ptr<const Interpolator>& interpolator, QIODevice& os)
   const
 {
   // this could be modified to write an empty or null interpolator if needed.

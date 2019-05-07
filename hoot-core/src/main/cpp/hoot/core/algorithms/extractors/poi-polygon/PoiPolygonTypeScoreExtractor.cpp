@@ -136,7 +136,7 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
   return typeScore;
 }
 
-QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString category)
+QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString& category)
 {
   if (_categoriesToSchemaTagValues[category].isEmpty())
   {
@@ -158,7 +158,7 @@ QSet<QString> PoiPolygonTypeScoreExtractor::_getTagValueTokens(const QString cat
   return _categoriesToSchemaTagValues[category];
 }
 
-void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString tagKey, QString& tagValue) const
+void PoiPolygonTypeScoreExtractor::_translateTagValue(const QString& tagKey, QString& tagValue) const
 {
   LOG_VART(tagKey);
   LOG_VART(tagValue);
@@ -332,7 +332,7 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
   return tagsList;
 }
 
-bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString name)
+bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -345,7 +345,7 @@ bool PoiPolygonTypeScoreExtractor::_typeHasName(const QString kvp, const QString
   return false;
 }
 
-QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp, const QString name)
+QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -359,8 +359,8 @@ QString PoiPolygonTypeScoreExtractor::_getMatchingTypeName(const QString kvp, co
   return "";
 }
 
-bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString kvp, const QString name1,
-                                                          const QString name2)
+bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString& kvp, const QString& name1,
+                                                          const QString& name2)
 {
   const QString typeName1 = _getMatchingTypeName(kvp, name1);
   const QString typeName2 = _getMatchingTypeName(kvp, name2);
@@ -542,7 +542,7 @@ bool PoiPolygonTypeScoreExtractor::isNatural(ConstElementPtr element)
   return element->getTags().contains("natural");
 }
 
-bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString tagKey, const Tags& t1,
+bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString& tagKey, const Tags& t1,
                                                         const Tags& t2, QString& tag1Val,
                                                         QString& tag2Val) const
 {

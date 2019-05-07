@@ -107,7 +107,7 @@ int EdgeMatch::countPartialMatches() const
   return count;
 }
 
-bool EdgeMatch::overlaps(const std::shared_ptr<const EdgeMatch> &other) const
+bool EdgeMatch::overlaps(const std::shared_ptr<const EdgeMatch>& other) const
 {
   if (other->getString1()->overlaps(getString1()))
   {

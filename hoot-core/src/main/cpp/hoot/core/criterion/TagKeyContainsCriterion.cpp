@@ -37,7 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagKeyContainsCriterion)
 
-TagKeyContainsCriterion::TagKeyContainsCriterion(const QString text) :
+TagKeyContainsCriterion::TagKeyContainsCriterion(const QString& text) :
 _text(text),
 _caseSensitive(false)
 {

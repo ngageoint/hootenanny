@@ -154,7 +154,7 @@ AlphaShape::AlphaShape(double alpha)
   _dt.reset(new Tgs::DelaunayTriangulation);
 }
 
-WayPtr AlphaShape::_addFaceAsWay(const Face* face, std::shared_ptr<OsmMap> map)
+WayPtr AlphaShape::_addFaceAsWay(const Face* face, const std::shared_ptr<OsmMap>& map)
 {
   Edge e = face->getEdge(0);
   e.getOriginX();

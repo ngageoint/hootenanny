@@ -276,7 +276,7 @@ std::shared_ptr<OsmMap> PertyOp::generateDebugMap(std::shared_ptr<OsmMap>& map)
   return result;
 }
 
-void PertyOp::permute(const std::shared_ptr<OsmMap> &map)
+void PertyOp::permute(const std::shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToPlanar(map);
 

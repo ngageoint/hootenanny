@@ -44,7 +44,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-LineStringAverager::LineStringAverager(std::shared_ptr<LineString> l1, std::shared_ptr<LineString> l2)
+LineStringAverager::LineStringAverager(const std::shared_ptr<LineString>& l1, const std::shared_ptr<LineString>& l2)
 {
   _l1 = l1;
   _l2 = l2;
@@ -105,8 +105,8 @@ std::shared_ptr<LineString> LineStringAverager::average()
   return std::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
 }
 
-std::shared_ptr<LineString> LineStringAverager::average(std::shared_ptr<LineString> l1,
-                                                        std::shared_ptr<LineString> l2)
+std::shared_ptr<LineString> LineStringAverager::average(const std::shared_ptr<LineString>& l1,
+                                                        const std::shared_ptr<LineString>& l2)
 {
   LineStringAverager lsa(l1, l2);
   return lsa.average();

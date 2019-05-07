@@ -70,7 +70,7 @@ public:
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
-  UnifyingConflator(std::shared_ptr<MatchThreshold> matchThreshold);
+  UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   ~UnifyingConflator();
 
@@ -93,7 +93,7 @@ public:
   /**
    * Set the factory to use when creating mergers. This method is likely only useful when testing.
    */
-  void setMergerFactory(std::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
+  void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 

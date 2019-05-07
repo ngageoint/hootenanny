@@ -54,7 +54,7 @@ LargeWaySplitter::LargeWaySplitter(double threshold)
   _threshold = threshold;
 }
 
-void LargeWaySplitter::apply(std::shared_ptr<OsmMap> map)
+void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -75,7 +75,7 @@ void LargeWaySplitter::apply(std::shared_ptr<OsmMap> map)
   }
 }
 
-void LargeWaySplitter::_divideWay(std::shared_ptr<Way> way, int numPieces)
+void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces)
 {
   double startLength = ElementConverter(_map).convertToLineString(way)->getLength();
   double pieceLength = startLength / (double)numPieces;
@@ -107,7 +107,7 @@ void LargeWaySplitter::_divideWay(std::shared_ptr<Way> way, int numPieces)
   }
 }
 
-void LargeWaySplitter::splitWays(std::shared_ptr<OsmMap> map, double threshold)
+void LargeWaySplitter::splitWays(const std::shared_ptr<OsmMap>& map, double threshold)
 {
   LargeWaySplitter a(threshold);
   a.apply(map);

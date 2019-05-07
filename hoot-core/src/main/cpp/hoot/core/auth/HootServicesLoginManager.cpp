@@ -125,8 +125,8 @@ QString HootServicesLoginManager::promptForAuthorizationVerifier() const
   return verifier;
 }
 
-long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
-                                                  const QString verifier, QString& userName)
+long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
+                                                  const QString& verifier, QString& userName)
 {
   QUrl loginUrl;
   HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
@@ -158,8 +158,8 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString requestToken,
   return userId;
 }
 
-HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requestToken,
-                                                              const QString verifier,
+HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString& requestToken,
+                                                              const QString& verifier,
                                                               QUrl& loginUrl) const
 {
   HootNetworkRequest loginRequest;
@@ -178,7 +178,7 @@ HootNetworkRequest HootServicesLoginManager::_getLoginRequest(const QString requ
   return loginRequest;
 }
 
-long HootServicesLoginManager::_parseLoginResponse(const QString response) const
+long HootServicesLoginManager::_parseLoginResponse(const QString& response) const
 {
   LOG_VART(response);
   std::shared_ptr<boost::property_tree::ptree> replyObj =
@@ -209,8 +209,8 @@ void HootServicesLoginManager::getAccessTokens(const long userId, QString& acces
   db.close();
 }
 
-bool HootServicesLoginManager::logout(const QString userName, const QString accessToken,
-                                      const QString accessTokenSecret)
+bool HootServicesLoginManager::logout(const QString& userName, const QString& accessToken,
+                                      const QString& accessTokenSecret)
 {
   HootApiDb db;
   //hoot db requires a layer to open, but we don't need one here...so put anything in

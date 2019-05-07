@@ -71,17 +71,17 @@ public:
    * specified by the inputs parameter
    * @param output the file to write the rules to
    */
-  void deriveRawRules(const QStringList inputs, const QStringList translationScripts,
-                      const QString output);
+  void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts,
+                      const QString& output);
 
   virtual void setConfiguration(const Settings& conf);
 
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
-  void setTempFileDir(QString dir) { _tempFileDir = dir; }
+  void setTempFileDir(const QString& dir) { _tempFileDir = dir; }
   void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
-  void setElementCriterion(QString criterionName);
+  void setElementCriterion(const QString& criterionName);
 
 private:
 
@@ -129,22 +129,22 @@ private:
   std::shared_ptr<ToEnglishTranslator> _translator;
 
   void _init();
-  void _validateInputs(const QStringList inputs, const QStringList translationScripts,
-                       const QString output);
-  std::shared_ptr<ElementInputStream> _getInputStream(const QString input,
-                                                        const QString translationScript);
+  void _validateInputs(const QStringList& inputs, const QStringList& translationScripts,
+                       const QString& output);
+  std::shared_ptr<ElementInputStream> _getInputStream(const QString& input,
+                                                      const QString& translationScript);
 
   /*
    * Examine each word token to determine if a raw implicit tag rule should be created for it
    */
-  void _updateForNewWord(QString word, const QString kvp);
+  void _updateForNewWord(const QString& word, const QString& kvp);
   /*
    * Gets tags to generate raw implicit tag rules from
    */
   QStringList _getPoiKvps(const Tags& tags) const;
 
-  void _parseNames(const QStringList names, const QStringList kvps);
-  void _parseNameToken(QString& nameToken, const QStringList kvps);
+  void _parseNames(const QStringList& names, const QStringList& kvps);
+  void _parseNameToken(QString& nameToken, const QStringList& kvps);
 
   /*
    * Sorts word/tag occurrence count lines by descending occurrence count
@@ -158,7 +158,7 @@ private:
    * In cases where these is a word/tag key occurrence count tie, this resolves the tie.
    */
   void _resolveCountTies();
-  void _sortByWord(std::shared_ptr<QTemporaryFile> input);
+  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input);
 };
 
 }

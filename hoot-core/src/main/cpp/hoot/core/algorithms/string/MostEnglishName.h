@@ -85,7 +85,7 @@ public:
    * @return a score from 0.0 to 1.0 with 1.0 indicating the highest likelihood that the input is
    * English text
    */
-  double scoreName(const QString text);
+  double scoreName(const QString& text);
 
   void setConfiguration(const Settings& conf);
 
@@ -95,7 +95,7 @@ public:
    * @param text input to examine
    * @return true if the input is in the English dictionary; false otherwise
    */
-  bool isInDictionary(const QString text);
+  bool isInDictionary(const QString& text);
 
   /**
    * Determines if all inputs are in the English dictionary
@@ -103,7 +103,7 @@ public:
    * @param texts input to examine
    * @return true if all text inputs are in the English dictionary; false otherwise
    */
-  bool areAllInDictionary(const QStringList texts);
+  bool areAllInDictionary(const QStringList& texts);
 
   /**
    * Determines if the input is an English word
@@ -111,7 +111,7 @@ public:
    * @param text input to examine
    * @return true if the input is determined to be English text; false otherwise
    */
-  bool isEnglishText(const QString text);
+  bool isEnglishText(const QString& text);
 
 private:
 
@@ -132,7 +132,7 @@ private:
 
   const QSet<QString>& _getWords();
 
-  long _loadEnglishWords(QString path);
+  long _loadEnglishWords(const QString& path);
 };
 
 }

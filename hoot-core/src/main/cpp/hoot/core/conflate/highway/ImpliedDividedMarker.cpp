@@ -55,12 +55,12 @@ ImpliedDividedMarker::ImpliedDividedMarker()
 {
 }
 
-ImpliedDividedMarker::ImpliedDividedMarker(std::shared_ptr<const OsmMap> map) :
+ImpliedDividedMarker::ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) :
 _inputMap(map)
 {
 }
 
-bool ImpliedDividedMarker::_dividerSandwhich(std::shared_ptr<Way> w)
+bool ImpliedDividedMarker::_dividerSandwich(const std::shared_ptr<Way>& w)
 {
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
@@ -95,7 +95,7 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
   return false;
 }
 
-std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(std::shared_ptr<const OsmMap> map)
+std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(const std::shared_ptr<const OsmMap>& map)
 {
   ImpliedDividedMarker t(map);
   return t.markDivided();
@@ -121,7 +121,7 @@ std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
   {
     std::shared_ptr<Way> w = _result->getWay(wayIds[i]);
     // if the way has a divided road on both ends
-    if (_dividerSandwhich(w))
+    if (_dividerSandwich(w))
     {
       // mark this tunnel/bridge as divided.
       w->setTag("divider", "yes");

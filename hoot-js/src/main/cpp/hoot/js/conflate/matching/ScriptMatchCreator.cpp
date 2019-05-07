@@ -204,7 +204,7 @@ public:
     return getPlugin(_script);
   }
 
-  static Local<Object> getPlugin(std::shared_ptr<PluginContext> script)
+  static Local<Object> getPlugin(const std::shared_ptr<PluginContext>& script)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     EscapableHandleScope handleScope(current);

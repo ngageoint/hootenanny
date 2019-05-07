@@ -72,7 +72,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::buildTest(std::shared_ptr<DataFrame> data, unsigned int numFactors)
+  void RandomTree::buildTest(const std::shared_ptr<DataFrame>& data, unsigned int numFactors)
   {
     try
     {
@@ -148,7 +148,7 @@ namespace Tgs
     }
   }
 
-  double RandomTree::computeErrorRate(std::shared_ptr<DataFrame> data)
+  double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data)
   {
     try
     {
@@ -240,7 +240,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::findProximity(std::shared_ptr<DataFrame> data,
+  void RandomTree::findProximity(const std::shared_ptr<DataFrame>& data,
     std::vector<unsigned int> & proximity)
   {
     try
@@ -374,7 +374,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainBinary(std::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     std::string /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
@@ -408,7 +408,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     unsigned int nodeSize, bool balanced)
   {
     try
@@ -444,7 +444,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
   {
     try
@@ -472,7 +472,7 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
+  void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
     std::shared_ptr<TreeNode> & node, unsigned int nodeSize)
   {
     try

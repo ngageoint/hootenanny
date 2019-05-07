@@ -42,7 +42,7 @@ class Address
 public:
 
   Address();
-  Address(const QString address, const bool allowLenientHouseNumberMatching = true);
+  Address(const QString& address, const bool allowLenientHouseNumberMatching = true);
 
   bool operator==(const Address& address) const;
 

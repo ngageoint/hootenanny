@@ -48,7 +48,7 @@ public:
   {
   }
 
-  void verifyInput(const QString inputFile)
+  void verifyInput(const QString& inputFile)
   {
     MultiaryIngestChangesetReader changesetFileReader;
     changesetFileReader.open(inputFile);

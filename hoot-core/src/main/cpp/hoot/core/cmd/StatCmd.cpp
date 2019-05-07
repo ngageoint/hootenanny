@@ -86,7 +86,7 @@ private:
 
   int _taskStatusUpdateInterval;
 
-  std::shared_ptr<PartialOsmMapReader> _getReader(const QString input)
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input)
   {
     LOG_TRACE("Getting reader...");
 
@@ -99,7 +99,7 @@ private:
     return reader;
   }
 
-  ElementVisitorPtr _getStatCollector(const QString visClassName)
+  ElementVisitorPtr _getStatCollector(const QString& visClassName)
   {
     std::shared_ptr<ElementVisitor> statsCollector;
 
@@ -124,7 +124,7 @@ private:
     return statsCollector;
   }
 
-  double _calcStat(const QString input, const QString visClassName)
+  double _calcStat(const QString& input, const QString& visClassName)
   {
     double stat;
 

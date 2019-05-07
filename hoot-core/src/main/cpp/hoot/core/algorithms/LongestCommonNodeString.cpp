@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-LongestCommonNodeString::LongestCommonNodeString(std::shared_ptr<Way> w1, std::shared_ptr<Way> w2)
+LongestCommonNodeString::LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2)
 {
   _w1 = w1;
   _w2 = w2;

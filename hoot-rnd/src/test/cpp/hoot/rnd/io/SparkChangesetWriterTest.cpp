@@ -51,7 +51,7 @@ public:
   {
   }
 
-  void writeNodes(const QString output, const QString format)
+  void writeNodes(const QString& output, const QString& format)
   {
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.setElementPayloadFormat(format);

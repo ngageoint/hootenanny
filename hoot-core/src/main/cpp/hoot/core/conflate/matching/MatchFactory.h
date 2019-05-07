@@ -86,13 +86,13 @@ public:
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(std::shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
+  void registerCreator(const std::shared_ptr<MatchCreator>& creator) { _creators.push_back(creator); }
 
   /**
    * @brief registerCreator Register the specified creator by string (constructs the creator)
    * @param c @sa ConfigOptions::getMatchCreators()
    */
-  void registerCreator(QString c);
+  void registerCreator(const QString& c);
 
   void reset();
 
@@ -103,7 +103,7 @@ private:
 
   MatchFactory();
 
-  void _checkMatchCreatorBoundable(std::shared_ptr<MatchCreator> matchCreator,
+  void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }

@@ -91,7 +91,7 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(std::shared_ptr<MatchCreator> matchCreator,
+void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                                const Envelope& bounds) const
 {
   if (bounds.isNull() == false)
@@ -127,7 +127,7 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   return result;
 }
 
-void MatchFactory::registerCreator(QString c)
+void MatchFactory::registerCreator(const QString& c)
 {
   QStringList args = c.split(",");
   QString className = args[0];

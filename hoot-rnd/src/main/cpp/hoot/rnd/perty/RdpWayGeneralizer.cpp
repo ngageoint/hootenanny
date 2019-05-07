@@ -48,13 +48,13 @@ RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
   setEpsilon(epsilon);
 }
 
-RdpWayGeneralizer::RdpWayGeneralizer(std::shared_ptr<OsmMap> map, double epsilon) :
+RdpWayGeneralizer::RdpWayGeneralizer(const std::shared_ptr<OsmMap>& map, double epsilon) :
 _map(map)
 {
   setEpsilon(epsilon);
 }
 
-void RdpWayGeneralizer::generalize(std::shared_ptr<Way> way)
+void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 {
   if (!_map.get())
   {

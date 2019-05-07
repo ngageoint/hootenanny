@@ -46,7 +46,7 @@ HootExceptionJs::HootExceptionJs()
 {
 }
 
-Handle<Object> HootExceptionJs::create(std::shared_ptr<HootException> e)
+Handle<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);

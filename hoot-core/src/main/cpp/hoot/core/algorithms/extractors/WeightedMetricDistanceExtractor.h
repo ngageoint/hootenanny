@@ -55,7 +55,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setPointAggregator(const QString aggregator);
+  void setPointAggregator(const QString& aggregator);
 
   void setSearchRadius(const double radius);
 

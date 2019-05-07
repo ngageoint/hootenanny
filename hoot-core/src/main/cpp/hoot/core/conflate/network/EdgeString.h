@@ -49,7 +49,7 @@ public:
 
   struct EdgeEntry
   {
-    EdgeEntry(ConstEdgeSublinePtr subline) : _subline(subline)
+    EdgeEntry(const ConstEdgeSublinePtr& subline) : _subline(subline)
     {
     }
 
@@ -69,7 +69,7 @@ public:
       _subline = tmp;
     }
 
-    void setSubline(ConstEdgeSublinePtr s) { _subline = s; }
+    void setSubline(const ConstEdgeSublinePtr& s) { _subline = s; }
 
     QString toString() const;
 
@@ -95,46 +95,46 @@ public:
 
   EdgeString();
 
-  void addFirstEdge(ConstNetworkEdgePtr e);
+  void addFirstEdge(const ConstNetworkEdgePtr& e);
 
-  void addFirstEdge(ConstEdgeSublinePtr subline);
+  void addFirstEdge(const ConstEdgeSublinePtr& subline);
 
-  void appendEdge(ConstNetworkEdgePtr e);
+  void appendEdge(const ConstNetworkEdgePtr& e);
 
-  void appendEdge(ConstEdgeSublinePtr subline);
+  void appendEdge(const ConstEdgeSublinePtr& subline);
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
-  double calculateLineDistance(ConstEdgeLocationPtr el1, ConstEdgeLocationPtr el2) const;
+  double calculateLineDistance(const ConstEdgeLocationPtr& el1, const ConstEdgeLocationPtr& el2) const;
 
   /**
    * Returns the EdgeLocation on this EdgeString that is closest to el using the
    * calculateLineDistance definition of distance.
    */
-  ConstEdgeLocationPtr calculateNearestLocation(ConstEdgeLocationPtr el) const;
+  ConstEdgeLocationPtr calculateNearestLocation(const ConstEdgeLocationPtr& el) const;
 
   std::shared_ptr<EdgeString> clone() const;
 
   /**
    * Returns true if the entire string in other is contained by this.
    */
-  bool contains(const std::shared_ptr<const EdgeString> other) const;
+  bool contains(const std::shared_ptr<const EdgeString>& other) const;
 
   /**
    * Returns true if the specified edge is in this string.
    */
-  bool contains(ConstNetworkEdgePtr e) const;
+  bool contains(const ConstNetworkEdgePtr& e) const;
 
   /**
    * Returns true if the specified vertex is in this string.
    */
-  bool contains(ConstNetworkVertexPtr e) const;
+  bool contains(const ConstNetworkVertexPtr& e) const;
 
   bool contains(const ConstEdgeSublinePtr& e) const;
 
   bool contains(const ConstEdgeLocationPtr& el) const;
 
-  bool containsInteriorVertex(ConstNetworkVertexPtr v) const;
+  bool containsInteriorVertex(const ConstNetworkVertexPtr& v) const;
 
   const QList<EdgeEntry>& getAllEdges() const { return _edges; }
 
@@ -151,7 +151,7 @@ public:
    * (calculateLength) is used to determine offset. A value less than 0 will return the first
    * edge. A value greater than the string length (calculateLength()) will return the last edge.
    */
-  ConstNetworkEdgePtr getEdgeAtOffset(ConstOsmMapPtr map, Meters offset) const;
+  ConstNetworkEdgePtr getEdgeAtOffset(const ConstOsmMapPtr& map, Meters offset) const;
 
   ConstEdgeLocationPtr getFrom() const;
 
@@ -161,7 +161,7 @@ public:
 
   ConstNetworkEdgePtr getLastEdge() const { return _edges.back().getEdge(); }
 
-  ConstEdgeLocationPtr getLocationAtOffset(ConstElementProviderPtr map, Meters offset) const;
+  ConstEdgeLocationPtr getLocationAtOffset(const ConstElementProviderPtr& map, Meters offset) const;
 
   QList<ConstElementPtr> getMembers() const;
 
@@ -174,7 +174,7 @@ public:
   /**
    * Returns true if v is at the beginning or end of the string.
    */
-  bool isAtExtreme(ConstNetworkVertexPtr v) const;
+  bool isAtExtreme(const ConstNetworkVertexPtr& v) const;
 
   bool isFromOnVertex() const { return getFrom()->isExtreme(EdgeLocation::SLOPPY_EPSILON); }
 
@@ -197,13 +197,13 @@ public:
    */
   bool isValid() const;
 
-  bool overlaps(std::shared_ptr<const EdgeString> other) const;
+  bool overlaps(const std::shared_ptr<const EdgeString>& other) const;
 
   bool overlaps(const ConstEdgeSublinePtr& es) const;
 
   bool overlaps(const ConstNetworkEdgePtr& es) const;
 
-  void prependEdge(ConstEdgeSublinePtr subline);
+  void prependEdge(const ConstEdgeSublinePtr& subline);
 
   void removeFirst() { _edges.removeFirst(); assert(validate()); }
 

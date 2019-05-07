@@ -47,13 +47,13 @@ public:
   void init();
 
   QString getCustomRuleFile() const { return _customRuleFile; }
-  void setCustomRuleFile(const QString file) { _customRuleFile = file; }
+  void setCustomRuleFile(const QString& file) { _customRuleFile = file; }
 
   QString getTagIgnoreFile() const { return _tagIgnoreFile; }
-  void setTagIgnoreFile(const QString file) { _tagIgnoreFile = file; }
+  void setTagIgnoreFile(const QString& file) { _tagIgnoreFile = file; }
 
   QString getWordIgnoreFile() const { return _wordIgnoreFile; }
-  void setWordIgnoreFile(const QString file) { _wordIgnoreFile = file; }
+  void setWordIgnoreFile(const QString& file) { _wordIgnoreFile = file; }
 
   QStringList getTagIgnoreList() const { return _tagIgnoreList; }
   QStringList getWordIgnoreList() const { return _wordIgnoreList; }

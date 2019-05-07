@@ -67,7 +67,7 @@ class TGS_EXPORT RStarTree
 {
 public:
 
-  RStarTree(std::shared_ptr<PageStore> ps, int dimensions);
+  RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
   virtual ~RStarTree();
 

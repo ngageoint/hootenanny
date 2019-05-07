@@ -38,7 +38,7 @@ namespace hoot
 class LongestCommonNodeString
 {
 public:
-  LongestCommonNodeString(std::shared_ptr<Way> w1, std::shared_ptr<Way> w2);
+  LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
 
   /**
    * Returns the length of the common substring. Zero if no common substring was found.

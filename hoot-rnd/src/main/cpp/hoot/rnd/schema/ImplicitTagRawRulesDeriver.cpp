@@ -85,7 +85,7 @@ void ImplicitTagRawRulesDeriver::setConfiguration(const Settings& conf)
   }
 }
 
-void ImplicitTagRawRulesDeriver::setElementCriterion(QString criterionName)
+void ImplicitTagRawRulesDeriver::setElementCriterion(const QString& criterionName)
 {
   ElementCriterion* criterion =
     Factory::getInstance().constructObject<ElementCriterion>(criterionName);
@@ -119,9 +119,9 @@ void ImplicitTagRawRulesDeriver::_init()
   }
 }
 
-void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
-                                                const QStringList translationScripts,
-                                                const QString output)
+void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList& inputs,
+                                                const QStringList& translationScripts,
+                                                const QString& output)
 {
   _validateInputs(inputs, translationScripts, output);
 
@@ -228,9 +228,9 @@ void ImplicitTagRawRulesDeriver::deriveRawRules(const QStringList inputs,
   }
 }
 
-void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
-                                                 const QStringList translationScripts,
-                                                 const QString output)
+void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList& inputs,
+                                                 const QStringList& translationScripts,
+                                                 const QString& output)
 {
   LOG_VARD(inputs);
   LOG_VARD(translationScripts);
@@ -269,35 +269,34 @@ void ImplicitTagRawRulesDeriver::_validateInputs(const QStringList inputs,
   }
 }
 
-void ImplicitTagRawRulesDeriver::_updateForNewWord(QString word, const QString kvp)
+void ImplicitTagRawRulesDeriver::_updateForNewWord(const QString& word, const QString& kvp)
 {
-  word = word.simplified();
-  LOG_TRACE("Updating word: " << word << " with kvp: " << kvp << "...");
+  QString simpleWord = word.simplified();
+  LOG_TRACE("Updating word: " << simpleWord << " with kvp: " << kvp << "...");
 
-  ImplicitTagUtils::cleanName(word);
+  ImplicitTagUtils::cleanName(simpleWord);
 
-  if (!word.isEmpty())
+  if (!simpleWord.isEmpty())
   {
-    if (StringUtils::isNumber(word))
+    if (StringUtils::isNumber(simpleWord))
     {
-      LOG_TRACE("Skipping word: " << word << ", which is a number.");
+      LOG_TRACE("Skipping word: " << simpleWord << ", which is a number.");
       return;
     }
 
-    if (!StringUtils::hasAlphabeticCharacter(word))
+    if (!StringUtils::hasAlphabeticCharacter(simpleWord))
     {
-      LOG_TRACE("Skipping word: " << word << ", which has no alphabetic characters.");
+      LOG_TRACE("Skipping word: " << simpleWord << ", which has no alphabetic characters.");
       return;
     }
 
-    const QString line = word.toLower() % QString("\t") % kvp % QString("\n");
+    const QString line = simpleWord.toLower() % QString("\t") % kvp % QString("\n");
     _countFile->write(line.toUtf8());
     _countFileLineCtr++;
   }
 }
 
-std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
-  const QString input, const QString translationScript)
+std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(const QString& input, const QString& translationScript)
 {
   LOG_INFO("Parsing: " << input << "...");
 
@@ -318,7 +317,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   return inputStream;
 }
 
-void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStringList kvps)
+void ImplicitTagRawRulesDeriver::_parseNames(const QStringList& names, const QStringList& kvps)
 {
   for (int i = 0; i < names.size(); i++)
   {
@@ -359,7 +358,7 @@ void ImplicitTagRawRulesDeriver::_parseNames(const QStringList names, const QStr
   }
 }
 
-void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStringList kvps)
+void ImplicitTagRawRulesDeriver::_parseNameToken(QString& nameToken, const QStringList& kvps)
 {
   //may eventually need to replace more punctuation chars here, but this is fine for now...need a
   //more extensible way to do it; also, that logic could moved into ImplicitTagUtils::cleanName
@@ -623,7 +622,7 @@ void ImplicitTagRawRulesDeriver::_resolveCountTies()
   _tieResolvedCountFile->close();
 }
 
-void ImplicitTagRawRulesDeriver::_sortByWord(std::shared_ptr<QTemporaryFile> input)
+void ImplicitTagRawRulesDeriver::_sortByWord(const std::shared_ptr<QTemporaryFile>& input)
 {
   LOG_INFO("Sorting output by word...");
   if (!input->exists())

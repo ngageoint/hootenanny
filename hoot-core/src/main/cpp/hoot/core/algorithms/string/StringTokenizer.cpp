@@ -38,7 +38,7 @@ StringTokenizer::StringTokenizer()
   setConfiguration(conf());
 }
 
-StringTokenizer::StringTokenizer(QString sepRegex) : _sep(sepRegex)
+StringTokenizer::StringTokenizer(const QString& sepRegex) : _sep(sepRegex)
 {
 }
 
@@ -63,7 +63,7 @@ void StringTokenizer::setConfiguration(const Settings& conf)
   _minSize = co.getTokenMinSize();
 }
 
-QStringList StringTokenizer::tokenize(const QString s) const
+QStringList StringTokenizer::tokenize(const QString& s) const
 {
   QStringList l = s.split(_sep, QString::SkipEmptyParts);
 

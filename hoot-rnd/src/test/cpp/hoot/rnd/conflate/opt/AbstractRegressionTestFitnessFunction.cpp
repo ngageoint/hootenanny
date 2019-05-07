@@ -43,9 +43,9 @@
 namespace hoot
 {
 
-AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(QString dir,
-                                                                             QString configFile,
-                                                                             QString testDirExtension)
+AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(const QString& dir,
+                                                                             const QString& configFile,
+                                                                             const QString& testDirExtension)
   : AbstractTestFitnessFunction(),
     _configFile(configFile)
 {
@@ -57,7 +57,7 @@ AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(QSt
   _testsToBestScores.clear();
 }
 
-void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName,
+void AbstractRegressionTestFitnessFunction::_createConfig(const QString& testName,
                                                           Settings& testSettings)
 {
   //Calling test->addConfig with the network config file to add in the non-variable config options

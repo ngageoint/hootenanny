@@ -192,12 +192,12 @@ private:
     }
   }
 
-  bool _isSupportedOutputFormat(const QString format) const
+  bool _isSupportedOutputFormat(const QString& format) const
   {
     return format.endsWith(".osc") || format.endsWith(".osc.sql");
   }
 
-  bool _inputIsSorted(const QString input) const
+  bool _inputIsSorted(const QString& input) const
   {
     //Streaming db inputs actually do not come back sorted, despite the order by id clause
     //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
@@ -213,7 +213,7 @@ private:
   /*
    * Reads entire input into memory
    */
-  OsmMapPtr _readInputFully(const QString input, const Status& elementStatus)
+  OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus)
   {
     LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
 
@@ -237,7 +237,7 @@ private:
     return map;
   }
 
-  ElementInputStreamPtr _getSortedElements(const QString input, const Status& status)
+  ElementInputStreamPtr _getSortedElements(const QString& input, const Status& status)
   {
     ElementInputStreamPtr sortedElements;
 
@@ -279,7 +279,7 @@ private:
     return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
   }
 
-  ElementInputStreamPtr _getFilteredInputStream(const QString input)
+  ElementInputStreamPtr _getFilteredInputStream(const QString& input)
   {
     LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
@@ -309,7 +309,7 @@ private:
     return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
   }
 
-  ElementInputStreamPtr _sortElementsExternally(const QString input)
+  ElementInputStreamPtr _sortElementsExternally(const QString& input)
   {
     std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
     sorted->sort(_getFilteredInputStream(input));
@@ -317,7 +317,7 @@ private:
   }
 
   void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
-                              const QString output)
+                              const QString& output)
   {
     LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
 

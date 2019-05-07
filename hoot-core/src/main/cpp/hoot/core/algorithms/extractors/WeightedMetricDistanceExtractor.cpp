@@ -108,7 +108,7 @@ string WeightedMetricDistanceExtractor::getName() const
                            " point agg: " + _pointAgg->toString()).toStdString();
 }
 
-void WeightedMetricDistanceExtractor::setPointAggregator(const QString aggregator)
+void WeightedMetricDistanceExtractor::setPointAggregator(const QString& aggregator)
 {
   _pointAgg.reset(Factory::getInstance().constructObject<ValueAggregator>(aggregator));
 }

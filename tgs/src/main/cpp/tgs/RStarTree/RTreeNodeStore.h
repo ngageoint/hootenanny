@@ -49,7 +49,7 @@ class TGS_EXPORT RTreeNodeStore
 {
 public:
 
-  RTreeNodeStore(int dimensions, std::shared_ptr<PageStore> ps);
+  RTreeNodeStore(int dimensions, const std::shared_ptr<PageStore>& ps);
 
   ~RTreeNodeStore();
 

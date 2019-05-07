@@ -93,7 +93,7 @@ public:
    * @brief DiffConflator - Construct & set a match threshold
    * @param matchThreshold - Match threshold
    */
-  DiffConflator(std::shared_ptr<MatchThreshold> matchThreshold);
+  DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   ~DiffConflator();
 

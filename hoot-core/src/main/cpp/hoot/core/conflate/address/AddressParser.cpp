@@ -239,8 +239,8 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
   return addresses;
 }
 
-QSet<QString> AddressParser::_parseAddressAsRange(const QString houseNum,
-                                                  const QString street) const
+QSet<QString> AddressParser::_parseAddressAsRange(const QString& houseNum,
+                                                  const QString& street) const
 {
   //address ranges; e.g. 1-3 elm street is an address range that includes the addresses:
   //"1 elm street", "2 elm street", and "3 elm street".  I've only seen this on the houseNum
@@ -291,7 +291,7 @@ bool AddressParser::_isParseableAddressFromComponents(const Tags& tags, QString&
   return false;
 }
 
-bool AddressParser::_isRangeAddress(const QString houseNum) const
+bool AddressParser::_isRangeAddress(const QString& houseNum) const
 {
   return houseNum.contains("-");
 }
@@ -344,7 +344,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   }
 }
 
-QString AddressParser::_parseFullAddress(const QString fullAddress, QString& houseNum,
+QString AddressParser::_parseFullAddress(const QString& fullAddress, QString& houseNum,
                                          QString& street) const
 {
   QString parsedAddress = fullAddress;
@@ -476,8 +476,8 @@ QSet<QString> AddressParser::_parseAddresses(const Element& element, QString& ho
   return parsedAddresses;
 }
 
-bool AddressParser::addressesMatchDespiteSubletterDiffs(const QString address1,
-                                                        const QString address2)
+bool AddressParser::addressesMatchDespiteSubletterDiffs(const QString& address1,
+                                                        const QString& address2)
 {
   LOG_VART(address1);
   LOG_VART(address2);
@@ -498,7 +498,7 @@ bool AddressParser::addressesMatchDespiteSubletterDiffs(const QString address1,
   return false;
 }
 
-QString AddressParser::_getSubLetterCleanedAddress(const QString address)
+QString AddressParser::_getSubLetterCleanedAddress(const QString& address)
 {
   //may be able to clean some of this up with better use of regex's
 

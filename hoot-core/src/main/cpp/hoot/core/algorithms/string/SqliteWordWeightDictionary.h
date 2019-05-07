@@ -45,11 +45,11 @@ class SqliteWordWeightDictionary : public WordWeightDictionary
 {
 public:
 
-  SqliteWordWeightDictionary(const QString filePath);
+  SqliteWordWeightDictionary(const QString& filePath);
 
-  virtual double getMinWeight() const { return 1.0 / (double)_count; }
+  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
 
-  virtual double getWeight(const QString& word) const;
+  virtual double getWeight(const QString& word) const override;
 
 private:
 

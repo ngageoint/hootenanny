@@ -60,8 +60,9 @@ struct BuildingPartRelationship
     Neighbor
   };
 
-  BuildingPartRelationship(ElementPtr building, std::shared_ptr<geos::geom::Geometry> buildingGeom,
-                           WayPtr buildingPartNeighbor,
+  BuildingPartRelationship(const ElementPtr& building,
+                           const std::shared_ptr<geos::geom::Geometry>& buildingGeom,
+                           const WayPtr& buildingPartNeighbor,
                            BuildingPartRelationshipType relationshipType)
     : building(building),
       buildingGeom(buildingGeom),

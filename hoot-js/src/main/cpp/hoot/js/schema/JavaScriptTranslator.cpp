@@ -99,8 +99,7 @@ JavaScriptTranslator::~JavaScriptTranslator()
   close();
 }
 
-vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAllFeatures(
-  QVariantList list)
+vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAllFeatures(const QVariantList& list)
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
@@ -118,7 +117,7 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   return result;
 }
 
-std::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString &tableName)
+std::shared_ptr<Feature> JavaScriptTranslator::_createFeature(const QVariantMap& vm, QString &tableName)
 {
   if (vm.contains("attrs") == false)
   {
@@ -214,7 +213,7 @@ void JavaScriptTranslator::_finalize()
   _initialized = false;
 }
 
-int JavaScriptTranslator::getLogCount(QString log)
+int JavaScriptTranslator::getLogCount(const QString& log)
 {
   int result;
 
@@ -331,7 +330,7 @@ const QString JavaScriptTranslator::getLayerNameFilter()
   }
 }
 
-QVariant& JavaScriptTranslator::_getMapValue(QVariantMap& map, QString key)
+QVariant& JavaScriptTranslator::_getMapValue(QVariantMap& map, const QString& key)
 {
   if (map.contains(key) == false)
   {
@@ -369,7 +368,7 @@ bool JavaScriptTranslator::isValidScript()
   return result;
 }
 
-void JavaScriptTranslator::_featureWarn(QString message, QString fileName, QString functionName,
+void JavaScriptTranslator::_featureWarn(const QString& message, const QString& fileName, const QString& functionName,
   int lineNumber)
 {
 //  stringstream ss;
@@ -552,7 +551,7 @@ void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QV
   }
 }
 
-std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
+std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(const QVariant& fieldV) const
 {
   std::shared_ptr<FieldDefinition> result;
 
@@ -709,7 +708,7 @@ std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVa
   return result;
 }
 
-std::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
+std::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(const QVariant& layer) const
 {
   std::shared_ptr<Layer> newLayer(new Layer());
 

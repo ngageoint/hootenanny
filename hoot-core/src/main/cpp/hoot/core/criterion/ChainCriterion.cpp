@@ -38,8 +38,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ChainCriterion)
 
-ChainCriterion::ChainCriterion(std::shared_ptr<ElementCriterion> child1,
-                               std::shared_ptr<ElementCriterion> child2)
+ChainCriterion::ChainCriterion(const ElementCriterionPtr& child1,
+                               const ElementCriterionPtr& child2)
 {
   _criteria.push_back(child1);
   _criteria.push_back(child2);
@@ -65,7 +65,7 @@ ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child
   _criteria.push_back(std::shared_ptr<ElementCriterion>(child3));
 }
 
-ChainCriterion::ChainCriterion(vector<std::shared_ptr<ElementCriterion>> criteria)
+ChainCriterion::ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria)
 {
   for (size_t i = 0; i < criteria.size(); i++)
     _criteria.push_back(std::shared_ptr<ElementCriterion>(criteria[i]->clone()));

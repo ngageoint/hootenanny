@@ -52,7 +52,7 @@ public:
 
   QString getUid() const { return _uid; }
 
-  void setUid(const QString uid) { _uid = uid; }
+  void setUid(const QString& uid) { _uid = uid; }
 
   QString toString() const
   {

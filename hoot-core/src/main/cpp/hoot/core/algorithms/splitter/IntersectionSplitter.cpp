@@ -52,12 +52,12 @@ IntersectionSplitter::IntersectionSplitter()
 {
 }
 
-IntersectionSplitter::IntersectionSplitter(std::shared_ptr<OsmMap> map) :
+IntersectionSplitter::IntersectionSplitter(const std::shared_ptr<OsmMap>& map) :
 _map(map)
 {
 }
 
-void IntersectionSplitter::_mapNodesToWay(std::shared_ptr<Way> way)
+void IntersectionSplitter::_mapNodesToWay(const std::shared_ptr<Way>& way)
 {
   long wId = way->getId();
 
@@ -113,7 +113,7 @@ void IntersectionSplitter::_mapNodesToWays()
   }
 }
 
-void IntersectionSplitter::_removeWayFromMap(std::shared_ptr<Way> way)
+void IntersectionSplitter::_removeWayFromMap(const std::shared_ptr<Way>& way)
 {
   long wId = way->getId();
 
@@ -124,7 +124,7 @@ void IntersectionSplitter::_removeWayFromMap(std::shared_ptr<Way> way)
   }
 }
 
-void IntersectionSplitter::splitIntersections(std::shared_ptr<OsmMap> map)
+void IntersectionSplitter::splitIntersections(const std::shared_ptr<OsmMap>& map)
 {
   IntersectionSplitter is(map);
   return is.splitIntersections();

@@ -331,7 +331,7 @@ public:
     _testTreeDistance(uut, testSize, sampleSize, false);
   }
 
-  void _testTreeDistance(std::shared_ptr<RStarTree> uut, int testSize, int sampleSize, bool bulkLoad)
+  void _testTreeDistance(const std::shared_ptr<RStarTree>& uut, int testSize, int sampleSize, bool bulkLoad)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -351,7 +351,7 @@ public:
     _testTreeDistance(uut, testSize, sampleSize);
   }
 
-  void _testTreeDistance(std::shared_ptr<RStarTree> uut, int testSize, int sampleSize)
+  void _testTreeDistance(const std::shared_ptr<RStarTree>& uut, int testSize, int sampleSize)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -392,7 +392,7 @@ public:
     }
   }
 
-  void benchmarkTree(std::shared_ptr<RStarTree> rst, int testSize, int sampleSize, bool bulkLoad)
+  void benchmarkTree(const std::shared_ptr<RStarTree>& rst, int testSize, int sampleSize, bool bulkLoad)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;

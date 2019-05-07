@@ -129,7 +129,7 @@ ZCurveRanger::ZCurveRanger(const ZValue& zv)
 {
 }
 
-vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(std::shared_ptr<LongBox> box)
+vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(const std::shared_ptr<LongBox>& box)
 {
   int bestMaxBit = 0;
   int bestD = 0;
@@ -175,13 +175,13 @@ vector<std::shared_ptr<LongBox>> ZCurveRanger::breakBox(std::shared_ptr<LongBox>
    return result;
 }
 
-long int ZCurveRanger::calculateExcess(std::shared_ptr<LongBox> box)
+long int ZCurveRanger::calculateExcess(const std::shared_ptr<LongBox>& box)
 {
   long int startSize = _toRange(box).calculateSize();
   return startSize - box->calculateVolume();
 }
 
-vector<std::shared_ptr<LongBox>> ZCurveRanger::decomposeBox(std::shared_ptr<LongBox> box, int level)
+vector<std::shared_ptr<LongBox>> ZCurveRanger::decomposeBox(const std::shared_ptr<LongBox>& box, int level)
 {
   vector<std::shared_ptr<LongBox>> result;
 
@@ -415,7 +415,7 @@ vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r)
   return result;
 }
 
-Range ZCurveRanger::_toRange(std::shared_ptr<LongBox> box)
+Range ZCurveRanger::_toRange(const std::shared_ptr<LongBox>& box)
 {
   vector<long int> scratch;
   scratch.reserve(_zv.getDimensions());

@@ -91,16 +91,16 @@ struct ScopedMergerDeleter
   std::vector<Merger*>& _ms;
 };
 
-MultiaryPoiMergeCache::MultiaryPoiMergeCache(ConstOsmMapPtr map,
-    std::shared_ptr<MatchCreator> matchCreator,
-    std::shared_ptr<MergerCreator> mergerCreator) :
+MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
+    const std::shared_ptr<MatchCreator>& matchCreator,
+    const std::shared_ptr<MergerCreator>& mergerCreator) :
   _map(map),
   _matchCreator(matchCreator),
   _mergerCreator(mergerCreator)
 {
 }
 
-MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryClusterPtr c2)
+MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2)
 {
   MultiaryClusterPtr result(new MultiaryCluster);
 

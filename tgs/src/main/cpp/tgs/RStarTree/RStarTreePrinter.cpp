@@ -35,7 +35,7 @@ using namespace std;
 namespace Tgs
 {
 
-RStarTreePrinter::RStarTreePrinter(std::shared_ptr<const RStarTree> tree)
+RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree)
 {
   _tree = tree;
 }
@@ -51,7 +51,7 @@ string RStarTreePrinter::_indentStr(int size)
   return result;
 }
 
-void RStarTreePrinter::print(std::shared_ptr<const RStarTree> tree)
+void RStarTreePrinter::print(const std::shared_ptr<const RStarTree>& tree)
 {
   RStarTreePrinter p(tree);
   p.print();

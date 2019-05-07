@@ -56,7 +56,7 @@ MergerBase()
 {
 }
 
-ScriptMerger::ScriptMerger(std::shared_ptr<PluginContext> script, Persistent<Object>& plugin,
+ScriptMerger::ScriptMerger(const std::shared_ptr<PluginContext>& script, Persistent<Object>& plugin,
                            const set<pair<ElementId, ElementId>>& pairs) :
   _pairs(pairs),
   _script(script)

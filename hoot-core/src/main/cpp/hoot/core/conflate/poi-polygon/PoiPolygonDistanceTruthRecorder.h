@@ -57,7 +57,7 @@ public:
    * @param elementDistance the distance between the two elements
    */
   static void recordDistanceTruth(ConstElementPtr poi, ConstElementPtr poly,
-                                  const QString poiBestKvp, const QString polyBestKvp,
+                                  const QString& poiBestKvp, const QString& polyBestKvp,
                                   const double elementDistance);
 
   /**
@@ -77,7 +77,7 @@ private:
   static QMultiMap<QString, double> _polyMatchRefIdsToDistances;
   static QMultiMap<QString, double> _polyReviewRefIdsToDistances;
 
-  static void _printMatchDistanceInfo(const QString matchType,
+  static void _printMatchDistanceInfo(const QString &matchType,
                                       const QMultiMap<QString, double>& distanceInfo);
 
 };

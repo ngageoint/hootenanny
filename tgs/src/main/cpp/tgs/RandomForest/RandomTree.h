@@ -73,7 +73,7 @@ namespace Tgs
     * @param data this data frame contains all the data vectors in the training set
     * @param numFactors the number of factors to randomly choose as candidates for node splitting
     */
-    void buildTest(std::shared_ptr<DataFrame> data, unsigned int numFactors);
+    void buildTest(const std::shared_ptr<DataFrame>& data, unsigned int numFactors);
 
     /**
     *  This classifies a data vector against the trained tree
@@ -92,7 +92,7 @@ namespace Tgs
     *
     * @param data this data frame contains all the data vectors in the training set
     */
-    double computeErrorRate(std::shared_ptr<DataFrame> data);
+    double computeErrorRate(const std::shared_ptr<DataFrame>& data);
 
     /**
     * Computes the proximity of the data vectors in the data set by running the 
@@ -102,7 +102,7 @@ namespace Tgs
     * @param data the set of data vectors
     * @param proximity a n x n (where n is the number of total data vectors) adjacency matrix
     */
-    void findProximity(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & proximity);
+    void findProximity(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & proximity);
 
     /**
     * Finds the factor importance as the sum of the info gain at each tree node per factor
@@ -148,7 +148,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainBinary(std::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
+    void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors, std::string posClass,
       unsigned int nodeSize = 1, bool balanced = false);
 
     /**
@@ -159,7 +159,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainMulticlass(std::shared_ptr<DataFrame> data, unsigned int numFactors,
+    void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
       unsigned int nodeSize = 1, bool balanced = false);
 
     /**
@@ -172,7 +172,7 @@ namespace Tgs
     * @param nodeSize the minimum number of data vectors in a set to split a node 
     * @param balanced true if the tree should used balanced data
     */
-    void trainRoundRobin(std::shared_ptr<DataFrame> data, unsigned int numFactors, std::string posClass,
+    void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors, std::string posClass,
       std::string negClass, unsigned int nodeSize = 1, bool balanced = false);
     /**
     * Resets the id counter.  Only needed in build-model when a model is loaded, increasing the ids,
@@ -185,7 +185,7 @@ namespace Tgs
     /**
     * Recursive function for building random tree nodes
     */
-    void _build(std::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
+    void _build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
       std::shared_ptr<TreeNode> &node, unsigned int nodeSize);
 
     /**

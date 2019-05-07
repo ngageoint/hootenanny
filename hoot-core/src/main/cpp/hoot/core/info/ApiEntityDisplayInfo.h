@@ -49,18 +49,18 @@ public:
    *
    * @param apiEntityType the type of entity to display
    */
-  static QString getDisplayInfo(const QString apiEntityType);
+  static QString getDisplayInfo(const QString& apiEntityType);
 
   /**
    * Gets display information on the currently configured operations by the given name
    *
    * @param optName a Hootenanny configuration option name identifying a list of operations
    */
-  static QString getDisplayInfoOps(const QString optName);
+  static QString getDisplayInfoOps(const QString& optName);
 
 private:
 
-  static QString _apiEntityTypeForBaseClass(const QString baseClassName);
+  static QString _apiEntityTypeForBaseClass(const QString& baseClassName);
 };
 
 }

@@ -39,9 +39,9 @@ namespace Tgs
 class RStarTreePrinter
 {
 public:
-  RStarTreePrinter(std::shared_ptr<const RStarTree> tree);
+  RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree);
 
-  static void print(std::shared_ptr<const RStarTree> tree);
+  static void print(const std::shared_ptr<const RStarTree>& tree);
 
   void print();
 

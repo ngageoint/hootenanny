@@ -58,20 +58,19 @@ void PhoneNumberParser::setSearchInText(bool search)
   _searchInText = search;
 }
 
-void PhoneNumberParser::setRegionCode(QString code)
+void PhoneNumberParser::setRegionCode(const QString& code)
 {
-  code = code.trimmed().toUpper();
-  if (!code.isEmpty())
+  _regionCode = code.trimmed().toUpper();
+  if (!_regionCode.isEmpty())
   {
     std::set<std::string> regions;
       PhoneNumberUtil::GetInstance()->GetSupportedRegions(&regions);
-    std::set<std::string>::const_iterator it = regions.find(code.toStdString());
+    std::set<std::string>::const_iterator it = regions.find(_regionCode.toStdString());
     if (it == regions.end())
     {
-      throw HootException("Invalid phone number region code: " + code);
+      throw HootException("Invalid phone number region code: " + _regionCode);
     }
   }
-  _regionCode = code;
 }
 
 void PhoneNumberParser::setConfiguration(const Settings& conf)
@@ -82,8 +81,8 @@ void PhoneNumberParser::setConfiguration(const Settings& conf)
   setSearchInText(config.getPhoneNumberSearchInText());
 }
 
-void PhoneNumberParser::_addPhoneNumber(const QString name, const QString tagKey,
-                                        const QString tagValue,
+void PhoneNumberParser::_addPhoneNumber(const QString& name, const QString& tagKey,
+                                        const QString& tagValue,
                                         QList<ElementPhoneNumber>& phoneNumbers) const
 {
   // Not normalizing by default here, since it will happen during phone number matching.

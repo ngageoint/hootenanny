@@ -42,7 +42,7 @@ using namespace std;
 
 using namespace Tgs;
 
-RStarTree::RStarTree(std::shared_ptr<PageStore> ps, int dimensions)
+RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   : _store(dimensions, ps)
 {
   RTreeNode* root;

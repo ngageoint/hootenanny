@@ -72,7 +72,7 @@ static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
-QString getApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
+QString getApiEntities(const std::string& apiEntityBaseClassName, const QString& apiEntityType,
                        const bool displayType,
                        //the size of the longest names plus a 3 space buffer; the value passed in
                        //here by callers may have to be adjusted over time for some entity types
@@ -189,7 +189,7 @@ QString getApiEntities2(const std::string& apiEntityClassName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className)
+QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& className)
 {
   LOG_VARD(className);
   if (className.toStdString() == OsmMapOperation::className() ||
@@ -205,7 +205,7 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className
   return "";
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {
   LOG_TRACE("getDisplayInfoOps: " << optName);
 
@@ -276,7 +276,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
   DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";

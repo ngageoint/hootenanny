@@ -68,7 +68,7 @@ UnifyingConflator::UnifyingConflator() :
   _reset();
 }
 
-UnifyingConflator::UnifyingConflator(std::shared_ptr<MatchThreshold> matchThreshold) :
+UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())

@@ -75,8 +75,8 @@ public:
    * @param referenceOutput path to the output data; must be a Hootenanny API database
    * @param changesetOuput path to the output changeset; must be a Spark changeset
    */
-  void ingest(const QString newInput, const QString translationScript,
-              const QString referenceOutput, const QString changesetOuput);
+  void ingest(const QString& newInput, const QString& translationScript,
+              const QString& referenceOutput, const QString& changesetOuput);
 
 private:
 
@@ -87,31 +87,31 @@ private:
 
   QElapsedTimer _timer;
 
-  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
+  std::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString& sortedNewInput);
 
   /*
    * Writes data to the reference layer when no data exists there (no changeset derivation)
    */
-  void _writeNewReferenceData(std::shared_ptr<ElementInputStream> filteredNewInputStream,
-                              const QString referenceOutput, const QString changesetOutput);
+  void _writeNewReferenceData(const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
+                              const QString& referenceOutput, const QString& changesetOutput);
 
   /*
    * Derives a changeset between the ref layer and another source; writes the output to a changeset
    * file; returns the changeset file
    */
   std::shared_ptr<QTemporaryFile> _deriveAndWriteChangesToChangeset(
-    std::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
-    const QString changesetOutput);
+    const std::shared_ptr<ElementInputStream>& filteredNewInputStream, const QString& referenceInput,
+    const QString& changesetOutput);
 
   /*
    * Writes the contents of a changeset to the ref layer
    */
-  void _writeChangesToReferenceLayer(const QString changesetOutput, const QString referenceOutput);
+  void _writeChangesToReferenceLayer(const QString& changesetOutput, const QString& referenceOutput);
 
-  void _sortInputFile(const QString input);
+  void _sortInputFile(const QString& input);
 
-  void _doInputErrorChecking(const QString newInput, const QString translationScript,
-                             const QString referenceOutput, const QString changesetOutput);
+  void _doInputErrorChecking(const QString& newInput, const QString& translationScript,
+                             const QString& referenceOutput, const QString& changesetOutput);
 };
 
 }

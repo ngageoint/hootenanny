@@ -78,7 +78,7 @@ void JsRegistrar::initAll(Handle<Object> exports)
   }
 }
 
-void JsRegistrar::registerInitializer(std::shared_ptr<ClassInitializer> ci)
+void JsRegistrar::registerInitializer(const std::shared_ptr<ClassInitializer>& ci)
 {
   _initializers.push_back(ci);
 }

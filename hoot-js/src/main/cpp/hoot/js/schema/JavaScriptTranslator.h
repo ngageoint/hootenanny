@@ -87,7 +87,7 @@ public:
   /**
    * Returns the number of times that this log message has been emitted.
    */
-  int getLogCount(QString log);
+  int getLogCount(const QString& log);
 
   virtual std::shared_ptr<const Schema> getOgrOutputSchema();
 
@@ -97,7 +97,7 @@ public:
   /**
    * Uses the specified script text instead of loading the script from a file.
    */
-  void setScriptText(QString text) { close(); _scriptText = text; _scriptPath = QString(); }
+  void setScriptText(const QString& text) { close(); _scriptText = text; _scriptPath = QString(); }
 
   virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType);
@@ -122,20 +122,20 @@ protected:
 
   Settings _conf;
 
-  std::vector<TranslatedFeature> _createAllFeatures(QVariantList vm);
-  std::shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
+  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
+  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
 
   virtual void _init();
 
   /**
    * Warn the user about the feature currently being processed.
    */
-  void _featureWarn(QString message, QString fileName, QString functionName,
+  void _featureWarn(const QString& message, const QString& fileName, const QString& functionName,
                     int lineNumber);
 
   virtual void _finalize();
 
-  QVariant& _getMapValue(QVariantMap& map, QString key);
+  QVariant& _getMapValue(QVariantMap& map, const QString& key);
 
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
 
@@ -143,9 +143,9 @@ protected:
 
   void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
-  std::shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
+  std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
 
-  std::shared_ptr<Layer> _parseLayer(QVariant layer) const;
+  std::shared_ptr<Layer> _parseLayer(const QVariant& layer) const;
 
   double _toDouble(const QVariant& v) const;
 

@@ -57,10 +57,10 @@ public:
    * @param matchCreator
    * @param mergerCreator
    */
-  MultiaryPoiMergeCache(ConstOsmMapPtr map, std::shared_ptr<MatchCreator> matchCreator,
-    std::shared_ptr<MergerCreator> mergerCreator);
+  MultiaryPoiMergeCache(const ConstOsmMapPtr& map, const std::shared_ptr<MatchCreator>& matchCreator,
+    const std::shared_ptr<MergerCreator>& mergerCreator);
 
-  MultiaryClusterPtr merge(MultiaryClusterPtr c1, MultiaryClusterPtr c2);
+  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2);
 
 private:
 

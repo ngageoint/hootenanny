@@ -49,7 +49,7 @@ class PhoneNumberLocator : public Configurable
 public:
 
   PhoneNumberLocator();
-  PhoneNumberLocator(const QString regionCode);
+  PhoneNumberLocator(const QString& regionCode);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -59,9 +59,9 @@ public:
    * @param phoneNumber the phone number to locate
    * @return an address string
    */
-  QString getLocationDescription(const QString phoneNumber) const;
+  QString getLocationDescription(const QString& phoneNumber) const;
 
-  void setRegionCode(QString code);
+  void setRegionCode(const QString& code);
 
   int getNumLocated() const { return _numLocated; }
 

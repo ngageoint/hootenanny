@@ -116,7 +116,7 @@ public:
   { _disableSameSourceConflation = disabled; }
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
-  void setSourceTagKey(const QString key) { _sourceTagKey = key; }
+  void setSourceTagKey(const QString& key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 

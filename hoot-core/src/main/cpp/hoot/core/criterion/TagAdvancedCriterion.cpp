@@ -53,7 +53,7 @@ _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
   setConfiguration(conf());
 }
 
-TagAdvancedCriterion::TagAdvancedCriterion(const QString filterJsonStringOrPath) :
+TagAdvancedCriterion::TagAdvancedCriterion(const QString& filterJsonStringOrPath) :
 _keyMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard)),
 _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 {
@@ -69,7 +69,7 @@ void TagAdvancedCriterion::setConfiguration(const Settings& s)
   }
 }
 
-void TagAdvancedCriterion::_parseFilterString(const QString filterJsonStringOrPath)
+void TagAdvancedCriterion::_parseFilterString(const QString& filterJsonStringOrPath)
 {
   std::shared_ptr<boost::property_tree::ptree> propTree;
   if (!filterJsonStringOrPath.toLower().endsWith(".json"))
@@ -109,8 +109,8 @@ void TagAdvancedCriterion::_parseFilterString(const QString filterJsonStringOrPa
   }
 }
 
-void TagAdvancedCriterion::_loadTagFilters(const QString tagFilterType,
-                                           std::shared_ptr<boost::property_tree::ptree> propTree)
+void TagAdvancedCriterion::_loadTagFilters(const QString& tagFilterType,
+                                           const std::shared_ptr<boost::property_tree::ptree>& propTree)
 {
   LOG_TRACE("Loading " << tagFilterType << " filters...");
 
@@ -131,7 +131,7 @@ void TagAdvancedCriterion::_loadTagFilters(const QString tagFilterType,
 }
 
 bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter,
-                                        const QString matchType) const
+                                        const QString& matchType) const
 {
   LOG_TRACE("Checking for tag " << matchType << " match...");
 

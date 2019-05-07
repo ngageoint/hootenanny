@@ -207,7 +207,7 @@ private:
   }
 
   void _writeOutputAsGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                             const QString outputPath, const bool selectSingleRandomTile,
+                             const QString& outputPath, const bool selectSingleRandomTile,
                              int randomSeed)
   {
     //write out to temp osm and then use ogr2ogr to convert to geojson
@@ -244,7 +244,7 @@ private:
   }
 
   void _writeOutputAsOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                         const QString outputPath, const bool selectSingleRandomTile,
+                         const QString& outputPath, const bool selectSingleRandomTile,
                          int randomSeed)
   {
     LOG_VARD(outputPath);

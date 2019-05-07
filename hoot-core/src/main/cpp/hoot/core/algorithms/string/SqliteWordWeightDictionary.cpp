@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString filePath) : _reader(filePath)
+SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath) : _reader(filePath)
 {
   _count = 1;
   _nonWord.setPattern("[^\\w]");

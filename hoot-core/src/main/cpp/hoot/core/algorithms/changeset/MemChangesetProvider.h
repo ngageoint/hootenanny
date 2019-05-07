@@ -41,7 +41,7 @@ class MemChangesetProvider : public ChangesetProvider
 
 public:
 
-  explicit MemChangesetProvider(std::shared_ptr<OGRSpatialReference> pProjection);
+  explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection);
 
   /**
    * @see ChangeSetProvider

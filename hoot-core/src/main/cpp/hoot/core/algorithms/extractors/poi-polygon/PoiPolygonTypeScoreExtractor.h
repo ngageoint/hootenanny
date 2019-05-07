@@ -156,15 +156,15 @@ private:
   bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
   bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
 
-  void _translateTagValue(const QString tagKey, QString& tagValue) const;
-  static QSet<QString> _getTagValueTokens(const QString category);
+  void _translateTagValue(const QString& tagKey, QString& tagValue) const;
+  static QSet<QString> _getTagValueTokens(const QString& category);
 
   static void _readTypeToNames();
-  static bool _typeHasName(const QString kvp, const QString name);
-  static QString _getMatchingTypeName(const QString kvp, const QString name);
-  static bool _haveMatchingTypeNames(const QString kvp, const QString name1, const QString name2);
+  static bool _typeHasName(const QString& kvp, const QString& name);
+  static QString _getMatchingTypeName(const QString& kvp, const QString& name);
+  static bool _haveMatchingTypeNames(const QString& kvp, const QString& name1, const QString& name2);
 
-  bool _haveConflictingTags(const QString tagKey, const Tags& t1, const Tags& t2, QString& tag1Val,
+  bool _haveConflictingTags(const QString& tagKey, const Tags& t1, const Tags& t2, QString& tag1Val,
                             QString& tag2Val) const;
 };
 
