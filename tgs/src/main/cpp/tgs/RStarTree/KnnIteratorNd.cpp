@@ -136,7 +136,7 @@ void KnnIteratorNd::_calculateNextNn()
     {
       if (currNode->isLeafNode())
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
@@ -152,7 +152,7 @@ void KnnIteratorNd::_calculateNextNn()
       }
       else
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpDistance = _calculateDistance(_knnPoint, b);
@@ -221,7 +221,7 @@ void KnnIteratorNd::_calculateNextNn()
 // 
 //     if (currNode->isLeafNode())
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double tmpDistance;
@@ -239,7 +239,7 @@ void KnnIteratorNd::_calculateNextNn()
 //     }
 //     else
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double d = _calculateDistance(_knnPoint, b);

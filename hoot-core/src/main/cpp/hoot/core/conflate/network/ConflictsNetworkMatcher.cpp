@@ -409,7 +409,7 @@ void ConflictsNetworkMatcher::_iterateRank()
   const double partialHandicap = 0.5;
   EdgeScoreMap newScores;
   LOG_VART(_scores.size());
-  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     LOG_VART(em->containsPartial());
     LOG_VART(em->containsStub());
@@ -418,7 +418,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
     double denominator = numerator;
 
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
       LOG_VART(r->getEdge()->containsPartial());
 
@@ -489,7 +489,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     double denominator = numerator;
     LOG_VART(numerator);
 
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
       double childHandicap = pow(partialHandicap, r->getEdge()->countPartialMatches());
       LOG_VART(r->getEdge());

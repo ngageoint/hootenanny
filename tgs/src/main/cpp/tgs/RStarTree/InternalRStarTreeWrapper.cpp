@@ -100,7 +100,7 @@ namespace Tgs
 
     Box tmpBox(_dimensions);
 
-    for(unsigned int i = 0; i < _dimensions; i++)
+    for (unsigned int i = 0; i < _dimensions; i++)
     {
       tmpBox.setBounds(i, minBounds[i], maxBounds[i]);
     }

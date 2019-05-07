@@ -252,7 +252,7 @@ QString AttributeCoOccurrence::printTable()
 {
   TextTable::Data data;
 
-  for(CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
+  for (CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
   {
     // Get the list of keys and build a reverse matrix
     for (HashMap<QString, int>::const_iterator jt = it->second.begin();
@@ -274,7 +274,7 @@ QString AttributeCoOccurrence::printList()
   QString result;
 
   // Build a list of REF1 keys so we can sort the table
-  for(CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
+  for (CoOccurrenceHash::const_iterator it = _resultMatrix.begin(); it != _resultMatrix.end(); ++it)
   {
     keyList.append(it->first);
   }
@@ -284,7 +284,7 @@ QString AttributeCoOccurrence::printList()
   // Print the Matrix as a list, sorted by REF1 keys
   result += QString("N  : %1 -> %2\n").arg(MetadataTags::Ref1()).arg(MetadataTags::Ref2());
 
-  for(int it=0; it < keyList.size(); it++)
+  for (int it=0; it < keyList.size(); it++)
   {
     CoOccurrenceHash::const_iterator jt = _resultMatrix.find(keyList[it]);
 

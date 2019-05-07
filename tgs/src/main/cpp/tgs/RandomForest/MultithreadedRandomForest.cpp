@@ -110,7 +110,7 @@ namespace Tgs
         pool.setExpiryTimeout(-1);
 
         QList<boost::shared_ptr<RandomTree> > mapTrees;
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           mapTrees.append(boost::shared_ptr<RandomTree>(new RandomTree()));
         }
@@ -118,7 +118,7 @@ namespace Tgs
         QList<boost::shared_ptr<RandomTree> > forestList =
           QtConcurrent::blockingMapped(mapTrees, train);
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(forestList[i]);
         }
@@ -140,14 +140,14 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
             if (cutOffCtr <  cutOffIdx)
             {
@@ -160,7 +160,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -173,7 +173,7 @@ namespace Tgs
           _trainInputs.nodeSize = 1;
 
           QList<boost::shared_ptr<RandomTree> > mapRetrainingTrees;
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
              mapRetrainingTrees.append(boost::shared_ptr<RandomTree>(new RandomTree()));
           }
@@ -181,7 +181,7 @@ namespace Tgs
           QList<boost::shared_ptr<RandomTree> > forestRetrainList =
             QtConcurrent::blockingMapped(mapRetrainingTrees, train);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest[i] = forestRetrainList[i];
           }

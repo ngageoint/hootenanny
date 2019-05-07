@@ -71,7 +71,7 @@ namespace Tgs
 
     HashMap<std::string, int>::iterator itr;
 
-    for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+    for (itr = popMap.begin(); itr != popMap.end(); ++itr)
     {
       entSum += _calcLogFunc((double)itr->second / (double)indices.size()); 
     }
@@ -86,7 +86,7 @@ namespace Tgs
  
      //The split will be based on any difference between the value of 2 contiguous values
      //Note the miniumum split idx is always 1
-     for(unsigned int i = 1; i < indices.size(); i++)
+     for (unsigned int i = 1; i < indices.size(); i++)
      {
        double val1 = df.getDataVector(indices[i-1])[fIdx];
        double val2 = df.getDataVector(indices[i])[fIdx];
@@ -121,7 +121,7 @@ namespace Tgs
       //of resorting indices on winning factor
       //
       //Note fIndices is the list of factor indices to consider
-      for(unsigned int i = 0; i < fIndices.size(); i++)
+      for (unsigned int i = 0; i < fIndices.size(); i++)
       {
         sortedIndices[i] = indices;                                  //Load up all the data vectors of interest
         df.sortIndicesOnFactorValue( sortedIndices[i], fIndices[i]); //Sort the data vectors by the factor values
@@ -131,7 +131,7 @@ namespace Tgs
       double maxGr = -1E10;
       unsigned int maxFactIdx = 0;
       unsigned int maxIdx = 0;
-      for(unsigned int j = 0; j < fIndices.size(); j++)
+      for (unsigned int j = 0; j < fIndices.size(); j++)
       {
         //std::cout << "IGC: " << infoGain[j] << " " << j << std::endl;
         if (infoGain[j] > maxGr)
@@ -195,7 +195,7 @@ namespace Tgs
       df.getClassPopulations(tmpIndices, popMap);
 
       entSum = 0.0;
-      for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+      for (itr = popMap.begin(); itr != popMap.end(); ++itr)
       {
         entSum += _calcLogFunc((double)itr->second / (double)(i + 1)); 
       }
@@ -214,7 +214,7 @@ namespace Tgs
 
       int tmpSize = indices.size() - i;
       entSum = 0.0;
-      for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+      for (itr = popMap.begin(); itr != popMap.end(); ++itr)
       {
         entSum += _calcLogFunc((double)itr->second / (double)tmpSize); 
       }
@@ -224,13 +224,13 @@ namespace Tgs
     double maxIg = -1E20;
     unsigned int maxSplitIdx = 1;
     //Compute the class entropy per split
-    for(unsigned int i = 0; i < splits.size(); i++)
+    for (unsigned int i = 0; i < splits.size(); i++)
     {
 //       //Construct the left and right splits based on splits[i] (a split point within indices)
 //       std::vector<unsigned int> leftSplit;
 //       std::vector<unsigned int> rightSplit;
 // 
-//       for(unsigned int j = 0; j < indices.size(); j++)
+//       for (unsigned int j = 0; j < indices.size(); j++)
 //       {
 //         if (j < splits[i])
 //         {
@@ -305,12 +305,12 @@ namespace Tgs
     double maxGr = -1E10;
     unsigned int maxSplitIdx = 0;
     //Compute the class entropy per split
-    for(unsigned int i = 0; i < splits.size(); i++)
+    for (unsigned int i = 0; i < splits.size(); i++)
     {
       std::vector<unsigned int> leftSplit;
       std::vector<unsigned int> rightSplit;
 
-      for(unsigned int j = 0; j < indices.size(); j++)
+      for (unsigned int j = 0; j < indices.size(); j++)
       {
         if (j < splits[i])
         {

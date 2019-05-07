@@ -48,13 +48,13 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator trainItr;
 
-      for(trainItr = rfInputs.trainingVectors.begin(); trainItr != rfInputs.trainingVectors.end(); ++trainItr)
+      for (trainItr = rfInputs.trainingVectors.begin(); trainItr != rfInputs.trainingVectors.end(); ++trainItr)
       {
         std::string className = trainItr->first;
 
         double startPercent = 0;
 
-        for(unsigned int i = 0; i < splitPercentages.size(); i++)
+        for (unsigned int i = 0; i < splitPercentages.size(); i++)
         {
 
           double endPercent = splitPercentages[i];
@@ -92,14 +92,14 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 
-      for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
+      for (mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {
         std::string className = mapItr->first;
 
         unsigned int initialTrainingIndex = trainingRangeMap[className].first;
         unsigned int initialTrainingSize = trainingRangeMap[className].second;
 
-        for(unsigned int i = 0; i < initialTrainingSize; i++)
+        for (unsigned int i = 0; i < initialTrainingSize; i++)
         {
           initialModel.addTrainingVector(className, mapItr->second[initialTrainingIndex + i]);
         }
@@ -129,14 +129,14 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double> > >::iterator mapItr;
 
-      for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
+      for (mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {
         std::string className = mapItr->first;
 
         unsigned int initialTrainingIndex = trainingRangeMap[className].first;
         unsigned int initialTrainingSize = trainingRangeMap[className].second;
 
-        for(unsigned int i = 0; i < initialTrainingSize; i++)
+        for (unsigned int i = 0; i < initialTrainingSize; i++)
         {
           initialModel.addTrainingVector(className, mapItr->second[initialTrainingIndex + i]);
         }
@@ -227,7 +227,7 @@ namespace Tgs
 
           bool parseOk;
 
-          for(unsigned int i = 0; i < tokenList.size(); i++)
+          for (unsigned int i = 0; i < tokenList.size(); i++)
           {
             if (i != tokenList.size() - 1) //Read numeric data
             {

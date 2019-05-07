@@ -69,7 +69,7 @@ namespace Tgs
     }
 
 
-    for(unsigned int i = 0; i < df.getNumDataVectors(); i++)
+    for (unsigned int i = 0; i < df.getNumDataVectors(); i++)
     {
       for (unsigned int j = 0; j < df.getNumFactors(); j++)
       {

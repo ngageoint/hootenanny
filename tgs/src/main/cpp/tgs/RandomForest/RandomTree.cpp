@@ -82,7 +82,7 @@ namespace Tgs
       std::vector<unsigned int> indices;
       indices.resize(data->getNumDataVectors());
 
-      for(unsigned int i = 0; i < indices.size(); i++)
+      for (unsigned int i = 0; i < indices.size(); i++)
       {
         indices[i] = i;
       }
@@ -157,7 +157,7 @@ namespace Tgs
 
       std::string result;
 
-      for(unsigned int i = 0; i < _oobSet.size(); i++)
+      for (unsigned int i = 0; i < _oobSet.size(); i++)
       {
         classifyDataVector(data->getDataVector(_oobSet[i]), result);
 
@@ -213,7 +213,7 @@ namespace Tgs
       //Export OobSet
       QDomElement oobSetNode = modelDoc.createElement("OobSet");
       std::stringstream oobStream;
-      for(unsigned int i = 0; i < _oobSet.size(); i++)
+      for (unsigned int i = 0; i < _oobSet.size(); i++)
       {
         oobStream << _oobSet[i];
 
@@ -251,7 +251,7 @@ namespace Tgs
       proxVec.resize(dSize);
 
       //Find out which node each vector is classified as
-      for(unsigned int i = 0; i < dSize; i++)
+      for (unsigned int i = 0; i < dSize; i++)
       {
         std::string resultClass;
         unsigned int nodeId = classifyDataVector(data->getDataVector(i), resultClass);
@@ -259,10 +259,10 @@ namespace Tgs
         proxVec[i] = nodeId;
       }
 
-      for(unsigned int j = 0; j < dSize; j++)
+      for (unsigned int j = 0; j < dSize; j++)
       {
         unsigned int tempId = proxVec[j];
-        for(unsigned int k = j; k < dSize;j++)
+        for (unsigned int k = j; k < dSize;j++)
         {
           if (proxVec[k] == tempId)
           {
@@ -319,7 +319,7 @@ namespace Tgs
 
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
         if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
@@ -539,13 +539,13 @@ namespace Tgs
 
           data->sortIndicesOnFactorValue(dataSet, fIdx);
 
-          for(unsigned int i = 0; i < splitIdx; i++)
+          for (unsigned int i = 0; i < splitIdx; i++)
           {
             leftSplit.push_back(dataSet[i]);
           }
           _build(data, leftSplit, node->leftChild, nodeSize);
 
-          for(unsigned int i = splitIdx; i < dataSet.size(); i++)
+          for (unsigned int i = splitIdx; i < dataSet.size(); i++)
           {
             rightSplit.push_back(dataSet[i]);
           }
@@ -625,7 +625,7 @@ namespace Tgs
               std::endl;
             fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
 
-            for(unsigned int i = 0; i < node->dataList.size(); i++)
+            for (unsigned int i = 0; i < node->dataList.size(); i++)
             {
               fileStream << "\t" << node->dataList[i];
             }
@@ -688,7 +688,7 @@ namespace Tgs
           QDomElement dataNode = modelDoc.createElement("Data");
 
           std::stringstream dataStream;
-          for(unsigned int i = 0; i < node->dataList.size(); i++)
+          for (unsigned int i = 0; i < node->dataList.size(); i++)
           {
             dataStream << node->dataList[i];
 
@@ -748,7 +748,7 @@ namespace Tgs
       {
         fileStream << tabDepth << "<OobSet>";
 
-        for(unsigned int i = 0; i < _oobSet.size(); i++)
+        for (unsigned int i = 0; i < _oobSet.size(); i++)
         {
           fileStream << "\t" << _oobSet[i];
         }
@@ -900,7 +900,7 @@ namespace Tgs
 
       QString treeNodeType;
 
-      for(unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
       {
         if (nodeList.at(i).nodeType() == QDomNode::CommentNode)
         {
@@ -919,7 +919,7 @@ namespace Tgs
         {
           QStringList classList = nodeElement.text().split(" ");
 
-          for(unsigned int i = 0; i < (unsigned int)classList.size(); i++)
+          for (unsigned int i = 0; i < (unsigned int)classList.size(); i++)
           {
             node->classLabel += classList[i].toLatin1().constData();
 
@@ -939,7 +939,7 @@ namespace Tgs
 
             bool parsedOk;
 
-            for(unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
+            for (unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
             {
               QString dataIndexString = dataList[i];
 
@@ -1089,7 +1089,7 @@ namespace Tgs
       //cout << oobList.size();
 
       bool parseOk = true;
-      for(unsigned int i = 0; i < (unsigned int)oobList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)oobList.size(); i++)
       {
         int oobValue = oobList[i].toInt(&parseOk);
 

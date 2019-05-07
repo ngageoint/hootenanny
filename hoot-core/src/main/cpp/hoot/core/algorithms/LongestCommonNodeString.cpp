@@ -62,9 +62,9 @@ int LongestCommonNodeString::apply()
   int *swap = 0;
   int maxSubstr = 0;
 
-  for(size_t i = 0; i< str1.size(); ++i)
+  for (size_t i = 0; i< str1.size(); ++i)
   {
-    for(size_t j = 0; j< str2.size(); ++j)
+    for (size_t j = 0; j< str2.size(); ++j)
     {
       if (str1[i] != str2[j])
       {

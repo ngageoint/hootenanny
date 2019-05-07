@@ -66,7 +66,7 @@ namespace Tgs
     {
       double itrVal = 1.0/(double)_forest.size();
 
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::string result;
         _forest[i]->classifyDataVector(dataVector, result);
@@ -134,7 +134,7 @@ namespace Tgs
       //Append Trees
       QDomElement randomTreesNode = modelDoc.createElement("RandomTrees");
 
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         _forest[i]->exportTree(modelDoc, randomTreesNode);
       }
@@ -159,7 +159,7 @@ namespace Tgs
         double errorSumSqr = 0;
         double variance;
 
-        for(unsigned int i = 0; i < _forest.size(); i++)
+        for (unsigned int i = 0; i < _forest.size(); i++)
         {
           double errRate = _forest[i]->computeErrorRate(data);
           errorSum += errRate;
@@ -194,7 +194,7 @@ namespace Tgs
         proximity.resize(dSize * dSize);
         std::fill(proximity.begin(), proximity.end(), 0);
 
-        for(unsigned int i = 0; i < _forest.size(); i++)
+        for (unsigned int i = 0; i < _forest.size(); i++)
         {
           _forest[i]->findProximity(data, proximity);
         }
@@ -219,19 +219,19 @@ namespace Tgs
       std::vector<std::string> factorLabels = data->getFactorLabels();
 
       //Init factor importance map with all factors
-      for(unsigned int j = 0; j < factorLabels.size(); j++)
+      for (unsigned int j = 0; j < factorLabels.size(); j++)
       {
         factorImportance[factorLabels[j]] = 0;
       }
 
       //Calc factor importance for each tree in forest
       //and aggregate the results
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::map<unsigned int, double> factPureMap;
         _forest[i]->getFactorImportance(factPureMap);
 
-        for(itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
+        for (itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
         {
           factorImportance[factorLabels[itr->first]] += itr->second;
         }

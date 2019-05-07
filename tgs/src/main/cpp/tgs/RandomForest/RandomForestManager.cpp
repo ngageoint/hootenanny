@@ -57,7 +57,7 @@ namespace Tgs
   {
     try
     {
-      for(unsigned int i = 0; i < (unsigned int)numForests; i++)
+      for (unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
         _rfList.push_back(boost::shared_ptr<RandomForest>(new RandomForest()));
       }
@@ -74,7 +74,7 @@ namespace Tgs
     {
       _rfList.clear();
 
-      for(unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
+      for (unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
         _rfList.push_back(

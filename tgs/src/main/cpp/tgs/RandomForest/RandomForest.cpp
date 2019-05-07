@@ -72,7 +72,7 @@ namespace Tgs
 
         data->setBinaryClassLabels(posClass); //Set all non pos example to negative
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
@@ -98,14 +98,14 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
             if (cutOffCtr <  cutOffIdx)
             {
@@ -118,7 +118,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -127,7 +127,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainBinary(data,
@@ -168,7 +168,7 @@ namespace Tgs
         //  Reset the ids so that all forests are created alike
         RandomTree::resetIds();
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
@@ -195,14 +195,14 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
             if (cutOffCtr <  cutOffIdx)
             {
@@ -215,7 +215,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -224,7 +224,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,
@@ -261,7 +261,7 @@ namespace Tgs
       {
         _forest.reserve(numTrees);
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
@@ -288,14 +288,14 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
             if (cutOffCtr <  cutOffIdx)
             {
@@ -308,7 +308,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -317,7 +317,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,
