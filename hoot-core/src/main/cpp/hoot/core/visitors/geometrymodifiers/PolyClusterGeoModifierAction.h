@@ -39,6 +39,17 @@
 namespace hoot
 {
 
+/*
+ * Replaces a cluster of polygons with a single polygon.
+ * The purpose of this class is to simplify maps for printing by replacing a large amount of
+ * buildings with a single built-up area polygon feature.
+ *
+ * Polygons are considered to be in the same cluster if any of their nodes are within 'distance'.
+ * The polygon replacing the cluster is an alpha-shape created with all polygon nodes using the
+ * `alpha` value.
+ * The cluster polygon is created with the tags of the 'cluster_tag_list'.
+ * If 'remove_polys' is true, the original polygons and all their nodes are removed from the map.
+ */
 class PolyClusterGeoModifierAction : public GeometryModifierAction
 {
 public:
@@ -90,8 +101,6 @@ private:
   void _generateClusters();
   void _recursePolygons(const boost::shared_ptr<geos::geom::Polygon>& poly);
   void _createClusterPolygons();
-
-  void _createDebugConvexHull();
 };
 
 }
