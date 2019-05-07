@@ -105,6 +105,7 @@ _keepMoreComplexGeometryWhenAutoMerging(
 _mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
 _manyToManyMatch(false)
 {
+  LOG_VART(_pairs);
 }
 
 void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
@@ -112,6 +113,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
+
+  LOG_VART(_pairs);
 
   //check if it is many to many
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
