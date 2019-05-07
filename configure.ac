@@ -171,9 +171,6 @@ NEWMAT_INIT()
 m4_include([m4/stxxl.m4])
 STXXL_INIT()
 
-m4_include([m4/log4cxx.m4])
-LOG4CXX_INIT()
-
 m4_include([m4/precision.m4])
 CHECK_PRECISION_INIT()
 
