@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+ <node id='3037408560' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0771486' lon='-69.342517' />
+ <node id='3037408561' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0780791' lon='-69.3400095' />
+  <node id='3037408562' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0772536' lon='-69.3399333' />
+  <node id='3037408563' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0772148' lon='-69.3399384' />
+  <node id='3037408564' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0771637' lon='-69.3399484' />
+  <node id='3037408565' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.077093' lon='-69.3399783' />
+  <node id='3037408566' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0770517' lon='-69.3400043' />
+  <node id='3037408567' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0770124' lon='-69.3400621' />
+  <node id='3037408568' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0769535' lon='-69.3401659' />
+  <node id='3037408569' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0756823' lon='-69.342327' />
+  <node id='3037408570' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0756764' lon='-69.342357' />
+  <node id='3037408571' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0756882' lon='-69.3423809' />
+  <node id='3037408572' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0757098' lon='-69.3423989' />
+  <node id='3037408573' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0757393' lon='-69.3424029' />
+  <node id='3037408574' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0770909' lon='-69.3415741' />
+  <node id='3037408575' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0770843' lon='-69.3417348' />
+  <node id='3037408576' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0767151' lon='-69.3417147' />
+  <node id='3037408577' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0767316' lon='-69.3413698' />
+  <node id='3037408578' timestamp='2014-08-23T18:09:39Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643' lat='10.0770876' lon='-69.3413999' />
+  <node id='3627798153' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.0765492' lon='-69.3420571' />
+  <node id='3627798154' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.0765587' lon='-69.3418652' />
+  <node id='3627798155' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.076417' lon='-69.3418621' />
+  <node id='3627798156' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.0764107' lon='-69.341747' />
+  <node id='3627798157' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.0761557' lon='-69.341747' />
+  <node id='3627798158' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610' lat='10.0759889' lon='-69.3420507' />
+ <way id='299706876' action='modify' timestamp='2014-08-23T18:09:40Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643'>
+    <nd ref='3037408560' />
+    <nd ref='3037408561' />
+    <nd ref='3037408562' />
+    <nd ref='3037408563' />
+    <nd ref='3037408564' />
+    <nd ref='3037408565' />
+    <nd ref='3037408566' />
+    <nd ref='3037408567' />
+    <nd ref='3037408568' />
+    <nd ref='3037408569' />
+    <nd ref='3037408570' />
+    <nd ref='3037408571' />
+    <nd ref='3037408572' />
+    <nd ref='3037408573' />
+    <nd ref='3037408560' />
+    <tag k='addr:city' v='Barquisimeto' />
+    <tag k='addr:street' v='Avenida Libertador' />
+    <tag k='angle' v='69.3' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='39128.8' />
+    <tag k='length' v='338.1' />
+    <tag k='name' v='Test' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='shop' v='mall' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='width' v='160.1' />
+  </way>
+  <way id='299706877' action='modify' timestamp='2014-08-23T18:09:40Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='24961643'>
+    <nd ref='3037408574' />
+    <nd ref='3037408575' />
+    <nd ref='3037408576' />
+    <nd ref='3037408577' />
+    <nd ref='3037408578' />
+    <nd ref='3037408574' />
+    <tag k='addr:city' v='Barquisimeto' />
+    <tag k='addr:street' v='Avenida Libertador' />
+    <tag k='angle' v='176.9' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='1511.7' />
+    <tag k='length' v='41.3' />
+    <tag k='name' v='Test' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='shop' v='supermarket' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='width' v='37.8' />
+  </way>
+  <way id='357553742' action='modify' timestamp='2015-06-30T21:43:19Z' uid='2271182' user='Sidneyb' visible='true' version='1' changeset='32319610'>
+    <nd ref='3627798153' />
+    <nd ref='3627798154' />
+    <nd ref='3627798155' />
+    <nd ref='3627798156' />
+    <nd ref='3627798157' />
+    <nd ref='3627798158' />
+    <nd ref='3627798153' />
+    <tag k='amenity' v='fast_food' />
+    <tag k='angle' v='359.4' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='1602.1' />
+    <tag k='length' v='63.2' />
+    <tag k='name' v='Test' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='width' v='33.8' />
+  </way>
+</osm>
