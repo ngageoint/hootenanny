@@ -45,16 +45,11 @@
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
 
-#if HOOT_HAVE_LIBLOG4CXX
-# include <log4cxx/logger.h>
-#endif
-
 namespace hoot
 {
 
 /**
- * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
- * and I don't really need all the complicated goodies (Singleton).
+ * This class is here to abstract out the logging interface(Singleton).
  */
 class Log
 {
@@ -144,10 +139,6 @@ public:
 
   static int getWarnMessageLimit();
 
-#if HOOT_HAVE_LIBLOG4CXX
-  log4cxx::LoggerPtr _logger;
-#endif
-
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
@@ -219,13 +210,6 @@ private:
 #define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))
 #define LOG_VAR(var) LOG_VARI(var)
 
-// The following macros will be defined by these includes. Using anything else could cause
-// portability issues.
-// LOG_LEVEL, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL
-#ifdef HOOT_HAVE_LIBLOG4CXX
-# include "LogLog4Cxx.h"
-#else
 # include "LogGeneric.h"
-#endif
 
 #endif // LOG_H

@@ -1747,41 +1747,6 @@ details.  The "best" value varies depending on the input data as well as how the
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
-=== log.format
-
-* Data Type: string
-* Default Value: `%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n`
-
-If available, uses the formatting as defined in
-https://svn.apache.org/repos/asf/logging/site/trunk/docs/log4cxx/apidocs/classlog4cxx_1_1_pattern_layout.html[log4cxx]
-to set the log format. If log4cxx isn't available then this has no effect.
-
-Some example format strings and the associated output are below:
-
------
-# Default log message with lots of information
-%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n
-12:36:03.565 INFO  ...conflate/UnifyingConflator.cpp( 154) Pre-constraining match count: 11
-
-# Log message w/ minimal information
-%-5p..%.20F(%3L) %m%n
-INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# Embed arbitrary strings in the log messages
-Foo: %m%n
-Foo: Pre-constraining match count: 11
-
-# Print out time elapsed in ms along w/ other info
-%6r %-5p..%.20F(%3L) %m%n
-   289 INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# XML-ish log message. This allows parsing messages that span multiple lines,
-# but you aren't guaranteed that all output from hoot goes through the logging
-# mechanism.
-<message time='%d' level='%p' file='%F' line='%L'>%m</message>%n
-<message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
------
-
 === log.warn.message.limit
 
 * Data Type: int
