@@ -35,16 +35,24 @@ layer for some road segements but at the cost of some incorrect tag transfers.  
 
 === Buildings
 
-As of 3/5/19, Attribute Conflation handles conflating buildings slightly differently than other conflation types.  The default building 
-conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation
-added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings.
+Attribute Conflation always passes the reference geometry to output by disabling the +building.keep.more.complex.geometry.when.auto.merging+ 
+option. It also handles building reviews differently than other types of conflation. By default in Hootenanny, buildings involved in more than one
+match are always flagged for review. Attribute Conflation automatically merges buildings in those situations by enabling the 
++building.merge.many.to.many.matches+ and +poi.polygon.auto.merge.many.poi.to.one.poly.matches+ options. In the situation where a group of
+buildings is merged together into a single building, the type tags of the merged buildings are retained. If two buildings have the same type tag
+key (e.g. shop=mall and shop=supermarked), arbitrarily the first tag will be kept and the others put into an "alt_types" tag. In addition, 
+Attribute Conflation handles conflated building output relations slightly differently than other conflation types. The default building 
+conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation 
+added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings by activating 
+the +building.outline.update.op.remove.building.relations+ option.
 
 === Reviews
 
-Attribute Conflation also allows for manual review of features that Hootenanny was unable to conflate and flagged for review.  However, this
-option is disabled by default.  To use this feature, enable the +attribute.conflation.allow.reviews.by.score+ configuration option.  You also
-have the ability to threshold reviews by review score, in a range of 0.0 to 1.0 (1.0 being the strongest case for feature pair to be reviewed), 
-in order to reduce the number of reviews you are presented with.  See the configuration options +review.score.criterion.min.threshold+ and 
-+review.score.criterion.max.threshold+.  Hootenanny will often return reviews with a score of 1.0 when it has no idea how to conflate a particular
-pair of features or those feature exhibit some unusual properties.  Therefore counterintuitively, setting a maximum threshold below 1.0 may
-reduce the number of reviews you see even further in the conflated output.
+By default, Attribute Conflation drops all conflation reviews from the output. It also allows for manual review of features that Hootenanny 
+was unable to conflate and flagged for review.  However, this option is disabled by default.  To use this feature, enable the 
++attribute.conflation.allow.reviews.by.score+ configuration option.  You also have the ability to threshold reviews by review score, in a 
+range of 0.0 to 1.0 (1.0 being the strongest case for feature pair to be reviewed), in order to reduce the number of reviews you are presented 
+with.  See the configuration options +review.score.criterion.min.threshold+ and +review.score.criterion.max.threshold+.  Hootenanny will often 
+return reviews with a score of 1.0 when it has no idea how to conflate a particular pair of features or those feature exhibit some unusual 
+properties.  Therefore counterintuitively, setting a maximum threshold below 1.0 may reduce the number of reviews you see even further in the 
+conflated output.

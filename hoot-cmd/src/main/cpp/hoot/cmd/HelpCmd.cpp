@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -145,8 +145,8 @@ private:
     sort(rndCmds.begin(), rndCmds.end(), commandCompare2);
 
     // Please update the asciidoc user documentation if you change this usage.
-    cout << "usage: hoot <command> [--trace] [--debug] [--warn] [-D name=value] [--conf <path>] "
-      "[<args>]\n";
+    cout << "usage: hoot <command> [--trace] [--debug] [--status] [--warn] [--error] " <<
+            "[-D name=value] [--conf <path>] [<args>]\n";
     cout << endl;
     cout << "For detailed help on the following commands type: hoot help (command name)\n"
             "\n";

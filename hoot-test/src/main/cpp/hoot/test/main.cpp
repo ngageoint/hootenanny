@@ -436,10 +436,6 @@ int main(int argc, char* argv[])
     std::vector<CppUnit::Test*> vTestsToRun;
     CppUnit::TextTestResult result;
 
-# if HOOT_HAVE_HADOOP
-    Hoot::getInstance().loadLibrary("PrettyPipesExample");
-# endif
-
     // initialize OSM Schema so the time expense doesn't print in other tests.
     OsmSchema::getInstance();
 

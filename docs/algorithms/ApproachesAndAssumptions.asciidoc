@@ -47,7 +47,7 @@ workflow is described as follows:
 
 [[HootConflationWorkflowDiagram]]
 .Hootenanny Conflation Workflow.
-image::algorithms/images/hoot_general_workflow.png[]
+image::images/hoot_general_workflow.png[]
 
 [[HootExplFileConversion]]
 === File Conversion
