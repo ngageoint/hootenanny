@@ -186,7 +186,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
   }
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
@@ -220,7 +220,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
 
   vector<ElementId> result;
 
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
@@ -242,7 +242,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
 
 ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   vector<ElementId>& buildings1, vector<ElementId>& buildings2,
-  vector< pair<ElementId, ElementId> >& replaced) const
+  vector<pair<ElementId, ElementId>>& replaced) const
 {
   LOG_TRACE("Merging buildings...");
 
@@ -250,7 +250,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   LOG_VART(buildings2.size());
   LOG_VART(replaced.size());
 
-  set< pair<ElementId, ElementId> > pairs;
+  set<pair<ElementId, ElementId>> pairs;
 
   assert(buildings1.size() != 0 || buildings2.size() != 0);
   // if there is only one set of buildings then there is no need to merge.  group all the building

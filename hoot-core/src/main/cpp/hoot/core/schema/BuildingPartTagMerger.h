@@ -24,44 +24,48 @@
  *
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PRESERVETYPESTAGMERGER_H
-#define PRESERVETYPESTAGMERGER_H
+#ifndef BUILDING_PART_TAG_MERGER_H
+#define BUILDING_PART_TAG_MERGER_H
 
 #include <hoot/core/schema/TagMerger.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
 
 /**
- * This is used to preserve types when merging multiple elements into one.
- *
- * e.g. merging multiple POIs into a multi-use building
+ * A tag merger for buildings and their constituent parts
  */
-class PreserveTypesTagMerger : public TagMerger
+class BuildingPartTagMerger : public TagMerger
 {
 public:
 
-  static QString ALT_TYPES_TAG_KEY;
+  static std::string className() { return "hoot::BuildingPartTagMerger"; }
 
-  static std::string className() { return "hoot::PreserveTypesTagMerger"; }
+  BuildingPartTagMerger();
+  BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames);
 
-  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>(),
-                         const OsmSchemaCategory& categoryFilter = OsmSchemaCategory::Empty);
-
-  virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
+  /**
+   * Merges tags between a building and a single building part
+   *
+   * @param buildingTags the final output tags for the building
+   * @param buildingPartTags the tags of the building part
+   * @param elementType the type of element whose tags are being merged (ignored)
+   * @return a merged set of tags
+   */
+  virtual Tags mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
+                         ElementType elementType) const override;
 
   virtual QString getDescription() const
-  { return "Keeps tags from both features and preserves overlapping type tags"; }
+  { return "Merges building and building part tags together"; }
+
+  void setBuildingPartTagNames(std::set<QString> tagNames) { _buildingPartTagNames = tagNames; }
 
 private:
 
-  std::set<QString> _skipTagKeys;
-  OsmSchemaCategory _categoryFilter;
-
-  Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
+  // a set of building part tag keys, which will be ignored during tag merging
+  std::set<QString> _buildingPartTagNames;
 };
 
 }
 
-#endif // PRESERVETYPESTAGMERGER_H
+#endif // BUILDING_PART_TAG_MERGER_H
