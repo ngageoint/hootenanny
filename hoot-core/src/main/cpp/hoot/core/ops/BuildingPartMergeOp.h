@@ -157,7 +157,7 @@ private:
 
   int _threadCount;
 
-  // TODO
+  // if true, building part type tags will be preserved in the combined building output
   bool _preserveTypes;
 
   void _init(OsmMapPtr& map);

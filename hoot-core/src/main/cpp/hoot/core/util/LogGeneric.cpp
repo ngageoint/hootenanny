@@ -79,9 +79,10 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
 
 bool Log::notFiltered(const string& prettyFunction)
 {
+    // TODO: This check does not work at the trace level for some reason, and the class filter is
+    // being reset to empty at some point after initialization.
+
   // init here instead of in init() since some logs are being produced before the init() call
-  // TODO: This check does not work at the trace level for some reason, and the class filter is
-  // being reset to empty after initialization.
 //  if (!_classFilterInitialized)
 //  {
 //    _classFilter = ConfigOptions().getLogClassFilter().split(";");
@@ -93,6 +94,7 @@ bool Log::notFiltered(const string& prettyFunction)
 //    return true;
 //  }
 
+  // This unnecessary extra initialization will have to remain until the above problem is fixed.
   if (_classFilter.isEmpty())
   {
     _classFilter = ConfigOptions().getLogClassFilter().split(";");

@@ -77,6 +77,7 @@ class BuildingMergerTest : public HootTestFixture
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
+  //TODO: _mergeManyToManyMatches
   CPPUNIT_TEST_SUITE_END();
 
 public:

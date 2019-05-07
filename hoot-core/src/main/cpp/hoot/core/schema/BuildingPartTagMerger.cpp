@@ -49,7 +49,7 @@ _buildingPartTagNames(buildingPartTagNames)
 }
 
 Tags BuildingPartTagMerger::mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
-                                      ElementType /*et*/) const
+                                      ElementType /*elementType*/) const
 {
   LOG_VART(buildingTags);
   LOG_VART(buildingPartTags);

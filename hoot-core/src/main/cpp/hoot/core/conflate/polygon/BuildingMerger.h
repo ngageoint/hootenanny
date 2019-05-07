@@ -57,12 +57,13 @@ public:
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
-   * TODO
+   * Creates a single building out of a group of buildings
    *
-   * @param map
-   * @param eids
-   * @param preserveTypes
-   * @return
+   * @param map map which owns the buildings being combined
+   * @param eids element IDs for the buildings to combine
+   * @param preserveTypes if true, differing building type tags will be preserved in the assembled
+   * building relation
+   * @return a building element
    */
   static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
                                                   const std::set<ElementId>& eids,
@@ -99,13 +100,17 @@ private:
   bool _keepMoreComplexGeometryWhenAutoMerging;
   // The default behavior is to review many to many matches. Setting this to true allows them to
   // all be merged together.
-  // TODO: add to tests
   bool _mergeManyToManyMatches;
-  // TODO
+  // set to true if the current building merge involves two buildings, each part of multiple matches
   bool _manyToManyMatch;
 
   /*
-   * TODO
+   * Creates a building out of the current set of building element IDs
+   *
+   * @param map map which owns the buildings being combined
+   * @param unknown1 if true, elements with unknown1 status are assembled into a building; if false,
+   * then buildings with unknown2 status are assembled
+   * @return a building element
    */
   boost::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 

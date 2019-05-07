@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * A tag merger for buildings and their constituent parts
  */
 class BuildingPartTagMerger : public TagMerger
 {
@@ -44,16 +44,25 @@ public:
   BuildingPartTagMerger();
   BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames);
 
+  /**
+   * Merges tags between a building and a single building part
+   *
+   * @param buildingTags the final output tags for the building
+   * @param buildingPartTags the tags of the building part
+   * @param elementType the type of element whose tags are being merged (ignored)
+   * @return a merged set of tags
+   */
   virtual Tags mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
-                         ElementType et) const override;
+                         ElementType elementType) const override;
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Merges building and building part tags together"; }
 
   void setBuildingPartTagNames(std::set<QString> tagNames) { _buildingPartTagNames = tagNames; }
 
 private:
 
+  // a set of building part tag keys, which will be ignored during tag merging
   std::set<QString> _buildingPartTagNames;
 };
 
