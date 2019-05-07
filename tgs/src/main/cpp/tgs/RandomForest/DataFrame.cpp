@@ -807,7 +807,7 @@ namespace Tgs
         bootstrap.resize(picksPerClass * idxSortedByClass.size());
 
         unsigned int pickCtr = 0;
-        while(pickCtr < bootstrap.size())
+        while (pickCtr < bootstrap.size())
         {
           for (itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
           {
@@ -882,7 +882,7 @@ namespace Tgs
         unsigned int pickCtr = 0;
 
         //std::cout << "Boot Strap size " << bootstrap.size() << std::endl;
-        while(pickCtr < bootstrap.size())
+        while (pickCtr < bootstrap.size())
         {
           //Pick a positive training example
           double r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
@@ -1407,17 +1407,17 @@ namespace Tgs
       unsigned int j = posR + 1;
 
       unsigned int ctr = 0;
-      while(ctr < loopLimit)
+      while (ctr < loopLimit)
       {
         do
         {
           j = j - 1;
-        } while(_data[indices[j]][fIdx] > x);
+        } while (_data[indices[j]][fIdx] > x);
 
         do
         {
           i = i + 1;
-        } while(_data[indices[i]][fIdx] < x);
+        } while (_data[indices[i]][fIdx] < x);
 
         if (i < j)
         {

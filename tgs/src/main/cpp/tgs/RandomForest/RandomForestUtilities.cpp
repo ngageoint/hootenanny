@@ -196,7 +196,7 @@ namespace Tgs
       int dataLine = 0;
 
       std::string buffer;
-      while(!arrfStream.eof())
+      while (!arrfStream.eof())
       {
         std::getline(arrfStream, buffer);
 
@@ -212,7 +212,7 @@ namespace Tgs
 
         if (readingData)  //Read training data
         {
-          while(std::getline(bufferStr, token, ','))
+          while (std::getline(bufferStr, token, ','))
           {
             tokenList.push_back(token);
           }
@@ -256,7 +256,7 @@ namespace Tgs
         }
         else
         {
-          while(std::getline(bufferStr, token, ' '))
+          while (std::getline(bufferStr, token, ' '))
           {
             tokenList.push_back(token);
           }
@@ -301,7 +301,7 @@ namespace Tgs
                   std::stringstream classStr(classes);
                   std::string classToken;
 
-                  while(std::getline(classStr, classToken, ','))
+                  while (std::getline(classStr, classToken, ','))
                   {
                     rfInputs.classLabels.push_back(classToken);
                   }

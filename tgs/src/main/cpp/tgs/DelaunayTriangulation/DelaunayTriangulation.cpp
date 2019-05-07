@@ -826,7 +826,7 @@ Face& FaceIterator::operator++()
         delete _f;
       }
 
-    } while(alreadyDone && _it != _end);
+    } while (alreadyDone && _it != _end);
 
     if (!alreadyDone)
     {

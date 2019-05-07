@@ -137,7 +137,7 @@ namespace Tgs
           }
         }
 
-      }while(!isPure);
+      } while (!isPure);
 
 
       return nodeId;
@@ -785,7 +785,7 @@ namespace Tgs
 
         std::string NodeType;
 
-        while(buffer2.find("</TreeNode>") == std::string::npos)
+        while (buffer2.find("</TreeNode>") == std::string::npos)
         {
           std::stringstream ss1(buffer2);
           ss1 >> firstStr;
@@ -829,7 +829,7 @@ namespace Tgs
               std::string nextStr;
               ss1 >> nextStr;
 
-              while(nextStr != "</Data>")
+              while (nextStr != "</Data>")
               {
                 unsigned int idx;
                 std::stringstream ss2(nextStr);
@@ -1062,7 +1062,7 @@ namespace Tgs
         {
           ss >> nextStr;
 
-          while(nextStr != "</OobSet>")
+          while (nextStr != "</OobSet>")
           {
             unsigned int idx;
             std::stringstream ss2(nextStr);

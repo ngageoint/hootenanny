@@ -77,7 +77,7 @@ public:
 
     int count = 0;
     cph.resetIterator();
-    while(cph.next())
+    while (cph.next())
     {
       const vector<long>& v = cph.getMatch();
       count++;
@@ -126,7 +126,7 @@ public:
 
     int count = 0;
     cph.resetIterator();
-    while(cph.next())
+    while (cph.next())
     {
       const vector<long>& v = cph.getMatch();
 

@@ -103,7 +103,7 @@ void KnnIterator::_calculateNextNn()
     if (_knnLeafHeap.size() > 0)
     {
       ld = _knnLeafHeap.top();
-      while(_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end()) 
+      while (_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end())
       {       
         _knnLeafHeap.pop();  
         if (_knnLeafHeap.size() > 0)

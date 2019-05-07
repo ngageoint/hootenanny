@@ -326,7 +326,7 @@ public:
 
     // otherwise: optimize!
     if (vectors.size() == dimension+1) {
-        while(!done()) {
+        while (!done()) {
           //cout << "count: " << count++ << endl;
           sort(vectors.begin(), vectors.end(), VectorSort(this));
             Vector cog; // center of gravity
