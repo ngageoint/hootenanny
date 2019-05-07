@@ -102,7 +102,7 @@ void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
     for (int j = 0; j < box.getDimensions(); j++)
     {
       double v = (box.getLowerBoundRaw(j) + box.getUpperBoundRaw(j)) / 2.0;
-      if(boundsWidth[j] != 0)
+      if (boundsWidth[j] != 0)
       {
         point[j] = int(((1 << ORDER) - 1) * ((v - bounds.getLowerBoundRaw(j)) / boundsWidth[j]));
       }
@@ -339,7 +339,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
     for (int j = 0; j < box.getDimensions(); j++)
     {
       double v = (box.getLowerBoundRaw(j) + box.getUpperBoundRaw(j)) / 2.0;
-      if(boundsWidth[j] == 0)
+      if (boundsWidth[j] == 0)
       {
         point[j] = 0;
       }

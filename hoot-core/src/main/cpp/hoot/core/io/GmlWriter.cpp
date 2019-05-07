@@ -64,13 +64,13 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
 
   const char *pszDriverName = "GML";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if( poDriver == NULL )
+  if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
   GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if( poDS == NULL )
+  if (poDS == NULL)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -81,7 +81,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, NULL );
-  if( poLayer == NULL )
+  if (poLayer == NULL)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -94,7 +94,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
 
     oField.SetWidth(64);
 
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(_columns[i]));
     }
@@ -105,7 +105,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
   if (_includeInfo)
   {
     OGRFieldDefn oField(MetadataTags::ErrorCircular().toStdString().c_str(), OFTReal);
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (" + MetadataTags::ErrorCircular() + ")."));
     }

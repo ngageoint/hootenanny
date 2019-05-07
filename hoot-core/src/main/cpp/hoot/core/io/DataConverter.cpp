@@ -475,7 +475,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
     {
       for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
     }
-    else if(definedCounts == layers.size())
+    else if (definedCounts == layers.size())
     {
       for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
     }

@@ -99,8 +99,8 @@ bool CollapsePolyGeoModifierAction::processElement( const ElementPtr& pElement, 
       }
     }
 
-    if((checkArea && (polyArea < _area)) ||
-       (checkLength && (polyLength < _length)))
+    if ((checkArea && (polyArea < _area)) ||
+        (checkLength && (polyLength < _length)))
     {
       Coordinate centroid;
       if (pPoly->getCentroid(centroid) == false)

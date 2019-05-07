@@ -44,7 +44,7 @@ namespace Tgs
 
   double InfoGainCalculator::_calcLogFunc(double n)
   {
-    if(n < std::numeric_limits<double>::epsilon())
+    if (n < std::numeric_limits<double>::epsilon())
     {
       n = std::numeric_limits<double>::epsilon();
     }
@@ -91,7 +91,7 @@ namespace Tgs
        double val1 = df.getDataVector(indices[i-1])[fIdx];
        double val2 = df.getDataVector(indices[i])[fIdx];
       //std::cout << "Potential Split " << i << " " << val1 << " " << val2 << std::endl;
-       if(fabs(val1 - val2) >= std::numeric_limits<double>::epsilon())
+       if (fabs(val1 - val2) >= std::numeric_limits<double>::epsilon())
        {
          splits.push_back(i);
        }
@@ -102,7 +102,7 @@ namespace Tgs
     std::vector<unsigned int> & indices, unsigned int & splitIdx, unsigned int & fIdx, 
     double & splitVal, double & purityDelta)
   {
-    if(!df.empty())
+    if (!df.empty())
     {
       //First find the class entropy
       double classEntropy = computeEntropyByClass(df, indices);
@@ -134,7 +134,7 @@ namespace Tgs
       for(unsigned int j = 0; j < fIndices.size(); j++)
       {
         //std::cout << "IGC: " << infoGain[j] << " " << j << std::endl;
-        if(infoGain[j] > maxGr)
+        if (infoGain[j] > maxGr)
         {
           maxGr = infoGain[j];  //Get the max info gain ratio
           maxFactIdx = fIndices[j];
@@ -142,7 +142,7 @@ namespace Tgs
         }
       }
 
-      if(fabs(maxGr - -1E10) <= std::numeric_limits<double>::epsilon())
+      if (fabs(maxGr - -1E10) <= std::numeric_limits<double>::epsilon())
       {
         return false;
       }
@@ -232,7 +232,7 @@ namespace Tgs
 // 
 //       for(unsigned int j = 0; j < indices.size(); j++)
 //       {
-//         if(j < splits[i])
+//         if (j < splits[i])
 //         {
 //           leftSplit.push_back(indices[j]);
 //         }
@@ -279,7 +279,7 @@ namespace Tgs
       //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
       //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
-      if(infoGain > maxIg)
+      if (infoGain > maxIg)
       {
         maxIg = infoGain;
         maxSplitIdx = splits[i];
@@ -312,7 +312,7 @@ namespace Tgs
 
       for(unsigned int j = 0; j < indices.size(); j++)
       {
-        if(j < splits[i])
+        if (j < splits[i])
         {
           leftSplit.push_back(indices[j]);
         }
@@ -329,7 +329,7 @@ namespace Tgs
       double infoGain = totalEntropy - splitEnt;
       double splitInfo = leftEnt + rightEnt;
 
-      if(splitInfo <= 0)
+      if (splitInfo <= 0)
       {
         splitInfo = 1E-10;
       }
@@ -339,7 +339,7 @@ namespace Tgs
       //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
       //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
-      if(gainRatio > maxGr)
+      if (gainRatio > maxGr)
       {
         maxGr = gainRatio;
         maxSplitIdx = splits[i];

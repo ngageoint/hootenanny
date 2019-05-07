@@ -72,7 +72,7 @@ MaximalNearestSubline::MaximalNearestSubline(const ConstOsmMapPtr& map,
 Meters MaximalNearestSubline::_calculateIntervalLength()
 {
   Meters result = -1;
-  if(_maxInterval[0].isValid() && _maxInterval[1].isValid())
+  if (_maxInterval[0].isValid() && _maxInterval[1].isValid())
   {
     Meters d0 = _maxInterval[0].calculateDistanceOnWay();
     Meters d1 = _maxInterval[1].calculateDistanceOnWay();

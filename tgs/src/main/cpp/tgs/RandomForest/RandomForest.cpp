@@ -66,7 +66,7 @@ namespace Tgs
       _forest.clear();
       _numSplitFactors = numFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
 
@@ -82,7 +82,7 @@ namespace Tgs
         std::cout << std::endl;
 
         //std::cout << "Mode Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -107,7 +107,7 @@ namespace Tgs
 
           for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;
@@ -162,7 +162,7 @@ namespace Tgs
       _numSplitFactors = numFactors;
       cout << _numSplitFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
         //  Reset the ids so that all forests are created alike
@@ -178,7 +178,7 @@ namespace Tgs
         std::cout << std::endl;
 
         //std::cout << "Model Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -204,7 +204,7 @@ namespace Tgs
 
           for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;
@@ -257,7 +257,7 @@ namespace Tgs
       _forest.clear();
       _numSplitFactors = numFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
 
@@ -271,7 +271,7 @@ namespace Tgs
         std::cout << std::endl;
 
        //std::cout << "Mode Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -297,7 +297,7 @@ namespace Tgs
 
           for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;

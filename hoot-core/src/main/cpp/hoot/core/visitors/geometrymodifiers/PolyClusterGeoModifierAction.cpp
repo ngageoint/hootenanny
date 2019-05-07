@@ -206,7 +206,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   foreach (boost::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
-    if( _processedPolys.contains(wayId) ) continue;
+    if (_processedPolys.contains(wayId)) continue;
 
     _clusters.push_back(QList<long>());
     _clusterIndex = _clusters.length()-1;

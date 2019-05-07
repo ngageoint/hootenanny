@@ -82,7 +82,7 @@ bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, Os
         long i2Id = interNodeIds[interNodeIx+1];
 
         // don't check if the segments share any nodes
-        if(i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
+        if (i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
 
         CoordinateExt interP1( pMap->getNode(i1Id)->toCoordinate());
         CoordinateExt interP2( pMap->getNode(i2Id)->toCoordinate());

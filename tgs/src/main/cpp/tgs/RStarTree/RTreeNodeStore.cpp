@@ -107,7 +107,7 @@ namespace Tgs
 
     // if exists
     NodeMap::const_iterator it = _availableNodes.find(id);
-    if(it != _availableNodes.end())
+    if (it != _availableNodes.end())
     {
       RecItem* item = it->second;
       _nodesList.splice(_nodesList.begin(), _nodesList, item->list_it);
@@ -135,7 +135,7 @@ namespace Tgs
       _nodesList.pop_back();
 
       NodeMap::iterator it = _availableNodes.find(keyVal);
-      if(it != _availableNodes.end())
+      if (it != _availableNodes.end())
       {
         RecItem * item = it->second;
         delete item;

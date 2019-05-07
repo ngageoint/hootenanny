@@ -101,7 +101,7 @@ namespace Tgs
       numFactors = std::min<size_t>(data->getActiveFactorCount(), numFactors);
       _numSplitFactors = numFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
 
@@ -123,7 +123,7 @@ namespace Tgs
           _forest.push_back(forestList[i]);
         }
 
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -149,7 +149,7 @@ namespace Tgs
 
           for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;

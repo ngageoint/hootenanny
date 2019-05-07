@@ -2429,7 +2429,7 @@ void HootApiDb::updateImportSequences()
 void HootApiDb::_updateImportSequence(long max, const QString& sequence)
 {
   LOG_TRACE("Updating sequence " << sequence);
-  if(!_updateIdSequence)
+  if (!_updateIdSequence)
   {
     _updateIdSequence.reset(new QSqlQuery(_db));
   }

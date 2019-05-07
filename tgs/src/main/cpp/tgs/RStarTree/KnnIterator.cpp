@@ -106,7 +106,7 @@ void KnnIterator::_calculateNextNn()
       while(_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end()) 
       {       
         _knnLeafHeap.pop();  
-        if(_knnLeafHeap.size() > 0)
+        if (_knnLeafHeap.size() > 0)
           ld = _knnLeafHeap.top();
       }
 
@@ -144,7 +144,7 @@ void KnnIterator::_calculateNextNn()
     
     if (currNode != NULL)
     {
-      if(currNode->isLeafNode())
+      if (currNode->isLeafNode())
       {
         for(int i=0; i<currNode->getChildCount(); i++)
         {
@@ -229,7 +229,7 @@ void KnnIterator::_calculateNextNn()
 // 
 //     _knnSearchQueue.pop();
 // 
-//     if(currNode->isLeafNode())
+//     if (currNode->isLeafNode())
 //     {
 //       for(int i=0; i<currNode->getChildCount(); i++)
 //       {

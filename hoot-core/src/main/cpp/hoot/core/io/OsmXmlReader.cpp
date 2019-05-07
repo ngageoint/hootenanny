@@ -191,7 +191,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
 
-  if( _wayIdMap.contains(_wayId) )
+  if (_wayIdMap.contains(_wayId))
   {
     throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
   }

@@ -262,7 +262,7 @@ bool Way::isValidPolygon() const
 void Way::_makeWritable()
 {
   // make sure we're the only ones referencing the way data.
-  if(_wayData.use_count() > 1)
+  if (_wayData.use_count() > 1)
   {
     _wayData.reset(new WayData(*_wayData));
   }

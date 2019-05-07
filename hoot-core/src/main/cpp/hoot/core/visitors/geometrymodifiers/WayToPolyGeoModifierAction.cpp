@@ -61,7 +61,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
-  if(!_widthTag.isEmpty() && tags.find(_widthTag) != tags.end())
+  if (!_widthTag.isEmpty() && tags.find(_widthTag) != tags.end())
   {
     double readWidth = tags[_widthTag].toDouble();
     if (readWidth > 0)
@@ -75,7 +75,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
   assert(nodeCount == (long)nodeIds.size());
 
   // ignore duplicate last node for loops to properly calculate merged ends
-  if(isLoop) nodeCount--;
+  if (isLoop) nodeCount--;
 
   // create coordinate arrays
   Coordinate polyPositions[2][nodeCount];
@@ -123,7 +123,7 @@ bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmM
       polyPositions[p][i] = pos;
 
       // calculate length to determing inner vs outer polygon for loop
-      if(isLoop && i > 0)
+      if (isLoop && i > 0)
       {
         CoordinateExt diff = pos - polyPositions[p][i-1];
         polyLen[0] += diff.length();

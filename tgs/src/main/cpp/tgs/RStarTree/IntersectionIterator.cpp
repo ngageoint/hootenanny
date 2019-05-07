@@ -59,7 +59,7 @@ namespace Tgs
     {
       assert(box.getUpperBound(i) >= box.getLowerBound(i));
 
-      if(_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
+      if (_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
       {
         return false;
       }

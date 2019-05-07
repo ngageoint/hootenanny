@@ -62,9 +62,9 @@ QString Progress::getMessage()
 {
   QString msg = "";
   // send message only if exceeds some range (e.g., every 10%)
-  if(_readyToSend())
+  if (_readyToSend())
   {
-    if(_reportType == "json")
+    if (_reportType == "json")
     {
       msg.append( _toJson() );
     }
@@ -91,10 +91,10 @@ void Progress::set(float percentComplete, QString state, bool jobFinished, QStri
   _jobFinished = jobFinished;
   _userMessage = userMessage;
   //temporary force getMessage call
-  if(_reportType == "json")
+  if (_reportType == "json")
   {
     QString msg = getMessage();
-    if(msg != "")
+    if (msg != "")
     {
       cout << getMessage().toStdString() << endl;
     }
@@ -111,10 +111,10 @@ void Progress::setFromRelative(float relativePercentComplete, QString state, boo
   _jobFinished = jobFinished;
   _userMessage = userMessage;
   //temporary force getMessage call
-  if(_reportType == "json")
+  if (_reportType == "json")
   {
     QString msg = getMessage();
-    if(msg != "")
+    if (msg != "")
     {
       cout << getMessage().toStdString() << endl;
     }
