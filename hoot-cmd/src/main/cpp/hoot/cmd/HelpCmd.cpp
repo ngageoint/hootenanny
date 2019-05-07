@@ -59,7 +59,7 @@ public:
     return c1->getName() < c2->getName();
   }
 
-  static bool commandCompare2(std::shared_ptr<Command> c1, std::shared_ptr<Command> c2)
+  static bool commandCompare2(const std::shared_ptr<Command>& c1, const std::shared_ptr<Command>& c2)
   {
     return c1->getName() < c2->getName();
   }

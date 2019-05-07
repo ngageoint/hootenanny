@@ -71,7 +71,7 @@ class FakeMatch : public Match
 public:
 
   FakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
-  FakeMatch(ElementId eid1, ElementId eid2, double p, const std::shared_ptr<const MatchThreshold> mt) :
+  FakeMatch(ElementId eid1, ElementId eid2, double p, const std::shared_ptr<const MatchThreshold>& mt) :
     Match(mt),
     _eid1(eid1),
     _eid2(eid2),

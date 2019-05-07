@@ -91,13 +91,13 @@ public:
 
   static OsmMapPtr createServiceTestMap();
 
-  static long insertTestUser(const QString userName, const QString email, const QString sessionId,
-                             const QString accessToken, const QString accessTokenSecret);
+  static long insertTestUser(const QString& userName, const QString& email, const QString& sessionId,
+                             const QString& accessToken, const QString& accessTokenSecret);
 
-  static bool deleteUserByUserName(const QString userName);
+  static bool deleteUserByUserName(const QString& userName);
 
-  static std::shared_ptr<HootNetworkCookieJar> getTestSessionCookie(const QString sessionId,
-                                                                      const QString url);
+  static std::shared_ptr<HootNetworkCookieJar> getTestSessionCookie(const QString& sessionId,
+                                                                    const QString& url);
 
 private:
 

@@ -67,7 +67,7 @@ public:
     setResetType(ResetBasic);
   }
 
-  void setUpTest(const QString testName)
+  void setUpTest(const QString& testName)
   {
     _mapId = -1;
     _testName = testName;

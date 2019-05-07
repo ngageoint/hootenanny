@@ -68,7 +68,7 @@ TestUtils::TestUtils()
 {
 }
 
-bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
+bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
 {
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -166,8 +166,8 @@ ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
   return getElementWithTag(map, "note", note);
 }
 
-ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
-                                        const QString tagValue)
+ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
+                                        const QString& tagValue)
 {
   TagCriterion tc(tagKey, tagValue);
   set<ElementId> bag;
@@ -270,8 +270,8 @@ QString TestUtils::toQuotedString(QString str)
   return result;
 }
 
-void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
-                                                 const QString outFilePath)
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath,
+                                                 const QString& outFilePath)
 {
   LOG_VART(stdFilePath);
   LOG_VART(outFilePath);

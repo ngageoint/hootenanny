@@ -325,9 +325,9 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   return map;
 }
 
-long ServicesDbTestUtils::insertTestUser(const QString userName, const QString email,
-                                         const QString sessionId, const QString accessToken,
-                                         const QString accessTokenSecret)
+long ServicesDbTestUtils::insertTestUser(const QString& userName, const QString& email,
+                                         const QString& sessionId, const QString& accessToken,
+                                         const QString& accessTokenSecret)
 {
   HootApiDb db;
   db.open(QUrl(HootApiDb::getBaseUrl().toString() + "/blah"));
@@ -338,7 +338,7 @@ long ServicesDbTestUtils::insertTestUser(const QString userName, const QString e
   return userId;
 }
 
-bool ServicesDbTestUtils::deleteUserByUserName(const QString userName)
+bool ServicesDbTestUtils::deleteUserByUserName(const QString& userName)
 {
   HootApiDb db;
   db.open(getDbModifyUrl());
@@ -352,8 +352,7 @@ bool ServicesDbTestUtils::deleteUserByUserName(const QString userName)
   return true;
 }
 
-std::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(
-  const QString sessionId, const QString url)
+std::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(const QString& sessionId, const QString& url)
 {
   std::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
   QList<QNetworkCookie> cookies;

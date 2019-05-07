@@ -96,7 +96,7 @@ public:
     }
   }
 
-  void insertChangeset(const QDateTime& createdAt, const QString boundsStr)
+  void insertChangeset(const QDateTime& createdAt, const QString& boundsStr)
   {
     OsmApiDb db;
     db.open(ServicesDbTestUtils::getOsmApiDbUrl());

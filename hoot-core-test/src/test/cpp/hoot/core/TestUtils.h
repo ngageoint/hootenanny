@@ -114,7 +114,7 @@ public:
 
   static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
 
-  static bool compareMaps(const QString& map1, const QString map2);
+  static bool compareMaps(const QString& map1, const QString& map2);
 
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
@@ -141,7 +141,7 @@ public:
    * @param tagValue tag value to search for
    * @return Returns a single element with the intput tag key/value pair; fails if more than one element
    */
-  static ElementPtr getElementWithTag(OsmMapPtr map, const QString tagKey, const QString tagValue);
+  static ElementPtr getElementWithTag(OsmMapPtr map, const QString& tagKey, const QString& tagValue);
 
   /**
    * Return the singleton instance.
@@ -172,7 +172,7 @@ public:
    */
   static QString toQuotedString(QString str);
 
-  static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
+  static void verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath, const QString& outFilePath);
 
   /**
    * Creates a folder path using QDir::mkpath in a more thread-safe way
