@@ -53,8 +53,49 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, PolyClusterGeoModifierAction)
 
-void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&)
+const QString PolyClusterGeoModifierAction::DISTANCE_PARAM = "distance";
+const QString PolyClusterGeoModifierAction::ALPHA_PARAM = "alpha";
+const QString PolyClusterGeoModifierAction::REMOVE_POLYS_PARAM = "remove_polys";
+const QString PolyClusterGeoModifierAction::CLUSTER_TAG_LIST_PARAM = "cluster_tag_list";
+
+void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>& arguments)
 {
+  _distance = DEFAULT_DISTANCE;
+  _alpha = DEFAULT_ALPHA;
+  _removePolys = DEFAULT_REMOVE_POLYS;
+  _clusterTagList = DEFAULT_CLUSTER_TAG_LIST;
+  _clusterTags.clear();
+
+  if (arguments.keys().contains(DISTANCE_PARAM))
+  {
+    _distance = arguments[DISTANCE_PARAM].toDouble();
+  }
+
+  if (arguments.keys().contains(ALPHA_PARAM))
+  {
+    _alpha = arguments[ALPHA_PARAM].toDouble();
+  }
+
+  if (arguments.keys().contains(REMOVE_POLYS_PARAM))
+  {
+    _removePolys = arguments[REMOVE_POLYS_PARAM].toLower() == "true";
+  }
+
+  if (arguments.keys().contains(CLUSTER_TAG_LIST_PARAM))
+  {
+    _clusterTagList = arguments[CLUSTER_TAG_LIST_PARAM];
+  }
+
+  QStringList tagList = _clusterTagList.split(";");
+
+  foreach (QString tag, tagList)
+  {
+    QStringList keyValues = tag.split("=");
+    if (keyValues.length() >= 2)
+    {
+      _clusterTags[keyValues[0]] = keyValues[1];
+    }
+  }
 }
 
 void PolyClusterGeoModifierAction::processStart(boost::shared_ptr<OsmMap>& )
@@ -76,7 +117,7 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
 
 void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pMap)
 {
-  LOG_INFO( "finalizing " << _ways.length() << " ways");
+  LOG_DEBUG( "finalizing " << _ways.length() << " ways");
 
   _pMap = pMap;
 
@@ -92,18 +133,16 @@ void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pM
   // create cluster representations on the map
   _createClusterPolygons();
 
-  //_createDebugConvexHull();
-
   // debug info
-  LOG_INFO( "Generated " << _clusters.length() << " clusters.");
+  LOG_DEBUG( "Generated " << _clusters.length() << " clusters.");
 
   // show clusters for debug
   foreach (QList<long> cluster, _clusters)
   {
-    LOG_INFO("Cluster");
+    LOG_TRACE("Cluster way ids:");
     foreach (long id, cluster)
     {
-      LOG_INFO(id);
+      LOG_TRACE(id);
     }
   }
 
@@ -281,66 +320,49 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
 
     // create a new element with cluster representation
     GeometryConverter gc(_pMap);
-    boost::shared_ptr<Element> pElem = gc.convertGeometryToElement(pCombinedPoly.get(),
-                                                                   Status::Unknown1,
-                                                                   WorstCircularErrorVisitor::getWorstCircularError(_pMap));
-    pElem->getTags()["PolyCluster"] = "Alpha";
-    pElem->getTags()["leisure"] = "common";
+    boost::shared_ptr<Element> pElem = gc.convertGeometryToElement(
+          pCombinedPoly.get(),
+          Status::Unknown1,
+          WorstCircularErrorVisitor::getWorstCircularError(_pMap));
+
+    // add desired cluster tags
+    QHashIterator<QString, QString> tagIterator(_clusterTags);
+
+    Tags tags = pElem->getTags();
+    while (tagIterator.hasNext())
+    {
+        tagIterator.next();
+        tags[tagIterator.key()] = tagIterator.value();
+    }
+
+    pElem->setTags(tags);
     _pMap->addElement(pElem);
 
     // remove cluster polys
-
-    // find all nodes from polys in this cluster
-    std::vector<long> nodeIds;
-
-    foreach (WayPtr pWay, _ways)
+    if (_removePolys)
     {
-      const std::vector<long> wayNodes = pWay->getNodeIds();
-      nodeIds.insert(nodeIds.end(), wayNodes.begin(), wayNodes.end());
-    }
+      // find all nodes from polys in this cluster
+      std::vector<long> nodeIds;
 
-    // remove polys
-    foreach (long wayId, cluster)
-    {
-      RemoveWayOp::removeWayFully(_pMap, wayId);// removeOp(wayId, true);
-      _polyByWayId[wayId];
-    }
+      foreach (WayPtr pWay, _ways)
+      {
+        const std::vector<long> wayNodes = pWay->getNodeIds();
+        nodeIds.insert(nodeIds.end(), wayNodes.begin(), wayNodes.end());
+      }
 
-    // remove nodes
-    foreach (long nodeId, nodeIds)
-    {
-      RemoveNodeOp removeOp(nodeId, true, false, true);
-      removeOp.apply(_pMap);
-    }
-  }
-}
+      // remove polys
+      foreach (long wayId, cluster)
+      {
+        RemoveWayOp::removeWayFully(_pMap, wayId);// removeOp(wayId, true);
+        _polyByWayId[wayId];
+      }
 
-void PolyClusterGeoModifierAction::_createDebugConvexHull()
-{
-  // create a convex hull way for each cluster
-  foreach (QList<long> cluster, _clusters)
-  {
-    boost::shared_ptr<Geometry> pCombinedPoly = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
-
-    foreach (long wayId, cluster)
-    {
-      pCombinedPoly = boost::shared_ptr<Geometry>(pCombinedPoly->Union(_polyByWayId[wayId].get()));
-    }
-
-    // create hull
-    Geometry* pHull = pCombinedPoly->convexHull();
-    CoordinateSequence* pHullCoords = pHull->getCoordinates();
-
-    WayPtr pHullWay( new Way(Status::Unknown1, _pMap->createNextWayId()));
-    pHullWay->getTags()["PolyCluster"] = "ConvexHull";
-    _pMap->addElement(pHullWay);
-
-    for (size_t i = 0; i < pHullCoords->size(); i++)
-    {
-      Coordinate pos = pHullCoords->getAt(i);
-      NodePtr pNode( new Node(Status::Unknown1, _pMap->createNextNodeId(), pos) );
-      pHullWay->addNode(pNode->getId());
-      _pMap->addElement(pNode);
+      // remove nodes
+      foreach (long nodeId, nodeIds)
+      {
+        RemoveNodeOp removeOp(nodeId, true, false, true);
+        removeOp.apply(_pMap);
+      }
     }
   }
 }

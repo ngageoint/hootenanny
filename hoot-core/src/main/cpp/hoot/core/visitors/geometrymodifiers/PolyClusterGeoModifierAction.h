@@ -42,10 +42,16 @@ namespace hoot
 class PolyClusterGeoModifierAction : public GeometryModifierAction
 {
 public:
+  static const QString DISTANCE_PARAM;
+  static const QString ALPHA_PARAM;
+  static const QString REMOVE_POLYS_PARAM;
+  static const QString CLUSTER_TAG_LIST_PARAM;
+
   static std::string className() { return "hoot::PolyClusterGeoModifierAction"; }
 
   virtual QString getCommandName() const override { return "poly_cluster"; }
-  virtual QList<QString> getParameterNames() const override { return QList<QString> { }; }
+  virtual QList<QString> getParameterNames() const override { return QList<QString>
+    { DISTANCE_PARAM, ALPHA_PARAM, REMOVE_POLYS_PARAM, CLUSTER_TAG_LIST_PARAM }; }
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual void processStart(boost::shared_ptr<OsmMap>& ) override;
@@ -53,22 +59,31 @@ public:
   virtual void processFinalize(boost::shared_ptr<OsmMap>& pMap) override;
 
 private:
+  const double DEFAULT_DISTANCE = 20;
+  const double DEFAULT_ALPHA = 20;
+  const bool DEFAULT_REMOVE_POLYS = true;
+  const QString DEFAULT_CLUSTER_TAG_LIST = QString("landuse=residential");
+
   const int MAX_PROCESSED_NODES_PER_POLY = 1000;
-  double _distance = 20;
-  double _alpha = _distance;
-  double _distanceSquared;
+
+  double _distance = DEFAULT_DISTANCE;
+  double _alpha = DEFAULT_ALPHA;
+  bool _removePolys = DEFAULT_REMOVE_POLYS;
+  QString _clusterTagList = DEFAULT_CLUSTER_TAG_LIST;
 
   boost::shared_ptr<OsmMap> _pMap;
   QList<WayPtr> _ways;
   QList<boost::shared_ptr<geos::geom::Polygon>> _polys;
 
   // cluster generation data
+  double _distanceSquared;
   int _clusterIndex;
   QList<QList<long>> _clusters;
   QList<long> _processedPolys;
   QHash<long, CoordinateExt> _coordinateByNodeIx;
   QHash<long, boost::shared_ptr<Polygon>> _polyByWayId;
   boost::shared_ptr<ClosePointHash> _pClosePointHash;
+  QHash<QString,QString> _clusterTags;
 
   void _clearProcessData();
   void _createWayPolygons();
