@@ -4,7 +4,7 @@
 
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-[git](https://git-scm.com/) 
+[git](https://git-scm.com/)
 
 In some cases, you may have to install a newer version of Vagrant or VirtualBox than what is available in the public repositories for your host operating system in order to launch the virtual machine.
 
@@ -35,7 +35,7 @@ Log into the Hootenanny virtual machine:
 
 # Using Hootenanny
 
-To access the iD Editor web user interface: [local Chrome browser](http://localhost:8888/hootenanny-id).
+To access the Hoot2x iD Editor web user interface: [local Chrome browser](http://localhost:8888/hootenanny-id/).
 
 To run Hootenanny from the command line:
 
@@ -66,7 +66,7 @@ If you've updated the Hootenanny code, perform the following steps to redeploy i
 If you typically use hoot-server for development, make sure that the UI on localhost:8080 matches localhost:8888. See [here](https://github.com/ngageoint/hootenanny/blob/develop/test-files/ui/README.md) for further instructions on how to run tests.
 
 If you run into permission errors running the Tomcat deployment script, remove files that may be owned by Tomcat and then re-run the script:
- 
+
     sudo rm -rf /usr/share/tomcat8/webapps/hootenannyid
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services.war
     sudo rm -rf /usr/share/tomcat8/webapps/hoot-services

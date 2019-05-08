@@ -41,9 +41,7 @@ class BuildingCriterionTest : public HootTestFixture
 
 public:
 
-  BuildingCriterionTest()
-    : HootTestFixture("test-files/criterion/",
-                      UNUSED_PATH)
+  BuildingCriterionTest() : HootTestFixture("test-files/criterion/", UNUSED_PATH)
   {
   }
 
@@ -59,10 +57,10 @@ public:
     HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "bestbuy")));
     HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "pho")));
     HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "panera")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
-    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "freddys")));
+    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelry")));
     HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "paneragroup")));
-    HOOT_STR_EQUALS(0, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
+    HOOT_STR_EQUALS(1, uut.isSatisfied(TestUtils::getElementWithNote(map, "jewelryandfreddys")));
   }
 };
 

@@ -42,7 +42,7 @@ The OSM data model is composed of three different elements. Each element may con
 [[IntersectAurora]]
 .Intersection in Aurora, Colorado
 
-image::algorithms/images/image019.png[]
+image::images/image019.png[]
 
 The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
 for the way are:
@@ -86,7 +86,7 @@ will be a red way and green way.
 [[DuplicateWay]]
 .Example Duplicate Way
 
-image::algorithms/images/image021.png[]
+image::images/image021.png[]
 
 ==== Unlikely Intersections
 
@@ -105,7 +105,7 @@ specified threshold, then the intersection is split:
 [[Intersect]]	
 .Example Intersection
 
-image::algorithms/images/image023.png[]
+image::images/image023.png[]
 
 Given the example in <<Intersect>>, if both roads are residential, and there are
 no tunnels/bridges, then it will be maintained as an intersection. However, if
@@ -125,7 +125,7 @@ to be divided, and we introduce the +divider=yes+ tag to the green way.
 [[UndividedOverpass]]
 .Undivided Overpass
 
-image::algorithms/images/image025.png[]
+image::images/image025.png[]
 
 ==== Superfluous Ways
 
@@ -173,7 +173,7 @@ The conflation process adopted by Hootenanny is to first identify all possible f
 [[ExConflInputData]]
 .Example conflation input data
 
-image::algorithms/images/image027.png[]
+image::images/image027.png[]
 
 In the example shown in <<ExConflInputData>>, there are three potential feature matches. The matches have been assigned notional scores for demonstration purposes:
 
@@ -188,7 +188,7 @@ Using a greedy search we will first apply the highest scoring manipulation, ways
 [[GreedySearch]]
 .Example 2 conflated data
 
-image::algorithms/images/image028.png[]
+image::images/image028.png[]
 
 Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
 
@@ -222,13 +222,13 @@ Hootenanny has adopted a modified version of MNS that also limits the distance t
 
 All accuracy values provided to Hootenanny assume a Gaussian distribution to the data and are provided at 2 Sigma, or approximately a 95% confidence interval. To convert accuracy to weights for both datasets we do the following:
 
-image::algorithms/images/image029-032.png[]
+image::images/image029-032.png[]
 
 The accuracy of the new way is calculated as:
 
 .Weighted Average
 
-image::algorithms/images/image033.png[]
+image::images/image033.png[]
 
 There are several possible interpretations of the "average" way. For our purposes, we would like the way that maintains the general shape of the two inputs, produces close to an exact average, and avoids unsightly perturbations. To accomplish this, we start by averaging the first two nodes, then march along the ways, averaging nodes together as we go. At the end, we average the final two nodes. The pseudo-code below describes the algorithm in more detail.
 
@@ -289,19 +289,19 @@ The score is calculated as:
 
 
 
-image:algorithms/images/image034.png[]
+image:images/image034.png[]
 
-image:algorithms/images/image035.png[]
+image:images/image035.png[]
 
 
 where the variables are as follows:
 
 
-* image:algorithms/images/image036.png[] & image:algorithms/images/image037.png[] - Standard deviation of the circular error of ways 1 & 2
+* image:images/image036.png[] & image:images/image037.png[] - Standard deviation of the circular error of ways 1 & 2
 
-* image:algorithms/images/image038.png[] - Per the Abramowitz & Stegun (1964) approximation for calculating image:algorithms/images/image039.png[]
+* image:images/image038.png[] - Per the Abramowitz & Stegun (1964) approximation for calculating image:images/image039.png[]
 
-* image:algorithms/images/image040.png[] - The mean distance between the ways
+* image:images/image040.png[] - The mean distance between the ways
 
 
 ===== Parallel Score
@@ -311,7 +311,7 @@ The parallel score assigns high scores to ways that are generally parallel, and 
 [[parallelscores]]
 .Example low and high scoring parallel scores
 
-image::algorithms/images/image041.png[]
+image::images/image041.png[]
 
 [[ExplAttributeScore]]
 ===== Attribute Score
@@ -446,7 +446,7 @@ Enumerated tags are tags with predefined nominal values. This includes +surface=
 [[HighwayTagRelate]]
 .Highway Tag Relationship
 
-image::algorithms/images/image044.png[]
+image::images/image044.png[]
 
 To address this, we have created a configuration file that defines a directed graph of relationships between tags and supports the following relations:
 
@@ -494,9 +494,9 @@ The _zipper score_ gives a higher score for ways that are already joined at one 
 The _length score_ gives higher values to ways that are longer. This encourages longer ways to be merged earlier in the conflation process, and long ways that meet all the above criteria are more likely to be the same than are smaller ways. The length weight is given by:
 
 
-image:algorithms/images/image045.png[]
+image:images/image045.png[]
 
-image:algorithms/images/image046.png[]
+image:images/image046.png[]
 
 
 The values 20, 0.2 and 0.8 were derived experimentally.

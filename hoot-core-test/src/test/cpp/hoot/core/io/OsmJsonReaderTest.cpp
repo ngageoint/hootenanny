@@ -514,12 +514,23 @@ public:
 
     OsmJsonReader::scrubBigInts(bigIntMultiline);
     HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
+
+    // One of the regex's to clean big ints originally had a leading semicolon in it (see related
+    // note in OsmJsonReader::scrubBigInts), which would add double quotes to the text below within
+    // a single json value and break it. Haven't encountered any data instances to be cleaned so far
+    // that would require the semicolon to be in the regex, so removed it. If any instances do exist,
+    // then we need to rethink that regex to correctly parse this.
+    QString bigIntEmbedded =
+      "{\n"
+      " \"fixme\": \"DUPLICATE [Facebook:1477777628952292, Facebook:1477777665618955]\"\n"
+      "}";
+    const QString bigIntEmbeddedCorrect(bigIntEmbedded);
+    OsmJsonReader::scrubBigInts(bigIntEmbedded);
+    HOOT_STR_EQUALS(bigIntEmbeddedCorrect, bigIntEmbedded);
   }
 
   void isSupportedTest()
   {
-    LOG_TRACE("test start");
-
     OsmJsonReader uut;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
 
@@ -527,8 +538,10 @@ public:
     CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
     CPPUNIT_ASSERT(!uut.isSupported("blah.json"));
+    // If the url is of the correct scheme and matches the host, we use it.
     CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
     CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
+    // wrong scheme
     CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
     // If the url doesn't match with our configured Overpass host, skip it.
     CPPUNIT_ASSERT(!uut.isSupported("http://blah"));

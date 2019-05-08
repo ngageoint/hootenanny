@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -67,12 +68,16 @@ _reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
 _dateTagKey(dateTagKey),
 _dateFormat(dateFormat)
 {  
+  OsmUtils::logElementDetail(map->getElement(_eid1), map, Log::Trace, "BuildingMatch: e1");
+  OsmUtils::logElementDetail(map->getElement(_eid2), map, Log::Trace, "BuildingMatch: e2");
+
   _p = _rf->classify(map, _eid1, _eid2);
 
   ConstElementPtr element1 = map->getElement(eid1);
   ConstElementPtr element2 = map->getElement(eid2);
 
   MatchType type = getType();
+  LOG_VART(type);
   QStringList description;
 
   if (type != MatchType::Match)
@@ -90,6 +95,7 @@ _dateFormat(dateFormat)
   else
     _explainText = mt->getTypeDetail(_p);
   LOG_VART(toString());
+  LOG_VART(_explainText);
 }
 
 QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
@@ -212,7 +218,7 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 set< pair<ElementId, ElementId> > BuildingMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }

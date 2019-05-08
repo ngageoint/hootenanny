@@ -79,12 +79,35 @@ void Log::progress(WarningLevel level, const string& str, const string& filename
 
 bool Log::notFiltered(const string& prettyFunction)
 {
+  // TODO: This check does not work at the trace level for some reason, and the class filter is
+  // being reset to empty at some point after initialization. The result is no log filtering
+  // occurs at the trace level and messages for all classes are logged.
+
   // init here instead of in init() since some logs are being produced before the init() call
-  if (!_classFilterInitialized)
+//  if (!_classFilterInitialized)
+//  {
+//    _classFilter = ConfigOptions().getLogClassFilter().split(";");
+//    _classFilter.removeAll(QString(""));
+//    _classFilterInitialized = true;
+//  }
+//  if (_classFilter.isEmpty())
+//  {
+//    return true;
+//  }
+
+  // The unnecessary extra calls to this initialization will have to remain until the above problem
+  // is fixed for trace logging.
+  if (_classFilter.isEmpty())
   {
     _classFilter = ConfigOptions().getLogClassFilter().split(";");
-    _classFilter.removeAll(QString(""));
-    _classFilterInitialized = true;
+    if (!_classFilter.isEmpty())
+    {
+      _classFilter.removeAll(QString(""));
+    }
+  }
+  if (_classFilter.isEmpty())
+  {
+    return true;
   }
 
   // split arguments from function call name
@@ -95,7 +118,7 @@ bool Log::notFiltered(const string& prettyFunction)
   nameParts = nameParts[0].split("::");
   int listLen = nameParts.length();
 
-  return _classFilter.empty() || (listLen > 1 && _classFilter.contains( nameParts[listLen-2] ));
+  return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
 }
 
 void Log::setLevel(WarningLevel l)

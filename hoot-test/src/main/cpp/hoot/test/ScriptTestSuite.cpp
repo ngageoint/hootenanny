@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptTestSuite.h"
 
@@ -48,9 +48,6 @@ ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec
 # ifndef HOOT_HAVE_SERVICES
     ignorePrefix << "Service";
     ignorePrefix << "RndService";
-# endif
-# ifndef HOOT_HAVE_HADOOP
-    ignorePrefix << "Big";
 # endif
 # ifndef HOOT_HAVE_RND
     ignorePrefix << "Rnd";

@@ -825,6 +825,24 @@ public:
       RecursiveElementRemover(w1->getElementId()).apply(map);
     }
 
+    // shop=mall has now been added to the building category, so whereas previously it couldn't
+    // be considered a building without also having building=yes, now it can be considered a
+    // building with the tag alone.
+    {
+      n1->getTags()["name"] = "Honey Creek Mall";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
+      w1->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
     {
       n1->getTags()["name"] = "Staunton Elementary";
 
@@ -878,21 +896,6 @@ public:
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("area", "yes");
       w1->getTags().set("building:use", "multipurpose");
-
-      uut.calculateMatch(w1->getElementId(), n1->getElementId());
-
-      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
-      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
-
-      RecursiveElementRemover(w1->getElementId()).apply(map);
-    }
-
-    {
-      n1->getTags()["name"] = "Honey Creek Mall";
-
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
-      w1->getTags()["name"] = "Honey Creek Mall";
-      w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 

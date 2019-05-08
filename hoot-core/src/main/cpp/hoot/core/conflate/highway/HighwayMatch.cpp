@@ -80,8 +80,8 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
 
   LOG_VART(_eid1);
   LOG_VART(_eid2);
-  //OsmUtils::logElementDetail(e1, map, Log::Debug, "HighwayMatch: e1");
-  //OsmUtils::logElementDetail(e2, map, Log::Debug, "HighwayMatch: e2");
+  //OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayMatch: e1");
+  //OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayMatch: e2");
 
   try
   {

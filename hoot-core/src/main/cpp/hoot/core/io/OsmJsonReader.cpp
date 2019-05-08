@@ -190,11 +190,15 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   // Clear out anything that might be hanging around
   _propTree.clear();
 
+  LOG_TRACE("JSON before cleaning: " << jsonStr.left(100));
+
   // Handle single or double quotes
   scrubQuotes(jsonStr);
 
   // Handle IDs
   scrubBigInts(jsonStr);
+
+  LOG_TRACE("JSON after cleaning: " << jsonStr.left(100));
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -422,7 +426,7 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
   }
 }
 
-void OsmJsonReader::scrubQuotes(QString &jsonStr)
+void OsmJsonReader::scrubQuotes(QString& jsonStr)
 {
   // We allow the use of single quotes, for ease of coding
   // test strings into c++. Single quotes within string literals
@@ -442,14 +446,15 @@ void OsmJsonReader::scrubQuotes(QString &jsonStr)
   }
 }
 
-void OsmJsonReader::scrubBigInts(QString &jsonStr)
+void OsmJsonReader::scrubBigInts(QString& jsonStr)
 {
   // Boost 1.41 property tree json parser has trouble with
   // integers bigger than 2^31. So we put quotes around big
   // numbers, and that makes it all better
   QRegExp rx1("(\"[^\"]+\"\\s*:\\s*)(-?\\d{8,})");
   jsonStr.replace(rx1, "\\1\"\\2\"");
-  QRegExp rx2("([\\[:,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
+  // see related note in OsmJsonReaderTest::scrubBigIntsTest about changes made to this regex
+  QRegExp rx2("([\\[,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
   jsonStr.replace(rx2, "\\1\"\\2\"\\3");
 }
 
