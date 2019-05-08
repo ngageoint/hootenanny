@@ -144,7 +144,7 @@ public:
 private:
 
   WarningLevel _level;
-  static boost::shared_ptr<Log> _theInstance;
+  static std::shared_ptr<Log> _theInstance;
   static int _warnMessageLimit;
   bool _classFilterInitialized = false;
   QStringList _classFilter;

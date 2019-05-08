@@ -43,7 +43,6 @@
 #ifdef BOOST_GRAPH_NO_BUNDLED_PROPERTIES
 #error Bundle support is required.
 #endif
-using namespace boost;
 
 // hoot
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -71,7 +70,8 @@ public:
   MatchEdge() : match(0) {}
   MatchEdge(const Match* m) : match(m) {}
 
-  typedef enum {
+  typedef enum
+  {
     AssociatedWith,
     MatchWith
   } MatchType;
@@ -101,8 +101,8 @@ typedef boost::adjacency_list<
   MatchEdge
 > MatchBoostGraph;
 
-typedef graph_traits <MatchBoostGraph>::vertex_descriptor MatchVertexId;
-typedef graph_traits <MatchBoostGraph>::edge_descriptor MatchEdgeId;
+typedef boost::graph_traits<MatchBoostGraph>::vertex_descriptor MatchVertexId;
+typedef boost::graph_traits<MatchBoostGraph>::edge_descriptor MatchEdgeId;
 
 class MatchGraphInternal
 {
@@ -167,7 +167,7 @@ public:
       if (type == MatchType::Match)
       {
         set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
-        for (set< pair<ElementId, ElementId>>::const_iterator it = eids.begin();
+        for (set<pair<ElementId, ElementId>>::const_iterator it = eids.begin();
              it != eids.end(); ++it)
         {
           dsm.joinT(it->first, it->second);
@@ -255,8 +255,8 @@ private:
     matchWith.type = MatchEdge::MatchWith;
 
     // add an edge for each of the match pairs (typically just one match pair)
-    set< pair<ElementId, ElementId> > eids = m->getMatchPairs();
-    for (set< pair<ElementId, ElementId> >::const_iterator it = eids.begin(); it != eids.end();
+    set<pair<ElementId, ElementId>> eids = m->getMatchPairs();
+    for (set<pair<ElementId, ElementId>>::const_iterator it = eids.begin(); it != eids.end();
       ++it)
     {
       MatchVertexId vid1 = createOrGetVertex(it->first);
@@ -278,7 +278,7 @@ private:
   {
     MatchVertexId mvi = _eid2Vertex[eid];
 
-    graph_traits<MatchBoostGraph>::out_edge_iterator ei, eend;
+    boost::graph_traits<MatchBoostGraph>::out_edge_iterator ei, eend;
     for (boost::tie(ei, eend) = out_edges(mvi, _graph); ei != eend; ++ei)
     {
       const MatchEdge& edge = _graph[*ei];

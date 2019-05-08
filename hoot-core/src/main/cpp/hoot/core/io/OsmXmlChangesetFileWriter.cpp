@@ -69,7 +69,7 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
+void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& cs)
 {  
   LOG_VARD(path);
   LOG_VARD(cs->hasMoreChanges());
@@ -155,14 +155,14 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
         switch (type)
         {
           case ElementType::Node:
-            _writeNode(writer, boost::dynamic_pointer_cast<const Node>(_change.getElement()));
+            _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
             break;
           case ElementType::Way:
-            _writeWay(writer, boost::dynamic_pointer_cast<const Way>(_change.getElement()));
+            _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
             break;
           case ElementType::Relation:
             _writeRelation(
-              writer, boost::dynamic_pointer_cast<const Relation>(_change.getElement()));
+              writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");

@@ -84,7 +84,8 @@ public:
   }
 
   template<class T> static
-  unsigned int distance(const T& s1, const T& s2) {
+  unsigned int distance(const T& s1, const T& s2)
+  {
     const size_t len1 = s1.size(), len2 = s2.size();
     std::vector<unsigned int> col(len2+1), prevCol(len2+1);
 

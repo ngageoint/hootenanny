@@ -50,7 +50,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Match, PoiPolygonMatch)
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
-boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
+std::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
 long PoiPolygonMatch::matchesProcessed = 0;
 long PoiPolygonMatch::distanceMatches = 0;
@@ -73,7 +73,7 @@ Match()
 }
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-                                 boost::shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 std::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
@@ -717,9 +717,9 @@ void PoiPolygonMatch::resetMatchDistanceInfo()
   PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
 }
 
-set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_poi->getElementId(), _poly->getElementId()));
   return result;
 }

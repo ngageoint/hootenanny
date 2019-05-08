@@ -28,8 +28,9 @@
 #include "IntersectionIterator.h"
 
 // Standard Includes
+#include <cassert>
+#include <cmath>
 #include <iomanip>
-#include <math.h>
 
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>

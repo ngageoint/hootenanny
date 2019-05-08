@@ -51,7 +51,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   _nonWord.setPattern("[^\\w\\s]");
 }
 
-std::map<QString, int> TagDistribution::getTagCounts(const QStringList inputs)
+std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
 {
   std::map<QString, int> tagCounts;
   for (int i = 0; i < inputs.size(); i++)
@@ -115,14 +115,14 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   return ts.readAll();
 }
 
-void TagDistribution::_countTags(const QString input, std::map<QString, int>& tagCounts)
+void TagDistribution::_countTags(const QString& input, std::map<QString, int>& tagCounts)
 {
   long inputTotal = 0;
 
-  boost::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
+  std::shared_ptr<PartialOsmMapReader> reader = _getReader(input);
 
   ElementInputStreamPtr filteredInputStream =
-    _getFilteredInputStream(boost::dynamic_pointer_cast<ElementInputStream>(reader));
+    _getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
   long elementCtr = 0;
   while (filteredInputStream->hasMoreElements())
@@ -207,7 +207,7 @@ void TagDistribution::_countTags(const QString input, std::map<QString, int>& ta
   filteredInputStream->close();
 }
 
-ElementInputStreamPtr TagDistribution::_getFilteredInputStream(ElementInputStreamPtr inputStream)
+ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInputStreamPtr& inputStream)
 {
   ElementInputStreamPtr filteredInputStream;
 
@@ -224,10 +224,10 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(ElementInputStrea
   return filteredInputStream;
 }
 
-boost::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString input)
+std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input)
 {
-  boost::shared_ptr<PartialOsmMapReader> reader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+  std::shared_ptr<PartialOsmMapReader> reader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));
   reader->setUseDataSourceIds(true);
   reader->open(input);
@@ -255,10 +255,10 @@ ElementCriterionPtr TagDistribution::_getCriterion()
   }
   LOG_VART(crit.get());
 
-  boost::shared_ptr<Configurable> critConfig;
+  std::shared_ptr<Configurable> critConfig;
   if (crit.get())
   {
-    critConfig = boost::dynamic_pointer_cast<Configurable>(crit);
+    critConfig = std::dynamic_pointer_cast<Configurable>(crit);
   }
   LOG_VART(critConfig.get());
   if (critConfig.get())

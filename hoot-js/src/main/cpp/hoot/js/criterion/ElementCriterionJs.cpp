@@ -39,9 +39,6 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace std;
 using namespace v8;
 
@@ -68,8 +65,8 @@ void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
   ElementCriterionPtr other = ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->
       getCriterion();
 
-  boost::shared_ptr<ElementCriterionConsumer> consumer =
-    boost::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
+  std::shared_ptr<ElementCriterionConsumer> consumer =
+    std::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
 
   if (!consumer)
   {

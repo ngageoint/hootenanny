@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATE_H
 #define STATE_H
@@ -62,8 +62,8 @@ private:
   QMap<QString, double> _values;
 };
 
-typedef boost::shared_ptr<State> StatePtr;
-typedef boost::shared_ptr<const State> ConstStatePtr;
+typedef std::shared_ptr<State> StatePtr;
+typedef std::shared_ptr<const State> ConstStatePtr;
 
 inline uint qHash(const ConstStatePtr& s)
 {

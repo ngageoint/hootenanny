@@ -98,15 +98,15 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > nodeIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > wayIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > relationIdMap;
+    std::shared_ptr<Tgs::BigMap<long, unsigned long>> relationIdMap;
   };
 
   struct ChangesetData
@@ -129,7 +129,7 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    boost::shared_ptr<std::map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    std::shared_ptr<std::map<ElementId, UnresolvedRelationReference>> unresolvedRelationRefs;
   };
 
 public:
@@ -141,20 +141,20 @@ public:
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
-  virtual bool isSupported(QString url);
-  virtual void open(QString url);
+  virtual bool isSupported(const QString& url) override;
+  virtual void open(const QString& url) override;
   void close();
 
-  virtual void finalizePartial();
-  virtual void writePartial(const ConstNodePtr& node);
-  virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void finalizePartial() override;
+  virtual void writePartial(const ConstNodePtr& node) override;
+  virtual void writePartial(const ConstWayPtr& way) override;
+  virtual void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
+  void setOutputFilesCopyLocation(const QString& location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
   void setReserveRecordIdsBeforeWritingData(bool reserve)
@@ -187,7 +187,7 @@ public:
   void setValidateData(bool validate) { _validateData = validate; }
   void setDisableDatabaseConstraintsDuringWrite(bool disable)
   { _disableDatabaseConstraintsDuringWrite = disable; }
-  void setTempDir(QString location) { _tempDir = location; }
+  void setTempDir(const QString& location) { _tempDir = location; }
   void setDisableDatabaseIndexesDuringWrite(bool disable)
   { _disableDatabaseIndexesDuringWrite = disable; }
   void setWriteIdSequenceUpdates(bool write)
@@ -205,14 +205,14 @@ protected:
   QString _outputFilesCopyLocation;
   QString _outputUrl;
   QString _outputDelimiter;
-  boost::shared_ptr<QFile> _sqlOutputCombinedFile;
+  std::shared_ptr<QFile> _sqlOutputCombinedFile;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
   bool _includeDebugTags;
-  std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
+  std::map<QString, std::shared_ptr<QTemporaryFile>> _outputSections;
   QStringList _sectionNames;
-  boost::shared_ptr<QElapsedTimer> _timer;
+  std::shared_ptr<QElapsedTimer> _timer;
   long _maxChangesetSize;
 
   void _reset();
@@ -222,7 +222,7 @@ protected:
   void _flush();
   void _verifyDependencies();
 
-  void _createOutputFile(const QString tableName, const QString header = "");
+  void _createOutputFile(const QString& tableName, const QString& header = "");
   QString _getCombinedSqlFileName() const;
 
   //creates the output files containing the data
@@ -243,8 +243,8 @@ protected:
   virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
   virtual void _writeTags(const Tags& tags, const ElementType::Type& elementType,
-                  const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
-                  boost::shared_ptr<QFile> historicalTableFile);
+                  const unsigned long dbId, const std::shared_ptr<QFile>& currentTableFile,
+                  const std::shared_ptr<QFile>& historicalTableFile);
 
   virtual void _incrementChangesInChangeset();
 
@@ -281,14 +281,14 @@ private:
   bool _writeIdSequenceUpdates;
 
   OsmApiDb _database;
-  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  std::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
   void _verifyOutputCopySettings();
   void _verifyFileOutputs();
   void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
-  void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
+  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine);
   void _reserveIdsInDb();
 
   void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,

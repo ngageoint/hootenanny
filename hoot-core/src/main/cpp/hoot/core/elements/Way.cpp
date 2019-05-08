@@ -29,12 +29,9 @@
 
 // Hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/GeometryUtils.h>
-
-// Boost
-using namespace boost;
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -130,7 +127,7 @@ void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter)
   visitRo(map, filter);
 }
 
-const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   bool goodNodes = true;
   if (ep.get())
@@ -144,8 +141,8 @@ const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvi
       }
       else
       {
-        boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-        ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+        std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+        ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
       }
@@ -166,15 +163,15 @@ const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvi
   }
 }
 
-const Envelope& Way::getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
 {
   _cachedEnvelope.init();
 
   const std::vector<long>& ids = _wayData->getNodeIds();
   for (size_t i = 0; i < ids.size(); i++)
   {
-    boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    std::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     assert(n.get());
     _cachedEnvelope.expandToInclude(n->getX(), n->getY());
   }
@@ -276,7 +273,8 @@ void Way::removeNode(long id)
   // copy the array in place and remove the unwanted nodes.
   for (size_t i = 0; i < nodes.size(); i++)
   {
-    if (nodes[i] != id) {
+    if (nodes[i] != id)
+    {
       nodes[newCount] = nodes[i];
       newCount++;
     }

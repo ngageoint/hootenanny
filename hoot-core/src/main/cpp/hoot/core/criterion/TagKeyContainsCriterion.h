@@ -45,7 +45,7 @@ public:
   static std::string className() { return "hoot::TagKeyContainsCriterion"; }
 
   TagKeyContainsCriterion() {}
-  explicit TagKeyContainsCriterion(const QString text);
+  explicit TagKeyContainsCriterion(const QString& text);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -56,7 +56,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setText(QString text) { _text = text; }
+  void setText(const QString& text) { _text = text; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
 private:

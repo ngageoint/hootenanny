@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCONSTOSMMAPVISITOR_H
 #define ELEMENTCONSTOSMMAPVISITOR_H
-
-// boost
-#include <boost/shared_ptr.hpp>
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -52,7 +49,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e) = 0;
+  virtual void visit(const std::shared_ptr<const Element>& e) = 0;
 
 protected:
 

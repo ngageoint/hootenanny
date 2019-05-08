@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ContainsNodeCriterion.h"
 
@@ -62,17 +62,17 @@ bool ContainsNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
     return w->hasNode(_nodeId);
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     return r->contains(ElementId(ElementType::Node, _nodeId));
   }
   else if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     return (n->getId() == _nodeId);
   }
   return false;

@@ -25,15 +25,12 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -67,7 +64,7 @@ public:
     }
 
     // Great bit of code taken from TranslatedTagDifferencer
-    boost::shared_ptr<ScriptTranslator> schemaPrinter(
+    std::shared_ptr<ScriptTranslator> schemaPrinter(
       ScriptTranslatorFactory::getInstance().createTranslator(printScript));
 
     if (!schemaPrinter)

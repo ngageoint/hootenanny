@@ -88,7 +88,7 @@ public:
     Coordinate w2c[] = { Coordinate(90, 5), Coordinate(190, 5), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    std::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);
@@ -125,7 +125,7 @@ public:
     Coordinate w2c[] = { Coordinate(110, 5), Coordinate(210, 5), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    std::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);

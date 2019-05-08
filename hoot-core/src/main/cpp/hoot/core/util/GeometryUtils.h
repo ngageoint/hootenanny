@@ -117,7 +117,7 @@ public:
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
-  static geos::geom::Envelope envelopeFromConfigString(const QString boundsStr);
+  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
 
   /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)

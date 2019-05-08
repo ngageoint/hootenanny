@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGELOCATION_H
 #define EDGELOCATION_H
@@ -77,7 +77,7 @@ public:
 
   bool isValid() const { return _portion >= 0.0 && _portion <= 1.0; }
 
-  boost::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
+  std::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
 
   QString toString() const;
 
@@ -88,8 +88,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<EdgeLocation> EdgeLocationPtr;
-typedef boost::shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
+typedef std::shared_ptr<EdgeLocation> EdgeLocationPtr;
+typedef std::shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
 
 inline bool operator==(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
 {

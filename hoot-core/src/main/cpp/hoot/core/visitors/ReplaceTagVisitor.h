@@ -89,7 +89,7 @@ public:
    * @brief visit - visit an element & perform check and replace
    * @param e - element to visit
    */
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Replaces matching tags with the specified replacement tag"; }

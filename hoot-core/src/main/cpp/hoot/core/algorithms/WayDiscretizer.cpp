@@ -45,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, ConstWayPtr way) :
+WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way) :
   _map(map)
 {
   _way = way;

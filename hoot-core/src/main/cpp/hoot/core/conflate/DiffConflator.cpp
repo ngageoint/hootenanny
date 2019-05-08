@@ -80,7 +80,7 @@ DiffConflator::DiffConflator() :
   _reset();
 }
 
-DiffConflator::DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
+DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance())
 {
@@ -121,7 +121,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _updateProgress(currentStep - 1, "Matching features...");
 
   LOG_DEBUG("\tDiscarding relations...");
-  boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
+  std::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
   RemoveElementsVisitor removeRelationsVisitor;
   removeRelationsVisitor.addCriterion(pRelationCrit);
   _pMap->visitRw(removeRelationsVisitor);
@@ -285,7 +285,7 @@ void DiffConflator::markInputElements(OsmMapPtr pMap)
   // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-  boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+  std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
   pRef1v->setConfiguration(visitorConf);
   pMap->visitRw(*pRef1v);
 }
@@ -315,7 +315,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
       }
 
       // Add the changed way with merged tags
-      ConstWayPtr pTempWay = boost::dynamic_pointer_cast<const Way>(c.getElement());
+      ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
       WayPtr pNewWay(new Way(*pTempWay));
       pNewWay->setStatus(Status::TagChange);
       pMap->addWay(pNewWay);
@@ -344,13 +344,13 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set< std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
 
     // Go through our match pairs, calculate tag diff for elements. We only
     // consider the "Original" elements when we do this - we want to ignore
     // elements created during map cleaning operations (e.g. intersection splitting)
     // because the map that the changeset operates on won't have those elements.
-    for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
+    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
       // If it's a POI-Poly match, the poi always comes first, even if it's from
@@ -463,14 +463,14 @@ void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType&
 }
 
 // Convenience function used when deriving a changeset
-boost::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
+std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
   //Conflation requires all data to be in memory, so no point in adding support for
   //ExternalMergeElementSorter here.
 
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
-  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
   return delta;
 }
 

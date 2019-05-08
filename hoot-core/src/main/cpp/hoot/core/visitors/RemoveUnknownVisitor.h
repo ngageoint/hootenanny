@@ -45,7 +45,7 @@ public:
 
   void set(Status status) { _status = status; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const
   { return "Removes all elements of Unknown1 or Unknown2 status"; }

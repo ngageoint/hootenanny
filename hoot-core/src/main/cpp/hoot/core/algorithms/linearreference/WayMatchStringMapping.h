@@ -89,8 +89,8 @@ public:
   { (way == WayNumber::Way1) ? setWayString1(ws) : setWayString2(ws); }
 };
 
-typedef boost::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;
-typedef boost::shared_ptr<const WayMatchStringMapping> ConstWayMatchStringMappingPtr;
+typedef std::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;
+typedef std::shared_ptr<const WayMatchStringMapping> ConstWayMatchStringMappingPtr;
 
 }
 

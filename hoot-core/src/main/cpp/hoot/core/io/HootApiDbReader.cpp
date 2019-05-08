@@ -64,7 +64,7 @@ Envelope HootApiDbReader::calculateEnvelope() const
   return result;
 }
 
-void HootApiDbReader::open(QString urlStr)
+void HootApiDbReader::open(const QString& urlStr)
 {
   _url = urlStr;
   if (!isSupported(_url))

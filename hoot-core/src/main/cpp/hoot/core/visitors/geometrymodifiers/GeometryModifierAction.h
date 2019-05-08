@@ -36,9 +36,6 @@
 #include <QString>
 #include <QHash>
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 namespace hoot
 {
 
@@ -95,7 +92,7 @@ struct GeometryModifierActionDesc
   QHash<QString, QString> arguments;
 
   // Instance of the command specific geometry modifier action class implementation.
-  boost::shared_ptr<GeometryModifierAction> pAction;
+  std::shared_ptr<GeometryModifierAction> pAction;
 };
 
 }

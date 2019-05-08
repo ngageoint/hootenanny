@@ -68,7 +68,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   DisableLog dl(Log::Warn);
 
   ElementConverter elementConverter(_map);
-  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     throw geos::util::TopologyException();
@@ -91,7 +91,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
         const QString poiNeighborName = poiNeighbor->getTags().getName();
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
-          boost::shared_ptr<Geometry> poiNeighborGeom =
+          std::shared_ptr<Geometry> poiNeighborGeom =
             ElementConverter(_map).convertToGeometry(poiNeighbor);
           //If a building in the area contains a another POI with a matching address to the
           //POI being examined, increase the evidence.

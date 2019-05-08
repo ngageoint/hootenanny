@@ -29,16 +29,13 @@
 #define UNLIKELYINTERSECTIONREMOVER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Units.h>
 
 // Standard
 #include <set>
 #include <vector>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -61,30 +58,31 @@ public:
 
   UnlikelyIntersectionRemover();
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeIntersections(boost::shared_ptr<OsmMap> map);
+  static void removeIntersections(std::shared_ptr<OsmMap> map);
 
-  virtual QString getInitStatusMessage() const { return "Removing unlikely intersections..."; }
+  virtual QString getInitStatusMessage() const override
+  { return "Removing unlikely intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " unlikely intersections"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Removes road intersections that are likely mistakes"; }
 
 protected:
 
-  boost::shared_ptr<OsmMap> _result;
+  std::shared_ptr<OsmMap> _result;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
 
-  double _pIntersection(long intersectingNode, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
+  double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
 
-  void _splitIntersection(long intersectingNode, const std::vector< boost::shared_ptr<Way> >& g2);
+  void _splitIntersection(long intersectingNode, const std::vector<std::shared_ptr<Way>>& g2);
 };
 
 }

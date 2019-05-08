@@ -65,13 +65,13 @@ _numRelationsRead(0)
 {
 }
 
-bool ApiDbReader::isSupported(QString urlStr)
+bool ApiDbReader::isSupported(const QString& urlStr)
 {
   QUrl url(urlStr);
   return _getDatabase()->isSupported(url);
 }
 
-void ApiDbReader::setBoundingBox(const QString bbox)
+void ApiDbReader::setBoundingBox(const QString& bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
@@ -79,7 +79,7 @@ void ApiDbReader::setBoundingBox(const QString bbox)
   }
 }
 
-void ApiDbReader::setOverrideBoundingBox(const QString bbox)
+void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
@@ -294,7 +294,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
                                      QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-  boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+  std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
   while (wayIdItr->next())
   {
     const long wayId = (*wayIdItr).value(0).toLongLong();
@@ -305,7 +305,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
   if (wayIds.size() > 0)
   {
     LOG_DEBUG("Retrieving ways by way ID...");
-    boost::shared_ptr<QSqlQuery> wayItr =
+    std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     while (wayItr->next())
     {
@@ -316,7 +316,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     }
 
     LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-    boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+    std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
       _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
     while (additionalWayNodeIdItr->next())
     {
@@ -335,7 +335,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     {
       LOG_DEBUG(
         "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-      boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
+      std::shared_ptr<QSqlQuery> additionalWayNodeItr =
         _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
       while (additionalWayNodeItr->next())
       {
@@ -355,7 +355,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   long boundedRelationCount = 0;
 
   LOG_DEBUG("Retrieving node records within the query bounds...");
-  boost::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
+  std::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
@@ -383,7 +383,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
       assert(nodeIds.size() > 0);
-      boost::shared_ptr<QSqlQuery> relationIdItr =
+      std::shared_ptr<QSqlQuery> relationIdItr =
         _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
       while (relationIdItr->next())
       {
@@ -410,7 +410,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         QSet<QString> newWays;
         QSet<QString> newRelations;
         LOG_DEBUG("Retrieving relations by relation ID...");
-        boost::shared_ptr<QSqlQuery> relationItr =
+        std::shared_ptr<QSqlQuery> relationItr =
           _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
         while (relationItr->next())
         {
@@ -444,7 +444,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         newNodes = newNodes.subtract(nodeIds);
         if (newNodes.size() > 0)
         {
-          boost::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
+          std::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
           while (nodeItr->next())
           {
             const QSqlQuery resultIterator = *nodeItr;
@@ -463,7 +463,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         {
           QSet<QString> additionalNodeIds;
           LOG_DEBUG("Retrieving ways by way ID...");
-          boost::shared_ptr<QSqlQuery> wayItr =
+          std::shared_ptr<QSqlQuery> wayItr =
             _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
           while (wayItr->next())
           {
@@ -474,7 +474,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           }
 
           LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-          boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          std::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
             _getDatabase()->selectWayNodeIdsByWayIds(newWays);
           while (additionalWayNodeIdItr->next())
           {
@@ -493,7 +493,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           {
             LOG_DEBUG(
               "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-            boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            std::shared_ptr<QSqlQuery> additionalWayNodeItr =
               _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
             while (additionalWayNodeItr->next())
             {
@@ -541,7 +541,7 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-void ApiDbReader::read(OsmMapPtr map)
+void ApiDbReader::read(const OsmMapPtr& map)
 {
   if (!_hasBounds())
   {
@@ -578,14 +578,14 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   long elementCount = 0;
 
   // contact the DB and select all
-  boost::shared_ptr<QSqlQuery> elementResultsIterator =
+  std::shared_ptr<QSqlQuery> elementResultsIterator =
     _getDatabase()->selectAllElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end (see comments in _resultToElement)
   while (elementResultsIterator->isActive())
   {
-    boost::shared_ptr<Element> element =
+    std::shared_ptr<Element> element =
       _resultToElement(*elementResultsIterator, elementType, *map );
     //this check is necessary due to the way _resultToElement behaves
     if (element.get())
@@ -652,7 +652,7 @@ bool ApiDbReader::hasMoreElements()
   return _nextElement.get();
 }
 
-boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
+std::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
   _selectElementType = _getCurrentSelectElementType();
   //LOG_VART(_selectElementType);
@@ -660,7 +660,7 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   //tells hasMoreElements that we don't have any more to return.
   if (_selectElementType == ElementType::Unknown)
   {
-    return boost::shared_ptr<Element>();
+    return std::shared_ptr<Element>();
   }
 
   //see if another result is available
@@ -678,7 +678,7 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   }
 
   //results are still available, so keep parsing through them
-  boost::shared_ptr<Element> element =
+  std::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
   if (!element.get())
@@ -696,13 +696,13 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   return element;
 }
 
-boost::shared_ptr<Element> ApiDbReader::readNextElement()
+std::shared_ptr<Element> ApiDbReader::readNextElement()
 {
   LOG_TRACE("Retrieving next element...");
 
   if (hasMoreElements())
   {
-    boost::shared_ptr<Element> result = _nextElement;
+    std::shared_ptr<Element> result = _nextElement;
     _lastId = result->getId();
     //LOG_VART(_lastId);
     _nextElement.reset();
@@ -820,7 +820,7 @@ void ApiDbReader::close()
   finalizePartial();
 }
 
-boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterator,
+std::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterator,
                                                          const ElementType& elementType,
                                                          OsmMap& map)
 {
@@ -834,7 +834,7 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   //null.
   if (resultIterator.next())
   {
-    boost::shared_ptr<Element> element;
+    std::shared_ptr<Element> element;
     switch (elementType.getEnum())
     {
       case ElementType::Node:
@@ -865,13 +865,13 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   {
     //don't call clear here, as the prepared query may be executed again in a following iteration
     resultIterator.finish();
-    return boost::shared_ptr<Element>();
+    return std::shared_ptr<Element>();
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

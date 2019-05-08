@@ -104,17 +104,17 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
+    const QList<std::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
         _outputPath + "Dynamic");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
+    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
-      boost::shared_ptr<const PertyTestRunResult> result = *it;
+      std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
       testRunPlotResultsStr +=
         QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
@@ -144,7 +144,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    boost::shared_ptr<const PertyTestRunResult> result = results[0];
+    std::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);
@@ -218,15 +218,15 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
+    const QList<std::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
         _outputPath + "Static");
     QString testRunResultsStr = "";
-    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
+    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
-      boost::shared_ptr<const PertyTestRunResult> result = *it;
+      std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
     }
 
@@ -244,7 +244,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    boost::shared_ptr<const PertyTestRunResult> result = results[0];
+    std::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);
@@ -318,17 +318,17 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<boost::shared_ptr<const PertyTestRunResult>> results =
+    const QList<std::shared_ptr<const PertyTestRunResult>> results =
       testRunner.runTest(
         _inputPath + "PertyTestRunnerTest-reference-in-1.osm",
         _outputPath + "Variance");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<boost::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
+    for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
          it != results.end(); ++it)
     {
-      boost::shared_ptr<const PertyTestRunResult> result = *it;
+      std::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
       testRunPlotResultsStr +=
         QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
@@ -349,7 +349,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    boost::shared_ptr<const PertyTestRunResult> result = results[0];
+    std::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);

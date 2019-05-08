@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ATTRIBUTECOMPARATOR_H
@@ -37,11 +37,11 @@ class AttributeComparator : public BaseComparator
 {
 public:
 
-  AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
+  AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
   virtual ~AttributeComparator() {}
 
-  virtual double compareMaps();
+  virtual double compareMaps() override;
 
   double getConfidenceInterval() { return _ci; }
 

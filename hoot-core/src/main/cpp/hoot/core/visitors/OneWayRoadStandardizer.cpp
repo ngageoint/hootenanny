@@ -41,11 +41,11 @@ OneWayRoadStandardizer::OneWayRoadStandardizer()
 {
 }
 
-void OneWayRoadStandardizer::visit(const boost::shared_ptr<Element>& e)
+void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 {
   if (ReversedRoadCriterion().isSatisfied(e))
   {
-    WayPtr road = boost::dynamic_pointer_cast<Way>(e);
+    WayPtr road = std::dynamic_pointer_cast<Way>(e);
     road->reverseOrder();
     road->getTags().set("oneway", "yes");
     _numAffected++;

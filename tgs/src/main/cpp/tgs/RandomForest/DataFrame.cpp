@@ -785,8 +785,8 @@ namespace Tgs
           dataIndices[i] = i;
         }
 
-        std::map<std::string, std::vector<unsigned int> > idxSortedByClass;
-        std::map<std::string, std::vector<unsigned int> >::iterator itr;
+        std::map<std::string, std::vector<unsigned int>> idxSortedByClass;
+        std::map<std::string, std::vector<unsigned int>>::iterator itr;
 
         for (unsigned int m = 0; m < _data.size(); m++)
         {

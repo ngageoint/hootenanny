@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __EDGE_MATCH_SET_H__
 #define __EDGE_MATCH_SET_H__
@@ -43,8 +43,8 @@ public:
 
 };
 
-typedef boost::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
-typedef boost::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
+typedef std::shared_ptr<EdgeMatchSet> EdgeMatchSetPtr;
+typedef std::shared_ptr<const EdgeMatchSet> ConstEdgeMatchSetPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetPtr, ConstEdgeMatchSetPtr);

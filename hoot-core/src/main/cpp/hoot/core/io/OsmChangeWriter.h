@@ -53,12 +53,12 @@ public:
   /**
    * Returns true if the output URL is supported.
    */
-  virtual bool isSupported(QString url) = 0;
+  virtual bool isSupported(const QString& url) = 0;
 
   /**
    * Opens the specified URL for writing.
    */
-  virtual void open(QString url) = 0;
+  virtual void open(const QString& url) = 0;
 
   /**
    * Closes the output file
@@ -67,7 +67,7 @@ public:
 
   // this is kind of kludgy in that its only required for the SparkChangesetReader; think of
   // a way to get rid of this
-  virtual void setElementPayloadFormat(const QString format) = 0;
+  virtual void setElementPayloadFormat(const QString& format) = 0;
 
 };
 

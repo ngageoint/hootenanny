@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BIGMAPSTXXL_H
 #define BIGMAPSTXXL_H
@@ -34,9 +34,6 @@
 // STXXL
 #include <stxxl/map>
 #include <stxxl/vector>
-
-// boost
-#include <boost/shared_ptr.hpp>
 
 // TGS
 #include <tgs/TgsConfig.h>
@@ -137,10 +134,10 @@ private:
       boost::bloom_filters::boost_hash<size_t, 0x41B71EFB2EB141F2>,
       boost::bloom_filters::boost_hash<size_t, 0x7545E14679E2A9E3>,
       boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
-      boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854> > > BloomFilter;
+      boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854>>> BloomFilter;
 
-  boost::shared_ptr<MapType> _map;
-  boost::shared_ptr<BloomFilter> _bloom;
+  std::shared_ptr<MapType> _map;
+  std::shared_ptr<BloomFilter> _bloom;
 };
 
 }

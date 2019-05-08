@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
@@ -35,9 +35,6 @@
 
 // Standard
 #include <vector>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -62,7 +59,7 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;
+typedef std::shared_ptr<ValueAggregator> ValueAggregatorPtr;
 
 }
 

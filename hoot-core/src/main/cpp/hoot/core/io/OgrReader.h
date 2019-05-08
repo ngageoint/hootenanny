@@ -38,8 +38,6 @@
 #include <QStringList>
 #include <QXmlDefaultHandler>
 
-#include <boost/shared_ptr.hpp>
-
 #include <ogr_spatialref.h>
 
 // Standard
@@ -67,21 +65,21 @@ public:
    * Returns true if this appears to be a reasonable path without actually attempting to open the
    * data source.
    */
-  static bool isReasonablePath(QString path);
+  static bool isReasonablePath(const QString& path);
 
   OgrReader();
 
-  OgrReader(QString path);
+  OgrReader(const QString& path);
 
-  OgrReader(QString path, QString layer);
+  OgrReader(const QString& path, const QString& layer);
 
   ~OgrReader();
 
-  ElementIterator* createIterator(QString path, QString layer) const;
+  ElementIterator* createIterator(const QString& path, const QString& layer) const;
 
-  QStringList getLayerNames(QString path);
+  QStringList getLayerNames(const QString& path);
 
-  QStringList getFilteredLayerNames(const QString path);
+  QStringList getFilteredLayerNames(const QString& path);
 
   /**
    * Read all geometry data from the specified path.
@@ -91,7 +89,7 @@ public:
    *  layers.
    * @param map Put what we read in this map.
    */
-  void read(QString path, QString layer, OsmMapPtr map);
+  void read(const QString& path, const QString& layer, const OsmMapPtr& map);
 
   void setDefaultCircularError(Meters circularError);
 
@@ -99,37 +97,37 @@ public:
 
   void setLimit(long limit);
 
-  void setTranslationFile(QString translate);
+  void setTranslationFile(const QString& translate);
 
-  long getFeatureCount(QString path, QString layer);
+  long getFeatureCount(const QString& path, const QString& layer);
 
-  virtual void initializePartial();
+  virtual void initializePartial() override;
 
-  virtual bool hasMoreElements();
+  virtual bool hasMoreElements() override;
 
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
-  virtual void close();
+  virtual void close() override;
 
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
-  virtual void setUseDataSourceIds(bool useDataSourceIds);
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override;
 
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
   /**
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual boost::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
+  virtual std::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   //leaving this empty for the time being
-  virtual QString supportedFormats() { return ""; }
+  virtual QString supportedFormats() override { return ""; }
 
   /**
    * @see ProgressReporter

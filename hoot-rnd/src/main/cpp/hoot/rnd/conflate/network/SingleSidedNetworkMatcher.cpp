@@ -114,9 +114,9 @@ double SingleSidedNetworkMatcher::_calculateProbabilityOfMatch(ConstNetworkVerte
   return 1 - pOfWrong;
 }
 
-boost::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
+std::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
 {
-  return boost::shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
+  return std::shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> SingleSidedNetworkMatcher::getAllEdgeScores() const

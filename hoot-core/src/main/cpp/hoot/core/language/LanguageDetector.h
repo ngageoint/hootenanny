@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -53,7 +53,7 @@ public:
    * @param text text to detect the language of
    * @return an ISO-6391- language code
    */
-  virtual QString detect(const QString text) = 0;
+  virtual QString detect(const QString& text) = 0;
 };
 
 }

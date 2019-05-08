@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
 #define COMPLETELYCONTAINEDBYMAPELEMENTVISITOR_H
@@ -35,9 +35,6 @@
 
 // standard
 #include <string>
-
-// tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -75,11 +72,11 @@ protected:
 
   bool _complete;
 
-  bool _isComplete(const boost::shared_ptr<const Element>& e);
+  bool _isComplete(const std::shared_ptr<const Element>& e);
 
-  void _visit(const boost::shared_ptr<const Way>& w);
+  void _visit(const std::shared_ptr<const Way>& w);
 
-  void _visit(const boost::shared_ptr<const Relation> &r);
+  void _visit(const std::shared_ptr<const Relation>& r);
 };
 
 }

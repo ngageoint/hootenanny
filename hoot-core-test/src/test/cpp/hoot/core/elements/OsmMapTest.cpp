@@ -92,14 +92,14 @@ public:
 
   void _checkKnnWayIterator(OsmMapPtr map)
   {
-    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    std::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     ElementConverter ec(map);
     const WayMap& ways = map->getWays();
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); ++itw)
     {
       const WayPtr& w = itw->second;
-      boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+      std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
       KnnWayIterator it(*map, w, tree.get(), map->getIndex().getTreeIdToWidMap());
 
       int count = 0;
@@ -410,7 +410,7 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    std::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     for (int i = 0; i < 10; i++)
     {

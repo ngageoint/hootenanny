@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHTHRESHOLD_H
 #define MATCHTHRESHOLD_H
@@ -79,8 +79,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<MatchThreshold> MatchThresholdPtr;
-typedef boost::shared_ptr<const MatchThreshold> ConstMatchThresholdPtr;
+typedef std::shared_ptr<MatchThreshold> MatchThresholdPtr;
+typedef std::shared_ptr<const MatchThreshold> ConstMatchThresholdPtr;
 
 }
 

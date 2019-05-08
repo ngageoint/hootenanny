@@ -50,7 +50,7 @@ public:
 
   virtual double getStat() const { return _worst; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);

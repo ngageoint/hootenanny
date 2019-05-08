@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OpList.h"
 
@@ -42,7 +42,7 @@ OpList::OpList()
 {
 }
 
-void OpList::apply(boost::shared_ptr<OsmMap> &map)
+void OpList::apply(std::shared_ptr<OsmMap> &map)
 {
   for (size_t i = 0; i < _ops.size(); i++)
   {
@@ -61,7 +61,7 @@ void OpList::readObject(QDataStream& is)
   {
     LOG_INFO("Reading op.");
     OsmMapOperation* op = ois.readObject<OsmMapOperation>();
-    _ops.push_back(boost::shared_ptr<OsmMapOperation>(op));
+    _ops.push_back(std::shared_ptr<OsmMapOperation>(op));
   }
 }
 

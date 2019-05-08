@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringCriterion.h"
 
@@ -40,7 +40,7 @@ bool MultiLineStringCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     return r->getType() == MetadataTags::RelationMultilineString();
   }
   return false;

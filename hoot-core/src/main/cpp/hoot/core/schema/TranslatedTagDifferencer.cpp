@@ -149,15 +149,15 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   return 1.0 - ((double)c.same / (double)(c.same + c.different));
 }
 
-boost::shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslator() const
+std::shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslator() const
 {
   if (_translator == 0)
   {
-    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    std::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
       _script));
 
     st->setErrorTreatment(StrictOff);
-    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = std::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
     if (!_translator)
     {
       throw HootException("Error allocating translator, the translation script must support "
@@ -184,7 +184,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
 
   if (tf)
   {
-    boost::shared_ptr<Feature> f = tf->feature;
+    std::shared_ptr<Feature> f = tf->feature;
     QString layer = tf->tableName;
 
     const QVariantMap& vm = f->getValues();
@@ -201,7 +201,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
 vector<ScriptToOgrTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
   const ConstOsmMapPtr& map, const ConstElementPtr& e) const
 {
-  boost::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
+  std::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
   Tags t = e->getTags();
 
   return _getTranslator()->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());

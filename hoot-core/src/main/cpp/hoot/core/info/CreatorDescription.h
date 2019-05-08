@@ -95,7 +95,7 @@ public:
    */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
-  static boost::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t,
+  static std::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t,
                                                                  ConstOsmMapPtr map);
 
   QString toString() const;

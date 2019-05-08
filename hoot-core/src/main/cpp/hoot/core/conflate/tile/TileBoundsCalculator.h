@@ -32,9 +32,6 @@
 // Hoot
 #include <hoot/core/util/OpenCv.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QString>
 
@@ -148,11 +145,11 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  std::vector< std::vector<geos::geom::Envelope> > calculateTiles();
+  std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
 
-  void renderImage(boost::shared_ptr<OsmMap> map);
+  void renderImage(const std::shared_ptr<OsmMap>& map);
 
-  void renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
@@ -187,7 +184,7 @@ private:
 
   int _calculateSplitY(const PixelBox& b);
 
-  void _countNode(const boost::shared_ptr<Node>& n);
+  void _countNode(const std::shared_ptr<Node>& n);
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 

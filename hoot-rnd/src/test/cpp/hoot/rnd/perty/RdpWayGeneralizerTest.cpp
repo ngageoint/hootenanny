@@ -72,7 +72,7 @@ public:
     setResetType(ResetBasic);
   }
 
-  QList<ConstNodePtr> readPoints(const QString filePath)
+  QList<ConstNodePtr> readPoints(const QString& filePath)
   {
     if (_inputPointsCache.contains(filePath))
     {
@@ -106,7 +106,7 @@ public:
     return points;
   }
 
-  QList<Coordinate> readCoords(const QString filePath)
+  QList<Coordinate> readCoords(const QString& filePath)
   {
     if (_inputCoordsCache.contains(filePath))
     {
@@ -135,14 +135,14 @@ public:
     return coordinates;
   }
 
-  void writeMap(OsmMapPtr map, const QString outFileName)
+  void writeMap(OsmMapPtr map, const QString& outFileName)
   {
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, outFileName);
   }
 
-  void writePointOutput(const QList<ConstNodePtr>& points, const QString outFileName)
+  void writePointOutput(const QList<ConstNodePtr>& points, const QString& outFileName)
   {
     OsmMapPtr map(new OsmMap());
 

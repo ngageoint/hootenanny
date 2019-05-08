@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-LongestCommonNodeString::LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2)
+LongestCommonNodeString::LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2)
 {
   _w1 = w1;
   _w2 = w2;
@@ -62,9 +62,9 @@ int LongestCommonNodeString::apply()
   int *swap = 0;
   int maxSubstr = 0;
 
-  for (size_t i = 0; i< str1.size(); ++i)
+  for (size_t i = 0; i < str1.size(); ++i)
   {
-    for (size_t j = 0; j< str2.size(); ++j)
+    for (size_t j = 0; j < str2.size(); ++j)
     {
       if (str1[i] != str2[j])
       {
@@ -88,9 +88,9 @@ int LongestCommonNodeString::apply()
         }
       }
     }
-    swap=curr;
-    curr=prev;
-    prev=swap;
+    swap = curr;
+    curr = prev;
+    prev = swap;
   }
   delete [] curr;
   delete [] prev;

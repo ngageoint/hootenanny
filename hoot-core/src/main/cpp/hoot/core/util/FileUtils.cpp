@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FileUtils.h"
@@ -75,7 +75,7 @@ void FileUtils::removeDir(const QString& dirName)
   }
 }
 
-QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
+QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString& filePath)
 {
   QStringList tokens;
 
@@ -105,7 +105,7 @@ QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
   return tokens;
 }
 
-QString FileUtils::readFully(const QString path)
+QString FileUtils::readFully(const QString& path)
 {
   QFile file(path);
   if (file.open(QIODevice::ReadOnly))
@@ -122,7 +122,7 @@ QString FileUtils::readFully(const QString path)
   }
 }
 
-void FileUtils::writeFully(const QString path, const QString text)
+void FileUtils::writeFully(const QString& path, const QString& text)
 {
   QFile outFile(path);
   if (outFile.exists() && !outFile.remove())
@@ -140,7 +140,7 @@ void FileUtils::writeFully(const QString path, const QString text)
   outFile.close();
 }
 
-long FileUtils::getNumberOfLinesInFile(const QString file)
+long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());
   size_t lineCount =
@@ -148,7 +148,7 @@ long FileUtils::getNumberOfLinesInFile(const QString file)
   return lineCount;
 }
 
-bool FileUtils::dirContainsFileWithExtension(const QDir dir, const QString extension)
+bool FileUtils::dirContainsFileWithExtension(const QDir& dir, const QString& extension)
 {
   const QString ext = extension.toLower().replace(".", "");
   const QStringList files = dir.entryList();
@@ -162,7 +162,7 @@ bool FileUtils::dirContainsFileWithExtension(const QDir dir, const QString exten
   return false;
 }
 
-QStringList FileUtils::readFileToList(const QString inputPath)
+QStringList FileUtils::readFileToList(const QString& inputPath)
 {
   LOG_VARD(inputPath);
   QStringList outputList;

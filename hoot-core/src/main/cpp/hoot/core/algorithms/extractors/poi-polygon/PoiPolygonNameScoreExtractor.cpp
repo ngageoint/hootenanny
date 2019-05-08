@@ -39,7 +39,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonNameScoreExtractor)
 
-boost::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
+std::shared_ptr<ToEnglishTranslator> PoiPolygonNameScoreExtractor::_translator;
 
 PoiPolygonNameScoreExtractor::PoiPolygonNameScoreExtractor() :
 _translateTagValuesToEnglish(false),
@@ -67,7 +67,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
   }
 }
 
-boost::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor() const
+std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor() const
 {
   if (_translateTagValuesToEnglish)
   {
@@ -82,12 +82,12 @@ boost::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor
         _translator);
     translateStringDist->setTranslateAll(false);
     return
-      boost::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
+      std::shared_ptr<NameExtractor>(new NameExtractor(StringDistancePtr(translateStringDist)));
   }
   else
   {
     return
-      boost::shared_ptr<NameExtractor>(
+      std::shared_ptr<NameExtractor>(
         new NameExtractor(
           StringDistancePtr(
             new MeanWordSetDistance(
@@ -101,7 +101,7 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
-  boost::shared_ptr<NameExtractor> nameExtractor = _getNameExtractor();
+  std::shared_ptr<NameExtractor> nameExtractor = _getNameExtractor();
   double nameScore = nameExtractor->extract(poi, poly);
   _namesProcessed = nameExtractor->getNamesProcessed();
   _matchAttemptMade = nameExtractor->getMatchAttemptMade();

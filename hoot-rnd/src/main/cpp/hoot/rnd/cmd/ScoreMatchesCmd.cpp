@@ -62,7 +62,7 @@ public:
   ScoreMatchesCmd() { }
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
-                            boost::shared_ptr<MatchThreshold> mt, bool showConfusion,
+                            std::shared_ptr<MatchThreshold> mt, bool showConfusion,
                             double& score)
   {
     MatchComparator comparator;
@@ -74,7 +74,7 @@ public:
     {
       OsmMapPtr copy(new OsmMap(maps[i]));
 
-      boost::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
+      std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
         new CountManualMatchesVisitor());
       maps[i]->visitRo(*manualMatchVisitor);
       numManualMatches += manualMatchVisitor->getStat();
@@ -132,7 +132,7 @@ public:
     virtual double f(Tgs::Vector v)
     {
       double score;
-      boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
+      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
       _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
       return score;
     }
@@ -236,7 +236,7 @@ public:
     else
     {
       double score;
-      boost::shared_ptr<MatchThreshold> mt;
+      std::shared_ptr<MatchThreshold> mt;
       const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
 
       cout << result;

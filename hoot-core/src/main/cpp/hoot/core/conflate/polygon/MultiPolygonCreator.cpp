@@ -74,7 +74,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
 
   vector<double> outerArea;
   // a vector of holes for each of the outer polygons.
-  vector< vector<Geometry*>* > holes;
+  vector<vector<Geometry*>*> holes;
   holes.resize(outers.size());
 
   outerArea.reserve(outers.size());
@@ -110,7 +110,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // containing polygon we've found so far.
       else if (polygonIndex == -1 || (outerArea[j] < outerArea[polygonIndex]))
       {
-        boost::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
+        std::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
         if (im->isContains())
         {
           contained = true;
@@ -181,7 +181,7 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
   }
 }
 
-boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
+std::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
   vector<LinearRing*> outers;
   _createRings(MetadataTags::RoleOuter(), outers);
@@ -199,7 +199,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 
   LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
 
-  boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
+  std::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
   // recursively add any child relation multipolygons.
   for (size_t i = 0; i < _r->getMembers().size(); i++)
@@ -211,7 +211,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
       {
-        boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
+        std::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
         {
           result.reset(result->Union(child.get()));
@@ -235,18 +235,18 @@ QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ri
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  boost::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
+  std::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
 
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
-  boost::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
+  std::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
   if (im->isContains())
   {
     result = "outer";
   }
   else
   {
-    boost::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
-    boost::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
+    std::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
+    std::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
 
     if (im2->isContains())
     {
@@ -514,7 +514,7 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  boost::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+  std::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
     return false;

@@ -48,9 +48,9 @@ VagabondNetworkMatcher::VagabondNetworkMatcher() :
   _pr.reset(new IndexedEdgeMatchSet());
 }
 
-boost::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcher::create()
+std::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcher::create()
 {
-  return boost::shared_ptr<VagabondNetworkMatcher>(new VagabondNetworkMatcher());
+  return std::shared_ptr<VagabondNetworkMatcher>(new VagabondNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> VagabondNetworkMatcher::getAllEdgeScores() const

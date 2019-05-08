@@ -58,7 +58,7 @@ void MultiaryIngestChangesetReader::open(QString fileName)
   LOG_DEBUG("Opened: " << fileName << ".");
 }
 
-boost::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProjection() const
 {
   if (!_wgs84)
   {

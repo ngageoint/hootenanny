@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_TRANSLATOR_H
 #define ADDRESS_TRANSLATOR_H
@@ -52,14 +52,14 @@ public:
    *
    * @param address a complete address string
    */
-  QString translateToEnglish(const QString address) const;
+  QString translateToEnglish(const QString& address) const;
 
 private:
 
   friend class PoiPolygonAddressScoreExtractorTest;
 
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  static std::shared_ptr<ToEnglishTranslator> _translator;
 };
 
 }

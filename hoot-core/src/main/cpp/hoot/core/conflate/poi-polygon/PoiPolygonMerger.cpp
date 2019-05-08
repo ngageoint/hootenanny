@@ -56,14 +56,14 @@ MergerBase()
 {
 }
 
-PoiPolygonMerger::PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs) :
+PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
   assert(_pairs.size() >= 1);
 }
 
-void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   /// See
   /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
@@ -106,7 +106,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   assert(finalBuilding.get());
 
   Tags finalBuildingTags = finalBuilding->getTags();
-  boost::shared_ptr<const TagMerger> tagMerger;
+  std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
     tagMerger.reset(new PreserveTypesTagMerger());
@@ -130,7 +130,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
 
   // do some book keeping to remove the POIs and mark them as replaced.
   long poisMerged = 0;
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
@@ -176,7 +176,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
 
   Tags result;
 
-  boost::shared_ptr<const TagMerger> tagMerger;
+  std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
     tagMerger.reset(new PreserveTypesTagMerger());
@@ -340,11 +340,11 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   const ElementId polyId = *polyIds.begin();
   LOG_VART(polyId);
 
-  std::set<std::pair<ElementId, ElementId> > pairs;
+  std::set<std::pair<ElementId, ElementId>> pairs;
   //Ordering doesn't matter here, since the poi is always merged into the poly.
   pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
   PoiPolygonMerger merger(pairs);
-  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  std::vector<std::pair<ElementId, ElementId>> replacedElements;
   merger.apply(map, replacedElements);
 
   LOG_INFO("Merged the POI into the polygon.");

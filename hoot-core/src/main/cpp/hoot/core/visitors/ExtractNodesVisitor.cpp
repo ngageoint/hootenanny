@@ -22,18 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ExtractNodesVisitor.h"
 
 namespace hoot
 {
 
-void ExtractNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
+void ExtractNodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     _n.append(n);
   }
 }

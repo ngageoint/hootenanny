@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAP_MATCH_SCORING_UTILS_H
 #define MAP_MATCH_SCORING_UTILS_H
-
-// Boost
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -53,7 +50,7 @@ class MapMatchScoringUtils
       @param matchComparator a match comparator populated during scoring of conflation results
       @return a printable string with scoring results
       */
-    static QString getMatchScoringString(boost::shared_ptr<const MatchComparator> matchComparator);
+    static QString getMatchScoringString(const std::shared_ptr<const MatchComparator>& matchComparator);
 
 };
 

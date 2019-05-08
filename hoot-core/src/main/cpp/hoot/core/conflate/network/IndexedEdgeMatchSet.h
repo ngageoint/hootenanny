@@ -57,9 +57,9 @@ public:
 
   void removeEdgeMatch(const ConstEdgeMatchPtr& em);
 
-  boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
+  std::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
-  boost::shared_ptr<IndexedEdgeMatchSet> clone() const;
+  std::shared_ptr<IndexedEdgeMatchSet> clone() const;
 
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.
@@ -148,8 +148,8 @@ private:
   void _removeVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr& em);
 };
 
-typedef boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
-typedef boost::shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
+typedef std::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
+typedef std::shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
 
 // not implemented
 bool operator<(ConstIndexedEdgeMatchSetPtr, ConstIndexedEdgeMatchSetPtr);

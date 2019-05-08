@@ -47,7 +47,7 @@ WayMatchStringSplitter::WayMatchStringSplitter()
 }
 
 void WayMatchStringSplitter::applySplits(OsmMapPtr map,
-  vector<pair<ElementId, ElementId> > &replaced,
+  vector<pair<ElementId, ElementId>> &replaced,
   QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
   LOG_TRACE("Applying way splits...");

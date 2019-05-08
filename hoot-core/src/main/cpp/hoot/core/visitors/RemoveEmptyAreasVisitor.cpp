@@ -51,12 +51,12 @@ void RemoveEmptyAreasVisitor::visit(const ConstElementPtr& e)
   // no need to visit nodes.
   if (e->getElementType() != ElementType::Node)
   {
-    boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    std::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
   }
 }
 
-void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (!_ec.get())
   {
@@ -65,7 +65,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
 
   if (AreaCriterion().isSatisfied(e))
   {
-    boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
+    std::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
 
     if (g->getArea() == 0.0)
     {

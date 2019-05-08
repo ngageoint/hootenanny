@@ -52,7 +52,7 @@ namespace Tgs
     }
   }
 
-  boost::shared_ptr<RandomTree> MultithreadedRandomForest::train(const boost::shared_ptr<RandomTree> &tree)
+  std::shared_ptr<RandomTree> MultithreadedRandomForest::train(const std::shared_ptr<RandomTree>& tree)
   {
     try
     {
@@ -67,7 +67,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainBinary(boost::shared_ptr<DataFrame> /*data*/,
+  void MultithreadedRandomForest::trainBinary(const std::shared_ptr<DataFrame>& /*data*/,
     unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, unsigned int /*nodeSize*/,
     double /*retrain*/, bool /*balanced*/)
   {
@@ -81,7 +81,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainMulticlass(boost::shared_ptr<DataFrame> data,
+  void MultithreadedRandomForest::trainMulticlass(const std::shared_ptr<DataFrame>& data,
     unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize, double retrain,
     bool balanced)
   {
@@ -109,13 +109,13 @@ namespace Tgs
         QThreadPool pool;
         pool.setExpiryTimeout(-1);
 
-        QList<boost::shared_ptr<RandomTree> > mapTrees;
+        QList<std::shared_ptr<RandomTree>> mapTrees;
         for (unsigned int i = 0; i < numTrees; i++)
         {
-          mapTrees.append(boost::shared_ptr<RandomTree>(new RandomTree()));
+          mapTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
         }
 
-        QList<boost::shared_ptr<RandomTree> > forestList =
+        QList<std::shared_ptr<RandomTree>> forestList =
           QtConcurrent::blockingMapped(mapTrees, train);
 
         for (unsigned int i = 0; i < numTrees; i++)
@@ -172,13 +172,13 @@ namespace Tgs
           _trainInputs.numFactors = (unsigned int)sqrt((double)(topFactors.size() - cutOffIdx));
           _trainInputs.nodeSize = 1;
 
-          QList<boost::shared_ptr<RandomTree> > mapRetrainingTrees;
+          QList<std::shared_ptr<RandomTree>> mapRetrainingTrees;
           for (unsigned int i = 0; i < numTrees; i++)
           {
-             mapRetrainingTrees.append(boost::shared_ptr<RandomTree>(new RandomTree()));
+             mapRetrainingTrees.append(std::shared_ptr<RandomTree>(new RandomTree()));
           }
 
-          QList<boost::shared_ptr<RandomTree> > forestRetrainList =
+          QList<std::shared_ptr<RandomTree>> forestRetrainList =
             QtConcurrent::blockingMapped(mapRetrainingTrees, train);
 
           for (unsigned int i = 0; i < numTrees; i++)
@@ -200,7 +200,7 @@ namespace Tgs
     }
   }
 
-  void MultithreadedRandomForest::trainRoundRobin(boost::shared_ptr<DataFrame> /*data*/,
+  void MultithreadedRandomForest::trainRoundRobin(const std::shared_ptr<DataFrame>& /*data*/,
     unsigned int /*numTrees*/, unsigned int /*numFactors*/, std::string /*posClass*/, std::string /*negClass*/,
     unsigned int /*nodeSize*/, double /*retrain*/, bool /*balanced*/)
   {

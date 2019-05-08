@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTAGRULESDATABASEDERIVER_H
 #define IMPLICITTAGRULESDATABASEDERIVER_H
@@ -60,7 +60,7 @@ public:
    * @param input a hoot supported feature input formats to derive implicit tag rules from
    * @param output a Sqlite database output file to store the implicit tag rules in
    */
-  void deriveRulesDatabase(const QString input, const QString output);
+  void deriveRulesDatabase(const QString& input, const QString& output);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -68,9 +68,9 @@ public:
   { _minTagOccurrencesPerWord = minOccurrences; }
   void setMinWordLength(const int length) { _minWordLength = length; }
   void setUseSchemaTagValuesForWordsOnly(bool use) { _useSchemaTagValuesForWordsOnly = use; }
-  void setCustomRuleFile(const QString file) { _customRules.setCustomRuleFile(file); }
-  void setTagIgnoreFile(const QString file) { _customRules.setTagIgnoreFile(file); }
-  void setWordIgnoreFile(const QString file) { _customRules.setWordIgnoreFile(file); }
+  void setCustomRuleFile(const QString& file) { _customRules.setCustomRuleFile(file); }
+  void setTagIgnoreFile(const QString& file) { _customRules.setTagIgnoreFile(file); }
+  void setWordIgnoreFile(const QString& file) { _customRules.setWordIgnoreFile(file); }
 
 private:
 
@@ -102,23 +102,23 @@ private:
 
   //file which has been thresholded at a word/tag occurrence count equal to or greater than
   //_minTagOccurrencesPerWord
-  boost::shared_ptr<QTemporaryFile> _thresholdedCountFile;
+  std::shared_ptr<QTemporaryFile> _thresholdedCountFile;
   //file which has had filtering applied to it based on _customRules
-  boost::shared_ptr<QTemporaryFile> _filteredCountFile;
+  std::shared_ptr<QTemporaryFile> _filteredCountFile;
 
-  void _validateInputs(const QString input, const QString output);
+  void _validateInputs(const QString& input, const QString& output);
 
   void _populateSchemaTagValues();
-  bool _wordIsNotASchemaTagValue(const QString word);
+  bool _wordIsNotASchemaTagValue(const QString& word);
 
-  void _writeRules(const QString input, const QString output);
+  void _writeRules(const QString& input, const QString& output);
   void _writeCustomRules(long& linesWrittenCount);
 
-  void _removeKvpsBelowOccurrenceThreshold(const QString input, const int minOccurrencesThreshold);
+  void _removeKvpsBelowOccurrenceThreshold(const QString& input, const int minOccurrencesThreshold);
   /*
    * Applies all rules filtering based on the parsed contents of _customRules
    */
-  void _applyFiltering(const QString input);
+  void _applyFiltering(const QString& input);
 };
 
 }

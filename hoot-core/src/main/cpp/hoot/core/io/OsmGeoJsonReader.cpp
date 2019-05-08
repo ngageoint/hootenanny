@@ -69,7 +69,7 @@ OsmGeoJsonReader::~OsmGeoJsonReader()
 {
 }
 
-bool OsmGeoJsonReader::isSupported(QString url)
+bool OsmGeoJsonReader::isSupported(const QString& url)
 {
   QUrl myUrl(url);
 
@@ -101,7 +101,7 @@ bool OsmGeoJsonReader::isSupported(QString url)
  * Reads the specified map. When this method is complete
  * the input will likely be closed.
  */
-void OsmGeoJsonReader::read(OsmMapPtr map)
+void OsmGeoJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
   if (_isFile)
@@ -120,7 +120,7 @@ void OsmGeoJsonReader::read(OsmMapPtr map)
   }
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
+OsmMapPtr OsmGeoJsonReader::loadFromString(const QString& jsonStr)
 {
   _loadJSON(jsonStr);
   _map.reset(new OsmMap());
@@ -128,7 +128,7 @@ OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
   return _map;
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
+OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
 {
   QFile infile(path);
   if (!infile.open(QFile::ReadOnly | QFile::Text))
@@ -379,7 +379,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
     string roles_values = properties.get("roles", "");
     if (roles_values.compare("") != 0)
     {
-      typedef boost::tokenizer<boost::char_separator<char> > _tokenizer;
+      typedef boost::tokenizer<boost::char_separator<char>> _tokenizer;
       _tokenizer tokens(roles_values, boost::char_separator<char>(";", 0, boost::keep_empty_tokens));
       for (_tokenizer::iterator it = tokens.begin(); it != tokens.end(); ++it)
         _roles.push(*it);
@@ -596,8 +596,9 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {    
-      boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
-      if (pCoord) results.push_back(*pCoord);
+      std::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
+      if (pCoord)
+        results.push_back(*pCoord);
     }
   }
   else if (type == "Polygon")
@@ -607,8 +608,9 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     {
       for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
       {
-        boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
-        if (pCoord) results.push_back(*pCoord);
+        std::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
+        if (pCoord)
+          results.push_back(*pCoord);
       }
     }
   }
@@ -631,8 +633,9 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
       JsonCoordinates point;
-      boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
-      if (pCoord) point.push_back(*pCoord);
+      std::shared_ptr<Coordinate> pCoord = ReadCoordinate(it->second);
+      if (pCoord)
+        point.push_back(*pCoord);
       results.push_back(point);
     }
   }
@@ -644,8 +647,9 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
       JsonCoordinates line;
       for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
       {
-        boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
-        if (pCoord) line.push_back(*pCoord);
+        std::shared_ptr<Coordinate> pCoord = ReadCoordinate(array->second);
+        if (pCoord)
+          line.push_back(*pCoord);
       }
       results.push_back(line);
     }
@@ -660,8 +664,9 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
       {
         for (pt::ptree::const_iterator poly = array->second.begin(); poly != array->second.end(); ++poly)
         {
-          boost::shared_ptr<Coordinate> pCoord = ReadCoordinate(poly->second);
-          if (pCoord) polygon.push_back(*pCoord);
+          std::shared_ptr<Coordinate> pCoord = ReadCoordinate(poly->second);
+          if (pCoord)
+            polygon.push_back(*pCoord);
         }
       }
       results.push_back(polygon);
@@ -674,7 +679,7 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
   return results;
 }
 
-void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
+void OsmGeoJsonReader::_addTags(const pt::ptree &item, const ElementPtr& element)
 {
   //  Starts with the "properties" tree, use the "tags" subtree if it exists
   //  otherwise just use the "properties" tree as tags
@@ -724,9 +729,9 @@ string OsmGeoJsonReader::_parseSubTags(const pt::ptree &item)
     return ss.str();
 }
 
-boost::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate( const pt::ptree& coordsIt )
+std::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate(const pt::ptree& coordsIt)
 {
-  boost::shared_ptr<Coordinate> pCoord;
+  std::shared_ptr<Coordinate> pCoord;
 
   double x = 0;
   double y = 0;
@@ -743,7 +748,7 @@ boost::shared_ptr<Coordinate> OsmGeoJsonReader::ReadCoordinate( const pt::ptree&
     if (coord != coordsIt.end())
     {
       y = coord->second.get_value<double>();
-      pCoord = boost::shared_ptr<Coordinate>( new Coordinate(x, y) );
+      pCoord = std::shared_ptr<Coordinate>( new Coordinate(x, y) );
     }
   }
 

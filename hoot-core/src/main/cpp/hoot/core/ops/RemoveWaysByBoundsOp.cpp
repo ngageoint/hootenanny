@@ -64,7 +64,7 @@ void RemoveWaysByBoundsOp::setConfiguration(const Settings& conf)
   _envelope = GeometryUtils::envelopeFromConfigString(opts.getWayRemoverBounds());
 }
 
-void RemoveWaysByBoundsOp::apply(boost::shared_ptr<OsmMap>& map)
+void RemoveWaysByBoundsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;

@@ -130,8 +130,8 @@ public:
     setResetType(ResetBasic);
   }
 
-  void testMerge(const QString inFileName, const QString outFileName,
-                 const QString expectedExceptionMsgContains = "")
+  void testMerge(const QString& inFileName, const QString& outFileName,
+                 const QString& expectedExceptionMsgContains = "")
   {
     LOG_VART(inFileName);
     LOG_VART(outFileName);

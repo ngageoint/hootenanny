@@ -83,8 +83,8 @@ struct OsmSchemaCategory
   static OsmSchemaCategory pseudoName() { return OsmSchemaCategory(PseudoName); }
   static OsmSchemaCategory multiUse() { return OsmSchemaCategory(Multiuse); }
 
-  bool operator==(OsmSchemaCategory t) const { return t._type == _type; }
-  bool operator!=(OsmSchemaCategory t) const { return t._type != _type; }
+  bool operator==(const OsmSchemaCategory& t) const { return t._type == _type; }
+  bool operator!=(const OsmSchemaCategory& t) const { return t._type != _type; }
 
   Type getEnum() const { return _type; }
 
@@ -199,12 +199,12 @@ private:
   Type _type;
 };
 
-inline OsmSchemaCategory operator&(const OsmSchemaCategory t1, const OsmSchemaCategory t2)
+inline OsmSchemaCategory operator&(const OsmSchemaCategory& t1, const OsmSchemaCategory& t2)
 {
   return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() & t2.getEnum()));
 }
 
-inline OsmSchemaCategory operator|(const OsmSchemaCategory t1, const OsmSchemaCategory t2)
+inline OsmSchemaCategory operator|(const OsmSchemaCategory& t1, const OsmSchemaCategory& t2)
 {
   return OsmSchemaCategory((OsmSchemaCategory::Type)(t1.getEnum() | t2.getEnum()));
 }
@@ -257,11 +257,11 @@ public:
 
   virtual ~OsmSchema();
 
-  void addAssociatedWith(QString name1, QString name2);
+  void addAssociatedWith(const QString& name1, const QString& name2);
 
-  void addIsA(QString name1, QString name2);
+  void addIsA(const QString& name1, const QString& name2);
 
-  void addSimilarTo(QString name1, QString name2, double weight, bool oneway = false);
+  void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false);
 
   QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
 
@@ -278,7 +278,7 @@ public:
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  std::vector<SchemaVertex> getAssociatedTagsAsVertices(QString name);
+  std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name);
 
   /**
    * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
@@ -296,9 +296,9 @@ public:
 
   QSet<QString> getAllTagKeys();
 
-  bool hasTagKey(const QString key);
+  bool hasTagKey(const QString& key);
 
-  std::vector<SchemaVertex> getChildTagsAsVertices(QString name);
+  std::vector<SchemaVertex> getChildTagsAsVertices(const QString& name);
 
   /**
    * Retrieves all child tags for the given input tags
@@ -317,7 +317,7 @@ public:
    *
    * minimumScore must be > 0.
    */
-  std::vector<SchemaVertex> getSimilarTagsAsVertices(QString name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTagsAsVertices(const QString& name, double minimumScore);
 
   /**
    * Retrieves tags similar to the input tag
@@ -326,9 +326,9 @@ public:
    * @param minimumScore tag similarity threshold
    * @return a set of tags
    */
-  Tags getSimilarTags(QString name, double minimumScore);
+  Tags getSimilarTags(const QString& name, double minimumScore);
 
-  std::vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
+  std::vector<SchemaVertex> getTagByCategory(const OsmSchemaCategory& c) const;
 
   /**
    * Returns the tag vertex for a given kvp. If the vertex is compound then an empty vertex will
@@ -432,7 +432,7 @@ public:
    * probably get rid of this method altogether and just check against the tags whereever this
    * method is being called.
    */
-  bool containsTagFromList(const Tags& tags, const QStringList tagList) const;
+  bool containsTagFromList(const Tags& tags, const QStringList& tagList) const;
 
   /**
    * Retrieves tags that are aliases of the input tags
@@ -450,7 +450,7 @@ public:
    * @return tag that is the ancestor of the other or the first tag if neither is an ancestor of
    * each other
    */
-  QString getParentKvp(const QString kvp1, const QString kvp2);
+  QString getParentKvp(const QString& kvp1, const QString& kvp2);
 
 private:
 
@@ -462,7 +462,7 @@ private:
   // the templates we're including take a crazy long time to include, so I'm isolating the
   // implementation.
   OsmSchemaData* d;
-  static boost::shared_ptr<OsmSchema> _theInstance;
+  static std::shared_ptr<OsmSchema> _theInstance;
   SchemaVertex _empty;
 
   /// Provide caching for isMetaData

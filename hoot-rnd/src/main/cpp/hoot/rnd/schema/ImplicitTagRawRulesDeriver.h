@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTAGRAWRULESDERIVER_H
 #define IMPLICITTAGRAWRULESDERIVER_H
@@ -71,17 +71,17 @@ public:
    * specified by the inputs parameter
    * @param output the file to write the rules to
    */
-  void deriveRawRules(const QStringList inputs, const QStringList translationScripts,
-                      const QString output);
+  void deriveRawRules(const QStringList& inputs, const QStringList& translationScripts,
+                      const QString& output);
 
   virtual void setConfiguration(const Settings& conf);
 
   void setSortParallelCount(int count) { _sortParallelCount = count; }
   void setSkipFiltering(bool skip) { _skipFiltering = skip; }
   void setKeepTempFiles(bool keep) { _keepTempFiles = keep; }
-  void setTempFileDir(QString dir) { _tempFileDir = dir; }
+  void setTempFileDir(const QString& dir) { _tempFileDir = dir; }
   void setTranslateNamesToEnglish(bool translate) { _translateNamesToEnglish = translate; }
-  void setElementCriterion(QString criterionName);
+  void setElementCriterion(const QString& criterionName);
 
 private:
 
@@ -105,13 +105,13 @@ private:
 
   //contains the word/tag occurrence counts at various stages; line format:
   //<count>\t<word>\t<key=value>
-  boost::shared_ptr<QTemporaryFile> _countFile;
-  boost::shared_ptr<QTemporaryFile> _sortedCountFile;
-  boost::shared_ptr<QTemporaryFile> _dedupedCountFile;
-  boost::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
+  std::shared_ptr<QTemporaryFile> _countFile;
+  std::shared_ptr<QTemporaryFile> _sortedCountFile;
+  std::shared_ptr<QTemporaryFile> _dedupedCountFile;
+  std::shared_ptr<QTemporaryFile> _tieResolvedCountFile;
 
   //final output file
-  boost::shared_ptr<QFile> _output;
+  std::shared_ptr<QFile> _output;
 
   //maps the a name token concatenated with a tag key to a tag value
   QHash<QString, QString> _wordKeysToCountsValues;
@@ -120,31 +120,31 @@ private:
 
   StringTokenizer _tokenizer;
 
-  boost::shared_ptr<PartialOsmMapReader> _inputReader;
+  std::shared_ptr<PartialOsmMapReader> _inputReader;
 
   //controls which elements have tags harvested from them
-  boost::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
+  std::shared_ptr<ImplicitTagEligibleCriterion> _elementCriterion;
 
   //translates names to English
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  std::shared_ptr<ToEnglishTranslator> _translator;
 
   void _init();
-  void _validateInputs(const QStringList inputs, const QStringList translationScripts,
-                       const QString output);
-  boost::shared_ptr<ElementInputStream> _getInputStream(const QString input,
-                                                        const QString translationScript);
+  void _validateInputs(const QStringList& inputs, const QStringList& translationScripts,
+                       const QString& output);
+  std::shared_ptr<ElementInputStream> _getInputStream(const QString& input,
+                                                      const QString& translationScript);
 
   /*
    * Examine each word token to determine if a raw implicit tag rule should be created for it
    */
-  void _updateForNewWord(QString word, const QString kvp);
+  void _updateForNewWord(const QString& word, const QString& kvp);
   /*
    * Gets tags to generate raw implicit tag rules from
    */
   QStringList _getPoiKvps(const Tags& tags) const;
 
-  void _parseNames(const QStringList names, const QStringList kvps);
-  void _parseNameToken(QString& nameToken, const QStringList kvps);
+  void _parseNames(const QStringList& names, const QStringList& kvps);
+  void _parseNameToken(QString& nameToken, const QStringList& kvps);
 
   /*
    * Sorts word/tag occurrence count lines by descending occurrence count
@@ -158,7 +158,7 @@ private:
    * In cases where these is a word/tag key occurrence count tie, this resolves the tie.
    */
   void _resolveCountTies();
-  void _sortByWord(boost::shared_ptr<QTemporaryFile> input);
+  void _sortByWord(const std::shared_ptr<QTemporaryFile>& input);
 };
 
 }

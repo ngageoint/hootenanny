@@ -53,7 +53,7 @@ MergerBase()
 {
 }
 
-NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
+NetworkMerger::NetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
   ConstEdgeMatchPtr edgeMatch, ConstNetworkDetailsPtr details) :
   _pairs(pairs),
   _edgeMatch(edgeMatch),
@@ -62,7 +62,7 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   assert(_pairs.size() >= 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+void NetworkMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   LOG_INFO("Applying NetworkMerger...");
 
@@ -138,7 +138,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     QList<ConstNodePtr> scrapNodeList;
     ExtractNodesVisitor extractVisitor(scrapNodeList);
     str2->visitRo(*map, extractVisitor);
-    boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+    std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
     QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
     foreach (ConstNodePtr n, scrapNodeSet)
     {

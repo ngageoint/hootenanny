@@ -53,7 +53,7 @@ ChangesetDeriver::~ChangesetDeriver()
   close();
 }
 
-boost::shared_ptr<OGRSpatialReference> ChangesetDeriver::getProjection() const
+std::shared_ptr<OGRSpatialReference> ChangesetDeriver::getProjection() const
 {
   return _from->getProjection();
 }

@@ -170,7 +170,7 @@ public:
 
 private:
 
-  static boost::shared_ptr<Settings> _theInstance;
+  static std::shared_ptr<Settings> _theInstance;
   SettingsMap _settings;
   /// matches variables in the form ${My_Var_1}
   QRegExp _dynamicRegex;

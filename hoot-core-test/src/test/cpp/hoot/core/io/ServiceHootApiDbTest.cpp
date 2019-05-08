@@ -133,7 +133,7 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     mapId = ids->at(0);
 
@@ -170,7 +170,7 @@ public:
     setUpTest("runMapExistsTest");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT(database.mapExists(mapId));
@@ -181,7 +181,7 @@ public:
     setUpTest("runChangesetExistsTest");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     const long changesetId = ids->at(1);
     CPPUNIT_ASSERT(database.changesetExists(changesetId));
@@ -193,7 +193,7 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT_EQUAL((long)1, database.numElements(ElementType::Node));
@@ -205,7 +205,7 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long wayId = ids->at(3);
@@ -219,7 +219,7 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long relationId = ids->at(4);
@@ -235,14 +235,14 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long nodeId = ids->at(2);
     const long wayId = ids->at(3);
     const long relationId = ids->at(4);
 
-    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    std::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
     {
@@ -260,7 +260,7 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(1, ctr);
 
-    boost::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
+    std::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
     ctr = 0;
     while (wayResultIterator->next())
     {
@@ -274,7 +274,7 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(1, ctr);
 
-    boost::shared_ptr<QSqlQuery> relationResultIterator =
+    std::shared_ptr<QSqlQuery> relationResultIterator =
       database.selectElements(ElementType::Relation);
     ctr = 0;
     while (relationResultIterator->next())
@@ -297,13 +297,13 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap2(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap2(database);
     CPPUNIT_ASSERT_EQUAL(8, ids->size());
     mapId = ids->at(0);
     const long nodeId1 = ids->at(2);
     const long nodeId2 = ids->at(3);
 
-    boost::shared_ptr<QSqlQuery> nodeResultIterator =
+    std::shared_ptr<QSqlQuery> nodeResultIterator =
       database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
@@ -333,14 +333,14 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMapWithCustomTags(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMapWithCustomTags(database);
     CPPUNIT_ASSERT_EQUAL(4, ids->size());
     mapId = ids->at(0);
     const long nodeId1 = ids->at(1);
     const long nodeId2 = ids->at(2);
     const long nodeId3 = ids->at(3);
 
-    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    std::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
     {
@@ -389,7 +389,7 @@ public:
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(testName));
 
-    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long nodeId = ids->at(2);
@@ -454,7 +454,7 @@ public:
     QTextCodec::setCodecForLocale(oldCodec);
   }
 
-  const boost::shared_ptr<QList<long> > insertTestMap1(HootApiDb& database)
+  const std::shared_ptr<QList<long>> insertTestMap1(HootApiDb& database)
   {
     database.transaction();
 
@@ -494,10 +494,10 @@ public:
 
     database.commit();
 
-    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
+    return std::shared_ptr<QList<long>>(new QList<long>(ids));
   }
 
-  const boost::shared_ptr<QList<long> > insertTestMap2(HootApiDb& database)
+  const std::shared_ptr<QList<long>> insertTestMap2(HootApiDb& database)
   {
     database.transaction();
 
@@ -550,10 +550,10 @@ public:
 
     database.commit();
 
-    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
+    return std::shared_ptr<QList<long>>(new QList<long>(ids));
   }
 
-  const boost::shared_ptr<QList<long> > insertTestMapWithCustomTags(HootApiDb& database)
+  const std::shared_ptr<QList<long>> insertTestMapWithCustomTags(HootApiDb& database)
   {
     QList<long> ids;
     database.transaction();
@@ -581,7 +581,7 @@ public:
 
     database.commit();
 
-    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
+    return std::shared_ptr<QList<long>>(new QList<long>(ids));
   }
 
 };

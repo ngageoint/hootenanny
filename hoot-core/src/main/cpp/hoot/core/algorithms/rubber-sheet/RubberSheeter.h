@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RUBBERSHEETER_H
@@ -50,7 +50,7 @@ public:
    * @param input2 the second input to rubber sheet
    * @param output the rubber sheeted combined output
    */
-  void rubberSheet(const QString input1, const QString input2, const QString output);
+  void rubberSheet(const QString& input1, const QString& input2, const QString& output);
  
 };
 

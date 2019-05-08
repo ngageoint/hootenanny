@@ -32,7 +32,8 @@
 #include <vector>
 
 // Standard Includes
-#include <limits.h>
+#include <cassert>
+#include <climits>
 #include <list>
 #include <queue>
 #include <set>

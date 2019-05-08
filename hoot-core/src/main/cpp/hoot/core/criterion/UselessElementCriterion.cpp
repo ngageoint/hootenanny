@@ -45,7 +45,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   ElementId eid = e->getElementId();
   LOG_VART(eid);
 
-  const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
+  const std::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
 
   // Is this element part of a relation? If so, it's not useless!
   const std::set<long>& parentRels = e2r->getRelationByElement(eid);
@@ -68,7 +68,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (ElementType::Way == eid.getType().getEnum())
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
     // Check for kids
     if (w->getNodeCount() > 0)
@@ -79,7 +79,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else if (ElementType::Relation == eid.getType().getEnum())
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     if (r->getMembers().size() > 0)
     {
       LOG_TRACE("UselessElementCriterion not satisified: relation has children");

@@ -22,14 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LONGESTCOMMONNODESTRING_H
 #define LONGESTCOMMONNODESTRING_H
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -41,7 +38,7 @@ namespace hoot
 class LongestCommonNodeString
 {
 public:
-  LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
+  LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2);
 
   /**
    * Returns the length of the common substring. Zero if no common substring was found.
@@ -59,7 +56,7 @@ public:
   int getW2Index() { return _i2; }
 
 private:
-  boost::shared_ptr<Way> _w1, _w2;
+  std::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };
 

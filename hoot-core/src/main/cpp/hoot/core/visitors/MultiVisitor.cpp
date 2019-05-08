@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiVisitor.h"
 
@@ -38,7 +38,7 @@ MultiVisitor::MultiVisitor()
 {
 }
 
-void MultiVisitor::visit(const boost::shared_ptr<Element>& e)
+void MultiVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (size_t i = 0; i < _visitors.size(); i++)
   {

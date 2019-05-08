@@ -86,12 +86,12 @@ public:
 
 private:
 
-  bool _inputIsSorted(const QString input) const
+  bool _inputIsSorted(const QString& input) const
   {
     return OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input);
   }
 
-  void _sortInMemory(const QString input, const QString output)
+  void _sortInMemory(const QString& input, const QString& output)
   {
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, Status::Unknown1);
@@ -99,23 +99,23 @@ private:
     IoUtils::saveMap(map, output);
   }
 
-  void _sortExternally(const QString input, const QString output)
+  void _sortExternally(const QString& input, const QString& output)
   {
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
     reader->initializePartial();
 
-    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
-    sorted->sort(boost::dynamic_pointer_cast<ElementInputStream>(reader));
+    std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    sorted->sort(std::dynamic_pointer_cast<ElementInputStream>(reader));
 
     reader->finalizePartial();
     reader->close();
 
-    boost::shared_ptr<PartialOsmMapWriter> writer =
-      boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+    std::shared_ptr<PartialOsmMapWriter> writer =
+      std::dynamic_pointer_cast<PartialOsmMapWriter>(
         OsmMapWriterFactory::createWriter(output));
     writer->open(output);
     writer->initializePartial();

@@ -67,7 +67,7 @@ public:
     OGREnvelope env;
     env.MinX = env.MinY = 0.0;
     env.MaxX = env.MaxY = 2.0;
-    boost::shared_ptr<OGRSpatialReference> sref = MapProjector::getInstance().
+    std::shared_ptr<OGRSpatialReference> sref = MapProjector::getInstance().
         createPlanarProjection(env);
     OsmMapPtr pMap(new OsmMap(sref));
     pMap->addElement(pN1);

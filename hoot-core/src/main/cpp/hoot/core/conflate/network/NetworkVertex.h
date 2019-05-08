@@ -29,8 +29,9 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+
+// geos
 #include <geos/geom/Coordinate.h>
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -68,8 +69,8 @@ private:
   static int uidCount;
 };
 
-typedef boost::shared_ptr<NetworkVertex> NetworkVertexPtr;
-typedef boost::shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
+typedef std::shared_ptr<NetworkVertex> NetworkVertexPtr;
+typedef std::shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
 
 inline bool operator<(const NetworkVertexPtr& v1, const NetworkVertexPtr& v2)
 {

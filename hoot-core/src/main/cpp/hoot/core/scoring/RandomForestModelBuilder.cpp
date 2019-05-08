@@ -72,7 +72,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
     {
       mc->setArguments(creatorParts);
     }
-    mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
+    mfe.addMatchCreator(std::shared_ptr<MatchCreator>(mc));
   }
 
   int datasetPairCtr = 1;
@@ -102,11 +102,11 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
 
   // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
   // ideally we'll circle back and update RF to use null values.
-  boost::shared_ptr<Tgs::DataFrame> df = mfe.getSamples().toDataFrame(-1);
+  std::shared_ptr<Tgs::DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
   Tgs::Random::instance()->seed(0);
   Tgs::RandomForest rf;
-  boost::shared_ptr<Tgs::DisableCout> dc;
+  std::shared_ptr<Tgs::DisableCout> dc;
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."

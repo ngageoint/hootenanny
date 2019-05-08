@@ -103,8 +103,8 @@ public:
    */
   bool hasPhoneNumber(const ConstElementPtr& element) const;
 
-  void setRegionCode(QString code);
-  void setAdditionalTagKeys(QStringList keys) { _additionalTagKeys = keys; }
+  void setRegionCode(const QString& code);
+  void setAdditionalTagKeys(const QStringList& keys) { _additionalTagKeys = keys; }
   void setSearchInText(bool search);
   long getPhoneNumbersProcessed() const { return _phoneNumbersProcessed; }
 
@@ -119,7 +119,7 @@ private:
   bool _searchInText;
   mutable long _phoneNumbersProcessed;
 
-  void _addPhoneNumber(const QString name, const QString tagKey, const QString tagValue,
+  void _addPhoneNumber(const QString& name, const QString& tagKey, const QString& tagValue,
                        QList<ElementPhoneNumber>& phoneNumbers) const;
 };
 

@@ -83,7 +83,7 @@ public:
   {
     // This test is primarily useful as an input to Weka for training models.
     MatchFeatureExtractor uut;
-    uut.addMatchCreator(boost::shared_ptr<MatchCreator>(new BuildingMatchCreator()));
+    uut.addMatchCreator(std::shared_ptr<MatchCreator>(new BuildingMatchCreator()));
     uut.processMap(load(_inputPath + "BuildingsA.osm", _inputPath + "BuildingsB.osm"));
 
     LOG_TRACE(uut.getResults().toStdString());

@@ -72,7 +72,7 @@ static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
-QString getApiEntities(const std::string& apiEntityBaseClassName, const QString apiEntityType,
+QString getApiEntities(const std::string& apiEntityBaseClassName, const QString& apiEntityType,
                        const bool displayType,
                        //the size of the longest names plus a 3 space buffer; the value passed in
                        //here by callers may have to be adjusted over time for some entity types
@@ -92,11 +92,11 @@ QString getApiEntities(const std::string& apiEntityBaseClassName, const QString 
     const std::string className = classNames[i];
     LOG_VARD(className);
 
-    boost::shared_ptr<ApiEntity> apiEntity(
+    std::shared_ptr<ApiEntity> apiEntity(
       Factory::getInstance().constructObject<ApiEntity>(className));
 
-    boost::shared_ptr<ApiEntityInfo> apiEntityInfo =
-      boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+    std::shared_ptr<ApiEntityInfo> apiEntityInfo =
+      std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
     if (!apiEntityInfo.get())
     {
       throw HootException(
@@ -107,8 +107,8 @@ QString getApiEntities(const std::string& apiEntityBaseClassName, const QString 
     if (!apiEntityInfo->getDescription().isEmpty())
     {
       bool supportsSingleStat = false;
-      boost::shared_ptr<SingleStatistic> singleStat =
-        boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+      std::shared_ptr<SingleStatistic> singleStat =
+        std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
       if (singleStat.get())
       {
         supportsSingleStat = true;
@@ -154,7 +154,7 @@ QString getApiEntities2(const std::string& apiEntityClassName)
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator
-    boost::shared_ptr<ApiEntity> mc(
+    std::shared_ptr<ApiEntity> mc(
       Factory::getInstance().constructObject<ApiEntity>(names[i]));
     std::vector<CreatorDescription> creators = mc->getAllCreators();
     LOG_VARD(creators.size());
@@ -189,7 +189,7 @@ QString getApiEntities2(const std::string& apiEntityClassName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className)
+QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& className)
 {
   LOG_VARD(className);
   if (className.toStdString() == OsmMapOperation::className() ||
@@ -205,7 +205,7 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString className
   return "";
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {
   LOG_TRACE("getDisplayInfoOps: " << optName);
 
@@ -234,23 +234,23 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
     // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
     // figured out a good way to combine the two yet.
 
-    boost::shared_ptr<ApiEntityInfo> apiEntityInfo;
+    std::shared_ptr<ApiEntityInfo> apiEntityInfo;
     const QString apiEntityType = _apiEntityTypeForBaseClass(className);
-    boost::shared_ptr<SingleStatistic> singleStat;
+    std::shared_ptr<SingleStatistic> singleStat;
     // :-( this is messy...
     if (Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
     {
-      boost::shared_ptr<OsmMapOperation> apiEntity(
+      std::shared_ptr<OsmMapOperation> apiEntity(
         Factory::getInstance().constructObject<OsmMapOperation>(className.toStdString()));
-      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
-      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
     else if (Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
     {
-      boost::shared_ptr<ElementVisitor> apiEntity(
+      std::shared_ptr<ElementVisitor> apiEntity(
         Factory::getInstance().constructObject<ElementVisitor>(className.toStdString()));
-      apiEntityInfo = boost::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
-      singleStat = boost::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
     }
 
     if (!apiEntityInfo.get())
@@ -276,7 +276,7 @@ QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString optName)
   return ts.readAll();
 }
 
-QString ApiEntityDisplayInfo::getDisplayInfo(const QString apiEntityType)
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 {
   DisableLog dl;
   QString msg = " (prepend 'hoot::' before using";

@@ -42,7 +42,7 @@ _envelope()
 {
 }
 
-void CalculateMapBoundsVisitor::visit(const boost::shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)
@@ -74,14 +74,14 @@ OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const OsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 

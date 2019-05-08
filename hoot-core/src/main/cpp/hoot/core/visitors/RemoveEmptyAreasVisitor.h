@@ -50,7 +50,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getInitStatusMessage() const { return "Removing empty areas..."; }
 
@@ -61,7 +61,7 @@ public:
 
 private:
 
-  boost::shared_ptr<ElementConverter> _ec;
+  std::shared_ptr<ElementConverter> _ec;
 };
 
 }

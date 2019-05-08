@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkVertex.h"
 
@@ -64,7 +64,7 @@ geos::geom::Coordinate NetworkVertex::getCentroid() const
 {
   if (ElementType::Node == _e->getElementType().getEnum())
   {
-    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(_e);
+    ConstNodePtr pNode = std::dynamic_pointer_cast<const Node>(_e);
     return pNode->toCoordinate();
   }
   else

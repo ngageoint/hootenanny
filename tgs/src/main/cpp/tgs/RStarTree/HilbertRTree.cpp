@@ -28,9 +28,10 @@
 #include "HilbertRTree.h"
 
 // Standard Includes
+#include <cassert>
+#include <cfloat>
+#include <cmath>
 #include <exception>
-#include <float.h>
-#include <math.h>
 #include <iostream>
 using namespace std;
 
@@ -42,7 +43,7 @@ using namespace std;
 
 using namespace Tgs;
 
-HilbertRTree::HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions) :
+HilbertRTree::HilbertRTree(const std::shared_ptr<PageStore>& ps, int dimensions) :
   RStarTree(ps, dimensions)
 {
   _hilbertCurve = new HilbertCurve(dimensions, 8);

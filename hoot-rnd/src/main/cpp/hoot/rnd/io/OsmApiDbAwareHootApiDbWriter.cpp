@@ -44,7 +44,7 @@ OsmApiDbAwareHootApiDbWriter::~OsmApiDbAwareHootApiDbWriter()
   _osmApiDb.close();
 }
 
-void OsmApiDbAwareHootApiDbWriter::open(QString urlStr)
+void OsmApiDbAwareHootApiDbWriter::open(const QString& urlStr)
 {
   if (!_osmApiDb.isSupported(ConfigOptions().getOsmapidbIdAwareUrl()))
   {

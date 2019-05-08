@@ -33,9 +33,6 @@
 // Qt
 #include <QString>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -47,7 +44,7 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  boost::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
+  std::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
 
 private:
 
@@ -57,7 +54,7 @@ private:
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  boost::shared_ptr<ConstElementVisitor> _v;
+  std::shared_ptr<ConstElementVisitor> _v;
 };
 
 }

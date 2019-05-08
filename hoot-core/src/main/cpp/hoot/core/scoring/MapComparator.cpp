@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapComparator.h"
 
@@ -82,7 +82,7 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+    std::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;
@@ -96,11 +96,11 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e)
+  virtual void visit(const std::shared_ptr<const Element>& e)
   {
     CHECK_MSG(_ref->containsElement(e->getElementId()), "Did not find element: " <<
               e->getElementId());
-    const boost::shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
+    const std::shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
 
     Tags in1 = re->getTags();
     Tags in2 = e->getTags();
@@ -173,10 +173,10 @@ public:
     }
   }
 
-  void compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
+  void compareNode(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
   {
-    ConstNodePtr rn = boost::dynamic_pointer_cast<const Node>(re);
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr rn = std::dynamic_pointer_cast<const Node>(re);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
@@ -190,10 +190,10 @@ public:
     }
   }
 
-  void compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
+  void compareWay(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
   {
-    ConstWayPtr rw = boost::dynamic_pointer_cast<const Way>(re);
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
     CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
               "Node count does not match.");
@@ -206,10 +206,10 @@ public:
     }
   }
 
-  void compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
+  void compareRelation(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
   {
-    ConstRelationPtr rr = boost::dynamic_pointer_cast<const Relation>(re);
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
     QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
 
@@ -226,7 +226,7 @@ public:
   }
 
 private:
-  boost::shared_ptr<OsmMap> _ref;
+  std::shared_ptr<OsmMap> _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -242,7 +242,7 @@ MapComparator::MapComparator():
   // blank
 }
 
-bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
+bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test)
 {
   bool mismatch = false;
   if (ref->getNodes().size() != test->getNodes().size())
