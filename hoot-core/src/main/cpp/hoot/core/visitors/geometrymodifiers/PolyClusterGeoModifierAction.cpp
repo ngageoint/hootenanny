@@ -106,7 +106,7 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
   }
 }
 
-void PolyClusterGeoModifierAction::processStart(boost::shared_ptr<OsmMap>& )
+void PolyClusterGeoModifierAction::processStart(std::shared_ptr<OsmMap>& )
 {
   _ways.clear();  
 }
@@ -115,7 +115,7 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
   if (!pWay->isClosedArea()) return false;
 
   // store for use in processFinalize
@@ -123,7 +123,7 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
   return true;
 }
 
-void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pMap)
+void PolyClusterGeoModifierAction::processFinalize(std::shared_ptr<OsmMap>& pMap)
 {
   LOG_DEBUG( "poly_cluster: finalizing " << _ways.length() << " ways");
 
@@ -182,7 +182,7 @@ void PolyClusterGeoModifierAction::_createWayPolygons()
 
   foreach (WayPtr pWay, _ways)
   {
-    boost::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
     // set id as user data
     pPoly->setUserData((void*)wayId);
@@ -196,10 +196,10 @@ void PolyClusterGeoModifierAction::_generateClusters()
   _distanceSquared = _distance * _distance;
 
   // build the ClosePointHash
-  _pClosePointHash = boost::shared_ptr<ClosePointHash>(new ClosePointHash(_distance));
+  _pClosePointHash = std::shared_ptr<ClosePointHash>(new ClosePointHash(_distance));
 
   // gather coordinates and build lookups
-  foreach (boost::shared_ptr<Polygon> poly, _polys)
+  foreach (std::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
     CoordinateSequence* pCoords = poly->getCoordinates();
@@ -217,7 +217,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   }
 
   // recursively build clusters
-  foreach (boost::shared_ptr<Polygon> poly, _polys)
+  foreach (std::shared_ptr<Polygon> poly, _polys)
   {
     long wayId = (long)poly->getUserData();
     if (_processedPolys.contains(wayId)) continue;
@@ -229,7 +229,7 @@ void PolyClusterGeoModifierAction::_generateClusters()
   }
 }
 
-void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Polygon>& poly)
+void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygon>& poly)
 {
   long thisWayId = (long)poly->getUserData();
   assert(_processedPolys.contains(thisWayId) == false);
@@ -242,12 +242,12 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
   int coordCount = min((int)poly->getNumPoints(), MAX_PROCESSED_NODES_PER_POLY-1);
 
   // create an envelope if we need it for intersection check
-  boost::shared_ptr<Envelope> pEnvelope;
+  std::shared_ptr<Envelope> pEnvelope;
 
   if (_checkIntersections)
   {
     WayPtr pWay = _pMap->getWay(thisWayId);
-    pEnvelope = boost::shared_ptr<Envelope>(pWay->getEnvelope(_pMap));
+    pEnvelope = std::shared_ptr<Envelope>(pWay->getEnvelope(_pMap));
   }
 
   for (int i = 0; i < coordCount; i++)
@@ -291,7 +291,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
                 CoordinateExt interP1( _pMap->getNode(i1Id)->toCoordinate());
                 CoordinateExt interP2( _pMap->getNode(i2Id)->toCoordinate());
 
-                boost::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(thisCoord, otherCoord, interP1, interP2);
+                std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(thisCoord, otherCoord, interP1, interP2);
 
                 if (pIntersectionPoint)
                 {
@@ -369,7 +369,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     alphashape.insert(points);
 
     // generate geometry
-    boost::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
+    std::shared_ptr<Geometry> pAlphaGeom = alphashape.toGeometry();
 
     // combine polys from this cluster with AlphaShape
     vector<Geometry*> geomvect;
@@ -381,12 +381,12 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     }
 
     MultiPolygon *mp = GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect);
-    //boost::shared_ptr<MultiPolygon> mp = boost::shared_ptr<MultiPolygon>(GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect));
-    boost::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
+    //std::shared_ptr<MultiPolygon> mp = std::shared_ptr<MultiPolygon>(GeometryFactory::getDefaultInstance()->createMultiPolygon(&geomvect));
+    std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 
     // create a new element with cluster representation
     GeometryConverter gc(_pMap);
-    boost::shared_ptr<Element> pElem = gc.convertGeometryToElement(
+    std::shared_ptr<Element> pElem = gc.convertGeometryToElement(
           pCombinedPoly.get(),
           Status::Unknown1,
           WorstCircularErrorVisitor::getWorstCircularError(_pMap));

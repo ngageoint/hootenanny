@@ -74,9 +74,9 @@ public:
     { DISTANCE_PARAM, ALPHA_PARAM, REMOVE_POLYS_PARAM, CHECK_INTERSECTIONS_PARAM, CLUSTER_TAG_LIST_PARAM }; }
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual void processStart(boost::shared_ptr<OsmMap>& ) override;
+  virtual void processStart(std::shared_ptr<OsmMap>& ) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
-  virtual void processFinalize(boost::shared_ptr<OsmMap>& pMap) override;
+  virtual void processFinalize(std::shared_ptr<OsmMap>& pMap) override;
 
 private:
   const double DEFAULT_DISTANCE = 20;
@@ -93,9 +93,9 @@ private:
   bool _checkIntersections = DEFAULT_CHECK_INTERSECTIONS;
   QString _clusterTagList = DEFAULT_CLUSTER_TAG_LIST;
 
-  boost::shared_ptr<OsmMap> _pMap;
+  std::shared_ptr<OsmMap> _pMap;
   QList<WayPtr> _ways;
-  QList<boost::shared_ptr<geos::geom::Polygon>> _polys;
+  QList<std::shared_ptr<geos::geom::Polygon>> _polys;
 
   // cluster generation data
   double _distanceSquared;
@@ -103,14 +103,14 @@ private:
   QList<QList<long>> _clusters;
   QList<long> _processedPolys;
   QHash<long, CoordinateExt> _coordinateByNodeIx;
-  QHash<long, boost::shared_ptr<Polygon>> _polyByWayId;
-  boost::shared_ptr<ClosePointHash> _pClosePointHash;
+  QHash<long, std::shared_ptr<Polygon>> _polyByWayId;
+  std::shared_ptr<ClosePointHash> _pClosePointHash;
   QHash<QString,QString> _clusterTags;
 
   void _clearProcessData();
   void _createWayPolygons();
   void _generateClusters();
-  void _recursePolygons(const boost::shared_ptr<geos::geom::Polygon>& poly);
+  void _recursePolygons(const std::shared_ptr<geos::geom::Polygon>& poly);
   void _createClusterPolygons();
 };
 
