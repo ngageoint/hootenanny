@@ -92,11 +92,12 @@ private:
   boost::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
-  // TODO
+  // forces a review if features in the secondary layer have a newer timestamp than the feature
+  // being compared to in the ref layer
   bool _reviewIfSecondaryFeatureNewer;
-  // TODO
+  // tag key to determine a feature's timestamp
   QString _dateTagKey;
-  // TODO
+  // format of a feature's timestamp
   QString _dateFormat;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
