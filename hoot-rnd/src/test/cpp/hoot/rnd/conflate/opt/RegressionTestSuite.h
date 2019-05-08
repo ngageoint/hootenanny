@@ -40,7 +40,7 @@ class RegressionTestSuite : public AbstractTestSuite
 
 public:
 
-  RegressionTestSuite(QString dir, QString testDirExtension);
+  RegressionTestSuite(const QString& dir, const QString& testDirExtension);
 
   /**
    * Attempts to load a conflate case test given a directory
@@ -48,7 +48,7 @@ public:
    * @param dir directory to load the test from
    * @param confs hoot configuration files to pass to the test
    */
-  virtual void loadDir(QString dir, QStringList confs);
+  virtual void loadDir(const QString& dir, QStringList confs) override;
 
 private:
 

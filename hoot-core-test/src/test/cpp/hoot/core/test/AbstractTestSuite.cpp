@@ -29,7 +29,7 @@
 namespace hoot
 {
 
-AbstractTestSuite::AbstractTestSuite(QString dir) :
+AbstractTestSuite::AbstractTestSuite(const QString& dir) :
 CppUnit::TestSuite(dir.toStdString())
 {
 }

@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
+ConflateCaseTestSuite::ConflateCaseTestSuite(const QString& dir, bool hideDisableTests)
   : AbstractTestSuite(dir),
     _hideDisableTests(hideDisableTests),
     _numTests(0)
@@ -52,7 +52,7 @@ ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
   LOG_VART(_numTests);
 }
 
-void ConflateCaseTestSuite::_loadBaseConfig(const QString testConfigFile, QStringList& confs)
+void ConflateCaseTestSuite::_loadBaseConfig(const QString& testConfigFile, QStringList& confs)
 {
   // need to grab the whole current config here to avoid errors when calling loadJson
   Settings tempConfig = conf();
@@ -72,7 +72,7 @@ void ConflateCaseTestSuite::_loadBaseConfig(const QString testConfigFile, QStrin
   }
 }
 
-void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
+void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
   {

@@ -47,9 +47,15 @@ class AbstractTestSuite : public CppUnit::TestSuite
 
 public:
 
-  AbstractTestSuite(QString dir);
+  AbstractTestSuite(const QString& dir);
 
-  virtual void loadDir(QString dir, QStringList confs) = 0;
+  /**
+   * @brief loadDir Loads directory of tests
+   * @param dir Directory to load
+   * @param confs List of config files, NOTE: passed by value because the copy of `confs`
+   *              can be edited without affecting the original value
+   */
+  virtual void loadDir(const QString& dir, QStringList confs) = 0;
 };
 
 }
