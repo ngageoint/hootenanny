@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Factory.h>
@@ -56,6 +57,7 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, PolyClusterGeoModifierAction)
 const QString PolyClusterGeoModifierAction::DISTANCE_PARAM = "distance";
 const QString PolyClusterGeoModifierAction::ALPHA_PARAM = "alpha";
 const QString PolyClusterGeoModifierAction::REMOVE_POLYS_PARAM = "remove_polys";
+const QString PolyClusterGeoModifierAction::CHECK_INTERSECTIONS_PARAM = "check_intersections";
 const QString PolyClusterGeoModifierAction::CLUSTER_TAG_LIST_PARAM = "cluster_tag_list";
 
 void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>& arguments)
@@ -63,6 +65,7 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
   _distance = DEFAULT_DISTANCE;
   _alpha = DEFAULT_ALPHA;
   _removePolys = DEFAULT_REMOVE_POLYS;
+  _checkIntersections = DEFAULT_CHECK_INTERSECTIONS;
   _clusterTagList = DEFAULT_CLUSTER_TAG_LIST;
   _clusterTags.clear();
 
@@ -79,6 +82,11 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
   if (arguments.keys().contains(REMOVE_POLYS_PARAM))
   {
     _removePolys = arguments[REMOVE_POLYS_PARAM].toLower() == "true";
+  }
+
+  if (arguments.keys().contains(CHECK_INTERSECTIONS_PARAM))
+  {
+    _checkIntersections = arguments[CHECK_INTERSECTIONS_PARAM].toLower() == "true";
   }
 
   if (arguments.keys().contains(CLUSTER_TAG_LIST_PARAM))
@@ -117,7 +125,13 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
 
 void PolyClusterGeoModifierAction::processFinalize(boost::shared_ptr<OsmMap>& pMap)
 {
-  LOG_DEBUG( "finalizing " << _ways.length() << " ways");
+  LOG_DEBUG( "poly_cluster: finalizing " << _ways.length() << " ways");
+
+  LOG_DEBUG( "arguments:");
+  LOG_VARD(_distance);
+  LOG_VARD(_alpha);
+  LOG_VARD(_removePolys);
+  LOG_VARD(_checkIntersections);
 
   _pMap = pMap;
 
@@ -227,6 +241,15 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
   // go through each node and find its matches
   int coordCount = min((int)poly->getNumPoints(), MAX_PROCESSED_NODES_PER_POLY-1);
 
+  // create an envelope if we need it for intersection check
+  boost::shared_ptr<Envelope> pEnvelope;
+
+  if(_checkIntersections)
+  {
+    WayPtr pWay = _pMap->getWay(thisWayId);
+    pEnvelope = boost::shared_ptr<Envelope>(pWay->getEnvelope(_pMap));
+  }
+
   for (int i = 0; i < coordCount; i++)
   {
     long thisNodeIndex = thisWayId * MAX_PROCESSED_NODES_PER_POLY + i;
@@ -236,13 +259,56 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
     foreach (long otherNodeIndex, matches)
     {
       long otherWayId = otherNodeIndex / MAX_PROCESSED_NODES_PER_POLY;
+      CoordinateExt otherCoord = _coordinateByNodeIx[otherNodeIndex];
 
       // if the match is from another poly and within distance, process it
       if (otherWayId != thisWayId &&
          !_processedPolys.contains(otherWayId) &&
-         (thisCoord-_coordinateByNodeIx[otherNodeIndex]).lengthSquared() <= _distanceSquared )
+         (thisCoord-otherCoord).lengthSquared() <= _distanceSquared )
       {
-        _recursePolygons(_polyByWayId[otherWayId]);
+        bool allow = true;
+
+        if(_checkIntersections)
+        {
+          vector<long> wayIdsToCheck = _pMap->getIndex().findWays(*pEnvelope);
+
+          // this probably takes quite a while, but here it is as an option
+          for (long wayIdToCheck : wayIdsToCheck)
+          {
+            // don't check against polys in the cluster
+            if (!_polyByWayId.contains(wayIdToCheck))
+            {
+              WayPtr pWayToCheck = _pMap->getWay(wayIdToCheck);
+
+              long wayToCheckNodeCount = pWayToCheck->getNodeCount();
+              vector<long> wayToCheckNodeIds = pWayToCheck->getNodeIds();
+
+              for (int checkNodeIx = 0; checkNodeIx < wayToCheckNodeCount-1; checkNodeIx++)
+              {
+                long i1Id = wayToCheckNodeIds[checkNodeIx];
+                long i2Id = wayToCheckNodeIds[checkNodeIx+1];
+
+                CoordinateExt interP1( _pMap->getNode(i1Id)->toCoordinate());
+                CoordinateExt interP2( _pMap->getNode(i2Id)->toCoordinate());
+
+                boost::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(thisCoord, otherCoord, interP1, interP2);
+
+                if (pIntersectionPoint)
+                {
+                  allow = false;
+                  break;
+                }
+              }
+
+              if (!allow) break;
+            }
+          }
+        }
+
+        if (allow)
+        {
+          _recursePolygons(_polyByWayId[otherWayId]);
+        }
       }
     }
   }
@@ -353,7 +419,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
       // remove polys
       foreach (long wayId, cluster)
       {
-        RemoveWayOp::removeWayFully(_pMap, wayId);// removeOp(wayId, true);
+        RemoveWayOp::removeWayFully(_pMap, wayId);
         _polyByWayId[wayId];
       }
 
