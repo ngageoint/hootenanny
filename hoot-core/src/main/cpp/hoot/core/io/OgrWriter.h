@@ -123,14 +123,14 @@ public:
 
   void setScriptPath(const QString& path) { _scriptPath = path; }
 
-  ///
-  /// \brief translateToFeatures Translates the element to a geometry and a
-  ///        vector of featurs
-  /// \param provider Should provide the element and all its children
-  /// \param e Element to translate
-  /// \param g Geometry output
-  /// \param tf Vector of translated features output
-  ///
+  /**
+   * @brief translateToFeatures Translates the element to a geometry and a
+   *        vector of features
+   * @param provider Should provide the element and all its children
+   * @param e Element to translate
+   * @param g Geometry output
+   * @param tf Vector of translated features output
+   */
   void translateToFeatures(ElementProviderPtr& provider,
                            const ConstElementPtr& e,
                            boost::shared_ptr<geos::geom::Geometry> &g,

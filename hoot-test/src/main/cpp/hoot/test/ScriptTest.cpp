@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
@@ -89,8 +89,9 @@ QString ScriptTest::_removeIgnoredSubstrings(QString output) const
   for (int i = 0; i < inLines.size(); i++)
   {
     bool keep = true;
-    if (inLines[i].contains(" INFO ") || inLines[i].contains(" DEBUG ") ||
-        inLines[i].contains(" elapsed: ") )
+    if (inLines[i].contains(" STATUS ") || inLines[i].contains(" INFO ") ||
+        inLines[i].contains(" DEBUG ") || inLines[i].contains(" elapsed: ") ||
+        inLines[i].contains("Time (sec)"))
     {
       keep = false;
     }

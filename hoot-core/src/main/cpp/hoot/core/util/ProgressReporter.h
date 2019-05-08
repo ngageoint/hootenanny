@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,39 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef LOGLOG4CXX_H
-#define LOGLOG4CXX_H
+#ifndef PROGRESS_REPORTER_H
+#define PROGRESS_REPORTER_H
 
-#include <log4cxx/logger.h>
-
-#include <iostream>
+// Hoot
+#include <hoot/core/util/Progress.h>
 
 namespace hoot
 {
 
-log4cxx::LoggerPtr& getLogger();
-log4cxx::LevelPtr toLog4CxxLevel(Log::WarningLevel l);
+/**
+ * Simple interface for reporting job status from commands
+ */
+class ProgressReporter
+{
+public:
 
-#define LOG_LEVEL(level, message) {\
-  if ((level) >= hoot::Log::getInstance().getLevel()) \
-  { \
-    log4cxx::LevelPtr log4cxxLevel = toLog4CxxLevel(level); \
-    std::stringstream ss_; \
-    ss_ << message; \
-    LOG4CXX_LOGLS(hoot::getLogger(), log4cxxLevel, ss_.str()); \
-  }}
+  virtual ~ProgressReporter() {}
 
-#define LOG_TRACE(str) { LOG_LEVEL(hoot::Log::Trace, str) }
-#define LOG_DEBUG(str) { LOG_LEVEL(hoot::Log::Debug, str) }
-#define LOG_VERBOSE(str) { LOG_LEVEL(hoot::Log::Verbose, str) }
-#define LOG_INFO(str) { LOG_LEVEL(hoot::Log::Info, str) }
-#define LOG_WARN(str) { LOG_LEVEL(hoot::Log::Warn, str) }
-#define LOG_ERROR(str) { LOG_LEVEL(hoot::Log::Error, str) }
-#define LOG_FATAL(str) { LOG_LEVEL(hoot::Log::Fatal, str) }
+  /**
+   * Allows for passing in progress info for status updates.
+   *
+   * @param progress progress info; A copy initialized to the most recent progress state is passed
+   * in to avoid maintaining progress with the same information across the entire application.
+   */
+  virtual void setProgress(Progress progress) = 0;
+
+  /**
+   * The number of job task steps performed by the implementer related to status progress reporting
+   *
+   * @return number of job steps for the progress task
+   */
+  virtual unsigned int getNumSteps() const = 0;
+};
 
 }
 
-#endif // LOGLOG4CXX_H
+#endif // PROGRESS_REPORTER_H

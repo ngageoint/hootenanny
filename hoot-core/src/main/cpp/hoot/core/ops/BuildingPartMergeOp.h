@@ -101,7 +101,7 @@ public:
 
   static int logWarnCount;
 
-  BuildingPartMergeOp();
+  BuildingPartMergeOp(bool preserveTypes = false);
 
   virtual void apply(OsmMapPtr& map) override;
 
@@ -139,6 +139,7 @@ public:
 
   int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }
   int getNumBuildingGroupsMerged() const { return _numBuildingGroupsMerged; }
+  void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
 
@@ -156,6 +157,9 @@ private:
   int _numBuildingGroupsMerged;
 
   int _threadCount;
+
+  // if true, building part type tags will be preserved in the combined building output
+  bool _preserveTypes;
 
   void _init(OsmMapPtr& map);
   void _initBuildingPartTagNames();

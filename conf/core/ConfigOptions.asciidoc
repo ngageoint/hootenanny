@@ -301,6 +301,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.merge.many.to.many.matches
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, many to many building matches will result in a review. If true, they will all be merged
+together when matched.
+
 === building.miss.threshold
 
 * Data Type: double
@@ -718,6 +726,14 @@ Debugging: The filename to use when saving the debug map during conflation.
 If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
+
+=== differential.remove.reference.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, when running Differential Conflation the reference elements will not be dropped from the
+output.
 
 === differential.snap.unconnected.roads
 
@@ -1184,15 +1200,6 @@ or deleted.  It also requires writing out temporary files, so extra disk space i
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
-=== hootapi.db.writer.job.id
-
-* Data Type: string
-* Default Value: ``
-
-This option allows the Hootenanny Web Services to pass in the ID of the currently executing command
-job.  Given that information, any Hootenanny API database writer invoked by the command will write
-the ID of the job's associated map to the job status table.
-
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string
@@ -1435,6 +1442,15 @@ corresponding implicit tag rules database.
 ** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
+
+=== job.id
+
+* Data Type: string
+* Default Value: ``
+
+This option allows for passing in a job ID for the currently executing command. This is useful when
+trying to track multiple commands across a single job. When the Hootenanny API database is used
+for job output storage, the ID will be stored in the job status table of the associated map.
 
 === json.format.hootenanny
 
@@ -1749,40 +1765,13 @@ details.  The "best" value varies depending on the input data as well as how the
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
-=== log.format
+=== log.class.filter
 
 * Data Type: string
-* Default Value: `%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n`
+* Default Value: ``
 
-If available, uses the formatting as defined in
-https://svn.apache.org/repos/asf/logging/site/trunk/docs/log4cxx/apidocs/classlog4cxx_1_1_pattern_layout.html[log4cxx]
-to set the log format. If log4cxx isn't available then this has no effect.
-
-Some example format strings and the associated output are below:
-
------
-# Default log message with lots of information
-%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n
-12:36:03.565 INFO  ...conflate/UnifyingConflator.cpp( 154) Pre-constraining match count: 11
-
-# Log message w/ minimal information
-%-5p..%.20F(%3L) %m%n
-INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# Embed arbitrary strings in the log messages
-Foo: %m%n
-Foo: Pre-constraining match count: 11
-
-# Print out time elapsed in ms along w/ other info
-%6r %-5p..%.20F(%3L) %m%n
-   289 INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# XML-ish log message. This allows parsing messages that span multiple lines,
-# but you aren't guaranteed that all output from hoot goes through the logging
-# mechanism.
-<message time='%d' level='%p' file='%F' line='%L'>%m</message>%n
-<message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
------
+A semicolon delimited list of class names used for limiting the log output. Do not prepend class
+names with their namespace. An empty string (default) disables the filtering.
 
 === log.warn.message.limit
 
@@ -2394,7 +2383,7 @@ this to true can be useful when conforming to strict specifications.
 * Data Type: string
 * Default Value: ``
 
-TODO: description
+Text prepended to a layer name when writing an OGR format.
 
 === ogr.writer.script
 
@@ -2528,6 +2517,14 @@ written if the value is not empty.
 
 If true, the OSM map writer will NOT write a file if the map is empty.
 The default is to write a file even if the map is empty.
+
+=== overpass.api.host
+
+* Data Type: string
+* Default Value: `overpass-api.de`
+
+Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
+GeoJSON web sources.
 
 === perty.apply.rubber.sheet
 
@@ -3235,14 +3232,13 @@ Sets that maximum angle that is still considered a power line match. Units in de
 
 A quantile value from 0.0 to 1.0 for the QuantileAggregator.
 
-=== progress.reporting.format
+=== progress.var.print.length.max
 
-* Data Type: string
-* Default Value: ``
+* Data Type: int
+* Default Value: `30`
 
-Sets the progress reporting format to the type specified for classes that support progress
-reporting.  Currently, 'json' is the only valid reporting format. If left blank, progress is not
-reported.
+Maximum length, in characters, allowed when logging a variable value during progress logging
+("--status"). Not honored by all progress logging.
 
 === railway.angle.sample.distance
 
@@ -3615,9 +3611,9 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 === search.radius.railway
 
 * Data Type: double
-* Default Value: `15`
+* Default Value: `${search.radius.default}`
 
-The search radius to use when conflating railways.
+The search radius to use when conflating railways.  See `search.radius.default`.
 
 === search.radius.waterway
 

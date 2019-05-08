@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,131 +22,120 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// standard includes
+#include "Progress.h"
+
+// std
 #include <iostream>
 using namespace std;
 
-// QT includes
+// Qt
 #include <QtCore/QStringBuilder>
 
-// Hoot includes
-#include "Progress.h"
-
+// hoot
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
 
-// constructor
-Progress::Progress(QString source = "")
+Progress::Progress(QString jobId, QString source, JobState jobState, float percentComplete,
+                   float taskWeight) :
+_jobId(jobId.trimmed()),
+_source(source),
+_percentComplete(percentComplete),
+_taskStartPercentComplete(percentComplete),
+_lastPercentComplete(percentComplete),
+_taskWeight(taskWeight),
+_jobState(jobState),
+_userMessage("")
 {
-  _source = source;
-  _reportType = "";
-  _percentComplete = 0.0;
-  _taskStartPercentComplete = 0.0;
-  _lastPercentComplete = 0.0;
-  _state = "Pending";
-  _jobFinished = false;
-  _userMessage = "";
 }
 
-/////////////////////////////////
-// public methods
-/////////////////////////////////
-
-// get the message in report type's format
-// - this will be called by the polling method
-QString Progress::getMessage()
+QString Progress::_getMessage() const
 {
-  QString msg = "";
-  // send message only if exceeds some range (e.g., every 10%)
-  if (_readyToSend())
-  {
-    if (_reportType == "json")
-    {
-      msg.append( _toJson() );
-    }
-  }
-  return msg;
+  // In case we need other logging formats at some point, moving the text building logic to a
+  // separate method.
+  return _toText();
 }
 
-// sets the task weight for the next subtask in range of 0...p(x) where p(x) is progress percentage leftover
-//   for completing the current overall task
-void Progress::setTaskWeight(float taskWeight)
+void Progress::set(float percentComplete, QString userMessage, bool logAsProgress)
 {
-  _taskWeight = taskWeight;
-  _taskStartPercentComplete = _percentComplete;
+  set(percentComplete, _jobState, userMessage, logAsProgress);
 }
 
-// the task method generally uses this setter
-void Progress::set(float percentComplete, QString state, bool jobFinished, QString userMessage)
+void Progress::set(float percentComplete, JobState jobState, QString userMessage,
+                   bool logAsProgress)
 {
   _lastPercentComplete = _percentComplete;
   _percentComplete = percentComplete;
   // reset the start percent complete value to current value
   _taskStartPercentComplete = percentComplete;
-  _state = state;
-  _jobFinished = jobFinished;
+  _jobState = jobState;
   _userMessage = userMessage;
-  //temporary force getMessage call
-  if (_reportType == "json")
+
+  const QString msg = _getMessage();
+  if (!msg.trimmed().isEmpty())
   {
-    QString msg = getMessage();
-    if (msg != "")
+    if (!logAsProgress)
     {
-      cout << getMessage().toStdString() << endl;
+      LOG_STATUS(msg);
+    }
+    else
+    {
+      PROGRESS_STATUS(msg);
     }
   }
 }
 
-// set from relative values updates the absolute values automatically
-void Progress::setFromRelative(float relativePercentComplete, QString state, bool jobFinished, QString userMessage)
+void Progress::setFromRelative(float relativePercentComplete, QString userMessage,
+                               bool logAsProgress)
+{
+  setFromRelative(relativePercentComplete, userMessage, logAsProgress);
+}
+
+void Progress::setFromRelative(float relativePercentComplete, JobState jobState,
+                               QString userMessage, bool logAsProgress)
 {
   // update absolute percent weight
   _lastPercentComplete = _percentComplete;
   _percentComplete = _taskStartPercentComplete + (relativePercentComplete * _taskWeight);
-  _state = state;
-  _jobFinished = jobFinished;
+  _jobState = jobState;
   _userMessage = userMessage;
-  //temporary force getMessage call
-  if (_reportType == "json")
+
+  const QString msg = _getMessage();
+  if (!msg.trimmed().isEmpty())
   {
-    QString msg = getMessage();
-    if (msg != "")
+    if (!logAsProgress)
     {
-      cout << getMessage().toStdString() << endl;
+      LOG_STATUS(msg);
+    }
+    else
+    {
+      PROGRESS_STATUS(msg);
     }
   }
 }
 
-/////////////////////////////////
-// protected methods
-/////////////////////////////////
-
-// convert progress status to JSON
-QString Progress::_toJson()
+bool Progress::getJobFinished() const
 {
-  QString js = "{ ";
-    js.append("\"source\": \"" % _source % "\", ");
-    js.append("\"status\": { ");
-      js.append("\"message\": \"" % _userMessage % "\", ");
-      js.append("\"state\": \"" % _state % "\", ");
-      js.append("\"jobFinished\": \"" % QString("%1").arg(_jobFinished?"true":"false") % "\", ");
-      js.append("\"percentComplete\" : " % QString("%1").arg((int)(_percentComplete*100.)));
-    js.append(" }");
-  js.append(" }");
+  return _jobState == JobState::Successful || _jobState == JobState::Failed;
+}
+
+QString Progress::_toText() const
+{
+  QString js = "";
+  if (!_jobId.isEmpty())
+  {
+    js.append(_jobId % " - ");
+  }
+  js.append(_source);
+  js.append(" (" % QString("%1").arg((int)(_percentComplete * 100.)) % "%): ");
+  js.append(_userMessage);
   return js;
 }
 
-
-// check if ready to send message or not
-bool Progress::_readyToSend()
-{
-  int last = (int)(_lastPercentComplete*10.);
-  int current = (int)(_percentComplete*10.);
-  return (current - last > 0? true : false);
 }
-
-} // end namespace hoot

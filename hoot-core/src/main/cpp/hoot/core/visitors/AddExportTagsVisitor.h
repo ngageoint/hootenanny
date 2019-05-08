@@ -66,7 +66,7 @@ private:
   bool _includeDebug;
 
   // moved this out of Status.cpp, for local consumption only
-  QString toCompatString( Status status ) const;
+  QString toCompatString(Status status) const;
 };
 
 }

@@ -81,7 +81,7 @@ bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString ou
     {
       LOG_INFO(
         "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
-        output.right(25));
+        output.right(25) << ". Loading entire map...");
       return false;
     }
   }
@@ -98,7 +98,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
       // Can this be cleaned up?
 
       const QString unstreamableMsg =
-        "Unable to stream I/O due to criterion op: " + opName + "; loading entire map...";
+        "Unable to stream I/O due to criterion op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -210,13 +210,14 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
   return filteredInputStream;
 }
 
-void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps)
+void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps,
+                             Progress progress)
 {
-  stream(QStringList(input), out, convertOps);
+  stream(QStringList(input), out, convertOps, progress);
 }
 
 void ElementStreamer::stream(const QStringList inputs, const QString out,
-                             const QStringList convertOps)
+                             const QStringList convertOps, Progress progress)
 {
   QElapsedTimer timer;
   timer.start();
@@ -231,7 +232,18 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
-    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
+    const QString message = "Streaming data conversion from " + in + " to " + out + "...";
+    // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+    // just an empty progress object, and we shouldn't log progress.
+    if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
+    {
+      progress.setFromRelative(
+        (float)i / (float)inputs.size(), Progress::JobState::Running, message);
+    }
+    else
+    {
+      LOG_STATUS(message);
+    }
 
     boost::shared_ptr<OsmMapReader> reader =
       OsmMapReaderFactory::createReader(

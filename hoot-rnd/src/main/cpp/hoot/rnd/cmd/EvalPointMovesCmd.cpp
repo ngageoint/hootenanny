@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Boost
@@ -41,7 +41,6 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
@@ -185,9 +184,8 @@ public:
     writer.writePoints(map, workingDir + "/EvalMove.shp");
 
     OgrReader reader;
-    Progress progress(getName());
     reader.setTranslationFile("LowerCase");
-    reader.read(workingDir + "/EvalMove.shp", "", result, progress);
+    reader.read(workingDir + "/EvalMove.shp", "", result);
 
     return result;
   }
@@ -204,9 +202,8 @@ public:
     writer.writePoints(map, workingDir + "/EvalMove.gml");
 
     OgrReader reader;
-    Progress progress(getName());
     reader.setTranslationFile("LowerCase");
-    reader.read(workingDir + "/EvalMove.gml", "", result, progress);
+    reader.read(workingDir + "/EvalMove.gml", "", result);
 
     return result;
   }

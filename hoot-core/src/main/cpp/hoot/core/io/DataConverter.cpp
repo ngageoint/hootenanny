@@ -32,7 +32,6 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -42,7 +41,6 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
@@ -55,6 +53,8 @@
 
 namespace hoot
 {
+
+const QString DataConverter::JOB_SOURCE = "Convert";
 
 void elementTranslatorThread::run()
 {
@@ -171,7 +171,8 @@ int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
 _colsArgSpecified(false),
-_featureReadLimit(0)
+_featureReadLimit(0),
+_printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
@@ -179,13 +180,21 @@ void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
+  LOG_VARD(_convertOps);
 }
 
 void DataConverter::convert(const QStringList inputs, const QString output)
 {
   _validateInput(inputs, output);
 
-  LOG_INFO("Converting " << inputs.join(", ").right(50) << " to " << output.right(50) << "...");
+  _progress.setJobId(ConfigOptions().getJobId());
+  _progress.setSource(JOB_SOURCE);
+  _progress.setState(Progress::JobState::Running);
+
+   _progress.set(
+    0.0,
+    "Converting " + inputs.join(", ").right(_printLengthMax) + " to " +
+    output.right(_printLengthMax) + "...");
 
   //We require that a translation be present when converting to OGR.  We may be able to absorb this
   //logic into _convert (see notes below).
@@ -207,6 +216,11 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   {
     _convert(inputs, output);
   }
+
+  _progress.set(
+    1.0, Progress::JobState::Successful,
+    "Converted ..." + inputs.join(", ").right(_printLengthMax) + " to: ..." +
+    output.right(_printLengthMax));
 }
 
 void DataConverter::_validateInput(const QStringList inputs, const QString output)
@@ -361,7 +375,7 @@ void DataConverter::_transToOgrMT(QString input, QString output)
 
 void DataConverter::_convertToOgr(const QString input, const QString output)
 {
-  LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
+  LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
 
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
       // TODO: I *believe* this ops size restriction needs to be replaced with a check similar to
@@ -374,19 +388,41 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
   else
   {
+    // The number of steps here must be updated as you add/remove job steps in the logic.
+    int numSteps = 2;
+    if (_convertOps.size() > 0)
+    {
+      numSteps++;
+    }
+    int currentStep = 1;
+
+    _progress.set(0.0, "Loading map: ..." + input.right(_printLengthMax) + "...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
+    currentStep++;
 
-    NamedOp(_convertOps).apply(map);
+    if (_convertOps.size() > 0)
+    {
+      NamedOp convertOps(_convertOps);
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
+      convertOps.apply(map);
+      currentStep++;
+    }
 
     QElapsedTimer timer;
     timer.start();
-
+    _progress.set(
+      (float)(currentStep - 1) / (float)numSteps,
+      "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     boost::shared_ptr<OgrWriter> writer(new OgrWriter());
     writer->setScriptPath(_translation);
     writer->open(output);
     writer->write(map);
+    currentStep++;
 
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
@@ -394,12 +430,103 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
 }
 
+std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
+                                                              const QString input,
+                                                              const QStringList layers)
+{
+  std::vector<float> progressWeights;
+  LOG_VART(layers.size());
+
+  // process the completion status report information first
+  long featureCountTotal = 0;
+  int undefinedCounts = 0;
+  for (int i = 0; i < layers.size(); i++)
+  {
+    LOG_VART(layers[i]);
+    // simply open the file, get the meta feature count value, and close
+    int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
+    LOG_VART(featuresPerLayer);
+    progressWeights.push_back((float)featuresPerLayer);
+    // cover the case where no feature count available efficiently; Despite the documentation
+    // saying "-1" should be returned for layers without the number of features calculated, a size
+    // of zero has been seen with some layers.
+    if (featuresPerLayer < 1) undefinedCounts++;
+    else featureCountTotal += featuresPerLayer;
+  }
+  LOG_VART(featureCountTotal);
+  LOG_VART(undefinedCounts);
+
+  int definedCounts = layers.size() - undefinedCounts;
+  LOG_VART(definedCounts);
+
+  // determine weights for 3 possible cases
+  if (undefinedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
+  }
+  else if (definedCounts == layers.size())
+  {
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+  else
+  {
+    for (int i = 0; i<layers.size(); i++)
+      if (progressWeights[i] == -1)
+      {
+        progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
+      }
+    // reset featurecount total and recalculate
+    featureCountTotal = 0;
+    for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
+    LOG_VART(progressWeights);
+    for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
+  }
+
+  LOG_VART(progressWeights);
+  return progressWeights;
+}
+
+QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& input)
+{
+  QStringList layers;
+
+  if (input.contains(";"))
+  {
+    QStringList list = input.split(";");
+    input = list.at(0);
+    layers.append(list.at(1));
+  }
+  else
+  {
+    layers = reader.getFilteredLayerNames(input);
+    layers.sort();
+  }
+  LOG_VARD(layers);
+
+  if (layers.size() == 0)
+  {
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+    }
+    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    {
+      LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
+
+  return layers;
+}
+
 void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
 {
-  LOG_TRACE("_convertFromOgr (formerly known as ogr2osm)");
+  LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
 
   QElapsedTimer timer;
   timer.start();
+
+  _progress.set(0.0, "Loading maps: ..." + inputs.join(",").right(_printLengthMax) + "...");
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
@@ -409,111 +536,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   }
   reader.setTranslationFile(_translation);
 
-  ConfigOptions configOptions;
-
-  Progress progress("DataConverter");
-  progress.setReportType(configOptions.getProgressReportingFormat());
-  progress.setState("Running");
-
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    QString input = inputs[i].trimmed();
-    LOG_VART(input);
-
-    if (input.trimmed().isEmpty())
-    {
-      LOG_WARN("Got an empty layer, skipping.");
-      continue;
-    }
-
-    QStringList layers;
-    if (input.contains(";"))
-    {
-      QStringList list = input.split(";");
-      input = list.at(0);
-      layers.append(list.at(1));
-    }
-    else
-    {
-      layers = reader.getFilteredLayerNames(input);
-      layers.sort();
-    }
-    LOG_VART(layers);
-
-    if (layers.size() == 0)
-    {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN("Could not find any valid layers to read from in " + input + ".");
-      }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-
-    // process the completion status report information first
-    long featureCountTotal = 0;
-    int undefinedCounts = 0;
-    std::vector<float> progressWeights;
-    for (int i = 0; i < layers.size(); i++)
-    {
-      LOG_VART(layers[i]);
-      // simply open the file, get the meta feature count value, and close
-      int featuresPerLayer = reader.getFeatureCount(input, layers[i]);
-      progressWeights.push_back((float)featuresPerLayer);
-      // cover the case where no feature count available efficiently
-      if (featuresPerLayer == -1) undefinedCounts++;
-      else featureCountTotal += featuresPerLayer;
-    }
-
-    int definedCounts = layers.size() - undefinedCounts;
-
-    // determine weights for 3 possible cases
-    if (undefinedCounts == layers.size())
-    {
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] = 1. / (float)layers.size();
-    }
-    else if (definedCounts == layers.size())
-    {
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-    }
-    else
-    {
-      for (int i = 0; i<layers.size(); i++)
-        if (progressWeights[i] == -1)
-        {
-          progressWeights[i] = (1. / (float)definedCounts) * featureCountTotal;
-        }
-      // reset featurecount total and recalculate
-      featureCountTotal = 0;
-      for (int i = 0; i < layers.size(); i++) featureCountTotal += progressWeights[i];
-      for (int i = 0; i < layers.size(); i++) progressWeights[i] /= (float)featureCountTotal;
-    }
-
-    // read each layer's data
-    for (int i = 0; i < layers.size(); i++)
-    {
-      PROGRESS_INFO(
-        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
-      progress.setTaskWeight(progressWeights[i]);
-      reader.read(input, layers[i], map, progress);
-    }
-  }
-
-  if (map->getNodes().size() == 0)
-  {
-    progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
-    throw HootException("After translation the map is empty. Aborting.");
-  }
-
-  LOG_INFO(
-    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
-
-  MapProjector::projectToPlanar(map);
-  //the ordering for these ogr2osm ops may matter
+  // The ordering for these ogr2osm ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
     _convertOps.prepend("hoot::BuildingPartMergeOp");
@@ -522,17 +545,79 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   {
     _convertOps.prepend("hoot::MergeNearbyNodes");
   }
-  NamedOp(_convertOps).apply(map);
+  LOG_VARD(_convertOps);
 
+  // The number of steps here must be updated as you add/remove job steps in the logic.
+  int numTasks = 2;
+  if (_convertOps.size() > 0)
+  {
+    numTasks++;
+  }
+  int currentTask = 1;
+  const float taskWeight = 1.0 / (float)numTasks;
+
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    QString input = inputs[i].trimmed();
+    LOG_VARD(input);
+
+    if (input.trimmed().isEmpty())
+    {
+      LOG_WARN("Got an empty layer, skipping.");
+      continue;
+    }
+
+    const QStringList layers = _getOgrLayersFromPath(reader, input);
+    const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
+    // read each layer's data
+    for (int i = 0; i < layers.size(); i++)
+    {
+      PROGRESS_INFO(
+        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
+      LOG_VART(progressWeights[i]);
+      reader.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
+      reader.read(input, layers[i], map);
+    }
+  }
+
+  if (map->getNodes().size() == 0)
+  {
+    const QString msg = "After translation the map is empty. Aborting.";
+    _progress.set(1.0, Progress::JobState::Failed, msg);
+    throw HootException(msg);
+  }
+
+  LOG_INFO(
+    "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
+    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+  currentTask++;
+
+  MapProjector::projectToPlanar(map);
+  if (_convertOps.size() > 0)
+  {
+    NamedOp convertOps(_convertOps);
+    convertOps.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(currentTask - 1) / (float)numTasks, taskWeight));
+    convertOps.apply(map);
+    currentTask++;
+  }
+
+  _progress.set(
+    (float)(currentTask - 1) / (float)numTasks,
+    "Writing map: ..." + output.right(_printLengthMax) + "...");
   MapProjector::projectToWgs84(map);
   IoUtils::saveMap(map, output);
-
-  progress.set(1.0, "Successful", true, "Finished successfully.");
+  currentTask++;
 }
 
 void DataConverter::_convert(const QStringList inputs, const QString output)
 {
-  LOG_TRACE("general convert");
+  LOG_DEBUG("general convert");
 
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
@@ -545,11 +630,11 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     assert(!_colsArgSpecified);
     //a previous check was done to make sure a translation wasn't specified as both a command line
     //input and a convert op
-    assert (_convertOps.contains("hoot::TranslationOp") &&
-            _convertOps.contains("hoot::TranslationVisitor"));
+    assert(_convertOps.contains("hoot::TranslationOp") &&
+           _convertOps.contains("hoot::TranslationVisitor"));
 
     _convertOps.prepend("hoot::TranslationOp");
-    LOG_VART(_convertOps);
+    LOG_VARD(_convertOps);
     conf().set(ConfigOptions::getTranslationScriptKey(), _translation);
     LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
   }
@@ -558,6 +643,24 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   const bool isStreamable =
     ElementStreamer::areValidStreamingOps(_convertOps) &&
     ElementStreamer::areStreamableIo(inputs, output);
+
+  // The number of steps here must be updated as you add/remove job steps in the logic.
+  int numTasks = 0;
+  if (isStreamable)
+  {
+    numTasks = 1;   // Streaming combines reading/writing into a single step.
+  }
+  else
+  {
+    numTasks = 2;
+    if (_convertOps.size() > 0)
+    {
+      numTasks++;
+    }
+  }
+  int currentTask = 1;
+  const float taskWeight = 1.0 / (float)numTasks;
+
   if (isStreamable)
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
@@ -565,41 +668,63 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
     assert(!_colsArgSpecified);
 
     //stream the i/o
-    ElementStreamer::stream(inputs, output);
+    ElementStreamer::stream(
+      inputs, output, QStringList(),
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(currentTask - 1) / (float)numTasks, taskWeight));
+    currentTask++;
   }
   else
   {
+    Progress inputLoadProgress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
+      inputLoadProgress.setFromRelative(
+        (float)i / (float)inputs.size(), Progress::JobState::Running,
+        "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
       IoUtils::loadMap(
         map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     }
+    currentTask++;
 
-    NamedOp(_convertOps).apply(map);
+    if (_convertOps.size() > 0)
+    {
+      NamedOp convertOps(_convertOps);
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(currentTask - 1) / (float)numTasks, taskWeight));
+      convertOps.apply(map);
+      currentTask++;
+    }
 
+    _progress.set(
+      (float)(currentTask - 1) / (float)numTasks,
+      "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
-
     if (output.toLower().endsWith(".shp") && _colsArgSpecified)
     {
-      LOG_TRACE("_exportToShapeWithCols (formerly known as osm2shp)");
-
-      //if the user specified cols, then we want to export them
+      // If the user specified cols, then we want to export them.
       _exportToShapeWithCols(output, _columns, map);
     }
     else
     {
-      LOG_TRACE("General conversion with: _convert (the original convert command)");
-
+      LOG_DEBUG("General conversion with: _convert (the original convert command)");
       IoUtils::saveMap(map, output);
     }
+    currentTask++;
   }
 }
 
 void DataConverter::_exportToShapeWithCols(const QString output, const QStringList cols,
                                            OsmMapPtr map)
 {
+  LOG_DEBUG("_exportToShapeWithCols (formerly known as osm2shp)");
+
   QElapsedTimer timer;
   timer.start();
 

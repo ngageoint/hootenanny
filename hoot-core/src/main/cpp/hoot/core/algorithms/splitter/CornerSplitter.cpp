@@ -80,6 +80,8 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 
 void CornerSplitter::splitCorners()
 {
+  _numAffected = 0;
+
   // Get a list of ways (that look like roads) in the map
   HighwayCriterion highwayCrit(_map);
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
@@ -292,6 +294,7 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
     LOG_VART(_map->containsElement(splitWayId));
 
     //  Split was successful
+    _numAffected++;
     return true;
   }
   //  No splits were made

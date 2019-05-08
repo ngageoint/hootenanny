@@ -67,9 +67,7 @@ public:
   double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2);
 
-   double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
-
-  static bool debug;
+  double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
 
 private:
 

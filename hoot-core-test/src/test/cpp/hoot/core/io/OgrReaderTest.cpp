@@ -64,9 +64,8 @@ public:
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
-      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -114,10 +113,9 @@ public:
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("translations/cloudmade.js");
-      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -144,10 +142,9 @@ public:
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("cloudmade");
-      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -196,7 +193,7 @@ public:
 
       // Iterate through all items
       int numberOfElements(0);
-      while ( reader.hasMoreElements() == true )
+      while (reader.hasMoreElements() == true)
       {
         ElementPtr tempElement = reader.readNextElement();
         numberOfElements++;

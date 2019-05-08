@@ -125,15 +125,15 @@ public:
   void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     LOG_VART(e->getElementId());
+    //LOG_VART(e);
 
     boost::shared_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
 
     // find other nearby candidates
-    set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                   getIndex(),
-                                                                   _indexToEid,
-                                                                   getMap());
+    set<ElementId> neighbors =
+      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+
     ElementId from(e->getElementType(), e->getId());
 
     _elementsEvaluated++;
@@ -145,11 +145,11 @@ public:
       {
         const boost::shared_ptr<const Element>& n = _map->getElement(*it);
         // score each candidate and push it on the result vector
-        HighwayMatch* m =
+        HighwayMatch* match =
           createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
-        if (m)
+        if (match)
         {
-          _result.push_back(m);
+          _result.push_back(match);
           neighborCount++;
         }
       }

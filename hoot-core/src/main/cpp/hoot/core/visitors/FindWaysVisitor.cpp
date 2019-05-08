@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindWaysVisitor.h"
@@ -62,11 +62,8 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map, ElementCriteri
   return v.getIds();
 }
 
-vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
-                                       ElementCriterion* pCrit,
-                                      ConstWayPtr refWay,
-                                       Meters maxDistance,
-                                       bool addError)
+vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                       ConstWayPtr refWay, Meters maxDistance, bool addError)
 {
   vector<long> close = map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
   vector<long> result;
@@ -91,9 +88,8 @@ vector<long> FindWaysVisitor::findWaysByNode(const ConstOsmMapPtr& map, long nod
 }
 
 // Convenience method for finding ways that contain the given tag
-vector<long> FindWaysVisitor::findWaysByTag(const ConstOsmMapPtr& map,
-                                  const QString& key,
-                                  const QString& value)
+vector<long> FindWaysVisitor::findWaysByTag(const ConstOsmMapPtr& map, const QString& key,
+                                            const QString& value)
 {
   TagCriterion crit(key, value);
   FindWaysVisitor v(&crit);

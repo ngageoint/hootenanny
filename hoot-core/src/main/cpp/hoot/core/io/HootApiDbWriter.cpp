@@ -342,7 +342,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
   setRemap(configOptions.getHootapiDbWriterRemapIds());
   setCopyBulkInsertActivated(configOptions.getHootapiDbWriterCopyBulkInsert());
-  setJobId(configOptions.getHootapiDbWriterJobId());
+  setJobId(configOptions.getJobId());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

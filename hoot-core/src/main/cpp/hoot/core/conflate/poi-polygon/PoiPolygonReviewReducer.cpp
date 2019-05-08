@@ -224,7 +224,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   // TODO: using custom match/review distances or custom score requirements may be a better way to
-  //handle these types
+  // handle these types
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {

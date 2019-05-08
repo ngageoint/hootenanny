@@ -32,6 +32,8 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementCache.h>
+#include <hoot/core/util/Progress.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QStringList>
@@ -84,6 +86,7 @@ class DataConverter : public Configurable
 public:
 
   static int logWarnCount;
+  static const QString JOB_SOURCE;
 
   DataConverter();
 
@@ -105,6 +108,9 @@ private:
   int _featureReadLimit;
   QStringList _convertOps;
 
+  Progress _progress;
+  int _printLengthMax;
+
   void _validateInput(const QStringList inputs, const QString output);
 
   void _convertToOgr(const QString input, const QString output);
@@ -116,6 +122,15 @@ private:
                          ElementCachePtr cachePtr,
                          QQueue<ElementPtr> &workQ);
   void _transToOgrMT(QString input, QString output);
+
+  /*
+   * Attempts to determine the relative weighting of each layer in an OGR data source based on
+   * feature size. If the feature size hasn't already been calculated for each layer, then a even
+   * distribution of weighting between layers is returned.
+   */
+  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString input,
+                                                 const QStringList layers);
+  QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 };
 
 }

@@ -135,6 +135,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   {
     return Info;
   }
+  if (l == "status")
+  {
+    return Status;
+  }
   if (l == "warn")
   {
     return Warn;
@@ -161,10 +165,10 @@ QString Log::getLevelString(WarningLevel l)
     return "TRACE";
   case Debug:
     return "DEBUG";
-  case Verbose:
-    return "VERBOSE";
   case Info:
     return "INFO";
+  case Status:
+    return "STATUS";
   case Warn:
     return "WARN";
   case Error:
@@ -177,10 +181,10 @@ QString Log::getLevelString(WarningLevel l)
 }
 
 void Log::log(WarningLevel level, const QString& str, const QString& filename,
-  const QString& functionName, int lineNumber)
+  const QString& prettyFunction, int lineNumber)
 {
   log(level, string(str.toUtf8().data()), string(filename.toUtf8().data()),
-      string(functionName.toUtf8().data()), lineNumber);
+      string(prettyFunction.toUtf8().data()), lineNumber);
 }
 
 string Log::ellipsisStr(const string& str, uint count)

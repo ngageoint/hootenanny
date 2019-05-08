@@ -43,7 +43,7 @@ class ClipDatasetCommand extends ExternalCommand {
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.job.id=" + jobId);
+        options.add("job.id=" + jobId);
         if(user == null) {
             options.add("api.db.email=test@test.com");
         } else {

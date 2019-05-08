@@ -8,10 +8,10 @@ npm run cover
 
 # move istanbul instrumented hoot-ui javascript code into tomcat webapps
 sudo service tomcat8 stop
-sudo -u tomcat8 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
-sudo -u tomcat8 cp -R $HOOT_HOME/hoot-ui $TOMCAT8_HOME/webapps/hootenanny-id
-sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot $TOMCAT8_HOME/webapps/hootenanny-id/js
-sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id $TOMCAT8_HOME/webapps/hootenanny-id/js
+sudo -u tomcat8 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id-legacy/
+sudo -u tomcat8 cp -R $HOOT_HOME/hoot-ui $TOMCAT8_HOME/webapps/hootenanny-id-legacy
+sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot $TOMCAT8_HOME/webapps/hootenanny-id-legacy/js
+sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id $TOMCAT8_HOME/webapps/hootenanny-id/-legacyjs
 # activate EGD plugin so it's available for cucumber tests
 [ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh $TOMCAT8_HOME
 
@@ -41,9 +41,9 @@ kill $PID
 
 # restore uninstrumented hoot-ui code to tomcat webapps
 sudo service tomcat8 stop
-sudo -u tomcat8 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id/
-sudo -u tomcat8 cp -R $HOOT_HOME/hoot-ui/dist $TOMCAT8_HOME/webapps/hootenanny-id
-sudo -u tomcat8 mkdir -p $TOMCAT8_HOME/webapps/hootenanny-id/data
-sudo -u tomcat8 cp $HOOT_HOME/hoot-ui/data/osm-plus-taginfo.csv $TOMCAT8_HOME/webapps/hootenanny-id/data
-sudo -u tomcat8 cp $HOOT_HOME/hoot-ui/data/tdsv61_field_values.json $TOMCAT8_HOME/webapps/hootenanny-id/data
+sudo -u tomcat8 rm -rf $TOMCAT8_HOME/webapps/hootenanny-id-legacy/
+sudo -u tomcat8 cp -R $HOOT_HOME/hoot-ui/dist $TOMCAT8_HOME/webapps/hootenanny-id-legacy
+sudo -u tomcat8 mkdir -p $TOMCAT8_HOME/webapps/hootenanny-id-legacy/data
+sudo -u tomcat8 cp $HOOT_HOME/hoot-ui/data/osm-plus-taginfo.csv $TOMCAT8_HOME/webapps/hootenanny-id-legacy/data
+sudo -u tomcat8 cp $HOOT_HOME/hoot-ui/data/tdsv61_field_values.json $TOMCAT8_HOME/webapps/hootenanny-id-legacy/data
 sudo service tomcat8 start

@@ -400,6 +400,9 @@ int main(int argc, char* argv[])
             "--single [test name] - Run only the test specified.\n"
             "--names - Show the names of all the tests as they run.\n"
             "--all-names - Only print the names of all the tests.\n"
+            "--fatal - Show fatal error messages only.\n"
+            "--error - Show error messages and above.\n"
+            "--status - Show status messages and above.\n"
             "--warn - Show warning messages and above.\n"
             "--info - Show info messages and above.\n"
             "--verbose - Show verbose messages and above.\n"
@@ -432,10 +435,6 @@ int main(int argc, char* argv[])
     std::vector<TestPtr> vAllTests;
     std::vector<CppUnit::Test*> vTestsToRun;
     CppUnit::TextTestResult result;
-
-# if HOOT_HAVE_HADOOP
-    Hoot::getInstance().loadLibrary("PrettyPipesExample");
-# endif
 
     // initialize OSM Schema so the time expense doesn't print in other tests.
     OsmSchema::getInstance();
