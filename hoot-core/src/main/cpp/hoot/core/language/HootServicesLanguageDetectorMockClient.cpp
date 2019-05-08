@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLanguageDetectorMockClient.h"
@@ -50,7 +50,7 @@ HootServicesLanguageDetectorClient()
   _useCookies = false;
 }
 
-QString HootServicesLanguageDetectorMockClient::detect(const QString text)
+QString HootServicesLanguageDetectorMockClient::detect(const QString& text)
 {
   LOG_DEBUG("Detecting source language for text: " << text << "...");
   _numDetectionsAttempted++;

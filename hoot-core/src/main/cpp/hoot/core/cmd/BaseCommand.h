@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef BASECOMMAND_H
@@ -34,9 +34,6 @@
 // Hoot
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -74,7 +71,7 @@ protected:
   virtual QString _getHelpPath() const;
 };
 
-typedef boost::shared_ptr<BaseCommand> BaseCommandPtr;
+typedef std::shared_ptr<BaseCommand> BaseCommandPtr;
 
 }
 

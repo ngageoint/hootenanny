@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RUBBERSHEETDERIVER_H
@@ -52,8 +52,8 @@ public:
    * @param transform1To2 output transformation for rubber sheeting from input 1 to input 2
    * @param ref if true, input 1 is treated as the reference input and held constant
    */
-  void derive(const QString input1, const QString input2, const QString transform2To1,
-              const QString transform1To2 = "", const bool ref = false);
+  void derive(const QString& input1, const QString& input2, const QString& transform2To1,
+              const QString& transform1To2 = "", const bool ref = false);
 };
 
 }

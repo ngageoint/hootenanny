@@ -68,7 +68,7 @@ UnifyingConflator::UnifyingConflator() :
   _reset();
 }
 
-UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
+UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -402,7 +402,7 @@ void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementI
 {
   for (size_t i = 0; i < replaced.size(); ++i)
   {
-    HashMap<ElementId, vector<Merger*> >::const_iterator it = _e2m.find(replaced[i].first);
+    HashMap<ElementId, vector<Merger*>>::const_iterator it = _e2m.find(replaced[i].first);
     if (it != _e2m.end())
     {
       const vector<Merger*>& mergers = it->second;

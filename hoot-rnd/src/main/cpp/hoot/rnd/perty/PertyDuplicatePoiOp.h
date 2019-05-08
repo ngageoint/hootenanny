@@ -98,7 +98,7 @@ private:
   double _p;
   double _duplicateSigma;
   boost::minstd_rand* _rng;
-  boost::shared_ptr<boost::minstd_rand> _localRng;
+  std::shared_ptr<boost::minstd_rand> _localRng;
 };
 
 }

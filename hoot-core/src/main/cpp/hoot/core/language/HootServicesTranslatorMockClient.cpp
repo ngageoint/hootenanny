@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesTranslatorMockClient.h"
@@ -55,13 +55,13 @@ HootServicesTranslatorClient()
   _useCookies = false;
 }
 
-void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList langCodes)
+void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList& langCodes)
 {
   LOG_DEBUG("Setting source languages...");
   _sourceLangs = langCodes;
 }
 
-QString HootServicesTranslatorMockClient::translate(const QString text)
+QString HootServicesTranslatorMockClient::translate(const QString& text)
 {
   _numTranslationsAttempted++;
   LOG_VART(text);

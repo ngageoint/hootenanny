@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OBJECTOUTPUTSTREAM_H
 #define OBJECTOUTPUTSTREAM_H
@@ -80,8 +80,8 @@ public:
 
 public:
   QDataStream* _stream;
-  boost::shared_ptr<QDataStream> _stream2Delete;
-  boost::shared_ptr<QByteArray> _array;
+  std::shared_ptr<QDataStream> _stream2Delete;
+  std::shared_ptr<QByteArray> _array;
   std::ostream* _ostream;
 };
 

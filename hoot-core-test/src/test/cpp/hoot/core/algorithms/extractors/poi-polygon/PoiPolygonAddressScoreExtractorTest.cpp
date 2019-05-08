@@ -300,8 +300,8 @@ public:
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     settings.set("poi.polygon.address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
-    boost::shared_ptr<DictionaryTranslator> dictTranslator =
-      boost::dynamic_pointer_cast<DictionaryTranslator>(AddressTranslator::_translator);
+    std::shared_ptr<DictionaryTranslator> dictTranslator =
+      std::dynamic_pointer_cast<DictionaryTranslator>(AddressTranslator::_translator);
     dictTranslator->setTokenizeInput(false);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

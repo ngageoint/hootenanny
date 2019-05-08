@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -68,7 +68,7 @@ public:
     //simplified.
     const QString jsonInput =
       "{ \"apps\": [ { \"name\": \"TikaLanguageDetector\", \"description\": \"blah\", \"url\": \"https://tika.apache.org\" }, { \"name\": \"OpenNlpLanguageDetector\", \"description\": \"more blah\", \"url\": \"https://opennlp.apache.org\" } ] }";
-    boost::shared_ptr<boost::property_tree::ptree> propTree =
+    std::shared_ptr<boost::property_tree::ptree> propTree =
       StringUtils::jsonStringToPropTree(jsonInput);
     std::stringstream outputStrStream;
     boost::property_tree::json_parser::write_json(outputStrStream, *propTree);

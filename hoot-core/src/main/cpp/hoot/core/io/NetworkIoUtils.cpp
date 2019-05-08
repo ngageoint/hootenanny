@@ -28,16 +28,15 @@
 #include "NetworkIoUtils.h"
 
 // Hoot
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/HootApiDb.h>
 
 namespace hoot
 {
 
-boost::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(
-  const QString userName, const QString accessToken, const QString accessTokenSecret,
-  const QString url)
+std::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(const QString& userName, const QString& accessToken, const QString& accessTokenSecret,
+  const QString& url)
 {
   LOG_VART(userName);
   LOG_VART(accessToken);
@@ -56,7 +55,7 @@ boost::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(
     throw HootException("User: " + userName + " has not been authenticated.");
   }
 
-  boost::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
+  std::shared_ptr<HootNetworkCookieJar> cookieJar(new HootNetworkCookieJar());
   QList<QNetworkCookie> cookies;
   QNetworkCookie sessionCookie(QString("SESSION").toUtf8(), sessionId.toUtf8());
   cookies.append(sessionCookie);

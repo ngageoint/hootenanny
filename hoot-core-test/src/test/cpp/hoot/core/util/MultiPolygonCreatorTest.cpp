@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -93,7 +93,7 @@ public:
     addPoint(map, w, 13, 5);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -127,7 +127,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
 
-    boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000), (9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 8.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -170,7 +170,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((9.0000000000000000 1.0000000000000000, 2.0000000000000000 6.0000000000000000, 6.0000000000000000 12.0000000000000000, 13.0000000000000000 11.0000000000000000, 14.0000000000000000 4.0000000000000000, 9.0000000000000000 1.0000000000000000), (10.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 7.0000000000000000, 10.0000000000000000 2.0000000000000000)), ((9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 7.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -212,7 +212,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
 
-    boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000), (7.0000000000000000 6.0000000000000000, 8.0000000000000000 8.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000)))"),
                          g->toString());

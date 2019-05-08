@@ -50,7 +50,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   virtual QString getDescription() const
   { return "Counts the number of elements having at least one information tag"; }

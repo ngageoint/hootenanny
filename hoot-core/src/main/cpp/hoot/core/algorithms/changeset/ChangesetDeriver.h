@@ -48,7 +48,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~ChangesetDeriver();
 
@@ -86,7 +86,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
 
 }
 

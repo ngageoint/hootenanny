@@ -53,13 +53,13 @@ public:
 
   static bool commandCompare(const std::string& n1, const std::string& n2)
   {
-    boost::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
-    boost::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
+    std::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
+    std::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
 
     return c1->getName() < c2->getName();
   }
 
-  static bool commandCompare2(boost::shared_ptr<Command> c1, boost::shared_ptr<Command> c2)
+  static bool commandCompare2(const std::shared_ptr<Command>& c1, const std::shared_ptr<Command>& c2)
   {
     return c1->getName() < c2->getName();
   }
@@ -98,7 +98,7 @@ private:
     bool foundIt = false;
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      std::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
 
       if (c->getName() == command)
       {
@@ -120,12 +120,12 @@ private:
   int _printSummary()
   {
     const vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
-    vector<boost::shared_ptr<Command>> coreCmds;
-    vector<boost::shared_ptr<Command>> rndCmds;
+    vector<std::shared_ptr<Command>> coreCmds;
+    vector<std::shared_ptr<Command>> rndCmds;
     for (size_t i = 0; i < cmds.size(); i++)
     {
       const string cmdClassName = cmds[i];
-      boost::shared_ptr<Command> command(
+      std::shared_ptr<Command> command(
         Factory::getInstance().constructObject<Command>(cmdClassName));
       if (command->displayInHelp())
       {
@@ -157,11 +157,11 @@ private:
     return 0;
   }
 
-  void _printCommands(const vector<boost::shared_ptr<Command>>& cmds)
+  void _printCommands(const vector<std::shared_ptr<Command>>& cmds)
   {
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      boost::shared_ptr<Command> command = cmds[i];
+      std::shared_ptr<Command> command = cmds[i];
       //spacing here is roughly the size of the longest command name plus a small buffer
       const int spaceSize = 30 - command->getName().size();
       const QString line = command->getName() + QString(spaceSize, ' ') + command->getDescription();
@@ -175,7 +175,7 @@ private:
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      boost::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
+      std::shared_ptr<Command> c(Factory::getInstance().constructObject<Command>(cmds[i]));
       if (c->displayInHelp())
       {
         cout << endl;

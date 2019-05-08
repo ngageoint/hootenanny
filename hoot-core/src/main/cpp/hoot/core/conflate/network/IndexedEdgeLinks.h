@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INDEXEDEDGELINKS_H
 #define INDEXEDEDGELINKS_H
@@ -44,8 +44,8 @@ public:
   IndexedEdgeLinks();
 };
 
-typedef boost::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
-typedef boost::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
+typedef std::shared_ptr<IndexedEdgeLinks> IndexedEdgeLinksPtr;
+typedef std::shared_ptr<const IndexedEdgeLinks> ConstIndexedEdgeLinksPtr;
 
 // not implemented
 bool operator<(ConstIndexedEdgeLinksPtr, ConstIndexedEdgeLinksPtr);

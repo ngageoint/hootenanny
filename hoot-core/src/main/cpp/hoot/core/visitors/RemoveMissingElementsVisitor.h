@@ -64,7 +64,7 @@ public:
 
 private:
 
-  boost::shared_ptr<ReportMissingElementsVisitor> _v;
+  std::shared_ptr<ReportMissingElementsVisitor> _v;
 };
 
 }

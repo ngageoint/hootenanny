@@ -98,9 +98,9 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
   return sqrt(sFrom * sTo);
 }
 
-boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
+std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
 {
-  return boost::shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
+  return std::shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
 void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
@@ -195,7 +195,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
   ebNeighborhood.remove(smallWayB);
 
   // represents which vertices an edge may match [vertex in nb][edge in na]
-  QHash<ConstNetworkVertexPtr, QList<ConstNetworkEdgePtr> > edgeVMatch;
+  QHash<ConstNetworkVertexPtr, QList<ConstNetworkEdgePtr>> edgeVMatch;
   QList<ConstNetworkEdgePtr> unmatched;
 
   // for each edge that intersects with va

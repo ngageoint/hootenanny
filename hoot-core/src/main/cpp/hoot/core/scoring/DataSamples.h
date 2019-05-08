@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DATASAMPLES_H
@@ -30,10 +30,10 @@
 
 // Standard
 #include <map>
+#include <memory>
 #include <vector>
 
 // Tgs
-#include <tgs/SharedPtr.h>
 #include <tgs/RandomForest/DataFrame.h>
 
 namespace hoot
@@ -52,7 +52,7 @@ public:
 
   std::vector<std::string> getUniqueLabels() const;
 
-  boost::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
+  std::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
 

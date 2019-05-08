@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "InfoGainCalculator.h"
@@ -112,7 +112,7 @@ namespace Tgs
       infoGain.resize(fIndices.size());
       std::vector<unsigned int> splitIndices;
       splitIndices.resize(fIndices.size());
-      std::vector<std::vector<unsigned int> > sortedIndices;
+      std::vector<std::vector<unsigned int>> sortedIndices;
       sortedIndices.resize(fIndices.size());
 
       //Sort each indices set based on the factor values

@@ -166,7 +166,7 @@ public:
 
 private:
 
-  boost::shared_ptr<MatchCriteria> _criteria;
+  std::shared_ptr<MatchCriteria> _criteria;
   Meters _spacing;
   Meters _minSplitSize;
 
@@ -196,7 +196,7 @@ private:
   void _calculateSublineScores(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2, Sparse2dMatrix &scores);
 
-  std::vector< std::pair<WayLocation, WayLocation> > _discretizePointPairs(const ConstOsmMapPtr &map,
+  std::vector<std::pair<WayLocation, WayLocation>> _discretizePointPairs(const ConstOsmMapPtr &map,
     const ConstWayPtr& w1, const ConstWayPtr& w2, std::vector<WaySublineMatch> &rawSublineMatches);
 
   std::vector<WaySublineMatch> _extractAllMatches(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
@@ -236,20 +236,20 @@ private:
   bool _checkForSortedSecondSubline(const std::vector<WaySublineMatch>& rawSublineMatches) const;
   bool _rawSublinesTooSmall(const std::vector<WaySublineMatch>& rawSublineMatches) const;
   cv::Mat _createConstraintMatrix(const std::vector<int>& starts, const std::vector<int>& ends,
-                                  const std::vector< std::pair<WayLocation, WayLocation> >& pairs,
+                                  const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
                                   std::vector<int>& matchIndexes);
   void _calculateSnapStarts(const WaySublineMatch& rawSublineMatch, const int matchIndex,
                             const std::vector<double>& splits,
-                            const std::vector< std::pair<WayLocation, WayLocation> >& pairs,
+                            const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
                             const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                             WayLocation& w1Start, WayLocation& w2Start);
   void _calculateSnapEnds(const int matchIndex, const std::vector<double>& splits,
-                          const std::vector< std::pair<WayLocation, WayLocation> >& pairs,
+                          const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
                           const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                           WayLocation& w1End, WayLocation& w2End);
   void _calculatePointPairMatches(const double way1CircularError, const double way2CircularError,
                                   const std::vector<WaySublineMatch>& rawSublineMatches,
-                                  const std::vector< std::pair<WayLocation, WayLocation> >& pairs,
+                                  const std::vector<std::pair<WayLocation, WayLocation>>& pairs,
                                   cv::Mat& m, std::vector<int>& starts, std::vector<int>& ends);
 
 };

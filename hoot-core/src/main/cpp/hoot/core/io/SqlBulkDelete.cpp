@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SqlBulkDelete.h"
 
@@ -41,7 +41,7 @@
 namespace hoot
 {
 
-SqlBulkDelete::SqlBulkDelete(QSqlDatabase& db, const QString tableName) :
+SqlBulkDelete::SqlBulkDelete(const QSqlDatabase& db, const QString& tableName) :
 _db(db),
 _tableName(tableName)
 {

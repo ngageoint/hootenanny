@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddressTagKeys.h"
 
@@ -54,7 +54,7 @@ const AddressTagKeysPtr& AddressTagKeys::getInstance()
   return _theInstance;
 }
 
-void AddressTagKeys::_readAddressTagKeys(const QString configFile)
+void AddressTagKeys::_readAddressTagKeys(const QString& configFile)
 {
   const QStringList addressTagKeyEntries = FileUtils::readFileToList(configFile);
   for (int i = 0; i < addressTagKeyEntries.size(); i++)
@@ -112,7 +112,7 @@ QSet<QString> AddressTagKeys::getAddressTagKeys(const Element& element) const
   return foundAddressTagKeys;
 }
 
-QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString addressTagType) const
+QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString& addressTagType) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)
@@ -126,7 +126,7 @@ QString AddressTagKeys::getAddressTagKey(const Tags& tags, const QString address
   return "";
 }
 
-QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString addressTagType) const
+QString AddressTagKeys::getAddressTagValue(const Tags& tags, const QString& addressTagType) const
 {
   const QStringList tagKeys = _addressTypeToTagKeys.values(addressTagType);
   for (int i = 0; i < tagKeys.size(); i++)

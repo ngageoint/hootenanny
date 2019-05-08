@@ -37,9 +37,6 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
-// Boost
-using namespace boost;
-
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>

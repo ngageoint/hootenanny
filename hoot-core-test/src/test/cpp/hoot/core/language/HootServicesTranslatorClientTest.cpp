@@ -61,7 +61,7 @@ public:
 
   void runRequestDataTest()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
+    std::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(
@@ -71,7 +71,7 @@ public:
 
   void runParseResponseTest()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
+    std::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     //see comment in StringUtilsTest::jsonParseTest about the formatting of this string
     const QString jsonStr =
@@ -85,7 +85,7 @@ public:
           "\"sourceText\": \"wie alt bist du\", "
           "\"detectedLang\": \"German\", "
           "\"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
     uut->_parseResponse(response);
 
@@ -119,9 +119,9 @@ public:
 
 private:
 
-  boost::shared_ptr<HootServicesTranslatorClient> _getClient()
+  std::shared_ptr<HootServicesTranslatorClient> _getClient()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
+    std::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
 
     Settings conf;
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");

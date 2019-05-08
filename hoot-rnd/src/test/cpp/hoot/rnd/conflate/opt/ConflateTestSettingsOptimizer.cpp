@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateTestSettingsOptimizer.h"
 
@@ -54,8 +54,7 @@ _verbose(verbose)
 {
 }
 
-Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
-  const QString testSettingsFile)
+Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(const QString& testSettingsFile)
 {
   LOG_VARD(testSettingsFile);
 
@@ -78,7 +77,7 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
   }
 
   Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
-  BOOST_FOREACH (boost::property_tree::ptree::value_type& setting, propTree.get_child("settings"))
+  for (boost::property_tree::ptree::value_type& setting : propTree.get_child("settings"))
   {
     const QString settingName = QString::fromStdString(setting.second.get<std::string>("name", ""));
     LOG_VART(settingName);
@@ -99,9 +98,8 @@ Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
   return stateDescription;
 }
 
-void ConflateTestSettingsOptimizer::runOptimization(
-  boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
-  const QString testSettingsFile, const QString outputFile)
+void ConflateTestSettingsOptimizer::runOptimization(std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+  const QString& testSettingsFile, const QString& outputFile)
 {
   Tgs::SimulatedAnnealing sa(_initStateDescription(testSettingsFile), fitnessFunction);
   sa.setPickFromBestScores(true);
@@ -110,9 +108,8 @@ void ConflateTestSettingsOptimizer::runOptimization(
   _writeOutput(fitnessFunction, sa.getBestStates(), numIterations, outputFile);
 }
 
-void ConflateTestSettingsOptimizer::_writeOutput(
-  boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-  const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile)
+void ConflateTestSettingsOptimizer::_writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+  const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile)
 {
   QString output =
     "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
@@ -135,8 +132,8 @@ void ConflateTestSettingsOptimizer::_writeOutput(
   LOG_INFO(temp);
   output += temp + "\n\n";
 
-  boost::shared_ptr<AbstractRegressionTestFitnessFunction> regressionTestFitnessFunction =
-    boost::dynamic_pointer_cast<AbstractRegressionTestFitnessFunction>(fitnessFunction);
+  std::shared_ptr<AbstractRegressionTestFitnessFunction> regressionTestFitnessFunction =
+    std::dynamic_pointer_cast<AbstractRegressionTestFitnessFunction>(fitnessFunction);
   if (regressionTestFitnessFunction)
   {
     temp = regressionTestFitnessFunction->bestScoresPerTestToString();

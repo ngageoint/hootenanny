@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
@@ -45,14 +45,14 @@ public:
 
   virtual ~ConstOsmMapOperation() {}
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map)
-  { apply((const boost::shared_ptr<OsmMap>&)map); }
+  virtual void apply(std::shared_ptr<OsmMap>& map)
+  { apply((const std::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may
    * still be changed.
    */
-  virtual void apply(const boost::shared_ptr<OsmMap>& map) = 0;
+  virtual void apply(const std::shared_ptr<OsmMap>& map) = 0;
 
   virtual QString getDescription() const { return ""; }
 };

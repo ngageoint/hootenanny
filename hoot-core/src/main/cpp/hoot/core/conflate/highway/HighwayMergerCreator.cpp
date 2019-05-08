@@ -55,7 +55,7 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
 
   set<pair<ElementId, ElementId>> eids;
 
-  boost::shared_ptr<SublineStringMatcher> sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> sublineMatcher;
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {

@@ -131,8 +131,8 @@ private:
 
 HOOT_DEFINE_EXCEPTION(OverlappingMatchesException)
 
-typedef boost::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
-typedef boost::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
+typedef std::shared_ptr<WaySublineMatchString> WaySublineMatchStringPtr;
+typedef std::shared_ptr<const WaySublineMatchString> ConstWaySublineMatchStringPtr;
 
 }
 

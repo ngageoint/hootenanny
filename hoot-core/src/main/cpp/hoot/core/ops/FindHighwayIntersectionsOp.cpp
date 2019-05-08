@@ -57,18 +57,18 @@ FindHighwayIntersectionsOp::FindHighwayIntersectionsOp()
 {
 }
 
-void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
+void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
-  boost::shared_ptr<RemoveElementsVisitor> removeRelationsVis(new RemoveElementsVisitor());
+  std::shared_ptr<RemoveElementsVisitor> removeRelationsVis(new RemoveElementsVisitor());
   removeRelationsVis->addCriterion(
     ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)));
   VisitorOp(removeRelationsVis).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   // pragmatically remove "bad" data in OSM afghanistan
-  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
+  std::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
   RemoveElementsVisitor::removeWays(map, pCrit);
 
   // reproject into a planar projection centered in the middle of bounding box.
@@ -83,23 +83,23 @@ void FindHighwayIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
   LOG_INFO("Assuming drives on right.");
 
   // find all intersections
-  boost::shared_ptr<FindHighwayIntersectionsVisitor> v(new FindHighwayIntersectionsVisitor());
+  std::shared_ptr<FindHighwayIntersectionsVisitor> v(new FindHighwayIntersectionsVisitor());
   VisitorOp(v).apply(map);
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  boost::shared_ptr<RemoveElementsVisitor> removeWaysVis(new RemoveElementsVisitor());
+  std::shared_ptr<RemoveElementsVisitor> removeWaysVis(new RemoveElementsVisitor());
   removeWaysVis->addCriterion(ElementCriterionPtr(new ElementTypeCriterion(ElementType::Way)));
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found
-  boost::shared_ptr<NotCriterion> intersectionCrit(
+  std::shared_ptr<NotCriterion> intersectionCrit(
     new NotCriterion(
       new ChainCriterion(
-        boost::shared_ptr<ElementInIdListCriterion>(
+        std::shared_ptr<ElementInIdListCriterion>(
           new ElementInIdListCriterion(v->getIntersections())),
-        boost::shared_ptr<NodeCriterion>(new NodeCriterion()))));
-  boost::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
+        std::shared_ptr<NodeCriterion>(new NodeCriterion()))));
+  std::shared_ptr<RemoveElementsVisitor> removeIntersectionsVis(new RemoveElementsVisitor());
   removeIntersectionsVis->addCriterion(intersectionCrit);
   VisitorOp(removeIntersectionsVis).apply(map);
 

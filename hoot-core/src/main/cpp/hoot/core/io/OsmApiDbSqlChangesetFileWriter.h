@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
@@ -54,7 +54,7 @@ class OsmApiDbSqlChangesetFileWriter : public Configurable
 
 public:
 
-  OsmApiDbSqlChangesetFileWriter(QUrl url);
+  OsmApiDbSqlChangesetFileWriter(const QUrl& url);
   ~OsmApiDbSqlChangesetFileWriter();
 
   /**
@@ -63,7 +63,7 @@ public:
    * @param path SQL file output path
    * @param changesetProvider changeset data
    */
-  void write(const QString path, ChangesetProviderPtr changesetProvider);
+  void write(const QString& path, ChangesetProviderPtr changesetProvider);
 
   /**
    * Set the configuration settings
@@ -99,7 +99,7 @@ private:
   QString _getUpdateValuesWayOrRelationStr(ConstElementPtr element) const;
 
   void _deleteExistingElement(ConstElementPtr removedElement);
-  void _deleteAll(const QString tableName, const QString idFieldName, const long id);
+  void _deleteAll(const QString& tableName, const QString& idFieldName, const long id);
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 

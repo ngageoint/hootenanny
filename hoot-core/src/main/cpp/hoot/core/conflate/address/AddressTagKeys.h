@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_TAG_KEYS_H
 #define ADDRESS_TAG_KEYS_H
@@ -39,7 +39,7 @@ namespace hoot
 
 class AddressTagKeys;
 
-typedef boost::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
+typedef std::shared_ptr<AddressTagKeys> AddressTagKeysPtr;
 
 /**
  * Allows for mapping an address part type to a range of valid OSM tag keys (Singleton)
@@ -66,7 +66,7 @@ public:
    * to by the configuration setting, address.tag.keys.file, for more detail
    * @return an address tag key or an empty string if no address tag of the specified type is found
    */
-  QString getAddressTagKey(const Tags& tags, const QString addressTagType) const;
+  QString getAddressTagKey(const Tags& tags, const QString& addressTagType) const;
 
   /**
    * Returns a tag value of the specified address type from a set of tags
@@ -77,7 +77,7 @@ public:
    * @return an address tag value or an empty string if no address tag of the specified type is
    * found
    */
-  QString getAddressTagValue(const Tags& tags, const QString addressTagType) const;
+  QString getAddressTagValue(const Tags& tags, const QString& addressTagType) const;
 
   QSet<QString> getAdditionalTagKeys() const { return _additionalTagKeys; }
 
@@ -97,7 +97,7 @@ private:
   /*
    * Reads tag keys used to identify tags as addresses
    */
-  void _readAddressTagKeys(const QString configFile);
+  void _readAddressTagKeys(const QString& configFile);
 };
 
 }

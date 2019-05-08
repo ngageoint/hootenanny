@@ -27,8 +27,6 @@
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
 
-#include <boost/shared_ptr.hpp>
-
 // geos
 #include <geos/geom/MultiLineString.h>
 
@@ -39,9 +37,6 @@
 
 // standard
 #include <string>
-
-// tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {

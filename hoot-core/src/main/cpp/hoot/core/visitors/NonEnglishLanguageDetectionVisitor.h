@@ -63,7 +63,7 @@ public:
   /**
    * @see ElementVisitor
    */
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -93,8 +93,8 @@ private:
   long _numProcessedElements;
   int _taskStatusUpdateInterval;
 
-  boost::shared_ptr<LanguageInfoProvider> _infoClient;
-  boost::shared_ptr<LanguageDetector> _langDetector;
+  std::shared_ptr<LanguageInfoProvider> _infoClient;
+  std::shared_ptr<LanguageDetector> _langDetector;
 
   QString _getLangCountsSortedByLangName() const;
 

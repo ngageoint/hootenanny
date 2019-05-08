@@ -108,10 +108,10 @@ public:
     //can't do a file comparison on the output here since the UUID's added to the file will be
     //different with each run
     CPPUNIT_ASSERT_EQUAL(100, (int)combinedMap->getElementCount());
-    boost::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
+    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
     combinedMap->visitRo(*tagKeyCountVisitorRef1);
     CPPUNIT_ASSERT_EQUAL(8, (int)tagKeyCountVisitorRef1->getStat());
-    boost::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor(MetadataTags::Ref2()));
+    std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef2(new TagKeyCountVisitor(MetadataTags::Ref2()));
     combinedMap->visitRo(*tagKeyCountVisitorRef2);
     CPPUNIT_ASSERT_EQUAL(10, (int)tagKeyCountVisitorRef2->getStat());
   }
@@ -133,7 +133,7 @@ public:
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(true);
     //matchScorer.setConfiguration(testSettings);
-    /*boost::shared_ptr<MatchComparator> result =*/
+    /*std::shared_ptr<MatchComparator> result =*/
     matchScorer._conflateAndScoreMatches(
       combinedMap,
       _outputPath + "PertyMatchScorerTest-conflated-out-1.osm");

@@ -99,7 +99,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
   // special way.
   if (foundAPoi && foundAPolygon)
   {
-    set< pair<ElementId, ElementId> > eids;
+    set<pair<ElementId, ElementId>> eids;
 
     // go through all the matches
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
@@ -112,7 +112,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       //problems where some matches are passed up completely by all mergers, which results in an
       //exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
       //not, then some rework may need to be done here.
-      set< pair<ElementId, ElementId> > s = m->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = m->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
     LOG_VART(eids);
@@ -164,8 +164,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     LOG_TRACE("Found a poi and a polygon...");
 
     // get out the matched pairs from the matches
-    set< pair<ElementId, ElementId> > p1 = m1->getMatchPairs();
-    set< pair<ElementId, ElementId> > p2 = m2->getMatchPairs();
+    set<pair<ElementId, ElementId>> p1 = m1->getMatchPairs();
+    set<pair<ElementId, ElementId>> p2 = m2->getMatchPairs();
     // we're expecting them to have one match each, more could be handled, but are not necessary at
     // this time.
     LOG_VART(p1.size());
@@ -230,7 +230,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
     }
 
     // create POI/Polygon matches and check to see if it is a miss
-    boost::shared_ptr<Match> ma(_createMatch(map, o1, o2));
+    std::shared_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
     result = false;

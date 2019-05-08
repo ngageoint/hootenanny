@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -106,7 +106,7 @@ public:
 //    size_t iterations = 10000000;
 //    bool doReadTest = false;
 //    map<long, long> bax;
-//    vector< pair<long, long> > pairs;
+//    vector<pair<long, long>> pairs;
 //    if (doReadTest)
 //    {
 //      pairs.reserve(iterations);
@@ -190,7 +190,7 @@ public:
 //    typedef stxxl::VECTOR_GENERATOR<long>::result VectorType;
 //    VectorType v;
 
-//    vector< pair<long, long> > pairs;
+//    vector<pair<long, long>> pairs;
 //    if (doReadTest)
 //    {
 //      pairs.reserve(iterations);

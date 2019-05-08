@@ -22,18 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENTITERATOR_H
 #define ELEMENTITERATOR_H
 
-
 // Standard
 #include <list>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -52,7 +48,7 @@ public:
 
   virtual ~ElementIterator() {}
 
-  const boost::shared_ptr<Element>& next();
+  const std::shared_ptr<Element>& next();
 
   bool hasNext();
 
@@ -61,7 +57,7 @@ protected:
   /**
    * A method to be used by the inheriting class to add new available elements.
    */
-  void _addElement(const boost::shared_ptr<Element>& e) { _pending.push_back(e); }
+  void _addElement(const std::shared_ptr<Element>& e) { _pending.push_back(e); }
 
   /**
    * A method to be overridden by the implementing class. This method will be called periodically
@@ -71,8 +67,8 @@ protected:
   virtual void _next() = 0;
 
 private:
-  boost::shared_ptr<Element> _current;
-  std::list< boost::shared_ptr<Element> > _pending;
+  std::shared_ptr<Element> _current;
+  std::list<std::shared_ptr<Element>> _pending;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RUBBERSHEETAPPLIER_H
@@ -50,7 +50,7 @@ public:
    * @param input input to apply the transform to
    * @param output path to write the transformed output
    */
-  void apply(const QString transform, const QString input, const QString output);
+  void apply(const QString& transform, const QString& input, const QString& output);
 };
 
 }

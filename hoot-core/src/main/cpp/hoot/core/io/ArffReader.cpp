@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ArffReader.h"
@@ -86,9 +86,9 @@ bool ArffReader::_eof()
   return result;
 }
 
-boost::shared_ptr<DataSamples> ArffReader::read()
+std::shared_ptr<DataSamples> ArffReader::read()
 {
-  boost::shared_ptr<DataSamples> result(new DataSamples());
+  std::shared_ptr<DataSamples> result(new DataSamples());
   DataSamples& ds = *result;
   QStringList columnNames;
 

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGERFACTORY_H
 #define TAGMERGERFACTORY_H
 
-// Tgs
-#include <tgs/SharedPtr.h>
+// Standard
+#include <memory>
 
 // Qt
 #include <QString>
@@ -57,11 +57,11 @@ public:
    */
   const TagMerger& getDefault() { return *getDefaultPtr(); }
 
-  boost::shared_ptr<const TagMerger> getDefaultPtr();
+  std::shared_ptr<const TagMerger> getDefaultPtr();
 
   const TagMerger& getMerger(const QString& name) { return *getMergerPtr(name); }
 
-  boost::shared_ptr<const TagMerger> getMergerPtr(const QString& name);
+  std::shared_ptr<const TagMerger> getMergerPtr(const QString& name);
 
   /**
    * A convenience function for merging tags using the default mechanism. Equivalent to:
@@ -78,10 +78,10 @@ private:
 
   TagMergerFactory();
 
-  QHash<QString, boost::shared_ptr<const TagMerger> > _mergers;
-  boost::shared_ptr<const TagMerger> _default;
+  QHash<QString, std::shared_ptr<const TagMerger>> _mergers;
+  std::shared_ptr<const TagMerger> _default;
 
-  static boost::shared_ptr<TagMergerFactory> _theInstance;
+  static std::shared_ptr<TagMergerFactory> _theInstance;
 };
 
 }

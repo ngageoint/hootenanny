@@ -55,14 +55,14 @@ public:
 
 private:
   // these are mutable because we do a lazy load.
-  mutable boost::shared_ptr<Tgs::RandomForest> _rf;
+  mutable std::shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;
-  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
   void _createAllExtractors() const;
   void _createTestExtractors() const;
 
-  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 
   /**
    * This provides a lazy load and should be called before any private members are accessed. This

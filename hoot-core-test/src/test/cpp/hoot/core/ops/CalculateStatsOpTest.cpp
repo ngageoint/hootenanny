@@ -79,13 +79,13 @@ public:
   // to this test.
   void runStatsNumTest()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
+    std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
     CPPUNIT_ASSERT_EQUAL(172, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
+    std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Nodes"));
     CPPUNIT_ASSERT_EQUAL(22.0, calcStatsOp->getSingleStat("Ways"));
@@ -346,7 +346,7 @@ public:
 
   void runStatsTestWithReviews()
   {
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types-with-reviews.osm");
+    std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types-with-reviews.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Nodes"));
     CPPUNIT_ASSERT_EQUAL(21.0, calcStatsOp->getSingleStat("Ways"));
@@ -592,7 +592,7 @@ public:
 
 private:
 
-  boost::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
+  std::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
@@ -601,7 +601,7 @@ private:
     reader.setUseDataSourceIds(true);
     reader.read(inputFile, map);
 
-    boost::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
+    std::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
     //If we figure out the error messages logged by the script translator related stats are
     //invalid and fix them, then this log disablement can be removed.
     {

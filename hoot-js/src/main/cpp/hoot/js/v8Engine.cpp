@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "v8Engine.h"
 
@@ -32,7 +32,7 @@ using namespace v8;
 namespace hoot
 {
 
-boost::shared_ptr<v8Engine> v8Engine::_theInstance;
+std::shared_ptr<v8Engine> v8Engine::_theInstance;
 
 bool v8Engine::_needPlatform = false;
 

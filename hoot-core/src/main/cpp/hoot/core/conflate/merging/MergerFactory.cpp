@@ -43,7 +43,7 @@ namespace hoot
 
 int MergerFactory::logWarnCount = 0;
 
-boost::shared_ptr<MergerFactory> MergerFactory::_theInstance;
+std::shared_ptr<MergerFactory> MergerFactory::_theInstance;
 
 MergerFactory::MergerFactory()
 {
@@ -116,7 +116,7 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    boost::shared_ptr<MergerCreator> mc(
+    std::shared_ptr<MergerCreator> mc(
       Factory::getInstance().constructObject<MergerCreator>(names[i]));
 
     vector<CreatorDescription> d = mc->getAllCreators();

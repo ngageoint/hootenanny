@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICITTAGUTILS_H
 #define IMPLICITTAGUTILS_H
@@ -62,7 +62,7 @@ public:
    * @return a collection of translated name strings
    */
   static QStringList translateNamesToEnglish(const QStringList names, const Tags& tags,
-                                             boost::shared_ptr<ToEnglishTranslator> translator);
+                                             std::shared_ptr<ToEnglishTranslator> translator);
 
 private:
 

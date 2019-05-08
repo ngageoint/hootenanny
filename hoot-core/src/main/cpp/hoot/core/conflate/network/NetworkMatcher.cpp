@@ -56,7 +56,7 @@ void NetworkMatcher::_createEdge2Index()
 
   // TODO: No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _edge2Index.reset(new HilbertRTree(mps, 2));
 
   std::vector<Box> boxes;
@@ -105,7 +105,7 @@ void NetworkMatcher::_createVertex2Index()
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _vertex2Index.reset(new HilbertRTree(mps, 2));
 
   std::vector<Box> boxes;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_SERVICES_LANGUAGE_DETECTOR_CLIENT_H
@@ -71,7 +71,7 @@ public:
   /**
    * @see LanguageDetector
    */
-  virtual QString detect(const QString text);
+  virtual QString detect(const QString& text) override;
 
 protected:
 
@@ -93,7 +93,7 @@ private:
   //of them as necessary to detect the language
   QStringList _detectors;
 
-  boost::shared_ptr<QCache<QString, DetectionResult>> _cache;
+  std::shared_ptr<QCache<QString, DetectionResult>> _cache;
 
   int _statusUpdateInterval;
 
@@ -119,20 +119,20 @@ private:
   static bool _loggedCacheMaxReached;
 
   //persistent session is required by hoot services
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getDetectUrl();
 
-  QString _getRequestData(const QString text) const;
-  QString _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj,
+  QString _getRequestData(const QString& text) const;
+  QString _parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
                          QString& detectorUsed);
 
-  QString _getLangFromCache(const QString text);
-  void _insertLangIntoCache(const QString text, const QString detectedLangCode);
+  QString _getLangFromCache(const QString& text);
+  void _insertLangIntoCache(const QString& text, const QString& detectedLangCode);
 
-  bool _textIsDetectable(const QString text) const;
+  bool _textIsDetectable(const QString& text) const;
 
-  QString _getCountsStr(const QString title, QMap<QString, int> data) const;
+  QString _getCountsStr(const QString& title, const QMap<QString, int>& data) const;
   QString _getUnvailableLangNamesStr() const;
 };
 

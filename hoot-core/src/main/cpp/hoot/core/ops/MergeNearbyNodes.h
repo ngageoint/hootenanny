@@ -29,11 +29,11 @@
 #define MERGENEARBYNODES_H
 
 // hoot
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -60,28 +60,28 @@ public:
 
   MergeNearbyNodes(Meters distance = -1);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
-  static void mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance = -1);
+  static void mergeNodes(std::shared_ptr<OsmMap> map, Meters distance = -1);
 
-  virtual void readObject(QDataStream& is);
+  virtual void readObject(QDataStream& is) override;
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
 
-  virtual void writeObject(QDataStream& os) const;
+  virtual void writeObject(QDataStream& os) const override;
 
-  virtual QString getDescription() const { return "Merges nearby nodes together"; }
+  virtual QString getDescription() const override { return "Merges nearby nodes together"; }
 
-  virtual QString getInitStatusMessage() const { return "Merging nearby nodes..."; }
+  virtual QString getInitStatusMessage() const override { return "Merging nearby nodes..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
 protected:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
   Meters _distance;
   geos::geom::Envelope _bounds;
 };

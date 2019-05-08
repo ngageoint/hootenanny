@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPOPERATIONJS_H
 #define OSMMAPOPERATIONJS_H
@@ -57,7 +57,7 @@ private:
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
-  boost::shared_ptr<OsmMapOperation> _op;
+  std::shared_ptr<OsmMapOperation> _op;
 };
 
 }

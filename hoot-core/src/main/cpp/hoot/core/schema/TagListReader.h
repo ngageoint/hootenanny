@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGLISTREADER_H
 #define TAGLISTREADER_H
@@ -49,7 +49,7 @@ public:
    * with '=' per record
    * @return a string list of tags
    */
-  static QStringList readList(const QString inputPath, const bool keysOnly = false);
+  static QStringList readList(const QString& inputPath, const bool keysOnly = false);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementCriterionVisitorInputStream.h"
@@ -67,7 +67,7 @@ void ElementCriterionVisitorInputStream::close()
   _numFeaturesPassingCriterion = 0;
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
+std::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
 {
   return _elementSource->getProjection();
 }

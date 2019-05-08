@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -50,12 +50,12 @@ namespace Tgs
     CPPUNIT_TEST_SUITE_END();
   public:
 
-    void log(std::map<int, std::list< pair<int, int> >::iterator>& map)
+    void log(std::map<int, std::list<pair<int, int>>::iterator>& map)
     {
       int n = map.size();
       cout << "[" << n << "]{";
 
-      for (std::map<int, std::list< pair<int, int> >::iterator>::const_iterator it = map.begin(); it != map.end();)
+      for (std::map<int, std::list<pair<int, int>>::iterator>::const_iterator it = map.begin(); it != map.end();)
       {
         cout << "(" << it->first << ", " << *(it->second) << ")";
         ++it;

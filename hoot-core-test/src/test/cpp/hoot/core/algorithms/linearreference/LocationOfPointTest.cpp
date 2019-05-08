@@ -59,7 +59,7 @@ public:
 
   void runLocateAfterTest()
   {
-//    shared_ptr<OsmMap> map(new OsmMap());
+//    std::shared_ptr<OsmMap> map(new OsmMap());
 
 //    Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
 //                       Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),

@@ -57,7 +57,7 @@ public:
   MultiaryScorePoiMatchesCmd() { }
 
   QString evaluateThreshold(OsmMapPtr map, QString output,
-    boost::shared_ptr<MatchThreshold> mt, bool showConfusion)
+    std::shared_ptr<MatchThreshold> mt, bool showConfusion)
   {
     MultiaryMatchComparator comparator;
     comparator.setTranslationScript(_translator);
@@ -173,7 +173,7 @@ public:
     OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");
     MapProjector::projectToPlanar(map);
 
-    boost::shared_ptr<MatchThreshold> mt;
+    std::shared_ptr<MatchThreshold> mt;
     QString result = evaluateThreshold(map, output, mt, showConfusion);
 
     cout << result;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MISSINGDATAHANDLER_H
 #define MISSINGDATAHANDLER_H
@@ -48,7 +48,7 @@ namespace Tgs
      * @param data the input data set object
      */
     static void replaceMissingValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data);
+      std::shared_ptr<DataFrame> data);
 
   private:
 
@@ -58,7 +58,7 @@ namespace Tgs
      * @param factorIndex the index of the factor of interest
      */
     static void _replaceMissingNominalValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data, unsigned int factorIndex);
+      std::shared_ptr<DataFrame> data, unsigned int factorIndex);
 
     /**
      * @brief _replaceMissingNumericValuesFast
@@ -66,7 +66,7 @@ namespace Tgs
      * @param factorIndex the index of the factor of interest
      */
     static void _replaceMissingNumericValuesFast(double missingDataValue,
-      boost::shared_ptr<DataFrame> data, unsigned int factorIndex);
+      std::shared_ptr<DataFrame> data, unsigned int factorIndex);
 
 
   };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VisitorOp.h"
 
@@ -46,7 +46,7 @@ void VisitorOp::addVisitor(const ConstElementVisitorPtr& e)
   _visitor = e;
 }
 
-void VisitorOp::apply(boost::shared_ptr<OsmMap> &map)
+void VisitorOp::apply(std::shared_ptr<OsmMap>& map)
 {
   map->visitRw(*_visitor);
 }

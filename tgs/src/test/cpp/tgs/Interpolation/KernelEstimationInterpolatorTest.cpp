@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -58,12 +58,12 @@ class KernelEstimationInterpolatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  boost::shared_ptr<KernelEstimationInterpolator> buildRandom()
+  std::shared_ptr<KernelEstimationInterpolator> buildRandom()
   {
-    boost::shared_ptr<KernelEstimationInterpolator> result(new KernelEstimationInterpolator());
+    std::shared_ptr<KernelEstimationInterpolator> result(new KernelEstimationInterpolator());
     KernelEstimationInterpolator& uut = *result;
 
-    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -102,7 +102,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    boost::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
+    std::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(-1);
@@ -148,7 +148,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    boost::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
+    std::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(0.3);
@@ -177,7 +177,7 @@ public:
     Tgs::Random::instance()->seed(0);
     KernelEstimationInterpolator uut(.1);
 
-    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    std::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

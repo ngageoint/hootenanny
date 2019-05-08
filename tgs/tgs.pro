@@ -63,7 +63,6 @@ HEADERS += \
     src/main/cpp/tgs/HashMap.h \
     src/main/cpp/tgs/LruCache.h \
     src/main/cpp/tgs/Progress.h \
-    src/main/cpp/tgs/SharedPtr.h \
     src/main/cpp/tgs/StreamUtils.h \
     src/main/cpp/tgs/StreamUtils.hh \
     src/main/cpp/tgs/TgsException.h \

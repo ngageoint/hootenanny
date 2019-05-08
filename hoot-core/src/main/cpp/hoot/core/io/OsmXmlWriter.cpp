@@ -26,23 +26,20 @@
  */
 #include "OsmXmlWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -119,7 +116,7 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-void OsmXmlWriter::open(QString url)
+void OsmXmlWriter::open(const QString& url)
 {
   QFile* f = new QFile();
   _fp.reset(f);
@@ -159,7 +156,7 @@ QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp boost::shared_ptr
+  // this will be deleted by the _fp std::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -202,13 +199,13 @@ void OsmXmlWriter::_initWriter()
   _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
-void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmXmlWriter::write(ConstOsmMapPtr map)
+void OsmXmlWriter::write(const ConstOsmMapPtr& map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
   {
@@ -323,7 +320,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   if (type == ElementType::Relation)
   {
-    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(elementClone);
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(elementClone);
     if (relation->getType() != "")
     {
       _writer->writeStartElement("tag");
@@ -336,7 +333,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
   //  Output the PID as a tag if desired for debugging purposes
   if (_includePid && type == ElementType::Way)
   {
-    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(elementClone);
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(elementClone);
     if (way->hasPid())
     {
       _writer->writeStartElement("tag");

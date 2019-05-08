@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ExpectationIntersection.h"
 
@@ -103,7 +103,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
 
   _validateRanges(matches.rows, ranges);
 
-  set< vector<int> > visitedSplits;
+  set<vector<int>> visitedSplits;
   vector<int> splitsInt(ranges.rows - 1);
   vector<double> splits(ranges.rows - 1);
 

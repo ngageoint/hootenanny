@@ -54,14 +54,14 @@ public:
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * Reads all the entries in the OsmMap.
    *
    * The default read function reads nodes, ways, then relations.
    */
-  virtual void readPartial(OsmMapPtr map);
+  virtual void readPartial(const OsmMapPtr& map);
 
   /**
    * Perform any necessary initialization after the data source is opened.

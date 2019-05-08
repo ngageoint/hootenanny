@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPWRITER_H
 #define PARTIALOSMMAPWRITER_H
@@ -56,7 +56,7 @@ public:
   /**
    * The default writes the map and then calls finalizePartial();
    */
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   /**
    * Write all the entries in the OsmMap to the output. This does not guarantee that all data will
@@ -64,7 +64,7 @@ public:
    *
    * The default write function writes nodes, ways, then relations.
    */
-  virtual void writePartial(const boost::shared_ptr<const Element>& e);
+  virtual void writePartial(const std::shared_ptr<const Element>& e);
   virtual void writePartial(const ConstOsmMapPtr& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -98,7 +98,7 @@ public:
     BufferedOverlapExtractor uut(0.2);
     const OsmMap* constMap = const_cast<const OsmMap*>(_map.get());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0,
-                                 uut.extract(*constMap, boost::const_pointer_cast<const Way>(w1), boost::const_pointer_cast<const Way>(w2)),
+                                 uut.extract(*constMap, std::const_pointer_cast<const Way>(w1), std::const_pointer_cast<const Way>(w2)),
                                  0.0);
   }
 

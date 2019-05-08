@@ -69,8 +69,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const override;
+  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
   virtual QString getDescription() const
   { return "Uses Symmetric Difference with buffering to calculate overlap"; }

@@ -103,7 +103,7 @@ public:
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
       MapProjector::projectToPlanar(map);
 
-      boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+      std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());

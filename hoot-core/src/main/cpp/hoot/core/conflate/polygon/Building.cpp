@@ -44,10 +44,10 @@ Building::Building(const OsmMap& map, const ConstElementPtr& e) : _e(e), _map(ma
 {
 }
 
-boost::shared_ptr<Geometry> Building::buildOutline() const
+std::shared_ptr<Geometry> Building::buildOutline() const
 {
   ElementConverter ec(_map.shared_from_this());
-  boost::shared_ptr<Geometry> result;
+  std::shared_ptr<Geometry> result;
 
   // if this is a building relation
   if (_e->getElementType() == ElementType::Relation)
@@ -55,13 +55,13 @@ boost::shared_ptr<Geometry> Building::buildOutline() const
     // construct the outline from the union of the parts.
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(_e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(_e);
     const vector<RelationData::Entry> entries = r->getMembers();
     for (size_t i = 0; i < entries.size(); i++)
     {
       if (entries[i].role == MetadataTags::RolePart())
       {
-        boost::shared_ptr<Geometry> g = ec.convertToGeometry(_map.getElement(entries[i].getElementId()));
+        std::shared_ptr<Geometry> g = ec.convertToGeometry(_map.getElement(entries[i].getElementId()));
         result.reset(result->Union(g.get()));
       }
     }

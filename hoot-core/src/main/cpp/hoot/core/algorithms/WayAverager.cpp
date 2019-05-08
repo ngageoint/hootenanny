@@ -87,9 +87,9 @@ WayPtr WayAverager::average()
     }
   }
 
-  boost::shared_ptr<const LineString> ls1 = ElementConverter(_map.shared_from_this()).
+  std::shared_ptr<const LineString> ls1 = ElementConverter(_map.shared_from_this()).
       convertToLineString(_w1);
-  boost::shared_ptr<const LineString> ls2 = ElementConverter(_map.shared_from_this()).
+  std::shared_ptr<const LineString> ls2 = ElementConverter(_map.shared_from_this()).
       convertToLineString(_w2);
 
   // All of the fancy stats here are compliments of Mike Porter.

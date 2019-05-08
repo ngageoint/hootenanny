@@ -42,14 +42,14 @@ AddBboxVisitor::AddBboxVisitor()
 {
 }
 
-void AddBboxVisitor::visit(const boost::shared_ptr<Element>& e)
+void AddBboxVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (e->getTags().getNonDebugCount() > 0)
   {
     // Skip nodes
     if (e->getElementType() != ElementType::Node)
     {
-      boost::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
+      std::shared_ptr<geos::geom::Envelope> bounds(e->getEnvelope(_map->shared_from_this()));
 
       if (bounds)
       {

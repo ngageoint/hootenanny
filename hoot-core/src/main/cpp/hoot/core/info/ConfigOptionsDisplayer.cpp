@@ -69,7 +69,7 @@ QString ConfigOptionsDisplayer::getAllOptionNames(const bool withDetails)
   return runProcess(cmd);
 }
 
-QString ConfigOptionsDisplayer::getOptionName(const QString optionName, const bool withDetails)
+QString ConfigOptionsDisplayer::getOptionName(const QString& optionName, const bool withDetails)
 {
   const QString configOptionsFile = ConfigOptions().getConfigOptionsFile();
   QString cmd;
@@ -88,8 +88,8 @@ QString ConfigOptionsDisplayer::getOptionName(const QString optionName, const bo
   }
 }
 
-QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString optionName,
-                                                         const QString configOptionsFile)
+QString ConfigOptionsDisplayer::_getAllConfigOptionsDetails(const QString& optionName,
+                                                            const QString& configOptionsFile)
 {
   QFile file(configOptionsFile);
   if (!file.open(QFile::ReadOnly))

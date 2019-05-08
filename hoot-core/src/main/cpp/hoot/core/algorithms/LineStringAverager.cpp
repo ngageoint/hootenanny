@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LineStringAverager.h"
@@ -44,13 +44,13 @@ using namespace geos::geom;
 namespace hoot
 {
 
-LineStringAverager::LineStringAverager(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2)
+LineStringAverager::LineStringAverager(const std::shared_ptr<LineString>& l1, const std::shared_ptr<LineString>& l2)
 {
   _l1 = l1;
   _l2 = l2;
 }
 
-boost::shared_ptr<LineString> LineStringAverager::average()
+std::shared_ptr<LineString> LineStringAverager::average()
 {
   const LineString* l1 = _l1.get();
   const LineString* l2 = _l2.get();
@@ -102,11 +102,11 @@ boost::shared_ptr<LineString> LineStringAverager::average()
   // merge the last two nodes and move to the average location
   result.setAt(_merge(cs1[i1], cs2[i2]), ri++);
 
-  return boost::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
+  return std::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
 }
 
-boost::shared_ptr<LineString> LineStringAverager::average(boost::shared_ptr<LineString> l1,
-                                                          boost::shared_ptr<LineString> l2)
+std::shared_ptr<LineString> LineStringAverager::average(const std::shared_ptr<LineString>& l1,
+                                                        const std::shared_ptr<LineString>& l2)
 {
   LineStringAverager lsa(l1, l2);
   return lsa.average();

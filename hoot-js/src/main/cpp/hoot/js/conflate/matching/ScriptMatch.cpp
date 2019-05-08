@@ -60,9 +60,9 @@ Match()
 {
 }
 
-ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, const Persistent<Object>& plugin,
-  const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
-  const ElementId& eid2, ConstMatchThresholdPtr mt) :
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
+  const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj, const ElementId& eid1,
+  const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
@@ -144,9 +144,9 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
   _p.normalize();
 }
 
-set< pair<ElementId, ElementId> > ScriptMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> ScriptMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }
@@ -283,7 +283,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  boost::shared_ptr<ScriptMatch> m1(
+  std::shared_ptr<ScriptMatch> m1(
     new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
   MatchSet ms;
   ms.insert(m1.get());
@@ -297,7 +297,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   if (mergers.size() == 1)
   {
     // apply the merger to our map copy
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     mergers[0]->apply(copiedMap, replaced);
 
     // replace the element id in the second merger.

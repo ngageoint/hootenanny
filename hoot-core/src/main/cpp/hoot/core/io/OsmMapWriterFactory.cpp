@@ -47,14 +47,14 @@ namespace hoot
 
 unsigned int OsmMapWriterFactory::_debugMapCount = 1;
 
-boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
+std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& url)
 {
   LOG_VART(url);
 
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
   LOG_VART(writerOverride);
 
-  boost::shared_ptr<OsmMapWriter> writer;
+  std::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapsFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
@@ -84,13 +84,13 @@ boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
   return writer;
 }
 
-QString OsmMapWriterFactory::getWriterName(const QString url)
+QString OsmMapWriterFactory::getWriterName(const QString& url)
 {
   LOG_VARD(url);
   vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   LOG_VARD(names.size());
-  boost::shared_ptr<OsmMapWriter> writer;
+  std::shared_ptr<OsmMapWriter> writer;
   for (size_t i = 0; i < names.size(); i++)
   {
     const std::string name = names[i];
@@ -104,17 +104,17 @@ QString OsmMapWriterFactory::getWriterName(const QString url)
   return "";
 }
 
-bool OsmMapWriterFactory::isSupportedFormat(const QString url)
+bool OsmMapWriterFactory::isSupportedFormat(const QString& url)
 {
   return !getWriterName(url).trimmed().isEmpty();
 }
 
-bool OsmMapWriterFactory::hasElementOutputStream(QString url)
+bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
 {
   bool result = false;
-  boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  boost::shared_ptr<ElementOutputStream> streamWriter =
-    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
+  std::shared_ptr<OsmMapWriter> writer = createWriter(url);
+  std::shared_ptr<ElementOutputStream> streamWriter =
+    std::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;
@@ -123,7 +123,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QString url,
+void OsmMapWriterFactory::write(const std::shared_ptr<const OsmMap>& map, const QString& url,
                                 const bool silent, const bool is_debug)
 {
   bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
@@ -140,7 +140,7 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
     timer.start();
 
     // We could pass a progress in here to get more granular write status feedback.
-    boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
+    std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
     writer->write(map);
@@ -150,7 +150,7 @@ void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap>& map, QStr
   }
 }
 
-void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString title,
+void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString& title,
                                         NetworkMatcherPtr matcher)
 {
   if (ConfigOptions().getDebugMapsWrite())

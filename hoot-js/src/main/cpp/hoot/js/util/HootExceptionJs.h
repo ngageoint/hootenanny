@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTEXCEPTIONJS_H
 #define HOOTEXCEPTIONJS_H
@@ -40,9 +40,6 @@
 // Standard
 #include <memory>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -51,10 +48,10 @@ class HootExceptionJs : public node::ObjectWrap
 public:
   static void Init(v8::Handle<v8::Object> target);
 
-  static v8::Handle<v8::Object> create(const HootException& e) { return create(boost::shared_ptr<HootException>(e.clone())); }
-  static v8::Handle<v8::Object> create(boost::shared_ptr<HootException> e);
+  static v8::Handle<v8::Object> create(const HootException& e) { return create(std::shared_ptr<HootException>(e.clone())); }
+  static v8::Handle<v8::Object> create(const std::shared_ptr<HootException>& e);
 
-  boost::shared_ptr<HootException> getException() const { return _e; }
+  std::shared_ptr<HootException> getException() const { return _e; }
 
   static bool isHootException(v8::Handle<v8::Value> v);
 
@@ -77,7 +74,7 @@ public:
 private:
   HootExceptionJs();
 
-  boost::shared_ptr<HootException> _e;
+  std::shared_ptr<HootException> _e;
   QString _className;
   static v8::Persistent<v8::Function> _constructor;
 
@@ -87,7 +84,7 @@ private:
 
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, boost::shared_ptr<HootException>& e)
+inline void toCpp(v8::Handle<v8::Value> v, std::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {

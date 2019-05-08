@@ -37,9 +37,6 @@
 #include <iostream>
 #include <string>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -119,7 +116,7 @@ public:
    * Throw an exception of the appropriate type given a pointer. If the appropriate exception type
    * is not found a HootException will be thrown instead.
    */
-  void rethrowPointer(boost::shared_ptr<HootException> e) { rethrowPointer(e.get()); }
+  void rethrowPointer(std::shared_ptr<HootException> e) { rethrowPointer(e.get()); }
   void rethrowPointer(HootException* e);
 
 private:

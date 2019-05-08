@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeLocation.h"
 
@@ -59,7 +59,7 @@ Meters EdgeLocation::getOffset(const ConstElementProviderPtr& provider) const
   return _portion * _e->calculateLength(provider);
 }
 
-boost::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& provider,
+std::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr& provider,
   Meters distance) const
 {
   Meters l = _e->calculateLength(provider);
@@ -67,7 +67,7 @@ boost::shared_ptr<EdgeLocation> EdgeLocation::move(const ConstElementProviderPtr
   Meters offset = _portion * l + distance;
   Meters portion = min(1.0, max(offset / l, 0.0));
 
-  return boost::shared_ptr<EdgeLocation>(new EdgeLocation(_e, portion));
+  return std::shared_ptr<EdgeLocation>(new EdgeLocation(_e, portion));
 }
 
 QString EdgeLocation::toString() const

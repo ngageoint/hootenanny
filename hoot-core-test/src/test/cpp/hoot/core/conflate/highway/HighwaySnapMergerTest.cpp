@@ -112,16 +112,16 @@ public:
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     ElementConverter ec(map);
@@ -178,16 +178,16 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     HOOT_STR_EQUALS(0, replaced.size());
@@ -222,11 +222,11 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
@@ -288,16 +288,16 @@ public:
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(r->getElementId(), w3->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     QString json = OsmJsonWriter().toString(map);
@@ -358,16 +358,16 @@ public:
     w2->getTags()["highway"] = "path";
     w2->getTags()["uuid"] = "w2";
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     QString json = OsmJsonWriter().toString(map);
@@ -424,16 +424,16 @@ public:
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), r->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     QString json = OsmJsonWriter().toString(map);
@@ -464,16 +464,16 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, w2c);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
     HighwaySnapMerger merger(pairs, sublineMatcher);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
     merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
@@ -481,7 +481,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     //will throw an exception on failure
     ConstRelationPtr reviewRelation =
-      boost::dynamic_pointer_cast<Relation>(
+      std::dynamic_pointer_cast<Relation>(
         TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }

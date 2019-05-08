@@ -65,7 +65,7 @@ void SparkChangesetWriter::setConfiguration(const Settings& conf)
   _precision = options.getWriterPrecision();
 }
 
-void SparkChangesetWriter::open(QString fileName)
+void SparkChangesetWriter::open(const QString& fileName)
 {
   close();
 
@@ -100,10 +100,10 @@ void SparkChangesetWriter::open(QString fileName)
   LOG_DEBUG("Opened: " << deleteFileName << ".");
 
   // find a match creator that can provide the search bounds.
-  foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
+  foreach (std::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
     // Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times by this?
-    SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
+    SearchRadiusProviderPtr sbc = std::dynamic_pointer_cast<SearchRadiusProvider>(mc);
     if (sbc.get())
     {
       if (_boundsCalculator.get())
@@ -186,7 +186,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
     LOG_VART(change.getElement());
   }
 
-  NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
+  NodePtr nodeCopy = (std::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
   const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
 
   QString createChangeLine;
@@ -248,7 +248,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
     if (change.getType() == Change::Modify)
     {
       NodePtr previousNodeCopy =
-        (boost::dynamic_pointer_cast<const Node>(change.getPreviousElement()))->cloneSp();
+        (std::dynamic_pointer_cast<const Node>(change.getPreviousElement()))->cloneSp();
 
       _exportTagsVisitor.visit(previousNodeCopy); // is this needed?
       // element hash before change
@@ -274,7 +274,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   }
 }
 
-void SparkChangesetWriter::setElementPayloadFormat(const QString format)
+void SparkChangesetWriter::setElementPayloadFormat(const QString& format)
 {
   if (format != "json")
   {

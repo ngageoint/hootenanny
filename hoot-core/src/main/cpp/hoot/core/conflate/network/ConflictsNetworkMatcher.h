@@ -61,7 +61,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static boost::shared_ptr<ConflictsNetworkMatcher> create();
+  static std::shared_ptr<ConflictsNetworkMatcher> create();
 
   virtual double getMatchThreshold() const { return _matchThreshold; }
 
@@ -110,8 +110,8 @@ private:
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
   };
-  typedef boost::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
-  typedef boost::shared_ptr<MatchRelationship> MatchRelationshipPtr;
+  typedef std::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
+  typedef std::shared_ptr<MatchRelationship> MatchRelationshipPtr;
 
   typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr>> MatchRelationshipMap;
 
@@ -169,8 +169,8 @@ private:
   void _printEdgeMatches();
 };
 
-typedef boost::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
-typedef boost::shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
+typedef std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
+typedef std::shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstConflictsNetworkMatcherPtr, ConstConflictsNetworkMatcherPtr);

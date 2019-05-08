@@ -56,7 +56,7 @@ void RelationWithMostMembersOp::setConfiguration(const Settings& conf)
   setCriterion(config.getRelationWithMostMembersOpMemberCriterion(), "member", conf);
 }
 
-void RelationWithMostMembersOp::setCriterion(const QString criterionClass, const QString type,
+void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, const QString& type,
                                              const Settings& conf)
 {
   LOG_VARD(criterionClass);
@@ -135,7 +135,7 @@ void RelationWithMostMembersOp::_setOutput(const long relationId, OsmMapPtr& out
   outputMap = tmpMap;
 }
 
-void RelationWithMostMembersOp::apply(boost::shared_ptr<OsmMap>& map)
+void RelationWithMostMembersOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _maxNumCritSatisifed = 0;
   _totalRelations = 0;

@@ -31,10 +31,10 @@
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -49,7 +49,10 @@
 // GEOS
 #include <geos/geom/Coordinate.h>
 
-#include <float.h>
+// Standard
+#include <cfloat>
+#include <functional>
+using namespace std;
 
 namespace hoot
 {
@@ -140,7 +143,7 @@ void UnconnectedWaySnapper::setWayDiscretizationSpacing(double spacing)
   _snapToWayDiscretizationSpacing = spacing;
 }
 
-void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(QString name)
+void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(const QString& name)
 {
   if (name.trimmed().isEmpty())
   {
@@ -155,7 +158,7 @@ void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(QString name)
     _wayToSnapToCriterionClassName = name.trimmed();
   }
 }
-void UnconnectedWaySnapper::setWayToSnapCriterionClassName(QString name)
+void UnconnectedWaySnapper::setWayToSnapCriterionClassName(const QString& name)
 {
   if (name.trimmed().isEmpty())
   {
@@ -170,7 +173,7 @@ void UnconnectedWaySnapper::setWayToSnapCriterionClassName(QString name)
     _wayToSnapCriterionClassName = name.trimmed();
   }
 }
-void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(QString name)
+void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(const QString& name)
 {
   if (name.trimmed().isEmpty())
   {
@@ -274,8 +277,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   LOG_DEBUG(_numSnappedToWayNodes << " ways snapped directly to way nodes");
 }
 
-ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
-  const QString criterionClassName, const Status& status)
+ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString& criterionClassName, const Status& status)
 {
   const QString critClass = criterionClassName.trimmed();
   if (!critClass.isEmpty())
@@ -285,48 +287,48 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
       status.toString() << "...");
     ElementCriterionPtr critTemp(
       Factory::getInstance().constructObject<ElementCriterion>(critClass));
-    boost::shared_ptr<Configurable> configurable =
-      boost::dynamic_pointer_cast<Configurable>(critTemp);
+    std::shared_ptr<Configurable> configurable =
+      std::dynamic_pointer_cast<Configurable>(critTemp);
     if (configurable)
     {
       configurable->setConfiguration(_conf);
     }
-    boost::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      boost::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
     if (mapConsumer)
     {
       mapConsumer->setOsmMap(_map.get());
     }
     return
-      boost::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
+      std::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
   }
   return ElementCriterionPtr();
 }
 
-void UnconnectedWaySnapper::_createFeatureIndex(ElementCriterionPtr featureCrit,
-                                                boost::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featureCrit,
+                                                std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
                                                 std::deque<ElementId>& featureIndexToEid,
                                                 const ElementType& elementType)
 {
   LOG_TRACE("Creating feature index of type: " << elementType << "...");
 
   // TODO: tune these indexes? - see #3054
-  boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
+  std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   featureIndex.reset(new Tgs::HilbertRTree(mps, 2));
-  boost::shared_ptr<IndexElementsVisitor> spatialIndexer;
+  std::shared_ptr<IndexElementsVisitor> spatialIndexer;
   if (elementType == ElementType::Node)
   {
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, _1), _map));
+        std::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, placeholders::_1), _map));
   }
   else
   {
     spatialIndexer.reset(
       new IndexElementsVisitor(
         featureIndex, featureIndexToEid, featureCrit,
-        boost::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, _1), _map));
+        std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map));
   }
   LOG_TRACE(spatialIndexer->getInitStatusMessage());
   if (elementType == ElementType::Node)
@@ -396,7 +398,7 @@ std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   // output quality so far but may need some attention later.
 
   std::set<ElementId> neighborIds;
-  boost::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
+  std::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
   if (elementType == ElementType::Node)
   {
     env->expandBy(_getWayNodeSearchRadius(node));
@@ -414,8 +416,7 @@ std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   return neighborIds;
 }
 
-int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(
-  NodePtr nodeToSnap, const ConstWayPtr& wayToSnapTo) const
+int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(const NodePtr& nodeToSnap, const ConstWayPtr& wayToSnapTo) const
 {
   LOG_TRACE(
     "Calculating way snap insert index for: " << nodeToSnap->getElementId() << " going into: " <<
@@ -483,7 +484,7 @@ int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(
   return nodeToSnapInsertIndex;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
+bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap)
 {
   LOG_TRACE("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way node...");
 
@@ -546,7 +547,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(NodePtr nodeToSnap)
   return false;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
+bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
 {
   LOG_TRACE("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
 
@@ -573,7 +574,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap)
   return false;
 }
 
-bool UnconnectedWaySnapper::snapClosestEndpointToWay(OsmMapPtr map, WayPtr disconnected, WayPtr connectTo)
+bool UnconnectedWaySnapper::snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo)
 {
   //  Create object for static call
   UnconnectedWaySnapper uws;
@@ -582,7 +583,7 @@ bool UnconnectedWaySnapper::snapClosestEndpointToWay(OsmMapPtr map, WayPtr disco
   return uws._snapClosestEndpointToWay(disconnected, connectTo);
 }
 
-bool UnconnectedWaySnapper::_snapClosestEndpointToWay(WayPtr disconnected, WayPtr connectTo)
+bool UnconnectedWaySnapper::_snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo)
 {
   //  Validate the parameters
   if (!disconnected || !connectTo || disconnected->getId() == connectTo->getId())
@@ -590,12 +591,12 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(WayPtr disconnected, WayPt
   //  Get the endpoint closest to the way to connect to it
   const std::vector<long> nodeIds = disconnected->getNodeIds();
   ElementConverter converter(_map);
-  boost::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
+  std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
 
   NodePtr endpoint1 = _map->getNode(nodeIds[0]);
-  boost::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
+  std::shared_ptr<geos::geom::Geometry> ep1 = converter.convertToGeometry(ConstNodePtr(endpoint1));
   NodePtr endpoint2 = _map->getNode(nodeIds[nodeIds.size() - 1]);
-  boost::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
+  std::shared_ptr<geos::geom::Geometry> ep2 = converter.convertToGeometry(ConstNodePtr(endpoint2));
 
   NodePtr endpoint;
   if (geometry->distance(ep1.get()) < geometry->distance(ep2.get()))
@@ -606,7 +607,7 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(WayPtr disconnected, WayPt
   return _snapUnconnectedNodeToWay(endpoint, connectTo);
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(NodePtr nodeToSnap, WayPtr wayToSnapTo)
+bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo)
 {
   //  Validate the parameters
   if (!nodeToSnap || !wayToSnapTo)

@@ -44,8 +44,8 @@ SetTagValueVisitor::SetTagValueVisitor()
   setConfiguration(conf());
 }
 
-SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
-                                       const QString criterionName, bool overwriteExistingTag,
+SetTagValueVisitor::SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue,
+                                       const QString& criterionName, bool overwriteExistingTag,
                                        bool negateCriterion) :
 _appendToExistingValue(appendToExistingValue),
 _overwriteExistingTag(overwriteExistingTag),
@@ -83,18 +83,18 @@ void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
   }
 }
 
-void SetTagValueVisitor::_setCriterion(const QString criterionName)
+void SetTagValueVisitor::_setCriterion(const QString& criterionName)
 {
   if (!criterionName.trimmed().isEmpty())
   {
     LOG_VART(criterionName);
     addCriterion(
-      boost::shared_ptr<ElementCriterion>(
+      std::shared_ptr<ElementCriterion>(
         Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
   }
 }
 
-void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
+void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)
 {
   if (k.isEmpty())
   {
@@ -145,7 +145,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
   _numAffected++;
 }
 
-void SetTagValueVisitor::visit(const boost::shared_ptr<Element>& e)
+void SetTagValueVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _k.size(); i++)
   {

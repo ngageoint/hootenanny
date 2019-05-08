@@ -72,7 +72,7 @@ void MultiaryHierarchicalClusterAlgorithm::_addChildLinks(MultiaryClusterPtr par
 }
 
 MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calculateClusters(
-  OsmMapPtr map, std::set< std::pair<ElementId, ElementId> >& pairs)
+  OsmMapPtr map, std::set<std::pair<ElementId, ElementId>>& pairs)
 {
   // initialize the cluster list with one element per cluster.
   // Also initialize all the links between clusters in a priority queue.
@@ -132,7 +132,7 @@ QList<MultiaryClusterAlgorithm::ClusterLinkPtr> MultiaryHierarchicalClusterAlgor
 
 void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
   OsmMapPtr map,
-  std::set< std::pair<ElementId, ElementId> >& pairs)
+  std::set<std::pair<ElementId, ElementId>>& pairs)
 {
   _clusters.clear();
   while (!_linkQueue.empty())
@@ -142,7 +142,7 @@ void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
 
   QSet<ElementId> allElements;
 
-  for (std::set< std::pair<ElementId, ElementId> >::iterator it = pairs.begin();
+  for (std::set<std::pair<ElementId, ElementId>>::iterator it = pairs.begin();
     it != pairs.end(); ++it)
   {
     allElements.insert(it->first);
@@ -160,7 +160,7 @@ void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
     eToCluster[eid] = c;
   }
 
-  for (std::set< std::pair<ElementId, ElementId> >::iterator it = pairs.begin();
+  for (std::set<std::pair<ElementId, ElementId>>::iterator it = pairs.begin();
     it != pairs.end(); ++it)
   {
     MatchClassification score = _scoreCache->getScore(eToCluster[it->first],

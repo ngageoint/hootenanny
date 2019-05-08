@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AlphaShapeGenerator.h"
@@ -47,7 +47,7 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
-  boost::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+  std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
     //would rather this be thrown than a warning logged, as the warning may go unoticed by web
@@ -71,12 +71,12 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   return result;
 }
 
-boost::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
+std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
 
   // put all the nodes into a vector of points.
-  std::vector< std::pair<double, double> > points;
+  std::vector<std::pair<double, double>> points;
   points.reserve(inputMap->getNodes().size());
   const NodeMap& nodes = inputMap->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -88,7 +88,7 @@ boost::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inpu
   }
 
   // create a complex geometry representing the alpha shape
-  boost::shared_ptr<Geometry> cutterShape;
+  std::shared_ptr<Geometry> cutterShape;
   {
     AlphaShape alphaShape(_alpha);
     alphaShape.insert(points);

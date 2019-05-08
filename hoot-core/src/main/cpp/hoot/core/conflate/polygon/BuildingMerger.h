@@ -65,9 +65,9 @@ public:
    * building relation
    * @return a building element
    */
-  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
-                                                  const std::set<ElementId>& eids,
-                                                  const bool preserveTypes = false);
+  static std::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
+                                                const std::set<ElementId>& eids,
+                                                const bool preserveTypes = false);
 
   virtual QString toString() const override;
 
@@ -94,7 +94,7 @@ protected:
 
 private:
 
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
 
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
@@ -113,7 +113,7 @@ private:
    * then buildings with unknown2 status are assembled
    * @return a building element
    */
-  boost::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
+  std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
 

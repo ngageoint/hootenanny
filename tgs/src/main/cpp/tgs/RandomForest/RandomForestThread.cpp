@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomForestThread.h"
 
@@ -30,8 +30,8 @@
 
 namespace Tgs
 {
-  RandomForestThread::RandomForestThread(boost::shared_ptr<DataFrame> data,
-    boost::shared_ptr<RandomTree> tree, unsigned int numFactors, unsigned int nodeSize,
+  RandomForestThread::RandomForestThread(const std::shared_ptr<DataFrame>& data,
+    const std::shared_ptr<RandomTree>& tree, unsigned int numFactors, unsigned int nodeSize,
     bool makeBalanced)
   {
     _data = data;

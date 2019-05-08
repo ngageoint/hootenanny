@@ -84,8 +84,8 @@ private:
   QList<ConstElementPtr> _members;
 };
 
-typedef boost::shared_ptr<NetworkEdge> NetworkEdgePtr;
-typedef boost::shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
+typedef std::shared_ptr<NetworkEdge> NetworkEdgePtr;
+typedef std::shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
@@ -110,7 +110,7 @@ inline uint qHash(const ConstNetworkEdgePtr& v)
 
 inline uint qHash(const NetworkEdgePtr& v)
 {
-  return qHash(boost::dynamic_pointer_cast<const NetworkEdge>(v));
+  return qHash(std::dynamic_pointer_cast<const NetworkEdge>(v));
 }
 
 }

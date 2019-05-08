@@ -34,9 +34,6 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -53,9 +50,9 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
-  BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
-                const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt,
-                bool reviewIfSecondaryFeatureNewer, QString dateTagKey, QString dateFormat);
+  BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
+                const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt,
+                bool reviewIfSecondaryFeatureNewer, const QString& dateTagKey, const QString& dateFormat);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -75,12 +72,12 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   virtual QString toString() const;
 
   virtual QString explain() const { return _explainText; }
-  virtual void setExplain(const QString explainText) { _explainText = explainText; }
+  virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
 
   virtual QString getDescription() const { return "Matches buildings"; }
 
@@ -89,7 +86,7 @@ private:
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
-  boost::shared_ptr<const BuildingRfClassifier> _rf;
+  std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
   bool _reviewIfSecondaryFeatureNewer;
@@ -98,9 +95,9 @@ private:
 
   void _calculateClassification(const ConstOsmMapPtr& map);
   QStringList _getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                   ConstElementPtr element1, ConstElementPtr element2);
-  QStringList _createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                   ConstElementPtr element2);
+                                   const ConstElementPtr& element1, const ConstElementPtr& element2);
+  QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
+                                                   const ConstElementPtr& element2);
 };
 
 }

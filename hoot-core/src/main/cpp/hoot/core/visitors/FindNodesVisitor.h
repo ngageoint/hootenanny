@@ -46,7 +46,7 @@ public:
 
   void setOsmMap(const OsmMap* map) override { _map = map; }
 
-  void visit(const boost::shared_ptr<const Element>& e) override;
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Get matching IDs
   std::vector<long> getIds() { return _nodeIds; }

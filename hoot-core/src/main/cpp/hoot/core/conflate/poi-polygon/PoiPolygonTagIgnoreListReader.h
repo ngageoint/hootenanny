@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONTAGIGNORELISTREADER_H
 #define POIPOLYGONTAGIGNORELISTREADER_H
@@ -50,7 +50,7 @@ private:
 
   PoiPolygonTagIgnoreListReader();
 
-  static boost::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
+  static std::shared_ptr<PoiPolygonTagIgnoreListReader> _theInstance;
 
   QStringList _poiTagIgnoreList;
   QStringList _polyTagIgnoreList;

@@ -64,8 +64,8 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {
@@ -88,7 +88,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
 
   double buffer = sqrt(max(a1, a2)) * _bufferPortion;
 
-  boost::shared_ptr<Geometry> overlap;
+  std::shared_ptr<Geometry> overlap;
   try
   {
     g1.reset(g1->buffer(buffer));

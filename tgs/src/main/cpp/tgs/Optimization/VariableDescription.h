@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VARIABLEDESCRIPTION_H
 #define VARIABLEDESCRIPTION_H
@@ -30,8 +30,8 @@
 // Qt
 #include <QString>
 
-// Tgs
-#include <tgs/SharedPtr.h>
+// Standard
+#include <memory>
 
 namespace Tgs
 {
@@ -71,8 +71,8 @@ private:
   VariableType _type;
 };
 
-typedef boost::shared_ptr<VariableDescription> VariableDescriptionPtr;
-typedef boost::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
+typedef std::shared_ptr<VariableDescription> VariableDescriptionPtr;
+typedef std::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
 
 }
 

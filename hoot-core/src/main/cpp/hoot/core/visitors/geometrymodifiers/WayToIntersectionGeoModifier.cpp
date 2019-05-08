@@ -49,10 +49,10 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
 {
   // only process ways
   if (pElement->getElementType() != ElementType::Way) return false;
-  const WayPtr pMyWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr pMyWay = std::dynamic_pointer_cast<Way>(pElement);
 
   // find envelope of nodes
-  boost::shared_ptr<Envelope> pEnv(pMyWay->getEnvelope(pMap->shared_from_this()));
+  std::shared_ptr<Envelope> pEnv(pMyWay->getEnvelope(pMap->shared_from_this()));
 
   // find intersecting ways
   vector<long> intersectIds = pMap->getIndex().findWays(*pEnv);
@@ -87,7 +87,7 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
         CoordinateExt interP1( pMap->getNode(i1Id)->toCoordinate());
         CoordinateExt interP2( pMap->getNode(i2Id)->toCoordinate());
 
-        boost::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
+        std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
         if (pIntersectionPoint)
         {
@@ -117,7 +117,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 
   // merge original node ids into an attached way if either end node is attached to another way
-  const boost::shared_ptr<NodeToWayMap>& n2w = pMap->getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = pMap->getIndex().getNodeToWayMap();
   vector<long> nodesToAttach = pWay->getNodeIds();
   bool attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach);
 
@@ -136,7 +136,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 }
 
-bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, vector<long> nodesToAttach)
+bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach)
 {
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);

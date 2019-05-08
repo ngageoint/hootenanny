@@ -57,7 +57,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-boost::shared_ptr<ProbabilityOfMatch> ProbabilityOfMatch::_theInstance;
+std::shared_ptr<ProbabilityOfMatch> ProbabilityOfMatch::_theInstance;
 
 ProbabilityOfMatch::ProbabilityOfMatch()
 {
@@ -94,7 +94,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
 }
 
 double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
-  const boost::shared_ptr<const LineString>& ls2, Meters circularError)
+  const std::shared_ptr<const LineString>& ls2, Meters circularError)
 {
   Meters distanceSum = 0.0;
 

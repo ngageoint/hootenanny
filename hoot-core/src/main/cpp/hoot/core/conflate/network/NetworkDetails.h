@@ -185,10 +185,10 @@ public:
 
 private:
 
-  boost::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
   double _maxStubLength;
 
@@ -205,7 +205,7 @@ private:
       WaySublineMatchStringPtr matches;
   };
 
-  QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;
+  QHash<ElementId, QHash<ElementId, SublineCache>> _sublineCache;
 
   SublineCache _calculateSublineScore(ConstOsmMapPtr map, ConstWayPtr w1, ConstWayPtr w2) const;
 
@@ -229,8 +229,8 @@ private:
     const WaySublineCollection& ws) const;
 };
 
-typedef boost::shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef boost::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+typedef std::shared_ptr<NetworkDetails> NetworkDetailsPtr;
+typedef std::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

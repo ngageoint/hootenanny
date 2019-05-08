@@ -55,7 +55,7 @@ public:
   QQueue<ElementPtr>* _pElementQ;
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
@@ -72,7 +72,7 @@ public:
   QString _output;
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
-  QQueue<std::pair<boost::shared_ptr<geos::geom::Geometry>,
+  QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
          std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
 };
@@ -92,13 +92,13 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void convert(const QStringList inputs, const QString output);
+  void convert(const QStringList& inputs, const QString& output);
 
-  void setTranslation(const QString translation) { _translation = translation; }
-  void setColumns(const QStringList columns) { _columns = columns; }
+  void setTranslation(const QString& translation) { _translation = translation; }
+  void setColumns(const QStringList& columns) { _columns = columns; }
   void setColsArgSpecified(const bool specified) { _colsArgSpecified = specified; }
   void setFeatureReadLimit(const int limit) { _featureReadLimit = limit; }
-  void setConvertOps(const QStringList ops) { _convertOps = ops; }
+  void setConvertOps(const QStringList& ops) { _convertOps = ops; }
 
 private:
 
@@ -111,25 +111,25 @@ private:
   Progress _progress;
   int _printLengthMax;
 
-  void _validateInput(const QStringList inputs, const QString output);
+  void _validateInput(const QStringList& inputs, const QString& output);
 
-  void _convertToOgr(const QString input, const QString output);
-  void _convertFromOgr(const QStringList inputs, const QString output);
-  void _convert(const QStringList inputs, const QString output);
-  void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
+  void _convertToOgr(const QString& input, const QString& output);
+  void _convertFromOgr(const QStringList& inputs, const QString& output);
+  void _convert(const QStringList& inputs, const QString& output);
+  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
-  void _fillElementCache(QString inputUrl,
+  void _fillElementCache(const QString& inputUrl,
                          ElementCachePtr cachePtr,
-                         QQueue<ElementPtr> &workQ);
-  void _transToOgrMT(QString input, QString output);
+                         QQueue<ElementPtr>& workQ);
+  void _transToOgrMT(const QString& input, const QString& output);
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on
    * feature size. If the feature size hasn't already been calculated for each layer, then a even
    * distribution of weighting between layers is returned.
    */
-  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString input,
-                                                 const QStringList layers);
+  std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString& input,
+                                                 const QStringList& layers);
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 };
 

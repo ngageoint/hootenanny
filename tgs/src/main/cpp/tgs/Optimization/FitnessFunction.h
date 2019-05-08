@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FITNESSFUNCTION_H
 #define FITNESSFUNCTION_H
@@ -43,8 +43,8 @@ public:
   virtual double f(const ConstStatePtr& s) = 0;
 };
 
-typedef boost::shared_ptr<FitnessFunction> FitnessFunctionPtr;
-typedef boost::shared_ptr<const FitnessFunction> ConstFitnessFunctionPtr;
+typedef std::shared_ptr<FitnessFunction> FitnessFunctionPtr;
+typedef std::shared_ptr<const FitnessFunction> ConstFitnessFunctionPtr;
 
 }
 

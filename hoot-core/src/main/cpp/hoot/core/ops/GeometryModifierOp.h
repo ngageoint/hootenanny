@@ -69,7 +69,7 @@ namespace hoot
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
     // runs through each action in the sequence they appear in the rules file
-    void apply(boost::shared_ptr<OsmMap>& map);
+    void apply(std::shared_ptr<OsmMap>& map);
 
     // OperationStatusInfo
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
@@ -83,7 +83,7 @@ namespace hoot
     QString _rulesFileName;
 
     // list of instances of all implemented geometry modifier actions
-    QList<boost::shared_ptr<GeometryModifierAction>> _actions;
+    QList<std::shared_ptr<GeometryModifierAction>> _actions;
 
     GeometryModifierVisitor _geometryModifierVisitor;
 

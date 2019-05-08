@@ -56,7 +56,7 @@ class RefToEidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<ElementId> > RefToEid;
+  typedef map<QString, set<ElementId>> RefToEid;
 
   explicit RefToEidVisitor(QString ref) : _ref(ref) {}
 

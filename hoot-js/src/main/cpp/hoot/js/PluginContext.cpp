@@ -100,7 +100,7 @@ Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVarian
     throw InternalErrorException("The specified object is not a function: " + name);
   }
   Handle<Function> func = Handle<Function>::Cast(value);
-  vector< Handle<Value> > jsArgs(args.size());
+  vector<Handle<Value>> jsArgs(args.size());
 
   for (int i = 0; i < args.size(); i++)
   {

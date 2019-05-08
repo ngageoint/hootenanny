@@ -56,17 +56,17 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
     DisableLog dl(Log::Warn);
 
     ElementConverter elementConverter(map.shared_from_this());
-    boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
     {
       throw geos::util::TopologyException();
     }
-    boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
     OsmMapPtr polyMap(new OsmMap());
     ElementPtr polyTemp(poly->clone());
     polyMap->addElement(polyTemp);
-    boost::shared_ptr<Geometry> polyAlphaShape =
+    std::shared_ptr<Geometry> polyAlphaShape =
       AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
     //oddly, even if the area is zero calc'ing the distance can have a positive effect - see #1170
     /*if (polyAlphaShape->getArea() == 0.0)

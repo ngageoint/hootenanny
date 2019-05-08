@@ -30,12 +30,12 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCleaner.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -101,12 +101,12 @@ void NamedOp::apply(OsmMapPtr& map)
 
     // We could benefit from passing progress into some of the ops to get more granular feedback.
 
-    boost::shared_ptr<OperationStatusInfo> statusInfo;
+    std::shared_ptr<OperationStatusInfo> statusInfo;
     if (f.hasBase<OsmMapOperation>(s.toStdString()))
     {
-      boost::shared_ptr<OsmMapOperation> t(
+      std::shared_ptr<OsmMapOperation> t(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(t);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
@@ -120,9 +120,9 @@ void NamedOp::apply(OsmMapPtr& map)
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
-      boost::shared_ptr<ElementVisitor> t(
+      std::shared_ptr<ElementVisitor> t(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      statusInfo = boost::dynamic_pointer_cast<OperationStatusInfo>(t);
+      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(t);
 
       _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
 
@@ -154,7 +154,7 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-void NamedOp::_updateProgress(const int currentStep, const QString message)
+void NamedOp::_updateProgress(const int currentStep, const QString& message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
@@ -165,8 +165,8 @@ void NamedOp::_updateProgress(const int currentStep, const QString message)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString message,
-                                 boost::shared_ptr<OperationStatusInfo> statusInfo) const
+QString NamedOp::_getInitMessage(const QString& message,
+                                 const std::shared_ptr<OperationStatusInfo>& statusInfo) const
 {
   QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())

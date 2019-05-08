@@ -39,9 +39,6 @@
 #include <map>
 #include <vector>
 
-//  Boost
-#include <boost/shared_ptr.hpp>
-
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
@@ -52,7 +49,7 @@ namespace hoot
 //  Forward declaration
 class ChangesetInfo;
 /** Helpful typedefs for pointers and vectors of maps */
-typedef boost::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
+typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
 typedef std::map<long, XmlElementPtr, osm_id_sort> XmlElementMap;
 typedef QVector<XmlElementMap> ChangesetTypeMap;
 

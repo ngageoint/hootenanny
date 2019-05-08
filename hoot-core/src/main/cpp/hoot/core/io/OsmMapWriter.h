@@ -48,18 +48,18 @@ public:
    * check. It will look to see if the URL is properly formatted (e.g. ends in .osm, or starts
    * with postgresql:, etc.)
    */
-  virtual bool isSupported(QString url) = 0;
+  virtual bool isSupported(const QString& url) = 0;
 
   /**
    * Opens the specified URL for writing.
    */
-  virtual void open(QString url) = 0;
+  virtual void open(const QString& url) = 0;
 
   /**
    * Writes the specified map out. When this method is complete the output will likely be closed
    * and all data is guaranteed to be flushed.
    */
-  virtual void write(ConstOsmMapPtr map) = 0;
+  virtual void write(const ConstOsmMapPtr& map) = 0;
 
   /**
    * Lists supported data format extensions

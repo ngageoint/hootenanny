@@ -102,7 +102,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("amenity = pub\n"
@@ -180,7 +180,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -215,7 +215,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -250,7 +250,7 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 

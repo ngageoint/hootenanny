@@ -37,9 +37,6 @@
 #include <set>
 #include <vector>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -62,16 +59,16 @@ public:
 
   ImpliedDividedMarker();
 
-  ImpliedDividedMarker(boost::shared_ptr<const OsmMap> map);
+  ImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static boost::shared_ptr<OsmMap> markDivided(boost::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<OsmMap> markDivided(const std::shared_ptr<const OsmMap>& map);
 
-  boost::shared_ptr<OsmMap> markDivided();
+  std::shared_ptr<OsmMap> markDivided();
 
   virtual QString getInitStatusMessage() const
   { return "Marking road sections that appear to be divided highways..."; }
@@ -84,14 +81,14 @@ public:
 
 private:
 
-  boost::shared_ptr<const OsmMap> _inputMap;
-  boost::shared_ptr<OsmMap> _result;
-  boost::shared_ptr<NodeToWayMap> _n2w;
+  std::shared_ptr<const OsmMap> _inputMap;
+  std::shared_ptr<OsmMap> _result;
+  std::shared_ptr<NodeToWayMap> _n2w;
 
   /**
    * Returns true if the given way has a divider highway connected on both ends.
    */
-  bool _dividerSandwhich(boost::shared_ptr<Way> w);
+  bool _dividerSandwich(const std::shared_ptr<Way>& w);
 
   bool _hasDividerConnected(long nodeId, long excludedWayId);
 };

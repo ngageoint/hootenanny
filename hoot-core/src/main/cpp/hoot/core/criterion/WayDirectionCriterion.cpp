@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayDirectionCriterion.h"
@@ -47,7 +47,7 @@ bool WayDirectionCriterion::isSatisfied(const ConstElementPtr& e) const
 
   return
     DirectionFinder::isSimilarDirection(
-      _map, _baseWay, boost::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
+      _map, _baseWay, std::dynamic_pointer_cast<const Way>(e)) == _similarDirection;
 }
 
 }

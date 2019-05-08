@@ -60,7 +60,7 @@ class HootApiDbSqlStatementFormatter
 
 public:
 
-  HootApiDbSqlStatementFormatter(const QString delimiter, const long mapId);
+  HootApiDbSqlStatementFormatter(const QString& delimiter, const long mapId);
 
   QString nodeToSqlString(const ConstNodePtr& node, const long nodeId, const long changesetId,
                                const bool validate = false);
@@ -141,7 +141,7 @@ private:
   int _precision;
   long _mapId;
 
-  void _initOutputFormatStrings(const QString delimiter);
+  void _initOutputFormatStrings(const QString& delimiter);
   QString _toTagsString(const Tags& tags);
 };
 

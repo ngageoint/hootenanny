@@ -68,7 +68,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
       {
         LOG_VARD(critName);
         ElementCriterionPtr crit =
-          boost::shared_ptr<ElementCriterion>(
+          std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
         addCriterion(crit);
         Configurable* c = dynamic_cast<Configurable*>(crit.get());
@@ -157,7 +157,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 
   const ElementType type = e->getElementType();
   const long id = e->getId();
-  const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
+  const std::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_criteriaSatisfied(ee))
   {
@@ -174,8 +174,8 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
-                                       const boost::shared_ptr<ElementCriterion>& pCrit)
+void RemoveElementsVisitor::removeWays(const std::shared_ptr<OsmMap>& pMap,
+                                       const std::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v;
   v.addCriterion(pCrit);
