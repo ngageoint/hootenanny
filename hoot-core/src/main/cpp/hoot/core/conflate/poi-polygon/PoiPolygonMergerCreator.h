@@ -62,9 +62,11 @@ private:
 
   const OsmMap* _map;
 
-  // TODO
+  // see PoiPolygonMerger::_autoMergeManyPoiToOnePolyMatches
   bool _autoMergeManyPoiToOnePolyMatches;
-  // TODO
+  // If enabled, this prevents reviews from being generated when another type of conflation
+  // (currently could only be Building Conflation) has a match that involves a polygon also
+  // involved in a POI/Poly Conflation match.
   bool _allowCrossConflationMerging;
 
   PoiPolygonPoiCriterion _poiCrit;

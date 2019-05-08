@@ -48,6 +48,8 @@ class PoiPolygonMergerCreatorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(reviewTest);
+  // TODO
+  //CPPUNIT_TEST(crossConflateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -162,6 +164,11 @@ public:
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VAR(*mergers[0]);
     HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+  }
+
+  void crossConflateMergeTest()
+  {
+
   }
 };
 

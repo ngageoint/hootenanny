@@ -2930,9 +2930,9 @@ your language translation needs.
 * Data Type: bool
 * Default Value: `false`
 
-If false, and a match found by Building Conflation involves the same feature in a match found by
+If false, when a match found by Building Conflation involves the same feature in a match found by
 POI to Polygon Conflation, a review will be generated. If true, then that situation will result in
-a merge between features involvedin the Building and POI to Polygon conflation matches.
+a merge between all features involved in the Building and POI to Polygon conflation matches.
 
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 

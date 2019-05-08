@@ -950,7 +950,7 @@
         	"id":"poipolygon_allow_cross_conflation_merging",
         	"elem_type":"bool",
         	"defaultvalue":"false",
-        	"description":"If false, and a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between features involvedin the Building and POI to Polygon conflation matches.",
+        	"description":"If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
         	"name":"Allow Cross Conflation Merging",
         	"hoot_key":"poi.polygon.allow.cross.conflation.merging"
     	    },
