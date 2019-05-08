@@ -62,8 +62,8 @@ double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& t
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   double result;
   if (g1->isEmpty() || g2->isEmpty())

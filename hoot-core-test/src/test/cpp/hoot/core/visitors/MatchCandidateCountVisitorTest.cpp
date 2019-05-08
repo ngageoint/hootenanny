@@ -246,7 +246,7 @@ public:
 
     QStringList matchCreators;
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
-    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+    std::shared_ptr<MatchCandidateCountVisitor> uut;
     const QString poiTagFilter = "{ \"must\": [ { \"tag\": \"poi=yes\" } ] }";
 
     MatchFactory::getInstance().reset();
@@ -288,7 +288,7 @@ public:
     QStringList matchCreators;
     matchCreators.append("hoot::BuildingMatchCreator");
     matchCreators.append("hoot::ScriptMatchCreator,PoiGeneric.js");
-    boost::shared_ptr<MatchCandidateCountVisitor> uut;
+    std::shared_ptr<MatchCandidateCountVisitor> uut;
 
     MatchFactory::getInstance().reset();
     MatchFactory::_setTagFilter("");

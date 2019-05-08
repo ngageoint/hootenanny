@@ -63,7 +63,7 @@ public:
   virtual void setHeadingDelta(Meters headingDelta)  = 0;
 };
 
-typedef boost::shared_ptr<SublineMatcher> SublineMatcherPtr;
+typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;
 
 }
 

@@ -62,7 +62,7 @@ public:
 
   PoiPolygonMatch();
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-    boost::shared_ptr<const PoiPolygonRfClassifier> rf,
+    std::shared_ptr<const PoiPolygonRfClassifier> rf,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
     const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
@@ -76,7 +76,7 @@ public:
 
   virtual QString getMatchName() const { return _matchName; }
 
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
@@ -117,7 +117,7 @@ public:
   { _disableSameSourceConflation = disabled; }
   void setDisableSameSourceConflationMatchTagKeyPrefixOnly(const bool disabled)
   { _disableSameSourceConflationMatchTagKeyPrefixOnly = disabled; }
-  void setSourceTagKey(const QString key) { _sourceTagKey = key; }
+  void setSourceTagKey(const QString& key) { _sourceTagKey = key; }
   void setReviewMultiUseBuildings(const bool review) { _reviewMultiUseBuildings = review; }
   void setAddressMatchingEnabled(const bool enabled) { _addressMatchEnabled = enabled; }
 
@@ -148,8 +148,8 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  boost::shared_ptr<geos::geom::Geometry> _poiGeom;
-  boost::shared_ptr<geos::geom::Geometry> _polyGeom;
+  std::shared_ptr<geos::geom::Geometry> _poiGeom;
+  std::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
 
   //min number evidences pieces required to classify a match
@@ -203,11 +203,11 @@ private:
 
   bool _reviewMultiUseBuildings;
 
-  boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
+  std::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   QString _explainText;
 
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  static std::shared_ptr<ToEnglishTranslator> _translator;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

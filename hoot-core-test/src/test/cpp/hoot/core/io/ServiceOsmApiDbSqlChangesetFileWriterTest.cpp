@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -78,7 +78,7 @@ public:
 
   void runSplitTest()
   {
-    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());

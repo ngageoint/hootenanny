@@ -22,17 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RANDOM_H__
 #define __TGS__RANDOM_H__
 
 // Standard Includes
-#include <stdlib.h>
+#include <cstdlib>
+#include <memory>
 #include <vector>
-//  Boost Includes
-#include <boost/shared_ptr.hpp>
 
 #include <tgs/TgsExport.h>
 
@@ -43,7 +42,7 @@ namespace Tgs
   public:
     Random(unsigned int seed);
 
-    static boost::shared_ptr<Random> instance()
+    static std::shared_ptr<Random> instance()
     {
       if (!_instance)
         _instance.reset(new Random());
@@ -75,7 +74,7 @@ namespace Tgs
   private:
     Random();
 
-    static boost::shared_ptr<Random> _instance;
+    static std::shared_ptr<Random> _instance;
 
     unsigned int _seed;
     bool _is_single;

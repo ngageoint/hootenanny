@@ -36,7 +36,8 @@ class IoSingleStat : public SingleStat
 {
 public:
 
-  enum Type {
+  enum Type
+  {
     RChar,
     WChar,
     SysCr,

@@ -42,7 +42,7 @@ MapCleaner::MapCleaner()
 {
 }
 
-void MapCleaner::apply(boost::shared_ptr<OsmMap>& map)
+void MapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }

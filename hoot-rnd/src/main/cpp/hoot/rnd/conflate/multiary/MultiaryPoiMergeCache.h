@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYPOIMERGECACHE_H
 #define MULTIARYPOIMERGECACHE_H
@@ -57,19 +57,19 @@ public:
    * @param matchCreator
    * @param mergerCreator
    */
-  MultiaryPoiMergeCache(ConstOsmMapPtr map, boost::shared_ptr<MatchCreator> matchCreator,
-    boost::shared_ptr<MergerCreator> mergerCreator);
+  MultiaryPoiMergeCache(const ConstOsmMapPtr& map, const std::shared_ptr<MatchCreator>& matchCreator,
+    const std::shared_ptr<MergerCreator>& mergerCreator);
 
-  MultiaryClusterPtr merge(MultiaryClusterPtr c1, MultiaryClusterPtr c2);
+  MultiaryClusterPtr merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2);
 
 private:
 
   ConstOsmMapPtr _map;
-  boost::shared_ptr<MatchCreator> _matchCreator;
-  boost::shared_ptr<MergerCreator> _mergerCreator;
+  std::shared_ptr<MatchCreator> _matchCreator;
+  std::shared_ptr<MergerCreator> _mergerCreator;
 };
 
-typedef boost::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
+typedef std::shared_ptr<MultiaryPoiMergeCache> MultiaryPoiMergeCachePtr;
 
 }
 

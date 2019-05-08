@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsRegistrar.h"
 
@@ -41,7 +41,7 @@ void Method(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(String::NewFromUtf8(current, "world"));
 }
 
-boost::shared_ptr<JsRegistrar> JsRegistrar::_theInstance = NULL;
+std::shared_ptr<JsRegistrar> JsRegistrar::_theInstance = NULL;
 
 JsRegistrar::JsRegistrar()
 {
@@ -78,7 +78,7 @@ void JsRegistrar::initAll(Handle<Object> exports)
   }
 }
 
-void JsRegistrar::registerInitializer(boost::shared_ptr<ClassInitializer> ci)
+void JsRegistrar::registerInitializer(const std::shared_ptr<ClassInitializer>& ci)
 {
   _initializers.push_back(ci);
 }

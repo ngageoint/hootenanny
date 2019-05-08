@@ -38,9 +38,6 @@
 #include <QXmlDefaultHandler>
 #include <QXmlStreamReader>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Standard
 #include <deque>
 
@@ -77,23 +74,23 @@ public:
 
   virtual void finalizePartial();
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual bool hasMoreElements();
 
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
-  void readFromString(QString xml, OsmMapPtr map);
+  void readFromString(const QString& xml, const OsmMapPtr& map);
 
-  void read(const QString& path, OsmMapPtr map);
+  void read(const QString& path, const OsmMapPtr& map);
 
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
-  virtual void setDefaultStatus(Status s) { _status = s; }
+  virtual void setDefaultStatus(Status s) override { _status = s; }
 
   virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
 
@@ -105,7 +102,7 @@ public:
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
 
-  virtual QString supportedFormats() { return ".osm;.osm.bz2;.osm.gz"; }
+  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
   /**
    * This will adds child refs to elements when they aren't present in the source data.  This is
@@ -128,7 +125,7 @@ private:
 
   QString _errorString;
   OsmMapPtr _map;
-  boost::shared_ptr<Element> _element;
+  std::shared_ptr<Element> _element;
 
   Status _status;
   Meters _defaultCircularError;
@@ -146,7 +143,7 @@ private:
   long _wayId;
   long _relationId;
 
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
 
   bool _inputCompressed;
 
@@ -182,8 +179,8 @@ private:
    */
   long _getRelationId(long fileId);
 
-  double _parseDouble(QString s);
-  long _parseLong(QString s);
+  double _parseDouble(const QString& s);
+  long _parseLong(const QString& s);
 
   const QString& _saveMemory(const QString& s);
 

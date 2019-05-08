@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTITHREADEDRANDOMFOREST_H
 #define MULTITHREADEDRANDOMFOREST_H
@@ -63,9 +63,9 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, unsigned int nodeSize = 1,
-      double retrain = 1.0, bool balanced = false);
+      double retrain = 1.0, bool balanced = false) override;
 
     /**
     * Build the forest from a data set
@@ -77,16 +77,16 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, unsigned int nodeSize = 1, double retrain = 1.0,
-      bool balanced = false);
+      bool balanced = false) override;
 
     /**
      * @brief trainMulticlass the map class to train a tree
      * @param tree the input tree
      * @return the trained tree
      */
-    static boost::shared_ptr<RandomTree> train(const boost::shared_ptr<RandomTree> & tree);
+    static std::shared_ptr<RandomTree> train(const std::shared_ptr<RandomTree>& tree);
 
     /**
     * Build the forest from a data set
@@ -100,9 +100,9 @@ namespace Tgs
     * @param retrain fraction of top factors to use in retraining model (1.0 means use all factors and no retraining)
     * @param balanced true if the forest will be balanced
     */
-    void trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numTrees,
+    virtual void trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numTrees,
       unsigned int numFactors, std::string posClass, std::string negClass,
-      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false);
+      unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) override;
   private:
 
 

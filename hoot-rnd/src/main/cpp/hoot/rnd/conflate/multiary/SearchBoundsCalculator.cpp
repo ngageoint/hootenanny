@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SearchBoundsCalculator.h"
 
@@ -34,7 +34,7 @@ namespace hoot
 
 using namespace geos::geom;
 
-SearchBoundsCalculator::SearchBoundsCalculator(SearchRadiusProviderPtr radiusProvider)
+SearchBoundsCalculator::SearchBoundsCalculator(const SearchRadiusProviderPtr& radiusProvider)
 {
   _radiusProvider = radiusProvider;
 }

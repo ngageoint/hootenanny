@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DELAUNAYINTERPOLATOR_H
 #define DELAUNAYINTERPOLATOR_H
@@ -72,7 +72,7 @@ public:
 protected:
   /// The number of folds in cross validation
   int _kFold;
-  boost::shared_ptr<DelaunayTriangulation> _dt;
+  std::shared_ptr<DelaunayTriangulation> _dt;
   std::map<Point2d, int> _pointToIndex;
   double _minX, _minY, _maxX, _maxY;
 

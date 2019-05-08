@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMCHANGEWRITERFACTORY_H
 #define OSMCHANGEWRITERFACTORY_H
@@ -41,10 +41,9 @@ class OsmChangeWriterFactory
 {
 public:
 
-  boost::shared_ptr<OsmChangeWriter> createWriter(
-    QString url, QString elementPayloadFormat = "json");
+  std::shared_ptr<OsmChangeWriter> createWriter(const QString& url, const QString& elementPayloadFormat = "json");
 
-  bool isSupported(const QString output);
+  bool isSupported(const QString& output);
 
   static OsmChangeWriterFactory& getInstance();
 
@@ -52,7 +51,7 @@ private:
 
   OsmChangeWriterFactory();
 
-  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
+  static std::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };
 
 }

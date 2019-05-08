@@ -60,9 +60,9 @@ public:
 
   ShapefileWriter() { _includeInfo = true; _includeIds = false; _circularErrorIndex = -1; }
 
-  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".shp"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
 
-  virtual void open(QString url) override;
+  virtual void open(const QString& url) override;
 
   QStringList getColumns(ConstOsmMapPtr map, ElementType type) const;
 
@@ -77,18 +77,18 @@ public:
    * path + "Polygon.shp"
    * path + "Line.shp"
    */
-  void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   /**
    * @deprecated Use open and write instead.
    */
-  void write(ConstOsmMapPtr map, QString path);
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
-  void writeLines(ConstOsmMapPtr map, const QString& path);
+  void writeLines(const ConstOsmMapPtr& map, const QString& path);
 
-  void writePoints(ConstOsmMapPtr map, const QString& path);
+  void writePoints(const ConstOsmMapPtr& map, const QString& path);
 
-  void writePolygons(ConstOsmMapPtr map, const QString& path);
+  void writePolygons(const ConstOsmMapPtr& map, const QString& path);
 
   virtual QString supportedFormats() override { return ".shp"; }
 
@@ -100,7 +100,7 @@ protected:
   QDir _outputDir;
   int _circularErrorIndex;
 
-  void _removeShapefile(QString path);
+  void _removeShapefile(const QString& path);
 
   void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr &relation,
     OGRLayer *poLayer, const QStringList &columns, const QStringList &shpColumns);

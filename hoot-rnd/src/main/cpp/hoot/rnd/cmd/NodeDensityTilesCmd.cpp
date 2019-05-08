@@ -138,7 +138,7 @@ public:
     conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
 
     OsmMapPtr inputMap = _readInputs(inputs);
-    const std::vector< std::vector<geos::geom::Envelope> > tiles =
+    const std::vector<std::vector<geos::geom::Envelope>> tiles =
       _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
     _writeOutputAsGeoJson(tiles, output, args.contains("--random"), randomSeed);
 
@@ -157,11 +157,11 @@ private:
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
-      boost::shared_ptr<OsmMapReader> reader =
+      std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(inputs.at(i), true, Status::Unknown1);
 
-      boost::shared_ptr<ApiDbReader> apiDbReader =
-        boost::dynamic_pointer_cast<ApiDbReader>(reader);
+      std::shared_ptr<ApiDbReader> apiDbReader =
+        std::dynamic_pointer_cast<ApiDbReader>(reader);
       if (apiDbReader)
       {
         //the tiles calculation is only concerned with nodes, and the only readers capable of
@@ -184,14 +184,14 @@ private:
     LOG_VARD(map->getNodeCount());
 
 //    OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
-//    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
+//    std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
 //    LOG_VARD(tempEnv->toString());
     OsmMapWriterFactory::writeDebugMap(map);
 
     return map;
   }
 
-  std::vector< std::vector<geos::geom::Envelope> > _calculateTiles(const long maxNodesPerTile,
+  std::vector<std::vector<geos::geom::Envelope>> _calculateTiles(const long maxNodesPerTile,
                                                                    const double pixelSize,
                                                                    OsmMapPtr map)
   {
@@ -206,8 +206,8 @@ private:
     return tileBoundsCalculator.calculateTiles();
   }
 
-  void _writeOutputAsGeoJson(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                             const QString outputPath, const bool selectSingleRandomTile,
+  void _writeOutputAsGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                             const QString& outputPath, const bool selectSingleRandomTile,
                              int randomSeed)
   {
     //write out to temp osm and then use ogr2ogr to convert to geojson
@@ -243,8 +243,8 @@ private:
     }
   }
 
-  void _writeOutputAsOsm(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                         const QString outputPath, const bool selectSingleRandomTile,
+  void _writeOutputAsOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                         const QString& outputPath, const bool selectSingleRandomTile,
                          int randomSeed)
   {
     LOG_VARD(outputPath);

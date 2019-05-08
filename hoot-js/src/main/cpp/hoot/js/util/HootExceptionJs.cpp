@@ -46,7 +46,7 @@ HootExceptionJs::HootExceptionJs()
 {
 }
 
-Handle<Object> HootExceptionJs::create(boost::shared_ptr<HootException> e)
+Handle<Object> HootExceptionJs::create(const std::shared_ptr<HootException>& e)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
@@ -133,7 +133,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
 
   if (isHootException(exception))
   {
-    boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
+    std::shared_ptr<HootException> e = toCpp<std::shared_ptr<HootException>>(exception);
     HootExceptionThrower::getInstance().rethrowPointer(e);
   }
   else
@@ -184,7 +184,7 @@ void HootExceptionJs::toJSON(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+  std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   QVariantMap m;
   m["message"] = e->getWhat();
@@ -198,7 +198,7 @@ void HootExceptionJs::toString(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+  std::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   args.GetReturnValue().Set(toV8(e->getWhat()));
 }

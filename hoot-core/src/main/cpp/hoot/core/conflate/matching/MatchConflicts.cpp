@@ -53,8 +53,8 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
   // map each eid to all corresponding matches.
   for (size_t i = 0; i < matches.size(); i++)
   {
-    set< pair<ElementId, ElementId> > eids = matches[i]->getMatchPairs();
-    for (set< pair<ElementId, ElementId> >::iterator it = eids.begin(); it != eids.end(); ++it)
+    set<pair<ElementId, ElementId>> eids = matches[i]->getMatchPairs();
+    for (set<pair<ElementId, ElementId>>::iterator it = eids.begin(); it != eids.end(); ++it)
     {
       eidToMatches.insert(pair<ElementId, size_t>(it->first, i));
       eidToMatches.insert(pair<ElementId, size_t>(it->second, i));

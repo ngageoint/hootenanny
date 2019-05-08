@@ -117,7 +117,7 @@ void WayJoiner1::joinSiblings()
 {
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
-  map<long, deque<long> > w;
+  map<long, deque<long>> w;
   //  Find all ways that have a split parent id
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -129,7 +129,7 @@ void WayJoiner1::joinSiblings()
     }
   }
   //  Rejoin any sibling ways where the parent id no longer exists
-  for (map<long, deque<long> >::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
+  for (map<long, deque<long>>::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
     while (way_ids.size() > 1)
@@ -148,7 +148,7 @@ void WayJoiner1::joinAtNode()
     if (way->hasPid())
       ids.insert(way->getId());
   }
-  boost::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> nodeToWayMap = _map->getIndex().getNodeToWayMap();
   //  Iterate all of the nodes and check for compatible ways to join them to
   for (unordered_set<long>::iterator it = ids.begin(); it != ids.end(); ++it)
   {

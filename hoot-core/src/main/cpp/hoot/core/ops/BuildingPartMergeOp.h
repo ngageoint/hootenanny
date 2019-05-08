@@ -48,10 +48,10 @@ namespace __gnu_cxx
 {
 
 template<>
-  struct hash<boost::shared_ptr<hoot::Element>>
+  struct hash<std::shared_ptr<hoot::Element>>
   {
     size_t
-    operator()(const boost::shared_ptr<hoot::Element>& k) const
+    operator()(const std::shared_ptr<hoot::Element>& k) const
     { return (size_t)(k.get()); }
   };
 
@@ -151,7 +151,7 @@ private:
   // building tag keys that need to be ignored during merging
   std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
-  boost::shared_ptr<ElementConverter> _elementConverter;
+  std::shared_ptr<ElementConverter> _elementConverter;
 
   int _totalBuildingGroupsProcessed;
   int _numBuildingGroupsMerged;
@@ -164,7 +164,7 @@ private:
   void _init(OsmMapPtr& map);
   void _initBuildingPartTagNames();
 
-  boost::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
+  std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 
   /*
    * Collects building parts and passes them off for parallel processing

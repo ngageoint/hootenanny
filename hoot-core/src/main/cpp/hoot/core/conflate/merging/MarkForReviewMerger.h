@@ -50,7 +50,7 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  MarkForReviewMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, QString note,
+  MarkForReviewMerger(const std::set<std::pair<ElementId, ElementId>>& pairs, QString note,
                       QString reviewType, double score);
 
   /**
@@ -77,7 +77,7 @@ public:
 private:
 
   std::set<ElementId> _eids;
-  std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set<std::pair<ElementId, ElementId>> _pairs;
   QString _note;
   QString _reviewType;
   double _score;

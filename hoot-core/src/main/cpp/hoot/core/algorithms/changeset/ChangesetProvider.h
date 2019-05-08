@@ -45,7 +45,7 @@ class ChangesetProvider
 
 public:
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**
    * @brief ~ElementInputStream
@@ -77,7 +77,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
+typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
 
 }
 

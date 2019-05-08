@@ -120,7 +120,7 @@ vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr a, WayLocation& s
 
 void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
 {
-  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 
   double l = ls->getLength();
 

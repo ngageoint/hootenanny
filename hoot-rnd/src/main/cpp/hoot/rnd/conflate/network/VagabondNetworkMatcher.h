@@ -80,7 +80,7 @@ public:
   /**
    * Use this instead of a constructor. To simplify life a shared pointer should always be used.
    */
-  static boost::shared_ptr<VagabondNetworkMatcher> create();
+  static std::shared_ptr<VagabondNetworkMatcher> create();
 
   virtual void iterate();
 
@@ -114,8 +114,8 @@ private:
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };
 
-typedef boost::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
-typedef boost::shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
+typedef std::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
+typedef std::shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstVagabondNetworkMatcherPtr, ConstVagabondNetworkMatcherPtr);

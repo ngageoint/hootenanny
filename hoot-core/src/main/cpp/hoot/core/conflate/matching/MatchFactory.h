@@ -70,7 +70,7 @@ public:
    */
   void createMatches(const ConstOsmMapPtr& map, std::vector<const Match *> &matches,
     const geos::geom::Envelope &bounds,
-    boost::shared_ptr<const MatchThreshold> threshold = boost::shared_ptr<MatchThreshold>()) const;
+    std::shared_ptr<const MatchThreshold> threshold = std::shared_ptr<MatchThreshold>()) const;
 
   /**
    * @brief Returns a description of all available match creators.
@@ -81,18 +81,18 @@ public:
    * @return Return all of the registered match creators. This is the list of creators that will
    * be used if createMatches is called.
    */
-  std::vector<boost::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
+  std::vector<std::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(boost::shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
+  void registerCreator(const std::shared_ptr<MatchCreator>& creator) { _creators.push_back(creator); }
 
   /**
    * @brief registerCreator Register the specified creator by string (constructs the creator)
    * @param c @sa ConfigOptions::getMatchCreators()
    */
-  void registerCreator(QString c);
+  void registerCreator(const QString& c);
 
   void reset();
 
@@ -103,16 +103,16 @@ private:
 
   MatchFactory();
 
-  void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
+  void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
   static void _setTagFilter(QString filter) { _theInstance->_tagFilter = filter; }
 
   static void _tempFixDefaults();
 
-  static boost::shared_ptr<MatchFactory> _theInstance;
+  static std::shared_ptr<MatchFactory> _theInstance;
 
-  std::vector<boost::shared_ptr<MatchCreator>> _creators;
+  std::vector<std::shared_ptr<MatchCreator>> _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

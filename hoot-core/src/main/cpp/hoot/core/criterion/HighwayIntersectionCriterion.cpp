@@ -52,7 +52,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);

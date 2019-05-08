@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AttributeComparator.h"
@@ -47,8 +47,8 @@ using namespace Tgs;
 namespace hoot
 {
 
-AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1,
-                                         boost::shared_ptr<OsmMap> map2) :
+AttributeComparator::AttributeComparator(const std::shared_ptr<OsmMap>& map1,
+                                         const std::shared_ptr<OsmMap>& map2) :
   BaseComparator(map1, map2),
   _iterations(10),
   _median(0.0),
@@ -75,7 +75,7 @@ double AttributeComparator::compareMaps()
   double zalpha = 1.645;
   _ci = -1;
 
-  boost::shared_ptr<OsmMap> referenceMap, otherMap;
+  std::shared_ptr<OsmMap> referenceMap, otherMap;
 
   // do this a bunch of times
   for (int i = 0; i < _iterations * 4 && (int)scores.size() < _iterations; i++)

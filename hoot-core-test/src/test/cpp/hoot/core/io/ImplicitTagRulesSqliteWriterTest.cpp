@@ -217,7 +217,7 @@ private:
 
   QSqlDatabase _db;
 
-  void _openDb( const QString path)
+  void _openDb(const QString& path)
   {
     if (!QSqlDatabase::contains(path))
     {

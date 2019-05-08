@@ -50,7 +50,7 @@ public:
 
   ReprojectToPlanarOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
 

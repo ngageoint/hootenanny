@@ -62,7 +62,7 @@ public:
   static std::string className() { return "hoot::TagAdvancedCriterion"; }
 
   TagAdvancedCriterion();
-  TagAdvancedCriterion(const QString filterJsonStrOrPath);
+  TagAdvancedCriterion(const QString& filterJsonStrOrPath);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -77,12 +77,12 @@ private:
 
   // one filter for each type: must, must_not, and should
   QMap<QString, QList<TagFilter>> _tagFilters;
-  boost::shared_ptr<QRegExp> _keyMatcher;
-  boost::shared_ptr<QRegExp> _valueMatcher;
+  std::shared_ptr<QRegExp> _keyMatcher;
+  std::shared_ptr<QRegExp> _valueMatcher;
 
-  void _parseFilterString(const QString filterJsonStringOrPath);
-  void _loadTagFilters(const QString tagFilterType,
-                       boost::shared_ptr<boost::property_tree::ptree> propTree);
+  void _parseFilterString(const QString& filterJsonStringOrPath);
+  void _loadTagFilters(const QString& tagFilterType,
+                       const std::shared_ptr<boost::property_tree::ptree>& propTree);
 
   bool _elementPassesTagFilter(const ConstElementPtr& e, const TagFilter& filter) const;
   bool _elementPassesMustTagFilters(const ConstElementPtr& e) const;
@@ -97,7 +97,7 @@ private:
    * Looks for match other than a tag string match...basically all other type of matches;
    * associations, etc.
    */
-  bool _hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter, const QString type) const;
+  bool _hasAuxMatch(const ConstElementPtr& e, const TagFilter& filter, const QString& type) const;
 };
 
 }

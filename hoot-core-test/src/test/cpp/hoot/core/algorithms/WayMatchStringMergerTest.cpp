@@ -142,7 +142,7 @@ public:
     uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
-    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map, _outputPath + "WayMatchStringMergerTestMergeNode.osm");
 
@@ -168,7 +168,7 @@ public:
     uut.setKeeperStatus(Status::Conflated);
 
     MapProjector::projectToWgs84(map);
-    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map, _outputPath + "WayMatchStringMergerTestMergeTags.osm");
 

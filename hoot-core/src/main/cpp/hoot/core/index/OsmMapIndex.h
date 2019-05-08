@@ -98,17 +98,17 @@ public:
 
   Meters getIndexSlush() const { return _indexSlush; }
 
-  boost::shared_ptr<NodeToWayMap> getNodeToWayMap() const;
+  std::shared_ptr<NodeToWayMap> getNodeToWayMap() const;
 
   /**
    * Returns a map that can tell you which relations an element is part of.
    */
-  const boost::shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
+  const std::shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
 
   /**
    * Unlike the way tree the node tree has no approximations built in.
    */
-  boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
+  std::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
    * Get all the direct parents of a given element. This will not return grandparents, etc.
@@ -117,7 +117,7 @@ public:
 
   const std::vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
-  boost::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
+  std::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
 
   /**
    * This gets called before an element changes. Between this call and the call to
@@ -155,11 +155,11 @@ private:
 
   mutable std::set<long> _pendingRelationChange;
 
-  mutable boost::shared_ptr<Tgs::HilbertRTree> _nodeTree;
-  mutable boost::shared_ptr<Tgs::HilbertRTree> _wayTree;
+  mutable std::shared_ptr<Tgs::HilbertRTree> _nodeTree;
+  mutable std::shared_ptr<Tgs::HilbertRTree> _wayTree;
 
-  mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
-  mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;
+  mutable std::shared_ptr<NodeToWayMap> _nodeToWayMap;
+  mutable std::shared_ptr<ElementToRelationMap> _elementToRelationMap;
 
   mutable std::vector<long> _treeIdToNid;
   mutable std::vector<long> _treeIdToWid;

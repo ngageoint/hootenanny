@@ -38,10 +38,7 @@
 
 // Standard
 #include <deque>
-
-// Boost
-#include <boost/function.hpp>
-
+#include <functional>
 
 namespace hoot
 {
@@ -62,10 +59,10 @@ public:
 
   static std::string className() { return "hoot::CreateIndexVisitor"; }
 
-  explicit IndexElementsVisitor(boost::shared_ptr<Tgs::HilbertRTree>& index,
+  explicit IndexElementsVisitor(std::shared_ptr<Tgs::HilbertRTree>& index,
                                 std::deque<ElementId>& indexToEid,
-                                const boost::shared_ptr<ElementCriterion>& criterion,
-                                boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                                const std::shared_ptr<ElementCriterion>& criterion,
+                                std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                 ConstOsmMapPtr pMap);
 
   void addCriterion(const ElementCriterionPtr& e);
@@ -75,7 +72,7 @@ public:
   void finalizeIndex();
 
   static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env,
-                                           const boost::shared_ptr<Tgs::HilbertRTree>& index,
+                                           const std::shared_ptr<Tgs::HilbertRTree>& index,
                                            const std::deque<ElementId>& indexToEid,
                                            ConstOsmMapPtr pMap);
 
@@ -89,10 +86,10 @@ public:
 
 private:
 
-  boost::shared_ptr<ElementCriterion> _criterion;
-  boost::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
+  std::shared_ptr<ElementCriterion> _criterion;
+  std::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
 
-  boost::shared_ptr<Tgs::HilbertRTree>& _index;
+  std::shared_ptr<Tgs::HilbertRTree>& _index;
   std::deque<ElementId>& _indexToEid;
   std::vector<Tgs::Box> _boxes;
   std::vector<int> _fids;

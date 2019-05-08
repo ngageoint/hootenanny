@@ -61,23 +61,23 @@ RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
       ConfigOptions().getRemoveDuplicateAreasDiff()));
 }
 
-boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
-  const boost::shared_ptr<Element>& e1)
+std::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(
+  const std::shared_ptr<Element>& e1)
 {
-  QHash<ElementId, boost::shared_ptr<Geometry> >::const_iterator it =
+  QHash<ElementId, std::shared_ptr<Geometry>>::const_iterator it =
     _geoms.find(e1->getElementId());
   if (it != _geoms.end())
   {
     return it.value();
   }
   ElementConverter gc(_map->shared_from_this());
-  boost::shared_ptr<Geometry> g = gc.convertToGeometry(e1);
+  std::shared_ptr<Geometry> g = gc.convertToGeometry(e1);
   _geoms[e1->getElementId()] = g;
   return g;
 }
 
-bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
-  const boost::shared_ptr<Element>& e2)
+bool RemoveDuplicateAreaVisitor::_equals(const std::shared_ptr<Element>& e1,
+  const std::shared_ptr<Element>& e2)
 {
   if (e1->getStatus() != e2->getStatus())
   {
@@ -98,8 +98,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
   }
 
   // convert to geometry and cache as relevant.
-  boost::shared_ptr<Geometry> g1 = _convertToGeometry(e1);
-  boost::shared_ptr<Geometry> g2 = _convertToGeometry(e2);
+  std::shared_ptr<Geometry> g1 = _convertToGeometry(e1);
+  std::shared_ptr<Geometry> g2 = _convertToGeometry(e2);
 
   double a1 = g1->getArea();
   double a2 = g2->getArea();
@@ -111,10 +111,10 @@ bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
   }
 
   // calculate the overlap of the areas
-  boost::shared_ptr<Geometry> overlap;
+  std::shared_ptr<Geometry> overlap;
   try
   {
-    overlap =boost::shared_ptr<Geometry>(g1->intersection(g2.get()));
+    overlap =std::shared_ptr<Geometry>(g1->intersection(g2.get()));
   }
   catch (const geos::util::TopologyException&)
   {
@@ -133,8 +133,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,
-                                            boost::shared_ptr<Element> e2)
+void RemoveDuplicateAreaVisitor::_removeOne(const std::shared_ptr<Element>& e1,
+                                            const std::shared_ptr<Element>& e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
   {
@@ -164,7 +164,7 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 
   if (e->getElementType() != ElementType::Node)
   {
-    boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    std::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
   }
 
@@ -177,7 +177,7 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
+void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e1)
 {
   if (!e1.get())
   {
@@ -186,7 +186,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
   //LOG_VART(e1->getElementId());
 
   AreaCriterion areaCrit;
-  boost::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
+  std::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
   // if the envelope is null or the element is incomplete.
   if (env->isNull() ||
       CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
@@ -203,7 +203,7 @@ void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
     ElementId eit = *it;
     if (e1->getElementId() < eit && eit.getType() != ElementType::Node)
     {
-      boost::shared_ptr<Element> e2 = _map->getElement(*it);
+      std::shared_ptr<Element> e2 = _map->getElement(*it);
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.

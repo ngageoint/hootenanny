@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYCLUSTER_H
 #define MULTIARYCLUSTER_H
@@ -53,7 +53,7 @@ public:
    * A list of links from this cluster to other clusters. These links refer to some kind of
    * non-miss relationship between the clusters.
    */
-  QList< boost::shared_ptr<MultiaryCluster> > links;
+  QList<std::shared_ptr<MultiaryCluster>> links;
 
   /**
    * A single element that represents the merged result of all the cluster's members.
@@ -65,7 +65,7 @@ public:
   QString toString() const;
 };
 
-typedef boost::shared_ptr<MultiaryCluster> MultiaryClusterPtr;
+typedef std::shared_ptr<MultiaryCluster> MultiaryClusterPtr;
 
 }
 

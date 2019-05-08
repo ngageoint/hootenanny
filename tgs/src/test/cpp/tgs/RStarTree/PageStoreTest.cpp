@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <tgs/RStarTree/FilePageStore.h>
@@ -71,7 +71,7 @@ public:
 
       for (int i = 0; i < 100; i++)
       {
-        boost::shared_ptr<Page> p = uut.getPage(_ids[i]);
+        std::shared_ptr<Page> p = uut.getPage(_ids[i]);
         verifyPage(p);
       }
     }
@@ -86,7 +86,7 @@ public:
     testPageStore(uut);
   }
 
-  void populatePage(boost::shared_ptr<Page> p)
+  void populatePage(const std::shared_ptr<Page>& p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)
@@ -101,7 +101,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getPageCount());
     int pageSize = uut.getPageSize();
 
-    boost::shared_ptr<Page> p = uut.createPage();
+    std::shared_ptr<Page> p = uut.createPage();
     CPPUNIT_ASSERT_EQUAL(pageSize, p->getDataSize());
 
     populatePage(p);
@@ -142,7 +142,7 @@ public:
     }
   }
 
-  void verifyPage(boost::shared_ptr<Page> p)
+  void verifyPage(const std::shared_ptr<Page>& p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)

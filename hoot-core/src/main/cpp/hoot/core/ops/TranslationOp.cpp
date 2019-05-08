@@ -48,7 +48,7 @@ TranslationOp::TranslationOp()
   setConfiguration(conf());
 }
 
-void TranslationOp::apply(boost::shared_ptr<OsmMap> &map)
+void TranslationOp::apply(std::shared_ptr<OsmMap> &map)
 {
   map->visitRw(_translator);
 }

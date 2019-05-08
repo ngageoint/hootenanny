@@ -51,13 +51,13 @@ public:
    * Construct with a subgraph of pairs. The links in the set of pairs are used to determine links
    * between elements so it is important that the pairs are represenetative of the matches.
    */
-  MultiaryPoiMerger(std::set< std::pair<ElementId, ElementId> >& pairs);
+  MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs);
 
   /**
    * See parent.
    */
   virtual void apply(const OsmMapPtr& map,
-    std::vector< std::pair<ElementId, ElementId> >& replaced);
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   virtual QString toString() const { return "MultiaryPoiMerger"; }
 
@@ -71,8 +71,8 @@ protected:
 
 private:
 
-  boost::shared_ptr<MatchCreator> _matchCreator;
-  boost::shared_ptr<MergerCreator> _mergerCreator;
+  std::shared_ptr<MatchCreator> _matchCreator;
+  std::shared_ptr<MergerCreator> _mergerCreator;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -91,7 +91,7 @@ private:
    * @param clusters The list of clusters to merge in the map.
    */
   void _mergeClusters(const OsmMapPtr& map,
-    std::vector< std::pair<ElementId, ElementId> >& replaced,
+    std::vector<std::pair<ElementId, ElementId>>& replaced,
     MultiaryClusterAlgorithm::ClusterList clusters);
 };
 

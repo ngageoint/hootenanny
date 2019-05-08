@@ -78,7 +78,7 @@ double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id)
     ConstWayPtr w = _map.getWay(otherWayId);
 
     // grab the geometry for the way that we're comparing against.
-    boost::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+    std::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
 
     Meters d = ls->distance(_lsFast);
 

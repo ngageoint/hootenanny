@@ -48,11 +48,11 @@ HighwaySnapMerger()
 }
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                           boost::shared_ptr<PartialNetworkMerger> networkMerger) :
-HighwaySnapMerger(pairs, boost::shared_ptr<SublineStringMatcher>()),
-_performBridgeGeometryMerging(
-  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
-_networkMerger(networkMerger)
+                                           std::shared_ptr<PartialNetworkMerger> networkMerger) :
+  HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
+  _performBridgeGeometryMerging(
+    ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+  _networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
   _markAddedMultilineStringRelations = true;
@@ -60,7 +60,7 @@ _networkMerger(networkMerger)
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const boost::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(
   ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
@@ -85,7 +85,7 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
     // TODO: This is ignoring the contents of multilinestring relations.
     if (toRemove->getElementType() == ElementType::Way)
     {
-      WayPtr wayWithTagsToRemove = boost::dynamic_pointer_cast<Way>(toRemove);
+      WayPtr wayWithTagsToRemove = std::dynamic_pointer_cast<Way>(toRemove);
       wayWithTagsToRemove->setPid(element1->getElementId().getId());
       removeSecondaryElement = false;
     }
@@ -231,11 +231,11 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
     RelationPtr relation;
     if (e1->getElementType() == ElementType::Relation)
     {
-      relation = boost::dynamic_pointer_cast<Relation>(e1);
+      relation = std::dynamic_pointer_cast<Relation>(e1);
     }
     else
     {
-      relation = boost::dynamic_pointer_cast<Relation>(e2);
+      relation = std::dynamic_pointer_cast<Relation>(e2);
     }
 
     const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
@@ -249,7 +249,7 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
       ElementPtr member = map->getElement(relationMembers[i].getElementId());
       if (member && member->getElementType() == ElementType::Way)
       {
-        WayPtr wayMember = boost::dynamic_pointer_cast<Way>(member);
+        WayPtr wayMember = std::dynamic_pointer_cast<Way>(member);
         LOG_TRACE(
           "Copying tags from: " << relation->getElementId() << " to member: " <<
           wayMember->getElementId() << "...");
@@ -298,9 +298,9 @@ void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTag
   if (elementWithTagsToKeep->getElementType() == ElementType::Way &&
       elementWithTagsToRemove->getElementType() == ElementType::Way)
   {
-    WayPtr wayWithTagsToKeep = boost::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
+    WayPtr wayWithTagsToKeep = std::dynamic_pointer_cast<Way>(elementWithTagsToKeep);
     ConstWayPtr wayWithTagsToRemove =
-      boost::dynamic_pointer_cast<const Way>(elementWithTagsToRemove);
+      std::dynamic_pointer_cast<const Way>(elementWithTagsToRemove);
     if (isAOneWayStreet.isSatisfied(wayWithTagsToRemove) &&
         // note the use of an alternative isSimilarDirection method
         !DirectionFinder::isSimilarDirection2(

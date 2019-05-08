@@ -52,7 +52,7 @@ void AddUuidVisitor::setConfiguration(const Settings& conf)
 
 void AddUuidVisitor::visit(const ConstElementPtr& e)
 {
-  boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+  std::shared_ptr<Element> ee = _map->getElement(e->getElementId());
   ee->getTags()[_key] = UuidHelper::createUuid().toString();
 }
 

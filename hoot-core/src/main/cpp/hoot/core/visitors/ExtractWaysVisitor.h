@@ -38,7 +38,7 @@ public:
 
   ExtractWaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
 
-  virtual void visit(const boost::shared_ptr<const Element>& e) override;
+  virtual void visit(const std::shared_ptr<const Element>& e) override;
 
   /**
    * Convenience method.

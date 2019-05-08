@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -48,8 +48,8 @@ namespace Tgs
   public:
     void test1()
     {
-      boost::shared_ptr<PageStore>mps(new MemoryPageStore(100));
-      boost::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
+      std::shared_ptr<PageStore>mps(new MemoryPageStore(100));
+      std::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
 
       {
         Tgs::RTreeNode rtn(2, mps->createPage());
@@ -76,8 +76,8 @@ namespace Tgs
 
     void test2()
     {
-      boost::shared_ptr<PageStore>mps(new MemoryPageStore(368));
-      boost::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
+      std::shared_ptr<PageStore>mps(new MemoryPageStore(368));
+      std::shared_ptr<RTreeNodeStore>store(new RTreeNodeStore(2, mps));
 
       RTreeNode rtn(2, mps->createPage());
       rtn.clear();

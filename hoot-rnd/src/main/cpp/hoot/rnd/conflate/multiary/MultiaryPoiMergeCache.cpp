@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryPoiMergeCache.h"
 
@@ -91,16 +91,16 @@ struct ScopedMergerDeleter
   std::vector<Merger*>& _ms;
 };
 
-MultiaryPoiMergeCache::MultiaryPoiMergeCache(ConstOsmMapPtr map,
-    boost::shared_ptr<MatchCreator> matchCreator,
-    boost::shared_ptr<MergerCreator> mergerCreator) :
+MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
+    const std::shared_ptr<MatchCreator>& matchCreator,
+    const std::shared_ptr<MergerCreator>& mergerCreator) :
   _map(map),
   _matchCreator(matchCreator),
   _mergerCreator(mergerCreator)
 {
 }
 
-MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryClusterPtr c2)
+MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, const MultiaryClusterPtr& c2)
 {
   MultiaryClusterPtr result(new MultiaryCluster);
 
@@ -164,7 +164,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
   OsmMapPtr tmp(new OsmMap(_map->getProjection()));
   CopyMapSubsetOp(_map, eids).apply(tmp);
 
-  std::vector< std::pair<ElementId, ElementId> > replaced;
+  std::vector<std::pair<ElementId, ElementId>> replaced;
 
   // apply the merge operation which should result in a single output node.
   // if you want to merge buildings this is the spot in the code that you'll need to modify.

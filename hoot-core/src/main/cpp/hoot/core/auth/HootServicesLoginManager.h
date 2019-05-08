@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_SERVICES_LOGIN_MANAGER_H
@@ -72,7 +72,7 @@ public:
    * @paraqm userName populated user name for the authenticated user
    * @return ID of the authenticated user
    */
-  long verifyUserAndLogin(const QString requestToken, const QString verifier, QString& userName);
+  long verifyUserAndLogin(const QString& requestToken, const QString& verifier, QString& userName);
 
   /**
    * Retrieves OAuth access tokens for an authenticated user
@@ -91,7 +91,7 @@ public:
    * @param accessTokenSecret the OAuth private access token for the user
    * @return true if the logout was successful; false otherwise
    */
-  bool logout(const QString userName, const QString accessToken, const QString accessTokenSecret);
+  bool logout(const QString& userName, const QString& accessToken, const QString& accessTokenSecret);
 
   /**
    * Returns the base URL used to access Hootenanny Web Services
@@ -106,15 +106,15 @@ private:
 
   // hoot requires the same http session be used throughout the auth process, so the same session
   // cookie must be passed along with all OAuth requests
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getRequestTokenUrl();
   static QString _getVerifyUrl();
   static QString _getLogoutUrl();
 
-  HootNetworkRequest _getLoginRequest(const QString requestToken, const QString verifier,
+  HootNetworkRequest _getLoginRequest(const QString& requestToken, const QString& verifier,
                                       QUrl& loginUrl) const;
-  long _parseLoginResponse(const QString response) const;
+  long _parseLoginResponse(const QString& response) const;
 };
 
 }

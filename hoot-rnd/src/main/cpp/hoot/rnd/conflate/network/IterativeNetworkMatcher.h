@@ -69,7 +69,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static boost::shared_ptr<IterativeNetworkMatcher> create();
+  static std::shared_ptr<IterativeNetworkMatcher> create();
 
   void iterate();
 
@@ -93,7 +93,7 @@ private:
 
   typedef QHash<ConstEdgeMatchPtr, double> EdgeScoreMap;
   /// [row][col]
-  typedef QHash< ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double> > VertexScoreMap;
+  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.
@@ -182,8 +182,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef boost::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+typedef std::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
+typedef std::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);

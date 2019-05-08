@@ -57,8 +57,8 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QStringList inputs, const QString out,
-                     const QStringList convertOps = QStringList(), Progress progress = Progress());
+  static void stream(const QStringList& inputs, const QString& out,
+                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
 
   /**
    * Streams a data source from input to output.
@@ -70,8 +70,8 @@ public:
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
    * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QString input, const QString out,
-                     const QStringList convertOps = QStringList(), Progress progress = Progress());
+  static void stream(const QString& input, const QString& out,
+                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
 
   /**
    * Determines whether both input and output are streamable data sources (associated
@@ -81,7 +81,7 @@ public:
    * @param output data destination
    * @return true if both formats are streamable; false otherwise
    */
-  static bool isStreamableIo(const QString input, const QString output);
+  static bool isStreamableIo(const QString& input, const QString& output);
 
   /**
    * Determines whether both inputs and output are streamable data sources (associated
@@ -91,7 +91,7 @@ public:
    * @param output data destination
    * @return true if all formats are streamable; false otherwise
    */
-  static bool areStreamableIo(const QStringList inputs, const QString output);
+  static bool areStreamableIo(const QStringList& inputs, const QString& output);
 
   /**
    * Return true if all the specified operations are valid streaming operations.
@@ -102,12 +102,12 @@ public:
    * @param ops
    * @return
    */
-  static bool areValidStreamingOps(const QStringList ops);
+  static bool areValidStreamingOps(const QStringList& ops);
 
 private:
 
   static ElementInputStreamPtr _getFilteredInputStream(
-    boost::shared_ptr<OsmMapReader> reader, const QStringList ops);
+    std::shared_ptr<OsmMapReader> reader, const QStringList& ops);
 };
 
 }

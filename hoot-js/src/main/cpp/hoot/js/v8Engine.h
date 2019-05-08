@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef V8ENGINE_H
 #define V8ENGINE_H
@@ -59,7 +59,7 @@ public:
 
 private:
   /** static pointer to the singleton instance */
-  static boost::shared_ptr<v8Engine> _theInstance;
+  static std::shared_ptr<v8Engine> _theInstance;
   /** static flag for platform initialization */
   static bool _needPlatform;
 
@@ -69,18 +69,18 @@ private:
   v8Engine();
 
   /** Creation parameters allocator for main isolate */
-  boost::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;
+  std::shared_ptr<v8::ArrayBuffer::Allocator> _allocator;
   /** Main isolate */
   v8::Isolate* _isolate;
-  boost::shared_ptr<v8::Isolate::Scope> _isolateScope;
+  std::shared_ptr<v8::Isolate::Scope> _isolateScope;
   /** In Hootenanny we own the Isolate, when called from Node we do not */
   bool _ownIsolate;
   /** Platform object */
-  boost::shared_ptr<v8::Platform> _platform;
-  boost::shared_ptr<v8::Locker> _locker;
+  std::shared_ptr<v8::Platform> _platform;
+  std::shared_ptr<v8::Locker> _locker;
   /** Main context */
-  boost::shared_ptr<v8::Persistent<v8::Context> > _context;
-  boost::shared_ptr<v8::Context::Scope> _scopeContext;
+  std::shared_ptr<v8::Persistent<v8::Context>> _context;
+  std::shared_ptr<v8::Context::Scope> _scopeContext;
 
 };
 

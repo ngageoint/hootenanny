@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTRANSLATORFACTORY_H
 #define SCRIPTTRANSLATORFACTORY_H
-
-// Boost Includes
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -61,7 +58,7 @@ public:
 
 private:
 
-  static boost::shared_ptr<ScriptTranslatorFactory> _theInstance;
+  static std::shared_ptr<ScriptTranslatorFactory> _theInstance;
 
   ScriptTranslatorFactory();
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ABSTRACTTESTSUITE_H
 #define ABSTRACTTESTSUITE_H
@@ -47,9 +47,15 @@ class AbstractTestSuite : public CppUnit::TestSuite
 
 public:
 
-  AbstractTestSuite(QString dir);
+  AbstractTestSuite(const QString& dir);
 
-  virtual void loadDir(QString dir, QStringList confs) = 0;
+  /**
+   * @brief loadDir Loads directory of tests
+   * @param dir Directory to load
+   * @param confs List of config files, NOTE: passed by value because the copy of `confs`
+   *              can be edited without affecting the original value
+   */
+  virtual void loadDir(const QString& dir, QStringList confs) = 0;
 };
 
 }

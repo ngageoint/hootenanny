@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SHORTESTPATH_H
@@ -32,10 +32,8 @@
 #include <QHash>
 
 // Standard
+#include <memory>
 #include <queue>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -45,7 +43,7 @@ class DirectedGraph;
 class ShortestPath
 {
 public:
-  ShortestPath(boost::shared_ptr<const DirectedGraph> graph);
+  ShortestPath(const std::shared_ptr<const DirectedGraph>& graph);
 
   void calculateCost();
 
@@ -87,7 +85,7 @@ private:
   };
 
 
-  boost::shared_ptr<const DirectedGraph> _graph;
+  std::shared_ptr<const DirectedGraph> _graph;
 
   QHash<long, double> _cost;
   std::priority_queue<Node, std::deque<Node>, LesserNode> _queue;

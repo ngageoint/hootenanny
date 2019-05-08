@@ -124,7 +124,7 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNet
     throw IllegalArgumentException("The input edge must have exactly 1 way as its member.");
   }
 
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+  ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
   Radians result;
   if (v == e->getFrom())
   {
@@ -572,8 +572,8 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
 
-  ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-  ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+  ConstWayPtr w1 = std::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
+  ConstWayPtr w2 = std::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
   double result;
 
@@ -697,10 +697,10 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 {
-  boost::shared_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
+  std::shared_ptr<Envelope> env(e->getMembers()[0]->getEnvelope(_map));
   for (int i = 1; i < e->getMembers().size(); ++i)
   {
-    boost::shared_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
+    std::shared_ptr<Envelope> env2(e->getMembers()[i]->getEnvelope(_map));
     env->expandToInclude(env2.get());
   }
   return *env;
@@ -708,7 +708,7 @@ Envelope NetworkDetails::getEnvelope(ConstNetworkEdgePtr e) const
 
 Envelope NetworkDetails::getEnvelope(ConstNetworkVertexPtr v) const
 {
-  boost::shared_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
+  std::shared_ptr<Envelope> env(v->getElement()->getEnvelope(_map));
   return *env;
 }
 
@@ -758,8 +758,8 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
       bestScore = 1.0;
     }
 
-    ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-    ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+    ConstWayPtr w1 = std::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
+    ConstWayPtr w2 = std::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
     LOG_VART(w1.get());
     LOG_VART(w2.get());
 
@@ -1075,7 +1075,7 @@ ConstWayPtr NetworkDetails::toWay(ConstNetworkEdgePtr e) const
     throw IllegalArgumentException("Expected e to contain a single way.");
   }
 
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+  ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
 
   if (!w)
   {
@@ -1103,7 +1103,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
       ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
-      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(_map->getWay(eid));
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_map->getWay(eid));
 
       Meters l = calculateLength(e);
       double startP = subline->getStart()->getPortion();

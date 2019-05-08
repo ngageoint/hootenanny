@@ -28,9 +28,6 @@
 #ifndef WAYJOINER1_H
 #define WAYJOINER1_H
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>

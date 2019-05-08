@@ -45,8 +45,8 @@ public:
   static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
   TagKeyCountVisitor();
-  TagKeyCountVisitor(const QString key);
-  explicit TagKeyCountVisitor(const QStringList keys);
+  TagKeyCountVisitor(const QString& key);
+  explicit TagKeyCountVisitor(const QStringList& keys);
 
   virtual void visit(const ConstElementPtr& e);
 

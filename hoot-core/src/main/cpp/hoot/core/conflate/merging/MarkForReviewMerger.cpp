@@ -42,7 +42,7 @@ MarkForReviewMerger::MarkForReviewMerger()
 {
 }
 
-MarkForReviewMerger::MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs,
+MarkForReviewMerger::MarkForReviewMerger(const set<pair<ElementId, ElementId>>& pairs,
                                          QString note, QString reviewType, double score) :
   _pairs(pairs),
   _note(note),
@@ -73,8 +73,8 @@ void MarkForReviewMerger::apply(const OsmMapPtr& map,
   }
   else
   {
-    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-         it != _pairs.end(); ++it)
+    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+         ++it)
     {
       ElementId eid1 = it->first;
       ElementId eid2 = it->second;

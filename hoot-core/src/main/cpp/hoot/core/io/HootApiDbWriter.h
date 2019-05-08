@@ -54,13 +54,13 @@ public:
 
   long getMapId() const { return _hootdb.getMapId(); }
 
-  virtual bool isSupported(QString urlStr);
+  virtual bool isSupported(const QString& urlStr) override;
 
-  virtual void open(QString urlStr);
+  virtual void open(const QString& urlStr) override;
 
-  virtual void deleteMap(QString urlStr);
+  virtual void deleteMap(const QString& urlStr);
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
 
@@ -79,25 +79,25 @@ public:
    */
   void setRemap(bool remap) { _remapIds = remap; }
 
-  void setUserEmail(QString email) { _userEmail = email; }
+  void setUserEmail(const QString& email) { _userEmail = email; }
 
-  void setJobId(const QString id) { _jobId = id; }
+  void setJobId(const QString& id) { _jobId = id; }
 
-  virtual void writePartial(const ConstNodePtr& n);
+  virtual void writePartial(const ConstNodePtr& n) override;
 
-  virtual void writePartial(const ConstWayPtr& w);
+  virtual void writePartial(const ConstWayPtr& w) override;
 
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * @see OsmChangeWriter
    */
-  virtual void writeChange(const Change& change);
-  virtual void setElementPayloadFormat(const QString /*format*/) {}
+  virtual void writeChange(const Change& change) override;
+  virtual void setElementPayloadFormat(const QString& /*format*/) override {}
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() { return "hootapidb://"; }
+  virtual QString supportedFormats() override { return "hootapidb://"; }
 
 protected:
 
@@ -122,9 +122,9 @@ protected:
 
   bool _includeDebug;
 
-  void _createElement(ConstElementPtr element);
-  void _modifyElement(ConstElementPtr element);
-  void _deleteElement(ConstElementPtr element);
+  void _createElement(const ConstElementPtr& element);
+  void _modifyElement(const ConstElementPtr& element);
+  void _deleteElement(const ConstElementPtr& element);
 
   /**
    * Return the remapped ID for the specified element if it exists
@@ -138,7 +138,7 @@ protected:
 
   virtual std::vector<long> _remapNodes(const std::vector<long>& nids);
 
-  void _addElementTags(const boost::shared_ptr<const Element>& e, Tags& t);
+  void _addElementTags(const std::shared_ptr<const Element>& e, Tags& t);
 
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.
@@ -164,8 +164,8 @@ private:
    */
   void _startNewChangeSet();
 
-  long _openDb(const QString urlStr/*, const bool forDelete = false*/);
-  QString _getMapNameFromUrl(const QString urlStr) const;
+  long _openDb(const QString& urlStr);
+  QString _getMapNameFromUrl(const QString& urlStr) const;
 };
 
 }

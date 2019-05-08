@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HootServicesLanguageInfoMockClient.h"
@@ -50,8 +50,8 @@ HootServicesLanguageInfoClient()
   _useCookies = false;
 }
 
-boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesLanguageInfoMockClient::getAvailableApps(const QString type)
+std::shared_ptr<boost::property_tree::ptree>
+  HootServicesLanguageInfoMockClient::getAvailableApps(const QString& type)
 {
   if (type == "detectors")
   {
@@ -63,8 +63,8 @@ boost::shared_ptr<boost::property_tree::ptree>
   }
 }
 
-boost::shared_ptr<boost::property_tree::ptree>
-  HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString /*type*/)
+std::shared_ptr<boost::property_tree::ptree>
+  HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString& /*type*/)
 {
   return StringUtils::jsonStringToPropTree(LANGS_STR);
 }

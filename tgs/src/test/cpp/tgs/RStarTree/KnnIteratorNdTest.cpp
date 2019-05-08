@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -118,8 +118,8 @@ public:
 
   void test1()
   {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    boost::shared_ptr<HilbertRTree> tree(new HilbertRTree(mps, 3));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    std::shared_ptr<HilbertRTree> tree(new HilbertRTree(mps, 3));
 
     createTestData(3, 4);
     tree->bulkInsert(testData, testId);

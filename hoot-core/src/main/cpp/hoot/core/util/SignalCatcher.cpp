@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SignalCatcher.h"
@@ -39,14 +39,14 @@
 namespace hoot
 {
 
-boost::shared_ptr<SignalCatcher> SignalCatcher::_instance;
+std::shared_ptr<SignalCatcher> SignalCatcher::_instance;
 
 SignalCatcher::SignalCatcher()
   : _defaultSet(false)
 {
 }
 
-boost::shared_ptr<SignalCatcher> SignalCatcher::getInstance()
+std::shared_ptr<SignalCatcher> SignalCatcher::getInstance()
 {
   if (!SignalCatcher::_instance)
     SignalCatcher::_instance.reset(new SignalCatcher());
@@ -126,7 +126,8 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
     // retrieve current stack addresses
     int addrlen = backtrace(addrlist, sizeof(addrlist) / sizeof(void*));
 
-    if (addrlen == 0) {
+    if (addrlen == 0)
+    {
         fprintf(out, "  <empty, possibly corrupt>\n");
         return;
     }
@@ -153,7 +154,8 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
                 begin_name = p;
             else if (*p == '+')
                 begin_offset = p;
-            else if (*p == ')' && begin_offset) {
+            else if (*p == ')' && begin_offset)
+            {
                 end_offset = p;
                 break;
             }
@@ -173,13 +175,15 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
             int status;
             char* ret = abi::__cxa_demangle(begin_name,
                                             funcname, &funcnamesize, &status);
-            if (status == 0) {
+            if (status == 0)
+            {
                 funcname = ret; // use possibly realloc()-ed string
                 //fprintf(out, "  %s : %s+%s\n",
                 //        symbollist[i], funcname, begin_offset);
                 fprintf(out, "  %s +%s\n", funcname, begin_offset);
             }
-            else {
+            else
+            {
                 // demangling failed. Output function name as a C function with
                 // no arguments.
                 fprintf(out, "  %s : %s()+%s\n",

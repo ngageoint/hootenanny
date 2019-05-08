@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataSamples.h"
@@ -64,9 +64,9 @@ vector<string> DataSamples::getUniqueLabels() const
   return labels;
 }
 
-boost::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
+std::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
 {
-  boost::shared_ptr<DataFrame> result(new DataFrame);
+  std::shared_ptr<DataFrame> result(new DataFrame);
   vector<string> labels = getUniqueLabels();
   result->setFactorLabels(labels);
 

@@ -22,14 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_NETWORK_REQUEST_H
 #define HOOT_NETWORK_REQUEST_H
-
-//  Boost
-#include <boost/shared_ptr.hpp>
 
 //  Qt
 #include <QList>
@@ -74,7 +71,7 @@ public:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool networkRequest(QUrl url,
+  bool networkRequest(const QUrl& url,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
     const QByteArray& data = QByteArray());
   /**
@@ -85,7 +82,7 @@ public:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool networkRequest(QUrl url,
+  bool networkRequest(const QUrl& url,
     const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
     const QByteArray& data = QByteArray());
@@ -110,13 +107,13 @@ public:
    * @brief getCookies
    * @return the cookies used by the request
    */
-  boost::shared_ptr<HootNetworkCookieJar> getCookies() const { return _cookies; }
+  std::shared_ptr<HootNetworkCookieJar> getCookies() const { return _cookies; }
 
   /**
    * @brief setCookies
    * @param cookies sets the cookies for the request
    */
-  void setCookies(boost::shared_ptr<HootNetworkCookieJar> cookies) { _cookies = cookies; }
+  void setCookies(const std::shared_ptr<HootNetworkCookieJar>& cookies) { _cookies = cookies; }
   /**
    * @brief setOAuthKeys Enable OAuth authentication
    * @param consumer_key - OAuth consumer key
@@ -136,7 +133,7 @@ private:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool _networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+  bool _networkRequest(const QUrl& url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                        QNetworkAccessManager::Operation http_op, const QByteArray& data);
   /**
    * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous
@@ -162,18 +159,18 @@ private:
   /** Error string */
   QString _error;
   /** cookies to pass in with the request */
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
   /** Flag for using OAuth 1.0, all four of the keys/tokens (two in each object)
    *  below must be valid for `_useOAuth` to be true.
    */
   bool _useOAuth;
   /** OAuth 1.0 consumer object */
-  boost::shared_ptr<OAuth::Consumer> _consumer;
+  std::shared_ptr<OAuth::Consumer> _consumer;
   /** OAuth 1.0 request token object */
-  boost::shared_ptr<OAuth::Token> _tokenRequest;
+  std::shared_ptr<OAuth::Token> _tokenRequest;
 };
 
-typedef boost::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
+typedef std::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
 
 }
 

@@ -51,7 +51,7 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     throw NotImplementedException("Only nodes are supported at this time.");
   }
 
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
 
   QString result = "{\"type\":\"Feature\",\"properties\":{\"type\":\"node\",\"tags\":{";
 

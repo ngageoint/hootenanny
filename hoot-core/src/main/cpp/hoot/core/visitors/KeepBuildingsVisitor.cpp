@@ -44,7 +44,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 
   if (type != ElementType::Node)
   {
-    boost::shared_ptr<Element> ee = _map->getElement(type, id);
+    std::shared_ptr<Element> ee = _map->getElement(type, id);
 
     if (BuildingCriterion().isSatisfied(ee->getTags(), type) == false)
     {

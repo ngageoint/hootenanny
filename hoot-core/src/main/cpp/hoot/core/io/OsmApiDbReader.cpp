@@ -58,7 +58,7 @@ OsmApiDbReader::~OsmApiDbReader()
   close();
 }
 
-void OsmApiDbReader::open(QString urlStr)
+void OsmApiDbReader::open(const QString& urlStr)
 {
   _url = urlStr;
   if (!isSupported(_url))
@@ -77,12 +77,12 @@ void OsmApiDbReader::open(QString urlStr)
   _open = true;
 }
 
-void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
+void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementPtr& element)
 {
   //We should see if these tags can be read out at the same time the element itself is read out...
 
   QStringList tags;
-  boost::shared_ptr<QSqlQuery> tagItr;
+  std::shared_ptr<QSqlQuery> tagItr;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:

@@ -65,7 +65,7 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Randomly changes element names"; }
 
@@ -80,7 +80,7 @@ private:
   double _changeP;
   double _p;
   boost::minstd_rand* _rng;
-  boost::shared_ptr<boost::minstd_rand> _localRng;
+  std::shared_ptr<boost::minstd_rand> _localRng;
 };
 
 }

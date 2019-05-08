@@ -75,7 +75,7 @@ public:
 
     @see ConstElementVisitor
     */
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   /**
     @see RngConsumer
@@ -111,7 +111,7 @@ public:
 private:
 
   boost::minstd_rand* _rng;
-  boost::shared_ptr<boost::minstd_rand> _localRng;
+  std::shared_ptr<boost::minstd_rand> _localRng;
 
   double _waySplitProbability;
   double _minNodeSpacing;

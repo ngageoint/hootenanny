@@ -79,7 +79,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   WayDiscretizer wd(map.shared_from_this(), w1);
   wd.discretize(2.0, v);
 
-  boost::shared_ptr<LineString> ls2 =
+  std::shared_ptr<LineString> ls2 =
     ElementConverter(map.shared_from_this()).convertToLineString(w2);
 
   double sigma = _searchRadius;
@@ -94,7 +94,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   distances.reserve(v.size());
   for (size_t i = 0; i < v.size(); i++)
   {
-    boost::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
+    std::shared_ptr<Point> point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
     double d = ls2->distance(point.get()) / sigma;
     distances.push_back(d);
   }
@@ -108,7 +108,7 @@ string WeightedMetricDistanceExtractor::getName() const
                            " point agg: " + _pointAgg->toString()).toStdString();
 }
 
-void WeightedMetricDistanceExtractor::setPointAggregator(const QString aggregator)
+void WeightedMetricDistanceExtractor::setPointAggregator(const QString& aggregator)
 {
   _pointAgg.reset(Factory::getInstance().constructObject<ValueAggregator>(aggregator));
 }

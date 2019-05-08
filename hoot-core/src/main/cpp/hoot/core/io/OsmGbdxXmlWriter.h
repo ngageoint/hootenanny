@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QDir>
 #include <QFile>
@@ -64,11 +61,11 @@ public:
   OsmGbdxXmlWriter();
   virtual ~OsmGbdxXmlWriter();
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".gxml"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
 
-  virtual QString supportedFormats() {return ".gxml";}
+  virtual QString supportedFormats() override {return ".gxml";}
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
   void close();
 
@@ -88,9 +85,9 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(ConstOsmMapPtr map, const QString& path);
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(ConstOsmMapPtr map) override;
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   virtual void writePartial(const ConstNodePtr& node) override;
   virtual void writePartial(const ConstWayPtr& way) override;
@@ -112,8 +109,8 @@ private:
   int _encodingErrorCount;
   int _fileNumber;
 
-  boost::shared_ptr<QIODevice> _fp;
-  boost::shared_ptr<QXmlStreamWriter> _writer;
+  std::shared_ptr<QIODevice> _fp;
+  std::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
 
   static QString _typeName(ElementType e);

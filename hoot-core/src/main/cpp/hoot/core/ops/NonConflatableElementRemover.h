@@ -28,9 +28,6 @@
 #ifndef NONCONFLATABLEELEMENTREMOVER_H
 #define NONCONFLATABLEELEMENTREMOVER_H
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -52,7 +49,7 @@ public:
   /**
     @see OsmMapOperation
   */
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const { return "Removes elements that are not conflatable"; }
 
@@ -64,7 +61,7 @@ public:
 
 private:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 };
 
 }

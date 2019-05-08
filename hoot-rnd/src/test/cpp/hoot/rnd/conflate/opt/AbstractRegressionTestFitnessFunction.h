@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ABSTRACTREGRESSIONTESTFITNESSFUNCTION_H__
@@ -54,7 +54,8 @@ class AbstractRegressionTestFitnessFunction : public AbstractTestFitnessFunction
 
 public:
 
-    AbstractRegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension);
+    AbstractRegressionTestFitnessFunction(const QString& dir, const QString& configFile,
+                                          const QString& testDirExtension);
 
     /**
      * Fitness function that determines the performance based on the test output
@@ -88,7 +89,7 @@ protected:
 
 private:
 
-    void _createConfig(const QString testName, Settings& testSettings);
+    void _createConfig(const QString& testName, Settings& testSettings);
     void _checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest);
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -37,7 +37,6 @@
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 
 namespace hoot
 {
@@ -57,7 +56,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) = 0;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) = 0;
 
   /**
    * Retrieves translation available languages info
@@ -65,7 +64,7 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual boost::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) = 0;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) = 0;
 };
 
 }

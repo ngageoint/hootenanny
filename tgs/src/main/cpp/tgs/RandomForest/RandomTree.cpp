@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomTree.h"
 
@@ -72,7 +72,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::buildTest(boost::shared_ptr<DataFrame> data, unsigned int numFactors)
+  void RandomTree::buildTest(const std::shared_ptr<DataFrame>& data, unsigned int numFactors)
   {
     try
     {
@@ -87,7 +87,7 @@ namespace Tgs
         indices[i] = i;
       }
 
-      _root = boost::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::shared_ptr<TreeNode>(new TreeNode());
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -105,7 +105,7 @@ namespace Tgs
   {
     try
     {
-      boost::shared_ptr<TreeNode> currentNode = _root;
+      std::shared_ptr<TreeNode> currentNode = _root;
       bool isPure = false;
       unsigned int nodeId = 0;
 
@@ -148,7 +148,7 @@ namespace Tgs
     }
   }
 
-  double RandomTree::computeErrorRate(boost::shared_ptr<DataFrame> data)
+  double RandomTree::computeErrorRate(const std::shared_ptr<DataFrame>& data)
   {
     try
     {
@@ -240,7 +240,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::findProximity(boost::shared_ptr<DataFrame> data,
+  void RandomTree::findProximity(const std::shared_ptr<DataFrame>& data,
     std::vector<unsigned int> & proximity)
   {
     try
@@ -289,7 +289,7 @@ namespace Tgs
 
       if(fileStream.good())
       {
-        _root = boost::shared_ptr<TreeNode>(new TreeNode());
+        _root = std::shared_ptr<TreeNode>(new TreeNode());
         _importOobSet(fileStream);
         _importNode(fileStream, _root);
         //Discard end tag
@@ -315,7 +315,7 @@ namespace Tgs
     {
 
       _root.reset();
-      _root = boost::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::shared_ptr<TreeNode>(new TreeNode());
 
       QDomNodeList childList = e.childNodes();
 
@@ -374,7 +374,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainBinary(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     std::string /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
@@ -394,7 +394,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = boost::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::shared_ptr<TreeNode>(new TreeNode());
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -408,7 +408,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainMulticlass(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainMulticlass(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     unsigned int nodeSize, bool balanced)
   {
     try
@@ -430,7 +430,7 @@ namespace Tgs
         data->makeBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
 
-      _root = boost::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::shared_ptr<TreeNode>(new TreeNode());
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -444,7 +444,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
+  void RandomTree::trainRoundRobin(const std::shared_ptr<DataFrame>& data, unsigned int numFactors,
     std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
   {
     try
@@ -457,7 +457,7 @@ namespace Tgs
 
       data->makeBalancedRoundRobinBootstrapAndOobSets(posClass, negClass, bootstrapSet, _oobSet);
 
-      _root = boost::shared_ptr<TreeNode>(new TreeNode());
+      _root = std::shared_ptr<TreeNode>(new TreeNode());
       _root->leftChild.reset();
       _root->rightChild.reset();
       _root->isPure = false;
@@ -472,8 +472,8 @@ namespace Tgs
 
   }
 
-  void RandomTree::_build(boost::shared_ptr<DataFrame> data, std::vector<unsigned int> & dataSet,
-    boost::shared_ptr<TreeNode> & node, unsigned int nodeSize)
+  void RandomTree::_build(const std::shared_ptr<DataFrame>& data, std::vector<unsigned int> & dataSet,
+    std::shared_ptr<TreeNode> & node, unsigned int nodeSize)
   {
     try
     {
@@ -514,8 +514,8 @@ namespace Tgs
 
           std::vector<unsigned int> leftSplit;
           std::vector<unsigned int> rightSplit;
-          node->leftChild = boost::shared_ptr<TreeNode>(new TreeNode());
-          node->rightChild = boost::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
+          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
 
           node->splitValue = splitVal;
           node->factorIndex = fIdx;
@@ -573,7 +573,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_calcFactorPurity(boost::shared_ptr<TreeNode> & node,
+  void RandomTree::_calcFactorPurity(std::shared_ptr<TreeNode> & node,
     std::map<unsigned int, double> & factorPurity)
   {
     try
@@ -591,7 +591,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_destroyTree(boost::shared_ptr<TreeNode> & node)
+  void RandomTree::_destroyTree(std::shared_ptr<TreeNode> & node)
   {
 
     //Perform a post order traversal of the tree
@@ -605,7 +605,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_exportNode(std::ostream & fileStream, boost::shared_ptr<TreeNode> & node,
+  void RandomTree::_exportNode(std::ostream & fileStream, std::shared_ptr<TreeNode> & node,
      std::string tabDepth)
   {
     try
@@ -660,7 +660,7 @@ namespace Tgs
   }
 
   void RandomTree::_exportNode(QDomDocument & modelDoc, QDomElement & parentNode,
-    boost::shared_ptr<TreeNode> & node)
+    std::shared_ptr<TreeNode> & node)
   {
     try
     {
@@ -762,7 +762,7 @@ namespace Tgs
     }
   }
 
-  void RandomTree::_importNode(std::istream & fileStream, boost::shared_ptr<TreeNode> & node)
+  void RandomTree::_importNode(std::istream & fileStream, std::shared_ptr<TreeNode> & node)
   {
     try
     {
@@ -862,9 +862,9 @@ namespace Tgs
         }
         else
         {
-          node->leftChild = boost::shared_ptr<TreeNode>(new TreeNode());
+          node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
           _importNode(fileStream, node->leftChild);
-          node->rightChild = boost::shared_ptr<TreeNode>(new TreeNode());
+          node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
           _importNode(fileStream, node->rightChild);
         }
       }
@@ -875,7 +875,7 @@ namespace Tgs
     }
   }
 
-  QDomElement RandomTree::_importNode(QDomElement & treeNode, boost::shared_ptr<TreeNode> &node)
+  QDomElement RandomTree::_importNode(QDomElement & treeNode, std::shared_ptr<TreeNode> &node)
   {
     try
     {
@@ -1023,7 +1023,7 @@ namespace Tgs
           return leftNode;
         }
 
-        node->leftChild = boost::shared_ptr<TreeNode>(new TreeNode());
+        node->leftChild = std::shared_ptr<TreeNode>(new TreeNode());
 
         QDomElement rightNode = _importNode(leftNode, node->leftChild);
 
@@ -1032,7 +1032,7 @@ namespace Tgs
           return rightNode;
         }
 
-        node->rightChild = boost::shared_ptr<TreeNode>(new TreeNode());
+        node->rightChild = std::shared_ptr<TreeNode>(new TreeNode());
         return _importNode(rightNode, node->rightChild);
       }
 

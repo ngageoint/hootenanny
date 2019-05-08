@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/elements/Element.h>
@@ -73,7 +73,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
   switch ( newElement->getElementType().getEnum() )
   {
   case ElementType::Node:
-    newNode = boost::dynamic_pointer_cast<const Node>(newElement);
+    newNode = std::dynamic_pointer_cast<const Node>(newElement);
     if ( newNode != ConstNodePtr() )
     {
       // Do we have to replace an entry?
@@ -88,7 +88,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     }
     break;
   case ElementType::Way:
-    newWay = boost::dynamic_pointer_cast<const Way>(newElement);
+    newWay = std::dynamic_pointer_cast<const Way>(newElement);
     if ( newWay != ConstWayPtr() )
     {
       // Do we have to replace an entry?
@@ -103,7 +103,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 
     break;
   case ElementType::Relation:
-    newRelation = boost::dynamic_pointer_cast<const Relation>(newElement);
+    newRelation = std::dynamic_pointer_cast<const Relation>(newElement);
     if ( newRelation != ConstRelationPtr() )
     {
       // Do we have to replace an entry?
@@ -273,7 +273,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCacheLRU::getProjection() const
+std::shared_ptr<OGRSpatialReference> ElementCacheLRU::getProjection() const
 {
   return _projection;
 }
@@ -360,7 +360,7 @@ const ConstNodePtr ElementCacheLRU::getNode(long id) const
 const NodePtr ElementCacheLRU::getNode(long id)
 {
   _updateNodeAccess(id);
-  return boost::const_pointer_cast<Node>(_nodes.find(id)->second.first);
+  return std::const_pointer_cast<Node>(_nodes.find(id)->second.first);
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
@@ -374,7 +374,7 @@ const ConstWayPtr ElementCacheLRU::getWay(long id) const
 const WayPtr ElementCacheLRU::getWay(long id)
 {
   _updateWayAccess(id);
-  return boost::const_pointer_cast<Way>(_ways.find(id)->second.first);
+  return std::const_pointer_cast<Way>(_ways.find(id)->second.first);
 }
 
 // This const function kind of defeats the purpose of the LRU cache,
@@ -388,7 +388,7 @@ const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 const RelationPtr ElementCacheLRU::getRelation(long id)
 {
   _updateRelationAccess(id);
-  return boost::const_pointer_cast<Relation>(_relations.find(id)->second.first);
+  return std::const_pointer_cast<Relation>(_relations.find(id)->second.first);
 }
 
 bool ElementCacheLRU::containsNode(long id) const
@@ -487,7 +487,7 @@ void ElementCacheLRU::removeElements(const ElementType::Type type)
 
 void ElementCacheLRU::_updateNodeAccess(long id)
 {
-  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator> >::iterator nodeItr = _nodes.find(id);
+  std::map<long, std::pair<ConstNodePtr, std::list<long>::iterator>>::iterator nodeItr = _nodes.find(id);
   _nodeList.erase(nodeItr->second.second);
   _nodeList.push_front(nodeItr->first);
   nodeItr->second.second = _nodeList.begin();
@@ -495,7 +495,7 @@ void ElementCacheLRU::_updateNodeAccess(long id)
 
 void ElementCacheLRU::_updateWayAccess(long id)
 {
-  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator> >::iterator wayItr = _ways.find(id);
+  std::map<long, std::pair<ConstWayPtr, std::list<long>::iterator>>::iterator wayItr = _ways.find(id);
   _wayList.erase(wayItr->second.second);
   _wayList.push_front(wayItr->first);
   wayItr->second.second = _wayList.begin();
@@ -503,7 +503,7 @@ void ElementCacheLRU::_updateWayAccess(long id)
 
 void ElementCacheLRU::_updateRelationAccess(long id)
 {
-  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator> >::iterator relItr = _relations.find(id);
+  std::map<long, std::pair<ConstRelationPtr, std::list<long>::iterator>>::iterator relItr = _relations.find(id);
   _relationList.erase(relItr->second.second);
   _relationList.push_front(relItr->first);
   relItr->second.second = _relationList.begin();

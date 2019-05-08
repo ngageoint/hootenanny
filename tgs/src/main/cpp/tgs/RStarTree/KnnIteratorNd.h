@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -30,14 +30,14 @@
 #define __TGS__KNN_ITERATOR_ND_H__
 
 // Standard Includes
-#include <limits.h>
+#include <cassert>
+#include <climits>
 #include <list>
 #include <queue>
 #include <set>
 #include <math.h>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>
 #include <tgs/RStarTree/RStarTree.h>

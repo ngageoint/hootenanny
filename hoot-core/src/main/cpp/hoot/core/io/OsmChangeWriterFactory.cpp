@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmChangeWriterFactory.h"
 
@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
+std::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
 
 OsmChangeWriterFactory::OsmChangeWriterFactory()
 {
@@ -51,15 +51,15 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url,
-                                                                        QString elementPayloadFormat)
+std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(const QString& url,
+                                                                      const QString& elementPayloadFormat)
 {
   LOG_VART(url);
   LOG_VART(elementPayloadFormat);
 
   vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangeWriter::className());
-  boost::shared_ptr<OsmChangeWriter> writer;
+  std::shared_ptr<OsmChangeWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
@@ -83,7 +83,7 @@ boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString 
   return writer;
 }
 
-bool OsmChangeWriterFactory::isSupported(const QString output)
+bool OsmChangeWriterFactory::isSupported(const QString& output)
 {
   return output.endsWith(".xml") || output.endsWith(".json");
 }

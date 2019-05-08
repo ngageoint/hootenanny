@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCACHE_H
 #define ELEMENTCACHE_H
@@ -144,7 +144,7 @@ public:
 
   // Functions from ElementProvider
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   virtual bool containsElement(const ElementId& eid) const = 0;
 
@@ -182,7 +182,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ElementCache> ElementCachePtr;
+typedef std::shared_ptr<ElementCache> ElementCachePtr;
 
 }
 

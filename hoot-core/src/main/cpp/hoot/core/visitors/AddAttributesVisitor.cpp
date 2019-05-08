@@ -56,7 +56,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
 }
 
-void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
+void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _attributes.length(); i++)
   {
@@ -124,7 +124,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 }
 
-ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString attribute,
+ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString& attribute,
                                                                    QString& attributeValue)
 {
   //LOG_VART(attribute);

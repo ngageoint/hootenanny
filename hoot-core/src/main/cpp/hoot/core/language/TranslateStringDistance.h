@@ -29,11 +29,8 @@
 
 // hoot
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -51,12 +48,12 @@ public:
   static std::string className() { return "hoot::TranslateStringDistance"; }
 
   TranslateStringDistance();
-  explicit TranslateStringDistance(StringDistancePtr d);
-  TranslateStringDistance(StringDistancePtr d, boost::shared_ptr<ToEnglishTranslator> translator);
+  explicit TranslateStringDistance(const StringDistancePtr& d);
+  TranslateStringDistance(const StringDistancePtr& d, const std::shared_ptr<ToEnglishTranslator>& translator);
 
   virtual ~TranslateStringDistance() {}
 
-  virtual void setStringDistance(const StringDistancePtr &sd) { _d = sd; }
+  virtual void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 
   /**
    * Returns a value from 1 (very similar) to 0 (very dissimilar) describing the distance between
@@ -80,9 +77,9 @@ private:
   bool _tokenize;
   //if using the dict translator, try to get multiple translations for comparison scoring
   bool _translateAll;
-  boost::shared_ptr<ToEnglishTranslator> _translator;
+  std::shared_ptr<ToEnglishTranslator> _translator;
 
-  QStringList _getNamesToScore(const QString name) const;
+  QStringList _getNamesToScore(const QString& name) const;
 };
 
 }

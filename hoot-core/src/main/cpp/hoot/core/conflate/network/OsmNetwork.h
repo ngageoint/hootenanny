@@ -96,8 +96,8 @@ private:
   VertexToEdgeMap _vertexToEdge;
 };
 
-typedef boost::shared_ptr<OsmNetwork> OsmNetworkPtr;
-typedef boost::shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
+typedef std::shared_ptr<OsmNetwork> OsmNetworkPtr;
+typedef std::shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
 
 // not implemented
 bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);

@@ -44,12 +44,12 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
 double CentroidDistanceExtractor::distance(const OsmMap &map,
-  const boost::shared_ptr<const Element>& target,
-  const boost::shared_ptr<const Element> &candidate) const
+  const std::shared_ptr<const Element>& target,
+  const std::shared_ptr<const Element> &candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {
@@ -58,8 +58,8 @@ double CentroidDistanceExtractor::distance(const OsmMap &map,
 
   g1.reset(GeometryUtils::validateGeometry(g1.get()));
   g2.reset(GeometryUtils::validateGeometry(g2.get()));
-  boost::shared_ptr<Point> tc(g1->getCentroid());
-  boost::shared_ptr<Point> cc(g2->getCentroid());
+  std::shared_ptr<Point> tc(g1->getCentroid());
+  std::shared_ptr<Point> cc(g2->getCentroid());
 
   if (tc.get() == 0 || cc.get() == 0)
   {

@@ -86,14 +86,14 @@ public:
     matchFactory.reset();
     matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
 
-    boost::shared_ptr<MergerCreator> mergerCreator(
+    std::shared_ptr<MergerCreator> mergerCreator(
       Factory::getInstance().constructObject<MergerCreator>(
         QString("hoot::ScriptMergerCreator")));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
     mergerFactory.registerCreator(mergerCreator.get());
 
-    boost::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
+    std::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
 
     MultiaryPoiMergeCache cache(map, matchCreator, mergerCreator);
 

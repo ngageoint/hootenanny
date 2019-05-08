@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASICBLOOMFILTER_H
 #define BASICBLOOMFILTER_H
@@ -62,11 +62,12 @@
 # define BLOOM_CONSTEXPR BOOST_CONSTEXPR
 #endif
 
-namespace boost {
-  namespace bloom_filters {
-
-    namespace detail {
-
+namespace boost
+{
+  namespace bloom_filters
+  {
+    namespace detail
+    {
       template <size_t N,
                 typename Container>
       struct apply_hash
@@ -127,8 +128,10 @@ namespace boost {
     } // namespace detail
 
     template <typename T, size_t Seed = 0>
-      struct boost_hash {
-        size_t operator()(const T& t) {
+      struct boost_hash
+      {
+        size_t operator()(const T& t)
+        {
           return boost::hash_value(t ^ Seed);
         }
       };
@@ -136,8 +139,9 @@ namespace boost {
 
     template <typename T,
               size_t Size,
-              class HashFunctions = mpl::vector< boost_hash<T> > >
-    class basic_bloom_filter {
+              class HashFunctions = mpl::vector<boost_hash<T>>>
+    class basic_bloom_filter
+    {
     public:
       typedef T value_type;
       typedef T key_type;
@@ -154,29 +158,35 @@ namespace boost {
       basic_bloom_filter() : _count(0) {}
 
       template <typename InputIterator>
-      basic_bloom_filter(const InputIterator start, const InputIterator end) {
+      basic_bloom_filter(const InputIterator start, const InputIterator end)
+      {
         for (InputIterator i = start; i != end; ++i)
           this->insert(*i);
       }
 
 #ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
-      basic_bloom_filter(const std::initializer_list<T>& ilist) {
+      basic_bloom_filter(const std::initializer_list<T>& ilist)
+      {
         typedef typename std::initializer_list<T>::const_iterator citer;
-        for (citer i = ilist.begin(), end = ilist.end(); i != end; ++i) {
+        for (citer i = ilist.begin(), end = ilist.end(); i != end; ++i)
+        {
           this->insert(*i);
         }
       }
 #endif
 
-      static BLOOM_CONSTEXPR size_t bit_capacity() {
+      static BLOOM_CONSTEXPR size_t bit_capacity()
+      {
         return Size;
       }
 
-      static BLOOM_CONSTEXPR size_t num_hash_functions() {
+      static BLOOM_CONSTEXPR size_t num_hash_functions()
+      {
         return mpl::size<HashFunctions>::value;
       };
 
-      double false_positive_rate() const {
+      double false_positive_rate() const
+      {
         const double n = static_cast<double>(this->_count);
         static const double k = static_cast<double>(num_hash_functions());
         static const double m = static_cast<double>(Size);
@@ -185,11 +195,13 @@ namespace boost {
         return std::pow(1 - std::pow(e, -k * n / m), k);
       }
 
-      size_t count() const {
+      size_t count() const
+      {
         return this->_count;
       }
 
-      bool empty() const {
+      bool empty() const
+      {
         return this->count() == 0;
       }
 
@@ -199,39 +211,47 @@ namespace boost {
         return this->bits;
       }
 
-      void insert(const T& t) {
+      void insert(const T& t)
+      {
         ++this->_count;
         apply_hash_type::insert(t, bits);
       }
 
       template <typename InputIterator>
-      void insert(const InputIterator start, const InputIterator end) {
-        for (InputIterator i = start; i != end; ++i) {
+      void insert(const InputIterator start, const InputIterator end)
+      {
+        for (InputIterator i = start; i != end; ++i)
+        {
           this->insert(*i);
         }
       }
 
-      bool probably_contains(const T& t) const {
+      bool probably_contains(const T& t) const
+      {
         return apply_hash_type::contains(t, bits);
       }
 
-      void clear() {
+      void clear()
+      {
         this->_count = 0;
         this->bits.reset();
       }
 
-      void swap(basic_bloom_filter& other) {
+      void swap(basic_bloom_filter& other)
+      {
         basic_bloom_filter tmp = other;
         other = *this;
         *this = tmp;
       }
 
-      basic_bloom_filter& operator|=(const basic_bloom_filter& rhs) {
+      basic_bloom_filter& operator|=(const basic_bloom_filter& rhs)
+      {
         this->bits |= rhs.bits;
         return *this;
       }
 
-      basic_bloom_filter& operator&=(const basic_bloom_filter& rhs) {
+      basic_bloom_filter& operator&=(const basic_bloom_filter& rhs)
+      {
         this->bits &= rhs.bits;
         return *this;
       }

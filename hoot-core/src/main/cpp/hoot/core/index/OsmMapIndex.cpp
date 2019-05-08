@@ -95,7 +95,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("Building node R-Tree index");
   // 10 children - 368 - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _nodeTree.reset(new HilbertRTree(mps, 2));
 
   vector<Box> boxes;
@@ -143,7 +143,7 @@ void OsmMapIndex::_buildWayTree() const
 
   LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
 
   vector<Box> boxes;
@@ -162,7 +162,7 @@ void OsmMapIndex::_buildWayTree() const
   {
     ConstWayPtr w = it->second;
 
-    boost::shared_ptr<LineString> ls =
+    std::shared_ptr<LineString> ls =
       ElementConverter(_map.shared_from_this()).convertToLineString(w);
     const Envelope* e = ls->getEnvelopeInternal();
 
@@ -295,7 +295,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  boost::shared_ptr<LineString> ls1 =
+  std::shared_ptr<LineString> ls1 =
     ElementConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
@@ -306,7 +306,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     ConstWayPtr n = it->second;
     if (n != 0 && nId != way->getId())
     {
-      boost::shared_ptr<LineString> ls2 =
+      std::shared_ptr<LineString> ls2 =
         ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
 
@@ -336,7 +336,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 =
+      std::shared_ptr<LineString> ls2 =
         ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
@@ -368,7 +368,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 =
+      std::shared_ptr<LineString> ls2 =
         ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
@@ -408,7 +408,7 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
   return result;
 }
 
-const boost::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMap() const
+const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMap() const
 {
   if (_elementToRelationMap == 0)
   {
@@ -424,7 +424,7 @@ const boost::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelation
   return _elementToRelationMap;
 }
 
-boost::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
+std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
   if (_nodeToWayMap == 0)
   {
@@ -433,7 +433,7 @@ boost::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
   return _nodeToWayMap;
 }
 
-boost::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
+std::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 {
   if (_nodeTree == 0)
   {
@@ -491,7 +491,7 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   return result;
 }
 
-boost::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
+std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
 {
   if (_wayTree == 0)
   {
@@ -530,7 +530,7 @@ void OsmMapIndex::_insertWay(long wid)
 
   Box b(2);
 
-  boost::shared_ptr<LineString> ls =
+  std::shared_ptr<LineString> ls =
     ElementConverter(_map.shared_from_this()).convertToLineString(w);
   const Envelope* e = ls->getEnvelopeInternal();
 

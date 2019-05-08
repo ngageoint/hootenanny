@@ -31,6 +31,9 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
+// Standard
+#include <memory>
+
 namespace hoot
 {
 
@@ -59,7 +62,7 @@ protected:
   long _numProcessed;   // how many elements the operation processed total
 };
 
-typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;
+typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;
 
 }
 

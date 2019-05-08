@@ -80,7 +80,7 @@ public:
 
 virtual QString getDescription() const { return ""; }
 
-  virtual void visit(const boost::shared_ptr<Element>&) {}
+  virtual void visit(const std::shared_ptr<Element>&) {}
 
   /**
    * User barycentric interpolation to determine the shift at a given point.
@@ -199,7 +199,7 @@ void PertyOp::setConfiguration(const Settings& conf)
   _configure();
 }
 
-void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
+void PertyOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
@@ -234,10 +234,10 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   return _gridCalculator->permute(env, rows, cols);
 }
 
-boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& map)
+std::shared_ptr<OsmMap> PertyOp::generateDebugMap(std::shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToPlanar(map);
-  boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
+  std::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
   geos::geom::Envelope env = CalculateMapBoundsVisitor::getGeosBounds(map);
   LOG_INFO("env: " << env.toString());
@@ -276,7 +276,7 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
   return result;
 }
 
-void PertyOp::permute(const boost::shared_ptr<OsmMap> &map)
+void PertyOp::permute(const std::shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToPlanar(map);
 

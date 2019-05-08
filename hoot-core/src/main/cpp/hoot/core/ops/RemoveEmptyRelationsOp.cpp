@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyRelationsOp.h"
 
@@ -54,7 +54,7 @@ void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
   _deleteEmptyRelations(map, true);
 }
 
-void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder)
+void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const bool reverseOrder)
 {
   const RelationMap& relations = map->getRelations();
 

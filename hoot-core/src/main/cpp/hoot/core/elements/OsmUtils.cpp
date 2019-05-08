@@ -55,46 +55,46 @@ using namespace std;
 namespace hoot
 {
 
-void OsmUtils::printNodes(const QString nodeCollectionName,
-                          const QList<boost::shared_ptr<const Node> >& nodes)
+void OsmUtils::printNodes(const QString& nodeCollectionName,
+                          const QList<std::shared_ptr<const Node>>& nodes)
 {
   if (Log::getInstance().getLevel() == Log::Trace)
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());
-    for (QList<boost::shared_ptr<const Node>>::const_iterator it = nodes.begin();
+    for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.begin();
          it != nodes.end(); ++it)
     {
-      boost::shared_ptr<const Node> node = *it;
+      std::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
     }
   }
 }
 
-const QList<long> OsmUtils::nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes)
+const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes)
 {
   QList<long> nodeIds;
-  for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.constBegin();
+  for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.constBegin();
        it != nodes.constEnd(); ++it)
   {
-    boost::shared_ptr<const Node> node = *it;
+    std::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
   }
   return nodeIds;
 }
 
-QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
-                                                       boost::shared_ptr<const OsmMap> map)
+QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
+                                                            const std::shared_ptr<const OsmMap>& map)
 {
-  QList<boost::shared_ptr<const Node> > nodes;
+  QList<std::shared_ptr<const Node>> nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
   {
-    nodes.append(boost::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
+    nodes.append(std::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
   }
   return nodes;
 }
 
-Coordinate OsmUtils::nodeToCoord(boost::shared_ptr<const Node> node)
+Coordinate OsmUtils::nodeToCoord(const std::shared_ptr<const Node>& node)
 {
   return Coordinate(node->getX(), node->getY());
 }
@@ -131,12 +131,12 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
   return relation->toString() + getRelationMembersDetailedString(relation, map);
 }
 
-QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
+QString OsmUtils::getRelationMembersDetailedString(const ConstRelationPtr& relation,
                                                    const ConstOsmMapPtr& map)
 {
   QString str = "\nMember Detail:\n\n";
@@ -150,7 +150,7 @@ QString OsmUtils::getRelationMembersDetailedString(ConstRelationPtr& relation,
   return str;
 }
 
-long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map)
+long OsmUtils::getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map)
 {
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   QSet<long> wayMemberIds;
@@ -174,7 +174,7 @@ long OsmUtils::getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMap
 }
 
 void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
-                                const Log::WarningLevel& logLevel, const QString message)
+                                const Log::WarningLevel& logLevel, const QString& message)
 {
   if (Log::getInstance().getLevel() <= logLevel)
   {
@@ -182,13 +182,13 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
     LOG_VAR(element);
     if (element->getElementType() == ElementType::Relation)
     {
-      ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
       LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
     }
   }
 }
 
-bool OsmUtils::oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   // Technically, this should also take into account reverse one ways and check direction.  Since
   // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
@@ -199,20 +199,20 @@ bool OsmUtils::oneWayConflictExists(ConstElementPtr element1, ConstElementPtr el
     (isAOneWayStreet.isSatisfied(element2) && explicitlyNotAOneWayStreet(element1));
 }
 
-bool OsmUtils::explicitlyNotAOneWayStreet(ConstElementPtr element)
+bool OsmUtils::explicitlyNotAOneWayStreet(const ConstElementPtr& element)
 {
   // TODO: use Tags::isFalse here instead
   return element->getTags().get("oneway") == "no";
 }
 
-bool OsmUtils::nameConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+bool OsmUtils::nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   return
     element1->getTags().hasName() && element2->getTags().hasName() &&
       !Tags::haveMatchingName(element1->getTags(), element2->getTags());
 }
 
-bool OsmUtils::nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2)
+bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   const QString element1HighwayVal = element1->getTags().get("highway");
   const QString element2HighwayVal = element2->getTags().get("highway");

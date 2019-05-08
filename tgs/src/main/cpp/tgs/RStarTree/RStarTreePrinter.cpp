@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RStarTreePrinter.h"
@@ -35,7 +35,7 @@ using namespace std;
 namespace Tgs
 {
 
-RStarTreePrinter::RStarTreePrinter(boost::shared_ptr<const RStarTree> tree)
+RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree)
 {
   _tree = tree;
 }
@@ -51,7 +51,7 @@ string RStarTreePrinter::_indentStr(int size)
   return result;
 }
 
-void RStarTreePrinter::print(boost::shared_ptr<const RStarTree> tree)
+void RStarTreePrinter::print(const std::shared_ptr<const RStarTree>& tree)
 {
   RStarTreePrinter p(tree);
   p.print();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
@@ -41,7 +41,7 @@ using namespace std;
 namespace hoot
 {
 
-OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(QUrl url) :
+OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
@@ -55,7 +55,7 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString path,
+void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
                                            ChangesetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
@@ -101,7 +101,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path,
     {
       if (change.getElement()->getElementType().getEnum() == ElementType::Node)
       {
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         _changesetBounds.expandToInclude(node->getX(), node->getY());
       }
       changes++;
@@ -172,13 +172,13 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      changeElement.reset(new Node(*boost::dynamic_pointer_cast<const Node>(element)));
+      changeElement.reset(new Node(*std::dynamic_pointer_cast<const Node>(element)));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*boost::dynamic_pointer_cast<const Way>(element)));
+      changeElement.reset(new Way(*std::dynamic_pointer_cast<const Way>(element)));
       break;
    case ElementType::Relation:
-      changeElement.reset(new Relation(*boost::dynamic_pointer_cast<const Relation>(element)));
+      changeElement.reset(new Relation(*std::dynamic_pointer_cast<const Relation>(element)));
       break;
     default:
       throw HootException("Unknown element type");
@@ -233,10 +233,10 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   switch (changeElement->getElementType().getEnum())
   {
     case ElementType::Way:
-      _createWayNodes(boost::dynamic_pointer_cast<const Way>(changeElement));
+      _createWayNodes(std::dynamic_pointer_cast<const Way>(changeElement));
       break;
     case ElementType::Relation:
-      _createRelationMembers(boost::dynamic_pointer_cast<const Relation>(changeElement));
+      _createRelationMembers(std::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
       //node
@@ -249,7 +249,7 @@ QString OsmApiDbSqlChangesetFileWriter::_getUpdateValuesStr(ConstElementPtr elem
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return _getUpdateValuesNodeStr(boost::dynamic_pointer_cast<const Node>(element));
+      return _getUpdateValuesNodeStr(std::dynamic_pointer_cast<const Node>(element));
     case ElementType::Way:
       return _getUpdateValuesWayOrRelationStr(element);
     case ElementType::Relation:
@@ -324,12 +324,12 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
     case ElementType::Way:
       _deleteAll(ApiDb::getCurrentWayNodesTableName(), "way_id", changeElement->getId());
       _deleteAll(ApiDb::getWayNodesTableName(), "way_id", changeElement->getId());
-      _createWayNodes(boost::dynamic_pointer_cast<const Way>(changeElement));
+      _createWayNodes(std::dynamic_pointer_cast<const Way>(changeElement));
       break;
     case ElementType::Relation:
       _deleteAll(ApiDb::getCurrentRelationMembersTableName(), "relation_id", changeElement->getId());
       _deleteAll(ApiDb::getRelationMembersTableName(), "relation_id", changeElement->getId());
-      _createRelationMembers(boost::dynamic_pointer_cast<const Relation>(changeElement));
+      _createRelationMembers(std::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
       //node
@@ -424,7 +424,7 @@ QString OsmApiDbSqlChangesetFileWriter::_getInsertValuesStr(ConstElementPtr elem
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return _getInsertValuesNodeStr(boost::dynamic_pointer_cast<const Node>(element));
+      return _getInsertValuesNodeStr(std::dynamic_pointer_cast<const Node>(element));
     case ElementType::Way:
       return _getInsertValuesWayOrRelationStr(element);
     case ElementType::Relation:
@@ -475,7 +475,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   LOG_VART(tags);
   if (element->getElementType().getEnum() == ElementType::Relation && !tags.contains("type"))
   {
-    ConstRelationPtr tmp = boost::dynamic_pointer_cast<const Relation>(element);
+    ConstRelationPtr tmp = std::dynamic_pointer_cast<const Relation>(element);
     tags.appendValue("type", tmp->getType());
   }
 
@@ -590,7 +590,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteCurrentTags(const ElementId& eid)
   }
 }
 
-void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
+void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString& tableName, const QString& idFieldName,
                                            const long id)
 {
   LOG_TRACE("Deleting all from: " << tableName << "...");

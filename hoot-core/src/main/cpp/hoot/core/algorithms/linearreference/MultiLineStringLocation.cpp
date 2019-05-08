@@ -79,7 +79,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelati
       throw HootException(
         "Feature splitting for multi-line string relations may only occur on relations which contain only ways.");
     }
-    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(element);
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
     _waySublineString.addSubline(
       WaySubline(
         WayLocation(map, way, 0, 0.0),

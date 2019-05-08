@@ -98,7 +98,7 @@ public:
   {
     OsmMapPtr map = genPoints(0);
 
-    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
@@ -106,7 +106,7 @@ public:
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
-      boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+      std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
       {
         insideCount++;
@@ -131,7 +131,7 @@ public:
 
   void runSerializationTest()
   {
-    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     MapCropper pre(g, false);
@@ -146,7 +146,7 @@ public:
 
     stringstream ss2(ss.str());
     ObjectInputStream ois(ss2);
-    boost::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
+    std::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
     OsmMapPtr mapPost = genPoints(0);
     post->apply(mapPost);
 
@@ -277,7 +277,7 @@ public:
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       const WayPtr& w = it->second;
-      boost::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      std::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
       const Envelope& e = *(pl->getEnvelopeInternal());
       double area = pl->getArea();
       if (count == 0)

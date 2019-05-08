@@ -27,9 +27,6 @@
 
 #include "OgrReader.h"
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
@@ -97,7 +94,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
 
@@ -107,9 +104,9 @@ public:
 
   long getFeatureCount() const { return _featureCount; }
 
-  QStringList getLayersWithGeometry(const QString path) const;
+  QStringList getLayersWithGeometry(const QString& path) const;
 
-  void open(const QString path, QString layer);
+  void open(const QString& path, const QString& layer);
 
   QRegExp getNameFilter();
 
@@ -118,7 +115,7 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(OsmMapPtr map);
+  void read(const OsmMapPtr& map);
 
   /**
    * Reads the next feature into the given map.
@@ -131,7 +128,7 @@ public:
 
   void setLimit(long limit) { _limit = limit; }
 
-  void setTranslationFile(QString translate) { _finalizeTranslate(); _translatePath = translate; }
+  void setTranslationFile(const QString& translate) { _finalizeTranslate(); _translatePath = translate; }
 
   void initializePartial();
 
@@ -141,7 +138,7 @@ public:
 
   bool hasMoreElements();
 
-  boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
 
@@ -153,12 +150,12 @@ protected:
   long _count;
   long _featureCount;
   bool _useFileId;
-  boost::shared_ptr<GDALDataset> _dataSource;
+  std::shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
-  boost::shared_ptr<OGRSpatialReference> _wgs84;
-  boost::shared_ptr<ScriptTranslator> _translator;
+  std::shared_ptr<OGRSpatialReference> _wgs84;
+  std::shared_ptr<ScriptTranslator> _translator;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -198,11 +195,11 @@ protected:
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
    */
-  boost::shared_ptr<OGRSpatialReference> _fixProjection(boost::shared_ptr<OGRSpatialReference> srs);
+  std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs);
 
   void _initTranslate();
 
-  void _openLayer(QString path, QString layer);
+  void _openLayer(const QString& path, const QString& layer);
 
   void _openNextLayer();
 
@@ -268,7 +265,7 @@ OgrReader::OgrReader()
   _d = new OgrReaderInternal();
 }
 
-OgrReader::OgrReader(QString path)
+OgrReader::OgrReader(const QString& path)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -277,7 +274,7 @@ OgrReader::OgrReader(QString path)
   }
 }
 
-OgrReader::OgrReader(QString path, QString layer)
+OgrReader::OgrReader(const QString& path, const QString& layer)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -301,7 +298,7 @@ void OgrReader::setProgress(Progress progress)
   _d->setProgress(progress);
 }
 
-ElementIterator* OgrReader::createIterator(QString path, QString layer) const
+ElementIterator* OgrReader::createIterator(const QString& path, const QString& layer) const
 {
   OgrReaderInternal* d = new OgrReaderInternal();
   d->setDefaultCircularError(_d->getDefaultCircularError());
@@ -312,9 +309,9 @@ ElementIterator* OgrReader::createIterator(QString path, QString layer) const
   return new OgrElementIterator(d);
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::shared_ptr<OGRSpatialReference> srs)
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs)
 {
-  boost::shared_ptr<OGRSpatialReference> result;
+  std::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
@@ -371,7 +368,7 @@ boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::
   return result;
 }
 
-boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   return _d->getBoundingBoxFromConfig(s, srs);
@@ -380,10 +377,10 @@ boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& 
 /**
  * Returns a list of all layer names includeing those that don't have geometry.
  */
-QStringList OgrReader::getLayerNames(QString path)
+QStringList OgrReader::getLayerNames(const QString& path)
 {
   QStringList result;
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -401,7 +398,7 @@ QStringList OgrReader::getLayerNames(QString path)
 /**
  * Returns a filtered list of layer names that have geometry.
  */
-QStringList OgrReader::getFilteredLayerNames(const QString path)
+QStringList OgrReader::getFilteredLayerNames(const QString& path)
 {
   QRegExp filterStr = _d->getNameFilter();
   LOG_VART(filterStr.pattern());
@@ -425,19 +422,19 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   return result;
 }
 
-bool OgrReader::isReasonablePath(QString path)
+bool OgrReader::isReasonablePath(const QString& path)
 {
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
-long OgrReader::getFeatureCount(QString path, QString layer)
+long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 {
   _d->open(path, layer);
   _d->close();
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, OsmMapPtr map)
+void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
 {
   _d->open(path, layer);
   _d->read(map);
@@ -459,7 +456,7 @@ void OgrReader::setLimit(long limit)
   _d->setLimit(limit);
 }
 
-void OgrReader::setTranslationFile(QString translate)
+void OgrReader::setTranslationFile(const QString& translate)
 {
   _d->setTranslationFile(translate);
 }
@@ -489,7 +486,7 @@ void OgrReader::finalizePartial()
   _elementsRead = 0;
 }
 
-bool OgrReader::isSupported(QString url)
+bool OgrReader::isSupported(const QString& url)
 {
   return isReasonablePath(url);
 }
@@ -499,12 +496,12 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
   _d->setUseDataSourceIds(useDataSourceIds);
 }
 
-void OgrReader::open(QString url)
+void OgrReader::open(const QString& url)
 {
   _d->open(url, "");
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
 {
   return _d->getProjection();
 }
@@ -537,11 +534,11 @@ OgrReaderInternal::~OgrReaderInternal()
   }
 }
 
-QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
+QStringList OgrReaderInternal::getLayersWithGeometry(const QString& path) const
 {
   QStringList result;
   LOG_DEBUG("Opening layers with geometry: " << path);
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   LOG_VART(count);
   for (int i = 0; i < count; i++)
@@ -867,11 +864,11 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
-boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   ConfigOptions co(s);
-  boost::shared_ptr<Envelope> result;
+  std::shared_ptr<Envelope> result;
   QString bboxStrRaw = co.getOgrReaderBoundingBox();
   QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
@@ -928,8 +925,8 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     }
 
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
-    boost::shared_ptr<OGRCoordinateTransformation> transform(
+    std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+    std::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)
@@ -964,7 +961,7 @@ void OgrReaderInternal::_initTranslate()
   }
 }
 
-void OgrReaderInternal::open(const QString path, QString layer)
+void OgrReaderInternal::open(const QString& path, const QString& layer)
 {
   _initTranslate();
 
@@ -982,7 +979,7 @@ void OgrReaderInternal::open(const QString path, QString layer)
   LOG_VART(_pendingLayers);
 }
 
-void OgrReaderInternal::_openLayer(QString path, QString layer)
+void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 {
   _path = path;
   _layerName = layer;
@@ -1000,7 +997,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     throw HootException("Failed to identify source layer from data source.");
   }
 
-  boost::shared_ptr<OGRSpatialReference> sourceSrs;
+  std::shared_ptr<OGRSpatialReference> sourceSrs;
 
   if (_layer->GetSpatialRef())
   {
@@ -1025,7 +1022,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     }
   }
 
-  boost::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
+  std::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
   if (filter.get())
   {
     _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
@@ -1102,7 +1099,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(OsmMapPtr map)
+void OgrReaderInternal::read(const OsmMapPtr& map)
 {
   _map = map;
   _count = 0;
@@ -1330,9 +1327,9 @@ void OgrReaderInternal::populateElementMap()
   _relationsItr = _map->getRelations().begin();
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

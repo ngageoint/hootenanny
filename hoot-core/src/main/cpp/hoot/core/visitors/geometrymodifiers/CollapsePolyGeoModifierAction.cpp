@@ -53,7 +53,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
   if (!pWay->isClosedArea()) return false;
 
   OsmMapPtr mapPtr = pMap->shared_from_this();
@@ -64,7 +64,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
 
   if (checkArea || checkLength)
   {
-    shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
     // calculate poly area only if we need it
     double polyArea = checkArea ? pPoly->getArea() : 0;

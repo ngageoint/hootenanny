@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONRFCLASSIFIER_H
 #define POIPOLYGONRFCLASSIFIER_H
@@ -50,12 +50,12 @@ public:
 
 private:
 
-  std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
   void _createExtractors();
 };
 
-typedef boost::shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
+typedef std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
 
 }
 

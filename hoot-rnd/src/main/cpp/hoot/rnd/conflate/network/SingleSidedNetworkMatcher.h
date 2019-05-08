@@ -77,7 +77,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static boost::shared_ptr<SingleSidedNetworkMatcher> create();
+  static std::shared_ptr<SingleSidedNetworkMatcher> create();
 
   void iterate();
 
@@ -107,21 +107,21 @@ private:
       score(s)
     {}
 
-    QString toString() const { return QString("match: %1 score: %2").arg(match->toString()).
-      arg(score); }
+    QString toString() const
+    { return QString("match: %1 score: %2").arg(match->toString()).arg(score); }
 
     ConstEdgeMatchPtr match;
     double score;
   };
 
-  typedef boost::shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
+  typedef std::shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
 
   typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
 
   /// [v2]
-  typedef QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr> > EdgeMatchScoreMap;
+  typedef QHash<ConstNetworkEdgePtr, QList<EdgeLinkScorePtr>> EdgeMatchScoreMap;
   /// [v2][v1]
-  typedef QHash< ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double> > VertexScoreMap;
+  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
 
   IndexedEdgeMatchSetPtr _edgeMatches;
   EdgeMatchScoreMap _edge2Scores;
@@ -152,8 +152,8 @@ private:
 
 };
 
-typedef boost::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
-typedef boost::shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
+typedef std::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
+typedef std::shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstSingleSidedNetworkMatcherPtr, ConstSingleSidedNetworkMatcherPtr);

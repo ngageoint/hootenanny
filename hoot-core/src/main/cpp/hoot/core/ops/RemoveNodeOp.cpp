@@ -63,7 +63,7 @@ void RemoveNodeOp::_removeNodeNoCheck(OsmMapPtr& map, long nId)
 
 void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
 {
-  const boost::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
   if (ways.size() > 0)
   {
@@ -86,7 +86,7 @@ void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
     map->getRelation(*it)->removeElement(ElementId::node(nId));
   }
 
-  const boost::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long> ways = n2w->getWaysByNode(nId);
 
   for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)

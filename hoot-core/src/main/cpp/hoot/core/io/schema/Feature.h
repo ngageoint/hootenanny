@@ -22,16 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RECORD_H
 #define RECORD_H
 
 // Qt
 #include <QVariant>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 #include <hoot/core/io/schema/StrictChecking.h>
 
@@ -43,9 +40,9 @@ class FeatureDefinition;
 class Feature
 {
 public:
-  Feature(const boost::shared_ptr<const FeatureDefinition>& d);
+  Feature(const std::shared_ptr<const FeatureDefinition>& d);
 
-  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   const QVariantMap& getValues() const { return _values; }
 
@@ -60,7 +57,7 @@ public:
   QString toString() const;
 
 private:
-  const boost::shared_ptr<const FeatureDefinition>& _definition;
+  const std::shared_ptr<const FeatureDefinition>& _definition;
   QVariantMap _values;
 };
 

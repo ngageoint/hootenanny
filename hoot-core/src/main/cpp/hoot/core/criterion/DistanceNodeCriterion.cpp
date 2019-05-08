@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DistanceNodeCriterion.h"
@@ -88,7 +88,7 @@ bool DistanceNodeCriterion::isSatisfied(const ConstElementPtr& e) const
   if (e->getElementType() != ElementType::Node)
     return false;
 
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
   return _center.distance(n->toCoordinate()) < _distance;
 }
 

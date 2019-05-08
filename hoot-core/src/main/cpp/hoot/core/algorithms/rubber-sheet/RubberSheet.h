@@ -75,17 +75,17 @@ public:
 
   RubberSheet();
 
-  void apply(boost::shared_ptr<OsmMap>& map) override;
+  void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map.
    */
-  void applyTransform(boost::shared_ptr<OsmMap>& map);
+  void applyTransform(std::shared_ptr<OsmMap>& map);
 
   /**
    * Calculates an appropriate transform for the specified map, but does not change any data.
    */
-  void calculateTransform(boost::shared_ptr<OsmMap>& map);
+  void calculateTransform(std::shared_ptr<OsmMap>& map);
 
   /**
    * Set this to true if Unknown1 is a reference dataset and Unknown2 should be moved toward it.
@@ -135,7 +135,7 @@ public:
 
 private:
 
-  typedef std::map<long, std::list<Match> > MatchList;
+  typedef std::map<long, std::list<Match>> MatchList;
 
   class Tie
   {
@@ -153,7 +153,7 @@ private:
       QString toString() { return "dx: " + QString::number(dx()) + ", dy: " + QString::number(dy()); }
   };
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   // A map of nids to the list of matches.
   MatchList _matches;
@@ -162,10 +162,10 @@ private:
   bool _debug;
   int _minimumTies;
   std::vector<Tie> _ties;
-  boost::shared_ptr<Tgs::Interpolator> _interpolator1to2, _interpolator2to1;
+  std::shared_ptr<Tgs::Interpolator> _interpolator1to2, _interpolator2to1;
   // used as a temporary in interpolating.
   std::vector<double> _matchPoint;
-  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::shared_ptr<OGRSpatialReference> _projection;
   std::string _interpolatorClassName;
 
   double _searchRadius;
@@ -184,17 +184,17 @@ private:
   /**
    * Build a data frame for use with interpolators.
    */
-  boost::shared_ptr<Tgs::DataFrame> _buildDataFrame(Status s) const;
+  std::shared_ptr<Tgs::DataFrame> _buildDataFrame(Status s) const;
 
-  boost::shared_ptr<Tgs::Interpolator> _buildInterpolator(Status s) const;
+  std::shared_ptr<Tgs::Interpolator> _buildInterpolator(Status s) const;
 
   const Match& _findMatch(long nid1, long nid2);
 
-  boost::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
+  std::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
 
   geos::geom::Coordinate _translate(const geos::geom::Coordinate& c, Status s);
 
-  void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator,
+  void _writeInterpolator(const std::shared_ptr<const Tgs::Interpolator>& interpolator,
                           QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;

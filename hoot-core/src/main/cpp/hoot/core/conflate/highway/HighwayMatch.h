@@ -38,9 +38,6 @@
 // Qt
 #include <QHash>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -58,8 +55,8 @@ public:
   static std::string className() { return "hoot::HighwayMatch"; }
 
   HighwayMatch();
-  HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
-               const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
+  HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+               const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
                ConstMatchThresholdPtr mt);
 
@@ -76,7 +73,7 @@ public:
 
   virtual double getScore() const { return _score; }
 
-  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
+  const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
   { return _sublineMatcher; }
 
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
@@ -95,9 +92,9 @@ public:
 
 private:
 
-  boost::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<HighwayClassifier> _classifier;
   ElementId _eid1, _eid2;
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
   MatchClassification _c;
   double _minSplitSize;
   double _score;

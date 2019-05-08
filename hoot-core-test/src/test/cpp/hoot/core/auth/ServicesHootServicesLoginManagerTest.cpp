@@ -76,7 +76,7 @@ public:
   void loginRequestTest()
   {
     HootServicesLoginManager uut;
-    boost::shared_ptr<HootNetworkCookieJar> cookies =
+    std::shared_ptr<HootNetworkCookieJar> cookies =
       ServicesDbTestUtils::getTestSessionCookie(
         "testSessionId", HootServicesLoginManager::_getRequestTokenUrl());
     uut._cookies = cookies;

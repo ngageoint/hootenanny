@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MissingDataHandler.h"
 
@@ -34,7 +34,7 @@
 namespace Tgs
 {
   void MissingDataHandler::replaceMissingValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data)
+    std::shared_ptr<DataFrame> data)
   {
     try
     {
@@ -76,13 +76,13 @@ namespace Tgs
   }
 
   void MissingDataHandler::_replaceMissingNominalValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data, unsigned int factorIndex)
+    std::shared_ptr<DataFrame> data, unsigned int factorIndex)
   {
     try
     {
       unsigned int numDataVectors = data->getNumDataVectors();
 
-      std::map<std::string, std::map<double, unsigned int > > frequencyMap;
+      std::map<std::string, std::map<double, unsigned int>> frequencyMap;
 
       for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
@@ -99,7 +99,7 @@ namespace Tgs
       std::map<std::string, double> maxFrequencyMap;
 
       std::map<double, unsigned int >::iterator valueItr;
-      std::map<std::string, std::map<double, unsigned int > >::iterator classItr;
+      std::map<std::string, std::map<double, unsigned int>>::iterator classItr;
 
       for(classItr = frequencyMap.begin(); classItr != frequencyMap.end(); ++classItr)
       {
@@ -140,13 +140,13 @@ namespace Tgs
   }
 
   void MissingDataHandler::_replaceMissingNumericValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data, unsigned int factorIndex)
+    std::shared_ptr<DataFrame> data, unsigned int factorIndex)
   {
     try
     {
       unsigned int numDataVectors = data->getNumDataVectors();
 
-      std::map<std::string, std::vector<double> > sortMap;
+      std::map<std::string, std::vector<double>> sortMap;
 
       for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
@@ -161,7 +161,7 @@ namespace Tgs
       }
 
       std::map<std::string, double> medianMap;
-      std::map<std::string, std::vector<double> >::iterator sortItr;
+      std::map<std::string, std::vector<double>>::iterator sortItr;
 
       for(sortItr = sortMap.begin(); sortItr != sortMap.end(); ++sortItr)
       {
