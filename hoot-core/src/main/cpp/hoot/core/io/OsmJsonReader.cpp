@@ -61,7 +61,6 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-// Default constructor
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
@@ -79,7 +78,6 @@ OsmJsonReader::OsmJsonReader()
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount())
 {
-  // Do nothing special
 }
 
 OsmJsonReader::~OsmJsonReader()
@@ -91,17 +89,22 @@ bool OsmJsonReader::isSupported(const QString& url)
 {
   QUrl myUrl(url);
 
-  // Is it a file?
-  if (myUrl.isLocalFile())
-  {
-    QString filename = myUrl.toLocalFile();
+  const bool isRelativeUrl = myUrl.isRelative();
+  const bool isLocalFile =  myUrl.isLocalFile();
 
+  // Is it a file?
+  if (isRelativeUrl || isLocalFile)
+  {
+    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
     if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
+    {
       return true;
+    }
   }
 
   // Is it a web address?
-  if ("http" == myUrl.scheme() || "https" == myUrl.scheme())
+  if (myUrl.host() == ConfigOptions().getOverpassApiHost() && ("http" == myUrl.scheme() ||
+      "https" == myUrl.scheme()))
   {
     return true;
   }
@@ -141,6 +144,8 @@ void OsmJsonReader::open(const QString& url)
     {
       _isWeb = true;
     }
+    LOG_VARD(_isFile);
+    LOG_VARD(_isWeb);
   }
   catch (const std::exception& ex)
   {
@@ -186,11 +191,15 @@ void OsmJsonReader::_loadJSON(const QString& jsonStr)
   // Clear out anything that might be hanging around
   _propTree.clear();
 
+  LOG_TRACE("JSON before cleaning: " << jsonStr.left(100));
+
   // Handle single or double quotes
   scrubQuotes(json);
 
   // Handle IDs
   scrubBigInts(json);
+
+  LOG_TRACE("JSON after cleaning: " << jsonStr.left(100));
 
   // Convert string to stringstream
   stringstream ss(json.toUtf8().constData(), ios::in);
@@ -418,7 +427,7 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
   }
 }
 
-void OsmJsonReader::scrubQuotes(QString &jsonStr)
+void OsmJsonReader::scrubQuotes(QString& jsonStr)
 {
   // We allow the use of single quotes, for ease of coding
   // test strings into c++. Single quotes within string literals
@@ -438,14 +447,15 @@ void OsmJsonReader::scrubQuotes(QString &jsonStr)
   }
 }
 
-void OsmJsonReader::scrubBigInts(QString &jsonStr)
+void OsmJsonReader::scrubBigInts(QString& jsonStr)
 {
   // Boost 1.41 property tree json parser has trouble with
   // integers bigger than 2^31. So we put quotes around big
   // numbers, and that makes it all better
   QRegExp rx1("(\"[^\"]+\"\\s*:\\s*)(-?\\d{8,})");
   jsonStr.replace(rx1, "\\1\"\\2\"");
-  QRegExp rx2("([\\[:,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
+  // see related note in OsmJsonReaderTest::scrubBigIntsTest about changes made to this regex
+  QRegExp rx2("([\\[,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
   jsonStr.replace(rx2, "\\1\"\\2\"\\3");
 }
 
@@ -462,6 +472,7 @@ void OsmJsonReader::_readFromHttp()
     urlQuery.addQueryItem("srsname", "EPSG:4326");
     _url.setQuery(urlQuery);
   }
+
   bool split = false;
   int numSplits = 1;
   vector<thread> threads;
@@ -512,6 +523,7 @@ void OsmJsonReader::_readFromHttp()
       }
     }
   }
+
   if (split)
   {
     //  Wait on the work to be completed
@@ -524,7 +536,9 @@ void OsmJsonReader::_readFromHttp()
     //  Do HTTP GET request without splitting
     HootNetworkRequest request;
     request.networkRequest(_url);
-    _results.append(QString::fromUtf8(request.getResponseContent().data()));
+    const QString response = QString::fromUtf8(request.getResponseContent().data());
+    LOG_VART(response.left(200));
+    _results.append(response);
   }
 }
 

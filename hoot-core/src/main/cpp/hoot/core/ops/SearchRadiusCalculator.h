@@ -42,7 +42,7 @@ class OsmMap;
 
 /**
  * Calculates a conflation search radius using tie points from rubbersheeting.  If there
- * are not enough tie points to perform the calculation
+ * are not enough tie points to perform the calculation, the default search radius will be used.
  */
 class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {

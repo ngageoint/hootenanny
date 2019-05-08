@@ -194,7 +194,8 @@ void RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     if (ctr % 1000 == 0)
     {
       PROGRESS_INFO(
-        "Applied rubber sheet transform to " << ctr << " / " << nm.size() << " nodes...");
+        "Applied rubber sheet transform to " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(nm.size()) << " nodes...");
     }
   }
 }

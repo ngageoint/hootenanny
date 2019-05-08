@@ -98,37 +98,33 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   // TODO: These loops assume that equal portions of a line equal the same point on the line.
   // Said another way if you're 10% down line 1, then that is equivalent to 10% down line 2.
   // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
-  // improve this matching.
+  // improve this matching. - see #3158
   Meters d1 = 0.0;
   for (int i = 0; i < string1->getMembers().size(); ++i)
   {
     _pairs.insert(pair<ElementId, ElementId>(
-        _toElement(string1->getEdge(i))->getElementId(),
-        _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
-      ));
+      _toElement(string1->getEdge(i))->getElementId(),
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
     _pairs.insert(pair<ElementId, ElementId>(
-        _toElement(string1->getEdge(i))->getElementId(),
-        _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()
-      ));
+      _toElement(string1->getEdge(i))->getElementId(),
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
   }
 
   Meters d2 = 0.0;
   for (int i = 0; i < string2->getMembers().size(); ++i)
   {
     _pairs.insert(pair<ElementId, ElementId>(
-        _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-        _toElement(string2->getEdge(i))->getElementId()
-      ));
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
+      _toElement(string2->getEdge(i))->getElementId()));
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
     _pairs.insert(pair<ElementId, ElementId>(
-        _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-        _toElement(string2->getEdge(i))->getElementId()
-      ));
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
+      _toElement(string2->getEdge(i))->getElementId()));
   }
 
   LOG_VART(_pairs);

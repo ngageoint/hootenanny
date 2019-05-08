@@ -40,8 +40,6 @@ class OsmMap;
 
 /**
  * A map operation making use of UnionPolyonsVisitor
- *
- * @todo We could possibly use a VisitorOp with UnionPolygonsVisitor for this instead.
  */
 class UnionPolygonsOp : public OsmMapOperation, public OperationStatusInfo
 {

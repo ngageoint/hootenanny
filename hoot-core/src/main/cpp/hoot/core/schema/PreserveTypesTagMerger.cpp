@@ -27,7 +27,6 @@
 #include "PreserveTypesTagMerger.h"
 
 // hoot
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
 
@@ -41,7 +40,10 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger()
+PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys,
+                                               const OsmSchemaCategory& categoryFilter) :
+_skipTagKeys(skipTagKeys),
+_categoryFilter(categoryFilter)
 {
 }
 
@@ -51,8 +53,16 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   Tags t1Copy = t1;
   Tags t2Copy = t2;
 
-  TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
-  TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
+  if (ConfigOptions().getTagMergerDefault() == "hoot::OverwriteTag1Merger")
+  {
+    TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);
+    TagComparator::getInstance().mergeText(t2Copy, t1Copy, result);
+  }
+  else
+  {
+    TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
+    TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
+  }
 
   //retain any previously set alt_types
   if (!t1Copy[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
@@ -66,61 +76,71 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
   //combine the rest of the tags together; if two tags with the same key are found, use the most
   //specific one or use both if they aren't related in any way
+  OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::ConstIterator it = t1Copy.constBegin(); it != t1Copy.constEnd(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
+
+    if (_skipTagKeys.find(it.key()) != _skipTagKeys.end())
+    {
+      LOG_TRACE("Explicitly skipping tag: " << it.key() << "=" <<  it.value() << "...");
+      continue;
+    }
+    if (schema.isMetaData(it.key(), it.value()))
+    {
+      LOG_TRACE("Skipping metadata tag: " << it.key() << "=" <<  it.value() << "...");
+      continue;
+    }
+    if (_categoryFilter != OsmSchemaCategory::Empty &&
+        !schema.getCategories(it.key(), it.value()).intersects(_categoryFilter))
+    {
+      LOG_TRACE(
+        "Skipping tag not passing category filter: " << it.key() << "=" << it.value() << "...");
+      continue;
+    }
+
     if (!t2Copy[it.key()].trimmed().isEmpty())
     {
       LOG_VART(t2Copy[it.key()]);
       //if one is more specific than the other, add it, but then remove both tags so we don't
       //try to add them again
-      if (OsmSchema::getInstance().isAncestor(it.key() % "=" % t2Copy[it.key()],
-                                              it.key() % "=" % it.value()))
+      if (schema.isAncestor(it.key() % "=" % t2Copy[it.key()], it.key() % "=" % it.value()))
       {
         LOG_TRACE(
           it.key() % "=" % t2Copy[it.key()] << " is more specific than " <<
           it.key() % "=" % it.value() << ".  Using more specific tag.");
         result[it.key()] = t2Copy[it.key()];
       }
-      else if (OsmSchema::getInstance().isAncestor(it.key() % "=" % it.key(),
-                                                   it.key() % "=" % t2Copy[it.value()]))
+      else if (schema.isAncestor(it.key() % "=" % it.key(), it.key() % "=" % t2Copy[it.value()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
           it.key() % "=" % t2Copy[it.key()] << ".  Using more specific tag.");
         result[it.key()] = it.value();
       }
-      else
+      else  if (it.key() != ALT_TYPES_TAG_KEY)
       {
-        // TODO: This is actually going to bring in any tags into alt_types and not just schema type
-        //tags.  Probably need to either rename alt_types or have a more strict check on which tags
-        //can be merged into it.  Something similar to PoiPolygonTypeScoreExtractor::hasType but
-        //looser could be used...or pass in a type def function to this class.
-
-        if(it.key() != ALT_TYPES_TAG_KEY)
+        //arbitrarily use first one and add second to an alt_types field
+        LOG_TRACE(
+          "Both tag sets contain same type: " << it.key() <<
+          " but neither is more specific.  Keeping both...");
+        result[it.key()] = it.value();
+        LOG_VART(result[ALT_TYPES_TAG_KEY]);
+        if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
         {
-          //arbitrarily use first one and add second to an alt_types field
-          LOG_TRACE(
-            "Both tag sets contain same type: " << it.key() <<
-            " but neither is more specific.  Keeping both...");
-          result[it.key()] = it.value();
-          LOG_VART(result[ALT_TYPES_TAG_KEY]);
-          if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+          const QString altType = it.key() % "=" % t2Copy[it.key()];
+          if (!result[ALT_TYPES_TAG_KEY].contains(altType))
           {
-            const QString altType = it.key() % "=" % t2Copy[it.key()];
-            if (!result[ALT_TYPES_TAG_KEY].contains(altType))
-            {
-              result[ALT_TYPES_TAG_KEY] =
-                result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % t2Copy[it.key()];
-            }
+            result[ALT_TYPES_TAG_KEY] =
+              result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % t2Copy[it.key()];
           }
-          else
-          {
-            result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
-          }
-          LOG_VART(result[ALT_TYPES_TAG_KEY]);
         }
+        else
+        {
+          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
+        }
+        LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
     }
     else if (!it.value().isEmpty())
@@ -134,7 +154,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
-    if (!result.contains(it.key()) && !it.value().isEmpty())
+    if (_skipTagKeys.find(it.key()) == _skipTagKeys.end() &&
+        !result.contains(it.key()) && !it.value().isEmpty())
     {
       result[it.key()] = it.value();
     }

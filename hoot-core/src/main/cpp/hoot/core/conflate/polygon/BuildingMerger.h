@@ -56,8 +56,18 @@ public:
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
+  /**
+   * Creates a single building out of a group of buildings
+   *
+   * @param map map which owns the buildings being combined
+   * @param eids element IDs for the buildings to combine
+   * @param preserveTypes if true, differing building type tags will be preserved in the assembled
+   * building relation
+   * @return a building element
+   */
   static std::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
-                                                  const std::set<ElementId>& eids);
+                                                const std::set<ElementId>& eids,
+                                                const bool preserveTypes = false);
 
   virtual QString toString() const override;
 
@@ -71,10 +81,11 @@ public:
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 
+  virtual QString getDescription() const { return "Merges buildings"; }
+
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
-
-  virtual QString getDescription() const { return "Merges buildings"; }
+  void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }
 
 protected:
 
@@ -88,11 +99,25 @@ private:
   //If true, merging always keeps the more complex of the two building geometries.  If false,
   //merging keeps the geometry of the reference building.
   bool _keepMoreComplexGeometryWhenAutoMerging;
+  // The default behavior is to review many to many matches. Setting this to true allows them to
+  // all be merged together.
+  bool _mergeManyToManyMatches;
+  // set to true if the current building merge involves two buildings, each part of multiple matches
+  bool _manyToManyMatch;
 
-  std::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
-  std::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+  /*
+   * Creates a building out of the current set of building element IDs
+   *
+   * @param map map which owns the buildings being combined
+   * @param unknown1 if true, elements with unknown1 status are assembled into a building; if false,
+   * then buildings with unknown2 status are assembled
+   * @return a building element
+   */
+  std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
+
+  void _removeRedundantAltTypeTags(Tags& tags);
 };
 
 }

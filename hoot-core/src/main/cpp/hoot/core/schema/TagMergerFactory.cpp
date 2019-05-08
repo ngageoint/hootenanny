@@ -62,7 +62,6 @@ std::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
     LOG_DEBUG("Default tag merger is: " << defaultName);
     _default = getMergerPtr(defaultName);
   }
-
   return _default;
 }
 
@@ -79,7 +78,6 @@ std::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& n
   {
     result = it.value();
   }
-
   return result;
 }
 

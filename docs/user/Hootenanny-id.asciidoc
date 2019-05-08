@@ -17,7 +17,7 @@ This guide is intended as a general purpose reference to understand various comp
 
 === Accessing Hootenanny
 
-Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is only supported in Chrome (recommended) and/or Chromium.
+Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is supported in Chrome (recommended), Chromium, and Firefox.
 
 [[HootiD-UILayout]]
 .Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Add Secondary Dataset button. *H*: Layer directory structure with scrolling and resize options. *I*: Recently Used Layers dropdown lists most recent layers accessed. *J*: Layer color picker. *K* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
@@ -160,7 +160,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
 image::user/images/id/hoot_background_new.png[]
 
-NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT8_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
+NOTE: The DigitalGlobe EVWHS basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid Connect ID, you will need to edit the _dgservices.js_ file to set `evwhs_connectId = 'REPLACE_ME'` and rebuild the UI with `npm run production`.
 
 ==== Image Carousel
 

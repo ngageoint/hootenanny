@@ -147,7 +147,7 @@ void Hoot::loadLibrary(const QString& name)
 
 void Hoot::reinit()
 {
-  LOG_DEBUG("Hoot instance reinit...");
+  LOG_TRACE("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
@@ -157,7 +157,7 @@ void Hoot::reinit()
     rl.rlim_cur = max;
     setrlimit(RLIMIT_AS, &rl);
     getrlimit(RLIMIT_AS, &rl);
-    LOG_INFO("Set max memory usage to: " << rl.rlim_cur << "bytes.");
+    LOG_DEBUG("Set max memory usage to: " << rl.rlim_cur << "bytes.");
   }
 
   Log::getInstance().init();

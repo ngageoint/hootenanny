@@ -197,8 +197,10 @@ private:
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
+
+  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_GEOJSON_READER_H

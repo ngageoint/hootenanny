@@ -164,12 +164,12 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   bool removeSecondaryElement;
   _determineKeeperFeature(
     e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
-  //LOG_VART(elementWithTagsToKeep->getElementId());
-  //LOG_VART(elementWithTagsToRemove->getElementId());
-  OsmUtils::logElementDetail(
-    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
-  OsmUtils::logElementDetail(
-    elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+  LOG_VART(elementWithTagsToKeep->getElementId());
+  LOG_VART(elementWithTagsToRemove->getElementId());
+//  OsmUtils::logElementDetail(
+//    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+//  OsmUtils::logElementDetail(
+//    elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
 
   return
     _mergeWays(

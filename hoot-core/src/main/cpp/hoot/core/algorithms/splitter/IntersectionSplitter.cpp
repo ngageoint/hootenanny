@@ -37,6 +37,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDebug>
@@ -149,8 +150,8 @@ void IntersectionSplitter::splitIntersections()
     if (_todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
     {
       PROGRESS_INFO(
-        "\tProcessed intersection splits for: " << numProcessed << " / " << totalNodes <<
-        " nodes.");
+        "\tProcessed intersection splits for: " << StringUtils::formatLargeNumber(numProcessed) <<
+        " / " << StringUtils::formatLargeNumber(totalNodes) << " nodes.");
     }
 
     // if the node is part of two or more ways

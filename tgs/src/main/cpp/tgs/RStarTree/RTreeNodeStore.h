@@ -94,7 +94,6 @@ protected:
   /// pointer to the same thing as above, only faster. Zoom zoom!
   PageStore* _store;
 
- //  void _addNode(RTreeNode* node) const;
   void _addNode(RecItem * item, int key);
   mutable std::list<int>_nodesList;
 };

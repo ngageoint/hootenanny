@@ -108,9 +108,9 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
 }
 
 std::shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-    const vector<std::shared_ptr<MatchCreator>>& matchCreators,
-    const QString& matchCreatorName,
-    CreatorDescription::BaseFeatureType& featureType)
+  const vector<std::shared_ptr<MatchCreator>>& matchCreators,
+  const QString& matchCreatorName,
+  CreatorDescription::BaseFeatureType& featureType)
 {
   for (vector<std::shared_ptr<MatchCreator>>::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)

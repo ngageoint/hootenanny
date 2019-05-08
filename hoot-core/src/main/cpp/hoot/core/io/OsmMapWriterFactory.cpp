@@ -139,6 +139,7 @@ void OsmMapWriterFactory::write(const std::shared_ptr<const OsmMap>& map, const 
     QElapsedTimer timer;
     timer.start();
 
+    // We could pass a progress in here to get more granular write status feedback.
     std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);

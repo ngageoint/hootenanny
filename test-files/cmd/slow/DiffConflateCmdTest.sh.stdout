@@ -1,11 +1,11 @@
-15:08:31.501 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-15:08:31.501 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-15:08:34.007 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-15:08:34.008 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-15:08:36.524 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-15:08:36.524 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-15:08:39.090 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
-15:08:39.090 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+19:01:12.599 WARN  ...s/rubber-sheet/RubberSheet.cpp( 483) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+19:01:12.599 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+19:01:15.310 WARN  ...s/rubber-sheet/RubberSheet.cpp( 483) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+19:01:15.310 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+19:01:18.027 WARN  ...s/rubber-sheet/RubberSheet.cpp( 483) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+19:01:18.027 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+19:01:20.718 WARN  ...s/rubber-sheet/RubberSheet.cpp( 483) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 1 tie points were found.
+19:01:20.718 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
 Checking differential output
 Checking Changeset
 Changeset Files Match
@@ -14,7 +14,13 @@ Tag Changeset Files Match
 Checking unified geometry+tag diff changeset
 Unified Changeset Files Match
 Checking unified geometry+tag diff osm
-15:08:42.303 WARN  ...s/rubber-sheet/RubberSheet.cpp( 430) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
-15:08:42.303 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
-15:08:43.193 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from test-files/Empty.osm...
-15:08:43.195 INFO  ...ore/io/OsmMapReaderFactory.cpp( 183) Loading map from tmp/dum.osm...
+19:01:23.924 WARN  ...s/rubber-sheet/RubberSheet.cpp( 483) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 4 and 0 tie points were found.
+19:01:23.924 WARN  ...s/rubber-sheet/RubberSheet.cpp( 159) No appropriate interpolator was specified, skipping rubber sheet transform.
+19:01:24.811 INFO  ...ore/io/OsmMapReaderFactory.cpp( 174) Loading map from test-files/Empty.osm...
+19:01:24.813 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reporting missing elements...
+19:01:24.813 INFO  .../hoot/core/io/OsmXmlReader.cpp( 349) 	Reported 0 missing elements.
+19:01:24.813 INFO  ...ore/io/OsmMapReaderFactory.cpp( 206) Read 0 elements from input in: 00:00.
+19:01:24.813 INFO  ...ore/io/OsmMapReaderFactory.cpp( 174) Loading map from tmp/DiffConflateCmdTest.osm...
+19:01:24.813 INFO  .../hoot/core/io/OsmXmlReader.cpp( 347) 	Reporting missing elements...
+19:01:24.814 INFO  .../hoot/core/io/OsmXmlReader.cpp( 349) 	Reported 0 missing elements.
+19:01:24.814 INFO  ...ore/io/OsmMapReaderFactory.cpp( 206) Read 0 elements from input in: 00:00.

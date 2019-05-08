@@ -45,6 +45,7 @@
 #include <hoot/core/conflate/network/NetworkMatch.h>
 #include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <fstream>
@@ -161,7 +162,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     }
   }
 
-  LOG_INFO("Found " << matches.size() << " highway match candidates.");
+  LOG_INFO(
+    "Found " << StringUtils::formatLargeNumber(matches.size()) << " highway match candidates.");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

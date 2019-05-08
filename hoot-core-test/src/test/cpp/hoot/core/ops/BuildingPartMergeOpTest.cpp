@@ -58,6 +58,7 @@ class BuildingPartMergeOpTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
   CPPUNIT_TEST(runToyMultithreadTest);
+  CPPUNIT_TEST(runPreserveTypesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -79,13 +80,13 @@ public:
     uut.setThreadCount(1);
     uut.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
-    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
-    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
-
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "runToyTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
     HOOT_FILE_EQUALS(_inputPath + "runToyTestOut.osm", _outputPath + "runToyTestOut.osm");
   }
 
@@ -100,15 +101,42 @@ public:
     uut.setThreadCount(2);
     uut.apply(map);
 
-    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
-    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
-    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
-
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "runToyMultithreadTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
     HOOT_FILE_EQUALS(
       _inputPath + "runToyTestOut.osm", _outputPath + "runToyMultithreadTestOut.osm");
+  }
+
+  void runPreserveTypesTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    const QString inputPath =
+      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+    reader.read(inputPath + "/Input1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + "/Input2.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(1);
+    uut.setPreserveTypes(true);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "runPreserveTypesTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumBuildingGroupsMerged());
+    HOOT_FILE_EQUALS(
+      _inputPath + "runPreserveTypesTestOut.osm", _outputPath + "runPreserveTypesTestOut.osm");
   }
 };
 

@@ -78,7 +78,7 @@ class ImportCommand extends ExternalCommand {
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("hootapi.db.writer.job.id=" + jobId);
+        options.add("job.id=" + jobId);
         options.add("api.db.email=" + user.getEmail());
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {

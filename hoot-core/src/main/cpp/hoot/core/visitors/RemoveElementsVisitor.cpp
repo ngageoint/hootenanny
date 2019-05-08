@@ -161,7 +161,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 
   if (_criteriaSatisfied(ee))
   {
-    LOG_DEBUG("Passed filter: " << e);
+    LOG_TRACE("Removing element: " << e);
     _count++;
     if (_recursive)
     {

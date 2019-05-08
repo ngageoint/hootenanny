@@ -84,9 +84,8 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
   {
-    // TODO: optimize
-    // we don't really need to convert first, we can just loop through the nodes and sum up the
-    // distance.
+    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
+    // and sum up the distance.
     return convertToGeometry(e)->getLength();
   }
   else

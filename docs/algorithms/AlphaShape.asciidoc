@@ -14,7 +14,7 @@ the alpha shape.
 
 [[alphashape]]
 .Simple Alpha Shape
-image::algorithms/AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
+image::AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
 
 By tuning the _alpha_ value the alpha shape can be made to generalize the set of
 points, or tightly fit the points. If a large enough alpha value is specified

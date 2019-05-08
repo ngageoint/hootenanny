@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -50,30 +50,75 @@ void Log::log(WarningLevel level, const string& str)
 }
 
 void Log::log(WarningLevel level, const string& str, const string& filename,
-  const string& /*functionName*/, int lineNumber)
-{
-  if (level >= _level)
+  const string& prettyFunction, int lineNumber)
+{  
+
+  if (level >= _level && notFiltered(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << getLevelString(level) << " " <<
             ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str << endl;
   }
 }
 
 void Log::progress(WarningLevel level, const string& str, const string& filename,
-  const string& /*functionName*/, int lineNumber)
+  const string& prettyFunction, int lineNumber)
 {
-  if (level >= _level)
+  if (level >= _level && notFiltered(prettyFunction))
   {
     QDateTime dt = QDateTime::currentDateTime();
 
     // takes the form: "09:34:21.635 WARN  <filename>(<lineNumber>) <str>"
-    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(5) << left << getLevelString(level) << " " <<
+    cout << dt.toString("hh:mm:ss.zzz") << " " << setw(6) << left << getLevelString(level) << " " <<
             ellipsisStr(filename) << "(" << setw(4) << right << lineNumber << ")" << " " << str <<
             "        \r" << flush;
   }
+}
+
+bool Log::notFiltered(const string& prettyFunction)
+{
+  // TODO: This check does not work at the trace level for some reason, and the class filter is
+  // being reset to empty at some point after initialization. The result is no log filtering
+  // occurs at the trace level and messages for all classes are logged.
+
+  // init here instead of in init() since some logs are being produced before the init() call
+//  if (!_classFilterInitialized)
+//  {
+//    _classFilter = ConfigOptions().getLogClassFilter().split(";");
+//    _classFilter.removeAll(QString(""));
+//    _classFilterInitialized = true;
+//  }
+//  if (_classFilter.isEmpty())
+//  {
+//    return true;
+//  }
+
+  // The unnecessary extra calls to this initialization will have to remain until the above problem
+  // is fixed for trace logging.
+  if (_classFilter.isEmpty())
+  {
+    _classFilter = ConfigOptions().getLogClassFilter().split(";");
+    if (!_classFilter.isEmpty())
+    {
+      _classFilter.removeAll(QString(""));
+    }
+  }
+  if (_classFilter.isEmpty())
+  {
+    return true;
+  }
+
+  // split arguments from function call name
+  QStringList nameParts = QString::fromStdString(prettyFunction).split("(");
+  if (nameParts.length() < 1) return true;
+
+  // split class name from function name
+  nameParts = nameParts[0].split("::");
+  int listLen = nameParts.length();
+
+  return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
 }
 
 void Log::setLevel(WarningLevel l)

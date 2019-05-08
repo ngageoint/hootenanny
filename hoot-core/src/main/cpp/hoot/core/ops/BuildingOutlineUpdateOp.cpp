@@ -223,7 +223,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
         WayPtr way = _map->getWay(entries[i].getElementId().getId());
-        if (way->getNodeCount() >= 4)   // TODO: put this in a config?
+        if (way->getNodeCount() >= 4)
         {
           LOG_TRACE("Unioning building part: " << way << "...");
           _unionOutline(building, way, outline);

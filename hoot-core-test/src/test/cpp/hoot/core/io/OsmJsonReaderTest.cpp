@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -54,6 +54,7 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(urlTest);
   CPPUNIT_TEST(scrubQuoteTest);
   CPPUNIT_TEST(scrubBigIntsTest);
+  CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -334,8 +335,9 @@ public:
   void urlTest()
   {
     OsmMapPtr pMap;
-    QString urlNodes = "http://overpass-api.de/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
-    QString urlWays  = "http://overpass-api.de/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+    QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
+    QString urlWays  = "http://" + overpassHost + "/api/interpreter?data=[out:json];way(35.20,-120.59,35.21,-120.58);out;";
     OsmJsonReader uut;
 
     const uint32_t RETRY_SECS = 30;
@@ -512,10 +514,41 @@ public:
 
     OsmJsonReader::scrubBigInts(bigIntMultiline);
     HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
+
+    // One of the regex's to clean big ints originally had a leading semicolon in it (see related
+    // note in OsmJsonReader::scrubBigInts), which would add double quotes to the text below within
+    // a single json value and break it. Haven't encountered any data instances to be cleaned so far
+    // that would require the semicolon to be in the regex, so removed it. If any instances do exist,
+    // then we need to rethink that regex to correctly parse this.
+    QString bigIntEmbedded =
+      "{\n"
+      " \"fixme\": \"DUPLICATE [Facebook:1477777628952292, Facebook:1477777665618955]\"\n"
+      "}";
+    const QString bigIntEmbeddedCorrect(bigIntEmbedded);
+    OsmJsonReader::scrubBigInts(bigIntEmbedded);
+    HOOT_STR_EQUALS(bigIntEmbeddedCorrect, bigIntEmbedded);
   }
 
-}; // class OsmJsonReaderTest
-} // namespace hoot
+  void isSupportedTest()
+  {
+    OsmJsonReader uut;
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+
+    // The files passed in must actually exist in order for a postive match.
+    CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
+    CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
+    CPPUNIT_ASSERT(!uut.isSupported("blah.json"));
+    // If the url is of the correct scheme and matches the host, we use it.
+    CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
+    CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));
+    // wrong scheme
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
+    // If the url doesn't match with our configured Overpass host, skip it.
+    CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
+    CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
+  }
+};
+}
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");

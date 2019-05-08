@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LOGJS_H
 #define LOGJS_H
@@ -54,6 +54,8 @@ private:
   static void logTrace(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logDebug(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logInfo(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void logStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void status(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logWarn(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logError(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void logFatal(const v8::FunctionCallbackInfo<v8::Value>& args);

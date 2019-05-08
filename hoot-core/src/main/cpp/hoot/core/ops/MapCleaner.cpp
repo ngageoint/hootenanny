@@ -33,7 +33,6 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

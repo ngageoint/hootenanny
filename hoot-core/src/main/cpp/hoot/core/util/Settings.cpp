@@ -499,14 +499,14 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Debug);
       args = args.mid(1);
     }
-    else if (args[0] == "--verbose")
-    {
-      Log::getInstance().setLevel(Log::Verbose);
-      args = args.mid(1);
-    }
     else if (args[0] == "--info")
     {
       Log::getInstance().setLevel(Log::Info);
+      args = args.mid(1);
+    }
+    else if (args[0] == "--status")
+    {
+      Log::getInstance().setLevel(Log::Status);
       args = args.mid(1);
     }
     else if (args[0] == "--warn")
