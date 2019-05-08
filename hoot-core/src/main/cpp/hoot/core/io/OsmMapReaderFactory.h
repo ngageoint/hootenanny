@@ -50,36 +50,36 @@ class OsmMapReaderFactory
 
 public:
 
-  static std::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
-                                                      Status defaultStatus = Status::Invalid);
+  static std::shared_ptr<OsmMapReader> createReader(const QString& url, bool useFileId = true,
+                                                    Status defaultStatus = Status::Invalid);
   //Note the url as the last param here...was getting runtime overlap between these two where
   //bools were being passed as status ints and vice versa.  May need to do some more refactoring
   //here to make things cleaner.
   static std::shared_ptr<OsmMapReader> createReader(bool useFileId, bool useFileStatus,
-                                                      QString url);
+                                                    const QString& url);
 
   /**
    * Returns true if a partial reader is available for the given URL.
    */
-  static bool hasPartialReader(QString url);
+  static bool hasPartialReader(const QString& url);
 
-  static bool hasElementInputStream(QString url);
+  static bool hasElementInputStream(const QString& url);
 
-  static void read(std::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
+  static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
   //see note for createReader
-  static void read(std::shared_ptr<OsmMap> map, bool useFileId, bool useFileStatus, QString url);
+  static void read(const std::shared_ptr<OsmMap>& map, bool useFileId, bool useFileStatus, const QString& url);
 
-  static QString getReaderName(const QString url);
+  static QString getReaderName(const QString& url);
 
-  static bool isSupportedFormat(const QString url);
+  static bool isSupportedFormat(const QString& url);
 
 private:
 
   static void _read(
-    std::shared_ptr<OsmMap> map, std::shared_ptr<OsmMapReader> reader, const QString url);
+    const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url);
 
-  static std::shared_ptr<OsmMapReader> _createReader(const QString url);
+  static std::shared_ptr<OsmMapReader> _createReader(const QString& url);
 };
 
 }

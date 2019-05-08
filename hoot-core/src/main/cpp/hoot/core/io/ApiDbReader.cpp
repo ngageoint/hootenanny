@@ -65,13 +65,13 @@ _numRelationsRead(0)
 {
 }
 
-bool ApiDbReader::isSupported(QString urlStr)
+bool ApiDbReader::isSupported(const QString& urlStr)
 {
   QUrl url(urlStr);
   return _getDatabase()->isSupported(url);
 }
 
-void ApiDbReader::setBoundingBox(const QString bbox)
+void ApiDbReader::setBoundingBox(const QString& bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
@@ -79,7 +79,7 @@ void ApiDbReader::setBoundingBox(const QString bbox)
   }
 }
 
-void ApiDbReader::setOverrideBoundingBox(const QString bbox)
+void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
@@ -541,7 +541,7 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-void ApiDbReader::read(OsmMapPtr map)
+void ApiDbReader::read(const OsmMapPtr& map)
 {
   if (!_hasBounds())
   {

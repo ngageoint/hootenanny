@@ -87,7 +87,7 @@ OsmJsonReader::~OsmJsonReader()
   close();
 }
 
-bool OsmJsonReader::isSupported(QString url)
+bool OsmJsonReader::isSupported(const QString& url)
 {
   QUrl myUrl(url);
 
@@ -113,7 +113,7 @@ bool OsmJsonReader::isSupported(QString url)
 /**
  * Opens the specified URL for reading.
  */
-void OsmJsonReader::open(QString url)
+void OsmJsonReader::open(const QString& url)
 {
   try
   {
@@ -160,7 +160,7 @@ void OsmJsonReader::close()
  * Reads the specified map. When this method is complete
  * the input will likely be closed.
  */
-void OsmJsonReader::read(OsmMapPtr map)
+void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
   if (_isFile)
@@ -180,19 +180,20 @@ void OsmJsonReader::read(OsmMapPtr map)
 }
 
 // Throws HootException on error
-void OsmJsonReader::_loadJSON(QString jsonStr)
+void OsmJsonReader::_loadJSON(const QString& jsonStr)
 {
+  QString json(jsonStr);
   // Clear out anything that might be hanging around
   _propTree.clear();
 
   // Handle single or double quotes
-  scrubQuotes(jsonStr);
+  scrubQuotes(json);
 
   // Handle IDs
-  scrubBigInts(jsonStr);
+  scrubBigInts(json);
 
   // Convert string to stringstream
-  stringstream ss(jsonStr.toUtf8().constData(), ios::in);
+  stringstream ss(json.toUtf8().constData(), ios::in);
 
   if (!ss.good())
   {
@@ -208,7 +209,7 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
 
-    LOG_DEBUG(jsonStr);
+    LOG_DEBUG(json);
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
   catch (const std::exception& e)
@@ -218,7 +219,7 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   }
 }
 
-OsmMapPtr OsmJsonReader::loadFromString(QString jsonStr)
+OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
 {
   _loadJSON(jsonStr);
   _map.reset(new OsmMap());
@@ -234,7 +235,7 @@ OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
   return _map;
 }
 
-OsmMapPtr OsmJsonReader::loadFromFile(QString path)
+OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
 {
   QFile infile(path);
   if (!infile.open(QFile::ReadOnly | QFile::Text))

@@ -51,8 +51,8 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
   return *_theInstance;
 }
 
-std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url,
-                                                                        QString elementPayloadFormat)
+std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(const QString& url,
+                                                                      const QString& elementPayloadFormat)
 {
   LOG_VART(url);
   LOG_VART(elementPayloadFormat);
@@ -83,7 +83,7 @@ std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString ur
   return writer;
 }
 
-bool OsmChangeWriterFactory::isSupported(const QString output)
+bool OsmChangeWriterFactory::isSupported(const QString& output)
 {
   return output.endsWith(".xml") || output.endsWith(".json");
 }

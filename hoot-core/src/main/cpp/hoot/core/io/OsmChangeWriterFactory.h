@@ -41,10 +41,9 @@ class OsmChangeWriterFactory
 {
 public:
 
-  std::shared_ptr<OsmChangeWriter> createWriter(
-    QString url, QString elementPayloadFormat = "json");
+  std::shared_ptr<OsmChangeWriter> createWriter(const QString& url, const QString& elementPayloadFormat = "json");
 
-  bool isSupported(const QString output);
+  bool isSupported(const QString& output);
 
   static OsmChangeWriterFactory& getInstance();
 

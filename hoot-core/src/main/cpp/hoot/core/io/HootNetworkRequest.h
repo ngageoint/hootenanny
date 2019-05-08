@@ -71,7 +71,7 @@ public:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool networkRequest(QUrl url,
+  bool networkRequest(const QUrl& url,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
     const QByteArray& data = QByteArray());
   /**
@@ -82,7 +82,7 @@ public:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool networkRequest(QUrl url,
+  bool networkRequest(const QUrl& url,
     const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
     const QByteArray& data = QByteArray());
@@ -113,7 +113,7 @@ public:
    * @brief setCookies
    * @param cookies sets the cookies for the request
    */
-  void setCookies(std::shared_ptr<HootNetworkCookieJar> cookies) { _cookies = cookies; }
+  void setCookies(const std::shared_ptr<HootNetworkCookieJar>& cookies) { _cookies = cookies; }
   /**
    * @brief setOAuthKeys Enable OAuth authentication
    * @param consumer_key - OAuth consumer key
@@ -133,7 +133,7 @@ private:
    * @param data POST data as a QByteArray
    * @return success
    */
-  bool _networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+  bool _networkRequest(const QUrl& url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                        QNetworkAccessManager::Operation http_op, const QByteArray& data);
   /**
    * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous

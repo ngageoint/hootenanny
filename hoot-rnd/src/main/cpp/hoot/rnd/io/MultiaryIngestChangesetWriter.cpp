@@ -66,7 +66,7 @@ void MultiaryIngestChangesetWriter::setConfiguration(const Settings& conf)
   _elementPayloadFormat = options.getSparkChangesetWriterElementPayloadFormat().toLower();
 }
 
-void MultiaryIngestChangesetWriter::open(QString fileName)
+void MultiaryIngestChangesetWriter::open(const QString& fileName)
 {
   close();
 
@@ -185,7 +185,7 @@ void MultiaryIngestChangesetWriter::writeChange(const Change& change)
   }
 }
 
-void MultiaryIngestChangesetWriter::setElementPayloadFormat(const QString format)
+void MultiaryIngestChangesetWriter::setElementPayloadFormat(const QString& format)
 {
   if (format != "json" && format != "xml")
   {

@@ -56,7 +56,7 @@ public:
   /**
    * The default writes the map and then calls finalizePartial();
    */
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   /**
    * Write all the entries in the OsmMap to the output. This does not guarantee that all data will

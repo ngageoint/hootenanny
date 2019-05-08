@@ -60,12 +60,12 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
-  virtual bool isSupported(QString urlStr);
+  virtual bool isSupported(const QString& urlStr) override;
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
-  void setBoundingBox(const QString bbox);
-  void setOverrideBoundingBox(const QString bbox);
+  void setBoundingBox(const QString& bbox);
+  void setOverrideBoundingBox(const QString& bbox);
   void setReturnNodesOnly(const bool returnNodesOnly)
   { _returnNodesOnly = returnNodesOnly; }
 
@@ -73,46 +73,46 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) { _status = status; }
+  virtual void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
   void setUserEmail(const QString& email) { _email = email; }
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void initializePartial();
+  virtual void initializePartial() override;
 
   /**
    * The read command called after open.
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
   void close();
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual bool hasMoreElements();
+  virtual bool hasMoreElements() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<Element> readNextElement();
+  virtual std::shared_ptr<Element> readNextElement() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
 protected:
 

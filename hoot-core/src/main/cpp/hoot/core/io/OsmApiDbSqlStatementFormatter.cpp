@@ -40,14 +40,14 @@ using namespace std;
 namespace hoot
 {
 
-OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delimiter)
+OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString& delimiter)
 {
   _initOutputFormatStrings(delimiter);
   //let's just do this once at the beginning, since it could be expensive
   _dateString = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 }
 
-void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
+void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& delimiter)
 {
   QString formatString = OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getChangesetsTableName()] =
@@ -113,7 +113,7 @@ void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delim
     formatString.replace("\t", delimiter);
 }
 
-QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString stringToOutput)
+QString OsmApiDbSqlStatementFormatter::escapeCopyToData(const QString& stringToOutput)
 {
   QString escapedString = stringToOutput;
   // Escape any special characters as required by
@@ -272,8 +272,8 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
 
 QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
                                                            const ElementType& elementType,
-                                                           const QString tagKey,
-                                                           const QString tagValue)
+                                                           const QString& tagKey,
+                                                           const QString& tagValue)
 {
   QStringList sqlStrs;
 

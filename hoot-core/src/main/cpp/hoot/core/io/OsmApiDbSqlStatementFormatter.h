@@ -71,7 +71,7 @@ class OsmApiDbSqlStatementFormatter
 
 public:
 
-  OsmApiDbSqlStatementFormatter(const QString delimiter);
+  OsmApiDbSqlStatementFormatter(const QString& delimiter);
 
   QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
                                const bool validate = false);
@@ -83,14 +83,14 @@ public:
                                          const RelationData::Entry& member,
                                          const unsigned int memberSequenceIndex);
   QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
-                              const QString tagKey, const QString tagValue);
+                              const QString& tagKey, const QString& tagValue);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
                                const long numChangesInChangeset,
                                const geos::geom::Envelope& changesetBounds);
   QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
 
-  static QString escapeCopyToData(const QString stringToOutput);
+  static QString escapeCopyToData(const QString& stringToOutput);
 
   inline unsigned int _convertDegreesToNanodegrees(const double degrees)
   {
@@ -207,7 +207,7 @@ private:
   QMap<QString, QString> _outputFormatStrings;
   QString _dateString;
 
-  void _initOutputFormatStrings(const QString delimiter);
+  void _initOutputFormatStrings(const QString& delimiter);
 };
 
 }

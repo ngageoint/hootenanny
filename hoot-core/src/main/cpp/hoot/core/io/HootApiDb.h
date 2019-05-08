@@ -100,7 +100,7 @@ public:
   /**
    * Returns true if any map with the specified name exists in the services database
    */
-  bool mapExists(const QString name);
+  bool mapExists(const QString& name);
 
   /**
    * Returns true if the changeset with the specified ID exists in the services database
@@ -370,7 +370,7 @@ public:
    * @param name name of the map to retrieve
    * @return a map ID
    */
-  long getMapIdByName(const QString name);
+  long getMapIdByName(const QString& name);
 
   /**
    * Removes the layer name from a Hooteanny API database URL
@@ -378,7 +378,7 @@ public:
    * @param url input URL
    * @return a URL with the layer name removed
    */
-  static QString removeLayerName(const QString url);
+  static QString removeLayerName(const QString& url);
 
   void setCreateIndexesOnClose(bool create) { _createIndexesOnClose = create; }
   void setFlushOnClose(bool flush) { _flushOnClose = flush; }
@@ -391,8 +391,8 @@ public:
    * @param accessTokenSecret private OAuth access token for the user
    * @return an HTTP session ID or an empty string if no session ID was found for the given input
    */
-  QString getSessionIdByAccessTokens(const QString userName, const QString accessToken,
-                                     const QString accessTokenSecret);
+  QString getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
+                                     const QString& accessTokenSecret);
 
   /**
    * Determines whether a set of access tokens are valid for a user
@@ -403,8 +403,8 @@ public:
    * @return true if the access tokens passed in are associated with the specified user; false
    * otherwise
    */
-  bool accessTokensAreValid(const QString userName, const QString accessToken,
-                            const QString accessTokenSecret);
+  bool accessTokensAreValid(const QString& userName, const QString& accessToken,
+                            const QString& accessTokenSecret);
 
   /**
    * Returns the HTTP session ID associated with a user
@@ -436,7 +436,7 @@ public:
    * @param userId user ID
    * @param sessionId HTTP session ID
    */
-  void insertUserSession(const long userId, const QString sessionId);
+  void insertUserSession(const long userId, const QString& sessionId);
 
   /**
    * Updates the OAuth access tokens for a user
@@ -445,8 +445,8 @@ public:
    * @param accessToken OAuth public access token
    * @param accessTokenSecret OAuth private access token
    */
-  void updateUserAccessTokens(const long userId, const QString accessToken,
-                              const QString accessTokenSecret);
+  void updateUserAccessTokens(const long userId, const QString& accessToken,
+                              const QString& accessTokenSecret);
 
   /**
    * Determines whether a user has permission to access a map
@@ -471,7 +471,7 @@ public:
    * @param isPublic folder visibility
    * @returns ID of the created folder
    */
-  long insertFolder(const QString displayName, const long parentId, const long userId,
+  long insertFolder(const QString& displayName, const long parentId, const long userId,
                     const bool isPublic);
 
   /**
@@ -516,7 +516,7 @@ public:
    * @param mapName map name
    * @return true if the current user owns a map with the input name; false othersie
    */
-  bool currentUserHasMapWithName(const QString mapName);
+  bool currentUserHasMapWithName(const QString& mapName);
 
   /**
    * Returns the ID of a map with given name if owned by the currently configured user
@@ -524,7 +524,7 @@ public:
    * @param name map name
    * @return ID of the map; -1 if the map is not found
    */
-  long getMapIdByNameForCurrentUser(const QString name);
+  long getMapIdByNameForCurrentUser(const QString& name);
 
   /**
    * Writes an associated resource ID for a job
@@ -532,7 +532,7 @@ public:
    * @param jobId the job's ID
    * @param resourceId the resource ID
    */
-  void updateJobStatusResourceId(const QString jobId, const long resourceId);
+  void updateJobStatusResourceId(const QString& jobId, const long resourceId);
 
   /**
    * Inserts a job record
@@ -540,7 +540,7 @@ public:
    * @param statusDetail optional status detail text
    * @return the ID of the inserted job
    */
-  QString insertJob(const QString statusDetail = "");
+  QString insertJob(const QString& statusDetail = "");
 
   /**
    * Retrieves the resource ID associated with a job
@@ -548,7 +548,7 @@ public:
    * @param jobId the job's ID
    * @return a resource ID
    */
-  long getJobStatusResourceId(const QString jobId);
+  long getJobStatusResourceId(const QString& jobId);
 
   /**
    * @brief updateImportSequences Updates the node/way/relation ID sequences to ensure that
@@ -687,7 +687,7 @@ private:
    * @param from Copy structure from this table.
    * @param to Copy structure to this table.
    */
-  void _copyTableStructure(QString from, QString to);
+  void _copyTableStructure(const QString& from, const QString& to);
 
   void _flushBulkInserts();
   void _flushBulkDeletes();
@@ -715,7 +715,7 @@ private:
   // test code, if needed.
   void _deleteFolderMapMappingsByMapId(const long mapId);
   void _deleteAllFolders(const std::set<long>& folderIds);
-  void _deleteJob(const QString id);
+  void _deleteJob(const QString& id);
 };
 
 }

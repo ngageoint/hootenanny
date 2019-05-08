@@ -44,7 +44,7 @@ OsmApiDbAwareHootApiDbReader::~OsmApiDbAwareHootApiDbReader()
   _osmApiDb.close();
 }
 
-void OsmApiDbAwareHootApiDbReader::open(QString urlStr)
+void OsmApiDbAwareHootApiDbReader::open(const QString& urlStr)
 {
   if (urlStr.startsWith("osmapidb"))
   {

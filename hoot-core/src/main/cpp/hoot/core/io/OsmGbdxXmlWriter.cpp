@@ -113,7 +113,7 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-void OsmGbdxXmlWriter::open(QString url)
+void OsmGbdxXmlWriter::open(const QString& url)
 {
 //  if (url.toLower().endsWith(".gxml"))
 //  {
@@ -233,13 +233,13 @@ QString OsmGbdxXmlWriter::_typeName(ElementType e)
   }
 }
 
-void OsmGbdxXmlWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmGbdxXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmGbdxXmlWriter::write(ConstOsmMapPtr map)
+void OsmGbdxXmlWriter::write(const ConstOsmMapPtr& map)
 {
   _writeNodes(map);
   _writeWays(map);

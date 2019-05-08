@@ -45,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-bool OsmMapReaderFactory::hasElementInputStream(QString url)
+bool OsmMapReaderFactory::hasElementInputStream(const QString& url)
 {
   bool result = false;
   std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
@@ -59,7 +59,7 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
   return result;
 }
 
-bool OsmMapReaderFactory::hasPartialReader(QString url)
+bool OsmMapReaderFactory::hasPartialReader(const QString& url)
 {
   bool result = false;
   std::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
@@ -73,7 +73,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
   return result;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString url)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& url)
 {
   QString readerOverride = ConfigOptions().getOsmMapReaderFactoryReader();
 
@@ -116,9 +116,9 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString u
   return reader;
 }
 
-std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
-                                                                  bool useDataSourceIds,
-                                                                  Status defaultStatus)
+std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& url,
+                                                                bool useDataSourceIds,
+                                                                Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -131,7 +131,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
 }
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds,
-                                                                  bool useFileStatus, QString url)
+                                                                bool useFileStatus, const QString& url)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -143,7 +143,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSour
   return reader;
 }
 
-QString OsmMapReaderFactory::getReaderName(const QString url)
+QString OsmMapReaderFactory::getReaderName(const QString& url)
 {
   LOG_VARD(url);
   vector<std::string> names =
@@ -163,12 +163,12 @@ QString OsmMapReaderFactory::getReaderName(const QString url)
   return "";
 }
 
-bool OsmMapReaderFactory::isSupportedFormat(const QString url)
+bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
 {
   return !getReaderName(url).trimmed().isEmpty();
 }
 
-void OsmMapReaderFactory::read(OsmMapPtr map, QString url, bool useDataSourceIds,
+void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds,
                                Status defaultStatus)
 {
   LOG_INFO("Loading map from " << url.right(50) << "...");
@@ -176,16 +176,16 @@ void OsmMapReaderFactory::read(OsmMapPtr map, QString url, bool useDataSourceIds
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::read(OsmMapPtr map, bool useDataSourceIds,
-                               bool useFileStatus, QString url)
+void OsmMapReaderFactory::read(const OsmMapPtr& map, bool useDataSourceIds,
+                               bool useFileStatus, const QString& url)
 {
   LOG_INFO("Loading map from " << url.right(50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, useFileStatus);
   _read(map, reader, url);
 }
 
-void OsmMapReaderFactory::_read(OsmMapPtr map,
-                                std::shared_ptr<OsmMapReader> reader, const QString url)
+void OsmMapReaderFactory::_read(const OsmMapPtr& map,
+                                const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
   if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())

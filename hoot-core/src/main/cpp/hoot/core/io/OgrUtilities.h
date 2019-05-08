@@ -94,7 +94,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return pointer to the datasource opened
    */
-  std::shared_ptr<GDALDataset> openDataSource(const QString url, bool readonly);
+  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
 
   /**
    * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource

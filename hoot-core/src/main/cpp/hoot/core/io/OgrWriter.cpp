@@ -114,7 +114,7 @@ OgrWriter::~OgrWriter()
 
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, std::shared_ptr<Feature> f, std::shared_ptr<Geometry> g)
+void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -195,7 +195,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, std::shared_ptr<Feature> f, std::sh
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, std::shared_ptr<Feature> f, const Geometry* g,
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const Geometry* g,
                                    OGRFeature* poFeature)
 {
   std::string wkt = g->toString();
@@ -233,7 +233,7 @@ void OgrWriter::close()
   _ds.reset();
 }
 
-void OgrWriter::_createLayer(std::shared_ptr<const Layer> layer)
+void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
 {
   OGRLayer *poLayer;
 
@@ -384,7 +384,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   return _layers[layerName];
 }
 
-bool OgrWriter::isSupported(QString url)
+bool OgrWriter::isSupported(const QString& url)
 {
   if (_scriptPath.isEmpty())
   {
@@ -430,7 +430,7 @@ void OgrWriter::createAllLayers()
   }
 }
 
-void OgrWriter::openOutput(QString url)
+void OgrWriter::openOutput(const QString& url)
 {
   try
   {
@@ -450,7 +450,7 @@ void OgrWriter::openOutput(QString url)
   }
 }
 
-void OgrWriter::open(QString url)
+void OgrWriter::open(const QString& url)
 {
   // Initialize our translator - this will load the schema
   initTranslator();
@@ -489,7 +489,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
   }
 }
 
-std::shared_ptr<Geometry> OgrWriter::_toMulti(std::shared_ptr<Geometry> from)
+std::shared_ptr<Geometry> OgrWriter::_toMulti(const std::shared_ptr<Geometry>& from)
 {
   std::shared_ptr<Geometry> result;
 
@@ -528,7 +528,7 @@ std::shared_ptr<Geometry> OgrWriter::_toMulti(std::shared_ptr<Geometry> from)
   return result;
 }
 
-void OgrWriter::strictError(QString warning)
+void OgrWriter::strictError(const QString& warning)
 {
   if (_strictChecking == StrictOn)
   {
@@ -540,7 +540,7 @@ void OgrWriter::strictError(QString warning)
   }
 }
 
-void OgrWriter::write(ConstOsmMapPtr map)
+void OgrWriter::write(const ConstOsmMapPtr& map)
 {
   ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(
     std::dynamic_pointer_cast<const ElementProvider>(map)));
@@ -628,8 +628,8 @@ void OgrWriter::write(ConstOsmMapPtr map)
   }
 }
 
-void OgrWriter::writeTranslatedFeature(std::shared_ptr<Geometry> g,
-                                       vector<ScriptToOgrTranslator::TranslatedFeature> tf)
+void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
+                                       const vector<ScriptToOgrTranslator::TranslatedFeature>& tf)
 {
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)

@@ -58,12 +58,12 @@ public:
   /**
    * @see OsmChangeWriter
    */
-  virtual bool isSupported(QString url) override { return url.endsWith(".spark.1"); }
+  virtual bool isSupported(const QString& url) override { return url.endsWith(".spark.1"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(QString fileName) override;
+  virtual void open(const QString& fileName) override;
 
   void close();
 
@@ -74,7 +74,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setElementPayloadFormat(const QString format) override;
+  virtual void setElementPayloadFormat(const QString& format) override;
 
 private:
 

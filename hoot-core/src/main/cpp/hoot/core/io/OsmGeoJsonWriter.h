@@ -55,20 +55,20 @@ public:
    * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
    * @param map
    */
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   /**
    * @brief isSupported returns true if the URL is likely supported
    * @param url Filename ending in ".geojson"
    * @return
    */
-  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".geojson"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".geojson"); }
 
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
    * @param conf Configuration settings object
    */
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   virtual QString supportedFormats() override { return ".geojson"; }
 

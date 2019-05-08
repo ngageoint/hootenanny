@@ -36,13 +36,13 @@ PartialOsmMapReader::PartialOsmMapReader()
   _elementsRead = 0;
 }
 
-void PartialOsmMapReader::read(OsmMapPtr map)
+void PartialOsmMapReader::read(const OsmMapPtr& map)
 {
   readPartial(map);
   finalizePartial();
 }
 
-void PartialOsmMapReader::readPartial(OsmMapPtr map)
+void PartialOsmMapReader::readPartial(const OsmMapPtr& map)
 {
   _partialMap = map;
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))

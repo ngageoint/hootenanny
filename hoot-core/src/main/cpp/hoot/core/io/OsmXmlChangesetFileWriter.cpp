@@ -69,7 +69,7 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(QString path, ChangesetProviderPtr cs)
+void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& cs)
 {  
   LOG_VARD(path);
   LOG_VARD(cs->hasMoreChanges());

@@ -41,7 +41,7 @@ using namespace std;
 namespace hoot
 {
 
-OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(QUrl url) :
+OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
@@ -55,7 +55,7 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString path,
+void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
                                            ChangesetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
@@ -590,7 +590,7 @@ void OsmApiDbSqlChangesetFileWriter::_deleteCurrentTags(const ElementId& eid)
   }
 }
 
-void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString tableName, const QString idFieldName,
+void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString& tableName, const QString& idFieldName,
                                            const long id)
 {
   LOG_TRACE("Deleting all from: " << tableName << "...");

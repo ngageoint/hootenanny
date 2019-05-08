@@ -69,7 +69,7 @@ OsmGeoJsonReader::~OsmGeoJsonReader()
 {
 }
 
-bool OsmGeoJsonReader::isSupported(QString url)
+bool OsmGeoJsonReader::isSupported(const QString& url)
 {
   QUrl myUrl(url);
 
@@ -99,7 +99,7 @@ bool OsmGeoJsonReader::isSupported(QString url)
  * Reads the specified map. When this method is complete
  * the input will likely be closed.
  */
-void OsmGeoJsonReader::read(OsmMapPtr map)
+void OsmGeoJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
   if (_isFile)
@@ -118,7 +118,7 @@ void OsmGeoJsonReader::read(OsmMapPtr map)
   }
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
+OsmMapPtr OsmGeoJsonReader::loadFromString(const QString& jsonStr)
 {
   _loadJSON(jsonStr);
   _map.reset(new OsmMap());
@@ -126,7 +126,7 @@ OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
   return _map;
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
+OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
 {
   QFile infile(path);
   if (!infile.open(QFile::ReadOnly | QFile::Text))
@@ -694,7 +694,7 @@ vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& g
 }
 
 
-void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
+void OsmGeoJsonReader::_addTags(const pt::ptree &item, const ElementPtr& element)
 {
   //  Starts with the "properties" tree, use the "tags" subtree if it exists
   //  otherwise just use the "properties" tree as tags

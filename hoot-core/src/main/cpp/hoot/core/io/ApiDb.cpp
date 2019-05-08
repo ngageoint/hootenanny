@@ -227,7 +227,7 @@ void ApiDb::rollback()
   _inTransaction = false;
 }
 
-long ApiDb::getUserIdByName(const QString userName)
+long ApiDb::getUserIdByName(const QString& userName)
 {
   LOG_VART(userName);
   if (_getUserIdByName == 0)
@@ -301,7 +301,7 @@ QString ApiDb::getUserNameById(const long userId)
   return userName;
 }
 
-bool ApiDb::userExists(const QString userName)
+bool ApiDb::userExists(const QString& userName)
 {
   return userExists(getUserIdByName(userName));
 }
@@ -343,7 +343,7 @@ bool ApiDb::userExists(const long id)
   return true;
 }
 
-long ApiDb::getUserId(const QString email, bool throwWhenMissing)
+long ApiDb::getUserId(const QString& email, bool throwWhenMissing)
 {
   if (_selectUserByEmail == 0)
   {
@@ -381,7 +381,7 @@ long ApiDb::getUserId(const QString email, bool throwWhenMissing)
   return result;
 }
 
-long ApiDb::insertUser(const QString email, const QString displayName)
+long ApiDb::insertUser(const QString& email, const QString& displayName)
 {
   LOG_TRACE("Inserting user with email: " << email << " and displayName: " << displayName);
 
@@ -440,7 +440,7 @@ long ApiDb::insertUser(const QString email, const QString displayName)
   return id;
 }
 
-vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
+vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString& sql)
 {
   vector<long> result;
 
@@ -474,7 +474,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
   return result;
 }
 
-std::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
+std::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString& sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -539,7 +539,7 @@ void ApiDb::_unescapeString(QString& s)
   s.replace("\\134", "\\");
 }
 
-QSqlQuery ApiDb::_exec(const QString sql, QVariant v1, QVariant v2, QVariant v3) const
+QSqlQuery ApiDb::_exec(const QString& sql, QVariant v1, QVariant v2, QVariant v3) const
 {
   QSqlQuery q(_db);
 
@@ -817,7 +817,7 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
   return sql;
 }
 
-std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString& timeStr)
 {
   LOG_VARD(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
@@ -844,7 +844,7 @@ std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString ti
   return _selectChangesetsCreatedAfterTime;
 }
 
-QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
+QMap<QString, QString> ApiDb::getDbUrlParts(const QString& url)
 {
   QMap<QString, QString> dbUrlParts;
 
@@ -859,7 +859,7 @@ QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
   return dbUrlParts;
 }
 
-QString ApiDb::getPsqlString(const QString url)
+QString ApiDb::getPsqlString(const QString& url)
 {
   const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
   return
@@ -867,7 +867,7 @@ QString ApiDb::getPsqlString(const QString url)
     " -U " + dbUrlParts["user"] + " -d " + dbUrlParts["database"];
 }
 
-void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
+void ApiDb::execSqlFile(const QString& dbUrl, const QString& sqlFile)
 {
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
   QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql -v ON_ERROR_STOP=1";
@@ -891,7 +891,7 @@ void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
   }
 }
 
-QString ApiDb::getPqString(const QString url)
+QString ApiDb::getPqString(const QString& url)
 {
   const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
   QString hostAddr = dbUrlParts["host"];
@@ -919,7 +919,7 @@ Settings ApiDb::readDbConfig()
   return result;
 }
 
-void ApiDb::readDbConfig(Settings& settings, QString config_path)
+void ApiDb::readDbConfig(Settings& settings, const QString& config_path)
 {
   QFile fp(config_path);
   if (fp.open(QIODevice::ReadOnly) == false)

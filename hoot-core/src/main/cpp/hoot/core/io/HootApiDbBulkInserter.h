@@ -61,8 +61,8 @@ public:
   HootApiDbBulkInserter();
   virtual ~HootApiDbBulkInserter();
 
-  virtual bool isSupported(QString url) override;
-  virtual void open(QString url) override;
+  virtual bool isSupported(const QString& url) override;
+  virtual void open(const QString& url) override;
 
   virtual void finalizePartial();
   virtual void writePartial(const ConstNodePtr& node) override;
@@ -74,7 +74,7 @@ public:
   long getMapId() const { return _database.getMapId(); }
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
-  void setUserEmail(QString email) { _userEmail = email; }
+  void setUserEmail(const QString& email) { _userEmail = email; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 

@@ -124,7 +124,7 @@ QStringList ShapefileWriter::getColumns(ConstOsmMapPtr map, ElementType type) co
   }
 }
 
-void ShapefileWriter::open(QString url)
+void ShapefileWriter::open(const QString& url)
 {
   if (QDir(url).exists() == false)
   {
@@ -136,7 +136,7 @@ void ShapefileWriter::open(QString url)
   }
 }
 
-void ShapefileWriter::_removeShapefile(QString path)
+void ShapefileWriter::_removeShapefile(const QString& path)
 {
   QFileInfo fi(path);
 
@@ -152,25 +152,26 @@ void ShapefileWriter::_removeShapefile(QString path)
   QFile::remove(base + ".PRJ");
 }
 
-void ShapefileWriter::write(ConstOsmMapPtr map, QString path)
+void ShapefileWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
-  if (path.toLower().endsWith(".shp"))
+  QString tempPath = path;
+  if (tempPath.toLower().endsWith(".shp"))
   {
-    path.remove(path.size() - 4, path.size());
+    tempPath.remove(tempPath.size() - 4, tempPath.size());
   }
-  writeLines(map, path + "Lines.shp");
-  writePoints(map, path + "Points.shp");
-  writePolygons(map, path + "Polygons.shp");
+  writeLines(map, tempPath + "Lines.shp");
+  writePoints(map, tempPath + "Points.shp");
+  writePolygons(map, tempPath + "Polygons.shp");
 }
 
-void ShapefileWriter::write(ConstOsmMapPtr map)
+void ShapefileWriter::write(const ConstOsmMapPtr& map)
 {
   writeLines(map, _outputDir.absoluteFilePath("Lines.shp"));
   writePoints(map, _outputDir.absoluteFilePath("Points.shp"));
   writePolygons(map, _outputDir.absoluteFilePath("Polygons.shp"));
 }
 
-void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
+void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 {
   GDALAllRegister();
 
@@ -281,7 +282,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
   GDALClose(poDS);
 }
 
-void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
+void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path)
 {
   GDALAllRegister();
 
@@ -385,7 +386,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
   GDALClose(poDS);
 }
 
-void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
+void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& path)
 {
   GDALAllRegister();
 

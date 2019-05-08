@@ -48,16 +48,17 @@ using namespace geos::geom;
 namespace hoot
 {
 
-void GmlWriter::write(std::shared_ptr<const OsmMap> map, QString path)
+void GmlWriter::write(const std::shared_ptr<const OsmMap>& map, const QString& path)
 {
-  if (path.toLower().endsWith(".gml"))
+  QString tempPath(path);
+  if (tempPath.toLower().endsWith(".gml"))
   {
-    path.remove(path.size() - 4, path.size());
+    tempPath.remove(tempPath.size() - 4, tempPath.size());
   }
-  writePoints(map, path + "Points.shp");
+  writePoints(map, tempPath + "Points.shp");
 }
 
-void GmlWriter::writePoints(std::shared_ptr<const OsmMap> map, const QString& path)
+void GmlWriter::writePoints(const std::shared_ptr<const OsmMap>& map, const QString& path)
 {
   GDALAllRegister();
   OGRSetNonLinearGeometriesEnabledFlag(FALSE);

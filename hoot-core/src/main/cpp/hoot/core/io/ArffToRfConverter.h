@@ -47,7 +47,7 @@ public:
    * @param input a .arff file
    * @param output a .rf file
    */
-  static void convert(const QString input, const QString output);
+  static void convert(const QString& input, const QString& output);
 };
 
 }

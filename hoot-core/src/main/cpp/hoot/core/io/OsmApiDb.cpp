@@ -490,7 +490,7 @@ std::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(std::shared_ptr<QSqlQuery> row, const ElementType::Type type)
+QString OsmApiDb::extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type type)
 {
   QString tag = "";
   int pos = -1;
@@ -512,12 +512,12 @@ long OsmApiDb::getNextId(const ElementType& elementType)
   return _getIdFromSequence(elementType, "next");
 }
 
-long OsmApiDb::getNextId(const QString tableName)
+long OsmApiDb::getNextId(const QString& tableName)
 {
   return _getIdFromSequence(tableName, "next");
 }
 
-long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString sequenceType)
+long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString& sequenceType)
 {
   LOG_TRACE(
     "Retrieving " << sequenceType << " " << elementType.toString() << " ID from sequence...");
@@ -532,7 +532,7 @@ long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString 
   }
 }
 
-long OsmApiDb::_getIdFromSequence(const QString tableName, const QString sequenceType)
+long OsmApiDb::_getIdFromSequence(const QString& tableName, const QString& sequenceType)
 {
   long result;
   if (_seqQueries[tableName].get() == 0)
@@ -630,7 +630,7 @@ void OsmApiDb::enableConstraints()
   _modifyConstraints(_getTables(), false);
 }
 
-void OsmApiDb::_modifyConstraints(const QStringList tableNames, const bool disable)
+void OsmApiDb::_modifyConstraints(const QStringList& tableNames, bool disable)
 {
   for (int i = 0; i < tableNames.size(); i++)
   {

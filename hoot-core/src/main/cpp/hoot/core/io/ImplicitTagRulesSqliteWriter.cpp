@@ -51,12 +51,12 @@ ImplicitTagRulesSqliteWriter::~ImplicitTagRulesSqliteWriter()
   close();
 }
 
-bool ImplicitTagRulesSqliteWriter::isSupported(const QString outputUrl)
+bool ImplicitTagRulesSqliteWriter::isSupported(const QString& outputUrl)
 {
   return outputUrl.endsWith(".sqlite", Qt::CaseInsensitive);
 }
 
-void ImplicitTagRulesSqliteWriter::open(const QString outputUrl)
+void ImplicitTagRulesSqliteWriter::open(const QString& outputUrl)
 {
   QFile outputFile(outputUrl);
   if (outputFile.exists() && !outputFile.remove())
@@ -97,7 +97,7 @@ void ImplicitTagRulesSqliteWriter::close()
   }
 }
 
-void ImplicitTagRulesSqliteWriter::write(const QString inputUrl)
+void ImplicitTagRulesSqliteWriter::write(const QString& inputUrl)
 {
   LOG_INFO("Writing implicit tag rules to: " << _db.databaseName() << "...");
 
@@ -251,7 +251,7 @@ void ImplicitTagRulesSqliteWriter::_prepareQueries()
   }
 }
 
-long ImplicitTagRulesSqliteWriter::_insertTag(const QString kvp)
+long ImplicitTagRulesSqliteWriter::_insertTag(const QString& kvp)
 {
   LOG_TRACE("Inserting tag: " << kvp << "...");
 
@@ -307,7 +307,7 @@ void ImplicitTagRulesSqliteWriter::_insertRule(const long wordId, const long tag
   }
 }
 
-long ImplicitTagRulesSqliteWriter::_insertWord(const QString word)
+long ImplicitTagRulesSqliteWriter::_insertWord(const QString& word)
 {
   LOG_TRACE("Inserting word: " << word << "...");
 

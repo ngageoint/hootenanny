@@ -55,21 +55,21 @@ public:
    * @param outputUrl output database location
    * @return true if the output location is supported; false otherwise
    */
-  bool isSupported(const QString outputUrl);
+  bool isSupported(const QString& outputUrl);
 
   /**
    * Opens the output rules database
    *
    * @param outputUrl output rules database
    */
-  void open(const QString outputUrl);
+  void open(const QString& outputUrl);
 
   /**
    * Writes rules from the input file to the output database
    *
    * @param inputUrl raw implicit tag rules input file
    */
-  void write(const QString inputUrl);
+  void write(const QString& inputUrl);
 
   /**
    * Close the writer
@@ -99,8 +99,8 @@ private:
   void _createTables();
   void _prepareQueries();
 
-  long _insertWord(const QString word);
-  long _insertTag(const QString kvp);
+  long _insertWord(const QString& word);
+  long _insertTag(const QString& kvp);
   void _insertRule(const long wordId, const long tagId, const long tagOccurrenceCount);
   void _createIndexes();
 };

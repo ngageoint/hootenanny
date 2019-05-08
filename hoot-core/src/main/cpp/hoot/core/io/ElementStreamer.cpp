@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-bool ElementStreamer::isStreamableIo(const QString input, const QString output)
+bool ElementStreamer::isStreamableIo(const QString& input, const QString& output)
 {
   QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
   if (writerName.trimmed().isEmpty())
@@ -73,7 +73,7 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
     !ConfigUtils::boundsOptionEnabled();
 }
 
-bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString output)
+bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& output)
 {
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -88,7 +88,7 @@ bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString ou
   return true;
 }
 
-bool ElementStreamer::areValidStreamingOps(const QStringList ops)
+bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 {
   // add visitor/criterion operations if any of the convert ops are visitors.
   foreach (QString opName, ops)
@@ -146,7 +146,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
 }
 
 ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
-  std::shared_ptr<OsmMapReader> reader, const QStringList ops)
+  std::shared_ptr<OsmMapReader> reader, const QStringList& ops)
 {
   ElementInputStreamPtr filteredInputStream =
     std::dynamic_pointer_cast<ElementInputStream>(reader);
@@ -210,13 +210,13 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
   return filteredInputStream;
 }
 
-void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps)
+void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps)
 {
   stream(QStringList(input), out, convertOps);
 }
 
-void ElementStreamer::stream(const QStringList inputs, const QString out,
-                             const QStringList convertOps)
+void ElementStreamer::stream(const QStringList& inputs, const QString& out,
+                             const QStringList& convertOps)
 {
   QElapsedTimer timer;
   timer.start();

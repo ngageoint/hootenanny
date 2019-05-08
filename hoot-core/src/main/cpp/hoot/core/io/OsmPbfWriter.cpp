@@ -222,7 +222,7 @@ void OsmPbfWriter::initializePartial()
   _initBlob();
 }
 
-void OsmPbfWriter::_open(QString url)
+void OsmPbfWriter::_open(const QString& url)
 {
   LOG_TRACE("Opening url: " << url);
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
@@ -234,7 +234,7 @@ void OsmPbfWriter::_open(QString url)
   _needToCloseInput = true;
 }
 
-void OsmPbfWriter::open(QString url)
+void OsmPbfWriter::open(const QString& url)
 {
   _open(url);
   initializePartial();
@@ -278,13 +278,13 @@ int OsmPbfWriter::_toRelationMemberType(ElementType t)
   }
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map)
 {
   write(map, _openStream.get());
   _openStream.reset();
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map, ostream* strm)
 {
   LOG_DEBUG("Writing stream...");
 
@@ -305,7 +305,7 @@ void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
   _writePrimitiveBlock();
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   fstream output(path.toUtf8().constData(), ios::out | ios::binary);
 
@@ -374,7 +374,7 @@ void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void OsmPbfWriter::_writeBlob(const char* buffer, int size, string type)
+void OsmPbfWriter::_writeBlob(const char* buffer, int size, const string& type)
 {
   LOG_DEBUG("Writing blob...");
 

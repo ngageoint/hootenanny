@@ -49,17 +49,17 @@ public:
    * check. It will look to see if the URL is properly formatted (e.g. ends in .osm, or starts
    * with postgresql:, etc.)
    */
-  virtual bool isSupported(QString url) = 0;
+  virtual bool isSupported(const QString& url) = 0;
 
   /**
    * Opens the specified URL for reading.
    */
-  virtual void open(QString url) = 0;
+  virtual void open(const QString& url) = 0;
 
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
    */
-  virtual void read(OsmMapPtr map) = 0;
+  virtual void read(const OsmMapPtr& map) = 0;
 
   /**
    * Determines the reader's default element status

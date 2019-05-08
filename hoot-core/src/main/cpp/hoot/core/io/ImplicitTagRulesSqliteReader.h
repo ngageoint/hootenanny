@@ -55,7 +55,7 @@ public:
    *
    * @param url location of the database to open
    */
-  void open(const QString url);
+  void open(const QString& url);
 
   /**
    * Closes a Sqlite implicit tag rules database

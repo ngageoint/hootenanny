@@ -226,7 +226,7 @@ void HootApiDb::commit()
   }
 }
 
-void HootApiDb::_copyTableStructure(QString from, QString to)
+void HootApiDb::_copyTableStructure(const QString& from, const QString& to)
 {
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
@@ -1485,7 +1485,7 @@ void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
   _deleteFolders->finish();
 }
 
-long HootApiDb::insertFolder(const QString displayName, const long parentId, const long userId,
+long HootApiDb::insertFolder(const QString& displayName, const long parentId, const long userId,
                              const bool isPublic)
 {
   if (_insertFolder == 0)
@@ -1556,7 +1556,7 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
   }
 }
 
-bool HootApiDb::currentUserHasMapWithName(const QString mapName)
+bool HootApiDb::currentUserHasMapWithName(const QString& mapName)
 {
   LOG_VART(_currUserId);
 
@@ -1594,7 +1594,7 @@ bool HootApiDb::mapExists(const long id)
   return _mapExistsById->next();
 }
 
-bool HootApiDb::mapExists(const QString name)
+bool HootApiDb::mapExists(const QString& name)
 {
   if (_mapExistsByName == 0)
   {
@@ -1611,7 +1611,7 @@ bool HootApiDb::mapExists(const QString name)
   return _mapExistsByName->next();
 }
 
-long HootApiDb::getMapIdByName(const QString name)
+long HootApiDb::getMapIdByName(const QString& name)
 {
   //assuming unique name here
   if (_getMapIdByName == 0)
@@ -1640,7 +1640,7 @@ long HootApiDb::getMapIdByName(const QString name)
   return result;
 }
 
-long HootApiDb::getMapIdByNameForCurrentUser(const QString name)
+long HootApiDb::getMapIdByNameForCurrentUser(const QString& name)
 {
   LOG_VARD(_currUserId);
 
@@ -1730,8 +1730,8 @@ bool HootApiDb::changesetExists(const long id)
   return _changesetExists->next();
 }
 
-bool HootApiDb::accessTokensAreValid(const QString userName, const QString accessToken,
-                                     const QString accessTokenSecret)
+bool HootApiDb::accessTokensAreValid(const QString& userName, const QString& accessToken,
+                                     const QString& accessTokenSecret)
 {
   LOG_VART(userName);
   LOG_VART(accessToken);
@@ -1847,7 +1847,7 @@ QString HootApiDb::getAccessTokenSecretByUserId(const long userId)
   return accessTokenSecret;
 }
 
-void HootApiDb::insertUserSession(const long userId, const QString sessionId)
+void HootApiDb::insertUserSession(const long userId, const QString& sessionId)
 {
   if (_insertUserSession == 0)
   {
@@ -1873,8 +1873,8 @@ void HootApiDb::insertUserSession(const long userId, const QString sessionId)
   }
 }
 
-void HootApiDb::updateUserAccessTokens(const long userId, const QString accessToken,
-                                       const QString accessTokenSecret)
+void HootApiDb::updateUserAccessTokens(const long userId, const QString& accessToken,
+                                       const QString& accessTokenSecret)
 {
   if (_updateUserAccessTokens == 0)
   {
@@ -1932,8 +1932,8 @@ QString HootApiDb::getSessionIdByUserId(const long userId)
   return sessionId;
 }
 
-QString HootApiDb::getSessionIdByAccessTokens(const QString userName, const QString accessToken,
-                                              const QString accessTokenSecret)
+QString HootApiDb::getSessionIdByAccessTokens(const QString& userName, const QString& accessToken,
+                                              const QString& accessTokenSecret)
 {
   QString sessionId = "";
 
@@ -2294,7 +2294,7 @@ QUrl HootApiDb::getBaseUrl()
   return result;
 }
 
-QString HootApiDb::removeLayerName(const QString url)
+QString HootApiDb::removeLayerName(const QString& url)
 {
   QStringList urlParts =  url.split("/");
   QString modifiedUrl;
@@ -2306,7 +2306,7 @@ QString HootApiDb::removeLayerName(const QString url)
   return modifiedUrl;
 }
 
-void HootApiDb::updateJobStatusResourceId(const QString jobId, const long resourceId)
+void HootApiDb::updateJobStatusResourceId(const QString& jobId, const long resourceId)
 {
   LOG_VARD(jobId);
   LOG_VARD(resourceId);
@@ -2330,7 +2330,7 @@ void HootApiDb::updateJobStatusResourceId(const QString jobId, const long resour
   _updateJobStatusResourceId->finish();
 }
 
-QString HootApiDb::insertJob(const QString statusDetail)
+QString HootApiDb::insertJob(const QString& statusDetail)
 {
   if (_insertJob == 0)
   {
@@ -2358,7 +2358,7 @@ QString HootApiDb::insertJob(const QString statusDetail)
   return jobId;
 }
 
-long HootApiDb::getJobStatusResourceId(const QString jobId)
+long HootApiDb::getJobStatusResourceId(const QString& jobId)
 {
   LOG_VARD(jobId);
   if (_getJobStatusResourceId == 0)
@@ -2395,7 +2395,7 @@ long HootApiDb::getJobStatusResourceId(const QString jobId)
   return resourceId;
 }
 
-void HootApiDb::_deleteJob(const QString id)
+void HootApiDb::_deleteJob(const QString& id)
 {
   if (_deleteJobById == 0)
   {

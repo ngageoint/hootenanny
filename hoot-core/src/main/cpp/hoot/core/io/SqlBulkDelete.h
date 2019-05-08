@@ -45,7 +45,7 @@ class SqlBulkDelete : public BulkDelete
 {
 public:
 
-  SqlBulkDelete(QSqlDatabase& db, const QString tableName);
+  SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
 
   virtual ~SqlBulkDelete();
 

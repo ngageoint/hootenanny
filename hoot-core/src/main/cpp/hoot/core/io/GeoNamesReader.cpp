@@ -90,16 +90,16 @@ bool GeoNamesReader::hasMoreElements()
   return !_fp.atEnd();
 }
 
-bool GeoNamesReader::isSupported(QString url)
+bool GeoNamesReader::isSupported(const QString& url)
 {
-  url = QDir().absoluteFilePath(url);
-  QFile f(url);
+  QString path = QDir().absoluteFilePath(url);
+  QFile f(path);
 
-  bool result = url.toLower().endsWith(".geonames") && f.exists();
+  bool result = path.toLower().endsWith(".geonames") && f.exists();
   return result;
 }
 
-void GeoNamesReader::open(QString url)
+void GeoNamesReader::open(const QString& url)
 {
   _fp.close();
   _fp.setFileName(QDir().absoluteFilePath(url));

@@ -80,7 +80,7 @@ QString OsmJsonWriter::markupString(const QString& str)
   }
 }
 
-void OsmJsonWriter::open(QString url)
+void OsmJsonWriter::open(const QString& url)
 {
   _fp.setFileName(url);
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -90,7 +90,7 @@ void OsmJsonWriter::open(QString url)
   _out = &_fp;
 }
 
-QString OsmJsonWriter::toString(ConstOsmMapPtr map)
+QString OsmJsonWriter::toString(const ConstOsmMapPtr& map)
 {
   QBuffer b;
   b.open(QBuffer::WriteOnly);
@@ -115,13 +115,13 @@ QString OsmJsonWriter::_typeName(ElementType e)
   }
 }
 
-void OsmJsonWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmJsonWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmJsonWriter::write(ConstOsmMapPtr map)
+void OsmJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
   if (_out->isWritable() == false)
@@ -191,7 +191,7 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
     _out->write(QString("\n").toUtf8());
 }
 
-bool OsmJsonWriter::_hasTags(ConstElementPtr e)
+bool OsmJsonWriter::_hasTags(const ConstElementPtr& e)
 {
   return e->getTags().size() > 0 ||
          e->getElementType() != ElementType::Node ||
@@ -217,7 +217,7 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
   }
 }
 
-void OsmJsonWriter::_writeTags(ConstElementPtr e)
+void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 {
   ElementPtr eClone(e->clone());
   _addExportTagsVisitor.visit(eClone);

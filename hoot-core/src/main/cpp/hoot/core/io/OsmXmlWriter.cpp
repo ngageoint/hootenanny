@@ -116,7 +116,7 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-void OsmXmlWriter::open(QString url)
+void OsmXmlWriter::open(const QString& url)
 {
   QFile* f = new QFile();
   _fp.reset(f);
@@ -199,13 +199,13 @@ void OsmXmlWriter::_initWriter()
   _writer->writeAttribute("generator", HOOT_PACKAGE_NAME);
 }
 
-void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmXmlWriter::write(ConstOsmMapPtr map)
+void OsmXmlWriter::write(const ConstOsmMapPtr& map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
   {

@@ -174,7 +174,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   return getDriverInfo(url, true)._driverName != NULL;
 }
 
-std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString url, bool readonly)
+std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are

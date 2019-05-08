@@ -100,7 +100,7 @@ public:
    * @param Type
    * @return
    */
-  QString extractTagFromRow(std::shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+  QString extractTagFromRow(const std::shared_ptr<QSqlQuery>& row, ElementType::Type Type);
 
   std::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
@@ -123,7 +123,7 @@ public:
    * @return the next sequence ID for the given type
    * @todo need to make use of sequence and table strings more consistently here
    */
-  long getNextId(const QString tableName);
+  long getNextId(const QString& tableName);
 
   /**
    * Converts a node coordinate from how its stored in a Hootenanny API database (0.01 nanodegrees
@@ -206,11 +206,11 @@ private:
 
   void _init();
 
-  long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
-  long _getIdFromSequence(const QString tableName, const QString sequenceType);
+  long _getIdFromSequence(const ElementType& elementType, const QString& sequenceType);
+  long _getIdFromSequence(const QString& tableName, const QString& sequenceType);
 
   static QStringList _getTables();
-  void _modifyConstraints(const QStringList tableNames, const bool disable);
+  void _modifyConstraints(const QStringList& tableNames, bool disable);
 };
 
 }

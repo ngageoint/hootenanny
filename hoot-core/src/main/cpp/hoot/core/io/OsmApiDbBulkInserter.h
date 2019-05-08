@@ -141,20 +141,20 @@ public:
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
-  virtual bool isSupported(QString url);
-  virtual void open(QString url);
+  virtual bool isSupported(const QString& url) override;
+  virtual void open(const QString& url) override;
   void close();
 
-  virtual void finalizePartial();
-  virtual void writePartial(const ConstNodePtr& node);
-  virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void finalizePartial() override;
+  virtual void writePartial(const ConstNodePtr& node) override;
+  virtual void writePartial(const ConstWayPtr& way) override;
+  virtual void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
+  void setOutputFilesCopyLocation(const QString& location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
   void setReserveRecordIdsBeforeWritingData(bool reserve)
@@ -187,7 +187,7 @@ public:
   void setValidateData(bool validate) { _validateData = validate; }
   void setDisableDatabaseConstraintsDuringWrite(bool disable)
   { _disableDatabaseConstraintsDuringWrite = disable; }
-  void setTempDir(QString location) { _tempDir = location; }
+  void setTempDir(const QString& location) { _tempDir = location; }
   void setDisableDatabaseIndexesDuringWrite(bool disable)
   { _disableDatabaseIndexesDuringWrite = disable; }
   void setWriteIdSequenceUpdates(bool write)
@@ -222,7 +222,7 @@ protected:
   void _flush();
   void _verifyDependencies();
 
-  void _createOutputFile(const QString tableName, const QString header = "");
+  void _createOutputFile(const QString& tableName, const QString& header = "");
   QString _getCombinedSqlFileName() const;
 
   //creates the output files containing the data
@@ -243,8 +243,8 @@ protected:
   virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
   virtual void _writeTags(const Tags& tags, const ElementType::Type& elementType,
-                  const unsigned long dbId, std::shared_ptr<QFile> currentTableFile,
-                  std::shared_ptr<QFile> historicalTableFile);
+                  const unsigned long dbId, const std::shared_ptr<QFile>& currentTableFile,
+                  const std::shared_ptr<QFile>& historicalTableFile);
 
   virtual void _incrementChangesInChangeset();
 
@@ -288,7 +288,7 @@ private:
   void _verifyChangesetUserId();
 
   void _incrementAndGetLatestIdsFromDb();
-  void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
+  void _updateRecordLineWithIdOffset(const QString& tableName, QString& recordLine);
   void _reserveIdsInDb();
 
   void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,

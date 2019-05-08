@@ -45,11 +45,11 @@ public:
   OsmApiDbReader();
   virtual ~OsmApiDbReader();
 
-  virtual void open(QString urlStr);
+  virtual void open(const QString& urlStr) override;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
-  virtual QString supportedFormats() { return "osmapidb://"; }
+  virtual QString supportedFormats() override { return "osmapidb://"; }
 
 protected:
 
@@ -68,7 +68,7 @@ private:
 
   std::shared_ptr<OsmApiDb> _database;
 
-  void _parseAndSetTagsOnElement(ElementPtr element);
+  void _parseAndSetTagsOnElement(const ElementPtr& element);
 };
 
 }

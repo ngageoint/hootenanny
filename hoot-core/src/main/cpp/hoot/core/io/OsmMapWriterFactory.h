@@ -48,18 +48,18 @@ class OsmMapWriterFactory
 {
 public:
 
-  static std::shared_ptr<OsmMapWriter> createWriter(QString url);
+  static std::shared_ptr<OsmMapWriter> createWriter(const QString& url);
 
-  static bool hasElementOutputStream(QString url);
+  static bool hasElementOutputStream(const QString& url);
 
-  static void write(const std::shared_ptr<const OsmMap>& map, QString url,
+  static void write(const std::shared_ptr<const OsmMap>& map, const QString& url,
                     const bool silent = false, const bool is_debug = false);
 
-  static QString getWriterName(const QString url);
+  static QString getWriterName(const QString& url);
 
-  static bool isSupportedFormat(const QString url);
+  static bool isSupportedFormat(const QString& url);
 
-  static void writeDebugMap(const ConstOsmMapPtr& map, const QString title = "",
+  static void writeDebugMap(const ConstOsmMapPtr& map, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
 private:

@@ -57,22 +57,22 @@ public:
   /**
    * @see OsmMapWriter
    */
-  virtual void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
+  virtual void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void finalizePartial() { close(); }
+  virtual void finalizePartial() override { close(); }
 
   /**
    * @see OsmMapWriter
    */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark"); }
+  virtual bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(QString fileName);
+  virtual void open(const QString& fileName) override;
 
   /**
    * @see PartialOsmMapWriter
@@ -90,7 +90,7 @@ public:
   virtual void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
   //no point in showing this in the format list at this point, since its not actively maintained
-  virtual QString supportedFormats() { return ""; }
+  virtual QString supportedFormats() override { return ""; }
 
 private:
 

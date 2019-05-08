@@ -37,7 +37,7 @@ PartialOsmMapWriter::PartialOsmMapWriter()
 {
 }
 
-void PartialOsmMapWriter::write(ConstOsmMapPtr map)
+void PartialOsmMapWriter::write(const ConstOsmMapPtr& map)
 {
   writePartial(map);
   finalizePartial();

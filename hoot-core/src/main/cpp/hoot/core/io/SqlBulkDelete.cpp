@@ -41,7 +41,7 @@
 namespace hoot
 {
 
-SqlBulkDelete::SqlBulkDelete(QSqlDatabase& db, const QString tableName) :
+SqlBulkDelete::SqlBulkDelete(const QSqlDatabase& db, const QString& tableName) :
 _db(db),
 _tableName(tableName)
 {

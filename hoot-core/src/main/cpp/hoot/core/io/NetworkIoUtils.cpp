@@ -35,9 +35,8 @@
 namespace hoot
 {
 
-std::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(
-  const QString userName, const QString accessToken, const QString accessTokenSecret,
-  const QString url)
+std::shared_ptr<HootNetworkCookieJar> NetworkIoUtils::getUserSessionCookie(const QString& userName, const QString& accessToken, const QString& accessTokenSecret,
+  const QString& url)
 {
   LOG_VART(userName);
   LOG_VART(accessToken);

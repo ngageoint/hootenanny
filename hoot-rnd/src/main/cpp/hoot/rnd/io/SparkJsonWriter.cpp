@@ -54,7 +54,7 @@ SparkJsonWriter::SparkJsonWriter() :
 
 }
 
-void SparkJsonWriter::open(QString fileName)
+void SparkJsonWriter::open(const QString& fileName)
 {
   close();
 

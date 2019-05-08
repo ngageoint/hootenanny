@@ -85,7 +85,7 @@ public:
   /**
    * Sets the script to be used. The script won't be initialized until the first call to translate.
    */
-  void setScript(QString path) { close(); _scriptPath = path; }
+  void setScript(const QString& path) { close(); _scriptPath = path; }
 
   /**
    * Translates the specified tags. The result is placed back into the original tag set. The script

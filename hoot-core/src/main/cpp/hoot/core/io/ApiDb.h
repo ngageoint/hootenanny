@@ -168,14 +168,14 @@ public:
    */
   virtual std::vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  std::vector<long> selectNodeIdsForWay(long wayId, const QString sql);
+  std::vector<long> selectNodeIdsForWay(long wayId, const QString& sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
   virtual std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
+  std::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString& sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -186,7 +186,7 @@ public:
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
    * if the user doesn't exist.
    */
-  virtual long getUserId(const QString email, bool throwWhenMissing);
+  virtual long getUserId(const QString& email, bool throwWhenMissing);
 
   /**
    * Determines whether a user with the given ID exists in the database
@@ -199,7 +199,7 @@ public:
   /**
    * Inserts a user.
    */
-  virtual long insertUser(const QString email, const QString displayName);
+  virtual long insertUser(const QString& email, const QString& displayName);
 
   /**
    * Deletes a user.
@@ -269,7 +269,7 @@ public:
    * @return a SQL results iterator
    */
   std::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
-                                                     const ElementType& memberElementType);
+                                                          const ElementType& memberElementType);
 
   virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
 
@@ -280,7 +280,7 @@ public:
    * format specified by the TIME_FORMAT constant
    * @return a SQL results iterator
    */
-  std::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+  std::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString& timeStr);
 
   /**
    * Gets the next sequence ID for the given element type
@@ -369,7 +369,7 @@ public:
    * @param url URL to decompose
    * @return a collection of URL parts mapped by name
    */
-  static QMap<QString, QString> getDbUrlParts(const QString url);
+  static QMap<QString, QString> getDbUrlParts(const QString& url);
 
   /**
    * Converts an API database URL into the format needed by PSQL
@@ -377,7 +377,7 @@ public:
    * @param url URL to convert
    * @return a PSQL command string
    */
-  static QString getPsqlString(const QString url);
+  static QString getPsqlString(const QString& url);
 
   /**
    * Executes a SQL file using PSQL
@@ -385,7 +385,7 @@ public:
    * @param dbUrl URL of the target database
    * @param sqlFile path to the file containing SQL statements to execute
    */
-  static void execSqlFile(const QString dbUrl, const QString sqlFile);
+  static void execSqlFile(const QString& dbUrl, const QString& sqlFile);
 
   /**
    * Converts an API database URL into the format needed by libpq
@@ -393,11 +393,11 @@ public:
    * @param url URL to convert
    * @return a libpq command string
    */
-  static QString getPqString(const QString url);
+  static QString getPqString(const QString& url);
 
   static Settings readDbConfig();
 
-  static void readDbConfig(Settings& settings, QString config_path);
+  static void readDbConfig(Settings& settings, const QString& config_path);
 
   /**
    * Function for checking if the database is in a transaction
@@ -419,7 +419,7 @@ public:
    * @param userName user name of the user
    * @return a user ID or -1 if no user with the given user name was found
    */
-  long getUserIdByName(const QString userName);
+  long getUserIdByName(const QString& userName);
 
   /**
    * Returns a user name given a user ID
@@ -435,7 +435,7 @@ public:
    * @param userName user name of the user
    * @return true if the user exists; false otherwise
    */
-  bool userExists(const QString userName);
+  bool userExists(const QString& userName);
 
 protected:
 
@@ -456,7 +456,7 @@ protected:
 
   long _maxElementsPerPartialMap;
 
-  QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
+  QSqlQuery _exec(const QString& sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;
 
   static void _unescapeString(QString& s);

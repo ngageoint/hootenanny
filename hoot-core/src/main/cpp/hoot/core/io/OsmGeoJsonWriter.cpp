@@ -73,7 +73,7 @@ void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
   _writeHootFormat = ConfigOptions(conf).getJsonFormatHootenanny();
 }
 
-void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
+void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
   if (_out->isWritable() == false)

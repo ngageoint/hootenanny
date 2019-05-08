@@ -89,13 +89,13 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void convert(const QStringList inputs, const QString output);
+  void convert(const QStringList& inputs, const QString& output);
 
-  void setTranslation(const QString translation) { _translation = translation; }
-  void setColumns(const QStringList columns) { _columns = columns; }
+  void setTranslation(const QString& translation) { _translation = translation; }
+  void setColumns(const QStringList& columns) { _columns = columns; }
   void setColsArgSpecified(const bool specified) { _colsArgSpecified = specified; }
   void setFeatureReadLimit(const int limit) { _featureReadLimit = limit; }
-  void setConvertOps(const QStringList ops) { _convertOps = ops; }
+  void setConvertOps(const QStringList& ops) { _convertOps = ops; }
 
 private:
 
@@ -105,17 +105,17 @@ private:
   int _featureReadLimit;
   QStringList _convertOps;
 
-  void _validateInput(const QStringList inputs, const QString output);
+  void _validateInput(const QStringList& inputs, const QString& output);
 
-  void _convertToOgr(const QString input, const QString output);
-  void _convertFromOgr(const QStringList inputs, const QString output);
-  void _convert(const QStringList inputs, const QString output);
-  void _exportToShapeWithCols(const QString output, const QStringList cols, OsmMapPtr map);
+  void _convertToOgr(const QString& input, const QString& output);
+  void _convertFromOgr(const QStringList& inputs, const QString& output);
+  void _convert(const QStringList& inputs, const QString& output);
+  void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
-  void _fillElementCache(QString inputUrl,
+  void _fillElementCache(const QString& inputUrl,
                          ElementCachePtr cachePtr,
-                         QQueue<ElementPtr> &workQ);
-  void _transToOgrMT(QString input, QString output);
+                         QQueue<ElementPtr>& workQ);
+  void _transToOgrMT(const QString& input, const QString& output);
 };
 
 }

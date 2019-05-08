@@ -67,7 +67,7 @@ OsmGbdxJsonWriter::OsmGbdxJsonWriter(int precision)
   _writeHootFormat = false;
 }
 
-void OsmGbdxJsonWriter::open(QString path)
+void OsmGbdxJsonWriter::open(const QString& path)
 {
   QFileInfo fi(path);
   _outputDir = fi.absoluteDir();
@@ -115,7 +115,7 @@ void OsmGbdxJsonWriter::_newOutputFile()
   _out = &_fp;
 }
 
-void OsmGbdxJsonWriter::write(ConstOsmMapPtr map)
+void OsmGbdxJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
 

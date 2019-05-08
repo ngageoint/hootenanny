@@ -181,7 +181,7 @@ void DataConverter::setConfiguration(const Settings& conf)
   setConvertOps(config.getConvertOps());
 }
 
-void DataConverter::convert(const QStringList inputs, const QString output)
+void DataConverter::convert(const QStringList& inputs, const QString& output)
 {
   _validateInput(inputs, output);
 
@@ -209,7 +209,7 @@ void DataConverter::convert(const QStringList inputs, const QString output)
   }
 }
 
-void DataConverter::_validateInput(const QStringList inputs, const QString output)
+void DataConverter::_validateInput(const QStringList& inputs, const QString& output)
 {
   LOG_VART(inputs.size());
   LOG_VART(inputs);
@@ -271,8 +271,8 @@ void DataConverter::_validateInput(const QStringList inputs, const QString outpu
   }
 }
 
-void DataConverter::_fillElementCache(QString inputUrl, ElementCachePtr cachePtr,
-                                      QQueue<ElementPtr> &workQ)
+void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
+                                      QQueue<ElementPtr>& workQ)
 {
   // Setup reader
   std::shared_ptr<OsmMapReader> reader =
@@ -306,7 +306,7 @@ void DataConverter::_fillElementCache(QString inputUrl, ElementCachePtr cachePtr
   LOG_DEBUG("Done Reading");
 }
 
-void DataConverter::_transToOgrMT(QString input, QString output)
+void DataConverter::_transToOgrMT(const QString& input, const QString& output)
 {
   LOG_DEBUG("_transToOgrMT");
 
@@ -359,7 +359,7 @@ void DataConverter::_transToOgrMT(QString input, QString output)
   writerThread.wait();
 }
 
-void DataConverter::_convertToOgr(const QString input, const QString output)
+void DataConverter::_convertToOgr(const QString& input, const QString& output)
 {
   LOG_TRACE("_convertToOgr (formerly known as osm2ogr)");
 
@@ -394,7 +394,7 @@ void DataConverter::_convertToOgr(const QString input, const QString output)
   }
 }
 
-void DataConverter::_convertFromOgr(const QStringList inputs, const QString output)
+void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
   LOG_TRACE("_convertFromOgr (formerly known as ogr2osm)");
 
@@ -530,7 +530,7 @@ void DataConverter::_convertFromOgr(const QStringList inputs, const QString outp
   progress.set(1.0, "Successful", true, "Finished successfully.");
 }
 
-void DataConverter::_convert(const QStringList inputs, const QString output)
+void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
   LOG_TRACE("general convert");
 
@@ -597,8 +597,8 @@ void DataConverter::_convert(const QStringList inputs, const QString output)
   }
 }
 
-void DataConverter::_exportToShapeWithCols(const QString output, const QStringList cols,
-                                           OsmMapPtr map)
+void DataConverter::_exportToShapeWithCols(const QString& output, const QStringList& cols,
+                                           const OsmMapPtr& map)
 {
   QElapsedTimer timer;
   timer.start();

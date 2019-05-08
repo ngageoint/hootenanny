@@ -96,9 +96,9 @@ public:
 
   long getFeatureCount() const { return _featureCount; }
 
-  QStringList getLayersWithGeometry(const QString path) const;
+  QStringList getLayersWithGeometry(const QString& path) const;
 
-  void open(const QString path, QString layer);
+  void open(const QString& path, const QString& layer);
 
   QRegExp getNameFilter();
 
@@ -107,7 +107,7 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(OsmMapPtr map, Progress progress);
+  void read(const OsmMapPtr& map, Progress progress);
 
   /**
    * Reads the next feature into the given map.
@@ -120,7 +120,7 @@ public:
 
   void setLimit(long limit) { _limit = limit; }
 
-  void setTranslationFile(QString translate) { _finalizeTranslate(); _translatePath = translate; }
+  void setTranslationFile(const QString& translate) { _finalizeTranslate(); _translatePath = translate; }
 
   void initializePartial();
 
@@ -192,7 +192,7 @@ protected:
 
   void _initTranslate();
 
-  void _openLayer(QString path, QString layer);
+  void _openLayer(const QString& path, const QString& layer);
 
   void _openNextLayer();
 
@@ -259,7 +259,7 @@ OgrReader::OgrReader()
   _d = new OgrReaderInternal();
 }
 
-OgrReader::OgrReader(QString path)
+OgrReader::OgrReader(const QString& path)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -268,7 +268,7 @@ OgrReader::OgrReader(QString path)
   }
 }
 
-OgrReader::OgrReader(QString path, QString layer)
+OgrReader::OgrReader(const QString& path, const QString& layer)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -282,7 +282,7 @@ OgrReader::~OgrReader()
   delete _d;
 }
 
-ElementIterator* OgrReader::createIterator(QString path, QString layer) const
+ElementIterator* OgrReader::createIterator(const QString& path, const QString& layer) const
 {
   OgrReaderInternal* d = new OgrReaderInternal();
   d->setDefaultCircularError(_d->getDefaultCircularError());
@@ -361,7 +361,7 @@ std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 /**
  * Returns a list of all layer names includeing those that don't have geometry.
  */
-QStringList OgrReader::getLayerNames(QString path)
+QStringList OgrReader::getLayerNames(const QString& path)
 {
   QStringList result;
   std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
@@ -382,7 +382,7 @@ QStringList OgrReader::getLayerNames(QString path)
 /**
  * Returns a filtered list of layer names that have geometry.
  */
-QStringList OgrReader::getFilteredLayerNames(const QString path)
+QStringList OgrReader::getFilteredLayerNames(const QString& path)
 {
   QRegExp filterStr = _d->getNameFilter();
   LOG_VART(filterStr.pattern());
@@ -406,19 +406,19 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   return result;
 }
 
-bool OgrReader::isReasonablePath(QString path)
+bool OgrReader::isReasonablePath(const QString& path)
 {
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
-long OgrReader::getFeatureCount(QString path, QString layer)
+long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 {
   _d->open(path, layer);
   _d->close();
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, OsmMapPtr map, Progress progress)
+void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map, Progress progress)
 {
   _d->open(path, layer);
   _d->read(map, progress);
@@ -440,7 +440,7 @@ void OgrReader::setLimit(long limit)
   _d->setLimit(limit);
 }
 
-void OgrReader::setTranslationFile(QString translate)
+void OgrReader::setTranslationFile(const QString& translate)
 {
   _d->setTranslationFile(translate);
 }
@@ -470,7 +470,7 @@ void OgrReader::finalizePartial()
   _elementsRead = 0;
 }
 
-bool OgrReader::isSupported(QString url)
+bool OgrReader::isSupported(const QString& url)
 {
   return isReasonablePath(url);
 }
@@ -480,7 +480,7 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
   _d->setUseDataSourceIds(useDataSourceIds);
 }
 
-void OgrReader::open(QString url)
+void OgrReader::open(const QString& url)
 {
   _d->open(url, "");
 }
@@ -524,7 +524,7 @@ OgrReaderInternal::~OgrReaderInternal()
   }
 }
 
-QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
+QStringList OgrReaderInternal::getLayersWithGeometry(const QString& path) const
 {
   QStringList result;
   LOG_DEBUG("Opening layers with geometry: " << path);
@@ -951,7 +951,7 @@ void OgrReaderInternal::_initTranslate()
   }
 }
 
-void OgrReaderInternal::open(const QString path, QString layer)
+void OgrReaderInternal::open(const QString& path, const QString& layer)
 {
   _initTranslate();
 
@@ -969,7 +969,7 @@ void OgrReaderInternal::open(const QString path, QString layer)
   LOG_VART(_pendingLayers);
 }
 
-void OgrReaderInternal::_openLayer(QString path, QString layer)
+void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 {
   _path = path;
   _layerName = layer;
@@ -1089,7 +1089,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
+void OgrReaderInternal::read(const OsmMapPtr& map, Progress progress)
 {
   _map = map;
   _count = 0;

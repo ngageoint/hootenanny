@@ -60,7 +60,7 @@ public:
    *
    * @param sql The SQL to be executed.
    */
-  void write(const QString sql);
+  void write(const QString& sql);
 
   /**
    * Detects conflicts in the target OSM API database by examining its changesets and bounds and
@@ -72,7 +72,7 @@ public:
    * only searches for changesets created after the time
    * @return
    */
-  bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
+  bool conflictExistsInTarget(const QString& boundsStr, const QString& timeStr);
 
   /**
    * Writes a summary of the contents of a changeset
@@ -84,7 +84,7 @@ public:
 private:
 
   void _initChangesetStats();
-  void _execTransaction(const QString changesetInsertStatement, const QString elementSqlStatements);
+  void _execTransaction(const QString& changesetInsertStatement, const QString& elementSqlStatements);
 
   OsmApiDb _db;
 

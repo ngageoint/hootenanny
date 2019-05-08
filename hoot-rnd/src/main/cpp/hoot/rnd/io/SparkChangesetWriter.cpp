@@ -65,7 +65,7 @@ void SparkChangesetWriter::setConfiguration(const Settings& conf)
   _precision = options.getWriterPrecision();
 }
 
-void SparkChangesetWriter::open(QString fileName)
+void SparkChangesetWriter::open(const QString& fileName)
 {
   close();
 
@@ -274,7 +274,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   }
 }
 
-void SparkChangesetWriter::setElementPayloadFormat(const QString format)
+void SparkChangesetWriter::setElementPayloadFormat(const QString& format)
 {
   if (format != "json")
   {

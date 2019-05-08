@@ -61,9 +61,9 @@ public:
   OsmXmlWriter();
   virtual ~OsmXmlWriter();
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".osm"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".osm"); }
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
   void close();
 
@@ -98,19 +98,19 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(ConstOsmMapPtr map, const QString& path);
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(ConstOsmMapPtr map) override;
+  virtual void write(const ConstOsmMapPtr& map) override;
 
   virtual void writePartial(const ConstNodePtr& node) override;
   virtual void writePartial(const ConstWayPtr& way) override;
   virtual void writePartial(const ConstRelationPtr& relation) override;
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
   bool getFormatXml() const { return _formatXml; }
   void setFormatXml(const bool format) { _formatXml = format; }
 
-  virtual QString supportedFormats() { return ".osm"; }
+  virtual QString supportedFormats() override { return ".osm"; }
 
   /**
    * Remove illegal XML characters from the string s and print an error if one is found.  These
