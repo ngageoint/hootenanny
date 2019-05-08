@@ -61,6 +61,7 @@ import hoot.services.utils.DbUtils;
  */
 public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandRunnerImpl.class);
+    private static final Pattern pattern = Pattern.compile("(STATUS\\s+(.*)\\w+\\s+)\\((\\d+)%\\):"); //eg. STATUS Convert (59%):
 
     private ExecuteWatchdog watchDog;
     private OutputStream stdout;
@@ -69,16 +70,22 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     public String obfuscateConsoleLog(String in) {
-        //strip out logging metadata
-        //e.g. 15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184)
-        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+\\w+\\s+.+?\\(\\s+\\d+\\)\\s", "\n");
+        //strip out time in the logging metadata
+        //e.g. 15:21:06.248
+        String out = in.replaceAll("\\d+:\\d+:\\d+\\.\\d+\\s+", "");
+
+        //strip out the path to the cpp code
+        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s", "");
 
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
 
         //strip out db connection string
-        //e.g. hootapidb://hoot:hoottest@localhost:5432/hoot
-        out = out.replaceAll("hootapidb:\\/\\/\\w+:\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
+        //e.g. hootapidb://hoot:
+        out = out.replaceAll("hootapidb:\\/\\/\\w+:", "");
+        // seperated because some of the status output doesnt include the above text
+        //e.g. hoottest@localhost:5432/hoot
+        out = out.replaceAll("\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
 
         //strip out hoot path string
         //e.g. /home/vagrant/hoot/userfiles/tmp/upload
@@ -108,8 +115,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                     commandResult.setStdout(currentOut);
 
                     if (trackable) {
+                        // if includes percent progress, update that as well
+                        Matcher matcher = pattern.matcher(currentLine);
+                        if (matcher.find()) {
+                            commandResult.setPercentProgress(Double.parseDouble(matcher.group(3))); // group 3 is the percent from the pattern regex
+                        }
+
                         // update command status table stdout
-                            DbUtils.upsertCommandStatus(commandResult);
+                        DbUtils.upsertCommandStatus(commandResult);
                     }
                 }
             }
@@ -130,7 +143,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                     if (trackable) {
                         // update command status table stderr
-                            DbUtils.upsertCommandStatus(commandResult);
+                        DbUtils.upsertCommandStatus(commandResult);
                     }
                 }
             }
@@ -166,7 +179,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
         if (trackable) {
             // Add the new command to the command status table
-                DbUtils.upsertCommandStatus(commandResult);
+            DbUtils.upsertCommandStatus(commandResult);
         }
 
         try {
@@ -213,7 +226,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         commandResult.setFinish(finish);
 
         if (trackable) {
-                DbUtils.upsertCommandStatus(commandResult);
+            DbUtils.completeCommandStatus(commandResult);
         }
 
         if (commandResult.failed()) {

@@ -510,16 +510,26 @@ public class DbUtils {
         return -1;
     }
 
-    public static void upsertCommandStatus(CommandResult commandResult){
+    /**
+     * Inserts the command_status if it doesn't exist already, else update the stdout, stderr, and percent_complete for the command
+     * This function will also call updateJobProgress
+     * @param commandResult
+     */
+    public static void upsertCommandStatus(CommandResult commandResult) {
         Statement dbQuery = null;
-        ResultSet queryResult = null;
+        ResultSet queryResult;
 
         try (Connection conn = getConnection()) {
             if(commandResult.getId() == null) {
                 String queryInsert = String.format(
-                        "INSERT INTO command_status(start, command, job_id, stdout, stderr) " +
-                        "VALUES('%s', '%s', '%s', '%s', '%s') ",
-                        commandResult.getStart(), commandResult.getCommand(), commandResult.getJobId(), commandResult.getStdout(), commandResult.getStderr());
+                        "INSERT INTO command_status(start, command, job_id, stdout, stderr, percent_complete) " +
+                        "VALUES('%s', '%s', '%s', '%s', '%s', '%.2f') ",
+                        commandResult.getStart(),
+                        commandResult.getCommand(),
+                        commandResult.getJobId(),
+                        commandResult.getStdout(),
+                        commandResult.getStderr(),
+                        commandResult.getPercentProgress());
 
                 dbQuery = conn.createStatement();
                 dbQuery.executeUpdate(queryInsert, Statement.RETURN_GENERATED_KEYS);
@@ -534,13 +544,15 @@ public class DbUtils {
             else {
                 String queryUpdate = String.format(
                         "UPDATE command_status " +
-                        "SET stdout = '%s', stderr = '%s' " +
+                        "SET stdout = '%s', stderr = '%s', percent_complete = '%.2f' " +
                         "WHERE id=%d",
-                        commandResult.getStdout(), commandResult.getStderr(), commandResult.getId());
+                        commandResult.getStdout(), commandResult.getStderr(), commandResult.getPercentProgress(), commandResult.getId());
 
                 dbQuery = conn.createStatement();
                 dbQuery.executeUpdate(queryUpdate);
             }
+
+            updateJobProgress(commandResult.getJobId());
 
             if (!conn.getAutoCommit()) {
                 conn.commit();
@@ -550,14 +562,6 @@ public class DbUtils {
             logger.info("ERROR HERE: " + exc.getMessage());
         }
         finally {
-            if (queryResult != null) {
-                try {
-                    queryResult.close();
-                } catch (SQLException ex) {
-                    // ignore
-                }
-            }
-
             if (dbQuery != null) {
                 try {
                     dbQuery.close();
@@ -568,4 +572,138 @@ public class DbUtils {
         }
     }
 
+    /**
+     * Sets exit code and finish time for the specified command
+     * @param commandResult
+     */
+    public static void completeCommandStatus(CommandResult commandResult) {
+        Statement dbQuery = null;
+
+        try (Connection conn = getConnection()) {
+            String queryUpdate = String.format(
+                    "UPDATE command_status " +
+                    "SET exit_code = '%d', finish = '%s' " +
+                    "WHERE id=%d",
+                    commandResult.getExitCode(), commandResult.getFinish(), commandResult.getId());
+
+            dbQuery = conn.createStatement();
+            dbQuery.executeUpdate(queryUpdate);
+
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+        catch(Exception exc) {
+            logger.info("ERROR HERE: " + exc.getMessage());
+        }
+        finally {
+            if (dbQuery != null) {
+                try {
+                    dbQuery.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates the percent_complete for the job matching the specified jobId
+     * @param jobId
+     */
+    public static void updateJobProgress(String jobId) {
+        Statement dbQuery = null;
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection()) {
+            dbQuery = conn.createStatement();
+
+            // Get count for commands that have completed
+            String completedCommandsQuery = String.format("SELECT count(*) AS total FROM command_status WHERE exit_code = 0 and job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(completedCommandsQuery);
+            int completedCount = -1;
+            if(queryResult.next()) {
+                completedCount = queryResult.getInt("total");
+            }
+
+            // Get current running commands percent completed
+            String currentCommandQuery = String.format("SELECT percent_complete AS percent FROM command_status WHERE exit_code is null and job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(currentCommandQuery);
+            double currentCommandPercent = -1;
+            if(queryResult.next()) {
+                currentCommandPercent = queryResult.getDouble("percent");
+            }
+
+            // Get total number of commands for the job
+            String totalCommandsQuery = String.format("SELECT trackable_command_count AS total FROM job_status WHERE job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(totalCommandsQuery);
+            double totalCommandCount = 0;
+            if(queryResult.next()) {
+                totalCommandCount = queryResult.getDouble("total");
+            }
+
+            // check that some value was returned that isnt the default. total command count must be > 0
+            if(completedCount > -1 && currentCommandPercent > -1 && totalCommandCount > 0) {
+                double currentJobProgress = (((completedCount * 100.0d) + currentCommandPercent) / totalCommandCount);
+
+                String queryUpdate = String.format(
+                        "UPDATE job_status SET percent_complete = '%.2f' WHERE job_id = '%s'",
+                        currentJobProgress, jobId);
+
+                dbQuery = conn.createStatement();
+                dbQuery.executeUpdate(queryUpdate);
+
+                if (!conn.getAutoCommit()) {
+                    conn.commit();
+                }
+            }
+        }
+        catch(Exception exc) {
+            logger.info("ERROR HERE: " + exc.getMessage());
+        }
+        finally {
+            if (dbQuery != null) {
+                try {
+                    dbQuery.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    /**
+     * Retrieves the percent_complete for the job matching the specified jobId
+     * @param jobId
+     * @return
+     */
+    public static Double getJobProgress(String jobId) {
+        double progress = 0.0;
+        Statement dbQuery = null;
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection()) {
+            String queryUpdate = String.format("SELECT percent_complete AS percent_complete from job_status WHERE job_id = '%s'", jobId);
+
+            dbQuery = conn.createStatement();
+            queryResult = dbQuery.executeQuery(queryUpdate);
+            if(queryResult.next()) {
+                progress = queryResult.getDouble("percent_complete");
+            }
+        }
+        catch(Exception exc) {
+            logger.info("ERROR HERE: " + exc.getMessage());
+        }
+        finally {
+            if (dbQuery != null) {
+                try {
+                    dbQuery.close();
+                } catch (SQLException ex) {
+                    // ignore
+                }
+            }
+        }
+
+        return progress;
+    }
 }

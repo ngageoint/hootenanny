@@ -70,6 +70,8 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public final NumberPath<Integer> jobType = createNumber("jobType", Integer.class);
 
+    public final NumberPath<Integer> trackableCommandCount = createNumber("trackableCommandCount", Integer.class);
+
     public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
 
     public QJobStatus(String variable) {
@@ -93,15 +95,16 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
     }
 
     public void addMetadata() {
-        addMetadata(end, ColumnMetadata.named("end").withIndex(3).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
         addMetadata(jobId, ColumnMetadata.named("job_id").withIndex(1).ofType(Types.VARCHAR).withSize(64).notNull());
-        addMetadata(percentComplete, ColumnMetadata.named("percent_complete").withIndex(5).ofType(Types.DOUBLE).withSize(17).withDigits(17));
         addMetadata(start, ColumnMetadata.named("start").withIndex(2).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
+        addMetadata(end, ColumnMetadata.named("end").withIndex(3).ofType(Types.TIMESTAMP).withSize(35).withDigits(6));
         addMetadata(status, ColumnMetadata.named("status").withIndex(4).ofType(Types.INTEGER).withSize(10).notNull());
+        addMetadata(percentComplete, ColumnMetadata.named("percent_complete").withIndex(5).ofType(Types.DOUBLE).withSize(17).withDigits(17));
         addMetadata(statusDetail, ColumnMetadata.named("status_detail").withIndex(6).ofType(Types.VARCHAR).withSize(2147483647));
         addMetadata(resourceId, ColumnMetadata.named("resource_id").withIndex(7).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(userId, ColumnMetadata.named("user_id").withIndex(8).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(jobType, ColumnMetadata.named("job_type").withIndex(9).ofType(Types.INTEGER).withSize(10));
+        addMetadata(trackableCommandCount, ColumnMetadata.named("trackable_command_count").withIndex(10).ofType(Types.INTEGER).withSize(10));
     }
 
 }

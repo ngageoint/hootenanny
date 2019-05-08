@@ -66,6 +66,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
             newJobStatus.setStatusDetail("PROCESSING");
             newJobStatus.setPercentComplete(0.0);
             newJobStatus.setResourceId(job.getMapId());
+            newJobStatus.setCommandCount(job.getCommands().length);
             Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
             newJobStatus.setStart(ts);
 

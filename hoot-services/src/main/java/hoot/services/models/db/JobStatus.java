@@ -52,6 +52,8 @@ public class JobStatus {
 
     private Integer jobType;
 
+    private Integer trackableCommandCount;
+
     public java.sql.Timestamp getEnd() {
         return end;
     }
@@ -124,5 +126,12 @@ public class JobStatus {
         this.jobType = jobType;
     }
 
+    public Integer getCommandCount() {
+        return trackableCommandCount;
+    }
+
+    public void setCommandCount(Integer commandCount) {
+        this.trackableCommandCount = commandCount;
+    }
 }
 

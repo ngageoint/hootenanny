@@ -47,8 +47,11 @@ public class CommandResult {
     private String jobId;
     private String caller;
     private File workingDir;
+    private Double percentProgress;
 
-    public CommandResult() {}
+    public CommandResult() {
+        percentProgress = 0.0;
+    }
 
     public String getCommand() {
         return command;
@@ -136,6 +139,14 @@ public class CommandResult {
 
     public void setWorkingDir(File workingDir) {
         this.workingDir = workingDir;
+    }
+
+    public Double getPercentProgress() {
+        return percentProgress;
+    }
+
+    public void setPercentProgress(Double progress) {
+        this.percentProgress = progress;
     }
 
     @Override
