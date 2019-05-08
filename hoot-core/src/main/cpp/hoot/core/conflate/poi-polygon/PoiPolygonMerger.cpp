@@ -196,25 +196,21 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     const pair<ElementId, ElementId>& p = *it;
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
-    LOG_VART(e1->getElementId());
-    LOG_VART(e1->getStatus());
-    LOG_VART(e1->getElementType());
-    LOG_VART(e1->getTags().get("name"));
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
+      //LOG_VART(e1->getElementId());
+      LOG_VART(e1);
       result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
     }
-    LOG_VART(e2->getElementId());
-    LOG_VART(e2->getStatus());
-    LOG_VART(e2->getElementType());
-    LOG_VART(e2->getTags().get("name"));
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
+      //LOG_VART(e2->getElementId());
+      LOG_VART(e2);
       result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
 
-  LOG_VART(result);
+  LOG_TRACE("Merged POI tags: " << result);
   return result;
 }
 
@@ -223,7 +219,6 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
   LOG_TRACE("Getting building parts for status: " << s << "...");
 
   vector<ElementId> result;
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -240,7 +235,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
     }
   }
 
-  LOG_VART(result);
+  LOG_TRACE("Building part IDs: " << result);
   return result;
 }
 

@@ -264,7 +264,8 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
 {
   // _map must be set using setOsmMap()
   assert(_map != 0);
-  bool conflicting = false;
+  LOG_VART(matches.size());
+  LOG_VART(matches);
 
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
@@ -278,40 +279,48 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
       if (m1 != m2)
       {
         ConstOsmMapPtr map = _map->shared_from_this();
-        conflicting = MergerFactory::getInstance().isConflicting(map, m1, m2);
+        const bool conflicting = MergerFactory::getInstance().isConflicting(map, m1, m2);
         // if one of the mergers returned a conflict and cross conflation merging is enabled
-        if (conflicting && _allowCrossConflationMerging)
+        if (conflicting)
         {
-          const bool oneIsPoiPolyMatch =
-            m1->toString().contains("PoiPolygonMatch") ||
-            m2->toString().contains("PoiPolygonMatch");
-          LOG_VART(oneIsPoiPolyMatch);
-          const bool oneIsBuildingMatch =
-            m1->toString().contains("BuildingMatch") || m2->toString().contains("BuildingMatch");
-          LOG_VART(oneIsBuildingMatch);
-          LOG_VART(m1->getType());
-          LOG_VART(m2->getType());
-          // if we have exactly one poi/poly match, exactly one building match, and both have a
-          // status of matched
-          if (oneIsPoiPolyMatch && oneIsBuildingMatch && m1->getType() == MatchType::Match &&
-              m2->getType() == MatchType::Match)
+          if (_allowCrossConflationMerging)
           {
-            // we'll ignore the conflict so all the matches will merge together
-            LOG_TRACE(
-              "Allowing cross conflation Building/PoiPoly auto-merge for: " << m1 << " and " <<
-              m2 << "...");
-            conflicting = false;
+            // TODO: Do we need to handle Area Conflation here too?
+            const bool oneIsPoiPolyMatch =
+              m1->toString().contains("PoiPolygonMatch") ||
+              m2->toString().contains("PoiPolygonMatch");
+            LOG_VART(oneIsPoiPolyMatch);
+            const bool oneIsBuildingMatch =
+              m1->toString().contains("BuildingMatch") || m2->toString().contains("BuildingMatch");
+            LOG_VART(oneIsBuildingMatch);
+            LOG_VART(m1->getType());
+            LOG_VART(m2->getType());
+            // if we have exactly one poi/poly match, exactly one building match, and both have a
+            // status of matched
+            if (oneIsPoiPolyMatch && oneIsBuildingMatch && m1->getType() == MatchType::Match &&
+                m2->getType() == MatchType::Match)
+            {
+              // We'll ignore the conflict, so all the matches will merge together.
+              LOG_TRACE(
+                "Allowing cross conflation Building/PoiPoly auto-merge for: " << m1 << " and " <<
+                m2 << "...");
+              return false;
+            }
+            else
+            {
+              LOG_TRACE("conflicting: " << m1 << " and " << m2);
+              return true;
+            }
           }
-          else
-          {
-            LOG_TRACE("conflicting");
-          }
+
+          LOG_TRACE("conflicting: " << m1 << " and " << m2);
+          return true;
         }
       }
     }
   }
 
-  return conflicting;
+  return false;
 }
 
 }
