@@ -96,7 +96,7 @@ bool Factory::hasClass(const std::string& name)
   return _creators.find(name) != _creators.end();
 }
 
-void Factory::registerCreator(std::shared_ptr<ObjectCreator> oc, bool baseClass)
+void Factory::registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass)
 {
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())

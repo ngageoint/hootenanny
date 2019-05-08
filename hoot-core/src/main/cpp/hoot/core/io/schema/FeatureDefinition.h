@@ -44,7 +44,7 @@ class FeatureDefinition
 public:
   FeatureDefinition();
 
-  void addField(std::shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
+  void addField(const std::shared_ptr<FieldDefinition>& fd) { _fields.push_back(fd); }
 
   bool hasField(const QString& name) const;
 

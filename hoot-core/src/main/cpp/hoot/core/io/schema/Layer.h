@@ -52,15 +52,15 @@ public:
 
   QString getName() const { return _name; }
 
-  void setFeatureDefinition(std::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
+  void setFeatureDefinition(const std::shared_ptr<FeatureDefinition>& fd) { _definition = fd; }
 
   void setGeometryType(geos::geom::GeometryTypeId geometryType) { _geometryType = geometryType; }
 
-  void setName(QString name) { _name = name; }
+  void setName(const QString& name) { _name = name; }
 
   QString getFdName() const { return _fdname; }
 
-  void setFdName(QString name) { _fdname = name; }
+  void setFdName(const QString& name) { _fdname = name; }
 
 private:
   std::shared_ptr<const FeatureDefinition> _definition;

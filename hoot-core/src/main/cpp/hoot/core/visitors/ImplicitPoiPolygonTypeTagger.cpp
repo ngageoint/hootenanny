@@ -41,7 +41,7 @@ ImplicitPoiTypeTagger()
 {
 }
 
-ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString databasePath) :
+ImplicitPoiPolygonTypeTagger::ImplicitPoiPolygonTypeTagger(const QString& databasePath) :
 ImplicitPoiTypeTagger(databasePath)
 {
 }

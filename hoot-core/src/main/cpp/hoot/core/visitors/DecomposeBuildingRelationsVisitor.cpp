@@ -57,7 +57,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr<Relation> &r)
+void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr<Relation>& r)
 {
   Tags baseTags = r->getTags();
 

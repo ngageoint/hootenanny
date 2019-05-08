@@ -101,7 +101,7 @@ void MaximalSublineStringMatcher::setHeadingDelta(Meters headingDelta)
   _configureSublineMatcher();
 }
 
-void MaximalSublineStringMatcher::setSublineMatcher(std::shared_ptr<SublineMatcher> sm)
+void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm)
 {
   _sublineMatcher = sm;
   _configureSublineMatcher();

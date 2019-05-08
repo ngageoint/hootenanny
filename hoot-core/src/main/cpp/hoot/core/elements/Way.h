@@ -96,7 +96,7 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const geos::geom::Envelope& getApproximateEnvelope(std::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
 
@@ -110,7 +110,7 @@ public:
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(std::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node
@@ -220,12 +220,12 @@ private:
 typedef std::shared_ptr<Way> WayPtr;
 typedef std::shared_ptr<const Way> ConstWayPtr;
 
-inline bool operator<(WayPtr w1, WayPtr w2)
+inline bool operator<(const WayPtr& w1, const WayPtr& w2)
 {
   return w1->getElementId() < w2->getElementId();
 }
 
-inline bool operator<(ConstWayPtr w1, ConstWayPtr w2)
+inline bool operator<(const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   return w1->getElementId() < w2->getElementId();
 }

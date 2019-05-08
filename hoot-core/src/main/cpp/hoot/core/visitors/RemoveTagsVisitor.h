@@ -47,15 +47,15 @@ public:
   static std::string className() { return "hoot::RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
-  explicit RemoveTagsVisitor(QString key);
-  RemoveTagsVisitor(QString key1, QString key2);
-  explicit RemoveTagsVisitor(QStringList keys);
+  explicit RemoveTagsVisitor(const QString& key);
+  RemoveTagsVisitor(const QString& key1, const QString& key2);
+  explicit RemoveTagsVisitor(const QStringList& keys);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   void setConfiguration(const Settings& conf);
 
-  void addKey(QString key);
+  void addKey(const QString& key);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
@@ -81,7 +81,7 @@ private:
   bool _negateCriterion;
   long _numTagsRemoved;
 
-  void _setCriterion(const QString criterionName);
+  void _setCriterion(const QString& criterionName);
 };
 
 }

@@ -47,8 +47,8 @@ using namespace Tgs;
 namespace hoot
 {
 
-AttributeComparator::AttributeComparator(std::shared_ptr<OsmMap> map1,
-                                         std::shared_ptr<OsmMap> map2) :
+AttributeComparator::AttributeComparator(const std::shared_ptr<OsmMap>& map1,
+                                         const std::shared_ptr<OsmMap>& map2) :
   BaseComparator(map1, map2),
   _iterations(10),
   _median(0.0),

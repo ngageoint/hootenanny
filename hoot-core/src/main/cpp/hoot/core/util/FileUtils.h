@@ -57,7 +57,7 @@ public:
    * @param filePath file to read
    * @return a list of file lines
    */
-  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
+  static QStringList tokenizeOutputFileWithoutDates(const QString& filePath);
 
   /**
    * Reads an entire file to string
@@ -65,7 +65,7 @@ public:
    * @param path file path to read from
    * @return a string
    */
-  static QString readFully(const QString path);
+  static QString readFully(const QString& path);
 
   /**
    * Writes an entire file to string.  Closes the file on success.
@@ -73,7 +73,7 @@ public:
    * @param path file path to write to
    * @param text text to be written
    */
-  static void writeFully(const QString path, const QString text);
+  static void writeFully(const QString& path, const QString& text);
 
   /**
    * Returns the number of lines in a file
@@ -81,7 +81,7 @@ public:
    * @param file file to examine
    * @return a line count
    */
-  static long getNumberOfLinesInFile(const QString file);
+  static long getNumberOfLinesInFile(const QString& file);
 
   /**
    * Determines if a directory contains a file with the specified extension
@@ -91,7 +91,7 @@ public:
    * @return returns true if the input directory contains at least one file with the specified
    * extension; false otherwise
    */
-  static bool dirContainsFileWithExtension(const QDir dir, const QString extension);
+  static bool dirContainsFileWithExtension(const QDir& dir, const QString& extension);
 
   /**
    * Reads file lines into a string list
@@ -99,7 +99,7 @@ public:
    * @param inputPath file to read
    * @return a list of strings
    */
-  static QStringList readFileToList(const QString inputPath);
+  static QStringList readFileToList(const QString& inputPath);
 };
 
 }

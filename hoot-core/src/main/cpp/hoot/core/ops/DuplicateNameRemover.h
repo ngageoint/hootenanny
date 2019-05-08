@@ -81,7 +81,7 @@ private:
 
   std::shared_ptr<OsmMap> _map;
 
-  QString _getBestName(QString n1, QString n2);
+  QString _getBestName(const QString& n1, const QString& n2);
 };
 
 }

@@ -35,7 +35,7 @@ Schema::Schema()
 {
 }
 
-void Schema::addLayer(std::shared_ptr<Layer> l)
+void Schema::addLayer(const std::shared_ptr<Layer>& l)
 {
   _layers.push_back(l);
   _layerNameMap[l->getName()] = _layers.size()-1;
@@ -46,7 +46,7 @@ std::shared_ptr<const Layer> Schema::getLayer(size_t i) const
   return _layers[i];
 }
 
-std::shared_ptr<const Layer> Schema::getLayer(QString name) const
+std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 {
   std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
 
@@ -56,7 +56,7 @@ std::shared_ptr<const Layer> Schema::getLayer(QString name) const
   throw IllegalArgumentException("Unable to find layer with name: " + name);
 }
 
-bool Schema::hasLayer(QString name) const
+bool Schema::hasLayer(const QString& name) const
 {
   std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
 

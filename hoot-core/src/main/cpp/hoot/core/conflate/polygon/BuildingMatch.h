@@ -77,7 +77,7 @@ public:
   virtual QString toString() const;
 
   virtual QString explain() const { return _explainText; }
-  virtual void setExplain(const QString explainText) { _explainText = explainText; }
+  virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
 
   virtual QString getDescription() const { return "Matches buildings"; }
 

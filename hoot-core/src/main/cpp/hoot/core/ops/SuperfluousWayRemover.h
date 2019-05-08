@@ -52,14 +52,14 @@ public:
   static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
-  SuperfluousWayRemover(std::shared_ptr<OsmMap> map);
+  SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map);
 
   void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeWays(std::shared_ptr<OsmMap> map);
+  static void removeWays(const std::shared_ptr<OsmMap>& map);
 
   void removeWays();
 

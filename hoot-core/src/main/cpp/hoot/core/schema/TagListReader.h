@@ -49,7 +49,7 @@ public:
    * with '=' per record
    * @return a string list of tags
    */
-  static QStringList readList(const QString inputPath, const bool keysOnly = false);
+  static QStringList readList(const QString& inputPath, const bool keysOnly = false);
 };
 
 }

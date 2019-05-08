@@ -52,7 +52,7 @@ public:
    *
    * @param address a complete address string
    */
-  QString translateToEnglish(const QString address) const;
+  QString translateToEnglish(const QString& address) const;
 
 private:
 

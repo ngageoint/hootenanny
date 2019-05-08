@@ -77,8 +77,8 @@ private:
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geoms;
 
   std::shared_ptr<geos::geom::Geometry> _convertToGeometry(const std::shared_ptr<Element>& e1);
-  bool _equals(const std::shared_ptr<Element>& e1, const std::shared_ptr<Element> &e2);
-  void _removeOne(std::shared_ptr<Element> e1, std::shared_ptr<Element> e2);
+  bool _equals(const std::shared_ptr<Element>& e1, const std::shared_ptr<Element>& e2);
+  void _removeOne(const std::shared_ptr<Element>& e1, const std::shared_ptr<Element>& e2);
 };
 
 }

@@ -55,13 +55,13 @@ HootServicesTranslatorClient()
   _useCookies = false;
 }
 
-void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList langCodes)
+void HootServicesTranslatorMockClient::setSourceLanguages(const QStringList& langCodes)
 {
   LOG_DEBUG("Setting source languages...");
   _sourceLangs = langCodes;
 }
 
-QString HootServicesTranslatorMockClient::translate(const QString text)
+QString HootServicesTranslatorMockClient::translate(const QString& text)
 {
   _numTranslationsAttempted++;
   LOG_VART(text);

@@ -43,7 +43,7 @@ class DirectedGraph;
 class ShortestPath
 {
 public:
-  ShortestPath(std::shared_ptr<const DirectedGraph> graph);
+  ShortestPath(const std::shared_ptr<const DirectedGraph>& graph);
 
   void calculateCost();
 

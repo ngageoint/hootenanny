@@ -41,7 +41,7 @@ ImplicitTypeTaggerBase()
 {
 }
 
-ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString databasePath) :
+ImplicitPoiTypeTagger::ImplicitPoiTypeTagger(const QString& databasePath) :
 ImplicitTypeTaggerBase(databasePath)
 {
 }

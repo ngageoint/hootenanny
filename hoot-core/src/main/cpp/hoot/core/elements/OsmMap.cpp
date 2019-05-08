@@ -70,24 +70,24 @@ OsmMap::OsmMap()
   _srs = _wgs84;
 }
 
-OsmMap::OsmMap(ConstOsmMapPtr map)
+OsmMap::OsmMap(const ConstOsmMapPtr& map)
 {
   _copy(map);
 }
 
-OsmMap::OsmMap(OsmMapPtr map)
+OsmMap::OsmMap(const OsmMapPtr& map)
 {
   _copy(map);
 }
 
-OsmMap::OsmMap(std::shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs)
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
 }
 
-OsmMap::OsmMap(ConstOsmMapPtr map, std::shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialReference>& srs)
 {
   _copy(map);
   _srs = srs;
@@ -97,7 +97,7 @@ OsmMap::~OsmMap()
 {
 }
 
-void OsmMap::append(ConstOsmMapPtr appendFromMap)
+void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
 {
   if (this == appendFromMap.get())
   {
@@ -283,7 +283,7 @@ bool OsmMap::containsElement(const std::shared_ptr<const Element>& e) const
   return containsElement(e->getElementType(), e->getId());
 }
 
-void OsmMap::_copy(ConstOsmMapPtr from)
+void OsmMap::_copy(const ConstOsmMapPtr& from)
 {
   _idGen = from->_idGen;
   _idGenSp = from->_idGenSp;
@@ -521,7 +521,7 @@ void OsmMap::replaceNode(long oldId, long newId)
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
 }
 
-void OsmMap::setProjection(std::shared_ptr<OGRSpatialReference> srs)
+void OsmMap::setProjection(const std::shared_ptr<OGRSpatialReference>& srs)
 {
   _srs = srs;
   _index->reset();

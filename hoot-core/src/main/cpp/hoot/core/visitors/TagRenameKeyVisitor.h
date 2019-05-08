@@ -47,7 +47,7 @@ public:
 
   TagRenameKeyVisitor();
 
-  TagRenameKeyVisitor(const QString oldKey, const QString newKey);
+  TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 

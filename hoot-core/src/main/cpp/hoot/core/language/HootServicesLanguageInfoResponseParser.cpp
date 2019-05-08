@@ -35,7 +35,7 @@ namespace hoot
 {
 
 QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
-  const QString type,  std::shared_ptr<boost::property_tree::ptree> response)
+    const QString& type,  const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QString displayStr;
 
@@ -78,8 +78,8 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableLanguagesResponse(
   return displayStr.trimmed();
 }
 
-QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const QString type,
-  std::shared_ptr<boost::property_tree::ptree> response)
+QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(
+    const QString& type, const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QString displayStr;
 
@@ -107,7 +107,7 @@ QString HootServicesLanguageInfoResponseParser::parseAvailableAppsResponse(const
 }
 
 QMap<QString, QString> HootServicesLanguageInfoResponseParser::getLangCodesToLangs(
-  std::shared_ptr<boost::property_tree::ptree> response)
+  const std::shared_ptr<boost::property_tree::ptree>& response)
 {
   QMap<QString, QString> langCodesToLangs;
   for (boost::property_tree::ptree::value_type& language : response->get_child("languages"))

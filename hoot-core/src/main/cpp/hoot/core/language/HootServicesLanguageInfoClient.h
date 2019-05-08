@@ -56,12 +56,12 @@ public:
   /**
    * @see LanguageInfoProvider
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) override;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) override;
 
   /**
    * @see LanguageInfoProvider
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) override;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) override;
 
 protected:
 
@@ -90,7 +90,7 @@ private:
   static QString _getDetectorsUrl();
   static QString _getTranslatorsUrl();
 
-  QString _getAvailableLanguagesRequestData(const QStringList apps);
+  QString _getAvailableLanguagesRequestData(const QStringList& apps);
 };
 
 }

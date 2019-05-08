@@ -89,13 +89,13 @@ public:
 
   OsmMap();
 
-  explicit OsmMap(std::shared_ptr<const OsmMap>);
+  explicit OsmMap(const std::shared_ptr<const OsmMap>&);
 
-  explicit OsmMap(std::shared_ptr<OsmMap>);
+  explicit OsmMap(const std::shared_ptr<OsmMap>&);
 
-  explicit OsmMap(std::shared_ptr<OGRSpatialReference> srs);
+  explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
 
-  OsmMap(std::shared_ptr<const OsmMap>, std::shared_ptr<OGRSpatialReference> srs);
+  OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
   ~OsmMap();
 
@@ -108,7 +108,7 @@ public:
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(std::shared_ptr<const OsmMap> map);
+  void append(const std::shared_ptr<const OsmMap>& map);
 
   void addElement(const std::shared_ptr<Element>& e);
   template<class T>
@@ -211,7 +211,7 @@ public:
 
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
-  void registerListener(std::shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
+  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 
   /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
@@ -239,9 +239,9 @@ public:
    */
   static void resetCounters() { IdGenerator::getInstance()->reset(); }
 
-  void setIdGenerator(std::shared_ptr<IdGenerator> gen) { _idGenSp = gen; _idGen = gen.get(); }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGenSp = gen; _idGen = gen.get(); }
 
-  void setProjection(std::shared_ptr<OGRSpatialReference> srs);
+  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Validates the consistency of the map. Primarily this checks to make sure that all nodes
@@ -292,7 +292,7 @@ public:
   long getRelationCount() const { return _relations.size(); }
 
   // Helps us handle roundabouts
-  void setRoundabouts(std::vector<std::shared_ptr<Roundabout>> rnd) { _roundabouts = rnd; }
+  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
   std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
 
 protected:
@@ -323,7 +323,7 @@ protected:
 
   std::vector<std::shared_ptr<Roundabout>> _roundabouts;
 
-  void _copy(std::shared_ptr<const OsmMap> from);
+  void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
    * Returns true if there is a node in l.

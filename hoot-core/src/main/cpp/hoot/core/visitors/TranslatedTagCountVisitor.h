@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
-  TranslatedTagCountVisitor(std::shared_ptr<ScriptTranslator> t);
+  TranslatedTagCountVisitor(const std::shared_ptr<ScriptTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
 

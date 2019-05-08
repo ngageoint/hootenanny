@@ -47,11 +47,11 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  RasterComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2);
+  RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
   virtual ~RasterComparator() {}
 
-  double compareMaps();
+  virtual double compareMaps() override;
 
 protected:
 
@@ -60,7 +60,7 @@ protected:
 
   void _dumpImage(cv::Mat& image);
 
-  void _renderImage(std::shared_ptr<OsmMap> map, cv::Mat& result);
+  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& result);
 };
 
 }

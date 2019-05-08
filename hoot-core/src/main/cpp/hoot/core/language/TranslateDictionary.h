@@ -57,13 +57,13 @@ public:
 
   const QMap<QString, QStringList>& getTable() { return _translations; }
 
-  void load(QString path);
+  void load(const QString& path);
 
   Transliterator* getTransliterator() const { return _transliterator; }
   Transliterator* getTitler() const { return _titler; }
 
-  bool getFromTransliterationCache(const QString originalText, QString& transliteratedText);
-  void insertIntoTransliterationCache(const QString originalText, const QString transliteratedText);
+  bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText);
+  void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText);
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
 

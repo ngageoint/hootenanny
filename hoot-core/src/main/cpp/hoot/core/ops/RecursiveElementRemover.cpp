@@ -49,7 +49,7 @@ _criterion(criterion)
 {
 }
 
-void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap> &map)
+void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 

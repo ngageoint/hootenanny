@@ -56,7 +56,7 @@ public:
 
   OpList();
 
-  void addOp(std::shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
+  void addOp(const std::shared_ptr<OsmMapOperation>& op) { _ops.push_back(op); }
 
   /**
    * Applies the operations in the order they were added. If there are no operations then nothing

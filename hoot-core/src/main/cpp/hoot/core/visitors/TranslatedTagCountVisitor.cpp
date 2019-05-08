@@ -46,7 +46,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
 
-TranslatedTagCountVisitor::TranslatedTagCountVisitor(std::shared_ptr<ScriptTranslator> t) :
+TranslatedTagCountVisitor::TranslatedTagCountVisitor(const std::shared_ptr<ScriptTranslator>& t) :
   _map(),
   _populatedCount(),
   _defaultCount(),

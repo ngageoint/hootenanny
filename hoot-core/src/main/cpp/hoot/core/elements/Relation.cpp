@@ -132,7 +132,7 @@ bool Relation::contains(ElementId eid) const
   return false;
 }
 
-int Relation::numElementsByRole(const QString role) const
+int Relation::numElementsByRole(const QString& role) const
 {
   const vector<RelationData::Entry>& members = getMembers();
   int roleCtr = 0;

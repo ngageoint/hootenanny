@@ -29,9 +29,9 @@
 #define REPLACEROUNDABOUTS_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/conflate/highway/Roundabout.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
 #include <QMultiHash>
@@ -70,7 +70,7 @@ public:
    * @brief apply - Apply the ReplaceRoundabouts Op to the map.
    * @param pMap - Map to operate on.
    */
-  void apply(std::shared_ptr<OsmMap>& pMap) override;
+  virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief replaceRoundabouts - Loops through all the roundabouts stored
@@ -78,12 +78,12 @@ public:
    *                             them back.
    * @param pMap - Map to operate on.
    */
-  void replaceRoundabouts(std::shared_ptr<OsmMap> pMap);
+  void replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap);
 
-  virtual QString getInitStatusMessage() const
+  virtual QString getInitStatusMessage() const override
   { return "Replacing road roundabouts with simple intersections..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Replaced " + QString::number(_numAffected) + " road roundabouts"; }
 
   virtual QString getDescription() const override

@@ -99,7 +99,7 @@ private:
   ElementId _eid;
   const ElementCriterion* _criterion;
 
-  void _remove(const std::shared_ptr<OsmMap> &map, ElementId eid,
+  void _remove(const std::shared_ptr<OsmMap>& map, ElementId eid,
                const std::set<ElementId>& removeSet);
 };
 

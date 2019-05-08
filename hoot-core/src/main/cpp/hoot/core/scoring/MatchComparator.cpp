@@ -203,7 +203,7 @@ void MatchComparator::_clearCache()
   _elementWrongCounts.clear();
 }
 
-bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
+bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
   const ConstOsmMapPtr& /*conflated*/)
 {
   TagContainsCriterion tcf("uuid", uuid1);
@@ -616,7 +616,7 @@ int MatchComparator::getTotalCount() const
   return result;
 }
 
-bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated)
+bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated)
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
@@ -646,8 +646,8 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
   return result;
 }
 
-void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
-                                      const QString expected, const QString actual)
+void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
+                                      const QString& expected, const QString& actual)
 {
   SetTagValueVisitor stv1(MetadataTags::HootExpected(), expected);
   SetTagValueVisitor stv2(MetadataTags::HootActual(), actual);

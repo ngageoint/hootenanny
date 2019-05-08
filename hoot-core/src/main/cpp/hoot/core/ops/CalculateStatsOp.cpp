@@ -561,14 +561,14 @@ bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap> &map,
+double CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap>& map,
                                        const FilteredVisitor& v)
 {
   boost::any emptyVisitorData;
   return _applyVisitor(map, v, emptyVisitorData);
 }
 
-double CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap> &map,
+double CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap>& map,
                                        const FilteredVisitor& v, boost::any& visitorData)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
@@ -593,7 +593,7 @@ double CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap> &map,
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(std::shared_ptr<const OsmMap>& map, ConstElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(const std::shared_ptr<const OsmMap>& map, ConstElementVisitor *v)
 {
   std::shared_ptr<FilteredVisitor> critFv;
   if (_criterion)

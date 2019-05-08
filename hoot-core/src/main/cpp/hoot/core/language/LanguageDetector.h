@@ -53,7 +53,7 @@ public:
    * @param text text to detect the language of
    * @return an ISO-6391- language code
    */
-  virtual QString detect(const QString text) = 0;
+  virtual QString detect(const QString& text) = 0;
 };
 
 }

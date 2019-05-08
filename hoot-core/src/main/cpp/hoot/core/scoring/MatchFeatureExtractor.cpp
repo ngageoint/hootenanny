@@ -60,7 +60,7 @@ MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
   _matchFactory = &MatchFactory::getInstance();
 }
 
-void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator> &m)
+void MatchFeatureExtractor::addMatchCreator(const std::shared_ptr<MatchCreator>& m)
 {
   _creators.push_back(m);
 }
@@ -246,7 +246,7 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
   return result;
 }
 
-void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap> &map)
+void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
 {
   vector<const Match*> matches;
   Envelope bounds;

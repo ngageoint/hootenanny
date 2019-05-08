@@ -152,7 +152,7 @@ void ToEnglishTranslationVisitor::visit(const std::shared_ptr<Element>& e)
 }
 
 bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
-                                             const QString toTranslateTagKey)
+                                             const QString& toTranslateTagKey)
 {
   bool translationMade = false;
 

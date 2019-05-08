@@ -56,7 +56,7 @@ _translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(StringDistancePtr d) :
+TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
@@ -66,8 +66,8 @@ _translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(StringDistancePtr d,
-                                                 std::shared_ptr<ToEnglishTranslator> translator) :
+TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d,
+                                                 const std::shared_ptr<ToEnglishTranslator>& translator) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
@@ -161,7 +161,7 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   return bestScore;
 }
 
-QStringList TranslateStringDistance::_getNamesToScore(const QString name) const
+QStringList TranslateStringDistance::_getNamesToScore(const QString& name) const
 {
   QStringList names;
   if (!name.trimmed().isEmpty())

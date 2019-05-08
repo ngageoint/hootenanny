@@ -56,7 +56,7 @@ void RelationWithMostMembersOp::setConfiguration(const Settings& conf)
   setCriterion(config.getRelationWithMostMembersOpMemberCriterion(), "member", conf);
 }
 
-void RelationWithMostMembersOp::setCriterion(const QString criterionClass, const QString type,
+void RelationWithMostMembersOp::setCriterion(const QString& criterionClass, const QString& type,
                                              const Settings& conf)
 {
   LOG_VARD(criterionClass);

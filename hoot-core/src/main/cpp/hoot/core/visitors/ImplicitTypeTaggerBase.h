@@ -44,7 +44,7 @@ class ImplicitTypeTaggerBase : public ElementVisitor, public Configurable
 public:
 
   ImplicitTypeTaggerBase();
-  ImplicitTypeTaggerBase(const QString databasePath);
+  ImplicitTypeTaggerBase(const QString& databasePath);
   ~ImplicitTypeTaggerBase();
 
   /**
@@ -111,10 +111,10 @@ private:
   //translates names to English
   std::shared_ptr<ToEnglishTranslator> _translator;
 
-  QStringList _getNameTokens(const QStringList names) const;
-  QStringList _getTranslatedNames(const QStringList names, const Tags& tags);
+  QStringList _getNameTokens(const QStringList& names) const;
+  QStringList _getTranslatedNames(const QStringList& names, const Tags& tags);
   QStringList _cleanNames(Tags& tags);
-  QString _getEndOfNameToken(const QString name, const QStringList nameTokensList) const;
+  QString _getEndOfNameToken(const QString& name, const QStringList& nameTokensList) const;
 
   void _addImplicitTags(const ElementPtr& e, const Tags& tagsToAdd,
                         const QSet<QString>& matchingWords);
@@ -125,15 +125,15 @@ private:
   void _ensureCorrectTagSpecificity(const ElementPtr& e, Tags& tagsToAdd);
 
   void _getImplicitlyDerivedTagsFromMultipleNameTokens(
-    const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
+    const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
     Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules);
 
-  void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList names,
+  void _getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names,
     QStringList& nameTokensList, const Tags& elementTags, Tags& implicitlyDerivedTags,
     QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules, bool& namesContainBuilding,
     bool& namesContainOffice);
 
-  Tags _applyCustomRules(const ElementPtr& e, const QStringList filteredNames);
+  Tags _applyCustomRules(const ElementPtr& e, const QStringList& filteredNames);
 };
 
 }

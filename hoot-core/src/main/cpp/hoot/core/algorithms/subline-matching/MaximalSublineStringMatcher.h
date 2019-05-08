@@ -69,7 +69,7 @@ public:
 
   virtual void setHeadingDelta(Meters headingDelta);
 
-  virtual void setSublineMatcher(std::shared_ptr<SublineMatcher> sm);
+  virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
   virtual QString getDescription() const
   { return "Matches lines based on the maximal subline string found"; }

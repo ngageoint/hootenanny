@@ -53,7 +53,7 @@ SuperfluousNodeRemover::SuperfluousNodeRemover()
 {
 }
 
-void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap> &map)
+void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _usedNodes.clear();
@@ -122,14 +122,14 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
   }
 }
 
-std::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(std::shared_ptr<const OsmMap> map)
+std::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(const std::shared_ptr<const OsmMap>& map)
 {
   std::shared_ptr<OsmMap> result(new OsmMap(map));
   SuperfluousNodeRemover().apply(result);
   return result;
 }
 
-void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap> &map, const Envelope& e)
+void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const Envelope& e)
 {
   SuperfluousNodeRemover s;
   s.setBounds(e);

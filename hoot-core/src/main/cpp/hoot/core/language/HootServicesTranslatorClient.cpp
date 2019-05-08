@@ -134,7 +134,7 @@ void HootServicesTranslatorClient::setConfiguration(const Settings& conf)
   }
 }
 
-void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCodes)
+void HootServicesTranslatorClient::setSourceLanguages(const QStringList& langCodes)
 {    
   LOG_DEBUG("Setting source languages...");
 
@@ -156,7 +156,7 @@ void HootServicesTranslatorClient::setSourceLanguages(const QStringList langCode
   _checkLangsAvailable("translatable");
 }
 
-void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
+void HootServicesTranslatorClient::_checkLangsAvailable(const QString& type)
 {
   //request the supported langs info from the service and check the supported langs against our
   //specified source langs
@@ -164,7 +164,7 @@ void HootServicesTranslatorClient::_checkLangsAvailable(const QString type)
 }
 
 void HootServicesTranslatorClient::_validateAvailableLangs(
-  std::shared_ptr<boost::property_tree::ptree> replyObj, const QString type)
+  const std::shared_ptr<boost::property_tree::ptree>& replyObj, const QString& type)
 {
   QMap<QString, bool> returnedLangs;
   for (boost::property_tree::ptree::value_type& language : replyObj->get_child("languages"))
@@ -203,7 +203,7 @@ void HootServicesTranslatorClient::_validateAvailableLangs(
   }
 }
 
-QString HootServicesTranslatorClient::_getRequestData(const QString text)
+QString HootServicesTranslatorClient::_getRequestData(const QString& text)
 {
   boost::property_tree::ptree requestObj;
   requestObj.put("translator", _translator.toStdString());
@@ -223,8 +223,7 @@ QString HootServicesTranslatorClient::_getRequestData(const QString text)
   return QString::fromStdString(requestStrStrm.str());
 }
 
-void HootServicesTranslatorClient::_parseResponse(
-  std::shared_ptr<boost::property_tree::ptree> replyObj)
+void HootServicesTranslatorClient::_parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj)
 {
   _translatedText =
     QUrl::fromPercentEncoding(
@@ -247,7 +246,7 @@ void HootServicesTranslatorClient::_parseResponse(
   }
 }
 
-bool HootServicesTranslatorClient::_getTranslationFromCache(const QString text)
+bool HootServicesTranslatorClient::_getTranslationFromCache(const QString& text)
 {
   TranslationResult* cachedTranslation = _cache->object(text.toLower());
   if (cachedTranslation != 0)
@@ -274,14 +273,14 @@ bool HootServicesTranslatorClient::_getTranslationFromCache(const QString text)
   return false;
 }
 
-bool HootServicesTranslatorClient::_textIsTranslatable(const QString text) const
+bool HootServicesTranslatorClient::_textIsTranslatable(const QString& text) const
 {
   return !StringUtils::isNumber(text) && StringUtils::hasAlphabeticCharacter(text);
 }
 
-void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString text,
-                                                               const QString translatedText,
-                                                               const QString detectedLang)
+void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString& text,
+                                                               const QString& translatedText,
+                                                               const QString& detectedLang)
 {
   TranslationResult* translationResult = new TranslationResult();
   translationResult->detectedLang = detectedLang;
@@ -298,7 +297,7 @@ void HootServicesTranslatorClient::_insertTranslationIntoCache(const QString tex
   }
 }
 
-QString HootServicesTranslatorClient::translate(const QString text)
+QString HootServicesTranslatorClient::translate(const QString& text)
 {
   if (_sourceLangs.size() == 0)
   {

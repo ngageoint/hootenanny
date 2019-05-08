@@ -134,7 +134,7 @@ void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
     ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations();
 }
 
-void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap> &map)
+void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;

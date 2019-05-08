@@ -102,7 +102,7 @@ void SmallWayMerger::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void SmallWayMerger::_mergeNeighbors(std::shared_ptr<Way> w)
+void SmallWayMerger::_mergeNeighbors(const std::shared_ptr<Way>& w)
 {
   NodeToWayMap& n2w = *_n2w;
 

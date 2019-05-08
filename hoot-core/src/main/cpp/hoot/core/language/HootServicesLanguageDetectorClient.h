@@ -71,7 +71,7 @@ public:
   /**
    * @see LanguageDetector
    */
-  virtual QString detect(const QString text);
+  virtual QString detect(const QString& text) override;
 
 protected:
 
@@ -123,16 +123,16 @@ private:
 
   static QString _getDetectUrl();
 
-  QString _getRequestData(const QString text) const;
-  QString _parseResponse(std::shared_ptr<boost::property_tree::ptree> replyObj,
+  QString _getRequestData(const QString& text) const;
+  QString _parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
                          QString& detectorUsed);
 
-  QString _getLangFromCache(const QString text);
-  void _insertLangIntoCache(const QString text, const QString detectedLangCode);
+  QString _getLangFromCache(const QString& text);
+  void _insertLangIntoCache(const QString& text, const QString& detectedLangCode);
 
-  bool _textIsDetectable(const QString text) const;
+  bool _textIsDetectable(const QString& text) const;
 
-  QString _getCountsStr(const QString title, QMap<QString, int> data) const;
+  QString _getCountsStr(const QString& title, const QMap<QString, int>& data) const;
   QString _getUnvailableLangNamesStr() const;
 };
 

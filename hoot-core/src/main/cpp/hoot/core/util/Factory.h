@@ -171,7 +171,7 @@ public:
    * @param baseClass If set to true, then the object creator may implement the base class. This is
    *  very unusual, but accidentally forgetting to implement "string className()" is quite common.
    */
-  void registerCreator(std::shared_ptr<ObjectCreator> oc, bool baseClass = false);
+  void registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass = false);
 
 private:
 

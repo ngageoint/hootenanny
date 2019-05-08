@@ -53,7 +53,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2)
+BaseComparator::BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
 {
   _init(map1, map2);
 }
@@ -143,7 +143,7 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(std::shared_ptr<OsmMap> map, Coordinate c)
+Coordinate BaseComparator::_findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
   Coordinate result;
 
@@ -163,7 +163,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(std::shared_ptr<OsmMap> ma
   return result;
 }
 
-void BaseComparator::_init(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2)
+void BaseComparator::_init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
 {
   _map1 = map1;
   _map2 = map2;

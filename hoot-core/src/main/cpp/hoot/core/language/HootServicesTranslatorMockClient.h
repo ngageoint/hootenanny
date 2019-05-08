@@ -50,8 +50,8 @@ public:
 
   HootServicesTranslatorMockClient();
 
-  virtual QString translate(const QString text);
-  virtual void setSourceLanguages(const QStringList langCodes);
+  virtual QString translate(const QString& text) override;
+  virtual void setSourceLanguages(const QStringList& langCodes) override;
 
 private:
 

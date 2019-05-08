@@ -242,7 +242,7 @@ MapComparator::MapComparator():
   // blank
 }
 
-bool MapComparator::isMatch(std::shared_ptr<OsmMap> ref, std::shared_ptr<OsmMap> test)
+bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test)
 {
   bool mismatch = false;
   if (ref->getNodes().size() != test->getNodes().size())

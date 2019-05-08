@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-QStringList TagListReader::readList(const QString inputPath, const bool keysOnly)
+QStringList TagListReader::readList(const QString& inputPath, const bool keysOnly)
 {  
   LOG_VARD(inputPath);
   QStringList outputList;

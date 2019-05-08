@@ -69,7 +69,7 @@ void BuildingOutlineRemoveOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation> &building)
+void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& building)
 {
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)

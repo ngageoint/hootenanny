@@ -106,8 +106,8 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   }
 }
 
-double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, std::shared_ptr<Way> w1,
-                                                   std::shared_ptr<Way> w2)
+double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
+                                                   const std::shared_ptr<Way>& w2)
 {
   // pressume it is a valid intersection
   double p = 1.0;
@@ -175,7 +175,7 @@ void UnlikelyIntersectionRemover::removeIntersections(std::shared_ptr<OsmMap> ma
 }
 
 void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
-                                                     const vector<std::shared_ptr<Way>> &g2)
+                                                     const vector<std::shared_ptr<Way>>& g2)
 {
   NodePtr oldNode = _result->getNode(intersectingNode);
   // create a copy of the intersecting node

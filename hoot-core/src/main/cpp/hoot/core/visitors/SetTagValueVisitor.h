@@ -48,8 +48,8 @@ public:
   static std::string className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
-  SetTagValueVisitor(QString key, QString value, bool appendToExistingValue = false,
-                     const QString criterionName = "", bool overwriteExistingTag = true,
+  SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue = false,
+                     const QString& criterionName = "", bool overwriteExistingTag = true,
                      bool negateCriterion = false);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
@@ -80,8 +80,8 @@ private:
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
 
-  void _setTag(const ElementPtr& e, QString k, QString v);
-  void _setCriterion(const QString criterionName);
+  void _setTag(const ElementPtr& e, const QString& k, const QString& v);
+  void _setCriterion(const QString& criterionName);
 };
 
 }

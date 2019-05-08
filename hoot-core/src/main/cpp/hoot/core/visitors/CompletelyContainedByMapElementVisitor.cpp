@@ -98,7 +98,7 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Way> &w)
+void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Way>& w)
 {
   const std::vector<long>& nids = w->getNodeIds();
   for (size_t i = 0; i < nids.size(); i++)

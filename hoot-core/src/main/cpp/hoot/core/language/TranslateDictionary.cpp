@@ -93,19 +93,19 @@ TranslateDictionary& TranslateDictionary::getInstance()
   return *_theInstance;
 }
 
-bool TranslateDictionary::getFromTransliterationCache(const QString originalText,
+bool TranslateDictionary::getFromTransliterationCache(const QString& originalText,
                                                       QString& transliteratedText)
 {
   return _transliterationCache->get(originalText, transliteratedText);
 }
 
-void TranslateDictionary::insertIntoTransliterationCache(const QString originalText,
-                                                         const QString transliteratedText)
+void TranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
+                                                         const QString& transliteratedText)
 {
   _transliterationCache->insert(originalText, transliteratedText);
 }
 
-void TranslateDictionary::load(QString path)
+void TranslateDictionary::load(const QString& path)
 {
   try
   {

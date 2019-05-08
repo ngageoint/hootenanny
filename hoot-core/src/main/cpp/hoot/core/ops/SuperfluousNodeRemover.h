@@ -68,7 +68,7 @@ public:
 
   virtual void readObject(QDataStream& is);
 
-  static std::shared_ptr<OsmMap> removeNodes(std::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<OsmMap> removeNodes(const std::shared_ptr<const OsmMap>& map);
 
   static void removeNodes(std::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
 

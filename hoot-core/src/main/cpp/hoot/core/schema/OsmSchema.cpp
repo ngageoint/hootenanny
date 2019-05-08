@@ -1388,17 +1388,17 @@ OsmSchema::~OsmSchema()
   delete d;
 }
 
-void OsmSchema::addAssociatedWith(QString name1, QString name2)
+void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2)
 {
   d->addAssociatedWith(name1, name2);
 }
 
-void OsmSchema::addIsA(QString name1, QString name2)
+void OsmSchema::addIsA(const QString& name1, const QString& name2)
 {
   d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(QString name1, QString name2, double weight, bool oneway)
+void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway)
 {
   d->addSimilarTo(name1, name2, weight, oneway);
 }
@@ -1433,7 +1433,7 @@ QSet<QString> OsmSchema::getAllTagKeys()
   return _allTagKeysCache;
 }
 
-bool OsmSchema::hasTagKey(const QString key)
+bool OsmSchema::hasTagKey(const QString& key)
 {
   return getAllTagKeys().contains(key);
 }
@@ -1463,7 +1463,7 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
   return tagsToReturn;
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(QString name)
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1503,7 +1503,7 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(QString name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name)
 {
   return d->getChildTags(name);
 }
@@ -1587,7 +1587,7 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
@@ -1596,7 +1596,7 @@ vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double mi
   return d->getSimilarTags(name, minimumScore);
 }
 
-Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
+Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 {
   Tags tags;
   const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
@@ -1609,7 +1609,7 @@ Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
   return tags;
 }
 
-vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
+vector<SchemaVertex> OsmSchema::getTagByCategory(const OsmSchemaCategory& c) const
 {
   return d->getTagByCategory(c);
 }
@@ -1656,7 +1656,7 @@ bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
   return d->isAncestor(childKvp, parentKvp);
 }
 
-bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
+bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList) const
 {
   //LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
@@ -1791,7 +1791,7 @@ void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
   d->updateOrCreateVertex(tv);
 }
 
-QString OsmSchema::getParentKvp(const QString kvp1, const QString kvp2)
+QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)
 {
   if (isAncestor(kvp1, kvp2))
   {

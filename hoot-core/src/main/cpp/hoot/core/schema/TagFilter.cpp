@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-TagFilter::TagFilter(const QString key, const QString value, const OsmSchemaCategory& category) :
+TagFilter::TagFilter(const QString& key, const QString& value, const OsmSchemaCategory& category) :
 _key(key.trimmed().toLower()),
 _value(value.trimmed().toLower()),
 _similarityThreshold(-1.0),
@@ -61,7 +61,7 @@ _category(category)
   }
 }
 
-void TagFilter::setKey(QString key)
+void TagFilter::setKey(const QString& key)
 {
   if (_category != OsmSchemaCategory::Empty && !key.trimmed().isEmpty())
   {
@@ -74,7 +74,7 @@ void TagFilter::setKey(QString key)
   _key = key.trimmed().toLower();
 }
 
-void TagFilter::setValue(QString val)
+void TagFilter::setValue(const QString& val)
 {
   if (_category != OsmSchemaCategory::Empty && !val.trimmed().isEmpty())
   {

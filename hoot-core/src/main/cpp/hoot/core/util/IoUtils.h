@@ -51,7 +51,7 @@ public:
    * @param input input path
    * @return true if the input is OSM and supported; false otherwise
    */
-  static bool isSupportedOsmFormat(const QString input);
+  static bool isSupportedOsmFormat(const QString& input);
 
   /**
    * Returns true if the input format is a Hootenanny supported OGR format
@@ -60,9 +60,9 @@ public:
    * @param allowDir if true; then a directory can be passed as an input
    * @return true if all inputs passed in are OGR and supported; false otherwise
    */
-  static bool isSupportedOgrFormat(const QString input, const bool allowDir = false);
+  static bool isSupportedOgrFormat(const QString& input, const bool allowDir = false);
 
-  static bool areSupportedOgrFormats(const QStringList inputs, const bool allowDir = false);
+  static bool areSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
     Loads an OSM map into an OsmMap object
@@ -73,7 +73,7 @@ public:
     element ID's
     @param defaultStatus the hoot status to assign to all elements
     */
-  static void loadMap(OsmMapPtr map, QString path, bool useFileId,
+  static void loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
                       Status defaultStatus = Status::Invalid);
 
   /**
@@ -82,7 +82,7 @@ public:
     @param map the map object to save
     @param path the file path to save the map to
     */
-  static void saveMap(OsmMapPtr map, QString path);
+  static void saveMap(const OsmMapPtr& map, const QString& path);
 };
 
 }

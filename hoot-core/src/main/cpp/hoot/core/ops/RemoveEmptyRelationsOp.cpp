@@ -54,7 +54,7 @@ void RemoveEmptyRelationsOp::apply(OsmMapPtr& map)
   _deleteEmptyRelations(map, true);
 }
 
-void RemoveEmptyRelationsOp::_deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder)
+void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const bool reverseOrder)
 {
   const RelationMap& relations = map->getRelations();
 

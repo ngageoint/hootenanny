@@ -46,7 +46,7 @@ void VisitorOp::addVisitor(const ConstElementVisitorPtr& e)
   _visitor = e;
 }
 
-void VisitorOp::apply(std::shared_ptr<OsmMap> &map)
+void VisitorOp::apply(std::shared_ptr<OsmMap>& map)
 {
   map->visitRw(*_visitor);
 }

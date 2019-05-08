@@ -44,8 +44,8 @@ SetTagValueVisitor::SetTagValueVisitor()
   setConfiguration(conf());
 }
 
-SetTagValueVisitor::SetTagValueVisitor(QString key, QString value, bool appendToExistingValue,
-                                       const QString criterionName, bool overwriteExistingTag,
+SetTagValueVisitor::SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue,
+                                       const QString& criterionName, bool overwriteExistingTag,
                                        bool negateCriterion) :
 _appendToExistingValue(appendToExistingValue),
 _overwriteExistingTag(overwriteExistingTag),
@@ -83,7 +83,7 @@ void SetTagValueVisitor::addCriterion(const ElementCriterionPtr& e)
   }
 }
 
-void SetTagValueVisitor::_setCriterion(const QString criterionName)
+void SetTagValueVisitor::_setCriterion(const QString& criterionName)
 {
   if (!criterionName.trimmed().isEmpty())
   {
@@ -94,7 +94,7 @@ void SetTagValueVisitor::_setCriterion(const QString criterionName)
   }
 }
 
-void SetTagValueVisitor::_setTag(const ElementPtr& e, QString k, QString v)
+void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)
 {
   if (k.isEmpty())
   {

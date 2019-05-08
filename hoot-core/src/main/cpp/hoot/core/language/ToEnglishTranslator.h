@@ -59,7 +59,7 @@ public:
    *
    * @param langCode an ISO-639-1 language code
    */
-  virtual void setSourceLanguages(const QStringList langCodes) = 0;
+  virtual void setSourceLanguages(const QStringList& langCodes) = 0;
 
   /**
    * Translates text to English
@@ -67,7 +67,7 @@ public:
    * @param text the text to translate
    * @return translated text
    */
-  virtual QString translate(const QString text) = 0;
+  virtual QString translate(const QString& text) = 0;
 
   /**
    * Returns the language detected by the translator if language detection was performed
@@ -82,7 +82,7 @@ public:
    *
    * @param id
    */
-  virtual void setId(const QString id) = 0;
+  virtual void setId(const QString& id) = 0;
 };
 
 }

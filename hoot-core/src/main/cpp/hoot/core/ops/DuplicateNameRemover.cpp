@@ -62,7 +62,7 @@ void DuplicateNameRemover::setConfiguration(const Settings& conf)
   _preserveOriginalName = opts.getDuplicateNamePreserveOriginalName();
 }
 
-void DuplicateNameRemover::apply(std::shared_ptr<OsmMap> &map)
+void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;
@@ -162,7 +162,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap> &map)
   }
 }
 
-QString DuplicateNameRemover::_getBestName(QString n1, QString n2)
+QString DuplicateNameRemover::_getBestName(const QString& n1, const QString& n2)
 {
   // Here we assume that a name that has mixed case is better than all upper or all lower. E.g.
   // Walnut Street (better)

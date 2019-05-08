@@ -37,11 +37,11 @@ class AttributeComparator : public BaseComparator
 {
 public:
 
-  AttributeComparator(std::shared_ptr<OsmMap> map1, std::shared_ptr<OsmMap> map2);
+  AttributeComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 
   virtual ~AttributeComparator() {}
 
-  virtual double compareMaps();
+  virtual double compareMaps() override;
 
   double getConfidenceInterval() { return _ci; }
 

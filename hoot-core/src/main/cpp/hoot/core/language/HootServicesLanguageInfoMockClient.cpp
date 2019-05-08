@@ -51,7 +51,7 @@ HootServicesLanguageInfoClient()
 }
 
 std::shared_ptr<boost::property_tree::ptree>
-  HootServicesLanguageInfoMockClient::getAvailableApps(const QString type)
+  HootServicesLanguageInfoMockClient::getAvailableApps(const QString& type)
 {
   if (type == "detectors")
   {
@@ -64,7 +64,7 @@ std::shared_ptr<boost::property_tree::ptree>
 }
 
 std::shared_ptr<boost::property_tree::ptree>
-  HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString /*type*/)
+  HootServicesLanguageInfoMockClient::getAvailableLanguages(const QString& /*type*/)
 {
   return StringUtils::jsonStringToPropTree(LANGS_STR);
 }

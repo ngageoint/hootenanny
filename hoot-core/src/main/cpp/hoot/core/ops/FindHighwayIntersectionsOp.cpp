@@ -57,7 +57,7 @@ FindHighwayIntersectionsOp::FindHighwayIntersectionsOp()
 {
 }
 
-void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap> &map)
+void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));

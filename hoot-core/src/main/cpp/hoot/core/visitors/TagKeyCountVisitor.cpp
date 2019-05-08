@@ -39,13 +39,13 @@ _keyCount(0)
 {
 }
 
-TagKeyCountVisitor::TagKeyCountVisitor(const QString key) :
+TagKeyCountVisitor::TagKeyCountVisitor(const QString& key) :
 _keys(QStringList(key)),
 _keyCount(0)
 {
 }
 
-TagKeyCountVisitor::TagKeyCountVisitor(const QStringList keys) :
+TagKeyCountVisitor::TagKeyCountVisitor(const QStringList& keys) :
 _keys(keys),
 _keyCount(0)
 {

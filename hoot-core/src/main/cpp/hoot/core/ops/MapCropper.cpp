@@ -246,7 +246,7 @@ void MapCropper::crop(OsmMapPtr map, const std::shared_ptr<const Geometry>& g, b
   mc.apply(map);
 }
 
-void MapCropper::_cropWay(OsmMapPtr map, long wid)
+void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 {
   LOG_TRACE("Cropping way: " << wid << "...");
 
@@ -292,7 +292,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
   }
 }
 
-long MapCropper::_findNodeId(std::shared_ptr<const OsmMap> map, std::shared_ptr<const Way> w,
+long MapCropper::_findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w,
   const Coordinate& c)
 {
   long result = std::numeric_limits<long>::max();

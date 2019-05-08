@@ -42,14 +42,14 @@
 namespace hoot
 {
 
-bool IoUtils::isSupportedOsmFormat(const QString input)
+bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
   return inputLower.endsWith(".osm") || inputLower.endsWith(".osm.pbf") ||
          inputLower.startsWith("hootapidb://") || inputLower.startsWith("osmapidb://");
 }
 
-bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
+bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
 {
   LOG_VART(input);
   LOG_VART(allowDir);
@@ -85,7 +85,7 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
   }
 }
 
-bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowDir)
+bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
   if (inputs.size() == 0)
   {
@@ -106,7 +106,7 @@ bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowD
   return true;
 }
 
-void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaultStatus)
+void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus)
 {
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];
@@ -123,7 +123,7 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
   }
 }
 
-void IoUtils::saveMap(OsmMapPtr map, QString path)
+void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
   OsmMapWriterFactory::write(map, path);
 }

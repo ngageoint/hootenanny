@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList keys, const bool keysOnly,
+TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
                  const bool caseSensitive, const bool exactKeyMatch) :
 _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
@@ -52,7 +52,7 @@ _exactKeyMatch(exactKeyMatch)
 {
 }
 
-QString TagInfo::getInfo(const QStringList inputs)
+QString TagInfo::getInfo(const QStringList& inputs)
 {
   QString info = "{\n";
 
@@ -74,9 +74,10 @@ QString TagInfo::getInfo(const QStringList inputs)
   return info;
 }
 
-QString TagInfo::_getInfo(QString input)
+QString TagInfo::_getInfo(const QString& input)
 {
-  LOG_VARD(input);
+  QString inputInfo = input;
+  LOG_VARD(inputInfo);
   LOG_VART(_tagValuesPerKeyLimit);
   LOG_VART(_keys);
   LOG_VART(_keysOnly);
@@ -86,7 +87,7 @@ QString TagInfo::_getInfo(QString input)
 
   std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(
-      input, ConfigOptions().getReaderUseDataSourceIds(),
+      inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
   //Using a different code path for the OGR inputs to handle the layer syntax.  There may be
@@ -97,28 +98,28 @@ QString TagInfo::_getInfo(QString input)
     ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
 
     QStringList layers;
-    if (input.contains(";"))
+    if (inputInfo.contains(";"))
     {
-      QStringList list = input.split(";");
-      input = list.at(0);
+      QStringList list = inputInfo.split(";");
+      inputInfo = list.at(0);
       layers.append(list.at(1));
     }
     else
     {
-      layers = ogrReader->getFilteredLayerNames(input);
+      layers = ogrReader->getFilteredLayerNames(inputInfo);
     }
 
     if (layers.size() == 0)
     {
-      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+      LOG_WARN("Could not find any valid layers to read from in " + inputInfo + ".");
     }
 
     for (int i = 0; i < layers.size(); i++)
     {
-      LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
+      LOG_DEBUG("Reading: " << inputInfo + " " << layers[i] << "...");
 
       TagInfoHash result;
-      std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
+      std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(inputInfo, layers[i]));
       while (iterator->hasNext())
       {
         std::shared_ptr<Element> e = iterator->next();
@@ -153,14 +154,14 @@ QString TagInfo::_getInfo(QString input)
     //needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     //needed readed code can be manually added to this class.
 
-    if (!OsmMapReaderFactory::hasElementInputStream(input))
+    if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {
       throw HootException("Inputs to tag-values must be streamable.");
     }
 
-    LOG_DEBUG("Reading: " << input << "...");
+    LOG_DEBUG("Reading: " << inputInfo << "...");
 
-    reader->open(input);
+    reader->open(inputInfo);
     std::shared_ptr<ElementInputStream> streamReader =
       std::dynamic_pointer_cast<ElementInputStream>(reader);
 
@@ -187,7 +188,7 @@ QString TagInfo::_getInfo(QString input)
   return finalText;
 }
 
-bool TagInfo::_tagKeysMatch(const QString tagKey) const
+bool TagInfo::_tagKeysMatch(const QString& tagKey) const
 {
   LOG_VART(tagKey);
   const Qt::CaseSensitivity caseSensitivity =
@@ -211,7 +212,7 @@ bool TagInfo::_tagKeysMatch(const QString tagKey) const
   return false;
 }
 
-void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
+void TagInfo::_parseElement(const ElementPtr& e, TagInfoHash& result)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
@@ -238,7 +239,7 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
   }
 }
 
-QString TagInfo::_printJSON(QString lName, TagInfoHash& data)
+QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data)
 {
   QStringList attrKey = data.keys();
 

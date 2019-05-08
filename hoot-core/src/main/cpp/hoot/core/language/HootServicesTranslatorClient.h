@@ -60,8 +60,8 @@ public:
   HootServicesTranslatorClient();
   virtual ~HootServicesTranslatorClient();
 
-  virtual QStringList getSourceLanguages() const { return _sourceLangs; }
-  virtual void setSourceLanguages(const QStringList langCodes);
+  virtual QStringList getSourceLanguages() const override { return _sourceLangs; }
+  virtual void setSourceLanguages(const QStringList& langCodes) override;
 
   /**
    * Translates text given a source language
@@ -69,15 +69,15 @@ public:
    * @param text the text to translate
    * @return translated text or an empty string if a translation could not be made
    */
-  virtual QString translate(const QString text);
+  virtual QString translate(const QString& text) override;
 
-  virtual QString getDetectedLanguage() const { return _detectedLang; }
+  virtual QString getDetectedLanguage() const override { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
-  virtual void setId(const QString id) { _id = id; }
+  virtual void setId(const QString& id) override { _id = id; }
 
 protected:
 
@@ -151,20 +151,20 @@ private:
    * detectable language results in a warning, while a failure to verify a translatable language
    * results in an error
    */
-  void _checkLangsAvailable(const QString type);
+  void _checkLangsAvailable(const QString& type);
 
-  void _validateAvailableLangs(std::shared_ptr<boost::property_tree::ptree> replyObj,
-                               const QString type);
+  void _validateAvailableLangs(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
+                               const QString& type);
 
-  QString _getRequestData(const QString text);
-  void _parseResponse(std::shared_ptr<boost::property_tree::ptree> replyObj);
+  QString _getRequestData(const QString& text);
+  void _parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj);
 
-  bool _getTranslationFromCache(const QString text);
-  void _insertTranslationIntoCache(const QString text, const QString translatedText,
-                                   const QString detectedLang);
+  bool _getTranslationFromCache(const QString& text);
+  void _insertTranslationIntoCache(const QString& text, const QString& translatedText,
+                                   const QString& detectedLang);
 
-  bool _textIsTranslatable(const QString text) const;
-  bool _textIsEnglish(const QString text) const;
+  bool _textIsTranslatable(const QString& text) const;
+  bool _textIsEnglish(const QString& text) const;
 };
 
 }

@@ -39,7 +39,7 @@ TagRenameKeyVisitor::TagRenameKeyVisitor()
 {
 }
 
-TagRenameKeyVisitor::TagRenameKeyVisitor(const QString oldKey, const QString newKey) :
+TagRenameKeyVisitor::TagRenameKeyVisitor(const QString& oldKey, const QString& newKey) :
 _oldKey(oldKey),
 _newKey(newKey)
 {

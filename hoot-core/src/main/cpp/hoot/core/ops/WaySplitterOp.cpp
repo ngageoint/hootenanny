@@ -44,7 +44,7 @@ WaySplitterOp::WaySplitterOp()
   setConfiguration(conf());
 }
 
-void WaySplitterOp::apply(std::shared_ptr<OsmMap> &map)
+void WaySplitterOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 

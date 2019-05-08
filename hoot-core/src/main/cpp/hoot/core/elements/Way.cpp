@@ -127,7 +127,7 @@ void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter)
   visitRo(map, filter);
 }
 
-const Envelope& Way::getApproximateEnvelope(std::shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
 {
   bool goodNodes = true;
   if (ep.get())
@@ -163,7 +163,7 @@ const Envelope& Way::getApproximateEnvelope(std::shared_ptr<const ElementProvide
   }
 }
 
-const Envelope& Way::getEnvelopeInternal(std::shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
 {
   _cachedEnvelope.init();
 

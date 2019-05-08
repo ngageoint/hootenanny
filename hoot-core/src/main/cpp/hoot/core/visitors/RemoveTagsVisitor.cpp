@@ -43,14 +43,14 @@ _numTagsRemoved(0)
   setConfiguration(conf());
 }
 
-RemoveTagsVisitor::RemoveTagsVisitor(QString key) :
+RemoveTagsVisitor::RemoveTagsVisitor(const QString& key) :
 _negateCriterion(false),
 _numTagsRemoved(0)
 {
   addKey(key);
 }
 
-RemoveTagsVisitor::RemoveTagsVisitor(QString key1, QString key2) :
+RemoveTagsVisitor::RemoveTagsVisitor(const QString& key1, const QString& key2) :
 _negateCriterion(false),
 _numTagsRemoved(0)
 {
@@ -58,7 +58,7 @@ _numTagsRemoved(0)
   addKey(key2);
 }
 
-RemoveTagsVisitor::RemoveTagsVisitor(QStringList keys) :
+RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
 _keys(keys),
 _negateCriterion(false),
 _numTagsRemoved(0)
@@ -86,7 +86,7 @@ void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
   }
 }
 
-void RemoveTagsVisitor::_setCriterion(const QString criterionName)
+void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
 {
   if (!criterionName.trimmed().isEmpty())
   {
@@ -97,7 +97,7 @@ void RemoveTagsVisitor::_setCriterion(const QString criterionName)
   }
 }
 
-void RemoveTagsVisitor::addKey(QString key)
+void RemoveTagsVisitor::addKey(const QString& key)
 {
   _keys.append(key);
 }

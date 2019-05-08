@@ -55,7 +55,7 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
   setCrop(config.getCookieCutterOutputCrop());
 }
 
-void CookieCutterOp::apply(std::shared_ptr<OsmMap> &map)
+void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
   //remove unknown2 out of the input map and create a new map, which will be our ref map
   std::shared_ptr<OsmMap> refMap(new OsmMap(map));

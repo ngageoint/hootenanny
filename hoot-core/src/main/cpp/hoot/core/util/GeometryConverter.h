@@ -197,7 +197,7 @@ public:
   NodePtr convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map, Status s,
                              double circularError);
 
-  void setNodeFactory(std::shared_ptr<NodeFactory> nf) { _nf = nf; }
+  void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
 protected:
 

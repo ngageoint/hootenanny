@@ -124,7 +124,7 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
   }
 }
 
-ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString attribute,
+ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString& attribute,
                                                                    QString& attributeValue)
 {
   //LOG_VART(attribute);

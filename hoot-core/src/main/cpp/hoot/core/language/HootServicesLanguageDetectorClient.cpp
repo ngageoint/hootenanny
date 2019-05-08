@@ -157,8 +157,8 @@ QString HootServicesLanguageDetectorClient::_getUnvailableLangNamesStr() const
   return str;
 }
 
-QString HootServicesLanguageDetectorClient::_getCountsStr(const QString title,
-                                                          QMap<QString, int> data) const
+QString HootServicesLanguageDetectorClient::_getCountsStr(const QString& title,
+                                                          const QMap<QString, int>& data) const
 {
   QString str = title + ":\n";
 
@@ -174,7 +174,7 @@ QString HootServicesLanguageDetectorClient::_getCountsStr(const QString title,
  return str;
 }
 
-QString HootServicesLanguageDetectorClient::detect(const QString text)
+QString HootServicesLanguageDetectorClient::detect(const QString& text)
 {
   LOG_TRACE("Detecting source language for: " << text);
 
@@ -285,7 +285,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString text)
   return detectedLangCode;
 }
 
-QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) const
+QString HootServicesLanguageDetectorClient::_getRequestData(const QString& text) const
 {
   boost::property_tree::ptree requestObj;
   QByteArray textData = QUrl::toPercentEncoding(text);
@@ -298,7 +298,7 @@ QString HootServicesLanguageDetectorClient::_getRequestData(const QString text) 
 }
 
 QString HootServicesLanguageDetectorClient::_parseResponse(
-  std::shared_ptr<boost::property_tree::ptree> replyObj, QString& detectorUsed)
+  const std::shared_ptr<boost::property_tree::ptree>& replyObj, QString& detectorUsed)
 {
   QString detectedLangCode =
     QString::fromStdString(replyObj->get<std::string>("detectedLangCode")).trimmed();
@@ -340,7 +340,7 @@ QString HootServicesLanguageDetectorClient::_parseResponse(
   return detectedLangCode;
 }
 
-QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString text)
+QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString& text)
 {
   QString detectedLangCode = "";
   DetectionResult* cachedDetection = _cache->object(text.toLower());
@@ -364,8 +364,8 @@ QString HootServicesLanguageDetectorClient::_getLangFromCache(const QString text
   return detectedLangCode;
 }
 
-void HootServicesLanguageDetectorClient::_insertLangIntoCache(const QString text,
-                                                              const QString detectedLangCode)
+void HootServicesLanguageDetectorClient::_insertLangIntoCache(const QString& text,
+                                                              const QString& detectedLangCode)
 {
   DetectionResult* detectionResult = new DetectionResult();
   detectionResult->detectedLangCode = detectedLangCode;
@@ -382,7 +382,7 @@ void HootServicesLanguageDetectorClient::_insertLangIntoCache(const QString text
   }
 }
 
-bool HootServicesLanguageDetectorClient::_textIsDetectable(const QString text) const
+bool HootServicesLanguageDetectorClient::_textIsDetectable(const QString& text) const
 {
   return !StringUtils::isNumber(text) && StringUtils::hasAlphabeticCharacter(text);
 }

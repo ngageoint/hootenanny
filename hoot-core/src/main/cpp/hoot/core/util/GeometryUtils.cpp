@@ -290,7 +290,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
-Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
+Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
   const QString errMsg = "Invalid envelope string: " + boundsStr;

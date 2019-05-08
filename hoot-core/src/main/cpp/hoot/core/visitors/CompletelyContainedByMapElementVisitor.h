@@ -76,7 +76,7 @@ protected:
 
   void _visit(const std::shared_ptr<const Way>& w);
 
-  void _visit(const std::shared_ptr<const Relation> &r);
+  void _visit(const std::shared_ptr<const Relation>& r);
 };
 
 }

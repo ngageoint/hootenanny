@@ -59,7 +59,7 @@ public:
   virtual ~Match();
 
   virtual QString explain() const;
-  virtual void setExplain(const QString /*explainText*/){ }
+  virtual void setExplain(const QString& /*explainText*/){ }
 
   /**
    * Classifies the match and returns a classification object.
@@ -146,7 +146,7 @@ protected:
    * All of this order silliness maintains a consistent ordering of matches when they're placed
    * into a set as pointers.
    */
-  Match(const std::shared_ptr<const MatchThreshold> threshold) :
+  Match(const std::shared_ptr<const MatchThreshold>& threshold) :
     _order(_orderCount++), _threshold(threshold) {}
 
   friend class MatchPtrComparator;

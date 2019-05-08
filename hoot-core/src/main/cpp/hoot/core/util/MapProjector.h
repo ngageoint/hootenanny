@@ -84,7 +84,7 @@ public:
 
   static std::shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void project(std::shared_ptr<OsmMap> map, std::shared_ptr<OGRSpatialReference> ref);
+  static void project(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OGRSpatialReference>& ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
@@ -122,44 +122,44 @@ public:
                       const std::shared_ptr<OGRSpatialReference>& srs1,
                       const std::shared_ptr<OGRSpatialReference>& srs2);
 
-  static void projectToAeac(std::shared_ptr<OsmMap> map);
+  static void projectToAeac(const std::shared_ptr<OsmMap>& map);
 
   /**
    * Picks the center of the orthographic projection as the center of the map bounds. Should be
    * a reasonable projection for small areas. Units are in meters.
    */
-  static void projectToOrthographic(std::shared_ptr<OsmMap> map);
+  static void projectToOrthographic(const std::shared_ptr<OsmMap>& map);
 
-  static void projectToOrthographic(std::shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToOrthographic(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the envelope of the map to determine the projection.
    */
-  static void projectToPlanar(std::shared_ptr<OsmMap> map);
+  static void projectToPlanar(const std::shared_ptr<OsmMap>& map);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the provided envelope to determine the projection.
    */
-  static void projectToPlanar(std::shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToPlanar(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env);
 
-  static void projectToWgs84(std::shared_ptr<OsmMap> map);
+  static void projectToWgs84(const std::shared_ptr<OsmMap>& map);
 
   /**
    * Very slow convenience function.
    */
   static geos::geom::Coordinate projectFromWgs84(const geos::geom::Coordinate& c,
-                                                 std::shared_ptr<OGRSpatialReference> srs);
+                                                 const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Very slow convenience function.
    */
   static geos::geom::Coordinate project(const geos::geom::Coordinate& c,
-                                        std::shared_ptr<OGRSpatialReference> srs1,
-                                        std::shared_ptr<OGRSpatialReference> srs2);
+                                        const std::shared_ptr<OGRSpatialReference>& srs1,
+                                        const std::shared_ptr<OGRSpatialReference>& srs2);
 
-  static QString toWkt(std::shared_ptr<OGRSpatialReference> srs) { return toWkt(srs.get()); }
+  static QString toWkt(const std::shared_ptr<OGRSpatialReference>& srs) { return toWkt(srs.get()); }
   static QString toWkt(OGRSpatialReference* srs);
 
 private:
@@ -182,7 +182,7 @@ private:
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  bool _evaluateProjection(const OGREnvelope& env, std::shared_ptr<OGRSpatialReference> srs,
+  bool _evaluateProjection(const OGREnvelope& env, const std::shared_ptr<OGRSpatialReference>& srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
   size_t _findBestResult(std::vector<PlanarTestResult>& results);

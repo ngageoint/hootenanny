@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-bool LanguageUtils::normalizeAndDetermineIfTextIsEnglish(const QString text)
+bool LanguageUtils::normalizeAndDetermineIfTextIsEnglish(const QString& text)
 {
   const QString textToCheck =
     text

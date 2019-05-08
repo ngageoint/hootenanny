@@ -95,7 +95,7 @@ protected:
    * @param toTranslateTagKey the key of the tag whose value is to be translated
    * @return true if a successul translation was made; false otherwise
    */
-  bool _translate(const ElementPtr& e, const QString toTranslateTagKey);
+  bool _translate(const ElementPtr& e, const QString& toTranslateTagKey);
 
 private:
 

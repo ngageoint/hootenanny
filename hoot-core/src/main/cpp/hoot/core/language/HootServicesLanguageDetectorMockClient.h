@@ -50,7 +50,7 @@ public:
 
   HootServicesLanguageDetectorMockClient();
 
-  virtual QString detect(const QString text);
+  virtual QString detect(const QString& text) override;
 
 private:
 

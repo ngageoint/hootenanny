@@ -89,7 +89,7 @@ protected:
   NodeToWayMap* _n2w;
   std::shared_ptr<TagDifferencer> _diff;
 
-  void _mergeNeighbors(std::shared_ptr<Way> w);
+  void _mergeNeighbors(const std::shared_ptr<Way>& w);
 
   void _mergeWays(const std::set<long>& ids);
 };

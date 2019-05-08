@@ -409,7 +409,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 }
 
 bool MapProjector::_evaluateProjection(const OGREnvelope& env,
-  std::shared_ptr<OGRSpatialReference> srs, Meters testDistance, Meters& maxDistanceError,
+  const std::shared_ptr<OGRSpatialReference>& srs, Meters testDistance, Meters& maxDistanceError,
   Radians& maxAngleError)
 {
   // Disable CPL error messages. They will be re-enabled when the DisableCplErrors object is
@@ -524,8 +524,9 @@ bool MapProjector::isGeographic(const ConstElementProviderPtr& provider)
   return provider->getProjection()->IsGeographic();
 }
 
-Coordinate MapProjector::project(const Coordinate& c, std::shared_ptr<OGRSpatialReference> srs1,
-                                 std::shared_ptr<OGRSpatialReference> srs2)
+Coordinate MapProjector::project(const Coordinate& c,
+                                 const std::shared_ptr<OGRSpatialReference>& srs1,
+                                 const std::shared_ptr<OGRSpatialReference>& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
@@ -545,7 +546,7 @@ Coordinate MapProjector::project(const Coordinate& c, std::shared_ptr<OGRSpatial
   return result;
 }
 
-void MapProjector::project(std::shared_ptr<OsmMap> map, std::shared_ptr<OGRSpatialReference> ref)
+void MapProjector::project(const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OGRSpatialReference>& ref)
 {
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
@@ -615,20 +616,20 @@ void MapProjector::project(const std::shared_ptr<Geometry>& g,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapProjector::projectToAeac(std::shared_ptr<OsmMap> map)
+void MapProjector::projectToAeac(const std::shared_ptr<OsmMap>& map)
 {
   std::shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
     CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
-void MapProjector::projectToOrthographic(std::shared_ptr<OsmMap> map)
+void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map)
 {
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
   return projectToOrthographic(map, env);
 }
 
-void MapProjector::projectToOrthographic(std::shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env)
 {
   MapProjector proj;
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
@@ -641,7 +642,7 @@ void MapProjector::projectToOrthographic(std::shared_ptr<OsmMap> map, const OGRE
   proj.project(map, srs);
 }
 
-void MapProjector::projectToPlanar(std::shared_ptr<OsmMap> map)
+void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map)
 {
   if (isGeographic(map))
   {
@@ -651,7 +652,7 @@ void MapProjector::projectToPlanar(std::shared_ptr<OsmMap> map)
   }
 }
 
-void MapProjector::projectToPlanar(std::shared_ptr<OsmMap> map, const OGREnvelope& env)
+void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env)
 {
   if (map->getProjection()->IsProjected() == false)
   {
@@ -660,7 +661,7 @@ void MapProjector::projectToPlanar(std::shared_ptr<OsmMap> map, const OGREnvelop
   }
 }
 
-void MapProjector::projectToWgs84(std::shared_ptr<OsmMap> map)
+void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
 {
   if (isGeographic(map) == false)
   {
@@ -673,7 +674,7 @@ void MapProjector::projectToWgs84(std::shared_ptr<OsmMap> map)
 }
 
 Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
-                                          std::shared_ptr<OGRSpatialReference> srs)
+                                          const std::shared_ptr<OGRSpatialReference>& srs)
 {
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);

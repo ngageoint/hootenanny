@@ -142,7 +142,7 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message, int opCount, std::shared_ptr<OperationStatusInfo> statusInfo)
+QString NamedOp::_getInitMessage(const QString& message, int opCount, const std::shared_ptr<OperationStatusInfo>& statusInfo)
 {
   QString initMessage =
     QString("Applying operation %1 / %2")

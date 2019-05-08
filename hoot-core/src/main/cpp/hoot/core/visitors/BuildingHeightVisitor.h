@@ -86,11 +86,11 @@ private:
   Meters _getHeight(const ConstElementPtr& e);
   // considered putting this parsing logic in Tags::getLength() but decided against it for the time
   // being
-  Meters _parseMetersVal(const QString heightStr);
-  Meters _parseFeetVal(const QString heightStr, const QRegularExpressionMatch& regexMatch) const;
-  Meters _parseFeetToken(const QString type, const QRegularExpressionMatch& regexMatch,
+  Meters _parseMetersVal(const QString& heightStr);
+  Meters _parseFeetVal(const QString& heightStr, const QRegularExpressionMatch& regexMatch) const;
+  Meters _parseFeetToken(const QString& type, const QRegularExpressionMatch& regexMatch,
                          bool& successfulParse) const;
-  void _logInvalidFeetHeight(const QString heightStr) const;
+  void _logInvalidFeetHeight(const QString& heightStr) const;
   void _cleanHeightStr(QString& heightStr);
 };
 

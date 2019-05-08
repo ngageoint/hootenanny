@@ -50,7 +50,7 @@ public:
    * @param sql SQL to execute.
    * @return the executed query
    */
-  static QSqlQuery execNoPrepare(QSqlDatabase& database, const QString sql);
+  static QSqlQuery execNoPrepare(const QSqlDatabase& database, const QString& sql);
 
   /**
    * Get the number of rows in the table
@@ -59,9 +59,9 @@ public:
    * @param tableName name of the table to determine the row count for
    * @return number of rows
    */
-  static long getRowCount(const QSqlDatabase& database, const QString tableName);
+  static long getRowCount(const QSqlDatabase& database, const QString& tableName);
 
-  static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString tableName);
+  static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString& tableName);
 
   /**
    * Disables all existing database constraints on the specified table
@@ -69,7 +69,7 @@ public:
    * @param database database to modify
    * @param tableName table to modify
    */
-  static void disableTableConstraints(QSqlDatabase& database, const QString tableName);
+  static void disableTableConstraints(const QSqlDatabase& database, const QString& tableName);
 
   /**
    * Enables all existing database constraints on the specified table
@@ -77,7 +77,7 @@ public:
    * @param database database to modify
    * @param tableName table to modify
    */
-  static void enableTableConstraints(QSqlDatabase& database, const QString tableName);
+  static void enableTableConstraints(const QSqlDatabase& database, const QString& tableName);
 
   /**
    * Returns the version of the Postgres database used
@@ -88,7 +88,7 @@ public:
 
 private:
 
-  static void _modifyTableConstraints(QSqlDatabase& database, const QString tableName,
+  static void _modifyTableConstraints(const QSqlDatabase& database, const QString& tableName,
                                       const bool disable = true);
 
 };

@@ -98,8 +98,7 @@ void HootServicesLanguageInfoClient::setConfiguration(const Settings& conf)
   }
 }
 
-std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableApps(
- const QString type)
+std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableApps(const QString& type)
 {
  LOG_DEBUG("Checking apps available for: " << type << "...");
 
@@ -138,8 +137,7 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
  return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableLanguages(
-  const QString type)
+std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::getAvailableLanguages(const QString& type)
 {
   LOG_DEBUG("Checking languages available for: " << type << "...");
 
@@ -185,7 +183,7 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
   return StringUtils::jsonStringToPropTree(request.getResponseContent());
 }
 
-QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(const QStringList apps)
+QString HootServicesLanguageInfoClient::_getAvailableLanguagesRequestData(const QStringList& apps)
 { 
   boost::property_tree::ptree requestObj;
   requestObj.add_child("apps", *StringUtils::stringListToJsonStringArray(apps));

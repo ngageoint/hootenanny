@@ -45,7 +45,7 @@ public:
    * @param text text to examine
    * @return true if the text is English; false otherwise
    */
-  static bool normalizeAndDetermineIfTextIsEnglish(const QString text);
+  static bool normalizeAndDetermineIfTextIsEnglish(const QString& text);
 };
 
 }

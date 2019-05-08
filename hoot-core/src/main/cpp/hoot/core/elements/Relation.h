@@ -88,7 +88,7 @@ public:
    * @param role role by which to examine elements
    * @return the number of member elements with the specified role
    */
-  int numElementsByRole(const QString role) const;
+  int numElementsByRole(const QString& role) const;
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }

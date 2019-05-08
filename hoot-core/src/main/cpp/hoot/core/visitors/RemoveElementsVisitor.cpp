@@ -174,7 +174,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void RemoveElementsVisitor::removeWays(std::shared_ptr<OsmMap> pMap,
+void RemoveElementsVisitor::removeWays(const std::shared_ptr<OsmMap>& pMap,
                                        const std::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v;

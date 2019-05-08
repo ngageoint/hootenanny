@@ -133,8 +133,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const std::shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(std::shared_ptr<Element> e1,
-                                            std::shared_ptr<Element> e2)
+void RemoveDuplicateAreaVisitor::_removeOne(const std::shared_ptr<Element>& e1,
+                                            const std::shared_ptr<Element>& e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
   {

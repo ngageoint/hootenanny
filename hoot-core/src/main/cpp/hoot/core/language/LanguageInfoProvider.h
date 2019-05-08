@@ -56,7 +56,7 @@ public:
    * @param type type of app to retrieve; "translator" or "detector"
    * @return a property tree containing the language app information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString type) = 0;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableApps(const QString& type) = 0;
 
   /**
    * Retrieves translation available languages info
@@ -64,7 +64,7 @@ public:
    * @param type type of language information to retrieve; "translatable" or "detectable"
    * @return a property tree containing the language information
    */
-  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString type) = 0;
+  virtual std::shared_ptr<boost::property_tree::ptree> getAvailableLanguages(const QString& type) = 0;
 };
 
 }

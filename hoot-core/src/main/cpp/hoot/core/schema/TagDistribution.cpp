@@ -51,7 +51,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   _nonWord.setPattern("[^\\w\\s]");
 }
 
-std::map<QString, int> TagDistribution::getTagCounts(const QStringList inputs)
+std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
 {
   std::map<QString, int> tagCounts;
   for (int i = 0; i < inputs.size(); i++)
@@ -115,7 +115,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   return ts.readAll();
 }
 
-void TagDistribution::_countTags(const QString input, std::map<QString, int>& tagCounts)
+void TagDistribution::_countTags(const QString& input, std::map<QString, int>& tagCounts)
 {
   long inputTotal = 0;
 
@@ -207,7 +207,7 @@ void TagDistribution::_countTags(const QString input, std::map<QString, int>& ta
   filteredInputStream->close();
 }
 
-ElementInputStreamPtr TagDistribution::_getFilteredInputStream(ElementInputStreamPtr inputStream)
+ElementInputStreamPtr TagDistribution::_getFilteredInputStream(const ElementInputStreamPtr& inputStream)
 {
   ElementInputStreamPtr filteredInputStream;
 
@@ -224,7 +224,7 @@ ElementInputStreamPtr TagDistribution::_getFilteredInputStream(ElementInputStrea
   return filteredInputStream;
 }
 
-std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString input)
+std::shared_ptr<PartialOsmMapReader> TagDistribution::_getReader(const QString& input)
 {
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(

@@ -50,7 +50,7 @@ HootServicesLanguageDetectorClient()
   _useCookies = false;
 }
 
-QString HootServicesLanguageDetectorMockClient::detect(const QString text)
+QString HootServicesLanguageDetectorMockClient::detect(const QString& text)
 {
   LOG_DEBUG("Detecting source language for text: " << text << "...");
   _numDetectionsAttempted++;
