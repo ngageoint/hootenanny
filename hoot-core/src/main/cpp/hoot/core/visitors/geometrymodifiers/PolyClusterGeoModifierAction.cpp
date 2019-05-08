@@ -244,7 +244,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
   // create an envelope if we need it for intersection check
   boost::shared_ptr<Envelope> pEnvelope;
 
-  if(_checkIntersections)
+  if (_checkIntersections)
   {
     WayPtr pWay = _pMap->getWay(thisWayId);
     pEnvelope = boost::shared_ptr<Envelope>(pWay->getEnvelope(_pMap));
@@ -268,7 +268,7 @@ void PolyClusterGeoModifierAction::_recursePolygons(const boost::shared_ptr<Poly
       {
         bool allow = true;
 
-        if(_checkIntersections)
+        if (_checkIntersections)
         {
           vector<long> wayIdsToCheck = _pMap->getIndex().findWays(*pEnvelope);
 
