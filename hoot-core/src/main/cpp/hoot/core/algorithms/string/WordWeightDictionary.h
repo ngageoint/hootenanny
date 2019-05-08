@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORDWEIGHTDICTIONARY_H
@@ -30,9 +30,6 @@
 
 // Qt
 #include <QString>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -62,7 +59,7 @@ public:
   virtual double getWeight(const QString& word) const = 0;
 };
 
-typedef boost::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
+typedef std::shared_ptr<WordWeightDictionary> WordWeightDictionaryPtr;
 
 }
 

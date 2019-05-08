@@ -28,16 +28,13 @@
 #define REMOVEREF2VISITOR_H
 
 // hoot
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 // Qt
 #include <QMap>
 #include <QMutex>
-
-// tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {

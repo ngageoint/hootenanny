@@ -60,7 +60,7 @@ class GetRefUuidVisitor : public ConstElementVisitor
 {
 public:
 
-  typedef map<QString, set<QString> > RefToUuid;
+  typedef map<QString, set<QString>> RefToUuid;
 
   GetRefUuidVisitor(QString ref) : _ref(ref) {}
 
@@ -203,7 +203,7 @@ void MatchComparator::_clearCache()
   _elementWrongCounts.clear();
 }
 
-bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
+bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
   const ConstOsmMapPtr& /*conflated*/)
 {
   TagContainsCriterion tcf("uuid", uuid1);
@@ -256,7 +256,7 @@ double MatchComparator::getPertyScore() const
   assert(_expected.size() > 0);
   set<UuidPair> intersection;
   set_intersection(_actual.begin(), _actual.end(), _expected.begin(), _expected.end(),
-    insert_iterator<std::set<UuidPair> >(intersection, intersection.begin()));
+    insert_iterator<std::set<UuidPair>>(intersection, intersection.begin()));
   LOG_VARD(intersection.size());
   LOG_VARD(intersection);
   const double pertyScore = (double)intersection.size() / (double)_expected.size();
@@ -616,7 +616,7 @@ int MatchComparator::getTotalCount() const
   return result;
 }
 
-bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated)
+bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated)
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
@@ -646,8 +646,8 @@ bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOs
   return result;
 }
 
-void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
-                                      const QString expected, const QString actual)
+void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString& uuid,
+                                      const QString& expected, const QString& actual)
 {
   SetTagValueVisitor stv1(MetadataTags::HootExpected(), expected);
   SetTagValueVisitor stv2(MetadataTags::HootActual(), actual);
@@ -656,7 +656,7 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
   {
     if (it.key().contains(uuid))
     {
-      boost::shared_ptr<Element> eid = map->getElement(it.value());
+      std::shared_ptr<Element> eid = map->getElement(it.value());
       stv1.visit(eid);
       stv2.visit(eid);
     }
@@ -672,7 +672,7 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   {
     if (it.key().contains(uuid))
     {
-      boost::shared_ptr<Element> eid = map->getElement(it.value());
+      std::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }
@@ -687,7 +687,7 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
   {
     if (it.key().contains(uuid))
     {
-      boost::shared_ptr<Element> eid = map->getElement(it.value());
+      std::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }

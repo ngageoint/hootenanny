@@ -39,7 +39,7 @@ TagRenameKeyVisitor::TagRenameKeyVisitor()
 {
 }
 
-TagRenameKeyVisitor::TagRenameKeyVisitor(const QString oldKey, const QString newKey) :
+TagRenameKeyVisitor::TagRenameKeyVisitor(const QString& oldKey, const QString& newKey) :
 _oldKey(oldKey),
 _newKey(newKey)
 {
@@ -56,7 +56,7 @@ void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void TagRenameKeyVisitor::visit(const boost::shared_ptr<Element>& e)
+void TagRenameKeyVisitor::visit(const std::shared_ptr<Element>& e)
 {
   LOG_VART(_oldKey);
   LOG_VART(_newKey);

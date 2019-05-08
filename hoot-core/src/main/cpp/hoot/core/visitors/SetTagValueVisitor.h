@@ -48,15 +48,15 @@ public:
   static std::string className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
-  SetTagValueVisitor(QString key, QString value, bool appendToExistingValue = false,
-                     const QString criterionName = "", bool overwriteExistingTag = true,
+  SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue = false,
+                     const QString& criterionName = "", bool overwriteExistingTag = true,
                      bool negateCriterion = false);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Adds or updates one or more tags with a specified key/value combination"; }
@@ -74,14 +74,14 @@ private:
   //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
   //a customizable filter
-  boost::shared_ptr<ElementCriterion> _criterion;
+  std::shared_ptr<ElementCriterion> _criterion;
   //overwrites any tag with a matching key
   bool _overwriteExistingTag;
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
 
-  void _setTag(const ElementPtr& e, QString k, QString v);
-  void _setCriterion(const QString criterionName);
+  void _setTag(const ElementPtr& e, const QString& k, const QString& v);
+  void _setCriterion(const QString& criterionName);
 };
 
 }

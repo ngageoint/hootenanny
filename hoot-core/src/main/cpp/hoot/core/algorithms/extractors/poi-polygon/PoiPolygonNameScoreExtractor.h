@@ -88,12 +88,12 @@ private:
   //when enabled, will attempt to translate address tags to English
   bool _translateTagValuesToEnglish;
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
-  static boost::shared_ptr<ToEnglishTranslator> _translator;
+  static std::shared_ptr<ToEnglishTranslator> _translator;
 
   mutable long _namesProcessed;
   mutable bool _matchAttemptMade;
 
-  boost::shared_ptr<NameExtractor> _getNameExtractor() const;
+  std::shared_ptr<NameExtractor> _getNameExtractor() const;
 };
 
 }

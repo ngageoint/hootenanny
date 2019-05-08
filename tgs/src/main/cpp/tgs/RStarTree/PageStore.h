@@ -22,13 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__PAGE_STORE_H__
 #define __TGS__PAGE_STORE_H__
 
-#include <tgs/SharedPtr.h>
+// Standard
+#include <memory>
+
+// Tgs
 #include <tgs/RStarTree/Page.h>
 
 namespace Tgs
@@ -52,7 +55,7 @@ public:
    * Creates a new page w/ a new id and returns the page. All page shared pointers should be
    * freed before the PageStore is destroyed.
    */
-  virtual boost::shared_ptr<Page> createPage() = 0;
+  virtual std::shared_ptr<Page> createPage() = 0;
 
   /**
    * Saves all dirty pages and frees all memory.
@@ -62,7 +65,7 @@ public:
   /**
    * Returns the page with the given id.
    */
-  virtual boost::shared_ptr<Page> getPage(int id) = 0;
+  virtual std::shared_ptr<Page> getPage(int id) = 0;
 
   /**
    * Returns the number of pages in this page store

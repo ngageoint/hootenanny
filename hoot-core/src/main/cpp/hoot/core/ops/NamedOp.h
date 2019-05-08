@@ -52,14 +52,14 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const override { return ""; }
 
-  virtual void setProgress(Progress progress) { _progress = progress; }
-  virtual unsigned int getNumSteps() const { return _namedOps.size(); }
+  virtual void setProgress(Progress progress) override { _progress = progress; }
+  virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
 
 private:
 
@@ -75,9 +75,9 @@ private:
    */
   void _substituteForContainingOps();
 
-  QString _getInitMessage(const QString message,
-                          boost::shared_ptr<OperationStatusInfo> statusInfo) const;
-  void _updateProgress(const int currentStep, const QString message);
+  QString _getInitMessage(const QString& message, 
+                          const std::shared_ptr<OperationStatusInfo>& statusInfo) const;
+  void _updateProgress(const int currentStep, const QString& message);
 };
 
 }

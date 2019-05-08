@@ -42,7 +42,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayIntersectionsVisitor)
 
 void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
-  boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);

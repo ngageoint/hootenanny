@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<TagComparator> TagComparator::_theInstance;
+std::shared_ptr<TagComparator> TagComparator::_theInstance;
 
 struct Entry
 {
@@ -244,7 +244,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   priority_queue<Entry, deque<Entry>, Entry> heap;
 
   // create a n x m matrix of scores
-  vector< vector<double> > scores;
+  vector<vector<double>> scores;
   scores.resize(n1.size());
   Entry e;
   for (size_t i = 0; i < n1.size(); i++)
@@ -331,7 +331,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   priority_queue<Entry, deque<Entry>, Entry> heap;
 
   // create a n x m matrix of scores
-  vector< vector<double> > scores;
+  vector<vector<double>> scores;
   scores.resize(n1.size());
   Entry e;
   for (int i = 0; i < n1.size(); i++)

@@ -22,15 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTCORESTABLE_H
 #define HOOTCORESTABLE_H
-
-// Boost
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 
 // GEOS Includes
 #include <geos/geom/Coordinate.h>

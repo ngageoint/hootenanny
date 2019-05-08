@@ -66,14 +66,14 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
-  boost::shared_ptr<PoiPolygonRfClassifier> _getRf();
+  std::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<PoiPolygonRfClassifier> _getRf();
 
-  boost::shared_ptr<PoiPolygonRfClassifier> _rf;
+  std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATETESTSETTINGSOPTIMIZER_H
 #define CONFLATETESTSETTINGSOPTIMIZER_H
@@ -58,8 +58,8 @@ public:
    * @param outputFile file path which to write the optimization summary to
    */
   void runOptimization(
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
-    const QString testSettingsFile, const QString outputFile);
+    std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
+    const QString& testSettingsFile, const QString& outputFile);
 
 private:
 
@@ -68,13 +68,13 @@ private:
   /*
    * Configure hardcoded option value ranges here per test (could move this to a file)
    */
-  Tgs::StateDescriptionPtr _initStateDescription(const QString testSettingsFile);
+  Tgs::StateDescriptionPtr _initStateDescription(const QString& testSettingsFile);
 
   /*
    * Writes a summary of the optimization results to file
    */
-  void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile);
+  void _writeOutput(const std::shared_ptr<AbstractTestFitnessFunction>& fitnessFunction,
+    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString& outputFile);
 };
 
 }

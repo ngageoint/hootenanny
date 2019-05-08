@@ -69,7 +69,7 @@ public:
     ChangesetDeriverPtr changesetDiff(
       new ChangesetDeriver(map1SortedElements, map2SortedElements));
 
-    QMap<Change::ChangeType, QList<long> > changeTypeToIds;
+    QMap<Change::ChangeType, QList<long>> changeTypeToIds;
     while (changesetDiff->hasMoreChanges())
     {
       const Change change = changesetDiff->readNextChange();

@@ -54,7 +54,7 @@ ReplaceRoundabouts::ReplaceRoundabouts()
 {
 }
 
-void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
+void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
 {
   // Make sure we are planar
   MapProjector::projectToPlanar(pMap);
@@ -74,7 +74,7 @@ void ReplaceRoundabouts::replaceRoundabouts(boost::shared_ptr<OsmMap> pMap)
     RemoveNodeOp::removeNode(pMap, id, true);
 }
 
-void ReplaceRoundabouts::apply(boost::shared_ptr<OsmMap> &pMap)
+void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
 {
   _numAffected = 0;
 

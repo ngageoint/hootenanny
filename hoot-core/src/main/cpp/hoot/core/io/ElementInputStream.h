@@ -48,7 +48,7 @@ public:
    * @brief getProjection
    * @return
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   /**
    * @brief ~ElementInputStream
@@ -69,7 +69,7 @@ public:
   virtual ElementPtr readNextElement() = 0;
 };
 
-typedef boost::shared_ptr<ElementInputStream> ElementInputStreamPtr;
+typedef std::shared_ptr<ElementInputStream> ElementInputStreamPtr;
 
 }
 

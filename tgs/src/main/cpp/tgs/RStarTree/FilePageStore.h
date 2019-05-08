@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -49,11 +49,11 @@ public:
 
   virtual ~FilePageStore();
 
-  virtual boost::shared_ptr<Page> createPage();
+  virtual std::shared_ptr<Page> createPage();
 
   virtual void flush();
 
-  virtual boost::shared_ptr<Page> getPage(int id);
+  virtual std::shared_ptr<Page> getPage(int id);
 
   virtual int getPageCount() const;
 
@@ -69,7 +69,7 @@ private:
 
   int _pageSize;
 
-  typedef HashMap<int, boost::weak_ptr<Page> > PageMap;
+  typedef HashMap<int, std::weak_ptr<Page>> PageMap;
   PageMap _pagesMap;
   bool _readOnly;
   int _pageCount;

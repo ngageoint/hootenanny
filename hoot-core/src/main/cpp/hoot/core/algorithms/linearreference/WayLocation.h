@@ -31,9 +31,6 @@
 // GEOS
 #include <geos/geom/Coordinate.h>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Node.h>
@@ -200,8 +197,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef boost::shared_ptr<WayLocation> WayLocationPtr;
-typedef boost::shared_ptr<const WayLocation> ConstWayLocationPtr;
+typedef std::shared_ptr<WayLocation> WayLocationPtr;
+typedef std::shared_ptr<const WayLocation> ConstWayLocationPtr;
 
 }
 

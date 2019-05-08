@@ -215,12 +215,12 @@ private:
     }
   }
 
-  bool _isSupportedOutputFormat(const QString format) const
+  bool _isSupportedOutputFormat(const QString& format) const
   {
     return format.endsWith(".osc") || format.endsWith(".osc.sql");
   }
 
-  bool _inputIsSorted(const QString input) const
+  bool _inputIsSorted(const QString& input) const
   {
     //Streaming db inputs actually do not come back sorted, despite the order by id clause
     //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
@@ -236,7 +236,7 @@ private:
   /*
    * Reads entire input into memory
    */
-  OsmMapPtr _readInputFully(const QString input, const Status& elementStatus)
+  OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus)
   {
     LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
 
@@ -246,7 +246,7 @@ private:
     IoUtils::loadMap(map, input, true, elementStatus);
 
     //we don't want to include review relations
-    boost::shared_ptr<TagKeyCriterion> elementCriterion(
+    std::shared_ptr<TagKeyCriterion> elementCriterion(
       new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
@@ -260,7 +260,7 @@ private:
     return map;
   }
 
-  ElementInputStreamPtr _getSortedElements(const QString input, const Status& status)
+  ElementInputStreamPtr _getSortedElements(const QString& input, const Status& status)
   {
     ElementInputStreamPtr sortedElements;
 
@@ -302,25 +302,25 @@ private:
     return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
   }
 
-  ElementInputStreamPtr _getFilteredInputStream(const QString input)
+  ElementInputStreamPtr _getFilteredInputStream(const QString& input)
   {
     LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
     QList<ElementVisitorPtr> visitors;
     //we don't want to include review relations
-    boost::shared_ptr<ElementCriterion> elementCriterion(
+    std::shared_ptr<ElementCriterion> elementCriterion(
       new NotCriterion(
-        boost::shared_ptr<TagKeyCriterion>(
+        std::shared_ptr<TagKeyCriterion>(
           new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
     //node comparisons require hashes be present on the elements
-    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+    visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
 
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(input));
     reader->setUseDataSourceIds(true);
     reader->open(input);
-    ElementInputStreamPtr inputStream = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    ElementInputStreamPtr inputStream = std::dynamic_pointer_cast<ElementInputStream>(reader);
     ElementInputStreamPtr filteredInputStream(
       new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
 
@@ -332,15 +332,15 @@ private:
     return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
   }
 
-  ElementInputStreamPtr _sortElementsExternally(const QString input)
+  ElementInputStreamPtr _sortElementsExternally(const QString& input)
   {
-    boost::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
+    std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
     sorted->sort(_getFilteredInputStream(input));
     return sorted;
   }
 
   void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
-                              const QString output)
+                              const QString& output)
   {
     LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
 
@@ -362,15 +362,15 @@ private:
       OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
     }
 
-    boost::shared_ptr<PartialOsmMapReader> partialReader1 =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(input1);
+    std::shared_ptr<PartialOsmMapReader> partialReader1 =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
     if (partialReader1)
     {
       partialReader1->finalizePartial();
     }
     input1->close();
-    boost::shared_ptr<PartialOsmMapReader> partialReader2 =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(input2);
+    std::shared_ptr<PartialOsmMapReader> partialReader2 =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(input2);
     if (partialReader2)
     {
       partialReader2->finalizePartial();

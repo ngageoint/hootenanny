@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -69,11 +69,11 @@ public:
   bool geosIntersect(const LineSegment& ls1, Meters buffer, const LineSegment& ls2,
                      LineSegment& result)
   {
-    boost::shared_ptr<Geometry> g1(ls1.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
-    boost::shared_ptr<Geometry> g2(ls2.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
-    boost::shared_ptr<Geometry> g(g1->buffer(buffer, 40));
+    std::shared_ptr<Geometry> g1(ls1.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
+    std::shared_ptr<Geometry> g2(ls2.toGeometry(*GeometryFactory::getDefaultInstance())->clone());
+    std::shared_ptr<Geometry> g(g1->buffer(buffer, 40));
 
-    boost::shared_ptr<Geometry> i(g->intersection(g2.get()));
+    std::shared_ptr<Geometry> i(g->intersection(g2.get()));
 
     if (i->isEmpty())
     {

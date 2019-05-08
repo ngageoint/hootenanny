@@ -55,7 +55,7 @@ public:
    * @param inputs one or more map files to examine
    * @return a mapping of tag value strings to occurrence counts
    */
-  std::map<QString, int> getTagCounts(const QStringList inputs);
+  std::map<QString, int> getTagCounts(const QStringList& inputs);
 
   /**
    * Returns a summary for tag count data
@@ -64,8 +64,8 @@ public:
    */
   QString getTagCountsString(const std::map<QString, int>& tagCounts);
 
-  void setTagKeys(const QStringList keys) { _tagKeys = keys; }
-  void setCriterionClassName(const QString name) { _criterionClassName = name; }
+  void setTagKeys(const QStringList& keys) { _tagKeys = keys; }
+  void setCriterionClassName(const QString& name) { _criterionClassName = name; }
   void setSortByFrequency(const bool sort) { _sortByFrequency = sort; }
   void setTokenize(const bool tokenize) { _tokenize = tokenize; }
   void setLimit(const int limit) { _limit = limit; }
@@ -93,9 +93,9 @@ private:
   int _taskStatusUpdateInterval;
   QRegExp _nonWord;
 
-  void _countTags(const QString input, std::map<QString, int>& tagCounts);
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input);
-  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream);
+  void _countTags(const QString& input, std::map<QString, int>& tagCounts);
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input);
+  ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream);
   ElementCriterionPtr _getCriterion();
 };
 

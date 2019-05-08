@@ -88,8 +88,8 @@ protected:
   Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env, Tgs::HilbertRTreePtr tree);
 };
 
-typedef boost::shared_ptr<NetworkMatcher> NetworkMatcherPtr;
-typedef boost::shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
+typedef std::shared_ptr<NetworkMatcher> NetworkMatcherPtr;
+typedef std::shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);

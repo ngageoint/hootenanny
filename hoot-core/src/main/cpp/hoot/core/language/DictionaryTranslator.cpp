@@ -83,7 +83,7 @@ void DictionaryTranslator::_readStreetTypes()
   }
 }
 
-QString DictionaryTranslator::translate(const QString textToTranslate)
+QString DictionaryTranslator::translate(const QString& textToTranslate)
 {
   return toEnglish(textToTranslate, _tokenizeInput);
 }

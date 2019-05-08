@@ -30,9 +30,6 @@
 // hoot
 #include <hoot/core/conflate/merging/MergerCreator.h>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

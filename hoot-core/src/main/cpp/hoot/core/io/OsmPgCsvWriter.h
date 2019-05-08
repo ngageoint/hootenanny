@@ -31,9 +31,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QFile>
 #include <QTextStream>
@@ -57,17 +54,17 @@ public:
    * @param url Filename ending in ".pgcsv"
    * @return
    */
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".pgcsv"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".pgcsv"); }
   /**
    * @brief supportedFormats
    * @return
    */
-  virtual QString supportedFormats() { return ".pgcsv"; }
+  virtual QString supportedFormats() override { return ".pgcsv"; }
   /**
    * @brief open
    * @param url
    */
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
   /**
    * @brief close
    */
@@ -82,7 +79,7 @@ public:
    * @brief write Write map to set of PGCSV files
    * @param map Pointer to map object to write to PGCSV
    */
-  virtual void write(ConstOsmMapPtr map) override;
+  virtual void write(const ConstOsmMapPtr& map) override;
   /**
    * @brief writePartial Write a single node/way/relation to the correct stream
    * @param n/w/r - Pointer to the node/way/relation to write to PGCSV
@@ -133,7 +130,7 @@ private:
   /** Array of streams, one for each output file type */
   std::array<QTextStream, FileType::MaxFileType> _streams;
   /** Array of files, one for each output file type */
-  std::array<boost::shared_ptr<QFile>, FileType::MaxFileType> _files;
+  std::array<std::shared_ptr<QFile>, FileType::MaxFileType> _files;
 };
 
 }

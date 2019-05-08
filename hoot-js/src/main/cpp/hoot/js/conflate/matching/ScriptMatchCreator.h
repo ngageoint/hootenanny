@@ -80,20 +80,20 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 
-  boost::shared_ptr<PluginContext> _script;
+  std::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
   CreatorDescription _getScriptDescription(QString path) const;
 
-  boost::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
 
-  boost::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
+  std::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };
 
 }

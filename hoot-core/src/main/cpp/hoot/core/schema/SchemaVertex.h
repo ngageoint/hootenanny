@@ -68,7 +68,7 @@ enum TagValueType
  * In the cases above just because one tag matches in the set doesn't mean that there is a
  * similarity. You must have both tags matching to adequately represent the concept.
  *
- * Alternatively some simple cases like highway=primary are sufficient in and of themselves.
+ * Alternatively, some simple cases like highway=primary are sufficient in and of themselves.
  */
 class SchemaVertex
 {

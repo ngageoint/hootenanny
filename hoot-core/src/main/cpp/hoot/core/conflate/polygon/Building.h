@@ -49,7 +49,7 @@ public:
    * add the outline to the building's element. If the building does have an outline it is ignored
    * and a new one is generated from the parts.
    */
-  boost::shared_ptr<geos::geom::Geometry> buildOutline() const;
+  std::shared_ptr<geos::geom::Geometry> buildOutline() const;
 
 private:
 

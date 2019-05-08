@@ -56,8 +56,6 @@ using namespace hoot::pb;
 // TGS
 #include <tgs/System/Time.h>
 
-#include <boost/shared_ptr.hpp>
-
 #include <ogr_spatialref.h>
 
 // ZLib Includes
@@ -92,7 +90,7 @@ OsmPbfReader::OsmPbfReader(bool useFileId)
   _init(useFileId);
 }
 
-OsmPbfReader::OsmPbfReader(const QString urlString)
+OsmPbfReader::OsmPbfReader(const QString& urlString)
 {
   _init(false);
 
@@ -137,31 +135,31 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
-void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
+void OsmPbfReader::_addTag(const std::shared_ptr<Element>& e, const QString& key, const QString& value)
 {
-  key = key.trimmed();
-  value = value.trimmed();
+  QString k = key.trimmed();
+  QString v = value.trimmed();
 
-  if (value.isEmpty())
+  if (v.isEmpty())
   {
     return;
   }
 
-  if (key == MetadataTags::HootStatus())
+  if (k == MetadataTags::HootStatus())
   {
     if (_useFileStatus)
     {
-      e->setStatus(_parseStatus(value));
+      e->setStatus(_parseStatus(v));
     }
     else
     {
       e->setStatus(_status);
     }
   }
-  else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
+  else if (k == MetadataTags::Accuracy() || k == MetadataTags::ErrorCircular())
   {
     bool ok;
-    Meters circularError = value.toDouble(&ok);
+    Meters circularError = v.toDouble(&ok);
     if (circularError > 0 && ok)
     {
       e->setCircularError(circularError);
@@ -170,10 +168,10 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
     {
       bool isBad = false;
       Tags t1;
-      t1.set(key, value);
+      t1.set(k, v);
       try
       {
-        circularError = t1.getLength(key).value();
+        circularError = t1.getLength(k).value();
         if (circularError > 0)
         {
           e->setCircularError(circularError);
@@ -194,7 +192,7 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
 
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Bad circular error value: " << value.toStdString());
+          LOG_WARN("Bad circular error value: " << v.toStdString());
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -204,17 +202,17 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
       }
     }
   }
-  else if (key == MetadataTags::HootId())
+  else if (k == MetadataTags::HootId())
   {
     // pass
   }
-  else if (key == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
+  else if (k == MetadataTags::RelationType() && e->getElementType() == ElementType::Relation)
   {
-    (boost::dynamic_pointer_cast<Relation>(e))->setType(value);
+    (std::dynamic_pointer_cast<Relation>(e))->setType(v);
   }
-  else if (value != "")
+  else if (v != "")
   {
-    e->setTag(key, value);
+    e->setTag(k, v);
   }
 }
 
@@ -512,7 +510,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
+  std::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _defaultCircularError));
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -658,7 +656,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  boost::shared_ptr<hoot::Relation> newRelation(
+  std::shared_ptr<hoot::Relation> newRelation(
     new hoot::Relation(_status, newId, _defaultCircularError));
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
@@ -810,7 +808,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
+  std::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _defaultCircularError));
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -931,12 +929,12 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, OsmMapPtr map)
+void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, const OsmMapPtr& map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
+void OsmPbfReader::parseBlob(long headerOffset, istream* strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -1021,7 +1019,7 @@ void OsmPbfReader::parseElements(QByteArray bytes, const OsmMapPtr& map)
   parseElements(&ss, map);
 }
 
-int OsmPbfReader::_parseInt(QString s)
+int OsmPbfReader::_parseInt(const QString& s)
 {
   bool ok;
   int result = s.toInt(&ok);
@@ -1085,7 +1083,7 @@ uint32_t OsmPbfReader::_readUInt32()
   return ntohl(buf);
 }
 
-Status OsmPbfReader::_parseStatus(QString s)
+Status OsmPbfReader::_parseStatus(const QString& s)
 {
   Status result;
 
@@ -1098,7 +1096,7 @@ Status OsmPbfReader::_parseStatus(QString s)
   return result;
 }
 
-void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
+void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
 {
   _in = strm;
   _map = map;
@@ -1137,7 +1135,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 }
 
 // TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
-void OsmPbfReader::read(QString path, OsmMapPtr map)
+void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 {
   if (_status == Status::Invalid)
   {
@@ -1165,7 +1163,7 @@ void OsmPbfReader::read(QString path, OsmMapPtr map)
   map->visitRw(v);
 }
 
-void OsmPbfReader::_readFile(QString path, OsmMapPtr map)
+void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -1177,7 +1175,7 @@ void OsmPbfReader::_readFile(QString path, OsmMapPtr map)
   parse(&input, map);
 }
 
-void OsmPbfReader::read(OsmMapPtr map)
+void OsmPbfReader::read(const OsmMapPtr& map)
 {
   assert(map.get());
   if (_status == Status::Invalid)
@@ -1192,7 +1190,7 @@ void OsmPbfReader::read(OsmMapPtr map)
 }
 
 // TODO: make the partial reader handle dir inputs?
-bool OsmPbfReader::isSupported(QString urlStr)
+bool OsmPbfReader::isSupported(const QString& urlStr)
 {
   QFileInfo fileInfo(urlStr);
   if (fileInfo.isDir())
@@ -1208,7 +1206,7 @@ bool OsmPbfReader::isSupported(QString urlStr)
     input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
 }
 
-bool OsmPbfReader::isSorted(const QString file)
+bool OsmPbfReader::isSorted(const QString& file)
 {
   _init(false);
   if (isSupported(file))
@@ -1230,7 +1228,7 @@ bool OsmPbfReader::isSorted(const QString file)
   return _typeThenId;
 }
 
-void OsmPbfReader::open(QString urlStr)
+void OsmPbfReader::open(const QString& urlStr)
 {
   fstream* fp = new fstream();
   fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
@@ -1294,7 +1292,7 @@ bool OsmPbfReader::hasMoreElements()
   return false;
 }
 
-boost::shared_ptr<Element> OsmPbfReader::readNextElement()
+std::shared_ptr<Element> OsmPbfReader::readNextElement()
 {
   if (!hasMoreElements())
   {
@@ -1348,7 +1346,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
   //read nodes, then ways, then relations
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
-  boost::shared_ptr<Element> element;
+  std::shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodes().size()))
   {
     /// @optimize
@@ -1423,9 +1421,9 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> OsmPbfReader::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");

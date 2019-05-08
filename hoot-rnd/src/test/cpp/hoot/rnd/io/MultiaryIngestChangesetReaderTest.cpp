@@ -48,7 +48,7 @@ public:
   {
   }
 
-  void verifyInput(const QString inputFile)
+  void verifyInput(const QString& inputFile)
   {
     MultiaryIngestChangesetReader changesetFileReader;
     changesetFileReader.open(inputFile);
@@ -65,7 +65,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Create);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)1, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(56.546465, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(99.21651651000001, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(1, change.getElement()->getTags().size());
@@ -75,7 +75,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Modify);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)2, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(-34.44534436, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(45.6575656, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(2, change.getElement()->getTags().size());
@@ -85,7 +85,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Delete);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)4, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(34.56765, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(-45.6555, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(0, change.getElement()->getTags().size());

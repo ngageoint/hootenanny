@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_SERVICES_TRANSLATOR_CLIENT_H
@@ -60,8 +60,8 @@ public:
   HootServicesTranslatorClient();
   virtual ~HootServicesTranslatorClient();
 
-  virtual QStringList getSourceLanguages() const { return _sourceLangs; }
-  virtual void setSourceLanguages(const QStringList langCodes);
+  virtual QStringList getSourceLanguages() const override { return _sourceLangs; }
+  virtual void setSourceLanguages(const QStringList& langCodes) override;
 
   /**
    * Translates text given a source language
@@ -69,15 +69,15 @@ public:
    * @param text the text to translate
    * @return translated text or an empty string if a translation could not be made
    */
-  virtual QString translate(const QString text);
+  virtual QString translate(const QString& text) override;
 
-  virtual QString getDetectedLanguage() const { return _detectedLang; }
+  virtual QString getDetectedLanguage() const override { return _detectedLang; }
 
   QString getTranslatedText() const { return _translatedText; }
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
-  virtual void setId(const QString id) { _id = id; }
+  virtual void setId(const QString& id) override { _id = id; }
 
 protected:
 
@@ -103,7 +103,7 @@ protected:
   bool _skipWordsInEnglishDict;
 
   //used to retrieve info about what languages are translatable, etc.
-  boost::shared_ptr<LanguageInfoProvider> _infoClient;
+  std::shared_ptr<LanguageInfoProvider> _infoClient;
 
 private:
 
@@ -121,7 +121,7 @@ private:
   //against all available translatable languages (expensive)
   bool _performExhaustiveSearch;
 
-  boost::shared_ptr<QCache<QString, TranslationResult>> _cache;
+  std::shared_ptr<QCache<QString, TranslationResult>> _cache;
 
   int _statusUpdateInterval;
 
@@ -140,7 +140,7 @@ private:
   QString _id;
 
   //persistent session is required by hoot services
-  boost::shared_ptr<HootNetworkCookieJar> _cookies;
+  std::shared_ptr<HootNetworkCookieJar> _cookies;
 
   static QString _getTranslateUrl();
 
@@ -151,20 +151,20 @@ private:
    * detectable language results in a warning, while a failure to verify a translatable language
    * results in an error
    */
-  void _checkLangsAvailable(const QString type);
+  void _checkLangsAvailable(const QString& type);
 
-  void _validateAvailableLangs(boost::shared_ptr<boost::property_tree::ptree> replyObj,
-                               const QString type);
+  void _validateAvailableLangs(const std::shared_ptr<boost::property_tree::ptree>& replyObj,
+                               const QString& type);
 
-  QString _getRequestData(const QString text);
-  void _parseResponse(boost::shared_ptr<boost::property_tree::ptree> replyObj);
+  QString _getRequestData(const QString& text);
+  void _parseResponse(const std::shared_ptr<boost::property_tree::ptree>& replyObj);
 
-  bool _getTranslationFromCache(const QString text);
-  void _insertTranslationIntoCache(const QString text, const QString translatedText,
-                                   const QString detectedLang);
+  bool _getTranslationFromCache(const QString& text);
+  void _insertTranslationIntoCache(const QString& text, const QString& translatedText,
+                                   const QString& detectedLang);
 
-  bool _textIsTranslatable(const QString text) const;
-  bool _textIsEnglish(const QString text) const;
+  bool _textIsTranslatable(const QString& text) const;
+  bool _textIsEnglish(const QString& text) const;
 };
 
 }

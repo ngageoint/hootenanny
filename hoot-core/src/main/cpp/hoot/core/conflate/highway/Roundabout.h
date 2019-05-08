@@ -28,8 +28,11 @@
 #ifndef ROUNDABOUT_H
 #define ROUNDABOUT_H
 
+// Standard
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -109,7 +112,7 @@ public:
    * @param pWay - The roundabout way
    * @return - A newly constructed roundabout object
    */
-  static boost::shared_ptr<Roundabout> makeRoundabout (const OsmMapPtr &pMap,
+  static std::shared_ptr<Roundabout> makeRoundabout (const OsmMapPtr &pMap,
                                                        WayPtr pWay);
 
   /**
@@ -171,8 +174,8 @@ private:
 };
 
 // For convenience
-typedef boost::shared_ptr<Roundabout> RoundaboutPtr;
-typedef boost::shared_ptr<const Roundabout> ConstRoundaboutPtr;
+typedef std::shared_ptr<Roundabout> RoundaboutPtr;
+typedef std::shared_ptr<const Roundabout> ConstRoundaboutPtr;
 
 }
 

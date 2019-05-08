@@ -33,9 +33,6 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QtSql/QSqlQuery>
 
@@ -63,12 +60,12 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
-  virtual bool isSupported(QString urlStr);
+  virtual bool isSupported(const QString& urlStr) override;
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
-  void setBoundingBox(const QString bbox);
-  void setOverrideBoundingBox(const QString bbox);
+  void setBoundingBox(const QString& bbox);
+  void setOverrideBoundingBox(const QString& bbox);
   void setReturnNodesOnly(const bool returnNodesOnly)
   { _returnNodesOnly = returnNodesOnly; }
 
@@ -76,46 +73,46 @@ public:
    * Determines the reader's default element status. By default this is Invalid which specifies that
    * the file's status will be used.
    */
-  virtual void setDefaultStatus(Status status) { _status = status; }
+  virtual void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
   void setUserEmail(const QString& email) { _email = email; }
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void initializePartial();
+  virtual void initializePartial() override;
 
   /**
    * The read command called after open.
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
   void close();
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual bool hasMoreElements();
+  virtual bool hasMoreElements() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual boost::shared_ptr<Element> readNextElement();
+  virtual std::shared_ptr<Element> readNextElement() override;
 
   /**
    * @see PartialOsmMapReader
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
 protected:
 
@@ -138,8 +135,8 @@ protected:
   bool _keepStatusTag;
 
   ElementType _selectElementType;
-  boost::shared_ptr<QSqlQuery> _elementResultIterator;
-  boost::shared_ptr<Element> _nextElement;
+  std::shared_ptr<QSqlQuery> _elementResultIterator;
+  std::shared_ptr<Element> _nextElement;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -147,7 +144,7 @@ protected:
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const = 0;
+  virtual std::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
    * This is the same logic as in the Map.java query method.
@@ -190,7 +187,7 @@ private:
    * 
    * This will advance the results iterator *before* reading each element.
    */
-  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+  std::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);
 
   /*
@@ -199,7 +196,7 @@ private:
    */
   ElementType _getCurrentSelectElementType();
 
-  boost::shared_ptr<Element> _getElementUsingIterator();
+  std::shared_ptr<Element> _getElementUsingIterator();
 };
 
 }

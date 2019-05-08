@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslateStringDistance.h"
 
@@ -51,23 +51,23 @@ _translateAll(true),
 //DictionaryTranslator and they populate this class with a translator implemenation, the default
 //is hardcoded.  That supports for cases where the caller doesn't specify a translator
 //(PoiGeneric.js, some classifiers, etc.).
-_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
 {
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(StringDistancePtr d) :
+TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
 //see comments above
-_translator(boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
 {
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(StringDistancePtr d,
-                                                 boost::shared_ptr<ToEnglishTranslator> translator) :
+TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d,
+                                                 const std::shared_ptr<ToEnglishTranslator>& translator) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
@@ -94,8 +94,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   QString best1;
   QString best2;
 
-  boost::shared_ptr<DictionaryTranslator> dictTranslator =
-    boost::dynamic_pointer_cast<DictionaryTranslator>(_translator);
+  std::shared_ptr<DictionaryTranslator> dictTranslator =
+    std::dynamic_pointer_cast<DictionaryTranslator>(_translator);
   if (_translateAll && dictTranslator)
   {
     // This deals with translations that may return more than one result.
@@ -161,7 +161,7 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   return bestScore;
 }
 
-QStringList TranslateStringDistance::_getNamesToScore(const QString name) const
+QStringList TranslateStringDistance::_getNamesToScore(const QString& name) const
 {
   QStringList names;
   if (!name.trimmed().isEmpty())

@@ -54,12 +54,11 @@ _needsReview(false)
 {
 }
 
-PartialNetworkMerger::PartialNetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
+PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
   QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details) :
-_pairs(pairs),
-_edgeMatches(edgeMatches),
-_details(details),
-_needsReview(false)
+  _pairs(pairs),
+  _edgeMatches(edgeMatches),
+  _details(details)
 {
   assert(_pairs.size() >= 1);
 }
@@ -115,7 +114,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   QList<ConstNodePtr> scrapNodeList;
   ExtractNodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
-  boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
   foreach (ConstNodePtr n, scrapNodeSet)
   {

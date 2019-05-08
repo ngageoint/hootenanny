@@ -26,11 +26,10 @@
  */
 #include "SplitLongLinearWaysVisitor.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementType.h>
@@ -76,7 +75,7 @@ _maxNodesPerWay(0)
   LOG_DEBUG("Max nodes per way set to " << getMaxNumberOfNodes() );
 }
 
-void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element)
+void SplitLongLinearWaysVisitor::visit(const std::shared_ptr<Element>& element)
 {
   // If not a way, ignore
   if (element->getElementType() != ElementType::Way)
@@ -85,7 +84,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Convert to a Way
-  WayPtr way = boost::dynamic_pointer_cast<Way>(element);
+  WayPtr way = std::dynamic_pointer_cast<Way>(element);
   WayPtr emptyWay;
 
   if (way == emptyWay)

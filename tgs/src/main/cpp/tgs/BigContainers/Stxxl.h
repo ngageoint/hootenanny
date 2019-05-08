@@ -22,17 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STXXL_H
 #define STXXL_H
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // Qt
 #include <QTemporaryFile>
 #include <QString>
+
+// Standard
+#include <memory>
 
 namespace Tgs
 {
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  static boost::shared_ptr<Stxxl> _theInstance;
+  static std::shared_ptr<Stxxl> _theInstance;
   QTemporaryFile _configFileTmp;
 
   Stxxl();

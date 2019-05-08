@@ -100,7 +100,7 @@ cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
   assert(wl.isNode() == true);
 
   // populate graph
-  boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   ShortestPath sp(graph);
@@ -274,7 +274,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   }
 
   // populate graph
-  boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   LOG_DEBUG("Running cost");
@@ -301,7 +301,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   _saveImage(mat, output, -1.0, false);
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
 
-  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
   Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);

@@ -28,11 +28,8 @@
 #define VISITOROP_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
 
 namespace hoot
 {
@@ -59,13 +56,13 @@ public:
 
   virtual void addVisitor(const ConstElementVisitorPtr& e);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const { return ""; }
 
 private:
 
-  boost::shared_ptr<ConstElementVisitor> _visitor;
+  std::shared_ptr<ConstElementVisitor> _visitor;
 };
 
 }

@@ -107,12 +107,12 @@ bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 bool PoiPolygonReviewReducer::_polyContainsPoiAsMember(ConstElementPtr poly,
                                                        ConstElementPtr poi) const
 {
-  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
+  ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
   if (polyWay && polyWay->containsNodeId(poi->getId()))
   {
     return true;
   }
-  ConstRelationPtr polyRelation = boost::dynamic_pointer_cast<const Relation>(poly);
+  ConstRelationPtr polyRelation = std::dynamic_pointer_cast<const Relation>(poly);
   if (polyRelation && polyRelation->contains(ElementId(ElementType::Node, poi->getId())))
   {
     return true;
@@ -362,12 +362,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   }
 
   ElementConverter elementConverter(_map);
-  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     throw geos::util::TopologyException();
   }
-  boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+  std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   double polyArea = -1.0;
   try
@@ -472,7 +472,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
     if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      boost::shared_ptr<Geometry> polyNeighborGeom;
+      std::shared_ptr<Geometry> polyNeighborGeom;
       try
       {
         polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
@@ -499,9 +499,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
           {
             LOG_VART(poly);
             LOG_VART(polyNeighbor);
-            ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
-            boost::shared_ptr<const LineString> polyNeighborLineStr =
-              boost::dynamic_pointer_cast<const LineString>(
+            ConstWayPtr polyNeighborWay = std::dynamic_pointer_cast<const Way>(polyNeighbor);
+            std::shared_ptr<const LineString> polyNeighborLineStr =
+              std::dynamic_pointer_cast<const LineString>(
                 ElementConverter(_map).convertToLineString(polyNeighborWay));
             const long poiToNeighborPolyDist = polyNeighborLineStr->distance(poiGeom.get());
             LOG_VART(poiToNeighborPolyDist);
@@ -549,14 +549,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   //Calc the distance from the poi to the poly line instead of the poly itself.
                   //Calcing distance to the poly itself will always return 0 when the poi is in the
                   //poly.
-                  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
-                  boost::shared_ptr<const LineString> polyLineStr =
-                    boost::dynamic_pointer_cast<const LineString>(
+                  ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
+                  std::shared_ptr<const LineString> polyLineStr =
+                    std::dynamic_pointer_cast<const LineString>(
                       ElementConverter(_map).convertToLineString(polyWay));
                   poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
-                  ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
-                  boost::shared_ptr<const LineString> polyNeighborLineStr =
-                    boost::dynamic_pointer_cast<const LineString>(
+                  ConstWayPtr polyNeighborWay = std::dynamic_pointer_cast<const Way>(polyNeighbor);
+                  std::shared_ptr<const LineString> polyNeighborLineStr =
+                    std::dynamic_pointer_cast<const LineString>(
                       ElementConverter(_map).convertToLineString(polyNeighborWay));
                   poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());
                 }
@@ -683,7 +683,7 @@ bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr 
     ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
     if (poiNeighbor->getElementId() != poi->getElementId())
     {
-      boost::shared_ptr<Geometry> poiNeighborGeom;
+      std::shared_ptr<Geometry> poiNeighborGeom;
       try
       {
         poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
@@ -703,9 +703,9 @@ bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr 
         {
           LOG_VART(poi);
           LOG_VART(poiNeighbor);
-          ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
-            boost::shared_ptr<const LineString> polyLineStr =
-              boost::dynamic_pointer_cast<const LineString>(
+          ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
+            std::shared_ptr<const LineString> polyLineStr =
+              std::dynamic_pointer_cast<const LineString>(
                 ElementConverter(_map).convertToLineString(polyWay));
           const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
           LOG_VART(neighborPoiToPolyDist);

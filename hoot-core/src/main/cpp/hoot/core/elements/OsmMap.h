@@ -27,9 +27,6 @@
 #ifndef OSMMAP_H
 #define OSMMAP_H
 
-// Boost
-#include <boost/enable_shared_from_this.hpp>
-
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
@@ -47,6 +44,8 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
+
+#include <memory>
 
 namespace hoot
 {
@@ -77,7 +76,7 @@ class Roundabout;
  *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
  *    where neither directly references the other. (?)
  */
-class OsmMap : public boost::enable_shared_from_this<OsmMap>, public ElementProvider
+class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider
 {
   // Friend classes that need to modify private elements
   friend class RemoveNodeOp;
@@ -90,13 +89,13 @@ public:
 
   OsmMap();
 
-  explicit OsmMap(boost::shared_ptr<const OsmMap>);
+  explicit OsmMap(const std::shared_ptr<const OsmMap>&);
 
-  explicit OsmMap(boost::shared_ptr<OsmMap>);
+  explicit OsmMap(const std::shared_ptr<OsmMap>&);
 
-  explicit OsmMap(boost::shared_ptr<OGRSpatialReference> srs);
+  explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
 
-  OsmMap(boost::shared_ptr<const OsmMap>, boost::shared_ptr<OGRSpatialReference> srs);
+  OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
   ~OsmMap();
 
@@ -109,9 +108,9 @@ public:
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(boost::shared_ptr<const OsmMap> map);
+  void append(const std::shared_ptr<const OsmMap>& map);
 
-  void addElement(const boost::shared_ptr<Element>& e);
+  void addElement(const std::shared_ptr<Element>& e);
   template<class T>
   void addElements(T it, T end);
 
@@ -135,7 +134,7 @@ public:
    */
   virtual bool containsElement(const ElementId& eid) const;
   bool containsElement(ElementType type, long id) const;
-  bool containsElement(const boost::shared_ptr<const Element>& e) const;
+  bool containsElement(const std::shared_ptr<const Element>& e) const;
 
   /**
    * Returns true if the node is in this map.
@@ -159,7 +158,7 @@ public:
 
   size_t getElementCount() const;
 
-  const std::vector< boost::shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
+  const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
 
   const IdGenerator& getIdGenerator() const { return *_idGen; }
 
@@ -184,7 +183,7 @@ public:
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
   virtual const ConstRelationPtr getRelation(long id) const;
 
@@ -212,21 +211,21 @@ public:
 
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
 
-  void registerListener(boost::shared_ptr<OsmMapListener> l) { _listeners.push_back(l); }
+  void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 
   /**
    * Replace the all instances of from with instances of to. In some cases this may be an invalid
    * operation and an exception will be throw. E.g. replacing a node with a way where the node
    * is part of another way.
    */
-  void replace(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<Element>& to);
+  void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
 
   /**
    * Similar to above, but from is replaced with a collection of elements. This makes sense in the
    * context of a relation, but may not make sense in other cases (e.g. replace a single node
    * that is part of a way with multiple nodes).
    */
-  void replace(const boost::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
+  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
 
   /**
    * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
@@ -240,9 +239,9 @@ public:
    */
   static void resetCounters() { IdGenerator::getInstance()->reset(); }
 
-  void setIdGenerator(boost::shared_ptr<IdGenerator> gen) { _idGenSp = gen; _idGen = gen.get(); }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGenSp = gen; _idGen = gen.get(); }
 
-  void setProjection(boost::shared_ptr<OGRSpatialReference> srs);
+  void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
   /**
    * Validates the consistency of the map. Primarily this checks to make sure that all nodes
@@ -293,23 +292,23 @@ public:
   long getRelationCount() const { return _relations.size(); }
 
   // Helps us handle roundabouts
-  void setRoundabouts(std::vector< boost::shared_ptr<Roundabout> > rnd) { _roundabouts = rnd; }
-  std::vector< boost::shared_ptr<Roundabout> > getRoundabouts() const { return _roundabouts; }
+  void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
+  std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
 
 protected:
 
   mutable IdGenerator* _idGen;
-  mutable boost::shared_ptr<IdGenerator> _idGenSp;
+  mutable std::shared_ptr<IdGenerator> _idGenSp;
 
-  static boost::shared_ptr<OGRSpatialReference> _wgs84;
+  static std::shared_ptr<OGRSpatialReference> _wgs84;
 
-  boost::shared_ptr<OGRSpatialReference> _srs;
+  std::shared_ptr<OGRSpatialReference> _srs;
 
   mutable NodeMap _nodes;
   mutable RelationMap _relations;
   mutable WayMap _ways;
 
-  boost::shared_ptr<OsmMapIndex> _index;
+  std::shared_ptr<OsmMapIndex> _index;
   NodePtr _nullNode;
   ConstNodePtr _constNullNode;
   RelationPtr _nullRelation;
@@ -318,13 +317,13 @@ protected:
   mutable NodeMap::const_iterator _tmpNodeMapIt;
   RelationMap::iterator _tmpRelationIt;
   mutable WayMap::const_iterator _tmpWayIt;
-  std::vector<boost::shared_ptr<OsmMapListener>> _listeners;
+  std::vector<std::shared_ptr<OsmMapListener>> _listeners;
 
-  std::vector<boost::shared_ptr<Element>> _replaceTmpArray;
+  std::vector<std::shared_ptr<Element>> _replaceTmpArray;
 
-  std::vector<boost::shared_ptr<Roundabout>> _roundabouts;
+  std::vector<std::shared_ptr<Roundabout>> _roundabouts;
 
-  void _copy(boost::shared_ptr<const OsmMap> from);
+  void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
    * Returns true if there is a node in l.
@@ -334,8 +333,8 @@ protected:
   void _replaceNodeInRelations(long oldId, long newId);
 };
 
-typedef boost::shared_ptr<OsmMap> OsmMapPtr;
-typedef boost::shared_ptr<const OsmMap> ConstOsmMapPtr;
+typedef std::shared_ptr<OsmMap> OsmMapPtr;
+typedef std::shared_ptr<const OsmMap> ConstOsmMapPtr;
 
 template<class T>
 void addElements(T it, T end)

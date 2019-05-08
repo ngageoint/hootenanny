@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 // CPP Unit Includes
 #include <cppunit/extensions/HelperMacros.h>
@@ -70,13 +71,13 @@ public:
 
 //   void benchmark(int dimensions, int size, int iterations, int pageSize)
 //   {
-//    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
+//    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
 //     RStarTree uut(mps, dimensions);
 //
 //     Box b(dimensions);
 //     Timer t;
 //     t.start();
-//     std::vector< std::vector<double> > statFodder;
+//     std::vector<std::vector<double>> statFodder;
 //     std::vector<Box> boxes;
 //     std::vector<bool> found;
 //
@@ -211,7 +212,7 @@ public:
 //   {
 //     int dimensions = 2;
 //     int pointCount = 3000;
-//    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+//    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
 //     RStarTree uut(mps, dimensions);
 //
 //     std::vector<Box> boxes;
@@ -222,7 +223,7 @@ public:
 // //     Timer t;
 // //     t.start();
 //     Box b(dimensions);
-//     std::vector< std::vector<double> > statFodder;
+//     std::vector<std::vector<double>> statFodder;
 //     statFodder.resize(dimensions);
 //     for (int i = 0; i < pointCount; i++)
 //     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BaseRandomForest.h"
 
@@ -148,7 +148,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findAverageError(boost::shared_ptr<DataFrame> data, double & average,
+  void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
     double & stdDev)
   {
     try
@@ -182,7 +182,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findProximity(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
     std::vector<unsigned int> & proximity)
   {
     try
@@ -210,7 +210,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::getFactorImportance(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
     std::map<std::string, double> & factorImportance)
   {
     try
@@ -308,7 +308,7 @@ namespace Tgs
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
 
-              _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
               _forest.back()->import(treeElement);
             }
           }

@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -54,10 +55,10 @@ Match()
 }
 
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
-                             boost::shared_ptr<const BuildingRfClassifier> rf,
+                             const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,
-                             ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
-                             QString dateTagKey, QString dateFormat) :
+                             const ConstMatchThresholdPtr& mt, bool reviewIfSecondaryFeatureNewer,
+                             const QString& dateTagKey, const QString& dateFormat) :
 Match(mt),
 _eid1(eid1),
 _eid2(eid2),
@@ -67,12 +68,16 @@ _reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
 _dateTagKey(dateTagKey),
 _dateFormat(dateFormat)
 {  
+  OsmUtils::logElementDetail(map->getElement(_eid1), map, Log::Trace, "BuildingMatch: e1");
+  OsmUtils::logElementDetail(map->getElement(_eid2), map, Log::Trace, "BuildingMatch: e2");
+
   _p = _rf->classify(map, _eid1, _eid2);
 
   ConstElementPtr element1 = map->getElement(eid1);
   ConstElementPtr element2 = map->getElement(eid2);
 
   MatchType type = getType();
+  LOG_VART(type);
   QStringList description;
 
   if (type != MatchType::Match)
@@ -90,10 +95,11 @@ _dateFormat(dateFormat)
   else
     _explainText = mt->getTypeDetail(_p);
   LOG_VART(toString());
+  LOG_VART(_explainText);
 }
 
-QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                                ConstElementPtr element2)
+QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
+                                                                const ConstElementPtr& element2)
 {
   LOG_VART(_dateTagKey);
   LOG_VART(_dateFormat);
@@ -165,7 +171,7 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr 
 }
 
 QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                                ConstElementPtr element1, ConstElementPtr element2)
+                                                const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   QStringList description;
 
@@ -210,9 +216,9 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
   return _rf->getFeatures(m, _eid1, _eid2);
 }
 
-set< pair<ElementId, ElementId> > BuildingMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }

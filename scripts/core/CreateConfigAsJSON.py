@@ -218,4 +218,7 @@ def createJSON(c):
 
     return result
 
-open(headerFn, 'w').write(createJSON(c))
+finalJSON = createJSON(c) 
+#open(headerFn, 'w').write(createJSON(c))
+
+open(headerFn, 'w').write(finalJSON)

@@ -87,8 +87,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("No source languages populated.").toStdString(), exceptionMsg.toStdString());
+    HOOT_STR_EQUALS(QString("No source languages populated."), exceptionMsg);
   }
 
   void runIgnorePreTranslatedTagsTest()
@@ -167,7 +166,7 @@ private:
     return conf;
   }
 
-  void _runTranslationTest(Settings config, const QString outputFile, const QString goldFile)
+  void _runTranslationTest(const Settings& config, const QString& outputFile, const QString& goldFile)
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(

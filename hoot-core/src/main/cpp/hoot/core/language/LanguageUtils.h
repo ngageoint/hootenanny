@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LANGUAGE_UTILS_H
@@ -45,7 +45,7 @@ public:
    * @param text text to examine
    * @return true if the text is English; false otherwise
    */
-  static bool normalizeAndDetermineIfTextIsEnglish(const QString text);
+  static bool normalizeAndDetermineIfTextIsEnglish(const QString& text);
 };
 
 }

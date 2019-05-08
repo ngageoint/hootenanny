@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LAYER_H
 #define LAYER_H
@@ -36,9 +36,6 @@
 // Standard
 #include <vector>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -49,24 +46,24 @@ class Layer
 public:
   Layer();
 
-  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   geos::geom::GeometryTypeId getGeometryType() const { return _geometryType; }
 
   QString getName() const { return _name; }
 
-  void setFeatureDefinition(boost::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
+  void setFeatureDefinition(const std::shared_ptr<FeatureDefinition>& fd) { _definition = fd; }
 
   void setGeometryType(geos::geom::GeometryTypeId geometryType) { _geometryType = geometryType; }
 
-  void setName(QString name) { _name = name; }
+  void setName(const QString& name) { _name = name; }
 
   QString getFdName() const { return _fdname; }
 
-  void setFdName(QString name) { _fdname = name; }
+  void setFdName(const QString& name) { _fdname = name; }
 
 private:
-  boost::shared_ptr<const FeatureDefinition> _definition;
+  std::shared_ptr<const FeatureDefinition> _definition;
   geos::geom::GeometryTypeId _geometryType;
   QString _name;
   QString _fdname;

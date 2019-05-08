@@ -97,7 +97,7 @@ public:
    * @brief DiffConflator - Construct & set a match threshold
    * @param matchThreshold - Match threshold
    */
-  DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
+  DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   ~DiffConflator();
 
@@ -189,7 +189,7 @@ private:
   OsmMapPtr _pMap;
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;
   bool _conflateTags = false;
 
@@ -244,7 +244,7 @@ private:
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
 
-  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
+  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
 
   void _removeMatches(const Status& status);
 

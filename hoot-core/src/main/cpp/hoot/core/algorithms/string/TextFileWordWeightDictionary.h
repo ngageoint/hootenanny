@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TEXTFILEWORDWEIGHTDICTIONARY_H
@@ -64,11 +64,11 @@ namespace hoot
 class TextFileWordWeightDictionary : public WordWeightDictionary
 {
 public:
-  TextFileWordWeightDictionary(const QString filePath);
+  TextFileWordWeightDictionary(const QString& filePath);
 
-  virtual double getMinWeight() const { return 1.0 / (double)_count; }
+  virtual double getMinWeight() const override { return 1.0 / (double)_count; }
 
-  virtual double getWeight(const QString& word) const;
+  virtual double getWeight(const QString& word) const override;
 
 private:
   // some white box testing.
@@ -89,7 +89,7 @@ private:
   long _count;
   QRegExp _nonWord;
 
-  void _loadFile(QString path);
+  void _loadFile(const QString& path);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROJECTTOGEOGRAPHICVISITOR_H
 #define PROJECTTOGEOGRAPHICVISITOR_H
@@ -47,9 +47,9 @@ public:
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();
 
-  void initialize(boost::shared_ptr<OGRSpatialReference>& projection);
+  void initialize(std::shared_ptr<OGRSpatialReference>& projection);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
@@ -57,7 +57,7 @@ public:
 private:
 
   OGRCoordinateTransformation* _transform;
-  boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
+  std::shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }

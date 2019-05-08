@@ -47,7 +47,7 @@ void NodesPerWayVisitor::visit(const ConstElementPtr& e)
 {
   if (_crit.isSatisfied(e))
   {
-    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     const int numWayNodes = way->getNodeCount();
     _totalWayNodes += numWayNodes;
     if (_minNodesPerWay == 0 || numWayNodes < _minNodesPerWay)

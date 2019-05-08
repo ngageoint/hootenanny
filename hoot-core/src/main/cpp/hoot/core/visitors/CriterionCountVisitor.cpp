@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CriterionCountVisitor.h"
 #include <hoot/core/util/Factory.h>
@@ -39,7 +39,7 @@ _pCrit()
 {
 }
 
-CriterionCountVisitor::CriterionCountVisitor(const boost::shared_ptr<ElementCriterion>& pCrit):
+CriterionCountVisitor::CriterionCountVisitor(const std::shared_ptr<ElementCriterion>& pCrit):
 _count(0),
 _visited(0),
 _pCrit(pCrit)

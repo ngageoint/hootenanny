@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMALOADERFACTORY_H
 #define OSMSCHEMALOADERFACTORY_H
-
-// Boost
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -49,13 +46,13 @@ public:
 
   static OsmSchemaLoaderFactory& getInstance();
 
-  boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
+  std::shared_ptr<OsmSchemaLoader> createLoader(QString url);
 
 private:
 
   OsmSchemaLoaderFactory() {}
 
-  static boost::shared_ptr<OsmSchemaLoaderFactory> _theInstance;
+  static std::shared_ptr<OsmSchemaLoaderFactory> _theInstance;
 };
 
 }

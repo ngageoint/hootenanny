@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITORINPUTSTREAM_H
 #define ELEMENTVISITORINPUTSTREAM_H
 
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -56,7 +56,7 @@ public:
   /**
    * Returns the source's projection.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   /**
    * @brief hasMoreElements

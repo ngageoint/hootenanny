@@ -111,7 +111,7 @@ public:
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "AlphaDonut.osm");
 
-    boost::shared_ptr<Geometry> g = uut.toGeometry();
+    std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
   }
 
@@ -140,7 +140,7 @@ public:
     OsmXmlWriter writer;
     writer.write(uut.toOsmMap(), _outputPath + "AlphaMap.osm");
 
-    boost::shared_ptr<Geometry> g = uut.toGeometry();
+    std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);
   }
 };

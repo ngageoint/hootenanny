@@ -35,9 +35,6 @@
 // Standard
 #include <vector>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
@@ -117,7 +114,7 @@ private:
    */
   WayLocation _searchStart;
 
-  std::vector< NodePtr > _createdNodes;
+  std::vector<NodePtr> _createdNodes;
 
   Meters _calculateIntervalLength();
 
@@ -137,7 +134,7 @@ private:
    */
   ConstNodePtr _getStartNode();
 
-  bool _isInBounds(const WayLocation& wl, const boost::shared_ptr<geos::geom::LineString>& ls);
+  bool _isInBounds(const WayLocation& wl, const std::shared_ptr<geos::geom::LineString>& ls);
 
   bool _isOutsideInterval(int ia);
 };

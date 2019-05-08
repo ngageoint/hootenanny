@@ -77,13 +77,12 @@ class BuildingMergerTest : public HootTestFixture
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
+  CPPUNIT_TEST(runManyToManyMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  BuildingMergerTest()
-    : HootTestFixture("test-files/",
-                      "test-output/conflate/polygon/")
+  BuildingMergerTest() : HootTestFixture("test-files/", "test-output/conflate/polygon/")
   {
     setResetType(ResetBasic);
   }
@@ -158,7 +157,7 @@ public:
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
@@ -168,7 +167,7 @@ public:
     RemoveMissVisitor v(map, "Panera");
     map->visitRw(v);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
 
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
@@ -238,6 +237,33 @@ public:
     HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
   }
 
+  void runManyToManyMergeTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmXmlReader reader;
+    const QString inputPath =
+      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(inputPath + "/Input1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + "/Input2.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    set<pair<ElementId, ElementId>> pairs = getPairsForManyToManyMergingTest();
+
+    BuildingMerger bm(pairs);
+    bm.setMergeManyToManyMatches(true);
+    vector<pair<ElementId, ElementId>> replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "BuildingMergerTest-runManyToManyMergeTest.osm");
+    HOOT_STR_EQUALS(
+      "[5]{(Way(-5), Relation(-1)), (Way(-4), Relation(-1)), (Way(-3), Relation(-1)), (Way(-2), Relation(-1)), (Way(-1), Relation(-1))}",
+      replaced);
+  }
+
 private:
 
   set<pair<ElementId, ElementId>> getPairsForComplexAutoMergingTests(OsmMapPtr map)
@@ -260,6 +286,18 @@ private:
       pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
     }
 
+    return pairs;
+  }
+
+  set<pair<ElementId, ElementId>> getPairsForManyToManyMergingTest() const
+  {
+    set<pair<ElementId, ElementId>> pairs;
+    // came up with this by tracing through the actual conflation of the data to see what was being
+    // passed into the merger after matching
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-5)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-4)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-3)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-1), ElementId::way(-3)));
     return pairs;
   }
 };

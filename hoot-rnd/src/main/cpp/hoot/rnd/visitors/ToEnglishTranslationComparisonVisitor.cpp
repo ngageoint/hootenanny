@@ -87,7 +87,7 @@ void ToEnglishTranslationComparisonVisitor::setConfiguration(const Settings& con
   }
 }
 
-void ToEnglishTranslationComparisonVisitor::visit(const boost::shared_ptr<Element>& e)
+void ToEnglishTranslationComparisonVisitor::visit(const std::shared_ptr<Element>& e)
 {
   const Tags& tags = e->getTags();
   bool atLeastOneTranslationCompared = false;

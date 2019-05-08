@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, WorstCircularErrorVisitor)
 
-void WorstCircularErrorVisitor::visit(const boost::shared_ptr<const Element>& e)
+void WorstCircularErrorVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   _worst = max(_worst, e->getCircularError());
 }

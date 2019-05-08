@@ -50,15 +50,15 @@ public:
 
   virtual void finalizePartial() {}
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   virtual bool hasMoreElements();
 
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
-  virtual ElementPtr readNextElement();
+  virtual ElementPtr readNextElement() override;
 
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
 
@@ -66,7 +66,7 @@ public:
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
-  virtual QString supportedFormats() { return ".geonames"; }
+  virtual QString supportedFormats() override { return ".geonames"; }
 
 private:
 
@@ -82,7 +82,7 @@ private:
   QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
 
   QString _saveMemory(const QString& s);
 };

@@ -123,12 +123,12 @@ const QSet<QString>& MostEnglishName::_getWords()
   return _englishWords;
 }
 
-bool MostEnglishName::isInDictionary(const QString text)
+bool MostEnglishName::isInDictionary(const QString& text)
 {
   return _getWords().contains(text.toLower());
 }
 
-bool MostEnglishName::areAllInDictionary(const QStringList texts)
+bool MostEnglishName::areAllInDictionary(const QStringList& texts)
 {
   for (int i = 0; i < texts.size(); i++)
   {
@@ -140,7 +140,7 @@ bool MostEnglishName::areAllInDictionary(const QStringList texts)
   return true;
 }
 
-long MostEnglishName::_loadEnglishWords(QString path)
+long MostEnglishName::_loadEnglishWords(const QString& path)
 {
   QFile fp(path);
   const int MAX_LINE_SIZE = 2048;
@@ -175,12 +175,12 @@ long MostEnglishName::_loadEnglishWords(QString path)
   return wordCount;
 }
 
-bool MostEnglishName::isEnglishText(const QString text)
+bool MostEnglishName::isEnglishText(const QString& text)
 {
   return scoreName(text) == 1.0;
 }
 
-double MostEnglishName::scoreName(const QString text)
+double MostEnglishName::scoreName(const QString& text)
 {
   QStringList words = _tokenizer.tokenize(text);
 

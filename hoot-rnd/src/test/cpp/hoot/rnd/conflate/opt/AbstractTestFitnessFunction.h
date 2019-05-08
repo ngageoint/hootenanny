@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ABSTRACTTESTFITNESSFUNCTION_H__
@@ -99,7 +99,7 @@ protected:
   int _testCount;
 
   //test suite run by this fitness function
-  boost::shared_ptr<AbstractTestSuite> _testSuite;
+  std::shared_ptr<AbstractTestSuite> _testSuite;
 
   //name of the temporary settings file generated for the current test run
   QString _settingsFileName;

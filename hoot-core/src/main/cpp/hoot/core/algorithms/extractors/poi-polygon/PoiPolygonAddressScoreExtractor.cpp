@@ -83,13 +83,13 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     //if not, try to find the address from a poly way node instead
     if (poly->getElementType() == ElementType::Way)
     {
-      ConstWayPtr wayPoly = boost::dynamic_pointer_cast<const Way>(poly);
+      ConstWayPtr wayPoly = std::dynamic_pointer_cast<const Way>(poly);
       polyAddresses = _addressParser.parseAddressesFromWayNodes(*wayPoly, map, poi->getElementId());
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (poly->getElementType() == ElementType::Relation)
     {
-      ConstRelationPtr relationPoly = boost::dynamic_pointer_cast<const Relation>(poly);
+      ConstRelationPtr relationPoly = std::dynamic_pointer_cast<const Relation>(poly);
       polyAddresses =
         _addressParser.parseAddressesFromRelationMembers(*relationPoly, map, poi->getElementId());
     }

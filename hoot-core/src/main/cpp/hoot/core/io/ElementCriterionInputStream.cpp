@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include <boost/shared_ptr.hpp>
-#include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+
 #include "ElementCriterionInputStream.h"
+
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ _criterion(criterion)
 {
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjection() const
+std::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjection() const
 {
   return _elementSource->getProjection();
 }

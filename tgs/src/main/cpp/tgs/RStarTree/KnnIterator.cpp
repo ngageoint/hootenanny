@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "KnnIterator.h"
@@ -32,7 +32,8 @@
 #include <vector>
 
 // Standard Includes
-#include <limits.h>
+#include <cassert>
+#include <climits>
 #include <list>
 #include <queue>
 #include <set>

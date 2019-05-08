@@ -53,7 +53,7 @@ public:
   /**
    * @see ElementInputStream
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   /**
    * @see ElementInputStream
@@ -88,7 +88,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<InMemoryElementSorter> InMemoryElementSorterPtr;
+typedef std::shared_ptr<InMemoryElementSorter> InMemoryElementSorterPtr;
 
 }
 

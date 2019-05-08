@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARY_INGEST_CHANGESET_READER_H
 #define MULTIARY_INGEST_CHANGESET_READER_H
@@ -53,7 +53,7 @@ public:
   /**
    * @see ChangesetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
 
   void open(QString fileName);
 
@@ -75,7 +75,7 @@ public:
 private:
 
   QFile _file;
-  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  mutable std::shared_ptr<OGRSpatialReference> _wgs84;
   OsmJsonReader _jsonReader;
   OsmXmlReader _xmlReader;
 

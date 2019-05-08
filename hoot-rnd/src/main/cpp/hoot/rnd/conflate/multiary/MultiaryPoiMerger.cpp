@@ -46,18 +46,18 @@ MergerBase()
 {
 }
 
-MultiaryPoiMerger::MultiaryPoiMerger(std::set< std::pair<ElementId, ElementId> >& pairs) :
+MultiaryPoiMerger::MultiaryPoiMerger(std::set<std::pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs)
 {
 }
 
 void MultiaryPoiMerger::apply(const OsmMapPtr& map,
-  std::vector< std::pair<ElementId, ElementId> >& replaced)
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   // find the appropriate match creator for calculating scores between clusters
-  std::vector< boost::shared_ptr<MatchCreator> > matchCreators = MatchFactory::getInstance().
+  std::vector<std::shared_ptr<MatchCreator>> matchCreators = MatchFactory::getInstance().
     getCreators();
-  foreach (boost::shared_ptr<MatchCreator> mc, matchCreators)
+  foreach (std::shared_ptr<MatchCreator> mc, matchCreators)
   {
     if (mc->isMatchCandidate(map->getElement(_pairs.begin()->first), map))
     {
@@ -115,7 +115,7 @@ void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
 }
 
 void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
-  std::vector< std::pair<ElementId, ElementId> >& replaced,
+  std::vector<std::pair<ElementId, ElementId>>& replaced,
   MultiaryClusterAlgorithm::ClusterList clusters)
 {
   foreach (MultiaryClusterPtr mc, clusters)

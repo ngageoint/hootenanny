@@ -62,18 +62,18 @@ public:
 
 private:
 
-  boost::shared_ptr<Tgs::RandomForest> _rf;
+  std::shared_ptr<Tgs::RandomForest> _rf;
   QStringList _rfFactorLabels;
-  std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
   void _createAllExtractors();
   void _createTestExtractors();
 
-  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 
 };
 
-typedef boost::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
+typedef std::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
 
 }
 

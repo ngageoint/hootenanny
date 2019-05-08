@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddressTranslator.h"
 
@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<ToEnglishTranslator> AddressTranslator::_translator;
+std::shared_ptr<ToEnglishTranslator> AddressTranslator::_translator;
 
 AddressTranslator::AddressTranslator()
 {
@@ -59,7 +59,7 @@ void AddressTranslator::setConfiguration(const Settings& conf)
   }
 }
 
-QString AddressTranslator::translateToEnglish(const QString address) const
+QString AddressTranslator::translateToEnglish(const QString& address) const
 {
   const QStringList addressParts = address.simplified().split(" ");
   //Try to translate blocks of consecutive address tokens to cut down on the number of

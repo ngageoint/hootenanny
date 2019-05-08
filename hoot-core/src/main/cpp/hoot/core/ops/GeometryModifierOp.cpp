@@ -51,7 +51,7 @@ GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
   LOG_DEBUG( "Available Geometry Modifiers:")
   for (std::string availType : availableActionTypes)
   {
-    boost::shared_ptr<GeometryModifierAction> pAction( Factory::getInstance().constructObject<GeometryModifierAction>(availType) );
+    std::shared_ptr<GeometryModifierAction> pAction(Factory::getInstance().constructObject<GeometryModifierAction>(availType));
     _actions.append(pAction);
     LOG_DEBUG( "class: " << availType << " command: " << pAction->getCommandName());
   }
@@ -62,7 +62,7 @@ void GeometryModifierOp::setConfiguration(const Settings& conf)
   _pConf = &conf;
 }
 
-void GeometryModifierOp::apply(boost::shared_ptr<OsmMap>& map)
+void GeometryModifierOp::apply(std::shared_ptr<OsmMap>& map)
 {
   QList<GeometryModifierActionDesc> actionDescs = _readJsonRules();
 
@@ -102,7 +102,7 @@ QList<GeometryModifierActionDesc> GeometryModifierOp::_readJsonRules()
     actionDesc.command = QString::fromStdString(commandLevelValue.first);
 
     // check command availability
-    foreach (boost::shared_ptr<GeometryModifierAction> pAction, _actions)
+    foreach (std::shared_ptr<GeometryModifierAction> pAction, _actions)
     {
       if (pAction->getCommandName() == actionDesc.command)
       {

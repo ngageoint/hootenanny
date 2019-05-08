@@ -49,7 +49,7 @@ _criterion(criterion)
 {
 }
 
-void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
+void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
@@ -121,7 +121,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, ElementId eid,
+void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, ElementId eid,
   const set<ElementId>& removeSet)
 {
   // if this element isn't being removed

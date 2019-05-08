@@ -75,10 +75,10 @@ public:
    * @param circularError The circular error in meters. @sa Element::getCircularError()
    * @return A newly allocated and initialized Node shared pointer.
    */
-  static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y,
+  static std::shared_ptr<Node> newSp(Status s, long id, double x, double y,
     Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY);
 
-  static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
+  static std::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
                                        long changeset, long version, quint64 timestamp,
                                        QString user = ElementData::USER_EMPTY,
                                        long uid = ElementData::UID_EMPTY,
@@ -101,9 +101,9 @@ public:
    *
    * @return A newly allocated and copied Node shared pointer.
    */
-  boost::shared_ptr<Node> cloneSp() const;
+  std::shared_ptr<Node> cloneSp() const;
 
-  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
 
   double getX() const { return _nodeData.getX(); }
 
@@ -115,10 +115,10 @@ public:
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
 
-  geos::geom::Coordinate toCoordinate() const {
-    return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
+  geos::geom::Coordinate toCoordinate() const
+  { return geos::geom::Coordinate(_nodeData.getX(), _nodeData.getY()); }
 
-  boost::shared_ptr<geos::geom::Point> toPoint() const;
+  std::shared_ptr<geos::geom::Point> toPoint() const;
 
   QString toString() const;
 
@@ -143,8 +143,8 @@ protected:
   virtual const ElementData& _getElementData() const { return _nodeData; }
 };
 
-typedef boost::shared_ptr<Node> NodePtr;
-typedef boost::shared_ptr<const Node> ConstNodePtr;
+typedef std::shared_ptr<Node> NodePtr;
+typedef std::shared_ptr<const Node> ConstNodePtr;
 
 inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
 {

@@ -27,7 +27,7 @@ ditches).
 
 [[n-tier-webarch]]
 .Hootenanny N-Tier Architecture
-image::developer/images/n-tier-arch.png[]
+image::images/n-tier-arch.png[]
 
 <<n-tier-webarch>> diagrams the n-tier architecture that supports the web enabled environment for Hootenanny Conflation. The web client is a customized version of the MapBox iD Editor that has been extended to handle conflation routines using REST service end points specifically tailored to meet the NSG user requirements. It is currently the only UI that can interact with the Hootenanny Web Services and core components. Conflation input data (FGDB, Shapefile, OSM, GEONAMES) can be imported into the system using the Hootenanny ETL and Translation services accessed via the Hootenanny User Interface (UI). Conflated data can be exported in the same file formats as well as streaming via WFS from UI. The Hootenanny web services also contain REST end points but are not required to interact between the Hoot Core libraries and the RDBMS. The Hoot Core represents the algorithms and routines that handle the bulk of conflation operations. Both the Web Services and Hoot core interact with the PostgreSQL RDBMS for invoking SQL queries and updating conflated data. Hootenanny web services call node.js to interact with the Hootenanny core for translation and provide requested information to the Hootenanny UI.  
 
@@ -44,7 +44,7 @@ The purpose of this document is two-fold:
 
 [[HootWebEnabledArchOverview]]
 .Hootenanny Web-enabled Architecture depicting the interaction between Hoot Core, DB, Web Services and the Web Client. 
-image::developer/images/web-enabled-arch.png[]
+image::images/web-enabled-arch.png[]
 
 ==== Hootenanny Core
 
@@ -58,7 +58,7 @@ Hootenanny leverages a PostgreSQL RDBMS architecture for storing, retrieving, an
 
 [[HootenannyDatabaseSchema]]
 .Hootenanny schema depicting as a high level database design diagram grouped into functional categories. 
-image::developer/images/hootdbschema.png[]
+image::images/hootdbschema.png[]
 
 === Hootenanny Web Services
 
@@ -68,7 +68,7 @@ All service calls made from the Hootenanny UI to the each of the web services ar
 
 [[HootWebServiceChain]]
 .Hootenanny Web Service Chain
-image::developer/images/hoot-srv-chain.png[]
+image::images/hoot-srv-chain.png[]
 
 ==== Hootenanny WFS Services
 
@@ -96,7 +96,7 @@ The iD editor is developed in JavaScript and can be easily customized for variou
 
 [[HootUIGuidedownload]]
 .Accessing the Hootenanny User Interface Guide
-image::developer/images/hootiD-UI_download.png[]
+image::images/hootiD-UI_download.png[]
 
 [[WebServiceAppendix]]
 == Hootenanny Web Services Documentation

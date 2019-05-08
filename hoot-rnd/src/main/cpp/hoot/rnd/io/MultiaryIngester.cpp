@@ -66,9 +66,9 @@ _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
-void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QString translationScript,
-                                             const QString referenceOutput,
-                                             const QString changesetOutput)
+void MultiaryIngester::_doInputErrorChecking(const QString& newInput, const QString& translationScript,
+                                             const QString& referenceOutput,
+                                             const QString& changesetOutput)
 {
   if (!OsmMapReaderFactory::hasElementInputStream(newInput))
   {
@@ -107,8 +107,8 @@ void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QStri
   }
 }
 
-void MultiaryIngester::ingest(const QString newInput, const QString translationScript,
-                              const QString referenceOutput, const QString changesetOutput)
+void MultiaryIngester::ingest(const QString& newInput, const QString& translationScript,
+                              const QString& referenceOutput, const QString& changesetOutput)
 {
   LOG_INFO("Ingesting Multiary data from " << newInput << "...");
 
@@ -156,7 +156,7 @@ void MultiaryIngester::ingest(const QString newInput, const QString translationS
   }
 }
 
-void MultiaryIngester::_sortInputFile(const QString input)
+void MultiaryIngester::_sortInputFile(const QString& input)
 {
   _timer.restart();
   LOG_INFO("Sorting " << input << " by POI ID...");
@@ -192,37 +192,36 @@ void MultiaryIngester::_sortInputFile(const QString input)
   LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
 }
 
-boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
-  const QString sortedNewInput)
+std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(const QString& sortedNewInput)
 {
-  boost::shared_ptr<PartialOsmMapReader> newInputReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+  std::shared_ptr<PartialOsmMapReader> newInputReader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(sortedNewInput));
   newInputReader->setUseDataSourceIds(true);
   newInputReader->open(sortedNewInput);
-  boost::shared_ptr<ElementInputStream> inputStream =
-    boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
+  std::shared_ptr<ElementInputStream> inputStream =
+    std::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
   //filter data down to POIs only, translate each element, and assign it a unique hash id
-  boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
+  std::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
-  visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
-  visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
-  boost::shared_ptr<ElementInputStream> filteredNewInputStream(
+  visitors.append(std::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
+  visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+  std::shared_ptr<ElementInputStream> filteredNewInputStream(
     new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
   return filteredNewInputStream;
 }
 
-void MultiaryIngester::_writeNewReferenceData(
-  boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceOutput,
-  const QString changesetOutput)
+void MultiaryIngester::_writeNewReferenceData(const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
+                                              const QString& referenceOutput,
+                                              const QString& changesetOutput)
 {
   _timer.restart();
   LOG_INFO("Writing POIs to reference layer: " << referenceOutput << "...");
 
   //cast to this so we can get the total/skipped features count
-  boost::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
-    boost::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
+  std::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
+    std::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
@@ -233,12 +232,12 @@ void MultiaryIngester::_writeNewReferenceData(
   //to the POI filtering and translation.  So, we could maybe get better performance by splitting
   //the reading and writing into separate threads if we really wanted to (?).
   conf().set(ConfigOptions::getHootapiDbWriterCopyBulkInsertKey(), true);
-  boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+  std::shared_ptr<PartialOsmMapWriter> referenceWriter =
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::createWriter(referenceOutput));
   referenceWriter->open(referenceOutput);
 
-  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+  std::shared_ptr<OsmChangeWriter> changesetFileWriter =
     OsmChangeWriterFactory::getInstance().createWriter(changesetOutput, "json");
   changesetFileWriter->open(changesetOutput);
 
@@ -277,9 +276,9 @@ void MultiaryIngester::_writeNewReferenceData(
   LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
 }
 
-boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChangeset(
-  boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
-  const QString changesetOutput)
+std::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChangeset(
+    const std::shared_ptr<ElementInputStream>& filteredNewInputStream,
+    const QString& referenceInput, const QString& changesetOutput)
 {
   //The changeset file changes and reference layer POI updates are written in two separate steps.
   //If we tried to write the POI changes to the reference layer as we streamed in the POIs
@@ -290,22 +289,22 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   LOG_INFO("Deriving and writing changes to changeset file: " << changesetOutput << "...");
 
   //cast to this so we can get the total/skipped features count
-  boost::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
-    boost::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
+  std::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
+    std::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
 
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-  boost::shared_ptr<PartialOsmMapReader> referenceReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+  std::shared_ptr<PartialOsmMapReader> referenceReader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(referenceInput));
   referenceReader->open(referenceInput);
   LOG_DEBUG("Opened reference reader.");
 
   ChangesetDeriver changesetDeriver(
-    boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), critInputStrm);
+    std::dynamic_pointer_cast<ElementInputStream>(referenceReader), critInputStrm);
   LOG_DEBUG("Initialized changeset deriver.");
 
   //this spark changeset writer will write the element payload as json for external spark use
-  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+  std::shared_ptr<OsmChangeWriter> changesetFileWriter =
     OsmChangeWriterFactory::getInstance().createWriter(changesetOutput, "json");
   changesetFileWriter->open(changesetOutput);
   LOG_DEBUG("Opened change file writer.");
@@ -314,7 +313,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   //the element payload json for writing the change to the database in the next step, write out
   //a second changeset with the payload in xml; this spark changeset writer will write the
   //element payload as xml for db writing
-  boost::shared_ptr<QTemporaryFile> tmpChangeset(
+  std::shared_ptr<QTemporaryFile> tmpChangeset(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/multiary-ingest-changeset-temp-XXXXXX.mic"));
@@ -325,7 +324,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
     throw HootException("Unable to open changeset temp file: " + tmpChangeset->fileName() + ".");
   }
   LOG_VART(tmpChangeset->fileName());
-  boost::shared_ptr<OsmChangeWriter> changesetTempFileWriter =
+  std::shared_ptr<OsmChangeWriter> changesetTempFileWriter =
     OsmChangeWriterFactory::getInstance().createWriter(tmpChangeset->fileName(), "xml");
   changesetTempFileWriter->open(tmpChangeset->fileName());
   LOG_DEBUG("Opened temp change file writer.");
@@ -395,8 +394,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   return tmpChangeset;
 }
 
-void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutput,
-                                                     const QString referenceOutput)
+void MultiaryIngester::_writeChangesToReferenceLayer(const QString& changesetOutput,
+                                                     const QString& referenceOutput)
 {
   _timer.restart();
   LOG_INFO("Writing changes to reference layer: " << referenceOutput << "...");
@@ -411,12 +410,12 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //to run within the same transaction.  Having all of them in the same transaction isn't possible
   //here unless we use the HootApiDbWriter.
   conf().set(ConfigOptions::getHootapiDbWriterCopyBulkInsertKey(), false);
-  boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+  std::shared_ptr<PartialOsmMapWriter> referenceWriter =
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::createWriter(referenceOutput));
   referenceWriter->initializePartial();
-  boost::shared_ptr<OsmChangeWriter> referenceChangeWriter =
-    boost::dynamic_pointer_cast<OsmChangeWriter>(referenceWriter);
+  std::shared_ptr<OsmChangeWriter> referenceChangeWriter =
+    std::dynamic_pointer_cast<OsmChangeWriter>(referenceWriter);
   referenceChangeWriter->open(referenceOutput);
   LOG_DEBUG("Opened change layer writer.");
 

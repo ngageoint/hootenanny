@@ -53,7 +53,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   LOG_INFO("Merging POIs...");
 
   // instantiate script merger
-  boost::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script(new PluginContext());
   v8::HandleScope handleScope(current);
   v8::Context::Scope context_scope(script->getContext(current));
   script->loadScript(ConfPath::search("PoiGeneric.js", "rules"), "plugin");
@@ -84,11 +84,11 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
     {
       LOG_VART(node);
 
-      std::set< std::pair< ElementId, ElementId> > matches;
+      std::set<std::pair<ElementId, ElementId>> matches;
       matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, node->getElementId()));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedNodes;
+      std::vector<std::pair<ElementId, ElementId>> replacedNodes;
       merger.apply(map, replacedNodes);
       LOG_VART(replacedNodes.size());
 

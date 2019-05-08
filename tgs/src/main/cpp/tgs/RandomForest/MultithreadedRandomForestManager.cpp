@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultithreadedRandomForestManager.h"
 
@@ -51,7 +51,7 @@ namespace Tgs
       for(unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
         _rfList.push_back(
-          boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+          std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
       }
     }
     catch(const Exception & e)
@@ -70,7 +70,7 @@ namespace Tgs
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
         _rfList.push_back(
-          boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+          std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
         _rfList.back()->importModel(forestElement);
       }
     }
@@ -101,7 +101,7 @@ namespace Tgs
       std::cerr << "DEBUG _TRAIN MT" << std::endl;
       _rfList.clear();
       _rfList.push_back(
-        boost::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
+        std::shared_ptr<MultithreadedRandomForest>(new MultithreadedRandomForest()));
       _rfList[0]->trainMulticlass(_data, numTrees, numFactors, nodeSize, retrain, balanced);
     }
     catch(const Exception & e)

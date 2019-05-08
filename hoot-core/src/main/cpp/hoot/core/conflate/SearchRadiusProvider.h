@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SEARCHRADIUSPROVIDER_H
 #define SEARCHRADIUSPROVIDER_H
@@ -48,7 +48,7 @@ public:
   virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) = 0;
 };
 
-typedef boost::shared_ptr<SearchRadiusProvider> SearchRadiusProviderPtr;
+typedef std::shared_ptr<SearchRadiusProvider> SearchRadiusProviderPtr;
 
 }
 

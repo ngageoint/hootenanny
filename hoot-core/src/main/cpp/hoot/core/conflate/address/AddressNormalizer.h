@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ADDRESS_NORMALIZER_H
@@ -61,7 +61,7 @@ public:
    * @param address the address to normalize
    * @return a collection of normalized addresses
    */
-  QSet<QString> normalizeAddress(const QString address) const;
+  QSet<QString> normalizeAddress(const QString& address) const;
 
   int getNumNormalized() const { return _numNormalized; }
 
@@ -69,8 +69,8 @@ private:
 
   mutable int _numNormalized;
 
-  static bool _isValidNormalizedAddress(const QString inputAddress,
-                                        const QString normalizedAddress);
+  static bool _isValidNormalizedAddress(const QString& inputAddress,
+                                        const QString& normalizedAddress);
 };
 
 }

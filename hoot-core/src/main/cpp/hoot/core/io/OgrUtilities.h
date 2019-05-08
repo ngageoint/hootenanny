@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OGRUTILITIES_H
 #define OGRUTILITIES_H
@@ -35,9 +35,6 @@ class GDALDataset;
 // Qt
 #include <QString>
 #include <QSet>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 #include <vector>
 
@@ -89,7 +86,7 @@ public:
    * @param url - Location of the datasource to create, pathname or API URL
    * @return pointer to the datasource created
    */
-  boost::shared_ptr<GDALDataset> createDataSource(const QString& url);
+  std::shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   /**
    * @brief openDataSource - Open an OGR datasource from the url
@@ -97,7 +94,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return pointer to the datasource opened
    */
-  boost::shared_ptr<GDALDataset> openDataSource(const QString url, bool readonly);
+  std::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
 
   /**
    * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource
@@ -129,7 +126,7 @@ private:
    */
   void loadDriverInfo();
 
-  static boost::shared_ptr<OgrUtilities> _theInstance;
+  static std::shared_ptr<OgrUtilities> _theInstance;
   std::vector<OgrDriverInfo> _drivers;
 };
 

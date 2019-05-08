@@ -129,8 +129,8 @@ private:
   void _resetEdgeMatchSimilarities();
 };
 
-typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef boost::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+typedef std::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
+typedef std::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
 
 }
 

@@ -82,7 +82,7 @@ void AddressNormalizer::normalizeAddresses(const ElementPtr& e)
   }
 }
 
-QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
+QSet<QString> AddressNormalizer::normalizeAddress(const QString& address) const
 {
   // See note about init of this in AddressParser::parseAddresses.
   LibPostalInit::getInstance();
@@ -122,8 +122,8 @@ QSet<QString> AddressNormalizer::normalizeAddress(const QString address) const
   return normalizedAddresses;
 }
 
-bool AddressNormalizer::_isValidNormalizedAddress(const QString inputAddress,
-                                                  const QString normalizedAddress)
+bool AddressNormalizer::_isValidNormalizedAddress(const QString& inputAddress,
+                                                  const QString& normalizedAddress)
 {
   // force normalization of "&" to "and"
   if (normalizedAddress.contains(" & "))

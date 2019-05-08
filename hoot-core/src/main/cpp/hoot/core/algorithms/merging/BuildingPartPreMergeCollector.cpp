@@ -118,10 +118,10 @@ void BuildingPartPreMergeCollector::_groupBuildingParts(ElementPtr building, Way
 }
 
 void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(
-  ElementPtr building, boost::shared_ptr<geos::geom::Geometry> buildingGeom,
+  ElementPtr building, std::shared_ptr<geos::geom::Geometry> buildingGeom,
   WayPtr buildingPartNeighbor)
 {
-  boost::shared_ptr<geos::geom::Geometry> buildingPartMatchCandidateGeom =
+  std::shared_ptr<geos::geom::Geometry> buildingPartMatchCandidateGeom =
     _getGeometry(buildingPartNeighbor);
   assert(buildingPartMatchCandidateGeom);
   // if this is another building part totally contained by this building
@@ -134,9 +134,9 @@ void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(
   {
     // Something is wrong with the geometry, so let's try cleaning it.
     LOG_TRACE("cleaning...");
-    boost::shared_ptr<geos::geom::Geometry> cleanMatchCandidate(
+    std::shared_ptr<geos::geom::Geometry> cleanMatchCandidate(
       GeometryUtils::validateGeometry(buildingPartMatchCandidateGeom.get()));
-    boost::shared_ptr<geos::geom::Geometry> cleanBuilding(
+    std::shared_ptr<geos::geom::Geometry> cleanBuilding(
       GeometryUtils::validateGeometry(buildingGeom.get()));
     contains = cleanBuilding->contains(cleanMatchCandidate.get());
     _numGeometriesCleaned++;
@@ -149,10 +149,10 @@ void BuildingPartPreMergeCollector::_addContainedBuildingPartToGroup(
   }
 }
 
-boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometry(
+std::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeometry(
   ConstElementPtr element)
 {
-  boost::shared_ptr<geos::geom::Geometry> geom;
+  std::shared_ptr<geos::geom::Geometry> geom;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Way:
@@ -161,7 +161,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
       // but that was causing stability issues as noted in
       // BuildingPartMergeOp::_getBuildingPartPreProcessingInput.
       QMutexLocker schemaLock(_hootSchemaMutex);
-      geom = _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Way>(element));
+      geom = _elementConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
       break;
     }
 
@@ -171,7 +171,7 @@ boost::shared_ptr<geos::geom::Geometry> BuildingPartPreMergeCollector::_getGeome
       // therefore, don't require a mutex lock.  Its not inconceivable that fact could change at
       // some point and then a mutex would have to be added here.
       geom =
-        _elementConverter->convertToGeometry(boost::dynamic_pointer_cast<const Relation>(element));
+        _elementConverter->convertToGeometry(std::dynamic_pointer_cast<const Relation>(element));
       break; 
     }
 

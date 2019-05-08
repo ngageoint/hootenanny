@@ -34,11 +34,11 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -67,53 +67,53 @@ public:
 
   MapCropper();
   MapCropper(const geos::geom::Envelope& envelope);
-  MapCropper(const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
-  static void crop(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
+  static void crop(std::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
 
-  static void crop(boost::shared_ptr<OsmMap> map,
-                   const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  static void crop(std::shared_ptr<OsmMap> map,
+                   const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual std::string getClassName() const override { return className(); }
 
-  virtual void readObject(QDataStream& is);
+  virtual void readObject(QDataStream& is) override;
 
   /**
    * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
    * This value will not be serialized.
    */
-  virtual void setBounds(const geos::geom::Envelope &bounds) { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope &bounds) override { _nodeBounds = bounds; }
 
-  virtual void writeObject(QDataStream& os) const;
+  virtual void writeObject(QDataStream& os) const override;
 
-  virtual QString getDescription() const { return "Crops a map"; }
+  virtual QString getDescription() const override { return "Crops a map"; }
 
-  virtual QString getInitStatusMessage() const
+  virtual QString getInitStatusMessage() const override
   { return "Cropping map..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
 private:
 
   geos::geom::Envelope _envelope;
-  boost::shared_ptr<const geos::geom::Geometry> _envelopeG;
+  std::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
   bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
   int _statusUpdateInterval;
 
-  void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
+  void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
   /**
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
    */
-  long _findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w, const geos::geom::Coordinate& c);
+  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w, const geos::geom::Coordinate& c);
 
   /**
    * Returns true if the specified envelope is wholly inside the region that will be kept. If
@@ -131,7 +131,7 @@ private:
    */
   bool _isWhollyOutside(const geos::geom::Envelope& e);
 
-  boost::shared_ptr<Way> _reintroduceWay(boost::shared_ptr<OsmMap> map, boost::shared_ptr<const Way> w,
+  std::shared_ptr<Way> _reintroduceWay(std::shared_ptr<OsmMap> map, std::shared_ptr<const Way> w,
     const geos::geom::LineString* ls);
 
   friend class MapCropperTest;

@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__MEMORY_PAGE_STORE_H__
 #define __TGS__MEMORY_PAGE_STORE_H__
 
 // Standard Includes
+#include <memory>
 #include <vector>
 
 #include <tgs/TgsExport.h>
@@ -47,11 +48,11 @@ namespace Tgs
 
     virtual ~MemoryPageStore();
 
-    virtual boost::shared_ptr<Page> createPage();
+    virtual std::shared_ptr<Page> createPage();
 
     virtual void flush() {}
 
-    virtual boost::shared_ptr<Page> getPage(int id);
+    virtual std::shared_ptr<Page> getPage(int id);
 
     virtual int getPageCount() const { return (int)_pages.size(); }
 
@@ -62,7 +63,7 @@ namespace Tgs
   private:
 
     int _pageSize;
-    std::vector<boost::shared_ptr<Page> > _pages;
+    std::vector<std::shared_ptr<Page>> _pages;
 
     virtual void _savePage(int, char *) {}
 

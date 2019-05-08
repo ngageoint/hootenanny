@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbablePathCalculator.h"
@@ -306,7 +306,7 @@ namespace Tgs
     const int col = p.col;
     const int index = _toIndex(p);
     const float f = _currentValues[index];
-    vector< MyHeap::JHeapNode >& nodes = q.getNodes();
+    vector<MyHeap::JHeapNode>& nodes = q.getNodes();
 
     // this pixel is impassible
     if (_baseValues[index] < 0)
@@ -573,7 +573,7 @@ namespace Tgs
 
   void ProbablePathCalculator::_surround(int index, float cost, MyHeap& q)
   {    
-    vector< MyHeap::JHeapNode >& nodes = q.getNodes();
+    vector<MyHeap::JHeapNode>& nodes = q.getNodes();
 
     int row = index / _cols;
     int col = index % _cols;

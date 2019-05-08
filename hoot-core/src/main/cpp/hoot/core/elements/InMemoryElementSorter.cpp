@@ -70,7 +70,7 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() const
+std::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() const
 {
   return _source->getProjection();
 }

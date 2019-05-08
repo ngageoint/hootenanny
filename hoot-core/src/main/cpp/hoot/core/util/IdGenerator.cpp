@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IdGenerator.h"
@@ -33,9 +33,9 @@
 namespace hoot
 {
 
-boost::shared_ptr<IdGenerator> IdGenerator::_theInstance;
+std::shared_ptr<IdGenerator> IdGenerator::_theInstance;
 
-boost::shared_ptr<IdGenerator> IdGenerator::getInstance()
+std::shared_ptr<IdGenerator> IdGenerator::getInstance()
 {
   if (!_theInstance)
   {

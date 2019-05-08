@@ -104,8 +104,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
-    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -154,8 +154,8 @@ public:
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
 
-    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -202,8 +202,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
-    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -248,8 +248,8 @@ public:
     WayPtr w3 = TestUtils::createWay(map, Status::Unknown1, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
-    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -282,22 +282,22 @@ public:
       false);
     MapProjector::projectToOrthographic(map);
 
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
     LOG_INFO(
       sublineMatcher->findMatch(
         map,
-        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
       "subline 1: start: way(-3) index: 0 fraction: 0.354292349419726 end: way(-3) index: 1 fraction: 0\n"
       "subline 2: start: way(-2) index: 0 fraction: 0 end: way(-2) index: 1 fraction: 0",
       sublineMatcher->findMatch(
         map,
-        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
   }
 
   /**
@@ -312,15 +312,15 @@ public:
     Settings conf;
     conf.set(ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
 
-    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    std::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setConfiguration(conf);
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    WayPtr w218 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
-    WayPtr w948 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
-    WayPtr w582 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
+    WayPtr w218 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
+    WayPtr w948 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
+    WayPtr w582 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.0001, 0.9999));
 

@@ -36,9 +36,6 @@
 // Standart
 #include <vector>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

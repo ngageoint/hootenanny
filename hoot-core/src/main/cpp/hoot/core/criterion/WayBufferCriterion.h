@@ -66,7 +66,7 @@ public:
    * @param circularError circular error of baseLine
    */
   WayBufferCriterion(ConstOsmMapPtr map,
-                     boost::shared_ptr<geos::geom::LineString> baseLine,
+                     std::shared_ptr<geos::geom::LineString> baseLine,
                      Meters buffer,
                      Meters circularError,
                      double matchPercent);
@@ -81,8 +81,8 @@ public:
 private:
 
   Meters _buffer;
-  mutable boost::shared_ptr<geos::geom::Geometry> _baseBuffered;
-  boost::shared_ptr<geos::geom::LineString> _baseLs;
+  mutable std::shared_ptr<geos::geom::Geometry> _baseBuffered;
+  std::shared_ptr<geos::geom::LineString> _baseLs;
 
   // Anything outside the given bounds cannot be within maxDistance
   mutable geos::geom::Envelope _boundsPlus;

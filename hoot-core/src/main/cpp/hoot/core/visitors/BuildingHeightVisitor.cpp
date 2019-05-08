@@ -138,7 +138,7 @@ void BuildingHeightVisitor::_cleanHeightStr(QString& heightStr)
     .simplified();
 }
 
-Meters BuildingHeightVisitor::_parseMetersVal(const QString heightStr)
+Meters BuildingHeightVisitor::_parseMetersVal(const QString& heightStr)
 {
   bool ok = false;
   const Meters height = heightStr.toDouble(&ok);
@@ -149,7 +149,7 @@ Meters BuildingHeightVisitor::_parseMetersVal(const QString heightStr)
   return 0.0;
 }
 
-Meters BuildingHeightVisitor::_parseFeetVal(const QString heightStr,
+Meters BuildingHeightVisitor::_parseFeetVal(const QString& heightStr,
                                             const QRegularExpressionMatch& regexMatch) const
 {
   // don't allow swapping of feet/inches and warn about it; could also handle this in the regex
@@ -198,7 +198,7 @@ Meters BuildingHeightVisitor::_parseFeetVal(const QString heightStr,
   return (feet + (inches / 12)) / 3.2808;
 }
 
-Meters BuildingHeightVisitor::_parseFeetToken(const QString type,
+Meters BuildingHeightVisitor::_parseFeetToken(const QString& type,
                                               const QRegularExpressionMatch& regexMatch,
                                               bool& successfulParse) const
 {
@@ -215,7 +215,7 @@ Meters BuildingHeightVisitor::_parseFeetToken(const QString type,
   return val;
 }
 
-void BuildingHeightVisitor::_logInvalidFeetHeight(const QString heightStr) const
+void BuildingHeightVisitor::_logInvalidFeetHeight(const QString& heightStr) const
 {
   if (logWarnCount < Log::getWarnMessageLimit())
   {

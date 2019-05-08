@@ -26,43 +26,28 @@ echo "### 01. --without-cppunit"
 echo "### 02. --without-newmat"
 ./configure -q                   --without-newmat                                                   && build
 
-echo "### 03. --without-log4cxx"
-./configure -q                                    --without-log4cxx                                 && build
-
-echo "### 04. --with-services"
+echo "### 03. --with-services"
 ./configure -q                                                      --with-services                 && build
 
-echo "### 05. --without-cppunit --without-newmat"
-./configure -q --without-cppunit --without-newmat                                                   && build_notest
+echo "### 04. --without-cppunit --without-newmat"
+./configure -q --without-cppunit --without-newmat                                 && build_notest
 
-echo "### 06. --without-cppunit --without-newmat --without-log4cxx"
-./configure -q --without-cppunit --without-newmat --without-log4cxx                                 && build_notest
+echo "### 05. --without-cppunit --without-newmat --with-services"
+./configure -q --without-cppunit --without-newmat --with-services                 && build_notest
 
-echo "### 07. --without-cppunit --without-newmat --without-log4cxx --with-services"
-./configure -q --without-cppunit --without-newmat --without-log4cxx --with-services                 && build_notest
-
-echo "### 08. --without-newmat --with-services"
+echo "### 06. --without-newmat --with-services"
 ./configure -q                   --without-newmat                   --with-services                 && build
 
-echo "### 09. --without-newmat --without-log4cxx"
-./configure -q                   --without-newmat --without-log4cxx                                 && build
-
-echo "### 10. --without-newmat --without-log4cxx --with-services"
-./configure -q                   --without-newmat --without-log4cxx --with-services                 && build
-
-echo "### 11. --without-log4cxx --with-services"
-./configure -q                                    --without-log4cxx --with-services                 && build
-
-echo "### 12. ./configure -q"
+echo "### 07. ./configure -q"
 ./configure -q
 
-echo "### 13. --without-cppunit --without-newmat --without-log4cxx --with-services --with-rnd"
-./configure -q --without-cppunit --without-newmat --without-log4cxx --with-services --with-rnd      && build_notest
+echo "### 08. --without-cppunit --without-newmat --with-services --with-rnd"
+./configure -q --without-cppunit --without-newmat --with-services --with-rnd      && build_notest
 
-echo "### 14. --without-newmat --without-log4cxx --with-services --with-rnd"
-./configure -q                   --without-newmat --without-log4cxx --with-services --with-rnd      && build
+echo "### 09. --without-newmat --without-log4cxx --with-services --with-rnd"
+./configure -q                   --without-newmat --with-services --with-rnd      && build
 
-echo "### 15. --with-rnd"
+echo "### 10. --with-rnd"
 ./configure -q                                                                      --with-rnd      && build
 
 echo "############"

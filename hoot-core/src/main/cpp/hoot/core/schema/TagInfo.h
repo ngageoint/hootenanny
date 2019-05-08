@@ -44,7 +44,7 @@ class TagInfo
 {
 public:
 
-  TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList keys = QStringList(),
+  TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
           const bool keysOnly = false, const bool caseSensitive = true,
           const bool exactKeyMatch = true);
 
@@ -54,7 +54,7 @@ public:
    * @param inputs data sources with tags to examine
    * @return a JSON tags string
    */
-  QString getInfo(const QStringList inputs);
+  QString getInfo(const QStringList& inputs);
 
 private:
 
@@ -77,12 +77,12 @@ private:
   // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
 
-  QString _getInfo(QString input);
+  QString _getInfo(const QString& input);
 
-  QString _printJSON(QString lName, TagInfoHash& data);
+  QString _printJSON(const QString& lName, TagInfoHash& data);
 
-  void _parseElement(ElementPtr e, TagInfoHash& result);
-  bool _tagKeysMatch(const QString tagKey) const;
+  void _parseElement(const ElementPtr& e, TagInfoHash& result);
+  bool _tagKeysMatch(const QString& tagKey) const;
 };
 
 }

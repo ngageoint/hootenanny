@@ -42,9 +42,6 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace std;
 using namespace v8;
 
@@ -113,8 +110,8 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   SublineStringMatcherPtr sublineMatcher = toCpp<SublineStringMatcherPtr>(args[0]);
   OsmMapPtr map = toCpp<OsmMapPtr>(args[1]);
   MergerBase::PairsSet pairs = toCpp<MergerBase::PairsSet>(args[2]);
-  vector< pair<ElementId, ElementId> > replaced =
-      toCpp< vector< pair<ElementId, ElementId> > >(args[3]);
+  vector<pair<ElementId, ElementId>> replaced =
+      toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
 
   HighwaySnapMergerPtr snapMerger(new HighwaySnapMerger(pairs, sublineMatcher));
   snapMerger->apply(map, replaced);

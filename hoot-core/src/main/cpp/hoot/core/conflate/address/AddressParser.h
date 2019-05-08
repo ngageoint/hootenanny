@@ -96,7 +96,7 @@ public:
    * @return a collection of addresses
    */
   QList<Address> parseAddressesFromRelationMembers(const Relation& relation, const OsmMap& map,
-                                                const ElementId& skipElementId = ElementId()) const;
+                                                   const ElementId& skipElementId = ElementId()) const;
 
   /**
    * Determines if an element has an address
@@ -144,7 +144,7 @@ public:
    * @param address2 second address to compare
    * @return true if the address match despite subletter differences; false otherwise
    */
-  static bool addressesMatchDespiteSubletterDiffs(const QString address1, const QString address2);
+  static bool addressesMatchDespiteSubletterDiffs(const QString& address1, const QString& address2);
 
   void setPreTranslateTagValuesToEnglish(bool translate, const Settings& conf);
   void setAllowLenientHouseNumberMatching(bool allow) { _allowLenientHouseNumberMatching = allow; }
@@ -162,15 +162,15 @@ private:
 
   QSet<QString> _parseAddresses(const Element& element, QString& houseNum, QString& street) const;
 
-  QSet<QString> _parseAddressAsRange(const QString houseNum, const QString street) const;
-  bool _isRangeAddress(const QString houseNum) const;
+  QSet<QString> _parseAddressAsRange(const QString& houseNum, const QString& street) const;
+  bool _isRangeAddress(const QString& houseNum) const;
   bool _isParseableAddressFromComponents(const Tags& tags, QString& houseNum,
                                          QString& street) const;
   bool _isValidAddressStr(QString& address, QString& houseNum,  QString& street) const;
   /*
    * Parses tags which contain a complete address string
    */
-  QString _parseFullAddress(const QString fullAddress, QString& houseNum, QString& street) const;
+  QString _parseFullAddress(const QString& fullAddress, QString& houseNum, QString& street) const;
   /*
    * Parses tags where multiple tags are combined to make a complete address
    */
@@ -181,7 +181,7 @@ private:
    */
   QString _parseAddressFromAltTags(const Tags& tags, QString& houseNum, QString& street) const;
 
-  static QString _getSubLetterCleanedAddress(const QString address);
+  static QString _getSubLetterCleanedAddress(const QString& address);
 };
 
 }

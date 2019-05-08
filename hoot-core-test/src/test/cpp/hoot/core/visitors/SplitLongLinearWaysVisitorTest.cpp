@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <limits> // for std::min
 
@@ -70,7 +70,7 @@ public:
   }
 
 private:
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   void _createWay(const long wayId, const unsigned int startNodeId, const unsigned int endNodeId)
   {
@@ -86,8 +86,9 @@ private:
       for ( unsigned int i = startNodeId; i <= endNodeId; i++ )
       {
         // Make sure map does not already have node in question
-        if ( _map->containsNode(i) == false ) {
-          boost::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
+        if ( _map->containsNode(i) == false )
+        {
+          std::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
           _map->addNode(createNode);
         }
 

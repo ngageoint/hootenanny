@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactory.h"
 
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
+std::shared_ptr<TagMergerFactory> TagMergerFactory::_theInstance;
 
 TagMergerFactory::TagMergerFactory()
 {
@@ -54,7 +54,7 @@ TagMergerFactory& TagMergerFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
+std::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
 {
   if (!_default)
   {
@@ -62,14 +62,13 @@ boost::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
     LOG_DEBUG("Default tag merger is: " << defaultName);
     _default = getMergerPtr(defaultName);
   }
-
   return _default;
 }
 
-boost::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
+std::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
-  boost::shared_ptr<const TagMerger> result;
-  QHash<QString, boost::shared_ptr<const TagMerger> >::const_iterator it = _mergers.find(name);
+  std::shared_ptr<const TagMerger> result;
+  QHash<QString, std::shared_ptr<const TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
     result.reset(Factory::getInstance().constructObject<TagMerger>(name.toStdString()));
@@ -79,7 +78,6 @@ boost::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString&
   {
     result = it.value();
   }
-
   return result;
 }
 

@@ -55,14 +55,14 @@ void ExternalMergeElementSorter::close()
 {
   if (_sortedElements)
   {
-    boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(_sortedElements);
+    std::shared_ptr<PartialOsmMapReader> sortedElementsReader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(_sortedElements);
     sortedElementsReader->finalizePartial();
     _sortedElements->close();
   }
 }
 
-boost::shared_ptr<OGRSpatialReference> ExternalMergeElementSorter::getProjection() const
+std::shared_ptr<OGRSpatialReference> ExternalMergeElementSorter::getProjection() const
 {
   return _sortedElements->getProjection();
 }
@@ -114,13 +114,13 @@ void ExternalMergeElementSorter::_initElementStream()
 {
   LOG_DEBUG("Opening reader for element stream at " << _sortFinalOutput->fileName() << "...");
 
-  boost::shared_ptr<PartialOsmMapReader> sortedElementsReader =
-    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+  std::shared_ptr<PartialOsmMapReader> sortedElementsReader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(_sortFinalOutput->fileName()));
   sortedElementsReader->setUseDataSourceIds(true);
   sortedElementsReader->open(_sortFinalOutput->fileName());
   sortedElementsReader->initializePartial();
-  _sortedElements = boost::dynamic_pointer_cast<ElementInputStream>(sortedElementsReader);
+  _sortedElements = std::dynamic_pointer_cast<ElementInputStream>(sortedElementsReader);
 }
 
 bool ExternalMergeElementSorter::_elementCompare(const ConstElementPtr& e1,
@@ -159,7 +159,7 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
 
       LOG_DEBUG("Writing elements to temp file...");
 
-      boost::shared_ptr<QTemporaryFile> tempOutputFile(
+      std::shared_ptr<QTemporaryFile> tempOutputFile(
         new QTemporaryFile(
           ConfigOptions().getApidbBulkInserterTempFileDir() + "/" + SORT_TEMP_FILE_BASE_NAME +
           ".osm"));
@@ -174,8 +174,8 @@ void ExternalMergeElementSorter::_createSortedFileOutputs(ElementInputStreamPtr 
       }
       _tempOutputFiles.append(tempOutputFile);
 
-      boost::shared_ptr<PartialOsmMapWriter> writer =
-        boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+      std::shared_ptr<PartialOsmMapWriter> writer =
+        std::dynamic_pointer_cast<PartialOsmMapWriter>(
           OsmMapWriterFactory::createWriter(tempOutputFile->fileName()));
       writer->open(tempOutputFile->fileName());
       writer->initializePartial();
@@ -209,9 +209,9 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
 {
   LOG_DEBUG("Merging " << _tempOutputFiles.size() << " temporary files...");
 
-  QList<boost::shared_ptr<PartialOsmMapReader>> readers;
+  QList<std::shared_ptr<PartialOsmMapReader>> readers;
   ElementPriorityQueue priorityQueue = _getInitializedPriorityQueue(readers);
-  boost::shared_ptr<PartialOsmMapWriter> writer = _getFinalOutputWriter();
+  std::shared_ptr<PartialOsmMapWriter> writer = _getFinalOutputWriter();
 
   _mergeSortedElements(priorityQueue, writer, readers);
 
@@ -230,8 +230,8 @@ void ExternalMergeElementSorter::_mergeSortedFiles()
 }
 
 void ExternalMergeElementSorter::_mergeSortedElements(ElementPriorityQueue& priorityQueue,
-                                              boost::shared_ptr<PartialOsmMapWriter> writer,
-                                              QList<boost::shared_ptr<PartialOsmMapReader>> readers)
+                                              std::shared_ptr<PartialOsmMapWriter> writer,
+                                              QList<std::shared_ptr<PartialOsmMapReader>> readers)
 {
   LOG_DEBUG("Iterating through remaining elements in sorted order...");
 
@@ -312,7 +312,7 @@ void ExternalMergeElementSorter::_printPriorityQueue(ElementPriorityQueue priori
   LOG_TRACE("Priority queue: " << str);
 }
 
-boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutputWriter()
+std::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutputWriter()
 {
   LOG_DEBUG("Initializing final output...");
 
@@ -329,8 +329,8 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
     LOG_DEBUG(
       "Opened temp final output file: " << _sortFinalOutput->fileName() << " for sorted output.");
   }
-  boost::shared_ptr<PartialOsmMapWriter> writer =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+  std::shared_ptr<PartialOsmMapWriter> writer =
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::createWriter(_sortFinalOutput->fileName()));
   writer->open(_sortFinalOutput->fileName());
   writer->initializePartial();
@@ -339,7 +339,7 @@ boost::shared_ptr<PartialOsmMapWriter> ExternalMergeElementSorter::_getFinalOutp
 }
 
 ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
-  QList<boost::shared_ptr<PartialOsmMapReader>>& readers)
+  QList<std::shared_ptr<PartialOsmMapReader>>& readers)
 {
   LOG_DEBUG("Writing initial records from each temp file to priority queue...");
 
@@ -349,15 +349,15 @@ ElementPriorityQueue ExternalMergeElementSorter::_getInitializedPriorityQueue(
   {
     const QString fileName = _tempOutputFiles.at(i)->fileName();
     LOG_VART(fileName);
-    boost::shared_ptr<PartialOsmMapReader> reader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+    std::shared_ptr<PartialOsmMapReader> reader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::createReader(fileName));
 
     //By default, OsmXmlReader will not add child references (node ref, elements members) to parent
     //elements if those elements are not present in the data.  For external sorting, where partial
     //chunks of elements will be present, we need to change that behavior.
-    boost::shared_ptr<OsmXmlReader> xmlReader =
-      boost::dynamic_pointer_cast<OsmXmlReader>(reader);
+    std::shared_ptr<OsmXmlReader> xmlReader =
+      std::dynamic_pointer_cast<OsmXmlReader>(reader);
     if (xmlReader.get())
     {
       xmlReader->setAddChildRefsWhenMissing(true);

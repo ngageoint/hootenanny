@@ -47,7 +47,7 @@ void MembersPerRelationVisitor::visit(const ConstElementPtr& e)
 {
   if (_crit.isSatisfied(e))
   {
-    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(e);
     const int numMembers = relation->getMembers().size();
     _totalMembers += numMembers;
     if (_minMembersPerRelation == 0 || numMembers < _minMembersPerRelation)

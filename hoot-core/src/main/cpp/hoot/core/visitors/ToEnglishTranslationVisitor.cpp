@@ -93,7 +93,7 @@ void ToEnglishTranslationVisitor::setConfiguration(const Settings& conf)
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
 }
 
-void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
+void ToEnglishTranslationVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_tagKeys.isEmpty())
   {
@@ -152,7 +152,7 @@ void ToEnglishTranslationVisitor::visit(const boost::shared_ptr<Element>& e)
 }
 
 bool ToEnglishTranslationVisitor::_translate(const ElementPtr& e,
-                                             const QString toTranslateTagKey)
+                                             const QString& toTranslateTagKey)
 {
   bool translationMade = false;
 

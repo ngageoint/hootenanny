@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DICTIONARY_TRANSLATOR_H
@@ -68,7 +68,7 @@ public:
   /**
    * @see ToEnglishTranslator; wraps call to toEnglish
    */
-  virtual QString translate(const QString textToTranslate);
+  virtual QString translate(const QString& textToTranslate) override;
 
   /**
    * Converts the given input string into all possible known translations. E.g.
@@ -91,15 +91,15 @@ public:
 
   QString translateStreet(const QString& input);
 
-  virtual QStringList getSourceLanguages() const { return QStringList(); }
-  virtual void setSourceLanguages(const QStringList /*langCodes*/) {}
-  virtual QString getDetectedLanguage() const { return ""; }
+  virtual QStringList getSourceLanguages() const override { return QStringList(); }
+  virtual void setSourceLanguages(const QStringList& /*langCodes*/) override {}
+  virtual QString getDetectedLanguage() const override { return ""; }
 
   virtual void setConfiguration(const Settings& /*conf*/) {}
 
   void setTokenizeInput(bool tokenize) { _tokenizeInput = tokenize; }
 
-  virtual void setId(const QString /*id*/) {}
+  virtual void setId(const QString& /*id*/) override {}
 
 private:
 

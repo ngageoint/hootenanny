@@ -69,7 +69,7 @@ public:
 
   virtual void setHeadingDelta(Meters headingDelta);
 
-  virtual void setSublineMatcher(boost::shared_ptr<SublineMatcher> sm);
+  virtual void setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm);
 
   virtual QString getDescription() const
   { return "Matches lines based on the maximal subline string found"; }
@@ -82,7 +82,7 @@ private:
   Radians _maxAngle;
   Meters _minSplitsize;
   Meters _headingDelta;
-  boost::shared_ptr<SublineMatcher> _sublineMatcher;
+  std::shared_ptr<SublineMatcher> _sublineMatcher;
 
   class ScoredMatch
   {

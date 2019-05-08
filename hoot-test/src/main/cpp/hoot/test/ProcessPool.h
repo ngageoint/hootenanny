@@ -22,24 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROCESS_POOL_H
 #define PROCESS_POOL_H
 
-//  Boost
-#include <boost/shared_ptr.hpp>
+//  Standard
+#include <memory>
+#include <set>
+#include <vector>
 
 //  QT
 #include <QMutex>
 #include <QProcess>
 #include <QThread>
 #include <QWaitCondition>
-typedef boost::shared_ptr<QProcess> QProcessPtr;
-
-//  Standard
-#include <set>
-#include <vector>
+typedef std::shared_ptr<QProcess> QProcessPtr;
 
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
@@ -153,7 +151,7 @@ private:
   /** Shared pointer containing ownership of the process pointer from createProcess() */
   QProcessPtr _proc;
 };
-typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;
+typedef std::shared_ptr<ProcessThread> ProcessThreadPtr;
 
 /**
  * @brief The ProcessPool class that encapsulates the division of work amongs processes.  Tests

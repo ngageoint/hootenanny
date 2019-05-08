@@ -74,7 +74,7 @@ using namespace std;
 // Tgs
 #include <tgs/System/Time.h>
 
-typedef boost::shared_ptr<CppUnit::Test> TestPtr;
+typedef std::shared_ptr<CppUnit::Test> TestPtr;
 
 enum _TestType
 {
@@ -436,14 +436,10 @@ int main(int argc, char* argv[])
     std::vector<CppUnit::Test*> vTestsToRun;
     CppUnit::TextTestResult result;
 
-# if HOOT_HAVE_HADOOP
-    Hoot::getInstance().loadLibrary("PrettyPipesExample");
-# endif
-
     // initialize OSM Schema so the time expense doesn't print in other tests.
     OsmSchema::getInstance();
 
-    boost::shared_ptr<HootTestListener> listener;
+    std::shared_ptr<HootTestListener> listener;
 
     bool printDiff = args.contains("--diff");
 

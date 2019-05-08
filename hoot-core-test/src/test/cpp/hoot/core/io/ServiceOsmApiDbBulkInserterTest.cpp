@@ -128,7 +128,7 @@ public:
 
     //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
     //file validation will have to be good enough
-//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
@@ -195,7 +195,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
@@ -263,7 +263,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    // TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
@@ -331,7 +331,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    // TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
@@ -399,7 +399,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    std::shared_ptr<OsmApiDb> osmApiDb = std::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
     CPPUNIT_ASSERT_EQUAL((long)18, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)8, osmApiDb->getNextId(ElementType::Way));
     CPPUNIT_ASSERT_EQUAL((long)4, osmApiDb->getNextId(ElementType::Relation));

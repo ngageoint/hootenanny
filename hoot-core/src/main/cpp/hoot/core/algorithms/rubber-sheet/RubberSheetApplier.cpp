@@ -48,7 +48,7 @@ RubberSheetApplier::RubberSheetApplier()
 {
 }
 
-void RubberSheetApplier::apply(const QString transform, const QString input, const QString output)
+void RubberSheetApplier::apply(const QString& transform, const QString& input, const QString& output)
 {
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input, true, Status::Unknown1);

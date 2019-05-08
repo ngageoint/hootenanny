@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -32,9 +32,6 @@
 
 //Qt includes
 #include <QString>
-
-//boost includes
-#include <boost/shared_ptr.hpp>
 
 namespace hoot
 {
@@ -52,7 +49,7 @@ public:
 
   LongBox(std::vector<long int> min, std::vector<long int> max);
 
-  boost::shared_ptr<LongBox> copy();
+  std::shared_ptr<LongBox> copy();
 
   virtual ~LongBox();
 

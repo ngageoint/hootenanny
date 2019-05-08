@@ -159,10 +159,10 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
       else if (name == "nd")
       {
         long id = reader.attributes().value("ref").toString().toLong();
-        boost::dynamic_pointer_cast<XmlWay>(element)->addNode(id);
+        std::dynamic_pointer_cast<XmlWay>(element)->addNode(id);
       }
       else if (name == "member")
-        boost::dynamic_pointer_cast<XmlRelation>(element)->addMember(reader.attributes());
+        std::dynamic_pointer_cast<XmlRelation>(element)->addMember(reader.attributes());
     }
     //  End element for create/modify/delete
     else if (type == QXmlStreamReader::EndElement)

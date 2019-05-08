@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryUtilities.h"
 
@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-boost::shared_ptr<MultiaryUtilities> MultiaryUtilities::_theInstance;
+std::shared_ptr<MultiaryUtilities> MultiaryUtilities::_theInstance;
 
 void MultiaryUtilities::conflate(OsmMapPtr map)
 {
@@ -51,7 +51,7 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
   matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
 
   MergerFactory::getInstance().reset();
-  boost::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
+  std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
   mergerFactory->registerCreator(new MultiaryPoiMergerCreator());
 
   MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
@@ -112,7 +112,7 @@ QList<MultiaryElement> MultiaryUtilities::conflateCluster(QList<QByteArray> pbfE
     NodePtr n = it->second;
     me.setHash(n->getTags().get(MetadataTags::HootHash()));
     me.setBounds(getInstance().getBoundsCalculator()->calculateSearchBounds(map,
-      boost::dynamic_pointer_cast<Node>(n)));
+      std::dynamic_pointer_cast<Node>(n)));
     me.setPayload(convertElementToPbf(n));
     result.append(me);
   }
@@ -182,9 +182,9 @@ SearchBoundsCalculatorPtr MultiaryUtilities::getBoundsCalculator()
   if (_searchBoundsCalculator.get() == 0)
   {
     // find a match creator that can provide the search bounds.
-    foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
+    foreach (std::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
     {
-      SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
+      SearchRadiusProviderPtr sbc = std::dynamic_pointer_cast<SearchRadiusProvider>(mc);
 
       if (sbc.get())
       {
