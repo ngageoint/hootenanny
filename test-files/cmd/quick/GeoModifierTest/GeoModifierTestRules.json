@@ -63,5 +63,24 @@
         "arguments":
         {
         }
+    },
+    "poly_cluster":
+    {
+        "filter":
+        {
+            "must": 
+            [
+              {
+                "tag": "building=*"
+              }
+            ]
+        },
+        "arguments":
+        {
+          "distance" : 1000,
+          "alpha" : 500,
+          "check_intersections" : "false",
+          "cluster_tag_list" : "landuse=residential;testvalue=16"
+        }
     }
 }
