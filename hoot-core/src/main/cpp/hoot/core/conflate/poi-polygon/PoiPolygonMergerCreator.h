@@ -62,7 +62,10 @@ private:
 
   const OsmMap* _map;
 
+  // TODO
   bool _autoMergeManyPoiToOnePolyMatches;
+  // TODO
+  bool _allowCrossConflationMerging;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

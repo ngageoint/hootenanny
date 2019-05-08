@@ -80,6 +80,7 @@ public:
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
+  // Is the right implementation for this?
   virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   { return false; }
 

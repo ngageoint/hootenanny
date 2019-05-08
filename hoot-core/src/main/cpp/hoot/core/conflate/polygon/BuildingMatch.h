@@ -92,8 +92,11 @@ private:
   boost::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
+  // TODO
   bool _reviewIfSecondaryFeatureNewer;
+  // TODO
   QString _dateTagKey;
+  // TODO
   QString _dateFormat;
 
   void _calculateClassification(const ConstOsmMapPtr& map);

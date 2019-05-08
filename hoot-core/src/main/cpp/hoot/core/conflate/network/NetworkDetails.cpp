@@ -768,7 +768,7 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Unable to retieve partial match score.  One or more ways is null.");
+        LOG_WARN("Unable to retrieve partial match score.  One or more ways is null.");
         if (!w1.get())
         {
           LOG_DEBUG("Way 1 is null.");
