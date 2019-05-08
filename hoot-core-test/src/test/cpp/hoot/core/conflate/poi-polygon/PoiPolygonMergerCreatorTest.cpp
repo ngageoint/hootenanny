@@ -46,9 +46,9 @@ namespace hoot
 class PoiPolygonMergerCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
-  CPPUNIT_TEST(basicTest);
+  //CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(reviewTest);
-  CPPUNIT_TEST(crossConflateMergeTest);
+  //CPPUNIT_TEST(crossConflateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -112,8 +112,46 @@ public:
    */
   void reviewTest()
   {
-    OsmMapPtr map(new OsmMap());
+    // Create a building and poi/poly match with feature overlap and ensure they create reviews and
+    // don't merge together when cross feature conflate merging is not allowed.
 
+    OsmMapPtr map(new OsmMap());
+    boost::shared_ptr<MatchSet> matches(new MatchSet());
+    _createOverlappingMatches(map, matches);
+
+    vector<Merger*> mergers;
+    PoiPolygonMergerCreator uut;
+    uut.setOsmMap(map.get());
+    uut.setAllowCrossConflationMerging(false);
+
+    HOOT_STR_EQUALS(1, uut.createMergers(*matches, mergers));
+    HOOT_STR_EQUALS(1, mergers.size());
+    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+  }
+
+  void crossConflateMergeTest()
+  {
+    // Create a building and poi/poly match with feature overlap and ensure they all merge together
+    // when cross feature conflate merging is allowed.
+
+    OsmMapPtr map(new OsmMap());
+    boost::shared_ptr<MatchSet> matches(new MatchSet());
+    _createOverlappingMatches(map, matches);
+
+    vector<Merger*> mergers;
+    PoiPolygonMergerCreator uut;
+    uut.setOsmMap(map.get());
+    uut.setAllowCrossConflationMerging(true);
+
+    HOOT_STR_EQUALS(1, uut.createMergers(*matches, mergers));
+    HOOT_STR_EQUALS(1, mergers.size());
+    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
+  }
+
+private:
+
+  void _createOverlappingMatches(OsmMapPtr map, boost::shared_ptr<MatchSet> matches)
+  {
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
@@ -152,27 +190,8 @@ public:
     match2.setMatchEvidenceThreshold(3);
     match2.setReviewEvidenceThreshold(1);
     match2.calculateMatch(w2->getElementId(), n1->getElementId());
-    LOG_VAR(match2);
 
-    MatchSet matches;
-    matches.insert(matchesV.begin(), matchesV.end());
-    vector<Merger*> mergers;
-    PoiPolygonMergerCreator uut;
-    uut.setOsmMap(map.get());
-    HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
-    HOOT_STR_EQUALS(1, mergers.size());
-    LOG_VAR(*mergers[0]);
-    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
-  }
-
-  void crossConflateMergeTest()
-  {
-    // TODO: finish
-
-    // Create a building and poi/poly match with feature overlap and ensure they all merge together
-    // when cross feature conflate merging is allowed.
-
-    //setAllowCrossConflationMerging(true);
+    matches->insert(matchesV.begin(), matchesV.end());
   }
 };
 
