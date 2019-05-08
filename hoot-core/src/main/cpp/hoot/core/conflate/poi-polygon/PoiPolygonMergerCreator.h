@@ -58,6 +58,8 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
+  void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
+
 private:
 
   const OsmMap* _map;

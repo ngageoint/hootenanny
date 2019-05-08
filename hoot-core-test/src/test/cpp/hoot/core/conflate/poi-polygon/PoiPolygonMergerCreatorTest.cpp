@@ -48,8 +48,7 @@ class PoiPolygonMergerCreatorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(reviewTest);
-  // TODO
-  //CPPUNIT_TEST(crossConflateMergeTest);
+  CPPUNIT_TEST(crossConflateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -168,7 +167,12 @@ public:
 
   void crossConflateMergeTest()
   {
+    // TODO: finish
 
+    // Create a building and poi/poly match with feature overlap and ensure they all merge together
+    // when cross feature conflate merging is allowed.
+
+    //setAllowCrossConflationMerging(true);
   }
 };
 

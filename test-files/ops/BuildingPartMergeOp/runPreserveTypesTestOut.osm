@@ -154,7 +154,7 @@
         <tag k="feature_area" v="5028.9"/>
         <tag k="amenity" v="fast_food"/>
         <tag k="name" v="Building 5"/>
-        <tag k="alt_types" v="building=yes;shop=mall"/>
+        <tag k="alt_types" v="shop=mall"/>
         <tag k="shop" v="supermarket"/>
         <tag k="alt_name" v="Building 1;Building 2;Building 3;Building 4"/>
         <tag k="building" v="yes"/>

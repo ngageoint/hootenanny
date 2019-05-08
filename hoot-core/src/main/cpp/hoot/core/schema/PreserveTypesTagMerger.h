@@ -69,6 +69,9 @@ private:
   OsmSchemaCategory _categoryFilter;
 
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
+  // can probably eventually get rid of this by correcting logic that's duplicating tags in
+  // mergeTags
+  void _removeRedundantAltTypeTags(Tags& tags) const;
 };
 
 }
