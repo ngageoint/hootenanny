@@ -37,6 +37,7 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -85,11 +86,12 @@ import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
+import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
+import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
 import hoot.services.models.db.Users;
-import hoot.services.models.osm.User;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
@@ -122,6 +124,9 @@ public class GrailResource {
 
     @Autowired
     private OAuthRestTemplate oauthRestTemplate;
+
+    @Autowired
+    private UpdateParentCommandFactory updateParentCommandFactory;
 
     public GrailResource() {}
 
@@ -565,6 +570,64 @@ public class GrailResource {
         }
 
         return Response.ok(json.toJSONString()).build();
+    }
+
+    /**
+     * Pull the remote data for a bounding box
+     * from public Overpass API
+     * and write to a Hoot map dataset
+     *
+     * @param
+     *
+     * @return Job ID
+     *            Internally, this is the directory that the files are kept in
+     * @throws UnsupportedEncodingException
+     */
+    @GET
+    @Path("/pulloverpasstodb")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response pullOverpassToDb(@Context HttpServletRequest request,
+            @QueryParam("bbox") String bbox) {
+
+        Users user = Users.fromRequest(request);
+
+        String jobId = UUID.randomUUID().toString().replace("-", "");
+        String folderName = "grail_" + bbox.replace(",", "_");
+
+        Response response;
+        JSONObject json = new JSONObject();
+        json.put("jobid", jobId);
+
+        List<Command> workflow = new LinkedList<>();
+
+
+        // Create the folder if it doesn't exist
+        Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
+
+        // Write the data to the hoot db
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+        String url = "'"
+                + PUBLIC_OVERPASS_URL
+                + "/api/interpreter?data=[out:json];(node("
+                + new BoundingBox(bbox).toOverpassString()
+                + ");<;>;);out%20meta%20qt;"
+                + "'";
+        params.setInput1(url);
+        params.setOutput(REFERENCE);
+        ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
+        workflow.add(importOverpass);
+
+        // Move the data to the folder
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, REFERENCE, user, this.getClass());
+        workflow.add(setFolder);
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+
+        ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
+        response = responseBuilder.build();
+
+        return response;
     }
 
     /**
