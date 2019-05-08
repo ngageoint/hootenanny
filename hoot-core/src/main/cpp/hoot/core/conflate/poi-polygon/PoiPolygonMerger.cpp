@@ -109,7 +109,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   boost::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
-    tagMerger.reset(new PreserveTypesTagMerger());
+    tagMerger.reset(
+      new PreserveTypesTagMerger(
+        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
   }
   else
   {
@@ -179,7 +181,9 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
   boost::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
-    tagMerger.reset(new PreserveTypesTagMerger());
+    tagMerger.reset(
+      new PreserveTypesTagMerger(
+        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
   }
   else
   {

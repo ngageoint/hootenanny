@@ -46,6 +46,14 @@ public:
 
   static std::string className() { return "hoot::PreserveTypesTagMerger"; }
 
+  /**
+   * Constructor
+   *
+   * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
+   * list will be not be preserved.
+   * @param categoryFilter optional; Any additional type tags found during merging that do fall
+   * within the specified category will be skipped
+   */
   PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>(),
                          const OsmSchemaCategory& categoryFilter = OsmSchemaCategory::Empty);
 
@@ -56,6 +64,7 @@ public:
 
 private:
 
+  // see descriptions for these in constructor
   std::set<QString> _skipTagKeys;
   OsmSchemaCategory _categoryFilter;
 

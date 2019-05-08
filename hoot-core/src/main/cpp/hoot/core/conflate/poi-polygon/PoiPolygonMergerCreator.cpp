@@ -279,6 +279,7 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
       {
         ConstOsmMapPtr map = _map->shared_from_this();
         conflicting = MergerFactory::getInstance().isConflicting(map, m1, m2);
+        // if one of the mergers returned a conflict and cross conflation merging is enabled
         if (conflicting && _allowCrossConflationMerging)
         {
           const bool oneIsPoiPolyMatch =
@@ -290,9 +291,12 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
           LOG_VART(oneIsBuildingMatch);
           LOG_VART(m1->getType());
           LOG_VART(m2->getType());
+          // if we have exactly one poi/poly match, exactly one building match, and both have a
+          // status of matched
           if (oneIsPoiPolyMatch && oneIsBuildingMatch && m1->getType() == MatchType::Match &&
               m2->getType() == MatchType::Match)
           {
+            // we'll ignore the conflict so all the matches will merge together
             LOG_TRACE(
               "Allowing cross conflation Building/PoiPoly auto-merge for: " << m1 << " and " <<
               m2 << "...");
