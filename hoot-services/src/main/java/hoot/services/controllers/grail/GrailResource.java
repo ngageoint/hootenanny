@@ -577,11 +577,18 @@ public class GrailResource {
      * from public Overpass API
      * and write to a Hoot map dataset
      *
-     * @param
+     * The data from Overpass will be named
+     * the secondary layer for conflation
+     *
+     * The purpose of conflating these datasets is to update
+     * a private OSM instance that has diverged from the public OSM
+     * with private changes.
+     *
+     * @param bbox The bounding box
      *
      * @return Job ID
-     *            Internally, this is the directory that the files are kept in
-     * @throws UnsupportedEncodingException
+     * used by the client for polling job status
+     * Internally, this provides the map dataset name suffix
      */
     @GET
     @Path("/pulloverpasstodb")
@@ -592,6 +599,8 @@ public class GrailResource {
         Users user = Users.fromRequest(request);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
+        String mapSuffix = jobId.substring(0, 7);
+        String mapName = SECONDARY + "_" + mapSuffix;
         String folderName = "grail_" + bbox.replace(",", "_");
 
         Response response;
@@ -614,12 +623,12 @@ public class GrailResource {
                 + ");<;>;);out%20meta%20qt;"
                 + "'";
         params.setInput1(url);
-        params.setOutput(REFERENCE);
+        params.setOutput(mapName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
 
         // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, REFERENCE, user, this.getClass());
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, mapName, user, this.getClass());
         workflow.add(setFolder);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
@@ -631,126 +640,83 @@ public class GrailResource {
     }
 
     /**
-     * Pull the remote data for a bounding box and write
-     * to Hoot map datasets
+     * Pull the remote data for a bounding box
+     * from Rails Port API
+     * and write to a Hoot map dataset
      *
-     * Remote data may be OSM API or Overpass API
-     * This implementation uses the public Overpass API
-     * and a configured private OSM Rails port API
+     * The data from the Rails Port will be
+     * named the reference layer for conflation
      *
      * The purpose of conflating these datasets is to update
      * a private OSM instance that has diverged from the public OSM
      * with private changes.
      *
-     * POST hoot-services/grail/pullosmtodb?BBOX=left,bottom,right,top&DEBUG_LEVEL=<error,info,debug,verbose,trace>
-     *        left is the longitude of the left (west) side of the bounding box
-     *        bottom is the latitude of the bottom (south) side of the bounding box
-     *        right is the longitude of the right (east) side of the bounding box
-     *        top is the latitude of the top (north) side of the bounding box
-     *
-     * @param
+     * @param bbox The bounding box
      *
      * @return Job ID
-     *            Internally, this is the directory that the files are kept in
+     * used by the client for polling job status
+     * Internally, this provides the map dataset name suffix
      */
-    @POST
-    @Path("/pullosmtodb")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response pullOsmToDb(@Context HttpServletRequest request,
-            GrailParams reqParams,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response pullRailsPortToDb(@Context HttpServletRequest request,
+            @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
 
-        //TODO: Split the download into two parallel jobs
-
-
-        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+        String jobId = UUID.randomUUID().toString().replace("-", "");
+        File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
+        String mapSuffix = jobId.substring(0, 7);
+        String mapName = REFERENCE + "_" + mapSuffix;
+        String folderName = "grail_" + bbox.replace(",", "_");
 
         Response response;
-
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
 
-        try {
-            FileUtils.forceMkdir(workDir);
-        }
-        catch (IOException ioe) {
-            logger.error("PullOsmToDb: Error creating folder: {} ", workDir.getAbsolutePath(), ioe);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
-        }
-
         List<Command> workflow = new LinkedList<>();
 
+        // Pull data from the reference OSM API
+        // Until hoot can read API url directly, download to file first
+        File referenceOSMFile = new File(workDir, REFERENCE +".osm");
+        if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
+
         try {
-            // Pull data from the reference OSM API
-            File referenceOSMFile = new File(workDir, REFERENCE +".osm");
-            if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
-
-            try {
-                workflow.add(getRailsPortApiCommand(jobId, user, reqParams.getBounds(), referenceOSMFile.getAbsolutePath()));
-            } catch (UnavailableException ex) {
-                Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
-            }
-
-            // Pull OSM data from the real source OSM Db using overpass
-            File secondaryOSMFile = new File(workDir, SECONDARY + ".osm");
-            if (secondaryOSMFile.exists()) { secondaryOSMFile.delete(); }
-
-            workflow.add(getPublicOverpassCommand(jobId, user, reqParams.getBounds(), secondaryOSMFile.getAbsolutePath()));
-
-            GrailParams referencePushParams = new GrailParams();
-            GrailParams secondaryPushParams = new GrailParams();
-            GrailParams linkParams = new GrailParams();
-
-            referencePushParams.setUser(user);
-            secondaryPushParams.setUser(user);
-            linkParams.setUser(user);
-
-            // We could use the existing Import Command to push the OSM files to the DB BUT it will delete the import directory
-            // Till I figure out a better way to do this, we will use our version.
-            referencePushParams.setInput1(referenceOSMFile.getAbsolutePath());
-            referencePushParams.setOutput(REFERENCE);
-            ExternalCommand pushReference = grailCommandFactory.build(jobId, referencePushParams, debugLevel, PushToDbCommand.class, this.getClass());
-            workflow.add(pushReference);
-
-            // Set map tags marking dataset as eligible for derive changeset
-            Map<String, String> tags = new HashMap<>();
-            tags.put("source", "rails");
-            InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
-            workflow.add(setMapTags);
-
-            secondaryPushParams.setInput1(secondaryOSMFile.getAbsolutePath());
-            secondaryPushParams.setOutput(SECONDARY);
-            ExternalCommand pushSecondary = grailCommandFactory.build(jobId, secondaryPushParams, debugLevel, PushToDbCommand.class, this.getClass());
-            workflow.add(pushSecondary);
-
-            // Now create a folder and link the uploaded layers to it
-            linkParams.setFolder(jobId);
-            linkParams.setInput1(REFERENCE);
-            linkParams.setInput2(SECONDARY);
-            InternalCommand updateDb = updateDbCommandFactory.build(jobId, linkParams, this.getClass());
-            workflow.add(updateDb);
-
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
-
-            //After job completion the download folder can be removed
-            //workflow.add(removeFolder);
-
-            ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
-            response = responseBuilder.build();
+            workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
+        } catch (UnavailableException ex) {
+            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
-        catch (WebApplicationException e) {
-            throw e;
-        }
-        catch (IllegalArgumentException iae) {
-            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-        }
-        catch (Exception e) {
-            throw new WebApplicationException(e);
-        }
+
+        // Write the data to the hoot db
+        GrailParams params = new GrailParams();
+        params.setUser(user);
+//        String url = RAILSPORT_PULL_URL +
+//                "/mapfull?bbox=" + new BoundingBox(bbox).toServicesString();
+//        params.setInput1(url);
+        params.setInput1(referenceOSMFile.getAbsolutePath());
+        params.setWorkDir(workDir);
+        params.setOutput(mapName);
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
+        workflow.add(importRailsPort);
+
+        // Set map tags marking dataset as eligible for derive changeset
+        Map<String, String> tags = new HashMap<>();
+        tags.put("source", "rails");
+        InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+        workflow.add(setMapTags);
+
+        // Create the folder if it doesn't exist
+        Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
+
+        // Move the data to the folder
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, mapName, user, this.getClass());
+        workflow.add(setFolder);
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+
+        ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
+        response = responseBuilder.build();
 
         return response;
     }
