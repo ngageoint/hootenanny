@@ -155,9 +155,9 @@ void ServicesDbTestUtils::deleteUser(QString email)
 
 int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& key)
 {
-  for (int i=0;i<keys.size();i++)
+  for (int i = 0; i < keys.size(); i++)
   {
-    if (keys[i]==key) return i;
+    if (keys[i] == key) return i;
   }
 
   // didn't find a match so return -1

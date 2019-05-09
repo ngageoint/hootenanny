@@ -62,7 +62,7 @@ public:
   const std::vector<long>& getMatch();
 
   // Returns all potential matches for a specific id, works outside of the iteration method.
-  std::vector<long> getMatchesFor( long id);
+  std::vector<long> getMatchesFor(long id);
 
   /**
    * Returns true if there is another match in the hash. A match may be returned multiple times

@@ -62,14 +62,14 @@ public:
   // Parses content of command specific arguments
   virtual void parseArguments(const QHash<QString, QString>& arguments) = 0;
 
-  // Command function called after processing all individual elements
-  virtual void processStart(std::shared_ptr<OsmMap>& ) {}
+  // Command function called before processing all individual elements
+  virtual void processStart(OsmMapPtr& /* pMap */) {}
 
   // Command function to process a filtered element
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) = 0;
 
   // Command function called after processing all individual elements
-  virtual void processFinalize(std::shared_ptr<OsmMap>& ) {}
+  virtual void processFinalize(OsmMapPtr& /* pMap */) {}
 };
 
 /*

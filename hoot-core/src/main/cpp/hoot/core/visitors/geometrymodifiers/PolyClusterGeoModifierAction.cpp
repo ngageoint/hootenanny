@@ -106,12 +106,12 @@ void PolyClusterGeoModifierAction::parseArguments(const QHash<QString, QString>&
   }
 }
 
-void PolyClusterGeoModifierAction::processStart(std::shared_ptr<OsmMap>& )
+void PolyClusterGeoModifierAction::processStart(OsmMapPtr& /* pMap */)
 {
   _ways.clear();  
 }
 
-bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, OsmMap* )
+bool PolyClusterGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* /* pMap */)
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
@@ -123,11 +123,11 @@ bool PolyClusterGeoModifierAction::processElement( const ElementPtr& pElement, O
   return true;
 }
 
-void PolyClusterGeoModifierAction::processFinalize(std::shared_ptr<OsmMap>& pMap)
+void PolyClusterGeoModifierAction::processFinalize(OsmMapPtr& pMap)
 {
-  LOG_DEBUG( "poly_cluster: finalizing " << _ways.length() << " ways");
+  LOG_DEBUG("poly_cluster: finalizing " << _ways.length() << " ways");
 
-  LOG_DEBUG( "arguments:");
+  LOG_DEBUG("arguments:");
   LOG_VARD(_distance);
   LOG_VARD(_alpha);
   LOG_VARD(_removePolys);
@@ -141,14 +141,14 @@ void PolyClusterGeoModifierAction::processFinalize(std::shared_ptr<OsmMap>& pMap
   // generate geos::geom::Polygons for source buildings
   _createWayPolygons();
 
-  // genberate clusters from building polys
+  // generate clusters from building polys
   _generateClusters();
 
   // create cluster representations on the map
   _createClusterPolygons();
 
   // debug info
-  LOG_DEBUG( "Generated " << _clusters.length() << " clusters.");
+  LOG_DEBUG("Generated " << _clusters.length() << " clusters.");
 
   // show clusters for debug
   foreach (QList<long> cluster, _clusters)
@@ -288,8 +288,8 @@ void PolyClusterGeoModifierAction::_recursePolygons(const std::shared_ptr<Polygo
                 long i1Id = wayToCheckNodeIds[checkNodeIx];
                 long i2Id = wayToCheckNodeIds[checkNodeIx+1];
 
-                CoordinateExt interP1( _pMap->getNode(i1Id)->toCoordinate());
-                CoordinateExt interP2( _pMap->getNode(i2Id)->toCoordinate());
+                CoordinateExt interP1(_pMap->getNode(i1Id)->toCoordinate());
+                CoordinateExt interP2(_pMap->getNode(i2Id)->toCoordinate());
 
                 std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(thisCoord, otherCoord, interP1, interP2);
 
@@ -334,7 +334,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
       for (size_t i = 0; i < pCoords->size(); i++)
       {
         CoordinateExt c = pCoords->getAt(i);
-        std::pair<double, double> point( c.x, c.y );
+        std::pair<double, double> point(c.x, c.y);
         points.push_back(point);
 
         if (hasLast)
@@ -355,7 +355,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
               double inc = (double)p * factor;
               CoordinateExt vInc = delta * inc;
               CoordinateExt add = c + vInc;
-              std::pair<double, double> addPoint( add.x, add.y );
+              std::pair<double, double> addPoint(add.x, add.y);
               points.push_back(addPoint);
             }
           }

@@ -71,12 +71,12 @@ vector<long> ClosePointHash::getMatchesFor(long id)
 
   foreach (int64_t binIx, _idTobin[id])
   {
-    ids.insert( ids.end(), _bins[binIx].begin(), _bins[binIx].end() );
+    ids.insert(ids.end(), _bins[binIx].begin(), _bins[binIx].end());
   }
 
   // remove duplicates
-  sort( ids.begin(), ids.end() );
-  ids.erase( unique( ids.begin(), ids.end() ), ids.end() );
+  sort(ids.begin(), ids.end());
+  ids.erase(unique(ids.begin(), ids.end()), ids.end());
   return ids;
 }
 

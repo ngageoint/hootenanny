@@ -74,9 +74,9 @@ public:
     { DISTANCE_PARAM, ALPHA_PARAM, REMOVE_POLYS_PARAM, CHECK_INTERSECTIONS_PARAM, CLUSTER_TAG_LIST_PARAM }; }
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual void processStart(std::shared_ptr<OsmMap>& ) override;
+  virtual void processStart(OsmMapPtr& pMap) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
-  virtual void processFinalize(std::shared_ptr<OsmMap>& pMap) override;
+  virtual void processFinalize(OsmMapPtr& pMap) override;
 
 private:
   const double DEFAULT_DISTANCE = 20;
