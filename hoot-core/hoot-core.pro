@@ -26,12 +26,8 @@ CONFIG += rtti \
     precompile_header
 
 OTHER_FILES = \
-    $$files(../plugins/*.js, true) \
-    $$files(../plugins/*.py, true) \
     $$files(../translations/*.js, true) \
     $$files(../translations/*.py, true) \
-    $$files(../plugins-local/*.js, true) \
-    $$files(../plugins-local/*.py, true) \
     $$files(../translations-local/*.js, true) \
     $$files(../translations-local/*.py, true) \
     $$files(../rules/*.js, true) \

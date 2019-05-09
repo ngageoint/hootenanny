@@ -58,7 +58,7 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 translationScriptPath=$(homeFolder)/translations
 
 # Translation extension install folder
-translationExtPath=$(homeFolder)/plugins-local/script/utp
+translationExtPath=$(homeFolder)/translations-local/script/utp
 
 # Supported basemap type extensions
 BasemapRasterExtensions=png,tif
@@ -85,7 +85,7 @@ translationServerPort=8094
 translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
-translationServerScript=/plugins/TranslationServer.js
+translationServerScript=/translations/TranslationServer.js
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
@@ -140,7 +140,7 @@ ElementMergeServerPort=8096
 ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
-ElementMergeServerScript=/plugins/ElementMergeServer.js
+ElementMergeServerScript=/translations/ElementMergeServer.js
 
 # LANGUAGE TRANSLATION/DETECTION
 

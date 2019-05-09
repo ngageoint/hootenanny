@@ -1426,9 +1426,8 @@ corresponding implicit tag rules database.
 
 * Data Type: list
 * Default Value:
-** `${HOOT_TRANSLATE_PATH}`
-** `${HOOT_HOME}/plugins`
-** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/translations`
+** `${HOOT_HOME}/translations-local`
 ** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.

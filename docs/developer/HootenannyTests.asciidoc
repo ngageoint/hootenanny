@@ -323,14 +323,14 @@ The Plugins Test test various translation related operations.  They may be invok
 --------------
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure
-make -sj$(nproc) plugins-test
+make -sj$(nproc) translations-test
 --------------
 
 They run by default in the slow test suite.
 
 To run an individual test:
 --------------
-cd $HOOT_HOME/plugins/test
+cd $HOOT_HOME/translations/test
 mocha <test name>.js
 --------------
 
