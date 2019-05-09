@@ -61,6 +61,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonMatch"; }
 
   PoiPolygonMatch();
+  // this constructor added primarily for testing purposes
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,

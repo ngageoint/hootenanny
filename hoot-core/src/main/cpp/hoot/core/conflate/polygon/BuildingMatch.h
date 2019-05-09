@@ -50,6 +50,7 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
+  // this constructor added primarily for testing purposes
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt,

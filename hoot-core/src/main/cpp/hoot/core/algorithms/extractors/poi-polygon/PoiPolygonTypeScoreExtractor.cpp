@@ -54,7 +54,6 @@ QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
 _translateTagValuesToEnglish(false)
 {
-  LOG_VART(_translateTagValuesToEnglish);
   _readTypeToNames();
 }
 

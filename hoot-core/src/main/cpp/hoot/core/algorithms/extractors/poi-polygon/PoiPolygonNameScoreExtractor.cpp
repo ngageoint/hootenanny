@@ -46,7 +46,6 @@ _translateTagValuesToEnglish(false),
 _namesProcessed(0),
 _matchAttemptMade(false)
 {
-  LOG_VART(_translateTagValuesToEnglish);
 }
 
 void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
