@@ -179,13 +179,13 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
   const char *pszDriverName = "ESRI Shapefile";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if( poDriver == NULL )
+  if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
   GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if( poDS == NULL )
+  if (poDS == NULL)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -200,7 +200,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbLineString,
                               options.getCrypticOptions());
-  if( poLayer == NULL )
+  if (poLayer == NULL)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -214,7 +214,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
     oField.SetWidth(64);
 
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -225,7 +225,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
   if (_includeInfo)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
@@ -290,13 +290,13 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
 
   const char *pszDriverName = "ESRI Shapefile";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if( poDriver == NULL )
+  if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
   GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if( poDS == NULL )
+  if (poDS == NULL)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -310,7 +310,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, options.getCrypticOptions());
-  if( poLayer == NULL )
+  if (poLayer == NULL)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -324,7 +324,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
 
     oField.SetWidth(64);
 
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -335,7 +335,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
   if (_includeInfo)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
@@ -394,13 +394,13 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
   const char *pszDriverName = "ESRI Shapefile";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if( poDriver == NULL )
+  if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
   GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if( poDS == NULL )
+  if (poDS == NULL)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -415,7 +415,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbMultiPolygon,
                               options.getCrypticOptions());
-  if( poLayer == NULL )
+  if (poLayer == NULL)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -429,7 +429,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
     oField.SetWidth(64);
 
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -440,7 +440,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
   if (_includeInfo)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }

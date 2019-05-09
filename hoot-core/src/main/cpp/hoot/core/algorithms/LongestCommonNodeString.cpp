@@ -49,7 +49,7 @@ int LongestCommonNodeString::apply()
   _i1 = -1;
   _i2 = -1;
 
-  if(_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
+  if (_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
   {
        return 0;
   }
@@ -62,17 +62,17 @@ int LongestCommonNodeString::apply()
   int *swap = 0;
   int maxSubstr = 0;
 
-  for(size_t i = 0; i < str1.size(); ++i)
+  for (size_t i = 0; i < str1.size(); ++i)
   {
-    for(size_t j = 0; j < str2.size(); ++j)
+    for (size_t j = 0; j < str2.size(); ++j)
     {
-      if(str1[i] != str2[j])
+      if (str1[i] != str2[j])
       {
         curr[j] = 0;
       }
       else
       {
-        if(i == 0 || j == 0)
+        if (i == 0 || j == 0)
         {
           curr[j] = 1;
         }

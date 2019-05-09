@@ -104,10 +104,10 @@ void KnnIterator::_calculateNextNn()
     if (_knnLeafHeap.size() > 0)
     {
       ld = _knnLeafHeap.top();
-      while(_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end()) 
+      while (_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end())
       {       
         _knnLeafHeap.pop();  
-        if(_knnLeafHeap.size() > 0)
+        if (_knnLeafHeap.size() > 0)
           ld = _knnLeafHeap.top();
       }
 
@@ -145,9 +145,9 @@ void KnnIterator::_calculateNextNn()
     
     if (currNode != NULL)
     {
-      if(currNode->isLeafNode())
+      if (currNode->isLeafNode())
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
@@ -163,7 +163,7 @@ void KnnIterator::_calculateNextNn()
       }
       else
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpDistance = _calculateDistance(b);
@@ -230,9 +230,9 @@ void KnnIterator::_calculateNextNn()
 // 
 //     _knnSearchQueue.pop();
 // 
-//     if(currNode->isLeafNode())
+//     if (currNode->isLeafNode())
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double tmpDistance;
@@ -250,7 +250,7 @@ void KnnIterator::_calculateNextNn()
 //     }
 //     else
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double d = _calculateDistance(_knnPoint, b);
