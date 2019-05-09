@@ -244,7 +244,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 # Build automatically generated JS files
-js-make: $(SCHEMA_FILES) plugins/config.js conf/core/ConfigOptions.json
+js-make: $(SCHEMA_FILES) plugins/config.js
 
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
