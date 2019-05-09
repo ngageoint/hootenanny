@@ -146,7 +146,7 @@ namespace Tgs
   {
     try
     {
-      if(!dataIndices.empty() && fIdx < _factorLabels.size())
+      if (!dataIndices.empty() && fIdx < _factorLabels.size())
       {
         sortIndicesOnFactorValue(dataIndices, fIdx);
 
@@ -158,7 +158,7 @@ namespace Tgs
         double sumsqr = 0;
 
         mean = 0;
-        for(unsigned int i = 0; i < dataIndices.size(); i++)
+        for (unsigned int i = 0; i < dataIndices.size(); i++)
         {
           sum += _data[dataIndices[i]][fIdx];
           sumsqr += _data[dataIndices[i]][fIdx] * _data[dataIndices[i]][fIdx];
@@ -176,7 +176,7 @@ namespace Tgs
 
         double silv = 1.06 * pow((double)dataIndices.size(), -0.2);
 
-        if(sqrt(variance) < h )
+        if (sqrt(variance) < h)
         {
           silv *= sqrt(variance);
         }
@@ -204,14 +204,14 @@ namespace Tgs
     try
     {
       //Look up the index for the factor name
-      for(unsigned int i = 0; i < _factorLabels.size(); i++)
+      for (unsigned int i = 0; i < _factorLabels.size(); i++)
       {
-        if(_factorLabels[i] == factor)
+        if (_factorLabels[i] == factor)
         {
           //Find the index in the _activeFactorIndices list and remove it
-          for(unsigned int k = 0; k < _activeFactorIndices.size(); k++)
+          for (unsigned int k = 0; k < _activeFactorIndices.size(); k++)
           {
-            if(_activeFactorIndices[k] == i)
+            if (_activeFactorIndices[k] == i)
             {
               _activeFactorIndices.erase(_activeFactorIndices.begin() + k);
               break;
@@ -237,11 +237,11 @@ namespace Tgs
       modelDoc.appendChild(factorLabelNode);
       std::stringstream factorStream;
 
-      for(unsigned int i = 0; i < _factorLabels.size(); i++)
+      for (unsigned int i = 0; i < _factorLabels.size(); i++)
       {
         factorStream <<  _factorLabels[i];
 
-        if(i != _factorLabels.size() - 1)
+        if (i != _factorLabels.size() - 1)
         {
           factorStream << " ";
         }
@@ -252,17 +252,17 @@ namespace Tgs
       dataFrameNode.appendChild(factorLabelNode);
 
       //Export Factors Data Type
-      if(!_factorType.empty())
+      if (!_factorType.empty())
       {
         QDomElement factorTypeNode = modelDoc.createElement("FactorTypes");
         modelDoc.appendChild(factorTypeNode);
         std::stringstream factorTypeStream;
 
-        for(unsigned int i = 0; i < _factorType.size(); i++)
+        for (unsigned int i = 0; i < _factorType.size(); i++)
         {
           factorTypeStream <<  _factorType[i];
 
-          if(i != _factorType.size() - 1)
+          if (i != _factorType.size() - 1)
           {
             factorTypeStream << " ";
           }
@@ -275,17 +275,17 @@ namespace Tgs
       }
 
       //Export NULL Treatment
-      if(!_nullTreatment.empty())
+      if (!_nullTreatment.empty())
       {
         QDomElement factorNullNode = modelDoc.createElement("FactorNullTreatment");
         modelDoc.appendChild(factorNullNode);
         std::stringstream factorNullStream;
 
-        for(unsigned int i = 0; i < _nullTreatment.size(); i++)
+        for (unsigned int i = 0; i < _nullTreatment.size(); i++)
         {
           factorNullStream << _nullTreatment[i];
 
-          if(i != _nullTreatment.size() - 1)
+          if (i != _nullTreatment.size() - 1)
           {
             factorNullStream << " ";
           }
@@ -298,21 +298,21 @@ namespace Tgs
 
       //Export Missing Data Values
 
-      if(!_medianMaps.empty())
+      if (!_medianMaps.empty())
       {
         QDomElement medianValuesNode = modelDoc.createElement("MedianValues");
         modelDoc.appendChild(medianValuesNode);
 
         std::map<std::string, double>::iterator medianItr;
 
-        for(unsigned int i = 0; i < _medianMaps.size(); i++)
+        for (unsigned int i = 0; i < _medianMaps.size(); i++)
         {
           QDomElement medianValuesByFactorNode = modelDoc.createElement("MedianValuesByFactor");
           modelDoc.appendChild(medianValuesByFactorNode);
 
           std::map<std::string, double> factorMedianMap = _medianMaps[i];
 
-          for(medianItr = factorMedianMap.begin(); medianItr != factorMedianMap.end(); ++medianItr)
+          for (medianItr = factorMedianMap.begin(); medianItr != factorMedianMap.end(); ++medianItr)
           {
             QDomElement classMedianNode = modelDoc.createElement("ClassMedian");
             modelDoc.appendChild(classMedianNode);
@@ -335,7 +335,7 @@ namespace Tgs
       modelDoc.appendChild(dataVectorsNode);
 
       //Export data vectors as trainingClass and data values
-      for(unsigned int i = 0; i < _data.size(); i++)
+      for (unsigned int i = 0; i < _data.size(); i++)
       {
         QDomElement vectorNode = modelDoc.createElement("DataVector");
         modelDoc.appendChild(vectorNode);
@@ -351,11 +351,11 @@ namespace Tgs
         modelDoc.appendChild(dataNode);
 
         std::stringstream dataStream;
-        for(unsigned int j = 0; j < _data[i].size(); j++)
+        for (unsigned int j = 0; j < _data[i].size(); j++)
         {
           dataStream << _data[i][j];
 
-          if(j != _data[i].size() - 1)
+          if (j != _data[i].size() - 1)
           {
             dataStream << " ";
           }
@@ -398,9 +398,9 @@ namespace Tgs
   {
     try
     {
-      for(unsigned int i = 0; i < indices.size(); i++)
+      for (unsigned int i = 0; i < indices.size(); i++)
       {
-        if(indices[i] < _trainingLabels.size())
+        if (indices[i] < _trainingLabels.size())
         {
           populations[_trainingLabels[indices[i]]] += 1;
         }
@@ -425,9 +425,9 @@ namespace Tgs
     try
     {
       distribution.resize(_trainingLabels.size(), 0);
-      for(unsigned int i = 0; i < indices.size(); i++)
+      for (unsigned int i = 0; i < indices.size(); i++)
       {
-        if(indices[i] < _trainingLabels.size())
+        if (indices[i] < _trainingLabels.size())
         {
           distribution[indices[i]] += 1;
         }
@@ -498,7 +498,7 @@ namespace Tgs
       {
         return "Training Label";
       }
-      if(!_factorLabels.empty() && fIdx < (int)_factorLabels.size())
+      if (!_factorLabels.empty() && fIdx < (int)_factorLabels.size())
       {
         return _factorLabels[fIdx];
       }
@@ -554,7 +554,7 @@ namespace Tgs
       std::map<std::string, unsigned int> classMap;
       std::map<std::string, unsigned int>::iterator itr;
 
-      for(unsigned int i = 0; i < dataSet.size(); i++)
+      for (unsigned int i = 0; i < dataSet.size(); i++)
       {
         classMap[_trainingLabels[dataSet[i]]] += 1;
       }
@@ -563,9 +563,9 @@ namespace Tgs
 
       std::string maxClass;
 
-      for(itr = classMap.begin(); itr != classMap.end(); ++itr)
+      for (itr = classMap.begin(); itr != classMap.end(); ++itr)
       {
-        if(itr->second > maxCount)
+        if (itr->second > maxCount)
         {
           maxCount = itr->second;
           maxClass = itr->first;
@@ -646,32 +646,32 @@ namespace Tgs
     {
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
-        if(childList.at(i).nodeType() == QDomNode::CommentNode)
+        if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
           continue;
         }
 
-        if(childList.at(i).isElement())
+        if (childList.at(i).isElement())
         {
           QDomElement childNode = childList.at(i).toElement(); // try to convert the node to an element.
 
           QString tag = childNode.tagName().toUpper();
-          if(tag == "FACTORLABELS")
+          if (tag == "FACTORLABELS")
           {
             QStringList factorList = childNode.text().split(" ");
 
-            for(unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
+            for (unsigned int fIdx = 0; fIdx < (unsigned int)factorList.size(); fIdx++)
             {
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
           }
-          else if(tag == "DATAVECTORS")
+          else if (tag == "DATAVECTORS")
           {
             QDomNodeList vecNodeList = childNode.childNodes();
 
-            for(unsigned int vIdx = 0; vIdx < (unsigned int)vecNodeList.size(); vIdx++)
+            for (unsigned int vIdx = 0; vIdx < (unsigned int)vecNodeList.size(); vIdx++)
             {
               QDomElement vecElement = vecNodeList.at(vIdx).toElement();
               _importDataVector(vecElement);
@@ -699,13 +699,13 @@ namespace Tgs
     {
       //std::cout << "isDataPure ";
       //std::cout << indices.size() << std::endl;
-      if(indices.size() > 0)
+      if (indices.size() > 0)
       {
         HashMap<std::string, int> populations;
 
         getClassPopulations(indices, populations);
 
-        if(populations.size() == 1)
+        if (populations.size() == 1)
         {
           return true;
         }
@@ -767,7 +767,7 @@ namespace Tgs
   {
     try
     {
-      if(!_data.empty())
+      if (!_data.empty())
       {
 
         double r;
@@ -779,7 +779,7 @@ namespace Tgs
         selectedVectors.resize(_data.size());
 
         //Initialize a list with the indices to all the data vectors
-        for(unsigned int i = 0; i < selectedVectors.size(); i++)
+        for (unsigned int i = 0; i < selectedVectors.size(); i++)
         {
           selectedVectors[i] = false;
           dataIndices[i] = i;
@@ -788,12 +788,12 @@ namespace Tgs
         std::map<std::string, std::vector<unsigned int>> idxSortedByClass;
         std::map<std::string, std::vector<unsigned int>>::iterator itr;
 
-        for(unsigned int m = 0; m < _data.size(); m++)
+        for (unsigned int m = 0; m < _data.size(); m++)
         {
           idxSortedByClass[_trainingLabels[m]].push_back(m);
         }
 
-  //       for(itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
+  //       for (itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
   //       {
   //         std::cout << "Bootstrap classes: " << itr->first << std::endl;
   //       }
@@ -807,9 +807,9 @@ namespace Tgs
         bootstrap.resize(picksPerClass * idxSortedByClass.size());
 
         unsigned int pickCtr = 0;
-        while(pickCtr < bootstrap.size())
+        while (pickCtr < bootstrap.size())
         {
-          for(itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
+          for (itr = idxSortedByClass.begin(); itr != idxSortedByClass.end(); ++itr)
           {
             r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
@@ -821,9 +821,9 @@ namespace Tgs
         }
 
         //Anything that did not get selected for the boot strap is added to oob
-        for(unsigned int k = 0; k < selectedVectors.size(); k++)
+        for (unsigned int k = 0; k < selectedVectors.size(); k++)
         {
-          if(selectedVectors[k] == false)
+          if (selectedVectors[k] == false)
           {
             oob.push_back(k);
           }
@@ -845,7 +845,7 @@ namespace Tgs
   {
     try
     {
-      if(!_data.empty())
+      if (!_data.empty())
       {
         std::vector<unsigned int> posIndices; //Vector to hold indices of positive class
         std::vector<unsigned int> negIndices; //Vector to hold indices of negative class
@@ -854,9 +854,9 @@ namespace Tgs
 
 
         //Initialize a list with the indices to all the data vectors
-        for(unsigned int i = 0; i < _data.size(); i++)
+        for (unsigned int i = 0; i < _data.size(); i++)
         {
-          if(_trainingLabels[i] == className1)
+          if (_trainingLabels[i] == className1)
           {
             posIndices.push_back(i);
           }
@@ -882,7 +882,7 @@ namespace Tgs
         unsigned int pickCtr = 0;
 
         //std::cout << "Boot Strap size " << bootstrap.size() << std::endl;
-        while(pickCtr < bootstrap.size())
+        while (pickCtr < bootstrap.size())
         {
           //Pick a positive training example
           double r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
@@ -902,17 +902,17 @@ namespace Tgs
         }
 
         //Anything that did not get selected for the boot strap is added to oob
-        for(unsigned int k = 0; k < selectedPos.size(); k++)
+        for (unsigned int k = 0; k < selectedPos.size(); k++)
         {
-          if(selectedPos[k] == false)
+          if (selectedPos[k] == false)
           {
             oob.push_back(posIndices[k]);
           }
         }
 
-        for(unsigned int j = 0; j < selectedNeg.size(); j++)
+        for (unsigned int j = 0; j < selectedNeg.size(); j++)
         {
-          if(selectedNeg[j] == false)
+          if (selectedNeg[j] == false)
           {
             oob.push_back(negIndices[j]);
           }
@@ -935,14 +935,14 @@ namespace Tgs
   {
     try
     {
-      if(!_data.empty())
+      if (!_data.empty())
       {
         std::vector<bool> selectedVectors; //Tracks which vectors have been added to bootstrap
 
         selectedVectors.resize(_data.size());
 
         //Initialize a list with the indices to all the data vectors
-        for(unsigned int i = 0; i < selectedVectors.size(); i++)
+        for (unsigned int i = 0; i < selectedVectors.size(); i++)
         {
           selectedVectors[i] = false;
         }
@@ -951,7 +951,7 @@ namespace Tgs
         bootstrap.resize(_data.size());
         //std::cout << "Data Size " << _data.size() << " Bootstrap Size " << dataIndices.size() << std::endl;
 
-        for(unsigned int j = 0; j < bootstrap.size(); j++)
+        for (unsigned int j = 0; j < bootstrap.size(); j++)
         {
           double r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
@@ -962,9 +962,9 @@ namespace Tgs
         }
 
         //Anything that did not get selected for the boot strap is added to oob
-        for(unsigned int k = 0; k < selectedVectors.size(); k++)
+        for (unsigned int k = 0; k < selectedVectors.size(); k++)
         {
-           if(selectedVectors[k] == false)
+           if (selectedVectors[k] == false)
            {
              oob.push_back(k);
            }
@@ -1034,7 +1034,7 @@ namespace Tgs
       _trainingLabelsBak = _trainingLabels;
       _trainingLabelEnum.clear();
       _trainingEnumCnt = 1;
-      for(unsigned int i = 0; i < _trainingLabels.size(); i++)
+      for (unsigned int i = 0; i < _trainingLabels.size(); i++)
       {
         const string& label = labelMap[_trainingLabels[i]];
         _trainingLabels[i] = labelMap[label];
@@ -1057,7 +1057,7 @@ namespace Tgs
       _trainingLabels = _trainingLabelsBak;
       _trainingLabelEnum.clear();
       _trainingEnumCnt = 1;
-      for(unsigned int i = 0; i < _trainingLabels.size(); i++)
+      for (unsigned int i = 0; i < _trainingLabels.size(); i++)
       {
         const string& label = _trainingLabels[i];
         if (_trainingLabelEnum.find(label) == _trainingLabelEnum.end())
@@ -1077,19 +1077,19 @@ namespace Tgs
   {
     try
     {
-      if(!_data.empty())
+      if (!_data.empty())
       {
         fIndices.resize(numFactors);
 
         std::vector<unsigned int> candidateFactors;
         candidateFactors.resize(_activeFactorIndices.size());
 
-        for(unsigned int i = 0; i < _activeFactorIndices.size(); i++)
+        for (unsigned int i = 0; i < _activeFactorIndices.size(); i++)
         {
           candidateFactors[i] = _activeFactorIndices[i];
         }
 
-        for(unsigned int k = 0; k < numFactors; k++)
+        for (unsigned int k = 0; k < numFactors; k++)
         {
           double rr = (double)Tgs::Random::instance()->generateInt();
           double r = (rr / ((double)(RAND_MAX)+(double)(1)));
@@ -1118,7 +1118,7 @@ namespace Tgs
     {
       _activeFactorIndices.resize(_factorLabels.size());
 
-      for(unsigned int i = 0; i < _factorLabels.size(); i++)
+      for (unsigned int i = 0; i < _factorLabels.size(); i++)
       {
         _activeFactorIndices[i] = i;
       }
@@ -1135,9 +1135,9 @@ namespace Tgs
     {
       _trainingLabelsBak = _trainingLabels;
 
-      for(unsigned int i = 0; i < _trainingLabels.size(); i++)
+      for (unsigned int i = 0; i < _trainingLabels.size(); i++)
       {
-        if(_trainingLabels[i] != posClass)
+        if (_trainingLabels[i] != posClass)
         {
           _trainingLabels[i] = "other";
         }
@@ -1156,7 +1156,7 @@ namespace Tgs
       _factorLabels = factors;
       _activeFactorIndices.resize(factors.size());
 
-      for(unsigned int i = 0; i < factors.size(); i++)
+      for (unsigned int i = 0; i < factors.size(); i++)
       {
         _activeFactorIndices[i] = i;
       }
@@ -1244,7 +1244,7 @@ namespace Tgs
     {
       //std::cout << "Fact value is " << fIdx << std::endl;
       //Set the index to use as the sort source
-      if(!_data.empty() && fIdx < _data[0].size())
+      if (!_data.empty() && fIdx < _data[0].size())
       {
         _qSortIndicesOnFactorValue(indices, 0, indices.size() - 1, fIdx);
       }
@@ -1265,19 +1265,19 @@ namespace Tgs
   {
     try
     {
-      if(!_data.empty())
+      if (!_data.empty())
       {
         std::vector<std::string> badFactors;
-        for(unsigned int i = 0; i < _activeFactorIndices.size(); i++)
+        for (unsigned int i = 0; i < _activeFactorIndices.size(); i++)
         {
           std::set<double> dataCheck;
 
-          for(unsigned int k = 0; k < _data.size(); k++)
+          for (unsigned int k = 0; k < _data.size(); k++)
           {
             dataCheck.insert(_data[k][_activeFactorIndices[i]]);
           }
 
-          if(dataCheck.size() == 1) //All data has the same value
+          if (dataCheck.size() == 1) //All data has the same value
           {
             std::cout << "Deactivating factor due to all vectors having the same value: " <<
               _factorLabels[_activeFactorIndices[i]] << std::endl;
@@ -1286,7 +1286,7 @@ namespace Tgs
           }
         }
 
-        for(unsigned int j = 0; j < badFactors.size(); j++)
+        for (unsigned int j = 0; j < badFactors.size(); j++)
         {
           deactivateFactor(badFactors[j]);
         }
@@ -1328,14 +1328,14 @@ namespace Tgs
     {
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
-        if(childList.at(i).nodeType() == QDomNode::CommentNode)
+        if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
           continue;
         }
 
-        if(childList.at(i).isElement())
+        if (childList.at(i).isElement())
         {
           QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
 
@@ -1343,21 +1343,21 @@ namespace Tgs
 
           bool parseOk = true;
 
-          if(tag == "CLASSNAME")
+          if (tag == "CLASSNAME")
           {
             _trainingLabels.push_back(e.text().toLatin1().constData());
           }
-          else if(tag == "DATA")
+          else if (tag == "DATA")
           {
             QStringList factorList = e.text().split(" ");
 
             std::vector<double> dataVector(factorList.size());
 
-            for(unsigned int dIdx = 0; dIdx < (unsigned int)factorList.size(); dIdx++)
+            for (unsigned int dIdx = 0; dIdx < (unsigned int)factorList.size(); dIdx++)
             {
               double dataValue = factorList[dIdx].toDouble(&parseOk);
 
-              if(!parseOk)
+              if (!parseOk)
               {
                 std::stringstream ss;
                 ss << "Unable to parse the data value " << factorList[dIdx].toLatin1().constData();
@@ -1383,7 +1383,7 @@ namespace Tgs
   {
     try
     {
-      if(posP < posR)
+      if (posP < posR)
       {
         unsigned int q = _qSortPartition(indices, posP, posR, fIdx);
         _qSortIndicesOnFactorValue(indices, posP, q, fIdx);
@@ -1407,19 +1407,19 @@ namespace Tgs
       unsigned int j = posR + 1;
 
       unsigned int ctr = 0;
-      while(ctr < loopLimit)
+      while (ctr < loopLimit)
       {
         do
         {
           j = j - 1;
-        } while(_data[indices[j]][fIdx] > x);
+        } while (_data[indices[j]][fIdx] > x);
 
         do
         {
           i = i + 1;
-        } while(_data[indices[i]][fIdx] < x);
+        } while (_data[indices[i]][fIdx] < x);
 
-        if(i < j)
+        if (i < j)
         {
           unsigned int swapVal = indices[j];
           indices[j] = indices[i];

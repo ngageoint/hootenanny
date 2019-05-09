@@ -49,10 +49,15 @@ public:
     return sqrt(x * x + y * y);
   }
 
+  double lengthSquared() const
+  {
+    return x * x + y * y;
+  }
+
   void normalize()
   {
     double len = length();
-    if( len == 0 ) return;
+    if (len == 0) return;
     x /= len;
     y /= len;
   }

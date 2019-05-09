@@ -125,7 +125,7 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
 
     for (size_t i = 0; i < v.size(); i++)
     {
-      if(!map->containsNode(v[i])) continue;
+      if (!map->containsNode(v[i])) continue;
 
       for (size_t j = 0; j < v.size(); j++)
       {

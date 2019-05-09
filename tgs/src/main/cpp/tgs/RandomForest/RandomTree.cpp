@@ -65,7 +65,7 @@ namespace Tgs
 
   RandomTree::~RandomTree()
   {
-    if(_root != NULL)
+    if (_root != NULL)
     {
       _destroyTree(_root);
       _root.reset();
@@ -82,7 +82,7 @@ namespace Tgs
       std::vector<unsigned int> indices;
       indices.resize(data->getNumDataVectors());
 
-      for(unsigned int i = 0; i < indices.size(); i++)
+      for (unsigned int i = 0; i < indices.size(); i++)
       {
         indices[i] = i;
       }
@@ -113,21 +113,21 @@ namespace Tgs
       {
         isPure = currentNode->isPure;
 
-        if(isPure)  //We are at leaf node and are done
+        if (isPure)  //We are at leaf node and are done
         {
           outputClass = currentNode->classLabel;
           nodeId = currentNode->nodeId;
         }
         else
         {
-  //         if(dataVector[currentNode->factorIndex] < currentNode->rangeMin || dataVector[currentNode->factorIndex] > currentNode->rangeMax)
+  //         if (dataVector[currentNode->factorIndex] < currentNode->rangeMin || dataVector[currentNode->factorIndex] > currentNode->rangeMax)
   //         {
   //           std::cout << " Node Val " << dataVector[currentNode->factorIndex] << " Min " << currentNode->rangeMin << " Max " << currentNode->rangeMax << std::endl;
   //           outputClass = "zz00";
   //           nodeId = currentNode->nodeId;
   //           return nodeId;
   //         }
-          if(dataVector[currentNode->factorIndex] < currentNode->splitValue)
+          if (dataVector[currentNode->factorIndex] < currentNode->splitValue)
           {
             currentNode = currentNode->leftChild;
           }
@@ -137,7 +137,7 @@ namespace Tgs
           }
         }
 
-      }while(!isPure);
+      } while (!isPure);
 
 
       return nodeId;
@@ -157,11 +157,11 @@ namespace Tgs
 
       std::string result;
 
-      for(unsigned int i = 0; i < _oobSet.size(); i++)
+      for (unsigned int i = 0; i < _oobSet.size(); i++)
       {
         classifyDataVector(data->getDataVector(_oobSet[i]), result);
 
-        if(result == data->getTrainingLabel(_oobSet[i]))
+        if (result == data->getTrainingLabel(_oobSet[i]))
         {
           correct++;
         }
@@ -185,7 +185,7 @@ namespace Tgs
     {
       throw Exception(__LINE__, "This function has been deprecated.");
 
-      if(fileStream.good())
+      if (fileStream.good())
       {
         fileStream << tabDepth << "<RandomTree>" << std::endl;
         _exportOobSet(fileStream, tabDepth + "\t");
@@ -213,11 +213,11 @@ namespace Tgs
       //Export OobSet
       QDomElement oobSetNode = modelDoc.createElement("OobSet");
       std::stringstream oobStream;
-      for(unsigned int i = 0; i < _oobSet.size(); i++)
+      for (unsigned int i = 0; i < _oobSet.size(); i++)
       {
         oobStream << _oobSet[i];
 
-        if(i != _oobSet.size() - 1)
+        if (i != _oobSet.size() - 1)
         {
           oobStream << " ";
         }
@@ -251,7 +251,7 @@ namespace Tgs
       proxVec.resize(dSize);
 
       //Find out which node each vector is classified as
-      for(unsigned int i = 0; i < dSize; i++)
+      for (unsigned int i = 0; i < dSize; i++)
       {
         std::string resultClass;
         unsigned int nodeId = classifyDataVector(data->getDataVector(i), resultClass);
@@ -259,12 +259,12 @@ namespace Tgs
         proxVec[i] = nodeId;
       }
 
-      for(unsigned int j = 0; j < dSize; j++)
+      for (unsigned int j = 0; j < dSize; j++)
       {
         unsigned int tempId = proxVec[j];
-        for(unsigned int k = j; k < dSize;j++)
+        for (unsigned int k = j; k < dSize;j++)
         {
-          if(proxVec[k] == tempId)
+          if (proxVec[k] == tempId)
           {
             proximity[j * dSize + k] += 1;
           }
@@ -287,7 +287,7 @@ namespace Tgs
 
       _root.reset();
 
-      if(fileStream.good())
+      if (fileStream.good())
       {
         _root = std::shared_ptr<TreeNode>(new TreeNode());
         _importOobSet(fileStream);
@@ -319,25 +319,25 @@ namespace Tgs
 
       QDomNodeList childList = e.childNodes();
 
-      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
-        if(childList.at(i).nodeType() == QDomNode::CommentNode)
+        if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
           //Skip comments
           continue;
         }
 
-        if(childList.at(i).isElement())
+        if (childList.at(i).isElement())
         {
           QString tag = childList.at(i).toElement().tagName().toUpper();
 
-          if(tag == "OOBSET")
+          if (tag == "OOBSET")
           {
 
             QString oobString = childList.at(i).toElement().text();
             _importOobSet(oobString);
           }
-          else if(tag == "TREENODES")
+          else if (tag == "TREENODES")
           {
 
             QDomElement rootDomNode = childList.at(i).firstChild().toElement();
@@ -385,7 +385,7 @@ namespace Tgs
       //Build bootstrap and oob sets (on data vector indices)
       std::vector<unsigned int> bootstrapSet;
 
-      if(balanced)
+      if (balanced)
       {
         data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
@@ -421,7 +421,7 @@ namespace Tgs
       //Build bootstrap and oob sets (on data vector indices)
       std::vector<unsigned int> bootstrapSet;
 
-      if(balanced)
+      if (balanced)
       {
         data->makeBalancedBoostrapAndOobSets(bootstrapSet, _oobSet);
       }
@@ -481,7 +481,7 @@ namespace Tgs
       node->leftChild.reset();
       node->rightChild.reset();
 
-      if(data->isDataSetPure(dataSet) || dataSet.size() <= nodeSize)  //Data is pure
+      if (data->isDataSetPure(dataSet) || dataSet.size() <= nodeSize)  //Data is pure
       {
         //If data set is all of same class then it is pure and done
         //Give it a class label
@@ -508,7 +508,7 @@ namespace Tgs
         bool splitPossible = _igc.findDataSplit(*data, factors, dataSet, splitIdx, fIdx, splitVal,
           purityDelta);
 
-        if(splitPossible)  //Data is not all same value
+        if (splitPossible)  //Data is not all same value
         {
           node->isPure = false;
 
@@ -539,13 +539,13 @@ namespace Tgs
 
           data->sortIndicesOnFactorValue(dataSet, fIdx);
 
-          for(unsigned int i = 0; i < splitIdx; i++)
+          for (unsigned int i = 0; i < splitIdx; i++)
           {
             leftSplit.push_back(dataSet[i]);
           }
           _build(data, leftSplit, node->leftChild, nodeSize);
 
-          for(unsigned int i = splitIdx; i < dataSet.size(); i++)
+          for (unsigned int i = splitIdx; i < dataSet.size(); i++)
           {
             rightSplit.push_back(dataSet[i]);
           }
@@ -578,7 +578,7 @@ namespace Tgs
   {
     try
     {
-      if(!node->isPure)
+      if (!node->isPure)
       {
         _calcFactorPurity(node->leftChild, factorPurity);
         _calcFactorPurity(node->rightChild, factorPurity);
@@ -597,7 +597,7 @@ namespace Tgs
     //Perform a post order traversal of the tree
     //Delete node after its children have been deleted
 
-    if(node.get() != 0)
+    if (node.get() != 0)
     {
       _destroyTree(node->leftChild);
       _destroyTree(node->rightChild);
@@ -612,20 +612,20 @@ namespace Tgs
     {
       throw Exception(__LINE__, "This function has been deprecated.");
 
-      if(fileStream.good())
+      if (fileStream.good())
       {
-        if(node != NULL)
+        if (node != NULL)
         {
           fileStream << tabDepth + "<TreeNode>" << std::endl;
 
-          if(node->isPure)
+          if (node->isPure)
           {
             fileStream << tabDepth + "\t<NodeType>\tPure\t</NodeType>" << std::endl;
             fileStream << tabDepth + "\t<ClassName>\t" << node->classLabel << "\t</ClassName>" <<
               std::endl;
             fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
 
-            for(unsigned int i = 0; i < node->dataList.size(); i++)
+            for (unsigned int i = 0; i < node->dataList.size(); i++)
             {
               fileStream << "\t" << node->dataList[i];
             }
@@ -664,13 +664,13 @@ namespace Tgs
   {
     try
     {
-      if(node)
+      if (node)
       {
         QDomElement treeDomNode = modelDoc.createElement("TreeNode");
 
         treeDomNode.setAttribute("id", node->nodeId);
 
-        if(node->isPure)
+        if (node->isPure)
         {
           //Add Node Type
           QDomElement typeNode = modelDoc.createElement("NodeType");
@@ -688,11 +688,11 @@ namespace Tgs
           QDomElement dataNode = modelDoc.createElement("Data");
 
           std::stringstream dataStream;
-          for(unsigned int i = 0; i < node->dataList.size(); i++)
+          for (unsigned int i = 0; i < node->dataList.size(); i++)
           {
             dataStream << node->dataList[i];
 
-            if(i != node->dataList.size() - 1)
+            if (i != node->dataList.size() - 1)
             {
               dataStream << " ";
             }
@@ -744,11 +744,11 @@ namespace Tgs
     {
       throw Exception(__LINE__, "This function has been deprecated.");
 
-      if(fileStream.good())
+      if (fileStream.good())
       {
         fileStream << tabDepth << "<OobSet>";
 
-        for(unsigned int i = 0; i < _oobSet.size(); i++)
+        for (unsigned int i = 0; i < _oobSet.size(); i++)
         {
           fileStream << "\t" << _oobSet[i];
         }
@@ -776,7 +776,7 @@ namespace Tgs
 
       ss >> firstStr;
 
-      if(firstStr == "<TreeNode>")
+      if (firstStr == "<TreeNode>")
       {
         //std::cout << "<TreeNode>" << std::endl;
         std::string buffer2;
@@ -785,17 +785,17 @@ namespace Tgs
 
         std::string NodeType;
 
-        while(buffer2.find("</TreeNode>") == std::string::npos)
+        while (buffer2.find("</TreeNode>") == std::string::npos)
         {
           std::stringstream ss1(buffer2);
           ss1 >> firstStr;
 
-          if(firstStr == "<NodeType>")
+          if (firstStr == "<NodeType>")
           {
             ss1 >> NodeType;
             //std::cout << "<NodeType> " << NodeType << std::endl;
           }
-          else if(firstStr == "<ClassName>")
+          else if (firstStr == "<ClassName>")
           {
             std::string nextStr;
             ss1 >> nextStr;
@@ -803,7 +803,7 @@ namespace Tgs
             bool first = true;
             while (nextStr != "</ClassName>")
             {
-              if(first == false)
+              if (first == false)
               {
                 node->classLabel += " ";
               }
@@ -817,10 +817,10 @@ namespace Tgs
 
             //std::cout << "<ClassName> " << className << std::endl;
           }
-          else if(firstStr == "<Data>")
+          else if (firstStr == "<Data>")
           {
             //std::cout << "<Data>" << "|" << NodeType << "|" << std::endl;
-            if(NodeType == "Pure")
+            if (NodeType == "Pure")
             {
               //std::cout << "Pure" << std::endl;
               node->isPure = true;
@@ -829,7 +829,7 @@ namespace Tgs
               std::string nextStr;
               ss1 >> nextStr;
 
-              while(nextStr != "</Data>")
+              while (nextStr != "</Data>")
               {
                 unsigned int idx;
                 std::stringstream ss2(nextStr);
@@ -838,7 +838,7 @@ namespace Tgs
                 ss1 >> nextStr;
               }
             }
-            else if(NodeType == "Split")
+            else if (NodeType == "Split")
             {
               //std::cout << "Split" << std::endl;
               node->isPure = false;
@@ -855,7 +855,7 @@ namespace Tgs
         }
 
         //Assign the nodes children
-        if(node->isPure == true)
+        if (node->isPure == true)
         {
           node->leftChild.reset();
           node->rightChild.reset();
@@ -879,7 +879,7 @@ namespace Tgs
   {
     try
     {
-      if(treeNode.isNull())
+      if (treeNode.isNull())
       {
         return treeNode;
       }
@@ -889,7 +889,7 @@ namespace Tgs
       QString idString = treeNode.attribute("id", "0");
       node->nodeId = idString.toUInt(&parsedId);
 
-      if(!parsedId)
+      if (!parsedId)
       {
         std::stringstream ss;
         ss << "Unable to parse the tree node id value " << idString.toLatin1().constData();
@@ -900,9 +900,9 @@ namespace Tgs
 
       QString treeNodeType;
 
-      for(unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)nodeList.size(); i++)
       {
-        if(nodeList.at(i).nodeType() == QDomNode::CommentNode)
+        if (nodeList.at(i).nodeType() == QDomNode::CommentNode)
         {
           //Skip comments
           continue;
@@ -911,41 +911,41 @@ namespace Tgs
         QString tag = nodeList.at(i).toElement().tagName().toUpper();
         QDomElement nodeElement = nodeList.at(i).toElement();
 
-        if(tag == "NODETYPE")
+        if (tag == "NODETYPE")
         {
           treeNodeType = nodeElement.text().toUpper();
         }
-        else if(tag == "CLASSNAME")
+        else if (tag == "CLASSNAME")
         {
           QStringList classList = nodeElement.text().split(" ");
 
-          for(unsigned int i = 0; i < (unsigned int)classList.size(); i++)
+          for (unsigned int i = 0; i < (unsigned int)classList.size(); i++)
           {
             node->classLabel += classList[i].toLatin1().constData();
 
-            if(i != (unsigned int)classList.size() - 1)
+            if (i != (unsigned int)classList.size() - 1)
             {
               node->classLabel += " ";
             }
           }
         }
-        else if(tag == "DATA")
+        else if (tag == "DATA")
         {
           QStringList dataList = nodeElement.text().split(" ");
 
-          if(treeNodeType == "PURE")
+          if (treeNodeType == "PURE")
           {
             node->isPure = true;
 
             bool parsedOk;
 
-            for(unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
+            for (unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
             {
               QString dataIndexString = dataList[i];
 
               unsigned int dataIndex = dataIndexString.toUInt(&parsedOk);
 
-              if(!parsedOk)
+              if (!parsedOk)
               {
                 std::stringstream ss;
                 ss << "Error parsing index value of " << dataIndexString.toLatin1().constData() <<
@@ -956,9 +956,9 @@ namespace Tgs
               node->dataList.push_back(dataIndex);
             }
           }
-          else if(treeNodeType == "SPLIT")
+          else if (treeNodeType == "SPLIT")
           {
-            if(dataList.size() != 5)
+            if (dataList.size() != 5)
             {
               std::stringstream ss;
               ss << "The DATA tag for each SPLIT TreeNode must have exactly 5 values.";
@@ -976,7 +976,7 @@ namespace Tgs
             double rangeMin = dataList[3].toDouble(&parsedOk);
             double rangeMax = dataList[4].toDouble(&parsedOk);
 
-            if(!parsedOk)
+            if (!parsedOk)
             {
               std::stringstream ss;
               ss << "Unable to parse the DATA value for a SPLIT node " <<
@@ -1008,7 +1008,7 @@ namespace Tgs
       }
 
       //Assign the nodes children
-      if(node->isPure == true)
+      if (node->isPure == true)
       {
         node->leftChild.reset();
         node->rightChild.reset();
@@ -1018,7 +1018,7 @@ namespace Tgs
       else //Split Node
       {
         QDomElement leftNode = treeNode.nextSibling().toElement();
-        if(leftNode.isNull())
+        if (leftNode.isNull())
         {
           return leftNode;
         }
@@ -1027,7 +1027,7 @@ namespace Tgs
 
         QDomElement rightNode = _importNode(leftNode, node->leftChild);
 
-        if(rightNode.isNull())
+        if (rightNode.isNull())
         {
           return rightNode;
         }
@@ -1049,7 +1049,7 @@ namespace Tgs
     {
       throw Exception(__LINE__, "This function has been deprecated.");
 
-      if(fileStream.good())
+      if (fileStream.good())
       {
         std::string buffer;
         std::getline(fileStream, buffer);
@@ -1058,11 +1058,11 @@ namespace Tgs
         std::string nextStr;
         ss >> firstStr;
 
-        if(firstStr == "<OobSet>")
+        if (firstStr == "<OobSet>")
         {
           ss >> nextStr;
 
-          while(nextStr != "</OobSet>")
+          while (nextStr != "</OobSet>")
           {
             unsigned int idx;
             std::stringstream ss2(nextStr);
@@ -1089,11 +1089,11 @@ namespace Tgs
       //cout << oobList.size();
 
       bool parseOk = true;
-      for(unsigned int i = 0; i < (unsigned int)oobList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)oobList.size(); i++)
       {
         int oobValue = oobList[i].toInt(&parseOk);
 
-        if(!parseOk)
+        if (!parseOk)
         {
           std::stringstream ss;
           ss << "Unable to parse the OobSet from the XML file";

@@ -246,7 +246,7 @@ public:
     int ctr = 0;
     while (nodeResultIterator->next())
     {
-      for(int j = 0; j < 10; j++) { LOG_TRACE("VALUE = "+nodeResultIterator->value(j).toString()); }
+      for (int j = 0; j < 10; j++) { LOG_TRACE("VALUE = " + nodeResultIterator->value(j).toString()); }
 
       HOOT_STR_EQUALS(nodeId, nodeResultIterator->value(0).toLongLong());
       HOOT_STR_EQUALS(38.0, nodeResultIterator->value(1).toDouble());

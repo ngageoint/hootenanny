@@ -75,7 +75,7 @@ namespace Tgs
   {
     std::shared_ptr<IntersectionIterator> interItr = std::shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
 
-    while(interItr->next())
+    while (interItr->next())
     {
       objIds.push_back(interItr->getId());
     }
@@ -85,7 +85,7 @@ namespace Tgs
   {
     std::shared_ptr<DistanceIterator> distItr = std::shared_ptr<DistanceIterator>(new DistanceIterator(_tree.get(), point, radius));
 
-    while(distItr->next())
+    while (distItr->next())
     {
       objIds.push_back(distItr->getId());
     }
@@ -99,7 +99,7 @@ namespace Tgs
 
     Box tmpBox(_dimensions);
 
-    for(unsigned int i = 0; i < _dimensions; i++)
+    for (unsigned int i = 0; i < _dimensions; i++)
     {
       tmpBox.setBounds(i, minBounds[i], maxBounds[i]);
     }

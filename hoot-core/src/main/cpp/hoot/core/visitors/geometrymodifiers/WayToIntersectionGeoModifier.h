@@ -61,7 +61,7 @@ public:
   virtual QList<QString> getParameterNames() const override { return QList<QString>(); }
 
   virtual void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
-  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) override;
+  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
   void processIntersections(OsmMap* pMap, const WayPtr pWay, std::vector<IntersectionInfo>& inters);

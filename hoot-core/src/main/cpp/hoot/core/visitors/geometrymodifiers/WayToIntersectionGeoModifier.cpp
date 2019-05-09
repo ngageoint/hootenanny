@@ -45,7 +45,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToIntersectionGeoModifier)
 
-bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* pMap)
+bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process ways
   if (pElement->getElementType() != ElementType::Way) return false;
@@ -73,8 +73,8 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
     {
       long p1Id = myNodeIds[myNodeIx];
       long p2Id = myNodeIds[myNodeIx+1];
-      CoordinateExt myP1( pMap->getNode(p1Id)->toCoordinate());
-      CoordinateExt myP2( pMap->getNode(p2Id)->toCoordinate());
+      CoordinateExt myP1(pMap->getNode(p1Id)->toCoordinate());
+      CoordinateExt myP2(pMap->getNode(p2Id)->toCoordinate());
 
       for (int interNodeIx = 0; interNodeIx < interNodeCount-1; interNodeIx++)
       {
@@ -82,10 +82,10 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
         long i2Id = interNodeIds[interNodeIx+1];
 
         // don't check if the segments share any nodes
-        if(i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
+        if (i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
 
-        CoordinateExt interP1( pMap->getNode(i1Id)->toCoordinate());
-        CoordinateExt interP2( pMap->getNode(i2Id)->toCoordinate());
+        CoordinateExt interP1(pMap->getNode(i1Id)->toCoordinate());
+        CoordinateExt interP2(pMap->getNode(i2Id)->toCoordinate());
 
         std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
@@ -100,7 +100,7 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
 
   if (allIntersections.size() > 0)
   {
-    processIntersections( pMap, pMyWay, allIntersections );
+    processIntersections(pMap, pMyWay, allIntersections);
   }
 
   return true;

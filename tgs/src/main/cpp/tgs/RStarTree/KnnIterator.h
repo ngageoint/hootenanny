@@ -194,9 +194,9 @@ inline double KnnIterator::distPtToLine(double x, double y, double s1, double t1
     u = numerator / denominator;
 
   // collinear case and line is not degenerated
-  if( u != 0.0 &&
-    fabs(deltaX - deltaX2) < 1.0e-06 &&
-    fabs(deltaY - deltaY2) < 1.0e-06 )
+  if (u != 0.0 &&
+     fabs(deltaX - deltaX2) < 1.0e-06 &&
+     fabs(deltaY - deltaY2) < 1.0e-06)
   {
     u = deltaX2 / deltaX;
     // case when point lies on the line segment

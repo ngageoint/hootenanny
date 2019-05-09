@@ -52,7 +52,7 @@ class GeometryModifierVisitor : public ElementVisitor, public OperationStatusInf
 public:
   virtual void setOsmMap(OsmMap* pMap) { _pMap = pMap; }
 
-  void setActionDesc( GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
+  void setActionDesc(GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
   static std::string className() { return "hoot::GeometryModifierVisitor"; }
