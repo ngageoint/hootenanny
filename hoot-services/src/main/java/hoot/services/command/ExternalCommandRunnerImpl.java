@@ -72,10 +72,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public String obfuscateConsoleLog(String in) {
         //strip out time in the logging metadata
         //e.g. 15:21:06.248
-        String out = in.replaceAll("\\d+:\\d+:\\d+\\.\\d+\\s+", "");
+        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+", "");
 
         //strip out the path to the cpp code
-        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s", "");
+        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s*", "");
 
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
@@ -109,8 +109,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentOut.equals(currentLine)) {
-                    logger.info(line);
-
                     currentOut = currentOut.concat(currentLine);
                     commandResult.setStdout(currentOut);
 
