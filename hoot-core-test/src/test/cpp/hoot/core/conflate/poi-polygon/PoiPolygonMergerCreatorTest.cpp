@@ -73,11 +73,10 @@ public:
     conf().set(ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
   }
 
-  /**
-   * Creates a single match and should result in a PoiPolygonMerger
-   */
   void basicTest()
   {
+    // Creates a single match and should result in a PoiPolygonMerger
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -109,9 +108,6 @@ public:
     HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
   }
 
-  /**
-   * Creates two matches with overlap and should create a MarkForReviewMerger
-   */
   void reviewTest()
   {
     // Create a building and poi/poly match with feature overlap and ensure they create reviews and
@@ -177,49 +173,28 @@ public:
     // Create a building and poi/poly match with feature overlap and ensure they all merge together
     // when cross feature conflate merging is allowed.
 
-    OsmMapPtr map(new OsmMap());
-
-    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
-                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
-                        Coordinate(0.0, 0.0),
-                        Coordinate::getNull() };
-    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
-    w1->getTags().set("building", true);
-    w1->getTags()["name"] = "foo";
-    w1->getTags()["amenity"] = "bar";
-
-    Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(5.0, 0.0),
-                        Coordinate(5.0, 5.0), Coordinate(0.0, 5.0),
-                        Coordinate(0.0, 0.0),
-                        Coordinate::getNull() };
-    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 5, "w2");
-    w2->getTags().set("building", true);
-    w2->getTags()["name"] = "goofie";
-
-    NodePtr n1(new Node(Status::Unknown2, 1, 19, 19, 5));
-    n1->getTags()["name"] = "foo";
-    n1->getTags()["amenity"] = "cafe";
-    map->addNode(n1);
-
     vector<const Match*> matchesV;
 
     BuildingMatch match1(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5)));
     match1._p.setMatch();
-    match1._eid1 = w1->getElementId();
-    match1._eid2 = n1->getElementId();
+    match1._eid1 = ElementId(ElementType::Way, 1);
+    match1._eid2 = ElementId(ElementType::Node, 1);
     matchesV.push_back(&match1);
 
     PoiPolygonMatch match2(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6)));
     match2._class.setMatch();
-    match2._eid1 = w2->getElementId();
-    match2._eid2 = n1->getElementId();
+    match2._eid1 = ElementId(ElementType::Way, 2);
+    match2._eid2 = ElementId(ElementType::Node, 1);
     matchesV.push_back(&match2);
 
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
     vector<Merger*> mergers;
     PoiPolygonMergerCreator uut;
-    uut.setOsmMap(map.get());
+    // Neither of the match types used here actually require a map to calculate isConflicting, but
+    // since the merger creator requires a map we'll pass in an empty one.
+    OsmMapPtr emptyMap(new OsmMap());
+    uut.setOsmMap(emptyMap.get());
     uut.setAllowCrossConflationMerging(true);
 
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
