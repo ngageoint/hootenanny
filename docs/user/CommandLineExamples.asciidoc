@@ -151,6 +151,7 @@ See the User Guide for more details on command usage.
 -----
     
 ===== Sort a map to the OSM standard in memory:
+-----
     hoot sort input.osm output.osm
 -----
     
