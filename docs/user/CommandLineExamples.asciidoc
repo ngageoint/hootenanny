@@ -16,20 +16,24 @@ See the User Guide for more details on command usage.
    
 ==== Conflation
 
+===== Conflate two maps into a single map (Reference Conflation)
 -----
-    # Conflate two maps into a single map (Reference Conflation)
     hoot conflate input1.osm input2.osm output.osm
+-----
     
-    # Conflate, adding data from the second map to output that does not conflict with data in 
-    # the first map (Differential Conflation)
+===== Conflate, adding data from the second map to output that does not conflict with data in the first map (Differential Conflation)
+-----
     hoot conflate --differential input1.osm input2.osm output.osm
+-----
 
-    # Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples)
+===== Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples)
+-----
     hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
       input1.osm input2.osm output.osm
+-----
 
-    # Conflate specifying a JSON feature filter as a file (see the User Guide Feature Filtering section
-    # for more filter examples)
+===== Conflate specifying a JSON feature filter as a file (see the User Guide Feature Filtering section for more filter examples)
+-----
     hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
     
