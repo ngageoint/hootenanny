@@ -57,7 +57,7 @@ See the User Guide for more details on command usage.
 ===== List all supported input data formats:
 -----
     hoot info --formats --input
-----
+-----
     
 ===== List all supported output data formats:
 -----
