@@ -72,12 +72,18 @@ Match()
 {
 }
 
+PoiPolygonMatch::PoiPolygonMatch(ConstMatchThresholdPtr threshold) :
+Match(threshold)
+{
+}
+
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  std::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
 _map(map),
+_e1IsPoi(false),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
 _distance(-1.0),
@@ -720,7 +726,15 @@ void PoiPolygonMatch::resetMatchDistanceInfo()
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_poi->getElementId(), _poly->getElementId()));
+  // arbitrarily adding poi id first for consistency
+  if (_e1IsPoi)
+  {
+    result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  }
+  else
+  {
+    result.insert(pair<ElementId, ElementId>(_eid2, _eid1));
+  }
   return result;
 }
 
@@ -731,16 +745,37 @@ map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 QString PoiPolygonMatch::toString() const
 {
-  return
-    QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address score: %8")
-      .arg(_poi->getElementId().toString())
-      .arg(_poly->getElementId().toString())
-      .arg(_class.toString())
-      .arg(_distance)
-      .arg(_closeDistanceMatch)
-      .arg(_typeScore)
-      .arg(_nameScore)
-      .arg(_addressScore);
+  QString str =
+    "PoiPolygonMatch: POI: %1, Poly: %2, P: %3, distance: %4, close match: %5, type score: %6, ";
+  str += "name score: %7, address score: %8";
+  // arbitrarily adding poi id first for consistency
+  if (_e1IsPoi)
+  {
+    return
+      str
+        .arg(_eid1.toString())
+        .arg(_eid2.toString())
+        .arg(_class.toString())
+        .arg(_distance)
+        .arg(_closeDistanceMatch)
+        .arg(_typeScore)
+        .arg(_nameScore)
+        .arg(_addressScore);
+  }
+  // _poi and _poly may be null during certain tests
+  else
+  {
+    return
+      str
+        .arg(_eid2.toString())
+        .arg(_eid1.toString())
+        .arg(_class.toString())
+        .arg(_distance)
+        .arg(_closeDistanceMatch)
+        .arg(_typeScore)
+        .arg(_nameScore)
+        .arg(_addressScore);
+  }
 }
 
 }

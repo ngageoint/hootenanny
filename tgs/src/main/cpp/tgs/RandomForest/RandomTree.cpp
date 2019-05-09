@@ -100,8 +100,8 @@ namespace Tgs
     }
   }
 
-  unsigned int RandomTree::classifyDataVector(const std::vector<double> & dataVector,
-    std::string & outputClass) const
+  unsigned int RandomTree::classifyDataVector(const std::vector<double>& dataVector,
+    std::string& outputClass) const
   {
     try
     {
@@ -113,7 +113,7 @@ namespace Tgs
       {
         isPure = currentNode->isPure;
 
-        if(isPure)  //We are at leaf node and are done
+        if (isPure)  //We are at leaf node and are done
         {
           outputClass = currentNode->classLabel;
           nodeId = currentNode->nodeId;
@@ -127,7 +127,7 @@ namespace Tgs
   //           nodeId = currentNode->nodeId;
   //           return nodeId;
   //         }
-          if(dataVector[currentNode->factorIndex] < currentNode->splitValue)
+          if (dataVector[currentNode->factorIndex] < currentNode->splitValue)
           {
             currentNode = currentNode->leftChild;
           }
@@ -137,8 +137,7 @@ namespace Tgs
           }
         }
 
-      }while(!isPure);
-
+      } while(!isPure);
 
       return nodeId;
     }

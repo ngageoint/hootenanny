@@ -48,6 +48,7 @@ PoiPolygonPhoneNumberScoreExtractor::PoiPolygonPhoneNumberScoreExtractor() :
 _phoneNumbersProcessed(0),
 _matchAttemptMade(false)
 {
+  LOG_VART(_phoneNumbersProcessed);
 }
 
 void PoiPolygonPhoneNumberScoreExtractor::setConfiguration(const Settings& conf)

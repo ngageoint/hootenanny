@@ -33,6 +33,8 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
@@ -46,9 +48,9 @@ namespace hoot
 class PoiPolygonMergerCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
-  //CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(reviewTest);
-  //CPPUNIT_TEST(crossConflateMergeTest);
+  CPPUNIT_TEST(crossConflateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -116,42 +118,7 @@ public:
     // don't merge together when cross feature conflate merging is not allowed.
 
     OsmMapPtr map(new OsmMap());
-    boost::shared_ptr<MatchSet> matches(new MatchSet());
-    _createOverlappingMatches(map, matches);
 
-    vector<Merger*> mergers;
-    PoiPolygonMergerCreator uut;
-    uut.setOsmMap(map.get());
-    uut.setAllowCrossConflationMerging(false);
-
-    HOOT_STR_EQUALS(1, uut.createMergers(*matches, mergers));
-    HOOT_STR_EQUALS(1, mergers.size());
-    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
-  }
-
-  void crossConflateMergeTest()
-  {
-    // Create a building and poi/poly match with feature overlap and ensure they all merge together
-    // when cross feature conflate merging is allowed.
-
-    OsmMapPtr map(new OsmMap());
-    boost::shared_ptr<MatchSet> matches(new MatchSet());
-    _createOverlappingMatches(map, matches);
-
-    vector<Merger*> mergers;
-    PoiPolygonMergerCreator uut;
-    uut.setOsmMap(map.get());
-    uut.setAllowCrossConflationMerging(true);
-
-    HOOT_STR_EQUALS(1, uut.createMergers(*matches, mergers));
-    HOOT_STR_EQUALS(1, mergers.size());
-    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
-  }
-
-private:
-
-  void _createOverlappingMatches(OsmMapPtr map, boost::shared_ptr<MatchSet> matches)
-  {
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
                         Coordinate(0.0, 0.0),
@@ -190,8 +157,75 @@ private:
     match2.setMatchEvidenceThreshold(3);
     match2.setReviewEvidenceThreshold(1);
     match2.calculateMatch(w2->getElementId(), n1->getElementId());
+    matchesV.push_back(&match2);
+    LOG_VAR(match2);
 
-    matches->insert(matchesV.begin(), matchesV.end());
+    MatchSet matches;
+    matches.insert(matchesV.begin(), matchesV.end());
+    vector<Merger*> mergers;
+    PoiPolygonMergerCreator uut;
+    uut.setOsmMap(map.get());
+
+    HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
+    HOOT_STR_EQUALS(1, mergers.size());
+    LOG_VART(*mergers[0]);
+    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+  }
+
+  void crossConflateMergeTest()
+  {
+    // Create a building and poi/poly match with feature overlap and ensure they all merge together
+    // when cross feature conflate merging is allowed.
+
+    OsmMapPtr map(new OsmMap());
+
+    Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
+                        Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+    w1->getTags().set("building", true);
+    w1->getTags()["name"] = "foo";
+    w1->getTags()["amenity"] = "bar";
+
+    Coordinate c2[] = { Coordinate(0.0, 0.0), Coordinate(5.0, 0.0),
+                        Coordinate(5.0, 5.0), Coordinate(0.0, 5.0),
+                        Coordinate(0.0, 0.0),
+                        Coordinate::getNull() };
+    WayPtr w2 = TestUtils::createWay(map, Status::Unknown2, c2, 5, "w2");
+    w2->getTags().set("building", true);
+    w2->getTags()["name"] = "goofie";
+
+    NodePtr n1(new Node(Status::Unknown2, 1, 19, 19, 5));
+    n1->getTags()["name"] = "foo";
+    n1->getTags()["amenity"] = "cafe";
+    map->addNode(n1);
+
+    vector<const Match*> matchesV;
+
+    BuildingMatch match1(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5)));
+    match1._p.setMatch();
+    match1._eid1 = w1->getElementId();
+    match1._eid2 = n1->getElementId();
+    matchesV.push_back(&match1);
+
+    PoiPolygonMatch match2(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6)));
+    match2._class.setMatch();
+    match2._eid1 = w2->getElementId();
+    match2._eid2 = n1->getElementId();
+    matchesV.push_back(&match2);
+
+    MatchSet matches;
+    matches.insert(matchesV.begin(), matchesV.end());
+    vector<Merger*> mergers;
+    PoiPolygonMergerCreator uut;
+    uut.setOsmMap(map.get());
+    uut.setAllowCrossConflationMerging(true);
+
+    HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
+    HOOT_STR_EQUALS(1, mergers.size());
+    LOG_VART(*mergers[0]);
+    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
   }
 };
 

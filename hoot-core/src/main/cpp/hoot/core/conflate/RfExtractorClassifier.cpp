@@ -62,6 +62,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   {
     row.push_back(it->second);
   }
+  LOG_VART(row);
   std::map<string, double> scores;
   _rf->classifyVector(row, scores);
 
@@ -69,6 +70,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   result.setMatchP(scores["match"]);
   result.setReviewP(scores["review"]);
 
+  LOG_VART(result);
   return result;
 }
 
@@ -79,7 +81,6 @@ const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_g
   {
     _createExtractors();
   }
-
   return _extractors;
 }
 
@@ -94,7 +95,8 @@ map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
   _getExtractors();
   for (size_t i = 0; i < _extractors.size(); i++)
   {
-    double v = _extractors[i]->extract(*m, e1, e2);
+    const double v = _extractors[i]->extract(*m, e1, e2);
+    LOG_VART(v);
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
@@ -104,6 +106,7 @@ map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 

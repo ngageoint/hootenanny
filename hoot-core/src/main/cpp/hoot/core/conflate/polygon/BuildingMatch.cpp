@@ -54,6 +54,11 @@ Match()
 {
 }
 
+BuildingMatch::BuildingMatch(const ConstMatchThresholdPtr& mt) :
+Match(mt)
+{
+}
+
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
                              const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,

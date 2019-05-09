@@ -79,6 +79,7 @@ void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
   LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
 
   double length = _lengthNodes.back();
+  LOG_VART(length);
   double d = 0.0;
 
   assert(spacing != 0.0);
@@ -109,7 +110,10 @@ geos::geom::Coordinate WayDiscretizer::interpolate(double d)
 {
   geos::geom::Coordinate result;
 
+  LOG_VART(d);
+  LOG_VART(_way.get());
   const std::vector<long>& nodeIds = _way->getNodeIds();
+  LOG_VART(nodeIds);
 
   if (d <= 0)
   {
@@ -140,6 +144,7 @@ geos::geom::Coordinate WayDiscretizer::interpolate(double d)
     result.y = startN->getY() * (1 - w) + endN->getY() * w;
   }
 
+  LOG_VART(result);
   return result;
 }
 

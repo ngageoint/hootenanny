@@ -39,6 +39,7 @@ namespace hoot
 class BuildingRfClassifier : public RfExtractorClassifier
 {
 public:
+
   BuildingRfClassifier();
 
 protected:
@@ -55,7 +56,6 @@ protected:
    * Create the best extractors found during experimentation.
    */
   void _createBestExtractors() const;
-
 };
 
 }

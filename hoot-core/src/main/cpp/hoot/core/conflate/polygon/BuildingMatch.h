@@ -50,9 +50,11 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
+  BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt,
-                bool reviewIfSecondaryFeatureNewer, const QString& dateTagKey, const QString& dateFormat);
+                bool reviewIfSecondaryFeatureNewer = false, const QString& dateTagKey = "",
+                const QString& dateFormat = "");
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -82,6 +84,8 @@ public:
   virtual QString getDescription() const { return "Matches buildings"; }
 
 private:
+
+  friend class PoiPolygonMergerCreatorTest;
 
   ElementId _eid1, _eid2;
   static QString _matchName;

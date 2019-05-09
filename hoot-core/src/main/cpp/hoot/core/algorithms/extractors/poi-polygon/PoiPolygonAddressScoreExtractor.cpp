@@ -45,6 +45,7 @@ PoiPolygonAddressScoreExtractor::PoiPolygonAddressScoreExtractor() :
 _addressesProcessed(0),
 _matchAttemptMade(false)
 {
+  LOG_VART(_addressesProcessed);
 }
 
 void PoiPolygonAddressScoreExtractor::setConfiguration(const Settings& conf)

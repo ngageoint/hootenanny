@@ -61,6 +61,7 @@ public:
   static std::string className() { return "hoot::PoiPolygonMatch"; }
 
   PoiPolygonMatch();
+  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
@@ -139,6 +140,8 @@ public:
   static long convexPolyDistanceMatches;
 
 private:
+
+  friend class PoiPolygonMergerCreatorTest;
 
   static QString _matchName;
 

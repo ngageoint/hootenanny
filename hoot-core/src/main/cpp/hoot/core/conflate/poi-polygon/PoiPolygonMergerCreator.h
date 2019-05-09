@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Creates mergers to handle matches found by POI to Polygon Conflation
+ */
 class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 
