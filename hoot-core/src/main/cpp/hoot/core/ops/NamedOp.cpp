@@ -144,7 +144,7 @@ void NamedOp::apply(OsmMapPtr& map)
       StringUtils::formatLargeNumber(map->getElementCount()));
     if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
     {
-      LOG_DEBUG(
+      LOG_INFO(
         "\t" << statusInfo->getCompletedStatusMessage() + " in " +
         StringUtils::secondsToDhms(timer.elapsed()));
     }

@@ -178,6 +178,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
 
   Tags result;
 
+  LOG_VART(_autoMergeManyPoiToOnePolyMatches);
   std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
@@ -194,6 +195,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
+    LOG_VART(p);
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)

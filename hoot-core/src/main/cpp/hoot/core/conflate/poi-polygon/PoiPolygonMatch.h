@@ -215,9 +215,9 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+  void _categorizeElementsByGeometryType();
 
-  bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;
+  bool _inputFeaturesHaveSameSource() const;
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);

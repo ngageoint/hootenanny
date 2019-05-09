@@ -53,6 +53,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   Tags t1Copy = t1;
   Tags t2Copy = t2;
 
+  LOG_VART(ConfigOptions().getTagMergerDefault());
   if (ConfigOptions().getTagMergerDefault() == "hoot::OverwriteTag1Merger")
   {
     TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);
@@ -63,6 +64,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
     TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
   }
+  LOG_VART(result);
 
   //retain any previously set alt_types
   if (!t1Copy[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
@@ -73,6 +75,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   {
     result = _preserveAltTypes(t2Copy, result);
   }
+  LOG_VART(result);
 
   //combine the rest of the tags together; if two tags with the same key are found, use the most
   //specific one or use both if they aren't related in any way
