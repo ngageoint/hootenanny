@@ -160,6 +160,20 @@ See the User Guide for more details on command usage.
 
     # Count all POIs in a map
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
+
+    # Show a summary of building conflation reviews by type and frequency
+    hoot tag-distribution input.osm hoot:review:note hoot::ReviewRelationCriterion
+
+    Total tag count: 129
+    62	(48.1%)	unmatched buildings are overlapping
+    20	(15.5%)	very little building overlap building orientation not similar building edges not very close to each other
+    15	(11.6%)	very little building overlap similar building orientation building edges not very close to each other
+    14	(10.9%)	very little building overlap semisimilar building orientation building edges not very close to each other
+    12	(9.3%)	very little building overlap very similar building orientation building edges not very close to each other
+    3	(2.33%)	small building overlap building orientation not similar building edges not very close to each other
+    1	(<1%)	small building overlap similar building orientation building edges not very close to each other
+    1	(<1%)	small building overlap semisimilar building orientation building edges not very close to each other
+    1	(<1%)	medium building overlap building orientation not similar building edges not very close to each other
 -----
 
 === Advanced
@@ -376,8 +390,8 @@ See the User Guide for more details on command usage.
     # highway=road made up over 97% of all highway tags in the data.
     hoot tag-distribution input.osm highway hoot::HighwayCriterion
     
-    road : 365 (0.9759)
-    motorway : 9 (0.02406)
+    365	(97.59%)	road
+    9	(2.41%)		motorway
     
     # Display tag schema information for a map
     hoot tag-info input.osm
@@ -413,11 +427,11 @@ See the User Guide for more details on command usage.
     # Display occurrence frequencies of tokenized feature names
     hoot tag-distribution input.osm --names --tokenize --limit 5
     
-    nw : 320 (6.811%)
-    st : 246 (5.236%)
-    ave : 80 (1.703%)
-    sw : 45 (0.9579%)
-    h : 18 (0.3831%)
+    320	(6.81%)	nw
+    246	(5.24%)	st
+    80	(1.70%)	ave
+    45	(0.96%)	sw
+    18	(0.38%)	h
 
     # Count the number of elements with valid address tags in a map
     hoot count input.osm hoot::HasAddressCriterion

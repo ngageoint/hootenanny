@@ -97,6 +97,8 @@ private:
   std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input);
   ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream);
   ElementCriterionPtr _getCriterion();
+
+  QString _getPercentageStr(const double percentage) const;
 };
 
 }

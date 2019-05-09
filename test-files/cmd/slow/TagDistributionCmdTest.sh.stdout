@@ -1,201 +1,201 @@
 
 #1:
-Total tag value count: 4698
-road : 365 (7.769%)
-motorway : 9 (0.1916%)
+Total tag count: 4698
+365	(7.77%)	road
+9	(<1%)	motorway
 
 #2:
-Total tag value count: 4698
-motorway : 9 (0.1916%)
-road : 365 (7.769%)
+Total tag count: 4698
+9	(<1%)	motorway
+365	(7.77%)	road
 
 #3:
 No tags with keys: highway were found.
 
 #4:
-Total tag value count: 4698
-h st nw : 18 (0.3831%)
-pennsylvania ave nw : 18 (0.3831%)
-i st nw : 17 (0.3619%)
-constitution ave nw : 15 (0.3193%)
-17th st nw : 14 (0.298%)
-e st nw : 14 (0.298%)
-k st nw : 13 (0.2767%)
-virginia ave nw : 13 (0.2767%)
-14th st nw : 12 (0.2554%)
-15th st nw : 12 (0.2554%)
-18th st nw : 12 (0.2554%)
-independence ave sw : 11 (0.2341%)
-25th st nw : 11 (0.2341%)
-g st nw : 11 (0.2341%)
-f st nw : 11 (0.2341%)
-21st st nw : 10 (0.2129%)
-20th st nw : 10 (0.2129%)
-19th st nw : 10 (0.2129%)
-23rd st nw : 10 (0.2129%)
-interstate 66 bn : 9 (0.1916%)
-13th st nw : 8 (0.1703%)
-22nd st nw : 7 (0.149%)
-washington cir nw : 6 (0.1277%)
-24th st nw : 6 (0.1277%)
-c st nw : 6 (0.1277%)
-new york ave nw : 6 (0.1277%)
-new hampshire ave nw : 6 (0.1277%)
-14th st sw : 5 (0.1064%)
-12th st sw : 4 (0.08514%)
-16th st nw : 4 (0.08514%)
-ohio dr nw : 3 (0.06386%)
-madison dr nw : 3 (0.06386%)
-lincoln memorial cir sw : 3 (0.06386%)
-lincoln memorial cir nw : 3 (0.06386%)
-d st nw : 3 (0.06386%)
-26th st nw : 3 (0.06386%)
-jefferson dr sw : 3 (0.06386%)
-maine ave sw : 3 (0.06386%)
-ohio dr sw : 2 (0.04257%)
-ellipse rd nw : 2 (0.04257%)
-east executive ave nw : 2 (0.04257%)
-d st sw : 2 (0.04257%)
-connecticut ave nw : 2 (0.04257%)
-c st sw : 2 (0.04257%)
-15th st sw : 2 (0.04257%)
-12th st nw : 2 (0.04257%)
-e st expy nw : 2 (0.04257%)
-rock creek  potomac pkwy nw : 2 (0.04257%)
-raoul wallenberg pl sw : 2 (0.04257%)
-vermont ave nw : 2 (0.04257%)
-state pl nw : 2 (0.04257%)
-west executive ave nw : 1 (0.02129%)
-west basin dr sw : 1 (0.02129%)
-south executive ave nw : 1 (0.02129%)
-queen annes ln nw : 1 (0.02129%)
-madison pl nw : 1 (0.02129%)
-jackson pl nw : 1 (0.02129%)
-henry bacon dr nw : 1 (0.02129%)
-daniel c french dr sw : 1 (0.02129%)
-arlington memorial brg sw : 1 (0.02129%)
-alexander hamilton pl nw : 1 (0.02129%)
-23rd st sw : 1 (0.02129%)
-17th st sw : 1 (0.02129%)
-13th st sw : 1 (0.02129%)
-13 12 st nw : 1 (0.02129%)
-12th st expy nw : 1 (0.02129%)
+Total tag count: 4698
+18	(<1%)	h st nw
+18	(<1%)	pennsylvania ave nw
+17	(<1%)	i st nw
+15	(<1%)	constitution ave nw
+14	(<1%)	17th st nw
+14	(<1%)	e st nw
+13	(<1%)	k st nw
+13	(<1%)	virginia ave nw
+12	(<1%)	14th st nw
+12	(<1%)	15th st nw
+12	(<1%)	18th st nw
+11	(<1%)	independence ave sw
+11	(<1%)	25th st nw
+11	(<1%)	g st nw
+11	(<1%)	f st nw
+10	(<1%)	21st st nw
+10	(<1%)	20th st nw
+10	(<1%)	19th st nw
+10	(<1%)	23rd st nw
+9	(<1%)	interstate 66 bn
+8	(<1%)	13th st nw
+7	(<1%)	22nd st nw
+6	(<1%)	washington cir nw
+6	(<1%)	24th st nw
+6	(<1%)	c st nw
+6	(<1%)	new york ave nw
+6	(<1%)	new hampshire ave nw
+5	(<1%)	14th st sw
+4	(<1%)	12th st sw
+4	(<1%)	16th st nw
+3	(<1%)	ohio dr nw
+3	(<1%)	madison dr nw
+3	(<1%)	lincoln memorial cir sw
+3	(<1%)	lincoln memorial cir nw
+3	(<1%)	d st nw
+3	(<1%)	26th st nw
+3	(<1%)	jefferson dr sw
+3	(<1%)	maine ave sw
+2	(<1%)	ohio dr sw
+2	(<1%)	ellipse rd nw
+2	(<1%)	east executive ave nw
+2	(<1%)	d st sw
+2	(<1%)	connecticut ave nw
+2	(<1%)	c st sw
+2	(<1%)	15th st sw
+2	(<1%)	12th st nw
+2	(<1%)	e st expy nw
+2	(<1%)	rock creek  potomac pkwy nw
+2	(<1%)	raoul wallenberg pl sw
+2	(<1%)	vermont ave nw
+2	(<1%)	state pl nw
+1	(<1%)	west executive ave nw
+1	(<1%)	west basin dr sw
+1	(<1%)	south executive ave nw
+1	(<1%)	queen annes ln nw
+1	(<1%)	madison pl nw
+1	(<1%)	jackson pl nw
+1	(<1%)	henry bacon dr nw
+1	(<1%)	daniel c french dr sw
+1	(<1%)	arlington memorial brg sw
+1	(<1%)	alexander hamilton pl nw
+1	(<1%)	23rd st sw
+1	(<1%)	17th st sw
+1	(<1%)	13th st sw
+1	(<1%)	13 12 st nw
+1	(<1%)	12th st expy nw
 
 #5:
-Total tag value count: 4698
-h st nw : 18 (0.3831%)
-pennsylvania ave nw : 18 (0.3831%)
-i st nw : 17 (0.3619%)
-constitution ave nw : 15 (0.3193%)
-17th st nw : 14 (0.298%)
+Total tag count: 4698
+18	(<1%)	h st nw
+18	(<1%)	pennsylvania ave nw
+17	(<1%)	i st nw
+15	(<1%)	constitution ave nw
+14	(<1%)	17th st nw
 
 #6:
-Total tag value count: 4698
-nw : 320 (6.811%)
-st : 246 (5.236%)
-ave : 80 (1.703%)
-sw : 45 (0.9579%)
-h : 18 (0.3831%)
+Total tag count: 4698
+320	(6.81%)	nw
+246	(5.24%)	st
+80	(1.7%)	ave
+45	(<1%)	sw
+18	(<1%)	h
 
 #7:
-Total tag value count: 8088
-road : 417 (5.156%)
-unclassified : 148 (1.83%)
-pennsylvania ave nw : 28 (0.3462%)
-h st nw : 20 (0.2473%)
-i st nw : 19 (0.2349%)
-secondary : 18 (0.2226%)
-e st nw : 17 (0.2102%)
-17th st nw : 16 (0.1978%)
-constitution ave nw : 16 (0.1978%)
-k st nw : 16 (0.1978%)
-independence ave sw : 15 (0.1855%)
-25th st nw : 15 (0.1855%)
-14th st nw : 14 (0.1731%)
-15th st nw : 14 (0.1731%)
-g st nw : 14 (0.1731%)
-f st nw : 14 (0.1731%)
-virginia ave nw : 14 (0.1731%)
-18th st nw : 13 (0.1607%)
-20th st nw : 12 (0.1484%)
-23rd st nw : 12 (0.1484%)
-ellipse rd nw : 12 (0.1484%)
-21st st nw : 11 (0.136%)
-19th st nw : 11 (0.136%)
-22nd st nw : 10 (0.1236%)
-new hampshire ave nw : 10 (0.1236%)
-interstate 66 bn : 9 (0.1113%)
-13th st nw : 9 (0.1113%)
-motorway : 9 (0.1113%)
-new york ave nw : 8 (0.09891%)
-14th st sw : 8 (0.09891%)
-12th st sw : 8 (0.09891%)
-c st nw : 8 (0.09891%)
-24th st nw : 7 (0.08655%)
-washington cir nw : 7 (0.08655%)
-d st nw : 6 (0.07418%)
-16th st nw : 6 (0.07418%)
-path : 6 (0.07418%)
-maine ave sw : 5 (0.06182%)
-ohio dr sw : 5 (0.06182%)
-us hwy 50 : 5 (0.06182%)
-vermont ave nw : 4 (0.04946%)
-26th st nw : 4 (0.04946%)
-17th st sw : 4 (0.04946%)
-connecticut ave nw : 4 (0.04946%)
-jefferson dr sw : 4 (0.04946%)
-madison dr nw : 4 (0.04946%)
-rock crk and potomac pkwy nw : 4 (0.04946%)
-us hwy 29 : 3 (0.03709%)
-us hwy 1 : 3 (0.03709%)
-snows ct nw : 3 (0.03709%)
-primary : 3 (0.03709%)
-ohio dr nw : 3 (0.03709%)
-d st sw : 3 (0.03709%)
-c st sw : 3 (0.03709%)
-15th st sw : 3 (0.03709%)
-12th st nw : 3 (0.03709%)
-lincoln memorial cir sw : 3 (0.03709%)
-lincoln memorial cir nw : 3 (0.03709%)
-raoul wallenberg pl sw : 3 (0.03709%)
-state pl nw : 3 (0.03709%)
-w basin dr sw : 3 (0.03709%)
-rock creek  potomac pkwy nw : 2 (0.02473%)
-queen annes ln nw : 2 (0.02473%)
-madison pl nw : 2 (0.02473%)
-jackson pl nw : 2 (0.02473%)
-henry bacon dr nw : 2 (0.02473%)
-east executive ave nw : 2 (0.02473%)
-alexander hamilton pl nw : 2 (0.02473%)
-13th st sw : 2 (0.02473%)
-13 12 st nw : 2 (0.02473%)
-e st expy nw : 2 (0.02473%)
-e st expy : 2 (0.02473%)
-i 66 : 2 (0.02473%)
-south pl nw : 2 (0.02473%)
-zei aly nw : 1 (0.01236%)
-whitehurst fwy rmp : 1 (0.01236%)
-west executive ave nw : 1 (0.01236%)
-west basin dr sw : 1 (0.01236%)
-w executive ave nw : 1 (0.01236%)
-virginia avenue north w : 1 (0.01236%)
-south executive ave nw : 1 (0.01236%)
-reed ct nw : 1 (0.01236%)
-rawlings sq nw : 1 (0.01236%)
-raoul wallenberg pl : 1 (0.01236%)
-lincoln memorial cir : 1 (0.01236%)
-lees ct nw : 1 (0.01236%)
-kutz brg : 1 (0.01236%)
-hughes mews st nw : 1 (0.01236%)
-executive ave nw : 1 (0.01236%)
-e executive ave nw : 1 (0.01236%)
-daniel french dr sw : 1 (0.01236%)
-daniel c french dr sw : 1 (0.01236%)
-colonial ln nw : 1 (0.01236%)
-arlington memorial brg sw : 1 (0.01236%)
-arlington memorial brg : 1 (0.01236%)
-23rd st sw : 1 (0.01236%)
-12th st expy nw : 1 (0.01236%)
+Total tag count: 8088
+417	(5.16%)	road
+148	(1.83%)	unclassified
+28	(<1%)	pennsylvania ave nw
+20	(<1%)	h st nw
+19	(<1%)	i st nw
+18	(<1%)	secondary
+17	(<1%)	e st nw
+16	(<1%)	17th st nw
+16	(<1%)	constitution ave nw
+16	(<1%)	k st nw
+15	(<1%)	independence ave sw
+15	(<1%)	25th st nw
+14	(<1%)	14th st nw
+14	(<1%)	15th st nw
+14	(<1%)	g st nw
+14	(<1%)	f st nw
+14	(<1%)	virginia ave nw
+13	(<1%)	18th st nw
+12	(<1%)	20th st nw
+12	(<1%)	23rd st nw
+12	(<1%)	ellipse rd nw
+11	(<1%)	21st st nw
+11	(<1%)	19th st nw
+10	(<1%)	22nd st nw
+10	(<1%)	new hampshire ave nw
+9	(<1%)	interstate 66 bn
+9	(<1%)	13th st nw
+9	(<1%)	motorway
+8	(<1%)	new york ave nw
+8	(<1%)	14th st sw
+8	(<1%)	12th st sw
+8	(<1%)	c st nw
+7	(<1%)	24th st nw
+7	(<1%)	washington cir nw
+6	(<1%)	d st nw
+6	(<1%)	16th st nw
+6	(<1%)	path
+5	(<1%)	maine ave sw
+5	(<1%)	ohio dr sw
+5	(<1%)	us hwy 50
+4	(<1%)	vermont ave nw
+4	(<1%)	26th st nw
+4	(<1%)	17th st sw
+4	(<1%)	connecticut ave nw
+4	(<1%)	jefferson dr sw
+4	(<1%)	madison dr nw
+4	(<1%)	rock crk and potomac pkwy nw
+3	(<1%)	us hwy 29
+3	(<1%)	us hwy 1
+3	(<1%)	snows ct nw
+3	(<1%)	primary
+3	(<1%)	ohio dr nw
+3	(<1%)	d st sw
+3	(<1%)	c st sw
+3	(<1%)	15th st sw
+3	(<1%)	12th st nw
+3	(<1%)	lincoln memorial cir sw
+3	(<1%)	lincoln memorial cir nw
+3	(<1%)	raoul wallenberg pl sw
+3	(<1%)	state pl nw
+3	(<1%)	w basin dr sw
+2	(<1%)	rock creek  potomac pkwy nw
+2	(<1%)	queen annes ln nw
+2	(<1%)	madison pl nw
+2	(<1%)	jackson pl nw
+2	(<1%)	henry bacon dr nw
+2	(<1%)	east executive ave nw
+2	(<1%)	alexander hamilton pl nw
+2	(<1%)	13th st sw
+2	(<1%)	13 12 st nw
+2	(<1%)	e st expy nw
+2	(<1%)	e st expy
+2	(<1%)	i 66
+2	(<1%)	south pl nw
+1	(<1%)	zei aly nw
+1	(<1%)	whitehurst fwy rmp
+1	(<1%)	west executive ave nw
+1	(<1%)	west basin dr sw
+1	(<1%)	w executive ave nw
+1	(<1%)	virginia avenue north w
+1	(<1%)	south executive ave nw
+1	(<1%)	reed ct nw
+1	(<1%)	rawlings sq nw
+1	(<1%)	raoul wallenberg pl
+1	(<1%)	lincoln memorial cir
+1	(<1%)	lees ct nw
+1	(<1%)	kutz brg
+1	(<1%)	hughes mews st nw
+1	(<1%)	executive ave nw
+1	(<1%)	e executive ave nw
+1	(<1%)	daniel french dr sw
+1	(<1%)	daniel c french dr sw
+1	(<1%)	colonial ln nw
+1	(<1%)	arlington memorial brg sw
+1	(<1%)	arlington memorial brg
+1	(<1%)	23rd st sw
+1	(<1%)	12th st expy nw
 
 #8:
 No tags with keys: blah were found.

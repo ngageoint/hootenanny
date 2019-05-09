@@ -61,17 +61,25 @@ std::map<QString, int> TagDistribution::getTagCounts(const QStringList& inputs)
   return tagCounts;
 }
 
+QString TagDistribution::_getPercentageStr(const double percentage) const
+{
+  const QString percentageStr =
+    percentage >= 0.01 ? QString::number(percentage * 100, 'g', 3) : "<1";
+  return percentageStr;
+}
+
 QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCounts)
 {
   QString buffer;
   QTextStream ts(&buffer);
+  QLocale locale(QLocale::English);
   if (tagCounts.size() == 0)
   {
     ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
   }
   else
   {
-    ts << "Total tag value count: " << _total << endl;
+    ts << "Total tag count: " << _total << endl;
 
     int ctr = 0;
     if (!_sortByFrequency)
@@ -82,8 +90,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->first;
         const int count = itr->second;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << tagValue << " : " << QString::number(count) << " ("
-           << QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << endl;
+        ts << QString::number(count) << "\t(" << _getPercentageStr(percentageOfTotal) << "%)\t"
+           << tagValue << endl;
 
         ctr++;
         if (ctr == _limit)
@@ -101,8 +109,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->second;
         const int count = itr->first;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << tagValue << " : " << QString::number(count) << " ("
-           << QString::number(percentageOfTotal * 100, 'g', 4) << "%)" << endl;
+        ts << QString::number(count) << "\t(" << _getPercentageStr(percentageOfTotal) << "%)\t"
+           << tagValue << endl;
 
         ctr++;
         if (ctr == _limit)
