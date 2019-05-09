@@ -50,7 +50,6 @@ public:
 
   void overwriteTest()
   {
-    //Log::getInstance().setLevel(Log::Info);
     OverwriteTagMerger uut;
 
     {
@@ -86,7 +85,7 @@ public:
       expected["uuid"] = "foo;bar";
 
       Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-      compareTags(expected, merged);
+      CPPUNIT_ASSERT_EQUAL(expected, merged);
     }
 
     {
@@ -124,7 +123,7 @@ public:
       expected["uuid"] = "bar;foo";
 
       Tags merged = uut1.mergeTags(t1, t2, ElementType::Way);
-      compareTags(expected, merged);
+      CPPUNIT_ASSERT_EQUAL(expected, merged);
     }
     {
       Tags t1;
@@ -149,30 +148,9 @@ public:
       expected["oneway"] = "yes";
 
       Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-      compareTags(expected, merged);
+      CPPUNIT_ASSERT_EQUAL(expected, merged);
     }
   }
-
-  void compareTags(const Tags& t1, const Tags& t2)
-  {
-    if (t1.size() != t2.size())
-    {
-      LOG_WARN("t1: " << t1.toString());
-      LOG_WARN("t2: " << t2.toString());
-      CPPUNIT_ASSERT_EQUAL(t1.size(), t2.size());
-    }
-
-    for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
-    {
-      if (t1[it.key()] != t2[it.key()])
-      {
-        LOG_WARN("t1: " << t1.toString());
-        LOG_WARN("t2: " << t2.toString());
-        HOOT_STR_EQUALS(it.key() << "=" << t1[it.key()], it.key() << "=" << t2[it.key()]);
-      }
-    }
-  }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OverwriteTagMergerTest, "quick");

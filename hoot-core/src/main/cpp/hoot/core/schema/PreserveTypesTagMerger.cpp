@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 // Qt
 #include <QStringBuilder>
@@ -36,12 +37,15 @@
 namespace hoot
 {
 
+// haven't seen any need to make this configurable yet
 QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
 PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys,
                                                const OsmSchemaCategory& categoryFilter) :
+_overwrite1(ConfigOptions().getTagMergerDefault() ==
+            QString::fromStdString(OverwriteTag1Merger::className())),
 _skipTagKeys(skipTagKeys),
 _categoryFilter(categoryFilter)
 {
@@ -53,7 +57,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   Tags t1Copy = t1;
   Tags t2Copy = t2;
 
-  if (ConfigOptions().getTagMergerDefault() == "hoot::OverwriteTag1Merger")
+  if (_overwrite1)
   {
     TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);
     TagComparator::getInstance().mergeText(t2Copy, t1Copy, result);
