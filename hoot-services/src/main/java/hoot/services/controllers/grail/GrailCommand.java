@@ -38,7 +38,7 @@ import hoot.services.command.ExternalCommand;
 abstract class GrailCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(GrailCommand.class);
 
-    private final GrailParams params;
+    protected final GrailParams params;
 
     GrailCommand(String jobId, GrailParams grailParams) {
         super(jobId);

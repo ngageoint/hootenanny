@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.grail;
 
+import java.io.File;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -74,6 +76,16 @@ public class GrailParams {
     private String consumerKey;
 
     private String consumerSecret;
+
+    private File workDir;
+
+    public File getWorkDir() {
+        return workDir;
+    }
+
+    public void setWorkDir(File workDir) {
+        this.workDir = workDir;
+    }
 
     public String getBounds() {
         return bounds;
