@@ -519,8 +519,10 @@ See the User Guide for more details on command usage.
     
     365	(97.59%)	road
     9	(2.41%)		motorway
+-----
     
-    # Display tag schema information for a map
+===== Display tag schema information for a map
+-----
     hoot tag-info input.osm
     
     .{
@@ -550,7 +552,6 @@ See the User Guide for more details on command usage.
         ],
         ...
     }}
-
 -----
     
 ===== Display occurrence frequencies of tokenized feature names:
