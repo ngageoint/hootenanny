@@ -41,7 +41,7 @@ if [ "$flag" = "1" ]; then
   db_date_str=${db_date_str%]*}
 
   # there are times where this file hasn't been created yet, create it
-  if [ -e $HOOT_HOME/scripts/database/blank_osmapidb.sql ]; then
+  if [ ! -e $HOOT_HOME/scripts/database/blank_osmapidb.sql ]; then
     $HOOT_HOME/scripts/ReplaceEnvironmentVariables.sh $HOOT_HOME/scripts/database/blank_osmapidb.sql.in $HOOT_HOME/scripts/database/blank_osmapidb.sql
   fi
 
