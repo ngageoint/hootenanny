@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -50,8 +49,10 @@ HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
 _map(0),
-_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
+_allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMerging())
 {
+  LOG_VARD(_allowCrossConflationMerging);
 }
 
 Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
@@ -95,7 +96,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     LOG_TRACE("Match invalid; skipping merge.");
   }
 
-  // if there is at least one POI and at least one polygon, then we need to merge things in a
+  // If there is at least one POI and at least one polygon, then we need to merge things in a
   // special way.
   if (foundAPoi && foundAPolygon)
   {
@@ -122,7 +123,8 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       mergers.push_back(
         new MarkForReviewMerger(
           eids,
-          "Conflicting information: multiple features have been matched to the same feature and require review.",
+          QString("Conflicting information: multiple features have been matched to the same ") +
+          QString("feature and require review."),
           matchTypes.join(";"), 1));
     }
     else
@@ -147,6 +149,9 @@ vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
   const Match* m2) const
 {
+  LOG_VART(m1);
+  LOG_VART(m2);
+
   bool foundAPoi = false;
   bool foundAPolygon = false;
   if (m1->getMatchMembers() & MatchMembers::Poi || m2->getMatchMembers() & MatchMembers::Poi)
@@ -243,8 +248,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
   // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
-    LOG_TRACE("type ids match");
     result = m1->isConflicting(*m2, map);
+    LOG_TRACE("type ids match; conflict=" << result);
   }
   else
   {
@@ -259,7 +264,8 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
 {
   // _map must be set using setOsmMap()
   assert(_map != 0);
-  bool conflicting = false;
+  LOG_VART(matches.size());
+  LOG_VART(matches);
 
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
@@ -273,16 +279,48 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
       if (m1 != m2)
       {
         ConstOsmMapPtr map = _map->shared_from_this();
-        if (MergerFactory::getInstance().isConflicting(map, m1, m2))
+        const bool conflicting = MergerFactory::getInstance().isConflicting(map, m1, m2);
+        // if one of the mergers returned a conflict and cross conflation merging is enabled
+        if (conflicting)
         {
-          LOG_TRACE("conflicting");
-          conflicting = true;
+          if (_allowCrossConflationMerging)
+          {
+            // TODO: Do we need to handle Area Conflation here too?
+            const bool oneIsPoiPolyMatch =
+              m1->toString().contains("PoiPolygonMatch") ||
+              m2->toString().contains("PoiPolygonMatch");
+            LOG_VART(oneIsPoiPolyMatch);
+            const bool oneIsBuildingMatch =
+              m1->toString().contains("BuildingMatch") || m2->toString().contains("BuildingMatch");
+            LOG_VART(oneIsBuildingMatch);
+            LOG_VART(m1->getType());
+            LOG_VART(m2->getType());
+            // if we have exactly one poi/poly match, exactly one building match, and both have a
+            // status of matched
+            if (oneIsPoiPolyMatch && oneIsBuildingMatch && m1->getType() == MatchType::Match &&
+                m2->getType() == MatchType::Match)
+            {
+              // We'll ignore the conflict, so all the matches will merge together.
+              LOG_TRACE(
+                "Allowing cross conflation Building/PoiPoly auto-merge for: " << m1 << " and " <<
+                m2 << "...");
+              return false;
+            }
+            else
+            {
+              LOG_TRACE("conflicting: " << m1 << " and " << m2);
+              return true;
+            }
+          }
+
+          LOG_TRACE("conflicting: " << m1 << " and " << m2);
+          return true;
         }
       }
     }
   }
 
-  return conflicting;
+  return false;
 }
 
 }

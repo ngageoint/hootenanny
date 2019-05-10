@@ -2935,6 +2935,15 @@ is enabled, POI/Polygon conflation will use additional to English language trans
 address normalization.  Disable this only if libpostal's language translation is not adequate for
 your language translation needs.
 
+=== poi.polygon.allow.cross.conflation.merging
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, when a match found by Building Conflation involves the same feature in a match found by
+POI to Polygon Conflation, a review will be generated. If true, then that situation will result in
+a merge between all features involved in the Building and POI to Polygon conflation matches.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool

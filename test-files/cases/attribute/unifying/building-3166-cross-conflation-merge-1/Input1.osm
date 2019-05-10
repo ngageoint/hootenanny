@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.07319253078" minlon="-69.35422185554" maxlat="10.07417236388" maxlon="-69.35318588552001"/>
+    <node visible="true" id="-5837416" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0738493359200003" lon="-69.3535279974600058"/>
+    <node visible="true" id="-5837415" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0739414761799999" lon="-69.3533696980099990"/>
+    <node visible="true" id="-5837414" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0741723638800007" lon="-69.3535065370700039"/>
+    <node visible="true" id="-5837413" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0737560023300006" lon="-69.3542218555400041"/>
+    <node visible="true" id="-5837412" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0731925307800001" lon="-69.3538879049000059"/>
+    <node visible="true" id="-5837410" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0736011511400001" lon="-69.3531858855200056"/>
+    <node visible="true" id="-5837409" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0737174206199995" lon="-69.3532547941800033"/>
+    <node visible="true" id="-5837408" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0736330208900000" lon="-69.3533997952199996"/>
+    <way visible="true" id="-5837417" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5837408"/>
+        <nd ref="-5837409"/>
+        <nd ref="-5837410"/>
+        <nd ref="-5837412"/>
+        <nd ref="-5837413"/>
+        <nd ref="-5837414"/>
+        <nd ref="-5837415"/>
+        <nd ref="-5837416"/>
+        <nd ref="-5837408"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="91.5"/>
+        <tag k="feature_area" v="6005.9"/>
+        <tag k="width" v="72.6"/>
+        <tag k="angle" v="59.4"/>
+        <tag k="name" v="Building 1"/>
+    </way>
+</osm>
