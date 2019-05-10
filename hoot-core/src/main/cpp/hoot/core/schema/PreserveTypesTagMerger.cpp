@@ -54,36 +54,39 @@ _categoryFilter(categoryFilter)
 Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
   Tags result;
-  Tags t1Copy = t1;
-  Tags t2Copy = t2;
-
+  Tags tagsToOverwriteWith;
+  Tags tagsToBeOverwritten;
   if (_overwrite1)
   {
-    TagComparator::getInstance().mergeNames(t2Copy, t1Copy, result);
-    TagComparator::getInstance().mergeText(t2Copy, t1Copy, result);
+    tagsToOverwriteWith = t2;
+    tagsToBeOverwritten = t1;
   }
   else
   {
-    TagComparator::getInstance().mergeNames(t1Copy, t2Copy, result);
-    TagComparator::getInstance().mergeText(t1Copy, t2Copy, result);
+    tagsToOverwriteWith = t1;
+    tagsToBeOverwritten = t2;
   }
+
+  TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result);
+  TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result);
   LOG_VART(result);
 
   //retain any previously set alt_types
-  if (!t1Copy[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+  if (!tagsToOverwriteWith[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
   {
-    result = _preserveAltTypes(t1Copy, result);
+    result = _preserveAltTypes(tagsToOverwriteWith, result);
   }
-  if (!t2Copy[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+  if (!tagsToBeOverwritten[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
   {
-    result = _preserveAltTypes(t2Copy, result);
+    result = _preserveAltTypes(tagsToBeOverwritten, result);
   }
   LOG_VART(result);
 
   //combine the rest of the tags together; if two tags with the same key are found, use the most
   //specific one or use both if they aren't related in any way
   OsmSchema& schema = OsmSchema::getInstance();
-  for (Tags::ConstIterator it = t1Copy.constBegin(); it != t1Copy.constEnd(); ++it)
+  for (Tags::ConstIterator it = tagsToOverwriteWith.constBegin();
+       it != tagsToOverwriteWith.constEnd(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
@@ -107,23 +110,25 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       continue;
     }
 
-    if (!t2Copy[it.key()].trimmed().isEmpty())
+    if (!tagsToBeOverwritten[it.key()].trimmed().isEmpty())
     {
-      LOG_VART(t2Copy[it.key()]);
+      LOG_VART(tagsToBeOverwritten[it.key()]);
       //if one is more specific than the other, add it, but then remove both tags so we don't
       //try to add them again
-      if (schema.isAncestor(it.key() % "=" % t2Copy[it.key()], it.key() % "=" % it.value()))
+      if (schema.isAncestor(
+            it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
       {
         LOG_TRACE(
-          it.key() % "=" % t2Copy[it.key()] << " is more specific than " <<
+          it.key() % "=" % tagsToBeOverwritten[it.key()] << " is more specific than " <<
           it.key() % "=" % it.value() << ".  Using more specific tag.");
-        result[it.key()] = t2Copy[it.key()];
+        result[it.key()] = tagsToBeOverwritten[it.key()];
       }
-      else if (schema.isAncestor(it.key() % "=" % it.key(), it.key() % "=" % t2Copy[it.value()]))
+      else if (schema.isAncestor(
+                 it.key() % "=" % it.key(), it.key() % "=" % tagsToBeOverwritten[it.value()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
-          it.key() % "=" % t2Copy[it.key()] << ".  Using more specific tag.");
+          it.key() % "=" % tagsToBeOverwritten[it.key()] << ".  Using more specific tag.");
         result[it.key()] = it.value();
       }
       else  if (it.key() != ALT_TYPES_TAG_KEY)
@@ -136,16 +141,16 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
         if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
         {
-          const QString altType = it.key() % "=" % t2Copy[it.key()];
+          const QString altType = it.key() % "=" % tagsToBeOverwritten[it.key()];
           if (!result[ALT_TYPES_TAG_KEY].contains(altType))
           {
             result[ALT_TYPES_TAG_KEY] =
-              result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % t2Copy[it.key()];
+              result[ALT_TYPES_TAG_KEY] % ";" + it.key() % "=" % tagsToBeOverwritten[it.key()];
           }
         }
         else
         {
-          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % t2Copy[it.key()];
+          result[ALT_TYPES_TAG_KEY] = it.key() % "=" % tagsToBeOverwritten[it.key()];
         }
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
@@ -157,7 +162,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_VART(result);
 
-  for (Tags::ConstIterator it = t2Copy.constBegin(); it != t2Copy.constEnd(); ++it)
+  for (Tags::ConstIterator it = tagsToBeOverwritten.constBegin();
+       it != tagsToBeOverwritten.constEnd(); ++it)
   {
     LOG_VART(it.key());
     LOG_VART(it.value());

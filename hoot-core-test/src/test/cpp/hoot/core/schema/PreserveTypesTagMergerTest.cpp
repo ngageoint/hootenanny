@@ -176,7 +176,7 @@ public:
     expected["name"] = "Building 2";
     expected["alt_name"] = "Building 1";
     expected["building"] = "chapel";
-    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathredal";
+    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral";
 
     PreserveTypesTagMerger uut;
     uut.setOverwrite1(true);
@@ -189,10 +189,10 @@ public:
     t3["building"] = "church";
 
     Tags expected2;;
-    expected2["name"] = "Building 2";
-    expected2["alt_name"] = "Building 1;Building 3";
-    expected2["building"] = "chapel";
-    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral;building=church";
+    expected2["name"] = "Building 3";
+    expected2["alt_name"] = "Building 1;Building 2";
+    expected2["building"] = "church";
+    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=cathedral;building=chapel";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
