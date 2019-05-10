@@ -100,8 +100,8 @@ namespace Tgs
     }
   }
 
-  unsigned int RandomTree::classifyDataVector(const std::vector<double> & dataVector,
-    std::string & outputClass) const
+  unsigned int RandomTree::classifyDataVector(const std::vector<double>& dataVector,
+    std::string& outputClass) const
   {
     try
     {
@@ -138,7 +138,6 @@ namespace Tgs
         }
 
       } while (!isPure);
-
 
       return nodeId;
     }

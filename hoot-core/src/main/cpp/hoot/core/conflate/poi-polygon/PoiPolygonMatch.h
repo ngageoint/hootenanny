@@ -61,6 +61,8 @@ public:
   static std::string className() { return "hoot::PoiPolygonMatch"; }
 
   PoiPolygonMatch();
+  // this constructor added primarily for testing purposes
+  PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
@@ -80,6 +82,7 @@ public:
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
+  // Is the right implementation for this?
   virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   { return false; }
 
@@ -138,6 +141,8 @@ public:
   static long convexPolyDistanceMatches;
 
 private:
+
+  friend class PoiPolygonMergerCreatorTest;
 
   static QString _matchName;
 
@@ -211,9 +216,9 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
+  void _categorizeElementsByGeometryType();
 
-  bool _inputFeaturesHaveSameSource(const ElementId& eid1, const ElementId& eid2) const;
+  bool _inputFeaturesHaveSameSource() const;
 
   unsigned int _calculateEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly);

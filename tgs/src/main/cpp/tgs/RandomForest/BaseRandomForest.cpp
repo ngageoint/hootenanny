@@ -42,7 +42,6 @@ namespace Tgs
 
   BaseRandomForest::BaseRandomForest() : _numSplitFactors(0), _forestCreated(false)
   {
-
   }
 
   BaseRandomForest::~BaseRandomForest(){}
@@ -53,18 +52,18 @@ namespace Tgs
     {
       _forest.clear();
     }
-    catch(const Exception & e)
+    catch (const Exception & e)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
 
-  void BaseRandomForest::classifyVector(std::vector<double> & dataVector,
-    std::map<std::string, double> & scores) const
+  void BaseRandomForest::classifyVector(std::vector<double>& dataVector,
+    std::map<std::string, double>& scores) const
   {
     try
     {
-      double itrVal = 1.0/(double)_forest.size();
+      double itrVal = 1.0 / (double)_forest.size();
 
       for (unsigned int i = 0; i < _forest.size(); i++)
       {
@@ -73,7 +72,7 @@ namespace Tgs
         scores[result] += itrVal;
       }
     }
-    catch(const Exception & e)
+    catch (const Exception& e)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }

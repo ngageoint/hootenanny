@@ -43,6 +43,9 @@ namespace hoot
 class Match;
 class Merger;
 
+/**
+ * Abstract base class for creating conflation feature mergers
+ */
 class MergerCreator
 {
 public:

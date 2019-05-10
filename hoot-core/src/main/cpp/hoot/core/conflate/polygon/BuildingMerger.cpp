@@ -247,7 +247,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       newTags =
         PreserveTypesTagMerger(std::set<QString>(), OsmSchemaCategory::building())
           .mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
-      _removeRedundantAltTypeTags(newTags);
     }
     else
     {
@@ -315,39 +314,6 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       }
     }
     replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
-  }
-}
-
-void BuildingMerger::_removeRedundantAltTypeTags(Tags& tags)
-{
-  LOG_VART(tags.contains("alt_types"));
-  if (tags.contains("alt_types"))
-  {
-    // Remove anything in alt_types that's also in the building (may be able to handle this within
-    // PreserveTypesTagMerger instead). So far, this has primarily been done to keep building=yes
-    // out of alt_types.
-    const QStringList altTypes = tags.get("alt_types").split(";");
-    LOG_VART(altTypes);
-    QStringList altTypesCopy = altTypes;
-    for (int i = 0; i < altTypes.size(); i++)
-    {
-      LOG_VART(altTypes[i]);
-      assert(altTypes[i].contains("="));
-      const QStringList tagParts = altTypes[i].split("=");
-      assert(tagParts.size() == 2);
-      LOG_VART(tagParts);
-      LOG_VART(tags.get(tagParts[0]) == tagParts[1]);
-      if (tags.get(tagParts[0]) == tagParts[1])
-      {
-        altTypesCopy.removeAll(tagParts[0] + "=" + tagParts[1]);
-      }
-    }
-    LOG_VART(altTypesCopy);
-    if (altTypes.size() != altTypesCopy.size())
-    {
-      LOG_VART(altTypesCopy.join(";"));
-      tags.set("alt_types", altTypesCopy.join(";"));
-    }
   }
 }
 
