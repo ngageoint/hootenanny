@@ -176,13 +176,13 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {
-  LOG_VART(tags.contains("alt_types"));
-  if (tags.contains("alt_types"))
+  LOG_VART(tags.contains(ALT_TYPES_TAG_KEY));
+  if (tags.contains(ALT_TYPES_TAG_KEY))
   {
     // Remove anything in alt_types that's also in the building (may be able to handle this within
     // PreserveTypesTagMerger instead). So far, this has primarily been done to keep building=yes
     // out of alt_types.
-    const QStringList altTypes = tags.get("alt_types").split(";");
+    const QStringList altTypes = tags.get(ALT_TYPES_TAG_KEY).split(";");
     LOG_VART(altTypes);
     QStringList altTypesCopy = altTypes;
     for (int i = 0; i < altTypes.size(); i++)
@@ -202,8 +202,13 @@ void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
     if (altTypes.size() != altTypesCopy.size())
     {
       LOG_VART(altTypesCopy.join(";"));
-      tags.set("alt_types", altTypesCopy.join(";"));
+      tags.set(ALT_TYPES_TAG_KEY, altTypesCopy.join(";"));
     }
+  }
+  //tags.removeEmptyTags(); // why does this crash?
+  if (tags[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
+  {
+    tags.remove(ALT_TYPES_TAG_KEY);
   }
 }
 
