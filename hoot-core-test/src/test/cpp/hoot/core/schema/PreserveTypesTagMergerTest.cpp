@@ -40,6 +40,9 @@
 namespace hoot
 {
 
+/**
+ * These tests are fairly sensitive to schema changes.
+ */
 class PreserveTypesTagMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(PreserveTypesTagMergerTest);
@@ -249,15 +252,19 @@ public:
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
 
-    uut.setCategoryFilter(OsmSchemaCategory::poi());
+    uut.setCategoryFilter(OsmSchemaCategory::use());
 
     Tags expected2;
-    expected2["building"] = "yes";
     expected2["name"] = "Building 1";
     expected2["alt_name"] = "Building 2";
+    // TODO: need to verify these
+    expected2["amenity"] = "fast_food";
+    expected2["building"] = "yes";
 
     merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
+
+    uut.setCategoryFilter(OsmSchemaCategory::poi());
 
     Tags t3;
     t3["poi"] = "yes";
@@ -265,8 +272,8 @@ public:
     t3["amenity"] = "gallery";
 
     Tags expected3;
-    expected3["building"] = "yes";
     expected3["poi"] = "yes";
+    expected3["shop"] = "supermarket";
     expected3["name"] = "Building 1";
     expected3["amenity"] = "gallery";
     expected3["alt_name"] = "Building 3";

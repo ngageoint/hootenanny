@@ -101,9 +101,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       LOG_TRACE("Skipping metadata tag: " << it.key() << "=" <<  it.value() << "...");
       continue;
     }
-    // TODO: Should we also check for tag similarity as well?
-    if (_categoryFilter != OsmSchemaCategory::Empty &&
-        !schema.getCategories(it.key(), it.value()).intersects(_categoryFilter))
+    if (!_passesSchemaFilter(it.key(), it.value()))
     {
       LOG_TRACE(
         "Skipping tag not passing category filter: " << it.key() << "=" << it.value() << "...");
@@ -131,7 +129,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
           it.key() % "=" % tagsToBeOverwritten[it.key()] << ".  Using more specific tag.");
         result[it.key()] = it.value();
       }
-      else  if (it.key() != ALT_TYPES_TAG_KEY)
+      else if (it.key() != ALT_TYPES_TAG_KEY)
       {
         //arbitrarily use first one and add second to an alt_types field
         LOG_TRACE(
@@ -167,8 +165,11 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   {
     LOG_VART(it.key());
     LOG_VART(it.value());
-    if (_skipTagKeys.find(it.key()) == _skipTagKeys.end() &&
-        !result.contains(it.key()) && !it.value().isEmpty())
+
+    if (!result.contains(it.key()) && !it.value().isEmpty() &&
+        _skipTagKeys.find(it.key()) == _skipTagKeys.end() /*&&
+        // TODO: should this be here?
+        _passesSchemaFilter(it.key(), it.value())*/)
     {
       result[it.key()] = it.value();
     }
@@ -179,6 +180,24 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   LOG_VART(result);
 
   return result;
+}
+
+bool PreserveTypesTagMerger::_passesSchemaFilter(const QString& key, const QString& val) const
+{
+  OsmSchema& schema = OsmSchema::getInstance();
+  LOG_VART(_categoryFilter.toString());
+
+  if (_categoryFilter == OsmSchemaCategory::Empty ||
+      (OsmSchemaCategory::building().intersects(_categoryFilter) && key == "building") ||
+      (OsmSchemaCategory::poi().intersects(_categoryFilter) && key == "poi"))
+  {
+    return true;
+  }
+
+  LOG_VART(schema.getCategories(key, val));
+
+  // TODO: Should we also check for tag similarity as well?
+  return schema.getCategories(key, val).intersects(_categoryFilter);
 }
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const

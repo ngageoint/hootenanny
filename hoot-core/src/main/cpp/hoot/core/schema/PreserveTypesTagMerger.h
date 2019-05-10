@@ -83,6 +83,7 @@ private:
   // can probably eventually get rid of this by correcting logic that's duplicating tags in
   // mergeTags
   void _removeRedundantAltTypeTags(Tags& tags) const;
+  bool _passesSchemaFilter(const QString& key, const QString& val) const;
 };
 
 }
