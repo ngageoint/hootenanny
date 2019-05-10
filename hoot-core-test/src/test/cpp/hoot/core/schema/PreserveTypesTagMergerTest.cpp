@@ -45,7 +45,8 @@ class PreserveTypesTagMergerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PreserveTypesTagMergerTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(overlappingKeysTest);
-//  CPPUNIT_TEST(overwrite1Test);
+  CPPUNIT_TEST(overlappingKeysTest2);
+  //CPPUNIT_TEST(overwrite1Test);
 //  CPPUNIT_TEST(overwrite1OverlappingKeysTest);
 //  CPPUNIT_TEST(skipTagsTest);
 //  CPPUNIT_TEST(categoryFilterTest);
@@ -81,21 +82,18 @@ public:
   void overlappingKeysTest()
   {
     Tags t1;
-    t1["building"] = "yes";
     t1["name"] = "Building 1";
-    t1["shop"] = "supermarket";
+    t1["building"] = "cathedral";
 
     Tags t2;
-    t2["building"] = "yes";
     t2["name"] = "Building 2";
-    t2["shop"] = "mall";
+    t2["building"] = "chapel";
 
     Tags expected;
-    expected["building"] = "yes";
     expected["name"] = "Building 1";
-    expected["alt_names"] = "Building 2";
-    expected["shop"] = "supermarket";
-    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "shop=mall";
+    expected["alt_name"] = "Building 2";
+    expected["building"] = "cathedral";
+    expected[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel";
 
     PreserveTypesTagMerger uut;
     uut.setOverwrite1(false);
@@ -105,17 +103,38 @@ public:
 
     Tags t3;
     t3["name"] = "Building 3";
-    t3["shop"] = "salon";
+    t3["building"] = "church";
 
     Tags expected2;
-    expected2["building"] = "yes";
     expected2["name"] = "Building 1";
-    expected2["alt_names"] = "Building 2;Building 3";
-    expected2["shop"] = "supermarket";
-    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "shop=mall;shop=salon";
+    expected2["alt_name"] = "Building 2;Building 3";
+    expected2["building"] = "cathedral";
+    expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "building=chapel;building=church";
 
     merged = uut.mergeTags(merged, t3, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
+  }
+
+  void overlappingKeysTest2()
+  {
+    Tags t1;
+    t1["name"] = "Building 1";
+    t1["building"] = "cathedral";
+
+    Tags t2;
+    t2["name"] = "Building 2";
+    t2["building"] = "cathedral";
+
+    Tags expected;
+    expected["name"] = "Building 1";
+    expected["alt_name"] = "Building 2";
+    expected["building"] = "cathedral";
+
+    PreserveTypesTagMerger uut;
+    uut.setOverwrite1(false);
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
 
   void overwrite1Test()
@@ -133,7 +152,7 @@ public:
     Tags expected;
     expected["building"] = "yes";
     expected["name"] = "Building 2";
-    expected["alt_names"] = "Building 1";
+    expected["alt_name"] = "Building 1";
     expected["shop"] = "supermarket";
     expected["amenity"] = "restaurant";
 
@@ -175,7 +194,7 @@ public:
     Tags expected2;
     expected2["building"] = "yes";
     expected2["name"] = "Building 2";
-    expected2["alt_names"] = "Building 1;Building 3";
+    expected2["alt_name"] = "Building 1;Building 3";
     expected2["shop"] = "mall";
     expected2[PreserveTypesTagMerger::ALT_TYPES_TAG_KEY] = "shop=supermarket;shop=salon";
 
@@ -198,9 +217,7 @@ public:
     Tags expected;
     expected["building"] = "yes";
     expected["name"] = "Building 1";
-    expected["alt_names"] = "";
     expected["shop"] = "supermarket";
-    expected["amenity"] = "";
 
     std::set<QString> keys;
     keys.insert("amenity");
@@ -225,7 +242,7 @@ public:
     Tags expected;
     expected["building"] = "yes";
     expected["name"] = "Building 1";
-    expected["alt_names"] = "Building 2";
+    expected["alt_name"] = "Building 2";
     expected["shop"] = "supermarket";
     expected["amenity"] = "fast_food";
 

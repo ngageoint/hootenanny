@@ -98,6 +98,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       LOG_TRACE("Skipping metadata tag: " << it.key() << "=" <<  it.value() << "...");
       continue;
     }
+    // TODO: Should we also check for tag similarity as well?
     if (_categoryFilter != OsmSchemaCategory::Empty &&
         !schema.getCategories(it.key(), it.value()).intersects(_categoryFilter))
     {
