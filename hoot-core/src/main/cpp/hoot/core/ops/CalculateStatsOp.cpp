@@ -474,8 +474,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       SingleStat(
         "Percentage of Total Features Marked for Review",
         ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0));
-    _stats.append(
-      SingleStat("Total Reviews to be Made", numReviewsToBeMade));
+    _stats.append(SingleStat("Total Reviews to be Made", numReviewsToBeMade));
     const double unconflatedFeatureCount =
       _applyVisitor(
         constMap,
