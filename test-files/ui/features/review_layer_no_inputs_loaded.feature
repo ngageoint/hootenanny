@@ -44,6 +44,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         Then I wait 30 "seconds" to see "Conflating …"
         Then I wait 3 "minutes" to see "3MergeDataTypes_Cucumber"
         And I wait 30 "seconds" to not see "Please wait while panning to review item."
+        Then I should not see the "#processingDiv" on the page
         And I click the "trash" button
         And I accept the alert
 
@@ -70,6 +71,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         And I should see "There are 8 reviews"
         And I click the "Resolve all remaining reviews" link
         And I wait 5 seconds
+        Then I should not see the "#processingDiv" on the page
         And I click the "trash" button
         And I wait 5 seconds
         And I select the "sprocket" div
