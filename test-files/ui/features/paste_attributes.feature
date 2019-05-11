@@ -70,5 +70,6 @@ Feature: Paste Attributes
         #Otherwise next feature test will get alert about restoring unsaved features
         When I press "Save"
         Then I click the "save-button" button
+        Then I should not see the "div.shade" on the page
         Then I click the "trash" button
         And I accept the alert

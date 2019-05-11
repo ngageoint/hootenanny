@@ -3,7 +3,7 @@
 TAR=tar
 EXCLUDE_DIRS=grep -E -v ".*/$$"
 confdir=$(prefix)/conf
-plugindir=$(prefix)/plugins
+#plugindir=$(prefix)/plugins
 
 always:
 
@@ -66,7 +66,7 @@ help:
 	@echo "dist                    - Make a distributable tarball."
 	@echo "eclipse                 - If configured '--with-services', then, builds Eclipse IDE project files."
 	@echo "osmapidb                - If configured '--with-services', then builds a clean copy of an OSM API database."
-	@echo "plugins-test            - Run the mocha plugins tests.  Should take less than five minutes."
+	@echo "translations-test       - Run the mocha translations tests.  Should take less than five minutes."
 	@echo "services-build          - If configured '--with-services', then builds just the web services source."
 	@echo "services-clean          - If configured '--with-services', then cleans just the web services binaries. This will not modify the DB."
 	@echo "services-clean-coverage - If configured '--with-services', then removes just the web services test code coverage report output."
@@ -123,8 +123,8 @@ ui-clean-coverage:
 ui2x-build:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot ui2x-build
 
-plugins-test:
-	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot plugins-test
+translations-test:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.hoot translations-test
 
 services-build:
 	$(MAKE) -f Makefile.hoot services-build
@@ -144,10 +144,10 @@ services-clean-coverage:
 services-coverage:
 	$(MAKE) -f Makefile.hoot services-coverage
 
-# Use some tar fanciness to grab all the files in conf, plugins, translations and scripts
+# Use some tar fanciness to grab all the files in conf, translations and scripts
 install-other:
 	mkdir -p tmp
-	$(TAR) cf tmp/other.tar conf plugins scripts translations rules
+	$(TAR) cf tmp/other.tar conf scripts translations rules
 	mkdir -p $(localstatedir)
 	cat tmp/other.tar | $(TAR) xv -C $(localstatedir)
 	rm -f tmp/other.tar

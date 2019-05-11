@@ -218,7 +218,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         Response resp = exRes.getExportResources();
         String result = resp.getEntity().toString();
 
-        String transExtPath = HOME_FOLDER + "/" + "/plugins-local/script/utp";
+        String transExtPath = HOME_FOLDER + "/" + "/translations-local/script/utp";
         if (!TRANSLATION_EXT_PATH.isEmpty()) {
             transExtPath = TRANSLATION_EXT_PATH;
         }

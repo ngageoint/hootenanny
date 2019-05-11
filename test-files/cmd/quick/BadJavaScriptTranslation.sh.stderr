@@ -3,7 +3,7 @@ Error running convert:
 Unable to find an appropriate scripting language for: test-files/cmd/quick/tSimple.js
 ImportError: Import by filename is not supported.
 Error running convert:
-Unable to find an appropriate scripting language for: plugins/BadSyntaxTest.js
+Unable to find an appropriate scripting language for: translations/BadSyntaxTest.js
 ImportError: Import by filename is not supported.
 Error running convert:
 Unable to find an appropriate scripting language for: test-files/cmd/quick/BadRequire.js

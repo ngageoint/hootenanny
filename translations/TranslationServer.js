@@ -35,18 +35,18 @@ if (typeof hoot === 'undefined') {
 
 //Getting schema for fcode, geom type
 var schemaMap = {
-    TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
-    TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
-    MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js'),
-    GGDMv30: require(HOOT_HOME + '/plugins/ggdm30_schema.js')
+    TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
+    TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
+    MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
+    GGDMv30: require(HOOT_HOME + '/translations/ggdm30_schema.js')
 };
 
 //Getting osm tags for fcode
 var fcodeLookup = {
-    TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
-    TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
-    MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js'),
-    GGDMv30: require(HOOT_HOME + '/plugins/eggdm30_osm.js')
+    TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
+    TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
+    MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
+    GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
 };
 
 var translationsMap = {

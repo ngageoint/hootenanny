@@ -22,25 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
-// Convert Mass & NH GIS data to OSM+
+// GAIT Exported Shapefile Conversion
 //
-
-hoot.require('MassNh')
-hoot.require('MassNh_rules')
-hoot.require('translate')
-hoot.require('config')
+// Very basic....
+//
 
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName, geometryType)
+// function translateAttributes(attrs, layerName)
+function translateToOsm(attrs, layerName, geometryType)
 {
-    return MassNh.toOsm(attrs, layerName, geometryType);
+    tags = {};
 
+    tags['gait:error_type'] = attrs.ERRTYPE;
+    tags['gait:magnitude'] = attrs.MAGNITUDE;
+    tags['gait:instance'] = attrs.INSTANCE;
+    tags['gait:condition_number'] = attrs.COND_NUM;
+    tags['gait:fcode1'] = attrs.CODE1;
+    tags['gait:fcode2'] = attrs.CODE2;
+    tags['gait:label1'] = attrs.LABEL1;
+    tags['gait:label2'] = attrs.LABEL2;
+    tags['gait:annotation'] = attrs.ANNOTATION;
+    tags['gait:geometry_type'] = attrs.ORIG_GEOM;
+    tags['gait:uuid'] = attrs.UFI;
+    tags['gait:schema'] = attrs.ATTRSCHEMA;
+    tags['gait:source_table'] = attrs.ORIG_TABLE;
+
+    return tags;
 } // End of Translate Attributes
 
 
