@@ -66,13 +66,13 @@ namespace Tgs
       _forest.clear();
       _numSplitFactors = numFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
 
         data->setBinaryClassLabels(posClass); //Set all non pos example to negative
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainBinary(data, numFactors, posClass, nodeSize, true);
@@ -82,7 +82,7 @@ namespace Tgs
         std::cout << std::endl;
 
         //std::cout << "Mode Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -98,16 +98,16 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;
@@ -118,7 +118,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -127,7 +127,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainBinary(data,
@@ -162,13 +162,13 @@ namespace Tgs
       _numSplitFactors = numFactors;
       cout << _numSplitFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
         //  Reset the ids so that all forests are created alike
         RandomTree::resetIds();
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainMulticlass(data, numFactors, nodeSize, true);
@@ -178,7 +178,7 @@ namespace Tgs
         std::cout << std::endl;
 
         //std::cout << "Model Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -195,16 +195,16 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;
@@ -215,7 +215,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -224,7 +224,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,
@@ -257,11 +257,11 @@ namespace Tgs
       _forest.clear();
       _numSplitFactors = numFactors;
 
-      if(!data->empty())
+      if (!data->empty())
       {
         _forest.reserve(numTrees);
 
-        for(unsigned int i = 0; i < numTrees; i++)
+        for (unsigned int i = 0; i < numTrees; i++)
         {
           _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
           _forest.back()->trainRoundRobin(data, numFactors, posClass, negClass, nodeSize, true);
@@ -271,7 +271,7 @@ namespace Tgs
         std::cout << std::endl;
 
        //std::cout << "Mode Trained " << std::endl;
-        if(retrain >= 0 && retrain < 1.0)
+        if (retrain >= 0 && retrain < 1.0)
         {
           std::cout << "Retraining model on top " << (retrain * 100) << "% of factors" << std::endl;
           std::map<std::string, double> topFactors;
@@ -288,16 +288,16 @@ namespace Tgs
           std::multimap<double, std::string>::iterator mMapItr;
 
           //Create a map from lowest to highest of important mapped to factor type
-          for(mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
+          for (mapItr = topFactors.begin(); mapItr != topFactors.end(); ++mapItr)
           {
             sortedFactors.insert(std::pair<double, std::string>(mapItr->second, mapItr->first));
           }
 
           unsigned int cutOffCtr = 0;
 
-          for(mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
+          for (mMapItr = sortedFactors.begin(); mMapItr != sortedFactors.end(); ++mMapItr)
           {
-            if(cutOffCtr <  cutOffIdx)
+            if (cutOffCtr <  cutOffIdx)
             {
               badFactors.push_back(mMapItr->second);
               cutOffCtr++;
@@ -308,7 +308,7 @@ namespace Tgs
             }
           }
 
-          for(unsigned int i = 0; i < badFactors.size(); i++)
+          for (unsigned int i = 0; i < badFactors.size(); i++)
           {
             data->deactivateFactor(badFactors[i]);
           }
@@ -317,7 +317,7 @@ namespace Tgs
 
           _forest.reserve(numTrees);
 
-          for(unsigned int i = 0; i < numTrees; i++)
+          for (unsigned int i = 0; i < numTrees; i++)
           {
             _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
             _forest.back()->trainMulticlass(data,

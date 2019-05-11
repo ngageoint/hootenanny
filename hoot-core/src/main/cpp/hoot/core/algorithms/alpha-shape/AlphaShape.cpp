@@ -151,7 +151,7 @@ inline double distance(double x1, double x2, double y1, double y2)
 AlphaShape::AlphaShape(double alpha)
 {
   _alpha = alpha;
-  _dt.reset(new Tgs::DelaunayTriangulation);
+  _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
 }
 
 WayPtr AlphaShape::_addFaceAsWay(const Face* face, const std::shared_ptr<OsmMap>& map)
@@ -330,7 +330,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     {
       PROGRESS_TRACE("Progress: " << i << " of " << randomized.size() - 1 << "          ");
     }
-    _dt->insert(randomized[i].first, randomized[i].second);
+    _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
   }
   LOG_TRACE("Progress: " << randomized.size() - 1 << " of " << randomized.size() - 1 << "          ");
 }
@@ -359,7 +359,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
   Envelope e;
   double preUnionArea = 0.0;
   int i = 0;
-  for (FaceIterator fi = _dt->getFaceIterator(); fi != _dt->getFaceEnd(); fi++)
+  for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator(); fi != _pDelauneyTriangles->getFaceEnd(); fi++)
   {
     const Face& f = *fi;
     i++;
@@ -480,7 +480,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
 QString AlphaShape::toString()
 {
   QString result;
-  Edge start = _dt->getStartingEdge();
+  Edge start = _pDelauneyTriangles->getStartingEdge();
   Edge e = start;
 
   do

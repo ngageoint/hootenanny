@@ -280,8 +280,6 @@ private:
   EdgeIterator _edgeEnd;
   FaceIterator _faceEnd;
 
-  void _initFaces();
-
   void _addFaces(Edge e);
 };
 

@@ -93,7 +93,7 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>&
   // Need to get ElementIds from our vector of longs
   for (vector<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
-    if(from->containsWay(*it))
+    if (from->containsWay(*it))
     { // make sure it's a way
       _eids.insert(ElementId(ElementType::Way, *it));
     }

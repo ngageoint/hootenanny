@@ -50,7 +50,7 @@ public:
   virtual QList<QString> getParameterNames() const override { return QList<QString>( { WIDTH_TAG_PARAM, DEFAULT_WIDTH_PARAM } ); }
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
-  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) override;
+  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
 private:
   const double DEFAULT_WIDTH = 5;

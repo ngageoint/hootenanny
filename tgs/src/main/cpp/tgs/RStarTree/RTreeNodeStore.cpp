@@ -108,7 +108,7 @@ namespace Tgs
 
     // if exists
     NodeMap::const_iterator it = _availableNodes.find(id);
-    if(it != _availableNodes.end())
+    if (it != _availableNodes.end())
     {
       RecItem* item = it->second;
       _nodesList.splice(_nodesList.begin(), _nodesList, item->list_it);
@@ -130,13 +130,13 @@ namespace Tgs
 
   void RTreeNodeStore::_flushNodes()
   {
-    while((int)_nodesList.size() > MAX_NODE_COUNT)
+    while ((int)_nodesList.size() > MAX_NODE_COUNT)
     {
       int keyVal = _nodesList.back();
       _nodesList.pop_back();
 
       NodeMap::iterator it = _availableNodes.find(keyVal);
-      if(it != _availableNodes.end())
+      if (it != _availableNodes.end())
       {
         RecItem * item = it->second;
         delete item;

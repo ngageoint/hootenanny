@@ -68,6 +68,7 @@ namespace Tgs
   class BaseRandomForest
   {
   public:
+
     /**
      * @brief BaseRandomForest constructor
      */
@@ -180,7 +181,6 @@ namespace Tgs
      */
     void replaceMissingTrainingValues();
 
-
     /**
     * Build the forest from a data set
     *
@@ -227,6 +227,7 @@ namespace Tgs
       unsigned int nodeSize = 1, double retrain = 1.0, bool balanced = false) = 0;
 
   protected:
+
     std::vector<std::shared_ptr<RandomTree>> _forest; /// A container for the random forest
 
     unsigned int _numSplitFactors;  /// The number of factors to test to split a node

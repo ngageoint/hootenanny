@@ -45,7 +45,7 @@ namespace Tgs
     if (readOnly == true)
     {
       _pageFile = fopen(fileName, "rb");
-      if(_pageFile != NULL)
+      if (_pageFile != NULL)
       {
         _pageCount = _determinePageCount();
       }
@@ -53,7 +53,7 @@ namespace Tgs
     else
     {
       _pageFile = fopen(fileName, "wb+");
-      if(_pageFile != NULL)
+      if (_pageFile != NULL)
       {
         _pageCount = _determinePageCount();
       }
@@ -91,7 +91,7 @@ namespace Tgs
 
   int FilePageStore::_determinePageCount()
   {
-    if(_fseeki64(_pageFile, 0, SEEK_END) == 0)
+    if (_fseeki64(_pageFile, 0, SEEK_END) == 0)
     {
       __int64 fileSize64 = _ftelli64(_pageFile);
       assert(fileSize64 % (__int64)getPageSize() == 0);
@@ -110,7 +110,7 @@ namespace Tgs
 
     if (_pagesMap.find(id) != _pagesMap.end())
     {
-      if(_pagesMap[id].expired() != true)
+      if (_pagesMap[id].expired() != true)
       {
         return _pagesMap[id].lock();
       }
@@ -149,7 +149,7 @@ namespace Tgs
       PageMap::const_iterator it;
       for (it = _pagesMap.begin(); it != _pagesMap.end(); ++it)
       {
-        if(!(*it).second.expired())
+        if (!(*it).second.expired())
         {
           if ((*it).second.lock()->isDirty())
           {
@@ -166,7 +166,7 @@ namespace Tgs
   void FilePageStore::_savePage(int id, char * pData)
   {
     // Just Write out to file
-    if(!_bDestructing)
+    if (!_bDestructing)
     {
       _writePage(id, pData);
       _pagesMap.erase(_pagesMap.find(id));
@@ -182,11 +182,11 @@ namespace Tgs
     }
 
     __int64 i64 = ((__int64)id)*((__int64)_pageSize);
-    if(_fseeki64(_pageFile, i64, SEEK_SET) == 0)
+    if (_fseeki64(_pageFile, i64, SEEK_SET) == 0)
     {
       fwrite(data, 1, _pageSize, _pageFile);
 
-      if(ferror(_pageFile)!= 0)
+      if (ferror(_pageFile)!= 0)
       {
         throw Tgs::Exception(_getError("Error writing page data."));
       }
@@ -203,17 +203,17 @@ namespace Tgs
     bool bRet = false;
     char * buffer = new char[_pageSize];
     __int64 i64 = ((__int64)id)*((__int64)_pageSize);
-    if(_fseeki64(_pageFile, i64, SEEK_SET) == 0)
+    if (_fseeki64(_pageFile, i64, SEEK_SET) == 0)
     {
       size_t result = fread(buffer, 1, _pageSize, _pageFile);
-      if(result == _pageSize)
+      if (result == _pageSize)
       {
         memcpy(data, buffer,_pageSize);
         delete [] buffer;
         bRet = true;
       }
 
-      if(ferror(_pageFile)!= 0)
+      if (ferror(_pageFile)!= 0)
       {
         throw Tgs::Exception(_getError("Error reading page data."));
       }
