@@ -363,10 +363,11 @@ public:
   bool hasCategory(const QString& kvp, const QString& category) const;
 
   /**
-   * TODO
+   * Determines if the key is part of any category in the schema
    *
-   * @param kvp
-   * @return
+   * @param key tag key
+   * @param val tag value
+   * @return true if the tag is part of at least one schema category; false otherwise
    */
   bool hasAnyCategory(const QString& key, const QString& val) const;
 

@@ -48,17 +48,18 @@ class PreserveTypesTagMergerTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PreserveTypesTagMergerTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(overlappingKeysTest);
-  CPPUNIT_TEST(overlappingKeysTest2);
   CPPUNIT_TEST(overwrite1Test);
   CPPUNIT_TEST(overwrite1OverlappingKeysTest);
   CPPUNIT_TEST(skipTagsTest);
-  //CPPUNIT_TEST(categoryFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void basicTest()
   {
+    // All the type tags should be preserved, the second name should go to alt_names, and
+    // building=yes shouldn't be duplicated
+
     Tags t1;
     t1["building"] = "yes";
     t1["name"] = "Building 1";
@@ -84,6 +85,8 @@ public:
 
   void overlappingKeysTest()
   {
+    // The second name should go into alt_name, and the second building tag should go into alt_types.
+
     Tags t1;
     t1["name"] = "Building 1";
     t1["building"] = "cathedral";
@@ -104,6 +107,9 @@ public:
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
 
+    // After this merge, we should see names for the second two buildings in alt_name and their
+    // building tags in alt_types.
+
     Tags t3;
     t3["name"] = "Building 3";
     t3["building"] = "church";
@@ -118,30 +124,10 @@ public:
     CPPUNIT_ASSERT_EQUAL(expected2, merged);
   }
 
-  void overlappingKeysTest2()
-  {
-    Tags t1;
-    t1["name"] = "Building 1";
-    t1["building"] = "cathedral";
-
-    Tags t2;
-    t2["name"] = "Building 2";
-    t2["building"] = "cathedral";
-
-    Tags expected;
-    expected["name"] = "Building 1";
-    expected["alt_name"] = "Building 2";
-    expected["building"] = "cathedral";
-
-    PreserveTypesTagMerger uut;
-    uut.setOverwrite1(false);
-
-    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
-    CPPUNIT_ASSERT_EQUAL(expected, merged);
-  }
-
   void overwrite1Test()
   {
+    // The first name should go in alt_name, and all types should be preserved.
+
     Tags t1;
     t1["building"] = "yes";
     t1["name"] = "Building 1";
@@ -167,6 +153,8 @@ public:
 
   void overwrite1OverlappingKeysTest()
   {
+    // The first name should go into alt_name, and only the second building tag should be preserved.
+
     Tags t1;
     t1["name"] = "Building 1";
     t1["building"] = "cathedral";
@@ -203,6 +191,8 @@ public:
 
   void skipTagsTest()
   {
+    // The amenity tag should be witheld from the output.
+
     Tags t1;
     t1["building"] = "yes";
     t1["name"] = "Building 1";
@@ -223,75 +213,10 @@ public:
     keys.insert("amenity");
     PreserveTypesTagMerger uut(keys);
     uut.setOverwrite1(false);
+
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
-
-//  void categoryFilterTest()
-//  {
-//    PreserveTypesTagMerger uut(std::set<QString>());
-//    uut.setOverwrite1(false);
-//    uut.setCategoryFilter(OsmSchemaCategory::building());
-
-//    {
-//      Tags t1;
-//      t1["building"] = "yes";
-//      t1["name"] = "Building 1";
-//      t1["shop"] = "supermarket";
-
-//      Tags t2;
-//      t2["building"] = "yes";
-//      t2["name"] = "Building 2";
-//      t2["amenity"] = "fast_food";
-
-//      Tags expected;
-//      expected["building"] = "yes";
-//      expected["name"] = "Building 1";
-//      expected["alt_name"] = "Building 2";
-//      expected["shop"] = "supermarket";
-//      expected["amenity"] = "fast_food";
-
-//      CPPUNIT_ASSERT_EQUAL(expected, uut.mergeTags(t1, t2, ElementType::Way));
-//    }
-
-//    {
-//      Tags t1;
-//      t1["building"] = "yes";
-//      t1["name"] = "Building 1";
-//      t1["shop"] = "supermarket";
-
-//      Tags t2;
-//      t2["building"] = "yes";
-//      t2["name"] = "Building 2";
-//      t2["shop"] = "medical";
-
-//      Tags expected;
-//      expected["building"] = "yes";
-//      expected["name"] = "Building 1";
-//      expected["alt_name"] = "Building 2";
-//      expected["shop"] = "supermarket";
-
-//      CPPUNIT_ASSERT_EQUAL(expected, uut.mergeTags(t1, t2, ElementType::Way));
-//    }
-
-//    uut.setCategoryFilter(OsmSchemaCategory::poi());
-
-//    Tags t3;
-//    t3["poi"] = "yes";
-//    t3["name"] = "Building 3";
-//    t3["amenity"] = "gallery";
-
-//    Tags expected3;
-//    expected3["poi"] = "yes";
-//    expected3["building"] = "yes";
-//    expected3["shop"] = "supermarket";
-//    expected3["name"] = "Building 1";
-//    expected3["amenity"] = "gallery";
-//    expected3["alt_name"] = "Building 3";
-
-//    merged = uut.mergeTags(t1, t3, ElementType::Way);
-//    CPPUNIT_ASSERT_EQUAL(expected3, merged);
-//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PreserveTypesTagMergerTest, "quick");

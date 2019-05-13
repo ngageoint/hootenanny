@@ -42,12 +42,10 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys/*,
-                                               const OsmSchemaCategory& categoryFilter*/) :
+PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys) :
 _overwrite1(ConfigOptions().getTagMergerDefault() ==
             QString::fromStdString(OverwriteTag1Merger::className())),
-_skipTagKeys(skipTagKeys)//,
-//_categoryFilter(categoryFilter)
+_skipTagKeys(skipTagKeys)
 {
 }
 
@@ -57,8 +55,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   LOG_VART(t2);
 
   Tags result;
-  Tags tagsToOverwriteWith; //tagsWithTypePreservationPref
-  Tags tagsToBeOverwritten; //tagsWithoutTypePreservationPref
+  Tags tagsToOverwriteWith;
+  Tags tagsToBeOverwritten;
   if (_overwrite1)
   {
     tagsToOverwriteWith = t2;
@@ -107,13 +105,9 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         "Skipping type handling for metadata tag: " << it.key() << "=" <<  it.value() << "...");
       skippingTagPreservation = true;
     }
-//    else if (!_passesSchemaFilter(it.key(), it.value()))
-//    {
-//      LOG_TRACE(
-//        "Skipping type handling for tag not passing category filter: " << it.key() << "=" <<
-//        it.value() << "...");
-//      skippingTagPreservation = true;
-//    }
+    // If a tag is not part of any type category, there is no point in trying to preserve its type
+    // since we have no category record of it in the schema. We'll skip the type perservation and
+    // just add it to the output regardless (if its value isn't empty).
     else if (!schema.hasAnyCategory(it.key(), it.value()))
     {
       LOG_TRACE(
@@ -194,30 +188,6 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
   return result;
 }
-
-//bool PreserveTypesTagMerger::_passesSchemaFilter(const QString& key, const QString& val) const
-//{
-//  OsmSchema& schema = OsmSchema::getInstance();
-//  LOG_VART(_categoryFilter.toString());
-
-//  if (_categoryFilter == OsmSchemaCategory::Empty ||
-//      (OsmSchemaCategory::building().intersects(_categoryFilter) && key == "building") ||
-//      (OsmSchemaCategory::poi().intersects(_categoryFilter) && key == "poi"))
-//  {
-//    return true;
-//  }
-
-//  OsmSchemaCategory categories = schema.getCategories(key, val);
-//  LOG_VART(categories);
-//  if (categories == OsmSchemaCategory::Empty)
-//  {
-//    LOG_TRACE("Tag has no category: " << key << "=" << val);
-//    return true;
-//  }
-
-//  // TODO: Should we also check for tag similarity as well?
-//  return categories.intersects(_categoryFilter);
-//}
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {
