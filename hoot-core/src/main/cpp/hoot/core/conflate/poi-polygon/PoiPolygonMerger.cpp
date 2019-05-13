@@ -111,7 +111,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   {
     tagMerger.reset(
       new PreserveTypesTagMerger(
-        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+        std::set<QString>()/*, OsmSchemaCategory::building() | OsmSchemaCategory::poi()*/));
   }
   else
   {
@@ -184,7 +184,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
   {
     tagMerger.reset(
       new PreserveTypesTagMerger(
-        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+        std::set<QString>()/*, OsmSchemaCategory::building() | OsmSchemaCategory::poi()*/));
   }
   else
   {

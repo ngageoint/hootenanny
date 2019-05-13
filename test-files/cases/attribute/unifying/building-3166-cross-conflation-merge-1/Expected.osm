@@ -35,19 +35,25 @@
         <nd ref="-2"/>
         <nd ref="-1"/>
         <nd ref="-8"/>
+        <tag k="addr:street" v="Calle 30"/>
+        <tag k="alt_name" v="Building 1;Building 2"/>
+        <tag k="website" v="http://www.rbproducciones.com"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="addr:street" v="Calle 30"/>
-        <tag k="website" v="http://www.rbproducciones.com"/>
-        <tag k="opening_hours" v="Mo-Fr 08:00-17:00"/>
         <tag k="name" v="Producciones RB"/>
-        <tag k="addr:postcode" v="3001"/>
-        <tag k="shop" v="department_store"/>
-        <tag k="alt_name" v="Building 1;Building 2"/>
-        <tag k="building" v="yes"/>
+        <tag k="length" v="101.6"/>
         <tag k="man_made" v="works"/>
-        <tag k="addr:city" v="Barquisimeto"/>
+        <tag k="source:datetime" v="2017-04-05T09:55:16Z"/>
         <tag k="name:es" v="Producciones RB"/>
+        <tag k="addr:city" v="Barquisimeto"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="width" v="81.5"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="8176.2"/>
+        <tag k="addr:postcode" v="3001"/>
         <tag k="phone" v="02512372628"/>
+        <tag k="opening_hours" v="Mo-Fr 08:00-17:00"/>
+        <tag k="shop" v="department_store"/>
+        <tag k="angle" v="239.2"/>
     </way>
 </osm>

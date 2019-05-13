@@ -362,6 +362,14 @@ public:
    */
   bool hasCategory(const QString& kvp, const QString& category) const;
 
+  /**
+   * TODO
+   *
+   * @param kvp
+   * @return
+   */
+  bool hasAnyCategory(const QString& key, const QString& val) const;
+
   bool isAncestor(const QString& childKvp, const QString& parentKvp);
 
   bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);

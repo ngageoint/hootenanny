@@ -42,20 +42,23 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
-PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys,
-                                               const OsmSchemaCategory& categoryFilter) :
+PreserveTypesTagMerger::PreserveTypesTagMerger(const std::set<QString>& skipTagKeys/*,
+                                               const OsmSchemaCategory& categoryFilter*/) :
 _overwrite1(ConfigOptions().getTagMergerDefault() ==
             QString::fromStdString(OverwriteTag1Merger::className())),
-_skipTagKeys(skipTagKeys),
-_categoryFilter(categoryFilter)
+_skipTagKeys(skipTagKeys)//,
+//_categoryFilter(categoryFilter)
 {
 }
 
 Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
+  LOG_VART(t1);
+  LOG_VART(t2);
+
   Tags result;
-  Tags tagsToOverwriteWith;
-  Tags tagsToBeOverwritten;
+  Tags tagsToOverwriteWith; //tagsWithTypePreservationPref
+  Tags tagsToBeOverwritten; //tagsWithoutTypePreservationPref
   if (_overwrite1)
   {
     tagsToOverwriteWith = t2;
@@ -69,7 +72,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
   TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result);
   TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result);
-  LOG_VART(result);
+  LOG_TRACE("Tags after name/text merging: " << result);
 
   //retain any previously set alt_types
   if (!tagsToOverwriteWith[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
@@ -80,7 +83,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   {
     result = _preserveAltTypes(tagsToBeOverwritten, result);
   }
-  LOG_VART(result);
+  LOG_TRACE("Tags after alt_types handling: " << result);
 
   //combine the rest of the tags together; if two tags with the same key are found, use the most
   //specific one or use both if they aren't related in any way
@@ -91,24 +94,35 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.key());
     LOG_VART(it.value());
 
+    bool skippingTagPreservation = false;
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end())
     {
-      LOG_TRACE("Explicitly skipping tag: " << it.key() << "=" <<  it.value() << "...");
-      continue;
+      LOG_TRACE(
+        "Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
+      skippingTagPreservation = true;
     }
-    if (schema.isMetaData(it.key(), it.value()))
-    {
-      LOG_TRACE("Skipping metadata tag: " << it.key() << "=" <<  it.value() << "...");
-      continue;
-    }
-    if (!_passesSchemaFilter(it.key(), it.value()))
+    else if (schema.isMetaData(it.key(), it.value()))
     {
       LOG_TRACE(
-        "Skipping tag not passing category filter: " << it.key() << "=" << it.value() << "...");
-      continue;
+        "Skipping type handling for metadata tag: " << it.key() << "=" <<  it.value() << "...");
+      skippingTagPreservation = true;
+    }
+//    else if (!_passesSchemaFilter(it.key(), it.value()))
+//    {
+//      LOG_TRACE(
+//        "Skipping type handling for tag not passing category filter: " << it.key() << "=" <<
+//        it.value() << "...");
+//      skippingTagPreservation = true;
+//    }
+    else if (!schema.hasAnyCategory(it.key(), it.value()))
+    {
+      LOG_TRACE(
+        "Skipping type handling for tag not belonging to any type cateogry: " << it.key() << "=" <<
+        it.value() << "...");
+      skippingTagPreservation = true;
     }
 
-    if (!tagsToBeOverwritten[it.key()].trimmed().isEmpty())
+    if (!skippingTagPreservation && !tagsToBeOverwritten[it.key()].trimmed().isEmpty())
     {
       LOG_VART(tagsToBeOverwritten[it.key()]);
       //if one is more specific than the other, add it, but then remove both tags so we don't
@@ -155,10 +169,11 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     }
     else if (!it.value().isEmpty())
     {
+      LOG_TRACE("Adding tag: " << it.key() << "=" << it.value() << "...");
       result[it.key()] = it.value();
     }
   }
-  LOG_VART(result);
+  LOG_TRACE("Tags after type handling: " << result);
 
   for (Tags::ConstIterator it = tagsToBeOverwritten.constBegin();
        it != tagsToBeOverwritten.constEnd(); ++it)
@@ -167,47 +182,49 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     if (!result.contains(it.key()) && !it.value().isEmpty() &&
-        _skipTagKeys.find(it.key()) == _skipTagKeys.end() /*&&
-        // TODO: should this be here?
-        _passesSchemaFilter(it.key(), it.value())*/)
+        _skipTagKeys.find(it.key()) == _skipTagKeys.end())
     {
       result[it.key()] = it.value();
     }
   }
-  LOG_VART(result);
+  LOG_TRACE("Tags after processing remaining in t2: " << result);
 
   _removeRedundantAltTypeTags(result);
-  LOG_VART(result);
+  LOG_TRACE("Tags after removing redundant (final): " << result);
 
   return result;
 }
 
-bool PreserveTypesTagMerger::_passesSchemaFilter(const QString& key, const QString& val) const
-{
-  OsmSchema& schema = OsmSchema::getInstance();
-  LOG_VART(_categoryFilter.toString());
+//bool PreserveTypesTagMerger::_passesSchemaFilter(const QString& key, const QString& val) const
+//{
+//  OsmSchema& schema = OsmSchema::getInstance();
+//  LOG_VART(_categoryFilter.toString());
 
-  if (_categoryFilter == OsmSchemaCategory::Empty ||
-      (OsmSchemaCategory::building().intersects(_categoryFilter) && key == "building") ||
-      (OsmSchemaCategory::poi().intersects(_categoryFilter) && key == "poi"))
-  {
-    return true;
-  }
+//  if (_categoryFilter == OsmSchemaCategory::Empty ||
+//      (OsmSchemaCategory::building().intersects(_categoryFilter) && key == "building") ||
+//      (OsmSchemaCategory::poi().intersects(_categoryFilter) && key == "poi"))
+//  {
+//    return true;
+//  }
 
-  LOG_VART(schema.getCategories(key, val));
+//  OsmSchemaCategory categories = schema.getCategories(key, val);
+//  LOG_VART(categories);
+//  if (categories == OsmSchemaCategory::Empty)
+//  {
+//    LOG_TRACE("Tag has no category: " << key << "=" << val);
+//    return true;
+//  }
 
-  // TODO: Should we also check for tag similarity as well?
-  return schema.getCategories(key, val).intersects(_categoryFilter);
-}
+//  // TODO: Should we also check for tag similarity as well?
+//  return categories.intersects(_categoryFilter);
+//}
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {
   LOG_VART(tags.contains(ALT_TYPES_TAG_KEY));
   if (tags.contains(ALT_TYPES_TAG_KEY))
   {
-    // Remove anything in alt_types that's also in the building (may be able to handle this within
-    // PreserveTypesTagMerger instead). So far, this has primarily been done to keep building=yes
-    // out of alt_types.
+    // remove anything in alt_types that's also in the tags being merged
     const QStringList altTypes = tags.get(ALT_TYPES_TAG_KEY).split(";");
     LOG_VART(altTypes);
     QStringList altTypesCopy = altTypes;
@@ -240,8 +257,6 @@ void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 
 Tags PreserveTypesTagMerger::_preserveAltTypes(const Tags& source, const Tags& target) const
 {
-  LOG_TRACE("Preserving alt_types tag...");
-
   Tags updatedTags = target;
   const QStringList altTypes = source[ALT_TYPES_TAG_KEY].split(";");
   for (int i = 0; i < altTypes.size(); i++)
@@ -259,7 +274,6 @@ Tags PreserveTypesTagMerger::_preserveAltTypes(const Tags& source, const Tags& t
       }
     }
   }
-  LOG_VART(updatedTags);
   return updatedTags;
 }
 

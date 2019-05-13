@@ -54,8 +54,8 @@ public:
    * @param categoryFilter optional; Any additional type tags found during merging that do fall
    * within the specified category will be skipped
    */
-  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>(),
-                         const OsmSchemaCategory& categoryFilter = OsmSchemaCategory::Empty);
+  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>()/*,
+                         const OsmSchemaCategory& categoryFilter = OsmSchemaCategory::Empty*/);
 
   /**
    * @see TagMerger
@@ -67,7 +67,7 @@ public:
 
   void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
   void setSkipTagKeys(const std::set<QString>& keys) { _skipTagKeys = keys; }
-  void setCategoryFilter(const OsmSchemaCategory& filter) { _categoryFilter = filter; }
+  //void setCategoryFilter(const OsmSchemaCategory& filter) { _categoryFilter = filter; }
 
 private:
 
@@ -77,13 +77,13 @@ private:
   // any type tag that would otherwise be preserved will be skipped if in this list
   std::set<QString> _skipTagKeys;
   // optional filter to check a type tag against before preserving it
-  OsmSchemaCategory _categoryFilter;
+  //OsmSchemaCategory _categoryFilter;
 
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
   // can probably eventually get rid of this by correcting logic that's duplicating tags in
   // mergeTags
   void _removeRedundantAltTypeTags(Tags& tags) const;
-  bool _passesSchemaFilter(const QString& key, const QString& val) const;
+  //bool _passesSchemaFilter(const QString& key, const QString& val) const;
 };
 
 }

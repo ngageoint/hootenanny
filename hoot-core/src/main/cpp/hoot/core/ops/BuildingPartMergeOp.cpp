@@ -448,7 +448,7 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
   else
   {
     tagMerger.reset(
-      new PreserveTypesTagMerger(_buildingPartTagNames, OsmSchemaCategory::building()));
+      new PreserveTypesTagMerger(_buildingPartTagNames/*, OsmSchemaCategory::building()*/));
   }
 
   Tags& buildingTags = building->getTags();
