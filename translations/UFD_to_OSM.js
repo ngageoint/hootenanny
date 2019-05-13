@@ -2268,12 +2268,12 @@ ufd = {
         ['SSC','Artificial Mountain','shape','artificial_mountain'], // Artificial Mountain
         ['SSC','22','shape','crescent'], // Crescent
         ['SSC','Crescent','shape','crescent'], // Crescent
-        ['SSC','23','shape','ferris_wheel'], // Ferris Wheel
-        ['SSC','Ferris Wheel','shape','ferris_wheel'], // Ferris Wheel
+        ['SSC','23','attraction','ferris_wheel'], // Ferris Wheel
+        ['SSC','Ferris Wheel','attraction','ferris_wheel'], // Ferris Wheel
         ['SSC','24','shape','enclosed'], // Enclosed
         ['SSC','Enclosed','shape','enclosed'], // Enclosed
-        ['SSC','25','shape','roller_coaster'], // Roller Coaster
-        ['SSC','Roller Coaster','shape','roller_coaster'], // Roller Coaster
+        ['SSC','25','attraction','roller_coaster'], // Roller Coaster
+        ['SSC','Roller Coaster','attraction','roller_coaster'], // Roller Coaster
         ['SSC','26','shape','lateral'], // Lateral
         ['SSC','Lateral','shape','lateral'], // Lateral
         ['SSC','27','shape','mounds'], // Mounds
@@ -3186,6 +3186,68 @@ ufd = {
         ['ZD045',['zd045','text_description_a','text_description_l','text_description_p']],
         ], // End fCodeMap
 
+    // This is the current lost of shortened and screwed up attribute names and what they should be.
+    swapList : {
+        'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
+        'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
+        'COMM_CPYRT':'COMM_CPYRT_NOTICE',
+        'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
+        'COMPLETENE':'COMPLETENESS_CODE',
+        'CREATION_D':'CREATION_DATE',
+        'ORIGINATIN':'ORIGINATING_SOURCE',
+        'ORIG_SOURC':'ORIG_SOURCE_DATE',
+        'ORIG_SOU_1':'ORIG_SOURCE_INFO',
+        'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
+        'RSTRN_DECL':'RSTRN_DECLASS',
+        'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
+        'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
+        'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
+        'RSTRN_RELE':'RSTRN_RELEASIBILITY',
+        'SEC_CD_CNT':'SEC_CD_CNTRL',
+        'SEC_CLASS_':'SEC_CLASS_SYS_ID',
+        'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
+        'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
+        'SEC_CLS__2':'SEC_CLS_AUTHORITY',
+        'UPDATE_S_1':'UPDATE_SOURCE_DATE',
+        'UPDATE_S_2':'UPDATE_SOURCE_INFO',
+        'UPDATE_SOU':'UPDATE_SOURCE',
+        'Z_VALUE_TY':'Z_VALUE_TYPE'
+        },
+
+    // List of data values to drop/ignore. Love the spelling of some of these
+    // 997 = Unpopulated
+    // 998 = Not Applicable
+    // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
+    ignoreList : { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,'notapplicable':1,'997':1, '998':1 },
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    unitList : { 'WD1':10 },
+
+
+    // ##### Utility Functions #####
+    findFCode: function(layerName)
+    {
+        // Funky but it makes life easier
+        var llayerName = layerName.toString().toLowerCase();
+
+        for (var row in ufd.fCodeMap)
+        {
+            for (var val in ufd.fCodeMap[row][1])
+            {
+                if (llayerName.match(ufd.fCodeMap[row][1][val]))
+                {
+                    // attrs.F_CODE = ufd.fCodeMap[row][0];
+                    // Debug
+                    print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
+                    return ufd.fCodeMap[row][0];
+                }
+            }
+        }
+
+        // Default: Return null
+        return null;
+    },
+
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -3193,43 +3255,6 @@ ufd = {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Fix the renameing of some fields
-
-        // This is the current lost of shortened and screwed up attribute names and what they should be.
-        var swapList = {
-            'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
-            'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
-            'COMM_CPYRT':'COMM_CPYRT_NOTICE',
-            'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
-            'COMPLETENE':'COMPLETENESS_CODE',
-            'CREATION_D':'CREATION_DATE',
-            'ORIGINATIN':'ORIGINATING_SOURCE',
-            'ORIG_SOURC':'ORIG_SOURCE_DATE',
-            'ORIG_SOU_1':'ORIG_SOURCE_INFO',
-            'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
-            'RSTRN_DECL':'RSTRN_DECLASS',
-            'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
-            'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
-            'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
-            'RSTRN_RELE':'RSTRN_RELEASIBILITY',
-            'SEC_CD_CNT':'SEC_CD_CNTRL',
-            'SEC_CLASS_':'SEC_CLASS_SYS_ID',
-            'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
-            'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
-            'SEC_CLS__2':'SEC_CLS_AUTHORITY',
-            'UPDATE_S_1':'UPDATE_SOURCE_DATE',
-            'UPDATE_S_2':'UPDATE_SOURCE_INFO',
-            'UPDATE_SOU':'UPDATE_SOURCE',
-            'Z_VALUE_TY':'Z_VALUE_TYPE'
-        };
-
-        // List of data values to drop/ignore. Love the spelling of some of these
-        // 997 = Unpopulated
-        // 998 = Not Applicable
-        // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
-        var ignoreList = { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,'not applicable':1, '997':1, '998':1 };
-
-        // Unit conversion. Some attributes are in centimetres, others in decimetres
-        var unitList = { 'WD1':10 };
 
         // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
@@ -3242,7 +3267,7 @@ ufd = {
             attrValue = attrValue.replace(/\s/g, '');
 
             // Wipe out the useless values
-            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            if (attrs[col] == '' || attrValue in ufd.ignoreList || attrs[col] in ufd.ignoreList)
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
                 continue;
@@ -3257,13 +3282,13 @@ ufd = {
             }
 
             // Sort out units - if needed
-            if (col in unitList) attrs[col] = attrs[col] / unitList[col];
+            if (col in ufd.unitList) attrs[col] = attrs[col] / ufd.unitList[col];
 
             // Now see if we need to swap attr names
-            if (col in swapList)
+            if (col in ufd.swapList)
             {
                 // print('Swapped: ' + swapList[col]); // debug
-                attrs[swapList[col]] = attrs[col];
+                attrs[ufd.swapList[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
@@ -3282,20 +3307,37 @@ ufd = {
         }
         else
         {
-            // Funky but it makes life easier
-            var llayerName = layerName.toString().toLowerCase();
+            attrs.F_CODE = ufd.findFCode(layerName);
 
-            for (var row in ufd.fCodeMap)
-            {
-                for (var val in ufd.fCodeMap[row][1])
-                {
-                    if (llayerName.match(ufd.fCodeMap[row][1][val]))
-                    {
-                        attrs.F_CODE = ufd.fCodeMap[row][0];
-                        break;
-                    }
-                }
-            }
+            // Debug:
+            print('After Match :' + attrs.F_CODE + ':');
+            // // Funky but it makes life easier
+            // var llayerName = layerName.toString().toLowerCase();
+
+            // for (var row in ufd.fCodeMap)
+            // {
+            //     for (var val in ufd.fCodeMap[row][1])
+            //     {
+            //         if (llayerName.match(ufd.fCodeMap[row][1][val]))
+            //         {
+            //             attrs.F_CODE = ufd.fCodeMap[row][0];
+            //             // Debug
+            //             print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
+            //             break;
+            //         }
+            //     }
+            // }
+
+            // // Amusement Parks and Amusement Park Attractions tend to clash
+            // if (llayerName.match('amusement_park_att'))
+            // {
+            //     attrs.F_CODE = 'AK020'
+            // } 
+
+            // if (llayerName.match('amusement_park_att'))
+            // {
+            //     attrs.F_CODE = 'AK020'
+            // } 
         } // End of Find an FCode
 
         // Names are a bit of a mess
@@ -3480,6 +3522,17 @@ ufd = {
 
         // If we have a Tower, Add a man_made tag
         if (tags['tower:type']) tags.man_made = 'tower';
+
+        // Lakes and other water features
+        if (tags.water && !(tags.natural)) tags.natural = 'water' 
+
+        // Amusement Park Attractions
+        // Artificial Mountain can be in multiple F_CODES
+        if (attrs.F_CODE == 'AK020' && tags.shape)
+        {
+            tags.attraction = tags.shape;
+            delete tags.shape;
+        }
 
         // Sort out security stuff - not pretty
         // I'm pretty sure we are not going to see 99% of these but they are in the spec
