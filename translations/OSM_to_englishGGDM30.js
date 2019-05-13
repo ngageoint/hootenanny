@@ -50,7 +50,7 @@ function getDbSchema()
      return ggdm30.getDbSchema();
 }
 
-// Get raw schema directly from plugins/schema
+// Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
      return ggdm30.schema.getDbSchema();
