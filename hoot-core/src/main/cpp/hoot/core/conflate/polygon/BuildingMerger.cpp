@@ -244,9 +244,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     if (_manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
-      newTags =
-        PreserveTypesTagMerger(std::set<QString>(), OsmSchemaCategory::building())
-          .mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+      newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
     }
     else
     {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -36,7 +36,6 @@
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/RTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/visitors/GetTagValuesVisitor.h>
 
 // Qt
 #include <QStringList>

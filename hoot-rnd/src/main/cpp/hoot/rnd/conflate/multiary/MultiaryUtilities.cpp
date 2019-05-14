@@ -35,7 +35,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
 #include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
 

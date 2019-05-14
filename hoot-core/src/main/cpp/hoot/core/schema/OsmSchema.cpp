@@ -1624,6 +1624,11 @@ vector<SchemaVertex> OsmSchema::getUniqueSchemaVertices(const Tags& tags) const
   return d->getUniqueSchemaVertices(tags);
 }
 
+bool OsmSchema::hasAnyCategory(const QString& key, const QString& val) const
+{
+  return getCategories(key, val) != OsmSchemaCategory::Empty;
+}
+
 bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
 {
   bool result = false;
