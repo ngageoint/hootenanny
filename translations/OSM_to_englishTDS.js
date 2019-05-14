@@ -49,7 +49,7 @@ function getDbSchema()
      return tds.getDbSchema();
 }
 
-// Get raw schema directly from plugins/schema
+// Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
      return tds.schema.getDbSchema();

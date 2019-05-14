@@ -48,18 +48,18 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double>>>::iterator trainItr;
 
-      for(trainItr = rfInputs.trainingVectors.begin(); trainItr != rfInputs.trainingVectors.end(); ++trainItr)
+      for (trainItr = rfInputs.trainingVectors.begin(); trainItr != rfInputs.trainingVectors.end(); ++trainItr)
       {
         std::string className = trainItr->first;
 
         double startPercent = 0;
 
-        for(unsigned int i = 0; i < splitPercentages.size(); i++)
+        for (unsigned int i = 0; i < splitPercentages.size(); i++)
         {
 
           double endPercent = splitPercentages[i];
 
-          if(i == splitPercentages.size() - 1 && endPercent != 1.0)
+          if (i == splitPercentages.size() - 1 && endPercent != 1.0)
           {
             throw Exception(__LINE__, "The final splitPercentages entry should be 1.0");
           }
@@ -92,14 +92,14 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double>>>::iterator mapItr;
 
-      for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
+      for (mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {
         std::string className = mapItr->first;
 
         unsigned int initialTrainingIndex = trainingRangeMap[className].first;
         unsigned int initialTrainingSize = trainingRangeMap[className].second;
 
-        for(unsigned int i = 0; i < initialTrainingSize; i++)
+        for (unsigned int i = 0; i < initialTrainingSize; i++)
         {
           initialModel.addTrainingVector(className, mapItr->second[initialTrainingIndex + i]);
         }
@@ -129,14 +129,14 @@ namespace Tgs
 
       std::map<std::string, std::vector<std::vector<double>>>::iterator mapItr;
 
-      for(mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
+      for (mapItr = rfInputs.trainingVectors.begin(); mapItr != rfInputs.trainingVectors.end(); ++mapItr)
       {
         std::string className = mapItr->first;
 
         unsigned int initialTrainingIndex = trainingRangeMap[className].first;
         unsigned int initialTrainingSize = trainingRangeMap[className].second;
 
-        for(unsigned int i = 0; i < initialTrainingSize; i++)
+        for (unsigned int i = 0; i < initialTrainingSize; i++)
         {
           initialModel.addTrainingVector(className, mapItr->second[initialTrainingIndex + i]);
         }
@@ -159,7 +159,7 @@ namespace Tgs
       QFileInfo fi(filename.c_str());
       QString suffix = fi.suffix().toUpper();
 
-      if(suffix == "ARFF")
+      if (suffix == "ARFF")
       {
         return _generateTrainingDataFromAARFFile(filename);
 
@@ -185,7 +185,7 @@ namespace Tgs
 
       std::fstream arrfStream(filename.c_str(), std::fstream::in);
 
-      if(!arrfStream.is_open())
+      if (!arrfStream.is_open())
       {
         std::stringstream ss;
         ss << "Unable to open file " << filename;
@@ -196,11 +196,11 @@ namespace Tgs
       int dataLine = 0;
 
       std::string buffer;
-      while(!arrfStream.eof())
+      while (!arrfStream.eof())
       {
         std::getline(arrfStream, buffer);
 
-        if(buffer.empty())
+        if (buffer.empty())
         {
           dataLine++;
           continue;
@@ -210,14 +210,14 @@ namespace Tgs
         std::vector<std::string> tokenList;
         std::string token;
 
-        if(readingData)  //Read training data
+        if (readingData)  //Read training data
         {
-          while(std::getline(bufferStr, token, ','))
+          while (std::getline(bufferStr, token, ','))
           {
             tokenList.push_back(token);
           }
 
-          if((tokenList.size() - 1) != rfInputs.featureLabels.size())
+          if ((tokenList.size() - 1) != rfInputs.featureLabels.size())
           {
             throw Tgs::Exception(__LINE__, "The number features read in the attribute section does"
               " not match the number of values in the data section");
@@ -227,14 +227,14 @@ namespace Tgs
 
           bool parseOk;
 
-          for(unsigned int i = 0; i < tokenList.size(); i++)
+          for (unsigned int i = 0; i < tokenList.size(); i++)
           {
-            if(i != tokenList.size() - 1) //Read numeric data
+            if (i != tokenList.size() - 1) //Read numeric data
             {
 
               double value = QString(tokenList[i].c_str()).toDouble(&parseOk);
 
-              if(parseOk)
+              if (parseOk)
               {
                 data[i] = value;
               }
@@ -256,29 +256,29 @@ namespace Tgs
         }
         else
         {
-          while(std::getline(bufferStr, token, ' '))
+          while (std::getline(bufferStr, token, ' '))
           {
             tokenList.push_back(token);
           }
 
-          if(tokenList.size() == 0)
+          if (tokenList.size() == 0)
           {
             continue;
           }
-          else if(tokenList.size() == 1)
+          else if (tokenList.size() == 1)
           {
-            if(tokenList[0] == "@DATA")
+            if (tokenList[0] == "@DATA")
             {
               readingData = true;
             }
           }
           else
           {
-            if(tokenList[0] == "@ATTRIBUTE")
+            if (tokenList[0] == "@ATTRIBUTE")
             {
-              if(tokenList[1] != "class")
+              if (tokenList[1] != "class")
               {
-                if(tokenList.size() == 3) //Format @ATTRIBUTE FeatureName Type
+                if (tokenList.size() == 3) //Format @ATTRIBUTE FeatureName Type
                 {
                   rfInputs.featureLabels.push_back(tokenList[1]);
                 }
@@ -289,7 +289,7 @@ namespace Tgs
               }
               else
               {
-                if(tokenList.size() == 3) //Format @ATTRIBUTE class {class1,class2,classN}
+                if (tokenList.size() == 3) //Format @ATTRIBUTE class {class1,class2,classN}
                 {
                   char chars[] = "{}";
                   std::string classes = tokenList[2];
@@ -301,7 +301,7 @@ namespace Tgs
                   std::stringstream classStr(classes);
                   std::string classToken;
 
-                  while(std::getline(classStr, classToken, ','))
+                  while (std::getline(classStr, classToken, ','))
                   {
                     rfInputs.classLabels.push_back(classToken);
                   }

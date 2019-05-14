@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PrincipalComponentsAnalysis.h"
@@ -69,7 +69,7 @@ namespace Tgs
     }
 
 
-    for(unsigned int i = 0; i < df.getNumDataVectors(); i++)
+    for (unsigned int i = 0; i < df.getNumDataVectors(); i++)
     {
       for (unsigned int j = 0; j < df.getNumFactors(); j++)
       {

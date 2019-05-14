@@ -72,17 +72,17 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_modelMethod == MULTICLASS)
+        if (_modelMethod == MULTICLASS)
         {
           _classifyMultiClassTestVector(objId, objClass, dataVector, scores);
         }
-        else if(_modelMethod == BINARY)
+        else if (_modelMethod == BINARY)
         {
           _classifyBinaryTestVector(objId, objClass, dataVector, scores);
         }
-        else if(_modelMethod == ROUND_ROBIN)
+        else if (_modelMethod == ROUND_ROBIN)
         {
           _classifyRoundRobinTestVector(objId, objClass, dataVector, scores);
         }
@@ -108,9 +108,9 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_modelMethod == MULTICLASS)
+        if (_modelMethod == MULTICLASS)
         {
           _classifyMultiClassVector(objId, dataVector, scores);
         }
@@ -133,7 +133,7 @@ namespace Tgs
     {
       QFile modelFile(outputFilePath.c_str());
 
-      if(!modelFile.open(QIODevice::WriteOnly | QIODevice::Text))
+      if (!modelFile.open(QIODevice::WriteOnly | QIODevice::Text))
       {
         std::stringstream ss;
         ss << "Unable to open the file " << outputFilePath << " for writing the XML model.";
@@ -186,7 +186,7 @@ namespace Tgs
   {
     try
     {
-      if(!_results.empty())
+      if (!_results.empty())
       {
         _generateRemappedResults(reportName, classMap);
         generateTopFactors(reportName);
@@ -207,7 +207,7 @@ namespace Tgs
   {
     try
     {
-      if(!_results.empty())
+      if (!_results.empty())
       {
         generateResults(filename);
         generateTopFactors(filename);
@@ -228,7 +228,7 @@ namespace Tgs
   {
     try
     {
-      if(!_results.empty())
+      if (!_results.empty())
       {
         //Get the labels in the random forest training set
         std::set<std::string> classLabels = _data->getClassLabels();
@@ -245,12 +245,12 @@ namespace Tgs
         rsltStream.open(rsltfile.c_str(), std::fstream::out);
         confStream.open(conffile.c_str(), std::fstream::out);
 
-        if(rsltStream.is_open() && confStream.is_open())
+        if (rsltStream.is_open() && confStream.is_open())
         {
           //Generate headers for confusion matrix and results files
           rsltStream << "ID";  //Will change soon with new header style
 
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             rsltStream << "\t" << *setItr;
             confStream << "\t" << *setItr;
@@ -261,9 +261,9 @@ namespace Tgs
 
           //Initialize the confusion matrix with zeros
           std::map<std::string, std::map<std::string, int>> confusionCount;
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
-            for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
+            for (setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
             {
               confusionCount[*setItr][*setItr2] = 0;
             }
@@ -274,14 +274,14 @@ namespace Tgs
           //[true class][predicted class]
 
           std::map<std::string, double>::iterator scoreItr;
-          for(unsigned int j = 0; j < _results.size(); j++)
+          for (unsigned int j = 0; j < _results.size(); j++)
           {
             std::string highestScoreName;
             double maxScore = -1.0;
 
-            for(scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+            for (scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
             {
-              if(scoreItr->second > maxScore)
+              if (scoreItr->second > maxScore)
               {
                 maxScore = scoreItr->second;
                 highestScoreName = scoreItr->first;
@@ -292,10 +292,10 @@ namespace Tgs
           }
 
           //Output confusion matrix to file
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             confStream << * setItr;
-            for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
+            for (setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
             {
               confStream << "\t" << confusionCount[*setItr][*setItr2];
             }
@@ -305,13 +305,13 @@ namespace Tgs
           confStream.close();
 
           //Output results to file
-          for(unsigned int j = 0; j < _results.size(); j++)
+          for (unsigned int j = 0; j < _results.size(); j++)
           {
             rsltStream << _testObjectIds[j] << "\t";
 
             std::map<std::string, double> curScore = _results[j];
 
-            for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+            for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
             {
               rsltStream << curScore[*setItr] << "\t";
             }
@@ -341,9 +341,9 @@ namespace Tgs
   {
     try
     {
-      if(_initialized)
+      if (_initialized)
       {
-        if(_trained)
+        if (_trained)
         {
           std::fstream outStream;
 
@@ -351,24 +351,24 @@ namespace Tgs
 
           outStream.open(basefilename.c_str(), std::fstream::out);
 
-          if(outStream.is_open())
+          if (outStream.is_open())
           {
             std::map<std::string, double> factMap;
             std::map<std::string, double>::iterator itr;
 
-            for(unsigned int i = 0; i < _rfList.size(); i++)
+            for (unsigned int i = 0; i < _rfList.size(); i++)
             {
               std::map<std::string, double> tempFactMap;
               _rfList[i]->getFactorImportance(_data, tempFactMap);
 
-              for(itr = tempFactMap.begin(); itr != tempFactMap.end(); ++itr)
+              for (itr = tempFactMap.begin(); itr != tempFactMap.end(); ++itr)
               {
                 factMap[itr->first] += tempFactMap[itr->first];
               }
             }
 
 
-            for(itr = factMap.begin(); itr != factMap.end(); ++itr)
+            for (itr = factMap.begin(); itr != factMap.end(); ++itr)
             {
               outStream << itr->first << " " << itr->second << std::endl;
             }
@@ -413,7 +413,7 @@ namespace Tgs
 
       QFile xmlFile(sourceFile.c_str());
 
-      if(!xmlFile.open(QIODevice::ReadOnly))
+      if (!xmlFile.open(QIODevice::ReadOnly))
       {
         xmlFile.close();
         std::stringstream ss;
@@ -422,7 +422,7 @@ namespace Tgs
       }
 
       QString err;
-      if(!xmlDoc.setContent(&xmlFile, &err))
+      if (!xmlDoc.setContent(&xmlFile, &err))
       {
         std::stringstream ss;
         ss << "Error parsing XML model file "<< sourceFile << " - " << err.toLatin1().constData();
@@ -434,7 +434,7 @@ namespace Tgs
       bool parsedVersion;
       float version = docElem.attribute("Version", "1.0").toFloat(&parsedVersion);
 
-      if(!parsedVersion || version != RF_XML_VERSION)
+      if (!parsedVersion || version != RF_XML_VERSION)
       {
         std::stringstream ss;
         ss << "This version of Random Forest can not parse this version of the input XML file";
@@ -444,14 +444,14 @@ namespace Tgs
       //First read data sources
       QDomNodeList childList = docElem.childNodes();
 
-      for(unsigned int i = 0; i < (unsigned int)childList.size(); i++)
+      for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
-        if(childList.at(i).nodeType() == QDomNode::CommentNode)
+        if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
           continue;
         }
 
-        if(childList.at(i).isElement())
+        if (childList.at(i).isElement())
         {
           QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
 
@@ -459,12 +459,12 @@ namespace Tgs
 
           bool parseOk = true;
 
-          if(tag == "PARAMETERS")
+          if (tag == "PARAMETERS")
           {
             QString value = e.text();
             QStringList tokens = value.split(" ");
 
-            if(tokens.size() != 2)
+            if (tokens.size() != 2)
             {
               parseOk = false;
             }
@@ -476,20 +476,20 @@ namespace Tgs
               _initForests(numForests);
             }
           }
-          else if(tag == "RANDOMFORESTS")
+          else if (tag == "RANDOMFORESTS")
           {
             QDomNodeList forestNodes = e.childNodes();
 
             _parseXmlForestNodes(forestNodes);
 
           }
-          else if(tag == "DATAFRAME")
+          else if (tag == "DATAFRAME")
           {
             _data->clear();
             _data->import(e);
           }
 
-          if(!parseOk)
+          if (!parseOk)
           {
             std::stringstream ss;
             ss << "Error parsing tag " << tag.toLatin1().constData() << " with the value " <<
@@ -512,7 +512,7 @@ namespace Tgs
   {
     try
     {
-      if(modelMethod >= MULTICLASS && modelMethod <= ROUND_ROBIN)
+      if (modelMethod >= MULTICLASS && modelMethod <= ROUND_ROBIN)
       {
         _modelMethod = modelMethod;
       }
@@ -521,7 +521,7 @@ namespace Tgs
         throw Exception(__LINE__, "Unsupported model method for training model");
       }
 
-      if(!factorLabels.empty())
+      if (!factorLabels.empty())
       {
         _data->setFactorLabels(factorLabels);
       }
@@ -554,7 +554,7 @@ namespace Tgs
   {
     try
     {
-      for(unsigned int i = 0; i < _rfList.size(); i++)
+      for (unsigned int i = 0; i < _rfList.size(); i++)
       {
         _rfList[i]->clear();
       }
@@ -596,7 +596,7 @@ namespace Tgs
   {
     try
     {
-      if(!_initialized)
+      if (!_initialized)
       {
         throw Exception(__LINE__, "Model has not been initialized");
       }
@@ -616,7 +616,7 @@ namespace Tgs
 
       QDomElement forestsNode = modelDoc.createElement("RandomForests");
       //Append Forest(s)
-      for(unsigned int i = 0; i < _rfList.size(); i++)
+      for (unsigned int i = 0; i < _rfList.size(); i++)
       {
         _rfList[i]->exportModel(modelDoc, forestsNode);
       }
@@ -645,17 +645,17 @@ namespace Tgs
       {
         numFactors = (int)sqrt((float)_data->getNumFactors());
       }
-      if(_initialized)
+      if (_initialized)
       {
-        if(_modelMethod == MULTICLASS)
+        if (_modelMethod == MULTICLASS)
         {
           _trainMultiClass(numTrees, numFactors, nodeSize, retrain, balanced);
         }
-        else if(_modelMethod == BINARY)
+        else if (_modelMethod == BINARY)
         {
           _trainBinary(numTrees, numFactors, nodeSize, retrain, balanced);
         }
-        else if(_modelMethod == ROUND_ROBIN)
+        else if (_modelMethod == ROUND_ROBIN)
         {
           _trainRoundRobin(numTrees, numFactors, nodeSize, retrain, balanced);
         }
@@ -681,28 +681,28 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_trained)
+        if (_trained)
         {
           std::set<std::string> classSet = _data->getClassLabels();
           std::set<std::string>::iterator itr;
 
-          for(itr = classSet.begin(); itr != classSet.end(); ++itr)
+          for (itr = classSet.begin(); itr != classSet.end(); ++itr)
           {
             scores[*itr] = 0;
           }
 
           std::map<std::string, double>::iterator mItr;
           double sqrSum = 0;
-          for(unsigned int i = 0; i < _rfList.size(); i++)
+          for (unsigned int i = 0; i < _rfList.size(); i++)
           {
             std::map<std::string, double> tempResult;
             _rfList[i]->classifyVector(dataVector, tempResult);
 
-            for(mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
+            for (mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
             {
-              if(mItr->first != "other")
+              if (mItr->first != "other")
               {
                 scores[mItr->first] = mItr->second;
                 sqrSum += pow(mItr->second, 2);
@@ -710,10 +710,10 @@ namespace Tgs
             }
           }
 
-          if(sqrSum > 0)
+          if (sqrSum > 0)
           {
             //Normalize Scores
-            for(mItr = scores.begin(); mItr != scores.end(); ++mItr)
+            for (mItr = scores.begin(); mItr != scores.end(); ++mItr)
             {
               scores[mItr->first] /= sqrSum;
             }
@@ -748,14 +748,14 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_rfList[0]->isTrained())
+        if (_rfList[0]->isTrained())
         {
           std::set<std::string> classSet = _data->getClassLabels();
           std::set<std::string>::iterator itr;
 
-          for(itr = classSet.begin(); itr != classSet.end(); ++itr)
+          for (itr = classSet.begin(); itr != classSet.end(); ++itr)
           {
             scores[*itr] = 0;
           }
@@ -789,26 +789,26 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_trained)
+        if (_trained)
         {
           std::set<std::string> classSet = _data->getClassLabels();
           std::set<std::string>::iterator itr;
 
-          for(itr = classSet.begin(); itr != classSet.end(); ++itr)
+          for (itr = classSet.begin(); itr != classSet.end(); ++itr)
           {
             scores[*itr] = 0;
           }
 
           std::map<std::string, double>::iterator mItr;
 
-          for(unsigned int i = 0; i < _rfList.size(); i++)
+          for (unsigned int i = 0; i < _rfList.size(); i++)
           {
             std::map<std::string, double> tempResult;
             _rfList[i]->classifyVector(dataVector, tempResult);
 
-            for(mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
+            for (mItr = tempResult.begin(); mItr != tempResult.end(); ++mItr)
             {
               scores[mItr->first] += mItr->second / (double)_rfList.size();
             }
@@ -839,14 +839,14 @@ namespace Tgs
   {
     try
     {
-      if(_initialized && !_rfList.empty())
+      if (_initialized && !_rfList.empty())
       {
-        if(_rfList[0]->isTrained())
+        if (_rfList[0]->isTrained())
         {
           std::set<std::string> classSet = _data->getClassLabels();
           std::set<std::string>::iterator itr;
 
-          for(itr = classSet.begin(); itr != classSet.end(); ++itr)
+          for (itr = classSet.begin(); itr != classSet.end(); ++itr)
           {
             scores[*itr] = 0;
           }
@@ -877,7 +877,7 @@ namespace Tgs
   {
     try
     {
-      if(!_results.empty())
+      if (!_results.empty())
       {
         //Get the labels in the random forest training set
         std::set<std::string> classLabels = _data->getClassLabels();
@@ -894,12 +894,12 @@ namespace Tgs
         rsltStream.open(rsltfile.c_str(), std::fstream::out);
         confStream.open(conffile.c_str(), std::fstream::out);
 
-        if(rsltStream.is_open() && confStream.is_open())
+        if (rsltStream.is_open() && confStream.is_open())
         {
           //Generate headers for confusion matrix and results files
           rsltStream << "Class\tID";  //Will change soon with new header style
 
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             rsltStream << "\t" << *setItr;
             confStream << "\t" << *setItr;
@@ -910,9 +910,9 @@ namespace Tgs
 
           //Initialize the confusion matrix with zeros
           std::map<std::string, std::map<std::string, int>> confusionCount;
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
-            for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
+            for (setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
             {
               confusionCount[*setItr][*setItr2] = 0;
             }
@@ -923,14 +923,14 @@ namespace Tgs
           //[true class][predicted class]
 
           std::map<std::string, double>::iterator scoreItr;
-          for(unsigned int j = 0; j < _results.size(); j++)
+          for (unsigned int j = 0; j < _results.size(); j++)
           {
             std::string highestScoreName;
             double maxScore = -1.0;
 
-            for(scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+            for (scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
             {
-              if(scoreItr->second > maxScore)
+              if (scoreItr->second > maxScore)
               {
                 maxScore = scoreItr->second;
                 highestScoreName = scoreItr->first;
@@ -941,10 +941,10 @@ namespace Tgs
 
             std::string matchClass;
 
-            for(unsigned int i = 0; i < mapLabels.size(); i++)
+            for (unsigned int i = 0; i < mapLabels.size(); i++)
             {
               matchClass = mapLabels[i];
-              if(matchClass == highestScoreName)  //If any class name matched then that is the classification
+              if (matchClass == highestScoreName)  //If any class name matched then that is the classification
               {
                 break;
               }
@@ -954,10 +954,10 @@ namespace Tgs
           }
 
           //Output confusion matrix to file
-          for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+          for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
           {
             confStream << * setItr;
-            for(setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
+            for (setItr2 = classLabels.begin(); setItr2 != classLabels.end(); ++setItr2)
             {
               confStream << "\t" << confusionCount[*setItr][*setItr2];
             }
@@ -967,7 +967,7 @@ namespace Tgs
           confStream.close();
 
           //Output results to file
-          for(unsigned int j = 0; j < _results.size(); j++)
+          for (unsigned int j = 0; j < _results.size(); j++)
           {
             rsltStream << _testClasses[j] << "\t" << _testObjectIds[j] << "\t";
 
@@ -976,16 +976,16 @@ namespace Tgs
             std::string highestScoreName;
             double maxScore = -1.0;
 
-            for(scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
+            for (scoreItr = _results[j].begin(); scoreItr != _results[j].end(); ++scoreItr)
             {
-              if(scoreItr->second > maxScore)
+              if (scoreItr->second > maxScore)
               {
                 maxScore = scoreItr->second;
                 highestScoreName = scoreItr->first;
               }
             }
 
-            for(setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
+            for (setItr = classLabels.begin(); setItr != classLabels.end(); ++setItr)
             {
               rsltStream << curScore[*setItr] << "\t";
             }
@@ -1022,7 +1022,7 @@ namespace Tgs
       _rfList.resize(classNames.size());
 
       unsigned int itrCtr = 0;
-      for(itr = classNames.begin(); itr != classNames.end(); ++itr)
+      for (itr = classNames.begin(); itr != classNames.end(); ++itr)
       {
         std::string currentClass = *itr;
 
@@ -1066,14 +1066,14 @@ namespace Tgs
       _rfList.resize(numClasses * (numClasses - 1) / 2);
 
       unsigned int itrCtr = 0;
-      for(itr = classNames.begin(); itr != classNames.end(); ++itr)
+      for (itr = classNames.begin(); itr != classNames.end(); ++itr)
       {
-        for(itr2 = itr; itr2 != classNames.end(); ++itr2)
+        for (itr2 = itr; itr2 != classNames.end(); ++itr2)
         {
           std::string posClass = *itr;
           std::string negClass = *itr2;
 
-          if(posClass != negClass)
+          if (posClass != negClass)
           {
             _rfList[itrCtr]->trainRoundRobin(_data, numTrees, numFactors, posClass, negClass,
               nodeSize, retrain, balanced);

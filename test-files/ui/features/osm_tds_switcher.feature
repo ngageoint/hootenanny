@@ -130,5 +130,6 @@ Feature: OSM/TDS Switcher
         # Save the features
         When I press "Save"
         Then I click the "save-button" button
+        Then I should not see the "div.shaded" on the page
         Then I click the "trash" button
         And I accept the alert

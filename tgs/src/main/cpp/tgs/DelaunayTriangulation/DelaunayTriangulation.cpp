@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -826,7 +826,7 @@ Face& FaceIterator::operator++()
         delete _f;
       }
 
-    } while(alreadyDone && _it != _end);
+    } while (alreadyDone && _it != _end);
 
     if (!alreadyDone)
     {
@@ -882,7 +882,10 @@ const vector<Face>& DelaunayTriangulation::getFaces()
 {
   if (_faces.size() == 0)
   {
-    _initFaces();
+    for (FaceIterator fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
+    {
+      _faces.push_back(*fi);
+    }
   }
   return _faces;
 }
@@ -899,12 +902,6 @@ const Edge DelaunayTriangulation::getStartingEdge() const
     throw Exception("You must add at least three points to create a triangulation.");
   }
   return Edge(_subdivision->getStartingEdge());
-}
-
-void DelaunayTriangulation::_initFaces()
-{
-  _faces.clear();
-
 }
 
 void DelaunayTriangulation::insert(double x, double y)

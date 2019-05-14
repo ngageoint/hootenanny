@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * Creates mergers to handle matches found by POI to Polygon Conflation
+ */
 class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 
@@ -58,11 +61,18 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
+  void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
+
 private:
 
   const OsmMap* _map;
 
+  // see PoiPolygonMerger::_autoMergeManyPoiToOnePolyMatches
   bool _autoMergeManyPoiToOnePolyMatches;
+  // If enabled, this prevents reviews from being generated when another type of conflation
+  // (currently could only be Building Conflation) has a match that involves a polygon also
+  // involved in a POI/Poly Conflation match.
+  bool _allowCrossConflationMerging;
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;

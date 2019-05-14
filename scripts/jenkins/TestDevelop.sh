@@ -13,8 +13,8 @@ export HOOT_TEST_DIFF=--diff
 echo "Running core glacial tests..."
 bin/HootTest $HOOT_TEST_DIFF --glacial --parallel
 
-echo "Running plugins tests..."
-make -sj`nproc` plugins-test
+echo "Running translation tests..."
+make -sj`nproc` translations-test
 echo "Running services tests..."
 make -sj`nproc` services-test
 echo "Running ui tests..."

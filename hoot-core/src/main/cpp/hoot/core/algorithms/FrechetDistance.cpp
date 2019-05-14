@@ -277,10 +277,10 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
         if (_matrix[r][c] < maxDistance)
         {
           //  Check above and left to eliminate starting points that lie along a path already started
-          if( (r > 0 && _matrix[r - 1][c] < maxDistance) ||
+          if ((r > 0 && _matrix[r - 1][c] < maxDistance) ||
               (c > 0 && _matrix[r][c - 1] < maxDistance) ||
               (r > 0 && c > 0 && _matrix[r - 1][c - 1] < maxDistance)
-            )
+             )
             continue;
           starts.push_back(vertex_match(r, c));
         }

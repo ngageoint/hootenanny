@@ -30,11 +30,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
 
 using namespace std;
 
@@ -72,7 +70,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     PROGRESS_DEBUG("Creating merger " << i + 1 << " / " << _creators.size() << "...");
 
     OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i]);
-
     if (omc)
     {
       omc->setOsmMap(map.get());
@@ -81,7 +78,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     {
       return;
     }
-
     // we don't want the creators to hold onto a map pointer that will go out of scope
     if (omc)
     {
@@ -141,8 +137,8 @@ MergerFactory& MergerFactory::getInstance()
   return *_theInstance;
 }
 
-bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2)
-  const
+bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
+                                  const Match* m2) const
 {
   LOG_VART(_creators.size());
   // if any creator considers a match conflicting then it is a conflict

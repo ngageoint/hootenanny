@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.0731175" minlon="-69.3541795" maxlat="10.0742029" maxlon="-69.35301010000001"/>
+    <node visible="true" id="4773002926" timestamp="2017-12-14T09:53:15Z" version="4" changeset="54619454" user="Zverik" uid="290271" lat="10.0738540000000008" lon="-69.3531669999999991">
+        <tag k="website" v="http://www.rbproducciones.com"/>
+        <tag k="man_made" v="works"/>
+        <tag k="name" v="Producciones RB"/>
+        <tag k="shop" v="department_store"/>
+        <tag k="addr:street" v="Calle 30"/>
+        <tag k="addr:city" v="Barquisimeto"/>
+        <tag k="opening_hours" v="Mo-Fr 08:00-17:00"/>
+        <tag k="name:es" v="Producciones RB"/>
+        <tag k="phone" v="02512372628"/>
+        <tag k="addr:postcode" v="3001"/>
+    </node>
+    <node visible="true" id="4776545348" timestamp="2017-04-05T09:55:16Z" version="1" changeset="47470796" user="Juan Carlos Rangel Oliveros" uid="5580762" lat="10.0742028999999995" lon="-69.3533963000000000"/>
+    <node visible="true" id="4776545349" timestamp="2017-04-05T09:55:16Z" version="1" changeset="47470796" user="Juan Carlos Rangel Oliveros" uid="5580762" lat="10.0737433000000003" lon="-69.3541795000000008"/>
+    <node visible="true" id="4776545350" timestamp="2017-04-05T09:55:16Z" version="1" changeset="47470796" user="Juan Carlos Rangel Oliveros" uid="5580762" lat="10.0731175000000004" lon="-69.3537986000000046"/>
+    <node visible="true" id="4776545351" timestamp="2017-04-05T09:55:16Z" version="1" changeset="47470796" user="Juan Carlos Rangel Oliveros" uid="5580762" lat="10.0735770000000002" lon="-69.3530101000000059"/>
+    <way visible="true" id="484907523" timestamp="2017-04-05T09:55:16Z" version="1" changeset="47470796" user="Juan Carlos Rangel Oliveros" uid="5580762">
+        <nd ref="4776545348"/>
+        <nd ref="4776545349"/>
+        <nd ref="4776545350"/>
+        <nd ref="4776545351"/>
+        <nd ref="4773002926"/>
+        <nd ref="4776545348"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="101.6"/>
+        <tag k="man_made" v="works"/>
+        <tag k="name" v="Building 2"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="addr:street" v="Calle 30"/>
+        <tag k="addr:city" v="Barquisimeto"/>
+        <tag k="feature_area" v="8176.2"/>
+        <tag k="width" v="81.5"/>
+        <tag k="source:datetime" v="2017-04-05T09:55:16Z"/>
+        <tag k="addr:postcode" v="3001"/>
+        <tag k="angle" v="239.2"/>
+    </way>
+</osm>

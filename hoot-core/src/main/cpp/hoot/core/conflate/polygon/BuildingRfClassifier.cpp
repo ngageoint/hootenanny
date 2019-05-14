@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingRfClassifier.h"
 
@@ -66,13 +66,13 @@ BuildingRfClassifier::BuildingRfClassifier()
 void BuildingRfClassifier::_createAllExtractors() const
 {
   _extractors.clear();
-  vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
-    FeatureExtractor::className());
+  vector<std::string> extractorNames =
+    Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
   for (size_t i = 0; i < extractorNames.size(); i++)
   {
-    FeatureExtractor* fe = Factory::getInstance().constructObject<FeatureExtractor>(
-      extractorNames[i]);
+    FeatureExtractor* fe =
+    Factory::getInstance().constructObject<FeatureExtractor>(extractorNames[i]);
     _extractors.push_back(FeatureExtractorPtr(fe));
   }
 
@@ -228,6 +228,7 @@ void BuildingRfClassifier::_createBestExtractors() const
 
 void BuildingRfClassifier::_createExtractors() const
 {
+  LOG_TRACE("Creating extractors...");
   _createBestExtractors();
 }
 

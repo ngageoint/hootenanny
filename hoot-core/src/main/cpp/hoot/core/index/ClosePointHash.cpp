@@ -43,15 +43,41 @@ ClosePointHash::ClosePointHash(double distance)
 
 void ClosePointHash::addPoint(double x, double y, long id)
 {
-  _bins[_toBin(x + _distance, y + _distance)].push_back(id);
-  _bins[_toBin(x + _distance, y - _distance)].push_back(id);
-  _bins[_toBin(x - _distance, y + _distance)].push_back(id);
-  _bins[_toBin(x - _distance, y - _distance)].push_back(id);
+  int64_t binIx = _toBin(x + _distance, y + _distance);
+  _bins[binIx].push_back(id);
+  _idTobin[id].push_back(binIx);
+
+  binIx = _toBin(x + _distance, y - _distance);
+  _bins[binIx].push_back(id);
+  _idTobin[id].push_back(binIx);
+
+  binIx =_toBin(x - _distance, y + _distance);
+  _bins[binIx].push_back(id);
+  _idTobin[id].push_back(binIx);
+
+  binIx = _toBin(x - _distance, y - _distance);
+  _bins[binIx].push_back(id);
+  _idTobin[id].push_back(binIx);
 }
 
 const vector<long>& ClosePointHash::getMatch()
 {
   return _match;
+}
+
+vector<long> ClosePointHash::getMatchesFor(long id)
+{
+  vector<long> ids;
+
+  foreach (int64_t binIx, _idTobin[id])
+  {
+    ids.insert(ids.end(), _bins[binIx].begin(), _bins[binIx].end());
+  }
+
+  // remove duplicates
+  sort(ids.begin(), ids.end());
+  ids.erase(unique(ids.begin(), ids.end()), ids.end());
+  return ids;
 }
 
 bool ClosePointHash::next()

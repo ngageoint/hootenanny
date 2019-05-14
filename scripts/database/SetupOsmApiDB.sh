@@ -13,6 +13,11 @@ export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 do_create="true"
 
+# there are times where this file hasn't been created yet, create it
+if [ ! -e $HOOT_HOME/scripts/database/blank_osmapidb.sql ]; then
+  $HOOT_HOME/scripts/ReplaceEnvironmentVariables.sh $HOOT_HOME/scripts/database/blank_osmapidb.sql.in $HOOT_HOME/scripts/database/blank_osmapidb.sql
+fi
+
 # see if old db osmapi_test exists
 export flag=`psql $AUTH -lqt | cut -d \| -f 1 | grep -w "^ $DB_NAME_OSMAPI \+" | wc -l`
 

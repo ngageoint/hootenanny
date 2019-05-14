@@ -50,10 +50,12 @@ Feature: Manually resolve reviews feature
     #Then I wait 30 "seconds" to see "Resolved"
     #And I hover over ".layer-data"
     #And I click the "map" at "100","100"
+    Then I should not see the "#processingDiv" on the page
     And I press "Resolved"
     #This should work too
     #And I click the "r" key
     Then I wait 30 "seconds" to see "Reviews remaining: 7 (Resolved: 1)"
+    Then I should not see the "#processingDiv" on the page
     And I press "Resolved"
     Then I wait 30 "seconds" to see "Reviews remaining: 6 (Resolved: 2)"
     #Click the review item box

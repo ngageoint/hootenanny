@@ -44,6 +44,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyCriterion)
 PoiPolygonPolyCriterion::PoiPolygonPolyCriterion() :
 _tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList())
 {
+  LOG_VART(_tagIgnoreList);
 }
 
 bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const

@@ -450,7 +450,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           RelationPtr r(new Relation(_defaultStatus, rid, _defaultCircErr));
           if (type == "MultiPoint")
             _parseMultiPointGeometry(geo, r);
-          else if(type == "MultiLineString")
+          else if (type == "MultiLineString")
             _parseMultiLineGeometry(geo, r);
           else if (type == "MultiPolygon")
             _parseMultiPolygonGeometry(geo, r);
@@ -485,7 +485,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
       relation->setType(MetadataTags::RelationMultiPoint());
     _parseMultiPointGeometry(geometry, relation);
   }
-  else if(geo_type == "MultiLineString")
+  else if (geo_type == "MultiLineString")
   {
     if (relation->getType() == "")
       relation->setType(MetadataTags::RelationMultilineString());

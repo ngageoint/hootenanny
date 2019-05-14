@@ -67,14 +67,14 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
   if (pElement->getElementType() == ElementType::Relation)
   {
     const RelationPtr& pRelation = std::dynamic_pointer_cast<Relation>(pElement);
-    processRelation( pRelation );
+    processRelation(pRelation);
     _numAffected++;
   }
 
   if (pElement->getElementType() == ElementType::Way)
   {
     const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
-    processWay( pWay );
+    processWay(pWay);
     _numAffected++;
   }
 }
@@ -90,7 +90,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 
   foreach (RelationData::Entry entry, pRelation->getMembers())
   {
-    ElementPtr pMember =_map->getElement( entry.getElementId());
+    ElementPtr pMember =_map->getElement(entry.getElementId());
     if (pMember->getElementType() == ElementType::Way)
     {
       const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
@@ -103,7 +103,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
       }
 
       // gather all valid areas and their roles to calculate total area
-      if(_addArea && pWay->isClosedArea())
+      if (_addArea && pWay->isClosedArea())
       {
         double area = pPoly->getArea();
 

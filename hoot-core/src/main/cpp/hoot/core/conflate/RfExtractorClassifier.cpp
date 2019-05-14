@@ -69,6 +69,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   result.setMatchP(scores["match"]);
   result.setReviewP(scores["review"]);
 
+  LOG_VART(result);
   return result;
 }
 
@@ -79,7 +80,6 @@ const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_g
   {
     _createExtractors();
   }
-
   return _extractors;
 }
 
@@ -94,7 +94,7 @@ map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
   _getExtractors();
   for (size_t i = 0; i < _extractors.size(); i++)
   {
-    double v = _extractors[i]->extract(*m, e1, e2);
+    const double v = _extractors[i]->extract(*m, e1, e2);
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
