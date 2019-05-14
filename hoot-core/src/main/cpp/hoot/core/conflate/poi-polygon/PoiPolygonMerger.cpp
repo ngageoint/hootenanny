@@ -180,9 +180,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
   std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
-    tagMerger.reset(
-      new PreserveTypesTagMerger(
-        std::set<QString>()/*, OsmSchemaCategory::building() | OsmSchemaCategory::poi()*/));
+    tagMerger.reset(new PreserveTypesTagMerger());
   }
   else
   {

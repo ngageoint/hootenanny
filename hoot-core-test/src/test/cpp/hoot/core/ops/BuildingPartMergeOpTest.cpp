@@ -57,8 +57,8 @@ namespace hoot
 class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
-//  CPPUNIT_TEST(runToyTest);
-//  CPPUNIT_TEST(runToyMultithreadTest);
+  CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyMultithreadTest);
   CPPUNIT_TEST(runPreserveTypesTest);
   CPPUNIT_TEST_SUITE_END();
 
