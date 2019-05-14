@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -43,12 +44,12 @@ public:
 
   static std::string className() { return "hoot::WayJoiner"; }
 
-  WayJoiner() : _leavePid(false), _numJoined(0) { }
+  WayJoiner();
 
   /**
    * @brief join Runs all joining algorithms
    */
-  virtual void join(const OsmMapPtr& map) = 0;
+  virtual void join(const OsmMapPtr& map);
 
   /**
    * @brief get/set parent ID reset flag
@@ -64,38 +65,38 @@ protected:
    * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
    * parent
    */
-  virtual void _joinParentChild() = 0;
+  virtual void _joinParentChild();
 
   /**
    * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
    *    attempts to order them into adjoining way order, then joins them
    */
-  virtual void _joinSiblings() = 0;
+  virtual void _joinSiblings();
 
   /**
    * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
    *    to join them with adjacent ways that have the same tags
    */
-  virtual void _joinAtNode() = 0;
+  virtual void _joinAtNode();
 
   /**
    * @brief areJoinable Check the status of the ways to see if they are compatible when joining at
    * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
    */
-  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) = 0;
+  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2);
 
   /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed
    *    does nothing if _leavePid is true
    */
-  virtual void _resetParents() = 0;
+  virtual void _resetParents();
 
   /**
    * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
    *    but that parent way doesn't exist
    * @param way_ids Deque of sorted ways to join
    */
-  virtual void _rejoinSiblings(std::deque<long>& way_ids) = 0;
+  virtual void _rejoinSiblings(std::deque<long>& way_ids);
 
   /**
    * @brief joinWays Function to rejoin two ways
@@ -103,7 +104,7 @@ protected:
    * @param child Way that will be merged into the parent and then deleted
    * @return true if the two ways were joined; false otherwise
    */
-  virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) = 0;
+  virtual bool _joinWays(const WayPtr& parent, const WayPtr& child);
 
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;

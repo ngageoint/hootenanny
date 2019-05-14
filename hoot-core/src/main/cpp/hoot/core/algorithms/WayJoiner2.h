@@ -70,28 +70,10 @@ protected:
   virtual void _joinParentChild() override;
 
   /**
-   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
-   *    attempts to order them into adjoining way order, then joins them
-   */
-  virtual void _joinSiblings() override;
-
-  /**
    * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
    *    to join them with adjacent ways that have the same tags
    */
   virtual void _joinAtNode() override;
-
-  /**
-   * @brief areJoinable Check the status of the ways to see if they are compatible when joining at
-   * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
-   */
-  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) override;
-
-  /**
-   * @brief resetParents Resets parent id for all ways after joining operation has completed
-   *    does nothing if _leavePid is true
-   */
-  virtual void _resetParents() override;
 
   /**
    * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
