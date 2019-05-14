@@ -54,9 +54,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoiner2)
 
-WayJoiner2::WayJoiner2() :
-_leavePid(false),
-_numJoined(0)
+WayJoiner2::WayJoiner2()
 {
 }
 

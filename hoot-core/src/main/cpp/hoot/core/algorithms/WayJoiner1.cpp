@@ -47,9 +47,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoiner1)
 
-WayJoiner1::WayJoiner1() :
-    _leavePid(false),
-    _numJoined(0)
+WayJoiner1::WayJoiner1()
 {
 }
 
@@ -63,18 +61,18 @@ void WayJoiner1::join(const OsmMapPtr& map)
 {
   _map = map;
   //  Join back any ways with parent ids
-  joinParentChild();
+  _joinParentChild();
   //  Join any siblings that have the same parent id but the parent isn't connected
-  joinSiblings();
+  _joinSiblings();
   //  Rejoin any ways that are now connected to their parents
-  joinParentChild();
+  _joinParentChild();
   //  Run one last join on ways that share a node and have a parent id
-  joinAtNode();
+  _joinAtNode();
   //  Clear out any remaining unjoined parent ids
-  resetParents();
+  _resetParents();
 }
 
-void WayJoiner1::resetParents()
+void WayJoiner1::_resetParents()
 {
   if (_leavePid)
     return;
@@ -88,7 +86,7 @@ void WayJoiner1::resetParents()
   }
 }
 
-void WayJoiner1::joinParentChild()
+void WayJoiner1::_joinParentChild()
 {
   WayMap ways = _map->getWays();
   vector<long> ids;
@@ -109,11 +107,11 @@ void WayJoiner1::joinParentChild()
     long parent_id = way->getPid();
     WayPtr parent = ways[parent_id];
     //  Join this way to the parent
-    joinWays(parent, way);
+    _joinWays(parent, way);
   }
 }
 
-void WayJoiner1::joinSiblings()
+void WayJoiner1::_joinSiblings()
 {
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
@@ -133,11 +131,11 @@ void WayJoiner1::joinSiblings()
   {
     deque<long>& way_ids = map_it->second;
     while (way_ids.size() > 1)
-      rejoinSiblings(way_ids);
+      _rejoinSiblings(way_ids);
   }
 }
 
-void WayJoiner1::joinAtNode()
+void WayJoiner1::_joinAtNode()
 {
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
@@ -163,13 +161,13 @@ void WayJoiner1::joinAtNode()
       for (set<long>::const_iterator ways = way_ids.begin(); ways != way_ids.end(); ++ways)
       {
         WayPtr child = _map->getWay(*ways);
-        if (child && way->getId() != child->getId() && areJoinable(way, child))
+        if (child && way->getId() != child->getId() && _areJoinable(way, child))
         {
           Tags cTags = child->getTags();
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
-            joinWays(way, child);
+            _joinWays(way, child);
             break;
           }
         }
@@ -178,7 +176,7 @@ void WayJoiner1::joinAtNode()
   }
 }
 
-bool WayJoiner1::areJoinable(const WayPtr& w1, const WayPtr& w2)
+bool WayJoiner1::_areJoinable(const WayPtr& w1, const WayPtr& w2)
 {
   return
       //  Same status => Joinable
@@ -190,7 +188,7 @@ bool WayJoiner1::areJoinable(const WayPtr& w1, const WayPtr& w2)
       //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
-void WayJoiner1::rejoinSiblings(deque<long>& way_ids)
+void WayJoiner1::_rejoinSiblings(deque<long>& way_ids)
 {
   WayMap ways = _map->getWays();
   WayPtr start;
@@ -269,25 +267,25 @@ void WayJoiner1::rejoinSiblings(deque<long>& way_ids)
   {
     WayPtr parent = ways[sorted[0]];
     for (size_t i = 1; i < sorted.size(); ++i)
-      joinWays(parent, ways[sorted[i]]);
+      _joinWays(parent, ways[sorted[i]]);
   }
 }
 
-void WayJoiner1::joinWays(const WayPtr &parent, const WayPtr &child)
+bool WayJoiner1::_joinWays(const WayPtr &parent, const WayPtr &child)
 {
   if (!parent || !child)
-    return;
+    return false;
 
   //  Don't join area ways
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
-    return;
+    return false;
   //  Check if the two ways are able to be joined back up
   vector<long> child_nodes = child->getNodeIds();
   vector<long> parent_nodes = parent->getNodeIds();
   //  Make sure that there are nodes in the ways
   if (parent_nodes.size() == 0 || child_nodes.size() == 0)
-    return;
+    return false;
   //  First make sure that they begin or end at the same node
   bool parentFirst;
   if (child_nodes[0] == parent_nodes[parent_nodes.size() - 1])
@@ -295,7 +293,7 @@ void WayJoiner1::joinWays(const WayPtr &parent, const WayPtr &child)
   else if (child_nodes[child_nodes.size() - 1] == parent_nodes[0])
     parentFirst = false;
   else
-    return;
+    return false;
   //  Remove the split parent id
   child->resetPid();
   //  Merge the tags
@@ -326,6 +324,8 @@ void WayJoiner1::joinWays(const WayPtr &parent, const WayPtr &child)
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
   _numJoined++;
+
+  return true;
 }
 
 }
