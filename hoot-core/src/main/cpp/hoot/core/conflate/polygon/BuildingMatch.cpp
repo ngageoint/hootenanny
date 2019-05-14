@@ -72,7 +72,6 @@ _explainText(""),
 _reviewIfSecondaryFeatureNewer(ConfigOptions().getBuildingReviewIfSecondaryNewer()),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
 _dateFormat(ConfigOptions().getBuildingDateFormat()),
-// TODO: add test
 _matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
 {  
   _p = _rf->classify(map, _eid1, _eid2);
@@ -89,6 +88,8 @@ _matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
 
   if (type != MatchType::Match)
   { 
+    // If we have a review and one of the buildings completely containes the other (smaller
+    // overlap = 1), then let's convert to a match if the associted config options was enabled.
     const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
     LOG_VART(smallerOverlap);
     if (type == MatchType::Review && _matchReviewsWithContainment && smallerOverlap == 1.0)
