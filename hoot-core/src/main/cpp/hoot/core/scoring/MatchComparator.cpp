@@ -38,9 +38,9 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/GetTagValuesVisitor.h>
+#include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -208,7 +208,7 @@ bool MatchComparator::_debugLog(const QString& uuid1, const QString& uuid2, cons
 {
   TagContainsCriterion tcf("uuid", uuid1);
   tcf.addPair("uuid", uuid2);
-  ElementIdSetVisitor sv;
+  UniqueElementIdVisitor sv;
   FilteredVisitor fv2(tcf, sv);
   in->visitRo(fv2);
   const set<ElementId>& s = sv.getElementSet();
@@ -425,7 +425,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
 
   // read out all the uuids in the conflated data
   set<QString> cUuids;
-  GetTagValuesVisitor vc("uuid", cUuids);
+  UniqueTagValuesVisitor vc("uuid", cUuids);
   conflated->visitRo(vc);
   LOG_TRACE("cUuids size: " << cUuids.size());
 
@@ -499,14 +499,14 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
 
   // read out all the uuids in in1 and in2
   set<QString> in1Uuids;
-  GetTagValuesVisitor gtv1("uuid", in1Uuids);
+  UniqueTagValuesVisitor gtv1("uuid", in1Uuids);
   StatusCriterion sf1(Status::Unknown1);
   FilteredVisitor fvIn1(sf1, gtv1);
   in->visitRo(fvIn1);
   LOG_TRACE("in1Uuids size: " << in1Uuids.size());
 
   set<QString> in2Uuids;
-  GetTagValuesVisitor gtv2("uuid", in2Uuids);
+  UniqueTagValuesVisitor gtv2("uuid", in2Uuids);
   StatusCriterion sf2(Status::Unknown2);
   FilteredVisitor fvIn2(sf2, gtv2);
   in->visitRo(fvIn2);

@@ -22,21 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementIdSetVisitor.h"
-
-// Hoot
-#include <hoot/core/util/Factory.h>
+#include "UniqueTagValuesVisitor.h"
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdSetVisitor)
-
-void ElementIdSetVisitor::visit(const ConstElementPtr& e)
+void UniqueTagValuesVisitor::visit(const ConstElementPtr& e)
 {
-  _elements.insert(ElementId(e->getElementType(), e->getId()));
+  Tags::const_iterator it = e->getTags().find(_key);
+  if (it != e->getTags().end())
+  {
+    if (_split)
+    {
+      QStringList l;
+      e->getTags().readValues(_key, l);
+      for (int i = 0; i < l.size(); i++)
+      {
+        _bag.insert(l[i]);
+      }
+    }
+    else
+    {
+      _bag.insert(it.value());
+    }
+  }
 }
 
 }

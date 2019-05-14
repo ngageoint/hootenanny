@@ -40,7 +40,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -170,7 +170,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
                                         const QString& tagValue)
 {
   TagCriterion tc(tagKey, tagValue);
-  ElementIdSetVisitor v;
+  UniqueElementIdVisitor v;
   FilteredVisitor fv(tc, v);
   map->visitRo(fv);
   const set<ElementId> bag = v.getElementSet();

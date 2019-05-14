@@ -41,7 +41,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/rnd/scoring/multiary/MultiaryMatchTrainingValidator.h>
 
 // Qt
@@ -108,7 +108,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
   }
 
 
-  ElementIdSetVisitor eids;
+  UniqueElementIdVisitor eids;
   conflated->visitRo(eids);
 
   ElementConverter ec(conflated);

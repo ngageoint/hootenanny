@@ -42,7 +42,7 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -206,7 +206,7 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
   }
 
   TagKeyCriterion mergeTagCrit(MetadataTags::HootMergeTarget());
-  ElementIdSetVisitor idSetVis;
+  UniqueElementIdVisitor idSetVis;
   FilteredVisitor filteredVis(mergeTagCrit, idSetVis);
   map->visitRo(filteredVis);
   const std::set<ElementId>& mergeTargetIds = idSetVis.getElementSet();
