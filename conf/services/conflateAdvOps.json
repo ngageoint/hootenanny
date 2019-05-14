@@ -794,6 +794,14 @@
         	"onchange":"true"
     	    },
             {
+              "id": "building_force_contained_match",
+              "elem_type": "bool",
+              "description": "If true, a building pair has been flagged for review, and one member of the pair is contained completely inside the other, the pair will be matched instead.",
+              "name": "Always atch When One Building Is Completely Contained Inside Another",
+              "defaultvalue": "false",
+              "hoot_key": "building.force.contained.match"
+            },
+            {
             	"id":"building_keep_more_complex_geometry_when_auto_merging",
                 "elem_type":"bool",
                 "defaultvalue":"true",
@@ -816,6 +824,14 @@
                 "description":"If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
                 "name":"Remove Building Relations",
                 "hoot_key":"building.outline.update.op.remove.building.relations"
+            },
+            {
+              "id": "building_remove_building_relations",
+              "elem_type": "bool",
+              "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
+              "name": "Remove Building Relations",
+              "defaultvalue": "false",
+              "hoot_key": "building.outline.update.op.remove.building.relations"
             },
             {
             	"id":"building_review_if_secondary_newer",
