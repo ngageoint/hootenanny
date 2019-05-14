@@ -18,6 +18,11 @@ SUBDIRS += \
     hoot-js
 }
 
+swig {
+SUBDIRS += \
+    hoot-swig
+}
+
 rnd {
 SUBDIRS += hoot-rnd
 }
