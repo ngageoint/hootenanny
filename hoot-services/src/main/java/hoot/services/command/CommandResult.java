@@ -47,10 +47,10 @@ public class CommandResult {
     private String jobId;
     private String caller;
     private File workingDir;
-    private Double percentProgress;
+    private Integer percentProgress;
 
     public CommandResult() {
-        percentProgress = 0.0;
+        percentProgress = 0;
     }
 
     public String getCommand() {
@@ -141,11 +141,11 @@ public class CommandResult {
         this.workingDir = workingDir;
     }
 
-    public Double getPercentProgress() {
+    public Integer getPercentProgress() {
         return percentProgress;
     }
 
-    public void setPercentProgress(Double progress) {
+    public void setPercentProgress(Integer progress) {
         this.percentProgress = progress;
     }
 

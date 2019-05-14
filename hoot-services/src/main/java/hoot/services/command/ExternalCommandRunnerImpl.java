@@ -116,7 +116,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                         // if includes percent progress, update that as well
                         Matcher matcher = pattern.matcher(currentLine);
                         if (matcher.find()) {
-                            commandResult.setPercentProgress(Double.parseDouble(matcher.group(3))); // group 3 is the percent from the pattern regex
+                            commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
                         }
 
                         // update command status table stdout

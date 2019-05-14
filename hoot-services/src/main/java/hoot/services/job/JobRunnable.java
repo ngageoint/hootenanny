@@ -86,7 +86,7 @@ class JobRunnable implements Runnable {
                 }
                 else {
                     commandCounter++;
-                    Double percentComplete = DbUtils.getJobProgress(job.getJobId());
+                    Integer percentComplete = DbUtils.getJobProgress(job.getJobId());
                     jobStatusManager.updateJob(job.getJobId(), commandCounter + " out of " +
                             job.getCommands().length + " have been processed.", percentComplete);
                 }

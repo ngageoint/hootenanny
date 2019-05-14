@@ -38,7 +38,7 @@ public class JobStatus {
 
     private String jobId;
 
-    private Double percentComplete;
+    private Integer percentComplete;
 
     private java.sql.Timestamp start;
 
@@ -70,11 +70,11 @@ public class JobStatus {
         this.jobId = jobId;
     }
 
-    public Double getPercentComplete() {
+    public Integer getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(Double percentComplete) {
+    public void setPercentComplete(Integer percentComplete) {
         this.percentComplete = percentComplete;
     }
 
