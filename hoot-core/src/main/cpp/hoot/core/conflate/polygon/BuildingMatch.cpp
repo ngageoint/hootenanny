@@ -30,6 +30,7 @@
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
@@ -69,17 +70,18 @@ _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
 _explainText(""),
+// TODO: read the config opts for these directly
 _reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
 _dateTagKey(dateTagKey),
 _dateFormat(dateFormat)
 {  
-  OsmUtils::logElementDetail(map->getElement(_eid1), map, Log::Trace, "BuildingMatch: e1");
-  OsmUtils::logElementDetail(map->getElement(_eid2), map, Log::Trace, "BuildingMatch: e2");
-
   _p = _rf->classify(map, _eid1, _eid2);
 
-  ConstElementPtr element1 = map->getElement(eid1);
-  ConstElementPtr element2 = map->getElement(eid2);
+  ConstElementPtr element1 = map->getElement(_eid1);
+  ConstElementPtr element2 = map->getElement(_eid2);
+
+  OsmUtils::logElementDetail(element1, map, Log::Trace, "BuildingMatch: e1");
+  OsmUtils::logElementDetail(element2, map, Log::Trace, "BuildingMatch: e2");
 
   MatchType type = getType();
   LOG_VART(type);
@@ -87,7 +89,21 @@ _dateFormat(dateFormat)
 
   if (type != MatchType::Match)
   { 
-    description = _getMatchDescription(map, type, element1, element2);
+    const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
+    LOG_VART(smallerOverlap);
+    if (type == MatchType::Review && ConfigOptions().getBuildingForceContainedMatch() &&
+        smallerOverlap == 1.0)
+    {
+      LOG_TRACE(
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked for review where one " <<
+        "building is completely contained inside of the other. Marking as a match...")
+      _p.clear();
+      _p.setMatchP(1.0);
+    }
+    else
+    {
+      description = _getMatchDescription(map, type, element1, element2);
+    }
   }
   else if (_reviewIfSecondaryFeatureNewer)
   {
@@ -176,14 +192,16 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstEleme
 }
 
 QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                                const ConstElementPtr& element1, const ConstElementPtr& element2)
+                                                const ConstElementPtr& element1,
+                                                const ConstElementPtr& element2)
 {
   QStringList description;
 
   //  Get the overlap
   const double overlap = OverlapExtractor().extract(*map, element1, element2);
+  LOG_VART(overlap);
 
-  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+  // If the buildings aren't matched and they overlap at all, then make them be reviewed.
   if (type == MatchType::Miss && overlap > 0.0)
   {
     _p.clear();
@@ -198,16 +216,20 @@ QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const
     else if (overlap >= 0.5)    description.append("Medium building overlap.");
     else if (overlap >= 0.25)   description.append("Small building overlap.");
     else                        description.append("Very little building overlap.");
+
     //  Next check the Angle Histogram
     const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
+    LOG_VART(angle);
     if (angle >= 0.75)          description.append("Very similar building orientation.");
     else if (angle >= 0.5)      description.append("Similar building orientation.");
     else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
     else                        description.append("Building orientation not similar.");
-    //  Finally the edge distance
+
+    //  Finally, the edge distance
     const double edge =
       EdgeDistanceExtractor(
         ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
+    LOG_VART(edge);
     if (edge >= 90)             description.append("Building edges very close to each other.");
     else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
     else                        description.append("Building edges not very close to each other.");
