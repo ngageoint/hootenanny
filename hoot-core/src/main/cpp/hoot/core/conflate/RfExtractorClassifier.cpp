@@ -53,6 +53,8 @@ RfExtractorClassifier::RfExtractorClassifier()
 MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2) const
 {
+  LOG_TRACE("Determining classification for match between: " << eid1 << " and " << eid2 << "...");
+
   MatchClassification result;
 
   std::map<QString, double> features = getFeatures(map, eid1, eid2);

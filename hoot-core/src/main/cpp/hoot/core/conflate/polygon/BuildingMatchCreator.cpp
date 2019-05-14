@@ -85,14 +85,14 @@ public:
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, std::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
-    Status matchStatus = Status::Invalid, bool reviewMatchesOtherThanOneToOne = false) :
+    Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
     _filter(filter),
     _matchStatus(matchStatus),
-    _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
+    _reviewMatchesOtherThanOneToOne(ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne())
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -129,6 +129,7 @@ public:
     int neighborCount = 0;
 
     std::vector<Match*> tempMatches;
+
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       if (from != *it)
@@ -151,6 +152,17 @@ public:
         }
       }
     }
+
+    /*
+     * TODO: idea
+     *
+     * keep a map of element ids to matches above
+     *
+     * go through all the matches
+     *   if a match is a review with another feature and _matchReviewsWithContainment is enabled
+     *     see if it shares an edge (two common nodes?) with any element that has a match with that
+     *     feature and change the match to matched if so
+     */
 
     if (_reviewMatchesOtherThanOneToOne && neighborCount > 1)
     {
@@ -252,7 +264,8 @@ public:
       IndexElementsVisitor v(_index,
                              _indexToEid,
                              pCrit,
-                             std::bind(&BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
+                             std::bind(
+                               &BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
                              getMap());
 
       getMap()->visitRo(v);
@@ -321,9 +334,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<
 {
   LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
-  BuildingMatchVisitor v(
-    map, matches, _getRf(), threshold, _filter, Status::Unknown1,
-    ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
+  BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
