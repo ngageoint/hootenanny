@@ -63,17 +63,16 @@ Match(mt)
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
                              const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,
-                             const ConstMatchThresholdPtr& mt, bool reviewIfSecondaryFeatureNewer,
-                             const QString& dateTagKey, const QString& dateFormat) :
+                             const ConstMatchThresholdPtr& mt) :
 Match(mt),
 _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
 _explainText(""),
-// TODO: read the config opts for these directly
-_reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
-_dateTagKey(dateTagKey),
-_dateFormat(dateFormat)
+_reviewIfSecondaryFeatureNewer(ConfigOptions().getBuildingReviewIfSecondaryNewer()),
+_dateTagKey(ConfigOptions().getBuildingDateTagKey()),
+_dateFormat(ConfigOptions().getBuildingDateFormat()),
+_matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
 {  
   _p = _rf->classify(map, _eid1, _eid2);
 
@@ -91,8 +90,7 @@ _dateFormat(dateFormat)
   { 
     const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
     LOG_VART(smallerOverlap);
-    if (type == MatchType::Review && ConfigOptions().getBuildingForceContainedMatch() &&
-        smallerOverlap == 1.0)
+    if (type == MatchType::Review && _matchReviewsWithContainment && smallerOverlap == 1.0)
     {
       LOG_TRACE(
         "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked for review where one " <<

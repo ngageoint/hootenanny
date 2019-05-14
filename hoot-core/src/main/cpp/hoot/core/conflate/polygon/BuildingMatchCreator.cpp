@@ -177,11 +177,7 @@ public:
 
   BuildingMatch* createMatch(ElementId eid1, ElementId eid2)
   {
-    ConfigOptions opts = ConfigOptions();
-    return new
-      BuildingMatch(
-        _map, _rf, eid1, eid2, _mt, opts.getBuildingReviewIfSecondaryNewer(),
-        opts.getBuildingDateTagKey(), opts.getBuildingDateFormat());
+    return new BuildingMatch(_map, _rf, eid1, eid2, _mt);
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -312,11 +308,8 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
-      ConfigOptions opts = ConfigOptions(conf());
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold(),
-                                 opts.getBuildingReviewIfSecondaryNewer(),
-                                 opts.getBuildingDateTagKey(), opts.getBuildingDateFormat());
+      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
 
