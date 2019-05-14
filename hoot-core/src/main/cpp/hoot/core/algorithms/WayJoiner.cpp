@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -56,19 +57,19 @@ void WayJoiner::join(const OsmMapPtr& map)
 
   //  Join back any ways with parent ids
   _joinParentChild();
-//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-1");
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-1");
 
   //  Join any siblings that have the same parent id but the parent isn't connected
   _joinSiblings();
-//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-siblings");
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-siblings");
 
   //  Rejoin any ways that are now connected to their parents
   _joinParentChild();
-//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-2");
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-parent-child-2");
 
   //  Run one last join on ways that share a node and have a parent id
   _joinAtNode();
-//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
 
   //  Clear out any remaining unjoined parent ids
   _resetParents();
