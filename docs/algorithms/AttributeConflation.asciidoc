@@ -8,24 +8,26 @@ This conflation workflow can be used when you nearly absolute confidence in your
 and your secondary dataset has good tag attribution.  Attribute Conflation is still experimental as has primarily been tested against road data
 up to this point.
 
-=== One Way Streets
+=== Roads
+
+==== One Way Streets
 
 Attribute Conflation strives to preserve the correct one way direction for one way streets.  This can be difficult if the reference
 data is poorly attributed regarding one way streets and incorrect one way direction tag transfers may sometimes occur.
 
-=== Road Type Conflicts
+==== Type Conflicts
 
 If roads between the two input datasets have conflicting type tags, other then the generic highway=road tag, Hootenanny Attribute Conflation will
 not conflate the road pair together, so as not to lose road type accuracy.
 
-=== Bridges
+==== Bridges
 
 If the secondary layer being conflated has bridges connecting two road segments together and the reference data does not have those bridges,
 Attribute Conflation will need to make geometry change to the reference data to properly conflate the bridges.  If you wish to make
 no geometry changes to your reference dataset under any circumstance, you can disable the configuration option, 
 +attribute.conflation.allow.ref.geometry.changes.for.bridges+.
 
-=== Aggressive Road Joining
+==== Joining
 
 Another option for Attribute Conflation, disabled by default, is to enable aggressive road joining.  Generally, with this option disabled 
 you will end up with fewer road type and name tag transfers from the secondary layer to the reference layer for some road segements but at the cost of potentially more empty road segments in the output.  
@@ -35,12 +37,22 @@ layer for some road segements but at the cost of some incorrect tag transfers.  
 
 === Buildings
 
-Attribute Conflation always passes the reference geometry to output by disabling the +building.keep.more.complex.geometry.when.auto.merging+ 
-option. It also handles building reviews differently than other types of conflation. By default in Hootenanny, buildings involved in more than one
+==== Matching
+
+Unlike other types of conflation, Attribute Conflation will always force a match to occur if when two features are compared it is found that one
+contains the other. This is controlled by the +building.force.contained.match+ configuration option.
+
+==== Merging
+
+Attribute Conflation handles building merging differently than other types of conflation. It always passes the reference geometry to output by 
+disabling the +building.keep.more.complex.geometry.when.auto.merging+ option. By default in Hootenanny, buildings involved in more than one 
 match are always flagged for review. Attribute Conflation automatically merges buildings in those situations by enabling the 
 +building.merge.many.to.many.matches+ and +poi.polygon.auto.merge.many.poi.to.one.poly.matches+ options. In the situation where a group of
 buildings is merged together into a single building, the type tags of the merged buildings are retained. If two buildings have the same type tag
-key (e.g. shop=mall and shop=supermarked), arbitrarily the first tag will be kept and the others put into an "alt_types" tag. In addition, 
+key (e.g. shop=mall and shop=supermarked), arbitrarily the first tag will be kept and the others put into an "alt_types" tag. 
+
+==== Output
+
 Attribute Conflation handles conflated building output relations slightly differently than other conflation types. The default building 
 conflation behavior in Hootenanny generates both a building and multipolygon relation for each merged building, with the multipolygon relation 
 added as a member of the building relation.  Attribute Conflation generates only the multipolygon relation for merged buildings by activating 

@@ -38,7 +38,7 @@
         "hoot_key": "attribute.conflation.allow.reviews.by.score"
       },
       {
-        "id": "attribute_building_force_contained_match",
+        "id": "building_force_contained_match",
         "elem_type": "bool",
         "description": "If true, a building pair has been flagged for review, and one member of the pair is contained completely inside the other, the pair will be matched instead.",
         "name": "Always atch When One Building Is Completely Contained Inside Another",
@@ -46,7 +46,7 @@
         "hoot_key": "building.force.contained.match"
       },
       {
-        "id": "attribute_building_keep_ref_geom",
+        "id": "building_keep_more_complex_geometry_when_auto_merging",
         "elem_type": "bool",
         "description": "Keep building ref geom",
         "name": "Keep building ref geom",
@@ -54,7 +54,7 @@
         "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
       },
       {
-        "id": "attribute_building_merge_many_to_many_matches",
+        "id": "building_merge_many_to_many_matches",
         "elem_type": "bool",
         "description": "If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
         "name": "Automatically Merge Many To Many Matches",
@@ -62,7 +62,7 @@
         "hoot_key": "building.merge.many.to.many.matches"
       },
       {
-        "id": "remove_building_relations",
+        "id": "building_remove_building_relations",
         "elem_type": "bool",
         "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
         "name": "Remove Building Relations",
