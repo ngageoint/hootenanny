@@ -358,6 +358,8 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
   else
   {
+    LOG_VART(preserveTypes);
+
     vector<std::shared_ptr<Element>> parts;
     vector<ElementId> toRemove;
     parts.reserve(eid.size());
@@ -506,8 +508,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
-  return QString("BuildingMerger %1").arg(s);
+  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
 }
 
 }

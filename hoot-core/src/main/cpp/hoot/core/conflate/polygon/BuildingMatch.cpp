@@ -72,6 +72,7 @@ _explainText(""),
 _reviewIfSecondaryFeatureNewer(ConfigOptions().getBuildingReviewIfSecondaryNewer()),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
 _dateFormat(ConfigOptions().getBuildingDateFormat()),
+// TODO: add test
 _matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
 {  
   _p = _rf->classify(map, _eid1, _eid2);
