@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='10.0438315' minlon='-69.4085702' maxlat='10.0457384' maxlon='-69.4068858' origin='hootenanny' />
+  <node id='3268169410' timestamp='2015-01-03T23:29:30Z' uid='2526275' user='Carlosluis123' visible='true' version='1' changeset='27899952' lat='10.0455852' lon='-69.4085702' />
+  <node id='3268169411' timestamp='2015-01-03T23:29:30Z' uid='2526275' user='Carlosluis123' visible='true' version='1' changeset='27899952' lat='10.0457384' lon='-69.4069716' />
+  <node id='3268169412' timestamp='2015-01-03T23:29:30Z' uid='2526275' user='Carlosluis123' visible='true' version='1' changeset='27899952' lat='10.04399' lon='-69.4068858' />
+  <node id='3268169413' timestamp='2015-01-03T23:29:30Z' uid='2526275' user='Carlosluis123' visible='true' version='1' changeset='27899952' lat='10.0438315' lon='-69.4084361' />
+  <way id='320313408' action='modify' timestamp='2015-01-03T23:29:30Z' uid='2526275' user='Carlosluis123' visible='true' version='1' changeset='27899952'>
+    <nd ref='3268169410' />
+    <nd ref='3268169411' />
+    <nd ref='3268169412' />
+    <nd ref='3268169413' />
+    <nd ref='3268169410' />
+    <tag k='addr:city' v='Barquisimeto' />
+    <tag k='addr:postcode' v='3001' />
+    <tag k='addr:street' v='Avenida Florencio Jimenez' />
+    <tag k='angle' v='355.7' />
+    <tag k='building' v='hospital' />
+    <tag k='emergency' v='yes' />
+    <tag k='feature_area' v='33731.4' />
+    <tag k='length' v='199.6' />
+    <tag k='name' v='Building 1' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='width' v='176.0' />
+  </way>
+</osm>

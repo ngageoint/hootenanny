@@ -152,6 +152,7 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
     }
   }
 
+  LOG_VART(_removeBuildingRelations);
   if (_removeBuildingRelations)
   {
     _deleteBuildingRelations();
@@ -163,6 +164,7 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
   for (std::set<ElementId>::const_iterator it = _buildingRelationIds.begin(); it !=
        _buildingRelationIds.end(); ++it)
   {
+    LOG_TRACE("Removing building relation: " << *it << "...");
     RecursiveElementRemover(*it).apply(_map);
   }
 }

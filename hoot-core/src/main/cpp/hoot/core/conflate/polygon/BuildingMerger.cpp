@@ -244,9 +244,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     if (_manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
-      newTags =
-        PreserveTypesTagMerger(std::set<QString>(), OsmSchemaCategory::building())
-          .mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
+      newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
     }
     else
     {
@@ -360,6 +358,8 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
   else
   {
+    LOG_VART(preserveTypes);
+
     vector<std::shared_ptr<Element>> parts;
     vector<ElementId> toRemove;
     parts.reserve(eid.size());
@@ -508,8 +508,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
-  return QString("BuildingMerger %1").arg(s);
+  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
 }
 
 }

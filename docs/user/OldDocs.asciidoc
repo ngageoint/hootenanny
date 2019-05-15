@@ -907,7 +907,7 @@ To translate complex building parts simply translate them in the same way you wo
   
 .Example of a Complex Building
 
-image::user/images/image1348.png[]
+image::images/image1348.png[]
 
 In the above image there are three buildings; 123, 124, and 125. Building 123 is broken into two parts, a long rectangular section that is marked as a gabled roof and a squarish section that is marked with a flat roof. In a Shapefile that may look like the following:
 
