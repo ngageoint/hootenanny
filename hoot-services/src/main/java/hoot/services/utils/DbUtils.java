@@ -657,7 +657,7 @@ public class DbUtils {
             }
         }
         catch(SQLException exc) {
-            logger.info("ERROR HERE: " + exc.getMessage());
+            logger.error("ERROR HERE: " + exc.getMessage());
         }
 
         return progress;
