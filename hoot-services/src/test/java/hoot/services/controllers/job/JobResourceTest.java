@@ -128,7 +128,7 @@ public class JobResourceTest extends OSMResourceTestAbstract {
                     "{\"jobId\":\"" + jobId + "\"," +
                             "\"status\":\"complete\"," +
                             "\"statusDetail\":\"FINISHED SUCCESSFULLY\"," +
-                            "\"percentcomplete\":100.0," +
+                            "\"percentcomplete\":100," +
                             "\"lasttext\":\"FINISHED SUCCESSFULLY\"}";
 
             String actualResult = response.readEntity(String.class);
