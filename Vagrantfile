@@ -36,7 +36,8 @@ Vagrant.configure(2) do |config|
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
       # Try m3.4xlarge, c3.2xlarge, c3.4xlarge, m4.2xlarge, m4.4xlarge, etc.
-      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'c3.2xlarge')
+      # No such thing as m3.4xlarge...
+      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'c3.4xlarge')
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       if ENV.key?('AWS_KEYPAIR_NAME')
