@@ -40,7 +40,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
 
 NonConflatableElementRemover::NonConflatableElementRemover()
 {
-
 }
 
 void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
@@ -48,10 +47,10 @@ void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
   _numAffected = 0;
   _map = map;
 
-  std::shared_ptr<NonConflatableCriterion> pNonConflateCrit(new NonConflatableCriterion());
   RemoveElementsVisitor removeElementsVisitor;
   removeElementsVisitor.setRecursive(true);
-  removeElementsVisitor.addCriterion(pNonConflateCrit);
+  removeElementsVisitor.addCriterion(
+    std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
   _map->visitRw(removeElementsVisitor);
 }
 

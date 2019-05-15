@@ -184,7 +184,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
           }
           else
           {
-            LOG_TRACE("Building one null.");
+            LOG_TRACE("Buil"
+                      "+-ding one null.");
           }
           if (e2.get())
           {
