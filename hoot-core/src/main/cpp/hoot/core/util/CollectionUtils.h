@@ -49,19 +49,31 @@ public:
    * @return a flipped map
    */
   template<typename A, typename B>
-  static std::multimap<B,A> flipMap(const std::map<A,B>& src)
+  static std::multimap<B, A> flipMap(const std::map<A, B>& src)
   {
-    std::multimap<B,A> dst;
-    std::transform(src.begin(), src.end(), std::inserter(dst, dst.begin()), _flipPair<A,B>);
+    std::multimap<B, A> dst;
+    std::transform(src.begin(), src.end(), std::inserter(dst, dst.begin()), _flipPair<A, B>);
     return dst;
   }
+
+  /**
+   * Determines how many numbers two vectors have in common
+   *
+   * @param collection1 first collection to examine
+   * @param collection2 second collection to examine
+   * @return the number of numbers in common
+   * @todo Clearly, with some work, this could be genericized via templating for more generic use if
+   * ever needed.
+   */
+  static int numVectorItemsInCommon(const std::vector<long>& collection1,
+                                    const std::vector<long>& collection2);
 
 private:
 
   template<typename A, typename B>
   static std::pair<B,A> _flipPair(const std::pair<A,B>& p)
   {
-    return std::pair<B,A>(p.second, p.first);
+    return std::pair<B, A>(p.second, p.first);
   }
 };
 
