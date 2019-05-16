@@ -98,7 +98,7 @@ public class CommandResult {
     }
 
     public boolean failed() {
-        return (exitCode != SUCCESS);
+        return (exitCode == FAILURE);
     }
 
     public void setCommand(String command) {
