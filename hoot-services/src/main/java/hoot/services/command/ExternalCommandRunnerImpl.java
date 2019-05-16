@@ -200,7 +200,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             exitCode = executor.execute(cmdLine);
         }
         catch (Exception e) {
-            logger.error("Error executing ()", obfuscatedCommand, e);
             exitCode = CommandResult.FAILURE;
             exception = e;
         }
@@ -213,11 +212,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             }
         }
 
-        if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
-            // it was killed on purpose by the watchdog
-            logger.info("Process for {} command was killed!", obfuscatedCommand);
-        }
-
         LocalDateTime finish = LocalDateTime.now();
 
         commandResult.setExitCode(exitCode);
@@ -228,7 +222,12 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         }
 
         if (commandResult.failed()) {
-            logger.error("FAILURE of: {}", commandResult, exception);
+            if(this.watchDog.killedProcess()) {
+                // it was killed on purpose by the watchdog
+                logger.info("Process for {} command was killed!", obfuscatedCommand);
+            } else {
+                logger.error("FAILURE of: {}", commandResult, exception);
+            }
         }
         else {
             logger.debug("SUCCESS of: {}", commandResult);
