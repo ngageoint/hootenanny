@@ -64,7 +64,7 @@ public:
     const std::shared_ptr<const Element>& candidate) const override;
 
   virtual QString getDescription() const
-  { return "Uses Symmetric Difference with buffering and the feature with more overlap"; }
+  { return "Determines the overlap between two features focusing on the building with more overlap"; }
 };
 
 }

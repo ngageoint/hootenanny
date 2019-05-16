@@ -40,34 +40,28 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/BuildingPartCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
-// Return true if not conflatable
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  //See if our type is known conflatable - return false
-  // This could probably be made cleaner by adding a "conflatable" property to criterion. - #2941
-  if (HighwayCriterion().isSatisfied(e))
-    return false;
-  else if (LinearWaterwayCriterion().isSatisfied(e))
-    return false;
-  else if (PoiCriterion().isSatisfied(e))
-    return false;
-  else if (BuildingCriterion().isSatisfied(e))
-    return false;
-  else if (RailwayCriterion().isSatisfied(e))
-    return false;
-  else if (PowerLineCriterion().isSatisfied(e))
-    return false;
-  else if (AreaCriterion().isSatisfied(e))
-    return false;
-  else if (PoiPolygonPoiCriterion().isSatisfied(e))
-    return false;
-  else if (PoiPolygonPolyCriterion().isSatisfied(e))
+  // This could possibly be made cleaner by adding a "conflatable" property to criterion (there
+  // may be a better way). Its also unnecessarily maintenance-prone as new types get added. - #2941
+
+  if (HighwayCriterion().isSatisfied(e)
+      || LinearWaterwayCriterion().isSatisfied(e)
+      || PoiCriterion().isSatisfied(e)
+      || BuildingCriterion().isSatisfied(e)
+      || RailwayCriterion().isSatisfied(e)
+      || PowerLineCriterion().isSatisfied(e)
+      || AreaCriterion().isSatisfied(e)
+      || PoiPolygonPoiCriterion().isSatisfied(e)
+      || PoiPolygonPolyCriterion().isSatisfied(e)
+     )
     return false;
 
   // It is not something we can conflate

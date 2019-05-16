@@ -810,6 +810,15 @@
                 "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
             },
             {
+              "id":"building_match_threshold",
+              "elem_type":"double",
+              "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
+              "defaultvalue":"0.6",
+              "minvalue":"0.01",
+              "maxvalue":"1.0",
+              "hoot_key":"building.match.threshold"
+            },
+            {
             	"id":"building_merge_many_to_many_matches",
                 "elem_type":"bool",
                 "defaultvalue":"false",
