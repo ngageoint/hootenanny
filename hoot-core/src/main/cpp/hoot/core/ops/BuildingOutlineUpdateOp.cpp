@@ -47,6 +47,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -210,8 +211,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
   LOG_TRACE("Input building: " << building->toString());
 
   std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-
   const vector<RelationData::Entry> entries = building->getMembers();
+  QHash<RelationData::Entry,WayPtr> buildingWayLookup;
+
   for (size_t i = 0; i < entries.size(); i++)
   {
     LOG_VART(entries[i].role);
@@ -225,10 +227,12 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
         WayPtr way = _map->getWay(entries[i].getElementId().getId());
+
         if (way->getNodeCount() >= 4)
         {
           LOG_TRACE("Unioning building part: " << way << "...");
           _unionOutline(building, way, outline);
+          buildingWayLookup[entries[i]] = way;
         }
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
@@ -265,11 +269,16 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     const std::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
+
     _mergeNodes(outlineElement, building);
+
     outlineElement->setTags(building->getTags());;
+
     // We don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
+
     LOG_VART(outlineElement);
+
     if (_removeBuildingRelations)
     {
       LOG_TRACE("Marking building: " << building->getElementId() << " for deletion...");
@@ -278,6 +287,44 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     else
     {
       building->addElement(MetadataTags::RoleOutline(), outlineElement);
+    }
+
+    // remove outline ways that are duplicates of
+    if (outlineElement->getElementType() == ElementType::Relation)
+    {
+      vector<long> removeWayIds;
+      RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(outlineElement);
+
+      foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
+      {
+        ElementPtr pOutlineElement = _map->getElement(outlineEntry.getElementId());
+
+        if (pOutlineElement->getElementType() == ElementType::Way)
+        {
+          // see if it's a duplicate of any building
+          ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineElement);
+
+          foreach (WayPtr pSource, buildingWayLookup)
+          {
+            if( pSource->getNodeCount() == pOutlineWay->getNodeCount() )
+            {
+              vector<long> sourceNodes = pSource->getNodeIds();
+              vector<long> wayNodes = pOutlineWay->getNodeIds();
+
+              if( sourceNodes == wayNodes )
+              {
+                removeWayIds.push_back(pOutlineWay->getId());
+                pOutlineRelation->replaceElement(pOutlineElement, pSource);
+              }
+            }
+          }
+        }
+      }
+
+      foreach (long id, removeWayIds)
+      {
+        RemoveWayOp::removeWayFully(_map, id);
+      }
     }
   }
   else
