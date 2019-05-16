@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -120,17 +119,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  LOG_DEBUG("\tDiscarding relations...");
-  std::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
-  RemoveElementsVisitor removeRelationsVisitor;
-  removeRelationsVisitor.addCriterion(pRelationCrit);
-  _pMap->visitRw(removeRelationsVisitor);
-  _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-discarding-relations");
-
   LOG_DEBUG("\tDiscarding unconflatable elements...");
-  NonConflatableElementRemover nonConflateRemover;
-  nonConflateRemover.apply(_pMap);
+  NonConflatableElementRemover().apply(_pMap);
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
@@ -353,9 +343,8 @@ void DiffConflator::_calcAndStoreTagChanges()
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      // If it's a POI-Poly match, the poi always comes first, even if it's from
-      // the secondary dataset, so we can't always count on the first being
-      // the old element
+      // If it's a POI-Poly match, the poi always comes first, even if it's from the secondary
+      // dataset, so we can't always count on the first being the old element
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
       if (_pOriginalMap->containsElement(pit->first))
@@ -412,27 +401,23 @@ bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
   return false;
 }
 
-// Create a new change object based on the original element, with new tags
-Change DiffConflator::_getChange(ConstElementPtr pOldElement,
-                                 ConstElementPtr pNewElement)
+Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement)
 {
-  // This may seem a little weird, but we want something very specific here.
-  // We want the old element as it was... with new tags.
+  // Create a new change object based on the original element, with new tags. This may seem a
+  // little weird, but we want something very specific here. We want the old element as it was...
+  // with new tags.
 
   // Copy the old one to get the geometry
   ElementPtr pChangeElement(pOldElement->clone());
-
   assert(pChangeElement->getId() == pOldElement->getId());
 
   // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
-  Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
-                                                             pOldElement->getTags());
+  Tags newTags =
+    TagComparator::getInstance().overwriteMerge(pNewElement->getTags(), pOldElement->getTags());
   pChangeElement->setTags(newTags);
 
   // Create the change
-  Change newChange(Change::Modify, pChangeElement);
-
-  return newChange;
+  return Change(Change::Modify, pChangeElement);
 }
 
 void DiffConflator::_reset()
@@ -462,11 +447,10 @@ void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType&
   }
 }
 
-// Convenience function used when deriving a changeset
 std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  //Conflation requires all data to be in memory, so no point in adding support for
-  //ExternalMergeElementSorter here.
+  // Conflation requires all data to be in memory, so no point in adding support for the
+  // ExternalMergeElementSorter here.
 
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
@@ -481,7 +465,7 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 
 void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
-  // Write a changeset
+  // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
   if (!_conflateTags)
