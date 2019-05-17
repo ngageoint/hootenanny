@@ -44,6 +44,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.CommandStatus;
 
 
@@ -64,10 +66,20 @@ public class JobStatusManagerImpl implements JobStatusManager {
             newJobStatus.setJobType(job.getJobType().ordinal());
             newJobStatus.setStatus(RUNNING.ordinal());
             newJobStatus.setStatusDetail("PROCESSING");
-            newJobStatus.setPercentComplete(0.0);
+            newJobStatus.setPercentComplete(0);
             newJobStatus.setResourceId(job.getMapId());
             Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
             newJobStatus.setStart(ts);
+
+            // We only get the external command count because they take the longest to run so they have
+            // the biggest impact on the math for job progress
+            int commandCounter = 0;
+            for(Command command: job.getCommands()) {
+                if(command instanceof ExternalCommand) {
+                    commandCounter++;
+                }
+            }
+            newJobStatus.setCommandCount(commandCounter);
 
             createQuery().insert(jobStatus).populate(newJobStatus).execute();
 
@@ -103,7 +115,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
     }
 
     @Override
-    public void updateJob(String jobId, String statusDetail, Double percentComplete) {
+    public void updateJob(String jobId, String statusDetail, Integer percentComplete) {
         try {
             this.updateJob(jobId, RUNNING, statusDetail, percentComplete);
         }
@@ -127,7 +139,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public void setCompleted(String jobId, String statusDetail) {
         try {
-            this.updateJob(jobId, COMPLETE, statusDetail, 100.0);
+            this.updateJob(jobId, COMPLETE, statusDetail, 100);
         }
         catch (Exception e) {
             logger.error("Error setting job with ID = {} status to COMPLETE with status detail = '{}'", jobId, statusDetail, e);
@@ -231,9 +243,9 @@ public class JobStatusManagerImpl implements JobStatusManager {
      * Updates job. This one should be used to any storage behavior like add or
      * update Since the serialization routine can change.
      */
-    private void updateJob(String jobId, JobStatus jobStatus, String statusDetail, Double percentComplete) {
+    private void updateJob(String jobId, JobStatus jobStatus, String statusDetail, Integer percentComplete) {
         try {
-            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete, null);
+            updateJobStatus(jobId, jobStatus, statusDetail, percentComplete);
         }
         catch (Exception e) {
             logger.error("Failed to update job status of job with ID = {} and status detail = {}", jobId, statusDetail, e);
@@ -247,7 +259,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
      * @param jobId
      * @param newStatus
      */
-    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Double percentComplete, Long userId) {
+    private void updateJobStatus(String jobId, JobStatus newStatus, String statusDetail, Integer percentComplete) {
         hoot.services.models.db.JobStatus currentJobStatus = createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId)).fetchOne();
 
         if ((currentJobStatus != null) && (currentJobStatus.getStatus() == RUNNING.ordinal())) {
@@ -270,7 +282,6 @@ public class JobStatusManagerImpl implements JobStatusManager {
         else if (currentJobStatus == null) {
             currentJobStatus = new hoot.services.models.db.JobStatus();
             currentJobStatus.setJobId(jobId);
-            currentJobStatus.setUserId(userId);
             currentJobStatus.setStatus(newStatus.ordinal());
 
             if (statusDetail != null) {
