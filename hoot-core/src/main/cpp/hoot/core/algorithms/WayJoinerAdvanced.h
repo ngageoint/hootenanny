@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef WAYJOINER2_H
-#define WAYJOINER2_H
+#ifndef WAYJOINER_ADVANCED_H
+#define WAYJOINER_ADVANCED_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -38,14 +38,13 @@ namespace hoot
 
 /**
  * An experimental way joiner implemented to work with Attribute Conflation and a possible
- * predecessor to WayJoiner1.  If we end up keeping WayJoiner1 and WayJoiner2 separate, then
- * possibly a shared base class could be made to reduce some of the redundant code between them.
+ * replacement for WayJoinerBasic.
  */
-class WayJoiner2 : public WayJoiner
+class WayJoinerAdvanced : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::WayJoiner2"; }
+  static std::string className() { return "hoot::WayJoinerAdvanced"; }
 
   typedef enum
   {
@@ -54,7 +53,12 @@ public:
     ShareFirstNode
   } JoinAtNodeMergeType;
 
-  WayJoiner2();
+  WayJoinerAdvanced();
+
+  /**
+   * Static method to join all joinable ways using WayJoinerBasic
+   */
+  static void joinWays(const OsmMapPtr& map);
 
   /**
    * @see WayJoiner
@@ -90,7 +94,7 @@ protected:
    */
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
-  /*
+  /**
    * A more aggressive joining approach that tries to join up any unnamed generic roads in the
    * output with a non-generic named road.  Best to be run after other joining routines and will
    * likely result in some undesirable joins.
@@ -106,4 +110,4 @@ protected:
 
 }
 
-#endif  //  WAYJOINER2_H
+#endif  //  WAYJOINER_ADVANCED_H

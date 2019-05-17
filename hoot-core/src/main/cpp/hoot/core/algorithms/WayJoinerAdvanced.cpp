@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "WayJoiner2.h"
+#include "WayJoinerAdvanced.h"
 
 //  Hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
@@ -52,13 +52,19 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(WayJoiner, WayJoiner2)
+HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerAdvanced)
 
-WayJoiner2::WayJoiner2()
+WayJoinerAdvanced::WayJoinerAdvanced()
 {
 }
 
-void WayJoiner2::join(const OsmMapPtr& map)
+void WayJoinerAdvanced::joinWays(const OsmMapPtr& map)
+{
+  WayJoinerAdvanced wayJoiner;
+  wayJoiner.join(map);
+}
+
+void WayJoinerAdvanced::join(const OsmMapPtr& map)
 {
   //  Call base class implementation
   WayJoiner::join(map);
@@ -72,7 +78,7 @@ void WayJoiner2::join(const OsmMapPtr& map)
   }
 }
 
-void WayJoiner2::_joinParentChild()
+void WayJoinerAdvanced::_joinParentChild()
 {
   LOG_TRACE("Joining parents to children...");
 
@@ -127,7 +133,7 @@ void WayJoiner2::_joinParentChild()
   }
 }
 
-void WayJoiner2::_joinAtNode()
+void WayJoinerAdvanced::_joinAtNode()
 {
   LOG_TRACE("Joining ways at node...");
 
@@ -226,7 +232,7 @@ void WayJoiner2::_joinAtNode()
   LOG_TRACE("Num joinAtNode iterations: " << numIterations);
 }
 
-void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
+void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 {
   LOG_TRACE("Rejoining siblings...");
   LOG_VART(way_ids);
@@ -371,7 +377,7 @@ void WayJoiner2::_rejoinSiblings(deque<long>& way_ids)
   }
 }
 
-bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
+bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 {
   if (!parent || !child)
     return false;
@@ -529,7 +535,7 @@ bool WayJoiner2::_joinWays(const WayPtr& parent, const WayPtr& child)
   return true;
 }
 
-void WayJoiner2::_joinUnsplitWaysAtNode()
+void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 {
   // This could possibly be done inside of _joinAtNode to avoid an additional pass over the way
   // data by relaxing restrictions on what can be joined.
@@ -606,7 +612,7 @@ void WayJoiner2::_joinUnsplitWaysAtNode()
     " attempts.");
 }
 
-void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
+void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
                                          WayPtr& toRemove)
 {
   // this is kind of a mess
@@ -660,7 +666,7 @@ void WayJoiner2::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& ke
   }
 }
 
-bool WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
+bool WayJoinerAdvanced::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
                                              ConstWayPtr wayWithTagsToLose)
 {
   OneWayCriterion oneWayCrit;
@@ -678,7 +684,7 @@ bool WayJoiner2::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
   return false;
 }
 
-double WayJoiner2::_getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const
+double WayJoinerAdvanced::_getTotalLengthFromTags(const Tags& tags1, const Tags& tags2) const
 {
   double totalLength = -1.0;
   const bool eitherTagsHaveLength =

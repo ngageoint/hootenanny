@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "WayJoiner1.h"
+#include "WayJoinerBasic.h"
 
 //  Hoot
 #include <hoot/core/util/Factory.h>
@@ -38,15 +38,15 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(WayJoiner, WayJoiner1)
+HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerBasic)
 
-WayJoiner1::WayJoiner1()
+WayJoinerBasic::WayJoinerBasic()
 {
 }
 
-void WayJoiner1::joinWays(const OsmMapPtr& map)
+void WayJoinerBasic::joinWays(const OsmMapPtr& map)
 {
-  WayJoiner1 wayJoiner;
+  WayJoinerBasic wayJoiner;
   wayJoiner.join(map);
 }
 

@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef WAYJOINER1_H
-#define WAYJOINER1_H
+#ifndef WAYJOINER_BASIC_H
+#define WAYJOINER_BASIC_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -38,16 +38,16 @@ namespace hoot
 /**
  * Joins ways back together that were split during pre-conflation cleaning or during matching.
  */
-class WayJoiner1 : public WayJoiner
+class WayJoinerBasic : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::WayJoiner1"; }
+  static std::string className() { return "hoot::WayJoinerBasic"; }
 
-  WayJoiner1();
+  WayJoinerBasic();
 
   /**
-   * @see WayJoiner
+   * Static method to join all joinable ways using WayJoinerBasic
    */
   static void joinWays(const OsmMapPtr& map);
 
@@ -55,4 +55,4 @@ public:
 
 }
 
-#endif  //  WAYJOINER1_H
+#endif  //  WAYJOINER_BASIC_H
