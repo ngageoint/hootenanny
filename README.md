@@ -89,6 +89,7 @@ In addition to conflating maps together, Hootenanny can also:
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
 * Plot [node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-plot.asciidoc)
 * [Snap](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) unconnected roads to neighboring roads
+* [Process](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc) map postal address data
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
 * Translate feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
@@ -105,22 +106,26 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 # Command Line Interface
-`hoot conflate input1.osm input2.osm output.osm`
 [Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.
 
-[Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
+Example:
+```hoot conflate input1.osm input2.osm output.osm```
+
+[More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 # Programming Language Bindings
+Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
+
+Example:
+
 ```
-var HOOT_HOME = process.env.HOOT_HOME
-var hoot = require(HOOT_HOME + '/lib/HootJs');
+var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
 var map = new hoot.OsmMap();
 hoot.loadMap(map, "input1.osm", false, 1);
 hoot.loadMap(map, "input2.osm", false, 2);
 new hoot.UnifyingConflator().apply(map)
 hoot.saveMap(map, "output.osm");
 ```
-Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
