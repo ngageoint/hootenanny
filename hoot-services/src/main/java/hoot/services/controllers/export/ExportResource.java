@@ -93,9 +93,10 @@ public class ExportResource {
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
         Class<? extends ExportCommand> exportCommand = null;
-        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-            exportCommand = ExportOSMCommand.class;
-        } else if (outputType.equals("tiles")) {
+//        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
+//            exportCommand = ExportOSMCommand.class;
+//        } else
+        if (outputType.equals("tiles")) {
             exportCommand = CalculateTilesCommand.class;
         } else {
             exportCommand = ExportCommand.class;
