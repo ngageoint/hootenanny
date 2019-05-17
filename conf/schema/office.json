@@ -1,6 +1,6 @@
 [
     {
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "office=*",
         "objectType": "tag",
         "similarTo": {

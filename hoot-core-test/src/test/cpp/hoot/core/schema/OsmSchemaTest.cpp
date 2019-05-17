@@ -307,7 +307,7 @@ public:
       "valueType: 2\n"
       "aliases: [0]{}\n"
       "geometries: 31\n"
-      "categories: [2]{poi, hgispoi}\n"
+      "categories: [2]{poi}\n"
       ", name: bus_platform\n"
       "key: \n"
       "value: \n"
@@ -317,7 +317,7 @@ public:
       "valueType: 2\n"
       "aliases: [0]{}\n"
       "geometries: 31\n"
-      "categories: [2]{poi, hgispoi}\n"
+      "categories: [2]{poi}\n"
       "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
       "}", toString(uut.getSchemaVertices(t)));
 
@@ -330,7 +330,7 @@ public:
       "valueType: 2\n"
       "aliases: [0]{}\n"
       "geometries: 31\n"
-      "categories: [2]{poi, hgispoi}\n"
+      "categories: [2]{poi}\n"
       "tags: [2]{[2]{public_transport=platform, bus=yes}, [2]{public_transport=platform, highway=bus_stop}}\n"
       "}", toString(uut.getUniqueSchemaVertices(t)));
 

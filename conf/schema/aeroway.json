@@ -3,7 +3,7 @@
         "dataType": "enumeration",
         "influence": 1,
         "name": "aeroway",
-        "isA": "hgispoi",
+        "isA": "poi",
         "objectType": "tag"
     },
     {
