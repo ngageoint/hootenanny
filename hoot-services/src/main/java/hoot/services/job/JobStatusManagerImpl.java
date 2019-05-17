@@ -44,6 +44,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.CommandStatus;
 
 
@@ -66,9 +68,18 @@ public class JobStatusManagerImpl implements JobStatusManager {
             newJobStatus.setStatusDetail("PROCESSING");
             newJobStatus.setPercentComplete(0);
             newJobStatus.setResourceId(job.getMapId());
-            newJobStatus.setCommandCount(job.getCommands().length);
             Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
             newJobStatus.setStart(ts);
+
+            // We only get the external command count because they take the longest to run so they have
+            // the biggest impact on the math for job progress
+            int commandCounter = 0;
+            for(Command command: job.getCommands()) {
+                if(command instanceof ExternalCommand) {
+                    commandCounter++;
+                }
+            }
+            newJobStatus.setCommandCount(commandCounter);
 
             createQuery().insert(jobStatus).populate(newJobStatus).execute();
 
