@@ -33,6 +33,7 @@ Feature: Review Bookmarks
         Then I type "This is a review bookmark" in input "reviewBookmarkNote"
         Then I type "cucumber1@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
         Then I press "big.loud" span with text "Save"
+        Then I should not see the "div.fill-darken3" on the page
 
     Scenario: Create Bookmark without Note
         Then I click the "Bookmark Review" link
@@ -45,6 +46,7 @@ Feature: Review Bookmarks
         Then I type "Bookmark for cucumber testing" in input "reviewBookmarkDescription"
         Then I type "cucumber2@hootenanny.digitalglobe.com" in input "reviewBookmarkCreatorEmail"
         Then I press "big.loud" span with text "Save"
+        Then I should not see the "div.fill-darken3" on the page
 
     Scenario: Add new comment to bookmark
         Then I select the "sprocket" div

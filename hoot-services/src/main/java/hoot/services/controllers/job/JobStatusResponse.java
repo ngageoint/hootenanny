@@ -61,7 +61,7 @@ public class JobStatusResponse {
     private String statusDetail;
 
     @JsonProperty("percentcomplete")
-    private Double percentComplete;
+    private Integer percentComplete;
 
     @JsonProperty("lasttext")
     private String lastText;
@@ -133,11 +133,11 @@ public class JobStatusResponse {
         this.statusDetail = statusDetail;
     }
 
-    public Double getPercentComplete() {
+    public Integer getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(Double percentComplete) {
+    public void setPercentComplete(Integer percentComplete) {
         this.percentComplete = percentComplete;
     }
 
