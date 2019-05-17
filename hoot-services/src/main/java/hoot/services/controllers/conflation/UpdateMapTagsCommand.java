@@ -94,12 +94,8 @@ class UpdateMapTagsCommand implements InternalCommand {
 
     private void updateMapTags() {
         try {
-            // Currently we do not have any way to get map id directly from hoot
-            // core command when it runs so for now we need get the all the map ids matching name and pick
-            // first one..
-            // THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
 
-            Long mapId = DbUtils.getMapIdFromRef(mapName, userId);
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
             if (mapId != null) {
                 // Hack alert!
                 // Add special handling of stats tag key
@@ -113,9 +109,9 @@ class UpdateMapTagsCommand implements InternalCommand {
                         String stats = FileUtils.readFileToString(statsFile, "UTF-8");
                         tags.put(statsKey, stats);
 
-                        if (!statsFile.delete()) {
-                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
-                        }
+//                        if (!statsFile.delete()) {
+//                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+//                        }
                     }
                     else {
                         logger.error("Can't find {}", statsName);

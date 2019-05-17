@@ -154,7 +154,7 @@ class ConflateCommand extends ExternalCommand {
         String stats = "";
         if (params.getCollectStats()) {
             // Don't include non-error log messages in stdout because we are redirecting to file
-            debugLevel = "error";
+//            debugLevel = "error";
 
             //Hootenanny map statistics such as node and way count
             stats = "--stats";
