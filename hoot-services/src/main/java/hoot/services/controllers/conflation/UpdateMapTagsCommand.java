@@ -28,9 +28,13 @@ package hoot.services.controllers.conflation;
 
 import static hoot.services.HootProperties.RPT_STORE_PATH;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -106,12 +110,30 @@ class UpdateMapTagsCommand implements InternalCommand {
                     String statsName = tags.get(statsKey);
                     File statsFile = new File(statsName);
                     if (statsFile.exists()) {
-                        String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                        tags.put(statsKey, stats);
+                        List<String> stats = new ArrayList<>();
+                        try (BufferedReader br = new BufferedReader(new FileReader(statsFile))) {
+                            String line;
+                            boolean capture = false;
+                            int idx;
+                            while ((line = br.readLine()) != null) {
+                               if ((idx = line.indexOf("stats = ")) > -1) {
+                                   capture = true;
+                                   line = line.substring(idx);
+                               }
+                               if (line.isEmpty()) {
+                                   break;
+                               }
+                               if (capture) {
+                                   stats.add(line);
+                               }
+                            }
+                        }
 
-//                        if (!statsFile.delete()) {
-//                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
-//                        }
+                        tags.put(statsKey, String.join("\n", stats));
+
+                        if (!statsFile.delete()) {
+                            logger.error("Error deleting {} file", statsFile.getAbsolutePath());
+                        }
                     }
                     else {
                         logger.error("Can't find {}", statsName);
