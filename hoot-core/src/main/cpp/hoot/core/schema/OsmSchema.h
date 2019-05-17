@@ -362,6 +362,15 @@ public:
    */
   bool hasCategory(const QString& kvp, const QString& category) const;
 
+  /**
+   * Determines if the key is part of any category in the schema
+   *
+   * @param key tag key
+   * @param val tag value
+   * @return true if the tag is part of at least one schema category; false otherwise
+   */
+  bool hasAnyCategory(const QString& key, const QString& val) const;
+
   bool isAncestor(const QString& childKvp, const QString& parentKvp);
 
   bool allowsFor(const Tags& t, const ElementType& type, OsmGeometries::Type geometries);

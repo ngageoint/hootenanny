@@ -53,9 +53,7 @@ public:
   // this constructor added primarily for testing purposes
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
-                const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt,
-                bool reviewIfSecondaryFeatureNewer = false, const QString& dateTagKey = "",
-                const QString& dateFormat = "");
+                const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -101,6 +99,9 @@ private:
   QString _dateTagKey;
   // format of a feature's timestamp
   QString _dateFormat;
+  // determines whether feature pairs flagged for review should be converted to matches when one
+  // feature in the pair is completely contained by the other
+  bool _matchReviewsWithContainment;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
   QStringList _getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,

@@ -22,35 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef GETELEMENTIDSVISITOR_H
-#define GETELEMENTIDSVISITOR_H
+#include "UniqueElementIdVisitor.h"
 
-// hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+// Hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Puts all the visited elementIds into a bag.
- */
-class GetElementIdsVisitor : public ConstElementVisitor
+HOOT_FACTORY_REGISTER(ElementVisitor, UniqueElementIdVisitor)
+
+void UniqueElementIdVisitor::visit(const ConstElementPtr& e)
 {
-public:
-
-  GetElementIdsVisitor(std::set<ElementId>& bag) : _bag(bag) {}
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const { return "Puts all the visited elementIds into a bag"; }
-
-private:
-
-  std::set<ElementId>& _bag;
-};
-
+  _elements.insert(ElementId(e->getElementType(), e->getId()));
 }
 
-#endif // GETELEMENTIDSVISITOR_H
+}

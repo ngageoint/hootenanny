@@ -441,14 +441,14 @@ RelationPtr BuildingPartMergeOp::combineBuildingParts(const OsmMapPtr& map,
 
   TagMergerPtr tagMerger;
   LOG_VARD(_preserveTypes);
+  // exclude building part type tags from the type tag preservation by passing them in to be skipped
   if (!_preserveTypes)
   {
     tagMerger.reset(new BuildingPartTagMerger(_buildingPartTagNames));
   }
   else
   {
-    tagMerger.reset(
-      new PreserveTypesTagMerger(_buildingPartTagNames, OsmSchemaCategory::building()));
+    tagMerger.reset(new PreserveTypesTagMerger(_buildingPartTagNames));
   }
 
   Tags& buildingTags = building->getTags();

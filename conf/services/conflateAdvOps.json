@@ -794,12 +794,29 @@
         	"onchange":"true"
     	    },
             {
+              "id": "building_force_contained_match",
+              "elem_type": "bool",
+              "description": "If true, a building pair has been flagged for review, and one member of the pair is contained completely inside the other, the pair will be matched instead.",
+              "name": "Always atch When One Building Is Completely Contained Inside Another",
+              "defaultvalue": "false",
+              "hoot_key": "building.force.contained.match"
+            },
+            {
             	"id":"building_keep_more_complex_geometry_when_auto_merging",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
                 "name":"Keep More Complex Geometry When Auto Merging",
                 "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
+            },
+            {
+              "id":"building_match_threshold",
+              "elem_type":"double",
+              "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
+              "defaultvalue":"0.6",
+              "minvalue":"0.01",
+              "maxvalue":"1.0",
+              "hoot_key":"building.match.threshold"
             },
             {
             	"id":"building_merge_many_to_many_matches",
@@ -816,6 +833,14 @@
                 "description":"If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
                 "name":"Remove Building Relations",
                 "hoot_key":"building.outline.update.op.remove.building.relations"
+            },
+            {
+              "id": "building_remove_building_relations",
+              "elem_type": "bool",
+              "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
+              "name": "Remove Building Relations",
+              "defaultvalue": "false",
+              "hoot_key": "building.outline.update.op.remove.building.relations"
             },
             {
             	"id":"building_review_if_secondary_newer",
