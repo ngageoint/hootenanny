@@ -289,7 +289,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       building->addElement(MetadataTags::RoleOutline(), outlineElement);
     }
 
-    // remove outline ways that are duplicates of
+    // find outline ways that are exact duplicates of the original building ways
     if (outlineElement->getElementType() == ElementType::Relation)
     {
       vector<long> removeWayIds;
@@ -304,23 +304,25 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
           // see if it's a duplicate of any building
           ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineElement);
 
-          foreach (WayPtr pSource, buildingWayLookup)
+          foreach (WayPtr pBuildingWay, buildingWayLookup)
           {
-            if( pSource->getNodeCount() == pOutlineWay->getNodeCount() )
+            if (pBuildingWay->getNodeCount() == pOutlineWay->getNodeCount())
             {
-              vector<long> sourceNodes = pSource->getNodeIds();
+              vector<long> sourceNodes = pBuildingWay->getNodeIds();
               vector<long> wayNodes = pOutlineWay->getNodeIds();
 
-              if( sourceNodes == wayNodes )
+              if (sourceNodes == wayNodes)
               {
+                // replace the outline way with the building way and mark the outline way for removal
                 removeWayIds.push_back(pOutlineWay->getId());
-                pOutlineRelation->replaceElement(pOutlineElement, pSource);
+                pOutlineRelation->replaceElement(pOutlineWay, pBuildingWay);
               }
             }
           }
         }
       }
 
+      // remove replaced outline ways
       foreach (long id, removeWayIds)
       {
         RemoveWayOp::removeWayFully(_map, id);
