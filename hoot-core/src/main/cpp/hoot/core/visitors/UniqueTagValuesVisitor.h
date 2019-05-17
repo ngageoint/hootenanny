@@ -22,21 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementIdSetVisitor.h"
+#ifndef UNIQUE_TAG_VALUES_VISITOR_H
+#define UNIQUE_TAG_VALUES_VISITOR_H
 
-// Hoot
-#include <hoot/core/util/Factory.h>
+// hoot
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdSetVisitor)
-
-void ElementIdSetVisitor::visit(const ConstElementPtr& e)
+/**
+ * Puts all values for the given key into a bag. If you want to filter based on type see
+ * FilteredVisitor. If the values are a list then they're split before they're put in the bag.
+ */
+class UniqueTagValuesVisitor : public ConstElementVisitor
 {
-  _elements.insert(ElementId(e->getElementType(), e->getId()));
-}
+public:
+
+  /**
+   * @param split If split is set to true then the values in the tag are split before they're placed
+   *  in the bag.
+   */
+  UniqueTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false) :
+    _key(key),
+    _bag(bag),
+    _split(split)
+  {}
+
+  virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Returns all the unique element IDs visited"; }
+
+private:
+
+  QString _key;
+  std::set<QString>& _bag;
+  bool _split;
+};
 
 }
+
+#endif // UNIQUE_TAG_VALUES_VISITOR_H

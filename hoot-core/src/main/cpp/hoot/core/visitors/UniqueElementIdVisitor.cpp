@@ -22,25 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "UniqueElementIdVisitor.h"
 
-//
-// Convert Mass & NH GIS data to OSM+
-//
+// Hoot
+#include <hoot/core/util/Factory.h>
 
-hoot.require('MassNh')
-hoot.require('MassNh_rules')
-hoot.require('translate')
-hoot.require('config')
-
-
-// IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName, geometryType)
+namespace hoot
 {
-    return MassNh.toOsm(attrs, layerName, geometryType);
 
-} // End of Translate Attributes
+HOOT_FACTORY_REGISTER(ElementVisitor, UniqueElementIdVisitor)
 
+void UniqueElementIdVisitor::visit(const ConstElementPtr& e)
+{
+  _elements.insert(ElementId(e->getElementType(), e->getId()));
+}
 
+}

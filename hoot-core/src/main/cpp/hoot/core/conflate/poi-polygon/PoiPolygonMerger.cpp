@@ -35,7 +35,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
@@ -109,9 +109,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
-    tagMerger.reset(
-      new PreserveTypesTagMerger(
-        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+    tagMerger.reset(new PreserveTypesTagMerger());
   }
   else
   {
@@ -182,9 +180,7 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
   std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
-    tagMerger.reset(
-      new PreserveTypesTagMerger(
-        std::set<QString>(), OsmSchemaCategory::building() | OsmSchemaCategory::poi()));
+    tagMerger.reset(new PreserveTypesTagMerger());
   }
   else
   {
@@ -316,7 +312,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   map->visitRw(filteredVis2);
 
   //get our poi id
-  ElementIdSetVisitor idSetVis1;
+  UniqueElementIdVisitor idSetVis1;
   FilteredVisitor filteredVis3(poiCrit, idSetVis1);
   map->visitRo(filteredVis3);
   const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
@@ -329,7 +325,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   LOG_VART(poiId);
 
   //get our poly id
-  ElementIdSetVisitor idSetVis2;
+  UniqueElementIdVisitor idSetVis2;
   FilteredVisitor filteredVis4(polyCrit, idSetVis2);
   map->visitRo(filteredVis4);
   const std::set<ElementId>& polyIds = idSetVis2.getElementSet();

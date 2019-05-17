@@ -129,10 +129,10 @@
         <tag k="amenity" v="fast_food"/>
         <tag k="addr:street" v="Avenida Libertador"/>
         <tag k="name" v="Building 3"/>
-        <tag k="alt_types" v="shop=mall"/>
+        <tag k="alt_types" v="shop=supermarket"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="shop" v="supermarket"/>
+        <tag k="shop" v="mall"/>
         <tag k="alt_name" v="Building 1;Building 2;Building 4;Building 5"/>
         <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2014-08-23T18:09:40Z;2015-06-30T21:43:19Z"/>

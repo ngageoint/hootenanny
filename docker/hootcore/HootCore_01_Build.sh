@@ -34,7 +34,7 @@ echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 
 # Not sure if we need this:
 # if ! mocha --version &>/dev/null; then
-#     echo "### Installing mocha for plugins test..."
+#     echo "### Installing mocha for translations test..."
 #     npm install --silent -g mocha@3.5.3
 #     # Clean up after the npm install
 #     rm -rf ~/tmp

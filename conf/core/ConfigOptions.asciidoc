@@ -280,6 +280,14 @@ Date format string used by the building date tag value.  See QDateTime::fromStri
 
 Tag key used by the building.review.if.secondary.newer configuration option.
 
+=== building.force.contained.match
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, a building pair has been flagged for review, and one member of the pair is contained
+completely inside the other, the pair will be matched instead.
+
 === building.keep.more.complex.geometry.when.auto.merging
 
 * Data Type: bool
@@ -1436,9 +1444,8 @@ corresponding implicit tag rules database.
 
 * Data Type: list
 * Default Value:
-** `${HOOT_TRANSLATE_PATH}`
-** `${HOOT_HOME}/plugins`
-** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/translations`
+** `${HOOT_HOME}/translations-local`
 ** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.

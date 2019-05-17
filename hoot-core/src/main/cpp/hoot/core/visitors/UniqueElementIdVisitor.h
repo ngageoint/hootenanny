@@ -22,32 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "GetTagValuesVisitor.h"
+#ifndef UNIQUE_ELEMENT_ID_VISITOR_H
+#define UNIQUE_ELEMENT_ID_VISITOR_H
+
+// hoot
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-void GetTagValuesVisitor::visit(const ConstElementPtr& e)
+/**
+ * Returns a set of the element ids visited.
+ */
+class UniqueElementIdVisitor : public ConstElementVisitor
 {
-  Tags::const_iterator it = e->getTags().find(_key);
-  if (it != e->getTags().end())
-  {
-    if (_split)
-    {
-      QStringList l;
-      e->getTags().readValues(_key, l);
-      for (int i = 0; i < l.size(); i++)
-      {
-        _bag.insert(l[i]);
-      }
-    }
-    else
-    {
-      _bag.insert(it.value());
-    }
-  }
-}
+public:
+
+  static std::string className() { return "hoot::UniqueElementIdVisitor"; }
+
+  UniqueElementIdVisitor() {}
+
+  /**
+   * Returns a set containing all the ElementIds visited.
+   */
+  const std::set<ElementId>& getElementSet() const { return _elements; }
+
+  virtual void visit(const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Returns the unqiue element IDs visited"; }
+
+private:
+
+  std::set<ElementId> _elements;
+};
 
 }
+
+#endif // UNIQUE_ELEMENT_ID_VISITOR_H

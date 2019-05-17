@@ -41,6 +41,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 // Standard
 #include <fstream>
@@ -85,14 +86,13 @@ public:
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
     std::vector<const Match*>& result, std::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
-    Status matchStatus = Status::Invalid, bool reviewMatchesOtherThanOneToOne = false) :
+    Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
     _rf(rf),
     _mt(threshold),
     _filter(filter),
-    _matchStatus(matchStatus),
-    _reviewMatchesOtherThanOneToOne(reviewMatchesOtherThanOneToOne)
+    _matchStatus(matchStatus)
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
@@ -129,15 +129,17 @@ public:
     int neighborCount = 0;
 
     std::vector<Match*> tempMatches;
+
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
-      if (from != *it)
+      const ElementId neighborId = *it;
+      if (from != neighborId)
       {
-        const std::shared_ptr<const Element>& n = _map->getElement(*it);
-        if (isRelated(n, e))
+        const std::shared_ptr<const Element>& neighbor = _map->getElement(neighborId);
+        if (isRelated(neighbor, e))
         {
           // score each candidate and push it on the result vector
-          BuildingMatch* match = createMatch(from, *it);
+          BuildingMatch* match = createMatch(from, neighborId);
           // if we're confident this is a miss
           if (match->getType() == MatchType::Miss)
           {
@@ -152,18 +154,9 @@ public:
       }
     }
 
-    if (_reviewMatchesOtherThanOneToOne && neighborCount > 1)
+    if (ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne() && neighborCount > 1)
     {
-      for (std::vector<Match*>::iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
-      {
-        Match* match = *it;
-        //Not proud of this, but not sure what else to do at this point w/o having to change the
-        //Match interface.
-        MatchClassification& matchClass =
-          const_cast<MatchClassification&>(match->getClassification());
-        matchClass.setReview();
-        match->setExplain("Match involved in multiple building relationships.");
-      }
+      _markNonOneToOneMatchesAsReview(tempMatches);
     }
 
     for (std::vector<Match*>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
@@ -177,11 +170,7 @@ public:
 
   BuildingMatch* createMatch(ElementId eid1, ElementId eid2)
   {
-    ConfigOptions opts = ConfigOptions();
-    return new
-      BuildingMatch(
-        _map, _rf, eid1, eid2, _mt, opts.getBuildingReviewIfSecondaryNewer(),
-        opts.getBuildingDateTagKey(), opts.getBuildingDateFormat());
+    return new BuildingMatch(_map, _rf, eid1, eid2, _mt);
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -256,7 +245,8 @@ public:
       IndexElementsVisitor v(_index,
                              _indexToEid,
                              pCrit,
-                             std::bind(&BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
+                             std::bind(
+                               &BuildingMatchVisitor::getSearchRadius, this, placeholders::_1),
                              getMap());
 
       getMap()->visitRo(v);
@@ -279,7 +269,6 @@ private:
   ConstMatchThresholdPtr _mt;
   ElementCriterionPtr _filter;
   Status _matchStatus;
-  bool _reviewMatchesOtherThanOneToOne;
   int _neighborCountMax;
   int _neighborCountSum;
   int _elementsEvaluated;
@@ -294,6 +283,20 @@ private:
   long _numElementsVisited;
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
+
+  void _markNonOneToOneMatchesAsReview(std::vector<Match*>& matches)
+  {
+    for (std::vector<Match*>::iterator it = matches.begin(); it != matches.end(); ++it)
+    {
+      Match* match = *it;
+      //Not proud of this, but not sure what else to do at this point w/o having to change the
+      //Match interface.
+      MatchClassification& matchClass =
+        const_cast<MatchClassification&>(match->getClassification());
+      matchClass.setReview();
+      match->setExplain("Match involved in multiple building relationships.");
+    }
+  }
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :
@@ -312,25 +315,21 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
-      ConfigOptions opts = ConfigOptions(conf());
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold(),
-                                 opts.getBuildingReviewIfSecondaryNewer(),
-                                 opts.getBuildingDateTagKey(), opts.getBuildingDateFormat());
+      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
     }
   }
 
   return result;
 }
 
-void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
-  ConstMatchThresholdPtr threshold)
+void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
+                                         std::vector<const Match*>& matches,
+                                         ConstMatchThresholdPtr threshold)
 {
   LOG_DEBUG("Creating matches with: " << className() << "...");
   LOG_VARD(*threshold);
-  BuildingMatchVisitor v(
-    map, matches, _getRf(), threshold, _filter, Status::Unknown1,
-    ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne());
+  BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<

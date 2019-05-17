@@ -38,7 +38,15 @@
         "hoot_key": "attribute.conflation.allow.reviews.by.score"
       },
       {
-        "id": "attribute_building_keep_ref_geom",
+        "id": "building_force_contained_match",
+        "elem_type": "bool",
+        "description": "If true, a building pair has been flagged for review, and one member of the pair is contained completely inside the other, the pair will be matched instead.",
+        "name": "Always atch When One Building Is Completely Contained Inside Another",
+        "defaultvalue": "true",
+        "hoot_key": "building.force.contained.match"
+      },
+      {
+        "id": "building_keep_more_complex_geometry_when_auto_merging",
         "elem_type": "bool",
         "description": "Keep building ref geom",
         "name": "Keep building ref geom",
@@ -46,7 +54,24 @@
         "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
       },
       {
-        "id": "remove_building_relations",
+        "id":"building_match_threshold",
+        "elem_type":"double",
+        "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
+        "defaultvalue":"0.6",
+        "minvalue":"0.01",
+        "maxvalue":"1.0",
+        "hoot_key":"building.match.threshold"
+      },
+      {
+        "id": "building_merge_many_to_many_matches",
+        "elem_type": "bool",
+        "description": "If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
+        "name": "Automatically Merge Many To Many Matches",
+        "defaultvalue": "true",
+        "hoot_key": "building.merge.many.to.many.matches"
+      },
+      {
+        "id": "building_remove_building_relations",
         "elem_type": "bool",
         "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
         "name": "Remove Building Relations",
@@ -84,6 +109,22 @@
         "name": "Tag only merger creator",
         "defaultvalue": "true",
         "hoot_key": "highway.merge.tags.only"
+      },
+      {
+        "id": "poi_polygon_allow_cross_conflation_merging",
+        "elem_type": "bool",
+        "description": "If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
+        "name": "Allow Merges When Conflicts Between Building and POI to Polygon Conflation Occur",
+        "defaultvalue": "true",
+        "hoot_key": "poi.polygon.allow.cross.conflation.merging"
+      },
+      {
+        "id": "poi_polygon_auto_merge_many_poi_to_one_poly_matches",
+        "elem_type": "bool",
+        "description": "If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
+        "name": "Automatically Merge Many to One POI to Polygon Conflation Matches",
+        "defaultvalue": "true",
+        "hoot_key": "poi.polygon.auto.merge.many.poi.to.one.poly.matches"
       },
       {
         "id": "reader_conflate_use_data_source_ids_1",
@@ -168,6 +209,14 @@
         "name": "WayJoiner",
         "defaultvalue": "hoot::WayJoiner2",
         "hoot_key": "way.joiner"
+      },
+      {
+        "id": "writer_include_circular_error_tags",
+        "elem_type": "bool",
+        "description": "When true, writers will include circular error information. Not honored by all writers.",
+        "name": "Export Circular Error Tags",
+        "defaultvalue": "false",
+        "hoot_key": "writer.include.circular.error.tags"
       }
     ]
 }

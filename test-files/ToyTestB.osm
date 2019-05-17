@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' upload='true' generator='JOSM'>
-  <node id='-1669937' action='modify' visible='true' lat='38.854935388583854' lon='-104.89941618997054' />
+  <node id='-1669937' visible='true' lat='38.854935388583854' lon='-104.89941618997054' />
   <node id='-1669935' visible='true' lat='38.85490957909462' lon='-104.8979021380069' />
   <node id='-1669933' visible='true' lat='38.854902814965186' lon='-104.8982930090852' />
-  <node id='-1669931' action='modify' visible='true' lat='38.85491408851387' lon='-104.89874468233121' />
+  <node id='-1669931' visible='true' lat='38.85491408851387' lon='-104.89874468233121' />
   <node id='-1669929' visible='true' lat='38.85403609919224' lon='-104.9024200286039' />
   <node id='-1669927' visible='true' lat='38.854113662116276' lon='-104.90234127531997' />
   <node id='-1669925' visible='true' lat='38.854214674169604' lon='-104.9020934341029' />
@@ -65,7 +65,7 @@
   <node id='-1669813' visible='true' lat='38.85430929423359' lon='-104.90034074627879' />
   <node id='-1669811' visible='true' lat='38.85428572898136' lon='-104.90108818302153' />
   <node id='-1669809' visible='true' lat='38.85405007602957' lon='-104.90143012776618' />
-  <way id='-1669945' action='modify' visible='true'>
+  <way id='-1669945' visible='true'>
     <nd ref='-1669825' />
     <nd ref='-1669937' />
     <nd ref='-1669931' />
@@ -73,7 +73,7 @@
     <nd ref='-1669935' />
     <tag k='highway' v='road' />
   </way>
-  <way id='-1669943' action='modify' visible='true'>
+  <way id='-1669943' visible='true'>
     <nd ref='-1669929' />
     <nd ref='-1669927' />
     <nd ref='-1669925' />
@@ -94,14 +94,14 @@
     <nd ref='-1669817' />
     <tag k='highway' v='road' />
   </way>
-  <way id='-1669941' action='modify' visible='true'>
+  <way id='-1669941' visible='true'>
     <nd ref='-1669815' />
     <nd ref='-1669813' />
     <nd ref='-1669811' />
     <nd ref='-1669809' />
     <tag k='highway' v='road' />
   </way>
-  <way id='-1669939' action='modify' visible='true'>
+  <way id='-1669939' visible='true'>
     <nd ref='-1669817' />
     <nd ref='-1669827' />
     <nd ref='-1669829' />

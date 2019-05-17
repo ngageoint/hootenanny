@@ -29,7 +29,7 @@
 // GeoNames Conversion
 //
 
-hoot.require('geonames')
+hoot.require('geonames_core')
 hoot.require('geonames_rules')
 hoot.require('config')
 
