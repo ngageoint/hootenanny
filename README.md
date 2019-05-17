@@ -105,11 +105,21 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 # Command Line Interface
-[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  
+`hoot conflate input1.osm input2.osm output.osm`
+[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.
 
 [Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 # Programming Language Bindings
+```
+var HOOT_HOME = process.env.HOOT_HOME
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+var map = new hoot.OsmMap();
+hoot.loadMap(map, "input1.osm", false, 1);
+hoot.loadMap(map, "input2.osm", false, 2);
+new hoot.UnifyingConflator().apply(map)
+hoot.saveMap(map, "output.osm");
+```
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
 
 # Documentation
@@ -130,7 +140,9 @@ Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/ma
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 * If you have any support questions, please create an issue in this repository.
 
-# [Contributing](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
+# Development
+* [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
+* [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
