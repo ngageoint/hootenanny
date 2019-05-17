@@ -69,9 +69,9 @@ Below are a number of examples showing the error results with the Sinusoidal pro
 
 Below the Sinusoidal test case is used as an example showing how the distance and angle errors manifest.
  
-[[ProjectionErrorsSinusoidal1]]
+[#ProjectionErrorsSinusoidal1,reftext='{figure-caption} {counter:refnum}']
 .Distance error values for sinusoidal viewed as unprojected (WGS84). The black values are within 10% error. Light green values are well below the expected value (< 900m). Dark green values are well above the expected values (>1100m). Blue is greater than three times the expected value (>3000m). This uses the Almost Globe test case, -89.5, -180 to 89.5,180. 
-image::algorithms/ProjectionErrorsSinusoidal1.png[]
+image::images/ProjectionErrorsSinusoidal1.png[]
 
 [NOTE]
 ======
@@ -82,29 +82,29 @@ Maybe show with http://en.wikipedia.org/wiki/Tissot's_indicatrix[Tissot's indica
 
 <<ProjectionErrorsSinusoidal1>> is given to show how the sample points are distributed in the familiar WGS84. There are 21 samples going north/south and 41 samples going east/west. The remaining images use the same samples, but display the results in the Sinusoidal projection.
 
-[[ProjectionErrorsSinusoidal2]]
+[#ProjectionErrorsSinusoidal2,reftext='{figure-caption} {counter:refnum}']
 .Above is an image of the sample points in a Sinusoidal projection. This is the same data as displayed in <<ProjectionErrorsSinusoidal1>>.
-image::algorithms/ProjectionErrorsSinusoidal2.png[]
- 
+image::images/ProjectionErrorsSinusoidal2.png[]
+
 The largest errors tend to occur near the edges of the projection, or more specifically when the latitude and longitude move away from zero. One particularly extreme example is shown below which is found at 62.65, 180 (pointed to by the red arrow in <<ProjectionErrorsSinusoidal2>>).   
  
 [[ProjectionErrorsSinusoidal3]]
 .Zoom in of distance error at 62.65, 180. The region is pointed to by the red arrow in <<ProjectionErrorsSinusoidal2>>.
-image::algorithms/ProjectionErrorsSinusoidal3.png[]
+image::images/ProjectionErrorsSinusoidal3.png[]
 
 The above image only shows half of the testing “star pattern”; the test point is on the edge of the map and all rays that extend past 180E are discarded. The values on each of the rays are the distance of the ray. The expected pattern is a star with exactly 1000m long rays creating a half circle.
  
 Similar to distance errors, the values closer to 0 longitudes and 0 latitudes have less angular error.
 
-[[ProjectionErrorsSinusoidal4]]
+[#ProjectionErrorsSinusoidal4,reftext='{figure-caption} {counter:refnum}']
 .Image of angle error in the sinusoidal projection. Black is less than 1 degree error, greens are higher and blue is 55 to 69 degrees error.
-image::algorithms/ProjectionErrorsSinusoidal4.png[]
+image::images/ProjectionErrorsSinusoidal4.png[]
 
 Similar to distance errors, the values closer to 0 longitudes and 0 latitudes have less angular error.
 
 [[ProjectionErrorsSinusoidal5]]
 .Zoom in of angle error at 62.65, 180. The values are the number of degrees off from the expected angle measurement. The zoom area is pointed to by the red arrow in <<ProjectionErrorsSinusoidal4>>.
-image::algorithms/ProjectionErrorsSinusoidal5.png[]
+image::images/ProjectionErrorsSinusoidal5.png[]
 
 The desired star pattern is a point with equally spaced rays radiating out with 20deg spacing creating a half circle instead of an ellipse. The star patterns closer to 0 longitudes and latitudes look much more like a circle.
 
@@ -112,13 +112,13 @@ The desired star pattern is a point with equally spaced rays radiating out with 
  
 [[ProjectionErrorsGraph1]]
 .Distance errors for various test cases. The expected results are 1km for each of the measured values. A value of zero is no error (perfect). The box plots show the minimum, Q1, median, Q3 and maximum error. AEAC is Alber’s Equal Area Conic)
-image::algorithms/ProjectionErrorsGraph1.png[]
+image::images/ProjectionErrorsGraph1.png[]
 
 The above test case shows the distance error results for six different projections. There can be dramatic differences in distance error from one region to another. The Alber’s Equal Area Conic (AEAC) and Orthographic projections do not support all the test bounding boxes. When the bounding box is not supported the test results are omitted.
  
 [[ProjectionErrorsGraph2]]
 .Angle errors for various test cases. A value of zero denotes no difference from the expected results (perfect). The box plots show the minimum, Q1, median, Q3 and maximum error.
-image::algorithms/ProjectionErrorsGraph2.png[]
+image::images/ProjectionErrorsGraph2.png[]
 
 The above test case shows the angle error results for six different projections. Similar to the distance results there can be dramatic differences in angle error from one region to another. The Alber’s Equal Area Conic (AEAC) and Orthographic projections do not support all the test bounding boxes. When the bounding box is not supported the test results are omitted.
 

@@ -95,7 +95,7 @@ processing error in Hootenanny.
 
 [[processingerrorgraph]]
 .Graph of mean and max distance errors in log scale.
-image::algorithms/ProcessingErrorGraph.png[Graph of mean and max distance errors in log scale,scalewidth="50%"]
+image::images/ProcessingErrorGraph.png[Graph of mean and max distance errors in log scale,scalewidth="50%"]
 
 .Table of movement errors and distance errors in nanodegrees.
 [options="header"]
