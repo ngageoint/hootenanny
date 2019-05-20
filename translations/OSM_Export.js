@@ -45,3 +45,9 @@ function translateAttributes(attrs, layerName, geometryType)
     return attrs;
 }
 
+function translateToOgr(tags, elementType, geometryType)
+{
+    // Override attributes if appropriate
+    attrs = {attrs: translate.overrideValues(tags, toChange)};
+    return attrs;
+}
