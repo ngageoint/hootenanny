@@ -93,9 +93,6 @@ public class ExportResource {
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
         Class<? extends ExportCommand> exportCommand = null;
-//        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-//            exportCommand = ExportOSMCommand.class;
-//        } else
         if (outputType.equals("tiles")) {
             exportCommand = CalculateTilesCommand.class;
         } else {
@@ -217,7 +214,12 @@ public class ExportResource {
 
         //Update last accessed timestamp for db datasets on export
         if (params.getInputType().equalsIgnoreCase("db")) {
-            Long mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
+            Long mapid;
+            try { //Hoot2x sends mapid, Hoot1 still sends map name so handle both for now
+                mapid = Long.parseLong(params.getInput());
+            } catch (NumberFormatException ex) {
+                mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
+            }
             MapResource.updateLastAccessed(mapid);
         }
 
