@@ -811,6 +811,7 @@ public:
 
     {
       n1->getTags()["name"] = "Honey Creek Mall";
+      n1->getTags()["shop"] = "mall";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
       w1->getTags()["name"] = "Honey Creek Mall";
@@ -819,6 +820,7 @@ public:
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 
+      LOG_VART(uut.getClassification());
       HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
       CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
 
@@ -830,6 +832,7 @@ public:
     // building with the tag alone.
     {
       n1->getTags()["name"] = "Honey Creek Mall";
+      n1->getTags()["shop"] = "mall";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
       w1->getTags()["name"] = "Honey Creek Mall";
