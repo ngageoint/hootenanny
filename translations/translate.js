@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,7 @@
 // Set of core translation routines
 //
 translate = {
-   
+
     // Build Lookup tables
     createLookup : function(one2one)
     {
@@ -46,13 +46,13 @@ translate = {
                     lookup[row[0]] = {}
                 }
 
-                if (!(lookup[row[0]][row[1]])) 
+                if (!(lookup[row[0]][row[1]]))
                 {
                     lookup[row[0]][row[1]] = [row[2], row[3]];
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupclash() == 'true') 
+                    if (config.getOgrDebugLookupclash() == 'true')
                         {
                             if (lookup[row[0]][row[1]] != ('' + row[2] + ',' + row[3]))
                             {
@@ -62,7 +62,7 @@ translate = {
                 }
             }
         }
-    
+
         return lookup;
     },
 
@@ -82,7 +82,7 @@ translate = {
     },
 
 
-    // Add a value to the end of another value. 
+    // Add a value to the end of another value.
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
@@ -100,7 +100,7 @@ translate = {
         }
     },
 
-    
+
     // Concatinate two lists
     joinList : function(listA,listB)
     {
@@ -108,9 +108,9 @@ translate = {
         // Can't just do: var newList = listA;
 
         // In QT, this is fractionally slower than a simple loop
-        // In v8 this is faster. 
+        // In v8 this is faster.
         var newList = JSON.parse(JSON.stringify(listA));
-        
+
         for (var i in listB)
         {
             newList[i] = listB[i];
@@ -118,13 +118,13 @@ translate = {
 
         return newList;
     },
-    
-    
+
+
     // Swap keys and values in a list
     flipList : function(inList)
     {
         var newList = {};
-        
+
         for (var i in inList)
         {
             newList[inList[i]] = i;
@@ -132,8 +132,8 @@ translate = {
 
         return newList;
     },
-    
-    
+
+
     // This is used by anything that "exports" - toTds, toMGCP
     createBackwardsLookup : function(one2one)
     {
@@ -161,14 +161,14 @@ translate = {
                 }
             }
         }
-    
+
         return lookup;
     },
 
 
     // Apply one to one translations - used for import and export
     applyOne2One : function(inList, outList, lookup, fCodeList)
-    { 
+    {
         var endChar = '',
             tAttrib = '',
             row = [];
@@ -293,7 +293,7 @@ translate = {
     // Apply one to one translations - For TDS export
     // This version populates the OTH field for values that are not in the rules
     applyTdsOne2One : function(inList, outList, lookup, fCodeList)
-    { 
+    {
         var endChar = '',
             tAttrib = '',
             otherVal = '',
@@ -376,7 +376,7 @@ translate = {
                     otherVal = lookup[key]['other'];
 
                     if (otherVal)
-                    { 
+                    {
                         // Build the OTH value
                         othVal = '(' + otherVal[0] + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
@@ -794,7 +794,7 @@ translate = {
         }
     },
 
-    
+
     fixConstruction : function(tags, key)
     {
         if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
@@ -805,7 +805,7 @@ translate = {
         }
     },
 
-    
+
     // Returns true the feature is an OSM area feature
     // This is based on the OSM idea of what is considered an area
     // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
@@ -927,14 +927,14 @@ translate = {
         var result = false;
 
         // Exploit the object
-        var dropList = {'No Information':1, 
-                        'UNK':1, 'Unk':1, 
+        var dropList = {'No Information':1,
+                        'UNK':1, 'Unk':1,
                         'N_A':1, 'N/A':1,'NA':1,
                         '-999999':1,
                         '0':1,
             };
 
-        // For some reason it is not matching -32768 or -32767. 
+        // For some reason it is not matching -32768 or -32767.
         // It prints "-32768.00000000000000"
         // After playing, I found the two equals and the .0 helped
         // if (v === '' || v === '0' || v == 0.0 || v == -32768.0 || v == -32767.0 || v === '-999999' || v === undefined)
@@ -1161,7 +1161,7 @@ translate = {
             {
                 attrArray.push(schema[i].columns[j].name);
             }
-            // Add the attrArray to the list as <geom><FCODE>:[array]  
+            // Add the attrArray to the list as <geom><FCODE>:[array]
             // Eg[L,A,P]AP030:[array]
             lookup[schema[i].geom.charAt(0) + schema[i].fcode] = attrArray;
         }
@@ -1170,7 +1170,7 @@ translate = {
     },
 
 
-    // makeLayerNameLookup - build a lookup table for FCODE to LayerName 
+    // makeLayerNameLookup - build a lookup table for FCODE to LayerName
     makeLayerNameLookup : function(schema)
     {
         var lookup = {};
@@ -1422,26 +1422,26 @@ translate = {
 
     // addEtds - Add the eLTDS specific fields to each element in the schema
     addEtds: function(schema)
-    { 
+    {
         for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
         {
             schema[i].columns.push( { name:'SCAMIN',
-                                      desc:'Scale - Minimum', 
+                                      desc:'Scale - Minimum',
                                       type:'Integer',
                                       optional:'R',
-                                      defValue:'-999999' 
+                                      defValue:'-999999'
                                     });
             schema[i].columns.push( { name:'SCAMAX',
-                                      desc:'Scale - Maximum', 
+                                      desc:'Scale - Maximum',
                                       type:'Integer',
                                       optional:'R',
-                                      defValue:'-999999' 
+                                      defValue:'-999999'
                                     });
             schema[i].columns.push( { name:'LINK_ID',
-                                      desc:'Link Id', 
+                                      desc:'Link Id',
                                       type:'String',
                                       optional:'R',
-                                      defValue:'No Information' 
+                                      defValue:'No Information'
                                     });
         }
 
@@ -1449,17 +1449,17 @@ translate = {
 
     }, // End addEtds
 
-    
+
     // addFCSubtype - Add the ESRI specific FCSUBTYPE field to each element in the schema
     addFCSubtype: function(schema)
-    { 
+    {
         for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
         {
             schema[i].columns.push( { name:'FCSUBTYPE',
-                                      desc:'Feature Code Subtype', 
+                                      desc:'Feature Code Subtype',
                                       type:'Integer',
                                       optional:'R',
-                                      defValue:'' 
+                                      defValue:''
                                     });
         }
 
@@ -1471,7 +1471,7 @@ translate = {
     // addFdName - Add the ESRI Feature Dataset name to every element in the schema
     // If we don't add this the layers get put in the wrong place in the FGDB
     addFdName: function(schema,name)
-    { 
+    {
         for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
         {
             schema[i].fdname = name;
@@ -1517,7 +1517,7 @@ translate = {
                     for (var k = 0, enumLen = schema[i].columns[j].enumerations.length; k < enumLen; k++)
                         print('        Value: ' + schema[i].columns[j].enumerations[k].value + '  Name: ' + schema[i].columns[j].enumerations[k].name);
                         // print('        Name: ' + schema[i].columns[j].enumerations[k].name + '  Value: ' + schema[i].columns[j].enumerations[k].value);
-                } 
+                }
             } // End for j
 
             print(''); // just to get one blank line
@@ -1536,7 +1536,9 @@ translate = {
             // Delete: Remove a tag
             if (override[i] == '')
             {
-                delete values[i];
+                if (values[i]) {
+                    delete values[i];
+                }
             }
             // Modify: change a tag value ONLY if the tag already exists
             else if (i.charAt(0) == '#')
