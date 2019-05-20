@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +61,11 @@ class ExportCommand extends ExternalCommand {
         if(user != null) {
             params.setUserEmail(user.getEmail());
         }
+        //If no translation, we are keeping osm tag schema, but still provide the
+        //following no-op translation so that tag overrides can be run
+        if (params.getTranslation() == null || params.getTranslation().isEmpty()) {
+            params.setTranslation("translations/OSM_Export.js");
+        }
         if (params.getAppend()) {
             appendToFGDB();
         }
@@ -69,11 +75,10 @@ class ExportCommand extends ExternalCommand {
         java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -110,23 +115,38 @@ class ExportCommand extends ExternalCommand {
 
     List<String> getCommonExportHootOptions() {
         List<String> options = new LinkedList<>();
-        options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("api.db.email=" + params.getUserEmail());
-        options.add("job.id=" + jobId);
 
-        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        if (params.getTextStatus()) {
-            options.add("writer.text.status=true");
+        //Sets the user reading this data
+        options.add("api.db.email=" + params.getUserEmail());
+
+        //Convert ops, ORDER IS IMPORTANT
+        //we want to translate last
+        List<String> convertOps = new ArrayList<>();
+
+        //Remove review relations
+        if (!params.getIncludeHootTags()) {
+            convertOps.add("hoot::RemoveElementsVisitor");
+            options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
+            options.add("remove.elements.visitor.recursive=false");
+            options.add("writer.include.circular.error.tags=false");  //Not currently working for shp writer
+
+            //TODO: Do we need to remove matched review features?
+            //Like we do before conflating a merged dataset as a new input
         }
 
+        //Decompose building relations for non-osm formats
+        if (params.getOutputType().equalsIgnoreCase("osm") || params.getOutputType().equalsIgnoreCase("osm.pbf")) {
+            convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
+        }
+
+        //Translate the features (which includes applying tag overrides set below)
+        convertOps.add("hoot::TranslationOp");
+        options.add("translation.direction=toogr");
+        options.add("translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+
+        // By default export removes hoot conflation review related tags (currently passed from the UI)
         if (!params.getTagOverrides().isEmpty()) {
             options.add("translation.override=" + params.getTagOverrides() );
-        }
-
-        //# Add the option to append
-        if (params.getAppend()) {
-            options.add("ogr.append.data=true");
         }
 
         // OK. This is VERY UGLY and there has to be a better way to do this
@@ -135,6 +155,19 @@ class ExportCommand extends ExternalCommand {
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
             options.add("ogr.strict.checking=off");
         }
+
+        // Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        if (params.getTextStatus()) {
+            options.add("writer.text.status=true");
+        }
+
+        // Add the option to append to a gdb template
+        if (params.getAppend()) {
+            options.add("ogr.append.data=true");
+        }
+
+        //Add the orders convert operations
+        options.add("convert.ops=" + String.join(";", convertOps));
 
 
         return options;
