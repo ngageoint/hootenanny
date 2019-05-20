@@ -313,6 +313,10 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 
               if (sourceNodes == wayNodes)
               {
+                // since we copied the building tags to the new
+                Tags clearTags;
+                pBuildingWay->setTags(clearTags);
+
                 // replace the outline way with the building way and mark the outline way for removal
                 removeWayIds.push_back(pOutlineWay->getId());
                 pOutlineRelation->replaceElement(pOutlineWay, pBuildingWay);
