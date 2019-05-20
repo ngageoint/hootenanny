@@ -693,6 +693,18 @@ public class MapResource {
 
         return Response.ok().entity(ret).build();
     }
+    
+    @GET
+    @Path("/{mapId}/startingIndex")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllIds(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+    	Users user = Users.fromRequest(request);
+    	Map m = getMapForRequest(request, mapId, true, false);
+    	
+    	HashMap <String, Long> getIdsMap = m.getIdIndex();
+    	
+    	return Response.ok().entity(getIdsMap).build();
+    }
 
     /**
      * Writes a map query response with no element data
