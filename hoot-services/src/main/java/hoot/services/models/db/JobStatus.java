@@ -38,7 +38,7 @@ public class JobStatus {
 
     private String jobId;
 
-    private Double percentComplete;
+    private Integer percentComplete;
 
     private java.sql.Timestamp start;
 
@@ -51,6 +51,8 @@ public class JobStatus {
     private Long userId;
 
     private Integer jobType;
+
+    private Integer trackableCommandCount;
 
     public java.sql.Timestamp getEnd() {
         return end;
@@ -68,11 +70,11 @@ public class JobStatus {
         this.jobId = jobId;
     }
 
-    public Double getPercentComplete() {
+    public Integer getPercentComplete() {
         return percentComplete;
     }
 
-    public void setPercentComplete(Double percentComplete) {
+    public void setPercentComplete(Integer percentComplete) {
         this.percentComplete = percentComplete;
     }
 
@@ -124,5 +126,12 @@ public class JobStatus {
         this.jobType = jobType;
     }
 
+    public Integer getCommandCount() {
+        return trackableCommandCount;
+    }
+
+    public void setCommandCount(Integer commandCount) {
+        this.trackableCommandCount = commandCount;
+    }
 }
 

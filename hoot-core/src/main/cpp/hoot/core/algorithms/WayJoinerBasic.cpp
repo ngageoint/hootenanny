@@ -25,33 +25,29 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "NonConflatableElementRemover.h"
+#include "WayJoinerBasic.h"
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
+//  Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
+
+#include <unordered_set>
+#include <vector>
+
+using namespace std;
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
+HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerBasic)
 
-NonConflatableElementRemover::NonConflatableElementRemover()
+WayJoinerBasic::WayJoinerBasic()
 {
 }
 
-void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
+void WayJoinerBasic::joinWays(const OsmMapPtr& map)
 {
-  _numAffected = 0;
-  _map = map;
-
-  RemoveElementsVisitor removeElementsVisitor;
-  removeElementsVisitor.setRecursive(true);
-  removeElementsVisitor.addCriterion(
-    std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
-  _map->visitRw(removeElementsVisitor);
+  WayJoinerBasic wayJoiner;
+  wayJoiner.join(map);
 }
 
 }

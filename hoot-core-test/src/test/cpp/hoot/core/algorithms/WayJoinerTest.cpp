@@ -27,10 +27,11 @@
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/WayJoiner1.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/algorithms/WayJoinerAdvanced.h>
+#include <hoot/core/algorithms/WayJoinerBasic.h>
 #include <hoot/core/algorithms/splitter/CornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -47,6 +48,7 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST(runCornerSplitterTest);
   CPPUNIT_TEST(runIntersectionSplitterTest);
   CPPUNIT_TEST(runConflateTest);
+  CPPUNIT_TEST(runAdvancedConflateTest);
   CPPUNIT_TEST_SUITE_END();
 public:
 
@@ -66,7 +68,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -85,7 +87,7 @@ public:
 
     CornerSplitter::splitCorners(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -104,7 +106,7 @@ public:
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
@@ -139,6 +141,37 @@ public:
 
     HOOT_FILE_EQUALS(_outputPath + "WayJoinerConflateOutput.osm",
                      _inputPath + "WayJoinerConflateExpected.osm");
+  }
+
+  void runAdvancedConflateTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyTestB.osm", map);
+
+    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+
+    UnifyingConflator conflator;
+    Settings conf;
+    //  Use the Advanced way joiner
+    conf.set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
+    conflator.setConfiguration(conf);
+    conflator.apply(map);
+
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(true);
+    writer.setIncludeHootInfo(true);
+    writer.setIncludePid(true);
+    writer.write(map, _outputPath + "WayJoinerAdvancedConflateOutput.osm");
+
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerAdvancedConflateOutput.osm",
+                     _inputPath + "WayJoinerAdvancedConflateExpected.osm");
   }
 
 };

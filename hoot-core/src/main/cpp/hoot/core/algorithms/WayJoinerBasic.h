@@ -25,33 +25,34 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "NonConflatableElementRemover.h"
+#ifndef WAYJOINER_BASIC_H
+#define WAYJOINER_BASIC_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, NonConflatableElementRemover)
-
-NonConflatableElementRemover::NonConflatableElementRemover()
+/**
+ * Joins ways back together that were split during pre-conflation cleaning or during matching.
+ */
+class WayJoinerBasic : public WayJoiner
 {
+public:
+
+  static std::string className() { return "hoot::WayJoinerBasic"; }
+
+  WayJoinerBasic();
+
+  /**
+   * Static method to join all joinable ways using WayJoinerBasic
+   */
+  static void joinWays(const OsmMapPtr& map);
+
+};
+
 }
 
-void NonConflatableElementRemover::apply(std::shared_ptr<OsmMap>& map)
-{
-  _numAffected = 0;
-  _map = map;
-
-  RemoveElementsVisitor removeElementsVisitor;
-  removeElementsVisitor.setRecursive(true);
-  removeElementsVisitor.addCriterion(
-    std::shared_ptr<NonConflatableCriterion>(new NonConflatableCriterion()));
-  _map->visitRw(removeElementsVisitor);
-}
-
-}
+#endif  //  WAYJOINER_BASIC_H

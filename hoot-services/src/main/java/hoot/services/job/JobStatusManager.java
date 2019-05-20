@@ -40,7 +40,7 @@ public interface JobStatusManager {
 
     void deleteJob(String jobId, Long userId);
 
-    void updateJob(String jobId, String statusDetail, Double percentComplete);
+    void updateJob(String jobId, String statusDetail, Integer percentComplete);
 
     void setCancelled(String jobId, String reason);
 

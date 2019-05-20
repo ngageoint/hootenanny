@@ -36,6 +36,7 @@ import org.springframework.transaction.TransactionStatus;
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
+import hoot.services.utils.DbUtils;
 
 
 class JobRunnable implements Runnable {
@@ -85,7 +86,7 @@ class JobRunnable implements Runnable {
                 }
                 else {
                     commandCounter++;
-                    Double percentComplete = ((commandCounter * 100.0d) / job.getCommands().length);
+                    Integer percentComplete = DbUtils.getJobProgress(job.getJobId());
                     jobStatusManager.updateJob(job.getJobId(), commandCounter + " out of " +
                             job.getCommands().length + " have been processed.", percentComplete);
                 }
