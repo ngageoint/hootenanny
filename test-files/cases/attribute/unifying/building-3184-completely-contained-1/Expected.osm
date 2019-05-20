@@ -294,24 +294,6 @@
         <nd ref="-57"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-63"/>
-        <nd ref="-62"/>
-        <nd ref="-61"/>
-        <nd ref="-60"/>
-        <nd ref="-59"/>
-        <nd ref="-58"/>
-        <nd ref="-63"/>
-        <tag k="hoot:status" v="3"/>
-    </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-67"/>
-        <nd ref="-66"/>
-        <nd ref="-65"/>
-        <nd ref="-64"/>
-        <nd ref="-67"/>
-        <tag k="hoot:status" v="3"/>
-    </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77"/>
         <nd ref="-76"/>
@@ -340,6 +322,24 @@
         <tag k="angle" v="264.1"/>
         <tag k="length" v="19.1"/>
     </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-67"/>
+        <nd ref="-66"/>
+        <nd ref="-65"/>
+        <nd ref="-64"/>
+        <nd ref="-67"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-63"/>
+        <nd ref="-62"/>
+        <nd ref="-61"/>
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-58"/>
+        <nd ref="-63"/>
+        <tag k="hoot:status" v="1"/>
+    </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-6"/>
@@ -367,8 +367,8 @@
         <tag k="length" v="20.4"/>
     </way>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-11" role="outer"/>
-        <member type="way" ref="-12" role="outer"/>
+        <member type="way" ref="-7" role="outer"/>
+        <member type="way" ref="-6" role="outer"/>
         <member type="way" ref="-13" role="outer"/>
         <member type="way" ref="-14" role="inner"/>
         <member type="way" ref="-15" role="inner"/>
