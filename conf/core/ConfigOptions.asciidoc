@@ -4225,9 +4225,13 @@ SampledAngleHistogramExtractor
 === way.joiner
 
 * Data Type: string
-* Default Value: `hoot::WayJoiner1`
+* Default Value: `hoot::WayJoinerBasic`
 
-The way joiner implementation to use to repair way splits after a conflation job.
+The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
+
+This operation can take on the following two options:
+* `hoot::WayJoinerBasic`
+* `hoot::WayJoinerAdvanced`
 
 === way.matcher.heading.delta
 
