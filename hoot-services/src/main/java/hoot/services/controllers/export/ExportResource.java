@@ -184,12 +184,12 @@ public class ExportResource {
 
                 // only try to add zipCommand to workflow if not osm.pbf or tiles...
                 if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
 
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
+                    if (zipCommand != null) {
+                        workflow.add(zipCommand);
+                    }
                 }
-            }
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
@@ -399,7 +399,7 @@ public class ExportResource {
         if (outputType.equalsIgnoreCase("FOLDER") || outputType.equalsIgnoreCase("GDB")) {
             return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
         } else if (outputType.equalsIgnoreCase("SHP")) {
-            return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
+            return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName + "." + outputType), this.getClass());
         }
         else if (outputType.equalsIgnoreCase("OSM")) {
             String fileToCompress = outputName + "." + outputType;
