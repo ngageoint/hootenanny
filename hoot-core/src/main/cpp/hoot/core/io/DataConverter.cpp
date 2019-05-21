@@ -191,7 +191,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   _progress.setSource(JOB_SOURCE);
   _progress.setState(Progress::JobState::Running);
 
-   _progress.set(
+  _progress.set(
     0.0,
     "Converting " + inputs.join(", ").right(_printLengthMax) + " to " +
     output.right(_printLengthMax) + "...");
