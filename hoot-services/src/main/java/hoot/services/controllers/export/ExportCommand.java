@@ -134,8 +134,8 @@ class ExportCommand extends ExternalCommand {
             //Like we do before conflating a merged dataset as a new input
         }
 
-        //Decompose building relations for non-osm formats
-        if (params.getOutputType().equalsIgnoreCase("osm") || params.getOutputType().equalsIgnoreCase("osm.pbf")) {
+        //Decompose building relations for non-osm formats only
+        if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
             convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
         }
 
