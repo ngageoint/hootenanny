@@ -78,7 +78,15 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
+
+        //see https://github.com/ngageoint/hootenanny/issues/3228
+        if (params.getOutputType().equalsIgnoreCase("gdb")) {
+            substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+            command += " --trans ${TRANSLATION_PATH}";
+        }
+
+
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -137,12 +145,14 @@ class ExportCommand extends ExternalCommand {
         //Decompose building relations for non-osm formats only
         if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
             convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
+
+        } else {
+            //Translate the features (which includes applying tag overrides set below)
+            convertOps.add("hoot::TranslationOp");
+            options.add("translation.direction=toogr");
+            options.add("translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
         }
 
-        //Translate the features (which includes applying tag overrides set below)
-        convertOps.add("hoot::TranslationOp");
-        options.add("translation.direction=toogr");
-        options.add("translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
 
         // By default export removes hoot conflation review related tags (currently passed from the UI)
         if (!params.getTagOverrides().isEmpty()) {
@@ -193,31 +203,6 @@ class ExportCommand extends ExternalCommand {
         }
 
         return params.getInput();
-    }
-
-    static Map getConflatedMap(Long mapId) {
-        Map conflatedMap = new Map(mapId);
-        conflatedMap.setTags(DbUtils.getMapsTableTags(mapId));
-        return conflatedMap;
-    }
-
-    static String getAOI(ExportParams params, Map conflatedMap) {
-        // if sent a bbox in the url (reflecting task grid bounds)
-        // use that, otherwise use the bounds of the conflated output
-        BoundingBox boundingBox;
-        if (params.getBounds() != null) {
-            boundingBox = new BoundingBox(params.getBounds());
-        }
-        else {
-            boundingBox = conflatedMap.getBounds();
-        }
-
-        return boundingBox.getMinLon() + "," + boundingBox.getMinLat() + "," + boundingBox.getMaxLon() + "," + boundingBox.getMaxLat();
-    }
-
-    String getSQLChangesetPath() {
-        // Services currently always write changeset with sql
-        return new File(this.getWorkFolder(), "changeset-" + getJobId() + ".osc.sql").getAbsolutePath();
     }
 
     private File getWorkFolder() {
