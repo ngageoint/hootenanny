@@ -100,7 +100,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
 
         assertNotNull(job);
         assertEquals(2, job.getCommands().length);
-        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
         assertSame(ZIPFileCommand.class, job.getCommands()[1].getClass());
     }
 
@@ -124,7 +124,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
 
         assertNotNull(job);
         assertEquals(1, job.getCommands().length);
-        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
     }
 
     @Test
