@@ -1,8 +1,59 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$nfsShare = false
-$fouoShare = false
+# Allowing stuff to be set during "vagrant up"
+# E.g.
+# To use NFS, have 12CPU and 24Gb RAM
+#  NFSSHARE=true VBCPU=12 VBRAM=24576 vagrant up
+$nfsShare = ENV['NFSSHARE']
+if $nfsShare.nil?
+  $nfsShare = false
+else
+  puts '## Using NFS for file syncing'
+end
+
+$fouoShare = ENV['FOUOSHARE']
+if $fouoShare.nil?
+  $fouoShare = false
+else
+  puts '## Mounting /fouo on the VM'
+end
+
+$vbCpu = ENV['VBCPU']
+if $vbCpu.nil?
+  $vbCpu = 4
+else
+  puts '## Allocating ' + $vbCpu + ' CPU cores to the VM'
+end
+
+$vbRam = ENV['VBRAM']
+if $vbRam.nil?
+  $vbRam = 10240
+else
+  puts '## Allocating ' + $vbRam + ' RAM to the VM'
+end
+
+# Setup software repos for boxes that are not pre-provisioned
+$setRepos = <<-SHELL
+  if [ -z "$HOOT_HOME" ]; then
+      HOOT_HOME=~/hoot
+  fi
+  echo HOOT_HOME: $HOOT_HOME
+  #################################################
+
+  # add EPEL repo for extra packages
+  echo "### Add epel repo ###" > CentOS_upgrade.txt
+  sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+
+  # add Hoot repo for our pre-built dependencies.
+  echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+  sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+
+  # configure PGDG repository for PostgreSQL 9.5.
+  sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+SHELL
+
+
 
 Vagrant.configure(2) do |config|
   # Hoot port mapping
@@ -36,6 +87,7 @@ Vagrant.configure(2) do |config|
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
       aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm4.2xlarge')
+
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       if ENV.key?('AWS_KEYPAIR_NAME')
@@ -64,6 +116,8 @@ Vagrant.configure(2) do |config|
 
       # Setting up provisioners for AWS, in the correct order, depending on the OS platform.
       if os == 'CentOS7'
+        override.vm.provision "shell", inline: $setRepos
+        override.vm.provision "updateBox", type: "shell", :privileged => false, :inline => "sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1", run: "always"
         override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
         tomcat_script = 'sudo systemctl restart tomcat8'
       end
@@ -118,6 +172,7 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.hostname = "hoot-centos"
 
     mount_shares(hoot_centos7)
+    hoot_centos7.vm.provision "shell", inline: $setRepos
     set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7')
   end
@@ -146,7 +201,8 @@ Vagrant.configure(2) do |config|
     hoot_centos7_core.nfs.map_gid = Process.gid
     hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
     hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
-
+    hoot_centos7_core.vm.provision "shell", inline: $setRepos
+    hoot_centos7_core.vm.provision "updateBox", type: "shell", :privileged => false, :inline => "sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1", run: "always"
     hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
@@ -179,8 +235,10 @@ Vagrant.configure(2) do |config|
     #vb.gui = true
 
   # Customize the amount of memory on the VM:
-    vb.memory = 10240
-    vb.cpus = 4
+    # vb.memory = 10240
+    # vb.cpus = 4
+    vb.memory = $vbRam
+    vb.cpus = $vbCpu
   end
 
   # VSphere provider
