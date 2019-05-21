@@ -96,25 +96,6 @@ void MapCropper::setConfiguration(const Settings& conf)
   const QString boundsStr = ConfigOptions(conf).getCropBounds();
   if (!boundsStr.isEmpty())
   {
-//    const QString errorMsg =
-//      "Invalid bounds passed to map cropper: " + boundsStr +
-//      ".  Must be of the form: minx,miny,maxx,maxy";
-//    const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
-//    if (!boundsRegEx.exactMatch(boundsStr))
-//    {
-//      throw HootException(errorMsg);
-//    }
-//    const QStringList boundsParts = boundsStr.split(",");
-//    assert(boundsParts.size() == 4);
-//    if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
-//         boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
-//    {
-//      throw HootException(errorMsg);
-//    }
-
-//    _envelope =
-//      Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
-//        boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
     _envelope = GeometryUtils::envelopeFromConfigString(boundsStr);
     _invert = false;
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
