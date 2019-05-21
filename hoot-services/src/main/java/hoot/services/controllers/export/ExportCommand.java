@@ -42,10 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.UnTARFileCommand;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Users;
-import hoot.services.models.osm.Map;
-import hoot.services.utils.DbUtils;
 
 
 class ExportCommand extends ExternalCommand {
