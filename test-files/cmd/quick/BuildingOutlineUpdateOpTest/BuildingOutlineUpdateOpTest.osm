@@ -35,6 +35,7 @@
         <nd ref="-13395951"/>
         <nd ref="-13395945"/>
         <nd ref="-13395897"/>
+        <tag k="building:part" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13396396" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -43,39 +44,30 @@
         <nd ref="-13394591"/>
         <nd ref="-13394589"/>
         <nd ref="-13394595"/>
+        <tag k="building:part" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13396440" role="outer"/>
         <member type="way" ref="-13396396" role="outer"/>
-        <tag k="width" v="113.0"/>
-        <tag k="angle" v="264.7"/>
-        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
-        <tag k="source:datetime" v="2012-11-03T18:46:16.000Z"/>
-        <tag k="feature_area" v="23056.3"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="name" v="C.C. Arca"/>
-        <tag k="length" v="207.5"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="shop" v="department_store"/>
         <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13396440" role="part"/>
         <member type="way" ref="-13396396" role="part"/>
         <member type="relation" ref="-2" role="outline"/>
-        <tag k="width" v="113.0"/>
-        <tag k="angle" v="264.7"/>
-        <tag k="building" v="yes"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="source:datetime" v="2012-11-03T18:46:16.000Z"/>
         <tag k="feature_area" v="23056.3"/>
-        <tag k="source:imagery" v="Unknown"/>
         <tag k="name" v="C.C. Arca"/>
-        <tag k="length" v="207.5"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="shop" v="department_store"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:datetime" v="2012-11-03T18:46:16.000Z"/>
+        <tag k="width" v="113.0"/>
+        <tag k="angle" v="264.7"/>
+        <tag k="length" v="207.5"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="building"/>
     </relation>
 </osm>

@@ -329,6 +329,9 @@
         <nd ref="-64"/>
         <nd ref="-67"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="width" v="12.2"/>
+        <tag k="angle" v="180.4"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-63"/>
@@ -339,6 +342,9 @@
         <nd ref="-58"/>
         <nd ref="-63"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="width" v="13.8"/>
+        <tag k="angle" v="92.1"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>

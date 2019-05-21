@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-13.52587648770018" minlon="-172.3076125432203" maxlat="-13.52322358770161" maxlon="-172.3043568"/>
+    <node visible="true" id="-520" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
+    <node visible="true" id="-519" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
+    <node visible="true" id="-489" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
+    <node visible="true" id="-488" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
     <node visible="true" id="-453" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016116" lon="-172.3057521726027232"/>
     <node visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016134" lon="-172.3056548908227796"/>
     <node visible="true" id="-451" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5258764877001791" lon="-172.3075333203389619"/>
@@ -454,6 +458,86 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247489877008107" lon="-172.3057976000000053"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5248151877007672" lon="-172.3056752999999901"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5250101877006710" lon="-172.3052723000000128"/>
+    <way visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-520"/>
+        <nd ref="-19"/>
+        <nd ref="-3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-18"/>
+        <nd ref="-519"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-17"/>
+        <nd ref="-7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-16"/>
+        <nd ref="-11"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="-10"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10"/>
+        <nd ref="-1"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-489"/>
+        <nd ref="-3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="-488"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
@@ -503,8 +587,8 @@
         <nd ref="-21"/>
         <nd ref="-453"/>
         <nd ref="-452"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{a6dae783-1180-4d6e-ac02-f6cc26dcbd40}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -513,8 +597,8 @@
         <nd ref="-265"/>
         <nd ref="-451"/>
         <nd ref="-450"/>
-        <tag k="building" v="house"/>
         <tag k="uuid" v="{bdf7040b-3ae5-4c78-a1b4-b79e46805697}"/>
+        <tag k="building" v="house"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -566,8 +650,8 @@
         <nd ref="-448"/>
         <nd ref="-449"/>
         <nd ref="-446"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{7222aa0f-6f05-4f78-abdf-0976a7994f86}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -576,8 +660,8 @@
         <nd ref="-444"/>
         <nd ref="-445"/>
         <nd ref="-442"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{e391bd27-8a15-403d-832d-f35e66dcd568}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -586,8 +670,8 @@
         <nd ref="-440"/>
         <nd ref="-441"/>
         <nd ref="-438"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{2a18afdb-9a94-42dd-a957-ed52adf42ff7}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -596,8 +680,8 @@
         <nd ref="-436"/>
         <nd ref="-437"/>
         <nd ref="-434"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{6730ae7a-e3a7-4f91-bcff-e11e5aecff8d}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -606,8 +690,8 @@
         <nd ref="-432"/>
         <nd ref="-433"/>
         <nd ref="-430"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{2e887104-ed61-471c-8a83-bd2bb0f4cf0e}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -616,8 +700,8 @@
         <nd ref="-428"/>
         <nd ref="-429"/>
         <nd ref="-426"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{c1c6683d-394b-49f2-a710-30a818298f23}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -626,8 +710,8 @@
         <nd ref="-424"/>
         <nd ref="-425"/>
         <nd ref="-422"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1ee578cb-acbf-467a-85f2-6d9e435f8cb6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -636,8 +720,8 @@
         <nd ref="-420"/>
         <nd ref="-421"/>
         <nd ref="-418"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d89299cf-96d8-4174-a059-1ea3052f5689}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -646,8 +730,8 @@
         <nd ref="-416"/>
         <nd ref="-417"/>
         <nd ref="-414"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{0c9dc542-1999-4a69-847b-c6c7eaef9b8f}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -656,8 +740,8 @@
         <nd ref="-412"/>
         <nd ref="-413"/>
         <nd ref="-410"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{9ac5f91b-1f6c-4b80-aab2-800c61b6c2c1}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -666,8 +750,8 @@
         <nd ref="-408"/>
         <nd ref="-409"/>
         <nd ref="-406"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d6bd2600-654a-4aff-8998-91f768d7c669}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -678,8 +762,8 @@
         <nd ref="-404"/>
         <nd ref="-405"/>
         <nd ref="-400"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1a771938-e909-409c-8477-ae2ab7b3cbcd}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -688,8 +772,8 @@
         <nd ref="-398"/>
         <nd ref="-399"/>
         <nd ref="-396"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5545deb3-a0fa-402b-a1eb-77a13dc261e3}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -698,8 +782,8 @@
         <nd ref="-394"/>
         <nd ref="-395"/>
         <nd ref="-392"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{ab966bfb-b91f-4828-b9ef-db0bfc907015}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -708,8 +792,8 @@
         <nd ref="-390"/>
         <nd ref="-391"/>
         <nd ref="-388"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{cec15fdf-a800-4897-a5cd-418b8a02d483}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -718,8 +802,8 @@
         <nd ref="-386"/>
         <nd ref="-387"/>
         <nd ref="-384"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{3f48bb66-fb57-4e3f-a7c4-809cc381b6a1}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -728,8 +812,8 @@
         <nd ref="-382"/>
         <nd ref="-383"/>
         <nd ref="-380"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5d4808d0-f09d-43ff-83ac-1bb0e690c653}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -738,8 +822,8 @@
         <nd ref="-378"/>
         <nd ref="-379"/>
         <nd ref="-376"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{07abcaf4-854d-47f0-93d5-4b80705729b7}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -748,8 +832,8 @@
         <nd ref="-374"/>
         <nd ref="-375"/>
         <nd ref="-372"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{030ad189-c35a-4490-b1dc-6eea12af6c2d}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -758,8 +842,8 @@
         <nd ref="-370"/>
         <nd ref="-371"/>
         <nd ref="-368"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{c4eb6687-c771-420f-9e57-e30d73392dda}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -768,8 +852,8 @@
         <nd ref="-366"/>
         <nd ref="-367"/>
         <nd ref="-364"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{3f130417-b37e-4f1a-8fa9-f8e504a25a0c}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -778,8 +862,8 @@
         <nd ref="-362"/>
         <nd ref="-363"/>
         <nd ref="-360"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{454109e1-bc54-4ea1-8fcf-1968eab2fb86}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -788,8 +872,8 @@
         <nd ref="-358"/>
         <nd ref="-359"/>
         <nd ref="-356"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d9d6d055-c023-41b2-8bd2-138be48d351e}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -798,8 +882,8 @@
         <nd ref="-354"/>
         <nd ref="-355"/>
         <nd ref="-352"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{df22e148-c8ae-4af4-a42f-1ffbd6ee9beb}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -808,8 +892,8 @@
         <nd ref="-350"/>
         <nd ref="-351"/>
         <nd ref="-348"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{0aab3840-6050-46ba-94f8-177ce1ac78fe}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -818,8 +902,8 @@
         <nd ref="-346"/>
         <nd ref="-347"/>
         <nd ref="-344"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1bb911ac-3b44-4d24-84a9-429e29629258}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -828,8 +912,8 @@
         <nd ref="-342"/>
         <nd ref="-343"/>
         <nd ref="-340"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{e7267ac9-a3e8-4d4b-a34b-bdd3335c303b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -838,8 +922,8 @@
         <nd ref="-338"/>
         <nd ref="-339"/>
         <nd ref="-336"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{049390e1-8259-4823-943d-2dc0ae0bbb44}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -848,8 +932,8 @@
         <nd ref="-334"/>
         <nd ref="-335"/>
         <nd ref="-332"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5be63818-4576-4c79-b663-a98d2b205b4c}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -858,8 +942,8 @@
         <nd ref="-330"/>
         <nd ref="-331"/>
         <nd ref="-328"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{bf778cdf-d531-4b74-8aa7-17d7fe598dfa}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -868,8 +952,8 @@
         <nd ref="-326"/>
         <nd ref="-327"/>
         <nd ref="-324"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{0682247b-f3c0-4eae-a047-5c8e73abf355}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -878,8 +962,8 @@
         <nd ref="-322"/>
         <nd ref="-323"/>
         <nd ref="-320"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{55768aae-e8d5-4a77-b462-82f69380fafa}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -888,8 +972,8 @@
         <nd ref="-318"/>
         <nd ref="-319"/>
         <nd ref="-316"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{8c469e7a-1838-4536-8279-fadd2fda371b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -898,8 +982,8 @@
         <nd ref="-314"/>
         <nd ref="-315"/>
         <nd ref="-312"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{ea08632d-83de-4b37-8206-2455afd96a74}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -908,8 +992,8 @@
         <nd ref="-310"/>
         <nd ref="-311"/>
         <nd ref="-308"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1d942c2c-0653-4d34-91bf-19a751ac3feb}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -920,8 +1004,8 @@
         <nd ref="-306"/>
         <nd ref="-307"/>
         <nd ref="-302"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{0fd1f4bf-053f-4d95-8485-a2b33281c522}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -930,8 +1014,8 @@
         <nd ref="-300"/>
         <nd ref="-301"/>
         <nd ref="-298"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{6264cbc3-0484-4645-8b63-c557d007b593}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -940,8 +1024,8 @@
         <nd ref="-296"/>
         <nd ref="-297"/>
         <nd ref="-294"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{c6a37640-9cd3-4193-9672-eb2181863901}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -950,8 +1034,8 @@
         <nd ref="-292"/>
         <nd ref="-293"/>
         <nd ref="-290"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{c79115a9-1ca8-46c6-b1de-88cdda3dbb20}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -960,8 +1044,8 @@
         <nd ref="-288"/>
         <nd ref="-289"/>
         <nd ref="-286"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{be13e728-9ca0-4353-ba00-547f45c43833}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -970,8 +1054,8 @@
         <nd ref="-284"/>
         <nd ref="-285"/>
         <nd ref="-282"/>
-        <tag k="building" v="house"/>
         <tag k="uuid" v="{50e69f2b-15c3-4367-ac78-333b8afab103}"/>
+        <tag k="building" v="house"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -980,8 +1064,8 @@
         <nd ref="-280"/>
         <nd ref="-281"/>
         <nd ref="-278"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{53ad7a68-de71-43a2-912a-f3a78630d533}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -990,8 +1074,8 @@
         <nd ref="-276"/>
         <nd ref="-277"/>
         <nd ref="-274"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{8078df84-427b-432b-a652-99bb8127b05f}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1000,8 +1084,8 @@
         <nd ref="-272"/>
         <nd ref="-273"/>
         <nd ref="-270"/>
-        <tag k="building" v="house"/>
         <tag k="uuid" v="{5c4ac841-d090-4cb5-8848-625528956e50}"/>
+        <tag k="building" v="house"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1010,8 +1094,8 @@
         <nd ref="-268"/>
         <nd ref="-269"/>
         <nd ref="-266"/>
-        <tag k="building" v="house"/>
         <tag k="uuid" v="{7bd26861-f312-493d-9b3f-660869831a72}"/>
+        <tag k="building" v="house"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1020,8 +1104,8 @@
         <nd ref="-262"/>
         <nd ref="-263"/>
         <nd ref="-260"/>
-        <tag k="building" v="house"/>
         <tag k="uuid" v="{c6b5cc8f-076a-425e-a645-8e02727568f2}"/>
+        <tag k="building" v="house"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1030,8 +1114,8 @@
         <nd ref="-258"/>
         <nd ref="-259"/>
         <nd ref="-256"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{33835a74-54de-4d03-8a6e-a92e12c63973}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1040,8 +1124,8 @@
         <nd ref="-254"/>
         <nd ref="-255"/>
         <nd ref="-252"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{cafbb676-7086-485f-9569-53385d75fc0e}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1050,8 +1134,8 @@
         <nd ref="-250"/>
         <nd ref="-251"/>
         <nd ref="-248"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{b7e0f90c-0554-4bb1-bb94-7322154e436d}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1060,8 +1144,8 @@
         <nd ref="-246"/>
         <nd ref="-247"/>
         <nd ref="-244"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1acba2e2-3d0a-4b18-a85a-baf5fb27cb70}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1070,8 +1154,8 @@
         <nd ref="-242"/>
         <nd ref="-243"/>
         <nd ref="-240"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{67bc182f-a968-4a79-ac12-bfc007a47983}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1080,8 +1164,8 @@
         <nd ref="-238"/>
         <nd ref="-239"/>
         <nd ref="-236"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{9986dca2-f32c-4b9f-af9e-8200eb16597b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1090,8 +1174,8 @@
         <nd ref="-234"/>
         <nd ref="-235"/>
         <nd ref="-232"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{a72aed32-81a6-470a-905d-33fe230fd2ff}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1100,8 +1184,8 @@
         <nd ref="-230"/>
         <nd ref="-231"/>
         <nd ref="-228"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{93250937-7af7-4b49-95f6-a662b369b134}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1110,8 +1194,8 @@
         <nd ref="-226"/>
         <nd ref="-227"/>
         <nd ref="-224"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{1ed799cd-e4b1-41f3-83d1-feaa3cc9ea20}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1120,8 +1204,8 @@
         <nd ref="-222"/>
         <nd ref="-223"/>
         <nd ref="-220"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{f1c83a95-fc20-4c4d-b955-b278842feb4a}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1130,8 +1214,8 @@
         <nd ref="-218"/>
         <nd ref="-219"/>
         <nd ref="-216"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{7d76d31e-2f0f-4eb7-8a80-5aa7f4cde773}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1140,8 +1224,8 @@
         <nd ref="-214"/>
         <nd ref="-215"/>
         <nd ref="-212"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{37d8d570-7da8-4eab-9604-3fc0c33a5932}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1150,8 +1234,8 @@
         <nd ref="-210"/>
         <nd ref="-211"/>
         <nd ref="-208"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{41dd9153-3eba-4b06-876f-d6411829a1b9}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1160,8 +1244,8 @@
         <nd ref="-206"/>
         <nd ref="-207"/>
         <nd ref="-204"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{c291e757-975f-413e-bf57-7f51339feb62}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1170,8 +1254,8 @@
         <nd ref="-202"/>
         <nd ref="-203"/>
         <nd ref="-200"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{f9d47c31-ae22-4b32-b5aa-78e07b190180}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1180,8 +1264,8 @@
         <nd ref="-198"/>
         <nd ref="-199"/>
         <nd ref="-196"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{2e836c4e-164f-48f2-b3b5-9e67e214d5b7}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1192,8 +1276,8 @@
         <nd ref="-194"/>
         <nd ref="-195"/>
         <nd ref="-190"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d70ac56b-50e7-4f84-b2bd-4b0fd5a5189e}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1202,8 +1286,8 @@
         <nd ref="-188"/>
         <nd ref="-189"/>
         <nd ref="-186"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{4903258a-d3e6-43b5-806d-d0f6f2bf5b13}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1212,8 +1296,8 @@
         <nd ref="-184"/>
         <nd ref="-185"/>
         <nd ref="-182"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{9b8798e6-7866-4766-a5ed-6354796dab05}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1222,8 +1306,8 @@
         <nd ref="-180"/>
         <nd ref="-181"/>
         <nd ref="-178"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{56c13972-529b-4099-b2cb-eac78a68b649}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1232,8 +1316,8 @@
         <nd ref="-176"/>
         <nd ref="-177"/>
         <nd ref="-174"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{7eca9bc4-23ea-4efd-ba3d-d9ad635dd1a1}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1242,8 +1326,8 @@
         <nd ref="-172"/>
         <nd ref="-173"/>
         <nd ref="-170"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{dca1cbd8-95f9-489d-9fe7-4a14e6955463}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1252,8 +1336,8 @@
         <nd ref="-168"/>
         <nd ref="-169"/>
         <nd ref="-166"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{59418371-12c4-4a6d-8e9f-8c7ade33eb08}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1262,8 +1346,8 @@
         <nd ref="-164"/>
         <nd ref="-165"/>
         <nd ref="-162"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{45e10d1e-621c-4a21-aa6a-c05f0a7f4eee}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1272,8 +1356,8 @@
         <nd ref="-160"/>
         <nd ref="-161"/>
         <nd ref="-158"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{6598e144-5078-469e-8d03-4e5bbc2d02cf}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1282,8 +1366,8 @@
         <nd ref="-156"/>
         <nd ref="-157"/>
         <nd ref="-154"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5b6aef4a-be61-42ed-81b3-65095db114cd}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1292,8 +1376,8 @@
         <nd ref="-152"/>
         <nd ref="-153"/>
         <nd ref="-150"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{244b0b64-3407-4c52-93e8-6395d7b447a6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1302,8 +1386,8 @@
         <nd ref="-148"/>
         <nd ref="-149"/>
         <nd ref="-146"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5f038bf7-8fd5-4a3c-b8a1-fefda449e7a6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1312,8 +1396,8 @@
         <nd ref="-144"/>
         <nd ref="-145"/>
         <nd ref="-142"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{bae3e833-d30f-44e3-abcc-43183b03b5bb}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1322,8 +1406,8 @@
         <nd ref="-140"/>
         <nd ref="-141"/>
         <nd ref="-138"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{afeffed5-87cd-451c-b687-c66e71ad409b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1332,8 +1416,8 @@
         <nd ref="-136"/>
         <nd ref="-137"/>
         <nd ref="-134"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{4803dba7-32c1-4084-bce2-cc6a3b17f958}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1342,8 +1426,8 @@
         <nd ref="-132"/>
         <nd ref="-133"/>
         <nd ref="-130"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{113af0f3-515d-4ad3-b1d8-aa284c86ca24}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1352,8 +1436,8 @@
         <nd ref="-128"/>
         <nd ref="-129"/>
         <nd ref="-126"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d3378a75-cb2a-4c50-a47e-b7d0fa0f7cd1}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1362,8 +1446,8 @@
         <nd ref="-124"/>
         <nd ref="-125"/>
         <nd ref="-122"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{f4cb8b6a-23f7-41e5-898b-c505082c4148}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1372,8 +1456,8 @@
         <nd ref="-120"/>
         <nd ref="-121"/>
         <nd ref="-118"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{7b3f7a52-03e5-44e1-b8fb-7b2891572cef}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1382,8 +1466,8 @@
         <nd ref="-116"/>
         <nd ref="-117"/>
         <nd ref="-114"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{4dd33ed3-e2dc-4587-a215-dc32c6a84f0a}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1392,8 +1476,8 @@
         <nd ref="-112"/>
         <nd ref="-113"/>
         <nd ref="-110"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{e4d6b273-988d-45a9-87b4-f4b6528d58f6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1402,8 +1486,8 @@
         <nd ref="-108"/>
         <nd ref="-109"/>
         <nd ref="-106"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{d12fc881-e5ae-4dd5-8be1-1f4781c76506}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1414,8 +1498,8 @@
         <nd ref="-104"/>
         <nd ref="-105"/>
         <nd ref="-100"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{8a9fa740-b52d-4e0e-8ba3-d1d4e57c415b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1424,8 +1508,8 @@
         <nd ref="-98"/>
         <nd ref="-99"/>
         <nd ref="-96"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{15ef57bb-c908-4ed0-836d-ad3fafa4043f}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1434,8 +1518,8 @@
         <nd ref="-94"/>
         <nd ref="-95"/>
         <nd ref="-92"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{5fc2b4c8-0c48-46c9-98c7-bf81ab40f65a}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1444,8 +1528,8 @@
         <nd ref="-90"/>
         <nd ref="-91"/>
         <nd ref="-88"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{02c9e77a-2368-4721-8fb3-1c6740fae54b}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1454,8 +1538,8 @@
         <nd ref="-86"/>
         <nd ref="-87"/>
         <nd ref="-84"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{0698ae6b-65fe-4172-8a8a-04ff18ed771d}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1464,8 +1548,8 @@
         <nd ref="-82"/>
         <nd ref="-83"/>
         <nd ref="-80"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{8e5f90b9-b69e-4c94-b558-4dcfd89169d7}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1474,8 +1558,8 @@
         <nd ref="-78"/>
         <nd ref="-79"/>
         <nd ref="-76"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{46a2e9d1-0e23-4903-97d6-c0787b921cf6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1484,8 +1568,8 @@
         <nd ref="-74"/>
         <nd ref="-75"/>
         <nd ref="-72"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{095360b4-7c29-4a1c-b983-42f1e49c8d6d}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1494,8 +1578,8 @@
         <nd ref="-70"/>
         <nd ref="-71"/>
         <nd ref="-68"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{f4d4f92d-d84c-4943-b7c5-a5432d28e3d6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1504,8 +1588,8 @@
         <nd ref="-66"/>
         <nd ref="-67"/>
         <nd ref="-64"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{07f9a70d-8289-4ad4-848c-0c913d0db52c}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1514,8 +1598,8 @@
         <nd ref="-62"/>
         <nd ref="-63"/>
         <nd ref="-60"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{583cc752-dde1-4ca1-aac3-bd15b2e9b132}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1524,8 +1608,8 @@
         <nd ref="-58"/>
         <nd ref="-59"/>
         <nd ref="-56"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{981293e6-b3dd-4417-891a-6cec7fc1cef3}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1534,8 +1618,8 @@
         <nd ref="-54"/>
         <nd ref="-55"/>
         <nd ref="-52"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{e3fe101b-ef0a-40e5-b714-ce927db59b17}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1544,8 +1628,8 @@
         <nd ref="-50"/>
         <nd ref="-51"/>
         <nd ref="-48"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{26a0ecfe-4ca1-4a44-b45a-ee30f63d91a5}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1554,8 +1638,8 @@
         <nd ref="-46"/>
         <nd ref="-47"/>
         <nd ref="-44"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{b5e0cbe8-d886-4758-8c5b-e1ad421ce921}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1566,8 +1650,8 @@
         <nd ref="-42"/>
         <nd ref="-43"/>
         <nd ref="-38"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{532456a6-9c2a-4e56-9266-f5f251d33ab0}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1576,8 +1660,8 @@
         <nd ref="-36"/>
         <nd ref="-37"/>
         <nd ref="-34"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{6871142b-7154-494f-9d31-908fb9b80225}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1586,8 +1670,8 @@
         <nd ref="-32"/>
         <nd ref="-33"/>
         <nd ref="-30"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{580a2a5e-bd5b-4688-99b4-a973534026b6}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1596,8 +1680,8 @@
         <nd ref="-28"/>
         <nd ref="-29"/>
         <nd ref="-26"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{9722dac6-6048-49b5-955d-a488bb7f99ca}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1606,8 +1690,8 @@
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-22"/>
-        <tag k="building" v="yes"/>
         <tag k="uuid" v="{e7ff2d02-1668-4c36-b0e6-dc42d73e5a09}"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1653,59 +1737,64 @@
         <nd ref="-3"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-119" role=""/>
+        <member type="way" ref="-120" role=""/>
+        <member type="way" ref="-121" role=""/>
+        <member type="way" ref="-122" role=""/>
+        <member type="way" ref="-123" role=""/>
+        <member type="way" ref="-124" role=""/>
+        <member type="way" ref="-125" role=""/>
+        <member type="way" ref="-126" role=""/>
+        <member type="way" ref="-127" role=""/>
+        <member type="way" ref="-128" role=""/>
+        <member type="way" ref="-129" role=""/>
+        <member type="way" ref="-130" role=""/>
+        <member type="way" ref="-131" role=""/>
+        <member type="way" ref="-132" role=""/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
     <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-115" role="outer"/>
         <member type="way" ref="-116" role="outer"/>
         <member type="way" ref="-117" role="outer"/>
         <member type="way" ref="-118" role="outer"/>
-        <tag k="Shape_Leng" v="0.0019933496713700001"/>
-        <tag k="source:ingest:datetime" v="2017-01-26T17:32:37.358Z"/>
-        <tag k="source:name" v="quickbird"/>
-        <tag k="Shape_Area" v="8.6414271136699999e-08"/>
-        <tag k="hoot:layername" v="sw_pacific_building_polygons"/>
-        <tag k="OBJECTID" v="938"/>
-        <tag k="source:copyright" v="Copyright 2010 Government of NZ. All rights reserved. For Government Purposes only (as defined in the Memorandum of Understanding For The Multinational Geospatial Co-Production Program 2006)."/>
-        <tag k="building" v="yes"/>
-        <tag k="uuid" v="{69415f0e-dfee-463e-a4d6-03dfcde4e119};{a758f02a-41e8-48ee-900a-d19972b0d250};{243ef421-42c1-4757-941c-b5b4442e92c3};{e7666aed-93c4-11df-819b-89d5f1105783}"/>
-        <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
-        <tag k="name" v="Patamea Primary School"/>
-        <tag k="amenity" v="school"/>
-        <tag k="source:datetime" v="2004-08-18"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-3" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
         <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation(-7)."/>
+        <tag k="hoot:review:members" v="1"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="-1"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-3" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
         <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation(-6)."/>
+        <tag k="hoot:review:members" v="1"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="-1"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-109" role="outer"/>
         <member type="way" ref="-110" role="outer"/>
         <tag k="building:part" v="yes"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-109" role="outer"/>
         <member type="way" ref="-110" role="outer"/>
         <member type="way" ref="-111" role="outer"/>
         <tag k="building:part" v="yes"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-109" role="outer"/>
@@ -1713,17 +1802,18 @@
         <member type="way" ref="-111" role="outer"/>
         <member type="way" ref="-112" role="outer"/>
         <tag k="building:part" v="yes"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-3" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-2."/>
         <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:members" v="1"/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-2."/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1731,29 +1821,31 @@
         <member type="relation" ref="-6" role="part"/>
         <member type="relation" ref="-7" role="part"/>
         <member type="relation" ref="-10" role="outline"/>
-        <tag k="Shape_Leng" v="0.0019933496713700001"/>
-        <tag k="source:ingest:datetime" v="2017-01-26T17:32:37.358Z"/>
         <tag k="source:name" v="quickbird"/>
+        <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
+        <tag k="amenity" v="school"/>
+        <tag k="source:ingest:datetime" v="2017-01-26T17:32:37.358Z"/>
         <tag k="Shape_Area" v="8.6414271136699999e-08"/>
+        <tag k="name" v="Patamea Primary School"/>
+        <tag k="source:copyright" v="Copyright 2010 Government of NZ. All rights reserved. For Government Purposes only (as defined in the Memorandum of Understanding For The Multinational Geospatial Co-Production Program 2006)."/>
+        <tag k="uuid" v="{69415f0e-dfee-463e-a4d6-03dfcde4e119};{a758f02a-41e8-48ee-900a-d19972b0d250};{243ef421-42c1-4757-941c-b5b4442e92c3};{e7666aed-93c4-11df-819b-89d5f1105783}"/>
+        <tag k="building" v="yes"/>
+        <tag k="Shape_Leng" v="0.0019933496713700001"/>
+        <tag k="source:datetime" v="2004-08-18"/>
         <tag k="hoot:layername" v="sw_pacific_building_polygons"/>
         <tag k="OBJECTID" v="938"/>
-        <tag k="source:copyright" v="Copyright 2010 Government of NZ. All rights reserved. For Government Purposes only (as defined in the Memorandum of Understanding For The Multinational Geospatial Co-Production Program 2006)."/>
-        <tag k="building" v="yes"/>
-        <tag k="uuid" v="{69415f0e-dfee-463e-a4d6-03dfcde4e119};{a758f02a-41e8-48ee-900a-d19972b0d250};{243ef421-42c1-4757-941c-b5b4442e92c3};{e7666aed-93c4-11df-819b-89d5f1105783}"/>
-        <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
-        <tag k="name" v="Patamea Primary School"/>
-        <tag k="amenity" v="school"/>
-        <tag k="source:datetime" v="2004-08-18"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="building"/>
     </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="relation" ref="-3" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-1."/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:members" v="1"/>
+        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Relation:-1."/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1761,20 +1853,21 @@
         <member type="way" ref="-3" role="outer"/>
         <member type="way" ref="-2" role="outer"/>
         <member type="way" ref="-1" role="outer"/>
-        <tag k="Shape_Leng" v="0.0019933496713700001"/>
-        <tag k="source:ingest:datetime" v="2017-01-26T17:32:37.358Z"/>
+        <member type="relation" ref="-11" role="outline"/>
         <tag k="source:name" v="quickbird"/>
+        <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
+        <tag k="amenity" v="school"/>
+        <tag k="source:ingest:datetime" v="2017-01-26T17:32:37.358Z"/>
         <tag k="Shape_Area" v="8.6414271136699999e-08"/>
+        <tag k="name" v="Patamea Primary School"/>
+        <tag k="source:copyright" v="Copyright 2010 Government of NZ. All rights reserved. For Government Purposes only (as defined in the Memorandum of Understanding For The Multinational Geospatial Co-Production Program 2006)."/>
+        <tag k="uuid" v="{69415f0e-dfee-463e-a4d6-03dfcde4e119};{a758f02a-41e8-48ee-900a-d19972b0d250};{243ef421-42c1-4757-941c-b5b4442e92c3};{e7666aed-93c4-11df-819b-89d5f1105783}"/>
+        <tag k="building" v="yes"/>
+        <tag k="Shape_Leng" v="0.0019933496713700001"/>
+        <tag k="source:datetime" v="2004-08-18"/>
         <tag k="hoot:layername" v="sw_pacific_building_polygons"/>
         <tag k="OBJECTID" v="938"/>
-        <tag k="source:copyright" v="Copyright 2010 Government of NZ. All rights reserved. For Government Purposes only (as defined in the Memorandum of Understanding For The Multinational Geospatial Co-Production Program 2006)."/>
-        <tag k="building" v="yes"/>
-        <tag k="uuid" v="{69415f0e-dfee-463e-a4d6-03dfcde4e119};{a758f02a-41e8-48ee-900a-d19972b0d250};{243ef421-42c1-4757-941c-b5b4442e92c3};{e7666aed-93c4-11df-819b-89d5f1105783}"/>
-        <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
-        <tag k="name" v="Patamea Primary School"/>
-        <tag k="amenity" v="school"/>
-        <tag k="source:datetime" v="2004-08-18"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

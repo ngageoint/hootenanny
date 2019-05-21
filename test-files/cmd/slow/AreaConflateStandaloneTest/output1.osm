@@ -7841,6 +7841,36 @@
         <tag k="amenity" v="parking_entrance"/>
         <tag k="error:circular" v="15"/>
     </node>
+    <way visible="true" id="-805" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-476"/>
+        <nd ref="-456"/>
+        <nd ref="-454"/>
+        <nd ref="-502"/>
+        <nd ref="-504"/>
+        <nd ref="-461"/>
+        <nd ref="-457"/>
+        <nd ref="-477"/>
+        <nd ref="-476"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-804" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-962"/>
+        <nd ref="-968"/>
+        <nd ref="-970"/>
+        <nd ref="-969"/>
+        <nd ref="-963"/>
+        <nd ref="-962"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-803" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4584"/>
+        <nd ref="-3931"/>
+        <nd ref="-2474"/>
+        <nd ref="-4585"/>
+        <nd ref="-4584"/>
+        <tag k="area" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-796" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4668"/>
         <nd ref="-17"/>
@@ -18682,6 +18712,7 @@
     </relation>
     <relation visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-756" role="outer"/>
+        <member type="way" ref="-803" role="outline"/>
         <tag k="REF1" v="00b09e"/>
         <tag k="building" v="yes"/>
         <tag k="area" v="yes"/>
@@ -18701,6 +18732,7 @@
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-162" role="outer"/>
         <member type="way" ref="-163" role="inner"/>
+        <member type="way" ref="-804" role="outline"/>
         <tag k="REF1" v="00b210"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="multipolygon"/>
@@ -18709,6 +18741,7 @@
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-72" role="outer"/>
         <member type="way" ref="-73" role="inner"/>
+        <member type="way" ref="-805" role="outline"/>
         <tag k="REF1" v="00b29f"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="multipolygon"/>
