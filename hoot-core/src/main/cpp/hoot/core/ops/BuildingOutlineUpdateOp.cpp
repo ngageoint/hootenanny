@@ -222,7 +222,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
-    else if (entries[i].role == MetadataTags::RolePart())
+    else if (entries[i].role == MetadataTags::RolePart() ||
+             entries[i].role == MetadataTags::RoleOuter()
+            )
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
@@ -272,15 +274,16 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 
     _mergeNodes(outlineElement, building);
 
-    outlineElement->setTags(building->getTags());;
-
-    // We don't need the relation "type" tag.
-    outlineElement->getTags().remove("type");
-
     LOG_VART(outlineElement);
 
     if (_removeBuildingRelations)
-    {
+    {      
+      // only copy tags to the outline element if we are removing the building relations
+      outlineElement->setTags(building->getTags());;
+
+      // We don't need the relation "type" tag.
+      outlineElement->getTags().remove("type");
+
       LOG_TRACE("Marking building: " << building->getElementId() << " for deletion...");
       _buildingRelationIds.insert(building->getElementId());
     }
@@ -314,8 +317,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
               if (sourceNodes == wayNodes)
               {
                 // since we copied the building tags to the new
-                Tags clearTags;
-                pBuildingWay->setTags(clearTags);
+//                Tags clearTags;
+//                pBuildingWay->setTags(clearTags);
 
                 // replace the outline way with the building way and mark the outline way for removal
                 removeWayIds.push_back(pOutlineWay->getId());
