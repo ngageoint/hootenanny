@@ -51,6 +51,7 @@ using namespace geos::geom;
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QDir>
@@ -894,27 +895,9 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     key = ConfigOptions::getOgrReaderBoundingBoxLatlngKey();
   }
 
-  QStringList bbox = bboxStr.split(",");
-
-  if (bbox.size() != 4)
-  {
-    throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-  }
-
-  bool ok;
-  vector<double> bboxValues(4);
-  for (size_t i = 0; i < 4; i++)
-  {
-    bboxValues[i] = bbox[i].toDouble(&ok);
-    if (!ok)
-    {
-      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-    }
-  }
-
   if (bboxStrRaw.isEmpty() == false)
   {
-    result.reset(new Envelope(bboxValues[0], bboxValues[2], bboxValues[1], bboxValues[3]));
+    result.reset(new Envelope(GeometryUtils::envelopeFromConfigString(bboxStr)));
   }
   else
   {
@@ -922,6 +905,24 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     {
       throw HootException("A valid projection must be available when using a lat/lng bounding "
         "box.");
+    }
+
+    QStringList bbox = bboxStr.split(",");
+
+    if (bbox.size() != 4)
+    {
+      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+    }
+
+    bool ok;
+    vector<double> bboxValues(4);
+    for (size_t i = 0; i < 4; i++)
+    {
+      bboxValues[i] = bbox[i].toDouble(&ok);
+      if (!ok)
+      {
+        throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+      }
     }
 
     result.reset(new Envelope());
