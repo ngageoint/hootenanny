@@ -214,6 +214,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
   const vector<RelationData::Entry> entries = building->getMembers();
   QHash<RelationData::Entry,WayPtr> buildingWayLookup;
 
+  bool considerOuterRoleAsPart = !_removeBuildingRelations;
+
   for (size_t i = 0; i < entries.size(); i++)
   {
     LOG_VART(entries[i].role);
@@ -223,7 +225,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
     else if (entries[i].role == MetadataTags::RolePart() ||
-             entries[i].role == MetadataTags::RoleOuter()
+             (considerOuterRoleAsPart && entries[i].role == MetadataTags::RoleOuter())
             )
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
@@ -316,10 +318,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 
               if (sourceNodes == wayNodes)
               {
-                // since we copied the building tags to the new
-//                Tags clearTags;
-//                pBuildingWay->setTags(clearTags);
-
                 // replace the outline way with the building way and mark the outline way for removal
                 removeWayIds.push_back(pOutlineWay->getId());
                 pOutlineRelation->replaceElement(pOutlineWay, pBuildingWay);
