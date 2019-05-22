@@ -160,6 +160,7 @@
         <nd ref="4555"/>
         <nd ref="4556"/>
         <nd ref="4545"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-28" timestamp="2018-01-10T18:20:40Z" version="1" changeset="14856">
@@ -583,10 +584,10 @@
         <tag k="source:datetime" v="2017-11-30T17:17:27Z;2014-06-28T07:48:10.000Z"/>
     </way>
     <relation visible="true" id="-369579" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5" role=""/>
-        <member type="way" ref="-4" role=""/>
+        <member type="way" ref="-5" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
         <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-369578" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="reviewee"/>

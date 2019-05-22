@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-13.52587648770018" minlon="-172.3076125432203" maxlat="-13.52322358770161" maxlon="-172.3043568"/>
-    <node visible="true" id="-520" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
-    <node visible="true" id="-519" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
-    <node visible="true" id="-489" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
-    <node visible="true" id="-488" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
+    <node visible="true" id="-486" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247853912196252" lon="-172.3057303469734904"/>
     <node visible="true" id="-453" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016116" lon="-172.3057521726027232"/>
     <node visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5232235877016134" lon="-172.3056548908227796"/>
     <node visible="true" id="-451" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5258764877001791" lon="-172.3075333203389619"/>
@@ -458,84 +455,25 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5247489877008107" lon="-172.3057976000000053"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5248151877007672" lon="-172.3056752999999901"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-13.5250101877006710" lon="-172.3052723000000128"/>
-    <way visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-520"/>
-        <nd ref="-19"/>
-        <nd ref="-3"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-18"/>
-        <nd ref="-519"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-9"/>
-        <nd ref="-17"/>
-        <nd ref="-7"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
-        <nd ref="-12"/>
-        <nd ref="-13"/>
-        <nd ref="-14"/>
-        <nd ref="-15"/>
-        <nd ref="-16"/>
-        <nd ref="-11"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-11"/>
-        <nd ref="-10"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-10"/>
-        <nd ref="-1"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-8"/>
-        <nd ref="-9"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-7"/>
-        <nd ref="-8"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-486"/>
+        <nd ref="-18"/>
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-489"/>
-        <nd ref="-3"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <nd ref="-14"/>
+        <nd ref="-13"/>
+        <nd ref="-12"/>
         <nd ref="-2"/>
-        <nd ref="-488"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1737,24 +1675,6 @@
         <nd ref="-3"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-119" role=""/>
-        <member type="way" ref="-120" role=""/>
-        <member type="way" ref="-121" role=""/>
-        <member type="way" ref="-122" role=""/>
-        <member type="way" ref="-123" role=""/>
-        <member type="way" ref="-124" role=""/>
-        <member type="way" ref="-125" role=""/>
-        <member type="way" ref="-126" role=""/>
-        <member type="way" ref="-127" role=""/>
-        <member type="way" ref="-128" role=""/>
-        <member type="way" ref="-129" role=""/>
-        <member type="way" ref="-130" role=""/>
-        <member type="way" ref="-131" role=""/>
-        <member type="way" ref="-132" role=""/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
     <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-115" role="outer"/>
         <member type="way" ref="-116" role="outer"/>
@@ -1853,7 +1773,7 @@
         <member type="way" ref="-3" role="outer"/>
         <member type="way" ref="-2" role="outer"/>
         <member type="way" ref="-1" role="outer"/>
-        <member type="relation" ref="-11" role="outline"/>
+        <member type="way" ref="-119" role="outline"/>
         <tag k="source:name" v="quickbird"/>
         <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
         <tag k="amenity" v="school"/>

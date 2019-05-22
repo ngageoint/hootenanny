@@ -7807,6 +7807,7 @@
         <nd ref="-457"/>
         <nd ref="-477"/>
         <nd ref="-476"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-804" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -7816,6 +7817,7 @@
         <nd ref="-969"/>
         <nd ref="-963"/>
         <nd ref="-962"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-803" timestamp="1970-01-01T00:00:00Z" version="1">
