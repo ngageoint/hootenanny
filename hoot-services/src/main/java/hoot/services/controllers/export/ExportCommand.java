@@ -135,6 +135,9 @@ class ExportCommand extends ExternalCommand {
             options.add("remove.elements.visitor.recursive=false");
             options.add("writer.include.circular.error.tags=false");  //Not currently working for shp writer
 
+            convertOps.add("hoot::RemoveTagsVisitor");
+            options.add("remove.tags.visitor.keys=hoot:status;hoot:building:match;error:circular");
+
             //TODO: Do we need to remove matched review features?
             //Like we do before conflating a merged dataset as a new input
         }
@@ -143,7 +146,10 @@ class ExportCommand extends ExternalCommand {
         if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
             convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
 
-        } else {
+        }
+
+        //GDB doesn't support TranslationOp
+        if (!params.getOutputType().equalsIgnoreCase("gdb")) {
             //Translate the features (which includes applying tag overrides set below)
             convertOps.add("hoot::TranslationOp");
             options.add("translation.direction=toogr");
