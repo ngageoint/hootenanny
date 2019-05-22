@@ -170,20 +170,37 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
   }
 }
 
-void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building, const ElementPtr& element, std::shared_ptr<Geometry>& outline)
+void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding, const ElementPtr& pElement, std::shared_ptr<Geometry>& pOutline)
 {
-  std::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(element);
+  ElementConverter elementConverter = ElementConverter(_map);
+  std::shared_ptr<Geometry> pGeometry;
+
   try
   {
-    outline.reset(outline->Union(g.get()));
+    if (pElement->getElementType() == ElementType::Way)
+    {
+      const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
+
+      if (pWay->isClosedArea())
+      {
+        pGeometry = elementConverter.convertToPolygon(pWay);
+      }
+    }
+
+    if (!pGeometry)
+    {
+      pGeometry = elementConverter.convertToGeometry(pElement);
+    }
+
+    pOutline.reset(pOutline->Union(pGeometry.get()));
   }
   catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-    Geometry* cleanedGeom = GeometryUtils::validateGeometry(g.get());
+    Geometry* cleanedGeom = GeometryUtils::validateGeometry(pGeometry.get());
     try
     {
-      outline.reset(outline->Union(cleanedGeom));
+      pOutline.reset(pOutline->Union(cleanedGeom));
     }
     catch (const geos::util::TopologyException& e)
     {
@@ -191,8 +208,8 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building, const E
       //cleaning that works here)
       const QString errMsg =
         "Marking parent element for review for element with uncleanable topology: " +
-        element->getElementId().toString();
-      _reviewMarker.mark(_map, building, errMsg + ".", ReviewMarker::getBadGeometryType());
+        pElement->getElementId().toString();
+      _reviewMarker.mark(_map, pBuilding, errMsg + ".", ReviewMarker::getBadGeometryType());
       if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(errMsg + ": " + QString(e.what()));
