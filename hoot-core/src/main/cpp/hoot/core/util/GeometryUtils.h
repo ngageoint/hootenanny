@@ -115,7 +115,7 @@ public:
    * envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return
+   * @return an envelope
    */
   static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
 
@@ -124,7 +124,7 @@ public:
    * from an envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return
+   * @return an envelope string
    */
   static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 

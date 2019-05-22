@@ -191,7 +191,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -205,7 +205,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -219,7 +219,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -233,7 +233,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -247,7 +247,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
   }
 

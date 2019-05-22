@@ -293,39 +293,22 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
-  const QString errMsg = "Invalid envelope string: " + boundsStr;
-  if (boundsStr.contains(","))
+  const QString errorMsg = "Invalid envelope string: " + boundsStr;
+  const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
+  if (!boundsRegEx.exactMatch(boundsStr))
   {
-    const QStringList bboxParts = boundsStr.trimmed().split(",");
-    int size = bboxParts.size();
-    if (size == 4 || size == 5)
-    {
-      bool parseSuccess = true;
-      bool ok;
-      const double minLat = bboxParts[1].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double minLon = bboxParts[0].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double maxLat = bboxParts[3].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double maxLon = bboxParts[2].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      //  The fifth element, if it exists, can be ignored
-      if (!parseSuccess)
-      {
-        throw HootException(errMsg);
-      }
-      return Envelope(minLon, maxLon, minLat, maxLat);
-    }
-    else
-    {
-      throw HootException(errMsg);
-    }
+    throw HootException(errorMsg);
   }
-  else
+  const QStringList boundsParts = boundsStr.split(",");
+  assert(boundsParts.size() == 4);
+  if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
+       boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
   {
-    throw HootException(errMsg);
+    throw HootException(errorMsg);
   }
+  return
+    Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
+      boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
 }
 
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
