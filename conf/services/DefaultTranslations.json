@@ -18,7 +18,7 @@
         "PATH" : "translations/MGCP_TRD4.js"
     },
     {
-        "NAME" : "MGCP - Cartographc",
+        "NAME" : "MGCP - Cartographic",
         "DESCRIPTION" : "MGCP TRD4 For Cartographic Use Only",
         "CANEXPORT" : true,
         "PATH" : "translations/MGCP_TRD4_Cartographic.js"
