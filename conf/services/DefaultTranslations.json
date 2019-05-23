@@ -18,6 +18,12 @@
         "PATH" : "translations/MGCP_TRD4.js"
     },
     {
+        "NAME" : "MGCP - Cartographc",
+        "DESCRIPTION" : "MGCP TRD4 For Cartographic Use Only",
+        "CANEXPORT" : true,
+        "PATH" : "translations/MGCP_TRD4_Cartographic.js"
+    },
+    {
         "NAME" : "GGDMv30",
         "DESCRIPTION" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
         "CANEXPORT" : true,

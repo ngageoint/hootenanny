@@ -136,6 +136,15 @@ class ExportCommand extends ExternalCommand {
             options.add("ogr.strict.checking=off");
         }
 
+        // More VERY UGLY stuff and, yet again, there has to be a better way to do this
+        // The geometry modifications for Cartographic export need their own set of options. 
+        if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
+            options.add("convert.ops+=hoot::GeometryModifierOp");
+            // options.add("geometry.modifier.rules.file=$HOOT_HOME/translations/mgcpCartoMod.json");
+            File mgcpCarto = new File(new File(HOME_FOLDER, "translations"), "mgcpCartoMod.json");
+            options.add("geometry.modifier.rules.file=" + mgcpCarto.getAbsolutePath());
+        }
+
 
         return options;
     }

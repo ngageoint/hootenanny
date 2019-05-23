@@ -36,7 +36,7 @@ translate = {
         // build a more efficient lookup
         var lookup = {}
 
-        for (var r in one2one)
+        for (var r = 0, fLen = one2one.length; r < fLen; r++)
         {
             var row = one2one[r];
             if (row[2]) // Make sure it isn't 'undefined'
@@ -140,7 +140,7 @@ translate = {
         // build a more efficient lookup
         var lookup = {}
 
-        for (var r in one2one)
+        for (var r = 0, fLen = one2one.length; r < fLen; r++)
         {
             var row = one2one[r];
             if (row[2]) // Make sure it isn't 'undefined'
