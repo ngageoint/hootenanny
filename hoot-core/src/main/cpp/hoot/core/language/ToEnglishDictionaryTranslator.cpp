@@ -25,10 +25,10 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "DictionaryTranslator.h"
+#include "ToEnglishDictionaryTranslator.h"
 
 // Hoot
-#include <hoot/core/language/TranslateDictionary.h>
+#include <hoot/core/language/ToEnglishTranslateDictionary.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
@@ -46,11 +46,11 @@ using namespace std;
 namespace hoot
 {
 
-QSet<QString> DictionaryTranslator::_streetTypes;
+QSet<QString> ToEnglishDictionaryTranslator::_streetTypes;
 
-HOOT_FACTORY_REGISTER(ToEnglishTranslator, DictionaryTranslator)
+HOOT_FACTORY_REGISTER(ToEnglishTranslator, ToEnglishDictionaryTranslator)
 
-DictionaryTranslator::DictionaryTranslator() :
+ToEnglishDictionaryTranslator::DictionaryTranslator() :
 _tokenizeInput(true)
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
@@ -61,7 +61,7 @@ _tokenizeInput(true)
   _readStreetTypes();
 }
 
-void DictionaryTranslator::_readStreetTypes()
+void ToEnglishDictionaryTranslator::_readStreetTypes()
 {
   // see related note in ImplicitTagUtils::_modifyUndesirableTokens
   if (_streetTypes.isEmpty())
@@ -83,12 +83,12 @@ void DictionaryTranslator::_readStreetTypes()
   }
 }
 
-QString DictionaryTranslator::translate(const QString& textToTranslate)
+QString ToEnglishDictionaryTranslator::translate(const QString& textToTranslate)
 {
   return toEnglish(textToTranslate, _tokenizeInput);
 }
 
-QString DictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
+QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const bool tokenize)
 {
   LOG_TRACE("Translating: " << input << " to English...");
 
@@ -127,13 +127,13 @@ QString DictionaryTranslator::toEnglish(const QString& input, const bool tokeniz
   return result;
 }
 
-QStringList DictionaryTranslator::toEnglishAll(const QString& input)
+QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QString& input)
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
   return toEnglishAll(l);
 }
 
-QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
+QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 {
   LOG_VART(l);
   QStringList result;
@@ -219,12 +219,12 @@ QStringList DictionaryTranslator::toEnglishAll(const QStringList& l)
   return result;
 }
 
-QString DictionaryTranslator::toTitleCase(const QString& input)
+QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input)
 {
   return _transform(TranslateDictionary::getInstance().getTitler(), input);
 }
 
-QString DictionaryTranslator::translateStreet(const QString& input)
+QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
@@ -255,7 +255,7 @@ QString DictionaryTranslator::translateStreet(const QString& input)
   return toTitleCase(result);
 }
 
-QString DictionaryTranslator::transliterateToLatin(const QString& input)
+QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input)
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
@@ -271,7 +271,7 @@ QString DictionaryTranslator::transliterateToLatin(const QString& input)
   return result;
 }
 
-QString DictionaryTranslator::_transform(Transliterator* t, const QString& input) const
+QString ToEnglishDictionaryTranslator::_transform(Transliterator* t, const QString& input) const
 {
   UnicodeString str((UChar*)input.constData(), input.size());
 

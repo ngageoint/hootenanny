@@ -237,7 +237,7 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("convert.ops=hoot::TranslationOp");
-        options.add("translation.script=" + "/" + translation);
+        options.add("schema.translation.script=" + "/" + translation);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
@@ -282,7 +282,7 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("convert.ops=hoot::TranslationOp");
-        options.add("translation.script=" + HOME_FOLDER + "/" + translation);
+        options.add("schema.translation.script=" + HOME_FOLDER + "/" + translation);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 

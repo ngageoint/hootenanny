@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
@@ -40,7 +40,7 @@
 namespace hoot
 {
 
-class ScriptToOgrTranslator;
+class ScriptToOgrSchemaTranslator;
 
 /**
  * Translates elements that are passed to the visitor.
@@ -75,8 +75,8 @@ public:
 
 private:
 
-  ScriptTranslatorPtr _t;
-  ScriptToOgrTranslator* _togr;
+  ScriptSchemaTranslatorPtr _t;
+  ScriptToOgrSchemaTranslator* _togr;
   bool _toOgr;
 };
 

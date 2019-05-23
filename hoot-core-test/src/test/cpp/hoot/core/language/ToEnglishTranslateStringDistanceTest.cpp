@@ -39,16 +39,15 @@
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/string/ExactStringDistance.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/language/TranslateStringDistance.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-class TranslateStringDistanceTest : public HootTestFixture
+class ToEnglishTranslateStringDistanceTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(TranslateStringDistanceTest);
+  CPPUNIT_TEST_SUITE(ToEnglishTranslateStringDistanceTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -56,7 +55,7 @@ public:
 
   void runTest()
   {
-    TranslateStringDistance uut(
+    ToEnglishTranslateStringDistance uut(
       StringDistancePtr(new MeanWordSetDistance(StringDistancePtr(new ExactStringDistance()))));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "Kedutaan Besar Swiss"),
@@ -68,7 +67,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ToEnglishTranslateStringDistanceTest, "quick");
 
 }

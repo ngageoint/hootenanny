@@ -277,19 +277,19 @@ function doExport(req, res, hash, input) {
                     command += ' -D convert.ops=hoot::TranslationOp';
                     command += ' -D translation.script=translations/OSM_Ingest.js';
                 }
-                command += ' -D translation.override=' + overrideTags;
+                command += ' -D schema.translation.override=' + overrideTags;
             }
             if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp';
-                command += ' -D translation.script=' + config.schemas[req.params.schema];
-                command += ' -D translation.direction=toogr';
+                command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
+                command += ' -D schema.translation.direction=toogr';
                 // Set per schema config options
                 if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
             }
         } else {
             command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
-            if (overrideTags) command +=  ' -D translation.override=' + overrideTags;
+            if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];

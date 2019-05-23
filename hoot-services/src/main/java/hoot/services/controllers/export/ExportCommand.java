@@ -121,7 +121,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         if (!params.getTagOverrides().isEmpty()) {
-            options.add("translation.override=" + params.getTagOverrides() );
+            options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
         //# Add the option to append

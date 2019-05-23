@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TranslateStringDistance.h"
+#include "ToEnglishTranslateStringDistance.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 
@@ -39,34 +39,34 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(StringDistance, TranslateStringDistance)
+HOOT_FACTORY_REGISTER(StringDistance, ToEnglishTranslateStringDistance)
 
-TranslateStringDistance::TranslateStringDistance() :
+ToEnglishTranslateStringDistance::ToEnglishTranslateStringDistance() :
 _tokenize(true),
 _translateAll(true),
 //The translator implementation should always be passed into this class instead of hardcoded as
 //is done here (see #2649).  Only allowing the passing of the translator in as part of #2328 was
 //going to require a significant amount of work in hoot-js to support scripts like PoiGeneric.js.
 //So instead, since currently only poi/poly and implicit tagging expect to use anything other than
-//DictionaryTranslator and they populate this class with a translator implemenation, the default
+//ToEnglishDictionaryTranslator and they populate this class with a translator implemenation, the default
 //is hardcoded.  That supports for cases where the caller doesn't specify a translator
 //(PoiGeneric.js, some classifiers, etc.).
-_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator()))
 {
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d) :
+ToEnglishTranslateStringDistance::ToEnglishTranslateStringDistance(const StringDistancePtr& d) :
 _d(d),
 _tokenize(true),
 _translateAll(true),
 //see comments above
-_translator(std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator()))
+_translator(std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator()))
 {
   setConfiguration(conf());
 }
 
-TranslateStringDistance::TranslateStringDistance(const StringDistancePtr& d,
+ToEnglishTranslateStringDistance::ToEnglishTranslateStringDistance(const StringDistancePtr& d,
                                                  const std::shared_ptr<ToEnglishTranslator>& translator) :
 _d(d),
 _tokenize(true),
@@ -76,14 +76,14 @@ _translator(translator)
   setConfiguration(conf());
 }
 
-void TranslateStringDistance::setConfiguration(const Settings& conf)
+void ToEnglishTranslateStringDistance::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
-  _tokenize = config.getTranslateStringDistanceTokenize();
-  _translateAll = config.getTranslateStringDistanceTranslateAll();
+  _tokenize = config.getLanguageTranslateStringDistanceTokenize();
+  _translateAll = config.getLanguageTranslateStringDistanceTranslateAll();
 }
 
-double TranslateStringDistance::compare(const QString& s1, const QString& s2) const
+double ToEnglishTranslateStringDistance::compare(const QString& s1, const QString& s2) const
 {
   if (!_translator)
   {
@@ -94,8 +94,8 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   QString best1;
   QString best2;
 
-  std::shared_ptr<DictionaryTranslator> dictTranslator =
-    std::dynamic_pointer_cast<DictionaryTranslator>(_translator);
+  std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
+    std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(_translator);
   if (_translateAll && dictTranslator)
   {
     // This deals with translations that may return more than one result.
@@ -161,7 +161,7 @@ double TranslateStringDistance::compare(const QString& s1, const QString& s2) co
   return bestScore;
 }
 
-QStringList TranslateStringDistance::_getNamesToScore(const QString& name) const
+QStringList ToEnglishTranslateStringDistance::_getNamesToScore(const QString& name) const
 {
   QStringList names;
   if (!name.trimmed().isEmpty())

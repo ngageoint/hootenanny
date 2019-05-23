@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrReader.h>
@@ -56,7 +56,7 @@ public:
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
   ElementCachePtr _pElementCache;
 };
@@ -73,7 +73,7 @@ public:
   QMutex* _pTransFeaturesQMutex;
   QMutex* _pInitMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
+         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>>* _pTransFeaturesQ;
   bool* _pFinishedTranslating;
 };
 

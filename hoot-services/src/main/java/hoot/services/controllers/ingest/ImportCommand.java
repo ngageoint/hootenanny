@@ -83,7 +83,7 @@ class ImportCommand extends ExternalCommand {
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
             //options.add("convert.ops=hoot::TranslationOp");
-            //options.add("translation.script=" + translationPath);
+            //options.add("schema.translation.script=" + translationPath);
         //}
 
         List<String> hootOptions = toHootOptions(options);

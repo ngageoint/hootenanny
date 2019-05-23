@@ -85,13 +85,13 @@ void elementTranslatorThread::run()
     pNewElement = _pElementQ->dequeue();
 
     std::shared_ptr<geos::geom::Geometry> g;
-    std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
     ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
 
     { // Mutex Scope
       QMutexLocker lock(_pTransFeaturesQMutex);
       _pTransFeaturesQ->enqueue(std::pair<std::shared_ptr<geos::geom::Geometry>,
-                                std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
+                                std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
     }
   }
 
@@ -119,7 +119,7 @@ void ogrWriterThread::run()
 
   bool done = false;
   std::pair<std::shared_ptr<geos::geom::Geometry>,
-    std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>> feature;
 
   // Setup writer
   std::shared_ptr<OgrWriter> ogrWriter;
@@ -333,7 +333,7 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
   QMutex initMutex;
   QMutex transFeaturesMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
+         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
   // Read all elements
@@ -635,8 +635,8 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
     _convertOps.prepend("hoot::TranslationOp");
     LOG_VARD(_convertOps);
-    conf().set(ConfigOptions::getTranslationScriptKey(), _translation);
-    LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
+    conf().set(ConfigOptions::getSchemaTranslationScriptKey(), _translation);
+    LOG_VART(conf().get(ConfigOptions().getSchemaTranslationScriptKey()));
   }
 
   //check to see if all of the i/o can be streamed

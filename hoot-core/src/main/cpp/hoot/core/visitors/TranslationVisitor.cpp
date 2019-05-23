@@ -34,8 +34,8 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -58,7 +58,7 @@ TranslationVisitor::TranslationVisitor()
 void TranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions c(conf);
-  QString dir = c.getTranslationDirection();
+  QString dir = c.getSchemaTranslationDirection();
   if (dir == "toogr")
   {
     _toOgr = true;
@@ -72,20 +72,20 @@ void TranslationVisitor::setConfiguration(const Settings& conf)
     throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
   }
   LOG_VART(_toOgr);
-  LOG_VART(conf.hasKey(c.getTranslationScriptKey()));
-  LOG_VART(c.getTranslationScript());
-  if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
+  LOG_VART(conf.hasKey(c.getSchemaTranslationScriptKey()));
+  LOG_VART(c.gettSchemaTranslationScript());
+  if (conf.hasKey(c.getSchematTranslationScriptKey()) && c.gettSchemaTranslationScript() != "")
   {
-    setPath(c.getTranslationScript());
+    setPath(c.gettSchemaTranslationScript());
   }
 }
 
 void TranslationVisitor::setPath(QString path)
 {
-  _t.reset(ScriptTranslatorFactory::getInstance().createTranslator(path));
+  _t.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
   if (_toOgr)
   {
-    _togr = dynamic_cast<ScriptToOgrTranslator*>(_t.get());
+    _togr = dynamic_cast<ScriptToOgrSchemaTranslator*>(_t.get());
     if (_togr == 0)
     {
       throw HootException("Translating to OGR requires a script that supports to OGR "

@@ -1440,7 +1440,7 @@ are -1 or 1 up to the number of available processors.
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
 
-=== javascript.translator.path
+=== javascript.schema.translator.path
 
 * Data Type: list
 * Default Value:
@@ -1741,6 +1741,23 @@ ISO-639-1 language codes for the source languages for to English translation
 multiple source languages can have a large impact on translation performance due to language
 detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
+
+=== language.translation.string.distance.tokenize
+
+* Data Type: bool
+* Default Value: `true`
+
+Set to true if the strings should be tokenized (split into words) before translating the values.
+Only applies if language.translation.translator is set to hoot::ToEnglishDictionaryTranslator.
+
+=== language.translation.string.distance.translate.all
+
+* Data Type: bool
+* Default Value: `true`
+
+If true and language.translation.translator is set to hoot::ToEnglishDictionaryTranslator, will attempt to
+retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+translation is retrieved.
 
 === language.translation.translator
 
@@ -2311,6 +2328,14 @@ This can sometimes be necessary when reading from a DB created with osm2pgsql. E
 ----
 hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
+
+=== ogr.reader.limit
+
+* Data Type: int
+* Default Value: `-1`
+
+Optional maximum number of OGR features to read from an input file. This can be useful when
+debugging.
 
 === ogr.reader.node.id.field.name
 
@@ -3559,6 +3584,38 @@ If this configuration setting is set to true, then the first layer is treated as
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
 weighting is determined based on the circular error.
 
+=== schema.translation.direction
+
+* Data Type: string
+* Default Value: `toosm`
+
+The direction that the translation script should translate. `toogr` will translate from to OGR.
+`toosm` will translate from to OSM. This is used with the convert command, TranslationOp, or
+TranslationVisitor.
+
+TODO: make this default to empty
+
+=== schema.translation.override
+
+* Data Type: string
+* Default Value: ``
+
+Override the value of translated tags and attributes.
+
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either
+before or after the translation. E.g.
+* After attributes are translated to OSM+ tags during Import
+* Before OSM+ tags are translated to attributes on Export
+
+NOTE: This assumes that you know exactly what tags you want to modify/delete
+
+=== schema.translation.script
+
+* Data Type: string
+* Default Value: ``
+
+The script used by the TranslationVisitor for schema translation.
+
 === score.graph.debug.images
 
 * Data Type: bool
@@ -3680,6 +3737,16 @@ key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 
 Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
 adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
+
+=== shape.file.writer.cols
+
+* Data Type: list
+* Default Value:
+** ``
+Optional list of keys to use for shape file output columns. Valid only when converting from OSM to
+shape file and cannot be used in combination with a translation.  If this option is not specified,
+then the list of columns will be automatically determined based on the most frequently populated
+tags.
 
 === small.way.merger.diff
 
@@ -4017,23 +4084,6 @@ Another useful option is `[\s-,';]+`. This will split on white space, or several
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
 
-=== translate.string.distance.tokenize
-
-* Data Type: bool
-* Default Value: `true`
-
-Set to true if the strings should be tokenized (split into words) before translating the values.
-Only applies if language.translation.translator is set to hoot::DictionaryTranslator.
-
-=== translate.string.distance.translate.all
-
-* Data Type: bool
-* Default Value: `true`
-
-If true and language.translation.translator is set to hoot::DictionaryTranslator, will attempt to
-retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
-translation is retrieved.
-
 === translated.tag.differencer.ignore.list
 
 * Data Type: string
@@ -4059,42 +4109,13 @@ This differencer can be used with:
 * `small.way.merger.diff`
 * `remove.duplicate.areas.diff`
 
-=== translation.direction
-
-* Data Type: string
-* Default Value: `toosm`
-
-The direction that the translation script should translate. `toogr` will translate from OSM to OGR.
-`toosm` will translate from OSM to OGR. This is useful with the hoot::TranslationOp.
-
-=== translation.override
-
-* Data Type: string
-* Default Value: ``
-
-Override the value of translated tags and attributes.
-
-VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either
-before or after the translation. E.g.
-* After attributes are translated to OSM+ tags during Import
-* Before OSM+ tags are translated to attributes on Export
-
-NOTE: This assumes that you know exactly what tags you want to modify/delete
-
-=== translation.script
-
-* Data Type: string
-* Default Value: ``
-
-The script used by the TranslationVisitor for translation.
-
 === transliteration.max.cache.size
 
 * Data Type: int
 * Default Value: `-1`
 
-The maximum size of the cache used by DictionaryTranslator for transliterations.  A cache size of -1
-disables the transliteration cache.
+The maximum size of the cache used by ToEnglishDictionaryTranslator for transliterations.  A cache
+size of -1 disables the transliteration cache.
 
 === unify.enable.optimal.constrained.matches
 

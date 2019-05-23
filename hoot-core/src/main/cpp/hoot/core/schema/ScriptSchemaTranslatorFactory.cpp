@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ScriptTranslatorFactory.h"
+#include "ScriptSchemaTranslatorFactory.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/Log.h>
 
@@ -37,43 +37,43 @@ using namespace std;
 namespace hoot
 {
 
-std::shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
+std::shared_ptr<ScriptSchemaTranslatorFactory> ScriptSchemaTranslatorFactory::_theInstance;
 
-ScriptTranslatorFactory::ScriptTranslatorFactory()
+ScriptSchemaTranslatorFactory::ScriptSchemaTranslatorFactory()
 {
 }
 
-ScriptTranslatorFactory& ScriptTranslatorFactory::getInstance()
+ScriptSchemaTranslatorFactory& ScriptSchemaTranslatorFactory::getInstance()
 {
   if (!_theInstance.get())
   {
-    _theInstance.reset(new ScriptTranslatorFactory());
+    _theInstance.reset(new ScriptSchemaTranslatorFactory());
   }
   return *_theInstance;
 }
 
-bool CompareSt(ScriptTranslator* st1, ScriptTranslator* st2)
+bool CompareSt(ScriptSchemaTranslator* st1, ScriptSchemaTranslator* st2)
 {
   return st1->order() < st2->order();
 }
 
-ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
+ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString scriptPath)
 {
   LOG_VARD(scriptPath);
 
   _init();
 
-  vector<ScriptTranslator*> st;
+  vector<ScriptSchemaTranslator*> st;
   for (size_t i = 0; i < _translators.size(); ++i)
   {
     LOG_VART(_translators[i]);
-    st.push_back(Factory::getInstance().constructObject<ScriptTranslator>(_translators[i]));
+    st.push_back(Factory::getInstance().constructObject<ScriptSchemaTranslator>(_translators[i]));
   }
 
   sort(st.begin(), st.end(), CompareSt);
   LOG_VART(st);
 
-  ScriptTranslator* result = 0;
+  ScriptSchemaTranslator* result = 0;
   for (size_t i = 0; i < st.size(); ++i)
   {
     try
@@ -107,11 +107,11 @@ ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
   return result;
 }
 
-void ScriptTranslatorFactory::_init()
+void ScriptSchemaTranslatorFactory::_init()
 {
   if (_translators.size() == 0)
   {
-    _translators = Factory::getInstance().getObjectNamesByBase(ScriptTranslator::className());
+    _translators = Factory::getInstance().getObjectNamesByBase(ScriptSchemaTranslator::className());
   }
 }
 

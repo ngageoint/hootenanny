@@ -40,9 +40,9 @@ using namespace geos::geom;
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/PythonTranslator.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/io/PythonSchemaTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
@@ -156,7 +156,7 @@ protected:
   QString _layerName;
   OGRCoordinateTransformation* _transform;
   std::shared_ptr<OGRSpatialReference> _wgs84;
-  std::shared_ptr<ScriptTranslator> _translator;
+  std::shared_ptr<ScriptSchemaTranslator> _translator;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -953,7 +953,7 @@ void OgrReaderInternal::_initTranslate()
   if (_translatePath != "" && _translator.get() == 0)
   {
     // Nice and short. Taken from TranslatedTagDifferencer
-    _translator.reset(ScriptTranslatorFactory::getInstance().createTranslator(_translatePath));
+    _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
 
     if (_translator.get() == 0)
     {

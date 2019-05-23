@@ -83,7 +83,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.type.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
     uut.setConfiguration(settings);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

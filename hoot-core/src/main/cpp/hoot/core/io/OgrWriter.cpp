@@ -48,9 +48,9 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/io/ScriptSchemaTranslator.h>
+#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
@@ -403,10 +403,10 @@ void OgrWriter::initTranslator()
   if (_translator == 0)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
-         _scriptPath));
+    std::shared_ptr<ScriptSchemaTranslator> st(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath));
     st->setErrorTreatment(_strictChecking);
-    _translator = std::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
   }
 
   if (!_translator)
@@ -582,7 +582,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
           ElementProviderPtr& provider,
           const ConstElementPtr& e,
           std::shared_ptr<Geometry> &g, // output
-          std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf) // output
+          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {
   if (_translator.get() == 0)
   {
@@ -628,8 +628,9 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
   }
 }
 
-void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
-                                       const vector<ScriptToOgrTranslator::TranslatedFeature>& tf)
+void OgrWriter::writeTranslatedFeature(
+  const std::shared_ptr<Geometry>& g,
+  const vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf)
 {
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)
@@ -646,7 +647,7 @@ void OgrWriter::writeTranslatedFeature(const std::shared_ptr<Geometry>& g,
 void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& element)
 {
   std::shared_ptr<Geometry> g;
-  vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+  vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
 
   ElementPtr elementClone(element->clone());
   _addExportTagsVisitor.visit(elementClone);

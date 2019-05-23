@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ScriptTranslator.h"
+#include "ScriptSchemaTranslator.h"
 
 // hoot
 #include <hoot/core/util/HootException.h>
@@ -36,19 +36,19 @@
 namespace hoot
 {
 
-ScriptTranslator::ScriptTranslator()
+ScriptSchemaTranslator::ScriptSchemaTranslator()
 {
   _initialized = false;
   _strict = StrictOn;
 }
 
-ScriptTranslator::~ScriptTranslator()
+ScriptSchemaTranslator::~ScriptSchemaTranslator()
 {
   // the child class should call close since _finalize is virtual.
   assert (_initialized == false);
 }
 
-void ScriptTranslator::close()
+void ScriptSchemaTranslator::close()
 {
   if (_initialized)
   {
@@ -57,7 +57,7 @@ void ScriptTranslator::close()
   }
 }
 
-const QString& ScriptTranslator::_saveMemory(const QString& s)
+const QString& ScriptSchemaTranslator::_saveMemory(const QString& s)
 {
   if (!_strings.contains(s))
   {
@@ -66,7 +66,7 @@ const QString& ScriptTranslator::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-void ScriptTranslator::strictError(const QString& s)
+void ScriptSchemaTranslator::strictError(const QString& s)
 {
   if (_strict == StrictOn)
   {
@@ -78,7 +78,7 @@ void ScriptTranslator::strictError(const QString& s)
   }
 }
 
-void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
+void ScriptSchemaTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
 {
   if (!_initialized)
   {

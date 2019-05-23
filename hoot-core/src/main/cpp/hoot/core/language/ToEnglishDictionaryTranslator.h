@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef DICTIONARY_TRANSLATOR_H
-#define DICTIONARY_TRANSLATOR_H
+#ifndef TO_ENGLISH_DICTIONARY_TRANSLATOR_H
+#define TO_ENGLISH_DICTIONARY_TRANSLATOR_H
 
 // Hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-class TranslateDictionary;
+class ToEnglishTranslateDictionary;
 
 /**
  * This makes a reasonable attempt to translate or transliterate common map words in and pronouns
@@ -51,14 +51,14 @@ class TranslateDictionary;
  * any concept of grammar. If the word is unknown it is assumed to be a pronoun and will be
  * transliterated into latin characters.
  */
-class DictionaryTranslator : public ToEnglishTranslator
+class ToEnglishDictionaryTranslator : public ToEnglishTranslator
 {
 public:
 
-  static std::string className() { return "hoot::DictionaryTranslator"; }
+  static std::string className() { return "hoot::ToEnglishDictionaryTranslator"; }
 
-  DictionaryTranslator();
-  virtual ~DictionaryTranslator() {}
+  ToEnglishDictionaryTranslator();
+  virtual ~ToEnglishDictionaryTranslator() {}
 
   /**
    * Translates the given input string into a translation & transliteration of the input.
@@ -114,4 +114,4 @@ private:
 
 }
 
-#endif // DICTIONARY_TRANSLATOR_H
+#endif // TO_ENGLISH_DICTIONARY_TRANSLATOR_H

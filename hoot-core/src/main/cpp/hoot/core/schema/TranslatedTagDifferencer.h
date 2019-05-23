@@ -28,7 +28,7 @@
 #define TRANSLATEDTAGDIFFERENCER_H
 
 // hoot
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -71,7 +71,7 @@ public:
 private:
   QSet<QString> _ignoreList;
   QString _script;
-  mutable std::shared_ptr<ScriptToOgrTranslator> _translator;
+  mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
 
   class Comparison
   {
@@ -83,19 +83,19 @@ private:
 
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
-  std::vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
     const ConstElementPtr& in) const;
 
   /**
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
-  std::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.
    */
-  static Tags _toTags(const hoot::ScriptToOgrTranslator::TranslatedFeature* tf);
+  static Tags _toTags(const hoot::ScriptToOgrSchemaTranslator::TranslatedFeature* tf);
 };
 
 }

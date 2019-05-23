@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/io/ScriptSchemaTranslator.h>
+#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
@@ -64,8 +64,8 @@ public:
     }
 
     // Great bit of code taken from TranslatedTagDifferencer
-    std::shared_ptr<ScriptTranslator> schemaPrinter(
-      ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
 
     if (!schemaPrinter)
     {
