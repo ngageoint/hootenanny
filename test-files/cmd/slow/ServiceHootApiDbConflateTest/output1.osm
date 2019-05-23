@@ -805,6 +805,8 @@
         <nd ref="-1560008"/>
         <tag k="hoot:status" v="3"/>
         <tag k="area" v="yes"/>
+        <tag k="name" v="Maid-Rite"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1560080" timestamp="2019-03-29T11:51:21Z" version="1">

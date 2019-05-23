@@ -15,8 +15,8 @@ Most Tags on a Feature	4	4	6
 Average Tags Per Feature	3	2	3	
 Least Information Tags on a Feature	2	2	1	
 Most Information Tags on a Feature	4	4	6	
-Average Information Tags Per Feature	3.1	2.875	3	
-Features with Names	9	7	10	
+Average Information Tags Per Feature	3.1	2.875	3.142857142857143	
+Features with Names	9	7	11	
 Bridges	0	0	0	
 Tunnels	0	0	0	
 One-Way Streets	0	0	0	
@@ -30,7 +30,7 @@ Buildings With Level Info	0	0	0
 Least Levels in a Building	0	0	0	
 Most Levels in a Building	0	0	0	
 Average Levels Per Building	0	0	0	
-Non-Building Areas	0	0	3	
+Non-Building Areas	0	0	2	
 Features with Addresses	0	0	0	
 Total Addresses	0	0	0	
 Features with Phone Numbers	0	0	0	
@@ -96,25 +96,25 @@ Unmatched Polygon Conflatable POIs	0	0	0
 Percentage of Polygon Conflatable POIs Conflated	0	0	0	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	0	
 Percentage of Unmatched Polygon Conflatable POIs	0	0	0	
-Polygons	10	8	8	
+Polygons	10	8	9	
 Conflatable Polygons	0	0	0	
-Conflated Polygons	0	0	4	
+Conflated Polygons	0	0	5	
 Polygons Marked for Review	0	0	0	
 Polygon Reviews to be Made	0	0	0	
 Unmatched Polygons	10	8	4	
-Percentage of Polygons Conflated	0	0	50	
+Percentage of Polygons Conflated	0	0	55.55555555555556	
 Percentage of Polygons Marked for Review	0	0	0	
-Percentage of Unmatched Polygons	100	100	50	
-Areas	0	0	3	
+Percentage of Unmatched Polygons	100	100	44.44444444444444	
+Areas	0	0	2	
 Conflatable Areas	0	0	0	
-Conflated Areas	0	0	1	
+Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
 Unmatched Areas	0	0	2	
-Meters Squared of Areas Processed by Conflation	0	0	708.9552391105683	
-Percentage of Areas Conflated	0	0	33.33333333333333	
+Meters Squared of Areas Processed by Conflation	0	0	0	
+Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
-Percentage of Unmatched Areas	0	0	66.66666666666666	
+Percentage of Unmatched Areas	0	0	100	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
@@ -135,13 +135,13 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	70	56	77	
+Translated Populated Tags	70	56	82	
 Difference Between Total Features in Output and Total Features in Inputs			-4	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-22.22222222222222	
-Calculate Stats for Input 1 Time (sec)				5.300848960876465
-Calculate Stats for Input 2 Time (sec)				0.4612438678741455
-Apply Pre-Conflate Ops Time (sec)				0.006388187408447266
-Apply Post-Conflate Ops Time (sec)				0.002689123153686523
-Calculate Stats for Output Time (sec)				0.4845068454742432
+Calculate Stats for Input 1 Time (sec)				4.639615058898926
+Calculate Stats for Input 2 Time (sec)				0.4895510673522949
+Apply Pre-Conflate Ops Time (sec)				0.007011890411376953
+Apply Post-Conflate Ops Time (sec)				0.002753019332885742
+Calculate Stats for Output Time (sec)				0.4984030723571777
 
-20:33:03.806 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+20:01:02.285 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
