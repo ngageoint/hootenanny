@@ -308,6 +308,15 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     }
     else
     {
+      Tags buildingTags = pBuilding->getTags();
+
+      // to preserve naming of relation buildings in JOSM we copy the building's "building" and "name" tags
+      if (buildingTags.contains("name") && buildingTags.contains("building") )
+      {
+        pOutlineElement->setTag( "name", buildingTags["name"] );
+        pOutlineElement->setTag( "building", buildingTags["building"] );
+      }
+
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
 
