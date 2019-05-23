@@ -6,8 +6,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "geometries": [
             "linestring",

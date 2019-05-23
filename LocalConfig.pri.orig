@@ -16,8 +16,7 @@ release {
   DEFINES -= DEBUG
 }
 
-# Configure based on whether you optionally run ccache/distcc
-#QMAKE_CXX=g++
+# ccache speeds up compiling
 QMAKE_CXX=ccache g++
 
 # Warn about uninitialized variables

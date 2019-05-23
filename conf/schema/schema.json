@@ -120,12 +120,6 @@
         "import": "height.json"
     },
     {
-        "import": "hgis.json"
-    },
-    {
-        "import": "hgispoi.json"
-    },
-    {
         "import": "highway.json"
     },
     {
