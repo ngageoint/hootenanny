@@ -38,5 +38,5 @@
     "collapse_poly": {"filter": {"must": [{"tag": "amenity=seaplane_terminal"} ] }, "arguments": {"max_area_in_m": 15625 } },
     "collapse_poly": {"filter": {"must": [{"tag": "military=installation"} ] }, "arguments": {"max_area_in_m": 15625 } },
 
-    "way_to_intersection": { "filter": {"must": [{"tag": "bridge=yes"} ] }, "arguments": {} }
+    "way_to_intersection": { "filter": {"must": [{"tag": "tunnel=culvert"} ] }, "arguments": {} }
 }
