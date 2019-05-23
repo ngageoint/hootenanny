@@ -249,7 +249,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       {
         WayPtr way = _map->getWay(entries[i].getElementId().getId());
 
-        if (way->getNodeCount() >= 4)
+        if (way->isClosedArea())
         {
           LOG_TRACE("Unioning building part: " << way << "...");
           _unionOutline(pBuilding, way, outline);
