@@ -168,7 +168,7 @@ public:
     try
     {
       DataConverter converter;
-      converter.setFeatureReadLimit(2);
+      converter.setOgrFeatureReadLimit(2);
       QStringList inputs;
       inputs.append("test1.osm");
       converter.convert(inputs, "test2.osm");

@@ -87,7 +87,7 @@ ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
   if (_theInstance == NULL)
   {
     QString dictionary = ConfPath::search("dictionary.json");
-    _theInstance.reset(new TranslateDictionary());
+    _theInstance.reset(new ToEnglishTranslateDictionary());
     _theInstance->load(dictionary);
   }
   return *_theInstance;

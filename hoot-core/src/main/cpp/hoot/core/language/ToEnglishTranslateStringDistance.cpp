@@ -79,8 +79,8 @@ _translator(translator)
 void ToEnglishTranslateStringDistance::setConfiguration(const Settings& conf)
 {
   ConfigOptions config(conf);
-  _tokenize = config.getLanguageTranslateStringDistanceTokenize();
-  _translateAll = config.getLanguageTranslateStringDistanceTranslateAll();
+  _tokenize = config.getLanguageTranslationStringDistanceTokenize();
+  _translateAll = config.getLanguageTranslationStringDistanceTranslateAll();
 }
 
 double ToEnglishTranslateStringDistance::compare(const QString& s1, const QString& s2) const

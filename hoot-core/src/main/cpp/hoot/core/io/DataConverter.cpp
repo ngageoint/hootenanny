@@ -44,6 +44,8 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/TranslationOp.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
 
 // std
 #include <vector>
@@ -170,8 +172,7 @@ void ogrWriterThread::run()
 int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
-_colsArgSpecified(false),
-_featureReadLimit(0),
+_ogrFeatureReadLimit(0),
 _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
@@ -180,6 +181,9 @@ void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
+  setOgrFeatureReadLimit(config.getOgrReaderLimit());
+  setShapeFileColumns(config.getShapeFileReaderColumns());
+  setTranslation(config.getSchemaTranslationScript());
   LOG_VARD(_convertOps);
 }
 
@@ -229,9 +233,8 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(inputs);
   LOG_VART(output);
   LOG_VART(_translation);
-  LOG_VART(_colsArgSpecified);
-  LOG_VART(_columns);
-  LOG_VART(_featureReadLimit);
+  LOG_VART(_shapeFileColumns);
+  LOG_VART(_ogrFeatureReadLimit);
   if (inputs.size() > 0)
   {
     LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
@@ -240,10 +243,6 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
   LOG_VART(IoUtils::isSupportedOsmFormat(output));
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
-
-  //I was tempted to also add an exception that prevents you from trying to convert from one format
-  //as input and the same format as output.  We do that in a couple of tests, and while there may
-  //be a way to rework the tests so we don't do it anymore, I haven't looked into it. - BDW
 
   if (inputs.size() == 0)
   {
@@ -258,28 +257,21 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   //I don't think it would be possible for translation to work along with the export columns
   //specified, as you'd be first changing your column names with the translation and then trying
   //to export old column names.  If this isn't true, then we could remove this.
-  if (!_translation.isEmpty() && _colsArgSpecified)
+  if (!_translation.isEmpty() && _shapeFileColumnsSpecified)
   {
     throw HootException("Cannot specify both a translation and export columns.");
   }
 
-  if (!_translation.isEmpty() && (_convertOps.contains("hoot::TranslationOp") ||
-                                  _convertOps.contains("hoot::TranslationVisitor")))
-  {
-    throw HootException(
-      "Cannot specify both a translation as an input parameter as a configuration option.");
-  }
-
   //We may eventually be able to relax the restriction here of requiring the input be an OSM
   //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-  if (_colsArgSpecified && !output.toLower().endsWith(".shp"))
+  if (_shapeFileColumnsSpecified() && !output.toLower().endsWith(".shp"))
   {
     throw HootException(
       "Columns may only be specified when converting to the shape file format.");
   }
 
   //Should the feature read limit eventually be supported for all types of inputs?
-  if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
+  if (_ogrFeatureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
   {
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
@@ -396,10 +388,21 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     }
     int currentStep = 1;
 
+    // If the translation direction wasn't specified, go toward OGR.
+    if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+    {
+      conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toogr");
+    }
+
     _progress.set(0.0, "Loading map: ..." + input.right(_printLengthMax) + "...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true);
     currentStep++;
+
+    // Translation for to OGR happens in the writer and is not to be done in the convert ops, so
+    // let's remove any that are there.
+    _convertOps.removeAll("hoot::TranslationOp");
+    _convertOps.removeAll("hoot::TranslationVisitor");
 
     if (_convertOps.size() > 0)
     {
@@ -530,11 +533,22 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
-  if (_featureReadLimit > 0)
+  if (_ogrFeatureReadLimit > 0)
   {
-    reader.setLimit(_featureReadLimit);
+    reader.setLimit(_ogrFeatureReadLimit);
   }
   reader.setTranslationFile(_translation);
+
+  // Translation from OGR happens in the reader and is not to be done in the convert ops, so
+  // let's remove any that are there.
+  _convertOps.removeAll("hoot::TranslationOp");
+  _convertOps.removeAll("hoot::TranslationVisitor");
+
+  // If the translation direction wasn't specified, go toward OSM.
+  if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+  {
+    conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
+  }
 
   // The ordering for these ogr2osm ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
@@ -627,16 +641,33 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   if (!_translation.trimmed().isEmpty())
   {
     //a previous check was done to make sure both a translation and export cols weren't specified
-    assert(!_colsArgSpecified);
-    //a previous check was done to make sure a translation wasn't specified as both a command line
-    //input and a convert op
-    assert(_convertOps.contains("hoot::TranslationOp") &&
-           _convertOps.contains("hoot::TranslationVisitor"));
+    assert(!_shapeFileColumnsSpecified());
 
-    _convertOps.prepend("hoot::TranslationOp");
+    if (!_convertOps.contains("hoot::TranslationOp") &&
+        !_convertOps.contains("hoot::TranslationVisitor"))
+    {
+      // If a translation script was specified but not the translation op, we'll add auto add the op
+      // as the first conversion operation. If the caller wants the translation done after some
+      // other op, then they need to explicitly add it to the op list. Always adding the visitor
+      // instead of the op, bc its streamable. However, if any other ops in the group aren't
+      // streamable it won't matter anyway.
+      _convertOps.prepend("hoot::TranslationVisitor");
+    }
+    else if (_convertOps.contains("hoot::TranslationOp"))
+    {
+      // replacing TranslationOp with TranslationVisitor for the reason mentioned above
+      _convertOps.replaceInStrings("hoot::TranslationOp", "hoot::TranslationVisitor");
+    }
     LOG_VARD(_convertOps);
-    conf().set(ConfigOptions::getSchemaTranslationScriptKey(), _translation);
-    LOG_VART(conf().get(ConfigOptions().getSchemaTranslationScriptKey()));
+
+    // If the translation direction wasn't specified, go toward OSM.
+    if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+    {
+      conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
+    }
+
+    //conf().set(ConfigOptions::getSchemaTranslationScriptKey(), _translation);
+    //LOG_VART(conf().get(ConfigOptions().getSchemaTranslationScriptKey()));
   }
 
   //check to see if all of the i/o can be streamed
@@ -665,7 +696,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
-    assert(!_colsArgSpecified);
+    assert(!_shapeFileColumnsSpecified());
 
     //stream the i/o
     ElementStreamer::stream(
@@ -706,10 +737,10 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
       (float)(currentTask - 1) / (float)numTasks,
       "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
-    if (output.toLower().endsWith(".shp") && _colsArgSpecified)
+    if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
     {
       // If the user specified cols, then we want to export them.
-      _exportToShapeWithCols(output, _columns, map);
+      _exportToShapeWithCols(output, _shapeFileColumns, map);
     }
     else
     {

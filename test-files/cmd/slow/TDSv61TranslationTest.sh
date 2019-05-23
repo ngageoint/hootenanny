@@ -23,7 +23,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 
 ##### Start Tests #####
 # Jam all of the shapefiles into one OSM file
-hoot convert $HOOT_OPT $inputDir/*.shp $outputDir/new_TDSv61.osm --trans $TRANS # > tmp/TDSv61_to_OSM.txt
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_TDSv61.osm # > tmp/TDSv61_to_OSM.txt
 
 # Uncomment this to update the OSM file if you edit the shapefiles or the translation file.
 #cp $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
@@ -33,7 +33,7 @@ hoot diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file and it assumes that the output dir doesn't have any shapefiles in it
-hoot convert --debug -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp" --trans $TRANS # > tmp/TDSv61_to_TDS.txt
+hoot convert --debug -D schema.translation.script=$TRANS -D ogr.thematic.structure=false $outputDir/new_TDSv61.osm $outputDir".shp" # > tmp/TDSv61_to_TDS.txt
 
 # Make shapefiles - Thematic
 # hoot convert-osm2ogr $HOOT_OPT $TRANS $outputDir/new_TDSv61.osm $outputDir/"new_files.shp" > tmp/TDSv61_to_TDS2.txt

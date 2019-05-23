@@ -33,9 +33,9 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>

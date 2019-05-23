@@ -33,9 +33,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>

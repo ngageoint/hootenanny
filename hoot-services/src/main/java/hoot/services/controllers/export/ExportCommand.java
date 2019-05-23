@@ -73,7 +73,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} -D schema.translation.script=${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH} ";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -135,7 +135,6 @@ class ExportCommand extends ExternalCommand {
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
             options.add("ogr.strict.checking=off");
         }
-
 
         return options;
     }

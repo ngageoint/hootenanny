@@ -50,7 +50,7 @@ QSet<QString> ToEnglishDictionaryTranslator::_streetTypes;
 
 HOOT_FACTORY_REGISTER(ToEnglishTranslator, ToEnglishDictionaryTranslator)
 
-ToEnglishDictionaryTranslator::DictionaryTranslator() :
+ToEnglishDictionaryTranslator::ToEnglishDictionaryTranslator() :
 _tokenizeInput(true)
 {
   // if this assertion isn't true then bad things will happen when converting between QString and
@@ -105,7 +105,7 @@ QString ToEnglishDictionaryTranslator::toEnglish(const QString& input, const boo
     l.append(input);
   }
 
-  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
+  const QMap<QString, QStringList>& dict = ToEnglishTranslateDictionary::getInstance().getTable();
 
   for (int i = 0; i < l.size(); i++)
   {
@@ -142,7 +142,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
     return result;
   }
 
-  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
+  const QMap<QString, QStringList>& dict = ToEnglishTranslateDictionary::getInstance().getTable();
 
   int biggestMatchSize = 0;
   QStringList biggestMatch;
@@ -221,14 +221,14 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 
 QString ToEnglishDictionaryTranslator::toTitleCase(const QString& input)
 {
-  return _transform(TranslateDictionary::getInstance().getTitler(), input);
+  return _transform(ToEnglishTranslateDictionary::getInstance().getTitler(), input);
 }
 
 QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
 {
   QStringList l = input.split(_whiteSpace, QString::SkipEmptyParts);
 
-  const QMap<QString, QStringList>& dict = TranslateDictionary::getInstance().getTable();
+  const QMap<QString, QStringList>& dict = ToEnglishTranslateDictionary::getInstance().getTable();
 
   for (int i = 0; i < l.size(); i++)
   {
@@ -259,14 +259,14 @@ QString ToEnglishDictionaryTranslator::transliterateToLatin(const QString& input
 {
   // cache incoming requests -- we sometimes get a lot of duplicates.
   QString result;
-  if (!TranslateDictionary::getInstance().transliterationCachingEnabled())
+  if (!ToEnglishTranslateDictionary::getInstance().transliterationCachingEnabled())
   {
-    result = _transform(TranslateDictionary::getInstance().getTransliterator(), input);
+    result = _transform(ToEnglishTranslateDictionary::getInstance().getTransliterator(), input);
   }
-  else if (!TranslateDictionary::getInstance().getFromTransliterationCache(input, result))
+  else if (!ToEnglishTranslateDictionary::getInstance().getFromTransliterationCache(input, result))
   {
-    result = _transform(TranslateDictionary::getInstance().getTransliterator(), input);
-    TranslateDictionary::getInstance().insertIntoTransliterationCache(input, result);
+    result = _transform(ToEnglishTranslateDictionary::getInstance().getTransliterator(), input);
+    ToEnglishTranslateDictionary::getInstance().insertIntoTransliterationCache(input, result);
   }
   return result;
 }

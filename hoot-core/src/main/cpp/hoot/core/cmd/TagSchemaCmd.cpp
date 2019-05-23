@@ -27,8 +27,8 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 

@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/io/OgrReader.h>
@@ -95,17 +95,15 @@ public:
   void convert(const QStringList& inputs, const QString& output);
 
   void setTranslation(const QString& translation) { _translation = translation; }
-  void setColumns(const QStringList& columns) { _columns = columns; }
-  void setColsArgSpecified(const bool specified) { _colsArgSpecified = specified; }
-  void setFeatureReadLimit(const int limit) { _featureReadLimit = limit; }
+  void setShapeFileColumns(const QStringList& columns) { _shapeFileColumns = columns; }
+  void setOgrFeatureReadLimit(const int limit) { _ogrFeatureReadLimit = limit; }
   void setConvertOps(const QStringList& ops) { _convertOps = ops; }
 
 private:
 
   QString _translation;
-  QStringList _columns;
-  bool _colsArgSpecified;
-  int _featureReadLimit;
+  QStringList _shapeFileColumns;
+  int _ogrFeatureReadLimit;
   QStringList _convertOps;
 
   Progress _progress;
@@ -131,6 +129,8 @@ private:
   std::vector<float> _getOgrInputProgressWeights(OgrReader& reader, const QString& input,
                                                  const QStringList& layers);
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
+
+  bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
 };
 
 }

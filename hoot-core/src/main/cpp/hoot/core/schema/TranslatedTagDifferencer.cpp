@@ -31,8 +31,8 @@
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/ElementConverter.h>

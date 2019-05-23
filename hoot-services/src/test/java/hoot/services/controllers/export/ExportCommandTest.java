@@ -62,6 +62,8 @@ public class ExportCommandTest {
         List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();
         options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+        hootOptions.add("-D"); 
+        hootOptions.add("schema.translation.script=" + exportParams.getTranslation());
 
         assertEquals(jobId, exportCommand.getJobId());
         assertEquals(true, exportCommand.getTrackable());

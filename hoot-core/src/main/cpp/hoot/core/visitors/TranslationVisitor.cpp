@@ -34,8 +34,8 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -73,10 +73,10 @@ void TranslationVisitor::setConfiguration(const Settings& conf)
   }
   LOG_VART(_toOgr);
   LOG_VART(conf.hasKey(c.getSchemaTranslationScriptKey()));
-  LOG_VART(c.gettSchemaTranslationScript());
-  if (conf.hasKey(c.getSchematTranslationScriptKey()) && c.gettSchemaTranslationScript() != "")
+  LOG_VART(c.getSchemaTranslationScript());
+  if (conf.hasKey(c.getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
   {
-    setPath(c.gettSchemaTranslationScript());
+    setPath(c.getSchemaTranslationScript());
   }
 }
 

@@ -28,7 +28,7 @@
 #define TRANSLATEDTAGDIFFERENCER_H
 
 // hoot
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 

@@ -78,15 +78,13 @@ See the User Guide for more details on command usage.
 
 ===== Convert an OSM file to a file geodatabase and apply an OGR schema translation:
 -----
-    hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.script=MyTranslation.js \
-      -D schema.translation.direction=toogr input.osm output.gdb
+    hoot convert -D schema.translation.script=MyTranslation.js input.osm output.gdb
 -----
     
 ===== Convert an OSM API database to a file geodatabase and apply an OGR schema translation:
 -----
-    hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.script=MyTranslation.js \
-      -D schema.translation.direction=toogr PG:"dbname='mydb' host='myhost' port='5432' \ 
-      user='myuser' password='mypass'" output.gdb
+    hoot convert -D schema.translation.script=MyTranslation.js \
+      PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" output.gdb
 -----
     
 ===== Convert an OSM file to a shape file while specifying export columns:
@@ -96,20 +94,18 @@ See the User Guide for more details on command usage.
 
 ===== Convert multiple shape files to an OSM file with schema translation:
 -----
-    hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.script=MyTranslation.js \
-      -D schema.translation.direction=toosm input1.shp input2.shp output.osm 
+    hoot convert -D schema.translation.script=MyTranslation.js input1.shp input2.shp output.osm 
 -----
 
 ===== Convert roads, bridges, overpasses and tunnels from a file geodatabase into a single .osm file with schema translation:
 -----
-    hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.script=MyTranslation.js \
-      -D schema.translation.direction=toosm input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm
+    hoot convert -D schema.translation.script=MyTranslation.js \
+      input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm
 -----
     
 ===== Convert and translate a shape file that is stored inside of a zip file:
 -----
-    hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.script=MyTranslation.js 
-      -D schema.translation.direction=toosm /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm
+    hoot convert -D schema.translation.script=MyTranslation.js /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm
 -----
     
 ==== Utilities

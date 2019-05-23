@@ -54,16 +54,14 @@ public:
 
   virtual int runSimple(QStringList args) override
   {
-    if (args.size() < 2)
+    if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
     QElapsedTimer timer;
     timer.start();
-
-    DataConverter converter;
 
     LOG_VART(args.size());
     LOG_VART(args);
@@ -89,40 +87,10 @@ public:
     inputs.removeAt(argIndex - 1);
     LOG_VART(inputs.size());
     LOG_VART(inputs);
-    LOG_VART(output);
+    LOG_VART(output);  
 
-    if (args.contains("--trans"))
-    {
-      const QString translation = args.at(args.indexOf("--trans") + 1).trimmed();
-      if (translation.isEmpty())
-      {
-        throw HootException("Invalid translation specified.");
-      }
-      converter.setTranslation(translation);
-    }    
-
-    if (args.contains("--cols"))
-    {
-      converter.setColsArgSpecified(true);
-      const QStringList cols =
-        args.at(args.indexOf("--cols") + 1).trimmed().split(",", QString::SkipEmptyParts);
-      converter.setColumns(cols);
-    }
-
-    if (args.contains("--limit"))
-    {
-      bool ok;
-      const int featureReadLimit = args.at(args.indexOf("--limit") + 1).trimmed().toInt(&ok);
-      if (!ok)
-      {
-        throw HootException("Invalid input specified for limit: " +
-                            args.at(args.indexOf("--limit") + 1));
-      }
-      converter.setFeatureReadLimit(featureReadLimit);
-    }
-
+    DataConverter converter;
     converter.setConfiguration(conf());
-
     converter.convert(inputs, output);
 
     QString msg = "Convert operation completed in ";

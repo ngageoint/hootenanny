@@ -1250,7 +1250,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot convert -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm --trans $HOOT_HOME/translations/Identity.js
+hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm
 ----
 
 === id.generator.node.start
@@ -2261,7 +2261,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm --trans translations/Identity.js
+hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -2332,10 +2332,10 @@ hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost
 === ogr.reader.limit
 
 * Data Type: int
-* Default Value: `-1`
+* Default Value: `0`
 
 Optional maximum number of OGR features to read from an input file. This can be useful when
-debugging.
+debugging. A value < 1 indicates that there is no limit.
 
 === ogr.reader.node.id.field.name
 
@@ -3587,13 +3587,11 @@ weighting is determined based on the circular error.
 === schema.translation.direction
 
 * Data Type: string
-* Default Value: `toosm`
+* Default Value: ``
 
-The direction that the translation script should translate. `toogr` will translate from to OGR.
-`toosm` will translate from to OSM. This is used with the convert command, TranslationOp, or
+The direction that the translation script should translate. `toogr` will translate to OGR.
+`toosm` will translate to OSM. This is used with the convert command, TranslationOp, or
 TranslationVisitor.
-
-TODO: make this default to empty
 
 === schema.translation.override
 
@@ -3614,7 +3612,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Data Type: string
 * Default Value: ``
 
-The script used by the TranslationVisitor for schema translation.
+The script used by the TranslationVisitor and TranslationOp for schema translation. Required if
+converting to/from an OGR format.  Use either the base name of a Python translation file (without
+the .py extension) or the full path to a Javascript file (.js). If this configuration option is
+added to a call to the convert command and neither TranslationVisitor or TranslationOp is specified
+the convert command will add the translation operation as the first conversion operation. If you
+want the translation operation to occur in a different order, then you must explicitly specify
+it in convert.ops. For more information on translation files read the "Translation" section of the
+Hootenanny User Guide.
 
 === score.graph.debug.images
 
@@ -3743,6 +3748,7 @@ adding/modifying one or more tags on all elements in a map.  Separate list items
 * Data Type: list
 * Default Value:
 ** ``
+
 Optional list of keys to use for shape file output columns. Valid only when converting from OSM to
 shape file and cannot be used in combination with a translation.  If this option is not specified,
 then the list of columns will be automatically determined based on the most frequently populated

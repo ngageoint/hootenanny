@@ -289,6 +289,8 @@ function doExport(req, res, hash, input) {
         } else {
             command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
+            command += ' -D convert.ops=hoot::TranslationOp';
+            command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             // Set per schema config options
@@ -298,7 +300,7 @@ function doExport(req, res, hash, input) {
             + outFile
             ;
 
-        if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
+        //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
         //used for testing to simulate hoot export
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';

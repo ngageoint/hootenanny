@@ -40,9 +40,9 @@ using namespace geos::geom;
 #include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/PythonSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/schema/PythonSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>

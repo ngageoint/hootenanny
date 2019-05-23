@@ -28,7 +28,7 @@
 #define PYTHON_SCHEMA_TRANSLATOR_H
 
 // Hoot
-#include <hoot/core/io/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 
 // Std
 #include <string>

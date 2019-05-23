@@ -29,8 +29,8 @@
 #define JAVASCRIPT_SCHEMA_TRANSLATOR_H
 
 // hoot
-#include <hoot/core/io/ScriptSchemaTranslator.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>

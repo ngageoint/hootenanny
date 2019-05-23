@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/StrictChecking.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>

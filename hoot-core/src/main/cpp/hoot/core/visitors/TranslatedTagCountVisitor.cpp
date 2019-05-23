@@ -27,7 +27,7 @@
 #include "TranslatedTagCountVisitor.h"
 
 // hoot
-#include <hoot/core/io/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -35,7 +35,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/io/schema/Schema.h>
 
 using namespace geos::geom;
