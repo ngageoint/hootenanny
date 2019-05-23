@@ -223,12 +223,12 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding, const 
   }
 }
 
-void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
+void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 {
-  LOG_TRACE("Input building: " << building->toString());
+  LOG_TRACE("Input building: " << pBuilding->toString());
 
   std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-  const vector<RelationData::Entry> entries = building->getMembers();
+  const vector<RelationData::Entry> entries = pBuilding->getMembers();
   QHash<RelationData::Entry,WayPtr> buildingWayLookup;
 
   bool considerOuterRoleAsPart = !_removeBuildingRelations;
@@ -239,7 +239,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     if (entries[i].role == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline role from: " << entries[i] << "...");
-      building->removeElement(entries[i].role, entries[i].getElementId());
+      pBuilding->removeElement(entries[i].role, entries[i].getElementId());
     }
     else if (entries[i].role == MetadataTags::RolePart() ||
              (considerOuterRoleAsPart && entries[i].role == MetadataTags::RoleOuter())
@@ -252,7 +252,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
         if (way->getNodeCount() >= 4)
         {
           LOG_TRACE("Unioning building part: " << way << "...");
-          _unionOutline(building, way, outline);
+          _unionOutline(pBuilding, way, outline);
           buildingWayLookup[entries[i]] = way;
         }
       }
@@ -263,7 +263,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
         if (relation->isMultiPolygon())
         {
           LOG_TRACE("Unioning multipoly relation: " << relation << "...");
-          _unionOutline(building, relation, outline);
+          _unionOutline(pBuilding, relation, outline);
         }
         else
         {
@@ -271,7 +271,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
           {
             LOG_WARN(
               "Found a building with a non-multipolygon relation 'part'. " <<
-              relation->toString() << "Building: " << building->toString());
+              relation->toString() << "Building: " << pBuilding->toString());
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -287,68 +287,58 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
   {
     LOG_TRACE("Adding building outline element...");
 
-    const std::shared_ptr<Element> outlineElement =
+    const std::shared_ptr<Element> pOutlineElement =
       GeometryConverter(_map).convertGeometryToElement(
-        outline.get(), building->getStatus(), building->getCircularError());
+        outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
 
-    _mergeNodes(outlineElement, building);
+    _mergeNodes(pOutlineElement, pBuilding);
 
-    LOG_VART(outlineElement);
+    LOG_VART(pOutlineElement);
 
     if (_removeBuildingRelations)
     {      
       // only copy tags to the outline element if we are removing the building relations
-      outlineElement->setTags(building->getTags());;
+      pOutlineElement->setTags(pBuilding->getTags());;
 
       // We don't need the relation "type" tag.
-      outlineElement->getTags().remove("type");
+      pOutlineElement->getTags().remove("type");
 
-      LOG_TRACE("Marking building: " << building->getElementId() << " for deletion...");
-      _buildingRelationIds.insert(building->getElementId());
+      LOG_TRACE("Marking building: " << pBuilding->getElementId() << " for deletion...");
+      _buildingRelationIds.insert(pBuilding->getElementId());
     }
     else
     {
-      building->addElement(MetadataTags::RoleOutline(), outlineElement);
+      pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
 
     // find outline ways that are exact duplicates of the original building ways
-    if (outlineElement->getElementType() == ElementType::Relation)
+    vector<long> removeWayIds;
+
+    if (pOutlineElement->getElementType() == ElementType::Way)
     {
-      vector<long> removeWayIds;
-      RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(outlineElement);
+      ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineElement);
+      _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pBuilding);
+    }
+    else if (pOutlineElement->getElementType() == ElementType::Relation)
+    {  
+      const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
 
       foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
       {
-        ElementPtr pOutlineElement = _map->getElement(outlineEntry.getElementId());
+        ElementPtr pOutlineMember = _map->getElement(outlineEntry.getElementId());
 
-        if (pOutlineElement->getElementType() == ElementType::Way)
+        if (pOutlineMember->getElementType() == ElementType::Way)
         {
-          // see if it's a duplicate of any building
-          ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineElement);
-
-          foreach (WayPtr pBuildingWay, buildingWayLookup)
-          {
-            if (pBuildingWay->getNodeCount() == pOutlineWay->getNodeCount())
-            {
-              vector<long> sourceNodes = pBuildingWay->getNodeIds();
-              vector<long> wayNodes = pOutlineWay->getNodeIds();
-
-              if (sourceNodes == wayNodes)
-              {
-                // replace the outline way with the building way and mark the outline way for removal
-                removeWayIds.push_back(pOutlineWay->getId());
-                pOutlineRelation->replaceElement(pOutlineWay, pBuildingWay);
-              }
-            }
-          }
+          ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineMember);
+          _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pOutlineRelation);
         }
       }
+    }
 
-      // remove replaced outline ways
-      foreach (long id, removeWayIds)
-      {
-        RemoveWayOp::removeWayFully(_map, id);
-      }
+    // remove replaced outline ways
+    foreach (long id, removeWayIds)
+    {
+      RemoveWayOp::removeWayFully(_map, id);
     }
   }
   else
@@ -356,8 +346,33 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
     LOG_TRACE("Building outline is empty.  Skipping creation of multipoly relation.");
   }
 
-  LOG_TRACE("Output building: " << building);
+  LOG_TRACE("Output building: " << pBuilding);
 }
+
+void BuildingOutlineUpdateOp::_findOutlineDuplicate( ConstWayPtr& pOutlineWay,
+                                                     QHash<RelationData::Entry,WayPtr>& buildingWayLookup,
+                                                     vector<long>& removeWayIds,
+                                                     const RelationPtr& pOutlineHost
+                                                   )
+{
+  // see if it's a duplicate of any building
+  foreach (WayPtr pBuildingWay, buildingWayLookup)
+  {
+    if (pBuildingWay->getNodeCount() == pOutlineWay->getNodeCount())
+    {
+      vector<long> sourceNodes = pBuildingWay->getNodeIds();
+      vector<long> wayNodes = pOutlineWay->getNodeIds();
+
+      if (sourceNodes == wayNodes)
+      {
+        // replace the outline way with the building way and mark the outline way for removal
+        removeWayIds.push_back(pOutlineWay->getId());
+        pOutlineHost->replaceElement(pOutlineWay, pBuildingWay);
+      }
+    }
+  }
+}
+
 
 void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,
   const RelationPtr& reference)
