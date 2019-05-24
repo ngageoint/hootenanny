@@ -116,7 +116,7 @@ void MultiaryIngester::ingest(const QString& newInput, const QString& translatio
   _doInputErrorChecking(newInput, translationScript, referenceOutput, changesetOutput);
 
   //script for translating input to OSM
-  conf().set(ConfigOptions::gettSchemaTranslationScriptKey(), translationScript);
+  conf().set(ConfigOptions::getSchemaTranslationScriptKey(), translationScript);
 
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];

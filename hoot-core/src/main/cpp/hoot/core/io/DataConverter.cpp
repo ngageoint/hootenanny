@@ -182,7 +182,7 @@ void DataConverter::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
-  setShapeFileColumns(config.getShapeFileReaderColumns());
+  setShapeFileColumns(config.getShapeFileWriterCols());
   setTranslation(config.getSchemaTranslationScript());
   LOG_VARD(_convertOps);
 }
@@ -257,7 +257,7 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   //I don't think it would be possible for translation to work along with the export columns
   //specified, as you'd be first changing your column names with the translation and then trying
   //to export old column names.  If this isn't true, then we could remove this.
-  if (!_translation.isEmpty() && _shapeFileColumnsSpecified)
+  if (!_translation.isEmpty() && _shapeFileColumnsSpecified())
   {
     throw HootException("Cannot specify both a translation and export columns.");
   }
@@ -389,7 +389,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     int currentStep = 1;
 
     // If the translation direction wasn't specified, go toward OGR.
-    if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+    if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
     {
       conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toogr");
     }
@@ -545,7 +545,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll("hoot::TranslationVisitor");
 
   // If the translation direction wasn't specified, go toward OSM.
-  if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
   {
     conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
   }
@@ -661,7 +661,8 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     LOG_VARD(_convertOps);
 
     // If the translation direction wasn't specified, go toward OSM.
-    if (ConfigOptions().get(ConfigOptions::getSchemaTranslationDirection()).trimmed().isEmpty())
+    if (conf().getString(
+          ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
     {
       conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
     }

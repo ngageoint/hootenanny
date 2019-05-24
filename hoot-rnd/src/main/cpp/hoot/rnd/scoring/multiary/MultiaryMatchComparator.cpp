@@ -98,7 +98,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
   // A layer name to confusion table mapping
   QMap<QString, ConfusionTable> confusionTables;
 
-  ScriptToOgrSchemaTranslator translator;
+  ScriptToOgrSchemaTranslatorPtr translator;
 
   if (_translationScript != "")
   {

@@ -107,7 +107,8 @@ class ImportCommand extends ExternalCommand {
             }
 
             if (!isNoneTranslation) {
-                substitutionMap["HOOT_OPTIONS"] = substitutionMap["HOOT_OPTIONS"] + " -D schema.translation.script=" + translationPath;
+                substitutionMap.put(
+                  "HOOT_OPTIONS",  (String)substitutionMap.get("HOOT_OPTIONS") + " -D schema.translation.script=" + translationPath);
             }
             command = hootConvertCommand;
         }

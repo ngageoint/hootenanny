@@ -96,8 +96,7 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
       QStringList inputs;
       inputs.append("test1.shp");
       converter.convert(inputs, "test2.osm");
@@ -121,8 +120,8 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
+
       QStringList inputs;
       inputs.append("test1.osm");
       converter.convert(inputs, "test2.osm");
@@ -147,8 +146,7 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
       QStringList inputs;
       inputs.append("test1.shp");
       converter.convert(inputs, "test2.osm");
@@ -235,7 +233,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DataConverterTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DataConverterTest, "quick");
 
 }
