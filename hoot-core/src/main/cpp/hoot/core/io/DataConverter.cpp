@@ -377,7 +377,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
   {
     LOG_INFO("No translation direction specified. Translating to OGR...");
-    conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toogr");
+    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toogr");
   }
 
   // TODO: re-enable mt here; We should be able to simply move the convert ops application step to
@@ -548,7 +548,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
   {
     LOG_INFO("No translation direction specified. Translating to OSM...");
-    conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
+    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
   }
 
   // The ordering for these ogr2osm ops matters.
@@ -666,7 +666,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
           ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
     {
       LOG_INFO("No translation direction specified. Translating to OSM...");
-      conf().set(ConfigOptions::getSchemaTranslationScriptKey(), "toosm");
+      conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
     }
   }
 
