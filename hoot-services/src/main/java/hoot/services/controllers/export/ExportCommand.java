@@ -157,7 +157,7 @@ class ExportCommand extends ExternalCommand {
         }
 
 
-        // By default export removes hoot conflation review related tags (currently passed from the UI)
+        // By default export removes hoot conflation review related tags
         if (!params.getTagOverrides().isEmpty()) {
             options.add("translation.override=" + params.getTagOverrides() );
         }
