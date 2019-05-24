@@ -2266,7 +2266,7 @@ tds61 = {
             tds61.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
-            tds61.toChange = hoot.Settings.get("translation.override");
+            tds61.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Debug:
@@ -2430,7 +2430,7 @@ tds61 = {
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            tds61.toChange = hoot.Settings.get("translation.override");
+            tds61.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built

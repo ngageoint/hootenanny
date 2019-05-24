@@ -955,9 +955,13 @@ QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char *layerName,
+void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
                                                  const char* geomType)
 {
+  LOG_VART(_toOsmFunctionName);
+  LOG_VART(layerName);
+  LOG_VART(geomType);
+
   _tags = &t;
 
   Isolate* current = v8::Isolate::GetCurrent();
@@ -967,6 +971,8 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char *layerName,
   Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
   {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
     tags->Set(toV8(it.key()), toV8(it.value()));
   }
 
@@ -999,6 +1005,8 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char *layerName,
   t.clear();
 
   // Just making sure...
+  LOG_VART(newTags.IsEmpty() || newTags->IsNull() || newTags->IsUndefined());
+  LOG_VART(newTags->IsObject());
   if (newTags.IsEmpty() || newTags->IsNull() || newTags->IsUndefined())
   {
     // leave the tags empty
@@ -1020,6 +1028,7 @@ void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char *layerName,
       {
         t.insert(toCpp<QString>(arr->Get(i)), toCpp<QString>(v));
       }
+      LOG_VART(t);
     }
   }
   else
