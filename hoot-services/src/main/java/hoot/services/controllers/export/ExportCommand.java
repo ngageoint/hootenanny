@@ -129,22 +129,13 @@ class ExportCommand extends ExternalCommand {
             options.add("ogr.append.data=true");
         }
 
-        // OK. This is VERY UGLY and there has to be a better way to do this
-        // DNC uses some MIN INT values to signify NULL's If we don't change this, it throws an
-        // exception and dies.
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("ogr.strict.checking=off");
+            options.add("-C DncExport.conf");
         }
 
-        // More VERY UGLY stuff and, yet again, there has to be a better way to do this
-        // The geometry modifications for Cartographic export need their own set of options. 
         if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
-            options.add("convert.ops+=hoot::GeometryModifierOp");
-            // options.add("geometry.modifier.rules.file=$HOOT_HOME/translations/mgcpCartoMod.json");
-            File mgcpCarto = new File(new File(HOME_FOLDER, "translations"), "mgcpCartoMod.json");
-            options.add("geometry.modifier.rules.file=" + mgcpCarto.getAbsolutePath());
+            options.add("-C MgcpCartoExport.conf");
         }
-
 
         return options;
     }
