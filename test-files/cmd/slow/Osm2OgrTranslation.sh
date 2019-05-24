@@ -35,7 +35,7 @@ hoot convert --debug -D schema.translation.script=test-files/io/SampleTranslatio
 printLayerInfo $OUTPUT/output.gdb/
 
 echo "#### Test prepending layer names and lazy layer creation ####"
-hoot convert --debug -D schema.translation.script=test-files/io/SampleTranslation.js-D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.osm $OUTPUT/options.shp
+hoot convert --debug -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=bar_ test-files/io/SampleTranslation.osm $OUTPUT/options.shp
 hoot convert --debug -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=foo_ -D ogr.writer.create.all.layers=true test-files/io/SampleTranslation.osm $OUTPUT/options.shp
 printLayerInfo $OUTPUT/options/
 
