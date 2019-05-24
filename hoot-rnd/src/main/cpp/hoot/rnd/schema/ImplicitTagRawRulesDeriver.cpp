@@ -320,7 +320,6 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
     {
       translationDirection = "toosm";
     }
-    //QString translationDirection = "toogr";
     LOG_VARD(translationDirection);
     translationVisitor->setTranslationDirection(translationDirection);
 
