@@ -71,7 +71,7 @@ A Levenshtein Similarity score is calculated for each candidate POI. To calculat
 
 * M - The maximum length of the two strings.
 
-image::images/places/image007.png[]
+image::algorthms/images/places/image007.png[]
 
 ===== Calculating Goodness
 
@@ -84,9 +84,9 @@ Goodness is calculated as:
 * s - The Levenshtein similarity score
 * ws - Weight of s [0, 1] (defaults to .9)
 
-image::images/places/image008.png[]
+image::algorithms/images/places/image008.png[]
 
-image::images/places/image009.png[]
+image::algorithms/images/places/image009.png[]
 
 Any goodness score greater than or equal to a threshold is considered a match. The threshold defaults to 0.3.
 
@@ -178,15 +178,15 @@ _The Starbucks Problem_ below.
 
 [[placesinput1]]
 .Input 1
-image::images/places/image010.jpg[scale="75"]
+image::algorithms/images/places/image010.jpg[scale="75"]
 
 [[placesinput2]]
 .Input 2
-image::images/places/image011.jpg[scale="75"]
+image::algorithms/images/places/image011.jpg[scale="75"]
 
 [[placesconflated]]
 .Conflated Result
-image::images/places/image012.jpg[scale="75"]
+image::algorithms/images/places/image012.jpg[scale="75"]
 
 _The Starbucks Problem_ 
 

@@ -7,14 +7,14 @@ data set is far superior to another this can improve the conflation quality and
 reduce amount of time reviewing.
 
 Hootenanny uses the
-https://insightcloud.digitalglobe.com/redmine/attachments/download/2858/2011-B-03-AlphaShapes.pdf[alpha
+link:$$https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf$$[alpha
 shape] algorithm to define the shape of a finite set of points. In this case we
 treat the vertexes of the input shapefile as the set of points when calculating
 the alpha shape. 
 
 [[alphashape]]
 .Simple Alpha Shape
-image::AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
+image::algorithms/images/AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
 
 By tuning the _alpha_ value the alpha shape can be made to generalize the set of
 points, or tightly fit the points. If a large enough alpha value is specified
@@ -33,7 +33,9 @@ meets the following criteria:
 
 // Unfortunately Asciidoc doesn't like this URL. Too man underscores?
 // The real URL is http://doc.cgal.org/latest/Alpha_shapes_2/classCGAL_1_1Alpha__shape__2.html#afd047290bb8e9d12194eed582e82a9f1
-In http://tinyurl.com/meocd4y[CGAL 4.5] they mention calculating the alpha value
+In
+link:$$http://doc.cgal.org/latest/Alpha_shapes_2/classCGAL_1_1Alpha__shape__2.html#afd047290bb8e9d12194eed582e82a9f1$$[CGAL 4.5] they
+mention calculating the alpha value
 such that a specified number of components are returned. In this case it may be
 desirable to return two or more polygons if we know that there is significant
 distance between two mapped areas such as cities.

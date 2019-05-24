@@ -87,7 +87,7 @@ See also:
 
 [[coastlines]]
 .Coastlines
-image::algorithms/Coastlines.png[Coastlines at two scales,scalewidth="50%"]
+image::algorithms/images/Coastlines.png[Coastlines at two scales,scalewidth="50%"]
 
 In <<coastlines>> is an example of two coastlines extracted at two different
 scales. While there are obvious similarities there are also significant
@@ -276,7 +276,8 @@ are merged.
 
 [[GenericConflationQuality]]
 .Conflation Quality
-image::algorithms/GenericLineTestGraph.png[Random Forest vs. Generic Line Road Conflation Performance,scalewidth="50%"]
+image::algorithms/images/GenericLineTestGraph.png[Random Forest vs. Generic Line Road Conflation Performance,scalewidth="50%"]
+////
 #TODO: replace with MPL - #267
 #[gnuplot, algorithms/GenericLineTestGraph.png]
 #------
@@ -306,6 +307,7 @@ image::algorithms/GenericLineTestGraph.png[Random Forest vs. Generic Line Road C
 #subplots_adjust(bottom=0.15)
 #tick_params(labelsize=10)
 #--------------------------
+////
 
 In <<GenericConflationQuality>> 90% confidence interval error bars are presented
 when relevant.  For some tests no confidence intervals are generated and have
@@ -320,7 +322,8 @@ for this requires more investigation.
 
 [[Conflation Speed]]
 .Conflation Speed
-image::algorithms/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line Road Conflation Timing,scalewidth="50%"]
+image::algorithms/images/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line Road Conflation Timing,scalewidth="50%"]
+////
 #TODO: replace with MPL - #267
 #[gnuplot, algorithms/GenericLineTestTimingGraph.png]
 #------
@@ -339,6 +342,7 @@ image::algorithms/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line 
 #  using 8:xticlabels(1) title columnheader(8), \
 #  '' using 9 fill pattern 2 title columnheader(9)
 #------
+////
 
 The image above shows the conflation speed for some of the test runs discussed
 above. The Perty test runs include the entire perty operation (perturbing,
@@ -499,18 +503,18 @@ compared to the more specialized open source power line datasets coming from pow
 [width="100%"]
 |======
 | *Test Number* | *AOI* | *Reference Data* | *Secondary Data* | *Manually Matched Feature Count* | *Percentage Correctly Conflated* | *Percentage Marked for Unnecessary Review* | *Percentage Combined Correct and Reviewable* | *Time Elapsed (MM:SS)*
-| 1 | Mozambique | ENERGYDATA.INFO | OpenStreetMap | 62 | 96.7 | 0.0 | 96.7 | 05:14
-| 2 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 200 | 51.7 | 0.0 | 51.7 | 23:15
-| 3 | California Bay Area | California State Govt | OpenStreetMap | 229 | 78.4 | 0.0 | 78.4 | 01:39
-| 4 | Los Angeles | California State Govt | OpenStreetMap | 204 | 69.6 | 1.2 | 70.8 | 00:56
-| 5 | Namibia | MGCP | ENERGYDATA.INFO | 41 | 71.7 | 0.0 | 71.7 | 00:30 
-| 6 | Namibia | ENERGYDATA.INFO | OpenStreetMap | 51 | 94.7 | 0.0 | 94.7 | 03:53 
+| 1 | Mozambique | EDI | OSM | 62 | 96.7 | 0.0 | 96.7 | 05:14
+| 2 | Namibia | EDI | OSM | 200 | 51.7 | 0.0 | 51.7 | 23:15
+| 3 | California Bay Area | California State Govt | OSM | 229 | 78.4 | 0.0 | 78.4 | 01:39
+| 4 | Los Angeles | California State Govt | OSM | 204 | 69.6 | 1.2 | 70.8 | 00:56
+| 5 | Namibia | MGCP | EDI | 41 | 71.7 | 0.0 | 71.7 | 00:30 
+| 6 | Namibia | EDI | OSM | 51 | 94.7 | 0.0 | 94.7 | 03:53 
 |======
 
 The 80% correct conflation threshold was met by two of the tests, with three additional tests within 10% of that value.  The Nambia 
 test with only 51.7% correct obviously still requires quite a bit of attention.  
 
-It is worth noting that some of the ENERGYDATA.INFO and MGCP data contain previously added OpenStreetMap data.  Therefore, in some cases 
+It is worth noting that some of the ENERGYDATA.INFO (EDI) and MGCP data contain previously added OpenStreetMap (OSM) data.  Therefore, in some cases 
 nearly identical sections of data are being conflated together, which Hootenanny performs very well against (as expected).  In those areas 
 test scores could be considered artificially inflated.  However, since it is a quite common workflow to conflate OpenStreetMap into other 
 custom data sources due to OSM's richness as a result of open source contribution, testing conflating such overlapping data is still quite 
