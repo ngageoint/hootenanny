@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="8.382019700000001" minlon="-13.1567342" maxlat="8.889438800000001" maxlon="-12.9969995"/>
-    <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3829472971881263" lon="-13.1560971900159327"/>
-    <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3829472971881263" lon="-13.1560971900159327"/>
     <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3835674000000004" lon="-13.1565426999999993"/>
     <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3834657999999997" lon="-13.1566548000000001"/>
     <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.3833825999999991" lon="-13.1566875000000003"/>
@@ -113,49 +111,6 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.8837095000000001" lon="-13.0160833999999994"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.8837784000000006" lon="-13.0166359000000007"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="8.8838843999999995" lon="-13.0166626999999995"/>
-    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-133"/>
-        <nd ref="-91"/>
-        <nd ref="-92"/>
-        <nd ref="-93"/>
-        <nd ref="-94"/>
-        <nd ref="-95"/>
-        <nd ref="-96"/>
-        <nd ref="-97"/>
-        <nd ref="-141"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-98"/>
-        <nd ref="-106"/>
-        <nd ref="-107"/>
-        <nd ref="-108"/>
-        <nd ref="-109"/>
-        <nd ref="-110"/>
-        <nd ref="-98"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39"/>
-        <nd ref="-40"/>
-        <nd ref="-41"/>
-        <nd ref="-42"/>
-        <nd ref="-43"/>
-        <nd ref="-44"/>
-        <nd ref="-45"/>
-        <nd ref="-39"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-55"/>
-        <nd ref="-56"/>
-        <nd ref="-57"/>
-        <nd ref="-58"/>
-        <nd ref="-59"/>
-        <nd ref="-60"/>
-        <nd ref="-55"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-91"/>
         <nd ref="-92"/>
@@ -287,44 +242,11 @@
         <tag k="building:part" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-9" role="outer"/>
-        <member type="way" ref="-10" role="outer"/>
-        <tag k="building" v="yes"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="error:circular" v="15"/>
-    </relation>
-    <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-7" role="outer"/>
-        <member type="way" ref="-8" role="outer"/>
-        <tag k="building" v="yes"/>
-        <tag k="type" v="multipolygon"/>
-        <tag k="error:circular" v="15"/>
-    </relation>
-    <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="-2" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way(-4)."/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="-2" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:type" v="Bad Geometry"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:score" v="-1"/>
-        <tag k="hoot:review:note" v="Marking parent element for review for element with uncleanable topology: Way(-1)."/>
-        <tag k="type" v="review"/>
-    </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="part"/>
         <member type="way" ref="-1" role="part"/>
         <member type="way" ref="-3" role="part"/>
         <member type="way" ref="-4" role="part"/>
-        <member type="relation" ref="-5" role="outline"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="building"/>
         <tag k="error:circular" v="15"/>
@@ -332,7 +254,6 @@
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5" role="part"/>
         <member type="way" ref="-6" role="part"/>
-        <member type="relation" ref="-6" role="outline"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="building"/>
         <tag k="error:circular" v="15"/>
