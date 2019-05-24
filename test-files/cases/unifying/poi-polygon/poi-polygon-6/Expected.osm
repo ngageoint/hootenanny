@@ -28,8 +28,8 @@
         <member type="way" ref="-377372" role="outer"/>
         <member type="way" ref="-377365" role="outer"/>
         <member type="way" ref="-377379" role="outer"/>
-        <tag k="note" v="POI"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="note" v="POI"/>
         <tag k="building" v="yes"/>
         <tag k="type" v="multipolygon"/>
     </relation>

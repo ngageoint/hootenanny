@@ -86,9 +86,14 @@ private:
   std::set<ElementId> _buildingRelationIds;
 
   void _createOutline(const RelationPtr& building);
-  void _unionOutline(const RelationPtr& building, const ElementPtr& element, std::shared_ptr<geos::geom::Geometry>& outline);
+  void _unionOutline(const RelationPtr& building, const ElementPtr& element,
+                     std::shared_ptr<geos::geom::Geometry>& outline);
 
   void _extractUsedNodes(const RelationPtr& r, std::set<long>& nodes);
+  void _findOutlineDuplicate( ConstWayPtr& pOutlineWay, QHash<RelationData::Entry,
+                              WayPtr>& buildingWayLookup,
+                              std::vector<long>& removeWayIds,
+                              const RelationPtr& pOutlineHost );
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
