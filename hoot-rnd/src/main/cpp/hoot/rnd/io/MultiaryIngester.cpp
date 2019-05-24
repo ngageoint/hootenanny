@@ -223,7 +223,6 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
   translationVisitor->setTranslationScript(
     conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
 
-  //visitors.append(std::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
   visitors.append(translationVisitor);
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
   std::shared_ptr<ElementInputStream> filteredNewInputStream(
