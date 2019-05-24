@@ -58,10 +58,8 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
-  /**
-   * Set the path to the translation script.
-   */
-  void setPath(QString path);
+  void setTranslationScript(QString path);
+  void setTranslationDirection(QString direction);
 
   virtual void visit(const ElementPtr& e);
 
@@ -75,8 +73,8 @@ public:
 
 private:
 
-  ScriptSchemaTranslatorPtr _t;
-  ScriptToOgrSchemaTranslator* _togr;
+  ScriptSchemaTranslatorPtr _translator;
+  ScriptToOgrSchemaTranslator* _ogrTranslator;
   bool _toOgr;
 };
 

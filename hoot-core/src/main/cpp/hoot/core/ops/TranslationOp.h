@@ -59,7 +59,7 @@ public:
   /**
    * Set the path to the translation script.
    */
-  void setPath(QString path) { _translator.setPath(path); }
+  void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
 
   virtual QString getDescription() const { return _translator.getDescription(); }
 

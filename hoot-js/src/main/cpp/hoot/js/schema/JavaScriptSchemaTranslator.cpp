@@ -235,7 +235,7 @@ int JavaScriptSchemaTranslator::getLogCount(const QString& log)
 
 void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO.
+  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
@@ -407,7 +407,6 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 
     if (schemaJs->IsArray())
     {
-
       std::shared_ptr<Schema> schema(new Schema());
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 

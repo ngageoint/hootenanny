@@ -54,10 +54,10 @@ public:
 
   virtual int runSimple(QStringList args) override
   {
-    if (args.size() != 2)
+    if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes at least two parameters.").arg(getName()));
     }
 
     QElapsedTimer timer;

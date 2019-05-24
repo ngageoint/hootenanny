@@ -46,6 +46,8 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/TranslationOp.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/ops/BuildingPartMergeOp.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
 
 // std
 #include <vector>
@@ -359,7 +361,6 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
   writerThread.start();
   LOG_DEBUG("OGR Writer Thread Started");
 
-  // Wait for writer to finish
   LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();
 }
@@ -370,27 +371,25 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
   // Translation for to OGR happens in the writer and is not to be done in the convert ops, so
   // let's remove any that are there.
-  _convertOps.removeAll("hoot::TranslationOp");
-  _convertOps.removeAll("hoot::TranslationVisitor");
+  LOG_VARD(_convertOps);
+  _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
+  _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
+  LOG_VARD(_convertOps);
 
-  // If the translation direction wasn't specified, go toward OGR.
-  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
+  // TODO: We should be able to simply move the convert ops application step to before the
+  // conversion/translation step and then always run multithreaded after that (assuming we don't
+  // want to try to run the ops multithreaded as well with streams...may not be possible for some).
+
+  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
+  LOG_VARD(_convertOps.size());
+  if (OsmMapReaderFactory::hasElementInputStream(input) &&
+      _convertOps.size() == 0)
   {
-    LOG_INFO("No translation direction specified. Translating to OGR...");
-    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toogr");
+    // TODO: Progress needs to be integrated with mt somehow.
+    _transToOgrMT(input, output);
   }
-
-  // TODO: re-enable mt here; We should be able to simply move the convert ops application step to
-  // before the conversion/translation step and then always run multithreaded. Progress needs to be
-  // integrated with mt somehow as well.
-
-//  if (OsmMapReaderFactory::hasElementInputStream(input) &&
-//      _convertOps.size() == 0)
-//  {
-//    _transToOgrMT(input, output);
-//  }
-//  else
-//  {
+  else
+  {
     // The number of steps here must be updated as you add/remove job steps in the logic.
     int numSteps = 2;
     if (_convertOps.size() > 0)
@@ -430,7 +429,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
       " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
-  //}
+  }
 }
 
 std::vector<float> DataConverter::_getOgrInputProgressWeights(OgrReader& reader,
@@ -541,24 +540,24 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   // Translation from OGR happens in the reader and is not to be done in the convert ops, so
   // let's remove any that are there.
-  _convertOps.removeAll("hoot::TranslationOp");
-  _convertOps.removeAll("hoot::TranslationVisitor");
+  _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
+  _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
 
-  // If the translation direction wasn't specified, go toward OSM.
-  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
-  {
-    LOG_INFO("No translation direction specified. Translating to OSM...");
-    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
-  }
+//  // If the translation direction wasn't specified, go toward OSM.
+//  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
+//  {
+//    LOG_INFO("No translation direction specified. Translating to OSM...");
+//    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
+//  }
 
   // The ordering for these ogr2osm ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
-    _convertOps.prepend("hoot::BuildingPartMergeOp");
+    _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
   }
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    _convertOps.prepend("hoot::MergeNearbyNodes");
+    _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
   }
   LOG_VARD(_convertOps);
 
@@ -644,20 +643,22 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     //a previous check was done to make sure both a translation and export cols weren't specified
     assert(!_shapeFileColumnsSpecified());
 
-    if (!_convertOps.contains("hoot::TranslationOp") &&
-        !_convertOps.contains("hoot::TranslationVisitor"))
+    if (!_convertOps.contains(QString::fromStdString(TranslationOp::className())) &&
+        !_convertOps.contains(QString::fromStdString(TranslationVisitor::className())))
     {
       // If a translation script was specified but not the translation op, we'll add auto add the op
       // as the first conversion operation. If the caller wants the translation done after some
       // other op, then they need to explicitly add it to the op list. Always adding the visitor
       // instead of the op, bc its streamable. However, if any other ops in the group aren't
       // streamable it won't matter anyway.
-      _convertOps.prepend("hoot::TranslationVisitor");
+      _convertOps.prepend(QString::fromStdString(TranslationVisitor::className()));
     }
-    else if (_convertOps.contains("hoot::TranslationOp"))
+    else if (_convertOps.contains(QString::fromStdString(TranslationOp::className())))
     {
       // replacing TranslationOp with TranslationVisitor for the reason mentioned above
-      _convertOps.replaceInStrings("hoot::TranslationOp", "hoot::TranslationVisitor");
+      _convertOps.replaceInStrings(
+        QString::fromStdString(TranslationOp::className()),
+        QString::fromStdString(TranslationVisitor::className()));
     }
     LOG_VARD(_convertOps);
 

@@ -3,9 +3,9 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another.  Optionally, a translation may be performed during the 
-conversion.  The process may be memory bound depending upon the formats selected.  See the Hootenanny User Guide Supported Data Formats 
-section for information on supported formats.
+The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be performed during the 
+conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported 
+Data Formats section for more information.
 
 * +input(s)+ - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may be used
                for inputs within the same directory. For OGR inputs, layer names may optionally be specified.  Use a single space to separate 
@@ -17,6 +17,7 @@ section for information on supported formats.
 --------------------------------------
 convert (input) (output)
 
+# This syntax is upported for OGR inputs only.
 convert "(input1[;layer]) [input2[;layer]]" (output)
 --------------------------------------
 

@@ -173,8 +173,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
-        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -194,8 +193,6 @@ public class ImportCommandTest {
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
-
-        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());

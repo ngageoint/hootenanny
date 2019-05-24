@@ -72,7 +72,7 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getCommand());
 
         String expectedCommand = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf " +
-                "${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH}";
+                "${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 
         assertTrue(exportCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

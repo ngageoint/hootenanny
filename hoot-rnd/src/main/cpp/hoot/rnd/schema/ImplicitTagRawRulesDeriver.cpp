@@ -296,13 +296,13 @@ void ImplicitTagRawRulesDeriver::_updateForNewWord(const QString& word, const QS
   }
 }
 
-std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(const QString& input, const QString& translationScript)
+std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
+  const QString& input, const QString& translationScript)
 {
   LOG_INFO("Parsing: " << input << "...");
 
   _inputReader =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::createReader(input));
+    std::dynamic_pointer_cast<PartialOsmMapReader>(OsmMapReaderFactory::createReader(input));
   _inputReader->open(input);
   std::shared_ptr<ElementInputStream> inputStream =
     std::dynamic_pointer_cast<ElementInputStream>(_inputReader);
@@ -311,7 +311,22 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   if (translationScript.toLower() != "none")
   {
     std::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
-    translationVisitor->setPath(translationScript);
+
+    // I think we always want to be going to OSM here unless otherwise specified (or maybe
+    // regardless if its specified), but that should be verified.
+    QString translationDirection =
+      conf().getString(ConfigOptions::getSchemaTranslationDirectionKey());
+    if (translationDirection.trimmed().isEmpty())
+    {
+      translationDirection = "toosm";
+    }
+    //QString translationDirection = "toogr";
+    LOG_VARD(translationDirection);
+    translationVisitor->setTranslationDirection(translationDirection);
+
+    // always set the direction before setting the script
+    translationVisitor->setTranslationScript(translationScript);
+
     inputStream.reset(new ElementVisitorInputStream(_inputReader, translationVisitor));
   }
   return inputStream;
