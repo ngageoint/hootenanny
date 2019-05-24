@@ -33,7 +33,7 @@ translate = {
     createLookup : function(one2one)
     {
         // build a more efficient lookup
-        var lookup = {}
+        var lookup = {};
 
         one2one.forEach( function(item) {
             if (item[2]) // Make sure it isn't 'undefined'
@@ -47,12 +47,12 @@ translate = {
                 else
                 {
                     if (config.getOgrDebugLookupclash() == 'true') 
+                    {
+                        if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
                         {
-                            if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
-                            {
-                                print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
-                            }
+                            print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
                         }
+                    }
                 }
             }
         } );
@@ -78,9 +78,7 @@ translate = {
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
-        if (sepValue === undefined) {
-            sepValue = ';';
-        }
+        if (sepValue === undefined) sepValue = ';';
 
         if (oldValue === undefined || oldValue === null || oldValue === '')
         {
@@ -1150,6 +1148,8 @@ translate = {
     // makeAttrLookup - build a lookup table for FCODEs and Attrs
     makeAttrLookup : function(schema)
     {
+        var lookup = {};
+        
         // Add the attrArray to the list as <geom><FCODE>:[array]
         // Eg[L,A,P]AP030:[array]
         schema.forEach( function (item) {
