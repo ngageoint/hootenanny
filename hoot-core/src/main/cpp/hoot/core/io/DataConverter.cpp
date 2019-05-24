@@ -370,7 +370,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
 
   // Translation for to OGR happens in the writer and is not to be done in the convert ops, so
-  // let's remove any that are there.
+  // let's remove any that are in here.
   LOG_VARD(_convertOps);
   _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
@@ -382,10 +382,8 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   LOG_VARD(_convertOps.size());
-  if (OsmMapReaderFactory::hasElementInputStream(input) &&
-      _convertOps.size() == 0)
+  if (OsmMapReaderFactory::hasElementInputStream(input) && _convertOps.size() == 0)
   {
-    // TODO: Progress needs to be integrated with mt somehow.
     _transToOgrMT(input, output);
   }
   else
@@ -542,13 +540,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   // let's remove any that are there.
   _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
-
-//  // If the translation direction wasn't specified, go toward OSM.
-//  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
-//  {
-//    LOG_INFO("No translation direction specified. Translating to OSM...");
-//    conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
-//  }
 
   // The ordering for these ogr2osm ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())

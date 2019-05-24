@@ -79,6 +79,9 @@ public:
 
 /**
  * Converts data from one Hootenanny supported format to another
+ *
+ * OGR formats are handled with custom logic and all other formats are handled generically, with
+ * the exception of shape files written with explicitly specified columns.
  */
 class DataConverter : public Configurable
 {
