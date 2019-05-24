@@ -72,11 +72,18 @@ public:
     {
       const QString arg = args[i];
       LOG_VART(arg);
-      //-- options are assumed to be all at the end of the command, so we're done parsing
-      //inputs/outputs once we reach one of them
+      // Formerly, "--" options existed and were required to all be at the end of the command, so
+      // you could break here once you reached them, and you knew you were done parsing
+      // inputs/outputs. Now, the command doesn't take any command line options (uses all
+      // configuration options), so let's throw if we see a command line option. If we add any
+      // command line options back in at some point, then we can switch this logic back to how
+      // it originally was.
       if (arg.startsWith("--"))
       {
-        break;
+        //break;
+        throw IllegalArgumentException(
+          QString("The convert command takes no inline options starting with '--'. All options ") +
+          QString("are passed in as configuration options (-D)."));
       }
       argIndex++;
       inputs.append(arg);
