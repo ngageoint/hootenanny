@@ -29,7 +29,6 @@
 // Set of core translation routines
 //
 translate = {
-   
     // Build Lookup tables
     createLookup : function(one2one)
     {
@@ -569,6 +568,7 @@ translate = {
         return outTags;
     },
 
+
     // Parse the note:extra tag and return an associative array of key/value pairs
     parseNoteExtra : function(rawNote)
     {
@@ -798,7 +798,7 @@ translate = {
         }
     },
 
-    
+
     fixConstruction : function(tags, key)
     {
         if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
@@ -809,7 +809,7 @@ translate = {
         }
     },
 
-    
+
     // Returns true the feature is an OSM area feature
     // This is based on the OSM idea of what is considered an area
     // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
@@ -931,14 +931,14 @@ translate = {
         var result = false;
 
         // Exploit the object
-        var dropList = {'No Information':1, 
-                        'UNK':1, 'Unk':1, 
+        var dropList = {'No Information':1,
+                        'UNK':1, 'Unk':1,
                         'N_A':1, 'N/A':1,'NA':1,
                         '-999999':1,
                         '0':1,
             };
 
-        // For some reason it is not matching -32768 or -32767. 
+        // For some reason it is not matching -32768 or -32767.
         // It prints "-32768.00000000000000"
         // After playing, I found the two equals and the .0 helped
         // if (v === '' || v === '0' || v == 0.0 || v == -32768.0 || v == -32767.0 || v === '-999999' || v === undefined)
@@ -1087,16 +1087,12 @@ translate = {
         }
     }, // End applySimpleNumBiased
 
+
     // buildComplexRules
     // Build the lookup table for the applyComplexRules function
     buildComplexRules : function (rawList)
     {
         var rulesFunction = [];
-        // for (var i = 0, rLen = rawList.length; i < rLen; i++)
-        // {
-        //     rulesFunction.push([new Function('t', 'return ' + rawList[i][0]), new Function('t','a', rawList[i][1])]);
-        //     // print('Rules: Added ' + rawList[i][0]);
-        // }
 
         rawList.forEach( function (item) {
             rulesFunction.push([new Function('t', 'return ' + item[0]), new Function('t','a', item[1])]);
@@ -1104,7 +1100,6 @@ translate = {
         });
 
         return rulesFunction;
-
     }, // End buildComplexRules
 
 
@@ -1130,15 +1125,9 @@ translate = {
             }
         }
     */
-        // for (var i = 0, rLen = rulesList.length; i < rLen; i++)
-        // {
-        //     if (rulesList[i][0](tgs)) rulesList[i][1](tgs,atrs);
-        // }
-
         rulesList.forEach( function (item) {
             if (item[0](tgs)) item[1](tgs,atrs);
         });
-
     }, // End applyComplexRules
 
 
@@ -1146,17 +1135,6 @@ translate = {
     makeTdsAttrLookup : function(schema)
     {
         var lookup = {};
-
-        // for (var i=0, sLen = schema.length; i < sLen; i++)
-        // {
-        //     var attrArray = [];
-        //     for (var j=0, cLen = schema[i].columns.length; j < cLen; j++)
-        //     {
-        //         attrArray.push(schema[i].columns[j].name);
-        //     }
-        //     // Add the attrArray to the list as <tablename>:[array]
-        //     lookup[schema[i].name] = attrArray;
-        // }
 
         schema.forEach( function (item) {
             lookup[item.name] = [];
@@ -1172,21 +1150,7 @@ translate = {
     // makeAttrLookup - build a lookup table for FCODEs and Attrs
     makeAttrLookup : function(schema)
     {
-        var lookup = {};
-
-        // for (var i=0, sLen = schema.length; i < sLen; i++)
-        // {
-        //     var attrArray = [];
-        //     for (var j=0, cLen = schema[i].columns.length; j < cLen; j++)
-        //     {
-        //         attrArray.push(schema[i].columns[j].name);
-        //     }
-        //     // Add the attrArray to the list as <geom><FCODE>:[array]  
-        //     // Eg[L,A,P]AP030:[array]
-        //     lookup[schema[i].geom.charAt(0) + schema[i].fcode] = attrArray;
-        // }
-
-        // Add the attrArray to the list as <geom><FCODE>:[array]  
+        // Add the attrArray to the list as <geom><FCODE>:[array]
         // Eg[L,A,P]AP030:[array]
         schema.forEach( function (item) {
             var iName = item.geom.charAt(0) + item.fcode;
@@ -1200,15 +1164,10 @@ translate = {
     },
 
 
-    // makeLayerNameLookup - build a lookup table for FCODE to LayerName 
+    // makeLayerNameLookup - build a lookup table for FCODE to LayerName
     makeLayerNameLookup : function(schema)
     {
         var lookup = {};
-
-        // for (var i=0, sLen = schema.length; i < sLen; i++)
-        // {
-        //     lookup[schema[i].geom.charAt(0) + schema[i].fcode] = schema[i].name;
-        // }
 
         schema.forEach( function (item) {lookup[item.geom.charAt(0) + item.fcode] = item.name});
 
@@ -1242,7 +1201,6 @@ translate = {
                     });
 
         return schema;
-
     }, // End addReviewFeature
 
 
@@ -1272,7 +1230,6 @@ translate = {
                     });
 
         return schema;
-
     }, // End addEmptyFeature
 
 
@@ -1296,35 +1253,12 @@ translate = {
                     });
 
         return schema;
-
     }, // End addExtraFeature
 
 
     // addEtds - Add the eLTDS specific fields to each element in the schema
     addEtds: function(schema)
-    { 
-        // for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        // {
-        //     schema[i].columns.push( { name:'SCAMIN',
-        //                               desc:'Scale - Minimum', 
-        //                               type:'Integer',
-        //                               optional:'R',
-        //                               defValue:'-999999' 
-        //                             });
-        //     schema[i].columns.push( { name:'SCAMAX',
-        //                               desc:'Scale - Maximum', 
-        //                               type:'Integer',
-        //                               optional:'R',
-        //                               defValue:'-999999' 
-        //                             });
-        //     schema[i].columns.push( { name:'LINK_ID',
-        //                               desc:'Link Id', 
-        //                               type:'String',
-        //                               optional:'R',
-        //                               defValue:'No Information' 
-        //                             });
-        // }
-
+    {
         schema.forEach( function (item) {
             item.columns.push({name:'SCAMIN',desc:'Scale - Minimum',type:'Integer',optional:'R',defValue:'-999999'});
             item.columns.push({name:'SCAMAX',desc:'Scale - Maximum',type:'Integer',optional:'R',defValue:'-999999'});
@@ -1332,44 +1266,27 @@ translate = {
         });
 
         return schema;
-
     }, // End addEtds
 
-    
+
     // addFCSubtype - Add the ESRI specific FCSUBTYPE field to each element in the schema
     addFCSubtype: function(schema)
-    { 
-        // for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        // {
-        //     schema[i].columns.push( { name:'FCSUBTYPE',
-        //                               desc:'Feature Code Subtype', 
-        //                               type:'Integer',
-        //                               optional:'R',
-        //                               defValue:'' 
-        //                             });
-        // }
-
+    {
         schema.forEach( function (item) {
             item.columns.push({name:'FCSUBTYPE',desc:'Feature Code Subtype',type:'Integer',optional:'R',defValue:''});
         });
 
         return schema;
-
     }, // End addFCSubtype
 
 
     // addFdName - Add the ESRI Feature Dataset name to every element in the schema
     // If we don't add this the layers get put in the wrong place in the FGDB
     addFdName: function(schema,name)
-    { 
-        // for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        // {
-        //     schema[i].fdname = name;
-        // }
+    {
         schema.forEach( function(item) {item.fdname = name; });
 
         return schema;
-
     }, // End addFdName
 
 
@@ -1412,6 +1329,7 @@ translate = {
         });
 
     }, // End dumpSchema
+
 
     // overrideValues - Add, modify or delete tags/attributes based on a JSON string
     overrideValues: function(values,changeString)
