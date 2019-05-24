@@ -75,7 +75,7 @@ See the User Guide Command Line Documentation section for all configuration opti
 [[PoiToPolygonStatistics]]
 ==== Statistics
 
-Conflation statistics for POI to Polygon Conflation are available from the command line with the --stats option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
+Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
 different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section 
 <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
@@ -83,7 +83,7 @@ different definition than those conflatable with other POIs, which is less stric
 === Area to Area Conflation
 
 Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny 
-defines an area as a non-building polygon that possesses the OSM "area=yes" tag or equivalent.  Examples: parks, parking lots.  
+defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.  
 To read more information on Area to Area Conflation, see the "Area to Area Conflation" section in the Hootenanny Algorithm Guide.
 
 [[River-Conflation]]
@@ -243,82 +243,56 @@ There are several functions that may be called by Hootenanny:
   
 
 Below is about the simplest useful example that supports both +convert+. The following sections go into details on how these function are used.
-
 ------
 // an optional initialize function that gets called once before any 
 // translateAttribute calls.
-function initialize()
-{
+function initialize() {
     // The print method simply prints the string representation to stdout
     print("Initializing.")
 }
-
 // an optional finalize function that gets called once after all
 // translateAttribute calls.
-function finalize()
-{
+function finalize() {
     // the debug method prints to stdout when --debug has been specified on
     // the hoot command line. (DEBUG log level)
     debug("Finalizing.");
 }
-
-//
 // A very simple function for translating NFDDv4's to OSM:
 // - NAM column to OSM's name tag
 // - TYP column to OSM's highway tag
 // This is far from complete, but demonstrates the concepts.
-//
-function translateToOgr(tags, elementType, geometryType)
-{
+function translateToOgr(tags, elementType, geometryType) {
     var attrs = {};
-
-    if ('name' in tags)
-    {
+    if ('name' in tags) {
         attrs['NAM'] = tags['name'];
     }
-
     attrs['TYP'] = 0;
-    if (tags['highway'] == 'road')
-    {
+    if (tags['highway'] == 'road') {
         attrs['TYP'] = 1;
     }
-    else if (tags['highway'] == 'motorway')
-    {
+    else if (tags['highway'] == 'motorway') {
         attrs['TYP'] = 41;
     }
-
     return { attrs: attrs, tableName: "LAP030" };
 }
-
-//
 // A very simple function for translating from OSM's schema to NFDDv4:
 // - name tag to NFDDv4's NAM column
 // - highway tag to NFDDv4's TYP column
 // This is far from complete, but demonstrates the concepts.
-//
-function translateToOsm(attrs, layerName)
-{
+function translateToOsm(attrs, layerName) {
     tags = {};
-
-    if (attrs['NAM'] != '')
-    {
+    if (attrs['NAM'] != '') {
         tags['name'] = attrs['NAM']
     }
-    if (attrs['TYP'] == 41)
-    {
+    if (attrs['TYP'] == 41) {
         tags['highway'] = 'motorway';
     }
-    else
-    {
+    else {
         tags['highway'] = 'road';
     }
-
     return tags
 }
-
-//
 // This returns a schema for a subset of the NFDDv4 LAP030 (road) columns.
-//
 function getDbSchema()
 {
     var schema = [
@@ -343,7 +317,6 @@ function getDbSchema()
             ]
         }
     ]
-
     return schema;
 }
 ------
@@ -379,7 +352,6 @@ The functions will be called in the following order:
 
 [[Table-Based-Translation]]
 ===== Table Based Translation
-  
 
 For more advanced translations it may make sense to define a simple set of tables and use those tables to translate values. An example is below:
 
@@ -388,7 +360,6 @@ For more advanced translations it may make sense to define a simple set of table
 var nfddBiased = [
     { condition:"attrs['SBB'] == '995'", consequence:"tags['bridge'] = 'yes'" }
 ];
-
 // build a one to one translation table.
 var one2one = [
     ['ROC', '1',    'surface',  'ground'],
@@ -396,51 +367,37 @@ var one2one = [
     ['WTC', '1',    'all_weather', 'yes'],
     ['WTC', '2',    'all_weather', 'fair']
 ];
-
 // build a more efficient lookup
 var lookup = {}
-for (var r in one2one)
-{
+for (var r in one2one) {
     var row = one2one[r];
-    if (!(row[0] in lookup))
-    {
+    if (!(row[0] in lookup)) {
         lookup[row[0]] = {}
     }
-
     lookup[row[0]][row[1]] = [row[2], row[3]];
 }
-
 // A translateAttributes method that is very similar to the python translate 
 // attributes
-function translateToOsm(attrs, layerName) 
-{ 
+function translateToOsm(attrs, layerName) { 
     var tags = {};
-
-    for (var col in attrs)
-    {
+    for (var col in attrs) {
         var value = attrs[col];
-        if (col in lookup)
-        {
-            if (value in lookup[col])
-            {
+        if (col in lookup) {
+            if (value in lookup[col]) {
                 row = lookup[col][value];
                 tags[row[0]] = row[1];
             }
-            else
-            {
+            else {
                 throw "Lookup value not found for column. (" + col + "=" + value + ")";
             }
         }
-        else
-        {
-            for (var bi in nfddBiased)
-            {
+        else {
+            for (var bi in nfddBiased) {
                 print(attrs['SBB']);
                 print(nfddBiased[bi].condition);
                 print(eval(nfddBiased[bi].condition));
                 print(nfddBiased[bi].consequence);
-                if (eval(nfddBiased[bi].condition))
-                {
+                if (eval(nfddBiased[bi].condition)) {
                     print("Condition true.");
                     eval(nfddBiased[bi].consequence);
                 }
@@ -540,11 +497,9 @@ To accomplish this we can use the following translation script:
 [source,python]
 ----
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     # Intialize our results object
     tags = {}
-
     # Is the STNAME attribute properly populated?
     if 'STNAME' in attrs and attrs['STNAME'] != '':
         tags['name'] = attrs['STNAME']
@@ -560,11 +515,9 @@ def translateAttributes(attrs, layerName):
             tags['oneway'] = 'yes'
         if attrs['FLOW'] == '2':
             tags['oneway'] = 'no'
-
     # Useful when debugging. You can see print statements on stdout when Hootenanny is running
     #print "Input: " + str(attrs)
     #print "Output: " + str(tags)
-
     # Return our translated tags
     return tags
 ----
@@ -578,32 +531,25 @@ JavaScript notes:
   you will get errors.
 
 ----
-function translateToOsm(attrs, layerName)
-{
+function translateToOsm(attrs, layerName) {
     tags = {};
-
     // Names
     if (attrs.STNAME) tags.name = attrs.STNAME;
-
     // Highways
     if (attrs.STTYPE == 'main') tags.highway = 'primary';
     if (attrs.STTYPE == 'res') tags.highway = 'residential';
-
     // Flow direction
     if (attrs.FLOW == '1') tags.oneway = 'yes';
     if (attrs.FLOW == '2') tags.oneway = 'no';
-
     // Print the input attrs for debugging:
     // This will print:
     // Input:STNAME: :Foo St.:
     // Input:STTYPE: :main:
     // etc
     // for (var i in attrs) print('Input:' + i + ': :' + attrs[i] + ':');
-
     // Print the output tags for debugging. The format is the same as for the
     // attrs
     // for (var i in tags) print('Output:' + i + ': :' + tags[i] + ':');
-
     return tags;
 }
 ----
@@ -619,17 +565,13 @@ http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road d
 [source,python]
 ----
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     if not attrs: return
-
     tags = {}
-
     if 'FULLNAME' in attrs:
         name = attrs['FULLNAME']
         if name != 'NULL' and name != '':
             tags['name'] = name
-
     if 'MTFCC' in attrs:
         mtfcc = attrs['MTFCC']
         if mtfcc == 'S1100':
@@ -663,68 +605,45 @@ def translateAttributes(attrs, layerName):
         if mtfcc == 'S1830':
             tags['highway'] = 'path'
             tags['horse'] = 'designated'
-
     return tags
 ----
 
 ===== Example JavaScript Translation File
 
 ----
-function translateToOsm(attrs, layerName)
-{
+function translateToOsm(attrs, layerName) {
     tags = {};
-
     // Names
     if (attrs.FULLNAME && attrs.FULLNAME !== 'NULL') tags.name = attrs.FULLNAME;
-
     // Highways
     if (attrs.MTFCC == 'S1100') tags.highway = 'primary';
-
     if (attrs.MTFCC == 'S1200') tags.highway = 'secondary';
-
     if (attrs.MTFCC == 'S1400') tags.highway = 'unclassified';
-
-    if (attrs.MTFCC == 'S1500') 
-    {
+    if (attrs.MTFCC == 'S1500') {
         tags.highway = 'track';
         tags.surface = 'unpaved';
     }
-
     if (attrs.MTFCC == 'S1600') tags.highway = 'road';
-
     if (attrs.MTFCC == 'S1640') tags.highway = 'service';
-
-    if (attrs.MTFCC == 'S1710') 
-    {
+    if (attrs.MTFCC == 'S1710') {
         tags.highway = 'path';
         tags.foot = 'designated';
     }
-
     if (attrs.MTFCC == 'S1720') tags.highway = 'steps';
-
     if (attrs.MTFCC == 'S1730') tags.highway = 'service';
-
     if (attrs.MTFCC == 'S1750') tags.highway = 'road';
-
-    if (attrs.MTFCC == 'S1780') 
-    {
+    if (attrs.MTFCC == 'S1780') {
         tags.highway = 'service';
         tags.service = 'parking_aisle';
     }
-
-    if (attrs.MTFCC == 'S1820') 
-    {
+    if (attrs.MTFCC == 'S1820') {
         tags.highway = 'path';
         tags.bicycle = 'designated';
     }
-
-    if (attrs.MTFCC == 'S1830') 
-    {
+    if (attrs.MTFCC == 'S1830') {
         tags.highway = 'path';
         tags.horse = 'designated';
     }
-
-
     return tags;
 }
 ----
@@ -1033,12 +952,11 @@ Hootenanny provides a link:$$User_-_convert.html$$[convert] operation to transla
 
 The following translation code will always work for roads, but drops all the attribution on the input file.
 
+[source,python]
 ------
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     if not attrs: return
-
     return {'highway':'road'}
 ------
 
@@ -1049,22 +967,18 @@ def translateAttributes(attrs, layerName):
 
 The following translation will work well with the tiger data.
 
+[source,python]
 ------
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     if not attrs: return
-
     tags = {}
-
     # 95% CE in meters
     tags['accuracy'] = '10'
-
     if 'FULLNAME' in attrs:
         name = attrs['FULLNAME']
         if name != 'NULL' and name != '':
             tags['name'] = name
-
     if 'MTFCC' in attrs:
         mtfcc = attrs['MTFCC']
         if mtfcc == 'S1100':
@@ -1098,7 +1012,6 @@ def translateAttributes(attrs, layerName):
         if mtfcc == 'S1830':
             tags['highway'] = 'path'
             tags['horse'] = 'designated'
-
     return tags
 ------
 
@@ -1110,17 +1023,14 @@ hoot convert tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm --trans
 
 The following translation will work OK with the DC data.
 
+[source,python]
 ------
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     if not attrs: return
-
     tags = {}
-
     # 95% CE in meters
     tags['accuracy'] = '15'
-
     name = ''
     if 'REGISTERED' in attrs:
         name = attrs['REGISTERED']
@@ -1128,17 +1038,14 @@ def translateAttributes(attrs, layerName):
         name += attrs['STREETTYPE']
     if name != '':
         tags['name'] = name
-
     if 'SEGMENTTYP' in attrs:
         t = attrs['SEGMENTTYP']
         if t == '1' or t == '3':
             tags['highway'] = 'motorway'
         else:
             tags['highway'] = 'road'
-
     # There is also a one way attribute in the data, but given the difficulty 
     # in determining which way it is often left out of the mapping.
-
     return tags
 ------
 
@@ -1185,13 +1092,12 @@ hoot convert tmp/dc-roads/output.osm tmp/dc-roads/output.shp --cols "name,highwa
 . Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. +accuracy=5+ 
 
 . Convert your GPX file into an OSM file where each track is now a way.
-
++
 ------
 hoot convert "$HOME/MyTracks.gpx;tracks" tmp/MyTracks.osm --trans GpsTrack
 ------
-+
-
 . Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
++
 ------
 hoot conflate -D conflator.manipulators=hoot::WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
 hoot convert tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm --cols "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot"
@@ -1216,19 +1122,17 @@ hoot convert -D "convert.ops+=hoot::PointsToTracksOp" "$HOME/MyTracks.gpx;track_
 
 An example translation file is:
 
+[source,python]
 ------
 #!/bin/python
-
 def translateAttributes(attrs, layerName):
     if not attrs: return
-
     tags = attrs
     tags['accuracy'] = '5'
     tags['highway'] = 'road'
     if 'track_fid' in attrs:
         tags['hoot:track:id'] = attrs['track_fid']
         tags['hoot:track:seq'] = "%09d" % int(attrs['track_seg_point_id'])
-
     return tags
 ------
 
@@ -1259,9 +1163,8 @@ Get an empty TDS template FileGeodatabase::
 * From the ArcGIS Defence Mapping Extension install location.
 +
 ----
-C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip+
+C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Schema\Gdb\LTDS_4_0.zip
 ----
-+
 * Unpack this Zip file and copy the "LTDS_4_0.gdb" File GeoDatabase to your Hootenanny working directory.
 
 Run Hootenanny and add your data to the template File GeoDatabase::
@@ -1275,31 +1178,28 @@ hoot convert -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb --trans $HOOT_
 Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::
 * Place it in a convenient location
 
-
 Set the "Product Library" in ArcMap::
 Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#//0103000001p0000000
-* Copy "C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Product Library\LTDS_4_0_Product_Library.zip" to where you saved the Hoot File GeoDatabase
-* Unzip "LTDS_4_0_Product_Library.zip" to get LTDS_4_0_Product_Library.gdb"
+* Copy `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Product Library\LTDS_4_0_Product_Library.zip` to where you saved the Hoot File GeoDatabase
+* Unzip `LTDS_4_0_Product_Library.zip` to get `LTDS_4_0_Product_Library.gdb`
 * Open ArcMap:
-** Click on "Customize->Production->Product Library"
-** Right Click on "Product Library"
-** Click on "Select Product Library"
-** Navigate to wherever you saved the "LTDS_4_0_Product_Library.gdb" and select it.
+** Click on `Customize->Production->Product Library`
+** Right Click on `Product Library`
+** Click on `Select Product Library`
+** Navigate to wherever you saved the `LTDS_4_0_Product_Library.gdb` and select it.
 
 
 Calculate the Visual Specifications::
 Reference: http://resources.arcgis.com/en/help/main/10.2/index.html#/Calculate_Visual_Specifications/01090000001w000000/
 * Open ArcCatalog
-* Run "Toolboxes->System Toolboxes->Production Mapping Toolbox->Symbology->Calculate Visual Specifications":
-** *Input Features* Browse to where the Hootenanny File GeoDatabase is saved and select all of the features inside the "LTDS" feature dataset
-** *Visual Specification Workspace* Browse to and select "C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Cartography\Symbology\LTDS_4_0_NSG_Visual_Specification.mdb"
-** Select "LTDS_NSG::50K" for 50K TLM symbology or "LTDS_100K::100K" for a 100K TLM symbology.
-** Click on "OK"
+* Run `Toolboxes->System Toolboxes->Production Mapping Toolbox->Symbology->Calculate Visual Specifications`:
+** *Input Features* Browse to where the Hootenanny File GeoDatabase is saved and select all of the features inside the `LTDS` feature dataset
+** *Visual Specification Workspace* Browse to and select `C:\Program Files\ArcGIS\EsriDefenseMapping\Desktop10.2\Tds\Local\Cartography\Symbology\LTDS_4_0_NSG_Visual_Specification.mdb`
+** Select `LTDS_NSG::50K` for 50K TLM symbology or `LTDS_100K::100K` for a 100K TLM symbology.
+** Click on `OK`
 ** Wait for it to finish. It will take a while.
 
 View the Default Symbology::
 * Open ArcMap
 * Add the +LTDS_4_0.gdb+ dataset
-
-
 
