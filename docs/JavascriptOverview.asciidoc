@@ -10,21 +10,6 @@ for some of the commonly used JavaScript interfaces.
 
 At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files.
 
-=== Prerequisites
-
-Install node.js in a way appropriate to your system.
-
-During the configure stage of installing Hoot be sure to specify 
-+--with-nodejs+.
-
-E.g.
- 
-----
-./configure --with-nodejs
-----
-
-NOTE: Hootenanny JavaScript support should be considered experimental at best.
-
 === Using Hootenanny from Node.js
 
 Hoot creates a file called +HootJs.node+ that can be used as part of a node.js

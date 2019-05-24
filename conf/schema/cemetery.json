@@ -1,7 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "cemetery",
         "objectType": "tag",
         "geometries": [

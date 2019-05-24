@@ -179,7 +179,7 @@ a train platform. E.g.
         ["public_transport=platform", "bus=yes"],
         ["public_transport=platform", "highway=bus_stop"]
     ],
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
 },
 
 "compound": {
@@ -190,13 +190,13 @@ a train platform. E.g.
         ["public_transport=platform", "train=yes"]
     ],
     "similarTo": { "name": "railway=platform", "weight": 0.9 },
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
 },
 
 "tag": {
     "name": "railway=platform",
     "isA": "railway",
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
     "similarTo": { "name": "public_transport=platform", "weight": 0.3 }
 },
 ----

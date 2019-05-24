@@ -1,8 +1,7 @@
 [
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "waterway",
         "name": "bridge=aqueduct",
@@ -15,8 +14,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "bridge_tunnel=unknown",
         "name": "bridge=yes",
