@@ -57,10 +57,14 @@ void RemoveReviewUnknown2Visitor::visit(const std::shared_ptr<Element>& e)
         std::shared_ptr<Element> element(map->getElement(id));
         //  Remove all UNKNOWN2 elements in this relation
         if (element->getStatus() == Status::Unknown2)
+        {
           RemoveElementOp::removeElement(map, id);
+          _numElements++;
+        }
       }
       //  Finally remove the review relation
       RemoveElementOp::removeElement(map, r->getElementId());
+      _numAffected++;
     }
   }
 }
