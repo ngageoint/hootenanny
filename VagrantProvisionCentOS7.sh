@@ -27,6 +27,27 @@ export LANG=en_US.UTF-8
 cd ~
 source ~/.bash_profile
 
+if [ "$ADDREPOS" = "yes" ]; then
+    echo "Adding additional software repositories..."
+    # add EPEL repo for extra packages
+    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+
+    # add Hoot repo for our pre-built dependencies.
+    echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+
+    # configure PGDG repository for PostgreSQL 9.5.
+    echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+fi
+
+if [ "$YUMUPDATE" = "yes" ]; then
+    echo "Updating OS..."
+    echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
+    sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+fi
+
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
     sudo yum install -y yum-plugin-versionlock
