@@ -3,77 +3,88 @@
 
 Hootenanny uses a top level Makefile to control the building and testing of code from all three codebases: Hootenanny Core (C++), Hootenanny Web Services (Java), and Hootenanny User Interface (Javascript).  Underneath, Hootenanny also uses qmake and Maven for additional build capabilities.
 
-Type 'make help' to see a list of all possible build and configuration options, some of which are described in this section.
+Type +make help+ to see a list of all possible build and configuration options, some of which are described in this section.
 
 Before building Hootenanny, the application must be configured:
+
 ----------------
 aclocal && autoconf && autoheader && automake && ./configure <options>
 ----------------
 
 Once Hootenanny is initially configured, this command only need be re-run if the underlying make files change in source control:
+
 ------------------
 aclocal && autoconf && autoheader && automake
 ------------------
 
 This line needs to be re-run everytime you change configuration options:
+
 -----------------
 ./configure <options>
-------------------
+-----------------
 
 At the time of this writing, the Hootenanny configuration options consist of:
-* --with-services - builds all Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
-* --with-uitests - enables the Hootenanny User Interface tests
-* --with-rnd - builds all Hootenanny Core experimental R&D code
-* --with-coverage - generates code test coverage reports
+
+* +--with-services+ - builds all Hootenanny Core services database code as well as all Hootenanny Java Web Services code.
+* +--with-uitests+ - enables the Hootenanny User Interface tests
+* +--with-rnd+ - builds all Hootenanny Core experimental R&D code
+* +--with-coverage+ - generates code test coverage reports
 
 See the Notes On Configure doc for even more information about using configure with make.
 
 To build Hootenanny Core command line only code with no options:
+
 ---------------------
 ./configure && make -sj$(nproc)
---------------------
+---------------------
 
-The '-s' option tells Hootenanny to run in silent mode, which suppresses all non-error logging.  Silent mode can be removed for debugging purposes.
+The +-s+ option tells Hootenanny to run in silent mode, which suppresses all non-error logging.  Silent mode can be removed for debugging purposes.
 
-The '-j$(nproc)' tells Hootenanny to parallelize compilation and test execution where applicable, where '$(nproc)' returns the number of threads the system is configured to run on (typically the number of system CPU cores or 2x the number of CPU cores if hyperthreading is enabled).  You can substitude any value you wish for '$(nproc)' or leave the '-j$(nproc)' option out all together to run within a single thread.
+The +-j$(nproc)+ tells Hootenanny to parallelize compilation and test execution where applicable, where +$(nproc)+ returns the number of threads the system is configured to run on (typically the number of system CPU cores or 2x the number of CPU cores if hyperthreading is enabled).  You can substitude any value you wish for +$(nproc)+ or leave the +-j$(nproc)+ option out all together to run within a single thread.
 
-To build the RnD extension with the Hootenanny Core command line only code:
+To build the R&D extension with the Hootenanny Core command line only code:
+
 ---------------------
 ./configure --with-rnd && make -sj$(nproc)
 --------------------
 
 To build the Hootenanny API database, OSM API database, and Hootenanny Web Services capabilities along with Hootenanny Core:
----------------------
+
+--------------------
 ./configure --with-rnd --with-services && make -sj$(nproc)
 --------------------
 
 To build just the Hootenanny Web Services Java code:
+
 ---------------------
 ./configure --with-services && make -sj$(nproc) services-build
 --------------------
 
-The Hootenanny User Interface Javascript code requires no compilation and may be accessed directly from the 'hoot-ui' directory.
+The Hootenanny User Interface Javascript code requires no compilation and may be accessed directly from the +hoot-ui+ directory.
 
 To clean the code:
+
 -------
 make clean
 -------
 
-To see other, more granular cleaning options, run 'make help'.
+To see other, more granular cleaning options, run +make help+.
 
 To build a deployable, complete Hootenanny package:
----------------------
+
+--------------------
 ./configure --with-rnd --with-services && make -sj$(nproc) archive
 --------------------
 
 A .tar.gz file containing the Hootenanny Core and User Interface binaries, as well as a .war file containing the Hootenanny Web Services binaries will be created in the root Hootenanny directory.
 
 To generate Hootenanny documention:
+
 ------
 make docs
 ------
 
-The documentation can be found in several formats in the 'docs' folder.
+The documentation can be found in several formats in the +docs+ folder.
 
 Running Hootenanny tests is covered in a subsequent section of this document.
 
@@ -92,6 +103,4 @@ Web Services Maven files of note:
 * pom.xml
 * distribution/pom.xml
 * scripts/maven/mvn-build
-
-
 

@@ -9,26 +9,71 @@ Relation File need only be regnerated if you plan to rework the Generic Conflati
 
 To regenerate the files:
 
-* Under hoot-tests/unifying-tests.child/model-training.child:
-  * Regenerate the buildings model:
-    * Run the buildings model regression test: 'cd jakarta-buildings.child && make test'
-    * Remove the existing buildings model: 'rm -f $HOOT_HOME/conf/models/BuildingModel*'
-    * Compress the arff file: 'bzip2 jakarta-buildings.child/tmp/JakartaBuildingModel.arff'
-    * Copy the compressed model to the hoot dir: 
-      * 'cp jakarta-buildings.child/tmp/JakartaBuildingModel.arff.bz2 $HOOT_HOME/conf/models/BuildingModel.arff.bz2'
-  * Regenerate the roads model:
-    * Run the roads model regression test: 'cd train-highway.child && make test'
-    * Remove the existing buildings model: 'rm -f $HOOT_HOME/conf/models/HighwayModel*'
-    * Compress the arff file: 'bzip2 train-highway.child/tmp/HighwayModelAll.arff'
-    * Copy the compressed model to the hoot dir: 
-       * 'cp train-highway.child/tmp/HighwayModelAll.arff.bz2 $HOOT_HOME/conf/models/HighwayModel.arff.bz2'
-  * Regenerate the POI model (optional):
-    * Build the POI model files (TODO: verify this is right and update the regression test Makefile to do it automatically): 
-      * 'cd train-poi.child && make all'
-      * 'hoot build-model -C GenericPoi.conf tmp/Train1PoiRef1.osm tmp/Train1PoiRef2.osm tmp/Train2PoiRef1.osm tmp/Train2PoiRef2.osm tmp/Train3PoiRef1.osm tmp/Train3PoiRef2.osm tmp/Train4PoiRef1.osm tmp/Train4PoiRef1.osm tmp/Train5PoiRef1.osm tmp/Train5PoiRef2.osm tmp/Train6PoiRef1.osm tmp/Train6PoiRef2.osm tmp/Train7PoiRef1.osm tmp/Train7PoiRef2.osm tmp/PoiModel.rf
-    * Remove the existing POI model: 'rm -f $HOOT_HOME/conf/models/PoiModel*'
-    * Compress the arff file: 'bzip2 train-highway.child/tmp/HighwayModelAll.arff'
-    * Copy the compressed model to the hoot dir: 
-      * 'cp train-poi.child/tmp/?.arff.bz2 $HOOT_HOME/conf/models/PoiModel.arff.bz2'
+* Under `hoot-tests/unifying-tests.child/model-training.child`:
+** Regenerate the buildings model:
+*** Run the buildings model regression test:
++
+--------
+cd jakarta-buildings.child && make test
+--------
+*** Remove the existing buildings model:
++
+--------
+rm -f $HOOT_HOME/conf/models/BuildingModel*
+--------
+*** Compress the arff file:
++
+--------
+bzip2 jakarta-buildings.child/tmp/JakartaBuildingModel.arff
+--------
+*** Copy the compressed model to the hoot dir:
++
+--------
+cp jakarta-buildings.child/tmp/JakartaBuildingModel.arff.bz2 $HOOT_HOME/conf/models/BuildingModel.arff.bz2
+--------
+** Regenerate the roads model:
+*** Run the roads model regression test:
++
+--------
+cd train-highway.child && make test
+--------
+*** Remove the existing buildings model:
++
+--------
+rm -f $HOOT_HOME/conf/models/HighwayModel*
+--------
+*** Compress the arff file:
++
+--------
+bzip2 train-highway.child/tmp/HighwayModelAll.arff
+--------
+*** Copy the compressed model to the hoot dir:
++
+--------
+cp train-highway.child/tmp/HighwayModelAll.arff.bz2 $HOOT_HOME/conf/models/HighwayModel.arff.bz2
+--------
+** Regenerate the POI model (optional):
+*** Build the POI model files (TODO: verify this is right and update the regression test Makefile to do it automatically): 
++
+--------
+cd train-poi.child && make all'
+hoot build-model -C GenericPoi.conf tmp/Train1PoiRef1.osm tmp/Train1PoiRef2.osm tmp/Train2PoiRef1.osm tmp/Train2PoiRef2.osm tmp/Train3PoiRef1.osm tmp/Train3PoiRef2.osm tmp/Train4PoiRef1.osm tmp/Train4PoiRef1.osm tmp/Train5PoiRef1.osm tmp/Train5PoiRef2.osm tmp/Train6PoiRef1.osm tmp/Train6PoiRef2.osm tmp/Train7PoiRef1.osm tmp/Train7PoiRef2.osm tmp/PoiModel.rf
+--------
+*** Remove the existing POI model:
++
+--------
+rm -f $HOOT_HOME/conf/models/PoiModel*
+--------
+*** Compress the arff file:
++
+--------
+bzip2 train-highway.child/tmp/HighwayModelAll.arff
+--------
+*** Copy the compressed model to the hoot dir: 
++
+--------
+cp train-poi.child/tmp/?.arff.bz2 $HOOT_HOME/conf/models/PoiModel.arff.bz2
+--------
 * Build hoot; the Random Forest files (.rf) and SHA1 hashes will be regenerated.
 * Check all the file changes into the hoot repository
+

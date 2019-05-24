@@ -115,7 +115,7 @@ consistent with a given baseline. To do this the following must occur:
 When your test runs it will do the following:
 
 * Find all the scripts to execute (the scripts to run are determined by looking for all executable
-files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in @.off@ it will be ignored.)
+files in the test-files/cmd/[current|quick|slow|glacial] directories. If the file ends in +.off+ it will be ignored.)
 * Run a script and capture the stdout and stderr
 * Remove meaningless bits from the stdout and stderr such as INFO statements, DEBUG statements and
 the elapsed time print outs.
@@ -125,7 +125,7 @@ an error.
 **An Example**
 
 To create a test make a shell script that is executable and place it in the
-@test-files/cmd/current/@ directory. The shell script should exercise some aspect of the system
++test-files/cmd/current/+ directory. The shell script should exercise some aspect of the system
 and the success/failure should be determined by the output. For instance:
 
 ------------
@@ -193,7 +193,7 @@ Fix the script by changing the last line to:
 cat test-output/cmd/example/jakarta.osm
 --------------
 
-When you rerun @HootTest --current@ you'll see the .osm file in the .stdout.first file. If
+When you rerun +HootTest --current+ you'll see the .osm file in the .stdout.first file. If
 everything looks good create the new baseline.
 
 ------------
@@ -215,8 +215,8 @@ Elapsed: 0.146274
 
 This shows that the test run matches the baseline.
 
-We don't want the test to live in @current@ so we'll move it over to the appropriate test set. In
-this case @quick@.
+We don't want the test to live in +current+ so we'll move it over to the appropriate test set. In
+this case +quick+.
 
 ------------
 mv test-files/cmd/current/Example* test-files/cmd/quick/
@@ -239,31 +239,32 @@ these 15 roads get conflated properly?" tests. They're intended to test one situ
 correctness. Primarily they're tiny so they don't all break constantly, and it is very easy to
 determine what happened.
 
-These tests are discovered/created from @test-files/cases@. The test creation process goes as follows:
+These tests are discovered/created from +test-files/cases+. The test creation process goes as follows:
 
-* Search @test-files/cases@ for a config file (@Config.conf@), if there is one, push it
+* Search +test-files/cases+ for a config file (+Config.conf+), if there is one, push it
 onto the config file stack.
 * If there are directories, recursively search them for tests, but ignore any directories that end
-with @.off@
-* If there are no directories, search for @Input1.osm@, @Input2.osm@ and @Expected.osm@, if they're
+with +.off+
+* If there are no directories, search for +Input1.osm+, +Input2.osm+ and +Expected.osm+, if they're
 found then create a new test case for this directory.
 
 When a test runs it runs as follows:
 
 * Load all the config files in turn starting with the highest level directory config file.
 * Verify that the test has all the required files.
-* Run the equivalent of a conflate command on the two input files and put the result in @Output.osm@.
-* Verify that @Expected.osm@ matches @Output.osm@.
+* Run the equivalent of a conflate command on the two input files and put the result in +Output.osm+.
+* Verify that +Expected.osm+ matches +Output.osm+.
 
 This approach makes it very fast/easy to create new micro tests and run them with the rest of the
 test routines. At this time the micro tests run as part of _quick_ and up.
 
 To only run case tests execute:
+
 ------------
 HootTest --case-only
 ------------
 
-See @test-files/cases/README@ for additional information on case tests.
+See +test-files/cases/README+ for additional information on case tests.
 
 ==== Running Core Unit Tests in Parallel
 
@@ -433,20 +434,19 @@ attention and may be candidates for removal.
 
 The purpose of these tests is to catch relatively simple errors that get introduced into UI workflows inadvertently, and not to be a bulletproof set of tests for the user interface.  Achieving such a thing really isn't feasible.  Also, since these tests exercise code in all three Hootenanny codebases, they can quickly reveal inconsistencies between both what the web services expect the command line API to be and what it actually is and what the user interface expects the web service API to be and what it actually is.  With this set of tests in place to catch basic errors, we can allow testers to spend more time testing complicated conflation scenarios instead of, for example, waiting for a typo on a single line of code to be fixed before they can complete regression testing.
 
-https://cukes.info[Cucumber] is the technology used to simulate browser interactions in the tests.
-https://cukes.info[Cucumber] is the top level interpreter of the
-"gherkin language":https://github.com/cucumber/cucumber/wiki/Gherkin that describes each test.
+link:$$https://cukes.info$$[Cucumber] is the technology used to simulate browser interactions in the tests.
+Cucumber is the top level interpreter of the
+link:$$https://github.com/cucumber/cucumber/wiki/Gherkin$$[gherkin language] that describes each test.
 There are many
-https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts[good tutorials] on the
+link:$$https://github.com/cucumber/cucumber/wiki/Tutorials-and-Related-Blog-Posts$$[good tutorials] on the
 web to get you started,
 
 * Hootenanny Cucumber User Interface Tests can be found in test-files/ui.
-* Cucumber settings may be changed in @features/support/env.rb@.
-* Place common test methods in
-@features/conflate.feature@ and @features/step_definitions/custom_steps.rb@.
+* Cucumber settings may be changed in `features/support/env.rb`.
+* Place common test methods in `features/conflate.feature` and `features/step_definitions/custom_steps.rb`.
 * Each piece of functionality being tested should be placed into its own *.feature file.
-* When running silent mode ('make -s'), Cucumber output will be written to
-@test-files/ui/tmp/TestRun.log@.  When running without silent mode, Cucumber test output is written
+* When running silent mode (+make -s+), Cucumber output will be written to
+`test-files/ui/tmp/TestRun.log`.  When running without silent mode, Cucumber test output is written
 to the screen.
 
 The User Interface Tests run as part of the glacial test suite by default.  You must start Tomcat and then deploy the Hootenanny web services and user interface code to Tomcat yourself before running these tests, as shown below.
@@ -532,7 +532,7 @@ image::developer/images/LoadLatest.png[]
 Reports can be generated which detail how well test coverage is for Hootenanny code.  The report
 will take into account command line and CPPUnit tests in the Hootenanny core code, as well as Java
 JUnit tests in the Hootenanny Web Services code when the application is configured --with-services.
-Hootenanny Core code coverage is supplied @gcov@ and @lcov@, utilities for using GCC to generate
+Hootenanny Core code coverage is supplied +gcov+ and +lcov+, utilities for using GCC to generate
 coverage results.  Java code coverage is supplied by http://cobertura.github.io/cobertura/[Cobertura]
 via Maven.  Report coverage generation for Javascript code is currently in the works.
 
