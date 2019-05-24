@@ -15,7 +15,7 @@ Most Tags on a Feature	4	4	6
 Average Tags Per Feature	3	2	3	
 Least Information Tags on a Feature	2	2	1	
 Most Information Tags on a Feature	4	4	6	
-Average Information Tags Per Feature	3.1	2.875	3.285714285714286	
+Average Information Tags Per Feature	3.1	2.875	3.142857142857143	
 Features with Names	9	7	11	
 Bridges	0	0	0	
 Tunnels	0	0	0	
@@ -135,8 +135,13 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	70	56	83	
+Translated Populated Tags	70	56	82	
 Difference Between Total Features in Output and Total Features in Inputs			-4	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-22.22222222222222	
+Calculate Stats for Input 1 Time (sec)				4.639615058898926
+Calculate Stats for Input 2 Time (sec)				0.4895510673522949
+Apply Pre-Conflate Ops Time (sec)				0.007011890411376953
+Apply Post-Conflate Ops Time (sec)				0.002753019332885742
+Calculate Stats for Output Time (sec)				0.4984030723571777
 
-18:43:04.139 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
+20:01:02.285 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
