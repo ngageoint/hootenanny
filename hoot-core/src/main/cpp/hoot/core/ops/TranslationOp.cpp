@@ -39,7 +39,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, TranslationOp)
 
 TranslationOp::TranslationOp()
 {
-  //setConfiguration(conf());
 }
 
 void TranslationOp::apply(std::shared_ptr<OsmMap> &map)

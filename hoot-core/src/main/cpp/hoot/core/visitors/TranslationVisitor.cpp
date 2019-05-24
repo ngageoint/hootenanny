@@ -53,7 +53,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, TranslationVisitor)
 TranslationVisitor::TranslationVisitor() :
 _toOgr(false)
 {
-  //setConfiguration(conf());
 }
 
 void TranslationVisitor::setConfiguration(const Settings& conf)
@@ -84,8 +83,6 @@ void TranslationVisitor::setTranslationDirection(QString direction)
   else
   {
     throw HootException("Expected a schema.translation.direction of 'toogr' or 'toosm'.");
-    //LOG_INFO("No translation direction specified. Translating to OSM...");
-    //_toOgr = false;
   }
 }
 
