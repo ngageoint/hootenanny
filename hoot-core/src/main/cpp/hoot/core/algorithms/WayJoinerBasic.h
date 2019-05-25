@@ -22,35 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HGIS_POI_CRITERION_H
-#define HGIS_POI_CRITERION_H
 
-// hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#ifndef WAYJOINER_BASIC_H
+#define WAYJOINER_BASIC_H
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/WayJoiner.h>
 
 namespace hoot
 {
 
 /**
- * Identifies HGIS POIs
+ * Joins ways back together that were split during pre-conflation cleaning or during matching.
  */
-class HgisPoiCriterion : public ElementCriterion
+class WayJoinerBasic : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::HgisPoiCriterion"; }
+  static std::string className() { return "hoot::WayJoinerBasic"; }
 
-  HgisPoiCriterion();
+  WayJoinerBasic();
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  /**
+   * Static method to join all joinable ways using WayJoinerBasic
+   */
+  static void joinWays(const OsmMapPtr& map);
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HgisPoiCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies HGIS POIs"; }
 };
 
 }
 
-#endif // HGIS_POI_CRITERION_H
+#endif  //  WAYJOINER_BASIC_H

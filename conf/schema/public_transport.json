@@ -2,8 +2,7 @@
     {
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "public_transport=platform",
         "name": "bus_platform",
@@ -27,7 +26,6 @@
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
         "categories": [
             "poi",
-            "hgispoi",
             "multiuse"
         ],
         "isA": "public_transport=station",
@@ -57,7 +55,7 @@
             "relation"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "public_transport",
         "objectType": "tag"
     },
@@ -108,8 +106,7 @@
     {
         "#": "Any one of these tag combos can match, but all the tags in the sub-array must match.",
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "public_transport=platform",
         "name": "railway_platform",
@@ -127,8 +124,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "public_transport=station",
         "name": "railway_station",

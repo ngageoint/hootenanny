@@ -6,7 +6,7 @@
             "area"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "mismatchScore": 0.1,
         "name": "amenity",
         "objectType": "tag"

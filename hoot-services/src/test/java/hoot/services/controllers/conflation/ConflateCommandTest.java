@@ -81,7 +81,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -136,7 +136,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
@@ -158,7 +158,7 @@ public class ConflateCommandTest {
         debugLevel = "error";
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_ALGORITHM"));

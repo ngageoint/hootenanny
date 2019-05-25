@@ -15,8 +15,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "geometries": [
             "node"
@@ -78,8 +77,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "description": "This tag isn't used within OSM, but supports other inputs. An interchange point simply signifies that an interchange is in that area.",
         "geometries": [
@@ -115,8 +113,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "description": "Use the highway=motorway_junction tag to identify a point along a highway=* with junction refs or names where it is possible to exit the highway onto another road.",
         "geometries": [
@@ -128,8 +125,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "description": "Use the highway=mini_roundabout tag to identify a point along a highway=* with junction refs or names where it is possible to exit the highway onto another road.",
         "geometries": [
@@ -230,8 +226,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "geometries": [
             "node"
@@ -293,8 +288,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "geometries": [
             "node"
@@ -367,8 +361,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "description": "Traffic signals, also known as traffic lights, traffic lamps, signal lights and stop lights are signalling devices positioned at road intersections, pedestrian crossings and other locations to control competing flows of traffic.",
         "geometries": [
