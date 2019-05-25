@@ -79,7 +79,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot tiles-calculate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String expectedCommand = "hoot node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -92,7 +92,7 @@ public class CalculateTilesCommandTest {
         assertEquals(jobParams.getInput(), command.getSubstitutionMap().get("INPUTS"));
 
         String expectedOutputPath = new File(new File(TEMP_OUTPUT_PATH, jobId),
-        		jobParams.getOutputName() + "." + jobParams.getOutputType()).getAbsolutePath();
+                jobParams.getOutputName() + "." + jobParams.getOutputType()).getAbsolutePath();
 
         assertTrue(command.getSubstitutionMap().containsKey("OUTPUT"));
         assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT"));
@@ -137,7 +137,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot tiles-calculate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String expectedCommand = "hoot node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -150,7 +150,7 @@ public class CalculateTilesCommandTest {
         assertEquals(jobParams.getInput(), command.getSubstitutionMap().get("INPUTS"));
 
         String expectedOutputPath = new File(new File(TEMP_OUTPUT_PATH, jobId),
-        		jobParams.getOutputName() + "." + jobParams.getOutputType()).getAbsolutePath();
+                jobParams.getOutputName() + "." + jobParams.getOutputType()).getAbsolutePath();
 
         assertTrue(command.getSubstitutionMap().containsKey("OUTPUT"));
         assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT"));
@@ -159,9 +159,9 @@ public class CalculateTilesCommandTest {
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
     public void testCalculateTilesCommandNoMaxNodeCountOrPixelSize1() {
-    	try
-    	{
-    		String jobId = UUID.randomUUID().toString();
+        try
+        {
+            String jobId = UUID.randomUUID().toString();
             String debugLevel = "error";
             Class<?> caller = this.getClass();
             String aoi = "-104.8192,38.8162,-104.6926,38.9181";
@@ -177,8 +177,8 @@ public class CalculateTilesCommandTest {
             jobParams.setMaxNodeCountPerTile(1000);
 
             new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
-    	}
-    	catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
             throw e;
         }
@@ -187,9 +187,9 @@ public class CalculateTilesCommandTest {
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
     public void testCalculateTilesCommandNoMaxNodeCountOrPixelSize2() {
-    	try
-    	{
-    		String jobId = UUID.randomUUID().toString();
+        try
+        {
+            String jobId = UUID.randomUUID().toString();
             String debugLevel = "error";
             Class<?> caller = this.getClass();
             String aoi = "-104.8192,38.8162,-104.6926,38.9181";
@@ -205,8 +205,8 @@ public class CalculateTilesCommandTest {
             jobParams.setPixelSize(0.001);
 
             new CalculateTilesCommand(jobId, jobParams, debugLevel, caller, null);
-    	}
-    	catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
             throw e;
         }
