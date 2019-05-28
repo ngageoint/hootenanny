@@ -114,14 +114,20 @@ private:
 
   void _validateInput(const QStringList& inputs, const QString& output);
 
+  // converts from any input to an OGR output; a translation is required
   void _convertToOgr(const QString& input, const QString& output);
+  // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
+  // This handles all conversions not done by _convertToOgr or _convertFromOgr.
   void _convert(const QStringList& inputs, const QString& output);
+  // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
   void _fillElementCache(const QString& inputUrl,
                          ElementCachePtr cachePtr,
                          QQueue<ElementPtr>& workQ);
+  // _convertToOgr will call this to run the translator in a separate thread for a performance
+  // increase if certain pre-conditions are met.
   void _transToOgrMT(const QString& input, const QString& output);
 
   /*
