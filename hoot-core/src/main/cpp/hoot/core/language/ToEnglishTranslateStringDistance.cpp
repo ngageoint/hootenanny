@@ -44,13 +44,14 @@ HOOT_FACTORY_REGISTER(StringDistance, ToEnglishTranslateStringDistance)
 ToEnglishTranslateStringDistance::ToEnglishTranslateStringDistance() :
 _tokenize(true),
 _translateAll(true),
-//The translator implementation should always be passed into this class instead of hardcoded as
-//is done here (see #2649).  Only allowing the passing of the translator in as part of #2328 was
-//going to require a significant amount of work in hoot-js to support scripts like PoiGeneric.js.
-//So instead, since currently only poi/poly and implicit tagging expect to use anything other than
-//ToEnglishDictionaryTranslator and they populate this class with a translator implemenation, the default
-//is hardcoded.  That supports for cases where the caller doesn't specify a translator
-//(PoiGeneric.js, some classifiers, etc.).
+/* Really, the translator implementation should always be passed into this class instead of
+ * hardcoded as is done here. Only allowing the passing of the translator in as part of #2328 was
+   going to require a significant amount of work in hoot-js to support scripts like PoiGeneric.js.
+   So instead, since currently only poi/poly and implicit tagging expect to use anything other than
+   ToEnglishDictionaryTranslator and they populate this class with a translator implemenation, the
+   default is hardcoded. That supports cases where the caller doesn't specify a translator
+   (PoiGeneric.js, some classifiers, etc.). For now, it works.
+  */
 _translator(std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator()))
 {
   setConfiguration(conf());
