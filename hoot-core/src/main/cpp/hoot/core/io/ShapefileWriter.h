@@ -30,13 +30,12 @@
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QDir>
-#include <QHash>
 #include <QString>
 #include <QStringList>
-#include <QXmlDefaultHandler>
 
 // Standard
 #include <vector>
@@ -49,16 +48,15 @@ class Way;
 class Relation;
 
 /**
- * Reads in a .osm file into an OsmMap data structure. During this process all IDs are mapped from
- * the .osm node/way ID to a new ID.
+ * Writes an OsmMap to Shapefile file format.
  */
-class ShapefileWriter : public OsmMapWriter
+class ShapefileWriter : public OsmMapWriter, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::ShapefileWriter"; }
 
-  ShapefileWriter() { _includeInfo = true; _includeIds = false; _circularErrorIndex = -1; }
+  ShapefileWriter();
 
   virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".shp"); }
 
@@ -68,14 +66,11 @@ public:
 
   void setColumns(QStringList columns) { _columns = columns; }
 
-  void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-
-  void setIncludeHootInfo(bool includeInfo) { _includeInfo = includeInfo; }
-
   /**
    * Will write out up to three files:
-   * path + "Polygon.shp"
-   * path + "Line.shp"
+   * path + "Points.shp"
+   * path + "Lines.shp"
+   * path + "Polygons.shp"
    */
   virtual void write(const ConstOsmMapPtr& map) override;
 
@@ -92,18 +87,22 @@ public:
 
   virtual QString supportedFormats() override { return ".shp"; }
 
+  /**
+   * Set the configuration for this object.
+   */
+  virtual void setConfiguration(const Settings& conf) override;
+
 protected:
 
   QStringList _columns;
-  bool _includeIds;
-  bool _includeInfo;
+  bool _includeCircularError;
   QDir _outputDir;
   int _circularErrorIndex;
 
   void _removeShapefile(const QString& path);
 
-  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr &relation,
-    OGRLayer *poLayer, const QStringList &columns, const QStringList &shpColumns);
+  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr& relation,
+    OGRLayer* poLayer, const QStringList& columns, const QStringList& shpColumns);
 
   void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
     const QStringList& columns, const QStringList &shpColumns);

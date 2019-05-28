@@ -27,9 +27,6 @@
 
 #include "ShapefileWriter.h"
 
-// hoot
-#include <hoot/core/util/Factory.h>
-
 // GDAL
 #include <ogr_geometry.h>
 
@@ -39,16 +36,17 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/io/OgrOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/io/OgrOptions.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -98,6 +96,11 @@ private:
   QHash<QString, int> _keys;
 };
 
+ShapefileWriter::ShapefileWriter()
+  : _includeCircularError(ConfigOptions().getWriterIncludeCircularErrorTags()),
+    _circularErrorIndex(-1)
+{
+}
 
 QStringList ShapefileWriter::getColumns(ConstOsmMapPtr map, ElementType type) const
 {
@@ -134,6 +137,11 @@ void ShapefileWriter::open(const QString& url)
     }
     _outputDir = QDir(url);
   }
+}
+
+void ShapefileWriter::setConfiguration(const Settings& conf)
+{
+  _includeCircularError = ConfigOptions(conf).getWriterIncludeCircularErrorTags();
 }
 
 void ShapefileWriter::_removeShapefile(const QString& path)
@@ -177,8 +185,8 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
   _removeShapefile(path);
 
-  const char *pszDriverName = "ESRI Shapefile";
-  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
+  const char* pszDriverName = "ESRI Shapefile";
+  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
@@ -190,7 +198,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
 
-  OGRLayer *poLayer;
+  OGRLayer* poLayer;
 
   OgrOptions options;
   options["ENCODING"] = "UTF-8";
@@ -214,7 +222,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
     oField.SetWidth(64);
 
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -222,10 +230,10 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
     shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
   }
 
-  if (_includeInfo)
+  if (_includeCircularError)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
@@ -239,7 +247,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
 
     if (AreaCriterion().isSatisfied(way) == false)
     {
-      OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+      OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
       // set all the column values.
       for (int i = 0; i < columns.size(); i++)
       {
@@ -251,7 +259,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
         }
       }
 
-      if (_includeInfo)
+      if (_includeCircularError)
       {
         poFeature->SetField(_circularErrorIndex, way->getCircularError());
       }
@@ -288,8 +296,8 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
 
   _removeShapefile(path);
 
-  const char *pszDriverName = "ESRI Shapefile";
-  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
+  const char* pszDriverName = "ESRI Shapefile";
+  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
@@ -304,7 +312,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
   OgrOptions options;
   options["ENCODING"] = "UTF-8";
 
-  OGRLayer *poLayer;
+  OGRLayer* poLayer;
 
   QString layerName;
   layerName = QFileInfo(path).baseName();
@@ -324,7 +332,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
 
     oField.SetWidth(64);
 
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -332,10 +340,10 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
     shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
   }
 
-  if (_includeInfo)
+  if (_includeCircularError)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
@@ -361,7 +369,7 @@ void ShapefileWriter::writePoints(const ConstOsmMapPtr& map, const QString& path
         }
       }
 
-      if (_includeInfo)
+      if (_includeCircularError)
       {
         poFeature->SetField(_circularErrorIndex, node->getCircularError());
       }
@@ -392,8 +400,8 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
   _removeShapefile(path);
 
-  const char *pszDriverName = "ESRI Shapefile";
-  GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
+  const char* pszDriverName = "ESRI Shapefile";
+  GDALDriver* poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
   if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
@@ -429,7 +437,7 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 
     oField.SetWidth(64);
 
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(columns[i]));
     }
@@ -437,10 +445,10 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
     shpColumns.append(poLayer->GetLayerDefn()->GetFieldDefn(i)->GetNameRef());
   }
 
-  if (_includeInfo)
+  if (_includeCircularError)
   {
     OGRFieldDefn oField("error_circ", OFTReal);
-    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
+    if (poLayer->CreateField(&oField) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(MetadataTags::ErrorCircular()));
     }
@@ -473,10 +481,10 @@ void ShapefileWriter::writePolygons(const ConstOsmMapPtr& map, const QString& pa
 }
 
 void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
-  const RelationPtr &relation, OGRLayer *poLayer, const QStringList& columns,
-  const QStringList &shpColumns)
+  const RelationPtr& relation, OGRLayer* poLayer, const QStringList& columns,
+  const QStringList& shpColumns)
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+  OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.
   for (int i = 0; i < columns.size(); i++)
   {
@@ -488,7 +496,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
     }
   }
 
-  if (_includeInfo)
+  if (_includeCircularError)
   {
     poFeature->SetField(_circularErrorIndex, relation->getCircularError());
   }
@@ -516,10 +524,10 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const WayPtr &way,
-  OGRLayer *poLayer, const QStringList& columns, const QStringList &shpColumns)
+void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way,
+  OGRLayer* poLayer, const QStringList& columns, const QStringList &shpColumns)
 {
-  OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+  OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
   // set all the column values.
   for (int i = 0; i < columns.size(); i++)
   {
@@ -531,7 +539,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const WayPtr &
     }
   }
 
-  if (_includeInfo)
+  if (_includeCircularError)
   {
     poFeature->SetField(_circularErrorIndex, way->getCircularError());
   }
