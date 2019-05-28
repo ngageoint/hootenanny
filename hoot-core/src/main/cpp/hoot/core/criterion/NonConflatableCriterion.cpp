@@ -28,42 +28,48 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/criterion/BuildingPartCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
+NonConflatableCriterion::NonConflatableCriterion()
+{
+  if (_conflatableCriteria.isEmpty())
+  {
+    _initConflatableCriterion();
+  }
+}
+
+void NonConflatableCriterion::_initConflatableCriterion()
+{
+  const std::vector<std::string> criterionClassNames =
+    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+  for (std::vector<std::string>::const_iterator itr = criterionClassNames.begin();
+       itr != criterionClassNames.end(); ++itr)
+  {
+    ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
+    if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != 0)
+    {
+      _conflatableCriteria.append(crit);
+    }
+  }
+  LOG_VART(_conflatableCriteria.size());
+}
+
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // This could possibly be made cleaner by adding a "conflatable" property to criterion (there
-  // may be a better way). Its also unnecessarily maintenance-prone as new types get added. - #2941
-
-  if (HighwayCriterion().isSatisfied(e)
-      || LinearWaterwayCriterion().isSatisfied(e)
-      || PoiCriterion().isSatisfied(e)
-      || BuildingCriterion().isSatisfied(e)
-      || RailwayCriterion().isSatisfied(e)
-      || PowerLineCriterion().isSatisfied(e)
-      || AreaCriterion().isSatisfied(e)
-      || PoiPolygonPoiCriterion().isSatisfied(e)
-      || PoiPolygonPolyCriterion().isSatisfied(e)
-     )
-    return false;
-
+  for (int i = 0; i < _conflatableCriteria.size(); i++)
+  {
+    if (_conflatableCriteria.at(i)->isSatisfied(e))
+    {
+      // It is something we can conflate.
+      return false;
+    }
+  }
   // It is not something we can conflate
   return true;
 }

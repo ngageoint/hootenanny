@@ -97,7 +97,8 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError, const QString& note)
+WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
+                            const QString& note)
 {
   WayPtr result(new Way(s, map->createNextWayId(), circularError));
   for (size_t i = 0; c[i].isNull() == false; i++)
@@ -113,6 +114,21 @@ WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circ
   }
   map->addWay(result);
   return result;
+}
+
+WayPtr TestUtils::createWay(OsmMapPtr map, geos::geom::Coordinate c[], Status status,
+                            Meters circularError, Tags tags)
+{
+  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  for (size_t i = 0; c[i].isNull() == false; i++)
+  {
+    NodePtr n(new Node(status, map->createNextNodeId(), c[i], circularError));
+    map->addNode(n);
+    way->addNode(n->getId());
+  }
+  way->setTags(tags);
+  map->addWay(way);
+  return way;
 }
 
 WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,

@@ -22,37 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef AREACRITERION_H
-#define AREACRITERION_H
+#ifndef CONFLATABLE_ELEMENT_CRITERION_H
+#define CONFLATABLE_ELEMENT_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
 /**
- * A criterion that will either keep or remove areas.
+ * Simple abstract base class that signifies an ElementCriterion that describes conflatable feature
+ * types; e.g. BuildingCriterion.  All ElementCriterion used for identifying conflatable features
+ * should inherit from this class
  */
-class AreaCriterion : public ConflatableElementCriterion
+class ConflatableElementCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::AreaCriterion"; }
+  static std::string className() { return "hoot::ConflatableElementCriterion"; }
 
-  AreaCriterion();
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies areas"; }
+  virtual ~ConflatableElementCriterion() {}
 };
 
 }
 
-#endif // AREACRITERION_H
+#endif // CONFLATABLE_ELEMENT_CRITERION_H

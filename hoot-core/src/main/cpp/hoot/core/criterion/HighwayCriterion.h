@@ -29,7 +29,7 @@
 
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove road matches.
  */
-class HighwayCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
