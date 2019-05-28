@@ -73,7 +73,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
 
         super.configureCommand(command, substitutionMap, caller);
     }

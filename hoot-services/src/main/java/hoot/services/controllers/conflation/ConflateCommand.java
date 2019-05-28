@@ -246,25 +246,25 @@ class ConflateCommand extends ExternalCommand {
 
         String command = null;
         if (params.getHoot2() == null) { // hoot1
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else if (conflationType.isEmpty()) {
             if (conflationAlgorithms.stream().noneMatch(a -> a.equals(conflationAlgorithm))) {
                 throw new IllegalArgumentException(String.format("Conflation Algorithm \"%s\" is not valid.", conflationAlgorithm));
             }
 
             substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else if (conflationAlgorithm.isEmpty()) {
             if (conflationTypes.stream().noneMatch(t -> t.equals(conflationType))) {
                 throw new IllegalArgumentException(String.format("Conflation Type \"%s\" is not valid.", conflationType));
             }
 
             substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         } else {
             substitutionMap.put("CONFLATION_TYPE", conflationType + ".conf");
               substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + ".conf");
-            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_TYPE} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         }
 
         super.configureCommand(command, substitutionMap, caller);
