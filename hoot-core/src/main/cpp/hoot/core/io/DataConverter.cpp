@@ -375,21 +375,19 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
-  // TODO: We should be able to simply move the convert ops application step to before the
-  // conversion/translation step and then always run multithreaded after that (assuming we don't
-  // want to try to run the ops multithreaded as well with streams...may not be possible for some).
-
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  LOG_VARD(_convertOps.size());
-  if (OsmMapReaderFactory::hasElementInputStream(input) && _convertOps.size() == 0 &&
+  if (OsmMapReaderFactory::hasElementInputStream(input) &&
+      // multithreaded code doesn't support conversion ops. could it?
+      _convertOps.size() == 0 &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
   {
+    _progress.set(0.0, "Loading and translating map: ..." + input.right(_printLengthMax) + "...");
     _transToOgrMT(input, output);
   }
   else
   {
-    // The number of steps here must be updated as you add/remove job steps in the logic.
+    // The number of task steps here must be updated as you add/remove job steps in the logic.
     int numSteps = 2;
     if (_convertOps.size() > 0)
     {
@@ -541,7 +539,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
 
-  // The ordering for these ogr2osm ops matters.
+  // The ordering for these added ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
     _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
@@ -552,7 +550,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   }
   LOG_VARD(_convertOps);
 
-  // The number of steps here must be updated as you add/remove job steps in the logic.
+  // The number of task steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 2;
   if (_convertOps.size() > 0)
   {
