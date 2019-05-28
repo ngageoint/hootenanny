@@ -31,7 +31,6 @@ OP_OUTPUT_FILE=$(outputname).$(outputtype)
 OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
 ZIP_OUTPUT=$(outputname).zip
 INPUT_PATH=$(DB_URL)/$(input)
-REMOVE_REVIEW=-C RemoveReview2Pre.conf
 OP_ZIP=cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
 
 
@@ -58,7 +57,7 @@ endif
 ###
 step1:
 ifeq ("$(outputtype)","wfs")
-	hoot convert $(REMOVE_REVIEW) -D schema.translation.script="$(OP_TRANSLATION)" -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(INPUT_PATH)" $(OP_PG_URL) 
+	hoot convert -D schema.translation.script="$(OP_TRANSLATION)" -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(INPUT_PATH)" $(OP_PG_URL) 
 else ifeq ("$(outputtype)","osm")
 	mkdir -p "$(outputfolder)"
 	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
@@ -89,7 +88,7 @@ endif # Template Path
 endif # Translations TDSv40
 endif # Else
 endif # Append
-	hoot convert $(REMOVE_REVIEW) $(HOOT_OPTS) -D schema.translation.script="$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
+	hoot convert $(HOOT_OPTS) -D schema.translation.script="$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
 	$(OP_ZIP)
 
 endif # Shape/FGDB

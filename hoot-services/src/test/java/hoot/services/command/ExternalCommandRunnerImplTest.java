@@ -100,7 +100,7 @@ public class ExternalCommandRunnerImplTest {
 
         String jobId = UUID.randomUUID().toString();
 
-        String command = "/tmp/hoot.sh conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} " +
+        String command = "/tmp/hoot.sh conflate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} " +
                 "${INPUT2} ${OUTPUT} ${TIMESTAMP}";
 
         CommandResult result = runner.exec(command, substitutionMap, jobId,
