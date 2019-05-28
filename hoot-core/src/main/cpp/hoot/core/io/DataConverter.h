@@ -119,8 +119,11 @@ private:
   void _convertToOgr(const QString& input, const QString& output);
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
+
   // This handles all conversions not done by _convertToOgr or _convertFromOgr.
   void _convert(const QStringList& inputs, const QString& output);
+  void _handleGeneralConvertTranslationOpts(const QString& output);
+  QString _outputFormatToTranslationDirection(const QString& output) const;
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 

@@ -202,7 +202,8 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
   // writing do their translations inline (don't use TranslationOp or TranslationVisitor), and OGR
   // reading support for layer names, conversions involving OGR data must follow a separate logic
-  // path from non-OGR data.
+  // path from non-OGR data. It would be nice at some point to be able to do everything generically
+  // from within the _convert method.
 
   // We require that a translation be present when converting to OGR, the translation direction be
   // to OGR or unspecified, and that only one input is specified.
@@ -222,7 +223,8 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   }
   // If this wasn't a to/from OGR conversion, or no translation was specified, or a translation
   // direction different than what was expected for the input/output formats was specified, just
-  // call the generic convert routine. If no translation direction was specified, to OSM is assumed.
+  // call the generic convert routine. If no translation direction was specified, we'll try to guess
+  // it and let the user know that we did.
   else
   {
     _convert(inputs, output);
@@ -643,14 +645,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   currentTask++;
 }
 
-void DataConverter::_convert(const QStringList& inputs, const QString& output)
+void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
 {
-  LOG_DEBUG("general convert");
-
-  // This keeps the status and the tags.
-  conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-  conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-
   //For non OGR conversions, the translation must be passed in as an op.
   if (!_translation.trimmed().isEmpty())
   {
@@ -676,14 +672,44 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     }
     LOG_VARD(_convertOps);
 
-    // If the translation direction wasn't specified, go toward OSM.
-    if (conf().getString(
-          ConfigOptions::getSchemaTranslationDirectionKey()).trimmed().isEmpty())
+    // If the translation direction wasn't specified, try to guess it.
+    if (_translationDirection.isEmpty())
     {
-      LOG_INFO("No translation direction specified. Translating to OSM...");
-      conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), "toosm");
+      _translationDirection = _outputFormatToTranslationDirection(output);
+      // This gets read by the TranslationVisitor and cannot be empty.
+      conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
     }
   }
+}
+
+QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
+{
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
+    return "toogr";
+  }
+  else if (IoUtils::isSupportedOsmFormat(output))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
+    return "toosm";
+  }
+  else
+  {
+    LOG_INFO("No translation direction specified. Using 'toosm'...");
+    return "toosm";
+  }
+}
+
+void DataConverter::_convert(const QStringList& inputs, const QString& output)
+{
+  LOG_DEBUG("general convert");
+
+  // This keeps the status and the tags.
+  conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
+  conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
+
+  _handleGeneralConvertTranslationOpts(output);
 
   //check to see if all of the i/o can be streamed
   const bool isStreamable =
