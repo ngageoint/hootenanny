@@ -64,21 +64,6 @@ public:
 
   static int logWarnCount;
 
-  /**
-   * A true/false value to determine whether or not all layers are created.
-   * @sa setCreateAllLayers
-   */
-  static QString createAllLayersKey() { return "ogr.writer.create.all.layers"; }
-  /**
-   * Prepends this onto each of the layer names.
-   */
-  static QString preLayerNameKey() { return "ogr.writer.pre.layer.name"; }
-  static QString scriptKey() { return "ogr.writer.script"; }
-  /**
-   * Valid values are "on", "off" and "warn"
-   */
-  static QString strictCheckingKey() { return "ogr.strict.checking"; }
-
   OgrWriter();
 
   /**
@@ -130,8 +115,8 @@ public:
    */
   void translateToFeatures(ElementProviderPtr& provider,
                            const ConstElementPtr& e,
-                           std::shared_ptr<geos::geom::Geometry> &g,
-                           std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf);
+                           std::shared_ptr<geos::geom::Geometry>& g,
+                           std::vector<ScriptToOgrTranslator::TranslatedFeature>& tf);
 
   void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
                               const std::vector<ScriptToOgrTranslator::TranslatedFeature>& tf);
