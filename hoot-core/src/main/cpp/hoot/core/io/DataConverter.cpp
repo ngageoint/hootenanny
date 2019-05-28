@@ -382,7 +382,9 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   LOG_VARD(_convertOps.size());
-  if (OsmMapReaderFactory::hasElementInputStream(input) && _convertOps.size() == 0)
+  if (OsmMapReaderFactory::hasElementInputStream(input) && _convertOps.size() == 0 &&
+      // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
+      !ConfigUtils::boundsOptionEnabled())
   {
     _transToOgrMT(input, output);
   }
