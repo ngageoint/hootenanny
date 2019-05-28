@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-OUTPUT_DIR= test-output/cmd/slow/ConvertCmdTest
+OUTPUT_DIR=test-output/cmd/slow/ConvertCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
