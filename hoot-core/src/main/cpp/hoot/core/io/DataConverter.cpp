@@ -692,7 +692,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
     //stream the i/o
     ElementStreamer::stream(
-      inputs, output, QStringList(),
+      inputs, output, _convertOps,
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
         (float)(currentTask - 1) / (float)numTasks, taskWeight));
