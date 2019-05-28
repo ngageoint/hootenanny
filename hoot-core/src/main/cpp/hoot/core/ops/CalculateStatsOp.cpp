@@ -144,68 +144,105 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   MapProjector::projectToPlanar(map);
 
-  std::shared_ptr<const OsmMap> constMap = map;
+  shared_ptr<const OsmMap> constMap = map;
 
-  _stats.append(SingleStat("Nodes",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-      ConstElementVisitorPtr(new ElementCountVisitor())))));
-  _stats.append(SingleStat("Ways",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-      ConstElementVisitorPtr(new ElementCountVisitor())))));
-  _stats.append(SingleStat("Relations",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-      ConstElementVisitorPtr(new ElementCountVisitor())))));
-  _stats.append(SingleStat("Minimum Node ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-      ConstElementVisitorPtr(new MinIdVisitor())))));
-  _stats.append(SingleStat("Maximum Node ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-      ConstElementVisitorPtr(new MaxIdVisitor())))));
-  _stats.append(SingleStat("Minimum Way ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-      ConstElementVisitorPtr(new MinIdVisitor())))));
-  _stats.append(SingleStat("Maximum Way ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-      ConstElementVisitorPtr(new MaxIdVisitor())))));
-  _stats.append(SingleStat("Minimum Relation ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-      ConstElementVisitorPtr(new MinIdVisitor())))));
-  _stats.append(SingleStat("Maximum Relation ID",
-    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-      ConstElementVisitorPtr(new MaxIdVisitor())))));
+  // These arrays will move to json files
+  StatData quickStats[] =
+  {
+    {"Nodes", "hoot::ElementCountVisitor", "hoot::NodeTypeCriterion", StatCall::None },
+    {"Ways", "hoot::ElementCountVisitor", "hoot::WayTypeCriterion", StatCall::None },
+    {"Relations", "hoot::ElementCountVisitor", "hoot::RelationTypeCriterion", StatCall::None },
+    {"Minimum Node ID", "hoot::MinIdVisitor", "hoot::NodeTypeCriterion", StatCall::None },
+    {"Maximum Node ID", "hoot::MaxIdVisitor", "hoot::NodeTypeCriterion", StatCall::None },
+    {"Minimum Way ID", "hoot::MinIdVisitor", "hoot::WayTypeCriterion", StatCall::None },
+    {"Maximum Way ID", "hoot::MaxIdVisitor", "hoot::WayTypeCriterion", StatCall::None },
+    {"Minimum Relation ID", "hoot::MinIdVisitor", "hoot::RelationTypeCriterion", StatCall::None },
+    {"Maximum Relation ID", "hoot::MaxIdVisitor", "hoot::RelationTypeCriterion", StatCall::None },
+  };
+
+  StatData slowStats[] =
+  {
+    {"Least Nodes in a Way", "hoot::NodesPerWayVisitor", "", StatCall::Min },
+    {"Most Nodes in a Way", "hoot::NodesPerWayVisitor", "", StatCall::Max },
+    {"Average Nodes Per Way", "hoot::NodesPerWayVisitor", "", StatCall::Average },
+    {"Total Way Nodes", "hoot::NodesPerWayVisitor", "", StatCall::Stat },
+
+    {"Least Members in a Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Min },
+    {"Most Members in a Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Max },
+    {"Average Members Per Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Average },
+    {"Total Relation Members", "hoot::MembersPerRelationVisitor", "", StatCall::Stat },
+
+    {"Total Feature Tags", "hoot::TagCountVisitor", "", StatCall::Stat },
+    {"Least Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Min },
+    {"Most Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Max },
+    {"Average Tags Per Feature", "hoot::TagCountVisitor", "", StatCall::Average },
+  };
+
+  // QHash<QString,shared_ptr<ConstElementVisitor>> constElementVisitorLookup;
+
+  for (StatData d : quickStats) _interpretStatData(constMap, d);
+  if (!_quick) for (StatData d : slowStats) _interpretStatData(constMap, d);
+
+//  _stats.append(SingleStat("Nodes",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
+//      ConstElementVisitorPtr(new ElementCountVisitor())))));
+//  _stats.append(SingleStat("Ways",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
+//      ConstElementVisitorPtr(new ElementCountVisitor())))));
+//  _stats.append(SingleStat("Relations",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
+//      ConstElementVisitorPtr(new ElementCountVisitor())))));
+//  _stats.append(SingleStat("Minimum Node ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
+//      ConstElementVisitorPtr(new MinIdVisitor())))));
+//  _stats.append(SingleStat("Maximum Node ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
+//      ConstElementVisitorPtr(new MaxIdVisitor())))));
+//  _stats.append(SingleStat("Minimum Way ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
+//      ConstElementVisitorPtr(new MinIdVisitor())))));
+//  _stats.append(SingleStat("Maximum Way ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
+//      ConstElementVisitorPtr(new MaxIdVisitor())))));
+//  _stats.append(SingleStat("Minimum Relation ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
+//      ConstElementVisitorPtr(new MinIdVisitor())))));
+//  _stats.append(SingleStat("Maximum Relation ID",
+//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
+//      ConstElementVisitorPtr(new MaxIdVisitor())))));
 
   if (!_quick)
   {
-    NodesPerWayVisitor nodesPerWayVis;
-    _applyVisitor(constMap, &nodesPerWayVis);
-    _stats.append(SingleStat("Least Nodes in a Way", nodesPerWayVis.getMin()));
-    _stats.append(SingleStat("Most Nodes in a Way", nodesPerWayVis.getMax()));
-    _stats.append(SingleStat("Average Nodes Per Way", nodesPerWayVis.getAverage()));
-    _stats.append(SingleStat("Total Way Nodes", nodesPerWayVis.getStat()));
+//    NodesPerWayVisitor nodesPerWayVis;
+//    _applyVisitor(constMap, &nodesPerWayVis);
+//    _stats.append(SingleStat("Least Nodes in a Way", nodesPerWayVis.getMin()));
+//    _stats.append(SingleStat("Most Nodes in a Way", nodesPerWayVis.getMax()));
+//    _stats.append(SingleStat("Average Nodes Per Way", nodesPerWayVis.getAverage()));
+//    _stats.append(SingleStat("Total Way Nodes", nodesPerWayVis.getStat()));
 
-    MembersPerRelationVisitor membersPerRelationVis;
-    _applyVisitor(constMap, &membersPerRelationVis);
-    _stats.append(SingleStat("Least Members in a Relation", membersPerRelationVis.getMin()));
-    _stats.append(SingleStat("Most Members in a Relation", membersPerRelationVis.getMax()));
-    _stats.append(SingleStat("Average Members Per Relation", membersPerRelationVis.getAverage()));
-    _stats.append(SingleStat("Total Relation Members", membersPerRelationVis.getStat()));
+//    MembersPerRelationVisitor membersPerRelationVis;
+//    _applyVisitor(constMap, &membersPerRelationVis);
+//    _stats.append(SingleStat("Least Members in a Relation", membersPerRelationVis.getMin()));
+//    _stats.append(SingleStat("Most Members in a Relation", membersPerRelationVis.getMax()));
+//    _stats.append(SingleStat("Average Members Per Relation", membersPerRelationVis.getAverage()));
+//    _stats.append(SingleStat("Total Relation Members", membersPerRelationVis.getStat()));
 
-    TagCountVisitor tagCountVisitor;
-    _applyVisitor(constMap, &tagCountVisitor);
-    const long numTotalTags = (long)tagCountVisitor.getStat();
-    _stats.append(SingleStat("Total Feature Tags", numTotalTags));
-    const long numInformationTags = tagCountVisitor.getInformationCount();
-    _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
-    _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
-    _stats.append(SingleStat("Least Tags on a Feature", tagCountVisitor.getMin()));
-    _stats.append(SingleStat("Most Tags on a Feature", tagCountVisitor.getMax()));
-    _stats.append(SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
-    _stats.append(
-      SingleStat("Least Information Tags on a Feature", tagCountVisitor.getInformationMin()));
-    _stats.append(
-      SingleStat("Most Information Tags on a Feature", tagCountVisitor.getInformationMax()));
-    _stats.append(
-      SingleStat("Average Information Tags Per Feature", tagCountVisitor.getInformationAverage()));
+//    TagCountVisitor tagCountVisitor;
+//    _applyVisitor(constMap, &tagCountVisitor);
+//    const long numTotalTags = (long)tagCountVisitor.getStat();
+//    _stats.append(SingleStat("Total Feature Tags", numTotalTags));
+//    const long numInformationTags = tagCountVisitor.getInformationCount();
+//    _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
+//    _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
+//    _stats.append(SingleStat("Least Tags on a Feature", tagCountVisitor.getMin()));
+//    _stats.append(SingleStat("Most Tags on a Feature", tagCountVisitor.getMax()));
+//    _stats.append(SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
+//    _stats.append(
+//      SingleStat("Least Information Tags on a Feature", tagCountVisitor.getInformationMin()));
+//    _stats.append(
+//      SingleStat("Most Information Tags on a Feature", tagCountVisitor.getInformationMax()));
+//    _stats.append(
+//      SingleStat("Average Information Tags Per Feature", tagCountVisitor.getInformationAverage()));
 
     _stats.append(SingleStat("Features with Names",
       _applyVisitor(
@@ -552,6 +589,56 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   }
   logMsg += ".";
   LOG_DEBUG(logMsg);
+}
+
+void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
+{
+  shared_ptr<ElementCriterion> pCrit;
+
+  if (d.criterion.length() > 0)
+  {
+    pCrit = shared_ptr<ElementCriterion>(
+          static_cast<ElementCriterion *>(
+            Factory::getInstance().constructObject<ElementCriterion>(d.criterion)));
+  }
+
+  if (d.visitor.length() > 0)
+  {
+    double val;
+    shared_ptr<ConstElementVisitor> pRequestedVisitor;
+
+    pRequestedVisitor = shared_ptr<ConstElementVisitor>(
+          static_cast<ConstElementVisitor *>(
+            Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+
+
+    if (pCrit)
+    {
+      // if a criterion is specified, we apply a FilteredVisitor
+      FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pRequestedVisitor));
+      val = _applyVisitor(constMap, filteredVisitor);
+    }
+    else
+    {
+      // without criterion, apply the visitor directly and interpret as NumericStatistic
+      _applyVisitor(constMap, pRequestedVisitor.get());
+
+      NumericStatistic* ns = dynamic_cast<NumericStatistic*>(pRequestedVisitor.get());
+
+      switch (d.statCall)
+      {
+        case None: val = 0; break;
+        case Min: val = ns->getMin(); break;
+        case Max: val = ns->getMax(); break;
+        case Average: val = ns->getAverage(); break;
+        case Stat: val = ns->getStat(); break;
+      }
+    }
+
+    //LOG_VARD(val);
+    //_stats.append(SingleStat("-------> " + d.name, val));
+    _stats.append(SingleStat(d.name, val));
+  }
 }
 
 bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,

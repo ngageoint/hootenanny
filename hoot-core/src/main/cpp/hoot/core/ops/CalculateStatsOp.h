@@ -85,6 +85,23 @@ public:
 
 private:
 
+  enum StatCall
+  {
+    None,
+    Min,
+    Max,
+    Average,
+    Stat
+  };
+
+  struct StatData
+  {
+    QString name;
+    QString visitor;
+    QString criterion;
+    StatCall statCall;
+  };
+
   ElementCriterionPtr _criterion;
   //simple map name string for logging purposes
   QString _mapName;
@@ -94,6 +111,8 @@ private:
   //meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
+
+  void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name

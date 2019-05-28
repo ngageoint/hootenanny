@@ -33,6 +33,9 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, NodeTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, WayTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationTypeCriterion)
 
 bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
