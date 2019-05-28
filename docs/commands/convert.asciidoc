@@ -45,16 +45,16 @@ See their descriptions for more detail.
 
 examples:
 --------------------------------------
-# All of these do the same thing
+# All of these do the same thing:
 
-# everything specified
+# every option specified
 hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
-# op not specified; gets automatically added
+# translation onvert op not specified; gets automatically added
 hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
-# neither op nor direction specified; op gets automatically added and the direction is assumed to be to OGR due an OGR output format having
-# been specified
+# neither translation convert op nor translation direction specified; op gets automatically added and the direction is assumed to be to 
+# OGR due an OGR output format having been specified
 hoot convert -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 --------------------------------------
 

@@ -2304,13 +2304,13 @@ A comma separated list of possible names for X/longitude coordinate of a point. 
 a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or
 *middle*. The values in the column must be floating point values.
 
-//=== ogr.reader.csv.zfield
+=== ogr.reader.csv.zfield
 
-//* Data Type: string
-//* Default Value: `Z,z`
+* Data Type: string
+* Default Value: `Z,z`
 
-//From the GDAL docs:
-//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might
+From the GDAL docs:
+A comma separated list of possible names for Z/elevation coordinate of a point. Each name might
 be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix
 or *middle*. The values in the column must be floating point values.
 
