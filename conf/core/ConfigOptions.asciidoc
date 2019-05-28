@@ -3587,13 +3587,15 @@ weighting is determined based on the circular error.
 === schema.translation.direction
 
 * Data Type: string
-* Default Value: `toosm`
+* Default Value: ``
 
-The direction that the translation script should translate. `toogr` will translate to OGR.
-`toosm` will translate to OSM. This is used with the convert command, TranslationOp, or
-TranslationVisitor.
-
-TODO: change to empty?
+The direction that the translation script should translate in. Valid values are: `toogr` and
+`toosm`. `toogr` will translate in a direction appropriate for an OGR output. `toosm` will
+translate in a direction appropriate for an OSM output. This is used with the convert command when
+performing translations, TranslationOp, and TranslationVisitor. If no direction is specified, the
+convert command will attempt to determine the appropriate direction. If it cannot, an error will
+be returned. Both TranslationOp and TranslationVisitor used outside of the convert command will
+always return an error if no direction is specified.
 
 === schema.translation.override
 
