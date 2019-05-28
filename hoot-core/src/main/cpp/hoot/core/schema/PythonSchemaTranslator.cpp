@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Python
 // Python redefines these two macros from /usr/include/features.h
 // undefine them in this source file to remove warnings
 #ifdef _POSIX_C_SOURCE

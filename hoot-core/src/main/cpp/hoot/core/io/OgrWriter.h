@@ -118,7 +118,7 @@ public:
 
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
 
-  void setScriptPath(const QString& path) { _scriptPath = path; }
+  void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
 
   /**
    * @brief translateToFeatures Translates the element to a geometry and a

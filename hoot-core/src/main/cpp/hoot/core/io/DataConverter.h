@@ -105,6 +105,7 @@ public:
 private:
 
   QString _translation;
+  QString _translationDirection;
   QStringList _shapeFileColumns;
   int _ogrFeatureReadLimit;
   QStringList _convertOps;

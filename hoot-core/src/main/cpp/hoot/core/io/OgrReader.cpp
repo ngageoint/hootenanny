@@ -129,7 +129,8 @@ public:
 
   void setLimit(long limit) { _limit = limit; }
 
-  void setTranslationFile(const QString& translate) { _finalizeTranslate(); _translatePath = translate; }
+  void setSchemaTranslationScript(const QString& translate)
+  { _finalizeTranslate(); _translatePath = translate; }
 
   void initializePartial();
 
@@ -304,7 +305,7 @@ ElementIterator* OgrReader::createIterator(const QString& path, const QString& l
   OgrReaderInternal* d = new OgrReaderInternal();
   d->setDefaultCircularError(_d->getDefaultCircularError());
   d->setDefaultStatus(_d->getDefaultStatus());
-  d->setTranslationFile(_d->getTranslationFile());
+  d->setSchemaTranslationScript(_d->getTranslationFile());
   d->open(path, layer);
 
   return new OgrElementIterator(d);
@@ -457,9 +458,9 @@ void OgrReader::setLimit(long limit)
   _d->setLimit(limit);
 }
 
-void OgrReader::setTranslationFile(const QString& translate)
+void OgrReader::setSchemaTranslationScript(const QString& translate)
 {
-  _d->setTranslationFile(translate);
+  _d->setSchemaTranslationScript(translate);
 }
 
 void OgrReader::initializePartial()
