@@ -369,9 +369,8 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 {
   LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
 
-  // Translation for to OGR happens in the writer and is not to be done in the convert ops, so
-  // let's remove any that are in here.
-  LOG_VARD(_convertOps);
+  // Translation for going to OGR is always required and happens in the writer itself. It is not to
+  // be done with convert ops, so let's ignore any translation ops that were specified.
   _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
   LOG_VARD(_convertOps);
@@ -538,8 +537,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   }
   reader.setTranslationFile(_translation);
 
-  // Translation from OGR happens in the reader and is not to be done in the convert ops, so
-  // let's remove any that are there.
+  // see similar note in _convertToOgr
   _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
 
