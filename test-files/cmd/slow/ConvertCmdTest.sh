@@ -35,4 +35,4 @@ hoot convert -C Testing.conf test-files/io/InvalidCharacters.osm $OUTPUT_DIR/Inv
 
 echo "Translation check..."
 # This wasn't working at one point.
-hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/mgcpout.gdb
+hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb

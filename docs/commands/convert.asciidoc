@@ -8,8 +8,8 @@ conversion.  The process may be memory bound depending upon the input or output 
 Data Formats section for more information.
 
 * +input(s)+ - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may be used
-               for inputs within the same directory. For OGR inputs, layer names may optionally be specified.  Use a single space to separate 
-               each input and a ';' between inputs and layer (<filename>;<layer name>).
+               for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to 
+               separate each input and a ';' between inputs and layer (<filename>;<layer name>).
 * +output+   - Output path to convert to (e.g. .osm file, etc.).
 
 === Usage
@@ -23,8 +23,10 @@ convert "(input1[;layer]) [input2[;layer]]" (output)
 
 === Configuration Options
 
-If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before 
-writing the result to the output.
+If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before writing the 
+result to the output. If a schema translation script is specified in schema.translation.script a TranslationVisitor is automatically added
+to the convert operations, so explicitly specifying it is unnecessary but will not cause problems. The +convert+ command will always attempt
+to use a TranslationVisitor instead of TranslationOp to support streaming I/O.
 
 example:
 --------------------------------------
@@ -37,7 +39,24 @@ hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
 
 Use the following configuration options to perform schema translations:
 * `schema.translation.script`
-* `schema.translation.direction` - The default translation direction is to OSM.
+* `schema.translation.direction`
+
+See their descriptions for more detail.
+
+examples:
+--------------------------------------
+# All of these do the same thing
+
+# everything specified
+hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+
+# op not specified; gets automatically added
+hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+
+# neither op nor direction specified; op gets automatically added and the direction is assumed to be to OGR due an OGR output format having
+# been specified
+hoot convert -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+--------------------------------------
 
 ==== Shape File Conversion
 
@@ -70,7 +89,7 @@ hoot convert input1.osm input2.osm output.osm
 Convert an OSM file to a file geodatabase and apply an OGR translation:
 
 --------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation.direction=toogr MyInput.osm MyOutput.gdb
+hoot convert -D schema.translation.script=MyTranslation.js MyInput.osm MyOutput.gdb
 --------------------------------------
 
 ==== Converting OSM Databases to Geodatabases
@@ -78,14 +97,14 @@ hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation
 Convert an OSM database to a file geodatabase and apply an OGR translation:
 
 --------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation.direction=toogr \
+hoot convert -D schema.translation.script=MyTranslation.js \
  PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" MyOutput.gdb
 --------------------------------------
 
 Convert an OSM database to a file geodatabase, apply a translation, and set element cache capacities:
 
 --------------------------------------
-hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation.direction=toogr \
+hoot convert -D schema.translation.script=MyTranslation.js \
  PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \
  MyOutput.gdb -D element.cache.size.node=10000 -D element.cache.size.way=2000 -D element.cache.size.relation=2000
 --------------------------------------
@@ -116,7 +135,7 @@ Convert multiple tiger road data sets using a tiger translation file found in _t
 at one time.  Hootenanny will make sure that road end points that fall within 1 meter will be merged into intersections:
 
 --------------------------------------
-hoot convert -D schema.translation.script=TigerRoads -D schema.translation.direction=toosm til_2010_*_roads.shp TigerRoadsOutput.osm
+hoot convert -D schema.translation.script=TigerRoads til_2010_*_roads.shp TigerRoadsOutput.osm
 --------------------------------------
 
 ==== Converting File Geodatabases to OSM Files
@@ -125,7 +144,7 @@ Convert roads, bridges, overpasses and tunnels from a File Geodatabase into a si
 _translations/MyGdbTranslation.py_:
 
 --------------------------------------
-hoot convert -D schema.translation.script=MyGdbTranslation -D schema.translation.direction=toosm MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L MyGdbOutput.osm
+hoot convert -D schema.translation.script=MyGdbTranslation MyGdb.gdb;ROAD_L MyGdb.gdb;BRIDGE_OVERPASS_L MyGdb.gdb;TUNNEL_L MyGdbOutput.osm
 --------------------------------------
 
 ==== Converting Zipped Shape Files to OSM
@@ -133,13 +152,13 @@ hoot convert -D schema.translation.script=MyGdbTranslation -D schema.translation
 Convert a road shapefile that is stored inside the +tds+ directory in a Zip file:
 
 --------------------------------------
-hoot convert -D schema.translation.script=TDSv40.js -D schema.translation.direction=toosm /vsizip//gis-data/test_data.zip/tds/LAP030.shp ds_roads.osm
+hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.zip/tds/LAP030.shp ds_roads.osm
 --------------------------------------
 
 Convert all TDS shapefiles stored in the top level of a Zip file:
 
 --------------------------------------
-hoot convert -D schema.translation.script=TDSv40.js -D schema.translation.direction=toosm /vsizip//gis-data/test_data.zip/ tds_roads.osm
+hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.zip/ tds_roads.osm
 --------------------------------------
 
 === Notes
