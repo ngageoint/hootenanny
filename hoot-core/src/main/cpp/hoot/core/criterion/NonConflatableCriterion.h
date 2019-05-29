@@ -29,16 +29,16 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
 
 /**
- * A filter that will remove elements that aren't conflatable by hootenanny.
- * These are elements for which we have no matchers defined.
+ * A filter that will remove elements that aren't conflatable by Hootenanny. These are elements
+ * for which we have no matchers defined.
  */
 class NonConflatableCriterion : public ElementCriterion
 {
@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::NonConflatableCriterion"; }
 
-  NonConflatableCriterion() { }
+  NonConflatableCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

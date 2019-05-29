@@ -28,7 +28,7 @@
 #ifndef LINEAR_WATERWAY_CRITERION_H
 #define LINEAR_WATERWAY_CRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Identifies linear bodies of water
  */
-class LinearWaterwayCriterion : public ElementCriterion
+class LinearWaterwayCriterion : public ConflatableElementCriterion
 {
 public:
   static std::string className() { return "hoot::LinearWaterwayCriterion"; }

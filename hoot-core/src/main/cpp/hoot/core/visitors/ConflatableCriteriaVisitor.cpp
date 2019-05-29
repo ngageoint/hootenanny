@@ -22,37 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef AREACRITERION_H
-#define AREACRITERION_H
+#include "ConflatableCriteriaVisitor.h"
 
 // hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
-/**
- * A criterion that will either keep or remove areas.
- */
-class AreaCriterion : public ConflatableElementCriterion
+HOOT_FACTORY_REGISTER(ElementVisitor, ConflatableCriteriaVisitor)
+
+ConflatableCriteriaVisitor::ConflatableCriteriaVisitor()
 {
-public:
-
-  static std::string className() { return "hoot::AreaCriterion"; }
-
-  AreaCriterion();
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies areas"; }
-};
-
 }
 
-#endif // AREACRITERION_H
+void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
+{
+  const QStringList conflatableCriteria =
+    ConflatableElementCriterion::getConflatableCriteriaForElement(e);
+  QString conflatableCriteriaStr;
+  for (int i = 0; i < conflatableCriteria.size(); i++)
+  {
+    conflatableCriteriaStr += conflatableCriteria.at(i) + ";";
+  }
+  conflatableCriteriaStr.chop(1);
+  e->getTags()[MetadataTags::HootConflatableCriteria()] =  conflatableCriteriaStr;
+}
+
+}

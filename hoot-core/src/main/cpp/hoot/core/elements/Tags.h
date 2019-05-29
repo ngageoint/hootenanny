@@ -60,6 +60,9 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
+  Tags();
+  Tags(const QString& key, const QString& value);
+
   void addNote(const QString& note);
 
   /**

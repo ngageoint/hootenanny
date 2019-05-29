@@ -22,37 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef AREACRITERION_H
-#define AREACRITERION_H
+#ifndef CONFLATABLE_CRITERIA_VISITOR_H
+#define CONFLATABLE_CRITERIA_VISITOR_H
 
 // hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-/**
- * A criterion that will either keep or remove areas.
- */
-class AreaCriterion : public ConflatableElementCriterion
+class ConflatableCriteriaVisitor : public ElementVisitor
 {
+
 public:
 
-  static std::string className() { return "hoot::AreaCriterion"; }
+  static std::string className() { return "hoot::ConflatableCriteriaVisitor"; }
 
-  AreaCriterion();
+  ConflatableCriteriaVisitor();
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  virtual void visit(const std::shared_ptr<Element>& e);
 
-  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies areas"; }
+  virtual QString getDescription() const
+  { return "Marks elements with all criterion classes that consider them conflatable"; }
 };
 
 }
 
-#endif // AREACRITERION_H
+#endif // CONFLATABLE_CRITERIA_VISITOR_H
