@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * A filter that will remove elements that aren't conflatable by hootenanny. These are elements
+ * A filter that will remove elements that aren't conflatable by Hootenanny. These are elements
  * for which we have no matchers defined.
  */
 class NonConflatableCriterion : public ElementCriterion
@@ -59,10 +59,11 @@ public:
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
   /**
-   * TODO
+   * Determines which criteria consider an element as conflatable
    *
-   * @param e
-   * @return
+   * @param e the element to determine conflatability of
+   * @return a list of ConflatableElementCriterion class names that consider the element as
+   * conflatable
    */
   static QStringList conflatableCriteria(const ConstElementPtr& e);
 
@@ -73,7 +74,7 @@ private:
   // criterion class names to criterion objects
   static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
 
-  static void _initConflatableCriterion();
+  static void _createConflatableCriteria();
 };
 
 }

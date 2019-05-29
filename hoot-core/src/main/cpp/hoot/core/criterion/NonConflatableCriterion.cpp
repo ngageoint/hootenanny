@@ -42,11 +42,11 @@ NonConflatableCriterion::NonConflatableCriterion()
 {
   if (_conflatableCriteria.isEmpty())
   {
-    _initConflatableCriterion();
+    _createConflatableCriteria();
   }
 }
 
-void NonConflatableCriterion::_initConflatableCriterion()
+void NonConflatableCriterion::_createConflatableCriteria()
 {
   const std::vector<std::string> criterionClassNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
@@ -79,17 +79,17 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QStringList NonConflatableCriterion::conflatableCriteria(const ConstElementPtr& e)
 {
-  QStringList conflatableCriteria;
+  QStringList conflatableCriteriaForElement;
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
        itr != _conflatableCriteria.end(); ++itr)
   {
     if (itr.value()->isSatisfied(e))
     {
       // It is something we can conflate.
-      conflatableCriteria.append(itr.key());
+      conflatableCriteriaForElement.append(itr.key());
     }
   }
-  return conflatableCriteria;
+  return conflatableCriteriaForElement;
 }
 
 }
