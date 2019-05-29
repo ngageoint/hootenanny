@@ -45,6 +45,24 @@ public:
   static std::string className() { return "hoot::ConflatableElementCriterion"; }
 
   virtual ~ConflatableElementCriterion() {}
+
+  /**
+   * Determines which criteria consider an element as conflatable
+   *
+   * @param e the element to determine conflatability of
+   * @return a list of ConflatableElementCriterion class names that consider the element as
+   * conflatable
+   */
+  static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e);
+
+  static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
+
+private:
+
+  // criterion class names to criterion objects
+  static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
+
+  static void _createConflatableCriteria();
 };
 
 }

@@ -57,24 +57,6 @@ public:
   }
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
-
-  /**
-   * Determines which criteria consider an element as conflatable
-   *
-   * @param e the element to determine conflatability of
-   * @return a list of ConflatableElementCriterion class names that consider the element as
-   * conflatable
-   */
-  static QStringList conflatableCriteria(const ConstElementPtr& e);
-
-private:
-
-  friend class NonConflatableCriterionTest;
-
-  // criterion class names to criterion objects
-  static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
-
-  static void _createConflatableCriteria();
 };
 
 }

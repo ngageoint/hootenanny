@@ -34,38 +34,18 @@
 namespace hoot
 {
 
-QMap<QString, ElementCriterionPtr> NonConflatableCriterion::_conflatableCriteria;
-
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
 NonConflatableCriterion::NonConflatableCriterion()
 {
-  if (_conflatableCriteria.isEmpty())
-  {
-    _createConflatableCriteria();
-  }
-}
-
-void NonConflatableCriterion::_createConflatableCriteria()
-{
-  const std::vector<std::string> criterionClassNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
-  for (std::vector<std::string>::const_iterator itr = criterionClassNames.begin();
-       itr != criterionClassNames.end(); ++itr)
-  {
-    ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
-    if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != 0)
-    {
-      _conflatableCriteria[QString::fromStdString(*itr)] = crit;
-    }
-  }
-  LOG_VART(_conflatableCriteria.size());
 }
 
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
-       itr != _conflatableCriteria.end(); ++itr)
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria =
+    ConflatableElementCriterion::getConflatableCriteria();
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+       itr != conflatableCriteria.end(); ++itr)
   {
     if (itr.value()->isSatisfied(e))
     {
@@ -75,21 +55,6 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   // It is not something we can conflate
   return true;
-}
-
-QStringList NonConflatableCriterion::conflatableCriteria(const ConstElementPtr& e)
-{
-  QStringList conflatableCriteriaForElement;
-  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
-       itr != _conflatableCriteria.end(); ++itr)
-  {
-    if (itr.value()->isSatisfied(e))
-    {
-      // It is something we can conflate.
-      conflatableCriteriaForElement.append(itr.key());
-    }
-  }
-  return conflatableCriteriaForElement;
 }
 
 }
