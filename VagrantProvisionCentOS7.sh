@@ -54,6 +54,7 @@ if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
 else
     # Remove any version locks to allow upgrading when versions have changed.
     sudo yum versionlock delete \
+         armadillo \
          geos \
          geos-devel \
          glpk \
@@ -61,12 +62,16 @@ else
          hoot-gdal \
          hoot-gdal-devel \
          hoot-gdal-python \
+         libgeotiff \
+         libgeotiff-devel \
          liboauthcpp \
          liboauthcpp-devel \
          libphonenumber \
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
+         proj \
+         proj-devel \
          stxxl \
          stxxl-devel
 
@@ -74,6 +79,7 @@ fi
 
 echo "### Installing libraries with locked versions"
 sudo yum install -y \
+     armadillo-$ARMADILLO_VERSION \
      geos-$GEOS_VERSION \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
@@ -81,17 +87,22 @@ sudo yum install -y \
      hoot-gdal-$GDAL_VERSION \
      hoot-gdal-devel-$GDAL_VERSION \
      hoot-gdal-python-$GDAL_VERSION \
+     libgeotiff-$LIBGEOTIFF_VERSION \
+     libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     proj-$PROJ_VERSION \
+     proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
 echo "### Locking versions of libraries"
 sudo yum versionlock add \
+     armadillo-$ARMADILLO_VERSION \
      geos-$GEOS_VERSION \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
@@ -99,12 +110,16 @@ sudo yum versionlock add \
      hoot-gdal-$GDAL_VERSION \
      hoot-gdal-devel-$GDAL_VERSION \
      hoot-gdal-python-$GDAL_VERSION \
+     libgeotiff-$LIBGEOTIFF_VERSION \
+     libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     proj-$PROJ_VERSION \
+     proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
