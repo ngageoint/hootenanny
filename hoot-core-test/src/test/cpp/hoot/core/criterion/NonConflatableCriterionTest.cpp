@@ -32,9 +32,9 @@
 namespace hoot
 {
 
-class NonConflatableElementCriterionTest : public HootTestFixture
+class NonConflatableCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(NonConflatableElementCriterionTest);
+  CPPUNIT_TEST_SUITE(NonConflatableCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -44,35 +44,47 @@ public:
   {
     NonConflatableCriterion uut;
     OsmMapPtr map(new OsmMap());
-
-    CPPUNIT_ASSERT_EQUAL(9, NonConflatableCriterion::_conflatableCriteria.size());
-
-    CPPUNIT_ASSERT(
-      uut.isSatisfied(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"))));
-    CPPUNIT_ASSERT(
-      !uut.isSatisfied(
-        TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "no"))));
-
-    geos::geom::Coordinate buildingCoords[] = {
+    geos::geom::Coordinate wayCoords[] = {
       geos::geom::Coordinate(0.0, 0.0),
       geos::geom::Coordinate(1.0, 0.0),
       geos::geom::Coordinate(0.0, 1.0),
       geos::geom::Coordinate(0.0, 0.0),
       geos::geom::Coordinate::getNull() };
-    CPPUNIT_ASSERT(
-      uut.isSatisfied(
-        TestUtils::createWay(
-          map, buildingCoords, Status::Unknown1, 15.0, Tags("building", "yes"))));
-    CPPUNIT_ASSERT(
-      !uut.isSatisfied(
-        TestUtils::createWay(
-          map, buildingCoords, Status::Unknown1, 15.0, Tags("building", "no"))));
 
+    // This is a bit maintenance-prone as it will require an updating with each new
+    // ConflatableElementCriterion addition/subtraction, but that's a good thing as it will help
+    // us keep track of whenever changes are made to the set of ConflatableElementCriterion.
+    CPPUNIT_ASSERT_EQUAL(9, NonConflatableCriterion::_conflatableCriteria.size());
 
+    // Criteria satisfaction is negated, as we're checking to see if the element is *not*
+    // conflatable.
+
+    ConstNodePtr poi =
+      TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, Tags("poi", "yes"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(poi));
+    const QStringList poiConflatableCriteria = NonConflatableCriterion::conflatableCriteria(poi);
+    CPPUNIT_ASSERT_EQUAL(2, poiConflatableCriteria.size());
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiCriterion"));
+    CPPUNIT_ASSERT(poiConflatableCriteria.contains("hoot::PoiPolygonPoiCriterion"));
+
+    ConstWayPtr building =
+      TestUtils::createWay(
+        map, wayCoords, Status::Unknown1, 15.0, Tags("building", "yes"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(building));
+    const QStringList buildingConflatableCriteria =
+      NonConflatableCriterion::conflatableCriteria(building);
+    CPPUNIT_ASSERT_EQUAL(3, buildingConflatableCriteria.size());
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::AreaCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::BuildingCriterion"));
+    CPPUNIT_ASSERT(buildingConflatableCriteria.contains("hoot::PoiPolygonPolyCriterion"));
+
+    ConstWayPtr nonsense =
+      TestUtils::createWay(map, wayCoords, Status::Unknown1, 15.0, Tags("blah", "blah"));
+    CPPUNIT_ASSERT(uut.isSatisfied(nonsense));;
+    CPPUNIT_ASSERT_EQUAL(0, NonConflatableCriterion::conflatableCriteria(nonsense).size());
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NonConflatableElementCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NonConflatableCriterionTest, "quick");
 
 }

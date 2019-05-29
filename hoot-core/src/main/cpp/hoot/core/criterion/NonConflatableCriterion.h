@@ -58,11 +58,20 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
+  /**
+   * TODO
+   *
+   * @param e
+   * @return
+   */
+  static QStringList conflatableCriteria(const ConstElementPtr& e);
+
 private:
 
-  friend class NonConflatableElementCriterionTest;
+  friend class NonConflatableCriterionTest;
 
-  static QList<ElementCriterionPtr> _conflatableCriteria;
+  // criterion class names to criterion objects
+  static QMap<QString, ElementCriterionPtr> _conflatableCriteria;
 
   static void _initConflatableCriterion();
 };

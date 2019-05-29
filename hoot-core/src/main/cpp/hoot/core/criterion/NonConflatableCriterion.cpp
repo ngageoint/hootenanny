@@ -34,6 +34,8 @@
 namespace hoot
 {
 
+QMap<QString, ElementCriterionPtr> NonConflatableCriterion::_conflatableCriteria;
+
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
 NonConflatableCriterion::NonConflatableCriterion()
@@ -54,7 +56,7 @@ void NonConflatableCriterion::_initConflatableCriterion()
     ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
     if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != 0)
     {
-      _conflatableCriteria.append(crit);
+      _conflatableCriteria[QString::fromStdString(*itr)] = crit;
     }
   }
   LOG_VART(_conflatableCriteria.size());
@@ -62,9 +64,10 @@ void NonConflatableCriterion::_initConflatableCriterion()
 
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  for (int i = 0; i < _conflatableCriteria.size(); i++)
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
+       itr != _conflatableCriteria.end(); ++itr)
   {
-    if (_conflatableCriteria.at(i)->isSatisfied(e))
+    if (itr.value()->isSatisfied(e))
     {
       // It is something we can conflate.
       return false;
@@ -72,6 +75,21 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   // It is not something we can conflate
   return true;
+}
+
+QStringList NonConflatableCriterion::conflatableCriteria(const ConstElementPtr& e)
+{
+  QStringList conflatableCriteria;
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
+       itr != _conflatableCriteria.end(); ++itr)
+  {
+    if (itr.value()->isSatisfied(e))
+    {
+      // It is something we can conflate.
+      conflatableCriteria.append(itr.key());
+    }
+  }
+  return conflatableCriteria;
 }
 
 }
