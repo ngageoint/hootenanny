@@ -105,15 +105,7 @@ public class ExportCommandTest {
         exportParams.setAppend(false);
 
         ExportCommand exportCommand = new ExportCommand(jobId, exportParams, debugLevel, caller, null);
-
-        List<String> options = new LinkedList<>();
-        options.add("api.db.email=test@test.com");
-        options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
-        options.add("remove.elements.visitor.recursive=false");
-        options.add("writer.include.circular.error.tags=false");
-        options.add("writer.text.status=true");
-        options.add("convert.ops=hoot::RemoveElementsVisitor;hoot::DecomposeBuildingRelationsVisitor");
-
+        List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();
 
         options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });

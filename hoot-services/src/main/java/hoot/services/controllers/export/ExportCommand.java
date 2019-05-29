@@ -141,12 +141,10 @@ class ExportCommand extends ExternalCommand {
 
         }
 
-            //Translate the features (which includes applying tag overrides set below)
-            convertOps.add("hoot::TranslationOp");
-            options.add("schema.translation.direction=toogr");
-            options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
-
-
+        //Translate the features (which includes applying tag overrides set below)
+        convertOps.add("hoot::TranslationOp");
+        options.add("schema.translation.direction=toogr");
+        options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
 
         // By default export removes hoot conflation review related tags
         if (!params.getTagOverrides().isEmpty()) {
@@ -166,7 +164,7 @@ class ExportCommand extends ExternalCommand {
         //Add the orders convert operations
         options.add("convert.ops=" + String.join(";", convertOps));
 
-	//Add conf files for specific translation ops
+        //Add conf files for specific translation ops
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
             options.add("-C DncExport.conf");
         }
