@@ -73,9 +73,9 @@ public:
     setResetType(ResetBasic);
   }
 
-  void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
-               const double generalizeProbability, const double epsilon, const QString outputFile,
-               const QString outputCompareFile, const bool enableDebugLogging = false)
+  void runTest(const QString& inputFile, const int randomNumberGeneratorSeed,
+               const double generalizeProbability, const double epsilon, const QString& outputFile,
+               const QString& outputCompareFile, const bool enableDebugLogging = false)
   {
     Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     if (enableDebugLogging)

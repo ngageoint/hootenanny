@@ -136,19 +136,19 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
   else
   {
-    boost::shared_ptr<Element> e1 = _buildBuilding(map, true);
+    std::shared_ptr<Element> e1 = _buildBuilding(map, true);
     if (e1.get())
     {
       OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
     }
-    boost::shared_ptr<Element> e2 = _buildBuilding(map, false);
+    std::shared_ptr<Element> e2 = _buildBuilding(map, false);
     if (e2.get())
     {
       OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
     }
 
-    boost::shared_ptr<Element> keeper;
-    boost::shared_ptr<Element> scrap;
+    std::shared_ptr<Element> keeper;
+    std::shared_ptr<Element> scrap;
     LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
     if (_keepMoreComplexGeometryWhenAutoMerging)
     {
@@ -184,7 +184,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
           }
           else
           {
-            LOG_TRACE("Building one null.");
+            LOG_TRACE("Buil"
+                      "+-ding one null.");
           }
           if (e2.get())
           {
@@ -244,10 +245,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     if (_manyToManyMatch && _mergeManyToManyMatches)
     {
       // preserve type tags
-      newTags =
-        PreserveTypesTagMerger(std::set<QString>(), OsmSchemaCategory::building())
-          .mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
-      _removeRedundantAltTypeTags(newTags);
+      newTags = PreserveTypesTagMerger().mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
     }
     else
     {
@@ -318,45 +316,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 }
 
-void BuildingMerger::_removeRedundantAltTypeTags(Tags& tags)
-{
-  LOG_VART(tags.contains("alt_types"));
-  if (tags.contains("alt_types"))
-  {
-    // Remove anything in alt_types that's also in the building (may be able to handle this within
-    // PreserveTypesTagMerger instead). So far, this has primarily been done to keep building=yes
-    // out of alt_types.
-    const QStringList altTypes = tags.get("alt_types").split(";");
-    LOG_VART(altTypes);
-    QStringList altTypesCopy = altTypes;
-    for (int i = 0; i < altTypes.size(); i++)
-    {
-      LOG_VART(altTypes[i]);
-      assert(altTypes[i].contains("="));
-      const QStringList tagParts = altTypes[i].split("=");
-      assert(tagParts.size() == 2);
-      LOG_VART(tagParts);
-      LOG_VART(tags.get(tagParts[0]) == tagParts[1]);
-      if (tags.get(tagParts[0]) == tagParts[1])
-      {
-        altTypesCopy.removeAll(tagParts[0] + "=" + tagParts[1]);
-      }
-    }
-    LOG_VART(altTypesCopy);
-    if (altTypes.size() != altTypesCopy.size())
-    {
-      LOG_VART(altTypesCopy.join(";"));
-      tags.set("alt_types", altTypesCopy.join(";"));
-    }
-  }
-}
-
 QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& element) const
 {
   QSet<ElementId> relationMemberIdsToRemove;
   if (element->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
     if (relation->getType() == MetadataTags::RelationMultiPolygon())
     {
       const vector<RelationData::Entry>& entries = relation->getMembers();
@@ -375,9 +340,9 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
   return relationMemberIdsToRemove;
 }
 
-boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
-                                                         const set<ElementId>& eid,
-                                                         const bool preserveTypes)
+std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
+                                                       const set<ElementId>& eid,
+                                                       const bool preserveTypes)
 {
   if (eid.size() > 0)
   {
@@ -394,16 +359,18 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
   else
   {
-    vector<boost::shared_ptr<Element>> parts;
+    LOG_VART(preserveTypes);
+
+    vector<std::shared_ptr<Element>> parts;
     vector<ElementId> toRemove;
     parts.reserve(eid.size());
     for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
     {
-      boost::shared_ptr<Element> e = map->getElement(*it);
+      std::shared_ptr<Element> e = map->getElement(*it);
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
+        RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
         if (r->getType() == MetadataTags::RelationBuilding())
         {
           LOG_VART(r);
@@ -418,7 +385,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
           {
             if (m[i].getRole() == MetadataTags::RolePart())
             {
-              boost::shared_ptr<Element> buildingPart = map->getElement(m[i].getElementId());
+              std::shared_ptr<Element> buildingPart = map->getElement(m[i].getElementId());
               LOG_TRACE("Building part before tag update: " << buildingPart);
               // Push any non-conflicting tags in the parent relation down into the building part.
               buildingPart->setTags(
@@ -444,7 +411,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
     LOG_VART(toRemove.size());
     LOG_VART(toRemove);
 
-    boost::shared_ptr<Element> result =
+    std::shared_ptr<Element> result =
       BuildingPartMergeOp(preserveTypes).combineBuildingParts(map, parts);
     LOG_TRACE("Combined building parts into: " << result);
 
@@ -466,8 +433,8 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   }
 }
 
-boost::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
-                                                          const bool unknown1) const
+std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
+                                                        const bool unknown1) const
 {
   set<ElementId> eids;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
@@ -510,11 +477,11 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
       LOG_VART(way);
-      std::set<std::pair<ElementId, ElementId> > pairs;
+      std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      std::vector<std::pair<ElementId, ElementId>> replacedElements;
       merger.apply(map, replacedElements);
       buildingsMerged++;
     }
@@ -527,11 +494,11 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
       LOG_VART(relation);
-      std::set<std::pair<ElementId, ElementId> > pairs;
+      std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
-      std::vector<std::pair<ElementId, ElementId> > replacedElements;
+      std::vector<std::pair<ElementId, ElementId>> replacedElements;
       merger.apply(map, replacedElements);
       buildingsMerged++;
     }
@@ -542,8 +509,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
 
 QString BuildingMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
-  return QString("BuildingMerger %1").arg(s);
+  return QString("BuildingMerger %1").arg(hoot::toString(_getPairs()));
 }
 
 }

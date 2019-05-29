@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
 
@@ -49,7 +49,7 @@ _criterion(criterion)
 {
 }
 
-void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
+void RecursiveElementRemover::apply(const std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
@@ -60,7 +60,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   }
 
   const ConstElementPtr& e = map->getElement(_eid);
-  ElementIdSetVisitor sv;
+  UniqueElementIdVisitor sv;
   e->visitRo(*map, sv);
 
   // find all potential candidates for erasure. We'll whittle away any invalid candidates.
@@ -121,7 +121,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, ElementId eid,
+void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, ElementId eid,
   const set<ElementId>& removeSet)
 {
   // if this element isn't being removed

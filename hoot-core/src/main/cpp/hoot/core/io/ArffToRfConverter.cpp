@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ArffToRfConverter.h"
@@ -45,18 +45,18 @@
 namespace hoot
 {
 
-void ArffToRfConverter::convert(const QString input, const QString output)
+void ArffToRfConverter::convert(const QString& input, const QString& output)
 {
   LOG_INFO("Converting from " << input << " to " << output << "...");
 
   ArffReader ar(input);
 
-  boost::shared_ptr<Tgs::DataFrame> df = ar.read()->toDataFrame(-1);
+  std::shared_ptr<Tgs::DataFrame> df = ar.read()->toDataFrame(-1);
 
   Tgs::Random::instance()->seed(0);
   LOG_INFO("Building Random Forest...");
   Tgs::RandomForest rf;
-  boost::shared_ptr<Tgs::DisableCout> dc;
+  std::shared_ptr<Tgs::DisableCout> dc;
   if (Log::getInstance().getLevel() >= Log::Warn)
   {
     // disable the printing of "Trained Tree ..."

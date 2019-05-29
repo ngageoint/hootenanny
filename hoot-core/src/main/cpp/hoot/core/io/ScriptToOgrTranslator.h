@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTOOGRTRANSLATOR_H
 #define SCRIPTTOOGRTRANSLATOR_H
@@ -38,9 +38,6 @@
 // Qt
 #include <QString>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -53,7 +50,7 @@ public:
   typedef struct TranslatedFeature
   {
   public:
-    boost::shared_ptr<Feature> feature;
+    std::shared_ptr<Feature> feature;
     QString tableName;
 
     QString toString() const
@@ -64,7 +61,7 @@ public:
 
   virtual ~ScriptToOgrTranslator() {}
 
-  virtual boost::shared_ptr<const Schema> getOgrOutputSchema() = 0;
+  virtual std::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
   virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType) = 0;
@@ -73,8 +70,8 @@ public:
     geos::geom::GeometryTypeId geometryType) = 0;
 };
 
-typedef boost::shared_ptr<ScriptToOgrTranslator> ScriptToOgrTranslatorPtr;
-typedef boost::shared_ptr<const ScriptToOgrTranslator> ConstScriptToOgrTranslatorPtr;
+typedef std::shared_ptr<ScriptToOgrTranslator> ScriptToOgrTranslatorPtr;
+typedef std::shared_ptr<const ScriptToOgrTranslator> ConstScriptToOgrTranslatorPtr;
 
 }
 

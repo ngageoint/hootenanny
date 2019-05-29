@@ -56,9 +56,9 @@ public:
    * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
    *  expensive due to the amount of memory cleanup we must do in the general case.
    */
-  ScriptMatch(boost::shared_ptr<PluginContext> script, const v8::Persistent<v8::Object>& plugin,
-              const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-              const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt);
+  ScriptMatch(const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
+              const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj,
+              const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
@@ -75,11 +75,11 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
 
-  boost::shared_ptr<PluginContext> getScript() const { return _script; }
+  std::shared_ptr<PluginContext> getScript() const { return _script; }
 
   virtual QString toString() const override;
 
@@ -95,7 +95,7 @@ private:
   bool _neverCausesConflict;
   MatchClassification _p;
   v8::Persistent<v8::Object> _plugin;
-  boost::shared_ptr<PluginContext> _script;
+  std::shared_ptr<PluginContext> _script;
   QString _explainText;
   typedef std::pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Feature.h"
 
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-Feature::Feature(const boost::shared_ptr<const FeatureDefinition>& d) : _definition(d)
+Feature::Feature(const std::shared_ptr<const FeatureDefinition>& d) : _definition(d)
 {
 }
 
@@ -66,7 +66,7 @@ void Feature::validate(StrictChecking strict)
   for (size_t i = 0; i < _definition->getFieldCount(); ++i)
   {
     // is
-    boost::shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
+    std::shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
     if (_values.contains(d->getName()) == false)
     {
       if (d->hasDefaultValue() == false)

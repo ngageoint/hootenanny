@@ -69,7 +69,7 @@ public:
    * @param path Pathname for the output file(s)
    * @param cs Changeset provider to stream the changes from
    */
-  void write(QString path, ChangesetProviderPtr cs);
+  void write(const QString& path, const ChangesetProviderPtr& cs);
 
   /**
    * Set the configuration settings
@@ -99,7 +99,7 @@ private:
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
   //keeping track of these mappings unfortunately makes this writer memory bound
-  QMap<ElementType::Type, QMap<long, long> > _newElementIdMappings;
+  QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;

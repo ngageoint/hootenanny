@@ -46,14 +46,14 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 {
 }
 
-void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
+void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _map = map;
 
   // go through all the relations to get duplicate reviews
   const RelationMap& relations = map->getRelations();
-  QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> > membersToReview;
+  QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>> membersToReview;
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
@@ -66,7 +66,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 
   //loop through duplicate reviews
   ReviewMarker reviewMarker;
-  QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> >::iterator it = membersToReview.begin();
+  QMap<set<ElementId>, QList<ReviewMarker::ReviewUid>>::iterator it = membersToReview.begin();
   while (it != membersToReview.end())
   {
     set<ElementId> eids = it.key();
@@ -90,7 +90,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      boost::shared_ptr<OsmMap> copy(new OsmMap());
+      std::shared_ptr<OsmMap> copy(new OsmMap());
       CopyMapSubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

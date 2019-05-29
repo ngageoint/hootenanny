@@ -53,6 +53,8 @@ RfExtractorClassifier::RfExtractorClassifier()
 MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2) const
 {
+  LOG_TRACE("Determining classification for match between: " << eid1 << " and " << eid2 << "...");
+
   MatchClassification result;
 
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
@@ -69,17 +71,17 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   result.setMatchP(scores["match"]);
   result.setReviewP(scores["review"]);
 
+  LOG_VART(result);
   return result;
 }
 
-const vector< boost::shared_ptr<const FeatureExtractor> >& RfExtractorClassifier::_getExtractors()
+const vector<std::shared_ptr<const FeatureExtractor>>& RfExtractorClassifier::_getExtractors()
   const
 {
   if (_extractors.size() == 0)
   {
     _createExtractors();
   }
-
   return _extractors;
 }
 
@@ -88,13 +90,13 @@ map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
 {
   map<QString, double> result;
 
-  const boost::shared_ptr<const Element>& e1 = m->getElement(eid1);
-  const boost::shared_ptr<const Element> e2 = m->getElement(eid2);
+  const std::shared_ptr<const Element>& e1 = m->getElement(eid1);
+  const std::shared_ptr<const Element> e2 = m->getElement(eid2);
 
   _getExtractors();
   for (size_t i = 0; i < _extractors.size(); i++)
   {
-    double v = _extractors[i]->extract(*m, e1, e2);
+    const double v = _extractors[i]->extract(*m, e1, e2);
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {

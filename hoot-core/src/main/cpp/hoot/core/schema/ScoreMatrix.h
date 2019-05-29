@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCOREMATRIX_H
 #define SCOREMATRIX_H
@@ -162,7 +162,7 @@ private:
     }
   };
 
-  std::vector< std::vector<_type> > _v;
+  std::vector<std::vector<_type>> _v;
   std::vector<QString> _labelRows;
   std::vector<QString> _labelCols;
 

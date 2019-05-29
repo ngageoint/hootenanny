@@ -30,7 +30,8 @@
 
 #include <hoot/core/elements/Element.h>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Listener that gets notified before and after an element is changed.

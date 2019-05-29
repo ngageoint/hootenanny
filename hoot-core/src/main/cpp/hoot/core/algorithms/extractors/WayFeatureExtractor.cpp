@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayFeatureExtractor.h"
 
@@ -48,21 +48,21 @@ WayFeatureExtractor::WayFeatureExtractor()
 }
 
 double WayFeatureExtractor::extract(const OsmMap& map,
-  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element>& candidate) const
+  const std::shared_ptr<const Element>& target, const std::shared_ptr<const Element>& candidate) const
 {
   vector<double> scores;
 
   if (target->getElementType() == ElementType::Way &&
       candidate->getElementType() == ElementType::Way)
   {
-    scores.push_back(_extract(map, boost::dynamic_pointer_cast<const Way>(target),
-                              boost::dynamic_pointer_cast<const Way>(candidate)));
+    scores.push_back(_extract(map, std::dynamic_pointer_cast<const Way>(target),
+                              std::dynamic_pointer_cast<const Way>(candidate)));
   }
   else if (target->getElementType() == ElementType::Relation &&
            candidate->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r1 = boost::dynamic_pointer_cast<const Relation>(target);
-    ConstRelationPtr r2 = boost::dynamic_pointer_cast<const Relation>(candidate);
+    ConstRelationPtr r1 = std::dynamic_pointer_cast<const Relation>(target);
+    ConstRelationPtr r2 = std::dynamic_pointer_cast<const Relation>(candidate);
 
     if (r1->getType() == MetadataTags::RelationMultilineString() &&
         r2->getType() == MetadataTags::RelationMultilineString() &&

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,6 +33,8 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/conflate/polygon/BuildingMatchCreator.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
@@ -48,6 +50,7 @@ class PoiPolygonMergerCreatorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(PoiPolygonMergerCreatorTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST(reviewTest);
+  CPPUNIT_TEST(crossConflateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -70,11 +73,10 @@ public:
     conf().set(ConfigOptions().getMergerCreatorsKey(), ConfigOptions().getMergerCreatorsDefaultValue());
   }
 
-  /**
-   * Creates a single match and should result in a PoiPolygonMerger
-   */
   void basicTest()
   {
+    // Creates a single match and should result in a PoiPolygonMerger
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -90,8 +92,8 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    PoiPolygonMatch match1(map, boost::shared_ptr<MatchThreshold>(),
-                           boost::shared_ptr<PoiPolygonRfClassifier>());
+    PoiPolygonMatch match1(map, std::shared_ptr<MatchThreshold>(),
+                           std::shared_ptr<PoiPolygonRfClassifier>());
     match1.setMatchEvidenceThreshold(3);
     match1.setReviewEvidenceThreshold(1);
     match1.calculateMatch(w1->getElementId(), n1->getElementId());
@@ -106,11 +108,11 @@ public:
     HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
   }
 
-  /**
-   * Creates two matches with overlap and should create a MarkForReviewMerger
-   */
   void reviewTest()
   {
+    // Create a building and poi/poly match with feature overlap and ensure they create reviews and
+    // don't merge together when cross feature conflate merging is not allowed.
+
     OsmMapPtr map(new OsmMap());
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
@@ -138,19 +140,20 @@ public:
     vector<const Match*> matchesV;
 
     PoiPolygonMatch match1(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
     match1.setMatchEvidenceThreshold(3);
     match1.setReviewEvidenceThreshold(1);
     match1.calculateMatch(w1->getElementId(), n1->getElementId());
     matchesV.push_back(&match1);
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
     PoiPolygonMatch match2(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
     match2.setMatchEvidenceThreshold(3);
     match2.setReviewEvidenceThreshold(1);
     match2.calculateMatch(w2->getElementId(), n1->getElementId());
+    matchesV.push_back(&match2);
     LOG_VAR(match2);
 
     MatchSet matches;
@@ -158,10 +161,46 @@ public:
     vector<Merger*> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
+
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
-    LOG_VAR(*mergers[0]);
+    LOG_VART(*mergers[0]);
     HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+  }
+
+  void crossConflateMergeTest()
+  {
+    // Create a building and poi/poly match with feature overlap and ensure they all merge together
+    // when cross feature conflate merging is allowed.
+
+    vector<const Match*> matchesV;
+
+    BuildingMatch match1(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5)));
+    match1._p.setMatch();
+    match1._eid1 = ElementId(ElementType::Way, 1);
+    match1._eid2 = ElementId(ElementType::Node, 1);
+    matchesV.push_back(&match1);
+
+    PoiPolygonMatch match2(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6)));
+    match2._class.setMatch();
+    match2._eid1 = ElementId(ElementType::Way, 2);
+    match2._eid2 = ElementId(ElementType::Node, 1);
+    matchesV.push_back(&match2);
+
+    MatchSet matches;
+    matches.insert(matchesV.begin(), matchesV.end());
+    vector<Merger*> mergers;
+    PoiPolygonMergerCreator uut;
+    // Neither of the match types used here actually require a map to calculate isConflicting, but
+    // since the merger creator requires a map we'll pass in an empty one.
+    OsmMapPtr emptyMap(new OsmMap());
+    uut.setOsmMap(emptyMap.get());
+    uut.setAllowCrossConflationMerging(true);
+
+    HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
+    HOOT_STR_EQUALS(1, mergers.size());
+    LOG_VART(*mergers[0]);
+    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
   }
 };
 

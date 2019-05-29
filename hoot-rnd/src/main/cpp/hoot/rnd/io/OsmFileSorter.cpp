@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmFileSorter.h"
 
@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-void OsmFileSorter::sort(const QString input, const QString output)
+void OsmFileSorter::sort(const QString& input, const QString& output)
 {
   //I believe Osmosis handles parallelization automatically, so this is to be passed to the Unix
   //sort command used by the GeoNames format only.
@@ -112,7 +112,7 @@ void OsmFileSorter::_checkForOsmosis()
   }
 }
 
-void OsmFileSorter::_sortPbf(const QString input, const QString output)
+void OsmFileSorter::_sortPbf(const QString& input, const QString& output)
 {
   _checkForOsmosis();
 
@@ -128,9 +128,9 @@ void OsmFileSorter::_sortPbf(const QString input, const QString output)
   //OsmPbfWriter::updateSorted(output, true);
 }
 
-boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString input)
+std::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString& input)
 {
-  boost::shared_ptr<QTemporaryFile> pbfTemp(
+  std::shared_ptr<QTemporaryFile> pbfTemp(
     new QTemporaryFile(
       ConfigOptions().getApidbBulkInserterTempFileDir() +
       "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));

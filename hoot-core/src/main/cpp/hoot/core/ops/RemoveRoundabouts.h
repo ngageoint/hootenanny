@@ -37,6 +37,8 @@
 #include <QMultiHash>
 #include <QSet>
 #include <QMap>
+
+// Standard
 #include <vector>
 
 namespace hoot
@@ -73,7 +75,7 @@ public:
    * @brief apply - Apply the RemoveRoundabouts op
    * @param pMap - Target map
    */
-  void apply(boost::shared_ptr<OsmMap>& pMap) override;
+  void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   /**
    * @brief removeRoundabouts - Remove roundabouts, store the, replace them
@@ -92,7 +94,7 @@ public:
 
 private:
 
-  boost::shared_ptr<OsmMap> _pMap;
+  std::shared_ptr<OsmMap> _pMap;
   std::vector<long> _todoWays;
 };
 

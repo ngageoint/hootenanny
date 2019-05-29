@@ -26,27 +26,24 @@
  */
 #include "OsmGbdxJsonWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -70,7 +67,7 @@ OsmGbdxJsonWriter::OsmGbdxJsonWriter(int precision)
   _writeHootFormat = false;
 }
 
-void OsmGbdxJsonWriter::open(QString path)
+void OsmGbdxJsonWriter::open(const QString& path)
 {
   QFileInfo fi(path);
   _outputDir = fi.absoluteDir();
@@ -118,7 +115,7 @@ void OsmGbdxJsonWriter::_newOutputFile()
   _out = &_fp;
 }
 
-void OsmGbdxJsonWriter::write(ConstOsmMapPtr map)
+void OsmGbdxJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
 
@@ -176,13 +173,13 @@ void OsmGbdxJsonWriter::_writeGeometry(ConstElementPtr e)
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    _writeGeometry(boost::dynamic_pointer_cast<const Node>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Node>(e));
     break;
   case ElementType::Way:
-    _writeGeometry(boost::dynamic_pointer_cast<const Way>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Way>(e));
     break;
   case ElementType::Relation:
-    _writeGeometry(boost::dynamic_pointer_cast<const Relation>(e));
+    _writeGeometry(std::dynamic_pointer_cast<const Relation>(e));
     break;
   default:
     throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
@@ -240,7 +237,7 @@ void OsmGbdxJsonWriter::_writeFeature(ConstElementPtr e)
   if (e->getElementType() == ElementType::Relation)
   {
     _write(",");
-    _writeRelationInfo(boost::dynamic_pointer_cast<const Relation>(e));
+    _writeRelationInfo(std::dynamic_pointer_cast<const Relation>(e));
   }
 }
 

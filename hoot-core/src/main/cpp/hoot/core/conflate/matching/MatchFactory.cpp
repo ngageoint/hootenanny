@@ -43,7 +43,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<MatchFactory> MatchFactory::_theInstance;
+std::shared_ptr<MatchFactory> MatchFactory::_theInstance;
 
 MatchFactory::~MatchFactory()
 {
@@ -73,12 +73,12 @@ Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, Elem
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
-  const Envelope& bounds, boost::shared_ptr<const MatchThreshold> threshold) const
+  const Envelope& bounds, std::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     LOG_DEBUG("Launching match creator " << i +1 << " / " << _creators.size() << "...");
-    boost::shared_ptr<MatchCreator> matchCreator = _creators[i];
+    std::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
     {
@@ -91,12 +91,12 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
+void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                                const Envelope& bounds) const
 {
   if (bounds.isNull() == false)
   {
-    boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(matchCreator);
+    std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == 0)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "
@@ -117,7 +117,7 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
-    boost::shared_ptr<MatchCreator> mc(
+    std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(names[i]));
 
     vector<CreatorDescription> d = mc->getAllCreators();
@@ -127,7 +127,7 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   return result;
 }
 
-void MatchFactory::registerCreator(QString c)
+void MatchFactory::registerCreator(const QString& c)
 {
   QStringList args = c.split(",");
   QString className = args[0];
@@ -135,14 +135,14 @@ void MatchFactory::registerCreator(QString c)
   if (className.length() > 0)
   {
     args.removeFirst();
-    boost::shared_ptr<MatchCreator> mc(
+    std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
 
     if (!_tagFilter.trimmed().isEmpty())
     {
       // We're specifically checking for an option to feed this tag criterion.  Additional combined
       // criteria can be added to this match creator if needed.
-      boost::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
+      std::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
       mc->setCriterion(filter);
     }
 

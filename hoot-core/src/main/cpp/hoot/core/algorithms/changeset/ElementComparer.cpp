@@ -113,8 +113,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   }
 }
 
-bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
-                                   const boost::shared_ptr<const Element>& e) const
+bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
+                                   const std::shared_ptr<const Element>& e) const
 {
   if (!re->getTags().contains(MetadataTags::HootHash()) ||
       !e->getTags().contains(MetadataTags::HootHash()))
@@ -145,11 +145,11 @@ bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
   return same;
 }
 
-bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
-                                  const boost::shared_ptr<const Element>& e) const
+bool ElementComparer::_compareWay(const std::shared_ptr<const Element>& re,
+                                  const std::shared_ptr<const Element>& e) const
 {
-  ConstWayPtr rw = boost::dynamic_pointer_cast<const Way>(re);
-  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
+  ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
@@ -166,11 +166,11 @@ bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
   return true;
 }
 
-bool ElementComparer::_compareRelation(const boost::shared_ptr<const Element>& re,
-                                       const boost::shared_ptr<const Element>& e) const
+bool ElementComparer::_compareRelation(const std::shared_ptr<const Element>& re,
+                                       const std::shared_ptr<const Element>& e) const
 {
-  ConstRelationPtr rr = boost::dynamic_pointer_cast<const Relation>(re);
-  ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+  ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
+  ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
   if (rr->getType() != r->getType() ||
       rr->getMembers().size() != r->getMembers().size())

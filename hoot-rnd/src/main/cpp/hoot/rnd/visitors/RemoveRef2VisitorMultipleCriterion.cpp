@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveRef2VisitorMultipleCriterion.h"
@@ -48,8 +48,8 @@ RemoveRef2Visitor()
 void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr& e)
 {
   //hacking use of ChainCriterion here
-  boost::shared_ptr<const ChainCriterion> chainCrit =
-    boost::dynamic_pointer_cast<const ChainCriterion>(e);
+  std::shared_ptr<const ChainCriterion> chainCrit =
+    std::dynamic_pointer_cast<const ChainCriterion>(e);
   LOG_VARD(chainCrit->_criteria.size());
   if (!chainCrit.get() && chainCrit->_criteria.size() != 2)
   {

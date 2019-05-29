@@ -46,8 +46,7 @@ namespace hoot
 class LocationOfPointTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(LocationOfPointTest);
-  // fixme or remove me - #1737
-  //CPPUNIT_TEST(runLocateAfterTest);
+  CPPUNIT_TEST(runLocateAfterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -59,46 +58,47 @@ public:
 
   void runLocateAfterTest()
   {
-//    shared_ptr<OsmMap> map(new OsmMap());
+    std::shared_ptr<OsmMap> map(new OsmMap());
 
-//    Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
-//                       Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
-//                       Coordinate::getNull() };
-//    WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
+    geos::geom::Coordinate c[] =
+    { geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(100.0, 0.0),
+      geos::geom::Coordinate(100.0, 10.0), geos::geom::Coordinate(0.0, 10.0),
+      geos::geom::Coordinate::getNull() };
+    WayPtr w = TestUtils::createWay(map, Status::Unknown1, c, 1, "");
+    WayLocation wl(map, w, 0, 0);
 
-//    WayLocation wl(w, 0, 0);
-//    HOOT_STR_EQUALS("way: -1 index: 0 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(0,0), wl));
-//    HOOT_STR_EQUALS("way: -1 index: 0 fraction: 0.1",
-//      LocationOfPoint(w).locateAfter(Coordinate(0,0), WayLocation(w, 10.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 0 fraction: 0.1",
-//      LocationOfPoint(w).locateAfter(Coordinate(10,0), WayLocation(w, 0.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 0 fraction: 0.2",
-//      LocationOfPoint(w).locateAfter(Coordinate(20,0), WayLocation(w, 0.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 0 fraction: 0.5",
-//      LocationOfPoint(w).locateAfter(Coordinate(50,0), WayLocation(w, 20.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0.5",
-//      LocationOfPoint(w).locateAfter(Coordinate(50,10), WayLocation(w, 0.0)));
+    HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(0,0), wl));
+    HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0.1",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(0,0), WayLocation(map, w, 10.0)));
+    HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0.1",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(10,0), WayLocation(map, w, 0.0)));
+    HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0.2",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(20,0), WayLocation(map, w, 0.0)));
+    HOOT_STR_EQUALS("way(-1) index: 0 fraction: 0.5",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(50,0), WayLocation(map, w, 20.0)));
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.5",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(50,10), WayLocation(map, w, 0.0)));
 
-//    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0.5",
-//      LocationOfPoint(w).locateAfter(Coordinate(50,0), WayLocation(w, 100.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 1 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(100,0), WayLocation(w, 0.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 1 fraction: 0.2",
-//      LocationOfPoint(w).locateAfter(Coordinate(100,0), WayLocation(w, 102.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 1 fraction: 0.2",
-//      LocationOfPoint(w).locateAfter(Coordinate(100,2), WayLocation(w, 100.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(100,10), WayLocation(w, 110.0)));
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.5",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(50,0), WayLocation(map, w, 100.0)));
+    HOOT_STR_EQUALS("way(-1) index: 1 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(100,0), WayLocation(map, w, 0.0)));
+    HOOT_STR_EQUALS("way(-1) index: 1 fraction: 0.2",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(100,0), WayLocation(map, w, 102.0)));
+    HOOT_STR_EQUALS("way(-1) index: 1 fraction: 0.2",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(100,2), WayLocation(map, w, 100.0)));
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(100,10), WayLocation(map, w, 110.0)));
 
-//    HOOT_STR_EQUALS("way: -1 index: 2 fraction: 0.5",
-//      LocationOfPoint(w).locateAfter(Coordinate(50,10), WayLocation(w, 110.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 3 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(0,10), WayLocation(w, 0.0)));
-//    HOOT_STR_EQUALS("way: -1 index: 3 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(0,0), WayLocation(w, 3, 0)));
-//    HOOT_STR_EQUALS("way: -1 index: 3 fraction: 0",
-//      LocationOfPoint(w).locateAfter(Coordinate(0,10), WayLocation(w, 2, 0.3)));
+    HOOT_STR_EQUALS("way(-1) index: 2 fraction: 0.5",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(50,10), WayLocation(map, w, 110.0)));
+    HOOT_STR_EQUALS("way(-1) index: 3 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(0,10), WayLocation(map, w, 0.0)));
+    HOOT_STR_EQUALS("way(-1) index: 3 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(0,0), WayLocation(map, w, 3, 0)));
+    HOOT_STR_EQUALS("way(-1) index: 3 fraction: 0",
+      LocationOfPoint(map, w).locateAfter(geos::geom::Coordinate(0,10), WayLocation(map, w, 2, 0.3)));
   }
 };
 

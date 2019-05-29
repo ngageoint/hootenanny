@@ -22,21 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGC_KNN_ITERATOR_H__
 #define __TGC_KNN_ITERATOR_H__
 
 // Standard Includes
-#include <limits.h>
+#include <climits>
+#include <cmath>
 #include <list>
 #include <queue>
 #include <set>
-#include <math.h>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RStarTree/Iterator.h>
 #include <tgs/RStarTree/RStarTree.h>
@@ -195,9 +194,9 @@ inline double KnnIterator::distPtToLine(double x, double y, double s1, double t1
     u = numerator / denominator;
 
   // collinear case and line is not degenerated
-  if( u != 0.0 &&
-    fabs(deltaX - deltaX2) < 1.0e-06 &&
-    fabs(deltaY - deltaY2) < 1.0e-06 )
+  if (u != 0.0 &&
+     fabs(deltaX - deltaX2) < 1.0e-06 &&
+     fabs(deltaY - deltaY2) < 1.0e-06)
   {
     u = deltaX2 / deltaX;
     // case when point lies on the line segment

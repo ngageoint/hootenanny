@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LINESTRINGAVERAGER_H
@@ -31,26 +31,23 @@
 // GEOS
 #include <geos/geom/LineString.h>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
 class LineStringAverager
 {
 public:
-  LineStringAverager(boost::shared_ptr<geos::geom::LineString> l1,
-                     boost::shared_ptr<geos::geom::LineString> l2);
+  LineStringAverager(const std::shared_ptr<geos::geom::LineString>& l1,
+                     const std::shared_ptr<geos::geom::LineString>& l2);
 
-  boost::shared_ptr<geos::geom::LineString> average();
+  std::shared_ptr<geos::geom::LineString> average();
 
-  static boost::shared_ptr<geos::geom::LineString> average(boost::shared_ptr<geos::geom::LineString> l1,
-                                                           boost::shared_ptr<geos::geom::LineString> l2);
+  static std::shared_ptr<geos::geom::LineString> average(const std::shared_ptr<geos::geom::LineString>& l1,
+                                                         const std::shared_ptr<geos::geom::LineString>& l2);
 
 protected:
-  boost::shared_ptr<geos::geom::LineString> _l1;
-  boost::shared_ptr<geos::geom::LineString> _l2;
+  std::shared_ptr<geos::geom::LineString> _l1;
+  std::shared_ptr<geos::geom::LineString> _l2;
 
   geos::geom::Coordinate _merge(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 

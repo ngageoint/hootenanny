@@ -28,8 +28,9 @@
 #include "IntersectionIterator.h"
 
 // Standard Includes
+#include <cassert>
+#include <cmath>
 #include <iomanip>
-#include <math.h>
 
 #include <tgs/RStarTree/RStarTree.h>
 #include <tgs/RStarTree/RTreeNode.h>
@@ -59,7 +60,7 @@ namespace Tgs
     {
       assert(box.getUpperBound(i) >= box.getLowerBound(i));
 
-      if(_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
+      if (_minBounds[i] > box.getUpperBound(i) || box.getLowerBound(i) > _maxBounds[i])
       {
         return false;
       }

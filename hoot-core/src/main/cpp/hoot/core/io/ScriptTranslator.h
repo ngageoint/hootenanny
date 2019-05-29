@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTRANSLATOR_H
 #define SCRIPTTRANSLATOR_H
-
-// Boost
-#include <boost/shared_ptr.hpp>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -88,7 +85,7 @@ public:
   /**
    * Sets the script to be used. The script won't be initialized until the first call to translate.
    */
-  void setScript(QString path) { close(); _scriptPath = path; }
+  void setScript(const QString& path) { close(); _scriptPath = path; }
 
   /**
    * Translates the specified tags. The result is placed back into the original tag set. The script
@@ -131,7 +128,7 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef boost::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
+typedef std::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
 
 }
 

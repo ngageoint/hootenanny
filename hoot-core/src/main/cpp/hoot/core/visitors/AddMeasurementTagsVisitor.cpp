@@ -66,15 +66,15 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 
   if (pElement->getElementType() == ElementType::Relation)
   {
-    const RelationPtr& pRelation = boost::dynamic_pointer_cast<Relation>(pElement);
-    processRelation( pRelation );
+    const RelationPtr& pRelation = std::dynamic_pointer_cast<Relation>(pElement);
+    processRelation(pRelation);
     _numAffected++;
   }
 
   if (pElement->getElementType() == ElementType::Way)
   {
-    const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
-    processWay( pWay );
+    const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
+    processWay(pWay);
     _numAffected++;
   }
 }
@@ -82,7 +82,7 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 {
   // for length/width combine all way member polygons
-  boost::shared_ptr<Geometry> pCombined = boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
+  std::shared_ptr<Geometry> pCombined = std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   ElementConverter elementConverter(_map->shared_from_this());
 
   // for area add all outer role polys and subtract all inner role polys
@@ -90,20 +90,20 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 
   foreach (RelationData::Entry entry, pRelation->getMembers())
   {
-    ElementPtr pMember =_map->getElement( entry.getElementId());
+    ElementPtr pMember =_map->getElement(entry.getElementId());
     if (pMember->getElementType() == ElementType::Way)
     {
-      const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pMember);
-      shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+      const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
+      std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
       // build a combined polygon for extents
       if (_addLength || _addWidth)
       {
-        pCombined = boost::shared_ptr<Geometry>(pCombined->Union(pPoly.get()));
+        pCombined = std::shared_ptr<Geometry>(pCombined->Union(pPoly.get()));
       }
 
       // gather all valid areas and their roles to calculate total area
-      if(_addArea && pWay->isClosedArea())
+      if (_addArea && pWay->isClosedArea())
       {
         double area = pPoly->getArea();
 
@@ -138,7 +138,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
   Tags& tags = pWay->getTags();
 
   ElementConverter elementConverter(_map->shared_from_this());
-  shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+  std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
   if (_addLength || _addWidth)
   {
@@ -148,7 +148,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
 
     if (pPoly->getNumPoints() == 0)
     {
-      shared_ptr<LineString> pLine = elementConverter.convertToLineString(pWay);
+      std::shared_ptr<LineString> pLine = elementConverter.convertToLineString(pWay);
       polyLength = pLine->getLength();
     }
     else

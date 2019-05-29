@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReprojectToGeographicOp.h"
 
@@ -40,7 +40,7 @@ ReprojectToGeographicOp::ReprojectToGeographicOp()
 {
 }
 
-void ReprojectToGeographicOp::apply(boost::shared_ptr<OsmMap> &map)
+void ReprojectToGeographicOp::apply(std::shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map) == false)
   {

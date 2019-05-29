@@ -61,6 +61,7 @@ import hoot.services.utils.DbUtils;
  */
 public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandRunnerImpl.class);
+    private static final Pattern pattern = Pattern.compile("(STATUS\\s+(.*)\\w+\\s+)\\((\\d+)%\\):"); //eg. STATUS Convert (59%):
 
     private ExecuteWatchdog watchDog;
     private OutputStream stdout;
@@ -69,16 +70,22 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     public String obfuscateConsoleLog(String in) {
-        //strip out logging metadata
-        //e.g. 15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184)
-        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+\\w+\\s+.+?\\(\\s+\\d+\\)\\s", "\n");
+        //strip out time in the logging metadata
+        //e.g. 15:21:06.248
+        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+", "");
+
+        //strip out the path to the cpp code
+        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s*", "");
 
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
 
         //strip out db connection string
-        //e.g. hootapidb://hoot:hoottest@localhost:5432/hoot
-        out = out.replaceAll("hootapidb:\\/\\/\\w+:\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
+        //e.g. hootapidb://hoot:
+        out = out.replaceAll("hootapidb:\\/\\/\\w+:", "");
+        // seperated because some of the status output doesnt include the above text
+        //e.g. hoottest@localhost:5432/hoot
+        out = out.replaceAll("\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
 
         //strip out hoot path string
         //e.g. /home/vagrant/hoot/userfiles/tmp/upload
@@ -102,14 +109,18 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentOut.equals(currentLine)) {
-                    logger.info(line);
-
                     currentOut = currentOut.concat(currentLine);
                     commandResult.setStdout(currentOut);
 
                     if (trackable) {
+                        // if includes percent progress, update that as well
+                        Matcher matcher = pattern.matcher(currentLine);
+                        if (matcher.find()) {
+                            commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
+                        }
+
                         // update command status table stdout
-                            DbUtils.upsertCommandStatus(commandResult);
+                        DbUtils.upsertCommandStatus(commandResult);
                     }
                 }
             }
@@ -130,7 +141,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                     if (trackable) {
                         // update command status table stderr
-                            DbUtils.upsertCommandStatus(commandResult);
+                        DbUtils.upsertCommandStatus(commandResult);
                     }
                 }
             }
@@ -166,7 +177,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
         if (trackable) {
             // Add the new command to the command status table
-                DbUtils.upsertCommandStatus(commandResult);
+            DbUtils.upsertCommandStatus(commandResult);
         }
 
         try {
@@ -189,7 +200,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             exitCode = executor.execute(cmdLine);
         }
         catch (Exception e) {
-            logger.error("Error executing ()", obfuscatedCommand, e);
             exitCode = CommandResult.FAILURE;
             exception = e;
         }
@@ -202,22 +212,22 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             }
         }
 
-        if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
-            // it was killed on purpose by the watchdog
-            logger.info("Process for {} command was killed!", obfuscatedCommand);
-        }
-
         LocalDateTime finish = LocalDateTime.now();
 
         commandResult.setExitCode(exitCode);
         commandResult.setFinish(finish);
 
         if (trackable) {
-                DbUtils.upsertCommandStatus(commandResult);
+            DbUtils.completeCommandStatus(commandResult);
         }
 
         if (commandResult.failed()) {
-            logger.error("FAILURE of: {}", commandResult, exception);
+            if(this.watchDog.killedProcess()) {
+                // it was killed on purpose by the watchdog
+                logger.info("Process for {} command was killed!", obfuscatedCommand);
+            } else {
+                logger.error("FAILURE of: {}", commandResult, exception);
+            }
         }
         else {
             logger.debug("SUCCESS of: {}", commandResult);

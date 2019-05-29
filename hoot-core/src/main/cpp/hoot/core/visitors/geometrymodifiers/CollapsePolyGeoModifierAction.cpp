@@ -49,11 +49,11 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, CollapsePolyGeoModifierAction)
 const QString CollapsePolyGeoModifierAction::MAX_AREA_PARAM = "max_area_in_m";
 const QString CollapsePolyGeoModifierAction::MAX_LENGTH_PARAM = "max_length_in_m";
 
-bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap* pMap )
+bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process closed area ways
   if (pElement->getElementType() != ElementType::Way) return false;
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
   if (!pWay->isClosedArea()) return false;
 
   OsmMapPtr mapPtr = pMap->shared_from_this();
@@ -64,7 +64,7 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
 
   if (checkArea || checkLength)
   {
-    shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
 
     // calculate poly area only if we need it
     double polyArea = checkArea ? pPoly->getArea() : 0;
@@ -79,13 +79,13 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       CoordinateSequence* pMinRectCoords = pMinRect->getCoordinates();
 
       /* Debug polygon
-      WayPtr pDebugWay( new Way(Status::Unknown1, pMap->createNextWayId()));
+      WayPtr pDebugWay(new Way(Status::Unknown1, pMap->createNextWayId()));
       pMap->addElement(pDebugWay);
 
       for (size_t i = 0; i < pMinRectCoords->getSize(); i++)
       {
         Coordinate pos = pMinRectCoords->getAt(i);
-        NodePtr pNode( new Node(Status::Unknown1, pMap->createNextNodeId(), pos) );
+        NodePtr pNode(new Node(Status::Unknown1, pMap->createNextNodeId(), pos));
         pDebugWay->addNode(pNode->getId());
         pMap->addElement(pNode);
       }
@@ -99,14 +99,14 @@ bool CollapsePolyGeoModifierAction::process( const ElementPtr& pElement, OsmMap*
       }
     }
 
-    if((checkArea && (polyArea < _area)) ||
-       (checkLength && (polyLength < _length)))
+    if ((checkArea && (polyArea < _area)) ||
+        (checkLength && (polyLength < _length)))
     {
       Coordinate centroid;
       if (pPoly->getCentroid(centroid) == false)
       {
         // throwing a HootException might be too harsh
-        LOG_ERROR( "Collapse polygon modifier could not calculate centroid for element id " + pElement->getId());
+        LOG_ERROR("Collapse polygon modifier could not calculate centroid for element id " + pElement->getId());
         return false;
       }
 

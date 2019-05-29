@@ -13,7 +13,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target
 # too.
-SCHEMA_FILES=plugins/tds61_schema.js plugins/tds61_full_schema.js plugins/etds61_rules.js plugins/etds61_osm_rules.js plugins/tds40_schema.js plugins/tds40_full_schema.js plugins/etds40_rules.js plugins/etds40_osm_rules.js plugins/mgcp_schema.js plugins/emgcp_rules.js plugins/emgcp_osm_rules.js plugins/ggdm30_schema.js plugins/ggdm30_full_schema.js plugins/eggdm30_rules.js plugins/eggdm30_osm_rules.js
+SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js
 
 -include Makefile.inc
 
@@ -46,7 +46,7 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -rf tgs/libTgs.a
 	rm -rf hoot-core/tmp/debug/* hoot-core-test/tmp/debug/* tbs/tmp/debug/* hoot-rnd/tmp/debug/*
 	rm -rf bin/*
-	rm -f plugins/config.js
+	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json
 	rm -f conf/services/conflationTypeGroups.json
 	rm -f translations/*.pyc
@@ -87,7 +87,7 @@ ifneq (, $(shell command -v ccache))
 endif
 
 check: test
-test: build services-test plugins-test
+test: build services-test translations-test
 	bin/HootTest $(HOOT_TEST_DIFF) --slow --parallel
 
 docs: always HOOT_VERSION_FILE services-docs
@@ -97,12 +97,12 @@ docs: always HOOT_VERSION_FILE services-docs
 test-quick: build
 	bin/HootTest $(HOOT_TEST_DIFF) --quick --parallel
 
-test-all-core: services-test-all plugins-test
+test-all-core: services-test-all translations-test
 	# Don't run services tests at the same time as glacial -- that may stomp
 	# on each other's DB changes.
 	bin/HootTest $(HOOT_TEST_DIFF) --glacial --parallel
 
-test-all-no-core: services-test-all plugins-test
+test-all-no-core: services-test-all translations-test
 	$(MAKE) ui-test ui2x-test
 
 test-all: test-all-no-core
@@ -113,9 +113,9 @@ test-all: test-all-no-core
 licenses:
 	scripts/copyright/UpdateAllCopyrightHeaders.sh
 
-plugins-test: build
+translations-test: build
 ifneq ($(shell which mocha),)
-	cd plugins; npm install && npm test
+	cd translations; npm install && npm test
 else
 	@echo Skipping mocha tests
 endif
@@ -137,8 +137,8 @@ conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/Confi
 conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json 
 	python $^ $@ || (rm -f $@ ; exit -1)
 
-plugins/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
-	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc plugins/config.js
+translations/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
+	python scripts/core/CreateJsConfigCode.py conf/core/ConfigOptions.asciidoc translations/config.js
 
 tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	echo "#ifndef __TGS_CONFIG_H__" > tgs/src/main/cpp/tgs/TgsConfig.h
@@ -158,81 +158,81 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 ##### MGCP
 # Build the MGCP schema
-plugins/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP  "To English" rules
-plugins/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP "From English" rules
-plugins/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv40
-plugins/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+translations/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
-plugins/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+translations/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "To English" rules
 # This need to be full TDS so we have access to the full range of attributes
-plugins/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+translations/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS40 "From English" rules
-plugins/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
+translations/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
-plugins/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
 # This one has all of the Text Enumerations
-plugins/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "To English" rules
-plugins/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS61 "From English" rules
-plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### GGDMv30
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
-plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+translations/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # GGDMv30 full schema
 # This one has all of the Text Enumerations
-plugins/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+translations/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "To English" rules
-plugins/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+translations/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the GGDMv30 "From English" rules
-plugins/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
+translations/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
@@ -244,7 +244,7 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 # Build automatically generated JS files
-js-make: $(SCHEMA_FILES) plugins/config.js conf/core/ConfigOptions.json
+js-make: $(SCHEMA_FILES) translations/config.js
 
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
@@ -404,26 +404,26 @@ archive: js-make services-docs docs
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
 	# Copy the auto-generated schema definitions. This eases another dependency on CentOS
-	mkdir -p $(HOOT_TARNAME)/plugins/
+	mkdir -p $(HOOT_TARNAME)/translations/
 	# TDSv40
-	cp plugins/tds40_schema.js $(HOOT_TARNAME)/plugins/tds40_schema.js
-	cp plugins/tds40_full_schema.js $(HOOT_TARNAME)/plugins/tds40_full_schema.js
-	cp plugins/etds40_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
-	cp plugins/etds40_osm_rules.js $(HOOT_TARNAME)/plugins/etds40_osm_rules.js
+	cp translations/tds40_schema.js $(HOOT_TARNAME)/translations/tds40_schema.js
+	cp translations/tds40_full_schema.js $(HOOT_TARNAME)/translations/tds40_full_schema.js
+	cp translations/etds40_rules.js $(HOOT_TARNAME)/translations/etds40_osm_rules.js
+	cp translations/etds40_osm_rules.js $(HOOT_TARNAME)/translations/etds40_osm_rules.js
 	# TDSv61
-	cp plugins/tds61_schema.js $(HOOT_TARNAME)/plugins/tds61_schema.js
-	cp plugins/tds61_full_schema.js $(HOOT_TARNAME)/plugins/tds61_full_schema.js
-	cp plugins/etds61_rules.js $(HOOT_TARNAME)/plugins/etds61_rules.js
-	cp plugins/etds61_osm_rules.js $(HOOT_TARNAME)/plugins/etds61_osm_rules.js
+	cp translations/tds61_schema.js $(HOOT_TARNAME)/translations/tds61_schema.js
+	cp translations/tds61_full_schema.js $(HOOT_TARNAME)/translations/tds61_full_schema.js
+	cp translations/etds61_rules.js $(HOOT_TARNAME)/translations/etds61_rules.js
+	cp translations/etds61_osm_rules.js $(HOOT_TARNAME)/translations/etds61_osm_rules.js
 	# MGCP
-	cp plugins/mgcp_schema.js $(HOOT_TARNAME)/plugins/mgcp_schema.js
-	cp plugins/emgcp_rules.js $(HOOT_TARNAME)/plugins/emgcp_rules.js
-	cp plugins/emgcp_osm_rules.js $(HOOT_TARNAME)/plugins/emgcp_osm_rules.js
+	cp translations/mgcp_schema.js $(HOOT_TARNAME)/translations/mgcp_schema.js
+	cp translations/emgcp_rules.js $(HOOT_TARNAME)/translations/emgcp_rules.js
+	cp translations/emgcp_osm_rules.js $(HOOT_TARNAME)/translations/emgcp_osm_rules.js
 	# GGDMv30
-	cp plugins/ggdm30_schema.js $(HOOT_TARNAME)/plugins/ggdm30_schema.js
-	cp plugins/ggdm30_full_schema.js $(HOOT_TARNAME)/plugins/ggdm30_full_schema.js
-	cp plugins/eggdm30_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
-	cp plugins/eggdm30_osm_rules.js $(HOOT_TARNAME)/plugins/eggdm30_osm_rules.js
+	cp translations/ggdm30_schema.js $(HOOT_TARNAME)/translations/ggdm30_schema.js
+	cp translations/ggdm30_full_schema.js $(HOOT_TARNAME)/translations/ggdm30_full_schema.js
+	cp translations/eggdm30_rules.js $(HOOT_TARNAME)/translations/eggdm30_osm_rules.js
+	cp translations/eggdm30_osm_rules.js $(HOOT_TARNAME)/translations/eggdm30_osm_rules.js
 	# Don't include RF files at this time, to speed up archive
 	#mkdir -p $(HOOT_TARNAME)/conf/models/
 	#cp conf/models/BuildingModel.rf $(HOOT_TARNAME)/conf/models/BuildingModel.rf
@@ -485,9 +485,9 @@ ifeq ($(BUILD_RND),rnd)
 	genhtml coverage/core/rnd/RndTrimmed.info --output-directory coverage/core/rnd/ 2>&1 | grep -v -F "geninfo" >> coverage/core/rnd/log
 endif
 
-core-coverage: coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+core-coverage: coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
 
-coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/hadoop/index.html coverage/core/tbs/index.html core-rnd-coverage
+coverage: services-coverage ui-coverage coverage/core/core/index.html coverage/core/tbs/index.html core-rnd-coverage
 
 conf/dictionary/WordsAbridged.sqlite: conf/dictionary/WordsAbridged.sqlite.gz
 	gunzip -c $^ > $@

@@ -69,14 +69,14 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
   _useOAuth = true;
 }
 
-bool HootNetworkRequest::networkRequest(QUrl url, QNetworkAccessManager::Operation http_op,
+bool HootNetworkRequest::networkRequest(const QUrl& url, QNetworkAccessManager::Operation http_op,
                                         const QByteArray& data)
 {
   //  Call the actually network request function with empty headers map
   return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
 }
 
-bool HootNetworkRequest::networkRequest(QUrl url,
+bool HootNetworkRequest::networkRequest(const QUrl& url,
                                         const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                         QNetworkAccessManager::Operation http_op,
                                         const QByteArray& data)
@@ -85,19 +85,21 @@ bool HootNetworkRequest::networkRequest(QUrl url,
   return _networkRequest(url, headers, http_op, data);
 }
 
-bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+bool HootNetworkRequest::_networkRequest(const QUrl& url,
+                                         const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                          QNetworkAccessManager::Operation http_op,
                                          const QByteArray& data)
 {
+  QUrl tempUrl(url);
   //  Reset status
   _status = 0;
   _content.clear();
   _error.clear();
   //  Do HTTP request
-  boost::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
+  std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
 
-  if (url.scheme().toLower() == "https")
+  if (tempUrl.scheme().toLower() == "https")
   {
     //  Setup the SSL configuration
     QSslConfiguration config(QSslConfiguration::defaultConfiguration());
@@ -107,12 +109,12 @@ bool HootNetworkRequest::_networkRequest(QUrl url, const QMap<QNetworkRequest::K
     request.setSslConfiguration(config);
   }
   //  Setup username/password authentication
-  if (url.userInfo() != "")
+  if (tempUrl.userInfo() != "")
   {
     //  Using basic authentication
-    QString base64 = url.userInfo().toUtf8().toBase64();
+    QString base64 = tempUrl.userInfo().toUtf8().toBase64();
     request.setRawHeader("Authorization", QString("Basic %1").arg(base64).toUtf8());
-    url.setUserInfo("");
+    tempUrl.setUserInfo("");
   }
   //  Add the known headers
   for (QMap<QNetworkRequest::KnownHeaders, QVariant>::const_iterator it = headers.begin(); it != headers.end(); ++it)

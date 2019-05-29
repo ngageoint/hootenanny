@@ -454,7 +454,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
 fi
 
 if ! mocha --version &>/dev/null; then
-    echo "### Installing mocha for plugins test..."
+    echo "### Installing mocha for translations test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
     sudo rm -rf ~/tmp

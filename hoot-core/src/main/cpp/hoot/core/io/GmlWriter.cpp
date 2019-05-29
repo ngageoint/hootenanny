@@ -48,29 +48,30 @@ using namespace geos::geom;
 namespace hoot
 {
 
-void GmlWriter::write(boost::shared_ptr<const OsmMap> map, QString path)
+void GmlWriter::write(const std::shared_ptr<const OsmMap>& map, const QString& path)
 {
-  if (path.toLower().endsWith(".gml"))
+  QString tempPath(path);
+  if (tempPath.toLower().endsWith(".gml"))
   {
-    path.remove(path.size() - 4, path.size());
+    tempPath.remove(tempPath.size() - 4, tempPath.size());
   }
-  writePoints(map, path + "Points.shp");
+  writePoints(map, tempPath + "Points.shp");
 }
 
-void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& path)
+void GmlWriter::writePoints(const std::shared_ptr<const OsmMap>& map, const QString& path)
 {
   GDALAllRegister();
   OGRSetNonLinearGeometriesEnabledFlag(FALSE);
 
   const char *pszDriverName = "GML";
   GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(pszDriverName);
-  if( poDriver == NULL )
+  if (poDriver == NULL)
   {
     throw HootException(QString("%1 driver not available.").arg(pszDriverName));
   }
 
   GDALDataset* poDS = poDriver->Create(path.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
-  if( poDS == NULL )
+  if (poDS == NULL)
   {
     throw HootException(QString("Data source creation failed. %1").arg(path));
   }
@@ -81,7 +82,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
   layerName = QFileInfo(path).baseName();
   poLayer = poDS->CreateLayer(layerName.toLatin1(),
                               map->getProjection().get(), wkbPoint, NULL );
-  if( poLayer == NULL )
+  if (poLayer == NULL)
   {
     throw HootException(QString("Layer creation failed. %1").arg(path));
   }
@@ -94,7 +95,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
 
     oField.SetWidth(64);
 
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (%1).").arg(_columns[i]));
     }
@@ -105,7 +106,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
   if (_includeInfo)
   {
     OGRFieldDefn oField(MetadataTags::ErrorCircular().toStdString().c_str(), OFTReal);
-    if( poLayer->CreateField( &oField ) != OGRERR_NONE )
+    if (poLayer->CreateField( &oField ) != OGRERR_NONE)
     {
       throw HootException(QString("Error creating field (" + MetadataTags::ErrorCircular() + ")."));
     }
@@ -136,7 +137,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
       }
 
       // convert the geometry.
-      boost::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
+      std::shared_ptr<OGRGeometry> geom(new OGRPoint(node->getX(), node->getY()));
 
       if (poFeature->SetGeometry(geom.get()) != OGRERR_NONE)
       {

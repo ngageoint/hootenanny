@@ -27,9 +27,6 @@
 #ifndef DIRECTIONFINDER_H
 #define DIRECTIONFINDER_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot

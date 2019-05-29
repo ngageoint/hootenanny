@@ -98,7 +98,7 @@ there for custom use cases. Some example search radii are below:
 
 [[PoiToPoiSearchRadius]]
 .Search Radius Example
-image::algorithms/images/SearchRadius.png[A simple example of overlapping search radii,scalewidth="50%"]
+image::images/SearchRadius.png[A simple example of overlapping search radii,scalewidth="50%"]
 
 In <<PoiToPoiSearchRadius>> points A & B are points from the first input and
 point C is from the second data set. For this reason A & B will never be match

@@ -62,7 +62,7 @@ _maxNameLength(ConfigOptions().getImplicitTaggerMaxNameLength())
   _ruleReader->open(ConfigOptions().getImplicitTaggerRulesDatabase());
 }
 
-ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString databasePath) :
+ImplicitTypeTaggerBase::ImplicitTypeTaggerBase(const QString& databasePath) :
 _allowTaggingSpecificFeatures(true),
 _elementIsASpecificFeature(false),
 _numFeaturesModified(0),
@@ -158,7 +158,7 @@ QStringList ImplicitTypeTaggerBase::_getNames(const Tags& tags) const
   return namesToReturn;
 }
 
-bool caseInsensitiveLessThan(const QString s1, const QString s2)
+bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
 {
   return s1.toLower() < s2.toLower();
 }
@@ -319,7 +319,7 @@ void ImplicitTypeTaggerBase::visit(const ElementPtr& e)
   }
 }
 
-Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStringList filteredNames)
+Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStringList& filteredNames)
 {
   Tags tagsToAdd;
 
@@ -386,8 +386,8 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
   return filteredNames;
 }
 
-QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString name,
-                                                   const QStringList nameTokensList) const
+QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString& name,
+                                                   const QStringList& nameTokensList) const
 {
   for (int i = 0; i < nameTokensList.size(); i++)
   {
@@ -400,8 +400,7 @@ QString ImplicitTypeTaggerBase::_getEndOfNameToken(const QString name,
   return "";
 }
 
-void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
-  const QStringList names, const QStringList nameTokensList, const Tags& elementTags,
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(const QStringList& names, const QStringList& nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules)
 {
   // This method needs cleanup
@@ -483,8 +482,7 @@ void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromMultipleNameTokens(
   LOG_VART(wordsInvolvedInMultipleRules);
 }
 
-void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(
-  const QStringList names, QStringList& nameTokensList, const Tags& elementTags,
+void ImplicitTypeTaggerBase::_getImplicitlyDerivedTagsFromSingleNameTokens(const QStringList& names, QStringList& nameTokensList, const Tags& elementTags,
   Tags& implicitlyDerivedTags, QSet<QString>& matchingWords, bool& wordsInvolvedInMultipleRules,
   bool& namesContainBuilding, bool& namesContainOffice)
 {
@@ -720,7 +718,7 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
   }
 }
 
-QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList names) const
+QStringList ImplicitTypeTaggerBase::_getNameTokens(const QStringList& names) const
 {
   if (_translateNamesToEnglish)
   {

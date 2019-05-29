@@ -45,7 +45,7 @@ public:
   static std::string className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
 
   ImplicitPoiPolygonTypeTagger();
-  ImplicitPoiPolygonTypeTagger(const QString databasePath);
+  ImplicitPoiPolygonTypeTagger(const QString& databasePath);
 
   virtual QString getDescription() const
   { return "Adds tags to POIs and polygons implicitly derived from their names"; }

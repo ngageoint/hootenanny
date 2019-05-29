@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DELAUNAYTRIANGULATION_H
@@ -193,8 +193,10 @@ private:
   bool _atEnd;
 };
 
-struct FaceCompare {
-  bool operator() (const Face* lhs, const Face* rhs) const{
+struct FaceCompare
+{
+  bool operator() (const Face* lhs, const Face* rhs) const
+  {
     return *lhs < *rhs;
   }
 };
@@ -273,12 +275,10 @@ private:
   double _x[3], _y[3];
   int _pointCount;
   std::vector<Face> _faces;
-  std::map< Edge, std::pair<int, int> > _edgeToFace;
+  std::map<Edge, std::pair<int, int>> _edgeToFace;
 
   EdgeIterator _edgeEnd;
   FaceIterator _faceEnd;
-
-  void _initFaces();
 
   void _addFaces(Edge e);
 };

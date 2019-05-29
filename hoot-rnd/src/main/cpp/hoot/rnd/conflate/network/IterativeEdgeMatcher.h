@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ITERATIVE_EDGE_MATCHER_H__
 #define __ITERATIVE_EDGE_MATCHER_H__
@@ -85,9 +85,9 @@ private:
   typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
 
   /// [row][col]
-  typedef QHash< ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore> > EdgeScoreMap;
+  typedef QHash<ConstNetworkEdgePtr, QHash<ConstNetworkEdgePtr, DirectedEdgeScore>> EdgeScoreMap;
   /// [row][col]
-  typedef QHash< ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double> > VertexScoreMap;
+  typedef QHash<ConstNetworkVertexPtr, QHash<ConstNetworkVertexPtr, double>> VertexScoreMap;
 
   /**
    * A cost function used to compare network edges. It is a simple lookup.

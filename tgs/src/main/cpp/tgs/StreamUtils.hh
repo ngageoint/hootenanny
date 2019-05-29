@@ -14,6 +14,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <memory>
+
 template <class T, class U>
 std::ostream& operator<<(std::ostream& o, const std::pair<U, T>& p)
 {
@@ -317,7 +319,7 @@ std::ostream& operator<<(std::ostream& o, const std::set<T, C>& s)
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream & o, const boost::shared_ptr<T>& v)
+std::ostream& operator<<(std::ostream & o, const std::shared_ptr<T>& v)
 {
   if (v == 0)
   {
@@ -332,7 +334,7 @@ std::ostream& operator<<(std::ostream & o, const boost::shared_ptr<T>& v)
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream & o, const boost::shared_ptr<const T>& v)
+std::ostream& operator<<(std::ostream & o, const std::shared_ptr<const T>& v)
 {
   if (v.get() == 0)
   {

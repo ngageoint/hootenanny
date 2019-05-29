@@ -22,17 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ShortestPath.h"
 
 #include <hoot/core/scoring/DirectedGraph.h>
 
+// Standard
+#include <cassert>
+
 namespace hoot
 {
 
-ShortestPath::ShortestPath(boost::shared_ptr<const DirectedGraph> graph)
+ShortestPath::ShortestPath(const std::shared_ptr<const DirectedGraph>& graph)
 {
   _graph = graph;
 }

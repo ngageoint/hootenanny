@@ -60,13 +60,13 @@ public:
    * @param output the output file path; for OSM and GeoNames inputs, the output extension must
    * match; for OGR inputs, the output format must be OSM PBF
    */
-  static void sort(const QString input, const QString output);
+  static void sort(const QString& input, const QString& output);
 
 private:
 
   static void _checkForOsmosis();
-  static void _sortPbf(const QString input, const QString output);
-  static boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
+  static void _sortPbf(const QString& input, const QString& output);
+  static std::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString& input);
 
 };
 

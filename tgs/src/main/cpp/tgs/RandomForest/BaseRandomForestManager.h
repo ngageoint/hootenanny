@@ -22,13 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASERANDOMFORESTMANAGER_H
 #define BASERANDOMFORESTMANAGER_H
-
-//Boost Includes
-#include <boost/shared_array.hpp>
 
 //Std Includes
 #include <fstream>
@@ -115,7 +112,7 @@ namespace Tgs
     * @param classMap a map of the original class to new classes
     */
     void generateRemappedReports(std::string reportName, std::map<std::string,
-      std::vector<std::string> > & classMap);
+      std::vector<std::string>> & classMap);
 
     /**
     * Generates a set of text files for the results of the classification including:
@@ -168,7 +165,7 @@ namespace Tgs
     *  @param factorImportance a container to hold the results as a list of pairs
     *  of factor name to importance value
     */
-    void getFactorImportance(std::vector<std::pair<std::string, double> > & factorImportance);
+    void getFactorImportance(std::vector<std::pair<std::string, double>> & factorImportance);
 
     /**
     * Gets the list of factor labels
@@ -315,7 +312,7 @@ namespace Tgs
     * @param map of stuff
     */
     void _generateRemappedResults(std::string basefilename,
-      std::map<std::string, std::vector<std::string> > & classMap);
+      std::map<std::string, std::vector<std::string>> & classMap);
 
     /**
      * @brief _initForests initializes the list of random forests
@@ -365,18 +362,18 @@ namespace Tgs
     virtual void _trainRoundRobin(unsigned int numTrees, unsigned int numFactors, unsigned int nodeSize,
       double retrain, bool balanced);
 
-    boost::shared_ptr<DataFrame> _data;
+    std::shared_ptr<DataFrame> _data;
 
     ///These three containers are parallel indexed
     std::vector<std::string> _testObjectIds;  //The object ids of the data object being classified
     std::vector<std::string> _testClasses;  //The true class labels for the testing objects
-    std::vector<std::map<std::string, double> > _results;  ///A container to hold classification results
+    std::vector<std::map<std::string, double>> _results;  ///A container to hold classification results
 
     unsigned int _modelMethod;
     bool _initialized;
     bool _trained;
 
-    std::vector<boost::shared_ptr<BaseRandomForest> > _rfList;  ///The base forest
+    std::vector<std::shared_ptr<BaseRandomForest>> _rfList;  ///The base forest
   };
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__NORMAL_ESTIMATOR_H__
@@ -32,7 +32,6 @@
 #include <queue>
 
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/TgsExport.h>
 #include <tgs/SpinImage/Points.h>
 
@@ -100,18 +99,18 @@ protected:
   // white box testing
   friend class NormalEstimatorTest;
 
-  boost::shared_ptr<Tgs::HilbertRTree> _rtree;
+  std::shared_ptr<Tgs::HilbertRTree> _rtree;
   PointCloud* _pc;
   std::vector<int> _nearestNeighbors;
   std::vector<double> _nnDistances;
-  boost::shared_ptr<KnnIteratorNd> _it;
+  std::shared_ptr<KnnIteratorNd> _it;
   std::vector<double> _nnTmp;
   int _k;
 
   /// this is set to true for a point if its children have been traversed.
   std::vector<bool> _processed;
 
-  typedef std::vector< HashSet<int> > RiemannianGraph;
+  typedef std::vector<HashSet<int>> RiemannianGraph;
 
   RiemannianGraph _edges;
 

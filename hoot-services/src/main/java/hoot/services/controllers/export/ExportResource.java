@@ -357,7 +357,7 @@ public class ExportResource {
     @Path("/resources")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getExportResources() {
-        String transExtPath = HOME_FOLDER + "/" + "/plugins-local/script/utp";
+        String transExtPath = HOME_FOLDER + "/" + "/translations-local/script/utp";
         if ((TRANSLATION_EXT_PATH != null) && (!TRANSLATION_EXT_PATH.isEmpty())) {
             transExtPath = TRANSLATION_EXT_PATH;
         }

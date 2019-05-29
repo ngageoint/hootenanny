@@ -52,7 +52,7 @@ public:
   {
   }
 
-  void writeNodes(const QString output, const QString format)
+  void writeNodes(const QString& output, const QString& format)
   {
     MultiaryIngestChangesetWriter changesetFileWriter;
     changesetFileWriter.setElementPayloadFormat(format);

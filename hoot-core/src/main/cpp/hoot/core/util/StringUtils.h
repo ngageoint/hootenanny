@@ -68,7 +68,7 @@ public:
    * @param input string to examine
    * @return true if the input has at least one alphabetic character; false otherwise
    */
-  static bool hasAlphabeticCharacter(const QString input);
+  static bool hasAlphabeticCharacter(const QString& input);
 
   /**
    * Determines whether a string contains a number
@@ -76,7 +76,7 @@ public:
    * @param input string to examine
    * @return true if the input has at least one number; false otherwise
    */
-  static bool hasDigit(const QString input);
+  static bool hasDigit(const QString& input);
 
   /**
    * Converts a JSON string to a Boost property tree
@@ -84,7 +84,7 @@ public:
    * @param jsonStr the string to convert
    * @return a Boost property tree
    */
-  static boost::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(QString jsonStr);
+  static std::shared_ptr<boost::property_tree::ptree> jsonStringToPropTree(const QString& jsonStr);
 
   /**
    * Creates a JSON array from a list of strings
@@ -92,8 +92,8 @@ public:
    * @param stringList a list of strings
    * @return a Boost JSON property tree containing a string array
    */
-  static boost::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
-    const QStringList stringList);
+  static std::shared_ptr<boost::property_tree::ptree> stringListToJsonStringArray(
+    const QStringList& stringList);
 
   /**
    * Determines if text is a number
@@ -102,7 +102,7 @@ public:
    * @return true if the input is a number; false otherwise
    * @note only implemented for long int
    */
-  static bool isNumber(const QString input);
+  static bool isNumber(const QString& input);
 
   /**
    *

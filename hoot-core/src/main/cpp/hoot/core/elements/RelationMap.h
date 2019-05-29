@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONMAP_H
 #define RELATIONMAP_H
 
 // TGS
 #include <tgs/HashMap.h>
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {

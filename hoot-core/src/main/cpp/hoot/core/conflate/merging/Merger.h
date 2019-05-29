@@ -81,8 +81,8 @@ public:
   virtual QString getDescription() const = 0;
 };
 
-typedef boost::shared_ptr<Merger> MergerPtr;
-typedef boost::shared_ptr<const Merger> ConstMergerPtr;
+typedef std::shared_ptr<Merger> MergerPtr;
+typedef std::shared_ptr<const Merger> ConstMergerPtr;
 
 }
 

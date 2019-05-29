@@ -45,14 +45,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToIntersectionGeoModifier)
 
-bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* pMap)
+bool WayToIntersectionGeoModifier::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process ways
   if (pElement->getElementType() != ElementType::Way) return false;
-  const WayPtr pMyWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr pMyWay = std::dynamic_pointer_cast<Way>(pElement);
 
   // find envelope of nodes
-  boost::shared_ptr<Envelope> pEnv(pMyWay->getEnvelope(pMap->shared_from_this()));
+  std::shared_ptr<Envelope> pEnv(pMyWay->getEnvelope(pMap->shared_from_this()));
 
   // find intersecting ways
   vector<long> intersectIds = pMap->getIndex().findWays(*pEnv);
@@ -73,8 +73,8 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
     {
       long p1Id = myNodeIds[myNodeIx];
       long p2Id = myNodeIds[myNodeIx+1];
-      CoordinateExt myP1( pMap->getNode(p1Id)->toCoordinate());
-      CoordinateExt myP2( pMap->getNode(p2Id)->toCoordinate());
+      CoordinateExt myP1(pMap->getNode(p1Id)->toCoordinate());
+      CoordinateExt myP2(pMap->getNode(p2Id)->toCoordinate());
 
       for (int interNodeIx = 0; interNodeIx < interNodeCount-1; interNodeIx++)
       {
@@ -82,12 +82,12 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
         long i2Id = interNodeIds[interNodeIx+1];
 
         // don't check if the segments share any nodes
-        if(i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
+        if (i1Id == p1Id || i1Id == p2Id || i2Id == p1Id || i2Id == p2Id) continue;
 
-        CoordinateExt interP1( pMap->getNode(i1Id)->toCoordinate());
-        CoordinateExt interP2( pMap->getNode(i2Id)->toCoordinate());
+        CoordinateExt interP1(pMap->getNode(i1Id)->toCoordinate());
+        CoordinateExt interP2(pMap->getNode(i2Id)->toCoordinate());
 
-        boost::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
+        std::shared_ptr<CoordinateExt> pIntersectionPoint = CoordinateExt::lineSegementsIntersect(myP1, myP2, interP1, interP2);
 
         if (pIntersectionPoint)
         {
@@ -100,7 +100,7 @@ bool WayToIntersectionGeoModifier::process(const ElementPtr& pElement, OsmMap* p
 
   if (allIntersections.size() > 0)
   {
-    processIntersections( pMap, pMyWay, allIntersections );
+    processIntersections(pMap, pMyWay, allIntersections);
   }
 
   return true;
@@ -117,7 +117,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 
   // merge original node ids into an attached way if either end node is attached to another way
-  const boost::shared_ptr<NodeToWayMap>& n2w = pMap->getIndex().getNodeToWayMap();
+  const std::shared_ptr<NodeToWayMap>& n2w = pMap->getIndex().getNodeToWayMap();
   vector<long> nodesToAttach = pWay->getNodeIds();
   bool attached = assignToAdjacentWay(pMap, n2w, pWay->getId(), nodesToAttach);
 
@@ -136,7 +136,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   }
 }
 
-bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const boost::shared_ptr<NodeToWayMap>& n2w, long myWayId, vector<long> nodesToAttach)
+bool WayToIntersectionGeoModifier::assignToAdjacentWay(OsmMap* pMap, const std::shared_ptr<NodeToWayMap>& n2w, long myWayId, const vector<long>& nodesToAttach)
 {
   long nodeId = nodesToAttach[0];
   const set<long>& wayIds = n2w->getWaysByNode(nodeId);

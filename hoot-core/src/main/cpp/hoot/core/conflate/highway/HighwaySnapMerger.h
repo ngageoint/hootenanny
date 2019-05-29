@@ -52,7 +52,7 @@ public:
   HighwaySnapMerger();
   HighwaySnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -73,7 +73,7 @@ protected:
 
 private:
 
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   ReviewMarker _reviewMarker;
 
@@ -108,7 +108,7 @@ private:
   friend class HighwaySnapMergerTest;
 };
 
-typedef boost::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;
+typedef std::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;
 
 }
 

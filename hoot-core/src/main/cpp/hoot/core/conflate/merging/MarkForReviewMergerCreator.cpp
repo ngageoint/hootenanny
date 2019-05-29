@@ -65,7 +65,7 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
     LOG_VART(type);
     if (type == MatchType::Review)
     {
-      set< pair<ElementId, ElementId> > s = match->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = match->getMatchPairs();
       eids.insert(s.begin(), s.end());
       matchStrings.append(match->explain());
       score = max<double>(match->getClassification().getReviewP(), score);

@@ -55,7 +55,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setPointAggregator(const QString aggregator);
+  void setPointAggregator(const QString& aggregator);
 
   void setSearchRadius(const double radius);
 
@@ -66,7 +66,7 @@ protected:
 
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
-  boost::shared_ptr<ValueAggregator> _pointAgg;
+  std::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;
 };
 

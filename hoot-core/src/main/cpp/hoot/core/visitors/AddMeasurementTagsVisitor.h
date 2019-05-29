@@ -77,7 +77,7 @@ private:
   void processRelation(const RelationPtr pRelation );
   void processWay(const WayPtr pWay);
 
-  void calculateExtents( geos::geom::Geometry* pGeometry, double& length, double &width);
+  void calculateExtents(geos::geom::Geometry* pGeometry, double& length, double &width);
 };
 
 } // namespace hoot

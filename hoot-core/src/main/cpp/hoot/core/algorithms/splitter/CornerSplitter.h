@@ -58,11 +58,11 @@ public:
 
   CornerSplitter();
 
-  CornerSplitter(boost::shared_ptr<OsmMap> map);
+  CornerSplitter(const std::shared_ptr<OsmMap>& map);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  static void splitCorners(boost::shared_ptr<OsmMap> map);
+  static void splitCorners(const std::shared_ptr<OsmMap>& map);
 
   void splitCorners();
 
@@ -93,7 +93,7 @@ private:
    */
   bool _splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner = true);
   /** Pointer to the OsmMap */
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
   /** Vector of ways that are yet to be processed */
   std::vector<long> _todoWays;
   /** Threshold in degrees for splitting sharp corners */

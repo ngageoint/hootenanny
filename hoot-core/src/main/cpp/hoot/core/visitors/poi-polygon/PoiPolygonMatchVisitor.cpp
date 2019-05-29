@@ -37,11 +37,12 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 
-// Boost
-#include <boost/bind.hpp>
-
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
+
+// Standard
+#include <functional>
+using namespace std;
 
 namespace hoot
 {
@@ -58,7 +59,7 @@ _filter(filter)
 PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
                                                std::vector<const Match*>& result,
                                                ConstMatchThresholdPtr threshold,
-                                               boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                                               std::shared_ptr<PoiPolygonRfClassifier> rf,
                                                ElementCriterionPtr filter) :
 _map(map),
 _result(result),
@@ -82,9 +83,9 @@ PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
 {
 }
 
-void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Element>& e)
+void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>& e)
 {
-  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -101,7 +102,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
   {
     if (from != *it)
     {
-      const boost::shared_ptr<const Element>& n = _map->getElement(*it);
+      const std::shared_ptr<const Element>& n = _map->getElement(*it);
 
       if (n->isUnknown() && _polyCrit.isSatisfied(n))
       {
@@ -129,10 +130,10 @@ void PoiPolygonMatchVisitor::_checkForMatch(const boost::shared_ptr<const Elemen
   _neighborCountMax = std::max(_neighborCountMax, neighborCount);
 }
 
-void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e)
+void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<const Element>& e)
 {
   _surroundingPolyIds.clear();
-  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -146,7 +147,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
   {
     if (from != *it)
     {
-      const boost::shared_ptr<const Element>& n = _map->getElement(*it);
+      const std::shared_ptr<const Element>& n = _map->getElement(*it);
 
       // TODO: Aren't we already filtering by poly when we create the index?  Check this.  Also,
       // maybe could make the unknown part of the criteria to being with.
@@ -158,10 +159,10 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const boost::shared_ptr<
   }
 }
 
-void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e)
+void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const std::shared_ptr<const Element>& e)
 {
   _surroundingPoiIds.clear();
-  boost::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
+  std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
@@ -175,7 +176,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
   {
     if (from != *it)
     {
-      const boost::shared_ptr<const Element>& n = _map->getElement(*it);
+      const std::shared_ptr<const Element>& n = _map->getElement(*it);
 
       // TODO: Aren't we already filtering by poi when we create the index?  Check this.  Also,
       // maybe could make the unknown part of the criteria to begin with.
@@ -187,7 +188,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const boost::shared_ptr<c
   }
 }
 
-Meters PoiPolygonMatchVisitor::_getSearchRadius(const boost::shared_ptr<const Element>& e) const
+Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<const Element>& e) const
 {
   const Meters searchRadius = e->getCircularError() + _reviewDistanceThreshold;
   LOG_VART(searchRadius);
@@ -240,20 +241,20 @@ bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
   return element->isUnknown() && PoiPolygonPoiCriterion().isSatisfied(element);
 }
 
-boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
+std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
 {
   if (!_polyIndex)
   {
     // TODO: tune this? - see #3054
-    boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
+    std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
     _polyIndex.reset(new Tgs::HilbertRTree(mps, 2));
 
-    boost::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
+    std::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
     IndexElementsVisitor v(_polyIndex,
                            _polyIndexToEid,
                            crit,
-                           boost::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, _1),
+                           std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
                            _getMap());
 
     _getMap()->visitWaysRo(v);
@@ -263,20 +264,20 @@ boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
   return _polyIndex;
 }
 
-boost::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
+std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
 {
   if (!_poiIndex)
   {
     // TODO: tune this? - see #3054
-    boost::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
+    std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
     _poiIndex.reset(new Tgs::HilbertRTree(mps, 2));
 
-    boost::shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
+    std::shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
 
     IndexElementsVisitor v(_poiIndex,
                            _poiIndexToEid,
                            crit,
-                           boost::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, _1),
+                           std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
                            _getMap());
 
     _getMap()->visitNodesRo(v);

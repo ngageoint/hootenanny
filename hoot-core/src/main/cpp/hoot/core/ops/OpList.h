@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OPLIST_H
@@ -45,7 +45,7 @@ namespace hoot
  * self-referencing or loops of OpLists will result in undefined behaviour. E.g.
  *
  * // bad!
- * boost::shared_ptr<OpList> a(new OpList());
+ * std::shared_ptr<OpList> a(new OpList());
  * a->addOp(a);
  */
 class OpList : public OsmMapOperation, public Serializable, public Boundable
@@ -56,13 +56,13 @@ public:
 
   OpList();
 
-  void addOp(boost::shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
+  void addOp(const std::shared_ptr<OsmMapOperation>& op) { _ops.push_back(op); }
 
   /**
    * Applies the operations in the order they were added. If there are no operations then nothing
    * is done.
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
 
@@ -76,7 +76,7 @@ public:
 
 private:
 
-  std::vector< boost::shared_ptr<OsmMapOperation> > _ops;
+  std::vector<std::shared_ptr<OsmMapOperation>> _ops;
 };
 
 }

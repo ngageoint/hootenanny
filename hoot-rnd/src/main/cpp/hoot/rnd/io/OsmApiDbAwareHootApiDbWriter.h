@@ -47,7 +47,7 @@ public:
 
   virtual ~OsmApiDbAwareHootApiDbWriter();
 
-  virtual void open(QString urlStr) override;
+  virtual void open(const QString& urlStr) override;
 
   virtual void writePartial(const ConstNodePtr& node) override;
   virtual void writePartial(const ConstWayPtr& way) override;

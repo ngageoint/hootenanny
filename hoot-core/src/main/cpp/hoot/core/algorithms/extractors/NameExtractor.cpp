@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NameExtractor.h"
 
@@ -59,8 +59,8 @@ _matchAttemptMade(false)
 {
 }
 
-double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<const Element>& target,
-  const boost::shared_ptr<const Element>& candidate) const
+double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
+  const std::shared_ptr<const Element>& candidate) const
 {
   return extract(target, candidate);
 }

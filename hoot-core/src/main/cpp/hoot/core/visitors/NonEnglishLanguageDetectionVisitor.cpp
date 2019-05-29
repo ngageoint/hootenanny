@@ -142,7 +142,7 @@ QString NonEnglishLanguageDetectionVisitor::_getLangCountsSortedByLangName() con
   return langsStr;
 }
 
-void NonEnglishLanguageDetectionVisitor::visit(const boost::shared_ptr<Element>& e)
+void NonEnglishLanguageDetectionVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_tagKeys.isEmpty())
   {

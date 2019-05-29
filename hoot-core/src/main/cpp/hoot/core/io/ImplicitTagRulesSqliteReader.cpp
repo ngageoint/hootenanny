@@ -60,7 +60,7 @@ ImplicitTagRulesSqliteReader::~ImplicitTagRulesSqliteReader()
   close();
 }
 
-void ImplicitTagRulesSqliteReader::open(const QString url)
+void ImplicitTagRulesSqliteReader::open(const QString& url)
 {
   if (!QSqlDatabase::contains(url))
   {

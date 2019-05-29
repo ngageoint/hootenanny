@@ -63,11 +63,11 @@ public:
     TagRenameKeyVisitor visitor("source", "source_modified");
     map->visitRw(visitor);
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor1);
     CPPUNIT_ASSERT_EQUAL((long)0, (long)keyCountVisitor1->getStat());
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
     map->visitRo(*keyCountVisitor2);
     CPPUNIT_ASSERT_EQUAL((long)6, (long)keyCountVisitor2->getStat());
   }

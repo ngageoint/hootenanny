@@ -43,7 +43,7 @@ public:
   static std::string className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() {}
-  ChainCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
+  ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
@@ -59,9 +59,9 @@ public:
 
 protected:
 
-  ChainCriterion(std::vector<boost::shared_ptr<ElementCriterion>> criteria);
+  ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria);
 
-  std::vector<boost::shared_ptr<ElementCriterion>> _criteria;
+  std::vector<std::shared_ptr<ElementCriterion>> _criteria;
 
 private:
 

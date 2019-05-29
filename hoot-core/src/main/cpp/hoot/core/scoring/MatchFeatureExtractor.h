@@ -28,9 +28,6 @@
 #ifndef MANIPULATORFEATUREEXTRACTOR_H
 #define MANIPULATORFEATUREEXTRACTOR_H
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // hoot
 #include <hoot/core/scoring/DataSamples.h>
 
@@ -77,7 +74,7 @@ public:
    * Adds a match creator to the list of matches that will be evaluated. There must be at least
    * one. The match creator's matches must implement MatchDetails.
    */
-  void addMatchCreator(const boost::shared_ptr<MatchCreator>& m);
+  void addMatchCreator(const std::shared_ptr<MatchCreator>& m);
 
   /**
    * Returns the results as an ARFF file.
@@ -90,12 +87,12 @@ public:
   /**
    * Evaluates all the features in the given map.
    */
-  void processMap(const boost::shared_ptr<const OsmMap>& map);
+  void processMap(const std::shared_ptr<const OsmMap>& map);
 
 private:
 
   DataSamples _samples;
-  std::vector<boost::shared_ptr<MatchCreator> > _creators;
+  std::vector<std::shared_ptr<MatchCreator>> _creators;
   // if true then make sure there is an even representation from each class and only fully populated
   // records are represented.
   bool _evenClasses;
@@ -103,7 +100,7 @@ private:
   const MatchFactory* _matchFactory;
 
   MatchType _getActualMatchType(const std::set<ElementId> &eids,
-                                const boost::shared_ptr<const OsmMap>& map) const;
+                                const std::shared_ptr<const OsmMap>& map) const;
 
   /**
    * Returns a vector of unique factor labels. Not efficient.

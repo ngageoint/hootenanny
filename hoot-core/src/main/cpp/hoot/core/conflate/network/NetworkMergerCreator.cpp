@@ -115,7 +115,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         mergers.push_back(
           new HighwayTagOnlyMerger(
             pairs,
-            boost::shared_ptr<PartialNetworkMerger>(
+            std::shared_ptr<PartialNetworkMerger>(
               new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()))));
       }
     }
@@ -139,7 +139,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
           mergers.push_back(
             new HighwayTagOnlyMerger(
               larger->getMatchPairs(),
-              boost::shared_ptr<PartialNetworkMerger>(
+              std::shared_ptr<PartialNetworkMerger>(
                 new PartialNetworkMerger(
                   larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
                   larger->getNetworkDetails()))));
@@ -165,7 +165,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
             mergers.push_back(
               new HighwayTagOnlyMerger(
                 largest->getMatchPairs(),
-                boost::shared_ptr<PartialNetworkMerger>(
+                std::shared_ptr<PartialNetworkMerger>(
                   new PartialNetworkMerger(
                     largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
                     largest->getNetworkDetails()))));
@@ -297,7 +297,7 @@ double NetworkMergerCreator::_getOverlapPercent(const MatchSet& matches) const
 double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const NetworkMatch* m2) const
 {
   QList<EdgeString::EdgeEntry> m1e1, m1e2, m2e1, m2e2;
-  boost::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
+  std::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
 
   // We want m1e1 to be the shorter match set
   if (m1->getEdgeMatch()->getString1()->calculateLength(pMap)
@@ -346,7 +346,7 @@ double NetworkMergerCreator::_getOverlapPercent(const NetworkMatch* m1, const Ne
 
   foreach (EdgeString::EdgeEntry ee, m1e2)
   {
-    boost::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
+    std::shared_ptr<const OsmMap> pMap(_map->shared_from_this());
     Meters edgeLen = ee.getEdge()->calculateLength(pMap);
     if (m2e2.contains(ee))
     {

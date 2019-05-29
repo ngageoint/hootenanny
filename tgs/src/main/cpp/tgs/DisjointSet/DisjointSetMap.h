@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2006 Pedro Felzenszwalb
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DISJOINTMAP_H
 #define DISJOINTMAP_H
@@ -44,10 +44,11 @@ namespace Tgs
  * Similar to the DisjointSet, but can use a class other than an int for defining groups.
  */
 template<class T>
-class DisjointSetMap {
+class DisjointSetMap
+{
 public:
   typedef typename HashMap<T, int> UserMap;
-  typedef HashMap< int, std::vector<T> > AllGroups;
+  typedef HashMap<int, std::vector<T>> AllGroups;
 
   void clear()
   {
@@ -122,7 +123,8 @@ private:
 };
 
 template<class T>
-inline int DisjointSetMap<T>::find(int x) {
+inline int DisjointSetMap<T>::find(int x)
+{
   int y = x;
   while (y != _e[y].p)
     y = _e[y].p;
@@ -131,12 +133,15 @@ inline int DisjointSetMap<T>::find(int x) {
 }
 
 template<class T>
-inline void DisjointSetMap<T>::join(int x, int y) {
+inline void DisjointSetMap<T>::join(int x, int y)
+{
   x = find(x);
   y = find(y);
-  if (x < y) {
+  if (x < y)
+  {
     _e[y].p = x;
-  } else {
+  } else
+  {
     _e[x].p = y;
   }
 }

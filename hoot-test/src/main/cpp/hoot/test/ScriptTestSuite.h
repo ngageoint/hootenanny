@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTESTSUITE_H
 #define SCRIPTTESTSUITE_H
@@ -30,10 +30,8 @@
 #include <hoot/test/ScriptTest.h>
 
 // Standard
+#include <memory>
 #include <vector>
-
-// tgs
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -44,7 +42,7 @@ public:
   ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests);
 
 private:
-  std::vector<boost::shared_ptr<ScriptTest> > _tests;
+  std::vector<std::shared_ptr<ScriptTest>> _tests;
 };
 
 }

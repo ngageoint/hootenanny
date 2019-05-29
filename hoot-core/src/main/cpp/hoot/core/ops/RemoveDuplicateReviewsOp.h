@@ -51,7 +51,7 @@ public:
 
   RemoveDuplicateReviewsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -69,7 +69,7 @@ public:
 
 private:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 };
 
 }

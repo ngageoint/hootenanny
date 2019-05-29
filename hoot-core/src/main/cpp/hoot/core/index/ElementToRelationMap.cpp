@@ -42,16 +42,16 @@ ElementToRelationMap::ElementToRelationMap()
 }
 
 void ElementToRelationMap::addRelation(const OsmMap& map,
-                                       const boost::shared_ptr<const Relation> &r)
+                                       const std::shared_ptr<const Relation> &r)
 {
   class AddMemberVisitor : public ConstElementVisitor
   {
   public:
 
-    HashMap< ElementId, set<long> >& _mapping;
+    HashMap<ElementId, set<long>>& _mapping;
     long _rid;
 
-    AddMemberVisitor(HashMap< ElementId, set<long> >& mapping, long rid) : _mapping(mapping)
+    AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
     }
@@ -87,7 +87,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
 }
 
 const set<long>& ElementToRelationMap::getRelationByElement(
-  const boost::shared_ptr<const Element>& e) const
+  const std::shared_ptr<const Element>& e) const
 {
   return getRelationByElement(e->getElementId());
 }
@@ -98,16 +98,16 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
 }
 
 void ElementToRelationMap::removeRelation(const OsmMap& map,
-                                          const boost::shared_ptr<const Relation>& r)
+                                          const std::shared_ptr<const Relation>& r)
 {
   class RemoveMemberVisitor : public ConstElementVisitor
   {
   public:
 
-    HashMap< ElementId, set<long> >& _mapping;
+    HashMap<ElementId, set<long>>& _mapping;
     long _rid;
 
-    RemoveMemberVisitor(HashMap< ElementId, set<long> >& mapping, long rid) : _mapping(mapping)
+    RemoveMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
     }
@@ -194,7 +194,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();
-        const boost::shared_ptr<const Relation>& r = it->second;
+        const std::shared_ptr<const Relation>& r = it->second;
         ElementId childEid(type, id);
         if (inMappedRelation)
         {

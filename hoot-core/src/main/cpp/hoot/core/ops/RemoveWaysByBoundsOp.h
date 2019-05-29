@@ -29,8 +29,8 @@
 #define REMOVE_WAYS_BY_BOUNDS_OP_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
 // GEOS
@@ -38,9 +38,6 @@
 
 // Standard
 #include <set>
-
-// TGS
-#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -58,7 +55,7 @@ public:
   RemoveWaysByBoundsOp();
   RemoveWaysByBoundsOp(const geos::geom::Envelope& e, const bool inverse = false);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getInitStatusMessage() const;
   virtual QString getCompletedStatusMessage() const;
@@ -75,7 +72,7 @@ protected:
 
   geos::geom::Envelope _envelope;
   bool _inverse;
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   void _removeWays();
 };

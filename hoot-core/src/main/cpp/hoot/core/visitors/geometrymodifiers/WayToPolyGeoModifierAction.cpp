@@ -43,13 +43,13 @@ HOOT_FACTORY_REGISTER(GeometryModifierAction, WayToPolyGeoModifierAction)
 const QString WayToPolyGeoModifierAction::WIDTH_TAG_PARAM = "width_tag_m";
 const QString WayToPolyGeoModifierAction::DEFAULT_WIDTH_PARAM = "default_width_m";
 
-bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMap)
+bool WayToPolyGeoModifierAction::processElement(const ElementPtr& pElement, OsmMap* pMap)
 {
   // only process Ways
   if (pElement->getElementType() != ElementType::Way) return false;
 
   // process the way as requested
-  const WayPtr& pWay = boost::dynamic_pointer_cast<Way>(pElement);
+  const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
   long nodeCount = pWay->getNodeCount();
   bool isLoop = pWay->isSimpleLoop();
 
@@ -61,7 +61,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   double currWidth = _width;
 
   // if WIDTH_TAG_PARAM has a valid string, and a tag with the same name is found, use the width value in the tag
-  if(!_widthTag.isEmpty() && tags.find(_widthTag) != tags.end())
+  if (!_widthTag.isEmpty() && tags.find(_widthTag) != tags.end())
   {
     double readWidth = tags[_widthTag].toDouble();
     if (readWidth > 0)
@@ -75,7 +75,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
   assert(nodeCount == (long)nodeIds.size());
 
   // ignore duplicate last node for loops to properly calculate merged ends
-  if(isLoop) nodeCount--;
+  if (isLoop) nodeCount--;
 
   // create coordinate arrays
   Coordinate polyPositions[2][nodeCount];
@@ -123,7 +123,7 @@ bool WayToPolyGeoModifierAction::process(const ElementPtr& pElement, OsmMap* pMa
       polyPositions[p][i] = pos;
 
       // calculate length to determing inner vs outer polygon for loop
-      if(isLoop && i > 0)
+      if (isLoop && i > 0)
       {
         CoordinateExt diff = pos - polyPositions[p][i-1];
         polyLen[0] += diff.length();

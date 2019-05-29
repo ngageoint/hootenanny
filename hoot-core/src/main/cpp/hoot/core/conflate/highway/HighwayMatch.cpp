@@ -63,8 +63,8 @@ HighwayMatch::HighwayMatch() : Match()
 {
 }
 
-HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
-  const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
+HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),

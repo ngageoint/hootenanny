@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETAPPLIER_H
 #define OSMAPIDBSQLCHANGESETAPPLIER_H
@@ -60,7 +60,7 @@ public:
    *
    * @param sql The SQL to be executed.
    */
-  void write(const QString sql);
+  void write(const QString& sql);
 
   /**
    * Detects conflicts in the target OSM API database by examining its changesets and bounds and
@@ -72,7 +72,7 @@ public:
    * only searches for changesets created after the time
    * @return
    */
-  bool conflictExistsInTarget(const QString boundsStr, const QString timeStr);
+  bool conflictExistsInTarget(const QString& boundsStr, const QString& timeStr);
 
   /**
    * Writes a summary of the contents of a changeset
@@ -84,7 +84,7 @@ public:
 private:
 
   void _initChangesetStats();
-  void _execTransaction(const QString changesetInsertStatement, const QString elementSqlStatements);
+  void _execTransaction(const QString& changesetInsertStatement, const QString& elementSqlStatements);
 
   OsmApiDb _db;
 

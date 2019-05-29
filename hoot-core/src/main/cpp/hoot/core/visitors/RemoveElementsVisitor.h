@@ -62,7 +62,7 @@ public:
   void setRecursive(bool recursive) { _recursive = recursive; }
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
 
-  static void removeWays(boost::shared_ptr<OsmMap> pMap, const ElementCriterionPtr& pCrit);
+  static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
   int getCount() { return _count; }
 

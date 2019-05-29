@@ -24,24 +24,23 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include <vector>
 
-#include <boost/shared_ptr.hpp>
+#include "TranslationVisitor.h"
+
+#include <vector>
 
 #include <geos/geom/Geometry.h>
 
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-
-#include "TranslationVisitor.h"
 
 using namespace geos::geom;
 using namespace std;

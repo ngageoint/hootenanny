@@ -148,7 +148,7 @@ private:
 
   /// a cluster of IDs.
   typedef QSet<QString> IdCluster;
-  typedef boost::shared_ptr<IdCluster> IdClusterPtr;
+  typedef std::shared_ptr<IdCluster> IdClusterPtr;
 
   /// Provides indexed access to a set of elements that need to be reviewed.
   class ReviewClusterIndex : public QMap<QString, IdClusterPtr>
@@ -214,7 +214,7 @@ private:
   QHash<QString, IdClusterPtr> _expectedMatchGroups;
   ReviewClusterIndex _expectedReviews;
 
-  typedef QHash<int, QHash<int, int> > ConfusionTable;
+  typedef QHash<int, QHash<int, int>> ConfusionTable;
 
   /**
    * Confusion matrix with [actual][expected]
@@ -229,7 +229,7 @@ private:
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
    *
    */
-  QHash< QString, QHash<QString, QVariant> > _wrongBreakdown;
+  QHash<QString, QHash<QString, QVariant>> _wrongBreakdown;
 
   /// true positive, false positive, false negative counts.
   double _tp, _fp, _fn;

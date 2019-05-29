@@ -92,7 +92,7 @@ private:
 
   bool _markAddedMultilineStringRelations;
 
-  boost::shared_ptr<FindNodesInWayFactory> _createNodeFactory(
+  std::shared_ptr<FindNodesInWayFactory> _createNodeFactory(
     const WaySublineCollection& string) const;
 };
 

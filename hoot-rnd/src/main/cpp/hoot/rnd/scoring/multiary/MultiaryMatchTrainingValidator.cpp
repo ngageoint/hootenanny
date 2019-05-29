@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryMatchTrainingValidator.h"
 
@@ -85,7 +85,7 @@ MultiaryMatchTrainingValidator::MultiaryMatchTrainingValidator()
 {
 }
 
-void MultiaryMatchTrainingValidator::apply(boost::shared_ptr<OsmMap>& map)
+void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   CheckRelationshipsVisitor v;
   map->visitRo(v);

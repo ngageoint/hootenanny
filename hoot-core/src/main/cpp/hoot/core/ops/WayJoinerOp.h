@@ -47,7 +47,7 @@ public:
   /**
    * Apply the way joiner to the specified map
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  boost::shared_ptr<WayJoiner> _wayJoiner;
+  std::shared_ptr<WayJoiner> _wayJoiner;
 };
 
 }

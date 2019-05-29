@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMCHANGESETTESTPROVIDER_H
@@ -66,9 +66,9 @@ public:
 
   ~TestOsmChangesetProvider() { }
 
-  boost::shared_ptr<OGRSpatialReference> getProjection() const
+  std::shared_ptr<OGRSpatialReference> getProjection() const
   {
-    return boost::shared_ptr<OGRSpatialReference>();
+    return std::shared_ptr<OGRSpatialReference>();
   }
 
   void close() { }

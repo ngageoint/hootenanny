@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MedianNodeVisitor.h"
 
@@ -80,7 +80,7 @@ void MedianNodeVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
     _nodes.append(n);
   }
 }

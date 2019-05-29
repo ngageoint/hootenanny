@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -46,7 +46,7 @@ class RTreeNodeStoreTest : public CppUnit::TestFixture
 public:
   void test1()
   {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
     RTreeNodeStore uut(2, mps);
 
     RTreeNode* n1 = uut.createNode();

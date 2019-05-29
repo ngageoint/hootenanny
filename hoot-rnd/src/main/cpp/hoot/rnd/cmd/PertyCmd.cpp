@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -99,23 +99,23 @@ public:
     }
     else if (scoreOptionSpecified)
     {
-      boost::shared_ptr<const MatchComparator> matchComparator =
+      std::shared_ptr<const MatchComparator> matchComparator =
         PertyMatchScorer().scoreMatches(args[0], args[1]);
       cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
     }
     else if (testOptionSpecified)
     {
-      QList<boost::shared_ptr<const PertyTestRunResult> > results =
+      QList<std::shared_ptr<const PertyTestRunResult>> results =
       PertyTestRunner().runTest(args[0], args[1]);
 
       LOG_INFO("\n\nPERTY Test Results");
       LOG_INFO("\n\nNumber of Test Runs: " << results.size());
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
-      for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+      for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
            it != results.end(); ++it)
       {
-        boost::shared_ptr<const PertyTestRunResult> result = *it;
+        std::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_INFO(result->toString());
         anyTestFailed = !result->testPassed();
         //Just checking here for test run scores that were higher than expected but allowed to pass.

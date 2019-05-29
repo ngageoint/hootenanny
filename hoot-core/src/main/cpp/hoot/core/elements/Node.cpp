@@ -27,9 +27,6 @@
 
 #include "Node.h"
 
-// Boost
-using namespace boost;
-
 // GEOS
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
@@ -37,8 +34,8 @@ using namespace boost;
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 using namespace std;
@@ -75,14 +72,14 @@ void Node::clear()
   _nodeData.clear();
 }
 
-boost::shared_ptr<Node> Node::cloneSp() const
+std::shared_ptr<Node> Node::cloneSp() const
 {
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
   result->_nodeData = _nodeData;
   return result;
 }
 
-Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider>& /*ep*/) const
+Envelope* Node::getEnvelope(const std::shared_ptr<const ElementProvider>& /*ep*/) const
 {
   return new Envelope(getX(), getX(), getY(), getY());
 }
@@ -97,10 +94,10 @@ void Node::setY(double y)
   _nodeData.setY(y);
 }
 
-boost::shared_ptr<geos::geom::Point> Node::toPoint() const
+std::shared_ptr<geos::geom::Point> Node::toPoint() const
 {
   Coordinate c(getX(), getY());
-  boost::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
+  std::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
   return result;
 }
 
@@ -127,7 +124,7 @@ void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) cons
 
 void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
-  filter.visit(boost::dynamic_pointer_cast<const Node>(map.getNode(getId())));
+  filter.visit(std::dynamic_pointer_cast<const Node>(map.getNode(getId())));
 }
 
 }

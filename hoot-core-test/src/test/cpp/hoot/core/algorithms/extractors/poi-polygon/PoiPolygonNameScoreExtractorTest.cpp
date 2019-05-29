@@ -79,8 +79,8 @@ public:
     settings.set("poi.polygon.name.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::DictionaryTranslator");
     uut.setConfiguration(settings);
-    boost::shared_ptr<DictionaryTranslator> dictTranslator =
-      boost::dynamic_pointer_cast<DictionaryTranslator>(
+    std::shared_ptr<DictionaryTranslator> dictTranslator =
+      std::dynamic_pointer_cast<DictionaryTranslator>(
         PoiPolygonNameScoreExtractor::_translator);
     dictTranslator->setTokenizeInput(false);
 

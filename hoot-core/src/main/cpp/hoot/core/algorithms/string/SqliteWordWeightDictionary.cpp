@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SqliteWordWeightDictionary.h"
@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString filePath) : _reader(filePath)
+SqliteWordWeightDictionary::SqliteWordWeightDictionary(const QString& filePath) : _reader(filePath)
 {
   _count = 1;
   _nonWord.setPattern("[^\\w]");

@@ -93,12 +93,19 @@ ufd = {
         'DATECOLLEC':'source:creation_date', // From the data
         'IKO':'icao', // ICAO Designator
         'NAM':'name', // Name Category
+        'NAM1':'alt_name', // Secondary Name?
+        'NAM2':'name:two', // Not in the spec but in data
+        'NAM3':'name:three', // Not in the spec but in data
+        'NAM4':'name:four', // Not in the spec but in data
         'NFI':'gndb_id:2', // Named Feature Identifier
         'NFN':'gndb_id', // Name Identifier
+        'NM1':'alt_name', // Not in the spec but in data
+        'NM2':'name:two', // Not in the spec but in data
         'NM3':'name:three', // Name 3 (name of the political entity on one side of a boundary).
         'NM4':'name:four', // Name 4 (name of the political entity on the other side of the boundary).
         'OPERATOR':'source:operator_id', // Operator ID
         'EDITORNAME':'source:operator_id', // Operator ID - from the data
+        'GFID':'uuid', // This gets cleaned up in post processing
         'ORIG_SOURCE_DATE':'source:datetime',
         'ORIG_SOURCE_INFO':'source:description', // Originating Source Information
         'ORIGINATOR':'source:originator', // Agency that Supplied the Data
@@ -113,6 +120,7 @@ ufd = {
         'SEC_CLS_AUTH_DESC':'security:classification:non_standard_authority', // Non-standard Classification Authority
         'SEC_CLS_AUTH_MULT':'security:classification:multiple_authority', // Multiple Classification Authority Sources
         'TXT':'note', // Text
+        'TEXT_':'note', // Text
         'UPDATE_SOURCE_INFO':'source:update:description', // Update/Review Source Information
         'UPDATE_SOURCE_DATE':'source:update:datetime',
         'VDR':'source:datum:sounding:name', // Vertical Datum Record - ???
@@ -358,6 +366,7 @@ ufd = {
         ['BFC','House','building','residential'],
         ['BFC','17','building:multi_unit','yes'], // Multi Unit Dwelling
         ['BFC','Multi-Unit Dwelling','building:multi_unit','yes'], // Multi Unit Dwelling
+        ['BFC','Multi Unit Dwelling','building:multi_unit','yes'], // Multi Unit Dwelling
         ['BFC','18','building','cemetery_building'],
         ['BFC','Cemetery Building','building','cemetery_building'],
         ['BFC','19','building','farm'],
@@ -1219,6 +1228,7 @@ ufd = {
         ['LMC','Landmark','navigation:landmark','yes'], // Landmark
         ['LMC','2','navigation:landmark','no'], // Not a landmark
         ['LMC','Not a landmark','navigation:landmark','no'], // Not a landmark
+        ['LMC','Not a Landmark','navigation:landmark','no'], // Not a landmark
         ['LMC','997',undefined,undefined], // Unpopulated
 
         // LOC - Vertical Relative Location
@@ -1466,9 +1476,9 @@ ufd = {
         ['MST','7','missile','sa-4_ganef'], // SA4
         ['MST','SA4','missile','sa-4_ganef'], // SA4
         ['MST','8','missile','sa-5_gammon'], // SA5
-        ['MST','SA4','missile','sa-5_gammon'], // SA5
+        ['MST','SA5','missile','sa-5_gammon'], // SA5
         ['MST','9','missile','sa-6_gainful'], // SA6
-        ['MST','SA4','missile','sa-6_gainful'], // SA6
+        ['MST','SA6','missile','sa-6_gainful'], // SA6
         ['MST','999','missile','other'], // Other
         ['MST','Other','missile','other'], // Other
 
@@ -1561,6 +1571,8 @@ ufd = {
         ['ORIGINATING_SOURCE','Digital Topographic Data 4 (DTOP4)','source:name','digital_topographic_data_4_(dtop4)'], // Digital Topographic Data 4 (DTOP4)
         ['ORIGINATING_SOURCE','Digital Topographic Data 5 (DTOP5)','source:name','digital_topographic_data_5_(dtop5)'], // Digital Topographic Data 5 (DTOP5)
         ['ORIGINATING_SOURCE','Digital Vertical Obstruction File (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
+        ['ORIGINATING_SOURCE','DIGITAL VERTICAL OBSTRUCTION FILE (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
+        ['ORIGINATING_SOURCE','DVOF','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
         ['ORIGINATING_SOURCE','Digital Vertical Obstruction File (DVOF) - Digital Vertical Obstruction File (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // From data
         ['ORIGINATING_SOURCE','Foundation Feature Data (FFD)','source:name','foundation_feature_data_(ffd)'], // Foundation Feature Data (FFD)
         ['ORIGINATING_SOURCE','Foundation Feature Data/Relocatable Target Data (FFD/RTAD)','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
@@ -1571,6 +1583,7 @@ ufd = {
         ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','imagery_(ikonos)'], // Imagery (IKONOS)
         ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','imagery_(ntm)'], // Imagery (NTM)
         ['ORIGINATING_SOURCE','Imagery [NTM]','source:name','imagery_(ntm)'], // Imagery (NTM)
+        ['ORIGINATING_SOURCE','StereoNTM','source:name','imagery_(ntm)'], // From data
         ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery_(other)'], // Imagery (Other)
         ['ORIGINATING_SOURCE','Interim Terrain Data (ITD)','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
         ['ORIGINATING_SOURCE','Interim Vector Data (IVD)','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
@@ -1588,6 +1601,7 @@ ufd = {
         ['ORIGINATING_SOURCE','NIMA GIS Medical Facilities Database','source:name','nima_gis_medical_facilities_database'], // NIMA GIS Medical Facilities Database
         ['ORIGINATING_SOURCE','Native Data Source','source:name','native_data_source'], // Native Data Source
         ['ORIGINATING_SOURCE','Native Map Source','source:name','native_map_source'], // Native Map Source
+        ['ORIGINATING_SOURCE','NATIVE MAP SOURCE','source:name','native_map_source'], // Native Map Source
         ['ORIGINATING_SOURCE','Nominally Attributed Topographic Evaluation Map (NATE Map)','source:name','nominally_attributed_topographic_evaluation_map_(nate_map)'], //  Nominally Attributed Topographic Evaluation Map (NATE Map)
         ['ORIGINATING_SOURCE','Other','source:name','other'], // Other
         ['ORIGINATING_SOURCE','Planning Graphic','source:name','planning_graphic'], // Planning Graphic
@@ -1848,8 +1862,12 @@ ufd = {
         // ['RGC','0','gauge','unknown'],
         ['RGC','0',undefined,undefined],
         ['RGC','1','gauge:type','broad'],
+        ['RGC','Broad','gauge:type','broad'],
         ['RGC','2','gauge:type','narrow'],
+        ['RGC','Narrow','gauge:type','narrow'],
         ['RGC','3','gauge:type','standard'],
+        ['RGC','Normal (Country Specific)','gauge:type','standard'],
+        ['RGC','6','railway','monorail'], // Gauge = 0.5?
         ['RGC','6','railway','monorail'], // Gauge = 0.5?
         ['RGC','997',undefined,undefined], // In data, not in spec
 
@@ -2016,22 +2034,27 @@ ufd = {
 
         // SEC_CLASS - Security Classification
         // I'm pretty sure we are not going to see 99% of these
-        // Moved to Post Processing
-//         ['SEC_CLASS','01','security:classification','cosmic_top_secret-bohemia'], // COSMIC Top Secret-Bohemia
-//         ['SEC_CLASS','02','security:classification','cosmic_top_secret-balk'], // COSMIC Top Secret-Balk
-//         ['SEC_CLASS','03','security:classification','nato_secret'], // NATO Secret
-//         ['SEC_CLASS','04','security:classification','nato_secret-savate'], // NATO Secret-Savate
-//         ['SEC_CLASS','05','security:classification','nato_secret-avicula'], // NATO Secret-Avicula
-//         ['SEC_CLASS','06','security:classification','nato_confidential'], // NATO Confidential
-//         ['SEC_CLASS','07','security:classification','nato_restricted'], // NATO Restricted
-//         ['SEC_CLASS','08','security:classification','nato_unclassified'], // NATO Unclassified
-//         ['SEC_CLASS','09','security:classification','cosmic_top_secret_atom'], // COSMIC Top Secret Atom
-//         ['SEC_CLASS','10','security:classification','secret_atomal'], // Secret Atomal
-//         ['SEC_CLASS','11','security:classification','confidential_atomal'], // Confidential Atomal
-//         ['SEC_CLASS','C','security:classification','C'], // Confidential
-//         ['SEC_CLASS','S','security:classification','S'], // Secret
-//         ['SEC_CLASS','TS','security:classification','TS'], // Top Secret
-//         ['SEC_CLASS','U','security:classification','U'], // Unclassified
+        // Additional caveats added in Post Processing
+        ['SEC_CLASS','01','security:classification','TOP_SECRET'], // COSMIC Top Secret-Bohemia
+        ['SEC_CLASS','02','security:classification','TOP_SECRET'], // COSMIC Top Secret-Balk
+        ['SEC_CLASS','03','security:classification','TOP_SECRET'], // NATO Secret
+        ['SEC_CLASS','04','security:classification','SECRET'], // NATO Secret-Savate
+        ['SEC_CLASS','05','security:classification','SECRET'], // NATO Secret-Avicula
+        ['SEC_CLASS','06','security:classification','CONFIDENTIAL'], // NATO Confidential
+        ['SEC_CLASS','07','security:classification','RESTRICTED'], // NATO Restricted
+        ['SEC_CLASS','08','security:classification','UNCLASSIFIED'], // NATO Unclassified
+        ['SEC_CLASS','09','security:classification','TOP_SECRET'], // COSMIC Top Secret Atom
+        ['SEC_CLASS','10','security:classification','SECRET'], // Secret Atomal
+        ['SEC_CLASS','11','security:classification','CONFIDENTIAL'], // Confidential Atomal
+        ['SEC_CLASS','C','security:classification','CONFIDENTIAL'], // Confidential
+        ['SEC_CLASS','Confidential','security:classification','CONFIDENTIAL'], // Confidential
+        ['SEC_CLASS','S','security:classification','SECRET'], // Secret
+        ['SEC_CLASS','Secret','security:classification','SECRET'], // Secret
+        ['SEC_CLASS','TS','security:classification','TOP_SECRET'], // Top Secret
+        ['SEC_CLASS','Top Secret','security:classification','TOP_SECRET'], // Top Secret
+        ['SEC_CLASS','u','security:classification','UNCLASSIFIED'], // Unclassified
+        ['SEC_CLASS','U','security:classification','UNCLASSIFIED'], // Unclassified
+        ['SEC_CLASS','Unclassified','security:classification','UNCLASSIFIED'], // Unclassified
 
         // SEC_CLS_AUTHORITY - Classification Authority
         ['SEC_CLS_AUTHORITY','D_IMGPOL','security:classification:authority','D_IMGPOL'], // Classification Derived from Imagery Policy Series Classification Guide
@@ -2221,6 +2244,7 @@ ufd = {
         ['SPEC_ID','3KL-VMap-0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
         ['SPEC_ID','3KM-VMap-1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
         ['SPEC_ID','3KU-UVMap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
+        ['SPEC_ID','3KU-UVMAP','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
         ['SPEC_ID','3KD-UVMap','source:extraction_specification','3ku-uvmap'],
         ['SPEC_ID','4AA-ATC','source:extraction_specification','4aa-atc'], // 4AA-ATC
         ['SPEC_ID','4AC-JOG-R','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
@@ -2268,12 +2292,12 @@ ufd = {
         ['SSC','Artificial Mountain','shape','artificial_mountain'], // Artificial Mountain
         ['SSC','22','shape','crescent'], // Crescent
         ['SSC','Crescent','shape','crescent'], // Crescent
-        ['SSC','23','shape','ferris_wheel'], // Ferris Wheel
-        ['SSC','Ferris Wheel','shape','ferris_wheel'], // Ferris Wheel
+        ['SSC','23','attraction','ferris_wheel'], // Ferris Wheel
+        ['SSC','Ferris Wheel','attraction','ferris_wheel'], // Ferris Wheel
         ['SSC','24','shape','enclosed'], // Enclosed
         ['SSC','Enclosed','shape','enclosed'], // Enclosed
-        ['SSC','25','shape','roller_coaster'], // Roller Coaster
-        ['SSC','Roller Coaster','shape','roller_coaster'], // Roller Coaster
+        ['SSC','25','attraction','roller_coaster'], // Roller Coaster
+        ['SSC','Roller Coaster','attraction','roller_coaster'], // Roller Coaster
         ['SSC','26','shape','lateral'], // Lateral
         ['SSC','Lateral','shape','lateral'], // Lateral
         ['SSC','27','shape','mounds'], // Mounds
@@ -2364,7 +2388,9 @@ ufd = {
         ['SSR','77','building:roof_shape','with_cupola'],
         ['SSR','With Cupola','building:roof_shape','with_cupola'],
         ['SSR','78','building:roof_shape','with_turret'],
+        ['SSR','With Turret','building:roof_shape','with_turret'],
         ['SSR','79','building:roof_shape','with_tower'],
+        ['SSR','With Tower','building:roof_shape','with_tower'],
         ['SSR','80','building:roof_shape','with_minaret'],
         ['SSR','With Minaret','building:roof_shape','with_minaret'],
         ['SSR','999','building:roof_shape','other'],
@@ -2440,8 +2466,11 @@ ufd = {
         // ['TST','0','cable:shape','unknown'], // Unknown
         ['TST','0',undefined,undefined], // Unknown
         ['TST','1','cable:shape','symmetric_catenary'], // Normal Suspension
+        ['TST','Normal Suspension','cable:shape','symmetric_catenary'], // Normal Suspension
         ['TST','2','cable:shape','mountain_catenary'], // Catenary (Over Mountains)
+        ['TST','Catenary (Over Mountains)','cable:shape','mountain_catenary'], // Catenary (Over Mountains)
         ['TST','3','cable:shape','overwater_catenary'], // Catenary (Over Water)
+        ['TST','Catenary (Over Water)','cable:shape','overwater_catenary'], // Catenary (Over Water)
         ['TST','998',undefined,undefined], // Not Applicable
         ['TST','999','cable:shape','other'], // Other
 
@@ -2583,35 +2612,7 @@ ufd = {
         ['UPDATE_SOURCE','Vector Map Lv2 (VMap2)','source:review_source:type','vector_map_lv2_(vmap2)'], // Vector Map Lv2 (VMap2)
         ['UPDATE_SOURCE','World Vector Shoreline Plus (WVSPlus)','source:review_source:type','world_vector_shoreline_plus_(wvsplus)'], // World Vector Shoreline Plus (WVSPlus)
 
-        // USE_ - Usage2 - WTF???
-        // ['USE_','0','raw:USE_','unknown'], // Unknown
-        ['USE_','0',undefined,undefined], // Unknown
-        ['USE_','4','controlling_authority:2','national'], // National
-        ['USE_','National','controlling_authority:2','national'], // National
-        ['USE_','5','controlling_authority:2','state'], // State
-        ['USE_','State','controlling_authority:2','state'], // State
-        ['USE_','6','controlling_authority:2','private'], // Private
-        ['USE_','Private','controlling_authority:2','private'], // Private
-        ['USE_','8','controlling_authority:2','military'], // Military
-        ['USE_','Military','controlling_authority:2','military'], // Military
-        ['USE_','20','use:2','closed'], // Closed
-        ['USE_','Closed','use:2','closed'], // Closed
-        ['USE_','21','use:2','restricted'], // Restricted
-        ['USE_','Restricted','use:2','restricted'], // Restricted
-        ['USE_','22','controlling_authority:2','joint_military/civilian'], // Joint Military/Civilian
-        ['USE_','Joint Military/Civilian','controlling_authority:2','joint_military/civilian'], // Joint Military/Civilian
-        ['USE_','23','controlling_authority:2','international'], // International
-        ['USE_','International','controlling_authority:2','international'], // International
-        ['USE_','50','use:2','limited'], // Limited
-        ['USE_','Limited','use:2','limited'], // Limited
-        ['USE_','155','use:2','prohibited_area'], // Prohibited Area
-        ['USE_','Prohibited Area','use:2','prohibited_area'], // Prohibited Area
-        ['USE_','158','use:2','reserved'], // Reserved
-        ['USE_','Reserved','use:2','reserved'], // Reserved
-        ['USE_','999','use:2','other'], // Other
-        ['USE_','Other','use:2','other'], // Other
-
-        // USG - Usage: This is just Ugly.
+        // USE_ / USG - Usage: This is just Ugly.
         // It is a combination of primary user, function, or controlling authority
         // ['USG','0','controlling_authority','unknown'],
         ['USG','0',undefined,undefined],
@@ -2720,6 +2721,7 @@ ufd = {
         ['USG','120','use','recreation'], // Recreational
         ['USG','Recreational','use','recreation'],
         ['USG','128','use','mixed_urban_or_built-up_land'], // Mixed Urban or built-up Land
+        ['USG','Mixed Urban or built-up Land','use','mixed_urban_or_built-up_land'], // Mixed Urban or built-up Land
         ['USG','130','use','transportation'],
         ['USG','Transportation','use','transportation'],
         ['USG','134','use','utilities_and_communication'], // Utilities and Communication
@@ -2998,7 +3000,7 @@ ufd = {
         ['AJ030',['aj030','feedlot_stockyard_a']],
         ['AJ050',['aj050','windmill_p']],
         ['AJ051',['aj051','windmotor_p']],
-        ['AK020',['ak020','amusement_park_attraction_p']],
+        ['AK020',['ak020','amusement_park_attraction_p','amusement_park_att_p']],
         ['AK030',['ak030','amusement_park_a','amusement_park_p']],
         ['AK040',['ak040','athletic_field_a']],
         ['AK050',['ak050','tennis_courts_a']],
@@ -3186,6 +3188,69 @@ ufd = {
         ['ZD045',['zd045','text_description_a','text_description_l','text_description_p']],
         ], // End fCodeMap
 
+    // This is the current lost of shortened and screwed up attribute names and what they should be.
+    swapList : {
+        'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
+        'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
+        'COMM_CPYRT':'COMM_CPYRT_NOTICE',
+        'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
+        'COMPLETENE':'COMPLETENESS_CODE',
+        'CREATION_D':'CREATION_DATE',
+        'MIN_':'MIN',
+        'ORIGINATIN':'ORIGINATING_SOURCE',
+        'ORIG_SOURC':'ORIG_SOURCE_DATE',
+        'ORIG_SOU_1':'ORIG_SOURCE_INFO',
+        'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
+        'RSTRN_DECL':'RSTRN_DECLASS',
+        'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
+        'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
+        'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
+        'RSTRN_RELE':'RSTRN_RELEASIBILITY',
+        'SEC_CD_CNT':'SEC_CD_CNTRL',
+        'SEC_CLASS_':'SEC_CLASS_SYS_ID',
+        'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
+        'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
+        'SEC_CLS__2':'SEC_CLS_AUTHORITY',
+        'UPDATE_S_1':'UPDATE_SOURCE_DATE',
+        'UPDATE_S_2':'UPDATE_SOURCE_INFO',
+        'UPDATE_SOU':'UPDATE_SOURCE',
+        'Z_VALUE_TY':'Z_VALUE_TYPE'
+        },
+
+    // List of data values to drop/ignore. Love the spelling of some of these
+    // 997 = Unpopulated
+    // 998 = Not Applicable
+    // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
+    ignoreList : { 'unknown':1,'unk':1,'n/a':1,'n_a':1,'-32768':1,'notapplicable':1,'not-applicable':1,'997':1, 
+                   '998':1,'unpopulated':1,'<Null>':1  },
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    unitList : { 'WD1':10 },
+
+
+    // ##### Utility Functions #####
+    findFCode: function(layerName)
+    {
+        // Funky but it makes life easier
+        var llayerName = layerName.toString().toLowerCase();
+
+        for (var row in ufd.fCodeMap)
+        {
+            for (var val in ufd.fCodeMap[row][1])
+            {
+                if (llayerName.match(ufd.fCodeMap[row][1][val]))
+                {
+                    // Debug
+                    // print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
+                    return ufd.fCodeMap[row][0];
+                }
+            }
+        }
+
+        // Default: Return null
+        return null;
+    },
+
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -3193,43 +3258,6 @@ ufd = {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Fix the renameing of some fields
-
-        // This is the current lost of shortened and screwed up attribute names and what they should be.
-        var swapList = {
-            'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
-            'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
-            'COMM_CPYRT':'COMM_CPYRT_NOTICE',
-            'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
-            'COMPLETENE':'COMPLETENESS_CODE',
-            'CREATION_D':'CREATION_DATE',
-            'ORIGINATIN':'ORIGINATING_SOURCE',
-            'ORIG_SOURC':'ORIG_SOURCE_DATE',
-            'ORIG_SOU_1':'ORIG_SOURCE_INFO',
-            'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
-            'RSTRN_DECL':'RSTRN_DECLASS',
-            'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
-            'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
-            'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
-            'RSTRN_RELE':'RSTRN_RELEASIBILITY',
-            'SEC_CD_CNT':'SEC_CD_CNTRL',
-            'SEC_CLASS_':'SEC_CLASS_SYS_ID',
-            'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
-            'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
-            'SEC_CLS__2':'SEC_CLS_AUTHORITY',
-            'UPDATE_S_1':'UPDATE_SOURCE_DATE',
-            'UPDATE_S_2':'UPDATE_SOURCE_INFO',
-            'UPDATE_SOU':'UPDATE_SOURCE',
-            'Z_VALUE_TY':'Z_VALUE_TYPE'
-        };
-
-        // List of data values to drop/ignore. Love the spelling of some of these
-        // 997 = Unpopulated
-        // 998 = Not Applicable
-        // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
-        var ignoreList = { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,'not applicable':1, '997':1, '998':1 };
-
-        // Unit conversion. Some attributes are in centimetres, others in decimetres
-        var unitList = { 'WD1':10 };
 
         // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
@@ -3242,7 +3270,7 @@ ufd = {
             attrValue = attrValue.replace(/\s/g, '');
 
             // Wipe out the useless values
-            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            if (attrs[col] == '' || attrValue in ufd.ignoreList || attrs[col] in ufd.ignoreList)
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
                 continue;
@@ -3257,18 +3285,35 @@ ufd = {
             }
 
             // Sort out units - if needed
-            if (col in unitList) attrs[col] = attrs[col] / unitList[col];
+            if (col in ufd.unitList) attrs[col] = attrs[col] / ufd.unitList[col];
 
             // Now see if we need to swap attr names
-            if (col in swapList)
+            if (col in ufd.swapList)
             {
-                // print('Swapped: ' + swapList[col]); // debug
-                attrs[swapList[col]] = attrs[col];
+                // Debug
+                // print('Swapped: ' + ufd.swapList[col]); // debug
+                attrs[ufd.swapList[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
-
         }
+
+        // USE_ and USG seem to be used in various ways depending on the dataset
+        if (attrs.USE_)
+        {
+            if (attrs.USE_ == '0')
+            {
+                delete attrs.USE_;
+            }
+            else
+            {
+                if (! attrs.USG)
+                {
+                    attrs.USG = attrs.USE_;
+                    delete attrs.USE_;
+                }
+            }
+        } // End attrs.USE_
 
         // Time to find an FCODE
         if (attrs.F_CODE)
@@ -3282,45 +3327,47 @@ ufd = {
         }
         else
         {
-            // Funky but it makes life easier
-            var llayerName = layerName.toString().toLowerCase();
-
-            for (var row in ufd.fCodeMap)
-            {
-                for (var val in ufd.fCodeMap[row][1])
-                {
-                    if (llayerName.match(ufd.fCodeMap[row][1][val]))
-                    {
-                        attrs.F_CODE = ufd.fCodeMap[row][0];
-                        break;
-                    }
-                }
-            }
+            attrs.F_CODE = ufd.findFCode(layerName);
         } // End of Find an FCode
 
         // Names are a bit of a mess
+        // NAM vs NAM_ vs NM
         // Standards. We have them for a reason.
         if (!attrs.NAM)
         {
-            if (attrs.NAM_1)
+            for (var i in ['1','2','3','4','5'])
             {
-                attrs.NAM = attrs.NAM_1;
-                delete attrs.NAM_1;
+                if (attrs['NAM_' + i])
+                {
+                    attrs.NAM = attrs['NAM_' + i];
+                    delete attrs['NAM_' + i]
+                    break;
+                }
+
+                if (attrs['NAM' + i])
+                {
+                    attrs.NAM = attrs['NAM' + i];
+                    delete attrs['NAM' + i]
+                    break;
+                }
+                if (attrs['NM' + i])
+                {
+                    attrs.NAM = attrs['NM' + i];
+                    delete attrs['NM' + i]
+                    break;
+                }
             }
-            else if (attrs.NAM_2)
+        }
+
+        // Drop duplicate names
+        if (attrs.NAM)
+        {
+            for (var i in ['1','2','3','4','5'])
             {
-                attrs.NAM = attrs.NAM_2;
-                delete attrs.NAM_2;
-            }
-            else if (attrs.NAM_3)
-            {
-                attrs.NAM = attrs.NAM_3;
-                delete attrs.NAM_3;
-            }
-            else if (attrs.NAM_4)
-            {
-                attrs.NAM = attrs.NAM_4;
-                delete attrs.NAM_4;
+                if (attrs.NAM == attrs['NAM_' + i]) delete attrs['NAM_' + i]
+
+                if (attrs.NAM == attrs['NAM' + i]) delete attrs['NAM' + i]
+                if (attrs.NAM == attrs['NM' + i]) delete attrs['NM' + i]
             }
         }
 
@@ -3402,10 +3449,10 @@ ufd = {
 
         tags.source = 'ufd:' + layerName.toLowerCase();
 
-        // Add a UUID
-        if (attrs.GFID)
+        // Format or add a UUID
+        if (tags.uuid)
         {
-            tags.uuid = '{' + attrs.GFID + '}';
+            if (tags.uuid.slice[0,1] !== '{' && tags.uuid.slice[-1] !== '}') tags.uuid = '{' + tags.uuid + '}';
         }
         else
         {
@@ -3481,88 +3528,60 @@ ufd = {
         // If we have a Tower, Add a man_made tag
         if (tags['tower:type']) tags.man_made = 'tower';
 
+        // Lakes and other water features
+        if (tags.water && !(tags.natural)) tags.natural = 'water' 
+
+        // Amusement Park Attractions
+        // Artificial Mountain can be in multiple F_CODES
+        if (attrs.F_CODE == 'AK020' && tags.shape)
+        {
+            tags.attraction = tags.shape;
+            delete tags.shape;
+        }
+
         // Sort out security stuff - not pretty
         // I'm pretty sure we are not going to see 99% of these but they are in the spec
-        if (attrs.SEC_CLASS)
+        // The overall classification is added in the one2one rules
+        switch (attrs.SEC_CLASS)
         {
-            switch (attrs.SEC_CLASS)
-            {
+            case undefined: // Break early if no value
+                break;
+
             case '01': // COSMIC Top Secret-Bohemia
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC';
                 tags['security:classification:sci:non_us'] = 'BOHEMIA';
                 break;
 
             case '02': // COSMIC Top Secret-Balk
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC';
                 tags['security:classification:sci:non_us'] = 'BALK';
                 break;
 
-            case '03': // NATO Secret
-                tags['security:classification'] = 'SECRET'; // Secret
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '04': // NATO Secret-Savate
-                tags['security:classification'] = 'SECRET'; // Secret
                 tags['security:classification:nato'] = 'yes';
                 tags['security:classification:sci','SAVATE'];
                 break;
 
             case '05': // NATO Secret-Avicula
-                tags['security:classification'] = 'SECRET'; // Secret
                 tags['security:classification:nato'] = 'yes';
                 tags['security:classification:sci','AVICULA'];
                 break;
 
+            case '03': // NATO Secret
             case '06': // NATO Confidential
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '07': // NATO Restricted
-                tags['security:classification'] = 'RRESTRICTED'; // Restricted
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '08': // NATO Unclassified
-                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
                 tags['security:classification:nato'] = 'yes';
                 break;
 
             case '09': // COSMIC Top Secret Atom
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC;ATOM';
                 break;
 
             case '10': // Secret Atomal
-                tags['security:classification'] = 'SECRET'; // Secret
-                tags['security:classification:sci:non_us'] = 'ATOMAL';
-                break;
-
             case '11': // Confidential Atomal
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
                 tags['security:classification:sci:non_us'] = 'ATOMAL';
                 break;
-
-            case 'TS':
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-                break;
-
-            case 'S':
-                tags['security:classification'] = 'SECRET'; // Secret
-                break;
-
-            case 'C':
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-                break;
-
-            case 'U':
-            case 'Unclassified':
-                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
-                break;
-            }
         } // End SEC_CLASS
 
         // Misc F_CODE fixes
@@ -3583,14 +3602,17 @@ ufd = {
                 break;
 
             case '26': // 1st order
+            case 'Primary/1st Order':
                 tags.admin_level = '4';
                 break;
 
             case '30': // 2nd order
+            case 'Secondary/2nd Order':
                 tags.admin_level = '6';
                 break;
 
             case '31': // 3rd order
+            case 'Tertiary/3rd Order':
                 tags.admin_level = '8';
                 break;
             }
@@ -3639,6 +3661,9 @@ function initialize()
     {
         ufd.one2one.push.apply(ufd.one2one,ufd.fcodeOne2oneIn);
         ufd.lookup = translate.createLookup(ufd.one2one);
+
+        // Debug:
+       // translate.dumpOne2OneLookup(ufd.lookup);
     }
 
 }

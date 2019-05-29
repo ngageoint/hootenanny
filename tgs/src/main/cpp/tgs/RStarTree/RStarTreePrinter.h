@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RSTARTREEPRINTER_H
@@ -39,16 +39,16 @@ namespace Tgs
 class RStarTreePrinter
 {
 public:
-  RStarTreePrinter(boost::shared_ptr<const RStarTree> tree);
+  RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree);
 
-  static void print(boost::shared_ptr<const RStarTree> tree);
+  static void print(const std::shared_ptr<const RStarTree>& tree);
 
   void print();
 
   void print(const RTreeNode* node, int indent);
 
 private:
-  boost::shared_ptr<const RStarTree> _tree;
+  std::shared_ptr<const RStarTree> _tree;
 
   int _indent;
 

@@ -35,7 +35,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/visitors/ElementIdSetVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
@@ -56,14 +56,14 @@ MergerBase()
 {
 }
 
-PoiPolygonMerger::PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs) :
+PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
 {
   assert(_pairs.size() >= 1);
 }
 
-void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   /// See
   /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
@@ -106,7 +106,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   assert(finalBuilding.get());
 
   Tags finalBuildingTags = finalBuilding->getTags();
-  boost::shared_ptr<const TagMerger> tagMerger;
+  std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
     tagMerger.reset(new PreserveTypesTagMerger());
@@ -130,7 +130,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
 
   // do some book keeping to remove the POIs and mark them as replaced.
   long poisMerged = 0;
-  for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
@@ -176,7 +176,8 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
 
   Tags result;
 
-  boost::shared_ptr<const TagMerger> tagMerger;
+  LOG_VART(_autoMergeManyPoiToOnePolyMatches);
+  std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
     tagMerger.reset(new PreserveTypesTagMerger());
@@ -190,27 +191,24 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
+    LOG_VART(p);
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
-    LOG_VART(e1->getElementId());
-    LOG_VART(e1->getStatus());
-    LOG_VART(e1->getElementType());
-    LOG_VART(e1->getTags().get("name"));
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
+      //LOG_VART(e1->getElementId());
+      LOG_VART(e1);
       result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
     }
-    LOG_VART(e2->getElementId());
-    LOG_VART(e2->getStatus());
-    LOG_VART(e2->getElementType());
-    LOG_VART(e2->getTags().get("name"));
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
+      //LOG_VART(e2->getElementId());
+      LOG_VART(e2);
       result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
 
-  LOG_VART(result);
+  LOG_TRACE("Merged POI tags: " << result);
   return result;
 }
 
@@ -219,7 +217,6 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
   LOG_TRACE("Getting building parts for status: " << s << "...");
 
   vector<ElementId> result;
-
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -236,7 +233,7 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
     }
   }
 
-  LOG_VART(result);
+  LOG_TRACE("Building part IDs: " << result);
   return result;
 }
 
@@ -315,7 +312,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   map->visitRw(filteredVis2);
 
   //get our poi id
-  ElementIdSetVisitor idSetVis1;
+  UniqueElementIdVisitor idSetVis1;
   FilteredVisitor filteredVis3(poiCrit, idSetVis1);
   map->visitRo(filteredVis3);
   const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
@@ -328,7 +325,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   LOG_VART(poiId);
 
   //get our poly id
-  ElementIdSetVisitor idSetVis2;
+  UniqueElementIdVisitor idSetVis2;
   FilteredVisitor filteredVis4(polyCrit, idSetVis2);
   map->visitRo(filteredVis4);
   const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
@@ -340,11 +337,11 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   const ElementId polyId = *polyIds.begin();
   LOG_VART(polyId);
 
-  std::set<std::pair<ElementId, ElementId> > pairs;
+  std::set<std::pair<ElementId, ElementId>> pairs;
   //Ordering doesn't matter here, since the poi is always merged into the poly.
   pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
   PoiPolygonMerger merger(pairs);
-  std::vector<std::pair<ElementId, ElementId> > replacedElements;
+  std::vector<std::pair<ElementId, ElementId>> replacedElements;
   merger.apply(map, replacedElements);
 
   LOG_INFO("Merged the POI into the polygon.");
@@ -354,8 +351,7 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
 
 QString PoiPolygonMerger::toString() const
 {
-  QString s = hoot::toString(_getPairs());
-  return QString("PoiPolygonMerger %1").arg(s);
+  return QString("PoiPolygonMerger %1").arg(hoot::toString(_getPairs()));
 }
 
 }

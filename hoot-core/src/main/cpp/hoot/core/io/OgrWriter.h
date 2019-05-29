@@ -28,9 +28,6 @@
 #ifndef OGRWRITER_H
 #define OGRWRITER_H
 
-//Boost
-#include <boost/shared_ptr.hpp>
-
 // hoot
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -67,21 +64,6 @@ public:
 
   static int logWarnCount;
 
-  /**
-   * A true/false value to determine whether or not all layers are created.
-   * @sa setCreateAllLayers
-   */
-  static QString createAllLayersKey() { return "ogr.writer.create.all.layers"; }
-  /**
-   * Prepends this onto each of the layer names.
-   */
-  static QString preLayerNameKey() { return "ogr.writer.pre.layer.name"; }
-  static QString scriptKey() { return "ogr.writer.script"; }
-  /**
-   * Valid values are "on", "off" and "warn"
-   */
-  static QString strictCheckingKey() { return "ogr.strict.checking"; }
-
   OgrWriter();
 
   /**
@@ -100,22 +82,22 @@ public:
 
   void close();
 
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
   // Init the translator
   void initTranslator();
 
   // Open our ogr output
-  void openOutput(QString url);
+  void openOutput(const QString& url);
 
   // Create layers from our translation schema
   void createAllLayers();
 
   void setCache(ElementCachePtr cachePtr) { _elementCache = cachePtr; }
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
   void setCreateAllLayers(bool createAll) { _createAllLayers = createAll; }
 
@@ -133,60 +115,60 @@ public:
    */
   void translateToFeatures(ElementProviderPtr& provider,
                            const ConstElementPtr& e,
-                           boost::shared_ptr<geos::geom::Geometry> &g,
-                           std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf);
+                           std::shared_ptr<geos::geom::Geometry>& g,
+                           std::vector<ScriptToOgrTranslator::TranslatedFeature>& tf);
 
-  void writeTranslatedFeature(boost::shared_ptr<geos::geom::Geometry> g,
-                              std::vector<ScriptToOgrTranslator::TranslatedFeature> tf);
+  void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
+                              const std::vector<ScriptToOgrTranslator::TranslatedFeature>& tf);
 
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Node>&);
+  virtual void writePartial(const std::shared_ptr<const hoot::Node>&) override;
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Way>&);
+  virtual void writePartial(const std::shared_ptr<const hoot::Way>&) override;
 
-  virtual void writePartial(const boost::shared_ptr<const hoot::Relation>&);
+  virtual void writePartial(const std::shared_ptr<const hoot::Relation>&) override;
 
-  virtual void writeElement(ElementPtr& element);
+  virtual void writeElement(ElementPtr& element) override;
 
   virtual void writeElement(ElementPtr& element, bool debug);
 
   //leaving this empty for the time being
-  virtual QString supportedFormats() { return ""; }
+  virtual QString supportedFormats() override { return ""; }
 
 protected:
 
   bool _createAllLayers;
   bool _appendData;
   QString _scriptPath;
-  mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
-  boost::shared_ptr<GDALDataset> _ds;
+  mutable std::shared_ptr<ScriptToOgrTranslator> _translator;
+  std::shared_ptr<GDALDataset> _ds;
   /** Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
-  boost::shared_ptr<const Schema> _schema;
+  std::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
   AddExportTagsVisitor _addExportTagsVisitor;
 
-  void _addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<geos::geom::Geometry> g);
+  void _addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<geos::geom::Geometry>& g);
 
-  void _addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f,
+  void _addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
                           const geos::geom::Geometry* g,
                           OGRFeature* poFeature);
 
-  void _createLayer(boost::shared_ptr<const Layer> layer);
+  void _createLayer(const std::shared_ptr<const Layer>& layer);
 
   OGRLayer* _getLayer(const QString& layerName);
 
   OGRLayer* _getLayerByName(const QString& layerName);
 
-  boost::shared_ptr<geos::geom::Geometry> _toMulti(boost::shared_ptr<geos::geom::Geometry> from);
+  std::shared_ptr<geos::geom::Geometry> _toMulti(const std::shared_ptr<geos::geom::Geometry>& from);
 
-  void strictError(QString warning);
+  void strictError(const QString& warning);
 
   virtual void _writePartial(ElementProviderPtr& provider, const ConstElementPtr& e);
 

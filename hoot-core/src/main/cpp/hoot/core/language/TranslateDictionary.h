@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TRANSLATE_DICTIONARY_H
@@ -57,13 +57,13 @@ public:
 
   const QMap<QString, QStringList>& getTable() { return _translations; }
 
-  void load(QString path);
+  void load(const QString& path);
 
   Transliterator* getTransliterator() const { return _transliterator; }
   Transliterator* getTitler() const { return _titler; }
 
-  bool getFromTransliterationCache(const QString originalText, QString& transliteratedText);
-  void insertIntoTransliterationCache(const QString originalText, const QString transliteratedText);
+  bool getFromTransliterationCache(const QString& originalText, QString& transliteratedText);
+  void insertIntoTransliterationCache(const QString& originalText, const QString& transliteratedText);
 
   bool transliterationCachingEnabled() const { return _transliterationCachingEnabled; }
 
@@ -71,10 +71,10 @@ private:
 
   TranslateDictionary();
 
-  static boost::shared_ptr<TranslateDictionary> _theInstance;
+  static std::shared_ptr<TranslateDictionary> _theInstance;
 
   QMap<QString, QStringList> _translations;
-  boost::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
+  std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
   Transliterator* _transliterator;
   Transliterator* _titler;
   bool _transliterationCachingEnabled;

@@ -40,7 +40,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/GetElementIdsVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -55,7 +55,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<TestUtils> TestUtils::_theInstance;
+std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString TestUtils::STREET_TAG_NAME = "addr:street";
@@ -68,7 +68,7 @@ TestUtils::TestUtils()
 {
 }
 
-bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
+bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
 {
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -166,14 +166,14 @@ ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
   return getElementWithTag(map, "note", note);
 }
 
-ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
-                                        const QString tagValue)
+ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
+                                        const QString& tagValue)
 {
   TagCriterion tc(tagKey, tagValue);
-  set<ElementId> bag;
-  GetElementIdsVisitor v(bag);
+  UniqueElementIdVisitor v;
   FilteredVisitor fv(tc, v);
   map->visitRo(fv);
+  const set<ElementId> bag = v.getElementSet();
 
   if (bag.size() != 1)
   {
@@ -183,7 +183,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-boost::shared_ptr<TestUtils> TestUtils::getInstance()
+std::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {
@@ -270,8 +270,8 @@ QString TestUtils::toQuotedString(QString str)
   return result;
 }
 
-void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
-                                                 const QString outFilePath)
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath,
+                                                 const QString& outFilePath)
 {
   LOG_VART(stdFilePath);
   LOG_VART(outFilePath);

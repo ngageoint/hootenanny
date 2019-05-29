@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
-  TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);
+  TranslatedTagCountVisitor(const std::shared_ptr<ScriptTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
 
@@ -71,11 +71,11 @@ public:
 private:
 
   const OsmMap* _map;
-  boost::shared_ptr<const Schema> _schema;
-  boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  std::shared_ptr<const Schema> _schema;
+  std::shared_ptr<ScriptToOgrTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;
 
-  void _countTags(boost::shared_ptr<Feature>& f);
+  void _countTags(std::shared_ptr<Feature>& f);
 };
 
 }

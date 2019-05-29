@@ -766,40 +766,6 @@
                 "onchange":"true"
             },
             {
-            	"id":"building_review_if_secondary_newer",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
-                "name":"Review If Secondary Layer Building Newer",
-                "hoot_key":"building.review.if.secondary.newer"
-            },
-            {
-        	"id":"building_date_format",
-        	"elem_type":"string",
-        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
-        	"name":"Date Format",
-        	"defaultvalue":"yyyy-MM-ddTHH:mm",
-        	"hoot_key":"building.date.format",
-        	"onchange":"true"
-    	    },
-            {
-        	"id":"building_date_tag_key",
-        	"elem_type":"string",
-        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
-        	"name":"Date Tag Key",
-        	"defaultvalue":"source:date",
-        	"hoot_key":"building.date.tag.key",
-        	"onchange":"true"
-    	    },
-            {
-            	"id":"building_keep_more_complex_geometry_when_auto_merging",
-                "elem_type":"bool",
-                "defaultvalue":"true",
-                "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
-                "name":"Keep More Complex Geometry When Auto Merging",
-                "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
-            },
-            {
                 "id":"building_match_creator",
                 "elem_type":"string",
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
@@ -824,6 +790,81 @@
                 },
                 "hoot_key":"merger.creators",
                 "required":"true"
+            },
+            {
+        	"id":"building_date_format",
+        	"elem_type":"string",
+        	"description":"Date format string used by the building date tag value.  See QDateTime::fromString for more details.",
+        	"name":"Date Format",
+        	"defaultvalue":"yyyy-MM-ddTHH:mm",
+        	"hoot_key":"building.date.format",
+        	"onchange":"true"
+    	    },
+            {
+        	"id":"building_date_tag_key",
+        	"elem_type":"string",
+        	"description":"Tag key used by the building.review.if.secondary.newer configuration option.",
+        	"name":"Date Tag Key",
+        	"defaultvalue":"source:date",
+        	"hoot_key":"building.date.tag.key",
+        	"onchange":"true"
+    	    },
+            {
+              "id": "building_force_contained_match",
+              "elem_type": "bool",
+              "description": "If true, a building pair has been flagged for review, and one member of the pair is contained completely inside the other, the pair will be matched instead.",
+              "name": "Always atch When One Building Is Completely Contained Inside Another",
+              "defaultvalue": "false",
+              "hoot_key": "building.force.contained.match"
+            },
+            {
+            	"id":"building_keep_more_complex_geometry_when_auto_merging",
+                "elem_type":"bool",
+                "defaultvalue":"true",
+                "description":"If true, when buildings are auto-merged during conflation the geometry of the more complex building is the one that is kept.  If false or the buildings are equally complex, then the geometry of the first building in the pair passed to the Building Merger is the geometry kept.  This does not apply to feature merging done during the manual review process.",
+                "name":"Keep More Complex Geometry When Auto Merging",
+                "hoot_key":"building.keep.more.complex.geometry.when.auto.merging"
+            },
+            {
+              "id":"building_match_threshold",
+              "elem_type":"double",
+              "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
+              "defaultvalue":"0.6",
+              "minvalue":"0.01",
+              "maxvalue":"1.0",
+              "hoot_key":"building.match.threshold"
+            },
+            {
+            	"id":"building_merge_many_to_many_matches",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
+                "name":"Merge Many to Many Matches",
+                "hoot_key":"building.merge.many.to.many.matches"
+            },
+            {
+            	"id":"building_outline_update_op_remove_building_relations",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
+                "name":"Remove Building Relations",
+                "hoot_key":"building.outline.update.op.remove.building.relations"
+            },
+            {
+              "id": "building_remove_building_relations",
+              "elem_type": "bool",
+              "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
+              "name": "Remove Building Relations",
+              "defaultvalue": "false",
+              "hoot_key": "building.outline.update.op.remove.building.relations"
+            },
+            {
+            	"id":"building_review_if_secondary_newer",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"If true, any buildings in the secondary layer will be automatically reviewed against potentially matching features in the reference layer if they are marked with a more recent date than that of the reference feature.",
+                "name":"Review If Secondary Layer Building Newer",
+                "hoot_key":"building.review.if.secondary.newer"
             },
             {
             	"id":"building_review_matches_other_than_one_to_one",
@@ -931,12 +972,28 @@
         	"onchange":"true"
     	    },
             {
+        	"id":"poipolygon_address_allow_lenient_house_number_matching",
+        	"elem_type":"bool",
+        	"defaultvalue":"true",
+        	"description":"If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street",
+        	"name":"Allow Lenient House Number Matching",
+        	"hoot_key":"poi.polygon.address.allow.lenient.house.number.matching"
+    	    },
+            {
         	"id":"poipolygon_address_match_enabled",
         	"elem_type":"bool",
         	"defaultvalue":"true",
         	"description":"If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.  If the data being conflated is known to have poor address data, disabling this option may speed up conflation runtime performance.",
         	"name":"Address Match Enabled",
         	"hoot_key":"poi.polygon.address.match.enabled"
+    	    },
+            {
+        	"id":"poipolygon_allow_cross_conflation_merging",
+        	"elem_type":"bool",
+        	"defaultvalue":"false",
+        	"description":"If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
+        	"name":"Allow Cross Conflation Merging",
+        	"hoot_key":"poi.polygon.allow.cross.conflation.merging"
     	    },
             {
         	"id":"poipolygon_auto_merge_many_poi_to_one_poly_matches",

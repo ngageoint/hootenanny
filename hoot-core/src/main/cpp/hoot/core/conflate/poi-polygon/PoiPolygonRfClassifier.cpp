@@ -48,12 +48,12 @@ void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
 
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
+  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
+  _extractors.push_back(std::shared_ptr<FeatureExtractor>(
     new PoiPolygonAlphaShapeDistanceExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
-  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
-  boost::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
+  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
+  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
+  std::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
     new PoiPolygonAddressScoreExtractor());
   addressExtractor1->setConfiguration(conf());
   _extractors.push_back(addressExtractor1);

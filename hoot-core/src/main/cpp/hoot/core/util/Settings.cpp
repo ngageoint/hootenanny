@@ -115,7 +115,7 @@ private:
 
   void _loadTags(pt::ptree& tree)
   {
-    BOOST_FOREACH(pt::ptree::value_type& element, tree.get_child(""))
+    for (pt::ptree::value_type& element : tree.get_child(""))
     {
       const QString name = QString::fromUtf8(element.first.c_str());
       LOG_VART(name);
@@ -134,7 +134,7 @@ private:
   }
 };
 
-boost::shared_ptr<Settings> Settings::_theInstance = NULL;
+std::shared_ptr<Settings> Settings::_theInstance = NULL;
 
 Settings::Settings() :
   _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),

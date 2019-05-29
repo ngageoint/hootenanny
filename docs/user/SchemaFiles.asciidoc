@@ -131,7 +131,7 @@ The actual highway relationships can be viewed in the image below. Blue lines
 represent `isA` relationships and green lines represent `similarTo`
 relationships:
 
-image::user/images/HighwaySchema.jpg[]
+image::images/HighwaySchema.jpg[]
 
 There are many more intricacies to the schema file format and how the internal
 structure is built. If you would like more information please post to the GitHub
@@ -179,7 +179,7 @@ a train platform. E.g.
         ["public_transport=platform", "bus=yes"],
         ["public_transport=platform", "highway=bus_stop"]
     ],
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
 },
 
 "compound": {
@@ -190,13 +190,13 @@ a train platform. E.g.
         ["public_transport=platform", "train=yes"]
     ],
     "similarTo": { "name": "railway=platform", "weight": 0.9 },
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
 },
 
 "tag": {
     "name": "railway=platform",
     "isA": "railway",
-    "categories": ["poi", "hgispoi"]
+    "categories": ["poi"]
     "similarTo": { "name": "public_transport=platform", "weight": 0.3 }
 },
 ----

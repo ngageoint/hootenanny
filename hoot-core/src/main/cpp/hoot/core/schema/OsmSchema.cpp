@@ -39,7 +39,6 @@
 #else
 # error "Boost properties include not found during configure."
 #endif
-using namespace boost;
 
 // Hoot
 #include <hoot/core/elements/Relation.h>
@@ -88,8 +87,8 @@ typedef boost::adjacency_list<
   TagEdge
 > TagGraph;
 
-typedef graph_traits <TagGraph>::vertex_descriptor VertexId;
-typedef graph_traits <TagGraph>::edge_descriptor EdgeId;
+typedef boost::graph_traits<TagGraph>::vertex_descriptor VertexId;
+typedef boost::graph_traits<TagGraph>::edge_descriptor EdgeId;
 
 SchemaVertex empty;
 
@@ -126,7 +125,7 @@ template<>
   {
     size_t operator()(const hoot::AverageKey& k) const
     {
-      size_t h1 = hash< pair<hoot::VertexId, hoot::VertexId> >()(
+      size_t h1 = hash<pair<hoot::VertexId, hoot::VertexId>>()(
             pair<hoot::VertexId, hoot::VertexId>(k.vid1, k.vid2));
       size_t h2 = fastHashDouble()(k.w1);
       size_t h3 = fastHashDouble()(k.w2);
@@ -586,7 +585,7 @@ public:
 
       if (_vertexToScoresCache.find(id1) != _vertexToScoresCache.end())
       {
-        const vector< pair< VertexId, double > >& similars = _vertexToScoresCache[id1];
+        const vector<pair<VertexId, double>>& similars = _vertexToScoresCache[id1];
 
         for (size_t i = 0; i < similars.size(); i++)
         {
@@ -605,7 +604,7 @@ public:
   {
     vector<SchemaVertex> result;
 
-    graph_traits < TagGraph >::vertex_iterator vi, vend;
+    boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       const SchemaVertex& tv = _graph[*vi];
@@ -661,7 +660,7 @@ public:
       VertexId childVid = _name2Vertex[nChildKvp];
       VertexId parentVid = _name2Vertex[nParentKvp];
       pair<VertexId, VertexId> key(childVid, parentVid);
-      HashMap< pair<VertexId, VertexId>, bool >::const_iterator it = _isAncestorCache.find(key);
+      HashMap<pair<VertexId, VertexId>, bool>::const_iterator it = _isAncestorCache.find(key);
       if (it == _isAncestorCache.end())
       {
         result = _isAncestor(_name2Vertex[nChildKvp], _name2Vertex[nParentKvp]);
@@ -708,16 +707,16 @@ public:
     double result = 0.0;
 
     QString kvpn1 = normalizeEnumeratedKvp(kvp1);
-    //LOG_VART(kvpn1);
+    LOG_VART(kvpn1);
     QString kvpn2 = normalizeEnumeratedKvp(kvp2);
-    //LOG_VART(kvpn2);
+    LOG_VART(kvpn2);
 
     if (kvpn1.isEmpty() == false && kvpn2.isEmpty() == false)
     {
       VertexId id1 = _name2Vertex[kvpn1];
-      //LOG_VART(id1);
+      LOG_VART(id1);
       VertexId id2 = _name2Vertex[kvpn2];
-      //LOG_VART(id2);
+      LOG_VART(id2);
 
       if (_processed.find(id1) == _processed.end())
       {
@@ -735,7 +734,7 @@ public:
       {
         result = 0.0;
       }
-      //LOG_VART(result);
+      LOG_VART(result);
 
       if (id1 == id2 && kvp1 != kvp2)
       {
@@ -751,7 +750,7 @@ public:
           result = 1.0;
         }
       }
-      //LOG_VART(result);
+      LOG_VART(result);
     }
 
     return result;
@@ -760,7 +759,7 @@ public:
   void setIsACost(double cost)
   {
     _isACost = cost;
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       if (_graph[*ei].type == IsA)
@@ -786,7 +785,7 @@ public:
     QList<VertexId> orderedVertexes;
     QMap<size_t, VertexId> vertexIndex;
 
-    graph_traits < TagGraph >::vertex_iterator vi, vend;
+    boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       orderedVertexes.push_back(*vi);
@@ -812,10 +811,10 @@ public:
 
     result += "\n";
 
-    set< pair<VertexId, VertexId> > used;
+    set<pair<VertexId, VertexId>> used;
     QStringList orderedEdges;
 
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       VertexId src = source(*ei, _graph);
@@ -907,12 +906,12 @@ private:
 
   double _isACost;
   HashSet<VertexId> _processed;
-  HashMap< pair<VertexId, VertexId>, double> _cachedScores;
+  HashMap<pair<VertexId, VertexId>, double> _cachedScores;
   HashMap<AverageKey, AverageResult> _cachedAverages;
   HashMap<VertexId, VertexId> _parents;
-  QList< pair<QRegExp, VertexId> > _regexKeys;
-  HashMap< pair<VertexId, VertexId>, bool > _isAncestorCache;
-  typedef HashMap< VertexId, vector< pair< VertexId, double > > > VertexToScoreCache;
+  QList<pair<QRegExp, VertexId>> _regexKeys;
+  HashMap<pair<VertexId, VertexId>, bool> _isAncestorCache;
+  typedef HashMap<VertexId, vector<pair<VertexId, double>>> VertexToScoreCache;
   VertexToScoreCache _vertexToScoresCache;
 
   TagGraph _graph;
@@ -942,7 +941,7 @@ private:
       return vid2;
     }
 
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       _graph[*ei].w1 = pow(_graph[*ei].averageWeight, w1);
@@ -952,7 +951,7 @@ private:
     multiplies<double> combiner;
     greater<double> comparer;
     dijkstra_shortest_paths(_graph, vid1,
-                            distance_map(&d1[0]).
+                            boost::distance_map(&d1[0]).
                             weight_map(get(&TagEdge::w1, _graph)).
                             distance_zero(1.0).
                             distance_combine(combiner).
@@ -962,7 +961,7 @@ private:
     std::vector<double> d2(num_vertices(_graph));
 
     dijkstra_shortest_paths(_graph, vid2,
-                            distance_map(&d2[0]).
+                            boost::distance_map(&d2[0]).
                             weight_map(get(&TagEdge::w2, _graph)).
                             distance_zero(1.0).
                             distance_combine(combiner).
@@ -971,7 +970,7 @@ private:
 
     double bestScore = -1.0;
     VertexId bestVid = vid1;
-    graph_traits < TagGraph >::vertex_iterator vi, vend;
+    boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     LOG_TRACE("from " << _graph[vid1].name << " to " << _graph[vid2].name);
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
@@ -1004,14 +1003,14 @@ private:
     multiplies<double> combiner;
     greater<double> comparer;
     dijkstra_shortest_paths(_graph, vd,
-                            distance_map(&d[0]).
+                            boost::distance_map(&d[0]).
                             weight_map(get(&TagEdge::similarToWeight, _graph)).
                             distance_zero(1.0).
                             distance_combine(combiner).
                             distance_inf(0.0).
                             distance_compare(comparer));
 
-    graph_traits < TagGraph >::vertex_iterator vi, vend;
+    boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     //LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
@@ -1042,7 +1041,7 @@ private:
 
   void _getAssociatedTags(VertexId from, set<VertexId>& result)
   {
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       VertexId thisFrom = source(*ei, _graph);
@@ -1057,7 +1056,7 @@ private:
 
   void _getChildTags(VertexId parent, set<VertexId>& result)
   {
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       VertexId thisChild = source(*ei, _graph);
@@ -1211,7 +1210,7 @@ private:
 
   void _percolateInheritance()
   {
-    graph_traits <TagGraph>::vertex_iterator vi, vend;
+    boost::graph_traits<TagGraph>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       if (_graph[*vi].childWeight > 0.0)
@@ -1228,7 +1227,7 @@ private:
       }
     }
 
-    graph_traits < TagGraph >::edge_iterator ei, eend;
+    boost::graph_traits<TagGraph>::edge_iterator ei, eend;
     for (boost::tie(ei, eend) = edges(_graph); ei != eend; ++ei)
     {
       if (_graph[*ei].type == IsA)
@@ -1377,7 +1376,7 @@ private:
   }
 };
 
-boost::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
+std::shared_ptr<OsmSchema> OsmSchema::_theInstance = NULL;
 
 OsmSchema::OsmSchema()
 {
@@ -1389,17 +1388,17 @@ OsmSchema::~OsmSchema()
   delete d;
 }
 
-void OsmSchema::addAssociatedWith(QString name1, QString name2)
+void OsmSchema::addAssociatedWith(const QString& name1, const QString& name2)
 {
   d->addAssociatedWith(name1, name2);
 }
 
-void OsmSchema::addIsA(QString name1, QString name2)
+void OsmSchema::addIsA(const QString& name1, const QString& name2)
 {
   d->addIsA(name1, name2);
 }
 
-void OsmSchema::addSimilarTo(QString name1, QString name2, double weight, bool oneway)
+void OsmSchema::addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway)
 {
   d->addSimilarTo(name1, name2, weight, oneway);
 }
@@ -1434,7 +1433,7 @@ QSet<QString> OsmSchema::getAllTagKeys()
   return _allTagKeysCache;
 }
 
-bool OsmSchema::hasTagKey(const QString key)
+bool OsmSchema::hasTagKey(const QString& key)
 {
   return getAllTagKeys().contains(key);
 }
@@ -1464,7 +1463,7 @@ Tags OsmSchema::getAssociatedTags(const Tags& tags)
   return tagsToReturn;
 }
 
-vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(QString name)
+vector<SchemaVertex> OsmSchema::getAssociatedTagsAsVertices(const QString& name)
 {
   return d->getAssociatedTags(name);
 }
@@ -1504,7 +1503,7 @@ OsmSchemaCategory OsmSchema::getCategories(const QString& kvp) const
   return result;
 }
 
-vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(QString name)
+vector<SchemaVertex> OsmSchema::getChildTagsAsVertices(const QString& name)
 {
   return d->getChildTags(name);
 }
@@ -1588,7 +1587,7 @@ vector<SchemaVertex> OsmSchema::getSchemaVertices(const Tags& tags) const
   return d->getSchemaVertices(tags);
 }
 
-vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double minimumScore)
+vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(const QString& name, double minimumScore)
 {
   if (minimumScore <= 0)
   {
@@ -1597,7 +1596,7 @@ vector<SchemaVertex> OsmSchema::getSimilarTagsAsVertices(QString name, double mi
   return d->getSimilarTags(name, minimumScore);
 }
 
-Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
+Tags OsmSchema::getSimilarTags(const QString& name, double minimumScore)
 {
   Tags tags;
   const vector<SchemaVertex> vertices = d->getSimilarTags(name, minimumScore);
@@ -1610,7 +1609,7 @@ Tags OsmSchema::getSimilarTags(QString name, double minimumScore)
   return tags;
 }
 
-vector<SchemaVertex> OsmSchema::getTagByCategory(OsmSchemaCategory c) const
+vector<SchemaVertex> OsmSchema::getTagByCategory(const OsmSchemaCategory& c) const
 {
   return d->getTagByCategory(c);
 }
@@ -1623,6 +1622,11 @@ const SchemaVertex& OsmSchema::getTagVertex(const QString& kvp) const
 vector<SchemaVertex> OsmSchema::getUniqueSchemaVertices(const Tags& tags) const
 {
   return d->getUniqueSchemaVertices(tags);
+}
+
+bool OsmSchema::hasAnyCategory(const QString& key, const QString& val) const
+{
+  return getCategories(key, val) != OsmSchemaCategory::Empty;
 }
 
 bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
@@ -1657,7 +1661,7 @@ bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
   return d->isAncestor(childKvp, parentKvp);
 }
 
-bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList tagList) const
+bool OsmSchema::containsTagFromList(const Tags& tags, const QStringList& tagList) const
 {
   //LOG_VART(tagList.size());
   for (int i = 0; i < tagList.size(); i++)
@@ -1792,7 +1796,7 @@ void OsmSchema::updateOrCreateVertex(const SchemaVertex& tv)
   d->updateOrCreateVertex(tv);
 }
 
-QString OsmSchema::getParentKvp(const QString kvp1, const QString kvp2)
+QString OsmSchema::getParentKvp(const QString& kvp1, const QString& kvp2)
 {
   if (isAncestor(kvp1, kvp2))
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LEGACYVERTEXMATCHER_H
 #define LEGACYVERTEXMATCHER_H
@@ -77,7 +77,7 @@ public:
     }
   };
 
-  typedef boost::shared_ptr<TiePointScore> TiePointScorePtr;
+  typedef std::shared_ptr<TiePointScore> TiePointScorePtr;
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
@@ -119,11 +119,11 @@ private:
   // This approach is a little data structure heavy and there is certainly a more clever, faster
   // and more memory efficient approach, but I'm not sure it is warranted. This would actually
   // be kinda fun to optimize if it every becomes a bottle neck (doubtful).
-  QMap< ConstNetworkVertexPtr, QList<TiePointScorePtr> > _scores1, _scores2;
-  QMap< ConstNetworkVertexPtr, QMap<ConstNetworkVertexPtr, double> > _finalScores;
+  QMap<ConstNetworkVertexPtr, QList<TiePointScorePtr>> _scores1, _scores2;
+  QMap<ConstNetworkVertexPtr, QMap<ConstNetworkVertexPtr, double>> _finalScores;
   // Reverse and forward ordering of _finalScores to make getCandidateMatches faster.
-  // QMap< v, QList<v> >
-  QMap< ConstNetworkVertexPtr, QList<ConstNetworkVertexPtr> > _finalCandidates;
+  // QMap<v, QList<v>>
+  QMap<ConstNetworkVertexPtr, QList<ConstNetworkVertexPtr>> _finalCandidates;
   QSet<ConstNetworkVertexPtr> _hasConfidentTie;
 
   double _confidentThreshold;
@@ -171,8 +171,8 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
   return qHash(std::pair<ElementId, ElementId>(t->v1->getElementId(), t->v2->getElementId()));
 }
 
-typedef boost::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
-typedef boost::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+typedef std::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
+typedef std::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
 
 // not implemented
 bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);

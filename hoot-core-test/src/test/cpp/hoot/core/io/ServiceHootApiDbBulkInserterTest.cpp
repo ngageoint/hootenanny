@@ -67,7 +67,7 @@ public:
     setResetType(ResetBasic);
   }
 
-  void setUpTest(const QString testName)
+  void setUpTest(const QString& testName)
   {
     _mapId = -1;
     _testName = testName;
@@ -122,7 +122,7 @@ public:
     reader.read(actualMap);
     reader.close();
     const QString actualOutputFile = _outputPath + "psqlOffline-out.osm";
-    boost::shared_ptr<OsmMapWriter> actualMapWriter =
+    std::shared_ptr<OsmMapWriter> actualMapWriter =
       OsmMapWriterFactory::createWriter(actualOutputFile);
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);

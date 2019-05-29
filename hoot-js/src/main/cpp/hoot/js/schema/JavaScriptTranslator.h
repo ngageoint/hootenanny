@@ -87,9 +87,9 @@ public:
   /**
    * Returns the number of times that this log message has been emitted.
    */
-  int getLogCount(QString log);
+  int getLogCount(const QString& log);
 
-  virtual boost::shared_ptr<const Schema> getOgrOutputSchema();
+  virtual std::shared_ptr<const Schema> getOgrOutputSchema();
 
   // Filter for file names
   virtual const QString getLayerNameFilter() override;
@@ -97,7 +97,7 @@ public:
   /**
    * Uses the specified script text instead of loading the script from a file.
    */
-  void setScriptText(QString text) { close(); _scriptText = text; _scriptPath = QString(); }
+  void setScriptText(const QString& text) { close(); _scriptText = text; _scriptPath = QString(); }
 
   virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType);
@@ -109,11 +109,11 @@ public:
 
 protected:
 
-  boost::shared_ptr<PluginContext> _gContext;
+  std::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
 
   bool _error;
-  boost::shared_ptr<Schema> _schema;
+  std::shared_ptr<Schema> _schema;
   QString _scriptText;
   Tags* _tags;
   std::vector<double> _timing;
@@ -122,20 +122,20 @@ protected:
 
   Settings _conf;
 
-  std::vector<TranslatedFeature> _createAllFeatures(QVariantList vm);
-  boost::shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
+  std::vector<TranslatedFeature> _createAllFeatures(const QVariantList& vm);
+  std::shared_ptr<Feature> _createFeature(const QVariantMap& vm, QString& tableName);
 
   virtual void _init();
 
   /**
    * Warn the user about the feature currently being processed.
    */
-  void _featureWarn(QString message, QString fileName, QString functionName,
+  void _featureWarn(const QString& message, const QString& fileName, const QString& functionName,
                     int lineNumber);
 
   virtual void _finalize();
 
-  QVariant& _getMapValue(QVariantMap& map, QString key);
+  QVariant& _getMapValue(QVariantMap& map, const QString& key);
 
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
 
@@ -143,9 +143,9 @@ protected:
 
   void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
-  boost::shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
+  std::shared_ptr<FieldDefinition> _parseFieldDefinition(const QVariant& fieldV) const;
 
-  boost::shared_ptr<Layer> _parseLayer(QVariant layer) const;
+  std::shared_ptr<Layer> _parseLayer(const QVariant& layer) const;
 
   double _toDouble(const QVariant& v) const;
 

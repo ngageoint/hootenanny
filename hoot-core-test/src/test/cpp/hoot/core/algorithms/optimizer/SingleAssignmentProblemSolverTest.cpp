@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -71,14 +71,14 @@ class SingleAssignmentProblemSolverTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  vector< boost::shared_ptr<ActorTask> > toDelete;
+  vector<std::shared_ptr<ActorTask>> toDelete;
 
   void addActors(SingleAssignmentProblemSolver<ActorTask, ActorTask>& solver, int* v)
   {
     int i = 0;
     while (v[i] >= 0)
     {
-      boost::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
       toDelete.push_back(ptr);
       solver.addActor(ptr.get());
     }
@@ -89,7 +89,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      boost::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      std::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
       toDelete.push_back(ptr);
       solver.addTask(ptr.get());
     }

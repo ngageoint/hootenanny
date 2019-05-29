@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMPBFWRITER_H
@@ -93,11 +93,11 @@ public:
 
   void initializePartial(std::ostream* strm);
 
-  virtual void initializePartial();
+  virtual void initializePartial() override;
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith("osm.pbf"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith("osm.pbf"); }
 
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
   virtual void close();
 
   /**
@@ -123,11 +123,11 @@ public:
   /**
    * The write command called after open.
    */
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map) override;
 
-  void write(ConstOsmMapPtr map, const QString& path);
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
-  void write(ConstOsmMapPtr map, std::ostream* strm);
+  void write(const ConstOsmMapPtr& map, std::ostream* strm);
 
   /**
    * Writes the head out to the specified output stream. This is useful when manually composing
@@ -139,11 +139,11 @@ public:
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
    * call to initializePartial and finalized with a call to finalizePartial.
    */
-  virtual void writePartial(const ConstOsmMapPtr& map);
+  virtual void writePartial(const ConstOsmMapPtr& map) override;
 
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& n) override;
+  virtual void writePartial(const ConstWayPtr& w) override;
+  virtual void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
@@ -212,10 +212,10 @@ private:
   long _nodeIdDelta;
   long _relationIdDelta;
 
-  boost::shared_ptr<std::fstream> _openStream;
+  std::shared_ptr<std::fstream> _openStream;
   bool _needToCloseInput;
 
-  void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
+  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
 
   long _convertLon(double lon);
 
@@ -231,7 +231,7 @@ private:
 
   int _toRelationMemberType(ElementType t);
 
-  void _writeBlob(const char* buffer, int size, std::string type);
+  void _writeBlob(const char* buffer, int size, const std::string& type);
 
   /**
    * Write out the guts of the map.
@@ -241,19 +241,19 @@ private:
   /**
    * Writes a node using the non-dense format.
    */
-  void _writeNode(const boost::shared_ptr<const hoot::Node>& n);
+  void _writeNode(const std::shared_ptr<const hoot::Node>& n);
 
-  void _writeNodeDense(const boost::shared_ptr<const hoot::Node>& n);
+  void _writeNodeDense(const std::shared_ptr<const hoot::Node>& n);
 
   void _writeOsmHeader(bool includeBounds = true, bool sorted = true);
 
   void _writePrimitiveBlock();
 
-  void _writeRelation(const boost::shared_ptr<const hoot::Relation>& r);
+  void _writeRelation(const std::shared_ptr<const hoot::Relation>& r);
 
-  void _writeWay(const boost::shared_ptr<const hoot::Way>& w);
+  void _writeWay(const std::shared_ptr<const hoot::Way>& w);
 
-  void _open(QString url);
+  void _open(const QString& url);
 };
 
 }

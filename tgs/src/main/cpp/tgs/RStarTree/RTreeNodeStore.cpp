@@ -22,19 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RTreeNodeStore.h"
 
 // Standard Includes
+#include <cassert>
 #include <iostream>
 
 namespace Tgs
 {
   const int MAX_NODE_COUNT = 100000;
 
-  RTreeNodeStore::RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps)
+  RTreeNodeStore::RTreeNodeStore(int dimensions, const std::shared_ptr<PageStore>& ps)
   {
     _dimensions = dimensions;
     _storeSp = ps;
@@ -60,7 +61,7 @@ namespace Tgs
 
   RTreeNode* RTreeNodeStore::createNode()
   {
-    boost::shared_ptr<Page> page = _store->createPage();
+    std::shared_ptr<Page> page = _store->createPage();
     page->setDirty();
     RTreeNode* node = new RTreeNode(_dimensions, page);
     node->clear();
@@ -83,7 +84,7 @@ namespace Tgs
     if (it == _availableNodes.end())
     {
       RTreeNodeStore* me = const_cast<RTreeNodeStore*>(this);
-      boost::shared_ptr<Page> page = me->_store->getPage(id);
+      std::shared_ptr<Page> page = me->_store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;
@@ -107,7 +108,7 @@ namespace Tgs
 
     // if exists
     NodeMap::const_iterator it = _availableNodes.find(id);
-    if(it != _availableNodes.end())
+    if (it != _availableNodes.end())
     {
       RecItem* item = it->second;
       _nodesList.splice(_nodesList.begin(), _nodesList, item->list_it);
@@ -115,7 +116,7 @@ namespace Tgs
     }
     else
     {
-      boost::shared_ptr<Page> page = _store->getPage(id);
+      std::shared_ptr<Page> page = _store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;
@@ -129,13 +130,13 @@ namespace Tgs
 
   void RTreeNodeStore::_flushNodes()
   {
-    while((int)_nodesList.size() > MAX_NODE_COUNT)
+    while ((int)_nodesList.size() > MAX_NODE_COUNT)
     {
       int keyVal = _nodesList.back();
       _nodesList.pop_back();
 
       NodeMap::iterator it = _availableNodes.find(keyVal);
-      if(it != _availableNodes.end())
+      if (it != _availableNodes.end())
       {
         RecItem * item = it->second;
         delete item;

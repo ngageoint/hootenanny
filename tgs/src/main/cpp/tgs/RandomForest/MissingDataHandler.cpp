@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MissingDataHandler.h"
 
@@ -34,7 +34,7 @@
 namespace Tgs
 {
   void MissingDataHandler::replaceMissingValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data)
+    std::shared_ptr<DataFrame> data)
   {
     try
     {
@@ -42,13 +42,13 @@ namespace Tgs
 
       //For each factor check if the null value is supposed to be a missing value and proceed from there
       //If null treatment has not been set for the factor then default to replace as missing values
-      for(unsigned int fIdx = 0; fIdx < numFactors; fIdx++)
+      for (unsigned int fIdx = 0; fIdx < numFactors; fIdx++)
       {
-        if(!data->hasNullTreatments() || data->getNullTreatment(fIdx) == DataFrame::NullAsMissingValue)
+        if (!data->hasNullTreatments() || data->getNullTreatment(fIdx) == DataFrame::NullAsMissingValue)
         {
           DataFrame::FactorType fType;
 
-          if(data->hasFactorTypes())
+          if (data->hasFactorTypes())
           {
             fType = (DataFrame::FactorType)data->getFactorTypes()[fIdx];
           }
@@ -58,7 +58,7 @@ namespace Tgs
             fType = DataFrame::Numerical;
           }
 
-          if(fType == DataFrame::Numerical)
+          if (fType == DataFrame::Numerical)
           {
             _replaceMissingNumericValuesFast(missingDataValue, data, fIdx);
           }
@@ -76,19 +76,19 @@ namespace Tgs
   }
 
   void MissingDataHandler::_replaceMissingNominalValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data, unsigned int factorIndex)
+    std::shared_ptr<DataFrame> data, unsigned int factorIndex)
   {
     try
     {
       unsigned int numDataVectors = data->getNumDataVectors();
 
-      std::map<std::string, std::map<double, unsigned int > > frequencyMap;
+      std::map<std::string, std::map<double, unsigned int>> frequencyMap;
 
-      for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
+      for (unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
         double value = data->getDataVector(dataIndex)[factorIndex];
 
-        if(value != missingDataValue)
+        if (value != missingDataValue)
         {
           std::string className = data->getTrainingLabel(dataIndex);
 
@@ -99,18 +99,18 @@ namespace Tgs
       std::map<std::string, double> maxFrequencyMap;
 
       std::map<double, unsigned int >::iterator valueItr;
-      std::map<std::string, std::map<double, unsigned int > >::iterator classItr;
+      std::map<std::string, std::map<double, unsigned int>>::iterator classItr;
 
-      for(classItr = frequencyMap.begin(); classItr != frequencyMap.end(); ++classItr)
+      for (classItr = frequencyMap.begin(); classItr != frequencyMap.end(); ++classItr)
       {
         double maxValue = 0.0;
         int maxCount = -1;
 
-        for(valueItr = classItr->second.begin(); valueItr != classItr->second.end(); ++valueItr)
+        for (valueItr = classItr->second.begin(); valueItr != classItr->second.end(); ++valueItr)
         {
           int valueCount = valueItr->second;
 
-          if(valueCount > maxCount)
+          if (valueCount > maxCount)
           {
             maxValue = valueItr->first;
             maxCount = valueCount;
@@ -120,11 +120,11 @@ namespace Tgs
         maxFrequencyMap[classItr->first] = maxValue;
       }
 
-      for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
+      for (unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
         double value = data->getDataVector(dataIndex)[factorIndex];
 
-        if(value == missingDataValue)
+        if (value == missingDataValue)
         {
           std::string className = data->getTrainingLabel(dataIndex);
 
@@ -140,19 +140,19 @@ namespace Tgs
   }
 
   void MissingDataHandler::_replaceMissingNumericValuesFast(double missingDataValue,
-    boost::shared_ptr<DataFrame> data, unsigned int factorIndex)
+    std::shared_ptr<DataFrame> data, unsigned int factorIndex)
   {
     try
     {
       unsigned int numDataVectors = data->getNumDataVectors();
 
-      std::map<std::string, std::vector<double> > sortMap;
+      std::map<std::string, std::vector<double>> sortMap;
 
-      for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
+      for (unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
         double value = data->getDataVector(dataIndex)[factorIndex];
 
-        if(value != missingDataValue)
+        if (value != missingDataValue)
         {
           std::string className = data->getTrainingLabel(dataIndex);
 
@@ -161,19 +161,19 @@ namespace Tgs
       }
 
       std::map<std::string, double> medianMap;
-      std::map<std::string, std::vector<double> >::iterator sortItr;
+      std::map<std::string, std::vector<double>>::iterator sortItr;
 
-      for(sortItr = sortMap.begin(); sortItr != sortMap.end(); ++sortItr)
+      for (sortItr = sortMap.begin(); sortItr != sortMap.end(); ++sortItr)
       {
         std::sort(sortItr->second.begin(), sortItr->second.end());
         medianMap[sortItr->first] = sortItr->second[sortItr->second.size() / 2];
       }
 
-      for(unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
+      for (unsigned int dataIndex = 0; dataIndex < numDataVectors; dataIndex++)
       {
         double value = data->getDataVector(dataIndex)[factorIndex];
 
-        if(value == missingDataValue)
+        if (value == missingDataValue)
         {
           std::string className = data->getTrainingLabel(dataIndex);
 

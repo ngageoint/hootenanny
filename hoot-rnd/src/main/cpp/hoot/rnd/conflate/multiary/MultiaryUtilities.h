@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYUTILITIES_H
 #define MULTIARYUTILITIES_H
@@ -141,7 +141,7 @@ public:
   static QList<hoot::MultiarySimpleMatch> findMatches(QByteArray checkElement,
     QList<QByteArray> againstElements);
 
-  boost::shared_ptr<SearchBoundsCalculator> getBoundsCalculator();
+  std::shared_ptr<SearchBoundsCalculator> getBoundsCalculator();
 
   static MultiaryUtilities& getInstance();
 
@@ -149,9 +149,9 @@ private:
 
   MultiaryUtilities() {}
 
-  static boost::shared_ptr<MultiaryUtilities> _theInstance;
+  static std::shared_ptr<MultiaryUtilities> _theInstance;
 
-  boost::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;
+  std::shared_ptr<SearchBoundsCalculator> _searchBoundsCalculator;
 };
 
 }

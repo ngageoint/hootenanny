@@ -41,12 +41,12 @@ class MemChangesetProvider : public ChangesetProvider
 
 public:
 
-  explicit MemChangesetProvider(boost::shared_ptr<OGRSpatialReference> pProjection);
+  explicit MemChangesetProvider(const std::shared_ptr<OGRSpatialReference>& pProjection);
 
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~MemChangesetProvider();
 
@@ -72,11 +72,11 @@ public:
   bool containsChange(ElementId eID);
 
 private:
-  boost::shared_ptr<OGRSpatialReference> _projection;
+  std::shared_ptr<OGRSpatialReference> _projection;
   std::list<Change> _changes;
 };
 
-typedef boost::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
+typedef std::shared_ptr<MemChangesetProvider> MemChangesetProviderPtr;
 
 }
 

@@ -27,15 +27,14 @@
 #ifndef GEOMETRYMODIFIERACTION_H
 #define GEOMETRYMODIFIERACTION_H
 
+// Hoot
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
 #include <QHash>
-
-// boost
-#include <boost/shared_ptr.hpp>
 
 namespace hoot
 {
@@ -63,8 +62,14 @@ public:
   // Parses content of command specific arguments
   virtual void parseArguments(const QHash<QString, QString>& arguments) = 0;
 
+  // Command function called before processing all individual elements
+  virtual void processStart(OsmMapPtr& /* pMap */) {}
+
   // Command function to process a filtered element
-  virtual bool process(const ElementPtr& pElement, OsmMap* pMap) = 0;
+  virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) = 0;
+
+  // Command function called after processing all individual elements
+  virtual void processFinalize(OsmMapPtr& /* pMap */) {}
 };
 
 /*
@@ -80,15 +85,14 @@ struct GeometryModifierActionDesc
   // Command name
   QString command;
 
-  // Node tag key and value strings that must be present and matching
-  // for the node to be included in the processing.
-  QHash<QString, QString> filter;
+  // TagAdvancedCriterion for filtering (see FeatureFiltering.asciidoc)
+  TagAdvancedCriterion filter;
 
   // Argument name and value specific to each command.
   QHash<QString, QString> arguments;
 
   // Instance of the command specific geometry modifier action class implementation.
-  boost::shared_ptr<GeometryModifierAction> pAction;
+  std::shared_ptr<GeometryModifierAction> pAction;
 };
 
 }
