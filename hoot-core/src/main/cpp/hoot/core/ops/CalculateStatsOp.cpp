@@ -228,7 +228,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     const long featureCount = featureCountVisitor.getCount();
     LOG_VART(featureCount);
 
-    // _stats.append(SingleStat("Total Features", featureCount));
+    // _addStat("Total Features", featureCount);
 
     vector<std::shared_ptr<MatchCreator>> matchCreators =
       MatchFactory::getInstance().getCreators();
@@ -278,11 +278,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       //output is either conflated, passed through, marked for review, or left unconflated.
       conflatableFeatureCount = 0.0;
     }
-    _stats.append(SingleStat("Total Conflatable Features", conflatableFeatureCount));
-    _stats.append(
-      SingleStat(
-        "Percentage of Total Features Conflatable",
-        ((double)conflatableFeatureCount / (double)featureCount) * 100.0));
+    _addStat("Total Conflatable Features", conflatableFeatureCount);
+    _addStat("Percentage of Total Features Conflatable",
+             ((double)conflatableFeatureCount / (double)featureCount) * 100.0);
     const double numFeaturesMarkedForReview =
       _applyVisitor(
         constMap,
@@ -294,7 +292,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     const double untaggedFeatureCount =
       _applyVisitor(
         constMap, FilteredVisitor(new NoInformationCriterion(),new FeatureCountVisitor()));
-    _stats.append(SingleStat("Untagged Features", untaggedFeatureCount));
+    _addStat("Untagged Features", untaggedFeatureCount);
     long unconflatableFeatureCount = -1.0;
     if (!_inputIsConflatedMapOutput)
     {
@@ -307,13 +305,11 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       //comment)
       unconflatableFeatureCount = 0.0;
     }
-    _stats.append(SingleStat("Total Unconflatable Features", unconflatableFeatureCount));
-    _stats.append(
-      SingleStat(
-        "Percentage of Total Features Unconflatable",
-        ((double)unconflatableFeatureCount / (double)featureCount) * 100.0));
+    _addStat("Total Unconflatable Features", unconflatableFeatureCount);
+    _addStat("Percentage of Total Features Unconflatable",
+             ((double)unconflatableFeatureCount / (double)featureCount) * 100.0);
 
-    _stats.append(SingleStat("Match Creators", matchCreators.size()));
+    _addStat("Match Creators", matchCreators.size());
     QMap<CreatorDescription::BaseFeatureType, double> conflatableFeatureCounts;
     for (CreatorDescription::BaseFeatureType ft = CreatorDescription::POI;
          ft < CreatorDescription::Unknown;
@@ -358,9 +354,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               FilteredVisitor(
                 PoiPolygonPolyCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
-        _stats.append(
-          SingleStat(
-            "Polygons Conflatable by: " + matchCreatorName, conflatablePolyCount));
+        _addStat("Polygons Conflatable by: " + matchCreatorName, conflatablePolyCount);
         conflatableFeatureCounts[CreatorDescription::Polygon] += conflatablePolyCount;
 
         double conflatablePoiPolyPoiCount = 0.0;
@@ -374,40 +368,29 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
               FilteredVisitor(
                 PoiPolygonPoiCriterion(), ConstElementVisitorPtr(new ElementCountVisitor())));
         }
-        _stats.append(
-          SingleStat(
-            "POIs Conflatable by: " + matchCreatorName, conflatablePoiPolyPoiCount));
+        _addStat( "POIs Conflatable by: " + matchCreatorName, conflatablePoiPolyPoiCount);
         conflatableFeatureCounts[CreatorDescription::PoiPolygonPOI] += conflatablePoiPolyPoiCount;
       }
-      _stats.append(
-        SingleStat(
-          "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType));
+      _addStat( "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType);
       conflatableFeatureCounts[featureType] += conflatableFeatureCountForFeatureType;
     }
 
-    _stats.append(SingleStat("Total Conflated Features", conflatedFeatureCount));
-    _stats.append(
-      SingleStat(
-        "Percentage of Total Features Conflated",
-        ((double)conflatedFeatureCount / (double)featureCount) * 100.0));
-    _stats.append(
-      SingleStat("Total Features Marked for Review", numFeaturesMarkedForReview));
-    _stats.append(
-      SingleStat(
-        "Percentage of Total Features Marked for Review",
-        ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0));
-    _stats.append(SingleStat("Total Reviews to be Made", numReviewsToBeMade));
+    _addStat("Total Conflated Features", conflatedFeatureCount);
+    _addStat( "Percentage of Total Features Conflated",
+              ((double)conflatedFeatureCount / (double)featureCount) * 100.0);
+    _addStat("Total Features Marked for Review", numFeaturesMarkedForReview);
+    _addStat("Percentage of Total Features Marked for Review",
+             ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0);
+    _addStat("Total Reviews to be Made", numReviewsToBeMade);
     const double unconflatedFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(
             new NotCriterion(new StatusCriterion(Status::Conflated)),
           new FeatureCountVisitor()));
-    _stats.append(SingleStat("Total Unmatched Features", unconflatedFeatureCount));
-    _stats.append(
-      SingleStat(
-        "Percentage of Total Features Unmatched",
-        ((double)unconflatedFeatureCount / (double)featureCount) * 100.0));
+    _addStat("Total Unmatched Features", unconflatedFeatureCount);
+    _addStat("Percentage of Total Features Unmatched",
+             ((double)unconflatedFeatureCount / (double)featureCount) * 100.0);
 
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            conflatableFeatureCounts.begin();
@@ -425,7 +408,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     LongestTagVisitor v2;
     _applyVisitor(constMap, &v2);
-    _stats.append(SingleStat("Longest Tag", v2.getStat()));
+    _addStat("Longest Tag", v2.getStat());
 
     // TODO: this should be moved into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
@@ -437,29 +420,29 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       st->setErrorTreatment(StrictOff);
       TranslatedTagCountVisitor tcv(st);
       _applyVisitor(constMap, &tcv);
-      _stats.append(SingleStat("Translated Populated Tag Percent", tcv.getStat()));
-      _stats.append(SingleStat("Translated Populated Tags", tcv.getPopulatedCount()));
-      _stats.append(SingleStat("Translated Default Tags", tcv.getDefaultCount()));
-      _stats.append(SingleStat("Translated Null Tags", tcv.getNullCount()));
+      _addStat("Translated Populated Tag Percent", tcv.getStat());
+      _addStat("Translated Populated Tags", tcv.getPopulatedCount());
+      _addStat("Translated Default Tags", tcv.getDefaultCount());
+      _addStat("Translated Null Tags", tcv.getNullCount());
 
-      _stats.append(SingleStat("Building Translated Populated Tag Percent",
+      _addStat("Building Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(BuildingCriterion(map),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("Road Translated Populated Tag Percent",
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
+      _addStat("Road Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(HighwayCriterion(map),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("POI Translated Populated Tag Percent",
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
+      _addStat("POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiCriterion(),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
+      _addStat("Waterway Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(LinearWaterwayCriterion(),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("Polygon Conflatable POI Translated Populated Tag Percent",
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
+      _addStat("Polygon Conflatable POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiPolygonPoiCriterion(),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
-      _stats.append(SingleStat("Polygon Translated Populated Tag Percent",
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
+      _addStat("Polygon Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(PoiPolygonPolyCriterion(),
-          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st))))));
+          ConstElementVisitorPtr(new TranslatedTagCountVisitor(st)))));
     }
     else
     {
@@ -475,6 +458,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
   logMsg += ".";
   LOG_DEBUG(logMsg);
 }
+
+void CalculateStatsOp::_addStat(const QString& name, double value)
+{
+  _stats.append(SingleStat(name,value));
+}
+
+void CalculateStatsOp::_addStat(const char* name, double value)
+{
+  _stats.append(SingleStat(QString(name),value));
+}
+
 
 void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
 {
@@ -590,8 +584,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
     }
 
     //LOG_VARD(val);
-    //_stats.append(SingleStat("-------> " + d.name, val));
-    _stats.append(SingleStat(d.name, val));
+    //_addStat("-------> " + d.name, val);
+    _addStat(d.name, val);
   }
 }
 
@@ -721,8 +715,8 @@ void CalculateStatsOp::_generateFeatureStats(std::shared_ptr<const OsmMap>& map,
     _applyVisitor(
       map, FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(totalFeatures);
-  _stats.append(SingleStat(QString("%1s").arg(description), totalFeatures));
-  _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
+  _addStat(QString("%1s").arg(description), totalFeatures);
+  _addStat(QString("Conflatable %1s").arg(description), conflatableCount);
 
   double conflatedFeatureCount =
     _applyVisitor(
@@ -748,18 +742,15 @@ void CalculateStatsOp::_generateFeatureStats(std::shared_ptr<const OsmMap>& map,
           new NeedsReviewCriterion(map),
           criterion->clone()),
       _getElementVisitorForFeatureType(featureType)));
-  _stats.append(
-    SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
-  _stats.append(
-    SingleStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview));
+  _addStat(QString("Conflated %1s").arg(description), conflatedFeatureCount);
+  _addStat(QString("%1s Marked for Review").arg(description), featuresMarkedForReview);
   const double numFeatureReviewsToBeMade =
     _applyVisitor(
       map,
        FilteredVisitor(
          criterion->clone(),
          ConstElementVisitorPtr(new CountUniqueReviewsVisitor())));
-  _stats.append(
-    SingleStat(QString("%1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
+  _addStat(QString("%1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade);
 
   double unconflatedFeatureCount =
     _applyVisitor(
@@ -777,23 +768,21 @@ void CalculateStatsOp::_generateFeatureStats(std::shared_ptr<const OsmMap>& map,
     unconflatedFeatureCount -= poisMergedIntoPolys;
     LOG_VARD(unconflatedFeatureCount);
   }
-  _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
+  _addStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount);
 
   if (type == CreatorDescription::CalcTypeLength)
   {
-    _stats.append(
-      SingleStat(
-        QString("Meters of %1 Processed by Conflation").arg(description),
+    _addStat( QString("Meters of %1 Processed by Conflation").arg(description),
       _applyVisitor(
         map,
         FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
+        criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor()))));
   }
   else if (type == CreatorDescription::CalcTypeArea)
   {
-    _stats.append(SingleStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
+    _addStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
       _applyVisitor(map, FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
+        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor()))));
   }
 
   double percentageOfTotalFeaturesConflated = 0.0;
@@ -803,20 +792,15 @@ void CalculateStatsOp::_generateFeatureStats(std::shared_ptr<const OsmMap>& map,
       ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesConflated);
-  _stats.append(
-    SingleStat(
-      QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated));
+  _addStat(QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
   double percentageOfTotalFeaturesMarkedForReview = 0.0;
   if (totalFeatures > 0.0)
   {
     percentageOfTotalFeaturesMarkedForReview =
       ((double)featuresMarkedForReview / (double)totalFeatures) * 100.0;
   }
-  _stats.append(
-    SingleStat(
-      QString(
-        "Percentage of %1s Marked for Review").arg(description),
-        percentageOfTotalFeaturesMarkedForReview));
+  _addStat(QString("Percentage of %1s Marked for Review").arg(description),
+           percentageOfTotalFeaturesMarkedForReview);
   double percentageOfTotalFeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
   {
@@ -824,9 +808,7 @@ void CalculateStatsOp::_generateFeatureStats(std::shared_ptr<const OsmMap>& map,
       ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
-  _stats.append(
-    SingleStat(
-      QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));
+  _addStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
 }
 
 }

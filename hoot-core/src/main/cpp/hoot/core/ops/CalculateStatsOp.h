@@ -120,6 +120,8 @@ private:
   QHash<QString,std::shared_ptr<ElementCriterion>> _criterionCache;
   QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
 
+  void _addStat(const QString& name, double value);
+  void _addStat(const char* name, double value);
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
 
   /**
