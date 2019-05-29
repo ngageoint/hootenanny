@@ -129,11 +129,12 @@ class ExportCommand extends ExternalCommand {
             options.add("ogr.append.data=true");
         }
 
-        // OK. This is VERY UGLY and there has to be a better way to do this
-        // DNC uses some MIN INT values to signify NULL's If we don't change this, it throws an
-        // exception and dies.
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("ogr.strict.checking=off");
+            options.add("-C DncExport.conf");
+        }
+
+        if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
+            options.add("-C MgcpCartoExport.conf");
         }
 
         return options;

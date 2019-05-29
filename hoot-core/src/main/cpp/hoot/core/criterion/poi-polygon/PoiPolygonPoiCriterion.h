@@ -28,7 +28,7 @@
 #define POI_POLYGON_POI_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 
 // Qt
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Identifies POIs for use with POI/Polygon conflation
  */
-class PoiPolygonPoiCriterion : public ElementCriterion
+class PoiPolygonPoiCriterion : public ConflatableElementCriterion
 {
 public:
 
