@@ -86,6 +86,11 @@ class ImportCommand extends ExternalCommand {
             //options.add("schema.translation.script=" + translationPath);
         //}
 
+        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
+        {
+          options.add("schema.translation.script=" + translationPath);
+        }
+
         List<String> hootOptions = toHootOptions(options);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
@@ -104,11 +109,6 @@ class ImportCommand extends ExternalCommand {
                 //Reading a GDAL dataset in a .gz file or a .zip archive
                 inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
                 substitutionMap.put("INPUTS", inputs);
-            }
-
-            if (!isNoneTranslation) {
-                substitutionMap.put(
-                  "HOOT_OPTIONS",  (String)substitutionMap.get("HOOT_OPTIONS") + " -D schema.translation.script=" + translationPath);
             }
             command = hootConvertCommand;
         }
