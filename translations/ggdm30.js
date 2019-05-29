@@ -2057,7 +2057,7 @@ ggdm30 = {
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            ggdm30.toChange = hoot.Settings.get("translation.override");
+            ggdm30.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Debug:
@@ -2205,7 +2205,7 @@ ggdm30 = {
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            ggdm30.toChange = hoot.Settings.get("translation.override");
+            ggdm30.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built

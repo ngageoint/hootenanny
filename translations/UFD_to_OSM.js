@@ -3644,7 +3644,7 @@ function initialize()
         ufd.configIn.OgrAddUuid = config.getOgrAddUuid();
 
         // Get any changes
-        ufd.toChange = hoot.Settings.get("translation.override");
+        ufd.toChange = hoot.Settings.get("schema.translation.override");
     }
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and

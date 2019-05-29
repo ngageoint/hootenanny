@@ -22,50 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PYTHONTRANSLATOR_H
-#define PYTHONTRANSLATOR_H
+#ifndef TO_ENGLISH_ADDRESS_TRANSLATOR_H
+#define TO_ENGLISH_ADDRESS_TRANSLATOR_H
 
-// Hoot
-#include <hoot/core/io/ScriptTranslator.h>
-
-// Std
-#include <string>
+// hoot
+#include <hoot/core/language/ToEnglishTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class Tags;
-
-class PythonTranslator : public ScriptTranslator
+/**
+ * Translates addresses to English
+ */
+class ToEnglishAddressTranslator : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::PythonTranslator"; }
+  static std::string className() { return "hoot::ToEnglishAddressTranslator"; }
 
-  PythonTranslator();
+  ToEnglishAddressTranslator();
 
-  virtual ~PythonTranslator();
-
-  virtual bool isValidScript();
+  virtual void setConfiguration(const Settings& conf);
 
   /**
-   * don't evaluate this first.
+   * Translates an address to English
+   *
+   * @param address a complete address string
    */
-  virtual int order() const { return 100; }
+  QString translateToEnglish(const QString& address) const;
 
-protected:
-  // avoid including Python.h in this header file.
-  void* _translateFunction;
+private:
 
-  virtual void _init();
+  friend class PoiPolygonAddressScoreExtractorTest;
 
-  virtual void _finalize();
-
-  virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
+  // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
+  static std::shared_ptr<ToEnglishTranslator> _translator;
 };
 
 }
 
-#endif // PYTHONTRANSLATOR_H
+#endif // TO_ENGLISH_ADDRESS_TRANSLATOR_H

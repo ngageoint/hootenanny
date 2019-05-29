@@ -34,7 +34,7 @@ hoot.require('translate');
 function initialize()
 {
     // Get any changes
-    toChange = hoot.Settings.get("translation.override");
+    toChange = hoot.Settings.get("schema.translation.override");
 }
 
 

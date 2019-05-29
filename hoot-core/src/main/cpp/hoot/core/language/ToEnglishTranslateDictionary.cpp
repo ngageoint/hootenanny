@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "TranslateDictionary.h"
+#include "ToEnglishTranslateDictionary.h"
 
 // Hoot
 #include <hoot/core/util/ConfPath.h>
@@ -45,9 +45,9 @@ namespace pt = boost::property_tree;
 namespace hoot
 {
 
-std::shared_ptr<TranslateDictionary> TranslateDictionary::_theInstance = NULL;
+std::shared_ptr<ToEnglishTranslateDictionary> ToEnglishTranslateDictionary::_theInstance = NULL;
 
-TranslateDictionary::TranslateDictionary() :
+ToEnglishTranslateDictionary::ToEnglishTranslateDictionary() :
 _transliterationCachingEnabled(false)
 {
   if (ConfigOptions().getTransliterationMaxCacheSize() != -1)
@@ -76,36 +76,36 @@ _transliterationCachingEnabled(false)
   }
 }
 
-TranslateDictionary::~TranslateDictionary()
+ToEnglishTranslateDictionary::~ToEnglishTranslateDictionary()
 {
   delete _transliterator;
   delete _titler;
 }
 
-TranslateDictionary& TranslateDictionary::getInstance()
+ToEnglishTranslateDictionary& ToEnglishTranslateDictionary::getInstance()
 {
   if (_theInstance == NULL)
   {
     QString dictionary = ConfPath::search("dictionary.json");
-    _theInstance.reset(new TranslateDictionary());
+    _theInstance.reset(new ToEnglishTranslateDictionary());
     _theInstance->load(dictionary);
   }
   return *_theInstance;
 }
 
-bool TranslateDictionary::getFromTransliterationCache(const QString& originalText,
+bool ToEnglishTranslateDictionary::getFromTransliterationCache(const QString& originalText,
                                                       QString& transliteratedText)
 {
   return _transliterationCache->get(originalText, transliteratedText);
 }
 
-void TranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
+void ToEnglishTranslateDictionary::insertIntoTransliterationCache(const QString& originalText,
                                                          const QString& transliteratedText)
 {
   _transliterationCache->insert(originalText, transliteratedText);
 }
 
-void TranslateDictionary::load(const QString& path)
+void ToEnglishTranslateDictionary::load(const QString& path)
 {
   try
   {
@@ -121,7 +121,7 @@ void TranslateDictionary::load(const QString& path)
   }
 }
 
-void TranslateDictionary::_loadTags(pt::ptree& tree)
+void ToEnglishTranslateDictionary::_loadTags(pt::ptree& tree)
 {
   for (pt::ptree::value_type& translation : tree.get_child("Dictionary"))
   {

@@ -22,7 +22,7 @@ var translateMeanWordSetLevenshtein_1_5 = new hoot.NameExtractor(
 var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
     new hoot.MaxWordSetDistance(
         {"token.separator": "[\\s-,';]+"},
-        new hoot.TranslateStringDistance(
+        new hoot.ToEnglishTranslateStringDistance(
             // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
@@ -30,7 +30,7 @@ var translateMaxWordSetLevenshtein_1_15 = new hoot.NameExtractor(
 var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
     new hoot.MinSumWordSetDistance(
         {"token.separator": "[\\s-,';]+"},
-        new hoot.TranslateStringDistance(
+        new hoot.ToEnglishTranslateStringDistance(
             // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(
@@ -38,7 +38,7 @@ var translateMinWordSetLevenshtein_1_15 = new hoot.NameExtractor(
 var weightedWordDistance = new hoot.NameExtractor(
     new hoot.WeightedWordDistance(
         {"token.separator": "[\\s-,';]+", "weighted.word.distance.probability": 0.5},
-        new hoot.TranslateStringDistance(
+        new hoot.ToEnglishTranslateStringDistance(
             // runs just a little faster w/ tokenize off
             {"translate.string.distance.tokenize": "false"},
             new hoot.LevenshteinDistance(

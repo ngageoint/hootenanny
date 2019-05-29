@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef TRANSLATE_DICTIONARY_H
-#define TRANSLATE_DICTIONARY_H
+#ifndef TO_ENGLISH_TRANSLATE_DICTIONARY_H
+#define TO_ENGLISH_TRANSLATE_DICTIONARY_H
 
 // Qt
 #include <QString>
@@ -47,13 +47,13 @@ namespace hoot
 /**
  * (Singleton)
  */
-class TranslateDictionary
+class ToEnglishTranslateDictionary
 {
 public:
 
-  ~TranslateDictionary();
+  ~ToEnglishTranslateDictionary();
 
-  static TranslateDictionary& getInstance();
+  static ToEnglishTranslateDictionary& getInstance();
 
   const QMap<QString, QStringList>& getTable() { return _translations; }
 
@@ -69,9 +69,9 @@ public:
 
 private:
 
-  TranslateDictionary();
+  ToEnglishTranslateDictionary();
 
-  static std::shared_ptr<TranslateDictionary> _theInstance;
+  static std::shared_ptr<ToEnglishTranslateDictionary> _theInstance;
 
   QMap<QString, QStringList> _translations;
   std::shared_ptr<Tgs::LruCache<QString, QString>> _transliterationCache;
@@ -84,4 +84,4 @@ private:
 
 }
 
-#endif // DICTIONARY_TRANSLATOR_H
+#endif // TO_ENGLISH_TRANSLATE_DICTIONARY_H

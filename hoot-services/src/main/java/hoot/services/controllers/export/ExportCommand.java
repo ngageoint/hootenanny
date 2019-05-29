@@ -77,13 +77,6 @@ class ExportCommand extends ExternalCommand {
 
         String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
 
-        //see https://github.com/ngageoint/hootenanny/issues/3228
-        if (params.getOutputType().equalsIgnoreCase("gdb")) {
-            substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
-            command += " --trans ${TRANSLATION_PATH}";
-        }
-
-
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -133,7 +126,7 @@ class ExportCommand extends ExternalCommand {
             convertOps.add("hoot::RemoveElementsVisitor");
             options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
             options.add("remove.elements.visitor.recursive=false");
-            options.add("writer.include.circular.error.tags=false");  //Not currently working for shp writer
+            options.add("writer.include.circular.error.tags=false");
 
             convertOps.add("hoot::RemoveTagsVisitor");
             options.add("remove.tags.visitor.keys=hoot:status;hoot:building:match;error:circular");
@@ -148,18 +141,16 @@ class ExportCommand extends ExternalCommand {
 
         }
 
-        //GDB doesn't support TranslationOp
-        if (!params.getOutputType().equalsIgnoreCase("gdb")) {
             //Translate the features (which includes applying tag overrides set below)
             convertOps.add("hoot::TranslationOp");
-            options.add("translation.direction=toogr");
-            options.add("translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
-        }
+            options.add("schema.translation.direction=toogr");
+            options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+
 
 
         // By default export removes hoot conflation review related tags
         if (!params.getTagOverrides().isEmpty()) {
-            options.add("translation.override=" + params.getTagOverrides() );
+            options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
         // Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"

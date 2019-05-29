@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Python
 // Python redefines these two macros from /usr/include/features.h
 // undefine them in this source file to remove warnings
 #ifdef _POSIX_C_SOURCE
@@ -38,7 +37,7 @@
 // See http://docs.python.org/c-api/intro.html#includes
 #include <Python.h>
 
-#include "PythonTranslator.h"
+#include "PythonSchemaTranslator.h"
 
 // hoot
 #include <hoot/core/util/Exception.h>
@@ -60,18 +59,18 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ScriptTranslator, PythonTranslator)
+HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, PythonSchemaTranslator)
 
-PythonTranslator::PythonTranslator()
+PythonSchemaTranslator::PythonSchemaTranslator()
 {
 }
 
-PythonTranslator::~PythonTranslator()
+PythonSchemaTranslator::~PythonSchemaTranslator()
 {
   close();
 }
 
-void PythonTranslator::_init()
+void PythonSchemaTranslator::_init()
 {
   LOG_DEBUG("Initializing Python");
 
@@ -130,7 +129,7 @@ void PythonTranslator::_init()
   Py_DECREF(module);
 }
 
-bool PythonTranslator::isValidScript()
+bool PythonSchemaTranslator::isValidScript()
 {
   if (!_initialized)
   {
@@ -148,14 +147,14 @@ bool PythonTranslator::isValidScript()
   return _initialized;
 }
 
-void PythonTranslator::_finalize()
+void PythonSchemaTranslator::_finalize()
 {
   LOG_DEBUG("Finalizing Python");
   Py_DECREF((PyObject*)_translateFunction);
   Py_Finalize();
 }
 
-void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
+void PythonSchemaTranslator::_translateToOsm(Tags& tags, const char* layerName, const char* geomType)
 {
   PyObject* layerNamePy = PyString_FromString(layerName);
   PyObject* geomTypePy = PyString_FromString(geomType);

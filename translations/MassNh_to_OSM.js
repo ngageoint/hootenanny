@@ -553,7 +553,7 @@ MassNh = {
                     MassNh.configIn.OgrAddUuid = config.getOgrAddUuid();
 
                     // Get any changes
-                    MassNh.toChange = hoot.Settings.get("translation.override");
+                    MassNh.toChange = hoot.Settings.get("schema.translation.override");
                 }
 
         // Debug:
