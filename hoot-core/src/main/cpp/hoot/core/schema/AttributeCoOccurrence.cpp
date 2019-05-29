@@ -34,12 +34,11 @@
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/language/DictionaryTranslator.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -224,7 +223,7 @@ private:
     // "double PoiPolygonMatch::_calculateNameScore"
 
     // found experimentally when doing building name comparisons
-    double score = NameExtractor(StringDistancePtr(new TranslateStringDistance(
+    double score = NameExtractor(StringDistancePtr(new ToEnglishTranslateStringDistance(
                                  StringDistancePtr(new MeanWordSetDistance(
                                  StringDistancePtr(new LevenshteinDistance(1.45)))))))
                    .extract(e1, e2);

@@ -63,8 +63,6 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    DataConverter converter;
-
     LOG_VART(args.size());
     LOG_VART(args);
     QStringList inputs;
@@ -74,11 +72,18 @@ public:
     {
       const QString arg = args[i];
       LOG_VART(arg);
-      //-- options are assumed to be all at the end of the command, so we're done parsing
-      //inputs/outputs once we reach one of them
+      // Formerly, "--" options existed and were required to all be at the end of the command, so
+      // you could break here once you reached them, and you knew you were done parsing
+      // inputs/outputs. Now, the command doesn't take any command line options (uses all
+      // configuration options), so let's throw if we see a command line option. If we add any
+      // command line options back in at some point, then we can switch this logic back to how
+      // it originally was.
       if (arg.startsWith("--"))
       {
-        break;
+        //break;
+        throw IllegalArgumentException(
+          QString("The convert command takes no inline options starting with '--'. All options ") +
+          QString("are passed in as configuration options (-D)."));
       }
       argIndex++;
       inputs.append(arg);
@@ -89,40 +94,10 @@ public:
     inputs.removeAt(argIndex - 1);
     LOG_VART(inputs.size());
     LOG_VART(inputs);
-    LOG_VART(output);
+    LOG_VART(output);  
 
-    if (args.contains("--trans"))
-    {
-      const QString translation = args.at(args.indexOf("--trans") + 1).trimmed();
-      if (translation.isEmpty())
-      {
-        throw HootException("Invalid translation specified.");
-      }
-      converter.setTranslation(translation);
-    }    
-
-    if (args.contains("--cols"))
-    {
-      converter.setColsArgSpecified(true);
-      const QStringList cols =
-        args.at(args.indexOf("--cols") + 1).trimmed().split(",", QString::SkipEmptyParts);
-      converter.setColumns(cols);
-    }
-
-    if (args.contains("--limit"))
-    {
-      bool ok;
-      const int featureReadLimit = args.at(args.indexOf("--limit") + 1).trimmed().toInt(&ok);
-      if (!ok)
-      {
-        throw HootException("Invalid input specified for limit: " +
-                            args.at(args.indexOf("--limit") + 1));
-      }
-      converter.setFeatureReadLimit(featureReadLimit);
-    }
-
+    DataConverter converter;
     converter.setConfiguration(conf());
-
     converter.convert(inputs, output);
 
     QString msg = "Convert operation completed in ";

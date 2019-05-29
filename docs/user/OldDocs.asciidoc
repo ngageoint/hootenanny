@@ -363,7 +363,7 @@ _Note_: The +translateToOsm+ was previously called +translateAttributes+ . Eithe
 This method will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot convert "myinput1.shp myinput2.shp" myoutput.osm --trans tmp/SimpleExample.js
+hoot convert -D schema.translation.script=tmp/SimpleExample.js "myinput1.shp myinput2.shp" myoutput.osm
 ------
 
 The functions will be called in the following order:
@@ -756,7 +756,7 @@ Returns:
 The methods will be called after the +initialize+ method is called when translating from an OGR format to a OSM schema. For instance if you call:
 
 ------
-hoot convert myinput.osm myoutput.shp --trans tmp/SimpleExample.js
+hoot convert -D schema.translation.script=tmp/SimpleExample.js myinput.osm myoutput.shp
 ------
 
 The functions will be called in the following order:
@@ -848,7 +848,7 @@ Below are a discussion of some special handling situations when reading and writ
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
 ------
-hoot convert input.osm output.shp --trans translations/MyTranslation.js
+hoot convert -D schema.translation.script=translations/MyTranslation.js input.osm output.shp
 ------
 
 The above command will create a new directory called +output+ and the layers specified in the +translations/MyTranslation.js+ schema will be created as +output/<your layer name>.shp+ .
@@ -882,7 +882,7 @@ This uses a simple translation script ( +Poi.js+ ) that exports POI data and its
 Then to convert the file back into a .osm file run:
 
 ------
-hoot convert foo.vrt ConvertedBack.osm --trans translations/Poi.js
+hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedBack.osm
 ------
 
 
@@ -960,7 +960,7 @@ would like to disable the automatic construction of complex buildings from the i
 +ogr2osm.simplify.complex.buildings+ to false.  For example:
 
 ------
-hoot convert -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm --trans MyTranslation
+hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.complex.buildings=false MyInput.shp MyOutput.osm
 ------
 
 [[Common-Use-Cases]]
@@ -1105,7 +1105,7 @@ def translateAttributes(attrs, layerName):
 To run the tiger translation put the above code in a file named +translations/TigerRoads.py+ and run the following:
 
 ------
-hoot convert tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm --trans TigerRoads
+hoot convert -D schema.translation.script=TigerRoads tmp/dc-roads/tl_2012_11001_roads.shp tmp/dc-roads/tiger.osm
 ------
 
 The following translation will work OK with the DC data.
@@ -1145,7 +1145,7 @@ def translateAttributes(attrs, layerName):
 To run the DC GIS translation put the above code in a file named +translations/DcRoads.py+ and run the following:
 
 ------
-hoot convert tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm  --trans DcRoads
+hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp tmp/dc-roads/dcgis.osm
 ------
 
 
@@ -1174,7 +1174,7 @@ hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/
 Now we can convert the final result back into a Shapefile.
 
 ------
-hoot convert tmp/dc-roads/output.osm tmp/dc-roads/output.shp --cols "name,highway,surface,foot,horse,bicycle"
+hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle" tmp/dc-roads/output.osm tmp/dc-roads/output.shp
 ------
 
 
@@ -1187,14 +1187,14 @@ hoot convert tmp/dc-roads/output.osm tmp/dc-roads/output.shp --cols "name,highwa
 . Convert your GPX file into an OSM file where each track is now a way.
 
 ------
-hoot convert "$HOME/MyTracks.gpx;tracks" tmp/MyTracks.osm --trans GpsTrack
+hoot convert -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;tracks" tmp/MyTracks.osm
 ------
 +
 
 . Use the special track snapping conflation manipulation to snap your tracks to an existing road network and convert to Shapefile.
 ------
 hoot conflate -D conflator.manipulators=hoot::WaySnapMerger HighQualityRoads.osm tmp/MyTracks.osm tmp/MySnappedTracks.osm
-hoot convert tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm --cols "hoot:max:movement,hoot:mean:movement,hoot:score,name,foot"
+hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoot:score;name;foot" tmp/MySnappedTracks.shp tmp/MySnappedTracks.osm
 ------
 
 
@@ -1211,7 +1211,7 @@ If you have node attributes that you want to keep you can use the +hoot::PointsT
 The command used with a GPX input file is:
 
 ------
-hoot convert -D "convert.ops+=hoot::PointsToTracksOp" "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm --trans GpsTrack
+hoot convert -D "convert.ops+=hoot::PointsToTracksOp" -D schema.translation.script=GpsTrack "$HOME/MyTracks.gpx;track_points" tmp/MyTracks.osm
 ------
 
 An example translation file is:
@@ -1269,7 +1269,7 @@ Run Hootenanny and add your data to the template File GeoDatabase::
 * Add the template File GeoDatabase to write to.
 +
 ----
-hoot convert -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb --trans $HOOT_HOME/translations/TDS.js
+hoot convert -D schema.translation.script=GpsTrack -D ogr.append.data="true" your_data.osm LTDS_4_0.gdb
 ----
 
 Transfer the LTDS_4_0.gdb to the machine that has ESRI ArcGIS installed::

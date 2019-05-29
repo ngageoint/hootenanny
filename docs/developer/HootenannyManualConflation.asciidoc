@@ -19,8 +19,8 @@ This is a contrived example set of commands that perform all the data preparatio
 
 ----------------------------
 # translate
-hoot convert Input1.shp TranslatedOutput1.osm --trans MyTranslation.py
-hoot convert Input2.shp TranslatedOutput2.osm --trans MyTranslation.py
+hoot convert -D schema.translation.script=MyTranslation.py Input1.shp TranslatedOutput1.osm
+hoot convert -D schema.translation.script=MyTranslation.py Input2.shp TranslatedOutput2.osm
 
 # crop (optional)
 hoot crop TranslatedOutput1.osm CroppedOutput1.osm "-77.0551,38.8845,-77.0281,38.9031"
@@ -58,7 +58,7 @@ Hootenanny User Guide documentation on creating translations, as well as the con
 An example:
 
 ----------------------
-hoot convert Input.shp TranslatedOutput.osm --trans MyTranslation.py
+hoot convert -D schema.translation.script=MyTranslation.py Input.shp TranslatedOutput.osm
 ----------------------------
 
 ==== Cropping Test Data (optional)

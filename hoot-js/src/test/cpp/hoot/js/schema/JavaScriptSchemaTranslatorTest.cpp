@@ -33,9 +33,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -47,9 +47,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class JavaScriptTranslatorTest : public HootTestFixture
+class JavaScriptSchemaTranslatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(JavaScriptTranslatorTest);
+  CPPUNIT_TEST_SUITE(JavaScriptSchemaTranslatorTest);
   CPPUNIT_TEST(runSchemaTest);
   CPPUNIT_TEST(runToOsmTest);
   CPPUNIT_TEST(runLayerNameFilterTest);
@@ -60,10 +60,12 @@ public:
   void runToOsmTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
-                                      "test-files/io/SampleTranslation.js"));
+    std::shared_ptr<ScriptSchemaTranslator> st(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+        "test-files/io/SampleTranslation.js"));
 
-    std::shared_ptr<ScriptToOgrTranslator> uut = std::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    std::shared_ptr<ScriptToOgrSchemaTranslator> uut =
+      std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
 
     if (!uut)
     {
@@ -73,8 +75,8 @@ public:
 
     std::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
-//    JavaScriptTranslator::TranslatedFeature tf;
-    ScriptToOgrTranslator::TranslatedFeature tf;
+//    JavaScriptSchemaTranslator::TranslatedFeature tf;
+    ScriptToOgrSchemaTranslator::TranslatedFeature tf;
     QString layer;
 
     Tags t;
@@ -146,9 +148,10 @@ public:
   void runLayerNameFilterTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    // We just need a standard ScriptTranslator for this test.
-    std::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(
-                                      "test-files/io/SampleTranslation.js"));
+    // We just need a standard ScriptSchemaTranslator for this test.
+    std::shared_ptr<ScriptSchemaTranslator> uut(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+        "test-files/io/SampleTranslation.js"));
 
     if (!uut)
     {
@@ -162,10 +165,12 @@ public:
   void runSchemaTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    std::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
-                                      "test-files/io/SampleTranslation.js"));
+    std::shared_ptr<ScriptSchemaTranslator> st(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(
+        "test-files/io/SampleTranslation.js"));
 
-    std::shared_ptr<ScriptToOgrTranslator>uut = std::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    std::shared_ptr<ScriptToOgrSchemaTranslator>uut =
+      std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
 
     if (!uut)
     {
@@ -216,7 +221,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JavaScriptTranslatorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JavaScriptTranslatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JavaScriptSchemaTranslatorTest, "quick");
 
 }

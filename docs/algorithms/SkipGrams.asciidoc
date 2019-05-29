@@ -102,7 +102,7 @@ Garden+, +Park+, and +Recreation Center+.
 With these promising results, the +hoot::KskipBigramDistance+ class was tested
 as a +hoot::FeatureExtractor+ within the +hoot::BuildingRfClassifier+ framework,
 including using permutations of +hoot::MaxWordSetDistance+,
-+hoot::MeanWordSetDistance+, and +hoot::TranslateStringDistance+.  Once the
++hoot::MeanWordSetDistance+, and +hoot::ToEnglishTranslateStringDistance+.  Once the
 random forest model for building conflation was trained the model was tested
 against the model creation data sets, the output of Hootenanny is found below.
 

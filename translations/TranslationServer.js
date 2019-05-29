@@ -52,38 +52,38 @@ var fcodeLookup = {
 var translationsMap = {
     toogr: {
         TDSv40: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv40.js',
-            'translation.direction': 'toogr'
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
+            'schema.translation.direction': 'toogr'
         }),
         TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
-            'translation.direction': 'toogr'
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'schema.translation.direction': 'toogr'
         }),
         MGCP: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
-            'translation.direction': 'toogr'
+            'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
+            'schema.translation.direction': 'toogr'
         }),
         GGDMv30: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/GGDMv30.js',
-            'translation.direction': 'toogr'
+            'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
+            'schema.translation.direction': 'toogr'
         })
     },
     toosm: {
         TDSv40: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv40.js',
-            'translation.direction': 'toosm'
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
+            'schema.translation.direction': 'toosm'
         }),
         TDSv61: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/TDSv61.js',
-            'translation.direction': 'toosm'
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'schema.translation.direction': 'toosm'
         }),
         MGCP: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
-            'translation.direction': 'toosm'
+            'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
+            'schema.translation.direction': 'toosm'
         }),
         GGDMv30: new hoot.TranslationOp({
-            'translation.script': HOOT_HOME + '/translations/GGDMv30.js',
-            'translation.direction': 'toosm'
+            'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
+            'schema.translation.direction': 'toosm'
         })
     }
 };

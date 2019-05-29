@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "JavaScriptTranslator.h"
+#include "JavaScriptSchemaTranslator.h"
 
 // hoot
 #include <hoot/core/util/Exception.h>
@@ -60,7 +60,7 @@
 // Tgs
 #include <tgs/System/Time.h>
 
-Q_DECLARE_METATYPE(hoot::JavaScriptTranslator*)
+Q_DECLARE_METATYPE(hoot::JavaScriptSchemaTranslator*)
 
 using namespace geos::geom;
 using namespace std;
@@ -69,9 +69,9 @@ using namespace v8;
 namespace hoot
 {
 
-int JavaScriptTranslator::logWarnCount = 0;
+int JavaScriptSchemaTranslator::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ScriptTranslator, JavaScriptTranslator)
+HOOT_FACTORY_REGISTER(ScriptSchemaTranslator, JavaScriptSchemaTranslator)
 
 // Return the current time
 void jsGetTimeNow(const FunctionCallbackInfo<Value>& args)
@@ -79,17 +79,17 @@ void jsGetTimeNow(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(toV8(Tgs::Time::getTime()));
 }
 
-JavaScriptTranslator::JavaScriptTranslator()
+JavaScriptSchemaTranslator::JavaScriptSchemaTranslator()
 {
   setConfiguration(conf());
 }
 
-void JavaScriptTranslator::setConfiguration(const Settings& conf)
+void JavaScriptSchemaTranslator::setConfiguration(const Settings& conf)
 {
   _conf = conf;
 }
 
-JavaScriptTranslator::~JavaScriptTranslator()
+JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 {
   if (_timing.size() != 0)
   {
@@ -99,7 +99,8 @@ JavaScriptTranslator::~JavaScriptTranslator()
   close();
 }
 
-vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAllFeatures(const QVariantList& list)
+vector<JavaScriptSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::_createAllFeatures(
+  const QVariantList& list)
 {
   vector<TranslatedFeature> result;
   result.reserve(list.size());
@@ -117,7 +118,8 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   return result;
 }
 
-std::shared_ptr<Feature> JavaScriptTranslator::_createFeature(const QVariantMap& vm, QString &tableName)
+std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVariantMap& vm,
+                                                              QString &tableName)
 {
   if (vm.contains("attrs") == false)
   {
@@ -190,7 +192,7 @@ std::shared_ptr<Feature> JavaScriptTranslator::_createFeature(const QVariantMap&
   return result;
 }
 
-void JavaScriptTranslator::_finalize()
+void JavaScriptSchemaTranslator::_finalize()
 {
   // if we didn't error out.
   if (!_error)
@@ -213,7 +215,7 @@ void JavaScriptTranslator::_finalize()
   _initialized = false;
 }
 
-int JavaScriptTranslator::getLogCount(const QString& log)
+int JavaScriptSchemaTranslator::getLogCount(const QString& log)
 {
   int result;
 
@@ -231,9 +233,9 @@ int JavaScriptTranslator::getLogCount(const QString& log)
   return result;
 }
 
-void JavaScriptTranslator::_init()
+void JavaScriptSchemaTranslator::_init()
 {
-  //This can be a costly operation, hence putting it at INFO.
+  //This can be a costly operation, hence putting it at INFO for runtime awareness purposes.
   LOG_INFO("Loading translation script: " << _scriptPath << "...");
 
   _error = false;
@@ -305,7 +307,7 @@ void JavaScriptTranslator::_init()
 }
 
 // Use the layerNameFilter function to get the filter string (regexp)
-const QString JavaScriptTranslator::getLayerNameFilter()
+const QString JavaScriptSchemaTranslator::getLayerNameFilter()
 {
   // Just making sure
   if (!_initialized)
@@ -326,11 +328,11 @@ const QString JavaScriptTranslator::getLayerNameFilter()
   }
   else
   {
-    return ScriptTranslator::getLayerNameFilter();
+    return ScriptSchemaTranslator::getLayerNameFilter();
   }
 }
 
-QVariant& JavaScriptTranslator::_getMapValue(QVariantMap& map, const QString& key)
+QVariant& JavaScriptSchemaTranslator::_getMapValue(QVariantMap& map, const QString& key)
 {
   if (map.contains(key) == false)
   {
@@ -339,7 +341,7 @@ QVariant& JavaScriptTranslator::_getMapValue(QVariantMap& map, const QString& ke
   return map[key];
 }
 
-bool JavaScriptTranslator::isValidScript()
+bool JavaScriptSchemaTranslator::isValidScript()
 {
   bool result = false;
 
@@ -368,8 +370,8 @@ bool JavaScriptTranslator::isValidScript()
   return result;
 }
 
-void JavaScriptTranslator::_featureWarn(const QString& message, const QString& fileName, const QString& functionName,
-  int lineNumber)
+void JavaScriptSchemaTranslator::_featureWarn(const QString& message, const QString& fileName,
+                                              const QString& functionName, int lineNumber)
 {
 //  stringstream ss;
 //  LOG_INFO(_tags);
@@ -378,7 +380,7 @@ void JavaScriptTranslator::_featureWarn(const QString& message, const QString& f
                          functionName.toStdString(), lineNumber);
 }
 
-std::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
+std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
@@ -405,7 +407,6 @@ std::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
 
     if (schemaJs->IsArray())
     {
-
       std::shared_ptr<Schema> schema(new Schema());
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
@@ -425,7 +426,8 @@ std::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
   return _schema;
 }
 
-void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations)
+void JavaScriptSchemaTranslator::_parseEnumerations(DoubleFieldDefinition* fd,
+                                                    QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -467,7 +469,8 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
   }
 }
 
-void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition *fd, QVariant& enumerations)
+void JavaScriptSchemaTranslator::_parseEnumerations(IntegerFieldDefinition *fd,
+                                                    QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -509,7 +512,8 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition *fd, QVaria
   }
 }
 
-void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations)
+void JavaScriptSchemaTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd,
+                                                    QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -551,7 +555,8 @@ void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QV
   }
 }
 
-std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(const QVariant& fieldV) const
+std::shared_ptr<FieldDefinition> JavaScriptSchemaTranslator::_parseFieldDefinition(
+  const QVariant& fieldV) const
 {
   std::shared_ptr<FieldDefinition> result;
 
@@ -708,7 +713,7 @@ std::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(con
   return result;
 }
 
-std::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(const QVariant& layer) const
+std::shared_ptr<Layer> JavaScriptSchemaTranslator::_parseLayer(const QVariant& layer) const
 {
   std::shared_ptr<Layer> newLayer(new Layer());
 
@@ -780,7 +785,7 @@ std::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(const QVariant& layer) 
   return newLayer;
 }
 
-qint32 JavaScriptTranslator::_toInt32(const QVariant& v) const
+qint32 JavaScriptSchemaTranslator::_toInt32(const QVariant& v) const
 {
   if (v.canConvert(QVariant::Int) == false)
   {
@@ -789,7 +794,7 @@ qint32 JavaScriptTranslator::_toInt32(const QVariant& v) const
   return v.toInt();
 }
 
-qint64 JavaScriptTranslator::_toInt64(const QVariant& v) const
+qint64 JavaScriptSchemaTranslator::_toInt64(const QVariant& v) const
 {
   if (v.canConvert(QVariant::LongLong) == false)
   {
@@ -798,7 +803,7 @@ qint64 JavaScriptTranslator::_toInt64(const QVariant& v) const
   return v.toLongLong();
 }
 
-double JavaScriptTranslator::_toDouble(const QVariant& v) const
+double JavaScriptSchemaTranslator::_toDouble(const QVariant& v) const
 {
   if (v.canConvert(QVariant::Double) == false)
   {
@@ -807,13 +812,13 @@ double JavaScriptTranslator::_toDouble(const QVariant& v) const
   return v.toDouble();
 }
 
-vector<ScriptToOgrTranslator::TranslatedFeature> JavaScriptTranslator::translateToOgr(Tags& tags,
-  ElementType elementType, geos::geom::GeometryTypeId geometryType)
+vector<ScriptToOgrSchemaTranslator::TranslatedFeature> JavaScriptSchemaTranslator::translateToOgr(
+  Tags& tags, ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
   return _createAllFeatures(_translateToOgrVariants(tags, elementType, geometryType));
 }
 
-vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType elementType,
+vector<Tags> JavaScriptSchemaTranslator::translateToOgrTags(Tags& tags, ElementType elementType,
   GeometryTypeId geometryType)
 {
   vector<Tags> result;
@@ -852,7 +857,7 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
   return result;
 }
 
-QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
+QVariantList JavaScriptSchemaTranslator::_translateToOgrVariants(Tags& tags,
   ElementType elementType, geos::geom::GeometryTypeId geometryType)
 {
   _tags = &tags;
@@ -904,7 +909,8 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   Handle<Object> tObj = _gContext->getContext(current)->Global();
 
   // We assume this exists. we checked during Init.
-  Handle<Function> tFunc = Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
+  Handle<Function> tFunc =
+    Handle<Function>::Cast(tObj->Get(String::NewFromUtf8(current, "translateToOgr")));
 
   // Make sure we have a translation function. No easy way to do this earlier than now
   if (tFunc->IsUndefined())
@@ -949,8 +955,13 @@ QVariantList JavaScriptTranslator::_translateToOgrVariants(Tags& tags,
   return result;
 }
 
-void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const char* geomType)
+void JavaScriptSchemaTranslator::_translateToOsm(Tags& t, const char* layerName,
+                                                 const char* geomType)
 {
+  LOG_VART(_toOsmFunctionName);
+  LOG_VART(layerName);
+  LOG_VART(geomType);
+
   _tags = &t;
 
   Isolate* current = v8::Isolate::GetCurrent();
@@ -960,6 +971,8 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   Handle<Object> tags = Object::New(current);
   for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
   {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
     tags->Set(toV8(it.key()), toV8(it.value()));
   }
 
@@ -992,6 +1005,8 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
   t.clear();
 
   // Just making sure...
+  LOG_VART(newTags.IsEmpty() || newTags->IsNull() || newTags->IsUndefined());
+  LOG_VART(newTags->IsObject());
   if (newTags.IsEmpty() || newTags->IsNull() || newTags->IsUndefined())
   {
     // leave the tags empty
@@ -1013,6 +1028,7 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
       {
         t.insert(toCpp<QString>(arr->Get(i)), toCpp<QString>(v));
       }
+      LOG_VART(t);
     }
   }
   else
@@ -1020,8 +1036,6 @@ void JavaScriptTranslator::_translateToOsm(Tags& t, const char *layerName, const
     throw Exception("convert: Expected either a null or an object as the result.");
   }
 }
-
-
 
 }
 

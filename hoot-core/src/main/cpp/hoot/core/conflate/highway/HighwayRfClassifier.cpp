@@ -53,7 +53,7 @@
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
@@ -167,11 +167,11 @@ void HighwayRfClassifier::_createAllExtractors() const
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
 //    new MeanWordSetDistance(new ExactStringDistance()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new ExactStringDistance()))));
+//    new ToEnglishTranslateStringDistance(new ExactStringDistance()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MaxWordSetDistance(new ExactStringDistance())))));
+//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new ExactStringDistance())))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance())))));
+//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance())))));
 
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
 //    new LevenshteinDistance())));
@@ -180,18 +180,18 @@ void HighwayRfClassifier::_createAllExtractors() const
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
 //    new MeanWordSetDistance(new LevenshteinDistance()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new LevenshteinDistance()))));
+//    new ToEnglishTranslateStringDistance(new LevenshteinDistance()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MaxWordSetDistance(new LevenshteinDistance())))));
+//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new LevenshteinDistance())))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance())))));
+//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance())))));
 
 //  for (double a = 1.0; a < 1.8; a += 0.05)
 //  {
 //    _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
 //      new MeanWordSetDistance(new LevenshteinDistance(a)))));
 //    _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//      new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
+//      new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
 //  }
 
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(new Soundex())));
@@ -200,11 +200,11 @@ void HighwayRfClassifier::_createAllExtractors() const
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
 //    new MeanWordSetDistance(new Soundex()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new Soundex()))));
+//    new ToEnglishTranslateStringDistance(new Soundex()))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MaxWordSetDistance(new Soundex())))));
+//    new ToEnglishTranslateStringDistance(new MaxWordSetDistance(new Soundex())))));
 //  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new NameExtractor(
-//    new TranslateStringDistance(new MeanWordSetDistance(new Soundex())))));
+//    new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new Soundex())))));
 
 }
 

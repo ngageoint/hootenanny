@@ -25,12 +25,12 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef JAVASCRIPTTRANSLATOR_H
-#define JAVASCRIPTTRANSLATOR_H
+#ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
+#define JAVASCRIPT_SCHEMA_TRANSLATOR_H
 
 // hoot
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
@@ -60,18 +60,18 @@ class ElementType;
  * Script functions available:
  * http://qt-project.org/doc/qt-4.7/ecmascript.html
  */
-class JavaScriptTranslator : public ScriptTranslator, public ScriptToOgrTranslator,
-    public Configurable
+class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptToOgrSchemaTranslator,
+  public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::JavaScriptTranslator"; }
+  static std::string className() { return "hoot::JavaScriptSchemaTranslator"; }
 
   static int logWarnCount;
 
-  JavaScriptTranslator();
+  JavaScriptSchemaTranslator();
 
-  virtual ~JavaScriptTranslator();
+  virtual ~JavaScriptSchemaTranslator();
 
   QString getScriptPath() const { return _scriptPath; }
 
@@ -157,9 +157,8 @@ protected:
     ElementType elementType, geos::geom::GeometryTypeId geometryType);
 
   virtual void _translateToOsm(Tags& t, const char *layerName, const char* geomType);
-
 };
 
 }
 
-#endif // JAVASCRIPTTRANSLATOR_H
+#endif // JAVASCRIPT_SCHEMA_TRANSLATOR_H

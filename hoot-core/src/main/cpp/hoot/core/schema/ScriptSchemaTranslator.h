@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SCRIPTTRANSLATOR_H
-#define SCRIPTTRANSLATOR_H
+#ifndef SCRIPT_SCHEMA_TRANSLATOR_H
+#define SCRIPT_SCHEMA_TRANSLATOR_H
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -44,17 +44,17 @@ class Tags;
 
 /**
  * A script for translating feature attributes.
- * See ScriptTranslatorFactory for constructing a ScriptTranslator.
+ * See ScriptSchemaTranslatorFactory for constructing a ScriptSchemaTranslator.
  */
-class ScriptTranslator
+class ScriptSchemaTranslator
 {
 public:
 
-  static std::string className() { return "hoot::ScriptTranslator"; }
+  static std::string className() { return "hoot::ScriptSchemaTranslator"; }
 
-  ScriptTranslator();
+  ScriptSchemaTranslator();
 
-  virtual ~ScriptTranslator();
+  virtual ~ScriptSchemaTranslator();
 
   /**
    * This can be called to force the script to close out and uninitialize. This will be called
@@ -94,6 +94,7 @@ public:
   void translateToOsm(Tags& tags, const char *layerName, const char* geomType);
 
 protected:
+
   bool _initialized;
   QString _scriptPath;
 
@@ -128,8 +129,8 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
-typedef std::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
+typedef std::shared_ptr<ScriptSchemaTranslator> ScriptSchemaTranslatorPtr;
 
 }
 
-#endif // SCRIPTTRANSLATOR_H
+#endif // SCRIPT_SCHEMA_TRANSLATOR_H

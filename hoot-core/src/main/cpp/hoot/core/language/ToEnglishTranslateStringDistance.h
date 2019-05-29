@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TRANSLATESTRINGDISTANCE_H
-#define TRANSLATESTRINGDISTANCE_H
+#ifndef TO_ENGLISH_TRANSLATE_STRING_DISTANCE_H
+#define TO_ENGLISH_TRANSLATE_STRING_DISTANCE_H
 
 // hoot
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
@@ -40,18 +40,19 @@ namespace hoot
  * string. Multiple variations on the translation may be derived in which case the best matching
  * translation will be used.
  */
-class TranslateStringDistance : public StringDistance, public StringDistanceConsumer,
+class ToEnglishTranslateStringDistance : public StringDistance, public StringDistanceConsumer,
   public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TranslateStringDistance"; }
+  static std::string className() { return "hoot::ToEnglishTranslateStringDistance"; }
 
-  TranslateStringDistance();
-  explicit TranslateStringDistance(const StringDistancePtr& d);
-  TranslateStringDistance(const StringDistancePtr& d, const std::shared_ptr<ToEnglishTranslator>& translator);
+  ToEnglishTranslateStringDistance();
+  explicit ToEnglishTranslateStringDistance(const StringDistancePtr& d);
+  ToEnglishTranslateStringDistance(const StringDistancePtr& d,
+                                   const std::shared_ptr<ToEnglishTranslator>& translator);
 
-  virtual ~TranslateStringDistance() {}
+  virtual ~ToEnglishTranslateStringDistance() {}
 
   virtual void setStringDistance(const StringDistancePtr& sd) override { _d = sd; }
 
@@ -84,4 +85,4 @@ private:
 
 }
 
-#endif // TRANSLATESTRINGDISTANCE_H
+#endif // TO_ENGLISH_TRANSLATE_STRING_DISTANCE_H

@@ -59,9 +59,9 @@ class ExportOSMCommand extends ExportCommand {
         if (!params.getTagOverrides().isEmpty()) {
 
             File trans = new File(new File(HootProperties.HOME_FOLDER, "translations"),"OSM_Export.js");
-            options.add("translation.script=" + trans.getAbsolutePath());
+            options.add("schema.translation.script=" + trans.getAbsolutePath());
 
-            options.add("translation.override=" + params.getTagOverrides() );
+            options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
         if (params.getTextStatus()) {

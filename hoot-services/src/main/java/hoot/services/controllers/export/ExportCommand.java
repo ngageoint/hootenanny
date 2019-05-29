@@ -73,7 +73,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} -D schema.translation.script=${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH} ";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -121,7 +121,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         if (!params.getTagOverrides().isEmpty()) {
-            options.add("translation.override=" + params.getTagOverrides() );
+            options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
         //# Add the option to append
