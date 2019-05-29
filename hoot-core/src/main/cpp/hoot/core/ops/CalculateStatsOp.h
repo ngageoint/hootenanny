@@ -96,6 +96,7 @@ private:
     InfoMin,
     InfoMax,
     InfoAverage,
+    InfoDiff,
   };
 
   struct StatData
@@ -117,7 +118,7 @@ private:
   QList<SingleStat> _stats;
 
   QHash<QString,std::shared_ptr<ElementCriterion>> _criterionCache;
-  QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache; // todo
+  QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
 
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
 

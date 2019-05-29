@@ -174,6 +174,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
     {"Total Feature Tags", "hoot::TagCountVisitor", "", StatCall::Stat },
     {"Total Feature Information Tags", "hoot::TagCountVisitor", "", StatCall::InfoCount },
+    {"Total Feature Metadata Tags","hoot::TagCountVisitor", "", StatCall::InfoDiff },
 
     {"Least Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Min },
     {"Most Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Max },
@@ -209,188 +210,26 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {"Most Levels in a Building", "hoot::BuildingLevelsVisitor", "", StatCall::Max },
     {"Average Levels Per Building", "hoot::BuildingLevelsVisitor", "", StatCall::Average },
 
-
-
     {"Non-Building Areas", "hoot::ElementCountVisitor", "hoot::NonBuildingAreaCriterion", StatCall::None },
     {"Features with Addresses", "hoot::ElementCountVisitor", "hoot::HasAddressCriterion", StatCall::None },
     {"Total Addresses", "hoot::AddressCountVisitor", "", StatCall::Stat },
     {"Features with Phone Numbers", "hoot::ElementCountVisitor", "hoot::HasPhoneNumberCriterion", StatCall::None },
     {"Total Phone Numbers", "hoot::PhoneNumberCountVisitor", "", StatCall::Stat },
     {"Total Features", "hoot::FeatureCountVisitor", "", StatCall::Stat },
-
-//    {"Bridges", "hoot::ElementCountVisitor", "hoot::BridgeCriterion", StatCall::None },
-//    {"Bridges", "hoot::ElementCountVisitor", "hoot::BridgeCriterion", StatCall::None },
-
-
   };
-
-  // QHash<QString,shared_ptr<ConstElementVisitor>> constElementVisitorLookup;
 
   for (StatData d : quickStats) _interpretStatData(constMap, d);
   if (!_quick) for (StatData d : slowStats) _interpretStatData(constMap, d);
 
-//  _stats.append(SingleStat("Nodes",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-//      ConstElementVisitorPtr(new ElementCountVisitor())))));
-//  _stats.append(SingleStat("Ways",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-//      ConstElementVisitorPtr(new ElementCountVisitor())))));
-//  _stats.append(SingleStat("Relations",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-//      ConstElementVisitorPtr(new ElementCountVisitor())))));
-//  _stats.append(SingleStat("Minimum Node ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-//      ConstElementVisitorPtr(new MinIdVisitor())))));
-//  _stats.append(SingleStat("Maximum Node ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
-//      ConstElementVisitorPtr(new MaxIdVisitor())))));
-//  _stats.append(SingleStat("Minimum Way ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-//      ConstElementVisitorPtr(new MinIdVisitor())))));
-//  _stats.append(SingleStat("Maximum Way ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Way),
-//      ConstElementVisitorPtr(new MaxIdVisitor())))));
-//  _stats.append(SingleStat("Minimum Relation ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-//      ConstElementVisitorPtr(new MinIdVisitor())))));
-//  _stats.append(SingleStat("Maximum Relation ID",
-//    _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Relation),
-//      ConstElementVisitorPtr(new MaxIdVisitor())))));
-
   if (!_quick)
   {
-//    NodesPerWayVisitor nodesPerWayVis;
-//    _applyVisitor(constMap, &nodesPerWayVis);
-//    _stats.append(SingleStat("Least Nodes in a Way", nodesPerWayVis.getMin()));
-//    _stats.append(SingleStat("Most Nodes in a Way", nodesPerWayVis.getMax()));
-//    _stats.append(SingleStat("Average Nodes Per Way", nodesPerWayVis.getAverage()));
-//    _stats.append(SingleStat("Total Way Nodes", nodesPerWayVis.getStat()));
-
-//    MembersPerRelationVisitor membersPerRelationVis;
-//    _applyVisitor(constMap, &membersPerRelationVis);
-//    _stats.append(SingleStat("Least Members in a Relation", membersPerRelationVis.getMin()));
-//    _stats.append(SingleStat("Most Members in a Relation", membersPerRelationVis.getMax()));
-//    _stats.append(SingleStat("Average Members Per Relation", membersPerRelationVis.getAverage()));
-//    _stats.append(SingleStat("Total Relation Members", membersPerRelationVis.getStat()));
-
-//    TagCountVisitor tagCountVisitor;
-//    _applyVisitor(constMap, &tagCountVisitor);
-//    const long numTotalTags = (long)tagCountVisitor.getStat();
-//    _stats.append(SingleStat("Total Feature Tags", numTotalTags));
-//    const long numInformationTags = tagCountVisitor.getInformationCount();
-//    _stats.append(SingleStat("Total Feature Information Tags", numInformationTags));
-// MISSING    _stats.append(SingleStat("Total Feature Metadata Tags", numTotalTags - numInformationTags));
-//    _stats.append(SingleStat("Least Tags on a Feature", tagCountVisitor.getMin()));
-//    _stats.append(SingleStat("Most Tags on a Feature", tagCountVisitor.getMax()));
-//    _stats.append(SingleStat("Average Tags Per Feature", tagCountVisitor.getAverage()));
-//    _stats.append(
-//      SingleStat("Least Information Tags on a Feature", tagCountVisitor.getInformationMin()));
-//    _stats.append(
-//      SingleStat("Most Information Tags on a Feature", tagCountVisitor.getInformationMax()));
-//    _stats.append(
-//      SingleStat("Average Information Tags Per Feature", tagCountVisitor.getInformationAverage()));
-
-//    _stats.append(SingleStat("Features with Names",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(HasNameCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    UniqueNamesVisitor v;
-//    _applyVisitor(constMap, &v);
-//    _stats.append(SingleStat("Unique Names", v.getStat()));
-//    _stats.append(
-//      SingleStat("Unique Road Names",
-//      _applyVisitor(
-//      constMap,
-//      FilteredVisitor(HighwayCriterion(), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
-//    _stats.append(
-//      SingleStat("Unique Building Names",
-//      _applyVisitor(
-//      constMap,
-//      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new UniqueNamesVisitor())))));
-
-//    _stats.append(
-//      SingleStat("Meters of Linear Features",
-//      _applyVisitor(
-//        constMap,
-//        FilteredVisitor(LinearCriterion(), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-//    _stats.append(
-//      SingleStat("Meters Squared of Area Features",
-//      _applyVisitor(
-//        constMap,
-//        FilteredVisitor(StatsAreaCriterion(),
-//          ConstElementVisitorPtr(new CalculateAreaForStatsVisitor())))));
-//    _stats.append(
-//      SingleStat("Meters of Roads",
-//      _applyVisitor(
-//        constMap,
-//        FilteredVisitor(HighwayCriterion(map), ConstElementVisitorPtr(new LengthOfWaysVisitor())))));
-//    _stats.append(
-//      SingleStat("Meters Squared of Buildings",
-//      _applyVisitor(
-//      constMap,
-//      FilteredVisitor(BuildingCriterion(map), ConstElementVisitorPtr(new CalculateAreaVisitor())))));
-
-//    _stats.append(SingleStat("Bridges",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(BridgeCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    _stats.append(SingleStat("Tunnels",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(TunnelCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    _stats.append(SingleStat("One-Way Streets",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(OneWayCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    _stats.append(SingleStat("Road Roundabouts",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(RoundaboutCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-//    _stats.append(SingleStat("Multi-Use Buildings",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(MultiUseBuildingCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    BuildingHeightVisitor buildingHeightVis;
-//    _applyVisitor(constMap, &buildingHeightVis);
-//    _stats.append(SingleStat("Buildings With Height Info", buildingHeightVis.numWithStat()));
-//    _stats.append(SingleStat("Shortest Building Height", buildingHeightVis.getMin()));
-//    _stats.append(SingleStat("Tallest Building Height", buildingHeightVis.getMax()));
-//    _stats.append(SingleStat("Average Height Per Building", buildingHeightVis.getAverage()));
-//    BuildingLevelsVisitor buildingLevelVis;
-//    _applyVisitor(constMap, &buildingLevelVis);
-//    _stats.append(SingleStat("Buildings With Level Info", buildingLevelVis.numWithStat()));
-//    _stats.append(SingleStat("Least Levels in a Building", buildingLevelVis.getMin()));
-//    _stats.append(SingleStat("Most Levels in a Building", buildingHeightVis.getMax()));
-//    _stats.append(
-//      SingleStat("Average Levels Per Building", buildingHeightVis.getAverage()));
-
-//    _stats.append(SingleStat("Non-Building Areas",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(NonBuildingAreaCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-
-//    _stats.append(SingleStat("Features with Addresses",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(HasAddressCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    AddressCountVisitor addressCountVis;
-//    _applyVisitor(constMap, &addressCountVis);
-//    _stats.append(SingleStat("Total Addresses", addressCountVis.getStat()));
-
-//    _stats.append(SingleStat("Features with Phone Numbers",
-//      _applyVisitor(
-//        constMap, FilteredVisitor(HasPhoneNumberCriterion(),
-//        ConstElementVisitorPtr(new ElementCountVisitor())))));
-//    PhoneNumberCountVisitor phoneCountVis;
-//    _applyVisitor(constMap, &phoneCountVis);
-//    _stats.append(SingleStat("Total Phone Numbers", phoneCountVis.getStat()));
-
     FeatureCountVisitor featureCountVisitor;
     _applyVisitor(constMap, &featureCountVisitor);
     const long featureCount = featureCountVisitor.getCount();
     LOG_VART(featureCount);
-//    _stats.append(SingleStat("Total Features", featureCount));
+
+    // _stats.append(SingleStat("Total Features", featureCount));
+
     vector<std::shared_ptr<MatchCreator>> matchCreators =
       MatchFactory::getInstance().getCreators();
     LOG_VARD(matchCreators.size());
@@ -667,23 +506,25 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
   if (d.visitor.length() > 0)
   {
     double val;
-    shared_ptr<ConstElementVisitor> pRequestedVisitor;
-
-    try
-    {
-      pRequestedVisitor = shared_ptr<ConstElementVisitor>(
-            static_cast<ConstElementVisitor *>(
-              Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
-    }
-    catch (...)
-    {
-      throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
-    }
 
     if (pCrit)
     {
       // if a criterion is specified, we apply a FilteredVisitor
-      FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pRequestedVisitor));
+      // this is not cached as there is only one value and it's unlikely to be repeated
+      shared_ptr<ConstElementVisitor> pCriterionVisitor;
+
+      try
+      {
+        pCriterionVisitor = shared_ptr<ConstElementVisitor>(
+              static_cast<ConstElementVisitor *>(
+                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+      }
+      catch (...)
+      {
+        throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+      }
+
+      FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
       val = _applyVisitor(constMap, filteredVisitor);
     }
     else
@@ -694,15 +535,36 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       }
       else
       {
-        // without criterion, apply the visitor directly and interpret as NumericStatistic
-        _applyVisitor(constMap, pRequestedVisitor.get());
+        shared_ptr<ConstElementVisitor> pVisitor;
 
-        SingleStatistic* ss = dynamic_cast<SingleStatistic*>(pRequestedVisitor.get());
+        if (_appliedVisitorCache.contains(d.visitor))
+        {
+          pVisitor = _appliedVisitorCache[d.visitor];
+        }
+        else
+        {
+          try
+          {
+            pVisitor = shared_ptr<ConstElementVisitor>(
+                  static_cast<ConstElementVisitor *>(
+                    Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+          }
+          catch (...)
+          {
+            throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+          }
+
+          // without criterion, apply the visitor directly and interpret as NumericStatistic
+          _applyVisitor(constMap, pVisitor.get());
+          _appliedVisitorCache[d.visitor] = pVisitor;
+        }
+
+        SingleStatistic* ss = dynamic_cast<SingleStatistic*>(pVisitor.get());
         NumericStatistic* ns = NULL;
 
         if (d.statCall != Stat)
         {
-          ns = dynamic_cast<NumericStatistic*>(pRequestedVisitor.get());
+          ns = dynamic_cast<NumericStatistic*>(pVisitor.get());
         }
 
         switch (d.statCall)
@@ -716,6 +578,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
           case InfoMin: val = ns->getInformationMin(); break;
           case InfoMax: val = ns->getInformationMax(); break;
           case InfoAverage: val = ns->getInformationAverage(); break;
+          case InfoDiff: val = ns->getInformationCountDiff(); break;
         }
       }
     }
