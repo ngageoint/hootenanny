@@ -22,69 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ScriptTranslator.h"
+#include "ConflatableCriteriaVisitor.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
-// Standard
-#include <assert.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
-ScriptTranslator::ScriptTranslator()
+HOOT_FACTORY_REGISTER(ElementVisitor, ConflatableCriteriaVisitor)
+
+ConflatableCriteriaVisitor::ConflatableCriteriaVisitor()
 {
-  _initialized = false;
-  _strict = StrictOn;
 }
 
-ScriptTranslator::~ScriptTranslator()
+void ConflatableCriteriaVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  // the child class should call close since _finalize is virtual.
-  assert (_initialized == false);
+  const QStringList conflatableCriteria =
+    ConflatableElementCriterion::getConflatableCriteriaForElement(e);
+  QString conflatableCriteriaStr;
+  for (int i = 0; i < conflatableCriteria.size(); i++)
+  {
+    conflatableCriteriaStr += conflatableCriteria.at(i) + ";";
+  }
+  conflatableCriteriaStr.chop(1);
+  e->getTags()[MetadataTags::HootConflatableCriteria()] =  conflatableCriteriaStr;
 }
 
-void ScriptTranslator::close()
-{
-  if (_initialized)
-  {
-    _finalize();
-    _initialized = false;
-  }
-}
-
-const QString& ScriptTranslator::_saveMemory(const QString& s)
-{
-  if (!_strings.contains(s))
-  {
-    _strings[s] = s;
-  }
-  return _strings[s];
-}
-
-void ScriptTranslator::strictError(const QString& s)
-{
-  if (_strict == StrictOn)
-  {
-    throw HootException(s);
-  }
-  else if (_strict == StrictWarn)
-  {
-    LOG_WARN(s);
-  }
-}
-
-void ScriptTranslator::translateToOsm(Tags& tags, const char *layerName, const char* geomType)
-{
-  if (!_initialized)
-  {
-    _init();
-    _initialized = true;
-  }
-  _translateToOsm(tags, layerName, geomType);
-}
 }

@@ -88,42 +88,42 @@ See the User Guide for more details on command usage.
     hoot convert input.geonames output.osm
 -----
 
-===== Convert an OSM file to a file geodatabase and apply a schema translation:
+===== Convert an OSM file to a file geodatabase and apply an OGR schema translation:
 
 -----
-    hoot convert input.osm output.gdb --trans MyTranslation.js
+    hoot convert -D schema.translation.script=MyTranslation.js input.osm output.gdb
 -----
     
-===== Convert an OSM API database to a file geodatabase and apply a schema translation:
+===== Convert an OSM API database to a file geodatabase and apply an OGR schema translation:
 
 -----
-    hoot convert PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" \ 
-      output.gdb --trans MyTranslation.js
+    hoot convert -D schema.translation.script=MyTranslation.js \
+      PG:"dbname='mydb' host='myhost' port='5432' user='myuser' password='mypass'" output.gdb
 -----
     
 ===== Convert an OSM file to a shape file while specifying export columns:
 
 -----
-    hoot convert input.osm output.shp --cols "highway,surface,name,alt_name,oneway,bridge"
+    hoot convert -D shape.file.writer.cols="highway,surface,name,alt_name,oneway,bridge" input.osm output.shp
 -----
 
 ===== Convert multiple shape files to an OSM file with schema translation:
 
 -----
-    hoot convert input1.shp input2.shp output.osm --trans translation.js
+    hoot convert -D schema.translation.script=MyTranslation.js input1.shp input2.shp output.osm 
 -----
 
 ===== Convert roads, bridges, overpasses and tunnels from a file geodatabase into a single .osm file with schema translation:
 
 -----
-    hoot convert input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm \
-      --trans translation.js
+    hoot convert -D schema.translation.script=MyTranslation.js \
+      input.gdb;ROAD_L input.gdb;BRIDGE_OVERPASS_L input.gdb;TUNNEL_L output.osm
 -----
     
 ===== Convert and translate a shape file that is stored inside of a zip file:
 
 -----
-    hoot convert /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm --trans translation.js
+    hoot convert -D schema.translation.script=MyTranslation.js /vsizip//gis-data/input.zip/tds/LAP030.shp output.osm
 -----
     
 ==== Utilities
@@ -307,7 +307,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot conflate -D conflate.pre.ops="hoot::TranslationOp" \
-      -D translation.script=myTranslation.js input1.osm input2.osm output.osm
+      -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
       
 ===== Align a second map towards a first map before conflating them:
@@ -331,7 +331,7 @@ See the User Guide for more details on command usage.
 ===== Convert an OSM file to a shape file, allowing the export columns to be automatically selected based on frequency:
 
 -----
-    hoot convert input.osm output.shp --cols
+    hoot convert input.osm output.shp
 -----
 
 ===== Bulk write a map to an offline OSM API database:

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -31,44 +31,50 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-// GEOS
-#include <geos/geom/LineString.h>
-
-// Hoot
+// hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/string/ExactStringDistance.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/language/TranslateStringDistance.h>
-#include <hoot/core/language/DictionaryTranslator.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ConflatableCriteriaVisitor.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
 
-class TranslateStringDistanceTest : public HootTestFixture
+class ConflatableCriteriaVisitorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(TranslateStringDistanceTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE(ConflatableCriteriaVisitorTest);
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  ConflatableCriteriaVisitorTest() :
+    HootTestFixture(
+      "test-files/visitors/ConflatableCriteriaVisitorTest/",
+      "test-output/visitors/ConflatableCriteriaVisitorTest/")
   {
-    TranslateStringDistance uut(
-      StringDistancePtr(new MeanWordSetDistance(StringDistancePtr(new ExactStringDistance()))));
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("embassy of hungary", "Kedutaan Besar Swiss"),
-      0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("hollywood agency", "kantor hollywood"), 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut.compare("hollywood office", "kantor hollywood"), 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, uut.compare("hollywood building", "kantor hollywood"), 0.01);
+    setResetType(ResetBasic);
   }
 
+  void runBasicTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
+
+    ConflatableCriteriaVisitor uut;
+    map->visitRw(uut);
+
+    const QString outFileName = "ConflatableCriteriaVisitorTest-runBasicTest.osm";
+    OsmMapWriterFactory::write(map, _outputPath + outFileName);
+
+    HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
+  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TranslateStringDistanceTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatableCriteriaVisitorTest, "quick");
 
 }
+
+

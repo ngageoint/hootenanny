@@ -31,8 +31,8 @@
 #include <hoot/core/algorithms/optimizer/SingleAssignmentProblemSolver.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/ElementConverter.h>
@@ -97,21 +97,21 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   const ConstElementPtr& e2) const
 {
   // translate the tags for comparison
-  vector<ScriptToOgrTranslator::TranslatedFeature> tf1 = _translate(map, e1);
-  vector<ScriptToOgrTranslator::TranslatedFeature> tf2 = _translate(map, e2);
+  vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf1 = _translate(map, e1);
+  vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf2 = _translate(map, e2);
 
   class CostFunction :
       public SingleAssignmentProblemSolver<
-        ScriptToOgrTranslator::TranslatedFeature,
-        ScriptToOgrTranslator::TranslatedFeature>::CostFunction
+        ScriptToOgrSchemaTranslator::TranslatedFeature,
+        ScriptToOgrSchemaTranslator::TranslatedFeature>::CostFunction
   {
   public:
     const TranslatedTagDifferencer* ttd;
     /**
      * Returns the cost associated with assigning actor a to task t.
      */
-    virtual double cost(const ScriptToOgrTranslator::TranslatedFeature* tf1,
-                        const ScriptToOgrTranslator::TranslatedFeature* tf2) const
+    virtual double cost(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf1,
+                        const ScriptToOgrSchemaTranslator::TranslatedFeature* tf2) const
     {
       Tags t1 = _toTags(tf1);
       Tags t2 = _toTags(tf2);
@@ -121,8 +121,8 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
 
   CostFunction cost;
   cost.ttd = this;
-  typedef SingleAssignmentProblemSolver<ScriptToOgrTranslator::TranslatedFeature,
-      ScriptToOgrTranslator::TranslatedFeature> Saps;
+  typedef SingleAssignmentProblemSolver<ScriptToOgrSchemaTranslator::TranslatedFeature,
+      ScriptToOgrSchemaTranslator::TranslatedFeature> Saps;
   Saps sap(cost);
 
   for (size_t i = 0; i < tf1.size(); i++)
@@ -149,15 +149,15 @@ double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElem
   return 1.0 - ((double)c.same / (double)(c.same + c.different));
 }
 
-std::shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslator() const
+std::shared_ptr<ScriptToOgrSchemaTranslator> TranslatedTagDifferencer::_getTranslator() const
 {
   if (_translator == 0)
   {
-    std::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
-      _script));
+    std::shared_ptr<ScriptSchemaTranslator> st(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_script));
 
     st->setErrorTreatment(StrictOff);
-    _translator = std::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
     if (!_translator)
     {
       throw HootException("Error allocating translator, the translation script must support "
@@ -178,7 +178,7 @@ void TranslatedTagDifferencer::setConfiguration(const Settings& conf)
   _translator.reset();
 }
 
-Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFeature* tf)
+Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrSchemaTranslator::TranslatedFeature* tf)
 {
   Tags result;
 
@@ -198,7 +198,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
   return result;
 }
 
-vector<ScriptToOgrTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
+vector<ScriptToOgrSchemaTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
   const ConstOsmMapPtr& map, const ConstElementPtr& e) const
 {
   std::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);

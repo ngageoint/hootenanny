@@ -30,10 +30,6 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
-#include <hoot/core/util/NotImplementedException.h>
-
-// Standard
-#include <memory>
 
 namespace hoot
 {
@@ -53,6 +49,8 @@ class Element;
  * should only use the criteria in a positive sense. (e.g. apply something to the elements that
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
+ *
+ * Also see: ConflatableElementCriterion.
  */
 class ElementCriterion : public ApiEntityInfo
 {

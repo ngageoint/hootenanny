@@ -132,9 +132,9 @@ hoot convert \
 
 # Same as above.
 hoot convert \
-  -D ogr.writer.pre.layer.name=bar \
+  -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" --trans test-files/io/SampleTranslation.js
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 
 # Convert example .osm file and write the resulting layers to a directory full of Shapefiles.
 # The directory will be named tmp/MyShapefiles, not tmp/MyShapefiles.shp

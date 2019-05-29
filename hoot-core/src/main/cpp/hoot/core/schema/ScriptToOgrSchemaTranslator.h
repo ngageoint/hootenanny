@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SCRIPTTOOGRTRANSLATOR_H
-#define SCRIPTTOOGRTRANSLATOR_H
+#ifndef SCRIPT_TO_OGR_SCHEMA_TRANSLATOR_H
+#define SCRIPT_TO_OGR_SCHEMA_TRANSLATOR_H
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -44,12 +44,14 @@ namespace hoot
 class Schema;
 class Tags;
 
-class ScriptToOgrTranslator
+class ScriptToOgrSchemaTranslator
 {
 public:
+
   typedef struct TranslatedFeature
   {
   public:
+
     std::shared_ptr<Feature> feature;
     QString tableName;
 
@@ -59,7 +61,7 @@ public:
     }
   } TranslatedFeature;
 
-  virtual ~ScriptToOgrTranslator() {}
+  virtual ~ScriptToOgrSchemaTranslator() {}
 
   virtual std::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
@@ -70,9 +72,9 @@ public:
     geos::geom::GeometryTypeId geometryType) = 0;
 };
 
-typedef std::shared_ptr<ScriptToOgrTranslator> ScriptToOgrTranslatorPtr;
-typedef std::shared_ptr<const ScriptToOgrTranslator> ConstScriptToOgrTranslatorPtr;
+typedef std::shared_ptr<ScriptToOgrSchemaTranslator> ScriptToOgrSchemaTranslatorPtr;
+typedef std::shared_ptr<const ScriptToOgrSchemaTranslator> ConstScriptToOgrSchemaTranslatorPtr;
 
 }
 
-#endif // SCRIPTTOOGRTRANSLATOR_H
+#endif // SCRIPT_TO_OGR_SCHEMA_TRANSLATOR_H

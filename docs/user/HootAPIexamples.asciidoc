@@ -57,7 +57,7 @@ Exporting data from a HootAPI database using an OSM translation schema.
 Shapefile export:
 
 ------
-hoot convert -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp --trans translations/OSM_Ingest.js
+hoot convert -D schema.translation.script=translations/OSM_Ingest.js -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.shp
 ------
 
 * `translation file` - a translation file used to translate source data attribution
@@ -67,7 +67,7 @@ hoot convert -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost
 File Geodatabase export:
 
 ------
-hoot convert -D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb --trans translations/MGCP_TRD4.js
+hoot convert -D schema.translation.script=translations/MGCP_TRD4.js D api.db.email='test@test.com' hootapidb://hoot:hoottest@localhost:5432/hoot/DcGisRoads tmp/DGRoads.gdb
 ------
 
 * `translations/MGCP_TRD4.js` - the MGCP_TRD4 translation used to translate the data.

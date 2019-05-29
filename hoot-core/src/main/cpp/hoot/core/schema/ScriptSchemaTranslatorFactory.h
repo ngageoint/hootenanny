@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SCRIPTTRANSLATORFACTORY_H
-#define SCRIPTTRANSLATORFACTORY_H
+#ifndef SCRIPT_SCHEMA_TRANSLATOR_FACTORY_H
+#define SCRIPT_SCHEMA_TRANSLATOR_FACTORY_H
 
 // Qt
 #include <QString>
@@ -37,30 +37,30 @@
 namespace hoot
 {
 
-class ScriptTranslator;
+class ScriptSchemaTranslator;
 
 /**
  * (Singleton)
  */
-class ScriptTranslatorFactory
+class ScriptSchemaTranslatorFactory
 {
 public:
 
-  static ScriptTranslatorFactory& getInstance();
+  static ScriptSchemaTranslatorFactory& getInstance();
 
-  ScriptTranslator* createTranslator(QString scriptPath);
+  ScriptSchemaTranslator* createTranslator(QString scriptPath);
 
   /**
    * This can be used to register translators, but using the Factory methods are preferred. See
-   * JavaScriptTranslator for an example.
+   * JavaScriptSchemaTranslator for an example.
    */
   void registerScript(const std::string& className) { _translators.push_back(className); }
 
 private:
 
-  static std::shared_ptr<ScriptTranslatorFactory> _theInstance;
+  static std::shared_ptr<ScriptSchemaTranslatorFactory> _theInstance;
 
-  ScriptTranslatorFactory();
+  ScriptSchemaTranslatorFactory();
 
   std::vector<std::string> _translators;
 
@@ -69,4 +69,4 @@ private:
 
 }
 
-#endif // SCRIPTTRANSLATORFACTORY_H
+#endif // SCRIPT_SCHEMA_TRANSLATOR_FACTORY_H

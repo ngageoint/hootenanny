@@ -184,7 +184,7 @@ public:
     writer.writePoints(map, workingDir + "/EvalMove.shp");
 
     OgrReader reader;
-    reader.setTranslationFile("LowerCase");
+    reader.setSchemaTranslationScript("LowerCase");
     reader.read(workingDir + "/EvalMove.shp", "", result);
 
     return result;
@@ -202,7 +202,7 @@ public:
     writer.writePoints(map, workingDir + "/EvalMove.gml");
 
     OgrReader reader;
-    reader.setTranslationFile("LowerCase");
+    reader.setSchemaTranslationScript("LowerCase");
     reader.read(workingDir + "/EvalMove.gml", "", result);
 
     return result;

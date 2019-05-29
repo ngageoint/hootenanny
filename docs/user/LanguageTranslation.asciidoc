@@ -63,8 +63,8 @@ hoot convert -D convert.ops="hoot::ToEnglishTranslationVisitor" -D language.tran
   -D language.translation.source.languages="de" -D language.tag.keys="name;alt_name" input.osm output.osm
 -------------------
 
-Note that the `language.translation.translator` configuration option is set explicitly to a particular fully functional translator client 
-that accesses a translation service hosted by the Hootenanny Web Services.  The default translator (`hoot::DictionaryTranslator`) performs 
+Note that the `language.translation.translator` configuration option is set explicitly to a particular fully functional translator client
+that accesses a translation service hosted by the Hootenanny Web Services.  The default translator (`hoot::ToEnglishDictionaryTranslator`) performs
 static lookups and therefore, isn't too useful and is used primarily for testing purposes.  Note also that source languages are specified 
 by their ISO-6391-1 code.  When you listed the translatable languages earlier, the codes were printed along with the language names.
 

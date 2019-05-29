@@ -62,6 +62,8 @@ public class ExportCommandTest {
         List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();
         options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+        hootOptions.add("-D"); 
+        hootOptions.add("schema.translation.script=" + exportParams.getTranslation());
 
         assertEquals(jobId, exportCommand.getJobId());
         assertEquals(true, exportCommand.getTrackable());
@@ -69,8 +71,7 @@ public class ExportCommandTest {
         assertNotNull(exportCommand.getWorkDir());
         assertNotNull(exportCommand.getCommand());
 
-        String expectedCommand = "hoot convert --${DEBUG_LEVEL} " +
-                "${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH}";
+        String expectedCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
         assertEquals(expectedCommand, exportCommand.getCommand());
 
         assertTrue(exportCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));

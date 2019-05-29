@@ -34,8 +34,8 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
@@ -48,48 +48,55 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TranslationVisitor);
+HOOT_FACTORY_REGISTER(ElementVisitor, TranslationVisitor)
 
-TranslationVisitor::TranslationVisitor()
+TranslationVisitor::TranslationVisitor() :
+_toOgr(false)
 {
-  setConfiguration(conf());
 }
 
 void TranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions c(conf);
-  QString dir = c.getTranslationDirection();
-  if (dir == "toogr")
+
+  LOG_VARD(conf.hasKey(c.getSchemaTranslationScriptKey()));
+  LOG_VARD(c.getSchemaTranslationScript());
+  if (conf.hasKey(c.getSchemaTranslationScriptKey()) && c.getSchemaTranslationScript() != "")
+  {
+    setTranslationDirection(c.getSchemaTranslationDirection());
+    setTranslationScript(c.getSchemaTranslationScript());
+  }
+  LOG_VARD(_toOgr);
+}
+
+void TranslationVisitor::setTranslationDirection(QString direction)
+{
+  LOG_VARD(direction);
+  if (direction.toLower() == "toogr")
   {
     _toOgr = true;
   }
-  else if (dir == "toosm")
+  else if (direction.toLower() == "toosm")
   {
     _toOgr = false;
   }
   else
   {
-    throw HootException("Expected a translation.direction of 'toogr' or 'toosm'.");
-  }
-  LOG_VART(_toOgr);
-  LOG_VART(conf.hasKey(c.getTranslationScriptKey()));
-  LOG_VART(c.getTranslationScript());
-  if (conf.hasKey(c.getTranslationScriptKey()) && c.getTranslationScript() != "")
-  {
-    setPath(c.getTranslationScript());
+    throw HootException("Expected a schema.translation.direction of 'toogr' or 'toosm'.");
   }
 }
 
-void TranslationVisitor::setPath(QString path)
+void TranslationVisitor::setTranslationScript(QString path)
 {
-  _t.reset(ScriptTranslatorFactory::getInstance().createTranslator(path));
+  LOG_VARD(path);
+  _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
   if (_toOgr)
   {
-    _togr = dynamic_cast<ScriptToOgrTranslator*>(_t.get());
-    if (_togr == 0)
+    _ogrTranslator = dynamic_cast<ScriptToOgrSchemaTranslator*>(_translator.get());
+    if (_ogrTranslator == 0)
     {
-      throw HootException("Translating to OGR requires a script that supports to OGR "
-        "translations.");
+      throw IllegalArgumentException(
+        "Translating to OGR requires a script that supports to OGR translations.");
     }
   }
 }
@@ -110,7 +117,7 @@ void TranslationVisitor::visit(const ElementPtr& e)
 
     if (_toOgr)
     {
-      vector<Tags> allTags = _togr->translateToOgrTags(tags, e->getElementType(), gtype);
+      vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
 
       if (allTags.size() > 0)
       {
@@ -125,6 +132,7 @@ void TranslationVisitor::visit(const ElementPtr& e)
     else
     {
       LOG_TRACE("Tags before: " << tags);
+      LOG_VART(tags.size());
 
       QByteArray layerName;
       if (tags.contains(MetadataTags::HootLayername()))
@@ -155,7 +163,7 @@ void TranslationVisitor::visit(const ElementPtr& e)
         throw InternalErrorException("Unexpected geometry type.");
       }
 
-      _t->translateToOsm(tags, layerName.data(), geomType);
+      _translator->translateToOsm(tags, layerName.data(), geomType);
 
       if (tags.contains(MetadataTags::ErrorCircular()))
       {

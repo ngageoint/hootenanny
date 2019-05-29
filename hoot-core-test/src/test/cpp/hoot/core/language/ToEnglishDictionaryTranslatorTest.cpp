@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/Soundex.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -46,9 +46,9 @@
 namespace hoot
 {
 
-class DictionaryTranslatorTest : public HootTestFixture
+class ToEnglishDictionaryTranslatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(DictionaryTranslatorTest);
+  CPPUNIT_TEST_SUITE(ToEnglishDictionaryTranslatorTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -56,7 +56,7 @@ public:
 
   void runTest()
   {
-    DictionaryTranslator translator;
+    ToEnglishDictionaryTranslator translator;
 
     QStringList result;
     result << "building";
@@ -94,6 +94,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DictionaryTranslatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ToEnglishDictionaryTranslatorTest, "quick");
 
 }

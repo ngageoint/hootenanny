@@ -73,7 +73,7 @@ class ExportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH} --trans ${TRANSLATION_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} -D schema.translation.script=${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH} ";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -121,7 +121,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         if (!params.getTagOverrides().isEmpty()) {
-            options.add("translation.override=" + params.getTagOverrides() );
+            options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
         //# Add the option to append
@@ -129,13 +129,13 @@ class ExportCommand extends ExternalCommand {
             options.add("ogr.append.data=true");
         }
 
-        // OK. This is VERY UGLY and there has to be a better way to do this
-        // DNC uses some MIN INT values to signify NULL's If we don't change this, it throws an
-        // exception and dies.
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("ogr.strict.checking=off");
+            options.add("-C DncExport.conf");
         }
 
+        if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
+            options.add("-C MgcpCartoExport.conf");
+        }
 
         return options;
     }
