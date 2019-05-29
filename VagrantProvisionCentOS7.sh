@@ -27,7 +27,7 @@ export LANG=en_US.UTF-8
 cd ~
 source ~/.bash_profile
 
-if [ "$ADDREPOS" = "yes" ]; then
+if [ "${ADDREPOS:-yes}" = "yes" ]; then
     echo "Adding additional software repositories..."
     # add EPEL repo for extra packages
     echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -42,7 +42,7 @@ if [ "$ADDREPOS" = "yes" ]; then
     sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
 fi
 
-if [ "$YUMUPDATE" = "yes" ]; then
+if [ "${YUMUPDATE:-yes}" = "yes" ]; then
     echo "Updating OS..."
     echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
     sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
