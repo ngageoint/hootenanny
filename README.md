@@ -109,7 +109,11 @@ The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master
 [Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.
 
 Example:
-```hoot conflate input1.osm input2.osm output.osm```
+
+```
+#  conflate two datasets together
+hoot conflate input1.osm input2.osm output.osm
+```
 
 [More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
@@ -119,6 +123,7 @@ Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/ma
 Example:
 
 ```
+//  conflate two datasets together
 var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
 var map = new hoot.OsmMap();
 hoot.loadMap(map, "input1.osm", false, 1);

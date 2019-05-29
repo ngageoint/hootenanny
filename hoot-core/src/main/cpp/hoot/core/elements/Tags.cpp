@@ -45,6 +45,17 @@ namespace hoot
 QStringList Tags::_nameKeys;
 QStringList Tags::_pseudoNameKeys;
 
+Tags::Tags() :
+QHash<QString, QString>()
+{
+}
+
+Tags::Tags(const QString& key, const QString& value) :
+QHash<QString, QString>()
+{
+  set(key, value);
+}
+
 void Tags::addTags(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

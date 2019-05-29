@@ -162,13 +162,6 @@ class ExportCommand extends ExternalCommand {
             options.add("translation.override=" + params.getTagOverrides() );
         }
 
-        // OK. This is VERY UGLY and there has to be a better way to do this
-        // DNC uses some MIN INT values to signify NULL's If we don't change this, it throws an
-        // exception and dies.
-        if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("ogr.strict.checking=off");
-        }
-
         // Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         if (params.getTextStatus()) {
             options.add("writer.text.status=true");
@@ -182,6 +175,14 @@ class ExportCommand extends ExternalCommand {
         //Add the orders convert operations
         options.add("convert.ops=" + String.join(";", convertOps));
 
+	//Add conf files for specific translation ops
+        if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
+            options.add("-C DncExport.conf");
+        }
+
+        if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
+            options.add("-C MgcpCartoExport.conf");
+        }
 
         return options;
     }
