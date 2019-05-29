@@ -2117,10 +2117,13 @@ mgcp = {
             // Order is important:
             // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
             // stomp on the V4 ones
-            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
+            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
 
             mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
+
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
         }
 
         if (mgcp.lookup == undefined)

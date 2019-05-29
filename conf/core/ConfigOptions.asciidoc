@@ -4065,7 +4065,7 @@ This differencer can be used with:
 * Default Value: `toosm`
 
 The direction that the translation script should translate. `toogr` will translate from OSM to OGR.
-`toosm` will translate from OSM to OGR. This is useful with the hoot::TranslationOp.
+`toosm` will translate from OGR to OSM. This is useful with the hoot::TranslationOp.
 
 === translation.override
 

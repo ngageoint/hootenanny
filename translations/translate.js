@@ -29,47 +29,39 @@
 // Set of core translation routines
 //
 translate = {
-   
     // Build Lookup tables
     createLookup : function(one2one)
     {
         // build a more efficient lookup
-        var lookup = {}
+        var lookup = {};
 
-        for (var r in one2one)
-        {
-            var row = one2one[r];
-            if (row[2]) // Make sure it isn't 'undefined'
+        one2one.forEach( function(item) {
+            if (item[2]) // Make sure it isn't 'undefined'
             {
-                if (!(row[0] in lookup))
+                if (!(item[0] in lookup)) lookup[item[0]] = {};
+ 
+                if (!(lookup[item[0]][item[1]])) 
                 {
-                    lookup[row[0]] = {}
-                }
-
-                if (!(lookup[row[0]][row[1]])) 
-                {
-                    lookup[row[0]][row[1]] = [row[2], row[3]];
+                    lookup[item[0]][item[1]] = [item[2],item[3]];
                 }
                 else
                 {
                     if (config.getOgrDebugLookupclash() == 'true') 
+                    {
+                        if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
                         {
-                            if (lookup[row[0]][row[1]] != ('' + row[2] + ',' + row[3]))
-                            {
-                                print('Fwd Clash: ' + row[0] + ' ' + row[1] + '  is ' + lookup[row[0]][row[1]] + '  tried to change to ' + [row[2], row[3]]);
-                            }
+                            print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
                         }
+                    }
                 }
             }
-        }
-    
+        } );
+
         return lookup;
     },
 
 
-    /**
-     * Given a list of strings create a dictionary of those strings that point to trues.
-     */
+    // Given a list of strings create a dictionary of those strings that point to trues.
     createBoolLookup: function(list)
     {
         var lookup = {};
@@ -86,11 +78,9 @@ translate = {
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
-        if (sepValue === undefined) {
-            sepValue = ";";
-        }
+        if (sepValue === undefined) sepValue = ';';
 
-        if (oldValue === undefined || oldValue === null || oldValue === "")
+        if (oldValue === undefined || oldValue === null || oldValue === '')
         {
             return newValue;
         }
@@ -102,6 +92,7 @@ translate = {
 
     
     // Concatinate two lists
+    // NOTE: These are not arrays.
     joinList : function(listA,listB)
     {
         // Objects are passed by reference so we need to copy the lot
@@ -140,27 +131,22 @@ translate = {
         // build a more efficient lookup
         var lookup = {}
 
-        for (var r in one2one)
-        {
-            var row = one2one[r];
-            if (row[2]) // Make sure it isn't 'undefined'
+        one2one.forEach( function(item) {
+            if (item[2]) // Make sure it isn't 'undefined'
             {
-                if (!(row[2] in lookup))
-                {
-                    lookup[row[2]] = {}
-                }
+                if (!(item[2] in lookup)) lookup[item[2]] = {};
 
                 // This has been swapped around. The FCODE lists can stomp on the One2One values.
-                if (!(lookup[row[2]][row[3]]))
+                if (!(lookup[item[2]][item[3]]))
                 {
-                    lookup[row[2]][row[3]] = [row[0], row[1]];
+                    lookup[item[2]][item[3]] = [item[0],item[1]];
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + row[2] + ' ' + row[3] + '  is ' + lookup[row[2]][row[3]] + '  tried to change to ' + [row[0], row[1]]);
+                    if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
                 }
-            }
-        }
+            }            
+        } );
     
         return lookup;
     },
@@ -580,20 +566,25 @@ translate = {
         return outTags;
     },
 
+
     // Parse the note:extra tag and return an associative array of key/value pairs
     parseNoteExtra : function(rawNote)
     {
-        var noteVal = [],
-            outList = {},
-            tmpList = rawNote.split(';');
+        var outList = {}//,tmpList = rawNote.split(';');
 
-        for (var i = 0, len = tmpList.length; i < len; i++)
-        {
-            noteVal = tmpList[i].split(':'); // Split into Key/Value
+        // for (var i = 0, len = tmpList.length; i < len; i++)
+        // {
+        //     noteVal = tmpList[i].split(':'); // Split into Key/Value
 
+        //     // If we have a Key then add it to the output
+        //     if (noteVal[0]) outList[noteVal[0]] = noteVal[1];
+        // }
+
+        rawNote.split(';').forEach( function (item) {
+            var noteVal = item.split(':'); // Split into Key/Value
             // If we have a Key then add it to the output
             if (noteVal[0]) outList[noteVal[0]] = noteVal[1];
-        }
+        });
 
         return outList;
     },
@@ -604,22 +595,33 @@ translate = {
     //      (<Attr>:<Value>) (<Attr>:<Value>.....)
     parseOTH : function(rawOTH)
     {
-        var othVal = [],
-            outList = {},
-            tVal = '',
-            tVal = rawOTH.replace(/\) \(/g,'#'); // Swap ') (' for #)
+        // var othVal = [],
+        //     outList = {},
+        //     tVal = '',
+        //     tVal = rawOTH.replace(/\) \(/g,'#'); // Swap ') (' for #)
 
-            tVal = tVal.replace(/[\(\)]/g,''); // Get rid of ( and )
+        //     tVal = tVal.replace(/[\(\)]/g,''); // Get rid of ( and )
 
-            tmpList = tVal.split('#'); // Split on #
+        //     tmpList = tVal.split('#'); // Split on #
 
-        for (var i = 0, len = tmpList.length; i < len; i++)
-        {
-            othVal = tmpList[i].split(':'); // Split into Key/Value
+        // for (var i = 0, len = tmpList.length; i < len; i++)
+        // {
+        //     othVal = tmpList[i].split(':'); // Split into Key/Value
 
+        //     // If we have a Key _and_ a value, then add it to the output
+        //     if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
+        // }
+
+        var outList = {};
+
+        // 1) Swap ') (' for #)
+        // 2) Get rid of ( and )
+        // 3) Split on '#'
+        rawOTH.replace(/\) \(/g,'#').replace(/[\(\)]/g,'').split('#').forEach( function (item) {
+            var othVal = item.split(':'); // Split into Key/Value
             // If we have a Key _and_ a value, then add it to the output
-            if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
-        }
+            if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];            
+        });
 
         // Debug:
         // for (var j in outList) print('parseOTH: k=  :' + j + ':  v= :' + outList[j] + ':');
@@ -794,7 +796,7 @@ translate = {
         }
     },
 
-    
+
     fixConstruction : function(tags, key)
     {
         if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')
@@ -805,7 +807,7 @@ translate = {
         }
     },
 
-    
+
     // Returns true the feature is an OSM area feature
     // This is based on the OSM idea of what is considered an area
     // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
@@ -927,14 +929,14 @@ translate = {
         var result = false;
 
         // Exploit the object
-        var dropList = {'No Information':1, 
-                        'UNK':1, 'Unk':1, 
+        var dropList = {'No Information':1,
+                        'UNK':1, 'Unk':1,
                         'N_A':1, 'N/A':1,'NA':1,
                         '-999999':1,
                         '0':1,
             };
 
-        // For some reason it is not matching -32768 or -32767. 
+        // For some reason it is not matching -32768 or -32767.
         // It prints "-32768.00000000000000"
         // After playing, I found the two equals and the .0 helped
         // if (v === '' || v === '0' || v == 0.0 || v == -32768.0 || v == -32767.0 || v === '-999999' || v === undefined)
@@ -1083,19 +1085,19 @@ translate = {
         }
     }, // End applySimpleNumBiased
 
+
     // buildComplexRules
     // Build the lookup table for the applyComplexRules function
     buildComplexRules : function (rawList)
     {
         var rulesFunction = [];
-        for (var i = 0, rLen = rawList.length; i < rLen; i++)
-        {
-            rulesFunction.push([new Function('t', 'return ' + rawList[i][0]), new Function('t','a', rawList[i][1])]);
-            // print('Rules: Added ' + rawList[i][0]);
-        }
+
+        rawList.forEach( function (item) {
+            rulesFunction.push([new Function('t', 'return ' + item[0]), new Function('t','a', item[1])]);
+            // print('Rules: Added ' + item[0]);
+        });
 
         return rulesFunction;
-
     }, // End buildComplexRules
 
 
@@ -1121,11 +1123,9 @@ translate = {
             }
         }
     */
-        for (var i = 0, rLen = rulesList.length; i < rLen; i++)
-        {
-            if (rulesList[i][0](tgs)) rulesList[i][1](tgs,atrs);
-        }
-
+        rulesList.forEach( function (item) {
+            if (item[0](tgs)) item[1](tgs,atrs);
+        });
     }, // End applyComplexRules
 
 
@@ -1134,16 +1134,12 @@ translate = {
     {
         var lookup = {};
 
-        for (var i=0, sLen = schema.length; i < sLen; i++)
-        {
-            var attrArray = [];
-            for (var j=0, cLen = schema[i].columns.length; j < cLen; j++)
-            {
-                attrArray.push(schema[i].columns[j].name);
-            }
-            // Add the attrArray to the list as <tablename>:[array]
-            lookup[schema[i].name] = attrArray;
-        }
+        schema.forEach( function (item) {
+            lookup[item.name] = [];
+            item.columns.forEach( function (column) {
+                lookup[item.name].push(column.name);
+            });
+        });
 
         return lookup;
     },
@@ -1153,32 +1149,27 @@ translate = {
     makeAttrLookup : function(schema)
     {
         var lookup = {};
-
-        for (var i=0, sLen = schema.length; i < sLen; i++)
-        {
-            var attrArray = [];
-            for (var j=0, cLen = schema[i].columns.length; j < cLen; j++)
-            {
-                attrArray.push(schema[i].columns[j].name);
-            }
-            // Add the attrArray to the list as <geom><FCODE>:[array]  
-            // Eg[L,A,P]AP030:[array]
-            lookup[schema[i].geom.charAt(0) + schema[i].fcode] = attrArray;
-        }
+        
+        // Add the attrArray to the list as <geom><FCODE>:[array]
+        // Eg[L,A,P]AP030:[array]
+        schema.forEach( function (item) {
+            var iName = item.geom.charAt(0) + item.fcode;
+            lookup[iName] = [];
+            item.columns.forEach( function (column) {
+                lookup[iName].push(column.name);
+            });
+        });
 
         return lookup;
     },
 
 
-    // makeLayerNameLookup - build a lookup table for FCODE to LayerName 
+    // makeLayerNameLookup - build a lookup table for FCODE to LayerName
     makeLayerNameLookup : function(schema)
     {
         var lookup = {};
 
-        for (var i=0, sLen = schema.length; i < sLen; i++)
-        {
-            lookup[schema[i].geom.charAt(0) + schema[i].fcode] = schema[i].name;
-        }
+        schema.forEach( function (item) {lookup[item.geom.charAt(0) + item.fcode] = item.name});
 
         return lookup;
     },
@@ -1187,298 +1178,115 @@ translate = {
     // addReviewFeature - Add Review features to a schema
     addReviewFeature: function(schema)
     {
-        schema.push({ name: "review_A",
-                      desc: "Review features",
-                      geom: "Area",
-                      columns:[ { name:'score',
-                                  desc:'Review Score',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'note',
-                                  desc:'Review note',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'source',
-                                  desc:'Review source',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'uuid',
-                                  desc:'Review uuid',
-                                  type:'String',
-                                  defValue: '',
-                                  // length:'254'
-                                }
+        schema.push({ name:'review_A',desc:'Review features',geom:'Area',
+                      columns:[ {name:'score',desc:'Review Score',type:'String'/*,length:'254'*/},
+                                {name:'note',desc:'Review note',type:'String'/*,length:'254'*/},
+                                {name:'source',desc:'Review source',type:'String'/*,length:'254'*/},
+                                {name:'uuid',desc:'Review uuid',type:'String',defValue:''/*,length:'254'*/}
                               ]
                     });
-        schema.push({ name: "review_L",
-                      desc: "Review features",
-                      geom: "Line",
-                      columns:[ { name:'score',
-                                  desc:'Review Score',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'note',
-                                  desc:'Review note',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'source',
-                                  desc:'Review source',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'uuid',
-                                  desc:'Review uuid',
-                                  type:'String',
-                                  defValue: '',
-                                  // length:'254'
-                                }
+        schema.push({ name:'review_L',desc:'Review features',geom:'Line',
+                      columns:[ {name:'score',desc:'Review Score',type:'String'/*,length:'254'*/},
+                                {name:'note',desc:'Review note',type:'String'/*,length:'254'*/},
+                                {name:'source',desc:'Review source',type:'String'/*,length:'254'*/},
+                                {name:'uuid',desc:'Review uuid',type:'String',defValue:''/*,length:'254'*/}
                               ]
                     });
-        schema.push({ name: "review_P",
-                      desc: "Review Features",
-                      geom: "Point",
-                      columns:[ { name:'score',
-                                  desc:'Review Score',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'note',
-                                  desc:'Review note',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'source',
-                                  desc:'Review source',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'uuid',
-                                  desc:'Review uuid',
-                                  type:'String',
-                                  defValue: '',
-                                  // length:'254'
-                                }
+        schema.push({ name:'review_P',desc:'Review Features',geom:'Point',
+                      columns:[ {name:'score',desc:'Review Score',type:'String'/*,length:'254'*/},
+                                {name:'note',desc:'Review note',type:'String'/*,length:'254'*/},
+                                {name:'source',desc:'Review source',type:'String'/*,length:'254'*/},
+                                {name:'uuid',desc:'Review uuid',type:'String',defValue:''/*,length:'254'*/}
                               ]
                     });
 
         return schema;
-
     }, // End addReviewFeature
 
 
     // addEmptyFeature - Add o2s features to a schema
     addEmptyFeature: function(schema)
     {
-        schema.push({ name: "o2s_A",
-                      desc: "o2s",
-                      geom: "Area",
-                      columns:[ { name:'tag1',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  length:'8192'
-                                  // length:'254'
-                                },
-                                { name:'tag2',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag3',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag4',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                }
+        schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',
+                      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+                                {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
                               ]
                     });
-        schema.push({ name: "o2s_L",
-                      desc: "o2s",
-                      geom: "Line",
-                      columns:[ { name:'tag1',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  length:'8192'
-                                  // length:'254'
-                                },
-                                { name:'tag2',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag3',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag4',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                }
+        schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',
+                      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+                                {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
                               ]
                     });
-        schema.push({ name: "o2s_P",
-                      desc: "o2s",
-                      geom: "Point",
-                      columns:[ { name:'tag1',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  length:'8192'
-                                  // length:'254'
-                                },
-                                { name:'tag2',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag3',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                },
-                                { name:'tag4',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  defValue: '',
-                                  length:'254'
-                                }
+        schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',
+                      columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'/*,length:'254'*/},
+                                {name:'tag2',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag3',desc:'Tag List',type:'String',defValue:'',length:'254'},
+                                {name:'tag4',desc:'Tag List',type:'String',defValue:'',length:'254'}
                               ]
                     });
 
         return schema;
-
     }, // End addEmptyFeature
 
 
-    // addExtraFeature - Add features to hold "extra" tag values to a schema
+    // addExtraFeature - Add features to hold 'extra' tag values to a schema
     addExtraFeature: function(schema)
     {
-        schema.push({ name: "extra_A",
-                      desc: "extra tag values",
-                      geom: "Area",
-                      columns:[ { name:'tags',
-                                  desc:'Tag List',
-                                  type:'String',
-                                },
-                                { name:'uuid',
-                                  desc:'Feature uuid',
-                                  type:'String',
-                                  defValue: '',
-                                }
+        schema.push({name:'extra_A',desc:'extra tag values',geom:'Area',
+                     columns:[{name:'tags',desc:'Tag List',type:'String'},
+                              {name:'uuid',desc:'Feature uuid',type:'String',defValue:''}
+                             ]
+                    });
+        schema.push({ name:'extra_L',desc:'extra tag values',geom:'Line',
+                      columns:[{name:'tags',desc:'Tag List',type:'String'/*,length:'254'*/},
+                               {name:'uuid',desc:'Feature uuid',type:'String',defValue:''}
                               ]
                     });
-        schema.push({ name: "extra_L",
-                      desc: "extra tag values",
-                      geom: "Line",
-                      columns:[ { name:'tags',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'uuid',
-                                  desc:'Feature uuid',
-                                  type:'String',
-                                  defValue: '',
-                                }
-                              ]
-                    });
-        schema.push({ name: "extra_P",
-                      desc: "extra tag values",
-                      geom: "Point",
-                      columns:[ { name:'tags',
-                                  desc:'Tag List',
-                                  type:'String',
-                                  // length:'254'
-                                },
-                                { name:'uuid',
-                                  desc:'Feature uuid',
-                                  type:'String',
-                                  defValue: '',
-                                }
-                              ]
+        schema.push({name:'extra_P',desc:'extra tag values',geom:'Point',
+                     columns:[{name:'tags',desc:'Tag List',type:'String'/*,length:'254'*/},
+                              {name:'uuid',desc:'Feature uuid',type:'String',defValue:''}
+                             ]
                     });
 
         return schema;
-
     }, // End addExtraFeature
 
 
     // addEtds - Add the eLTDS specific fields to each element in the schema
     addEtds: function(schema)
-    { 
-        for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        {
-            schema[i].columns.push( { name:'SCAMIN',
-                                      desc:'Scale - Minimum', 
-                                      type:'Integer',
-                                      optional:'R',
-                                      defValue:'-999999' 
-                                    });
-            schema[i].columns.push( { name:'SCAMAX',
-                                      desc:'Scale - Maximum', 
-                                      type:'Integer',
-                                      optional:'R',
-                                      defValue:'-999999' 
-                                    });
-            schema[i].columns.push( { name:'LINK_ID',
-                                      desc:'Link Id', 
-                                      type:'String',
-                                      optional:'R',
-                                      defValue:'No Information' 
-                                    });
-        }
+    {
+        schema.forEach( function (item) {
+            item.columns.push({name:'SCAMIN',desc:'Scale - Minimum',type:'Integer',optional:'R',defValue:'-999999'});
+            item.columns.push({name:'SCAMAX',desc:'Scale - Maximum',type:'Integer',optional:'R',defValue:'-999999'});
+            item.columns.push({name:'LINK_ID',desc:'Link Id',type:'String',optional:'R',defValue:'No Information'});
+        });
 
         return schema;
-
     }, // End addEtds
 
-    
+
     // addFCSubtype - Add the ESRI specific FCSUBTYPE field to each element in the schema
     addFCSubtype: function(schema)
-    { 
-        for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        {
-            schema[i].columns.push( { name:'FCSUBTYPE',
-                                      desc:'Feature Code Subtype', 
-                                      type:'Integer',
-                                      optional:'R',
-                                      defValue:'' 
-                                    });
-        }
+    {
+        schema.forEach( function (item) {
+            item.columns.push({name:'FCSUBTYPE',desc:'Feature Code Subtype',type:'Integer',optional:'R',defValue:''});
+        });
 
         return schema;
-
     }, // End addFCSubtype
 
 
     // addFdName - Add the ESRI Feature Dataset name to every element in the schema
     // If we don't add this the layers get put in the wrong place in the FGDB
     addFdName: function(schema,name)
-    { 
-        for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        {
-            schema[i].fdname = name;
-        }
+    {
+        schema.forEach( function(item) {item.fdname = name; });
 
         return schema;
-
     }, // End addFdName
 
 
@@ -1487,7 +1295,7 @@ translate = {
     {
         for (var i in lookupTable)
         {
-            print("Key: " + i + "  Value: " + lookupTable[i]);
+            print('Key: ' + i + '  Value: ' + lookupTable[i]);
         }
     }, // End dumpLookup
 
@@ -1506,23 +1314,22 @@ translate = {
     // dumpSchema - Dump a schema so we can check it
     dumpSchema : function(schema)
     {
-        for (var i = 0, schemaLen = schema.length; i < schemaLen; i++)
-        {
-            print('Feature: ' + schema[i].name + '  Geom: ' + schema[i].geom + '  FdName: ' + schema[i].fdname);
-            for (var j = 0, columnLen = schema[i].columns.length; j < columnLen; j++)
-            {
-                print('    Attr: ' + schema[i].columns[j].name + '  Desc: ' + schema[i].columns[j].desc + '  Type: ' + schema[i].columns[j].type + '  Default: ' + schema[i].columns[j].defValue);
-                if (schema[i].columns[j].type == 'enumeration')
-                {
-                    for (var k = 0, enumLen = schema[i].columns[j].enumerations.length; k < enumLen; k++)
-                        print('        Value: ' + schema[i].columns[j].enumerations[k].value + '  Name: ' + schema[i].columns[j].enumerations[k].name);
-                        // print('        Name: ' + schema[i].columns[j].enumerations[k].name + '  Value: ' + schema[i].columns[j].enumerations[k].value);
-                } 
-            } // End for j
+        schema.forEach( function(item) {
+            print('Feature: ' + item.name + '  Geom: ' + item.geom + '  FdName: ' + item.fdname);
 
-            print(''); // just to get one blank line
-        } // End for i
+            item.columns.forEach( function (column) {
+                print('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
+                if (column.type == 'enumeration') 
+                {
+                    column.enumerations.forEach( function (eValue) {print('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
+                }
+            });
+
+        print(''); // just to get one blank line
+        });
+
     }, // End dumpSchema
+
 
     // overrideValues - Add, modify or delete tags/attributes based on a JSON string
     overrideValues: function(values,changeString)
