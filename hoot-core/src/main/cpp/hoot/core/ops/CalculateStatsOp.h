@@ -91,7 +91,11 @@ private:
     Min,
     Max,
     Average,
-    Stat
+    Stat,
+    InfoCount,
+    InfoMin,
+    InfoMax,
+    InfoAverage,
   };
 
   struct StatData
@@ -111,6 +115,9 @@ private:
   //meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
+
+  QHash<QString,std::shared_ptr<ElementCriterion>> _criterionCache;
+  QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache; // todo
 
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
 

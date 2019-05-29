@@ -69,10 +69,10 @@ public:
   }
 
   long numWithInformationStat() const { return _numInformationAffected; }
-  long getInformationCount() const { return _informationCount; }
-  long getInformationMin() const { return _smallestInformationCount; }
-  long getInformationMax() const { return _largestInformationCount; }
-  double getInformationAverage() const
+  virtual long getInformationCount() const { return _informationCount; }
+  virtual long getInformationMin() const { return _smallestInformationCount; }
+  virtual long getInformationMax() const { return _largestInformationCount; }
+  virtual double getInformationAverage() const
   {
     const double average =
       _numInformationAffected == 0 ? 0.0 :
