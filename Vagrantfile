@@ -83,7 +83,7 @@ Vagrant.configure(2) do |config|
       end
 
       aws.tags = {
-        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "m5-jenkins-hootenanny-#{os.downcase}"),
+        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
         'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
       }
 
