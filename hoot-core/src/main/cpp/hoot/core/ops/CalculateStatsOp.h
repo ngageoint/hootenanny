@@ -110,6 +110,7 @@ private:
   ElementCriterionPtr _criterion;
   //simple map name string for logging purposes
   QString _mapName;
+  std::shared_ptr<const OsmMap> _constMap;
   bool _quick;
   //We differentiate between maps that are the input to a conflation job vs those that are the
   //output of a conflation job.  Another option would be to refactor this class for both maps
@@ -135,18 +136,15 @@ private:
                                                 const QString &matchCreatorName,
                                                 CreatorDescription::BaseFeatureType &featureType);
 
-  double _applyVisitor(std::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
-
-  double _applyVisitor(std::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
-                       boost::any& visitorData);
-
-  void _applyVisitor(const std::shared_ptr<const OsmMap>& map, ConstElementVisitor *v);
+  double _applyVisitor(const hoot::FilteredVisitor &v);
+  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData);
+  double _applyFilteredVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis);
+  void _applyVisitor(ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);
 
-  void _generateFeatureStats(std::shared_ptr<const OsmMap>& map,
-                             const CreatorDescription::BaseFeatureType& featureType,
+  void _generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType,
                              const float conflatableCount,
                              const CreatorDescription::FeatureCalcType& type,
                              ElementCriterionPtr criterion,
