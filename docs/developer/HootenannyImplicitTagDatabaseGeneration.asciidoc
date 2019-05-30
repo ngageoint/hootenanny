@@ -82,11 +82,3 @@ tests can be found in the hoot-tests master branch.
 
 To implicitly tag other data, see the "Implicit Element Type Tagging Based On Name" section of the Hootenanny User Guide.
 
-
-
-
-
-
-
-
-

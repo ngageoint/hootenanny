@@ -42,7 +42,7 @@ The OSM data model is composed of three different elements. Each element may con
 [[IntersectAurora]]
 .Intersection in Aurora, Colorado
 
-image::images/image019.png[]
+image::algorithms/images/image019.png[]
 
 The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
 for the way are:
@@ -86,7 +86,7 @@ will be a red way and green way.
 [[DuplicateWay]]
 .Example Duplicate Way
 
-image::images/image021.png[]
+image::algorithms/images/image021.png[]
 
 ==== Unlikely Intersections
 
@@ -105,7 +105,7 @@ specified threshold, then the intersection is split:
 [[Intersect]]	
 .Example Intersection
 
-image::images/image023.png[]
+image::algorithms/images/image023.png[]
 
 Given the example in <<Intersect>>, if both roads are residential, and there are
 no tunnels/bridges, then it will be maintained as an intersection. However, if
@@ -125,7 +125,7 @@ to be divided, and we introduce the +divider=yes+ tag to the green way.
 [[UndividedOverpass]]
 .Undivided Overpass
 
-image::images/image025.png[]
+image::algorithms/images/image025.png[]
 
 ==== Superfluous Ways
 
@@ -173,7 +173,7 @@ The conflation process adopted by Hootenanny is to first identify all possible f
 [[ExConflInputData]]
 .Example conflation input data
 
-image::images/image027.png[]
+image::algorithms/images/image027.png[]
 
 In the example shown in <<ExConflInputData>>, there are three potential feature matches. The matches have been assigned notional scores for demonstration purposes:
 
@@ -188,7 +188,7 @@ Using a greedy search we will first apply the highest scoring manipulation, ways
 [[GreedySearch]]
 .Example 2 conflated data
 
-image::images/image028.png[]
+image::algorithms/images/image028.png[]
 
 Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
 
@@ -222,13 +222,32 @@ Hootenanny has adopted a modified version of MNS that also limits the distance t
 
 All accuracy values provided to Hootenanny assume a Gaussian distribution to the data and are provided at 2 Sigma, or approximately a 95% confidence interval. To convert accuracy to weights for both datasets we do the following:
 
-image::images/image029-032.png[]
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma_1 = \frac { accuracy_1 }{ 2 } \]
+++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma_2 = \frac { accuracy_2 }{ 2 } \]
+++++++++++++++++++++++++++++++++++++++++++
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ w_1 = \frac { 1 - \sigma_1^2 }{ \sigma_1^2 + \sigma_2^2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ w_2 = \frac { 1 - \sigma_2^2 }{ \sigma_1^2 + \sigma_2^2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The accuracy of the new way is calculated as:
 
 .Weighted Average
-
-image::images/image033.png[]
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ accuracy_{new} = 2 \sqrt{ w_1^2 \times \sigma_1^2 + w_2^2 \times \sigma_2^2  } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 There are several possible interpretations of the "average" way. For our purposes, we would like the way that maintains the general shape of the two inputs, produces close to an exact average, and avoids unsightly perturbations. To accomplish this, we start by averaging the first two nodes, then march along the ways, averaging nodes together as we go. At the end, we average the final two nodes. The pseudo-code below describes the algorithm in more detail.
 
@@ -287,21 +306,22 @@ While Hausdorff distance is used by (VividSolutions, 2005) and (Linna Li, 2011),
 
 The score is calculated as:
 
-
-
-image:images/image034.png[]
-
-image:images/image035.png[]
-
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \sigma = \sqrt{ \sigma_1^2 + \sigma_2^2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ s = 1 - ( \Phi ( \mu_{distance}, \sigma ) - 0.5) \times 2.0 \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 where the variables are as follows:
 
+* latexmath:[$ \sigma_1 $] & latexmath:[$ \sigma_2 $] - Standard deviation of the circular error of ways 1 & 2 respectively
 
-* image:images/image036.png[] & image:images/image037.png[] - Standard deviation of the circular error of ways 1 & 2
+* latexmath:[$ \Phi $] - Per the Abramowitz & Stegun (1964) approximation for calculating latexmath:[$ \Phi $]
 
-* image:images/image038.png[] - Per the Abramowitz & Stegun (1964) approximation for calculating image:images/image039.png[]
-
-* image:images/image040.png[] - The mean distance between the ways
+* latexmath:[$ \mu_{distance} $] - The mean distance between the ways
 
 
 ===== Parallel Score
@@ -311,7 +331,7 @@ The parallel score assigns high scores to ways that are generally parallel, and 
 [[parallelscores]]
 .Example low and high scoring parallel scores
 
-image::images/image041.png[]
+image::algorithms/images/image041.png[]
 
 [[ExplAttributeScore]]
 ===== Attribute Score
@@ -446,7 +466,7 @@ Enumerated tags are tags with predefined nominal values. This includes +surface=
 [[HighwayTagRelate]]
 .Highway Tag Relationship
 
-image::images/image044.png[]
+image::algorithms/images/image044.png[]
 
 To address this, we have created a configuration file that defines a directed graph of relationships between tags and supports the following relations:
 
@@ -493,11 +513,15 @@ The _zipper score_ gives a higher score for ways that are already joined at one 
 
 The _length score_ gives higher values to ways that are longer. This encourages longer ways to be merged earlier in the conflation process, and long ways that meet all the above criteria are more likely to be the same than are smaller ways. The length weight is given by:
 
+[latexmath]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ length_{\mu} = \frac { length_1 + length_2 }{ 2 } \]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-image:images/image045.png[]
-
-image:images/image046.png[]
-
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ score = 0.2 + \frac { length_{\mu} }{ length_{\mu} + 20 } \times 0.8 \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The values 20, 0.2 and 0.8 were derived experimentally.
 

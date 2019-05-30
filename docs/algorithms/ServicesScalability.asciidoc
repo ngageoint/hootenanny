@@ -109,7 +109,7 @@ outstanding operations after 15 minutes are terminated and are not reported.
 
 [[LoadBenchmark]]
 .Load Benchmark on 3/16/2015
-image::images/load.png[]
+image::algorithms/images/load.png[]
 
 The above graphs display the elapsed time for various operations under different
 simulated user loads. The specific tests and files used are described in
