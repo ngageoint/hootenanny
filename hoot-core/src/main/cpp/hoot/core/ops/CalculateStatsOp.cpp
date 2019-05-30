@@ -481,7 +481,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
   if (d.visitor.length() > 0)
   {
-    double val;
+    double val = 0;
 
     if (pCrit)
     {
