@@ -46,8 +46,6 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/io/ElementStreamer.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -228,7 +226,7 @@ private:
     //Streaming db inputs actually do not come back sorted, despite the order by id clause
     //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
 
-    //pbf sets a sorted flag
+    //pbf sets a sort flag
     if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
     {
       return true;
@@ -245,16 +243,19 @@ private:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, elementStatus);
 
-    if (ConfigOptions().getConvertOps().size() > 0)
+    // TODO: apply ops
+    /*
+     *if (_convertOps.size() > 0)
     {
-      NamedOp convertOps(ConfigOptions().getConvertOps());
-//      convertOps.setProgress(
-//        Progress(
-//          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-//          (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
+      NamedOp convertOps(_convertOps);
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
       convertOps.apply(map);
-      //currentStep++;
+      currentStep++;
     }
+     */
 
     //we don't want to include review relations
     std::shared_ptr<TagKeyCriterion> elementCriterion(
@@ -283,18 +284,29 @@ private:
     //Only sort if input isn't already sorted.
     if (!inputSorted)
     {
+      /*
+       * TODO: add streamable check
+       * TODO: change buffer size default
+       *
+       * const bool isStreamable =
+    ElementStreamer::areValidStreamingOps(_convertOps) &&
+    ElementStreamer::areStreamableIo(inputs, output);
+       */
+
       //If external sorting is enabled and both inputs are streamable, externally sort the elements
       //to avoid potential memory issues.
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
       LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
       if (OsmMapReaderFactory::hasElementInputStream(input) &&
-          ConfigOptions().getElementSorterElementBufferSize() != -1 &&
-          ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+          ConfigOptions().getElementSorterElementBufferSize() != -1)
       {
         sortedElements = _sortElementsExternally(input);
       }
       else
       {
+        // TODO: get rid of in memory sorter and _readInputFully (or factory implementation; do
+        // performance comparison first)?
+
         //Otherwise, since currently not all input formats are supported as streamable, switch over
         //to memory bound sorting.
         sortedElements = _sortElementsInMemory(_readInputFully(input, status));
@@ -328,14 +340,6 @@ private:
     visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
 
     // TODO: add streaming ops in the pipeline
-
-    /*
-     * ElementStreamer::stream(
-      inputs, output, _convertOps,
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        (float)(currentTask - 1) / (float)numTasks, taskWeight));
-     */
 
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -409,3 +413,5 @@ private:
 HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)
 
 }
+
+
