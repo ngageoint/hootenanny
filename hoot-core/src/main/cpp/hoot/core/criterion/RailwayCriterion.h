@@ -29,7 +29,7 @@
 #define RAILWAYCRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * A criterion that will keep railways.
  */
-class RailwayCriterion : public ElementCriterion
+class RailwayCriterion : public ConflatableElementCriterion
 {
 public:
 

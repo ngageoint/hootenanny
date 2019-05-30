@@ -122,6 +122,11 @@ public:
   static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[],
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), const QString& note = "");
 
+  static WayPtr createWay(OsmMapPtr map, geos::geom::Coordinate c[],
+                          Status status = Status::Unknown1,
+                          Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+                          Tags tags = Tags());
+
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes,
                           Status status = Status::Unknown1,
                           Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),

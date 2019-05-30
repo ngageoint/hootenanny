@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -71,8 +71,8 @@ std::shared_ptr<NameExtractor> PoiPolygonNameScoreExtractor::_getNameExtractor()
 {
   if (_translateTagValuesToEnglish)
   {
-    TranslateStringDistance* translateStringDist =
-      new TranslateStringDistance(
+    ToEnglishTranslateStringDistance* translateStringDist =
+      new ToEnglishTranslateStringDistance(
         StringDistancePtr(
           new MeanWordSetDistance(
             StringDistancePtr(

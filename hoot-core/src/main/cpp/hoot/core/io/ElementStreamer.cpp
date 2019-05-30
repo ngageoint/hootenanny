@@ -90,6 +90,7 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
 
 bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 {
+  LOG_VARD(ops);
   // add visitor/criterion operations if any of the convert ops are visitors.
   foreach (QString opName, ops)
   {
@@ -98,7 +99,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
       // Can this be cleaned up?
 
       const QString unstreamableMsg =
-        "Unable to stream I/O due to criterion op: " + opName + ". Loading entire map...";
+        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -202,7 +203,8 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
       }
       else
       {
-        throw HootException("An unsupported operation was passed to a streaming conversion.");
+        throw HootException(
+          "An unsupported operation was passed to a streaming conversion: " + opName);
       }
     }
   }
@@ -252,17 +254,8 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     reader->open(in);
 
     // add visitor/criterion operations if any of the convert ops are visitors.
-    QStringList convertOpsToUse;
-    if (convertOps.isEmpty())
-    {
-      convertOpsToUse = ConfigOptions().getConvertOps();
-    }
-    else
-    {
-      convertOpsToUse = convertOps;
-    }
     LOG_VARD(convertOps);
-    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOpsToUse);
+    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOps);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 

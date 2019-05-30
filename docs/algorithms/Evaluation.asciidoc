@@ -15,7 +15,7 @@ The location and completeness score determines how closely two sets of geometrie
 [[ExplLocationCompletenessScore]]  
 .Intermediate Steps of Location & Completeness Score
 
-image::images/image001a.png[]
+image::algorithms/images/image001a.png[]
 
 The steps involved are as follows:
 
@@ -26,9 +26,11 @@ The steps involved are as follows:
 The final score is a value of 0 to 1 and is calculated as the following equation where sigma denotes the sum of all pixels in the raster:
 
 [[Equation1]]
-.Equation 1
-
-image::images/image003.png[scale="75"]
+.Completeness Score
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \frac{ \sum Absolute Difference }{ \sum Blurred 1 + \sum Blurred 2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The toy example in <<Equation1>> gives a score of 0.882.
 
@@ -45,7 +47,7 @@ The routing score takes the following complexities into consideration:
 [[IntRoutingScore]]
 .Intermediate steps of the Routing Score
 
-image::images/image004a.png[]
+image::algorithms/images/image004a.png[]
 
 As shown in <<IntRoutingScore>>, the cost surfaces (Time Surface 1 & Time Surface 2) are calculated by doing the following:
 
@@ -56,12 +58,14 @@ As shown in <<IntRoutingScore>>, the cost surfaces (Time Surface 1 & Time Surfac
 5. Calculate the cost distance on the raster using a high cost of 5 seconds per meter. (Cost Time Surface 1 & 2)
 6. Calculate the Absolute Difference as the absolute value of the difference between Time Surface 1 & Time Surface 2.
 
-To convert the rasters into a score an equation similar to Equation 2 is used:
+To convert the rasters into a score an equation similar to this equation is used:
 
 [[Equation2]]
-.Equation 2
-
-image::images/image006.png[scale="75"]
+.Routing Score
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \frac{ \sum Absolute Difference }{ \sum Cost 1 + \sum Cost 2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 To get a reasonable representation of the entire image, the score is calculated 100 times, and the mean and 90% confidence interval are reported. In this case the score is 987 +/- 4.
 
@@ -89,7 +93,7 @@ The _Easy Roads_ test scenario was picked for its good geometry and straightforw
 [[EasyRoads]]
 .Easy Roads Rendering
 
-image::images/image007.png[]
+image::algorithms/images/image007.png[]
 
 The scores in the graph (<<EasyRoadsResults>>) reflect the simplicity of the data, with the UFD data scores effectively the same as the Conflated data. The OSM data is strikingly low in this case due to missing road data. Overall, the Conflated data is moderately higher than all the manual scores.
 
@@ -98,7 +102,7 @@ The conflation runtime for this test was approximately 2 seconds. This runtime i
 [[EasyRoadsResults]]
 .Easy Roads Results
 
-image::images/image009.png[]
+image::algorithms/images/image009.png[]
 
 ==== Spaghetti Bowl
 
@@ -106,14 +110,14 @@ The _Spaghetti Bowl_ test scenario is from a city with left hand driving rules a
 
 .OSM Rendering of the Spaghetti Bowl Region
 
-image::images/image010.jpg[scale="75"]
+image::algorithms/images/image010.jpg[scale="75"]
 
 One region toward the middle of the map contains eight roads occupying a 20 meter radius. This includes two one-way overpasses, two one-way tunnels and four surface roads. The data also includes many residential roads, bridges, complex intersections and foot paths.
 
 [[SpaghettiResults]]
 .Spaghetti Bowl Results
 
-image::images/image012.png[]
+image::algorithms/images/image012.png[]
 
 <<SpaghettiResults>> shows the scores for Attribute, Route, Location and Overall when comparing the two Manual data sets to each other and then to the source data sets (OSM & UFD), and ultimately to the conflated results from Hootenanny.
  +
@@ -148,13 +152,13 @@ Hootenanny only supports pairwise conflation. To accommodate this three-way test
 [[CityEdgeRender]]
 .City Edge Rendering
 
-image::images/image013.png[]
+image::algorithms/images/image013.png[]
 
 
 [[CityEdgeResults]]
 .City Edge Results
 
-image::images/image015.png[]
+image::algorithms/images/image015.png[]
 
 <<CityEdgeResults>> shows the manually conflated data compared to the inputs, the intermediate step of FFD + UFD, and the final result.
  +
@@ -186,7 +190,7 @@ However, the performance improvement in terms of time and cost is dramatic. All 
 
 [[BadConflateResult]]
 .Example of aesthetically unpleasing conflation. Bing aerial imagery basemap service shown in background.
-image::images/image016.png[]
+image::algorithms/images/image016.png[]
 
 [[ConflTimeComparison]]
 .*Conflation Time Comparisons*

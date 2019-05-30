@@ -45,7 +45,7 @@ function initialize()
 //
 // This can be called via the following for testing:
 // hoot convert -D "convert.ops=hoot::TranslationOp"  \
-//      -D translation.script=$HOOT_HOME/translations/NFDD_English.js <input>.osm <output>.osm
+//      -D schema.translation.script=$HOOT_HOME/translations/NFDD_English.js <input>.osm <output>.osm
 //
 function translateAttributes(attrs, layerName, geometryType)
 {

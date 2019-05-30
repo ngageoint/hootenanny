@@ -68,7 +68,6 @@ import com.querydsl.core.Tuple;
 
 import hoot.services.command.Command;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
-import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
@@ -93,9 +92,7 @@ public class ExportResource {
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
         Class<? extends ExportCommand> exportCommand = null;
-        if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-            exportCommand = ExportOSMCommand.class;
-        } else if (outputType.equals("tiles")) {
+        if (outputType.equals("tiles")) {
             exportCommand = CalculateTilesCommand.class;
         } else {
             exportCommand = ExportCommand.class;
@@ -145,7 +142,6 @@ public class ExportResource {
 
         try {
             String inputType = params.getInputType();
-            String outputType = params.getOutputType();
             String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
             // Created scratch area for each export request.
@@ -165,8 +161,8 @@ public class ExportResource {
                     workflow.add(getCommand(user, jobId, params, debugLevel));
                 }
 
-                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id), "FOLDER");
-                    workflow.add(zipCommand);
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id));
+                workflow.add(zipCommand);
                 params.setInputType("folder");
 
             } else if (inputType.equalsIgnoreCase("dbs")) {
@@ -174,24 +170,17 @@ public class ExportResource {
 
                 for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
                     params.setInput(map);
-                    params.setOutputName(map);
+                    params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(map)));
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
-            }
+                }
 
-                Command zipCommand = getZIPCommand(workDir, outputName, "FOLDER"); // zip maps into single folder...
+                Command zipCommand = getZIPCommand(workDir, outputName); // zip maps into single folder...
                 workflow.add(zipCommand);
 
             } else {
                 workflow.add(getCommand(user, jobId, params, debugLevel));
-
-                // only try to add zipCommand to workflow if not osm.pbf or tiles...
-                if (!params.getInput().equalsIgnoreCase("osm.pbf") && !params.getInput().equalsIgnoreCase("tiles")) {
-                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-
-                if (zipCommand != null) {
-                    workflow.add(zipCommand);
-                }
-            }
+                Command zipCommand = getZIPCommand(workDir, outputName);
+                workflow.add(zipCommand);
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
@@ -216,7 +205,12 @@ public class ExportResource {
 
         //Update last accessed timestamp for db datasets on export
         if (params.getInputType().equalsIgnoreCase("db")) {
-            Long mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
+            Long mapid;
+            try { //Hoot2x sends mapid, Hoot1 still sends map name so handle both for now
+                mapid = Long.parseLong(params.getInput());
+            } catch (NumberFormatException ex) {
+                mapid = DbUtils.getMapIdByName(params.getInput(), user.getId());
+            }
             MapResource.updateLastAccessed(mapid);
         }
 
@@ -310,6 +304,9 @@ public class ExportResource {
 
     /**
      * Returns the contents of a geojson job output file
+     * This is used by Hoot1 UI when creating a conflation task project
+     * using `hoot node-density-tiles` to build a k-d tree output geojson
+     * of task areas with roughly equal numbers of features
      *
      * GET hoot-services/job/export/geojson/[job id from exportjob]
      *
@@ -390,25 +387,9 @@ public class ExportResource {
         return Response.ok(exportResources).build();
     }
 
-    private Command getZIPCommand(File workDir, String outputName, String outputType) {
+    private Command getZIPCommand(File workDir, String outputName) {
         File targetZIP = new File(workDir, outputName + ".zip");
-
-        if (outputType.equalsIgnoreCase("FOLDER") || outputType.equalsIgnoreCase("GDB")) {
-            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
-        } else if (outputType.equalsIgnoreCase("SHP")) {
-            return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
-        }
-        else if (outputType.equalsIgnoreCase("OSM")) {
-            String fileToCompress = outputName + "." + outputType;
-            return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
-        }
-        else if (outputType.equalsIgnoreCase("GEOJSON")) {
-            String fileToCompress = outputName + "." + outputType;
-            return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
-        }
-        else {
-            return null;
-        }
+        return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {

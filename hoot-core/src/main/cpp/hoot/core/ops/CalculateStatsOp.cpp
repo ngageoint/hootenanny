@@ -41,7 +41,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
 #include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
@@ -61,7 +61,7 @@
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/stats/DataProducer.h>
-#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
@@ -398,8 +398,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
-      shared_ptr<ScriptTranslator> st(
-        ScriptTranslatorFactory::getInstance().createTranslator(
+      shared_ptr<ScriptSchemaTranslator> st(
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(
           ConfigOptions().getStatsTranslateScript()));
       st->setErrorTreatment(StrictOff);
       TranslatedTagCountVisitor tcv(st);

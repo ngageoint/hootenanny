@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -77,15 +77,15 @@ public:
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.name.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
     uut.setConfiguration(settings);
-    std::shared_ptr<DictionaryTranslator> dictTranslator =
-      std::dynamic_pointer_cast<DictionaryTranslator>(
+    std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
+      std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
         PoiPolygonNameScoreExtractor::_translator);
     dictTranslator->setTokenizeInput(false);
 
-    //DictionaryTranslator has some support for acronyms in the same manner that it supports to
-    //English translations.
+    //ToEnglishDictionaryTranslator has some support for acronyms in the same manner that it
+    //supports to English translations.
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("name", "Kentucky Fried Chicken");
     WayPtr way1(new Way(Status::Unknown2, -1, 15.0));

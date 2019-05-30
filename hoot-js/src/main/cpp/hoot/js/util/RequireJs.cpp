@@ -82,7 +82,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     }
 
     Settings conf;
-    QStringList libPath = ConfigOptions(conf).getJavascriptTranslatorPath();
+    QStringList libPath = ConfigOptions(conf).getJavascriptSchemaTranslatorPath();
 
     QString scriptName = toCpp<QString>(args[0]);
     QString fullPath; // the final script path

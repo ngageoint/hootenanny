@@ -46,7 +46,7 @@
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
-#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 
 // Standard
 #include <sstream>
@@ -85,14 +85,14 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))))));
 
@@ -105,14 +105,14 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))))));
 
@@ -132,7 +132,7 @@ void BuildingRfClassifier::_createAllExtractors() const
                           StringDistancePtr(new MeanWordSetDistance(
                           StringDistancePtr(new LevenshteinDistance(a)))))));
     _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                          StringDistancePtr(new TranslateStringDistance(
+                          StringDistancePtr(new ToEnglishTranslateStringDistance(
                           StringDistancePtr(new MeanWordSetDistance(
                           StringDistancePtr(new LevenshteinDistance(a)))))))));
   }
@@ -146,14 +146,14 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new Soundex()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new Soundex()))))))));
 
@@ -162,12 +162,12 @@ void BuildingRfClassifier::_createAllExtractors() const
 //    for (double p = 0.0; p < 1.0; p += 0.2)
 //    {
 //      _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-//        new TranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance(), p)))));
+//        new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance(), p)))));
 //      _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
 //        new MeanWordSetDistance(new ExactStringDistance(), p))));
 
 //      _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-//        new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(), p)))));
+//        new ToEnglishTranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(), p)))));
 //      _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
 //        new MeanWordSetDistance(new LevenshteinDistance(), p))));
 //    }
@@ -197,14 +197,14 @@ void BuildingRfClassifier::_createAllExtractors() const
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new KskipBigramDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new KskipBigramDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new KskipBigramDistance()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new KskipBigramDistance()))))))));
 }
@@ -219,7 +219,7 @@ void BuildingRfClassifier::_createBestExtractors() const
   _extractors.push_back(FeatureExtractorPtr(new CompactnessExtractor()));
   _extractors.push_back(FeatureExtractorPtr(new SmallerOverlapExtractor()));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance(1.45)))))))));
   _extractors.push_back(FeatureExtractorPtr(new EdgeDistanceExtractor(

@@ -54,7 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
-import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.job.Job;
@@ -89,6 +88,8 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         exportParams.setOutputName("output");
         exportParams.setTextStatus(true);
         exportParams.setInputType("file");
+        exportParams.setIncludeHootTags(false);
+        exportParams.setAppend(false);
 
         String responseData = target("export/execute")
                 .request(MediaType.APPLICATION_JSON)
@@ -100,8 +101,8 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
 
         assertNotNull(job);
         assertEquals(2, job.getCommands().length);
-        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
-        assertSame(ZIPFileCommand.class, job.getCommands()[1].getClass());
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
     }
 
     @Test
@@ -113,6 +114,8 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         exportParams.setOutputName("output");
         exportParams.setTextStatus(true);
         exportParams.setInputType("file");
+        exportParams.setIncludeHootTags(false);
+        exportParams.setAppend(false);
 
         String responseData = target("export/execute")
                 .request(MediaType.APPLICATION_JSON)
@@ -123,8 +126,9 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         Job job = super.getSubmittedJob();
 
         assertNotNull(job);
-        assertEquals(1, job.getCommands().length);
-        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
+        assertEquals(2, job.getCommands().length);
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
     }
 
     @Test
@@ -139,6 +143,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         jobParams.setAppend(false);
         jobParams.setTextStatus(false);
         jobParams.setInputType("file");
+        jobParams.setIncludeHootTags(false);
         jobParams.setOutputType("tiles");
         jobParams.setInput(String.valueOf(mapId));
         jobParams.setBounds(aoi);
@@ -155,8 +160,9 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         Job job = super.getSubmittedJob();
 
         assertNotNull(job);
-        assertEquals(1, job.getCommands().length);
+        assertEquals(2, job.getCommands().length);
         assertSame(CalculateTilesCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
     }
 
     @Test
@@ -170,6 +176,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
         exportParams.setInputType("file");
+        exportParams.setIncludeHootTags(false);
 
         String responseData = target("export/execute")
                 .request(MediaType.APPLICATION_JSON)
@@ -196,6 +203,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
         exportParams.setInputType("file");
+        exportParams.setIncludeHootTags(false);
 
         String responseData = target("export/execute")
                 .request(MediaType.APPLICATION_JSON)

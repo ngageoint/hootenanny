@@ -11,12 +11,12 @@ rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 # Make an initial FGDB
-hoot convert $HOOT_OPT $INPUT_OSM $OUTPUT_DIR/mgcp.gdb --trans translations/MGCP_TRD4.js
+hoot convert $HOOT_OPT -D schema.translation.script=translations/MGCP_TRD4.js $INPUT_OSM $OUTPUT_DIR/mgcp.gdb
 
 START_NUM=`ogrinfo -ro -al -so $OUTPUT_DIR/mgcp.gdb | grep "Feature Count" | awk '{print $3}'`
 
 # Now add more features to the FGDB
-hoot convert $HOOT_OPT -D ogr.append.data=true $INPUT_OSM $OUTPUT_DIR/mgcp.gdb --trans translations/MGCP_TRD4.js
+hoot convert $HOOT_OPT -D schema.translation.script=translations/MGCP_TRD4.js -D ogr.append.data=true $INPUT_OSM $OUTPUT_DIR/mgcp.gdb
 
 END_NUM=`ogrinfo -ro -al -so $OUTPUT_DIR/mgcp.gdb | grep "Feature Count" | awk '{print $3}'`
 

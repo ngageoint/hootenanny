@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion to identify buildings
  */
-class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 

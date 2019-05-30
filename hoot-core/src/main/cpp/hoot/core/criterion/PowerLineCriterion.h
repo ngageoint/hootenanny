@@ -27,7 +27,7 @@
 #ifndef POWERLINECRITERION_H
 #define POWERLINECRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -35,7 +35,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove power line utilities.
  */
-class PowerLineCriterion : public ElementCriterion
+class PowerLineCriterion : public ConflatableElementCriterion
 {
 public:
 

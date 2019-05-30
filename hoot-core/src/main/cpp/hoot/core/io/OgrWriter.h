@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/io/ElementCache.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/StrictChecking.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
@@ -63,21 +63,6 @@ public:
   static std::string className() { return "hoot::OgrWriter"; }
 
   static int logWarnCount;
-
-  /**
-   * A true/false value to determine whether or not all layers are created.
-   * @sa setCreateAllLayers
-   */
-  static QString createAllLayersKey() { return "ogr.writer.create.all.layers"; }
-  /**
-   * Prepends this onto each of the layer names.
-   */
-  static QString preLayerNameKey() { return "ogr.writer.pre.layer.name"; }
-  static QString scriptKey() { return "ogr.writer.script"; }
-  /**
-   * Valid values are "on", "off" and "warn"
-   */
-  static QString strictCheckingKey() { return "ogr.strict.checking"; }
 
   OgrWriter();
 
@@ -118,7 +103,7 @@ public:
 
   void setPrependLayerName(const QString& pre) { _prependLayerName = pre; }
 
-  void setScriptPath(const QString& path) { _scriptPath = path; }
+  void setSchemaTranslationScript(const QString& path) { _scriptPath = path; }
 
   /**
    * @brief translateToFeatures Translates the element to a geometry and a
@@ -130,11 +115,11 @@ public:
    */
   void translateToFeatures(ElementProviderPtr& provider,
                            const ConstElementPtr& e,
-                           std::shared_ptr<geos::geom::Geometry> &g,
-                           std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf);
+                           std::shared_ptr<geos::geom::Geometry>& g,
+                           std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
   void writeTranslatedFeature(const std::shared_ptr<geos::geom::Geometry>& g,
-                              const std::vector<ScriptToOgrTranslator::TranslatedFeature>& tf);
+                              const std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf);
 
   virtual void write(const ConstOsmMapPtr& map) override;
 
@@ -158,7 +143,7 @@ protected:
   bool _createAllLayers;
   bool _appendData;
   QString _scriptPath;
-  mutable std::shared_ptr<ScriptToOgrTranslator> _translator;
+  mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   std::shared_ptr<GDALDataset> _ds;
   /** Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
@@ -194,7 +179,6 @@ private:
   QList<long> _unwrittenFirstPassRelationIds;
   bool _failOnSkipRelation;
   int _maxFieldWidth;
-
 };
 
 }

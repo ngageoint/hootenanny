@@ -22,7 +22,6 @@ include::user/IdentifyRoadIntersections.asciidoc[]
 include::user/LocatePhoneNumbers.asciidoc[]
 include::user/CommandLineExamples.asciidoc[]
 include::HootenannyConfigOptions.asciidoc[]
-:leveloffset: 0
 include::commands/HootCommandLineReference.asciidoc[]
 include::References.asciidoc[]
 

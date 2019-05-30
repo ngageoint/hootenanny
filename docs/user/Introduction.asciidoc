@@ -20,7 +20,7 @@ categories:
 * Image to Image (I2I) - Aligns two images.
 
 .Simple V2V Conflation
-image::images/SimpleConflation.png[]
+image::user/images/SimpleConflation.png[]
 
 Hootenanny deals exclusively with vector to vector conflation. The following
 sections discuss when Hootenanny is an appropriate tool for conflation and
@@ -112,13 +112,16 @@ NOTE: In the Hootenanny iD UI, there are three conflation options: _Reference_, 
 ===== Vertical Conflation
 
 .Vertical Conflation.  Red and blue boxes represent different data sets.  This is a good candidate for Vertical Conflation because of the high degree of overlap between the two data sets.
-image::images/VerticalConflation.png[]
+image::user/images/VerticalConflation.png[]
 
 Vertical conflation is most applicable when both data sets provide value and there is significant overlap between the data sets. In this scenario many of the features will be evaluated for conflation and possibly merged or marked as needing review. The primary advantage to using this strategy is maintaining much of the information available in both data sets. Because a large amount of the data is being evaluated for conflation it also increases the chances that errors will be introduced or unnecessary reviews may be generated. 
 
-To use, pass +ReferenceConflation.asciidoc+ to the conflate command.  
+To use, pass +ReferenceConflation.conf+ to the conflate command.  
 
-e.g. 'hoot conflate -C ReferenceConflation.conf input1.osm input2.osm output.osm
+e.g.
+--------
+hoot conflate -C ReferenceConflation.conf input1.osm input2.osm output.osm
+--------
 
 See also:
 
@@ -127,19 +130,22 @@ See also:
 ===== Horizontal Conflation
 
 .Horizontal Conflation.  This is a good candidate for Horizontal Conflation because there is a small amount of overlap between the two data sets.  
-image::images/HorizontalConflation.png[]
+image::user/images/HorizontalConflation.png[]
 
 Programmatically there is no difference between Vertical and Horizontal conflation. The difference is solely conceptual. 
 
 [[UnsupportedHorizontalConflation]]
 .Unsupported Horizontal Conflation due to the complete lack of overlap between the two data sets.
-image::images/NotHorizontalConflation.png[]
+image::user/images/NotHorizontalConflation.png[]
 
 As demonstrated in <<UnsupportedHorizontalConflation>> two vector layers that don't quite touch are not conflated. If this is of interest please create an issue at https://github.com/ngageoint/hootenanny.
 
-To use, pass +HorizontalConflation.asciidoc+ to the conflate command.  
+To use, pass +HorizontalConflation.conf+ to the conflate command.  
 
-e.g. 'hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
+e.g.
+--------
+hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
+--------
 
 See also:
 
@@ -150,21 +156,24 @@ See also:
 
 [[CookieCutterImage]]
 .Cookie Cutter & Horizontal.  The left image depicts the overlap of a high quality, smaller area data set overlayed on a coarser regional data set that is typical for Vertical/Horizontal Conflation.  The shaded area in the right image depicts the -1km buffer that is applied during the Cookie Cutter operation.
-image::images/CookieCutter.png[]
+image::user/images/CookieCutter.png[]
 
 The cookie cutter operation is designed for situations where two data sets contain significant overlap, but one data set is better in _every way_. A typical scenario that warrants this strategy is coarse country wide data that needs to be conflated with high quality city level data. When employing cookie cutter a polygon that approximates the bounds of the city will be removed from the coarse country data before conflation. 
 
 [[horizontalconflate_Boulder1]]
 .Boulder, CO with Street centerlines (gray) and OpenStreetMap Highways (red).  Right image depicts generate-alpha-shape (red polygon).  Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and Highway data set downloaded from an OSM data provider.  The basemap shown here is OSM.
-image::images/hootid-horizconfl.png[]
+image::user/images/hootid-horizconfl.png[]
 
 [[horizontalconflate_hootid]]
 .Process depicted in the Hootenanny User interface. The Horizontal & Cookie Cutter conflation performs an edge matching to merge the Street centerline data with the OSM data.  The resulting conflated dataset shown in bottom image (green).  Boulder, CO with DigitalGlobe Global Basemap (GBM).
-image::images/hootiD_horizontalconflation_boulder.png[scaledwidth="50%"]
+image::user/images/hootiD_horizontalconflation_boulder.png[scaledwidth="50%"]
 
-To use, pass +HorizontalConflation.asciidoc+ to the conflate command.  
+To use, pass +HorizontalConflation.conf+ to the conflate command.  
 
-e.g. 'hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
+e.g.
+--------
+hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
+--------
 
 See also:
 
@@ -176,17 +185,23 @@ See also:
 
 ===== Differential Conflation
 
-To use, pass +DifferentialConflation.asciidoc+ to the conflate command.  
+To use, pass +DifferentialConflation.conf+ to the conflate command.  
 
-e.g. 'hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm
+e.g.
+--------
+hoot conflate -C DifferentialConflation.conf input1.osm input2.osm output.osm
+--------
 
 More details: <<hootalgo, DifferentialConflation>>
 
 ===== Attribute Conflation
 
-To use, pass +AttributeConflation.asciidoc+ to the conflate command.  
+To use, pass +AttributeConflation.conf+ to the conflate command.  
 
-e.g. 'hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
+e.g.
+--------
+hoot conflate -C AttributeConflation.conf input1.osm input2.osm output.osm
+--------
 
 More details: <<hootalgo, AttributeConflation>>
 

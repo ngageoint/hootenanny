@@ -79,13 +79,13 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
     def convertFileJson(self,envVars,inputFile,outputFile):
-        override = 'translation.override=' + json.dumps(envVars)
+        override = 'schema.translation.override=' + json.dumps(envVars)
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::AddBboxVisitor;hoot::TranslationOp',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
                 # '-D','ogr.debug.dumptags=true',
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX.js']
+                '-D','schema.translation.script=/var/lib/hootenanny/translations/GBDX.js']
 
         hootCmd.append(inputFile)
         hootCmd.append(outputFile)
@@ -113,14 +113,14 @@ class HootGbdxTask(GbdxTaskInterface):
 
 
     def convertFileXml(self,envVars,inputFile,outputFile):
-        override = 'translation.override=' + json.dumps(envVars)
+        override = 'schema.translation.override=' + json.dumps(envVars)
 
         hootCmd = ['hoot','convert','--error',
                 '-D','convert.ops=hoot::AddBboxVisitor;hoot::TranslationOp',
                 '-D','osm.add.bbox.tag=true',
                 '-D','osm.map.writer.skip.empty.map=true',
                 '-D',override,
-                '-D','translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
+                '-D','schema.translation.script=/var/lib/hootenanny/translations/GBDX_XML_Shape.js']
                 # '-D','ogr.debug.dumptags=true',
 
         hootCmd.append(inputFile)

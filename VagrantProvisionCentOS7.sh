@@ -23,28 +23,30 @@ echo GROUP: $VMGROUP
 
 export LANG=en_US.UTF-8
 
+# Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 source ~/.bash_profile
 
-# add EPEL repo for extra packages
-echo "### Add epel repo ###" > CentOS_upgrade.txt
-sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+if [ "${ADDREPOS:-yes}" = "yes" ]; then
+    echo "Adding additional software repositories..."
+    # add EPEL repo for extra packages
+    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
-# add Hoot repo for our pre-built dependencies.
-echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+    # add Hoot repo for our pre-built dependencies.
+    echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-# configure PGDG repository for PostgreSQL 9.5.
-sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+    # configure PGDG repository for PostgreSQL 9.5.
+    echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+fi
 
-echo "Updating OS..."
-echo "### Update ###" >> CentOS_upgrade.txt
-sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
-echo "### Upgrade ###" >> CentOS_upgrade.txt
-sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
-
-# Make sure that we are in ~ before trying to wget & install stuff
-cd ~
+if [ "${YUMUPDATE:-yes}" = "yes" ]; then
+    echo "Updating OS..."
+    echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
+    sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+fi
 
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.

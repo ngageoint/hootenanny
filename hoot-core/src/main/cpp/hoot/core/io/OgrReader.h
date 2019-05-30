@@ -97,7 +97,7 @@ public:
 
   void setLimit(long limit);
 
-  void setTranslationFile(const QString& translate);
+  void setSchemaTranslationScript(const QString& translate);
 
   long getFeatureCount(const QString& path, const QString& layer);
 
