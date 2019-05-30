@@ -77,7 +77,6 @@ class ExportCommand extends ExternalCommand {
 
         String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
 
-
         super.configureCommand(command, substitutionMap, caller);
     }
 
@@ -121,7 +120,8 @@ class ExportCommand extends ExternalCommand {
         //we want to translate last
         List<String> convertOps = new ArrayList<>();
 
-        //Remove review relations
+        //Remove review relations, but do not remove matched review features
+        //like we do before conflating a merged dataset as a new input
         if (!params.getIncludeHootTags()) {
             convertOps.add("hoot::RemoveElementsVisitor");
             options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
@@ -130,9 +130,6 @@ class ExportCommand extends ExternalCommand {
 
             convertOps.add("hoot::RemoveTagsVisitor");
             options.add("remove.tags.visitor.keys=hoot:status;hoot:building:match;error:circular");
-
-            //TODO: Do we need to remove matched review features?
-            //Like we do before conflating a merged dataset as a new input
         }
 
         //Decompose building relations for non-osm formats only
