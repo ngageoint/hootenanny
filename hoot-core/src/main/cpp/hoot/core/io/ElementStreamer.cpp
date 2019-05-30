@@ -213,13 +213,14 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
 }
 
 void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps,
-                             Progress progress)
+                             ElementInputStreamPtr customInputStream, Progress progress)
 {
-  stream(QStringList(input), out, convertOps, progress);
+  stream(QStringList(input), out, convertOps, customInputStream, progress);
 }
 
 void ElementStreamer::stream(const QStringList& inputs, const QString& out,
-                             const QStringList& convertOps, Progress progress)
+                             const QStringList& convertOps, ElementInputStreamPtr customInputStream,
+                             Progress progress)
 {
   QElapsedTimer timer;
   timer.start();
@@ -256,6 +257,11 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     // add visitor/criterion operations if any of the convert ops are visitors.
     LOG_VARD(convertOps);
     ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOps);
+
+    if (customInputStream)
+    {
+      //streamReader.reset(new ElementInputStream())
+    }
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 

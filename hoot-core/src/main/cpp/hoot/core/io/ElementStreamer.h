@@ -55,10 +55,13 @@ public:
    * @param inputs data sources
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
+   * @param customInputStream TODO
    * @param progress optional for tracking I/O job progress
    */
   static void stream(const QStringList& inputs, const QString& out,
-                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
+                     const QStringList& convertOps = QStringList(),
+                     ElementInputStreamPtr customInputStream = ElementInputStreamPtr(),
+                     Progress progress = Progress());
 
   /**
    * Streams a data source from input to output.
@@ -68,10 +71,13 @@ public:
    * @param input data source
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
+   * @param customInputStream TODO
    * @param progress optional for tracking I/O job progress
    */
   static void stream(const QString& input, const QString& out,
-                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
+                     const QStringList& convertOps = QStringList(),
+                     ElementInputStreamPtr customInputStream = ElementInputStreamPtr(),
+                     Progress progress = Progress());
 
   /**
    * Determines whether both input and output are streamable data sources (associated
