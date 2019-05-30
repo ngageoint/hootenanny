@@ -127,6 +127,7 @@ public:
     // The number of steps here must be updated as you add/remove job steps in the logic.
     const int numTotalTasks = 2;
     int currentTaskNum = 1;
+    // TODO: update progress
     Progress progress(ConfigOptions().getJobId(), jobSource, Progress::JobState::Running);
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
@@ -233,9 +234,6 @@ private:
     return false;
   }
 
-  /*
-   * Reads entire input into memory
-   */
   OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus)
   {
     LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
@@ -244,6 +242,20 @@ private:
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, elementStatus);
+
+    // TODO: apply ops
+    /*
+     *if (_convertOps.size() > 0)
+    {
+      NamedOp convertOps(_convertOps);
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
+      convertOps.apply(map);
+      currentStep++;
+    }
+     */
 
     //we don't want to include review relations
     std::shared_ptr<TagKeyCriterion> elementCriterion(
@@ -272,6 +284,15 @@ private:
     //Only sort if input isn't already sorted.
     if (!inputSorted)
     {
+      /*
+       * TODO: add streamable check
+       * TODO: change buffer size default
+       *
+       * const bool isStreamable =
+    ElementStreamer::areValidStreamingOps(_convertOps) &&
+    ElementStreamer::areStreamableIo(inputs, output);
+       */
+
       //If external sorting is enabled and both inputs are streamable, externally sort the elements
       //to avoid potential memory issues.
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
@@ -283,6 +304,9 @@ private:
       }
       else
       {
+        // TODO: get rid of in memory sorter and _readInputFully (or factory implementation; do
+        // performance comparison first)?
+
         //Otherwise, since currently not all input formats are supported as streamable, switch over
         //to memory bound sorting.
         sortedElements = _sortElementsInMemory(_readInputFully(input, status));
@@ -314,6 +338,8 @@ private:
           new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
     //node comparisons require hashes be present on the elements
     visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+
+    // TODO: add streaming ops in the pipeline
 
     std::shared_ptr<PartialOsmMapReader> reader =
       std::dynamic_pointer_cast<PartialOsmMapReader>(
