@@ -95,7 +95,7 @@ QString TagInfo::_getInfo(const QString& input)
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
-    ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+    ogrReader->setSchemaTranslationScript(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
 
     QStringList layers;
     if (inputInfo.contains(";"))

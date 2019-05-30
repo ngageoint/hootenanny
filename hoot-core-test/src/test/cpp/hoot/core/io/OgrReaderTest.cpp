@@ -114,7 +114,7 @@ public:
       OgrReader uut;
 
       OsmMapPtr map(new OsmMap());
-      uut.setTranslationFile("translations/cloudmade.js");
+      uut.setSchemaTranslationScript("translations/cloudmade.js");
       uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
@@ -143,7 +143,7 @@ public:
       OgrReader uut;
 
       OsmMapPtr map(new OsmMap());
-      uut.setTranslationFile("cloudmade");
+      uut.setSchemaTranslationScript("cloudmade");
       uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());

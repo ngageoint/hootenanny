@@ -442,12 +442,12 @@
                 "hoot_key":"ogr.thematic.structure"
             },
             {
-            	"id":"translate_string_distance_tokenize",
+            	"id":"language_translation_string_distance_tokenize",
                 "elem_type":"bool",
                 "defaultvalue":"true",
                 "description":"Set to true if the strings should be tokenized (split into words) before translating the values.",
                 "name":"Tokenize Strings When Translating",
-                "hoot_key":"translate.string.distance.tokenize"
+                "hoot_key":"language.translation.string.distance.tokenize"
             },
             {
                 "id":"reader_conflate_use_data_source_ids_1",

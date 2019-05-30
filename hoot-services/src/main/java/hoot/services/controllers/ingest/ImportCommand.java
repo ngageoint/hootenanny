@@ -84,8 +84,13 @@ class ImportCommand extends ExternalCommand {
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
             //options.add("convert.ops=hoot::TranslationOp");
-            //options.add("translation.script=" + translationPath);
+            //options.add("schema.translation.script=" + translationPath);
         //}
+
+        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
+        {
+          options.add("schema.translation.script=" + translationPath);
+        }
 
         List<String> hootOptions = toHootOptions(options);
 
@@ -105,11 +110,6 @@ class ImportCommand extends ExternalCommand {
                 //Reading a GDAL dataset in a .gz file or a .zip archive
                 inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
                 substitutionMap.put("INPUTS", inputs);
-            }
-
-            if (!isNoneTranslation) {
-                substitutionMap.put("TRANSLATION_PATH", translationPath);
-                hootConvertCommand += " --trans ${TRANSLATION_PATH}";
             }
             command = hootConvertCommand;
         }

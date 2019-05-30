@@ -34,7 +34,7 @@ hoot.require('translate');
 function initialize()
 {
     // Get any changes
-    toChange = hoot.Settings.get("translation.override");
+    toChange = hoot.Settings.get("schema.translation.override");
 }
 
 
@@ -45,3 +45,9 @@ function translateAttributes(attrs, layerName, geometryType)
     return attrs;
 }
 
+function translateToOgr(tags, elementType, geometryType)
+{
+    // Override attributes if appropriate
+    attrs = {attrs: translate.overrideValues(tags, toChange)};
+    return attrs;
+}

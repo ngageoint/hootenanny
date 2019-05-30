@@ -1936,7 +1936,7 @@ mgcp = {
             mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
-            mgcp.toChange = hoot.Settings.get("translation.override");
+            mgcp.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Debug:
@@ -2087,7 +2087,7 @@ mgcp = {
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            mgcp.toChange = hoot.Settings.get("translation.override");
+            mgcp.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2117,10 +2117,13 @@ mgcp = {
             // Order is important:
             // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
             // stomp on the V4 ones
-            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
             mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
+            mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
 
             mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
+
+            // Debug
+            // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
         }
 
         if (mgcp.lookup == undefined)

@@ -28,7 +28,7 @@ See the "Hootenanny Manual Conflation" section in this document for more details
 
 First, you will want to set up a Hootenanny JSON configuration file.  An example shown here
 is similar to the file provided with Hootenanny for conflating rivers, 
-@$HOOT_HOME/conf/LinearWaterway.conf@:
+`$HOOT_HOME/conf/LinearWaterway.conf`:
 
 ----------------
 {
@@ -48,10 +48,10 @@ conflation framework.  "log.identical.message.limit" is included here only, so y
 log messages for debugging purposes.
 
 As you build your model, you may need to add new configuration options which can be customized at
-runtime.  To do this, see @$HOOT_HOME/conf/core/ConfigOptions.asciidoc@. 
+runtime.  To do this, see `$HOOT_HOME/conf/core/ConfigOptions.asciidoc`.
 
 To be able to go ahead and do an initial match scoring, copy one of the existing *.js rules files in
-@$HOOT_HOME/rules@ to a new file and make sure its referenced from your configuration file. 
+`$HOOT_HOME/rules` to a new file and make sure its referenced from your configuration file. 
 
 === Scoring Matches
 
@@ -59,9 +59,9 @@ The Hootenanny +score-matches+ command can be used to determine how well Hootena
 test data by comparing its matches to the manually made matches.  Here is an example of using the 
 command:
 
-----------------------
+--------
 time hoot score-matches -C conf/LinearWaterway.conf --confusion Haiti_CNIGS_Rivers_REF1-cropped.osm Haiti_osm_waterway_ss_REF2-cropped.osm tmp/Test1.osm
----------------------- 
+--------
 
 Data sources: 
 
@@ -231,6 +231,7 @@ exports.isMatchCandidate = function(map, e) {
 Your Javascript rules file can be configured to set the conflation match/miss/review threshold based
 on existing Hootenanny configuration settings.  This examples shows how it is done in the linear
 waterway rules file:
+
 -------------
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
@@ -238,6 +239,7 @@ exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
 -------------
 If you wish to change these threshold settings, when conflating from the command line, the best way 
 to do it is by passing a new value in for each setting.  e.g.:
+
 ------------
 -D waterway.match.threshold=0.8 -D waterway.miss.threshold=0.8 -D waterway.review.threshold=0.8
 ------------
@@ -248,6 +250,7 @@ Generic conflation can be set up to automatically calculate the search radius of
 a modification to the associated Javascript rules file.  It can be done by adding a single line making
 a call to the calculateSearchRadius function inside the rules file init method.  Here is an example
 from the linear waterways rules file:  
+
 ------
 exports.init = function(map) 
 {
@@ -278,6 +281,7 @@ rubber sheeting, thus precluding use of the feature), you can manually specify t
 to be used during conflation.  This manually specified value will then be used as the search radius.  
 Here is an example of the related settings to add to your configuration file if you are conflating
 river data:
+
 ---------
 {
   "waterway.search.radius": "20.0"
@@ -315,6 +319,7 @@ To use a feature extractor to extract features in the generic conflation framewo
 the getMatchFeatureDetails method in your rules file and extract the feature there.  Here is an
 example which extracts the weighted shape distance feature for each of the extracted sublines for a 
 way feature:
+
 -------------
 exports.getMatchFeatureDetails = function(map, e1, e2)
 {
@@ -352,6 +357,7 @@ quick start.
 
 Weka can be downloaded from here: http://www.cs.waikato.ac.nz/ml/weka/  Its available for both Windows
 and Linux.  Here is an example to launch it from Linux:
+
 ---------
 nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 ---------
@@ -360,6 +366,7 @@ nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 
 After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka 
 model file can be output from Hootenanny using the build-model command.  An example:
+
 ----------------
 hoot build-model -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
 ---------------
@@ -385,11 +392,10 @@ a classification model and which are not.  There are two ways to come up with an
 
 One quick way to come up with an attribute set is:
 1. From the Preprocess tab, click the Choose button in the Filter section.
-2. Select Filter --> supervised --> attribute --> AttributeSelection
+2. Select Filter -> supervised -> attribute -> AttributeSelection
 3. Click the Apply button in the Filter section.
 
 Weka will select reduce the feature list down to what it deems will be effective in building a model.
-
 
 Here is another method for selecting features within Weka that has more flexibility:
 1. Click the Select Attributes tab.
@@ -424,6 +430,7 @@ NOTE: The J48 tree classifier was shown to be most effective for the generic riv
 
 In the Classifier output section you will see a entry with logic for the output classifier as well as a
 predicted score.  An example of the output logic:
+
 --------
 sampledAngleHistogramValue <= 0
 |   weightedShapeDistanceValue <= 0.861844: miss (81.0/27.0)
@@ -432,6 +439,7 @@ sampledAngleHistogramValue > 0: match (753.0/83.0)
 --------
 This logic can then be implemented in Javascript and added to the matchScore function in the rules
 file to identify matches.  Here is an example of that:
+
 -----------
 exports.matchScore = function(map, e1, e2)
 {
@@ -482,6 +490,7 @@ Feature extractors themselves may be tweaked to tune the model.
 Value aggregators determine how calculated feature values are combined.  There are several types of value 
 aggregators.  For a list, in the code, look for all classes implementing hoot::ValueAggregator.  In
 this example, an attribute score feature extractor is configured with an RMSE value aggregator:
+
 ---------
 var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggregator(),  {"attribute.score.extractor.use.weight": "true"});
 ---------
@@ -492,6 +501,7 @@ Feature extractors have some custom configuration options which, when tweaked, m
 on the generic conflation model.  Many extractors allow for passing in Hootenanny configuration 
 settings directly from the Javascript rule file.  From the previous example, this attribute score 
 extractor is configured with a weighting option:
+
 ---------
 var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggregator(),  {"attribute.score.extractor.use.weight": "true"});
 ---------
@@ -518,6 +528,7 @@ significantly more complex as the number of features involved increases.
 
 Here, the previous conflation logic ported to the rules file is modified to return reviews in certain
 situations:
+
 -------------
 exports.matchScore = function(map, e1, e2)
 {
@@ -570,6 +581,7 @@ able to use distance weighting to favor classifying features that are closer tog
 as matches over those that are further apart to increase the correct score.
 
 Here is an example using the distance score feature extractor to compute the distance value:
+
 -----------
 exports.matchScore = function(map, e1, e2)
 {

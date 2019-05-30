@@ -133,7 +133,7 @@ the top of the file (in the southern Denver region).
 ////
 // NOTE: Needs to be flushed out.
 ////
-If `isWholeGroup` returns true, then you can simply implement `mergePairs` -- 
+If `isWholeGroup` returns true, then you can simply implement `mergePairs` - 
 this gives a fair amount of flexibility, but will only handle simple 1:1 merge
 situations. Complex situations like 1:n, m:1, m:n will be marked as needing
 review. You could implement 

@@ -99,10 +99,10 @@ exports['isMatchCandidate'] = isMatchCandidate;
  * review scores. Values that are omitted are assumed to be zero. If the result
  * is a review then an explanation must be given in the 'explain' key. The
  * following are all valid results:
- *
- * - `return {'match': 1};`
- * - `return {'match': 0.5, 'miss': 0.5, 'review': 0};`
- * - `return {'review': 1, 'explain': "This doesn't look right."};`
+ * 
+ * - return {"match": 1};
+ * - return {"match": 0.5, "miss": 0.5, "review": 0};
+ * - return {"review": 1, "explain": "This doesn't look right."};
  *
  * The explain text will be presented to the user when a review occurs.
  *
@@ -143,7 +143,7 @@ exports['mergePair'] = mergePair;
  * @param replaced An empty array is passed in, the method should fill the array
  *      with all the replacements that occur during the merge process (e.g. if
  *      two elements (way:1 & way:2) are merged into one element (way:3), then
- *      the replaced array should contain [[way:1, way:3], [way:1, way:3]]
+ *      the replaced array should contain [ [way:1, way:3], [way:1, way:3] ]
  *      where all the "way:*" objects are of the ElementId type.
  */
 function mergeSets(map,  pairs, replaced) { }

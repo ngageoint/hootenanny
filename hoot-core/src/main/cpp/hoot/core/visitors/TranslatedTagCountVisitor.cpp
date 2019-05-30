@@ -27,7 +27,7 @@
 #include "TranslatedTagCountVisitor.h"
 
 // hoot
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
@@ -35,7 +35,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/io/schema/Schema.h>
 
 using namespace geos::geom;
@@ -46,13 +46,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
 
-TranslatedTagCountVisitor::TranslatedTagCountVisitor(const std::shared_ptr<ScriptTranslator>& t) :
+TranslatedTagCountVisitor::TranslatedTagCountVisitor(
+  const std::shared_ptr<ScriptSchemaTranslator>& t) :
   _map(),
   _populatedCount(),
   _defaultCount(),
   _nullCount()
 {
-  _translator = std::dynamic_pointer_cast<ScriptToOgrTranslator>(t);
+  _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
   if (!_translator)
   {
     throw HootException("Error allocating translator, the translation script must support "
@@ -116,7 +117,7 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
       }
     }
 
-    vector<ScriptToOgrTranslator::TranslatedFeature> f = _translator->translateToOgr(t,
+    vector<ScriptToOgrSchemaTranslator::TranslatedFeature> f = _translator->translateToOgr(t,
       e->getElementType(), g->getGeometryTypeId());
 
     // only write the feature if it wasn't filtered by the translation script.

@@ -12,7 +12,7 @@ changeset can then be applied directly to dataset A, without generating any
 review items.
 
 This algorithm is still under development. Currently it works best if you use 
-the Network Conflation conflicts matcher (see conf/core/NetworkAlgorithm.conf),
+the Network Conflation conflicts matcher (see +conf/core/NetworkAlgorithm.conf+),
 but if you are in a situation where you need to process a lot of data quickly,
 using the unifying-conflation HighwayMatchCreator produces acceptable results,
 in a shorter timeframe. Please note that the differential conflation algorithm

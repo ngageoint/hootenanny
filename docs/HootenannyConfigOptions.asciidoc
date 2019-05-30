@@ -58,7 +58,7 @@ hoot convert \
 
 The +$HOOT_HOME/conf/hoot.json+ configuration file is used with all commands without specifying the configuration on the command line.
 
-For +List+ type options, additional options can be appended to the list of defaults by using the ++=+ operator. E.g.
+For +List+ type options, additional options can be appended to the list of defaults by using the `+=` operator. E.g.
 
 -----
 hoot conflate \
@@ -67,7 +67,7 @@ hoot conflate \
   test-output/ToyTestRemoveUnknown2.osm
 -----
 
-This example adds the +RemoveUnknown2Visitor+ operation to the end of the post conflate operations list. The same is true for removing options from lists with the +-=+ operator. E.g.
+This example adds the +RemoveUnknown2Visitor+ operation to the end of the post conflate operations list. The same is true for removing options from lists with the `-=` operator. E.g.
 
 -----
 hoot conflate \
@@ -85,7 +85,7 @@ hoot conflate \
   test-output/ToyTestRemoveUnknown2.osm
 -----
 
-This example prepends the +RemoveUnknown2Visitor+ operation to the post conflate operations list using +++=+ operator.
+This example prepends the +RemoveUnknown2Visitor+ operation to the post conflate operations list using `++=` operator.
 
 [[Conflation-Configuration]]
 === Conflation Configuration
@@ -132,9 +132,9 @@ hoot convert \
 
 # Same as above.
 hoot convert \
-  -D ogr.writer.pre.layer.name=bar \
+  -D schema.translation.script=test-files/io/SampleTranslation.js -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" --trans test-files/io/SampleTranslation.js
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 
 # Convert example .osm file and write the resulting layers to a directory full of Shapefiles.
 # The directory will be named tmp/MyShapefiles, not tmp/MyShapefiles.shp
@@ -464,7 +464,7 @@ hoot conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.
 [[Provenance-Aware-Overwrite-Tag-Merger]]
 ===== Provenance Aware Overwrite Tag Merger
 
-This tag merger assumes features in different input files have their provenance tracked with a tag with the key "hoot:source".  
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.  
 This tag merger will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both 
 features are concatenated together.
 
@@ -478,7 +478,7 @@ hoot conflate -D tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger inpu
 ===== Preserve Types Tag Merger
 
 This tag merger preserves tags from both features.  In instances where two features have the same type tag key, the most specific type
-is chosen (or arbitrarily the reference type in a tie) and the unselected type is stored in an "alt_types" field.
+is chosen (or arbitrarily the reference type in a tie) and the unselected type is stored in an `alt_types` field.
 
 Use the value +hoot::PreserveTypesTagMerger+ . For example:
 

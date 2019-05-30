@@ -27,7 +27,7 @@
 #ifndef POICRITERION_H
 #define POICRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -35,7 +35,7 @@ namespace hoot
 /**
  * A criterion that is only satisified with POIs.
  */
-class PoiCriterion : public ElementCriterion
+class PoiCriterion : public ConflatableElementCriterion
 {
 public:
 

@@ -127,7 +127,7 @@ public:
   {
     FileUtils::removeDir(_outputPath + "OgrWriterShpTest");
     OgrWriter uut;
-    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterShpTest.shp");
     uut.write(createTestMap());
     QStringList nameFilter;
@@ -142,7 +142,7 @@ public:
   {
     FileUtils::removeDir(_outputPath + "OgrWriterTest.gdb");
     OgrWriter uut;
-    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterTest.gdb");
     uut.write(createTestMap());
 
@@ -171,7 +171,7 @@ public:
 
     FileUtils::removeDir(_outputPath + "OgrWriterRelationTest.gdb");
     OgrWriter uut;
-    uut.setScriptPath(_inputPath + "SampleTranslation.js");
+    uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterRelationTest.gdb");
     uut.write(map);
 

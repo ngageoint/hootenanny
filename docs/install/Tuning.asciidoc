@@ -16,7 +16,7 @@ The Hootenanny services database is pre-configured with a database connection po
 .edit properties in $TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/db/db.properties
 .restart tomcat
 
-After making changes, you should be able to monitor the number of open Postgres connections while hoot is running using something like "ps aux | grep postgres: | wc -l" or use a "postgres" filter on processes with htop.
+After making changes, you should be able to monitor the number of open Postgres connections while hoot is running using something like `ps aux | grep postgres: | wc -l` or use a `postgres` filter on processes with htop.
 
 === Batch Jobs
 
