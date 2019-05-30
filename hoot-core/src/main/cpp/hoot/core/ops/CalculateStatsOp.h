@@ -138,7 +138,7 @@ private:
 
   double _applyVisitor(const hoot::FilteredVisitor &v);
   double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData);
-  double _applyFilteredVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis);
+  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis);
   void _applyVisitor(ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
