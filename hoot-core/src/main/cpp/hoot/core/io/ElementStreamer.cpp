@@ -146,15 +146,12 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
   return true;
 }
 
-ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
-  std::shared_ptr<OsmMapReader> reader, const QStringList& ops)
+ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
+  ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  ElementInputStreamPtr filteredInputStream =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
-
   if (ops.size() == 0)
   {
-    return filteredInputStream;
+    return streamToFilter;
   }
 
   foreach (QString opName, ops)
@@ -181,7 +178,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementCriterionInputStream(filteredInputStream, criterion));
+        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
@@ -199,7 +196,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
+        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
       }
       else
       {
@@ -209,7 +206,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
     }
   }
 
-  return filteredInputStream;
+  return streamToFilter;
 }
 
 void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps,
@@ -255,7 +252,8 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
 
     // add visitor/criterion operations if any of the convert ops are visitors.
     LOG_VARD(convertOps);
-    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOps);
+    ElementInputStreamPtr streamReader =
+      getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 

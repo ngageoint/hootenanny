@@ -104,10 +104,15 @@ public:
    */
   static bool areValidStreamingOps(const QStringList& ops);
 
-private:
-
-  static ElementInputStreamPtr _getFilteredInputStream(
-    std::shared_ptr<OsmMapReader> reader, const QStringList& ops);
+  /**
+   * TODO
+   *
+   * @param streamToFilter
+   * @param ops
+   * @return
+   */
+  static ElementInputStreamPtr getFilteredInputStream(
+    ElementInputStreamPtr streamToFilter, const QStringList& ops);
 };
 
 }
