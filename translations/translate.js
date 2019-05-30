@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,22 +37,22 @@ translate = {
 
         one2one.forEach( function(item) {
             if (item[2]) // Make sure it isn't 'undefined'
-            {
+        {
                 if (!(item[0] in lookup)) lookup[item[0]] = {};
- 
-                if (!(lookup[item[0]][item[1]])) 
+
+                if (!(lookup[item[0]][item[1]]))
                 {
                     lookup[item[0]][item[1]] = [item[2],item[3]];
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupclash() == 'true') 
-                    {
-                        if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
+                    if (config.getOgrDebugLookupclash() == 'true')
                         {
+                        if (lookup[item[0]][item[1]] != ('' + item[2] + ',' + item[3]))
+                            {
                             print('Fwd Clash: ' + item[0] + ' ' + item[1] + '  is ' + lookup[item[0]][item[1]] + ' tried to change to ' + [item[2],item[3]]);
+                            }
                         }
-                    }
                 }
             }
         } );
@@ -74,7 +74,7 @@ translate = {
     },
 
 
-    // Add a value to the end of another value. 
+    // Add a value to the end of another value.
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
@@ -90,7 +90,7 @@ translate = {
         }
     },
 
-    
+
     // Concatinate two lists
     // NOTE: These are not arrays.
     joinList : function(listA,listB)
@@ -99,9 +99,9 @@ translate = {
         // Can't just do: var newList = listA;
 
         // In QT, this is fractionally slower than a simple loop
-        // In v8 this is faster. 
+        // In v8 this is faster.
         var newList = JSON.parse(JSON.stringify(listA));
-        
+
         for (var i in listB)
         {
             newList[i] = listB[i];
@@ -109,13 +109,13 @@ translate = {
 
         return newList;
     },
-    
-    
+
+
     // Swap keys and values in a list
     flipList : function(inList)
     {
         var newList = {};
-        
+
         for (var i in inList)
         {
             newList[inList[i]] = i;
@@ -123,8 +123,8 @@ translate = {
 
         return newList;
     },
-    
-    
+
+
     // This is used by anything that "exports" - toTds, toMGCP
     createBackwardsLookup : function(one2one)
     {
@@ -133,7 +133,7 @@ translate = {
 
         one2one.forEach( function(item) {
             if (item[2]) // Make sure it isn't 'undefined'
-            {
+        {
                 if (!(item[2] in lookup)) lookup[item[2]] = {};
 
                 // This has been swapped around. The FCODE lists can stomp on the One2One values.
@@ -145,16 +145,16 @@ translate = {
                 {
                     if (config.getOgrDebugLookupclash() == 'true') print('Bkwd Clash: ' + item[2] + ' ' + item[3] + '  is ' + lookup[item[2]][item[3]] + '  tried to change to ' + [item[0], item[1]]);
                 }
-            }            
+            }
         } );
-    
+
         return lookup;
     },
 
 
     // Apply one to one translations - used for import and export
     applyOne2One : function(inList, outList, lookup, fCodeList)
-    { 
+    {
         var endChar = '',
             tAttrib = '',
             row = [];
@@ -279,7 +279,7 @@ translate = {
     // Apply one to one translations - For TDS export
     // This version populates the OTH field for values that are not in the rules
     applyTdsOne2One : function(inList, outList, lookup, fCodeList)
-    { 
+    {
         var endChar = '',
             tAttrib = '',
             otherVal = '',
@@ -362,7 +362,7 @@ translate = {
                     otherVal = lookup[key]['other'];
 
                     if (otherVal)
-                    { 
+                    {
                         // Build the OTH value
                         othVal = '(' + otherVal[0] + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
@@ -620,7 +620,7 @@ translate = {
         rawOTH.replace(/\) \(/g,'#').replace(/[\(\)]/g,'').split('#').forEach( function (item) {
             var othVal = item.split(':'); // Split into Key/Value
             // If we have a Key _and_ a value, then add it to the output
-            if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];            
+            if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
         });
 
         // Debug:
@@ -1149,9 +1149,9 @@ translate = {
     makeAttrLookup : function(schema)
     {
         var lookup = {};
-        
-        // Add the attrArray to the list as <geom><FCODE>:[array]
-        // Eg[L,A,P]AP030:[array]
+
+            // Add the attrArray to the list as <geom><FCODE>:[array]
+            // Eg[L,A,P]AP030:[array]
         schema.forEach( function (item) {
             var iName = item.geom.charAt(0) + item.fcode;
             lookup[iName] = [];
@@ -1239,7 +1239,7 @@ translate = {
         schema.push({name:'extra_A',desc:'extra tag values',geom:'Area',
                      columns:[{name:'tags',desc:'Tag List',type:'String'},
                               {name:'uuid',desc:'Feature uuid',type:'String',defValue:''}
-                             ]
+                              ]
                     });
         schema.push({ name:'extra_L',desc:'extra tag values',geom:'Line',
                       columns:[{name:'tags',desc:'Tag List',type:'String'/*,length:'254'*/},
@@ -1249,7 +1249,7 @@ translate = {
         schema.push({name:'extra_P',desc:'extra tag values',geom:'Point',
                      columns:[{name:'tags',desc:'Tag List',type:'String'/*,length:'254'*/},
                               {name:'uuid',desc:'Feature uuid',type:'String',defValue:''}
-                             ]
+                              ]
                     });
 
         return schema;
@@ -1263,7 +1263,7 @@ translate = {
             item.columns.push({name:'SCAMIN',desc:'Scale - Minimum',type:'Integer',optional:'R',defValue:'-999999'});
             item.columns.push({name:'SCAMAX',desc:'Scale - Maximum',type:'Integer',optional:'R',defValue:'-999999'});
             item.columns.push({name:'LINK_ID',desc:'Link Id',type:'String',optional:'R',defValue:'No Information'});
-        });
+                                    });
 
         return schema;
     }, // End addEtds
@@ -1274,7 +1274,7 @@ translate = {
     {
         schema.forEach( function (item) {
             item.columns.push({name:'FCSUBTYPE',desc:'Feature Code Subtype',type:'Integer',optional:'R',defValue:''});
-        });
+                                    });
 
         return schema;
     }, // End addFCSubtype
@@ -1319,13 +1319,13 @@ translate = {
 
             item.columns.forEach( function (column) {
                 print('    Attr: ' + column.name + '  Desc: ' + column.desc + '  Type: ' + column.type + '  Default: ' + column.defValue);
-                if (column.type == 'enumeration') 
-                {
+                if (column.type == 'enumeration')
+        {
                     column.enumerations.forEach( function (eValue) {print('        Value: ' + eValue.value + '  Name: ' + eValue.name); });
                 }
             });
 
-        print(''); // just to get one blank line
+            print(''); // just to get one blank line
         });
 
     }, // End dumpSchema
@@ -1343,7 +1343,9 @@ translate = {
             // Delete: Remove a tag
             if (override[i] == '')
             {
-                delete values[i];
+                if (values[i]) {
+                    delete values[i];
+                }
             }
             // Modify: change a tag value ONLY if the tag already exists
             else if (i.charAt(0) == '#')

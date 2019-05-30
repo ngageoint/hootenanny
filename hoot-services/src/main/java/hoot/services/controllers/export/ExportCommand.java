@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,10 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.common.UnTARFileCommand;
-import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.Users;
-import hoot.services.models.osm.Map;
-import hoot.services.utils.DbUtils;
 
 
 class ExportCommand extends ExternalCommand {
@@ -60,6 +58,11 @@ class ExportCommand extends ExternalCommand {
         if(user != null) {
             params.setUserEmail(user.getEmail());
         }
+        //If no translation, we are keeping osm tag schema, but still provide the
+        //following no-op translation so that tag overrides can be run
+        if (params.getTranslation() == null || params.getTranslation().isEmpty()) {
+            params.setTranslation("translations/OSM_Export.js");
+        }
         if (params.getAppend()) {
             appendToFGDB();
         }
@@ -69,11 +72,10 @@ class ExportCommand extends ExternalCommand {
         java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} -D schema.translation.script=${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH} ";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT_PATH} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
@@ -110,25 +112,56 @@ class ExportCommand extends ExternalCommand {
 
     List<String> getCommonExportHootOptions() {
         List<String> options = new LinkedList<>();
-        options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true");
-        options.add("api.db.email=" + params.getUserEmail());
-        options.add("job.id=" + jobId);
 
-        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        if (params.getTextStatus()) {
-            options.add("writer.text.status=true");
+        //Sets the user reading this data
+        options.add("api.db.email=" + params.getUserEmail());
+
+        //Convert ops, ORDER IS IMPORTANT
+        //we want to translate last
+        List<String> convertOps = new ArrayList<>();
+
+        //Remove review relations, but do not remove matched review features
+        //like we do before conflating a merged dataset as a new input
+        if (!params.getIncludeHootTags()) {
+            convertOps.add("hoot::RemoveElementsVisitor");
+            options.add("remove.elements.visitor.element.criteria=hoot::ReviewRelationCriterion");
+            options.add("remove.elements.visitor.recursive=false");
+            options.add("writer.include.circular.error.tags=false");
+
+            convertOps.add("hoot::RemoveTagsVisitor");
+            options.add("remove.tags.visitor.keys=hoot:status;hoot:building:match;error:circular");
         }
 
+        //Decompose building relations for non-osm formats only
+        if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
+            convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
+
+        }
+
+        //Translate the features (which includes applying tag overrides set below)
+        convertOps.add("hoot::TranslationOp");
+        options.add("schema.translation.direction=toogr");
+        options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+
+        // By default export removes hoot conflation review related tags
         if (!params.getTagOverrides().isEmpty()) {
             options.add("schema.translation.override=" + params.getTagOverrides() );
         }
 
-        //# Add the option to append
+        // Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        if (params.getTextStatus()) {
+            options.add("writer.text.status=true");
+        }
+
+        // Add the option to append to a gdb template
         if (params.getAppend()) {
             options.add("ogr.append.data=true");
         }
 
+        //Add the orders convert operations
+        options.add("convert.ops=" + String.join(";", convertOps));
+
+        //Add conf files for specific translation ops
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
             options.add("-C DncExport.conf");
         }
@@ -160,31 +193,6 @@ class ExportCommand extends ExternalCommand {
         }
 
         return params.getInput();
-    }
-
-    static Map getConflatedMap(Long mapId) {
-        Map conflatedMap = new Map(mapId);
-        conflatedMap.setTags(DbUtils.getMapsTableTags(mapId));
-        return conflatedMap;
-    }
-
-    static String getAOI(ExportParams params, Map conflatedMap) {
-        // if sent a bbox in the url (reflecting task grid bounds)
-        // use that, otherwise use the bounds of the conflated output
-        BoundingBox boundingBox;
-        if (params.getBounds() != null) {
-            boundingBox = new BoundingBox(params.getBounds());
-        }
-        else {
-            boundingBox = conflatedMap.getBounds();
-        }
-
-        return boundingBox.getMinLon() + "," + boundingBox.getMinLat() + "," + boundingBox.getMaxLon() + "," + boundingBox.getMaxLat();
-    }
-
-    String getSQLChangesetPath() {
-        // Services currently always write changeset with sql
-        return new File(this.getWorkFolder(), "changeset-" + getJobId() + ".osc.sql").getAbsolutePath();
     }
 
     private File getWorkFolder() {
