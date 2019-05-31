@@ -171,7 +171,7 @@ bool OsmMapReaderFactory::isSupportedFormat(const QString& url)
 void OsmMapReaderFactory::read(const OsmMapPtr& map, const QString& url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map from " << url.right(50) << "...");
+  LOG_INFO("Loading map from ..." << url.right(50) << "...");
   std::shared_ptr<OsmMapReader> reader = createReader(url, useDataSourceIds, defaultStatus);
   _read(map, reader, url);
 }

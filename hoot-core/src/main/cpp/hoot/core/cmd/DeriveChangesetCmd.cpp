@@ -60,16 +60,21 @@ using namespace std;
 namespace hoot
 {
 
+const QString JOB_SOURCE = "Derive Changeset";
+
 /**
  * Derives a set of changes given two map inputs
  *
  * Streaming I/O and external element are available to this command.  However, the in-memory input
  * reading/sorting has been left in place to support faster I/O in the situation where large inputs
  * are being dealt with and large amounts of memory are available for reading/sorting or when
- * conversion operations are passed in which require reading an entire map into memory.  Access to
+ * conversion operations are passed in which require reading an entire map into memory. Access to
  * the the sorter implementation is controlled by the configuration option,
  * element.sorter.element.buffer.size where a size = -1 results in the in-memory implementation
  * being used and a positive size results in the external sorter being used.
+ *
+ * If convert operations are passed in and any are not streamable, then in memory sorting is forced
+ * to occur.
  */
 class DeriveChangesetCmd : public BaseCommand
 {
@@ -266,6 +271,8 @@ private:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, elementStatus);
 
+    // Add convert ops into the pipeline, if there are any.
+    LOG_VARD(ConfigOptions().getConvertOps().size());
     if (ConfigOptions().getConvertOps().size() > 0)
     {
       NamedOp convertOps(ConfigOptions().getConvertOps());
@@ -306,13 +313,11 @@ private:
     //Some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
 
-    const bool inputSorted = _inputIsSorted(input);
-    LOG_VARD(inputSorted);
     //Only sort if input isn't already sorted.
-    if (!inputSorted)
+    if (!_inputIsSorted(input))
     {
-      //If external sorting is enabled and the input is streamable, externally sort the elements
-      //to avoid potential memory issues.
+      // If external sorting is enabled and the input and convert ops are streamable, externally
+      // sort the elements to avoid potential memory issues.
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
       if (_inputIsStreamable(input) && ConfigOptions().getElementSorterElementBufferSize() != -1)
       {
@@ -320,8 +325,9 @@ private:
       }
       else
       {
-        //Otherwise, since currently not all input formats are supported as streamable, switch over
-        //to memory bound sorting.
+        // Otherwise, in the case that not all input formats or convert ops are streamable or the
+        // user chose to force in memory streaming by not specifying a sort buffer size, let's
+        // use to memory bound sorting.
         sortedElements = _sortElementsInMemory(_readInputFully(input, status, progress));
       }
     }
@@ -361,7 +367,7 @@ private:
     ElementInputStreamPtr filteredInputStream(
       new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
 
-    // Add streaming ops in the pipeline, if there are any.
+    // Add convert ops supporting streaming into the pipeline, if there are any.
     return
       ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
   }

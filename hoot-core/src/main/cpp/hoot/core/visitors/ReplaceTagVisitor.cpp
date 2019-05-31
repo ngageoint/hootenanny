@@ -73,7 +73,6 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
     _matchKey = matchTagParts[0];
     _matchValue = matchTagParts[1];
 
-
     if (!replaceTag.contains("="))
     {
       throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
