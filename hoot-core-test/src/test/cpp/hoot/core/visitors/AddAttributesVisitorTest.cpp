@@ -55,8 +55,6 @@ class AddAttributesVisitorTest : public HootTestFixture
 
 public:
 
-
-
   AddAttributesVisitorTest()
     : HootTestFixture("test-files/visitors/AddAttributesVisitorTest/",
                       "test-output/visitors/AddAttributesVisitorTest/")

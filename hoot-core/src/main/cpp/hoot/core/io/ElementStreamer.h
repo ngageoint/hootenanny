@@ -104,10 +104,15 @@ public:
    */
   static bool areValidStreamingOps(const QStringList& ops);
 
-private:
-
-  static ElementInputStreamPtr _getFilteredInputStream(
-    std::shared_ptr<OsmMapReader> reader, const QStringList& ops);
+  /**
+   * Get an input stream set up to be filtered by operations
+   *
+   * @param streamToFilter the stream to be filtered
+   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
+   * @return an input stream
+   */
+  static ElementInputStreamPtr getFilteredInputStream(
+    ElementInputStreamPtr streamToFilter, const QStringList& ops);
 };
 
 }

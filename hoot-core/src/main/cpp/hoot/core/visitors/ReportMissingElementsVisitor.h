@@ -43,7 +43,7 @@ namespace hoot
  * shouldn't contain missing references.
  */
 class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
-    public Configurable, public OperationStatusInfo
+  public Configurable, public OperationStatusInfo
 {
 public:
 

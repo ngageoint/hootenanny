@@ -39,13 +39,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWayOp)
 
-RemoveWayOp::RemoveWayOp(bool removeFully):
+RemoveWayOp::RemoveWayOp(bool removeFully) :
 _wayIdToRemove(-std::numeric_limits<int>::max()),
 _removeFully(removeFully)
 {
 }
 
-RemoveWayOp::RemoveWayOp(long wId, bool removeFully):
+RemoveWayOp::RemoveWayOp(long wId, bool removeFully) :
 _wayIdToRemove(wId),
 _removeFully(removeFully)
 {

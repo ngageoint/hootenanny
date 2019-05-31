@@ -46,6 +46,8 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/io/ElementStreamer.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -58,15 +60,21 @@ using namespace std;
 namespace hoot
 {
 
+const QString JOB_SOURCE = "Derive Changeset";
+
 /**
  * Derives a set of changes given two map inputs
  *
- * Streaming I/O and external element are available to this command.  However, the in memory input
+ * Streaming I/O and external element are available to this command.  However, the in-memory input
  * reading/sorting has been left in place to support faster I/O in the situation where large inputs
- * are being dealt with and large amounts of memory are available for reading/sorting.  Access to
- * the in memory implementation is controlled by the configuration option,
- * element.sorter.element.buffer.size (size = -1 results in the in memory implementation being
- * used).
+ * are being dealt with and large amounts of memory are available for reading/sorting or when
+ * conversion operations are passed in which require reading an entire map into memory. Access to
+ * the the sorter implementation is controlled by the configuration option,
+ * element.sorter.element.buffer.size where a size = -1 results in the in-memory implementation
+ * being used and a positive size results in the external sorter being used.
+ *
+ * If convert operations are passed in and any are not streamable, then in memory sorting is forced
+ * to occur.
  */
 class DeriveChangesetCmd : public BaseCommand
 {
@@ -82,8 +90,6 @@ public:
   virtual QString getName() const { return "changeset-derive"; }
 
   virtual QString getDescription() const { return "Creates an OSM changeset"; }
-
-  bool _printStats = false;
 
   virtual int runSimple(QStringList args)
   {
@@ -123,10 +129,23 @@ public:
     }
     LOG_VARD(_osmApiDbUrl);
 
+    const bool singleInput = input2.trimmed().isEmpty();
+
     const QString jobSource = "Derive Changeset";
     // The number of steps here must be updated as you add/remove job steps in the logic.
-    const int numTotalTasks = 2;
-    int currentTaskNum = 1;
+    _numTotalTasks = 2;
+
+    // for non-streamable convert ops and other inline ops that occur when not streaming
+    if (!_inputIsStreamable(input1))
+    {
+      _numTotalTasks += 3;
+    }
+    if (!singleInput && !_inputIsStreamable(input2))
+    {
+      _numTotalTasks += 3;
+    }
+
+    _currentTaskNum = 1;
     Progress progress(ConfigOptions().getJobId(), jobSource, Progress::JobState::Running);
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
@@ -137,31 +156,28 @@ public:
 
     _parseBuffer();
 
-    const bool singleInput = input2.trimmed().isEmpty();
-
-    progress.set((float)(currentTaskNum - 1) / (float)numTotalTasks, "Sorting features...");
+    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting features...");
     ElementInputStreamPtr sortedElements1;
     ElementInputStreamPtr sortedElements2;
     if (!singleInput)
     {
       //sortedElements1 is the former state of the data
-      sortedElements1 = _getSortedElements(input1, Status::Unknown1);
+      sortedElements1 = _getSortedElements(input1, Status::Unknown1, progress);
       //sortedElements2 is the newer state of the data
-      sortedElements2 = _getSortedElements(input2, Status::Unknown2);
+      sortedElements2 = _getSortedElements(input2, Status::Unknown2, progress);
     }
     else
     {
       //Here we're passing all the input data through to the output changeset, so put it in the
       //sortedElements2 newer data and leave the first one empty.
       sortedElements1 = _getEmptyInputStream();
-      sortedElements2 = _getSortedElements(input1, Status::Unknown2);
+      sortedElements2 = _getSortedElements(input1, Status::Unknown2, progress);
     }
-    currentTaskNum++;
+    _currentTaskNum++;
 
-    // We could make this progress reporting more granular, but for in-memory changesets only.
-    progress.set((float)(currentTaskNum - 1) / (float)numTotalTasks, "Writing changeset...");
+    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Writing changeset...");
     _streamChangesetOutput(sortedElements1, sortedElements2, output);
-    currentTaskNum++;
+    _currentTaskNum++;
 
     progress.set(
       1.0, Progress::JobState::Successful,
@@ -173,6 +189,11 @@ public:
 private:
 
   QString _osmApiDbUrl;
+
+  int _numTotalTasks;
+  int _currentTaskNum;
+
+  bool _printStats = false;
 
   void _parseBuffer()
   {
@@ -233,10 +254,15 @@ private:
     return false;
   }
 
-  /*
-   * Reads entire input into memory
-   */
-  OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus)
+  bool _inputIsStreamable(const QString& input) const
+  {
+    LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
+    return
+      OsmMapReaderFactory::hasElementInputStream(input) &&
+      ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps());
+  }
+
+  OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus, Progress progress)
   {
     LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
 
@@ -245,47 +271,64 @@ private:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, elementStatus);
 
+    // Add convert ops into the pipeline, if there are any.
+    LOG_VARD(ConfigOptions().getConvertOps().size());
+    if (ConfigOptions().getConvertOps().size() > 0)
+    {
+      NamedOp convertOps(ConfigOptions().getConvertOps());
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      convertOps.apply(map);
+      _currentTaskNum++;
+    }
+
     //we don't want to include review relations
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
     std::shared_ptr<TagKeyCriterion> elementCriterion(
       new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
     removeElementsVisitor.addCriterion(elementCriterion);
     map->visitRw(removeElementsVisitor);
+    _currentTaskNum++;
 
     //node comparisons require hashes be present on the elements
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
     CalculateHashVisitor2 hashVis;
     map->visitRw(hashVis);
+    _currentTaskNum++;
 
     return map;
   }
 
-  ElementInputStreamPtr _getSortedElements(const QString& input, const Status& status)
+  ElementInputStreamPtr _getSortedElements(const QString& input, const Status& status,
+                                           Progress progress)
   {
     ElementInputStreamPtr sortedElements;
 
     //Some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
 
-    const bool inputSorted = _inputIsSorted(input);
-    LOG_VARD(inputSorted);
     //Only sort if input isn't already sorted.
-    if (!inputSorted)
+    if (!_inputIsSorted(input))
     {
-      //If external sorting is enabled and both inputs are streamable, externally sort the elements
-      //to avoid potential memory issues.
+      // If external sorting is enabled and the input and convert ops are streamable, externally
+      // sort the elements to avoid potential memory issues.
       LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
-      LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-      if (OsmMapReaderFactory::hasElementInputStream(input) &&
-          ConfigOptions().getElementSorterElementBufferSize() != -1)
+      if (_inputIsStreamable(input) && ConfigOptions().getElementSorterElementBufferSize() != -1)
       {
         sortedElements = _sortElementsExternally(input);
       }
       else
       {
-        //Otherwise, since currently not all input formats are supported as streamable, switch over
-        //to memory bound sorting.
-        sortedElements = _sortElementsInMemory(_readInputFully(input, status));
+        // Otherwise, in the case that not all input formats or convert ops are streamable or the
+        // user chose to force in memory streaming by not specifying a sort buffer size, let's
+        // use to memory bound sorting.
+        sortedElements = _sortElementsInMemory(_readInputFully(input, status, progress));
       }
     }
     else
@@ -324,7 +367,9 @@ private:
     ElementInputStreamPtr filteredInputStream(
       new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
 
-    return filteredInputStream;
+    // Add convert ops supporting streaming into the pipeline, if there are any.
+    return
+      ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
   }
 
   ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map)
