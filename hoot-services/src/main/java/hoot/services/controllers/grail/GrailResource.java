@@ -37,7 +37,6 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -52,7 +51,6 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -65,6 +63,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
@@ -260,11 +260,11 @@ public class GrailResource {
      *      the count of new nodes, ways, and relations
      */
     @GET
-    @Path("/differentialstats/{jobId}")
+    @Path("/differentialstats")
     @Produces(MediaType.APPLICATION_JSON)
-    //TODO: make this generic to report stats on any folder of osc files
     public Response differentialStats(@Context HttpServletRequest request,
-            @PathParam("jobId") String jobDir,
+            @QueryParam("jobId") String jobDir,
+            @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         JSONObject jobInfo = new JSONObject();
@@ -273,7 +273,14 @@ public class GrailResource {
         File workDir = new File(fileDirectory);
 
         try {
-            List<File> oscFilesList = (List<File>) FileUtils.listFiles(workDir, new WildcardFileFilter("*.osc"), null);
+            IOFileFilter fileFilter;
+            if(includeTags) {
+                fileFilter = new WildcardFileFilter("*.osc");
+            } else {
+                fileFilter = new RegexFileFilter("^(?!.*\\.tags\\.).*osc$");
+            }
+
+            List<File> oscFilesList = (List<File>) FileUtils.listFiles(workDir, fileFilter, null);
 
             for(File currentOsc : oscFilesList) {
                 String xmlData = FileUtils.readFileToString(currentOsc, "UTF-8");
