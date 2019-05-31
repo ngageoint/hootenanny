@@ -105,11 +105,11 @@ public:
   static bool areValidStreamingOps(const QStringList& ops);
 
   /**
-   * TODO
+   * Get an input stream set up to be filtered by operations
    *
-   * @param streamToFilter
-   * @param ops
-   * @return
+   * @param streamToFilter the stream to be filtered
+   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
+   * @return an input stream
    */
   static ElementInputStreamPtr getFilteredInputStream(
     ElementInputStreamPtr streamToFilter, const QStringList& ops);
