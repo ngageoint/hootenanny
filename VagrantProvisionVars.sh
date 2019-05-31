@@ -6,12 +6,15 @@ export JDK_TAR=jdk-8u161-linux-x64.tar.gz
 export JDK_MD5=99051574a0d90871ed24a91a5d321ed2
 
 # Dependency library versions.
+export ARMADILLO_VERSION=8.300.0
 export GDAL_VERSION=2.1.4
 export GEOS_VERSION=3.6.2
 export GLPK_VERSION=4.64
 export LIBOAUTHCPP_VERSION=0.1.0
+export LIBGEOTIFF_VERSION=1.4.2
 export LIBPHONENUMBER_VERSION=8.9.16
 export NODE_VERSION=8.9.3
+export PROJ_VERSION=4.8.0
 export STXXL_VERSION=1.3.1
 
 # FGDB 1.5 is required to compile using g++ >= 5.1
