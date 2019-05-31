@@ -35,6 +35,7 @@ namespace hoot
 class ElementConsumer
 {
 public:
+
   virtual void addElement(const ElementPtr& e) = 0;
 };
 

@@ -66,7 +66,8 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VARD(refMap->getNodes().size());
 
   //create an alpha shape based on the ref map (unknown1)
-  std::shared_ptr<OsmMap> cutShapeMap = AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
+  std::shared_ptr<OsmMap> cutShapeMap =
+    AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
   LOG_VARD(cutShapeMap->getNodes().size());
 
   //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)

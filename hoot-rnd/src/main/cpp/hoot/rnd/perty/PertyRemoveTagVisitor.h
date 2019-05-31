@@ -39,7 +39,7 @@ namespace hoot
  * A simple random tag remover
  */
 class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+  public Configurable
 {
 public:
 
