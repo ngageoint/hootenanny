@@ -170,7 +170,6 @@ public:
     }
     _currentTaskNum++;
 
-    // We could make this progress reporting more granular, but for in-memory changesets only.
     progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Writing changeset...");
     _streamChangesetOutput(sortedElements1, sortedElements2, output);
     _currentTaskNum++;
