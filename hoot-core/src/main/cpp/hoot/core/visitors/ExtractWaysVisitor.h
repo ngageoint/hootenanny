@@ -27,12 +27,13 @@
 #ifndef EXTRACTWAYSVISITOR_H
 #define EXTRACTWAYSVISITOR_H
 
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ExtractWaysVisitor : public ElementConstOsmMapVisitor
+class ExtractWaysVisitor : public ConstElementVisitor
 {
 public:
 
