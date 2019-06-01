@@ -37,6 +37,7 @@
 #include <vector>
 
 //  Qt
+#include <QRegularExpression>
 #include <QTextStream>
 
 using namespace std;
@@ -462,10 +463,7 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWa
 {
   if (canSend(way))
   {
-    //  Add the way
-    changeset->add(ElementType::Way, type, way->id());
-    markBuffered(way);
-    //  Only creates/modifies require more processing
+    //  Only creates/modifies require pre-processing
     if (type != ChangesetType::TypeDelete)
     {
       //  Add any nodes that need to be created
@@ -479,6 +477,9 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWa
         }
       }
     }
+    //  Add the way last
+    changeset->add(ElementType::Way, type, way->id());
+    markBuffered(way);
     return true;
   }
   else
@@ -487,9 +488,6 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWa
 
 bool XmlChangeset::moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way)
 {
-  //  Add the way to the destination and remove from the source
-  destination->add(ElementType::Way, type, way->id());
-  source->remove(ElementType::Way, type, way->id());
   //  Don't worry about the contents of a delete operation
   if (type != ChangesetType::TypeDelete)
   {
@@ -504,6 +502,9 @@ bool XmlChangeset::moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destinati
       }
     }
   }
+  //  Add the way to the destination and remove from the source
+  destination->add(ElementType::Way, type, way->id());
+  source->remove(ElementType::Way, type, way->id());
   return true;
 }
 
@@ -536,10 +537,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
 {
   if (canSend(relation))
   {
-    //  Add the relation
-    changeset->add(ElementType::Relation, type, relation->id());
-    markBuffered(relation);
-    //  Deletes require no more processing
+    //  Deletes require no pre-processing
     if (type != ChangesetType::TypeDelete)
     {
       //  Add any relation members that need to be added
@@ -580,6 +578,9 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
         }
       }
     }
+    //  Add the relation last
+    changeset->add(ElementType::Relation, type, relation->id());
+    markBuffered(relation);
     return true;
   }
   else
@@ -588,9 +589,6 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
 
 bool XmlChangeset::moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation)
 {
-  //  Add the way to the destination and remove from the source
-  destination->add(ElementType::Relation, type, relation->id());
-  source->remove(ElementType::Relation, type, relation->id());
   //  Don't worry about the contents of a delete operation
   if (type != ChangesetType::TypeDelete)
   {
@@ -627,6 +625,9 @@ bool XmlChangeset::moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& dest
       }
     }
   }
+  //  Add the way to the destination and remove from the source
+  destination->add(ElementType::Relation, type, relation->id());
+  source->remove(ElementType::Relation, type, relation->id());
   return true;
 }
 
@@ -838,10 +839,11 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
      *  Changesets are created by first adding nodes, then ways, and
      *  finally relations. In testing this order was found to be 4%-7%
      *  faster than any other interpolation of the ordering of nodes,
-     *  ways, and relations.
+     *  ways, and relations.  BUT deleting must go in the opposite order
+     *  so we'll do relations, ways, and finally nodes.
      */
-    //  Start with the nodes
-    addNodes(changeset, type);
+    //  Start with the relations
+    addRelations(changeset, type);
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
@@ -850,8 +852,8 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
-    //  Then the relations
-    addRelations(changeset, type);
+    //  Finally the nodes
+    addNodes(changeset, type);
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxChangesetSize)
       continue;
@@ -872,18 +874,20 @@ bool XmlChangeset::matchesPlaceholderFailure(const QString& hint,
 {
   //  Placeholder node not found for reference -145213 in way -5687
   //  Placeholder Way not found for reference -12257 in relation -51
-  QRegExp regPlaceholder("Placeholder (node|way|relation) not found for reference (-?[0-9]+) in (node|way|relation) (-?[0-9]+)", Qt::CaseInsensitive);
-  if (hint.contains(regPlaceholder) && regPlaceholder.captureCount() == 4)
+  QRegularExpression reg("Placeholder (node|way|relation) not found for reference (-?[0-9]+) in (node|way|relation) (-?[0-9]+)",
+                         QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  if (match.hasMatch())
   {
     //  Get the node/way/relation type and id that caused the failure
-    member_type = ElementType::fromString(regPlaceholder.cap(1));
+    member_type = ElementType::fromString(match.captured(1));
     bool success = false;
-    member_id = regPlaceholder.cap(2).toLong(&success);
+    member_id = match.captured(2).toLong(&success);
     if (!success)
       return success;
     //  Get the node/way/relation type and id that failed
-    element_type = ElementType::fromString(regPlaceholder.cap(3));
-    element_id = regPlaceholder.cap(4).toLong(&success);
+    element_type = ElementType::fromString(match.captured(3));
+    element_id = match.captured(4).toLong(&success);
     return success;
   }
   return false;
@@ -892,20 +896,45 @@ bool XmlChangeset::matchesPlaceholderFailure(const QString& hint,
 bool XmlChangeset::matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type)
 {
   //  Relation with id  cannot be saved due to Relation with id 1707699
-  QRegExp regRelation("Relation with id (-?[0-9]+)? cannot be saved due to (nodes|way|relation) with id (-?[0-9]+)", Qt::CaseInsensitive);
-  if (hint.contains(regRelation))
+  QRegularExpression reg("Relation with id (-?[0-9]+)? cannot be saved due to (nodes|way|relation) with id (-?[0-9]+)",
+                         QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  if (match.hasMatch())
   {
-    QString error = regRelation.cap(1);
+    QString error = match.captured(1);
     if (error != "")
       element_id = error.toLong();
     //  Get the node/way/relation type and id that failed
-    member_type = ElementType::fromString(regRelation.cap(2));
+    member_type = ElementType::fromString(match.captured(2));
     bool success = false;
-    member_id = regRelation.cap(3).toLong(&success);
+    member_id = match.captured(3).toLong(&success);
     return success;
   }
   return false;
 }
+
+bool XmlChangeset::matchesChangesetPreconditionFailure(const QString& hint,
+                                                       long& member_id, ElementType::Type& member_type,
+                                                       long& element_id, ElementType::Type& element_type)
+{
+  QRegularExpression reg(
+        "Precondition failed: (Node|Way|Relation) (-?[0-9]+) is still used by (node|way|relation)s (-?[0-9]+)",
+        QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  if (match.hasMatch())
+  {
+    bool success = false;
+    member_type = ElementType::fromString(match.captured(1).toLower());
+    member_id = match.captured(2).toLong(&success);
+    if (!success)
+      return success;
+    element_type = ElementType::fromString(match.captured(3).toLower());
+    element_id = match.captured(4).toLong(&success);
+    return success;
+  }
+  return false;
+}
+
 
 ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const QString& splitHint)
 {
@@ -927,11 +956,11 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
     if (matchesPlaceholderFailure(splitHint, member_id, member_type, element_id, element_type))
     {
       //  Use the type and id to split the changeset
-      if (element_type == ElementType::Way)
+      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
       {
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
         {
-          if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+          if (element_type == ElementType::Way)
           {
             XmlWay* way = dynamic_cast<XmlWay*>(_allWays[element_id].get());
             //  Add the way to the split and remove from the changeset
@@ -939,13 +968,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
             changeset->remove(element_type, (ChangesetType)current_type, way->id());
             return split;
           }
-        }
-      }
-      else if (element_type == ElementType::Relation)
-      {
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-        {
-          if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+          else if (element_type == ElementType::Relation)
           {
             XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[element_id].get());
             //  Add the relation to the split and remove from the changeset
@@ -957,7 +980,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
       }
     }
     //  See if the hint is something like: Relation with id  cannot be saved due to Relation with id 1707699
-    if (matchesRelationFailure(splitHint, element_id, member_id, member_type))
+    else if (matchesRelationFailure(splitHint, element_id, member_id, member_type))
     {
       if (element_id != 0)
       {
@@ -992,6 +1015,45 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
               return split;
             }
           }
+        }
+      }
+    }
+    //  See if the hint is something like: Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67
+    else if (matchesChangesetPreconditionFailure(splitHint, member_id, member_type, element_id, element_type))
+    {
+      //  In this case the node 5 cannot be deleted because way 67 is still using it.  Way 67 must be modified or deleted first
+      //  here we figure out how to make that happen
+      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+      {
+        if (changeset->contains(member_type, (ChangesetType)current_type, member_id))
+        {
+          //  Remove the offending change from this changeset
+          split->add(member_type, (ChangesetType)current_type, member_id);
+          changeset->remove(member_type, (ChangesetType)current_type, member_id);
+          //  Try to add the blocking element to the split changeset
+          for (int blocking_type = ChangesetType::TypeCreate; blocking_type != ChangesetType::TypeMax; ++blocking_type)
+          {
+            if (element_type == ElementType::Way)
+            {
+              //  Add the way to the split so that they can be processed together
+              if (_allWays.find(element_id) != _allWays.end())
+              {
+                XmlWay* way = dynamic_cast<XmlWay*>(_allWays[element_id].get());
+                addWay(split, (ChangesetType)blocking_type, way);
+              }
+            }
+            else if (element_type == ElementType::Relation)
+            {
+              //  Add the relation to the split so that they can be processed together
+              if (_allRelations.find(element_id) != _allRelations.end())
+              {
+                XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[element_id].get());
+                addRelation(split, (ChangesetType)blocking_type, relation);
+              }
+            }
+          }
+          //  Split out the offending element and the associated blocking element if possible
+          return split;
         }
       }
     }

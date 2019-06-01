@@ -346,6 +346,18 @@ private:
    * @return True if the message matches and was parsed
    */
   bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
+  /**
+   * @brief matchesChangesetPreconditionFailure
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  bool matchesChangesetPreconditionFailure(const QString& hint,
+                                           long& member_id, ElementType::Type& member_type,
+                                           long& element_id, ElementType::Type& element_type);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
