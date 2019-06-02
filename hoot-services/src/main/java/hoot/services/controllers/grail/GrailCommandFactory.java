@@ -22,35 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.grail;
 
-/*
- * Order is important here, only add new enums to the end of the list
+import java.lang.reflect.Constructor;
+
+import org.springframework.stereotype.Component;
+
+
+/**
+ * Used for constructing an object from the specified 'grailCommandClass' passed in the constructor
+ * The middle man for constructing the various grail commands
  */
+@Component
+class GrailCommandFactory {
 
-public enum JobType {
-    IMPORT,
-    EXPORT,
-    CONFLATE,
-    CLIP,
-    ATTRIBUTES,
-    BASEMAP,
-    DELETE,
-    UNKNOWN,
-    DERIVE_CHANGESET,
-    UPLOAD_CHANGESET;
-
-    public static JobType fromInteger(int value) {
-        if ((value >= 0) && (value < JobType.values().length)) {
-            return JobType.values()[value];
+    GrailCommand build(String jobId, GrailParams params, String debugLevel, Class<? extends GrailCommand> grailCommandClass, Class<?> caller) {
+        try {
+            Constructor<? extends GrailCommand> constuctor =
+                    grailCommandClass.getDeclaredConstructor(String.class, GrailParams.class, String.class, Class.class);
+            return constuctor.newInstance(jobId, params, debugLevel, caller);
         }
-        return UNKNOWN;
-    }
-
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
+        catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate an instance of class: " + grailCommandClass.getName(), e);
+        }
     }
 }

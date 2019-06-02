@@ -22,35 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.grail;
 
-/*
- * Order is important here, only add new enums to the end of the list
+import org.springframework.stereotype.Component;
+
+
+/**
+ * Used for creating of the UpdateDbCommand object
  */
+@Component
+class UpdateDbCommandFactory {
 
-public enum JobType {
-    IMPORT,
-    EXPORT,
-    CONFLATE,
-    CLIP,
-    ATTRIBUTES,
-    BASEMAP,
-    DELETE,
-    UNKNOWN,
-    DERIVE_CHANGESET,
-    UPLOAD_CHANGESET;
-
-    public static JobType fromInteger(int value) {
-        if ((value >= 0) && (value < JobType.values().length)) {
-            return JobType.values()[value];
-        }
-        return UNKNOWN;
-    }
-
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
+    UpdateDbCommand build(String jobId, GrailParams params, Class<?> caller) {
+        return new UpdateDbCommand(params, jobId, caller);
     }
 }

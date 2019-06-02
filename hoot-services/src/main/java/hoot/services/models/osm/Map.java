@@ -641,6 +641,7 @@ public class Map extends Maps {
             } else {
                 mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
             }
+            mapLayer.setGrail(tags.get("grail") != null && tags.get("grail").equals("true"));
 
             mapLayerList.add(mapLayer);
         }

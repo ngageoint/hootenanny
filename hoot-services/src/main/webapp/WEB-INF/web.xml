@@ -91,6 +91,7 @@
         <url-pattern>/info/*</url-pattern>
         <url-pattern>/ogr/*</url-pattern>
         <url-pattern>/ingest/*</url-pattern>
+        <url-pattern>/grail/*</url-pattern>
         <url-pattern>/language/*</url-pattern>
         <!-- [!] new url-pattern's added here should be considered for security-applicationContext.xml [!] -->
     </servlet-mapping>

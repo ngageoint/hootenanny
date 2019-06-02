@@ -407,7 +407,7 @@
                 "defaultvalue":"3.0",
                 "hoot_key":"token.min.size"
             },
-	    {
+	       {
             	"id":"node_matcher_strictness",
                 "minvalue":"0.0",
                 "elem_type":"double",
@@ -448,6 +448,22 @@
                 "description":"Set to true if the strings should be tokenized (split into words) before translating the values.",
                 "name":"Tokenize Strings When Translating",
                 "hoot_key":"language.translation.string.distance.tokenize"
+            },
+            {
+                "id":"reader_conflate_use_data_source_ids_1",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+                "name":"Preserve element ids from the Reference layer during conflation",
+                "hoot_key":"reader.conflate.use.data.source.ids.1"
+            },
+            {
+                "id":"reader_conflate_use_data_source_ids_2",
+                "elem_type":"bool",
+                "defaultvalue":"false",
+                "description":"Determines whether the reader used by the conflate command to read the second input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+                "name":"Preserve element ids from the Secondary layer during conflation",
+                "hoot_key":"reader.conflate.use.data.source.ids.2"
             },
 	    {
             	"id":"weighted_metric_distance_extractor_search_radius",

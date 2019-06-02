@@ -22,35 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.grail;
 
-/*
- * Order is important here, only add new enums to the end of the list
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import hoot.services.command.ExternalCommand;
+
+
+/**
+ * Abstract class for various grail command classes to extend from
  */
+abstract class GrailCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(GrailCommand.class);
 
-public enum JobType {
-    IMPORT,
-    EXPORT,
-    CONFLATE,
-    CLIP,
-    ATTRIBUTES,
-    BASEMAP,
-    DELETE,
-    UNKNOWN,
-    DERIVE_CHANGESET,
-    UPLOAD_CHANGESET;
+    protected final GrailParams params;
 
-    public static JobType fromInteger(int value) {
-        if ((value >= 0) && (value < JobType.values().length)) {
-            return JobType.values()[value];
-        }
-        return UNKNOWN;
+    GrailCommand(String jobId, GrailParams grailParams) {
+        super(jobId);
+        this.params = grailParams;
     }
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
-    }
 }

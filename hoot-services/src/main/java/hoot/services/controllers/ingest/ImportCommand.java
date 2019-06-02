@@ -77,6 +77,7 @@ class ImportCommand extends ExternalCommand {
 
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + user.getEmail());

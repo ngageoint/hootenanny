@@ -24,33 +24,17 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.job;
+package hoot.services.controllers.osm.map;
 
-/*
- * Order is important here, only add new enums to the end of the list
- */
+import java.util.Map;
 
-public enum JobType {
-    IMPORT,
-    EXPORT,
-    CONFLATE,
-    CLIP,
-    ATTRIBUTES,
-    BASEMAP,
-    DELETE,
-    UNKNOWN,
-    DERIVE_CHANGESET,
-    UPLOAD_CHANGESET;
+import org.springframework.stereotype.Component;
 
-    public static JobType fromInteger(int value) {
-        if ((value >= 0) && (value < JobType.values().length)) {
-            return JobType.values()[value];
-        }
-        return UNKNOWN;
-    }
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
+@Component
+public class SetMapTagsCommandFactory {
+
+    public SetMapTagsCommand build(Map<String, String> tags, String jobId ) {
+        return new SetMapTagsCommand(tags, jobId);
     }
 }
