@@ -125,6 +125,7 @@ public class ImportResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+                                      @QueryParam("FOLDER_ID") String folderId,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
@@ -212,7 +213,8 @@ public class ImportResource {
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
-            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, 0L, inputName, user, this.getClass());
+
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
 
             Command[] workflow = { importCommand, setFolderCommand };
 
