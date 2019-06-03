@@ -180,7 +180,7 @@ echo ""
 hoot changeset-derive $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=$HOOT_EMAIL -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.reference.features=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
-echo "STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
+echo "STEP 11b: Writing an XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
 # changeset.xml.writer.add.timestamp should only be set false for this test's purposes; leave it set to the default value of
 # true for production purposes

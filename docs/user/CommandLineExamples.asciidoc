@@ -285,7 +285,8 @@ See the User Guide for more details on command usage.
 
 -----
     hoot conflate -D conflate.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
-      -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false
+      -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false \
+      input1.osm input2.osm output.osm
 -----
     
 ===== Conflate only buildings:
