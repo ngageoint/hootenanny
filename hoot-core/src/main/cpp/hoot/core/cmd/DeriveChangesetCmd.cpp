@@ -48,6 +48,7 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/util/MapProjector.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -283,6 +284,9 @@ private:
       convertOps.apply(map);
       _currentTaskNum++;
     }
+
+    // get back into wgs84 in case some op change the proj
+    MapProjector::projectToWgs84(map);
 
     //we don't want to include review relations
     progress.set(
