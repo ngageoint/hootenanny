@@ -78,6 +78,8 @@ public:
   int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
   int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
   int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
+  int getNumChanges() const
+  { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
 private:
 
