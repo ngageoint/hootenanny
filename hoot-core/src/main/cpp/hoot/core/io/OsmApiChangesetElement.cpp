@@ -28,6 +28,7 @@
 #include "OsmApiChangesetElement.h"
 
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 
 //  Qt
 #include <QTextStream>
@@ -122,9 +123,18 @@ QString XmlElement::toTagString(const QXmlStreamAttributes& attributes) const
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
+  QString key(attributes.value("k").toString());
   QString value(attributes.value("v").toString());
+  //  Tag values of length 255 need to be truncated
+  QString newValue(ApiTagTruncateVisitor::truncateTag(key, value));
+
   //  Make sure to XML encode the value
-  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"" << escapeString(value) << "\"/>\n";
+  ts << "\t\t\t<tag k=\"" << attributes.value("k").toString() << "\" v=\"";
+  if (newValue != "")
+    ts << escapeString(newValue);
+  else
+    ts << escapeString(value);
+  ts << "\"/>\n";
   return ts.readAll();
 }
 

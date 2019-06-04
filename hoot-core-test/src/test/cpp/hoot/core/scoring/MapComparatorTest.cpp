@@ -33,9 +33,9 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/OpenCv.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 using namespace hoot;
 
@@ -88,7 +88,7 @@ public:
     uut.setUseDateTime();
 
     // Change dates...
-    SetTagValueVisitor vtor("source:datetime", "1989-12-13T12:34:56Z");
+    SetTagValueVisitor vtor(MetadataTags::SourceDateTime(), "1989-12-13T12:34:56Z");
     map2->visitRw(vtor);
 
     // Make sure it fails now!

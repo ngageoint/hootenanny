@@ -28,13 +28,13 @@
 #include "TagInfo.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QFileInfo>
@@ -225,7 +225,7 @@ void TagInfo::_parseElement(const ElementPtr& e, TagInfoHash& result)
     }
 
     // Drop Hoot metadata tags
-    if (it.key() == "source:ingest:datetime")
+    if (it.key() == MetadataTags::SourceIngestDateTime())
     {
       continue;
     }
