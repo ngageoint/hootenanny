@@ -3,7 +3,7 @@ set -e
 
 # This is a base test script for conflating datasets where one dataset comes from an osm api database and the other 
 # from a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow 
-# with MapEdit # data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 
+# with MapEdit data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 
 # example of how to call this script.
 # 
 # This script:
@@ -147,6 +147,7 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   echo "STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow..."
   echo ""
+  # How is this working w/o reader.conflate.use.data.source.ids.2=true? How can changeset derivation work if not all IDs are preserved?
   hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=$HOOT_EMAIL -D convert.bounding.box=$AOI -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 

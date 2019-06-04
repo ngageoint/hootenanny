@@ -189,9 +189,9 @@ public:
         LOG_VARD(input2Sorted);
       }
 
-      OsmMapPtr map1;
-      OsmMapPtr map2;
-      _readInputsFully(input1, input2, map1, map2, progress);
+      OsmMapPtr map1(new OsmMap());
+      OsmMapPtr map2(new OsmMap());
+      _readInputsFully2(input1, input2, map1, map2, progress);
 
       LOG_VARD(map1->getElementCount());
       int map1Unknown1Count =
@@ -370,16 +370,110 @@ private:
       ConfigOptions().getElementSorterElementBufferSize() != -1;
   }
 
+  void _readInputsFully2(const QString& input1, const QString& input2, OsmMapPtr& map1,
+                         OsmMapPtr& map2, Progress progress)
+  {
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Reading entire input map 1 ..." + input1.right(25) + "...");
+    IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+    _currentTaskNum++;
+
+    if (!_singleInput)
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Reading entire input map 2 ..." + input2.right(25) + "...");
+      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
+    }
+
+    _currentTaskNum++;
+
+    if (ConfigOptions().getConvertOps().size() > 0)
+    {
+      NamedOp convertOps(ConfigOptions().getConvertOps());
+      convertOps.setProgress(
+        Progress(
+          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+          (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+      if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      {
+        OsmMapPtr fullMap(new OsmMap(map1));
+        if (!_singleInput)
+        {
+          try
+          {
+            fullMap->append(map2);
+          }
+          catch (const HootException& e)
+          {
+            if (e.getWhat().contains("already contains"))
+            {
+              throw HootException(
+                QString("It is not possible to run a map operation on two data sources with ") +
+                QString("overlapping element IDs: ") + e.what());
+            }
+            throw e;
+          }
+        }
+        convertOps.apply(fullMap);
+        // get back into wgs84 in case some op changed the proj
+        MapProjector::projectToWgs84(fullMap);
+      }
+      else
+      {
+        convertOps.apply(map1);
+        MapProjector::projectToWgs84(map1);
+        if (!_singleInput)
+        {
+          convertOps.apply(map2);
+          MapProjector::projectToWgs84(map2);
+        }
+      }
+      _currentTaskNum++;
+    }
+
+    //we don't want to include review relations
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
+    std::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor;
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
+    map1->visitRw(removeElementsVisitor);
+    LOG_VARD(map1->getElementCount());
+    if (!_singleInput)
+    {
+      map2->visitRw(removeElementsVisitor);
+      LOG_VARD(map2->getElementCount());
+    }
+    _currentTaskNum++;
+
+    //node comparisons require hashes be present on the elements
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
+    CalculateHashVisitor2 hashVis;
+    map1->visitRw(hashVis);
+    if (!_singleInput)
+    {
+      map2->visitRw(hashVis);
+    }
+    // TODO: fix
+    _currentTaskNum += 2;
+  }
+
   void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
                         OsmMapPtr& map2, Progress progress)
   {
     //some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value
     OsmMapPtr fullMap(new OsmMap());
+
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
       "Reading entire input map 1 ..." + input1.right(25) + "...");
-    IoUtils::loadMap(fullMap, input1, false, Status::Unknown1);
+    IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
     LOG_VARD(fullMap->getElementCount());
     int fullUnknown1Count =
       (int)FilteredVisitor::getStat(
@@ -392,10 +486,11 @@ private:
         ConstElementVisitorPtr(new ElementCountVisitor()), fullMap);
     LOG_VARD(fullUnknown2Count);
     _currentTaskNum++;
+
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
       "Reading entire input map 2 ..." + input2.right(25) + "...");
-    IoUtils::loadMap(fullMap, input2, false, Status::Unknown2);
+    IoUtils::loadMap(fullMap, input2, true, Status::Unknown2);
     LOG_VARD(fullMap->getElementCount());
     fullUnknown1Count =
       (int)FilteredVisitor::getStat(
