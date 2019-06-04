@@ -126,7 +126,9 @@ public:
     XmlChangeset changeset;
     changeset.loadChangeset(_inputPath + "ToyTestAInput.osc");
 
-    changeset.setMaxSize(10);
+    //  Four elements max will divide the changeset into four changesets
+    //  one for each way, with its corresponding nodes
+    changeset.setMaxSize(4);
 
     QStringList expectedFiles;
     expectedFiles.append(_inputPath + "ToyTestASplit1.osc");
@@ -140,7 +142,7 @@ public:
     updatedFiles.append(_inputPath + "ToyTestASplit3.response.xml");
     updatedFiles.append(_inputPath + "ToyTestASplit4.response.xml");
 
-    long processed[] = { 10, 20, 30, 40 };
+    long processed[] = { 4, 8, 37, 40 };
 
     ChangesetInfoPtr info;
     int index = 0;

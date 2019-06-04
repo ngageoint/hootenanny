@@ -239,6 +239,7 @@ public:
         "\t\t<node id=\"-1\" version=\"0\" lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" timestamp=\"\" changeset=\"0\">\n"
         "\t\t\t<tag k=\"node\" v=\"Should fail\"/>\n"
         "\t\t</node>\n"
+        "\t\t<node id=\"2\" version=\"1\" lat=\"38.8549524185660573\" lon=\"-104.8987388916486054\" timestamp=\"\" changeset=\"0\"/>\n"
         "\t</delete>\n"
         "</osmChange>\n",
         writer.getFailedChangeset());
