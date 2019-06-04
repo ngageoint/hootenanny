@@ -55,9 +55,6 @@
 //GEOS
 #include <geos/geom/Envelope.h>
 
-// Qt
-#include <QUrl>
-
 namespace hoot
 {
 
@@ -86,6 +83,7 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
 
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
+  // both inputs must support streaming to use streaming I/O
   const bool useStreamingIo =
     _inputIsStreamable(input1) && (_singleInput || _inputIsStreamable(input2));
   LOG_VARD(useStreamingIo);
@@ -95,12 +93,19 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
   // for non-streamable convert ops and other inline ops that occur when not streaming
   if (!useStreamingIo)
   {
+    // For non-streaming I/O we can divide each data conversion task into a separate step, hence
+    // the larger number of steps. With streaming I/O that isn't possible since all the data
+    // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 4;
     if (ConfigOptions().getConvertOps().size() > 0)
     {
+      // Convert ops get a single task, which NamedOp will break down into sub-tasks during
+      // progress reporting.
       _numTotalTasks++;
-      if (ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
+        // Have the extra work of combining and separating data inputs when any of the convert
+        // ops aren't streamable.
         _numTotalTasks++;
       }
     }
@@ -115,10 +120,19 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
     "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
     input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength) + "...");
 
+  // Allow for a buffer around the AOI where the changeset derivation is to occur, if there is an
+  // AOI.
   _parseBuffer();
 
+  //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
+  //sortedElements2 is the newer state of the data
   ElementInputStreamPtr sortedElements2;
+
+  // If we have two inputs, we'll determine the difference between them as the changeset.
+  // Otherwise, we're passing all the input data through to the output changeset, so put it in
+  // the sortedElements2 newer data and leave the first one empty. The result will be a changeset
+  // made up completely of what is in the single input.
 
   if (!useStreamingIo)
   {
@@ -126,22 +140,27 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
     // user chose to force in memory streaming by not specifying a sort buffer size, let's
     // use memory bound sorting.
 
+    // read both inputs completely
     OsmMapPtr map1(new OsmMap());
     OsmMapPtr map2(new OsmMap());
     _readInputsFully(input1, input2, map1, map2, progress);
 
+    // TODO: There need to be checks here to only sort if the input isn't already sorted like
+    // there are for the external sorting (e.g. pre-sorted PBF file).
+
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
     if (!_singleInput)
     {
-      // TODO: There need to be checks here to only sort if the input isn't already sorted like
-      // there are for the external sorting (e.g. pre-sorted PBF file).
-      sortedElements1 = _sortElementsInMemory(map1, progress);
+      sortedElements1 = _sortElementsInMemory(map1);
       assert(map2.get());
-      sortedElements2 = _sortElementsInMemory(map2, progress);
+      sortedElements2 = _sortElementsInMemory(map2);
     }
     else
     {
       sortedElements1 = _getEmptyInputStream();
-      sortedElements2 = _sortElementsInMemory(map1, progress);
+      sortedElements2 = _sortElementsInMemory(map1);
     }
     _currentTaskNum++;
   }
@@ -152,21 +171,19 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
 
     if (!_singleInput)
     {
-      //sortedElements1 is the former state of the data
       sortedElements1 = _getExternallySortedElements(input1, progress);
-      //sortedElements2 is the newer state of the data
       sortedElements2 = _getExternallySortedElements(input2, progress);
     }
     else
     {
-      //Here we're passing all the input data through to the output changeset, so put it in the
-      //sortedElements2 newer data and leave the first one empty.
+
       sortedElements1 = _getEmptyInputStream();
       sortedElements2 = _getExternallySortedElements(input1, progress);
     }
     _currentTaskNum++;
   }
 
+  // write out the changeset file
   assert(sortedElements1.get() && sortedElements2.get());
   progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Writing changeset...");
   _streamChangesetOutput(sortedElements1, sortedElements2, output);
@@ -248,10 +265,11 @@ bool ChangesetWriter::_inputIsStreamable(const QString& input) const
   LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
   LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
   return
+    // The input format itself must be streamable (partially read).
     OsmMapReaderFactory::hasElementInputStream(input) &&
     // All ops must be streamable, otherwise we'll load both inputs into memory.
     ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
-    // If not sort buffer size is set, we sort in-memory. If we're already loading the data
+    // If no sort buffer size is set, we sort in-memory. If we're already loading the data
     // into memory for sorting, might as well force it into memory for the initial read as well.
     ConfigOptions().getElementSorterElementBufferSize() != -1;
 }
@@ -266,8 +284,13 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   OsmMapPtr fullMap(new OsmMap());
   if (!_singleInput)
   {
+    // We must preserve the original element IDs while loading in order for changeset derivation
+    // to work.
+
+    // load the first map
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
 
+    // append the second map onto the first one
     OsmMapPtr tmpMap(new OsmMap());
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     try
@@ -276,6 +299,8 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
     }
     catch (const HootException& e)
     {
+      // If there were any element IDs in common between the two input files, we'll get this error.
+      // In that case we must fail.
       if (e.getWhat().contains("already contains"))
       {
         throw HootException(
@@ -288,10 +313,15 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   }
   else
   {
+    // Just load the first map, but as unknown2 to end up with a changeset made up of just this
+    // input.
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
   _currentTaskNum++;
 
+  // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
+  // then they some will exhibit undefined behavior if you try to exec them on the inputs
+  // separately.
   NamedOp convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
@@ -302,6 +332,7 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   MapProjector::projectToWgs84(fullMap);
   _currentTaskNum++;
 
+  // We need the two inputs separated for changeset derivation, so split them back out by status.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
@@ -329,15 +360,20 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
   if (!_singleInput)
   {
+    // Load each input into a separate map. There's no need to combine them, since we have all
+    // streamable convert ops (avoids the extra cost of splitting them back apart).
     IoUtils::loadMap(map1, input1, true, Status::Unknown1);
     IoUtils::loadMap(map2, input2, true, Status::Unknown2);
   }
   else
   {
+    // Just load the first map, but as unknown2 to end up with a changeset made up of just this
+    // input.
     IoUtils::loadMap(map1, input1, true, Status::Unknown2);
   }
   _currentTaskNum++;
 
+  // Apply our convert ops to each map separately.
   NamedOp convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
@@ -360,30 +396,43 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   {
     if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {
+      /*
+       * If any op in the convert ops is a map consumer, then it must go through this logic, which
+       * requires combining both map inputs into one. If there are any overlapping element IDs
+       * between the two datasets, an error will occur.
+       */
       _handleUnstreamableConvertOpsInMemory(input1, input2, map1, map2, progress);
     }
     else
     {
+      /*
+       * If none of the ops are map consumers, we can avoid having to load both inputs into the same
+       * map, which gets around the ID overlap problem.
+       */
       _handleStreamableConvertOpsInMemory(input1, input2, map1, map2, progress);
     }
   }
   else
   {
+    // We didn't have any convert ops, so just load everything up.
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
     if (!_singleInput)
     {
+      // Load each input into a separate map.
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
       IoUtils::loadMap(map2, input2, true, Status::Unknown2);
     }
     else
     {
+      // Just load the first map, but as unknown2 to end up with a changeset made up of just this
+      // input.
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);;
     }
     _currentTaskNum++;
   }
 
-  //we don't want to include review relations
+  // We don't want to include review relations.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Removing review relations...");
   std::shared_ptr<TagKeyCriterion> elementCriterion(
@@ -398,7 +447,7 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   }
   _currentTaskNum++;
 
-  //  Truncate tags over 255 characters to push into OSM API
+  //  Truncate tags over 255 characters to push into OSM API.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
@@ -409,7 +458,7 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   }
   _currentTaskNum++;
 
-  //node comparisons require hashes be present on the elements
+  // Node comparisons require hashes be present on the elementss
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
   CalculateHashVisitor2 hashVis;
@@ -440,6 +489,8 @@ ElementInputStreamPtr ChangesetWriter::_getExternallySortedElements(const QStrin
   }
   else
   {
+    // If it was sorted, just get a stream with the ops we need to be applied inline and don't do
+    // any sorting.
     sortedElements = _getFilteredInputStream(input);
   }
   _currentTaskNum++;
@@ -449,8 +500,8 @@ ElementInputStreamPtr ChangesetWriter::_getExternallySortedElements(const QStrin
 
 ElementInputStreamPtr ChangesetWriter::_getEmptyInputStream()
 {
-  //no-op here since InMemoryElementSorter taking in an empty map will just return an empty
-  //element stream
+  // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
+  // element stream
   return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
 }
 
@@ -459,16 +510,17 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
   LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
   QList<ElementVisitorPtr> visitors;
-  //we don't want to include review relations
+  // We don't want to include review relations.
   std::shared_ptr<ElementCriterion> elementCriterion(
     new NotCriterion(
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
-  //node comparisons require hashes be present on the elements
+  // Node comparisons require hashes be present on the elements.
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
-  //  Tags need to be truncated if they are over 255 characters
+  // Tags need to be truncated if they are over 255 characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
+  // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::createReader(input));
@@ -485,12 +537,8 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetWriter::_sortElementsInMemory(OsmMapPtr map, Progress progress)
+ElementInputStreamPtr ChangesetWriter::_sortElementsInMemory(OsmMapPtr map)
 {
-  progress.set(
-    (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-    // TODO: fix
-    "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
 
@@ -509,8 +557,8 @@ void ChangesetWriter::_streamChangesetOutput(ElementInputStreamPtr input1,
   QString stats;
   LOG_VARD(output);
 
-  //Could this eventually this could be cleaned up to use OsmChangeWriterFactory and the
-  //OsmChange interface instead?
+  // Could this eventually this could be cleaned up to use OsmChangeWriterFactory and the
+  // OsmChange interface instead?
   ChangesetDeriverPtr changesetDeriver(new ChangesetDeriver(input1, input2));
   if (output.endsWith(".osc"))
   {
@@ -534,6 +582,7 @@ void ChangesetWriter::_streamChangesetOutput(ElementInputStreamPtr input1,
     LOG_WARN("No changes written to changeset.");
   }
 
+  // close the output stream
   std::shared_ptr<PartialOsmMapReader> partialReader1 =
     std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
   if (partialReader1)

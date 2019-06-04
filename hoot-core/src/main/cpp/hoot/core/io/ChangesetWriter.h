@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * High level class for generating changeset output
+ * High level class for prepping data for changeset generation and then calls on appropriate
+ * changeset file writers.
  *
  * Streaming I/O and external element can be used from here.  However, the in-memory input
  * reading/sorting has been left in place to support faster I/O in the situation where large inputs
@@ -61,6 +62,14 @@ public:
 
   ChangesetWriter(const bool printStats = false, const QString osmApiDbUrl = "");
 
+  /**
+   * Writes the changeset between one or two inputs to an output file. If only one input is
+   * specified, the resulting changeset will be made entirely of the elements from the input.
+   *
+   * @param output the changeset output file target
+   * @param input1 the first input source
+   * @param input2 the optional second input source
+   */
   void write(const QString& output, const QString& input1, const QString& input2 = "");
 
 private:
@@ -72,6 +81,8 @@ private:
 
   bool _printStats;
 
+  // If true, we are generating a changeset that will be made up of everything in the single input
+  // provided.
   bool _singleInput;
 
   void _parseBuffer();
@@ -82,22 +93,34 @@ private:
 
   ElementInputStreamPtr _getEmptyInputStream();
 
-  // memory bound methods
+  // IN MEMORY SORTING BASED METHODS
 
+  /*
+   * Reads both inputs into memory and populates maps for them
+   */
   void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
                         OsmMapPtr& map2, Progress progress);
+  /*
+   * Logic for dealing with map consuming convert ops
+   */
   void _handleUnstreamableConvertOpsInMemory(const QString& input1, const QString& input2,
                                              OsmMapPtr& map1, OsmMapPtr& map2, Progress progress);
+  /*
+   * Logic for dealing with non-map consuming convert ops
+   */
   void _handleStreamableConvertOpsInMemory(const QString& input1, const QString& input2,
                                            OsmMapPtr& map1, OsmMapPtr& map2, Progress progress);
-  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map, Progress progress);
+  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map);
 
-  // non-memory bound methods
+  // EXTERNAL DISK SORTING BASED METHODS
 
   ElementInputStreamPtr _getExternallySortedElements(const QString& input, Progress progress);
   ElementInputStreamPtr _getFilteredInputStream(const QString& input);
   ElementInputStreamPtr _sortElementsExternally(const QString& input);
 
+  /*
+   * Runs the two data source streams through a changeset deriver
+   */
   void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
                               const QString& output);
 };
