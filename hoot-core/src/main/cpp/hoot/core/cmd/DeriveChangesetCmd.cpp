@@ -49,6 +49,10 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/RemoveUnknownVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -84,7 +88,12 @@ public:
   static string className() { return "hoot::DeriveChangesetCmd"; }
 
   DeriveChangesetCmd() :
-  _osmApiDbUrl("")
+  _osmApiDbUrl(""),
+  _numTotalTasks(0),
+  _currentTaskNum(0),
+  _printStats(false),
+  _useStreamingIo(false),
+  _singleInput(false)
   {
   }
 
@@ -130,20 +139,21 @@ public:
     }
     LOG_VARD(_osmApiDbUrl);
 
-    const bool singleInput = input2.trimmed().isEmpty();
+    _singleInput = input2.trimmed().isEmpty();
+    _useStreamingIo = _inputIsStreamable(input1) && (!_singleInput || _inputIsStreamable(input2));
+    LOG_VARD(_useStreamingIo);
 
     const QString jobSource = "Derive Changeset";
     // The number of steps here must be updated as you add/remove job steps in the logic.
-    _numTotalTasks = 2;
-
+    _numTotalTasks = 3;
     // for non-streamable convert ops and other inline ops that occur when not streaming
-    if (!_inputIsStreamable(input1))
+    if (!_useStreamingIo)
     {
-      _numTotalTasks += 3;
-    }
-    if (!singleInput && !_inputIsStreamable(input2))
-    {
-      _numTotalTasks += 3;
+      _numTotalTasks += 6;
+      if (ConfigOptions().getConvertOps().size() > 0)
+      {
+        _numTotalTasks++;
+      }
     }
 
     _currentTaskNum = 1;
@@ -157,25 +167,107 @@ public:
 
     _parseBuffer();
 
-    progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting features...");
+    //progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting features...");
     ElementInputStreamPtr sortedElements1;
     ElementInputStreamPtr sortedElements2;
-    if (!singleInput)
+
+    if (!_useStreamingIo)
     {
-      //sortedElements1 is the former state of the data
-      sortedElements1 = _getSortedElements(input1, Status::Unknown1, progress);
-      //sortedElements2 is the newer state of the data
-      sortedElements2 = _getSortedElements(input2, Status::Unknown2, progress);
+      // In the case that not all input formats or convert ops are streamable or the
+      // user chose to force in memory streaming by not specifying a sort buffer size, let's
+      // use memory bound sorting.
+
+      //_getElementsSortedInMemory(input1, input2, sortedElements1, sortedElements2, progress);
+
+      // Only sort if input isn't already sorted.
+      bool input1Sorted = _inputIsSorted(input1);
+      LOG_VARD(input1Sorted);
+      bool input2Sorted = false;
+      if (!_singleInput)
+      {
+        input2Sorted = _inputIsSorted(input2);
+        LOG_VARD(input2Sorted);
+      }
+
+      OsmMapPtr map1;
+      OsmMapPtr map2;
+      _readInputsFully(input1, input2, map1, map2, progress);
+
+      LOG_VARD(map1->getElementCount());
+      int map1Unknown1Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown1Count);
+      int map1Unknown2Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown2Count);
+
+      LOG_VARD(map2->getElementCount());
+      int map2Unknown1Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map2);
+      LOG_VARD(map2Unknown1Count);
+      int map2Unknown2Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map2);
+      LOG_VARD(map2Unknown2Count);
+
+      if (!_singleInput)
+      {
+        // TODO: fix
+        //if (!input1Sorted)
+        //{
+          sortedElements1 = _sortElementsInMemory(map1, progress);
+        //}
+        _currentTaskNum++;
+        //if (!input2Sorted)
+        //{
+          assert(map2.get());
+          sortedElements2 = _sortElementsInMemory(map2, progress);
+        //}
+        _currentTaskNum++;
+      }
+      else
+      {
+        sortedElements1 = _getEmptyInputStream();
+        _currentTaskNum++;
+        //if (!input1Sorted)
+        //{
+          sortedElements2 = _sortElementsInMemory(map1, progress);
+        //}
+        _currentTaskNum++;
+      }
     }
     else
     {
-      //Here we're passing all the input data through to the output changeset, so put it in the
-      //sortedElements2 newer data and leave the first one empty.
-      sortedElements1 = _getEmptyInputStream();
-      sortedElements2 = _getSortedElements(input1, Status::Unknown2, progress);
-    }
-    _currentTaskNum++;
+      // If external sorting is enabled and the input and convert ops are streamable, externally
+      // sort the elements to avoid potential memory issues.
 
+      if (!_singleInput)
+      {
+        //sortedElements1 is the former state of the data
+        sortedElements1 = _getExternallySortedElements(input1, progress);
+        //sortedElements2 is the newer state of the data
+        sortedElements2 = _getExternallySortedElements(input2, progress);
+      }
+      else
+      {
+        //Here we're passing all the input data through to the output changeset, so put it in the
+        //sortedElements2 newer data and leave the first one empty.
+        sortedElements1 = _getEmptyInputStream();
+        _currentTaskNum++;
+        sortedElements2 = _getExternallySortedElements(input1, progress);
+      }
+    }
+
+    LOG_VARD(sortedElements1.get());
+    LOG_VARD(sortedElements2.get());
+    assert(sortedElements1.get() && sortedElements2.get());
     progress.set((float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Writing changeset...");
     _streamChangesetOutput(sortedElements1, sortedElements2, output);
     _currentTaskNum++;
@@ -194,7 +286,10 @@ private:
   int _numTotalTasks;
   int _currentTaskNum;
 
-  bool _printStats = false;
+  bool _printStats;
+
+  bool _useStreamingIo;
+  bool _singleInput;
 
   void _parseBuffer()
   {
@@ -244,6 +339,12 @@ private:
 
   bool _inputIsSorted(const QString& input) const
   {
+    // ops could change the ordering
+    if (ConfigOptions().getConvertOps().size() > 0)
+    {
+      return false;
+    }
+
     //Streaming db inputs actually do not come back sorted, despite the order by id clause
     //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
 
@@ -258,21 +359,58 @@ private:
   bool _inputIsStreamable(const QString& input) const
   {
     LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
+    LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
+    LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
     return
       OsmMapReaderFactory::hasElementInputStream(input) &&
-      ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps());
+      // All ops must be streamable, otherwise we'll load both inputs into memory.
+      ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()) &&
+      // If not sort buffer size is set, we sort in-memory. If we're already loading the data
+      // into memory for sorting, might as well force it into memory for the initial read as well.
+      ConfigOptions().getElementSorterElementBufferSize() != -1;
   }
 
-  OsmMapPtr _readInputFully(const QString& input, const Status& elementStatus, Progress progress)
+  void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
+                        OsmMapPtr& map2, Progress progress)
   {
-    LOG_INFO("Reading entire input into memory for " << input.right(25) << "...");
-
     //some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true, elementStatus);
+    OsmMapPtr fullMap(new OsmMap());
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Reading entire input map 1 ..." + input1.right(25) + "...");
+    IoUtils::loadMap(fullMap, input1, false, Status::Unknown1);
+    LOG_VARD(fullMap->getElementCount());
+    int fullUnknown1Count =
+      (int)FilteredVisitor::getStat(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+        ConstElementVisitorPtr(new ElementCountVisitor()), fullMap);
+    LOG_VARD(fullUnknown1Count);
+    int fullUnknown2Count =
+      (int)FilteredVisitor::getStat(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+        ConstElementVisitorPtr(new ElementCountVisitor()), fullMap);
+    LOG_VARD(fullUnknown2Count);
+    _currentTaskNum++;
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Reading entire input map 2 ..." + input2.right(25) + "...");
+    IoUtils::loadMap(fullMap, input2, false, Status::Unknown2);
+    LOG_VARD(fullMap->getElementCount());
+    fullUnknown1Count =
+      (int)FilteredVisitor::getStat(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+        ConstElementVisitorPtr(new ElementCountVisitor()), fullMap);
+    LOG_VARD(fullUnknown1Count);
+    fullUnknown2Count =
+      (int)FilteredVisitor::getStat(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+        ConstElementVisitorPtr(new ElementCountVisitor()), fullMap);
+    LOG_VARD(fullUnknown2Count);
+    _currentTaskNum++;
 
-    // Add convert ops into the pipeline, if there are any.
+    // Add convert ops into the pipeline, if there are any. TODO: Any OsmMapOperations in the
+    // bunch need to operate on the entire map made up of both inputs to work correctly.
     LOG_VARD(ConfigOptions().getConvertOps().size());
     if (ConfigOptions().getConvertOps().size() > 0)
     {
@@ -281,12 +419,11 @@ private:
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
           (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
-      convertOps.apply(map);
+      convertOps.apply(fullMap);
+      // get back into wgs84 in case some op changed the proj
+      MapProjector::projectToWgs84(fullMap);
       _currentTaskNum++;
     }
-
-    // get back into wgs84 in case some op change the proj
-    MapProjector::projectToWgs84(map);
 
     //we don't want to include review relations
     progress.set(
@@ -296,49 +433,158 @@ private:
     RemoveElementsVisitor removeElementsVisitor;
     removeElementsVisitor.setRecursive(false);
     removeElementsVisitor.addCriterion(elementCriterion);
-    map->visitRw(removeElementsVisitor);
+    fullMap->visitRw(removeElementsVisitor);
+    LOG_VARD(fullMap->getElementCount());
     _currentTaskNum++;
 
     //node comparisons require hashes be present on the elements
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
     CalculateHashVisitor2 hashVis;
-    map->visitRw(hashVis);
+    fullMap->visitRw(hashVis);
     _currentTaskNum++;
 
-    return map;
+    RemoveUnknown1Visitor remove1Vis;
+    RemoveUnknown2Visitor remove2Vis;
+    if (!_singleInput)
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Separating out first input map...");
+      map1.reset(new OsmMap(fullMap));
+      //map1.reset(new OsmMap());
+      //map1->append(fullMap);
+      LOG_VARD(map1->getElementCount());
+      int map1Unknown1Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown1Count);
+      int map1Unknown2Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown2Count);
+      map1->visitRw(remove2Vis);
+      LOG_VARD(map1->getElementCount());
+      LOG_DEBUG(remove2Vis.getCompletedStatusMessage());
+      _currentTaskNum++;
+
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+        "Separating out second input map...");
+      map2.reset(new OsmMap(fullMap));
+      //map2.reset(new OsmMap());
+      //map2->append(fullMap);
+      LOG_VARD(map2->getElementCount());
+      int map2Unknown1Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map2);
+      LOG_VARD(map2Unknown1Count);
+      int map2Unknown2Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map2);
+      LOG_VARD(map2Unknown2Count);
+      map2->visitRw(remove1Vis);
+      LOG_DEBUG(remove1Vis.getCompletedStatusMessage());
+      LOG_VARD(map2->getElementCount());
+    }
+    else
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Separating out first input map...");
+      map1.reset(new OsmMap(fullMap));
+      //map1.reset(new OsmMap());
+      //map1->append(fullMap);
+      LOG_VARD(map1->getElementCount());
+      int map1Unknown1Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown1)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown1Count);
+      int map1Unknown2Count =
+        (int)FilteredVisitor::getStat(
+          ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+          ConstElementVisitorPtr(new ElementCountVisitor()), map1);
+      LOG_VARD(map1Unknown2Count);
+      map1->visitRw(remove1Vis);
+      LOG_DEBUG(remove1Vis.getCompletedStatusMessage());
+      LOG_VARD(map1->getElementCount());
+    }
+    _currentTaskNum++;
   }
 
-  ElementInputStreamPtr _getSortedElements(const QString& input, const Status& status,
-                                           Progress progress)
+//  void _getElementsSortedInMemory(const QString& input1, const QString& input2,
+//                                  ElementInputStreamPtr& sortedElements1,
+//                                  ElementInputStreamPtr& sortedElements2, Progress progress)
+//  {
+//    // Only sort if input isn't already sorted.
+//    const bool input1Sorted = _inputIsSorted(input1);
+//    LOG_VARD(input1Sorted);
+//    const bool input2Sorted = _inputIsSorted(input2);
+//    LOG_VARD(input2Sorted);
+
+//    OsmMapPtr map1;
+//    OsmMapPtr map2;
+//    _readInputsFully(input1, input2, map1, map2, progress);
+
+//    if (!_singleInput)
+//    {
+//      // TODO: fix
+//      //if (!input1Sorted)
+//      //{
+//        sortedElements1 = _sortElementsInMemory(map1, progress);
+//        //sortedElements1.reset(_sortElementsInMemory(map1, progress));
+//      //}
+//      _currentTaskNum++;
+//      //if (!input2Sorted)
+//      //{
+//        assert(map2.get());
+//        sortedElements2 = _sortElementsInMemory(map2, progress);
+//        //sortedElements2.reset(_sortElementsInMemory(map2, progress));
+//      //}
+//      _currentTaskNum++;
+//    }
+//    else
+//    {
+//      sortedElements1 = _getEmptyInputStream();
+//      _currentTaskNum++;
+//      //if (!input1Sorted)
+//      //{
+//        sortedElements2 = _sortElementsInMemory(map1, progress);
+//        //sortedElements2.reset(_sortElementsInMemory(map1, progress));
+//      //}
+//      _currentTaskNum++;
+//    }
+//    LOG_VARD(sortedElements1.get());
+//    LOG_VARD(sortedElements2.get());
+//  }
+
+  ElementInputStreamPtr _getExternallySortedElements(const QString& input, Progress progress)
   {
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Sorting input elements ..." + input.right(25) + "...");
+
     ElementInputStreamPtr sortedElements;
 
     //Some in these datasets may have status=3 if you're loading conflated data, so use
     //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
 
-    //Only sort if input isn't already sorted.
+    // Only sort if input isn't already sorted.
     if (!_inputIsSorted(input))
     {
-      // If external sorting is enabled and the input and convert ops are streamable, externally
-      // sort the elements to avoid potential memory issues.
-      LOG_VARD(ConfigOptions().getElementSorterElementBufferSize());
-      if (_inputIsStreamable(input) && ConfigOptions().getElementSorterElementBufferSize() != -1)
-      {
-        sortedElements = _sortElementsExternally(input);
-      }
-      else
-      {
-        // Otherwise, in the case that not all input formats or convert ops are streamable or the
-        // user chose to force in memory streaming by not specifying a sort buffer size, let's
-        // use to memory bound sorting.
-        sortedElements = _sortElementsInMemory(_readInputFully(input, status, progress));
-      }
+      sortedElements = _sortElementsExternally(input);
     }
     else
     {
       sortedElements = _getFilteredInputStream(input);
     }
+    _currentTaskNum++;
+
     return sortedElements;
   }
 
@@ -371,13 +617,18 @@ private:
     ElementInputStreamPtr filteredInputStream(
       new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
 
-    // Add convert ops supporting streaming into the pipeline, if there are any.
+    // Add convert ops supporting streaming into the pipeline, if there are any. TODO: Any
+    // OsmMapOperations in the bunch need to operate on the entire map made up of both inputs to
+    // work correctly.
     return
       ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
   }
 
-  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map)
+  ElementInputStreamPtr _sortElementsInMemory(OsmMapPtr map, Progress progress)
   {
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
     return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
   }
 
@@ -410,6 +661,11 @@ private:
       assert(!_osmApiDbUrl.isEmpty());
       OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
     }
+    LOG_VARD(changesetDeriver->getNumCreateChanges());
+    LOG_VARD(changesetDeriver->getNumModifyChanges());
+    LOG_VARD(changesetDeriver->getNumDeleteChanges());
+    LOG_VARD(changesetDeriver->getNumFromElementsParsed());
+    LOG_VARD(changesetDeriver->getNumToElementsParsed());
 
     std::shared_ptr<PartialOsmMapReader> partialReader1 =
       std::dynamic_pointer_cast<PartialOsmMapReader>(input1);

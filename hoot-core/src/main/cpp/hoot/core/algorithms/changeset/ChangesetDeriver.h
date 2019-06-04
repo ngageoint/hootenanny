@@ -43,6 +43,12 @@ class ChangesetDeriver : public ChangesetProvider
 
 public:
 
+  /**
+   * TODO
+   *
+   * @param from
+   * @param to
+   */
   ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
   /**
@@ -69,6 +75,9 @@ public:
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }
+  int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
+  int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
+  int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
 
 private:
 
@@ -83,6 +92,7 @@ private:
   long _numFromElementsParsed;
   long _numToElementsParsed;
   bool _allowDeletingReferenceFeatures;
+  QMap<Change::ChangeType, int> _changesByType;
 
 };
 

@@ -41,11 +41,18 @@ _numFromElementsParsed(0),
 _numToElementsParsed(0),
 _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures())
 {
+  LOG_VARD(_from.get());
+  LOG_VARD(_to.get());
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
     throw IllegalArgumentException("The projections must both be geographic.");
   }
+
+  _changesByType.clear();
+  _changesByType[Change::ChangeType::Create] = 0;
+  _changesByType[Change::ChangeType::Modify] = 0;
+  _changesByType[Change::ChangeType::Delete] = 0;
 }
 
 ChangesetDeriver::~ChangesetDeriver()
@@ -443,6 +450,7 @@ Change ChangesetDeriver::readNextChange()
   }
 
   Change result = _next;
+  _changesByType[result.getType()]++;
   _next.clearElement();
   return result;
 }

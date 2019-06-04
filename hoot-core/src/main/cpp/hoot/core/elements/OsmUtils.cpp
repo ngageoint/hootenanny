@@ -31,7 +31,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
