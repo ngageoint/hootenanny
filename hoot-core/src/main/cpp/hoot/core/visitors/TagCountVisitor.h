@@ -48,21 +48,21 @@ public:
 
   TagCountVisitor();
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const { return "Calculates tag count statistics"; }
+  virtual QString getDescription() const override { return "Calculates tag count statistics"; }
 
-  virtual QString getInitStatusMessage() const
+  virtual QString getInitStatusMessage() const override
   { return "Calculating tag count statistics..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
 
-  virtual long numWithStat() const { return _numAffected; }
-  virtual double getStat() const { return _totalCount; }
-  virtual double getMin() const { return _smallestCount; }
-  virtual double getMax() const { return _largestCount; }
-  virtual double getAverage() const
+  virtual long numWithStat() const override { return _numAffected; }
+  virtual double getStat() const override { return _totalCount; }
+  virtual double getMin() const override { return _smallestCount; }
+  virtual double getMax() const override { return _largestCount; }
+  virtual double getAverage() const override
   {
     const double average = _numAffected == 0 ? 0.0 : _totalCount / _numAffected;
     return average;

@@ -47,7 +47,7 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
-//#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
@@ -399,11 +399,11 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   _currentTaskNum++;
 
   //  Truncate tags over 255 characters to push into OSM API
-//  progress.set(
-//    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
-//  ApiTagTruncateVisitor truncateTags;
-//  map->visitRw(truncateTags);
-//  _currentTaskNum++;
+  progress.set(
+    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
+  ApiTagTruncateVisitor truncateTags;
+  map->visitRw(truncateTags);
+  _currentTaskNum++;
 
   //node comparisons require hashes be present on the elements
   progress.set(
@@ -463,7 +463,7 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
   //node comparisons require hashes be present on the elements
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
   //  Tags need to be truncated if they are over 255 characters
-  //visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
+  visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(

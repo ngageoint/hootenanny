@@ -36,22 +36,22 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/PythonSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QDir>
@@ -619,7 +619,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   if (_addSourceDateTime)
   {
     // Add an ingest datetime tag
-    t.appendValue("source:ingest:datetime",
+    t.appendValue(MetadataTags::SourceIngestDateTime(),
                   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
   }
 
