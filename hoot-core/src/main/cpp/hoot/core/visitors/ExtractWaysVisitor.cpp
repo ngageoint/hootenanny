@@ -48,7 +48,6 @@ vector<ConstWayPtr> ExtractWaysVisitor::extractWays(const ConstOsmMapPtr& map,
   vector<ConstWayPtr> result;
   ExtractWaysVisitor v(result);
 
-  v.setOsmMap(map.get());
   e->visitRo(*map, v);
   return result;
 }

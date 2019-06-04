@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * Sets the status on elements
+ *
+ * This really should be a ElementVisitor. See #2831.
  */
 class StatusUpdateVisitor : public ElementOsmMapVisitor, public Configurable
 {
