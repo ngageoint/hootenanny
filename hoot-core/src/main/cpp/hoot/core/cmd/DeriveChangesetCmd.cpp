@@ -333,111 +333,129 @@ private:
       ConfigOptions().getElementSorterElementBufferSize() != -1;
   }
 
+  void _handleUnstreamableConvertOpsInMemory(const QString& input1, const QString& input2,
+                                             OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
+  {
+    NamedOp convertOps(ConfigOptions().getConvertOps());
+    convertOps.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+
+    OsmMapPtr fullMap(new OsmMap());
+    if (!_singleInput)
+    {
+      IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
+    }
+    else
+    {
+      IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
+    }
+    if (!_singleInput)
+    {
+      OsmMapPtr tmpMap(new OsmMap());
+      IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
+      try
+      {
+        fullMap->append(tmpMap);
+      }
+      catch (const HootException& e)
+      {
+        if (e.getWhat().contains("already contains"))
+        {
+          throw HootException(
+            QString("It is not possible to run a non-streamable map operation ") +
+            QString("OsmMapOperation) on two data sources with overlapping element IDs: ") +
+            e.what());
+         }
+       throw e;
+      }
+    }
+    convertOps.apply(fullMap);
+    // get back into wgs84 in case some op changed the proj
+    MapProjector::projectToWgs84(fullMap);
+
+    RemoveUnknown1Visitor remove1Vis;
+    RemoveUnknown2Visitor remove2Vis;
+    if (!_singleInput)
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Separating out first input map...");
+      map1.reset(new OsmMap(fullMap));
+      map1->visitRw(remove2Vis);
+      _currentTaskNum++;
+
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Separating out second input map...");
+      map2.reset(new OsmMap(fullMap));
+      map2->visitRw(remove1Vis);
+    }
+    else
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Separating out first input map...");
+      map1.reset(new OsmMap(fullMap));
+      map1->visitRw(remove1Vis);
+    }
+    _currentTaskNum++;
+  }
+
+  void _handleStreamableConvertOpsInMemory(const QString& input1, const QString& input2,
+                                           OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
+  {
+    NamedOp convertOps(ConfigOptions().getConvertOps());
+    convertOps.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
+
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Reading entire input map 1 ..." + input1.right(25) + "...");
+    if (!_singleInput)
+    {
+      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+    }
+    else
+    {
+      IoUtils::loadMap(map1, input1, true, Status::Unknown2);
+    }
+    _currentTaskNum++;
+
+    if (!_singleInput)
+    {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+            "Reading entire input map 2 ..." + input2.right(25) + "...");
+      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
+    }
+    _currentTaskNum++;
+
+    convertOps.apply(map1);
+    MapProjector::projectToWgs84(map1);
+    if (!_singleInput)
+    {
+      convertOps.apply(map2);
+      MapProjector::projectToWgs84(map2);
+    }
+  }
+
   void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
                         OsmMapPtr& map2, Progress progress)
   {
     if (ConfigOptions().getConvertOps().size() > 0)
     {
-      NamedOp convertOps(ConfigOptions().getConvertOps());
-      convertOps.setProgress(
-        Progress(
-          ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
       if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
-        OsmMapPtr fullMap(new OsmMap());
-        if (!_singleInput)
-        {
-          IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
-        }
-        else
-        {
-          IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
-        }
-        if (!_singleInput)
-        {
-          OsmMapPtr tmpMap(new OsmMap());
-          IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
-          try
-          {
-            fullMap->append(tmpMap);
-          }
-          catch (const HootException& e)
-          {
-            if (e.getWhat().contains("already contains"))
-            {
-              throw HootException(
-                QString("It is not possible to run a non-streamable map operation ") +
-                QString("OsmMapOperation) on two data sources with overlapping element IDs: ") +
-                e.what());
-            }
-            throw e;
-          }
-        }
-        convertOps.apply(fullMap);
-        // get back into wgs84 in case some op changed the proj
-        MapProjector::projectToWgs84(fullMap);
-
-        RemoveUnknown1Visitor remove1Vis;
-        RemoveUnknown2Visitor remove2Vis;
-        if (!_singleInput)
-        {
-          progress.set(
-            (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-              "Separating out first input map...");
-          map1.reset(new OsmMap(fullMap));
-          map1->visitRw(remove2Vis);
-          _currentTaskNum++;
-
-          progress.set(
-            (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-            "Separating out second input map...");
-          map2.reset(new OsmMap(fullMap));
-          map2->visitRw(remove1Vis);
-        }
-        else
-        {
-          progress.set(
-            (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-              "Separating out first input map...");
-          map1.reset(new OsmMap(fullMap));
-          map1->visitRw(remove1Vis);
-        }
-        _currentTaskNum++;
+        _handleUnstreamableConvertOpsInMemory(input1, input2, map1, map2, progress);
       }
       else
       {
-        progress.set(
-          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Reading entire input map 1 ..." + input1.right(25) + "...");
-        if (!_singleInput)
-        {
-          IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-        }
-        else
-        {
-          IoUtils::loadMap(map1, input1, true, Status::Unknown2);
-        }
-        _currentTaskNum++;
-
-        if (!_singleInput)
-        {
-          progress.set(
-            (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-                "Reading entire input map 2 ..." + input2.right(25) + "...");
-          IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-        }
-        _currentTaskNum++;
-
-        convertOps.apply(map1);
-        MapProjector::projectToWgs84(map1);
-        if (!_singleInput)
-        {
-          convertOps.apply(map2);
-          MapProjector::projectToWgs84(map2);
-        }
+        _handleStreamableConvertOpsInMemory(input1, input2, map1, map2, progress);
       }
-      _currentTaskNum++;
     }
     else
     {
