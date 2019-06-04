@@ -47,7 +47,10 @@ namespace hoot
  * being used and a positive size results in the external sorter being used.
  *
  * If convert operations are passed in and any are not streamable, then in memory sorting is forced
- * to occur.
+ * to occur. Its important to note that any map consuming operations (OsmMapOperation, etc.) must
+ * operate over the entire map with data from both inputs (if there are two inputs). This requires
+ * a different set of logic for convert ops handling when map consuming ops are present (with
+ * in-memory sorting only).
  */
 class ChangesetWriter
 {

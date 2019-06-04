@@ -402,7 +402,11 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
-  map->visitRw(truncateTags);
+  map1->visitRw(truncateTags);
+  if (!_singleInput)
+  {
+    map2->visitRw(truncateTags);
+  }
   _currentTaskNum++;
 
   //node comparisons require hashes be present on the elements
