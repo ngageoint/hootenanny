@@ -38,7 +38,6 @@
 
 //  Qt
 #include <QRegularExpression>
-#include <QTextStream>
 
 using namespace std;
 
@@ -1224,14 +1223,11 @@ QString XmlChangeset::getFailedChangesetString()
   return getChangesetString(changeset, 0);
 }
 
-QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long id, ChangesetType type)
+QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id, ChangesetType type)
 {
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  XmlElementMap& nodes = _nodes[type];
-  XmlElementMap& ways = _ways[type];
-  XmlElementMap& relations = _relations[type];
   QString category;
   //  Get the category tag from the changeset type
   if (type == ChangesetType::TypeCreate)
@@ -1243,23 +1239,23 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long id, Changese
   if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
     ts << "\t<" << category << ">\n";
-    //  Nodes got first in each category
-    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Node); it != _idMap.end(ElementType::Node); ++it)
+    if (type != ChangesetType::TypeDelete)
     {
-      if (nodes.find(it->second) != nodes.end() && changeset->contains(ElementType::Node, type, it->second))
-        ts << nodes.at(it->second)->toString(id);
+      //  Nodes go first in each category
+      getNodes(changeset, ts, type, changeset_id);
+      //  Followed by ways
+      getWays(changeset, ts, type, changeset_id);
+      //  Relations bring up the rear
+      getRelations(changeset, ts, type, changeset_id);
     }
-    //  Followed by ways
-    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Way); it != _idMap.end(ElementType::Way); ++it)
+    else
     {
-      if (ways.find(it->second) != ways.end() && changeset->contains(ElementType::Way, type, it->second))
-        ts << ways.at(it->second)->toString(id);
-    }
-    //  Relations bring up the rear
-    for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Relation); it != _idMap.end(ElementType::Relation); ++it)
-    {
-      if (relations.find(it->second) != relations.end() && changeset->contains(ElementType::Relation, type, it->second))
-        ts << relations.at(it->second)->toString(id);
+      //  Relations first for deletes
+      getRelations(changeset, ts, type, changeset_id);
+      //  Followed by ways
+      getWays(changeset, ts, type, changeset_id);
+      //  Nodes go last
+      getNodes(changeset, ts, type, changeset_id);
     }
     ts << "\t</" << category << ">\n";
   }
@@ -1417,5 +1413,36 @@ void XmlChangeset::failRelation(long id, bool beforeSend)
     ++_sentCount;
   LOG_TRACE("Failed relation (" << id << ")");
 }
+
+void XmlChangeset::getNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+{
+  XmlElementMap& nodes = _nodes[type];
+  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Node); it != _idMap.end(ElementType::Node); ++it)
+  {
+    if (nodes.find(it->second) != nodes.end() && changeset->contains(ElementType::Node, type, it->second))
+      ts << nodes.at(it->second)->toString(changeset_id);
+  }
+}
+
+void XmlChangeset::getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+{
+  XmlElementMap& ways = _ways[type];
+  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Way); it != _idMap.end(ElementType::Way); ++it)
+  {
+    if (ways.find(it->second) != ways.end() && changeset->contains(ElementType::Way, type, it->second))
+      ts << ways.at(it->second)->toString(changeset_id);
+  }
+}
+
+void XmlChangeset::getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+{
+  XmlElementMap& relations = _relations[type];
+  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Relation); it != _idMap.end(ElementType::Relation); ++it)
+  {
+    if (relations.find(it->second) != relations.end() && changeset->contains(ElementType::Relation, type, it->second))
+      ts << relations.at(it->second)->toString(changeset_id);
+  }
+}
+
 
 }
