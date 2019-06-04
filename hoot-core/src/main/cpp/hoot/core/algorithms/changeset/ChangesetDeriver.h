@@ -43,12 +43,6 @@ class ChangesetDeriver : public ChangesetProvider
 
 public:
 
-  /**
-   * TODO
-   *
-   * @param from
-   * @param to
-   */
   ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to);
 
   /**
