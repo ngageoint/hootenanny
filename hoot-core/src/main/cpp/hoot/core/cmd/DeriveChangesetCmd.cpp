@@ -92,7 +92,6 @@ public:
   _numTotalTasks(0),
   _currentTaskNum(0),
   _printStats(false),
-  _useStreamingIo(false),
   _singleInput(false)
   {
   }
@@ -141,17 +140,18 @@ public:
 
     _singleInput = input2.trimmed().isEmpty();
     LOG_VARD(_singleInput);
-    _useStreamingIo = _inputIsStreamable(input1) && (_singleInput || _inputIsStreamable(input2));
-    LOG_VARD(_useStreamingIo);
+    const bool useStreamingIo =
+      _inputIsStreamable(input1) && (_singleInput || _inputIsStreamable(input2));
+    LOG_VARD(useStreamingIo);
 
     const QString jobSource = "Derive Changeset";
     // The number of steps here must be updated as you add/remove job steps in the logic.
     _numTotalTasks = 3;
     // for non-streamable convert ops and other inline ops that occur when not streaming
-    if (!_useStreamingIo)
+    if (!useStreamingIo && ConfigOptions().getConvertOps().size() > 0)
     {
-      _numTotalTasks += 6;
-      if (ConfigOptions().getConvertOps().size() > 0)
+      _numTotalTasks++;
+      if (ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
       {
         _numTotalTasks++;
       }
@@ -171,7 +171,7 @@ public:
     ElementInputStreamPtr sortedElements1;
     ElementInputStreamPtr sortedElements2;
 
-    if (!_useStreamingIo)
+    if (!useStreamingIo)
     {
       // In the case that not all input formats or convert ops are streamable or the
       // user chose to force in memory streaming by not specifying a sort buffer size, let's
@@ -183,28 +183,19 @@ public:
 
       if (!_singleInput)
       {
-        // TODO: fix
-        // Only sort if input isn't already sorted.
-        //if (!_inputIsSorted(input1))
-        //{
-          sortedElements1 = _sortElementsInMemory(map1, progress);
-        //}
+        // TODO: There need to be checks here to only sort if the input isn't already sorted like
+        // there are for the external sorting (e.g. pre-sorted PBF file).
+        sortedElements1 = _sortElementsInMemory(map1, progress);
         _currentTaskNum++;
-        //if (!_inputIsSorted(input2))
-        //{
-          assert(map2.get());
-          sortedElements2 = _sortElementsInMemory(map2, progress);
-        //}
+        assert(map2.get());
+        sortedElements2 = _sortElementsInMemory(map2, progress);
         _currentTaskNum++;
       }
       else
       {
         sortedElements1 = _getEmptyInputStream();
         _currentTaskNum++;
-        //if (!_inputIsSorted(input1))
-        //{
-          sortedElements2 = _sortElementsInMemory(map1, progress);
-        //}
+        sortedElements2 = _sortElementsInMemory(map1, progress);
         _currentTaskNum++;
       }
     }
@@ -251,7 +242,6 @@ private:
 
   bool _printStats;
 
-  bool _useStreamingIo;
   bool _singleInput;
 
   void _parseBuffer()
@@ -336,23 +326,13 @@ private:
   void _handleUnstreamableConvertOpsInMemory(const QString& input1, const QString& input2,
                                              OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
   {
-    NamedOp convertOps(ConfigOptions().getConvertOps());
-    convertOps.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
-
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
     OsmMapPtr fullMap(new OsmMap());
     if (!_singleInput)
     {
       IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
-    }
-    else
-    {
-      IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
-    }
-    if (!_singleInput)
-    {
+
       OsmMapPtr tmpMap(new OsmMap());
       IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
       try
@@ -367,37 +347,40 @@ private:
             QString("It is not possible to run a non-streamable map operation ") +
             QString("OsmMapOperation) on two data sources with overlapping element IDs: ") +
             e.what());
-         }
-       throw e;
+        }
+        throw e;
       }
     }
+    else
+    {
+      IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
+    }
+    _currentTaskNum++;
+
+    NamedOp convertOps(ConfigOptions().getConvertOps());
+    convertOps.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
     convertOps.apply(fullMap);
     // get back into wgs84 in case some op changed the proj
     MapProjector::projectToWgs84(fullMap);
+    _currentTaskNum++;
 
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
     RemoveUnknown1Visitor remove1Vis;
     RemoveUnknown2Visitor remove2Vis;
+    map1.reset(new OsmMap(fullMap));
     if (!_singleInput)
     {
-      progress.set(
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Separating out first input map...");
-      map1.reset(new OsmMap(fullMap));
       map1->visitRw(remove2Vis);
-      _currentTaskNum++;
 
-      progress.set(
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Separating out second input map...");
       map2.reset(new OsmMap(fullMap));
       map2->visitRw(remove1Vis);
     }
     else
     {
-      progress.set(
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Separating out first input map...");
-      map1.reset(new OsmMap(fullMap));
       map1->visitRw(remove1Vis);
     }
     _currentTaskNum++;
@@ -406,18 +389,12 @@ private:
   void _handleStreamableConvertOpsInMemory(const QString& input1, const QString& input2,
                                            OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
   {
-    NamedOp convertOps(ConfigOptions().getConvertOps());
-    convertOps.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
-
     progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-      "Reading entire input map 1 ..." + input1.right(25) + "...");
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
     if (!_singleInput)
     {
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
     }
     else
     {
@@ -425,15 +402,11 @@ private:
     }
     _currentTaskNum++;
 
-    if (!_singleInput)
-    {
-      progress.set(
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-            "Reading entire input map 2 ..." + input2.right(25) + "...");
-      IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-    }
-    _currentTaskNum++;
-
+    NamedOp convertOps(ConfigOptions().getConvertOps());
+    convertOps.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, 1.0 / (float)_numTotalTasks));
     convertOps.apply(map1);
     MapProjector::projectToWgs84(map1);
     if (!_singleInput)
@@ -441,6 +414,7 @@ private:
       convertOps.apply(map2);
       MapProjector::projectToWgs84(map2);
     }
+    _currentTaskNum++;
   }
 
   void _readInputsFully(const QString& input1, const QString& input2, OsmMapPtr& map1,
@@ -459,29 +433,18 @@ private:
     }
     else
     {
+      progress.set(
+        (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
       if (!_singleInput)
       {
-        progress.set(
-          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Reading entire input map 1 ..." + input1.right(25) + "...");
         IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-        _currentTaskNum++;
-
-        progress.set(
-          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Reading entire input map 2 ..." + input2.right(25) + "...");
         IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-        _currentTaskNum++;
       }
       else
       {
-        progress.set(
-          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-          "Reading entire input map 1 ..." + input1.right(25) + "...");
-        IoUtils::loadMap(map1, input1, true, Status::Unknown2);
-        // TODO: fix
-        _currentTaskNum += 2;
+        IoUtils::loadMap(map1, input1, true, Status::Unknown2);;
       }
+      _currentTaskNum++;
     }
 
     //we don't want to include review relations
@@ -508,8 +471,7 @@ private:
     {
       map2->visitRw(hashVis);
     }
-    // TODO: fix
-    _currentTaskNum += 2;
+    _currentTaskNum++;
   }
 
   ElementInputStreamPtr _getExternallySortedElements(const QString& input, Progress progress)
