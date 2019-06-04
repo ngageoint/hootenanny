@@ -793,6 +793,7 @@ private:
   {
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      // TODO: fix
       "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
     return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
   }
