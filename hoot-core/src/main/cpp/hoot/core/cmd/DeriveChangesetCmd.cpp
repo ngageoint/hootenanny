@@ -459,20 +459,29 @@ private:
     }
     else
     {
-      progress.set(
-        (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-        "Reading entire input map 1 ..." + input1.right(25) + "...");
-      IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-      _currentTaskNum++;
-
       if (!_singleInput)
       {
         progress.set(
           (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-              "Reading entire input map 2 ..." + input2.right(25) + "...");
+          "Reading entire input map 1 ..." + input1.right(25) + "...");
+        IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+        _currentTaskNum++;
+
+        progress.set(
+          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Reading entire input map 2 ..." + input2.right(25) + "...");
         IoUtils::loadMap(map2, input2, true, Status::Unknown2);
+        _currentTaskNum++;
       }
-      _currentTaskNum++;
+      else
+      {
+        progress.set(
+          (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+          "Reading entire input map 1 ..." + input1.right(25) + "...");
+        IoUtils::loadMap(map1, input1, true, Status::Unknown2);
+        // TODO: fix
+        _currentTaskNum += 2;
+      }
     }
 
     //we don't want to include review relations
