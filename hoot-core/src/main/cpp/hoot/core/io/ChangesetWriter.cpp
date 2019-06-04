@@ -28,29 +28,29 @@
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/elements/InMemoryElementSorter.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
-#include <hoot/core/util/IoUtils.h>
-#include <hoot/core/elements/ExternalMergeElementSorter.h>
-#include <hoot/core/io/ElementCriterionVisitorInputStream.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/ExternalMergeElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Progress.h>
+//#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/criterion/StatusCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -91,14 +91,18 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
   LOG_VARD(useStreamingIo);
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
-  _numTotalTasks = 5;
+  _numTotalTasks = 2;
   // for non-streamable convert ops and other inline ops that occur when not streaming
-  if (!useStreamingIo && ConfigOptions().getConvertOps().size() > 0)
+  if (!useStreamingIo)
   {
-    _numTotalTasks++;
-    if (ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+    _numTotalTasks += 4;
+    if (ConfigOptions().getConvertOps().size() > 0)
     {
       _numTotalTasks++;
+      if (ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
+      {
+        _numTotalTasks++;
+      }
     }
   }
 
@@ -394,6 +398,13 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   }
   _currentTaskNum++;
 
+  //  Truncate tags over 255 characters to push into OSM API
+//  progress.set(
+//    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
+//  ApiTagTruncateVisitor truncateTags;
+//  map->visitRw(truncateTags);
+//  _currentTaskNum++;
+
   //node comparisons require hashes be present on the elements
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
@@ -451,6 +462,8 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
         new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
   //node comparisons require hashes be present on the elements
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+  //  Tags need to be truncated if they are over 255 characters
+  //visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
 
   std::shared_ptr<PartialOsmMapReader> reader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
