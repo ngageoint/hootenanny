@@ -296,7 +296,7 @@ private:
     map->visitRw(removeElementsVisitor);
     _currentTaskNum++;
 
-    //we don't want to include review relations
+    //  Truncate tags over 255 characters to push into OSM API
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
     ApiTagTruncateVisitor truncateTags;
