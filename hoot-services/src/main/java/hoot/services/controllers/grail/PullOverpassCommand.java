@@ -26,22 +26,23 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.geo.BoundingBox;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.WebApplicationException;
 
 
 /**
@@ -79,6 +80,7 @@ class PullOverpassCommand implements InternalCommand {
     }
 
     private void getOverpass() {
+        String url = "";
         try {
                 BoundingBox boundingBox = new BoundingBox(params.getBounds());
 
@@ -96,19 +98,20 @@ class PullOverpassCommand implements InternalCommand {
     // </osm-script>
 
                 // This is Ugly! It is the encoded version of the compact QL script above
-                URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) +
+                url = replaceSensitiveData(params.getPullUrl()) +
                     "/api/interpreter?data=(node(" +
                     boundingBox.getMinLat() + "%2C" +
                     boundingBox.getMinLon() + "%2C" +
                     boundingBox.getMaxLat() + "%2C" +
-                    boundingBox.getMaxLon() + ")%3B%3C%3B%3E%3B)%3Bout%20meta%20qt%3B");
+                    boundingBox.getMaxLon() + ")%3B%3C%3B%3E%3B)%3Bout%20meta%20qt%3B";
 
+                URL requestUrl = new URL(url);
                 File outputFile = new File(params.getOutput());
 
-                FileUtils.copyURLToFile(requestUrl,outputFile, 10000, 10000);
+                FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
             }
             catch (Exception ex) {
-                String msg = "Failure to pull data from Overpass" + ex.getMessage();
+                String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
                 // throw new RuntimeException(msg, ex);
                 throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
