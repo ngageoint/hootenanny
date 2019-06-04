@@ -18,7 +18,12 @@ diff $INPUT_DIR/changeset-2.osc $OUTPUT_DIR/changeset-2.osc
 hoot changeset-derive -C Testing.conf -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D crop.bounds="104.8948,38.8519,104.9003,38.85545" -D set.tag.value.visitor.key=test_key -D set.tag.value.visitor.value=test_val $INPUT_DIR/map1.osm "" $OUTPUT_DIR/changeset-3.osc
 diff $INPUT_DIR/changeset-3.osc $OUTPUT_DIR/changeset-3.osc 
 
-# TODO: fix - also add an error test to capture this
+# This will cause an error b/c we're deriving a changeset between two files with overlapping element IDs while using an OsmMapOperation. Using
+# an OsmMapOperation requires all map inputs to be read into memory at once, and since we have to preserve element IDs for changeset derivation
+# by keeping the original IDs, the overlapping IDs cannot be loaded.
+hoot changeset-derive -C Testing.conf -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D crop.bounds="104.8948,38.8519,104.9003,38.85545" -D set.tag.value.visitor.key=test_key -D set.tag.value.visitor.value=test_val $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-10.osc
+
+# TODO: use two inputs w/o overlapping ID's
 #hoot changeset-derive -C Testing.conf -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D crop.bounds="104.8948,38.8519,104.9003,38.85545" -D set.tag.value.visitor.key=test_key -D set.tag.value.visitor.value=test_val $INPUT_DIR/map1.osm $INPUT_DIR/map2.osm $OUTPUT_DIR/changeset-10.osc
 #diff $INPUT_DIR/changeset-3.osc $OUTPUT_DIR/changeset-10.osc 
 
