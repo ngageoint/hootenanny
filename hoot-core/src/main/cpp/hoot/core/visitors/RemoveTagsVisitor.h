@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Removes any tags with keys matching those passed to this visitor
+ *
+ * This really should be a ElementVisitor. See #2831.
  */
 class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
   public ElementCriterionConsumer, public OperationStatusInfo
