@@ -61,7 +61,7 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   else
   {
     // Maybe it's a way with nothing but a time tag...
-    it = tags.find("source:datetime");
+    it = tags.find(MetadataTags::SourceDateTime());
     if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
     {
       // We can treat it like a highway

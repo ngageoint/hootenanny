@@ -27,10 +27,10 @@
 #include "MapComparator.h"
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // Standard
 #include <iomanip>
@@ -116,11 +116,11 @@ public:
     // have the option to ignore it here.
     if (!_useDateTime)
     {
-      in1.set("source:ingest:datetime", "None");  // Wipe out the ingest datetime
-      in2.set("source:ingest:datetime", "None");
+      in1.set(MetadataTags::SourceIngestDateTime(), "None");  // Wipe out the ingest datetime
+      in2.set(MetadataTags::SourceIngestDateTime(), "None");
 
-      in1.set("source:datetime", "None");  // Wipe out the ingest datetime
-      in2.set("source:datetime", "None");
+      in1.set(MetadataTags::SourceDateTime(), "None");  // Wipe out the ingest datetime
+      in2.set(MetadataTags::SourceDateTime(), "None");
     }
 
     if (in1 != in2)

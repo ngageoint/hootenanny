@@ -57,6 +57,7 @@ public:
   static const QString ERROR_CIRCULAR;
   inline static const QString& ErrorCircular()          { return ERROR_CIRCULAR; }
   inline static const QString SourceDateTime()          { return "source:datetime"; }
+  inline static const QString SourceIngestDateTime()    { return "source:ingest:datetime"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
