@@ -406,8 +406,9 @@ private:
             if (e.getWhat().contains("already contains"))
             {
               throw HootException(
-                QString("It is not possible to run a map operation on two data sources with ") +
-                QString("overlapping element IDs: ") + e.what());
+                QString("It is not possible to run a non-streamable map operation ") +
+                QString("OsmMapOperation) on two data sources with overlapping element IDs: ") +
+                e.what());
             }
             throw e;
           }
