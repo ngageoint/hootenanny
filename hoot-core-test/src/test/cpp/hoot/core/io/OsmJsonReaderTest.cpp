@@ -26,18 +26,12 @@
  */
 
 // Hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDir>
@@ -420,6 +414,40 @@ public:
         "}";
     OsmJsonReader::scrubQuotes(singleQuoteTest);
     HOOT_STR_EQUALS(doubleQuoteTest, singleQuoteTest);
+
+    QString overpassOriginal =
+    "{\n"
+    "  \"version\": 0.6,\n"
+    "  \"generator\": \"Overpass API\",\n"
+    "  \"osm3s\": {\n"
+    "    \"timestamp_osm_base\": \"some date\",\n"
+    "    \"copyright\": \"copyright\"\n"
+    "  },\n"
+    "  \"elements\": [\n"
+    "{\n"
+    "  \"type\": \"node\",\n"
+    "  \"id\": 824816086,\n"
+    "  \"lat\": 18.5396277,\n"
+    "  \"lon\": -72.5293447,\n"
+    "  \"timestamp\": \"date\",\n"
+    "  \"version\": 2,\n"
+    "  \"changeset\": 2,\n"
+    "  \"tags\": {\n"
+    "    \"amenity\": \"school\",\n"
+    "    \"name\": \"La Prairie d'Yslande\",\n"
+    "    \"operational_status\": \"open\",\n"
+    "    \"operational_status_quality\": \"confirmed\",\n"
+    "    \"school_district\": \"Gressier\",\n"
+    "    \"school_type\": \"kindergarten\",\n"
+    "    \"source\": \"CNIGS/OIM/FOCS\"\n"
+    "  }\n"
+    "}\n"
+    "  ]\n"
+    "}";
+
+    const QString overpassCorrect(overpassOriginal);
+    OsmJsonReader::scrubQuotes(overpassOriginal);
+    HOOT_STR_EQUALS(overpassCorrect, overpassOriginal);
   }
 
   void scrubBigIntsTest()

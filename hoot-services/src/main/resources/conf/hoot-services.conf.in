@@ -96,9 +96,11 @@ conflateSizeThreshold=200000000
 # Export size threshold
 exportSizeThreshold=400000000
 
+# HTTP remote request timeout (10 min)
+httpTimeout=600000
+
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
-
 
 # Config options asciidoc location
 configJsonPath=conf/core/ConfigOptions.json

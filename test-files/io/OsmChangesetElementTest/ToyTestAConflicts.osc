@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
     <create>
-	<node id="-37" version="0" lat="38.8545553856" lon="-104.9005792841" timestamp=""/>
+        <node id="-37" version="0" lat="38.8545553856" lon="-104.9005792841" timestamp=""/>
         <way id="-5" version="0" timestamp="">
             <nd ref="-37"/>
             <nd ref="31"/>
@@ -23,5 +23,6 @@
         <node id="-1" version="0" lat="38.8549321261880536" lon="-104.8979050333482093" timestamp="">
           <tag k="node" v="Should fail"/>
         </node>
+        <node id="2" version="1" lat="38.8549524185660573" lon="-104.8987388916486054" timestamp=""/>
     </delete>
 </osmChange>
