@@ -211,14 +211,18 @@ public class ImportResource {
                     shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
                     geojsonCnt, geonamesCnt);
 
+            List<Command> workflow = new LinkedList<>();
+
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
+            workflow.add(importCommand);
 
-            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
+            if(folderId != null) {
+                InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
+                workflow.add(setFolderCommand);
+            }
 
-            Command[] workflow = { importCommand, setFolderCommand };
-
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.IMPORT));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 
             Map<String, Object> res = new HashMap<String, Object>();
             res.put("jobid", jobId);
