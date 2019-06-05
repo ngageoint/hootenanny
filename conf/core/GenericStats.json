@@ -1,15 +1,15 @@
 {
     "quick":
     [
-        {"name":"Nodes", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"None" },
-        {"name":"Ways", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"None" },
-        {"name":"Relations", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"None" },
-        {"name":"Minimum Node ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"None" },
-        {"name":"Maximum Node ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"None" },
-        {"name":"Minimum Way ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"None" },
-        {"name":"Maximum Way ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"None" },
-        {"name":"Minimum Relation ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"None" },
-        {"name":"Maximum Relation ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"None" }
+        {"name":"Nodes", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
+        {"name":"Ways", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
+        {"name":"Relations", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Node ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Node ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Way ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Way ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Relation ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Relation ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" }
     ],
     "slow":
     [
@@ -35,21 +35,21 @@
         {"name":"Most Information Tags on a Feature", "visitor":"hoot::TagCountVisitor", "criterion":"", "StatCall":"InfoMax" },
         {"name":"Average Information Tags Per Feature", "visitor":"hoot::TagCountVisitor", "criterion":"", "StatCall":"InfoAverage" },
 
-        {"name":"Features with Names", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasNameCriterion", "StatCall":"None" },
+        {"name":"Features with Names", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasNameCriterion", "StatCall":"Stat" },
         {"name":"Unique Names", "visitor":"hoot::UniqueNamesVisitor", "criterion":"", "StatCall":"Stat" },
-        {"name":"Unique Road Names", "visitor":"hoot::UniqueNamesVisitor", "criterion":"hoot::HighwayCriterion", "StatCall":"None" },
+        {"name":"Unique Road Names", "visitor":"hoot::UniqueNamesVisitor", "criterion":"hoot::HighwayCriterion", "StatCall":"Stat" },
 
-        {"name":"Unique Building Names", "visitor":"hoot::UniqueNamesVisitor", "criterion":"hoot::BuildingCriterion", "StatCall":"None" },
-        {"name":"Meters of Linear Features", "visitor":"hoot::LengthOfWaysVisitor", "criterion":"hoot::LinearCriterion", "StatCall":"None" },
-        {"name":"Meters Squared of Area Features", "visitor":"hoot::CalculateAreaForStatsVisitor", "criterion":"hoot::StatsAreaCriterion", "StatCall":"None" },
-        {"name":"Meters of Roads", "visitor":"hoot::LengthOfWaysVisitor", "criterion":"hoot::HighwayCriterion", "StatCall":"None" },
-        {"name":"Meters Squared of Buildings", "visitor":"hoot::CalculateAreaVisitor", "criterion":"hoot::BuildingCriterion", "StatCall":"None" },
+        {"name":"Unique Building Names", "visitor":"hoot::UniqueNamesVisitor", "criterion":"hoot::BuildingCriterion", "StatCall":"Stat" },
+        {"name":"Meters of Linear Features", "visitor":"hoot::LengthOfWaysVisitor", "criterion":"hoot::LinearCriterion", "StatCall":"Stat" },
+        {"name":"Meters Squared of Area Features", "visitor":"hoot::CalculateAreaForStatsVisitor", "criterion":"hoot::StatsAreaCriterion", "StatCall":"Stat" },
+        {"name":"Meters of Roads", "visitor":"hoot::LengthOfWaysVisitor", "criterion":"hoot::HighwayCriterion", "StatCall":"Stat" },
+        {"name":"Meters Squared of Buildings", "visitor":"hoot::CalculateAreaVisitor", "criterion":"hoot::BuildingCriterion", "StatCall":"Stat" },
 
-        {"name":"Bridges", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::BridgeCriterion", "StatCall":"None" },
-        {"name":"Tunnels", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::TunnelCriterion", "StatCall":"None" },
-        {"name":"One-Way Streets", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::OneWayCriterion", "StatCall":"None" },
-        {"name":"Road Roundabouts", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RoundaboutCriterion", "StatCall":"None" },
-        {"name":"Multi-Use Buildings", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::MultiUseBuildingCriterion", "StatCall":"None" },
+        {"name":"Bridges", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::BridgeCriterion", "StatCall":"Stat" },
+        {"name":"Tunnels", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::TunnelCriterion", "StatCall":"Stat" },
+        {"name":"One-Way Streets", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::OneWayCriterion", "StatCall":"Stat" },
+        {"name":"Road Roundabouts", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RoundaboutCriterion", "StatCall":"Stat" },
+        {"name":"Multi-Use Buildings", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::MultiUseBuildingCriterion", "StatCall":"Stat" },
 
         {"name":"Buildings With Height Info", "visitor":"hoot::BuildingHeightVisitor", "criterion":"", "StatCall":"Stat" },
         {"name":"Shortest Building Height", "visitor":"hoot::BuildingHeightVisitor", "criterion":"", "StatCall":"Min" },
@@ -61,10 +61,10 @@
         {"name":"Most Levels in a Building", "visitor":"hoot::BuildingLevelsVisitor", "criterion":"", "StatCall":"Max" },
         {"name":"Average Levels Per Building", "visitor":"hoot::BuildingLevelsVisitor", "criterion":"", "StatCall":"Average" },
 
-        {"name":"Non-Building Areas", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NonBuildingAreaCriterion", "StatCall":"None" },
-        {"name":"Features with Addresses", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasAddressCriterion", "StatCall":"None" },
+        {"name":"Non-Building Areas", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NonBuildingAreaCriterion", "StatCall":"Stat" },
+        {"name":"Features with Addresses", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasAddressCriterion", "StatCall":"Stat" },
         {"name":"Total Addresses", "visitor":"hoot::AddressCountVisitor", "criterion":"", "StatCall":"Stat" },
-        {"name":"Features with Phone Numbers", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasPhoneNumberCriterion", "StatCall":"None" },
+        {"name":"Features with Phone Numbers", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::HasPhoneNumberCriterion", "StatCall":"Stat" },
         {"name":"Total Phone Numbers", "visitor":"hoot::PhoneNumberCountVisitor", "criterion":"", "StatCall":"Stat" },
         {"name":"Total Features", "visitor":"hoot::FeatureCountVisitor", "criterion":"", "StatCall":"Stat" }
     ]

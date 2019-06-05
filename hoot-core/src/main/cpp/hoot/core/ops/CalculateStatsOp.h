@@ -96,16 +96,15 @@ private:
   // implementation of the specific visitor is being used.
   enum StatCall
   {
-    None,
-    Min,
-    Max,
-    Average,
-    Stat,
-    InfoCount,
-    InfoMin,
-    InfoMax,
-    InfoAverage,
-    InfoDiff,
+    Stat,           // SingleStatistic::getStat()
+    Min,            // NumericStatistic::getMin()
+    Max,            // NumericStatistic::getMax()
+    Average,        // NumericStatistic::getAverage()
+    InfoCount,      // NumericStatistic::getInformationCount()
+    InfoMin,        // NumericStatistic::getInformationMin()
+    InfoMax,        // NumericStatistic::getInformationMax()
+    InfoAverage,    // NumericStatistic::getInformationAverage()
+    InfoDiff,       // NumericStatistic::getInformationCountDiff()
   };
 
   // Structure definition for a generic statistics calculation
@@ -139,6 +138,7 @@ private:
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
+  double GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -151,9 +151,9 @@ private:
                                                 const QString &matchCreatorName,
                                                 CreatorDescription::BaseFeatureType &featureType);
 
-  double _applyVisitor(const hoot::FilteredVisitor &v);
-  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData);
-  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis);
+  double _applyVisitor(const hoot::FilteredVisitor &v, StatCall call = Stat);
+  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, StatCall call = Stat);
+  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call = Stat);
   void _applyVisitor(ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,

@@ -101,11 +101,10 @@ void CalculateStatsOp::_readGenericStatsData()
   _quickStatData.clear();
   _slowStatData.clear();
   QList<StatData>* pCurr = NULL;
-  QHash<QString,StatCall> enumLookup({ {"none", None},
+  QHash<QString,StatCall> enumLookup({ {"stat", Stat},
                                        {"min", Min},
                                        {"max", Max},
                                        {"average", Average},
-                                       {"stat", Stat},
                                        {"infocount", InfoCount},
                                        {"infomin", InfoMin},
                                        {"infomax", InfoMax},
@@ -479,67 +478,65 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       }
 
       FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
-      val = _applyVisitor(filteredVisitor);
+      val = _applyVisitor(filteredVisitor, d.statCall);
     }
     else
     {
-      if (d.statCall == None)
+      shared_ptr<ConstElementVisitor> pVisitor;
+
+      if (_appliedVisitorCache.contains(d.visitor))
       {
-        throw HootException(QString("Stats data entry '%1' is invalid").arg(d.name) );
+        pVisitor = _appliedVisitorCache[d.visitor];
       }
       else
       {
-        shared_ptr<ConstElementVisitor> pVisitor;
-
-        if (_appliedVisitorCache.contains(d.visitor))
+        try
         {
-          pVisitor = _appliedVisitorCache[d.visitor];
+          pVisitor = shared_ptr<ConstElementVisitor>(
+                static_cast<ConstElementVisitor *>(
+                  Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
         }
-        else
+        catch (...)
         {
-          try
-          {
-            pVisitor = shared_ptr<ConstElementVisitor>(
-                  static_cast<ConstElementVisitor *>(
-                    Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
-          }
-          catch (...)
-          {
-            throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
-          }
-
-          // without criterion, apply the visitor directly and interpret as NumericStatistic
-          _applyVisitor(pVisitor.get());
-          _appliedVisitorCache[d.visitor] = pVisitor;
+          throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
         }
 
-        SingleStatistic* ss = dynamic_cast<SingleStatistic*>(pVisitor.get());
-        NumericStatistic* ns = NULL;
-
-        if (d.statCall != Stat)
-        {
-          ns = dynamic_cast<NumericStatistic*>(pVisitor.get());
-        }
-
-        switch (d.statCall)
-        {
-          case None: val = 0; break;
-          case Min: val = ns->getMin(); break;
-          case Max: val = ns->getMax(); break;
-          case Average: val = ns->getAverage(); break;
-          case Stat: val = ss->getStat(); break;
-          case InfoCount: val = ns->getInformationCount(); break;
-          case InfoMin: val = ns->getInformationMin(); break;
-          case InfoMax: val = ns->getInformationMax(); break;
-          case InfoAverage: val = ns->getInformationAverage(); break;
-          case InfoDiff: val = ns->getInformationCountDiff(); break;
-        }
+        // without criterion, apply the visitor directly and interpret as NumericStatistic
+        _applyVisitor(pVisitor.get());
+        _appliedVisitorCache[d.visitor] = pVisitor;
       }
+
+      val = GetRequestedStatValue(pVisitor.get(), d.statCall);
     }
 
-    //LOG_VARD(val);
-    //_addStat("-------> " + d.name, val);
     _addStat(d.name, val);
+  }
+}
+
+double CalculateStatsOp::GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call)
+{
+  if (call == Stat)
+  {
+    const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(pVisitor);
+    return ss ? ss->getStat() : 0;
+  }
+
+  const NumericStatistic* ns = dynamic_cast<const NumericStatistic*>(pVisitor);
+
+  if (!ns) return 0;
+
+  switch (call)
+  {
+    case Stat: return ns->getStat();
+    case Min: return ns->getMin();
+    case Max: return ns->getMax();
+    case Average: return ns->getAverage();
+    case InfoCount: return ns->getInformationCount();
+    case InfoMin: return ns->getInformationMin();
+    case InfoMax: return ns->getInformationMax();
+    case InfoAverage: return ns->getInformationAverage();
+    case InfoDiff: return ns->getInformationCountDiff();
+    default: return 0;
   }
 }
 
@@ -549,18 +546,18 @@ bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis)
+double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call)
 {
-  return _applyVisitor(FilteredVisitor(pCrit, pVis));
+  return _applyVisitor(FilteredVisitor(pCrit, pVis), call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, StatCall call)
 {
   boost::any emptyVisitorData;
-  return _applyVisitor(v, emptyVisitorData);
+  return _applyVisitor(v, emptyVisitorData, call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData, StatCall call)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
   FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
@@ -570,18 +567,18 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
     critFv.reset(new FilteredVisitor(*_criterion, *fv));
     fv = critFv.get();
   }
-  SingleStatistic* ss = dynamic_cast<SingleStatistic*>(&v.getChildVisitor());
-  assert(ss != 0);
+
+  ConstElementVisitor& childVisitor = v.getChildVisitor();
 
   _constMap->visitRo(*fv);
 
-  DataProducer* dataProducer = dynamic_cast<DataProducer*>(&v.getChildVisitor());
+  DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
   if (dataProducer != 0)
   {
     visitorData = dataProducer->getData();
   }
 
-  return ss->getStat();
+  return GetRequestedStatValue(&childVisitor, call);
 }
 
 void CalculateStatsOp::_applyVisitor(ConstElementVisitor *v)
