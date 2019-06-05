@@ -42,7 +42,7 @@ import hoot.services.utils.GeoUtils;
 
 /**
  * A geographic bounding box using a WGS84 coordinate system
- * 
+ *
  * Partially based on OSM's BoundingBox, bounding_box.rb, at
  * https://github.com/openstreetmap/openstreetmap-website/
  */
@@ -133,7 +133,7 @@ public class BoundingBox {
 
     /**
      * Constructs a bounding box from a list of coordinates
-     * 
+     *
      * @param coords
      *            a list of coordinates to create the bounding box from
      */
@@ -169,7 +169,7 @@ public class BoundingBox {
 
     /**
      * Creates a bounding box that contains all the specified nodes
-     * 
+     *
      * @param nodes
      *            a list of nodes the bounding box should contain
      */
@@ -243,7 +243,7 @@ public class BoundingBox {
 
     /**
      * Converts the bounds into a format the service methods can understand
-     * 
+     *
      * @return a bounds string
      */
     public String toServicesString() {
@@ -252,7 +252,7 @@ public class BoundingBox {
 
     /**
      * Converts the bounds into a format that the Overpass API can understand
-     * 
+     *
      * @return a bounds string
      */
     public String toOverpassString() {
@@ -261,7 +261,7 @@ public class BoundingBox {
 
     /**
      * Creates a bounding box from an OSM XML bounds node
-     * 
+     *
      * @return a bounding box
      */
     public static BoundingBox fromXml(Node xml) {
@@ -274,7 +274,7 @@ public class BoundingBox {
 
     /**
      * Returns an XML representation of the bounds
-     * 
+     *
      * @param parentXml
      *            parent XML node
      * @return an XML bounds node
@@ -297,7 +297,7 @@ public class BoundingBox {
     /**
      * Determines if bounding box has been initialized. Coordinate values are
      * initialized with Double.MAX_VALUE.
-     * 
+     *
      * @return true if the bounding box consists of only valid values; false
      *         otherwise
      */
@@ -311,7 +311,7 @@ public class BoundingBox {
     /**
      * Determines whether the bounding box is valid with respect to world
      * boundaries.
-     * 
+     *
      * @return true if valid; false otherwise
      */
     public boolean inWorld() {
@@ -323,7 +323,7 @@ public class BoundingBox {
 
     /**
      * Adds the input bounding box to this bounding box
-     * 
+     *
      * @param bounds
      *            bounds to expand by
      */
@@ -333,7 +333,7 @@ public class BoundingBox {
 
     /**
      * Expands this bounding box to include the input bounding box.
-     * 
+     *
      * @param bounds
      *            bounds to expand by
      * @param margin
@@ -369,7 +369,7 @@ public class BoundingBox {
 
     /**
      * Expands or shrinks this bounding box
-     * 
+     *
      * @param bounds
      *            bounds used to modify this bounding box
      * @param margin
@@ -408,7 +408,7 @@ public class BoundingBox {
 
     /**
      * Buffers this bounding box
-     * 
+     *
      * @param margin
      *            buffer; positive values expand the bounding box; negative
      *            values shrink it
@@ -433,7 +433,7 @@ public class BoundingBox {
 
     /**
      * Adds two bounding boxes together
-     * 
+     *
      * @param bounds1
      *            first bounding box
      * @param bounds2
@@ -451,7 +451,7 @@ public class BoundingBox {
 
     /**
      * Return the height of this bounding box
-     * 
+     *
      * @return height in degrees
      */
     public double getHeight() {
@@ -460,7 +460,7 @@ public class BoundingBox {
 
     /**
      * Return the width of this bounding box
-     * 
+     *
      * @return width in degrees
      */
     public double getWidth() {
@@ -469,7 +469,7 @@ public class BoundingBox {
 
     /**
      * Return the center longitude of this bounding box
-     * 
+     *
      * @return center longitude coordinate
      */
     public double getCenterX() {
@@ -478,7 +478,7 @@ public class BoundingBox {
 
     /**
      * Return the center latitude of this bounding box
-     * 
+     *
      * @return center latitude coordinate
      */
     public double getCenterY() {
@@ -488,7 +488,7 @@ public class BoundingBox {
     /**
      * Returns a bounding box that is the intersection this bounding box and the
      * input bounding box
-     * 
+     *
      * @param bounds
      *            the bounds to compute the intersection from
      * @return the bounding box intersection
@@ -501,7 +501,7 @@ public class BoundingBox {
     /**
      * Determines whether this bounding box intersects the input bounding box
      * coordinates
-     * 
+     *
      * @param minX
      *            minimum longitude
      * @param minY
@@ -519,7 +519,7 @@ public class BoundingBox {
 
     /**
      * Determines whether this bounding box intersects the input bounding box
-     * 
+     *
      * @param bounds
      *            the bounds to compute the intersection with this bounding box from
      * @return true if this intersects the input bounding box; false otherwise
@@ -541,7 +541,7 @@ public class BoundingBox {
 
     /**
      * Returns the area of this bounding box
-     * 
+     *
      * @return area in degrees
      */
     public double getArea() {
@@ -553,7 +553,7 @@ public class BoundingBox {
 
     /**
      * Returns a bounds that can be used by ZValues
-     * 
+     *
      * @return a z-index bounds
      */
     public Box toZIndexBox() {
@@ -563,7 +563,7 @@ public class BoundingBox {
 
     /**
      * Returns a bounding box that encompasses the entire world
-     * 
+     *
      * @return a bounding box
      */
     public static BoundingBox worldBounds() {

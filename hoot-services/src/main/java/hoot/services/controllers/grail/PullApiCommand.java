@@ -26,23 +26,24 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 import hoot.services.geo.BoundingBox;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.WebApplicationException;
 
 
 /**
@@ -81,6 +82,7 @@ class PullApiCommand implements InternalCommand {
     }
 
     private void getApiData() {
+        String url = "";
         try {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
             double bboxArea = boundingBox.getArea();
@@ -92,15 +94,16 @@ class PullApiCommand implements InternalCommand {
                         ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
-            URL requestUrl = new URL(replaceSensitiveData(params.getPullUrl()) +
-                "/mapfull?bbox=" + boundingBox.toServicesString());
+            url = replaceSensitiveData(params.getPullUrl()) +
+                    "/mapfull?bbox=" + boundingBox.toServicesString();
+            URL requestUrl = new URL(url);
 
             File outputFile = new File(params.getOutput());
 
-            FileUtils.copyURLToFile(requestUrl,outputFile, 10000, 10000);
+            FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
             }
             catch (IOException ex) {
-                String msg = "Failure to pull data from the OSM API" + ex.getMessage();
+                String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
                 throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
             }
     }

@@ -71,6 +71,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -87,6 +89,9 @@ public class ImportResource {
 
     @Autowired
     private ImportCommandFactory fileETLCommandFactory;
+
+    @Autowired
+    private UpdateParentCommandFactory updateParentCommandFactory;
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -120,6 +125,7 @@ public class ImportResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+                                      @QueryParam("FOLDER_ID") String folderId,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
@@ -201,14 +207,16 @@ public class ImportResource {
                 shpCnt = fgdbCnt = geonamesCnt = shpZipCnt = geonamesZipCnt = fgdbZipCnt = zipCnt = osmZipCnt = 0;
             }
 
-			UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
-					shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
-					geojsonCnt, geonamesCnt);
+            UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
+                    shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
+                    geojsonCnt, geonamesCnt);
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
 
-            Command[] workflow = { importCommand };
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
+
+            Command[] workflow = { importCommand, setFolderCommand };
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.IMPORT));
 

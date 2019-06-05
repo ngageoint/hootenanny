@@ -29,7 +29,7 @@
 #define REMOVEDUPLICATEWAYNODESVISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
@@ -43,7 +43,7 @@ namespace hoot
  * duplicated nodes appears to be in the conflation routines somewhere and should be found and
  * fixed.  If that happens, this visitor could be removed from the post conflation ops.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OperationStatusInfo
 {
 public:
 

@@ -27,7 +27,8 @@
 #ifndef FINDWAYSVISITOR_H
 #define FINDWAYSVISITOR_H
 
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -36,15 +37,13 @@ class ElementCriterion;
 
 // Used to get a vector of IDs for the ways that satisfy
 // the specified criterion
-class FindWaysVisitor : public ElementConstOsmMapVisitor
+class FindWaysVisitor : public ConstElementVisitor
 {
 public:
 
   static std::string className() { return "hoot::FindWaysVisitor"; }
 
   FindWaysVisitor(ElementCriterion* pCrit);
-
-  void setOsmMap(const OsmMap* map) override { _map = map; }
 
   void visit(const std::shared_ptr<const Element>& e) override;
 

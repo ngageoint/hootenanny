@@ -83,6 +83,7 @@ public final class HootProperties {
     public static final String CONFLATE_SIZE_THRESHOLD;
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
+    public static final String HTTP_TIMEOUT;
     public static final String OSMAPI_DB_NAME;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
@@ -216,6 +217,7 @@ public final class HootProperties {
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
+        HTTP_TIMEOUT = getProperty("httpTimeout");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");

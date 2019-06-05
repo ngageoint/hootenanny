@@ -28,29 +28,28 @@
 #include "OsmJsonReader.h"
 
 // hoot
-#include <hoot/core/Hoot.h>
 #include <hoot/core/io/HootNetworkRequest.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 // Boost
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+#include <boost/property_tree/json_parser.hpp>
 namespace pt = boost::property_tree;
 
 // Qt
-#include <QTextStream>
 #include <QTextCodec>
+#include <QTextStream>
 #include <QUrlQuery>
 
 // Standard
 #include <fstream>
 #include <iostream>
-#include <thread>
 #include <sstream>
+#include <thread>
 #include <unistd.h>
 using namespace std;
 
@@ -433,7 +432,9 @@ void OsmJsonReader::scrubQuotes(QString& jsonStr)
   // test strings into c++. Single quotes within string literals
   // should be escaped as \'
   // Detect if they are using single quotes or doubles
-  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1)
+  //  "features" is GEOJSON while "elements" comes from overpass
+  if (jsonStr.indexOf("\"features\"", Qt::CaseInsensitive) > -1 ||
+      jsonStr.indexOf("\"elements\"", Qt::CaseInsensitive) > -1)
     return; // No need to scrub
   else
   {

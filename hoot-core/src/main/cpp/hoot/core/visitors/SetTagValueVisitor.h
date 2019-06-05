@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
@@ -40,7 +40,7 @@ namespace hoot
  * Sets tags on any elements with the specified key to the specified value or adds a new tag, if
  * the tag doesn't exist on the element.
  */
-class SetTagValueVisitor : public ElementOsmMapVisitor, public Configurable,
+class SetTagValueVisitor : public ElementVisitor, public Configurable,
   public ElementCriterionConsumer, public OperationStatusInfo
 {
 public:

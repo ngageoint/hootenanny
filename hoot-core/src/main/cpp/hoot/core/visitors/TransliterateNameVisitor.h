@@ -28,13 +28,13 @@
 #define TRANSLITERATENAMEVISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
-class TransliterateNameVisitor : public ElementOsmMapVisitor, public OperationStatusInfo
+class TransliterateNameVisitor : public ElementVisitor, public OperationStatusInfo
 {
 public:
 

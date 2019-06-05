@@ -46,7 +46,8 @@ public:
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const override { return "Removes review relations and their UNKNOWN2 elements"; }
+  virtual QString getDescription() const override
+  { return "Removes review relations and their UNKNOWN2 elements"; }
 
   virtual QString getInitStatusMessage() const
   { return "Removing relations..."; }
