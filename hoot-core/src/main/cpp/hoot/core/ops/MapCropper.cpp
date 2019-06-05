@@ -72,7 +72,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MapCropper)
 
 MapCropper::MapCropper()
 {
-  _invert = false;
   setConfiguration(conf());
 }
 
@@ -84,7 +83,7 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
-MapCropper::MapCropper(const std::shared_ptr<const Geometry> &g, bool invert) :
+MapCropper::MapCropper(const std::shared_ptr<const Geometry>& g, bool invert) :
 _envelopeG(g),
 _invert(invert),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -93,11 +92,12 @@ _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 
 void MapCropper::setConfiguration(const Settings& conf)
 {
-  const QString boundsStr = ConfigOptions(conf).getCropBounds();
+  ConfigOptions confOpts = ConfigOptions(conf);
+  const QString boundsStr = confOpts.getCropBounds();
   if (!boundsStr.isEmpty())
   {
     _envelope = GeometryUtils::envelopeFromConfigString(boundsStr);
-    _invert = false;
+    _invert = confOpts.getCropInvert();
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
   }
 }

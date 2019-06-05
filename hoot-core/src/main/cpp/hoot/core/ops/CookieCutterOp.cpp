@@ -57,7 +57,8 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
 
 void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
-  //remove unknown2 out of the input map and create a new map, which will be our ref map
+  // remove unknown2 out of the input map and create a new map, which will be our ref map (unknown1
+  // map; cutter shape map)
   std::shared_ptr<OsmMap> refMap(new OsmMap(map));
   RemoveElementsVisitor unknown2Remover;
   unknown2Remover.setRecursive(true);
@@ -65,12 +66,13 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodes().size());
 
-  //create an alpha shape based on the ref map (unknown1)
+  // create an alpha shape based on the ref map (unknown1)
   std::shared_ptr<OsmMap> cutShapeMap =
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
   LOG_VARD(cutShapeMap->getNodes().size());
 
-  //remove unknown1 out of the input and create a new map, which will be our source map (unknown2)
+  // remove unknown1 out of the input and create a new map, which will be our source map
+  // (unknown2 map; dough map)
   std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
   RemoveElementsVisitor unknown1Remover;
   unknown1Remover.setRecursive(true);
@@ -78,13 +80,15 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodes().size());
 
-  //cookie cut the alpha shape obtained from the ref map out of the source map
+  // cookie cut the alpha shape obtained from the ref map (cutter map) out of the source map
+  // (dough map)
   CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
 
-  //combine the ref map back with the source map; Effectively, we've replaced all of the data in the
-  //source map whose AOI coincides with the ref map with the ref map's data.
+  // combine the ref map (cutter map) back with the source map (dough map); Effectively, we've
+  // replaced all of the data in the dough map whose AOI coincides with the ref map (cutter map)
+  // with the ref map's (cutter map's) data.
   refMap->setProjection(cookieCutMap->getProjection());
   refMap->append(cookieCutMap);
   std::shared_ptr<OsmMap> result = refMap;

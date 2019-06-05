@@ -378,7 +378,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     {
       QSet<QString> wayIds;
       QSet<QString> additionalWayNodeIds;
-      _readWaysByNodeIds(map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
+      _readWaysByNodeIds(
+        map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
@@ -418,7 +419,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           map->addElement(relation);
           const vector<RelationData::Entry>& members = relation->getMembers();
           //  Iterate all members so that they can be retrieved later
-          for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
+          for (vector<RelationData::Entry>::const_iterator it = members.begin();
+               it != members.end(); ++it)
           {
             ElementType type = it->getElementId().getType();
             QString id = QString::number(it->getElementId().getId());
@@ -444,7 +446,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         newNodes = newNodes.subtract(nodeIds);
         if (newNodes.size() > 0)
         {
-          std::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
+          std::shared_ptr<QSqlQuery> nodeItr =
+            _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
           while (nodeItr->next())
           {
             const QSqlQuery resultIterator = *nodeItr;

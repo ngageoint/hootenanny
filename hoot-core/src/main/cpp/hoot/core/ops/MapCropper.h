@@ -48,15 +48,15 @@ class Way;
 
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.
- * As a result it introduces new nodes into the data and may split ways up into multiple ways.
+ * As a result, it introduces new nodes into the data and may split ways up into multiple ways.
  *
- * In the class outside and inside are referenced. Outside refers to a geometry that is wholly
+ * In the class, outside and inside are referenced. Outside refers to a geometry that is wholly
  * outside the region that will be kept. Inside refers to a geometry that is at least partially
  * inside the region that will be kept.
  *
- * This class works with four pass as long as all data, bounds and crop geometry are in WGS84.
- * If the data before this operation is in a planar projection then it should be reprojected using
- * ReprojectToGeographicOp.
+ * This class works with four pass conflation (used in Hadoop only) as long as all data, bounds and
+ * crop geometry are in WGS84. If the data before this operation is in a planar projection then it
+ * should be reprojected using ReprojectToGeographicOp.
  */
 class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
   public Configurable, public OperationStatusInfo

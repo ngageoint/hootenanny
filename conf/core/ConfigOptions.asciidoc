@@ -719,6 +719,13 @@ Creates example review tags for debugging. All reviews created with this mechani
 
 Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,maxy
 
+=== crop.invert
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === debug.maps.filename
 
 * Data Type: string
