@@ -84,7 +84,7 @@ public class MapInfoResource {
 
         try {
             List<Long> idList = new ArrayList<>();
-            if(mapIds.isEmpty()) {
+            if(mapIds == null) {
                 idList = DbUtils.getAllMapIds();
             } else {
                 String[] stringIdsList = mapIds.split(",");
