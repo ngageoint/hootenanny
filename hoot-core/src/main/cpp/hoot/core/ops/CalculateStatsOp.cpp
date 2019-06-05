@@ -26,64 +26,38 @@
  */
 #include "CalculateStatsOp.h"
 
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateAreaVisitor.h>
-#include <hoot/core/visitors/CalculateAreaForStatsVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/visitors/FeatureCountVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/LongestTagVisitor.h>
-#include <hoot/core/visitors/MaxIdVisitor.h>
-#include <hoot/core/visitors/MinIdVisitor.h>
-#include <hoot/core/visitors/TranslatedTagCountVisitor.h>
-#include <hoot/core/visitors/UniqueNamesVisitor.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/visitors/TagCountVisitor.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/stats/DataProducer.h>
-#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/visitors/AddressCountVisitor.h>
-#include <hoot/core/visitors/PhoneNumberCountVisitor.h>
-#include <hoot/core/criterion/HasAddressCriterion.h>
-#include <hoot/core/criterion/HasPhoneNumberCriterion.h>
-#include <hoot/core/criterion/HasNameCriterion.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/criterion/MultiUseBuildingCriterion.h>
-#include <hoot/core/criterion/NonBuildingAreaCriterion.h>
-#include <hoot/core/criterion/RoundaboutCriterion.h>
-#include <hoot/core/criterion/BridgeCriterion.h>
-#include <hoot/core/criterion/TunnelCriterion.h>
-#include <hoot/core/visitors/BuildingHeightVisitor.h>
-#include <hoot/core/visitors/BuildingLevelsVisitor.h>
-#include <hoot/core/visitors/NodesPerWayVisitor.h>
-#include <hoot/core/visitors/MembersPerRelationVisitor.h>
+#include <hoot/core/visitors/TranslatedTagCountVisitor.h>
 
 #include <math.h>
 
 using namespace std;
+namespace bpt = boost::property_tree;
 
 namespace hoot
 {
@@ -91,20 +65,95 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, CalculateStatsOp)
 
 CalculateStatsOp::CalculateStatsOp(QString mapName, bool inputIsConflatedMapOutput) :
+  _pConf(&conf()),
   _mapName(mapName),
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput)
 {
+  _readGenericStatsData();
 }
 
 CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapName,
                                    bool inputIsConflatedMapOutput) :
+  _pConf(&conf()),
   _criterion(criterion),
   _mapName(mapName),
   _quick(false),
   _inputIsConflatedMapOutput(inputIsConflatedMapOutput)
 {
   LOG_VART(_inputIsConflatedMapOutput);
+  _readGenericStatsData();
+}
+
+void CalculateStatsOp::setConfiguration(const Settings& conf)
+{
+  _pConf = &conf;
+}
+
+void CalculateStatsOp::_readGenericStatsData()
+{
+  // read generic stats from json file
+  ConfigOptions opts = ConfigOptions(*_pConf);
+  QString statsFileName = opts.getStatsGenericDataFile();
+  bpt::ptree propPtree;
+  bpt::read_json(statsFileName.toLatin1().constData(), propPtree );
+
+  _quickStatData.clear();
+  _slowStatData.clear();
+  QList<StatData>* pCurr = NULL;
+  QHash<QString,StatCall> enumLookup({ {"none", None},
+                                       {"min", Min},
+                                       {"max", Max},
+                                       {"average", Average},
+                                       {"stat", Stat},
+                                       {"infocount", InfoCount},
+                                       {"infomin", InfoMin},
+                                       {"infomax", InfoMax},
+                                       {"infoaverage", InfoAverage},
+                                       {"infodiff", InfoDiff}});
+
+  foreach (bpt::ptree::value_type listType, propPtree)
+  {
+    if (listType.first == "quick") pCurr = &_quickStatData;
+    else if (listType.first == "slow") pCurr = &_slowStatData;
+    else
+    {
+      throw HootException("Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() + ". Allowed: 'quick' or 'slow'.");
+    }
+
+    foreach (bpt::ptree::value_type entry, listType.second)
+    {
+      StatData newStatData;
+
+      foreach (bpt::ptree::value_type data, entry.second)
+      {
+        QString key = QString::fromStdString(data.first).toLower();
+        QString val = QString::fromStdString(data.second.data());
+
+        if (key== "name") newStatData.name = val;
+        else if (key== "visitor") newStatData.visitor = val;
+        else if (key== "criterion") newStatData.criterion = val;
+        else if (key== "statcall")
+        {
+          QString enumVal = val.toLower();
+          if (enumLookup.contains(enumVal))
+          {
+            newStatData.statCall = enumLookup[enumVal];
+          }
+          else
+          {
+            throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+          }
+        }
+        else
+        {
+          throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+        }
+      }
+
+      pCurr->append(newStatData);
+    }
+  }
 }
 
 shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
@@ -146,80 +195,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   _constMap = map;
 
-  // These arrays will move to json files
-  StatData quickStats[] =
-  {
-    {"Nodes", "hoot::ElementCountVisitor", "hoot::NodeTypeCriterion", StatCall::None },
-    {"Ways", "hoot::ElementCountVisitor", "hoot::WayTypeCriterion", StatCall::None },
-    {"Relations", "hoot::ElementCountVisitor", "hoot::RelationTypeCriterion", StatCall::None },
-    {"Minimum Node ID", "hoot::MinIdVisitor", "hoot::NodeTypeCriterion", StatCall::None },
-    {"Maximum Node ID", "hoot::MaxIdVisitor", "hoot::NodeTypeCriterion", StatCall::None },
-    {"Minimum Way ID", "hoot::MinIdVisitor", "hoot::WayTypeCriterion", StatCall::None },
-    {"Maximum Way ID", "hoot::MaxIdVisitor", "hoot::WayTypeCriterion", StatCall::None },
-    {"Minimum Relation ID", "hoot::MinIdVisitor", "hoot::RelationTypeCriterion", StatCall::None },
-    {"Maximum Relation ID", "hoot::MaxIdVisitor", "hoot::RelationTypeCriterion", StatCall::None },
-  };
-
-  StatData slowStats[] =
-  {
-    {"Least Nodes in a Way", "hoot::NodesPerWayVisitor", "", StatCall::Min },
-    {"Most Nodes in a Way", "hoot::NodesPerWayVisitor", "", StatCall::Max },
-    {"Average Nodes Per Way", "hoot::NodesPerWayVisitor", "", StatCall::Average },
-    {"Total Way Nodes", "hoot::NodesPerWayVisitor", "", StatCall::Stat },
-
-    {"Least Members in a Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Min },
-    {"Most Members in a Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Max },
-    {"Average Members Per Relation", "hoot::MembersPerRelationVisitor", "", StatCall::Average },
-    {"Total Relation Members", "hoot::MembersPerRelationVisitor", "", StatCall::Stat },
-
-    {"Total Feature Tags", "hoot::TagCountVisitor", "", StatCall::Stat },
-    {"Total Feature Information Tags", "hoot::TagCountVisitor", "", StatCall::InfoCount },
-    {"Total Feature Metadata Tags","hoot::TagCountVisitor", "", StatCall::InfoDiff },
-
-    {"Least Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Min },
-    {"Most Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::Max },
-    {"Average Tags Per Feature", "hoot::TagCountVisitor", "", StatCall::Average },
-
-    {"Least Information Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::InfoMin },
-    {"Most Information Tags on a Feature", "hoot::TagCountVisitor", "", StatCall::InfoMax },
-    {"Average Information Tags Per Feature", "hoot::TagCountVisitor", "", StatCall::InfoAverage },
-
-    {"Features with Names", "hoot::ElementCountVisitor", "hoot::HasNameCriterion", StatCall::None },
-    {"Unique Names", "hoot::UniqueNamesVisitor", "", StatCall::Stat },
-    {"Unique Road Names", "hoot::UniqueNamesVisitor", "hoot::HighwayCriterion", StatCall::None },
-
-    {"Unique Building Names", "hoot::UniqueNamesVisitor", "hoot::BuildingCriterion", StatCall::None },
-    {"Meters of Linear Features", "hoot::LengthOfWaysVisitor", "hoot::LinearCriterion", StatCall::None },
-    {"Meters Squared of Area Features", "hoot::CalculateAreaForStatsVisitor",   "hoot::StatsAreaCriterion", StatCall::None },
-    {"Meters of Roads", "hoot::LengthOfWaysVisitor", "hoot::HighwayCriterion", StatCall::None },
-    {"Meters Squared of Buildings", "hoot::CalculateAreaVisitor", "hoot::BuildingCriterion", StatCall::None },
-
-    {"Bridges", "hoot::ElementCountVisitor", "hoot::BridgeCriterion", StatCall::None },
-    {"Tunnels", "hoot::ElementCountVisitor", "hoot::TunnelCriterion", StatCall::None },
-    {"One-Way Streets", "hoot::ElementCountVisitor", "hoot::OneWayCriterion", StatCall::None },
-    {"Road Roundabouts", "hoot::ElementCountVisitor", "hoot::RoundaboutCriterion", StatCall::None },
-    {"Multi-Use Buildings", "hoot::ElementCountVisitor", "hoot::MultiUseBuildingCriterion", StatCall::None },
-
-    {"Buildings With Height Info", "hoot::BuildingHeightVisitor", "", StatCall::Stat },
-    {"Shortest Building Height", "hoot::BuildingHeightVisitor", "", StatCall::Min },
-    {"Tallest Building Height", "hoot::BuildingHeightVisitor", "", StatCall::Max },
-    {"Average Height Per Building", "hoot::BuildingHeightVisitor", "", StatCall::Average },
-
-    {"Buildings With Level Info", "hoot::BuildingLevelsVisitor", "", StatCall::Stat },
-    {"Least Levels in a Building", "hoot::BuildingLevelsVisitor", "", StatCall::Min },
-    {"Most Levels in a Building", "hoot::BuildingLevelsVisitor", "", StatCall::Max },
-    {"Average Levels Per Building", "hoot::BuildingLevelsVisitor", "", StatCall::Average },
-
-    {"Non-Building Areas", "hoot::ElementCountVisitor", "hoot::NonBuildingAreaCriterion", StatCall::None },
-    {"Features with Addresses", "hoot::ElementCountVisitor", "hoot::HasAddressCriterion", StatCall::None },
-    {"Total Addresses", "hoot::AddressCountVisitor", "", StatCall::Stat },
-    {"Features with Phone Numbers", "hoot::ElementCountVisitor", "hoot::HasPhoneNumberCriterion", StatCall::None },
-    {"Total Phone Numbers", "hoot::PhoneNumberCountVisitor", "", StatCall::Stat },
-    {"Total Features", "hoot::FeatureCountVisitor", "", StatCall::Stat },
-  };
-
-  for (StatData d : quickStats) _interpretStatData(_constMap, d);
-  if (!_quick) for (StatData d : slowStats) _interpretStatData(_constMap, d);
+  for (StatData d : _quickStatData) _interpretStatData(_constMap, d);
+  if (!_quick) for (StatData d : _slowStatData) _interpretStatData(_constMap, d);
 
   if (!_quick)
   {
