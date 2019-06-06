@@ -29,21 +29,25 @@ REF_LAYER=$OSM_API_DB_URL
 SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
-# Additional settings useful for debugging:
+# Additional settings that may be useful for: 
+
+#debugging:
 #-D writer.include.debug.tags=true
 
-# Additional settings to tweak tag reading/writing behavior:
+# tweaking tag reading/writing behavior:
+#-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true
 
-
-# Additional settings to tweak cookie cutting behavior:
+# tweaking cookie cutting behavior:
 #-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
 
-# Additional settings to tweak changeset derivation behavior:
-#-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
+# tweaking changeset derivation behavior:
+#-D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
 
-# changeset.xml.writer.add.timestamp=false is for testing purposes only so that the simple diff between gold and output changesets works (we 
+# changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing purposes only so that the simple diff 
+# between gold and output changesets works (we 
 # don't have a map diff for changesets).
-GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D reader.preserve.all.tags=true"
+# writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
+GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 # We just want a small amount of noticeable shift here and none of the non-shift other destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=10 -D perty.systematic.error.y=10 -D perty.ops="
