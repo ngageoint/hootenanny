@@ -92,22 +92,24 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=false $SEC_LAY
 # deleted all ref data within the AOI and added all the secondary data within it.
 CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
 echo ""
-echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source)..."
+echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
 echo ""
 hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
 diff $IN_DIR/$TEST_NAME-changeset-1.osc $OUT_DIR/$TEST_NAME-changeset-1.osc
 echo ""
-echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source)..."
+echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; xml changeset out)..."
 echo ""
 hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc
 diff $IN_DIR/$TEST_NAME-changeset-2.osc $OUT_DIR/$TEST_NAME-changeset-2.osc
+# Go ahead and spit out a sql changeset in the same manner the XML changeset was generated...we'll need it for the next step.
+#echo ""
+#echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; sql changeset out)..."
+#echo ""
+#hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
+# TODO add diff check
 
 # CHANGESET APPLICATION
 
-# TODO: fix or get rid of all of this...trying to apply the changeset here and check the final output
-# Go ahead and spit out a sql changeset in the same manner the XML changeset was generated...we'll need it for the next step.
-#hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
-# TODO add diff check
 # Write the SQL changeset back to the ref db. We're using the SQL changeset here instead of the XML b/c that's the only kind we can write 
 # w/o a Rails Port in the hoot stack (which, if added, would only overly complicate hoot testing)...the effect is the same.
 #echo ""
