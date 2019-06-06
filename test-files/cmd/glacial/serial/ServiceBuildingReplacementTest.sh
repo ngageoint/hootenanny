@@ -9,8 +9,8 @@ set -e
 # hoot changeset-derive -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true ref.osm sec.osm changeset.osc
 
 TEST_NAME=ServiceBuildingReplacementTest
-IN_DIR=test-files/cmd/glacial/$TEST_NAME
-OUT_DIR=test-output/cmd/glacial/$TEST_NAME
+IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
+OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
@@ -140,5 +140,5 @@ hoot convert $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced
 hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # cleanup
-scripts/database/CleanOsmApiDB.sh 
+#scripts/database/CleanOsmApiDB.sh 
 hoot delete-db-map $HOOT_OPTS $DB_OPTS $SEC_LAYER
