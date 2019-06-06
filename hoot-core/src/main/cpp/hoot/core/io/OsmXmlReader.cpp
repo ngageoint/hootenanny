@@ -44,6 +44,7 @@
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -63,22 +64,29 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
-_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
-_useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
-_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
-_preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing()),
-_numRead(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+_numRead(0)
 {
+  setConfiguration(conf());
 }
 
 OsmXmlReader::~OsmXmlReader()
 {
   close();
+}
+
+void OsmXmlReader::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
+  setKeepStatusTag(configOptions.getReaderKeepStatusTag());
+  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
+  setPreserveAllTags(configOptions.getReaderPreserveAllTags());
+  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+  setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
+  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -347,8 +355,11 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // We don't support cropping during streaming, and there is a check in
   // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
   // a bounds has been set.
+  LOG_VARD(_bounds);
+  LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
+    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
     MapCropper::crop(_map, _bounds);
   }
 

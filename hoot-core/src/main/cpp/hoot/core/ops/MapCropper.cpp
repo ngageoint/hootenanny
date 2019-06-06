@@ -247,13 +247,17 @@ void MapCropper::apply(OsmMapPtr& map)
 void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
 {
   MapCropper mc(envelope);
+  LOG_INFO(mc.getInitStatusMessage());
   mc.apply(map);
+  LOG_INFO(mc.getCompletedStatusMessage());
 }
 
 void MapCropper::crop(OsmMapPtr map, const std::shared_ptr<const Geometry>& g, bool invert)
 {
   MapCropper mc(g, invert);
+  LOG_INFO(mc.getInitStatusMessage());
   mc.apply(map);
+  LOG_INFO(mc.getCompletedStatusMessage());
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)

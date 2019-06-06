@@ -32,6 +32,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QHash>
@@ -51,7 +52,8 @@ class Element;
 /**
  * Reads in a .osm file into an OsmMap data structure.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable,
+  public Configurable
 {
 public:
 
@@ -92,7 +94,6 @@ public:
   virtual ElementPtr readNextElement() override;
 
   virtual void setDefaultStatus(Status s) override { _status = s; }
-
   virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
 
   virtual bool startElement(const QString& namespaceURI, const QString& localName,
@@ -102,9 +103,8 @@ public:
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
-
-  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
-
+  void setPreserveAllTags(bool preserve) { _preserveAllTags = preserve; }
+  void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   /**
    * This will adds child refs to elements when they aren't present in the source data.  This is
    * only useful when dealing with disconnected chunks of map data, as in external sorting, and
@@ -115,7 +115,11 @@ public:
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
 
+  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
+
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+
+  virtual void setConfiguration(const Settings& conf) override;
 
 private:
 
