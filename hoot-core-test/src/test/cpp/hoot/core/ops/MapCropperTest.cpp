@@ -67,13 +67,13 @@ class MapCropperTest : public HootTestFixture
   CPPUNIT_TEST(runSerializationTest);
   CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST(runMultiPolygonTest);
+  CPPUNIT_TEST(runKeepFeaturesOnlyInBoundsTest);
+  CPPUNIT_TEST(runKeepCrossingFeaturesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  MapCropperTest()
-    : HootTestFixture("test-files/ops/",
-                      UNUSED_PATH)
+  MapCropperTest() : HootTestFixture("test-files/ops/", UNUSED_PATH)
   {
   }
 
@@ -294,6 +294,17 @@ public:
     }
   }
 
+  // TODO
+
+  void runKeepFeaturesOnlyInBoundsTest()
+  {
+
+  }
+
+  void runKeepCrossingFeaturesTest()
+  {
+
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCropperTest, "quick");

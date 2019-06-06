@@ -43,6 +43,7 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runUseStatusTest);
   CPPUNIT_TEST(runUncompressTest);
   CPPUNIT_TEST(runDecodeCharsTest);
+  CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -190,6 +191,12 @@ public:
       }
     }
     CPPUNIT_ASSERT_EQUAL(4, wayCtr);
+  }
+
+  // TODO
+  void runBoundsTest()
+  {
+
   }
 };
 
