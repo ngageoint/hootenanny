@@ -43,6 +43,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // Qt
 #include <QBuffer>
@@ -343,6 +344,14 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
+  // We don't support cropping during streaming, and there is a check in
+  // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
+  // a bounds has been set.
+  if (!_bounds.isNull())
+  {
+    MapCropper::crop(_map, _bounds);
+  }
+
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -394,10 +403,10 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
-                                const QString & /* localName */,
-                                const QString &qName,
-                                const QXmlAttributes &attributes)
+bool OsmXmlReader::startElement(const QString& /* namespaceURI */,
+                                const QString& /* localName */,
+                                const QString& qName,
+                                const QXmlAttributes& attributes)
 {
   try
   {
@@ -672,9 +681,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
   return true;
 }
 
-bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
-                              const QString & /* localName */,
-                              const QString &qName)
+bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
+                              const QString& /* localName */,
+                              const QString& qName)
 {
   if (_element)
   {
