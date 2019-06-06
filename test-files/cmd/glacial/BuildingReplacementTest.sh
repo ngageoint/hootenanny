@@ -29,9 +29,9 @@ REF_LAYER=$OSM_API_DB_URL
 SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
-# Additional settings that may be useful for: 
+# Additional settings that may end up being useful for: 
 
-#debugging:
+# debugging:
 #-D writer.include.debug.tags=true
 
 # tweaking tag reading/writing behavior:
@@ -49,7 +49,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 # writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
 GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
-# We just want a small amount of noticeable shift here and none of the non-shift other destructive perty ops.
+# We just want a small amount of noticeable shift here and none of the other non-shift destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=10 -D perty.systematic.error.y=10 -D perty.ops="
 # I've chosen to leave conflation (hoot::UnifyingConflator) out as the last convert op, since it hasn't been needed yet to make the building
 # output look good...it may be needed at some point, though, and would likely be needed with features like roads.
@@ -79,7 +79,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=false $SEC_LAY
 # TODO: For some strange reason this file output data is corrupted unless which layers IDs get element IDs preserved gets swapped
 # as described in the comments. So swap the values of reader.use.data.source.ids if you want to see this output..will figure out 
 # what's going on  later.
-# uncomment to see what the sec layer looks like in file form:
+# Uncomment to see what the sec layer looks like in file form:
 #hoot convert $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUT_DIR/sec.osm
 
 # END DATA PREP
@@ -96,8 +96,25 @@ CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source)..."
 echo ""
-hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-out-2.osc
-diff $IN_DIR/$TEST_NAME-out-2.osc $OUT_DIR/$TEST_NAME-out-2.osc
+hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc
+diff $IN_DIR/$TEST_NAME-changeset-2.osc $OUT_DIR/$TEST_NAME-changeset-2.osc
+# Go ahead and spit out a sql changeset in the same manner the XML changeset was generated...we'll need it for the next step.
+#hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
+# TODO add diff check
+
+# Write the SQL changeset back to the ref db. We're using the SQL changeset here instead of the XML b/c that's the only kind we can write 
+# w/o a Rails Port in the hoot stack (which, if added, would only overly complicate hoot testing)...the effect is the same.
+#echo ""
+#echo "Applying the changeset to the reference data..."
+#echo ""
+#hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $OSM_API_DB_URL
+
+#echo ""
+#echo "Reading the entire reference dataset out for verification..."
+#echo ""
+#hoot convert $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-conflated.osm
+# TODO:
+#hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-conflated.osm
 
 # CLEANUP
 
