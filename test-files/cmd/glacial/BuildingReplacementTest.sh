@@ -6,13 +6,15 @@ set -e
 # This could work for other data types but only buildings are being focused on initially. This workflow:
 #
 #   - Distorts one layer with perturbation and loads it into an OSM API DB as ref data (this was done only b/c I couldn't find readily 
-#     available two similar but not identical test building datasets; the perturbed buildings are uglier, so we'd want to get rid them)
+#     available two similar but not identical test building datasets; the perturbed buildings are uglier, so we'd want to drop them during 
+#     conflation in this scenario)
 #   - Reads the unperturbed data from either a file or into a Hoot API DB as secondary data (unperturbed buildings looks good, so let's keep)
 #   - Cuts a subset AOI out of ref data and puts the secondary data into that location
 #   - Derives a changeset that is the difference between the unmodified ref data and the data with the section of new data added to it
 #   - The resultant changeset should have deleted all ref data within the AOI and added all the secondary data within it.
 
 TEST_NAME=BuildingReplacementTest
+IN_DIR=test-files/cmd/glacial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -23,12 +25,25 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
-#REF_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm-perturbed.osm
 REF_LAYER=$OSM_API_DB_URL
 SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
-GENERAL_OPTS="--info -D uuid.helper.repeatable=true -D writer.include.debug.tags=true "
+# Additional settings useful for debugging:
+#-D writer.include.debug.tags=true
+
+# Additional settings to tweak tag reading/writing behavior:
+
+
+# Additional settings to tweak cookie cutting behavior:
+#-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
+
+# Additional settings to tweak changeset derivation behavior:
+#-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
+
+# changeset.xml.writer.add.timestamp=false is for testing purposes only so that the simple diff between gold and output changesets works (we 
+# don't have a map diff for changesets).
+GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D reader.preserve.all.tags=true"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 # We just want a small amount of noticeable shift here and none of the non-shift other destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=10 -D perty.systematic.error.y=10 -D perty.ops="
@@ -36,15 +51,6 @@ PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=10 -D perty.systematic.e
 # output look good...it may be needed at some point, though, and would likely be needed with features like roads.
 # The RemoveElementsVisitor is set up to keep only buildings.
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
-
-# Commented out here are settings to tweak tag reading/writing behavior:
-#-D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D writer.include.circular.error.tags=false
-
-# Commented out here are settings to tweak cookie cutting behavior:
-#-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
-
-# Commented out here are settings to tweak changeset derivation behavior:
-#-D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true -D changeset.xml.writer.add.timestamp=false -D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
 
 # DATA PREP
 
@@ -86,9 +92,10 @@ CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source)..."
 echo ""
-hoot changeset-derive $HGENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-out-2.osc
-# TODO: add diff check
+hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-out-2.osc
+diff $IN_DIR/$TEST_NAME-out-2.osc $OUT_DIR/$TEST_NAME-out-2.osc
 
 # CLEANUP
 
+scripts/database/CleanOsmApiDB.sh 
 hoot delete-db-map $HOOT_OPTS $DB_OPTS $SEC_LAYER

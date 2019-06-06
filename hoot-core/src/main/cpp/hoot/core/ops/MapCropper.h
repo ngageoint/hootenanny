@@ -106,6 +106,11 @@ private:
   bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
   int _statusUpdateInterval;
+  int _numWaysInBounds;
+  int _numWaysOutOfBounds;
+  int _numWaysCrossingThreshold;
+  int _numCrossingWaysKept;
+  int _numCrossingWaysRemoved;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
