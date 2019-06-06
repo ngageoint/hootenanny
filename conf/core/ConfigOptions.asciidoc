@@ -726,6 +726,20 @@ Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,
 
 TODO
 
+=== crop.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
+=== crop.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === debug.maps.filename
 
 * Data Type: string

@@ -1,23 +1,31 @@
 
 Writing the reference dataset to an osm api db (contains features to be replaced)...
 
+19:36:47.718 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73301713) in way (9514937).
+19:36:47.719 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73191975) in way (9514937).
+19:36:47.719 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73238746) in way (9514937).
+19:36:47.719 WARN   .../hoot/core/io/OsmXmlReader.cpp( 506) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
  setval 
 --------
       1
 (1 row)
 
-15:48:02.598 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73301713) in way (9514937).
-15:48:02.598 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73191975) in way (9514937).
-15:48:02.598 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73238746) in way (9514937).
-15:48:02.598 WARN   .../hoot/core/io/OsmXmlReader.cpp( 486) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Writing the secondary dataset to a hoot api db (contains features to replace with)...
 
-15:48:07.746 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73301713) in way (9514937).
-15:48:07.746 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73191975) in way (9514937).
-15:48:07.746 WARN   .../hoot/core/io/OsmXmlReader.cpp( 482) Missing node (73238746) in way (9514937).
-15:48:07.746 WARN   .../hoot/core/io/OsmXmlReader.cpp( 486) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+19:36:57.966 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73301713) in way (9514937).
+19:36:57.967 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73191975) in way (9514937).
+19:36:57.967 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73238746) in way (9514937).
+19:36:57.967 WARN   .../hoot/core/io/OsmXmlReader.cpp( 506) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source)...
+
+19:36:59.581 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73301713) in way (9514937).
+19:36:59.581 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73191975) in way (9514937).
+19:36:59.581 WARN   .../hoot/core/io/OsmXmlReader.cpp( 502) Missing node (73238746) in way (9514937).
+19:36:59.581 WARN   .../hoot/core/io/OsmXmlReader.cpp( 506) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+19:37:00.035 WARN   ...oot/core/util/MapProjector.cpp( 362) A projection within the specified error bounds could not be found. This is likely due to a very large bounds on the data. Please read 'Hootenanny - Distance and Angle Errors Due to Reprojection' for more information. You may experience poor conflation performance as a result.
 
 Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (hoot api db secondary source)...
 
-15:48:09.450 WARN   ...oot/core/util/MapProjector.cpp( 362) A projection within the specified error bounds could not be found. This is likely due to a very large bounds on the data. Please read 'Hootenanny - Distance and Angle Errors Due to Reprojection' for more information. You may experience poor conflation performance as a result.
+19:37:01.253 WARN   ...oot/core/util/MapProjector.cpp( 362) A projection within the specified error bounds could not be found. This is likely due to a very large bounds on the data. Please read 'Hootenanny - Distance and Angle Errors Due to Reprojection' for more information. You may experience poor conflation performance as a result.

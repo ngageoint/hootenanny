@@ -86,7 +86,7 @@ public:
    * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
    * This value will not be serialized.
    */
-  virtual void setBounds(const geos::geom::Envelope &bounds) override { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override { _nodeBounds = bounds; }
 
   virtual void writeObject(QDataStream& os) const override;
 
@@ -98,6 +98,9 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
+  void setKeepEntireFeaturesCrossingBounds(bool keep) { _keepEntireFeaturesCrossingBounds = keep; }
+  void setKeepOnlyFeaturesInsideBounds(bool keep) { _keepOnlyFeaturesInsideBounds = keep; }
+
 private:
 
   geos::geom::Envelope _envelope;
@@ -105,7 +108,14 @@ private:
   bool _invert;
   bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
+  // If true, won't split apart features straddling the specified bounds.
+  bool _keepEntireFeaturesCrossingBounds;
+  // If true, will only keep features falling completely inside the specified bounds. This overrides
+  // _keepEntireFeaturesCrossingBounds and sets it to false;
+  bool _keepOnlyFeaturesInsideBounds;
+
   int _statusUpdateInterval;
+
   int _numWaysInBounds;
   int _numWaysOutOfBounds;
   int _numWaysCrossingThreshold;

@@ -355,12 +355,21 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // We don't support cropping during streaming, and there is a check in
   // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
   // a bounds has been set.
-  LOG_VARD(_bounds);
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
+    // We're going to mimic how the API DB readers handle the bounds by including any features that
+    // cross over the boundary threshold.
     LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
-    MapCropper::crop(_map, _bounds);
+    MapCropper cropper(_bounds);
+    LOG_INFO(cropper.getInitStatusMessage());
+    cropper.setKeepEntireFeaturesCrossingBounds(true);
+    // negation of previous setting; won't support this yet here (if ever) b/c api db readers aren't
+    // set up to handle the bounds in this way; if we want to support this, then we also need to
+    // implement it in the api db readers
+    //cropper.setKeepOnlyFeaturesInsideBounds(true);
+    cropper.apply(_map);
+    LOG_INFO(cropper.getCompletedStatusMessage());
   }
 
   ReportMissingElementsVisitor visitor;

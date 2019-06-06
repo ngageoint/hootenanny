@@ -41,7 +41,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 # opts to apply to all the commands; changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing 
 # purposes only so that the simple diff between gold and output changesets works (we don't have a map diff for changesets).
 # writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
-GENERAL_OPTS="--debug -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 # opts to apply to commands involved in db i/o
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 # perturbation opts; We just want a small amount of noticeable shift here and none of the other non-shift destructive perty ops.

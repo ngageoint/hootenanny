@@ -71,6 +71,10 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, MapCropper)
 
 MapCropper::MapCropper() :
+_invert(false),
+_keepEntireFeaturesCrossingBounds(false),
+_keepOnlyFeaturesInsideBounds(false),
+_statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
@@ -84,7 +88,9 @@ MapCropper::MapCropper(const Envelope& envelope) :
 _envelope(envelope),
 _envelopeG(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope)),
 _invert(false),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_keepEntireFeaturesCrossingBounds(false),
+_keepOnlyFeaturesInsideBounds(false),
+_statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
@@ -96,7 +102,9 @@ _numCrossingWaysRemoved(0)
 MapCropper::MapCropper(const std::shared_ptr<const Geometry>& g, bool invert) :
 _envelopeG(g),
 _invert(invert),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_keepEntireFeaturesCrossingBounds(false),
+_keepOnlyFeaturesInsideBounds(false),
+_statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
@@ -115,6 +123,13 @@ void MapCropper::setConfiguration(const Settings& conf)
     LOG_VARD(_envelope);
     _invert = confOpts.getCropInvert();
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
+  }
+  _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
+  _keepEntireFeaturesCrossingBounds = confOpts.getCropKeepEntireFeaturesCrossingBounds();
+  _keepOnlyFeaturesInsideBounds = confOpts.getCropKeepOnlyFeaturesInsideBounds();
+  if (_keepOnlyFeaturesInsideBounds)
+  {
+    _keepEntireFeaturesCrossingBounds = false;
   }
 }
 
@@ -137,12 +152,13 @@ void MapCropper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
+    //LOG_VART(w);
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& e = *(ls->getEnvelopeInternal());
-    LOG_VART(e);
+    //LOG_VART(e);
 
     // if the way is completely outside the region we're keeping
-    if (_isWhollyOutside(e))
+    if (!_keepOnlyFeaturesInsideBounds && _isWhollyOutside(e))
     {
       // remove the way
       LOG_TRACE("Dropping: " << w << "...");
@@ -155,7 +171,7 @@ void MapCropper::apply(OsmMapPtr& map)
       LOG_TRACE("Keeping: " << w << "...");
       _numWaysInBounds++;
     }
-    else
+    else if (!_keepOnlyFeaturesInsideBounds && !_keepEntireFeaturesCrossingBounds)
     {
       // do an expensive operation to decide how much to keep, if any.
       _cropWay(result, w->getId());
@@ -477,6 +493,5 @@ void MapCropper::writeObject(QDataStream& os) const
     os << _envelope.getMaxY();
   }
 }
-
 
 }

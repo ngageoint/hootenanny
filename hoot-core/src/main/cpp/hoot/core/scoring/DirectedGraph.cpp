@@ -54,6 +54,7 @@ double DirectedGraph::determineCost(const std::shared_ptr<Way>& way)
   // reasonable default for an unknown "highway"
   double mph = 25;
 
+  // TODO: move to config
   if (highway == "motorway")
   {
     mph = 65;
