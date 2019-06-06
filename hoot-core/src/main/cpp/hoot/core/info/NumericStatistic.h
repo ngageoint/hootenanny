@@ -48,6 +48,12 @@ public:
   virtual double getMin() const = 0;
   virtual double getMax() const = 0;
   virtual double getAverage() const = 0;
+
+  virtual long getInformationCount() const { return 0; }
+  virtual long getInformationMin() const { return 0; }
+  virtual long getInformationMax() const { return 0; }
+  virtual long getInformationCountDiff() const { return getStat() - getInformationCount(); }
+  virtual double getInformationAverage() const { return 0; }
 };
 
 }

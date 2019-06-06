@@ -3894,6 +3894,13 @@ The format used to write the element payload portion of the Spark changeset file
 
 The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
 
+=== stats.generic.data.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/GenericStats.json`
+
+Path to a json file containing definitions for the generic set of statistics values.
+
 === stats.translate.script
 
 * Data Type: string
