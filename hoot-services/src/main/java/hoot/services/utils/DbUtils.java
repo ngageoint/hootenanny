@@ -189,15 +189,6 @@ public class DbUtils {
     }
 
     /**
-     * Gets all the ids from the maps table
-     *
-     * @return list of map ids
-     */
-    public static List<Long> getAllMapIds() {
-        return createQuery().select(maps.id).from(maps).fetch();
-    }
-
-    /**
      * Creates a new folder under the parent directory
      * if not already present and returns it's id
      *

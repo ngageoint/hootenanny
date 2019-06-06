@@ -45,6 +45,7 @@ public class MapLayer {
     private Boolean isPublic;
     private long userId;
     private long folderId;
+    private long size;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -112,5 +113,13 @@ public class MapLayer {
 
     public void setFolderId(long folderId) {
         this.folderId = folderId;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public long getSize() {
+        return this.size;
     }
 }

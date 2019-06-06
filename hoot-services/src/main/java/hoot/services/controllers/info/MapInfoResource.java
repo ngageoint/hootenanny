@@ -55,67 +55,8 @@ import hoot.services.utils.DbUtils;
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
-    private static final String[] maptables = {
-            "changesets",
-            "current_nodes",
-            "current_relation_members",
-            "current_relations",
-            "current_way_nodes",
-            "current_ways"
-    };
-
 
     public MapInfoResource() {}
-
-    /**
-     * Service method endpoint for retrieving the physical size of multiple map records.
-     *
-     * GET hoot-services/info/map/sizes?mapid=54,62
-     *
-     * @param mapIds
-     *            ids of the maps for which to retrieve sizes
-     * @return JSON containing a list of size information for all current maps
-     */
-    @GET
-    @Path("/sizes")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapSizes(@QueryParam("mapid") String mapIds) {
-        JSONArray layers = new JSONArray();
-
-        try {
-            List<Long> idList = new ArrayList<>();
-            if(mapIds == null) {
-                idList = DbUtils.getAllMapIds();
-            } else {
-                String[] stringIdsList = mapIds.split(",");
-                for (String id : stringIdsList) {
-                    idList.add(Long.parseLong(id));
-                }
-            }
-
-            for (Long mapId : idList) {
-                long mapSize = 0;
-                for (String table : maptables) {
-                    if (mapId != -1) { // skips OSM API db layer
-                        mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
-                    }
-                }
-                JSONObject layer = new JSONObject();
-                layer.put("id", mapId);
-                layer.put("size", mapSize);
-                layers.add(layer);
-            }
-        }
-        catch (Exception e) {
-            String message = "Error getting map size.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
-        }
-
-        JSONObject entity = new JSONObject();
-        entity.put("layers", layers);
-
-        return Response.ok(entity.toJSONString()).build();
-    }
 
     /**
      * Service endpoint for maximum data size for export conflate and ingest.
