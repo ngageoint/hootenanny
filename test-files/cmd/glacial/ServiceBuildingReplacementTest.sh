@@ -5,7 +5,7 @@ set -e
 #
 # This could work for other data types but only buildings have been attempted so far.
 
-TEST_NAME=BuildingReplacementTest
+TEST_NAME=ServiceBuildingReplacementTest
 IN_DIR=test-files/cmd/glacial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/$TEST_NAME
 rm -rf $OUT_DIR
