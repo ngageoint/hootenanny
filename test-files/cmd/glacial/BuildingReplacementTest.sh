@@ -37,17 +37,17 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
 # CONFIG OPTS
 
-# changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing purposes only so that the simple diff 
-# between gold and output changesets works (we 
-# don't have a map diff for changesets).
+# opts to apply to all the commands; changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing 
+# purposes only so that the simple diff between gold and output changesets works (we don't have a map diff for changesets).
 # writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
 GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+# opts to apply to commands involved in db i/o
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
-# We just want a small amount of noticeable shift here and none of the other non-shift destructive perty ops.
+# perturbation opts; We just want a small amount of noticeable shift here and none of the other non-shift destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=10 -D perty.systematic.error.y=10 -D perty.ops="
-# I've chosen to leave conflation (hoot::UnifyingConflator) out as the last op in convert.ops, since it hasn't been needed yet to make 
-# the building output look good...it may be needed at some point, though, and would likely be needed with features like roads.
-# The RemoveElementsVisitor is set up to keep only buildings.
+# changeset derivation opts; I've chosen to leave conflation (hoot::UnifyingConflator) out as the last op in convert.ops, since it hasn't 
+# been needed yet to make the building output look good...it may be needed at some point, though, and would likely be needed with features 
+# like roads. The RemoveElementsVisitor is set up to keep only buildings.
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
 
 # DATA PREP
@@ -59,6 +59,7 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,4
 echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
+#hoot convert $GENERAL_OPTS $PERTY_OPTS
 scripts/database/CleanAndInitializeOsmApiDb.sh 
 hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D changeset.user.id=1 -D reader.use.data.source.ids=true -D convert.ops=hoot::PertyOp $SEC_LAYER_FILE $REF_LAYER
 # Uncomment to see what the ref layer looks like in file form:
