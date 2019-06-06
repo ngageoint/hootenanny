@@ -73,19 +73,12 @@ bool ApiDbReader::isSupported(const QString& urlStr)
 
 void ApiDbReader::setBoundingBox(const QString& bbox)
 {
-  // TODO: simplify
-  if (!bbox.trimmed().isEmpty())
-  {
-    setBounds(GeometryUtils::envelopeFromConfigString(bbox));
-  }
+  setBounds(GeometryUtils::envelopeFromConfigString(bbox));
 }
 
 void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
-  if (!bbox.trimmed().isEmpty())
-  {
-    _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
-  }
+  _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
 }
 
 bool ApiDbReader::_hasBounds()
