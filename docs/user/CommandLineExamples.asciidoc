@@ -317,6 +317,16 @@ See the User Guide for more details on command usage.
     hoot conflate -D conflate.pre.ops="hoot::RubberSheet" -D rubber.sheet.ref=true input1.osm \
       input2.osm output.osm
 -----
+
+===== Completely replace a set of buildings in one dataset with those in another over an AOI via Rails Port:
+
+-----
+    hoot changeset-derive -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 \
+      -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp \
+      -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
+      -D remove.elements.visitor.recursive=true -D element.criterion.negate=true ref.osm sec.osm changeset.osc
+    hoot changeset-apply changeset.osc <OSM API URL>
+-----
     
 ==== Applying Changes
     

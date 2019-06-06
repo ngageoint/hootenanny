@@ -3,7 +3,10 @@ set -e
 
 # Wholesale Building Replacement Workflow
 #
-# This could work for other data types but only buildings have been attempted so far.
+# This could work for other data types but only buildings have been attempted so far. The main takeaway from this test if you're trying
+# to do your own similar workflow is the changeset derivation itself...ends up looking something like:
+#
+# hoot changeset-derive -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true ref.osm sec.osm changeset.osc
 
 TEST_NAME=ServiceBuildingReplacementTest
 IN_DIR=test-files/cmd/glacial/$TEST_NAME
@@ -24,38 +27,52 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
 # CONFIG OPTS
 
-# opts to apply to all the commands; changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing 
-# purposes only so that the simple diff between gold and output changesets works (we don't have a map diff for changesets).
-# writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
+# opts to apply to all the commands; 
+# - changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing purposes primarily so that the simple 
+# diff between gold and output changesets works (we don't have a map diff for changesets).
+# - writer.include.circular.error.tags=false simply keeps the output cleaner for changeset derivation
 GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 # opts to apply to commands involved in db i/o
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
-# perturbation opts; We just want a small amount of noticeable shift here and none of the other non-shift destructive perty ops.
+# perturbation opts; We just want a small amount of noticeable shift in the buildings and don't want to apply any of the other non-shift 
+# destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
-# changeset derivation opts; I've chosen to leave conflation (hoot::UnifyingConflator) out as the last op in convert.ops, since it hasn't 
-# been needed yet to make the building output look good...it may be needed at some point, though, and would likely be needed with features 
-# like roads. The RemoveElementsVisitor is set up to keep only buildings.
+# changeset derivation opts
+# - I've chosen to leave conflation (hoot::UnifyingConflator) out as the last op in convert.ops, since it hasn't been needed yet to make 
+# the building output look good...it may be needed at some point, though, and would likely be needed with features like roads. 
+# - The RemoveElementsVisitor is set up to keep only buildings.
+# - The behavior of API DB readers when using convert.bounding.box is to return features that cross the bounds in addition to those within it,
+# so you will see features slightly passed the bounds modified by the changeset in this workflow. To restrict the changes to just features
+# falling completely within the bounds would require some significant work to the ApiDbReader bounds query. Bounds reading by the OsmXmlReader,
+# however, could currently support both of the scenarios but it is hardcoded to behave in the same fashion as the db readers for now.
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
 
 # Additional config opts that may end up being useful for: 
+
 # debugging:
 #-D writer.include.debug.tags=true
+
 # tweaking tag reading/writing behavior:
 #-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true
+
 # tweaking cookie cutting behavior:
 #-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
+
 # tweaking changeset derivation behavior:
 #-D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
 
 # DATA PREP
 
-# Distort one layer with perturbation and loads it into an OSM API DB as ref data. Perturbation was done only b/c I couldn't find readily
-# available two similar but not identical test building datasets. The perturbed buildings are uglier, so we'd want to drop them during 
-# conflation in this scenario. Preserving the source data IDs (reader.use.data.source.ids=true in the second convert step) is important 
-# here for changeset derivation since this is the ref data. # Technically, we could roll this first convert step into the command following 
-# in, but to get ID preservation correct and use perty it was easier to do it this way. We're not using source IDs here to get rid of the ID 
-# overlap inherent in creating two sets of source data from the same input file. Also, I forget why changeset.user.id would be needed in 
-# the second convert...
+# First distort one layer with perturbation and loads it into an OSM API DB as ref data. Perturbation was done only b/c I couldn't find readily
+# available two similar but not identical test building datasets. The perturbed buildings are uglier, so the idea is we'd want to get them
+# replaced by something better (what we have in the original, unperturbed data). 
+#
+# Preserving the source data IDs (reader.use.data.source.ids=true in the second convert step) is important here for changeset derivation since 
+# we're loading ref data that we don't own (like MapEdit) and need to stay in sync with. 
+
+# The reason we're loading the perturbed data into a file before loading it into the osm apidb, vs peturbing it straight to the osm api db is
+# that the test data has negative IDs and we want to simulate a realistic scenario with postive IDs in the ref (hence, 
+# hoot::PositiveIdGenerator).
 echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
@@ -65,11 +82,14 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.so
 # Uncomment to see what the ref layer looks like in file form:
 #hoot convert $GENERAL_OPTS $REF_LAYER $OUT_DIR/ref.osm
 
-# Read the unperturbed data from a file into a Hoot API DB as secondary data (unperturbed buildings looks good, so let's keep). Since 
-# the perturbed data (ref) was derived directly from this secondary layer, there will overlapping element IDs. Changeset derivation with
-# cookie cutting (or any map consuming op) cannot work when there are overlapping element IDs in the two input datasets...we simply can't 
-# support that scenario. So, we'll pretend these secondary buildings are from a completely different source than the ref and drop their IDs 
-# (reader.use.data.source.ids=false).
+# Next, read the original unperturbed data from a file into a Hoot API DB as secondary data...unperturbed buildings looks good, so we want 
+# to keep them). 
+
+# Since the perturbed data (ref) was derived directly from this secondary layer, there will overlapping element IDs. Changeset 
+# derivation with cookie cutting (or any map consuming op) cannot work when there are overlapping element IDs in the two input datasets...we 
+# simply can't support that scenario. TODO: This does get a little confusing as I think we should be able to use either 
+# reader.use.data.source.ids equal to true or false here (with false making more sense), however errors are occurring when its set to false, 
+# so leaving it at true for now. We do, however, want positive IDs put into the hoot api db since negative IDs in the db make no sense. 
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
@@ -82,10 +102,11 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D id.gen
 
 # CHANGESET DERIVATION
 
-# Test changeset derivation both from an osm file and from a hoot api db layer. This changeset derivation has cookie cutting applied to it 
-# which cuts a subset AOI out of ref data and puts the secondary data into that location. Then, it derives a changeset that is the 
-# difference between the unmodified ref data and the data with the section of new data added to it. The resultant changeset should have 
-# deleted all ref data within the AOI and added all the secondary data within it.
+# Test changeset derivation both from an osm file and from a hoot api db layer. 
+
+# This changeset derivation has cookie cutting applied to it which cuts a subset AOI out of ref data and puts the secondary data into 
+# that location. Then, it derives a changeset that is the difference between the unmodified ref data and the data with the section of 
+# new data added to it. The resultant changeset should have deleted all ref data within the AOI and added all the secondary data within it.
 CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
@@ -107,7 +128,7 @@ diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.
 # CHANGESET APPLICATION
 
 # Write the SQL changeset back to the ref db. We're using the SQL changeset here instead of the XML b/c that's the only kind we can write 
-# w/o a Rails Port in the hoot stack (which, if added, would only overly complicate hoot testing)...the effect is the same.
+# w/o a Rails Port in the hoot stack (which, if added, would only overly complicate the hoot testing environment)...the effect is the same.
 echo ""
 echo "Applying the changeset to the reference data..."
 echo ""
