@@ -16,12 +16,22 @@ is outside the given bounds.
 crop (input.osm) (output.osm) (bounds)
 --------------------------------------
 
-==== Example
+=== Configuration Options
+
+The configuration options `crop.*` control the behavior of map cropping. See their descriptions for more detail.
+
+==== Examples
 
 --------------------------------------
+# regular crop
 hoot crop data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+
+# don't split feature that cross the bounds
+hoot crop -D crop.keep.entire.features.crossing.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+
+# only keep features completely within the bounds
+hoot crop -D crop.keep.only.features.inside.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+
+# reverse the crop; keep only features outside of the bounds
+hoot crop -D crop.invert=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
 --------------------------------------
-
-=== See Also
-
-* `crop.*` configuration options
