@@ -356,6 +356,8 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
                                                           const QString& input2, OsmMapPtr& map1,
                                                           OsmMapPtr& map2, Progress progress)
 {
+  // Preserving source IDs is important here.
+
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
   if (!_singleInput)
@@ -417,6 +419,7 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
     // We didn't have any convert ops, so just load everything up.
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
+    // Preserving source IDs is important here.
     if (!_singleInput)
     {
       // Load each input into a separate map.

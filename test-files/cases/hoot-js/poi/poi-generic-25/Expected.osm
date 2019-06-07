@@ -2,20 +2,20 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.87677999999998" minlon="-76.97969139999999" maxlat="38.8812188" maxlon="-76.97775"/>
     <node visible="true" id="-6700017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8767799999999824" lon="-76.9777500000000003">
-        <tag k="REF2" v="none"/>
         <tag k="bridge" v="yes"/>
-        <tag k="uuid" v="GeoNames.org:4139243"/>
         <tag k="name" v="John Phillip Sousa Bridge"/>
+        <tag k="uuid" v="GeoNames.org:4139243"/>
+        <tag k="REF2" v="none"/>
         <tag k="error:circular" v="1000"/>
     </node>
     <node visible="true" id="-6700016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8812187999999992" lon="-76.9796913999999930">
-        <tag k="REF1" v="003ac5"/>
-        <tag k="historic" v="tomb"/>
-        <tag k="cemetery" v="grave"/>
-        <tag k="source" v="survey"/>
-        <tag k="name" v="John Philip Sousa"/>
         <tag k="wikipedia" v="en:John Philip Sousa"/>
+        <tag k="source" v="survey"/>
+        <tag k="historic" v="tomb"/>
+        <tag k="name" v="John Philip Sousa"/>
         <tag k="tourism" v="attraction"/>
+        <tag k="REF1" v="003ac5"/>
+        <tag k="cemetery" v="grave"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

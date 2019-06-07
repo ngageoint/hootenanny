@@ -60,7 +60,6 @@ bool ElementStreamer::isStreamableIo(const QString& input, const QString& output
   LOG_VARD(OsmMapWriterFactory::hasElementOutputStream(output));
   LOG_VARD(ConfigUtils::boundsOptionEnabled());
   LOG_VARD(ConfigOptions().getWriterXmlSortById());
-  LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
   return
     OsmMapReaderFactory::hasElementInputStream(input) &&
@@ -69,7 +68,7 @@ bool ElementStreamer::isStreamableIo(const QString& input, const QString& output
     //option be specified in order to stream when writing that format
     (writerName != "hoot::OsmXmlWriter" ||
     (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-    //none of the convert bounding box supports are able to do streaming I/O at this point
+    //no readers when enforcing a convert bounding box are able to do streaming I/O at this point
     !ConfigUtils::boundsOptionEnabled();
 }
 

@@ -2,20 +2,20 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="31.89083299999999" minlon="35.611944" maxlat="31.89083299999999" maxlon="35.611944"/>
     <node visible="true" id="-376463" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.8908329999999935" lon="35.6119440000000012">
+        <tag k="int_name" v="El Kherse‘e; Al Khersee"/>
+        <tag k="name:de" v="Al Khersee"/>
+        <tag k="historic" v="ruins"/>
+        <tag k="name" v="الخرسعة"/>
+        <tag k="name:ar" v="الخرسعة"/>
+        <tag k="name:en" v="Al Khersee"/>
+        <tag k="uuid" v="GeoNames.org:248622"/>
+        <tag k="name:fr" v="Al Khersee"/>
+        <tag k="alt_name" v="Al Kharsa`ah;Al Kharsa‘ah;El Kherse`e;Khirbat Khursa`a;Khirbat Khursa‘a;Khirbat al Kharsa`ah;Khirbat al Kharsa‘ah;Khirbat el Kharsa'a;Khirbat el Kharsa’a"/>
         <tag k="REF1" v="0007f1"/>
         <tag k="REF2" v="none"/>
-        <tag k="place" v="locality"/>
-        <tag k="historic" v="ruins"/>
-        <tag k="name:ar" v="الخرسعة"/>
         <tag k="poi" v="yes"/>
         <tag k="is_in" v="Jordan, الأردن"/>
-        <tag k="name:fr" v="Al Khersee"/>
-        <tag k="name:de" v="Al Khersee"/>
-        <tag k="int_name" v="El Kherse‘e; Al Khersee"/>
-        <tag k="alt_name" v="Al Kharsa`ah;Al Kharsa‘ah;El Kherse`e;Khirbat Khursa`a;Khirbat Khursa‘a;Khirbat al Kharsa`ah;Khirbat al Kharsa‘ah;Khirbat el Kharsa'a;Khirbat el Kharsa’a"/>
-        <tag k="uuid" v="GeoNames.org:248622"/>
-        <tag k="name" v="الخرسعة"/>
-        <tag k="name:en" v="Al Khersee"/>
+        <tag k="place" v="locality"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

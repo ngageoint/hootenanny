@@ -2,8 +2,9 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.74020563418999" minlon="-77.58212998777999" maxlat="38.74061306795999" maxlon="-77.58176788755"/>
     <node visible="true" id="-85929" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403855545699898" lon="-77.5821299877799930">
-        <tag k="name" v="poi1"/>
         <tag k="amenity" v="theatre"/>
+        <tag k="name" v="poi1"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-85928" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405586736499927" lon="-77.5819683826699986"/>
     <node visible="true" id="-85926" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7405435059899901" lon="-77.5819207734599985"/>
@@ -31,8 +32,9 @@
         <nd ref="-85926"/>
         <nd ref="-85928"/>
         <nd ref="-85915"/>
-        <tag k="name" v="poly2"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-85799" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-85797"/>
@@ -44,18 +46,19 @@
         <nd ref="-85808"/>
         <nd ref="-85810"/>
         <nd ref="-85797"/>
-        <tag k="name" v="poly1"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly1"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-85929" role="reviewee"/>
         <member type="way" ref="-85799" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (7m; score: 2/2), type: yes (score: 0.8/1), name: no (score: 0.555743/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Features had an additive similarity score of 1, which is less than the required score of 3. Matches: distance: no (7m; score: 2/2), type: yes (score: 0.8/1), name: no (score: 0.555743/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

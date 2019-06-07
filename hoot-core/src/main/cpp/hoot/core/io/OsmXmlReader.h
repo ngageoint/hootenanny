@@ -31,6 +31,8 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QHash>
@@ -50,7 +52,8 @@ class Element;
 /**
  * Reads in a .osm file into an OsmMap data structure.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable,
+  public Configurable
 {
 public:
 
@@ -65,8 +68,8 @@ public:
 
   virtual QString errorString() const { return _errorString; }
 
-  virtual bool endElement(const QString &namespaceURI, const QString &localName,
-                          const QString &qName);
+  virtual bool endElement(const QString& namespaceURI, const QString& localName,
+                          const QString& qName);
 
   virtual bool fatalError(const QXmlParseException &exception);
 
@@ -91,19 +94,17 @@ public:
   virtual ElementPtr readNextElement() override;
 
   virtual void setDefaultStatus(Status s) override { _status = s; }
-
   virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
 
-  virtual bool startElement(const QString &namespaceURI, const QString &localName,
-                            const QString &qName, const QXmlAttributes &attributes);
+  virtual bool startElement(const QString& namespaceURI, const QString& localName,
+                            const QString& qName, const QXmlAttributes& attributes);
 
   virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setKeepStatusTag(bool keepStatusTag) { _keepStatusTag = keepStatusTag; }
   void setDefaultAccuracy(Meters circularError) { _defaultCircularError = circularError; }
   void setAddSourceDateTime(bool add) { _addSourceDateTime = add; }
-
-  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
-
+  void setPreserveAllTags(bool preserve) { _preserveAllTags = preserve; }
+  void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   /**
    * This will adds child refs to elements when they aren't present in the source data.  This is
    * only useful when dealing with disconnected chunks of map data, as in external sorting, and
@@ -113,6 +114,12 @@ public:
    */
   void setAddChildRefsWhenMissing(bool addChildRefsWhenMissing)
   { _addChildRefsWhenMissing = addChildRefsWhenMissing; }
+
+  virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
+
+  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+
+  virtual void setConfiguration(const Settings& conf) override;
 
 private:
 
@@ -162,15 +169,17 @@ private:
   long _numRead;
   long _statusUpdateInterval;
 
-  void _createNode(const QXmlAttributes &attributes);
-  void _createWay(const QXmlAttributes &attributes);
-  void _createRelation(const QXmlAttributes &attributes);
+  geos::geom::Envelope _bounds;
+
+  void _createNode(const QXmlAttributes& attributes);
+  void _createWay(const QXmlAttributes& attributes);
+  void _createRelation(const QXmlAttributes& attributes);
 
   bool _foundOsmElementXmlStartElement() const;
   bool _foundOsmElementXmlEndElement() const;
   bool _foundOsmHeaderXmlStartElement();
 
-  void _parseTimeStamp(const QXmlAttributes &attributes);
+  void _parseTimeStamp(const QXmlAttributes& attributes);
 
   /**
    * Given the file ID return a relation ID. If the ID has already been mapped it will simply

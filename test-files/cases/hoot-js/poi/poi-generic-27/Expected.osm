@@ -2,34 +2,34 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.10652" minlon="11.66883" maxlat="48.10690590000001" maxlon="11.6689581"/>
     <node visible="true" id="-3956422" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1065200000000033" lon="11.6688299999999998">
-        <tag k="REF2" v="01358a"/>
-        <tag k="addr:language" v="GER"/>
-        <tag k="addr:street" v="FRIEDENSPROMENADE"/>
-        <tag k="access" v="yes"/>
-        <tag k="phone" v="89-4309044"/>
-        <tag k="addr:housenumber" v="13"/>
-        <tag k="language" v="GER"/>
         <tag k="source" v="navteq"/>
-        <tag k="uuid" v="{52813480}"/>
+        <tag k="addr:street" v="FRIEDENSPROMENADE"/>
+        <tag k="addr:language" v="GER"/>
         <tag k="name" v="FRIEDENSPROMENADE"/>
         <tag k="tourism" v="hotel"/>
+        <tag k="uuid" v="{52813480}"/>
+        <tag k="language" v="GER"/>
+        <tag k="phone" v="89-4309044"/>
+        <tag k="addr:housenumber" v="13"/>
+        <tag k="REF2" v="01358a"/>
+        <tag k="access" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-3956421" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1069059000000081" lon="11.6689580999999993">
-        <tag k="REF1" v="01358a"/>
         <tag k="name" v="Amiga"/>
         <tag k="tourism" v="hotel"/>
+        <tag k="REF1" v="01358a"/>
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-3956421" role="reviewee"/>
         <member type="node" ref="-3956422" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Somewhat similar (44m) - very close together, similar POI type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

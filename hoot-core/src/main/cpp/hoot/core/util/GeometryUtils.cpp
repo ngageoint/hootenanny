@@ -293,6 +293,11 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
+  if (boundsStr.trimmed().isEmpty())
+  {
+    return Envelope();
+  }
+
   const QString errorMsg = "Invalid envelope string: " + boundsStr;
   const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
   if (!boundsRegEx.exactMatch(boundsStr))
