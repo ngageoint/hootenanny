@@ -36,20 +36,21 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/PythonTranslator.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/PythonSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -128,7 +129,8 @@ public:
 
   void setLimit(long limit) { _limit = limit; }
 
-  void setTranslationFile(const QString& translate) { _finalizeTranslate(); _translatePath = translate; }
+  void setSchemaTranslationScript(const QString& translate)
+  { _finalizeTranslate(); _translatePath = translate; }
 
   void initializePartial();
 
@@ -155,7 +157,7 @@ protected:
   QString _layerName;
   OGRCoordinateTransformation* _transform;
   std::shared_ptr<OGRSpatialReference> _wgs84;
-  std::shared_ptr<ScriptTranslator> _translator;
+  std::shared_ptr<ScriptSchemaTranslator> _translator;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -303,7 +305,7 @@ ElementIterator* OgrReader::createIterator(const QString& path, const QString& l
   OgrReaderInternal* d = new OgrReaderInternal();
   d->setDefaultCircularError(_d->getDefaultCircularError());
   d->setDefaultStatus(_d->getDefaultStatus());
-  d->setTranslationFile(_d->getTranslationFile());
+  d->setSchemaTranslationScript(_d->getTranslationFile());
   d->open(path, layer);
 
   return new OgrElementIterator(d);
@@ -456,9 +458,9 @@ void OgrReader::setLimit(long limit)
   _d->setLimit(limit);
 }
 
-void OgrReader::setTranslationFile(const QString& translate)
+void OgrReader::setSchemaTranslationScript(const QString& translate)
 {
-  _d->setTranslationFile(translate);
+  _d->setSchemaTranslationScript(translate);
 }
 
 void OgrReader::initializePartial()
@@ -617,7 +619,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   if (_addSourceDateTime)
   {
     // Add an ingest datetime tag
-    t.appendValue("source:ingest:datetime",
+    t.appendValue(MetadataTags::SourceIngestDateTime(),
                   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
   }
 
@@ -894,27 +896,9 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     key = ConfigOptions::getOgrReaderBoundingBoxLatlngKey();
   }
 
-  QStringList bbox = bboxStr.split(",");
-
-  if (bbox.size() != 4)
-  {
-    throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-  }
-
-  bool ok;
-  vector<double> bboxValues(4);
-  for (size_t i = 0; i < 4; i++)
-  {
-    bboxValues[i] = bbox[i].toDouble(&ok);
-    if (!ok)
-    {
-      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-    }
-  }
-
   if (bboxStrRaw.isEmpty() == false)
   {
-    result.reset(new Envelope(bboxValues[0], bboxValues[2], bboxValues[1], bboxValues[3]));
+    result.reset(new Envelope(GeometryUtils::envelopeFromConfigString(bboxStr)));
   }
   else
   {
@@ -922,6 +906,24 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     {
       throw HootException("A valid projection must be available when using a lat/lng bounding "
         "box.");
+    }
+
+    QStringList bbox = bboxStr.split(",");
+
+    if (bbox.size() != 4)
+    {
+      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+    }
+
+    bool ok;
+    vector<double> bboxValues(4);
+    for (size_t i = 0; i < 4; i++)
+    {
+      bboxValues[i] = bbox[i].toDouble(&ok);
+      if (!ok)
+      {
+        throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+      }
     }
 
     result.reset(new Envelope());
@@ -952,7 +954,7 @@ void OgrReaderInternal::_initTranslate()
   if (_translatePath != "" && _translator.get() == 0)
   {
     // Nice and short. Taken from TranslatedTagDifferencer
-    _translator.reset(ScriptTranslatorFactory::getInstance().createTranslator(_translatePath));
+    _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
 
     if (_translator.get() == 0)
     {

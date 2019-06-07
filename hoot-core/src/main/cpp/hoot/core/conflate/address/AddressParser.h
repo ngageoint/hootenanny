@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/language/AddressTranslator.h>
+#include <hoot/core/language/ToEnglishAddressTranslator.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
@@ -157,7 +157,7 @@ private:
   //the one built into libpostal before address normalization
   mutable bool _preTranslateTagValuesToEnglish;
 
-  AddressTranslator _addressTranslator;
+  ToEnglishAddressTranslator _addressTranslator;
   AddressNormalizer _addressNormalizer;
 
   QSet<QString> _parseAddresses(const Element& element, QString& houseNum, QString& street) const;

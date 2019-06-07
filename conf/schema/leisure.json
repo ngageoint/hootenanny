@@ -6,7 +6,7 @@
             "linestring"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "leisure",
         "objectType": "tag"
     },

@@ -66,16 +66,14 @@ struct OsmSchemaCategory
     Use =             0x08,
     Name =            0x10,
     PseudoName =      0x20,
-    HgisPoi =         0x40, // Human Geography POI. See ticket #6853 for a definition of a "HGIS POI"
-    Multiuse =        0x80//,
-    //All = Poi | Building | Transportation | Use | Name | PseudoName | HgisPoi | Multiuse
+    Multiuse =        0x40//,
+    //All = Poi | Building | Transportation | Use | Name | PseudoName | Multiuse
   };
 
   OsmSchemaCategory() : _type(Empty) {}
   OsmSchemaCategory(Type t) : _type(t) {}
 
   static OsmSchemaCategory building() { return OsmSchemaCategory(Building); }
-  static OsmSchemaCategory hgisPoi() { return OsmSchemaCategory(HgisPoi); }
   static OsmSchemaCategory poi() { return OsmSchemaCategory(Poi); }
   static OsmSchemaCategory transportation() { return OsmSchemaCategory(Transportation); }
   static OsmSchemaCategory use() { return OsmSchemaCategory(Use); }
@@ -113,10 +111,6 @@ struct OsmSchemaCategory
     else if (s == "pseudoname")
     {
       return PseudoName;
-    }
-    else if (s == "hgispoi")
-    {
-      return HgisPoi;
     }
     else if (s == "multiuse")
     {
@@ -181,10 +175,6 @@ struct OsmSchemaCategory
     if (_type & PseudoName)
     {
       result << "pseudoname";
-    }
-    if (_type & HgisPoi)
-    {
-      result << "hgispoi";
     }
     if (_type & Multiuse)
     {

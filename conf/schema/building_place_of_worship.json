@@ -1,8 +1,7 @@
 [
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "abstract_building_place_of_worship",

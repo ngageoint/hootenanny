@@ -28,7 +28,7 @@
 #define PERTY_REMOVE_TAG_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>
 
@@ -38,8 +38,7 @@ namespace hoot
 /**
  * A simple random tag remover
  */
-class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+class PertyRemoveTagVisitor : public ElementVisitor, public RngConsumer, public Configurable
 {
 public:
 

@@ -685,8 +685,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //runtime.  These requirements can possibly be removed at some point in the future, if proven
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
-  //clean the school restriction up (see #1173).
+  //removing it scores dropped for other datasets...so not changing it for now.
   if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
       BuildingCriterion().isSatisfied(poly))
   {

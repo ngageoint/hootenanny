@@ -15,7 +15,7 @@ Most Tags on a Feature	4	4	6
 Average Tags Per Feature	3	2	3	
 Least Information Tags on a Feature	2	1	0	
 Most Information Tags on a Feature	4	4	6	
-Average Information Tags Per Feature	3.08	2.818181818181818	3.294117647058823	
+Average Information Tags Per Feature	3.08	2.818181818181818	3.235294117647059	
 Features with Names	20	17	27	
 Bridges	0	0	0	
 Tunnels	0	0	0	
@@ -140,9 +140,14 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	169	144	221	
+Translated Populated Tags	169	144	220	
 Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-13	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
+Calculate Stats for Input 1 Time (sec)				4.416643857955933
+Calculate Stats for Input 2 Time (sec)				0.7790350914001465
+Apply Pre-Conflate Ops Time (sec)				0.008771896362304688
+Apply Post-Conflate Ops Time (sec)				0.004724025726318359
+Calculate Stats for Output Time (sec)				0.929394006729126
 
-16:10:06.986 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 343) Conflation job completed.
+19:27:50.271 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...late/unified/AllDataTypesA.osm and secondary: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

@@ -26,8 +26,21 @@
  */
 package hoot.services.job;
 
+/*
+ * Order is important here, only add new enums to the end of the list
+ */
+
 public enum JobType {
-    IMPORT, EXPORT, CONFLATE, CLIP, ATTRIBUTES, BASEMAP, DELETE, UNKNOWN;
+    IMPORT,
+    EXPORT,
+    CONFLATE,
+    CLIP,
+    ATTRIBUTES,
+    BASEMAP,
+    DELETE,
+    UNKNOWN,
+    DERIVE_CHANGESET,
+    UPLOAD_CHANGESET;
 
     public static JobType fromInteger(int value) {
         if ((value >= 0) && (value < JobType.values().length)) {

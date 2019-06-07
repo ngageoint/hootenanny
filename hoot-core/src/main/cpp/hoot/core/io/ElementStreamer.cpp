@@ -90,6 +90,7 @@ bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& 
 
 bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 {
+  LOG_VARD(ops);
   // add visitor/criterion operations if any of the convert ops are visitors.
   foreach (QString opName, ops)
   {
@@ -98,7 +99,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
       // Can this be cleaned up?
 
       const QString unstreamableMsg =
-        "Unable to stream I/O due to criterion op: " + opName + ". Loading entire map...";
+        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -145,15 +146,12 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
   return true;
 }
 
-ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
-  std::shared_ptr<OsmMapReader> reader, const QStringList& ops)
+ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
+  ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  ElementInputStreamPtr filteredInputStream =
-    std::dynamic_pointer_cast<ElementInputStream>(reader);
-
   if (ops.size() == 0)
   {
-    return filteredInputStream;
+    return streamToFilter;
   }
 
   foreach (QString opName, ops)
@@ -180,7 +178,7 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementCriterionInputStream(filteredInputStream, criterion));
+        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
@@ -198,16 +196,17 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
+        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
       }
       else
       {
-        throw HootException("An unsupported operation was passed to a streaming conversion.");
+        throw HootException(
+          "An unsupported operation was passed to a streaming conversion: " + opName);
       }
     }
   }
 
-  return filteredInputStream;
+  return streamToFilter;
 }
 
 void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps,
@@ -252,17 +251,9 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     reader->open(in);
 
     // add visitor/criterion operations if any of the convert ops are visitors.
-    QStringList convertOpsToUse;
-    if (convertOps.isEmpty())
-    {
-      convertOpsToUse = ConfigOptions().getConvertOps();
-    }
-    else
-    {
-      convertOpsToUse = convertOps;
-    }
     LOG_VARD(convertOps);
-    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOpsToUse);
+    ElementInputStreamPtr streamReader =
+      getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 

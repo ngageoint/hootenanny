@@ -36,8 +36,8 @@ namespace hoot
 {
 
 class Feature;
-class ScriptToOgrTranslator;
-class ScriptTranslator;
+class ScriptToOgrSchemaTranslator;
+class ScriptSchemaTranslator;
 class Schema;
 
 class TranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
-  TranslatedTagCountVisitor(const std::shared_ptr<ScriptTranslator>& t);
+  TranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
 
@@ -72,7 +72,7 @@ private:
 
   const OsmMap* _map;
   std::shared_ptr<const Schema> _schema;
-  std::shared_ptr<ScriptToOgrTranslator> _translator;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;
 
   void _countTags(std::shared_ptr<Feature>& f);

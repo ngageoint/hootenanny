@@ -43,8 +43,12 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
 {
   if (source)
   {
-    LOG_INFO(
-      "Sorting elements by element type for map with element count: " << source->getElementCount());
+    // Its possible an empty map was sent back just for obtaining an empty stream...let's not
+    // log that.
+    if (source->getElementCount() > 0)
+    {
+      LOG_INFO("Sorting " << source->getElementCount() << " elements in-memory...");
+    }
 
     _source = source;
 

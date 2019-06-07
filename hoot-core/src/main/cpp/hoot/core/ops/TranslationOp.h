@@ -40,7 +40,9 @@ namespace hoot
 {
 
 /**
- * Applies a translation to the given map.
+ * Applies a translation to an entire map. If doing a translation via the convert command, consider
+ * using TranslationVisitor instead if memory is a concern, as it does not require the whole map
+ * to be read into memory at once.
  */
 class TranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {
@@ -57,7 +59,7 @@ public:
   /**
    * Set the path to the translation script.
    */
-  void setPath(QString path) { _translator.setPath(path); }
+  void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
 
   virtual QString getDescription() const { return _translator.getDescription(); }
 

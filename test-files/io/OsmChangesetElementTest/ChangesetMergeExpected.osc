@@ -26,7 +26,12 @@
 		</way>
 	</modify>
 	<delete>
-		<node id="16" version="0" lat="-44.0000000000000000" lon="-7.0000000000000000" timestamp="" changeset="1"/>
+		<relation id="1" version="0" timestamp="" changeset="1">
+			<member type="node" ref="7" role="role1"/>
+			<member type="way" ref="3" role="role2"/>
+			<tag k="key2" v="value2"/>
+			<tag k="error:circular" v="15"/>
+		</relation>
 		<way id="2" version="0" timestamp="" changeset="1">
 			<nd ref="4"/>
 			<nd ref="5"/>
@@ -39,11 +44,6 @@
 			<tag k="key1" v="value1"/>
 			<tag k="error:circular" v="15"/>
 		</way>
-		<relation id="1" version="0" timestamp="" changeset="1">
-			<member type="node" ref="7" role="role1"/>
-			<member type="way" ref="3" role="role2"/>
-			<tag k="key2" v="value2"/>
-			<tag k="error:circular" v="15"/>
-		</relation>
+		<node id="16" version="0" lat="-44.0000000000000000" lon="-7.0000000000000000" timestamp="" changeset="1"/>
 	</delete>
 </osmChange>

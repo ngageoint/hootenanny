@@ -33,9 +33,9 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -98,12 +98,13 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
   // A layer name to confusion table mapping
   QMap<QString, ConfusionTable> confusionTables;
 
-  ScriptToOgrTranslatorPtr translator;
+  ScriptToOgrSchemaTranslatorPtr translator;
 
   if (_translationScript != "")
   {
-    translator.reset(dynamic_cast<ScriptToOgrTranslator*>(ScriptTranslatorFactory::getInstance().
-        createTranslator(_translationScript)));
+    translator.reset(
+      dynamic_cast<ScriptToOgrSchemaTranslator*>(
+        ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translationScript)));
     translator->getOgrOutputSchema();
   }
 
@@ -144,12 +145,12 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
 
       if (translator)
       {
-        std::vector<ScriptToOgrTranslator::TranslatedFeature> translated =
+        std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> translated =
             translator->translateToOgr(tags, e->getElementType(),
               ec.getGeometryType(e, false));
 
         bool foundCategory = false;
-        foreach (const ScriptToOgrTranslator::TranslatedFeature& tf, translated)
+        foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)
         {
           _addToConfusionTable(conf, confusionTables[tf.tableName]);
           foundCategory = true;
@@ -159,7 +160,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
         {
           _addToConfusionTable(conf, confusionTables[noCategory]);
           LOG_VAR(tags);
-          foreach (const ScriptToOgrTranslator::TranslatedFeature& tf, translated)
+          foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)
           {
             LOG_VAR(tf);
           }

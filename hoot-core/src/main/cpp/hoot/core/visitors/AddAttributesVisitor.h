@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ namespace hoot
  * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public ElementVisitor, public Configurable
+class AddAttributesVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
 {
 
 public:
@@ -58,6 +59,11 @@ public:
 
   virtual QString getDescription() const
   { return "Adds one or more common OSM attributes to features"; }
+
+  virtual QString getInitStatusMessage() const { return "Adding attributes..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Added " + QString::number(_numAffected) + " attributes"; }
 
 private:
 

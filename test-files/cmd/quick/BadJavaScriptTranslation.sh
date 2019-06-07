@@ -8,9 +8,9 @@ mkdir -p $OUTPUT_DIR
 
 DATA_FILES=$HOOT_HOME/test-files/jakarta_raya_coastline.shp
 
-hoot convert $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm --trans test-files/cmd/quick/tSimple.js
+hoot convert -D schema.translation.script=test-files/cmd/quick/tSimple.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
 
-hoot convert $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm --trans translations/BadSyntaxTest.js
+hoot convert -D schema.translation.script=translations/BadSyntaxTest.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
 
-hoot convert $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm --trans test-files/cmd/quick/BadRequire.js
+hoot convert -D schema.translation.script=test-files/cmd/quick/BadRequire.js $DATA_FILES $OUTPUT_DIR/BadJavaScriptTranslation.osm
 

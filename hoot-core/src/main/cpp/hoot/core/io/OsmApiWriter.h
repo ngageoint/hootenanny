@@ -60,7 +60,7 @@ class OsmApiWriter : public Configurable, public ProgressReporter
   const QString API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
   const QString API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
   const QString API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
-  const QString API_PATH_GET_ELEMENT = "api/0.6/%1/%2";
+  const QString API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early

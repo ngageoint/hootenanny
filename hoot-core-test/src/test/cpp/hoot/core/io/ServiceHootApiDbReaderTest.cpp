@@ -147,7 +147,8 @@ public:
   long insertDataForBoundTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
+    OsmMapReaderFactory::read(
+      map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
@@ -638,7 +639,7 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
-    reader.setBoundingBox("-88.1,28.91,-88.0,28.89");
+    reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
     reader.read(map);
 
     //quick check to see if the element counts are off...consult the test output for more detail

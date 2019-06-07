@@ -23,28 +23,30 @@ echo GROUP: $VMGROUP
 
 export LANG=en_US.UTF-8
 
+# Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 source ~/.bash_profile
 
-# add EPEL repo for extra packages
-echo "### Add epel repo ###" > CentOS_upgrade.txt
-sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+if [ "${ADDREPOS:-yes}" = "yes" ]; then
+    echo "Adding additional software repositories..."
+    # add EPEL repo for extra packages
+    echo "### Add epel repo ###" > CentOS_upgrade.txt
+    sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
 
-# add Hoot repo for our pre-built dependencies.
-echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
-sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+    # add Hoot repo for our pre-built dependencies.
+    echo "### Add Hoot repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-# configure PGDG repository for PostgreSQL 9.5.
-sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+    # configure PGDG repository for PostgreSQL 9.5.
+    echo "### Add pgdg repo ###" >> CentOS_upgrade.txt
+    sudo $HOOT_HOME/scripts/yum/pgdg-repo.sh 9.5
+fi
 
-echo "Updating OS..."
-echo "### Update ###" >> CentOS_upgrade.txt
-sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
-echo "### Upgrade ###" >> CentOS_upgrade.txt
-sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
-
-# Make sure that we are in ~ before trying to wget & install stuff
-cd ~
+if [ "${YUMUPDATE:-yes}" = "yes" ]; then
+    echo "Updating OS..."
+    echo "### Yum Upgrade ###" >> CentOS_upgrade.txt
+    sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+fi
 
 if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
     # Install the versionlock plugin version first.
@@ -52,6 +54,7 @@ if ! rpm -qa | grep -q ^yum-plugin-versionlock ; then
 else
     # Remove any version locks to allow upgrading when versions have changed.
     sudo yum versionlock delete \
+         armadillo \
          geos \
          geos-devel \
          glpk \
@@ -59,12 +62,16 @@ else
          hoot-gdal \
          hoot-gdal-devel \
          hoot-gdal-python \
+         libgeotiff \
+         libgeotiff-devel \
          liboauthcpp \
          liboauthcpp-devel \
          libphonenumber \
          libphonenumber-devel \
          nodejs \
          nodejs-devel \
+         proj \
+         proj-devel \
          stxxl \
          stxxl-devel
 
@@ -72,6 +79,7 @@ fi
 
 echo "### Installing libraries with locked versions"
 sudo yum install -y \
+     armadillo-$ARMADILLO_VERSION \
      geos-$GEOS_VERSION \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
@@ -79,17 +87,22 @@ sudo yum install -y \
      hoot-gdal-$GDAL_VERSION \
      hoot-gdal-devel-$GDAL_VERSION \
      hoot-gdal-python-$GDAL_VERSION \
+     libgeotiff-$LIBGEOTIFF_VERSION \
+     libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     proj-$PROJ_VERSION \
+     proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
 echo "### Locking versions of libraries"
 sudo yum versionlock add \
+     armadillo-$ARMADILLO_VERSION \
      geos-$GEOS_VERSION \
      geos-devel-$GEOS_VERSION \
      glpk-$GLPK_VERSION \
@@ -97,12 +110,16 @@ sudo yum versionlock add \
      hoot-gdal-$GDAL_VERSION \
      hoot-gdal-devel-$GDAL_VERSION \
      hoot-gdal-python-$GDAL_VERSION \
+     libgeotiff-$LIBGEOTIFF_VERSION \
+     libgeotiff-devel-$LIBGEOTIFF_VERSION \
      libphonenumber-$LIBPHONENUMBER_VERSION \
      libphonenumber-devel-$LIBPHONENUMBER_VERSION \
      liboauthcpp-$LIBOAUTHCPP_VERSION \
      liboauthcpp-devel-$LIBOAUTHCPP_VERSION \
      nodejs-$NODE_VERSION \
      nodejs-devel-$NODE_VERSION \
+     proj-$PROJ_VERSION \
+     proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 

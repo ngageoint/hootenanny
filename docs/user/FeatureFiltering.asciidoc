@@ -10,9 +10,9 @@ two ways: 1) at the geometry/base feature type level and 2) more granularly at t
 Conflation at the geometry/base feature type level is controlled with matchers.  An example of this type of conflation would be 
 Road Conflation or POI Conflation.  Hootenanny has a specific geometric and attribute related definition of what makes up a road or POI.  
 For an overview of the different types of conflation available in Hootenanny see the corresponding conflation related sections in this 
-document, as well as the documentation for the 'match.creators' configuration option.  By default, Hootenanny enables all types of 
+document, as well as the documentation for the `match.creators` configuration option.  By default, Hootenanny enables all types of 
 conflation that it supports.  This ensures that a conflation job results in as much data conflated as possible.  If you desire to perform 
-certain types of conflation only, you can adjust the 'match.creators' and 'merger.creators' configuration options accordingly.
+certain types of conflation only, you can adjust the `match.creators` and `merger.creators` configuration options accordingly.
 
 === Tag and Schema Conflation Feature Filtering
 
@@ -29,11 +29,13 @@ specifying a JSON string or path to a file containing multiple logical AND/OR/NO
 ==== Conflation Command Example
 
 An example using tag/schema filtering with conflation to conflate only restaurants:
+
 -----
 hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm
 -----
 
 Conflate specifying a JSON feature filter as a file:
+
 -----
 hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
@@ -42,7 +44,8 @@ hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.
 
 The tag/schema filtering capability is best explained through specific filter examples:
 
-1) Filter down to just restaurants:
+1. Filter down to just restaurants:
++
 -----
 {
   "must": 
@@ -54,7 +57,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-2) Filter down to just tourism related features:
+2. Filter down to just tourism related features:
++
 -----
 {
   "must": 
@@ -66,7 +70,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-3) Filter down to just restaurants OR places of worship; exclude chapels:
+3. Filter down to just restaurants OR places of worship; exclude chapels:
++
 -----
 {
   "should": 
@@ -87,7 +92,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-4) Filter down to just hospitals and allow alias matching (alias matching off by default).  Alias matching is controlled from the hoot schema.  For example, this would also pick up _amenity=medical_centre_ as an alias:
+4. Filter down to just hospitals and allow alias matching (alias matching off by default).  Alias matching is controlled from the hoot schema.  For example, this would also pick up _amenity=medical_centre_ as an alias:
++
 -----
 {
   "must": 
@@ -100,7 +106,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-5) Filter down to restaurants and anything with a schema similarity to restaurants >= 0.8 (similarity comparison off by default).  Feature type similarity scores are controlled from the hoot schema.  For example, this also picks up _amenity=pub_:
+5. Filter down to restaurants and anything with a schema similarity to restaurants >= 0.8 (similarity comparison off by default).  Feature type similarity scores are controlled from the hoot schema.  For example, this also picks up _amenity=pub_:
++
 -----
 {
   "must": 
@@ -113,7 +120,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-6) Filter down to only non-building malls (POI's):
+6. Filter down to only non-building malls (POI's):
++
 -----
 {
   "must": 
@@ -131,7 +139,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-7) Filter down to features with a tag key containing "address":
+7. Filter down to features with a tag key containing "address":
++
 -----
 {
   "must": 
@@ -143,7 +152,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-8) Filter down to features with a tag key starting with "address":
+8. Filter down to features with a tag key starting with "address":
++
 -----
 {
   "must": 
@@ -155,7 +165,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-9) Filter down to features with a tag key ending with "address":
+9. Filter down to features with a tag key ending with "address":
++
 -----
 {
   "must": 
@@ -167,7 +178,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-10) Filter down to features with a tag value containing "address":
+10. Filter down to features with a tag value containing "address":
++
 -----
 {
   "must": 
@@ -179,7 +191,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-11) Filter down to features with a tag value starting with "address":
+11. Filter down to features with a tag value starting with "address":
++
 -----
 {
   "must": 
@@ -191,7 +204,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-12) Filter down to features with a tag value ending with "address":
+12. Filter down to features with a tag value ending with "address":
++
 -----
 {
   "must": 
@@ -203,7 +217,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-13) Filter down to all gravel roads, as well as their descendants (off by default; this also returns surface=fine_gravel and surface=pebblestone):
+13. Filter down to all gravel roads, as well as their descendants (off by default; this also returns surface=fine_gravel and surface=pebblestone):
++
 -----
 {
   "must": 
@@ -216,7 +231,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-14) Filter down to all roads even though highway=secondary was specified (off by default; this also returns highway=road):
+14. Filter down to all roads even though highway=secondary was specified (off by default; this also returns highway=road):
++
 -----
 {
   "must": 
@@ -229,7 +245,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-15) Query for all transportation related features (no tag filter may be specified with a category; current available categories include: poi, building, transportation, use, multiuse, name, and pseudoname):
+15. Query for all transportation related features (no tag filter may be specified with a category; current available categories include: poi, building, transportation, use, multiuse, name, and pseudoname):
++
 -----
 {
   "must": 
@@ -241,7 +258,8 @@ The tag/schema filtering capability is best explained through specific filter ex
 }
 -----
 
-16) Query for all features associated with building:part=yes (this is kind of catch all where other relationships are too strong of a link; associations aren't widely used in the hoot schema but can be added quite easily):
+16. Query for all features associated with building:part=yes (this is kind of catch all where other relationships are too strong of a link; associations aren't widely used in the hoot schema but can be added quite easily):
++
 -----
 {
   "must": 

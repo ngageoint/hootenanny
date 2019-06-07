@@ -34,7 +34,6 @@
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/HgisPoiCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
@@ -79,8 +78,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isArea)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isBuilding"),
               FunctionTemplate::New(current, isBuilding)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isHgisPoi"),
-              FunctionTemplate::New(current, isHgisPoi)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinear"),
               FunctionTemplate::New(current, isLinear)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinearWaterway"),
@@ -198,16 +195,6 @@ void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isHgisPoi(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(Boolean::New(current, HgisPoiCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)

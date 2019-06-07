@@ -5,7 +5,7 @@ Given the following conditions the output of Hootenanny should always be exactly
 
 * You're running a single version of hootenanny
 * You're on a single machine (changing OS, libraries, etc. may change the output)
-* You've enabled any necessary flags for consistency between runs (e.g. @-D uuid.helper.repeatable=true@, @unify.optimizer.time.limit=-1@, there may be others depending on the command)
+* You've enabled any necessary flags for consistency between runs (e.g. `-D uuid.helper.repeatable=true`, `unify.optimizer.time.limit=-1`, there may be others depending on the command)
 * You're using the exact same input between runs
 
 === Common Problems
@@ -22,21 +22,21 @@ While there are any number of issues that can cause these problems, below are a 
 
 Don't do it.
 
-Check out @unify.optimizer.time.limit@ for a case when Hoot uses time for determining program flow. It may make sense to replace this with the @it_lim@ option in GLPK. This isn't quite as user friendly, but it will create reproducible results.
+Check out `unify.optimizer.time.limit` for a case when Hoot uses time for determining program flow. It may make sense to replace this with the `it_lim` option in GLPK. This isn't quite as user friendly, but it will create reproducible results.
 
 ==== Inconsistent Random Variables
 
-Provide flags for using a consistent seed as needed. See @uuid.helper.repeatable@ for an example.
+Provide flags for using a consistent seed as needed. See `uuid.helper.repeatable` for an example.
 
 ==== UUIDs
 
-Don't use Qt's UUID generation directly. See UuidHelper::createUuid() and the asssociated @uuid.helper.repeatable@ key.
+Don't use Qt's UUID generation directly. See UuidHelper::createUuid() and the asssociated `uuid.helper.repeatable` key.
 
 ==== Uninitialized Variables
 
-Sometimes GCC doesn't warn about uninitialized variables. There are some "tools in valgrind":http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals that will identify uninitialized variables. 
+Sometimes GCC doesn't warn about uninitialized variables. There are some link:$$http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals$$[tools in valgrind] that will identify uninitialized variables. 
 
-Adding these lines into your @LocalConfig.pri@ may also help to flag issues while compiling:
+Adding these lines into your `LocalConfig.pri` may also help to flag issues while compiling:
 
 -----
 # Warn about uninitialized variables and set all variables to their default     
@@ -63,7 +63,7 @@ main()
 }
 -----
 
-You aren't guaranteed that "a < b" will always be printed. Most frequently this happens when using containers to store values. E.g.
+You aren't guaranteed that `a < b` will always be printed. Most frequently this happens when using containers to store values. E.g.
 
 -----
 // bad!
@@ -82,7 +82,7 @@ set<ConstWayPtr, WayPtrCompare> w2;
 
 ==== Listing unsorted files from FS
 
-E.g. using QDir::entryList without a sorting option may return the files in a different order each time.
+E.g. using `QDir::entryList` without a sorting option may return the files in a different order each time.
 
 http://doc.qt.io/qt-4.8/qdir.html#entryList
 

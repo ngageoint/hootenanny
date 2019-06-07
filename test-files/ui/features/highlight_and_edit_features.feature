@@ -21,6 +21,7 @@ Feature: Highlight features on click
         Then I wait 30 "seconds" to see "Conflating …"
         Then I wait 3 "minutes" to see "AllDataTypes_HighlightCucumber"
         And I wait 30 "seconds" to not see "Please wait while panning to review item."
+        Then I should not see the "#processingDiv" on the page
 
     Scenario: I add a point to the map
         When I click the "add-point" button
