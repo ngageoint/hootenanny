@@ -2,20 +2,20 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-23.5337806" minlon="-46.31339" maxlat="-23.53253" maxlon="-46.3069421"/>
     <node visible="true" id="-20449830" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5325300000000013" lon="-46.3133899999999983">
-        <tag k="ele" v="741"/>
         <tag k="is_in:country_code" v="BR"/>
         <tag k="source" v="geonames"/>
-        <tag k="uuid" v="GeoNames.org:8504807"/>
+        <tag k="ele" v="741"/>
         <tag k="name" v="Suzano"/>
         <tag k="railway" v="station"/>
+        <tag k="uuid" v="GeoNames.org:8504807"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-20449829" timestamp="1970-01-01T00:00:00Z" version="1" lat="-23.5337806000000000" lon="-46.3069421000000006">
-        <tag k="operator" v="Radial"/>
+        <tag k="highway" v="bus_stop"/>
         <tag k="name" v="Terminal Norte de Suzano"/>
         <tag k="shelter" v="yes"/>
-        <tag k="highway" v="bus_stop"/>
         <tag k="source:datetime" v="2014-06-18T23:59:00.000Z"/>
+        <tag k="operator" v="Radial"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

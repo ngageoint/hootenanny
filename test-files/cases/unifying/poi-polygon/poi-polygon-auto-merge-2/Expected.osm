@@ -19,11 +19,11 @@
         <nd ref="-85808"/>
         <nd ref="-85810"/>
         <nd ref="-85797"/>
-        <tag k="alt_types" v="alt_types=amenity=theatre;amenity=community_centre"/>
         <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="amenity" v="arts_centre"/>
         <tag k="name" v="poly1"/>
         <tag k="alt_types" v="amenity=theatre;amenity=community_centre"/>
         <tag k="alt_name" v="poi1;poi2"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

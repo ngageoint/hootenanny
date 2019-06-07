@@ -11,8 +11,9 @@
         <nd ref="-25973"/>
         <nd ref="-25974"/>
         <nd ref="-25971"/>
-        <tag k="note" v="building;POI"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="note" v="building;POI"/>
         <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

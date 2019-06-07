@@ -2,21 +2,24 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="2.255955" minlon="22.3062313" maxlat="2.8672986" maxlon="22.9900745"/>
     <node visible="true" id="-340017" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2559549999999997" lon="22.9900744999999986">
-        <tag k="use" v="residential"/>
-        <tag k="place" v="village"/>
         <tag k="name" v="somewhere"/>
         <tag k="landuse" v="built_up_area"/>
+        <tag k="use" v="residential"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-339997" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.2666934000000003" lon="22.3062313000000003">
-        <tag k="use" v="residential"/>
-        <tag k="place" v="village"/>
         <tag k="name" v="Place1"/>
         <tag k="landuse" v="built_up_area"/>
-    </node>
-    <node visible="true" id="-339988" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8672985999999998" lon="22.3670612999999996">
         <tag k="use" v="residential"/>
         <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-339988" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.8672985999999998" lon="22.3670612999999996">
         <tag k="name" v="Place2"/>
         <tag k="landuse" v="built_up_area"/>
+        <tag k="use" v="residential"/>
+        <tag k="place" v="village"/>
+        <tag k="error:circular" v="15"/>
     </node>
 </osm>
