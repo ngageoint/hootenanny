@@ -34,7 +34,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 # opts to apply to commands involved in db i/o
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
-# perturbation opts; We just want a small amount of noticeable shift in the buildings and don't want to apply any of the other non-shift 
+# perturbation opts; We just want a small amount of noticeable shift in the features and don't want to apply any of the other non-shift 
 # destructive perty ops.
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 # changeset derivation opts
@@ -64,7 +64,7 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,4
 # DATA PREP
 
 # First distort one layer with perturbation and loads it into an OSM API DB as ref data. Perturbation was done only b/c I couldn't find readily
-# available two similar but not identical test building datasets. The perturbed buildings are uglier, so the idea is we'd want to get them
+# available two similar but not identical test building datasets. The perturbed features are uglier, so the idea is we'd want to get them
 # replaced by something better (what we have in the original, unperturbed data). 
 #
 # Preserving the source data IDs (reader.use.data.source.ids=true in the second convert step) is important here for changeset derivation since 
@@ -82,7 +82,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.so
 # Uncomment to see what the ref layer looks like in file form:
 #hoot convert $GENERAL_OPTS $REF_LAYER $OUT_DIR/ref.osm
 
-# Next, read the original unperturbed data from a file into a Hoot API DB as secondary data...unperturbed buildings looks good, so we want 
+# Next, read the original unperturbed data from a file into a Hoot API DB as secondary data. The unperturbed features looks good, so we'll want 
 # to keep them). 
 
 # Since the perturbed data (ref) was derived directly from this secondary layer, there will overlapping element IDs. Changeset 
@@ -129,6 +129,8 @@ diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.
 
 # Write the SQL changeset back to the ref db. We're using the SQL changeset here instead of the XML b/c that's the only kind we can write 
 # w/o a Rails Port in the hoot stack (which, if added, would only overly complicate the hoot testing environment)...the effect is the same.
+# The final output should have the better looking (unperturbed) features inserted only in the AOI of the ref map (there will be some overlap
+# of the AOI bounds). The rest of the map should have perturbed features remaining in it.
 echo ""
 echo "Applying the changeset to the reference data..."
 echo ""
