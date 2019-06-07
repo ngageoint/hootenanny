@@ -123,14 +123,19 @@ void MapCropper::setConfiguration(const Settings& conf)
     LOG_VARD(_envelope);
     _invert = confOpts.getCropInvert();
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
+    // I don't think these options make sense when we're doing inverted cropping (maybe they do?),
+    // so let's leave them turned off if inverting is selected.
+    if (!_invert)
+    {
+      _keepEntireFeaturesCrossingBounds = confOpts.getCropKeepEntireFeaturesCrossingBounds();
+      _keepOnlyFeaturesInsideBounds = confOpts.getCropKeepOnlyFeaturesInsideBounds();
+      if (_keepOnlyFeaturesInsideBounds)
+      {
+        _keepEntireFeaturesCrossingBounds = false;
+      }
+    }
   }
   _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
-  _keepEntireFeaturesCrossingBounds = confOpts.getCropKeepEntireFeaturesCrossingBounds();
-  _keepOnlyFeaturesInsideBounds = confOpts.getCropKeepOnlyFeaturesInsideBounds();
-  if (_keepOnlyFeaturesInsideBounds)
-  {
-    _keepEntireFeaturesCrossingBounds = false;
-  }
 }
 
 void MapCropper::apply(OsmMapPtr& map)
@@ -158,7 +163,7 @@ void MapCropper::apply(OsmMapPtr& map)
     //LOG_VART(e);
 
     // if the way is completely outside the region we're keeping
-    if (!_keepOnlyFeaturesInsideBounds && _isWhollyOutside(e))
+    if (_isWhollyOutside(e))
     {
       // remove the way
       LOG_TRACE("Dropping: " << w << "...");
@@ -171,7 +176,14 @@ void MapCropper::apply(OsmMapPtr& map)
       LOG_TRACE("Keeping: " << w << "...");
       _numWaysInBounds++;
     }
-    else if (!_keepOnlyFeaturesInsideBounds && !_keepEntireFeaturesCrossingBounds)
+    else if (_keepOnlyFeaturesInsideBounds)
+    {
+      // remove the way
+      LOG_TRACE("Dropping: " << w << "...");
+      RemoveWayOp::removeWayFully(result, w->getId());
+      _numWaysOutOfBounds++;
+    }
+    else if (!_keepEntireFeaturesCrossingBounds)
     {
       // do an expensive operation to decide how much to keep, if any.
       _cropWay(result, w->getId());

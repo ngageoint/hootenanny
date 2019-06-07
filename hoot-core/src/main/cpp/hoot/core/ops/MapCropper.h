@@ -98,6 +98,7 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
+  void setInvert(bool invert) { _invert = invert; }
   void setKeepEntireFeaturesCrossingBounds(bool keep) { _keepEntireFeaturesCrossingBounds = keep; }
   void setKeepOnlyFeaturesInsideBounds(bool keep) { _keepOnlyFeaturesInsideBounds = keep; }
 
@@ -106,7 +107,6 @@ private:
   geos::geom::Envelope _envelope;
   std::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
-  bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
   // If true, won't split apart features straddling the specified bounds.
   bool _keepEntireFeaturesCrossingBounds;
