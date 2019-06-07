@@ -27,7 +27,7 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/algorithms/changeset/InMemoryElementSorter.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
@@ -35,12 +35,10 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/RelationCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -81,7 +79,7 @@ DiffConflator::DiffConflator() :
   _reset();
 }
 
-DiffConflator::DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
+DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance())
 {
@@ -94,26 +92,35 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
+void DiffConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
+}
+
 void DiffConflator::apply(OsmMapPtr& map)
 {
   LOG_INFO("Calculating differential output...");
 
   Timer timer;
   _reset();
+  int currentStep = 1;  // tracks the current job task step for progress reporting
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
 
-  LOG_DEBUG("\tDiscarding relations...");
-  boost::shared_ptr<RelationCriterion> pRelationCrit(new RelationCriterion());
-  RemoveElementsVisitor removeRelationsVisitor(pRelationCrit);
-  _pMap->visitRw(removeRelationsVisitor);
-  _stats.append(SingleStat("Remove Relations Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-discarding-relations");
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
+
+  _updateProgress(currentStep - 1, "Matching features...");
 
   LOG_DEBUG("\tDiscarding unconflatable elements...");
-  NonConflatableElementRemover nonConflateRemover;
-  nonConflateRemover.apply(_pMap);
+  NonConflatableElementRemover().apply(_pMap);
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
@@ -142,10 +149,22 @@ void DiffConflator::apply(OsmMapPtr& map)
     (double)_matches.size() / findMatchesTime));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
 
+  currentStep++;
+
   // Use matches to calculate and store tag diff. We must do this before we
   // create the map diff, because that operation deletes all of the info needed
   // for calculating the tag diff.
+  _updateProgress(currentStep - 1, "Storing tag differentials...");
   _calcAndStoreTagChanges();
+  currentStep++;
+
+  QString message = "Dropping match conflicts";
+  if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
+  {
+    message += " and snapping roads";
+  }
+  message += "...";
+  _updateProgress(currentStep - 1, message);
 
   // We're eventually getting rid of all matches from the output, but in order to make the road
   // snapping work correctly we'll get rid of secondary elements in matches first.
@@ -156,30 +175,25 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
-
-    // One big weakness here is that if the map was rubbersheeted beforehand (e.g. as a pre
-    // conflation op when using the Network alg), we'll be snapping back to the rubbersheeted
-    // ref data, which never actually makes it to the output since we drop out ref matches. So,
-    // in places where the rubbersheeting severely moved ref ways, it may not appear that the
-    // snapping did very well.  Since the rubbersheeting potentially makes the matching better,
-    // which directly feeds this operation, there's really no other recourse other than to try
-    // diff conflate both with and w/o rubbersheeting to see which yields better overall results.
-
     _snapSecondaryRoadsBackToRef();
   }
 
-  // _pMap at this point contains all of input1, we are going to delete everything left that
-  // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
-  // differential that we want.
-  _removeMatches(Status::Unknown1);
+  if (ConfigOptions().getDifferentialRemoveReferenceData())
+  {
+    // _pMap at this point contains all of input1, we are going to delete everything left that
+    // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
+    // differential that we want.
+    _removeMatches(Status::Unknown1);
 
-  // Now remove input1 elements
-  LOG_DEBUG("\tRemoving all reference elements...");
-  boost::shared_ptr<ElementCriterion> pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-  RemoveElementsVisitor removeRef1Visitor(pTagKeyCrit);
-  removeRef1Visitor.setRecursive(true);
-  _pMap->visitRw(removeRef1Visitor);
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+    // Now remove input1 elements
+    LOG_DEBUG("\tRemoving all reference elements...");
+    ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+    RemoveElementsVisitor removeRef1Visitor;
+    removeRef1Visitor.setRecursive(true);
+    removeRef1Visitor.addCriterion(pTagKeyCrit);
+    _pMap->visitRw(removeRef1Visitor);
+    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+  }
 }
 
 void DiffConflator::_snapSecondaryRoadsBackToRef()
@@ -245,8 +259,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
   if (countVtor.getCount() > 0)
   {
-    // Not something a user can generally cause - more likely it's a misuse
-    // of this class.
+    // Not something a user can generally cause - more likely it's a misuse of this class.
     LOG_ERROR("Map elements with Status::Unknown2 found when storing "
               "original map for diff conflation. This can cause unpredictable "
               "results. The original map should contain only Status::Unknown1 "
@@ -262,7 +275,7 @@ void DiffConflator::markInputElements(OsmMapPtr pMap)
   // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-  boost::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+  std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
   pRef1v->setConfiguration(visitorConf);
   pMap->visitRw(*pRef1v);
 }
@@ -292,7 +305,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
       }
 
       // Add the changed way with merged tags
-      ConstWayPtr pTempWay = boost::dynamic_pointer_cast<const Way>(c.getElement());
+      ConstWayPtr pTempWay = std::dynamic_pointer_cast<const Way>(c.getElement());
       WayPtr pNewWay(new Way(*pTempWay));
       pNewWay->setStatus(Status::TagChange);
       pMap->addWay(pNewWay);
@@ -321,18 +334,17 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set< std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
 
     // Go through our match pairs, calculate tag diff for elements. We only
     // consider the "Original" elements when we do this - we want to ignore
     // elements created during map cleaning operations (e.g. intersection splitting)
     // because the map that the changeset operates on won't have those elements.
-    for (std::set< std::pair<ElementId, ElementId> >::iterator pit = pairs.begin();
+    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
          pit != pairs.end(); ++pit)
     {
-      // If it's a POI-Poly match, the poi always comes first, even if it's from
-      // the secondary dataset, so we can't always count on the first being
-      // the old element
+      // If it's a POI-Poly match, the poi always comes first, even if it's from the secondary
+      // dataset, so we can't always count on the first being the old element
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
       if (_pOriginalMap->containsElement(pit->first))
@@ -369,9 +381,10 @@ void DiffConflator::_calcAndStoreTagChanges()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
-// See if tags are the same
 bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
 {
+  // See if tags are the same
+
   QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
@@ -388,28 +401,23 @@ bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
   return false;
 }
 
-// Create a new change object based on the original element, with new tags
-Change DiffConflator::_getChange(ConstElementPtr pOldElement,
-                                 ConstElementPtr pNewElement)
+Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement)
 {
-  // This may seem a little weird, but we want something very specific here.
-  // We want the old element as it was... with new tags.
+  // Create a new change object based on the original element, with new tags. This may seem a
+  // little weird, but we want something very specific here. We want the old element as it was...
+  // with new tags.
 
   // Copy the old one to get the geometry
   ElementPtr pChangeElement(pOldElement->clone());
-
   assert(pChangeElement->getId() == pOldElement->getId());
 
-  // Need to merge tags into the new element
-  // Keeps all names, chooses tags1 in event of a conflict.
-  Tags newTags = TagComparator::getInstance().overwriteMerge(pNewElement->getTags(),
-                                                             pOldElement->getTags());
+  // Need to merge tags into the new element. Keeps all names, chooses tags1 in event of a conflict.
+  Tags newTags =
+    TagComparator::getInstance().overwriteMerge(pNewElement->getTags(), pOldElement->getTags());
   pChangeElement->setTags(newTags);
 
   // Create the change
-  Change newChange(Change::Modify, pChangeElement);
-
-  return newChange;
+  return Change(Change::Modify, pChangeElement);
 }
 
 void DiffConflator::_reset()
@@ -439,33 +447,25 @@ void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType&
   }
 }
 
-// Convenience function used when deriving a changeset
-boost::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
+std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  //Conflation requires all data to be in memory, so no point in adding support for
-  //ExternalMergeElementSorter here.
+  // Conflation requires all data to be in memory, so no point in adding support for the
+  // ExternalMergeElementSorter here.
 
   InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
   InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
-  boost::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
   return delta;
 }
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  // Make empty map
-  OsmMapPtr pEmptyMap(new OsmMap());
-
-  // Get Changeset Deriver
-  boost::shared_ptr<ChangesetDeriver> pDeriver = _sortInputs(pEmptyMap, pMap);
-
-  // Return the provider
-  return pDeriver;
+  return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
 }
 
-void DiffConflator::writeChangeset( OsmMapPtr pResultMap, QString &output, bool separateOutput)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
-  // Write a changeset
+  // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
   if (!_conflateTags)
@@ -505,17 +505,17 @@ void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stat
   CriterionCountVisitor poiCounter;
   poiCounter.addCriterion(pPoiCrit);
   pResultMap->visitRo(poiCounter);
-  stats.append((SingleStat("Count of New POIs", poiCounter.getCount())));
+  stats.append((SingleStat("New POIs", poiCounter.getCount())));
 
   ElementCriterionPtr pBuildingCrit(new BuildingCriterion(pResultMap));
   CriterionCountVisitor buildingCounter;
   buildingCounter.addCriterion(pBuildingCrit);
   pResultMap->visitRo(buildingCounter);
-  stats.append((SingleStat("Count of New Buildings", buildingCounter.getCount())));
+  stats.append((SingleStat("New Buildings", buildingCounter.getCount())));
 
   LengthOfWaysVisitor lengthVisitor;
   pResultMap->visitRo(lengthVisitor);
-  stats.append((SingleStat("Km of New Road", lengthVisitor.getStat() / 1000.0)));
+  stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
 }
 
 }

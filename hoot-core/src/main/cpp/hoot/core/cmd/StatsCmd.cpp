@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -46,14 +46,14 @@ namespace hoot
 class StatsCmd : public BaseCommand
 {
 public:
+
   static string className() { return "hoot::StatsCmd"; }
 
   StatsCmd() {}
 
   virtual QString getName() const { return "stats"; }
 
-  virtual QString getDescription() const
-  { return "Displays a set of statistics for a map"; }
+  virtual QString getDescription() const { return "Displays a set of statistics for a map"; }
 
   int runSimple(QStringList args)
   {
@@ -70,14 +70,14 @@ public:
 
     bool quick = false;
     bool toFile = false;
-    QString output_filename = "";
+    QString outputFilename = "";
     //  Capture any flags and remove them before processing inputs
     for (int i = 0; i < args.size(); i++)
     {
       if (args[i].startsWith(OUTPUT_SWITCH))
       {
-        output_filename = args[i];
-        output_filename.remove(OUTPUT_SWITCH);
+        outputFilename = args[i];
+        outputFilename.remove(OUTPUT_SWITCH);
         toFile = true;
         inputs.removeOne(args[i]);
       }
@@ -88,12 +88,11 @@ public:
       }
     }
 
-    QString sep = "\t";
+    const QString sep = "\t";
     // read the conflation status from the file.
     conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
 
-    QList< QList<SingleStat> > allStats;
-
+    QList<QList<SingleStat>> allStats;
     for (int i = 0; i < inputs.size(); i++)
     {
       OsmMapPtr map(new OsmMap());
@@ -102,10 +101,9 @@ public:
       //either strictly use one reading method or the other.
       //IoUtils::loadMap(map, inputs[i], true, Status::Invalid);
       OsmMapReaderFactory::read(map, inputs[i], true, Status::Invalid);
-
       MapProjector::projectToPlanar(map);
 
-      boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+      std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());
@@ -113,10 +111,10 @@ public:
 
     if (toFile)
     {
-      if (output_filename.endsWith(".json", Qt::CaseInsensitive))
-        MapStatsWriter().writeStatsToJson(allStats, output_filename);
+      if (outputFilename.endsWith(".json", Qt::CaseInsensitive))
+        MapStatsWriter().writeStatsToJson(allStats, outputFilename);
       else
-        MapStatsWriter().writeStatsToText(allStats, output_filename);
+        MapStatsWriter().writeStatsToText(allStats, outputFilename);
     }
     else
     {

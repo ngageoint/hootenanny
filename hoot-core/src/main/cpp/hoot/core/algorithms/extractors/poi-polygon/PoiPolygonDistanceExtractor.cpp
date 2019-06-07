@@ -55,12 +55,12 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElemen
     DisableLog dl(Log::Warn);
 
     ElementConverter elementConverter(map.shared_from_this());
-    boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
     {
       throw geos::util::TopologyException();
     }
-    boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
     return polyGeom->distance(poiGeom.get());
   }
   catch (const geos::util::TopologyException& e)

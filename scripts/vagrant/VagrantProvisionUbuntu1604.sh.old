@@ -339,7 +339,7 @@ if ! glpsol | grep --quiet $GLPK_VERSION; then
 fi
 
 if ! mocha --version &>/dev/null; then
-    echo "### Installing mocha for plugins test..."
+    echo "### Installing mocha for translations test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
     sudo rm -rf ~/tmp/*

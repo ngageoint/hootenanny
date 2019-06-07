@@ -29,6 +29,8 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON_ZIP;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES_ZIP;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
@@ -69,6 +71,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -85,6 +89,9 @@ public class ImportResource {
 
     @Autowired
     private ImportCommandFactory fileETLCommandFactory;
+
+    @Autowired
+    private UpdateParentCommandFactory updateParentCommandFactory;
 
     /**
      * Purpose of this service is to provide ingest service for uploading shape
@@ -118,6 +125,7 @@ public class ImportResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+                                      @QueryParam("FOLDER_ID") String folderId,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
@@ -129,8 +137,8 @@ public class ImportResource {
 
             List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-            int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geonamesCnt = 0, zipCnt = 0;
-            int shpZipCnt = 0, osmZipCnt = 0, geonamesZipCnt = 0, fgdbZipCnt = 0;
+            int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geojsonCnt = 0, geonamesCnt = 0, zipCnt = 0;
+            int shpZipCnt = 0, osmZipCnt = 0, geojsonZipCnt = 0, geonamesZipCnt = 0, fgdbZipCnt = 0;
 
             List<File> filesToImport = new LinkedList<>();
             List<String> fileNames = new ArrayList<>();
@@ -170,10 +178,12 @@ public class ImportResource {
                 shpCnt += counts.get(SHP);
                 fgdbCnt += counts.get(FGDB);
                 osmCnt += counts.get(OSM);
+                geojsonCnt +=  counts.get(GEOJSON);
                 geonamesCnt += counts.get(GEONAMES);
                 shpZipCnt += counts.get(SHAPE_ZIP);
                 fgdbZipCnt += counts.get(FGDB_ZIP);
                 osmZipCnt += counts.get(OSM_ZIP);
+                geojsonZipCnt += counts.get(GEOJSON_ZIP);
                 geonamesZipCnt += counts.get(GEONAMES_ZIP);
 
                 if ((geonamesCnt == 1) && (initialUploadClassification == TXT)) {
@@ -198,12 +208,15 @@ public class ImportResource {
             }
 
             UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
-                    shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+                    shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
+                    geojsonCnt, geonamesCnt);
 
             ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
 
-            Command[] workflow = { importCommand };
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
+
+            Command[] workflow = { importCommand, setFolderCommand };
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.IMPORT));
 

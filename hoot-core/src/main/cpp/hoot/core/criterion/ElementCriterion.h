@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERION_H
 #define ELEMENTCRITERION_H
 
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/info/ApiEntityInfo.h>
+// hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -49,6 +49,8 @@ class Element;
  * should only use the criteria in a positive sense. (e.g. apply something to the elements that
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
+ *
+ * Also see: ConflatableElementCriterion.
  */
 class ElementCriterion : public ApiEntityInfo
 {
@@ -66,10 +68,10 @@ public:
   /**
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
-  virtual boost::shared_ptr<ElementCriterion> clone() = 0;
+  virtual std::shared_ptr<ElementCriterion> clone() = 0;
 };
 
-typedef boost::shared_ptr<ElementCriterion> ElementCriterionPtr;
+typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;
 
 }
 

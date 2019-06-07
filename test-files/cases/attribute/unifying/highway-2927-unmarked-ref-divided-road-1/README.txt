@@ -1,5 +1,5 @@
-This is an Attribute Conflation test for ensuring small section of road at the start of unmarked reference divided highways are properly 
-joined into connecting roads
+This is an Attribute Conflation test with the Unifying Roads Algorithm for ensuring small section of road at the start of unmarked 
+reference divided highways are properly joined into connecting roads
 
 The road Av. Baralt splits into two divided roads in one section with a sidewalk in between them.  Since the reference geometry on one side
 of the divided road pair is smaller than the other, the smaller section is unable to match with any secondary feature.  Previously, this smaller

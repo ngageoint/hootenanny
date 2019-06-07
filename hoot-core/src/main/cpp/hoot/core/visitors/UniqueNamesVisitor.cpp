@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UniqueNamesVisitor.h"
 
@@ -36,8 +36,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, UniqueNamesVisitor)
 
 void UniqueNamesVisitor::visit(const ConstElementPtr& e)
 {
-  QStringList names = e->getTags().getNames();
-
+  const QStringList names = e->getTags().getNames();
   for (int i = 0; i < names.size(); i++)
   {
     _names.insert(names[i]);

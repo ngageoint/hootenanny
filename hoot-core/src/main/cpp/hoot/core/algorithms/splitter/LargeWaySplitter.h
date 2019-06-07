@@ -22,14 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LARGEWAYSPLITTER_H
 #define LARGEWAYSPLITTER_H
-
-// Boost
-#include <boost/shared_ptr.hpp>
 
 // Std
 #include <string>
@@ -51,25 +48,25 @@ public:
 
   static std::string className() { return "hoot::LargeWaySplitter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   LargeWaySplitter(double threshold);
 
-  void apply(boost::shared_ptr<OsmMap> map);
+  void apply(const std::shared_ptr<OsmMap>& map);
 
   /**
    * Split large ways into smaller ways.
    * @param threshold - The threshold length. This projection units.
    */
-  static void splitWays(boost::shared_ptr<OsmMap> map, double threshold);
+  static void splitWays(const std::shared_ptr<OsmMap>& map, double threshold);
 
 protected:
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   double _threshold;
 
-  void _divideWay(boost::shared_ptr<Way> way, int numPieces);
+  void _divideWay(const std::shared_ptr<Way>& way, int numPieces);
 };
 
 }

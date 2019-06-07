@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATECASETESTSUITE_H
 #define CONFLATECASETESTSUITE_H
@@ -40,7 +40,7 @@ class ConflateCaseTestSuite : public AbstractTestSuite
 
 public:
 
-  ConflateCaseTestSuite(QString dir, bool hideDisableTests = false);
+  ConflateCaseTestSuite(const QString& dir, bool hideDisableTests = false);
 
   /**
    * Attempts to load a conflate case test given a directory
@@ -48,11 +48,14 @@ public:
    * @param dir directory to load the test from
    * @param confs hoot configuration files to pass to the test
    */
-  virtual void loadDir(QString dir, QStringList confs);
+  virtual void loadDir(const QString& dir, QStringList confs) override;
 
 private:
 
   bool _hideDisableTests;
+  int _numTests;
+
+  void _loadBaseConfig(const QString& testConfigFile, QStringList& confs);
 };
 
 }

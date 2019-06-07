@@ -77,7 +77,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100.0);
+                    jobStatus.setPercentComplete(100);
                     jobStatus.setUserId(Users.TEST_USER.getId());
 
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -120,7 +120,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100.0);
+                    jobStatus.setPercentComplete(100);
                     jobStatus.setUserId(Users.TEST_USER.getId());
 
                     Timestamp ts = new Timestamp(now);
@@ -137,7 +137,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                 jobStatus.setJobType(JobType.UNKNOWN.ordinal());
                 jobStatus.setStatus(COMPLETE.ordinal());
                 jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                jobStatus.setPercentComplete(100.0);
+                jobStatus.setPercentComplete(100);
                 jobStatus.setUserId(Users.TEST_USER.getId());
 
                 Timestamp ts = new Timestamp(old);
@@ -181,11 +181,11 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                     if (i % 2 == 0) {
                         jobStatus.setStatus(COMPLETE.ordinal());
                         jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                        jobStatus.setPercentComplete(100.0);
+                        jobStatus.setPercentComplete(100);
                     } else {
                         jobStatus.setStatus(RUNNING.ordinal());
                         jobStatus.setStatusDetail("RUNNING");
-                        jobStatus.setPercentComplete(50.0);
+                        jobStatus.setPercentComplete(50);
                     }
 
                     Timestamp ts = new Timestamp(now);
@@ -204,11 +204,11 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                 if (i % 2 == 0) {
                     jobStatus.setStatus(COMPLETE.ordinal());
                     jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100.0);
+                    jobStatus.setPercentComplete(100);
                 } else {
                     jobStatus.setStatus(RUNNING.ordinal());
                     jobStatus.setStatusDetail("RUNNING");
-                    jobStatus.setPercentComplete(50.0);
+                    jobStatus.setPercentComplete(50);
                 }
 
                 Timestamp ts = new Timestamp(old);

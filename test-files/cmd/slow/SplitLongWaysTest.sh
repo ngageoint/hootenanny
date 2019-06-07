@@ -2,10 +2,10 @@
 set -e
 
 export HOOT_OPTS=--warn
-export ADDITIONAL_VISITORS="hoot::SplitLongLinearWaysVisitor"
+export ADDITIONAL_VISITORS="hoot::TranslationOp;hoot::SplitLongLinearWaysVisitor"
 export TRANSLATION="TDSv40.js"
 export OUTPUT_DIR=$HOOT_HOME/test-output/cmd/slow/SplitLongWaysTest
-export DATA_DIR=$HOOT_HOME/test-files
+export DATA_DIR=$HOOT_HOME/test-files/cmd/slow/SplitLongWaysTest
 export INPUTS=$DATA_DIR/SplitLongWaysTest.shp
 export KNOWN_GOOD_OUTPUT=$DATA_DIR/SplitLongWaysTestResults.osm.pbf
 export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm.pbf
@@ -14,6 +14,6 @@ export TEST_OUTPUT=$OUTPUT_DIR/SplitLongWaysTest.osm.pbf
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
-hoot convert $HOOT_OPTS -D convert.ops+=$ADDITIONAL_VISITORS $INPUTS $TEST_OUTPUT --trans $HOOT_HOME/translations/$TRANSLATION
+hoot convert $HOOT_OPTS -D schema.translation.script=$HOOT_HOME/translations/$TRANSLATION -D convert.ops+=$ADDITIONAL_VISITORS $INPUTS $TEST_OUTPUT
 
 hoot diff $HOOT_OPTS $KNOWN_GOOD_OUTPUT $TEST_OUTPUT && echo "Test Complete"

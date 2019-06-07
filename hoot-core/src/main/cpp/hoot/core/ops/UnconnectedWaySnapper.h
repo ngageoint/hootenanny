@@ -107,11 +107,21 @@ public:
   void setWayDiscretizationSpacing(double spacing);
   void setAddCeToSearchDistance(bool add) { _addCeToSearchDistance = add; }
   void setMarkSnappedNodes(bool mark) { _markSnappedNodes = mark; }
-  void setWayToSnapToCriterionClassName(QString name);
-  void setWayToSnapCriterionClassName(QString name);
-  void setWayNodeToSnapToCriterionClassName(QString name);
+  void setWayToSnapToCriterionClassName(const QString& name);
+  void setWayToSnapCriterionClassName(const QString& name);
+  void setWayNodeToSnapToCriterionClassName(const QString& name);
   void setSnapWayStatus(const Status& status) { _snapWayStatus = status; }
   void setSnapToWayStatus(const Status& status) { _snapToWayStatus = status; }
+
+  /**
+   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
+   *   the closest node in 'connectTo'
+   * @param map Map containing ways
+   * @param disconnected Disconnected way that needs to be connected
+   * @param connectTo Way to connect the disconnected way to
+   * @returns True if the ways were successfully snapped together
+   */
+  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
 
 private:
 
@@ -144,11 +154,11 @@ private:
   Status _snapToWayStatus;
 
   // feature indexes used for way nodes being snapped to
-  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
+  std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
   std::deque<ElementId> _snapToWayNodeIndexToEid;
 
   // feature indexes used for ways being snapped to
-  boost::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
+  std::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
   // keep track of the way nodes that are snapped
@@ -177,7 +187,7 @@ private:
    * @param status a hoot status; either Unknown1 or Unknown2
    * @return an element criterion
    */
-  ElementCriterionPtr _createFeatureCriterion(const QString criterionClassName,
+  ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
                                               const Status& status);
   /*
    * Creates an index needed when searching for features to snap to
@@ -187,8 +197,8 @@ private:
    * @param featureIndexToEid a pointer to the element ID index being created
    * @param elementType the element type of the criterion class; either Way or Node
    */
-  void _createFeatureIndex(ElementCriterionPtr featureCrit,
-                           boost::shared_ptr<Tgs::HilbertRTree>& featureIndex,
+  void _createFeatureIndex(const ElementCriterionPtr& featureCrit,
+                           std::shared_ptr<Tgs::HilbertRTree>& featureIndex,
                            std::deque<ElementId>& featureIndexToEid,
                            const ElementType& elementType);
 
@@ -218,7 +228,7 @@ private:
    * @param snapToWay the way being snapped to
    * @return a way node index
    */
-  int _getNodeToSnapWayInsertIndex(NodePtr nodeToSnap, const ConstWayPtr& snapToWay) const;
+  int _getNodeToSnapWayInsertIndex(const NodePtr& nodeToSnap, const ConstWayPtr& snapToWay) const;
 
   /*
    * Attempts to snap an unconnected way end node to another way node
@@ -226,7 +236,7 @@ private:
    * @param nodeToSnap the node to attempt to snap
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWayNode(NodePtr nodeToSnap);
+  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap);
 
   /*
    * Attempts to snap an unconnected way end node to another way
@@ -234,7 +244,24 @@ private:
    * @param nodeToSnap the node to attempt to snap
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWay(NodePtr nodeToSnap);
+  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap);
+
+  /**
+   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting point
+   * @param nodeToSnap Node to snap/add into the way
+   * @param wayToSnapTo Way to connect/add the node into
+   * @return True if successful
+   */
+  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const WayPtr& wayToSnapTo);
+
+  /**
+   * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
+   *   the closest node in 'connectTo'
+   * @param disconnected Disconnected way that needs to be connected
+   * @param connectTo Way to connect the disconnected way to
+   * @return True if successful
+   */
+  bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
 };
 
 }

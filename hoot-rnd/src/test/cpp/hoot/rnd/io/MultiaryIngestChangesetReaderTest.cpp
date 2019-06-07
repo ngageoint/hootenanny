@@ -42,7 +42,13 @@ class MultiaryIngestChangesetReaderTest : public HootTestFixture
 
 public:
 
-  void verifyInput(const QString inputFile)
+  MultiaryIngestChangesetReaderTest()
+    : HootTestFixture("test-files/rnd/io/MultiaryIngestChangesetTests/",
+                      UNUSED_PATH)
+  {
+  }
+
+  void verifyInput(const QString& inputFile)
   {
     MultiaryIngestChangesetReader changesetFileReader;
     changesetFileReader.open(inputFile);
@@ -59,7 +65,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Create);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)1, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(56.546465, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(99.21651651000001, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(1, change.getElement()->getTags().size());
@@ -69,7 +75,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Modify);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)2, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(-34.44534436, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(45.6575656, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(2, change.getElement()->getTags().size());
@@ -79,7 +85,7 @@ public:
         CPPUNIT_ASSERT(change.getType() == Change::Delete);
         CPPUNIT_ASSERT(change.getElement()->getElementType() == ElementType::Node);
         CPPUNIT_ASSERT_EQUAL((long)4, change.getElement()->getId());
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
+        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(34.56765, node->getX(), 1e-5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(-45.6555, node->getY(), 1e-5);
         CPPUNIT_ASSERT_EQUAL(0, change.getElement()->getTags().size());
@@ -98,12 +104,12 @@ public:
 
   void elementAsJsonTest()
   {
-    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-1.spark.1");
+    verifyInput(_inputPath + "changeset-1.spark.1");
   }
 
   void elementAsXmlTest()
   {
-    verifyInput("test-files/io/MultiaryIngestChangesetWriterTest/changeset-2.spark.1");
+    verifyInput(_inputPath + "changeset-2.spark.1");
   }
 
   void wrongElementTypeTest()
@@ -112,7 +118,7 @@ public:
     QString exceptionMsg("");
     try
     {
-      changesetFileReader.open("test-files/io/MultiaryIngestChangesetReaderTest/changeset-3.spark.1");
+      changesetFileReader.open(_inputPath + "changeset-3.spark.1");
       while (changesetFileReader.hasMoreChanges())
       {
         changesetFileReader.readNextChange();

@@ -63,8 +63,8 @@ HighwayMatch::HighwayMatch() : Match()
 {
 }
 
-HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
-  const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
+HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -80,8 +80,8 @@ HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifie
 
   LOG_VART(_eid1);
   LOG_VART(_eid2);
-  //OsmUtils::logElementDetail(e1, map, Log::Debug, "HighwayMatch: e1");
-  //OsmUtils::logElementDetail(e2, map, Log::Debug, "HighwayMatch: e2");
+  //OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayMatch: e1");
+  //OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayMatch: e2");
 
   try
   {

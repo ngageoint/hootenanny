@@ -71,7 +71,7 @@ A Levenshtein Similarity score is calculated for each candidate POI. To calculat
 
 * M - The maximum length of the two strings.
 
-image::algorithms/images/places/image007.png[]
+image::algorthms/images/places/image007.png[]
 
 ===== Calculating Goodness
 
@@ -160,7 +160,7 @@ extension to.geonames. For example:
 wget http://download.geonames.org/export/dump/allCountries.zip
 unzip allCountries.zip
 mv allCountries.txt allCountries.geonames
-hoot convert -D "convert.ops=hoot::TranslationOp" -D translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
+hoot convert -D "convert.ops=hoot::TranslationOp" -D schema.translation.script=$HOOT_HOME/translations/GeoNamesOrg.js allCountries.geonames allCountries.osm.pbf
 -------
 
 === Hootenanny Example Conflation Results

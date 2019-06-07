@@ -60,7 +60,10 @@ public:
   static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
-  void addNote(QString note);
+  Tags();
+  Tags(const QString& key, const QString& value);
+
+  void addNote(const QString& note);
 
   /**
    * Adds all the tags in t into this set of tags. Tags in t overwrite tags in this.
@@ -71,10 +74,10 @@ public:
    * Appends a value to a key. If the key already has a value then the values are semi-colon
    * delimited. If the key has no value then it is equivalent to simply setting the tag.
    */
-  void appendValue(QString k, QString v);
-  void appendValue(QString k, double v) { appendValue(k, QString::number(v)); }
-  void appendValue(QString k, QStringList v);
-  void appendValue(const QString kvp);
+  void appendValue(const QString& k, const QString& v);
+  void appendValue(const QString& k, double v) { appendValue(k, QString::number(v)); }
+  void appendValue(const QString& k, const QStringList& v);
+  void appendValue(const QString& kvp);
 
   /**
    * Appends a value to a key. If the key already has a value then the values are semi-colon
@@ -82,8 +85,8 @@ public:
    *
    * The value is only appended if it doesn't already exist in the list.
    */
-  void appendValueIfUnique(QString k, QString v);
-  void appendValueIfUnique(QString k, QStringList v);
+  void appendValueIfUnique(const QString& k, const QString& v);
+  void appendValueIfUnique(const QString& k, const QStringList& v);
 
   /**
    * Return if there is at least one non-metadata tag. @sa getInformationalCount()
@@ -205,7 +208,7 @@ public:
 
   void readValues(const QString& k, QStringList& list) const;
 
-  Meters readMeters(QString key) const;
+  Meters readMeters(const QString& key) const;
 
   /**
    * Remove all tags with empty strings as values.
@@ -271,7 +274,7 @@ public:
    * @param kvps kvps to search for
    * @return true if tags contain at least one kvp; false otherwise
    */
-  bool hasAnyKvp(const QStringList kvps) const;
+  bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
    * Converts a list of KVPs into tags
@@ -279,7 +282,7 @@ public:
    * @param kvps kvps to convert
    * @return a set of tags
    */
-  static Tags kvpListToTags(const QStringList kvps);
+  static Tags kvpListToTags(const QStringList& kvps);
 
   /**
    * Converts a collection of schema vertices to tags

@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<TagComparator> TagComparator::_theInstance;
+std::shared_ptr<TagComparator> TagComparator::_theInstance;
 
 struct Entry
 {
@@ -244,7 +244,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   priority_queue<Entry, deque<Entry>, Entry> heap;
 
   // create a n x m matrix of scores
-  vector< vector<double> > scores;
+  vector<vector<double>> scores;
   scores.resize(n1.size());
   Entry e;
   for (size_t i = 0; i < n1.size(); i++)
@@ -318,7 +318,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   QStringList n1 = t1.getNames();
   QStringList n2 = t2.getNames();
 
-  DictionaryTranslator translator;
+  ToEnglishDictionaryTranslator translator;
   for (int i = 0; i < n1.size(); i++)
   {
     n1[i] = translator.translateStreet(n1[i]);
@@ -331,7 +331,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
   priority_queue<Entry, deque<Entry>, Entry> heap;
 
   // create a n x m matrix of scores
-  vector< vector<double> > scores;
+  vector<vector<double>> scores;
   scores.resize(n1.size());
   Entry e;
   for (int i = 0; i < n1.size(); i++)
@@ -409,22 +409,10 @@ double TagComparator::compareTags(const Tags &t1, const Tags &t2, bool strict)
   }
   else
   {
-//    if (enumWeight <= 0)
-//    {
-//      return nameScore;
-//    }
-//    else if (nameWeight <= 0)
-//    {
-//      return enumScore;
-//    }
-//    else
-    {
-      LOG_VART(nameScore);
-      LOG_VART(enumScore);
-      LOG_VART(textScore);
-      return nameScore * enumScore * textScore;
-    }
-    //return (nameScore * nameWeight + enumScore * enumWeight) / (nameWeight + enumWeight);
+    LOG_VART(nameScore);
+    LOG_VART(enumScore);
+    LOG_VART(textScore);
+    return nameScore * enumScore * textScore;
   }
 }
 

@@ -70,6 +70,7 @@ const char* const OsmPbfWriter::OSM_HEADER = "OSMHeader";
 class OsmPbfWriterData
 {
 public:
+
   Blob blob;
   BlobHeader blobHeader;
   HeaderBlock headerBlock;
@@ -221,7 +222,7 @@ void OsmPbfWriter::initializePartial()
   _initBlob();
 }
 
-void OsmPbfWriter::_open(QString url)
+void OsmPbfWriter::_open(const QString& url)
 {
   LOG_TRACE("Opening url: " << url);
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
@@ -233,7 +234,7 @@ void OsmPbfWriter::_open(QString url)
   _needToCloseInput = true;
 }
 
-void OsmPbfWriter::open(QString url)
+void OsmPbfWriter::open(const QString& url)
 {
   _open(url);
   initializePartial();
@@ -277,13 +278,13 @@ int OsmPbfWriter::_toRelationMemberType(ElementType t)
   }
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map)
 {
   write(map, _openStream.get());
   _openStream.reset();
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map, ostream* strm)
 {
   LOG_DEBUG("Writing stream...");
 
@@ -304,7 +305,7 @@ void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
   _writePrimitiveBlock();
 }
 
-void OsmPbfWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmPbfWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   fstream output(path.toUtf8().constData(), ios::out | ios::binary);
 
@@ -373,7 +374,7 @@ void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void OsmPbfWriter::_writeBlob(const char* buffer, int size, string type)
+void OsmPbfWriter::_writeBlob(const char* buffer, int size, const string& type)
 {
   LOG_DEBUG("Writing blob...");
 
@@ -433,14 +434,14 @@ void OsmPbfWriter::_writeMap()
 
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const boost::shared_ptr<const hoot::Way>& w = it->second;
+    const std::shared_ptr<const hoot::Way>& w = it->second;
     wids.push_back(w->getId());
   }
   sort(wids.begin(), wids.end());
 
   for (size_t i = 0; i < wids.size(); i++)
   {
-    const boost::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
+    const std::shared_ptr<const hoot::Way>& w = _map->getWay(wids[i]);
     _writeWay(w);
 
     if (_enablePbFlushing && _tick % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -475,7 +476,7 @@ void OsmPbfWriter::_writeMap()
   }
 }
 
-void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 {
   _elementsWritten++;
   if (_pg == 0)
@@ -527,7 +528,7 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
   }
 }
 
-void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
+void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
 {
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
 
@@ -691,7 +692,7 @@ void OsmPbfWriter::_writePrimitiveBlock()
   }
 }
 
-void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
+void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r)
 {
   LOG_TRACE("Writing relation: " << r->getElementId() << "...");
 
@@ -761,7 +762,7 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
   _dirty = true;
 }
 
-void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
+void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
 {
   LOG_TRACE("Writing way: " << w->getElementId() << "...");
 

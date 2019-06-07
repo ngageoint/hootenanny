@@ -7,7 +7,7 @@
             "relation"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "railway",
         "objectType": "tag"
     },

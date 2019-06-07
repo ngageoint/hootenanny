@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTestSuite.h"
 
@@ -32,6 +32,8 @@
 #include <hoot/core/test/ConflateCaseTest.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ConfPath.h>
 
 // Qt
 #include <QDir>
@@ -40,15 +42,37 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir, bool hideDisableTests)
+ConflateCaseTestSuite::ConflateCaseTestSuite(const QString& dir, bool hideDisableTests)
   : AbstractTestSuite(dir),
-    _hideDisableTests(hideDisableTests)
+    _hideDisableTests(hideDisableTests),
+    _numTests(0)
 {
   QStringList confs;
   loadDir(dir, confs);
+  LOG_VART(_numTests);
 }
 
-void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
+void ConflateCaseTestSuite::_loadBaseConfig(const QString& testConfigFile, QStringList& confs)
+{
+  // need to grab the whole current config here to avoid errors when calling loadJson
+  Settings tempConfig = conf();
+  tempConfig.loadJson(ConfPath::search(testConfigFile));
+  if (tempConfig.hasKey(Settings::BASE_CONFIG_OPTION_KEY))
+  {
+    const QStringList baseConfigs =
+      tempConfig.getString(Settings::BASE_CONFIG_OPTION_KEY).trimmed().split(",");
+    for (int i = 0; i < baseConfigs.size(); i++)
+    {
+      const QString baseConfig = baseConfigs.at(i);
+      if (!baseConfig.isEmpty() && !confs.contains(baseConfig))
+      {
+        confs.append(baseConfig);
+      }
+    }
+  }
+}
+
+void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
   {
@@ -60,7 +84,17 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 
   if (fi.exists())
   {
-    confs.append(fi.absoluteFilePath());
+    const QString testConfFile = fi.absoluteFilePath();
+
+    // Check for a specified base config option, which allows the test to load a separate base
+    // configuration as its starting point. The other settings in its config file will override
+    // whatever is in the base configuration.
+    _loadBaseConfig(testConfFile, confs);
+
+    // load the test's config file
+    confs.append(testConfFile);
+
+    LOG_VART(confs);
   }
 
   // a list of strings paths to ignore if this string is found in the path.
@@ -71,9 +105,6 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 # endif
 # ifndef HOOT_HAVE_SERVICES
   ignoreList << "hoot-services";
-# endif
-# ifndef HOOT_HAVE_NODEJS
-  ignoreList << "hoot-js";
 # endif
 
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
@@ -115,6 +146,7 @@ void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
   else
   {
     addTest(new ConflateCaseTest(d, confs));
+    _numTests++;
   }
 }
 

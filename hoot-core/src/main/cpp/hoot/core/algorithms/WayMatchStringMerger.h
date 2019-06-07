@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::WayMatchStringMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   class SublineMapping
   {
@@ -95,7 +95,7 @@ public:
     WayPtr _newWay1;
     WayPtr _newWay2;
   };
-  typedef boost::shared_ptr<SublineMapping> SublineMappingPtr;
+  typedef std::shared_ptr<SublineMapping> SublineMappingPtr;
 
   class SublineMappingLessThan
   {
@@ -117,7 +117,7 @@ public:
   };
 
   WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
-    std::vector< std::pair<ElementId, ElementId> >& replaced);
+    std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
    * Alternative constructor. If this is used operations that modify the map will fail.
@@ -174,7 +174,7 @@ private:
 
   OsmMapPtr _map;
   WayMatchStringMappingPtr _mapping;
-  std::vector< std::pair<ElementId, ElementId> >& _replaced;
+  std::vector<std::pair<ElementId, ElementId>>& _replaced;
   QList<SublineMappingPtr> _sublineMappingOrder;
   QMap<ElementId, WayLocation> _nodeToWayLocation2;
   ConstTagMergerPtr _tagMerger;
@@ -198,8 +198,8 @@ private:
   void _splitPrimary();
 };
 
-typedef boost::shared_ptr<WayMatchStringMerger> WayMatchStringMergerPtr;
-typedef boost::shared_ptr<const WayMatchStringMerger> ConstWayMatchStringMergerPtr;
+typedef std::shared_ptr<WayMatchStringMerger> WayMatchStringMergerPtr;
+typedef std::shared_ptr<const WayMatchStringMerger> ConstWayMatchStringMergerPtr;
 
 }
 

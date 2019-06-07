@@ -111,7 +111,7 @@ void PertyNameVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyNameVisitor::visit(const boost::shared_ptr<Element>& e)
+void PertyNameVisitor::visit(const std::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   QStringList keys = e->getTags().getMatchingKeys(Tags::getNameKeys());

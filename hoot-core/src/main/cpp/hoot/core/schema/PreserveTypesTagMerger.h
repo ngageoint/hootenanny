@@ -28,6 +28,7 @@
 #define PRESERVETYPESTAGMERGER_H
 
 #include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
 {
@@ -45,16 +46,37 @@ public:
 
   static std::string className() { return "hoot::PreserveTypesTagMerger"; }
 
-  PreserveTypesTagMerger();
+  /**
+   * Constructor
+   *
+   * @param skipTagKeys optional; Any additional type tags found during merging with a key in this
+   * list will be not be preserved.
+   */
+  PreserveTypesTagMerger(const std::set<QString>& skipTagKeys = std::set<QString>());
 
+  /**
+   * @see TagMerger
+   */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
+  void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }
+  void setSkipTagKeys(const std::set<QString>& keys) { _skipTagKeys = keys; }
+
 private:
 
+  // if true the first set of tags passed into mergeTags are overwritten; otherwise the second set
+  // is overwritten
+  bool _overwrite1;
+  // any type tag that would otherwise be preserved will be skipped if in this list
+  std::set<QString> _skipTagKeys;
+
   Tags _preserveAltTypes(const Tags& source, const Tags& target) const;
+  // can probably eventually get rid of this by correcting logic that's duplicating tags in
+  // mergeTags
+  void _removeRedundantAltTypeTags(Tags& tags) const;
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BaseRandomForest.h"
 
@@ -42,7 +42,6 @@ namespace Tgs
 
   BaseRandomForest::BaseRandomForest() : _numSplitFactors(0), _forestCreated(false)
   {
-
   }
 
   BaseRandomForest::~BaseRandomForest(){}
@@ -53,27 +52,27 @@ namespace Tgs
     {
       _forest.clear();
     }
-    catch(const Exception & e)
+    catch (const Exception & e)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
   }
 
-  void BaseRandomForest::classifyVector(std::vector<double> & dataVector,
-    std::map<std::string, double> & scores) const
+  void BaseRandomForest::classifyVector(std::vector<double>& dataVector,
+    std::map<std::string, double>& scores) const
   {
     try
     {
-      double itrVal = 1.0/(double)_forest.size();
+      double itrVal = 1.0 / (double)_forest.size();
 
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::string result;
         _forest[i]->classifyDataVector(dataVector, result);
         scores[result] += itrVal;
       }
     }
-    catch(const Exception & e)
+    catch (const Exception& e)
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
@@ -121,7 +120,7 @@ namespace Tgs
       {
         labelStream << _factorLabels[i];
 
-        if(i != _factorLabels.size() - 1)
+        if (i != _factorLabels.size() - 1)
         {
           labelStream << " ";
         }
@@ -134,7 +133,7 @@ namespace Tgs
       //Append Trees
       QDomElement randomTreesNode = modelDoc.createElement("RandomTrees");
 
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         _forest[i]->exportTree(modelDoc, randomTreesNode);
       }
@@ -148,18 +147,18 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findAverageError(boost::shared_ptr<DataFrame> data, double & average,
+  void BaseRandomForest::findAverageError(const std::shared_ptr<DataFrame>& data, double & average,
     double & stdDev)
   {
     try
     {
-      if(isTrained())
+      if (isTrained())
       {
         double errorSum = 0;
         double errorSumSqr = 0;
         double variance;
 
-        for(unsigned int i = 0; i < _forest.size(); i++)
+        for (unsigned int i = 0; i < _forest.size(); i++)
         {
           double errRate = _forest[i]->computeErrorRate(data);
           errorSum += errRate;
@@ -182,19 +181,19 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::findProximity(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::findProximity(const std::shared_ptr<DataFrame>& data,
     std::vector<unsigned int> & proximity)
   {
     try
     {
       unsigned int dSize = data->getNumDataVectors();
 
-      if(_forestCreated  && dSize > 0)
+      if (_forestCreated  && dSize > 0)
       {
         proximity.resize(dSize * dSize);
         std::fill(proximity.begin(), proximity.end(), 0);
 
-        for(unsigned int i = 0; i < _forest.size(); i++)
+        for (unsigned int i = 0; i < _forest.size(); i++)
         {
           _forest[i]->findProximity(data, proximity);
         }
@@ -210,7 +209,7 @@ namespace Tgs
     }
   }
 
-  void BaseRandomForest::getFactorImportance(boost::shared_ptr<DataFrame> data,
+  void BaseRandomForest::getFactorImportance(const std::shared_ptr<DataFrame>& data,
     std::map<std::string, double> & factorImportance)
   {
     try
@@ -219,19 +218,19 @@ namespace Tgs
       std::vector<std::string> factorLabels = data->getFactorLabels();
 
       //Init factor importance map with all factors
-      for(unsigned int j = 0; j < factorLabels.size(); j++)
+      for (unsigned int j = 0; j < factorLabels.size(); j++)
       {
         factorImportance[factorLabels[j]] = 0;
       }
 
       //Calc factor importance for each tree in forest
       //and aggregate the results
-      for(unsigned int i = 0; i < _forest.size(); i++)
+      for (unsigned int i = 0; i < _forest.size(); i++)
       {
         std::map<unsigned int, double> factPureMap;
         _forest[i]->getFactorImportance(factPureMap);
 
-        for(itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
+        for (itr = factPureMap.begin(); itr != factPureMap.end(); ++itr)
         {
           factorImportance[factorLabels[itr->first]] += itr->second;
         }
@@ -269,12 +268,12 @@ namespace Tgs
 
       for (unsigned int i = 0; i < (unsigned int)childList.size(); i++)
       {
-        if(childList.at(i).nodeType() == QDomNode::CommentNode)
+        if (childList.at(i).nodeType() == QDomNode::CommentNode)
         {
           continue;
         }
 
-        if(childList.at(i).isElement())
+        if (childList.at(i).isElement())
         {
           QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
 
@@ -282,16 +281,16 @@ namespace Tgs
 
           bool parseOkay = true;
 
-          if(tag == "NUMTREES")
+          if (tag == "NUMTREES")
           {
             unsigned int numTrees = e.text().toUInt(&parseOkay);
             _forest.reserve(numTrees);
           }
-          else if(tag == "NUMSPLITFACTORS")
+          else if (tag == "NUMSPLITFACTORS")
           {
             _numSplitFactors = e.text().toUInt(&parseOkay);
           }
-          else if(tag == "FACTORLABELS")
+          else if (tag == "FACTORLABELS")
           {
             QStringList factorList = e.text().split(" ");
 
@@ -300,7 +299,7 @@ namespace Tgs
               _factorLabels.push_back(factorList[fIdx].toLatin1().constData());
             }
           }
-          else if(tag == "RANDOMTREES")
+          else if (tag == "RANDOMTREES")
           {
             QDomNodeList treeList = e.childNodes();
 
@@ -308,7 +307,7 @@ namespace Tgs
             {
               QDomElement treeElement = treeList.at(rIdx).toElement();
 
-              _forest.push_back(boost::shared_ptr<RandomTree>(new RandomTree()));
+              _forest.push_back(std::shared_ptr<RandomTree>(new RandomTree()));
               _forest.back()->import(treeElement);
             }
           }
@@ -320,7 +319,7 @@ namespace Tgs
             throw Exception(__LINE__, ss.str());
           }
 
-          if(!parseOkay)
+          if (!parseOkay)
           {
             std::stringstream ss;
             ss << "Unable to parse tag " << tag.toLatin1().constData() << " with value " <<

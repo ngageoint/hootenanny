@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BIGMAPHYBRID_H
 #define BIGMAPHYBRID_H
@@ -112,7 +112,7 @@ private:
 
   bool _inMemory;
   std::map<K,V> _smallMap;
-  boost::shared_ptr< BigMapStxxl<K,V> > _bigMap;
+  std::shared_ptr<BigMapStxxl<K,V>> _bigMap;
   size_t _maxEntriesInRam;
 
   void _checkSize()

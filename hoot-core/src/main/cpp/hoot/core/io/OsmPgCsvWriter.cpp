@@ -51,7 +51,7 @@ OsmPgCsvWriter::~OsmPgCsvWriter()
 {
 }
 
-void OsmPgCsvWriter::open(QString url)
+void OsmPgCsvWriter::open(const QString& url)
 {
   QFileInfo path(url);
   QString base = QString("%1/%2").arg(path.absolutePath()).arg(path.baseName());
@@ -156,7 +156,7 @@ void OsmPgCsvWriter::close()
   }
 }
 
-void OsmPgCsvWriter::write(ConstOsmMapPtr map)
+void OsmPgCsvWriter::write(const ConstOsmMapPtr& map)
 {
   QList<long> ids;
   //  Start with the nodes

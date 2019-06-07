@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -62,9 +62,10 @@ class AlphaShapeTest : public HootTestFixture
 public:
 
   AlphaShapeTest()
+    : HootTestFixture(UNUSED_PATH,
+                      "test-output/algorithms/alpha-shape/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/algorithms");
   }
 
   void createDonut(vector<pair<double, double>>& p, double innerRadius, double outerRadius,
@@ -108,9 +109,9 @@ public:
     }
 
     OsmXmlWriter writer;
-    writer.write(map, "test-output/algorithms/AlphaDonut.osm");
+    writer.write(map, _outputPath + "AlphaDonut.osm");
 
-    boost::shared_ptr<Geometry> g = uut.toGeometry();
+    std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
   }
 
@@ -137,9 +138,9 @@ public:
     uut.insert(points);
 
     OsmXmlWriter writer;
-    writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
+    writer.write(uut.toOsmMap(), _outputPath + "AlphaMap.osm");
 
-    boost::shared_ptr<Geometry> g = uut.toGeometry();
+    std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);
   }
 };

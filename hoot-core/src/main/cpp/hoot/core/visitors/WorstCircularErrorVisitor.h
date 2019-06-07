@@ -30,7 +30,7 @@
 
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 /**
  * A visitor for finding the worst circular error among elements. Worst = greatest.
@@ -50,13 +50,15 @@ public:
 
   virtual double getStat() const { return _worst; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);
 
   // Handle const pointers to const
   static Meters getWorstCircularError(const ConstOsmMapPtr& map);
+
+  static Meters getWorstCircularError(const std::vector<ElementPtr>& elements);
 
   virtual QString getDescription() const
   { return "Determines the highest circular error value"; }

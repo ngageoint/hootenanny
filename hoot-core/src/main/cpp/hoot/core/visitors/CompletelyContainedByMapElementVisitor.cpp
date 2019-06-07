@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CompletelyContainedByMapElementVisitor.h"
 
@@ -84,7 +84,7 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 
   if (type == ElementType::Way)
   {
-    boost::shared_ptr<const Way> w = _map->getWay(id);
+    std::shared_ptr<const Way> w = _map->getWay(id);
     _visit(w);
   }
   else if (type == ElementType::Relation)
@@ -98,7 +98,7 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Way> &w)
+void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Way>& w)
 {
   const std::vector<long>& nids = w->getNodeIds();
   for (size_t i = 0; i < nids.size(); i++)
@@ -111,7 +111,7 @@ void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<cons
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Relation>& r)
+void CompletelyContainedByMapElementVisitor::_visit(const std::shared_ptr<const Relation>& r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
 

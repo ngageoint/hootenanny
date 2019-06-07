@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -133,7 +133,7 @@ namespace Tgs
 
       PrincipalComponentsAnalysis uut;
       uut.compute(df);
-      vector< vector<double> > result = uut.getComponents();
+      vector<vector<double>> result = uut.getComponents();
 
       ASSERT_DBL_EQL(0.984808, result[0][0]);
       ASSERT_DBL_EQL(0.173648, result[0][1]);
@@ -185,7 +185,7 @@ namespace Tgs
 
       PrincipalComponentsAnalysis uut;
       uut.compute(df);
-      vector< vector<double> > result = uut.getComponents();
+      vector<vector<double>> result = uut.getComponents();
 
       double x1 = result[0][0];
       double y1 = result[0][1];
@@ -250,7 +250,7 @@ namespace Tgs
 
       PrincipalComponentsAnalysis uut;
       uut.compute(df2);
-      vector< vector<double> > result = uut.getComponents();
+      vector<vector<double>> result = uut.getComponents();
 
       cout << result;
     }

@@ -51,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   DecomposeBuildingRelationsVisitor();
 
@@ -74,7 +74,7 @@ private:
   OsmMap* _map;
   std::vector<long> _ids;
 
-  void _decomposeBuilding(const boost::shared_ptr<Relation>& r);
+  void _decomposeBuilding(const std::shared_ptr<Relation>& r);
 };
 
 }

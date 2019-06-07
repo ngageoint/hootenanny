@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATEDTAGCOUNTVISITOR_H
 #define TRANSLATEDTAGCOUNTVISITOR_H
@@ -30,14 +30,14 @@
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {
 
 class Feature;
-class ScriptToOgrTranslator;
-class ScriptTranslator;
+class ScriptToOgrSchemaTranslator;
+class ScriptSchemaTranslator;
 class Schema;
 
 class TranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
@@ -48,7 +48,7 @@ public:
   static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
-  TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);
+  TranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
 
@@ -71,11 +71,11 @@ public:
 private:
 
   const OsmMap* _map;
-  boost::shared_ptr<const Schema> _schema;
-  boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  std::shared_ptr<const Schema> _schema;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;
 
-  void _countTags(boost::shared_ptr<Feature>& f);
+  void _countTags(std::shared_ptr<Feature>& f);
 };
 
 }

@@ -49,7 +49,7 @@ function getDbSchema()
      return tds40.getDbSchema();
 }
 
-// Get raw schema directly from plugins/schema
+// Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
      return tds40.schema.getDbSchema();
@@ -81,7 +81,7 @@ function initialize()
 //
 // This can be called via the following for testing:
 // hoot convert -D "convert.ops=hoot::TranslationOp"  \
-//      -D translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
+//      -D schema.translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
 function translateAttributes(attrs, layerName, geometryType)
 {

@@ -3,7 +3,7 @@ set -e
 
 export TA_IN=test-files/conflate/point/Poi1.osm
 export TA_STDIR=test-files/prepare_validation
-export TA_OUT=test-output/cmd/prepare_validation
+export TA_OUT=test-output/cmd/quick/prepare_validation
 mkdir -p $TA_OUT
 
 NODE="$(command -v nodejs || command -v node)"

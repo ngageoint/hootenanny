@@ -87,21 +87,21 @@ public:
 
   static void verifyTestDatabaseEmpty();
 
-  static boost::shared_ptr<OsmMap> createTestMap1();
+  static std::shared_ptr<OsmMap> createTestMap1();
 
   static OsmMapPtr createServiceTestMap();
 
-  static long insertTestUser(const QString userName, const QString email, const QString sessionId,
-                             const QString accessToken, const QString accessTokenSecret);
+  static long insertTestUser(const QString& userName, const QString& email, const QString& sessionId,
+                             const QString& accessToken, const QString& accessTokenSecret);
 
-  static bool deleteUserByUserName(const QString userName);
+  static bool deleteUserByUserName(const QString& userName);
 
-  static boost::shared_ptr<HootNetworkCookieJar> getTestSessionCookie(const QString sessionId,
-                                                                      const QString url);
+  static std::shared_ptr<HootNetworkCookieJar> getTestSessionCookie(const QString& sessionId,
+                                                                    const QString& url);
 
 private:
 
-  static boost::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
+  static std::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
 };
 
 }

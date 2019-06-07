@@ -27,8 +27,8 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
-#include <hoot/core/language/DictionaryTranslator.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -38,7 +38,7 @@ namespace hoot
 
 /*
  * The tests in this class will fail with any translator other than the current default,
- * DictionaryTranslator.
+ * ToEnglishDictionaryTranslator.
  */
 class ImplicitTagRawRulesDeriverTest : public HootTestFixture
 {
@@ -48,25 +48,23 @@ class ImplicitTagRawRulesDeriverTest : public HootTestFixture
   CPPUNIT_TEST(runTranslateNamesFalsePoiTest);
   CPPUNIT_TEST(runMultipleInputsPoiTest);
   CPPUNIT_TEST(runDuplicateWordKeyCountPoiTest);
-  CPPUNIT_TEST(runNameCasePoiTest); 
+  CPPUNIT_TEST(runNameCasePoiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  static QString inDir() { return "test-files/schema/ImplicitTagRawRulesDeriverTest"; }
-  static QString outDir() { return "test-output/schema/ImplicitTagRawRulesDeriverTest"; }
-
   ImplicitTagRawRulesDeriverTest()
+    : HootTestFixture("test-files/rnd/schema/ImplicitTagRawRulesDeriverTest/",
+                      "test-output/rnd/schema/ImplicitTagRawRulesDeriverTest/")
   {
-    TestUtils::mkpath(outDir());
   }
 
   void runBasicPoiTest()
   {
     QStringList inputs;
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
     const QString outputFile =
-      outDir() + "/ImplicitTagRawRulesDeriverTest-runBasicTest-out.implicitTagRules";
+      _outputPath + "ImplicitTagRawRulesDeriverTest-runBasicTest-out.implicitTagRules";
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
@@ -76,26 +74,26 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesDeriverTest-runBasicTest.implicitTagRules", outputFile);
+      _inputPath + "ImplicitTagRawRulesDeriverTest-runBasicTest.implicitTagRules", outputFile);
   }
 
   void runMultipleInputsPoiTest()
   {
     QStringList inputs;
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
-    inputs.append(inDir() + "/philippines-1.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "philippines-1.osm.pbf");
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");
 
     const QString outputFile =
-      outDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
+      _outputPath + "ImplicitTagRawRulesDeriverTest-runMultipleInputsTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
@@ -103,12 +101,12 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesDeriverTest-runMultipleInputsTest.implicitTagRules",
+      _inputPath + "ImplicitTagRawRulesDeriverTest-runMultipleInputsTest.implicitTagRules",
       outputFile);
   }
 
@@ -116,10 +114,9 @@ public:
   {
     DisableLog dl;
 
-    boost::shared_ptr<QTemporaryFile> sortedCountFile(
+    std::shared_ptr<QTemporaryFile> sortedCountFile(
       new QTemporaryFile(
-        outDir() +
-        "/ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
+        _outputPath + "ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-sortedCountsInput-XXXXXX"));
     sortedCountFile->setAutoRemove(false);
     if (!sortedCountFile->open())
     {
@@ -139,13 +136,13 @@ public:
     sortedCountFile->open();
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
-    rawRulesDeriver.setTempFileDir(outDir());
+    rawRulesDeriver.setTempFileDir(_outputPath);
     rawRulesDeriver.setKeepTempFiles(true);
     rawRulesDeriver.setSkipFiltering(false);
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver._sortedCountFile = sortedCountFile;
     rawRulesDeriver._removeDuplicatedKeyTypes();
@@ -154,7 +151,7 @@ public:
     LOG_VARD(rawRulesDeriver._dedupedCountFile->fileName());
     LOG_VARD(rawRulesDeriver._tieResolvedCountFile->fileName());
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-deduped-output",
+      _inputPath + "ImplicitTagRawRulesDeriverTest-runDuplicateWordKeyCountTest-deduped-output",
       rawRulesDeriver._tieResolvedCountFile->fileName());
   }
 
@@ -164,13 +161,13 @@ public:
     //will make debugging case problems easier, if needed.
 
     QStringList inputs;
-    inputs.append(inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
+    inputs.append(_inputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest.osm");
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
 
     const QString outputFile =
-      outDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
+      _outputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest-out.implicitTagRules";
 
     ImplicitTagRawRulesDeriver rawRulesDeriver;
     rawRulesDeriver.setKeepTempFiles(false); //set true for debugging
@@ -178,20 +175,20 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
+      _inputPath + "ImplicitTagRawRulesDeriverTest-runNameCaseTest.implicitTagRules", outputFile);
   }
 
   void runTranslateNamesFalsePoiTest()
   {
     QStringList inputs;
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
     const QString outputFile =
-      outDir() + "/ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest-out.implicitTagRules";
+      _outputPath + "ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest-out.implicitTagRules";
 
     QStringList translationScripts;
     translationScripts.append("translations/OSM_Ingest.js");
@@ -201,12 +198,12 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(false);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     rawRulesDeriver.deriveRawRules(inputs, translationScripts, outputFile);
 
     HOOT_FILE_EQUALS(
-      inDir() + "/ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest.implicitTagRules",
+      _inputPath + "ImplicitTagRawRulesDeriverTest-runTranslateNamesFalsePoiTest.implicitTagRules",
       outputFile);
   }
 
@@ -222,7 +219,7 @@ public:
     rawRulesDeriver.setSortParallelCount(1);
     rawRulesDeriver.setTranslateNamesToEnglish(true);
     rawRulesDeriver._translator =
-      boost::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
 
     try
     {
@@ -235,7 +232,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid criterion type"));
 
     inputs.clear();
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
     translationScripts.clear();
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");
@@ -243,7 +240,7 @@ public:
     {
       rawRulesDeriver.deriveRawRules(
         inputs, translationScripts,
-        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+        _outputPath + "ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
     }
     catch (const HootException& e)
     {
@@ -253,7 +250,7 @@ public:
 
     rawRulesDeriver.setElementCriterion("hoot::ImplicitTagEligiblePoiPolyCriterion");
     inputs.clear();
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
     translationScripts.clear();
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");
@@ -261,7 +258,7 @@ public:
     {
       rawRulesDeriver.deriveRawRules(
         inputs, translationScripts,
-        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+        _outputPath + "ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
     }
     catch (const HootException& e)
     {
@@ -279,7 +276,7 @@ public:
     {
       rawRulesDeriver.deriveRawRules(
         inputs, translationScripts,
-        outDir() + "/ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
+        _outputPath + "ImplicitTagRawRulesDeriverTest-runBadInputsTest-out.implicitTagRules");
     }
     catch (const HootException& e)
     {
@@ -288,8 +285,8 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("No inputs were specified"));
 
     inputs.clear();
-    inputs.append(inDir() + "/yemen-crop-2.osm.pbf");
-    inputs.append(inDir() + "/philippines-1.osm.pbf");
+    inputs.append(_inputPath + "yemen-crop-2.osm.pbf");
+    inputs.append(_inputPath + "philippines-1.osm.pbf");
     translationScripts.clear();
     translationScripts.append("translations/OSM_Ingest.js");
     translationScripts.append("translations/OSM_Ingest.js");

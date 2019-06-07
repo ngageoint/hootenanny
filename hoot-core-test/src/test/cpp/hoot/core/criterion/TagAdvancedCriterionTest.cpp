@@ -63,16 +63,18 @@ class TagAdvancedCriterionTest : public HootTestFixture
 
 public:
 
+  TagAdvancedCriterionTest()
+    : HootTestFixture("test-files/criterion/",
+                      UNUSED_PATH)
+  {
+  }
+
   /**
    * A note about certain types of "aux matching", including alias, child, ancestor, and associated
    * with: combining string kvp wildcard filters with these type of options is not possible (but may
    * work in certain cases).  See the comments in runAliasTest for more detail.  The same comments
    * apply to tests for the aforementioned aux matching types.
    */
-  TagAdvancedCriterionTest()
-  {
-  }
-
   void runMustTest()
   {
     // element must satisfy all parts of the filter
@@ -372,7 +374,7 @@ public:
 
   void runSimilarityTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -411,7 +413,7 @@ public:
 
   void runAliasTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -454,7 +456,7 @@ public:
 
   void runChildTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -495,7 +497,7 @@ public:
 
   void runAncestorTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -536,7 +538,7 @@ public:
 
   void runAssociatedWithTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -602,7 +604,7 @@ public:
 
   void runCategoryTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -617,7 +619,7 @@ public:
 
   void runContradictoryFilterTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -640,7 +642,7 @@ public:
 
   void runCaseSensitivityTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -709,7 +711,7 @@ public:
 
   void runFileTest()
   {
-    TagAdvancedCriterion uut("test-files/criterion/TagAdvancedCriterionTest.json");
+    TagAdvancedCriterion uut(_inputPath + "TagAdvancedCriterionTest.json");
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->getTags().clear();
@@ -719,7 +721,7 @@ public:
 
   void runInvalidFilterTagJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try
@@ -777,7 +779,7 @@ public:
 
   void runInvalidFilterSimilarityThresholdJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     // Thresholds must be a positive number <= 1.0.
@@ -809,7 +811,7 @@ public:
 
   void runInvalidFilterFormatJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try
@@ -864,7 +866,7 @@ public:
 
   void runInvalidFilterCategoryJsonTest()
   {
-    boost::shared_ptr<TagAdvancedCriterion> uut;
+    std::shared_ptr<TagAdvancedCriterion> uut;
     QString exceptionMsg;
 
     try

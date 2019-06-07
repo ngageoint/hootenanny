@@ -58,7 +58,7 @@ public:
    * @param replaced A deque of all element Ids that were replaced as part of this Merger operation.
    */
   virtual void apply(const OsmMapPtr& map,
-                     std::vector< std::pair<ElementId, ElementId> >& replaced) = 0;
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) = 0;
 
   /**
    * Returns all the element ids that are impacted by this merger operation.
@@ -81,8 +81,8 @@ public:
   virtual QString getDescription() const = 0;
 };
 
-typedef boost::shared_ptr<Merger> MergerPtr;
-typedef boost::shared_ptr<const Merger> ConstMergerPtr;
+typedef std::shared_ptr<Merger> MergerPtr;
+typedef std::shared_ptr<const Merger> ConstMergerPtr;
 
 }
 

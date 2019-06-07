@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MOSTENGLISHNAME_H
 #define MOSTENGLISHNAME_H
@@ -34,9 +34,6 @@
 // Qt
 #include <QSet>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 // Std
 #include <string>
 
@@ -46,7 +43,7 @@ namespace hoot
 class MostEnglishName;
 class Tags;
 
-typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
+typedef std::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 
 /**
  * Return a best guess at the "most english" name in the list (Singleton). There are no guarantees.
@@ -69,7 +66,7 @@ public:
 
   static std::string className() { return "hoot::MostEnglishName"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static const MostEnglishNamePtr& getInstance();
 
@@ -88,7 +85,7 @@ public:
    * @return a score from 0.0 to 1.0 with 1.0 indicating the highest likelihood that the input is
    * English text
    */
-  double scoreName(const QString text);
+  double scoreName(const QString& text);
 
   void setConfiguration(const Settings& conf);
 
@@ -98,7 +95,7 @@ public:
    * @param text input to examine
    * @return true if the input is in the English dictionary; false otherwise
    */
-  bool isInDictionary(const QString text);
+  bool isInDictionary(const QString& text);
 
   /**
    * Determines if all inputs are in the English dictionary
@@ -106,7 +103,7 @@ public:
    * @param texts input to examine
    * @return true if all text inputs are in the English dictionary; false otherwise
    */
-  bool areAllInDictionary(const QStringList texts);
+  bool areAllInDictionary(const QStringList& texts);
 
   /**
    * Determines if the input is an English word
@@ -114,7 +111,7 @@ public:
    * @param text input to examine
    * @return true if the input is determined to be English text; false otherwise
    */
-  bool isEnglishText(const QString text);
+  bool isEnglishText(const QString& text);
 
 private:
 
@@ -135,7 +132,7 @@ private:
 
   const QSet<QString>& _getWords();
 
-  long _loadEnglishWords(QString path);
+  long _loadEnglishWords(const QString& path);
 };
 
 }

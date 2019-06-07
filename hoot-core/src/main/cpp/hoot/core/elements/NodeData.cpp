@@ -27,9 +27,6 @@
 
 #include "Node.h"
 
-// Boost
-using namespace boost;
-
 namespace hoot
 {
 

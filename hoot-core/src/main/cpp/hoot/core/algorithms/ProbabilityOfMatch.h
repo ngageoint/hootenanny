@@ -34,9 +34,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 
-// TGS
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -56,7 +53,7 @@ public:
     const ConstWayPtr& w2);
 
   double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
-    const boost::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
+    const std::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 
   double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
@@ -67,15 +64,13 @@ public:
   double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2);
 
-   double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
-
-  static bool debug;
+  double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
 
 private:
 
   ProbabilityOfMatch();
 
-  static boost::shared_ptr<ProbabilityOfMatch> _theInstance;
+  static std::shared_ptr<ProbabilityOfMatch> _theInstance;
   double _parallelExp;
   double _dMax;
 };

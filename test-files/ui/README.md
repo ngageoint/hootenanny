@@ -56,10 +56,10 @@ To measure live code coverage while running tests, steps from the `$HOOT_HOME/sc
     `#move istanbul instrumented hoot-ui javascript code into tomcat webapps`
 
     ```
-    sudo -u tomcat8 rm -rf /var/lib/tomcat8/webapps/hootenanny-id/js/hoot
-    sudo -u tomcat8 rm -rf /var/lib/tomcat8/webapps/hootenanny-id/js/id
-    sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot /var/lib/tomcat8/webapps/hootenanny-id/js/hoot
-    sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id /var/lib/tomcat8/webapps/hootenanny-id/js/id
+    sudo -u tomcat8 rm -rf /var/lib/tomcat8/webapps/hootenanny-id-legacy/js/hoot
+    sudo -u tomcat8 rm -rf /var/lib/tomcat8/webapps/hootenanny-id-legacy/js/id
+    sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/hoot /var/lib/tomcat8/webapps/hootenanny-id-legacy/js/hoot
+    sudo -u tomcat8 HOOT_HOME=$HOOT_HOME cp -R $HOOT_HOME/hoot-ui/istanbul/id /var/lib/tomcat8/webapps/hootenanny-id-legacy/js/id
     ```
 
 3. Then run the next set of lines to start the instanbul middleware:

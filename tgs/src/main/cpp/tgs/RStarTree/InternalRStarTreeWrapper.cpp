@@ -22,12 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "InternalRStarTreeWrapper.h"
 
 //TGS Includes
-#include <tgs/SharedPtr.h>
 #include <tgs/RStarTree/Box.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
@@ -39,9 +38,9 @@ namespace Tgs
   InternalRStarTreeWrapper::InternalRStarTreeWrapper(unsigned int pageSize, unsigned int dimensions)
     : _dimensions(dimensions)
   {
-    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore((int)pageSize));
+    std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore((int)pageSize));
 
-    _tree = boost::shared_ptr<HilbertRTree>(new HilbertRTree(mps, dimensions));
+    _tree = std::shared_ptr<HilbertRTree>(new HilbertRTree(mps, dimensions));
   }
 
   InternalRStarTreeWrapper::~InternalRStarTreeWrapper()
@@ -74,9 +73,9 @@ namespace Tgs
   void InternalRStarTreeWrapper::getIntersectingObjects(const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds, std::vector<int>& objIds)
   {
-    boost::shared_ptr<IntersectionIterator> interItr = boost::shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
+    std::shared_ptr<IntersectionIterator> interItr = std::shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
 
-    while(interItr->next())
+    while (interItr->next())
     {
       objIds.push_back(interItr->getId());
     }
@@ -84,9 +83,9 @@ namespace Tgs
 
   void InternalRStarTreeWrapper::getObjectsWithinRange(std::vector<double> point, double radius, std::vector<int> & objIds)
   {
-    boost::shared_ptr<DistanceIterator> distItr = boost::shared_ptr<DistanceIterator>(new DistanceIterator(_tree.get(), point, radius));
+    std::shared_ptr<DistanceIterator> distItr = std::shared_ptr<DistanceIterator>(new DistanceIterator(_tree.get(), point, radius));
 
-    while(distItr->next())
+    while (distItr->next())
     {
       objIds.push_back(distItr->getId());
     }
@@ -100,7 +99,7 @@ namespace Tgs
 
     Box tmpBox(_dimensions);
 
-    for(unsigned int i = 0; i < _dimensions; i++)
+    for (unsigned int i = 0; i < _dimensions; i++)
     {
       tmpBox.setBounds(i, minBounds[i], maxBounds[i]);
     }

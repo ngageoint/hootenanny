@@ -40,7 +40,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 // Qt
 #include <QStringList>
@@ -305,18 +305,18 @@ public:
 
     BuildKeysVisitor(vector<RFqHybridDummyData>& keys) : _keys(keys) {}
 
-    virtual void visit(const boost::shared_ptr<const Element>& e)
+    virtual void visit(const std::shared_ptr<const Element>& e)
     {
       if (e->getElementType() == ElementType::Node)
       {
-        const boost::shared_ptr<const hoot::Node>& n =
-          boost::dynamic_pointer_cast<const hoot::Node>(e);
+        const std::shared_ptr<const hoot::Node>& n =
+          std::dynamic_pointer_cast<const hoot::Node>(e);
         QStringList names = n->getTags().getNames();
         set<QString> nameSet;
         for (int i = 0; i < names.size(); i++)
         {
           nameSet.insert(names[i].toLower());
-          nameSet.insert(DictionaryTranslator().toEnglish(names[i]).toLower());
+          nameSet.insert(ToEnglishDictionaryTranslator().toEnglish(names[i]).toLower());
         }
         for (set<QString>::const_iterator it = nameSet.begin(); it != nameSet.end(); ++it)
         {
@@ -482,7 +482,7 @@ public:
   void runRandomQueryTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     MapProjector::projectToPlanar(map);
 

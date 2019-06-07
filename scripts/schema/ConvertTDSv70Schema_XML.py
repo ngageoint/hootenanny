@@ -134,7 +134,7 @@ def readFeatures(xmlDoc,funcList):
         featureName = feature.getElementsByTagName('Name')[0].firstChild.data
 
         # Drop this one. It seems to be the catch all
-        if featureName == 'TDS':
+        if featureName == 'TDS' or featureName == 'TDS_CARTO':
             continue
 
         # Build the basic feature
@@ -175,7 +175,11 @@ def readFeatures(xmlDoc,funcList):
                 fType = fieldValue.getElementsByTagName('Type')[0].firstChild.data
 
                 # These are OK. We have filtered out the features that don't have these
-                defaultValue= fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data
+                if fieldValue.getElementsByTagName('DefaultValue'):
+                    defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data
+                else:
+                    defaultValue = ''
+   
                 length = fieldValue.getElementsByTagName('Length')[0].firstChild.data
                 description = fieldValue.getElementsByTagName('AliasName')[0].firstChild.data
 

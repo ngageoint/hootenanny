@@ -28,14 +28,10 @@ package hoot.services.command;
 
 
 import static hoot.services.HootProperties.replaceSensitiveData;
-import static hoot.services.models.db.QCommandStatus.commandStatus;
-import static hoot.services.utils.DbUtils.createQuery;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,13 +46,14 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
+import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
-import hoot.services.models.db.CommandStatus;
+import hoot.services.utils.DbUtils;
 
 
 /**
@@ -64,6 +61,7 @@ import hoot.services.models.db.CommandStatus;
  */
 public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandRunnerImpl.class);
+    private static final Pattern pattern = Pattern.compile("(STATUS\\s+(.*)\\w+\\s+)\\((\\d+)%\\):"); //eg. STATUS Convert (59%):
 
     private ExecuteWatchdog watchDog;
     private OutputStream stdout;
@@ -71,85 +69,171 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
     public ExternalCommandRunnerImpl() {}
 
+    public String obfuscateConsoleLog(String in) {
+        //strip out time in the logging metadata
+        //e.g. 15:21:06.248
+        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+", "");
+
+        //strip out the path to the cpp code
+        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s*", "");
+
+        //strip out leading newlines
+        out = out.replaceFirst("^\\n", "");
+
+        //strip out db connection string
+        //e.g. hootapidb://hoot:
+        out = out.replaceAll("hootapidb:\\/\\/\\w+:", "");
+        // seperated because some of the status output doesnt include the above text
+        //e.g. hoottest@localhost:5432/hoot
+        out = out.replaceAll("\\w+@\\w+:\\d+\\/\\w+", "<hootapidb>");
+
+        //strip out hoot path string
+        //e.g. /home/vagrant/hoot/userfiles/tmp/upload
+        //e.g. /home/vagrant/hoot/userfiles/tmp
+        out = out.replaceAll(HootProperties.HOME_FOLDER, "<path>");
+
+        return out;
+    }
+
     @Override
     public CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
         String obfuscatedCommand = commandTemplate;
 
-        try (OutputStream stdout = new ByteArrayOutputStream();
-             OutputStream stderr = new ByteArrayOutputStream()) {
+        CommandResult commandResult = new CommandResult();
 
-            this.stdout = stdout;
-            this.stderr = stderr;
+        this.stdout = new LogOutputStream() {
+            @Override
+            protected void processLine(String line, int level) {
+                String currentOut = commandResult.getStdout() != null ? commandResult.getStdout() : "";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
-            ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(stdout, stderr);
-            Executor executor = new DefaultExecutor();
-            this.watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-            executor.setWatchdog(this.watchDog);
-            executor.setStreamHandler(executeStreamHandler);
+                // Had to add because ran into case where same line was processed twice in a row
+                if(!currentOut.equals(currentLine)) {
+                    currentOut = currentOut.concat(currentLine);
+                    commandResult.setStdout(currentOut);
 
-            if (workingDir != null) {
-                executor.setWorkingDirectory(workingDir);
+                    if (trackable) {
+                        // if includes percent progress, update that as well
+                        Matcher matcher = pattern.matcher(currentLine);
+                        if (matcher.find()) {
+                            commandResult.setPercentProgress(Integer.parseInt(matcher.group(3))); // group 3 is the percent from the pattern regex
+                        }
+
+                        // update command status table stdout
+                        DbUtils.upsertCommandStatus(commandResult);
+                    }
+                }
             }
+        };
 
-            CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
+        this.stderr = new LogOutputStream() {
+            @Override
+            protected void processLine(String line, int level) {
+                String currentErr = commandResult.getStderr() != null ? commandResult.getStderr() : "";
+                String currentLine = obfuscateConsoleLog(line) + "\n";
 
-            // Sensitive params obfuscated
-            obfuscatedCommand = Arrays.stream(
-                        parse(commandTemplate, substitutionMap).toStrings()
-                    )
-                    .collect(Collectors.joining(" "));
+                // Had to add because ran into case where same line was processed twice in a row
+                if(!currentErr.equals(currentLine)) {
+                    logger.error(line);
 
-            LocalDateTime start = null;
-            Exception exception = null;
-            int exitCode;
+                    currentErr = currentErr.concat(currentLine);
+                    commandResult.setStderr(currentErr);
 
+                    if (trackable) {
+                        // update command status table stderr
+                        DbUtils.upsertCommandStatus(commandResult);
+                    }
+                }
+            }
+        };
+
+        ExecuteStreamHandler executeStreamHandler = new PumpStreamHandler(this.stdout, this.stderr);
+        Executor executor = new DefaultExecutor();
+        this.watchDog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
+        executor.setWatchdog(this.watchDog);
+        executor.setStreamHandler(executeStreamHandler);
+
+        if (workingDir != null) {
+            executor.setWorkingDirectory(workingDir);
+        }
+
+        CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
+
+        // Sensitive params obfuscated
+        obfuscatedCommand = Arrays.stream(parse(commandTemplate, substitutionMap).toStrings())
+            .collect(Collectors.joining(" "));
+
+        LocalDateTime start = LocalDateTime.now();
+        Exception exception = null;
+        int exitCode;
+
+        commandResult.setStart(start);
+        commandResult.setCommand(obfuscatedCommand);
+        commandResult.setJobId(jobId);
+        commandResult.setCaller(caller);
+        commandResult.setWorkingDir(workingDir);
+        commandResult.setStdout("");
+        commandResult.setStderr("");
+
+        if (trackable) {
+            // Add the new command to the command status table
+            DbUtils.upsertCommandStatus(commandResult);
+        }
+
+        try {
+            logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
+
+            // TODO: Async approach but some commands need to be executed serially
+            // TODO: Will require changing JobRunnable.class processJob() as well because it blocks
+            // executor.execute(cmdLine, new ExecuteResultHandler() {
+            //     @Override
+            //     public void onProcessComplete(int exitValue) {
+            //
+            //     }
+            //
+            //     @Override
+            //     public void onProcessFailed(ExecuteException e) {
+            //
+            //     }
+            // });
+
+            exitCode = executor.execute(cmdLine);
+        }
+        catch (Exception e) {
+            exitCode = CommandResult.FAILURE;
+            exception = e;
+        }
+        finally {
             try {
-                start = LocalDateTime.now();
-
-                logger.info("Command {} started at: [{}]", obfuscatedCommand, start);
-
-                exitCode = executor.execute(cmdLine); //TODO: should be made async
+                this.stdout.close();
+                this.stderr.close();
+            } catch (IOException e) {
+                logger.error("Failed to close output streams", e);
             }
-            catch (Exception e) {
-                exitCode = CommandResult.FAILURE;
-                exception = e;
-            }
+        }
 
-            if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
+        LocalDateTime finish = LocalDateTime.now();
+
+        commandResult.setExitCode(exitCode);
+        commandResult.setFinish(finish);
+
+        if (trackable) {
+            DbUtils.completeCommandStatus(commandResult);
+        }
+
+        if (commandResult.failed()) {
+            if(this.watchDog.killedProcess()) {
                 // it was killed on purpose by the watchdog
                 logger.info("Process for {} command was killed!", obfuscatedCommand);
-            }
-
-            LocalDateTime finish = LocalDateTime.now();
-
-            //, exitCode, stdout.toString(), stderr.toString()
-            CommandResult commandResult = new CommandResult();
-            commandResult.setCommand(obfuscatedCommand);
-            commandResult.setCaller(caller);
-            commandResult.setExitCode(exitCode);
-            commandResult.setStderr(stderr.toString());
-            commandResult.setStdout(stdout.toString());
-            commandResult.setStart(start);
-            commandResult.setFinish(finish);
-            commandResult.setJobId(jobId);
-            commandResult.setWorkingDir(workingDir);
-
-            if (trackable) {
-                updateDatabase(commandResult);
-            }
-
-            if (commandResult.failed()) {
+            } else {
                 logger.error("FAILURE of: {}", commandResult, exception);
             }
-            else {
-                logger.debug("SUCCESS of: {}", commandResult);
-            }
+        }
+        else {
+            logger.debug("SUCCESS of: {}", commandResult);
+        }
 
-            return commandResult;
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
-        }
+        return commandResult;
     }
 
     private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {
@@ -217,21 +301,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         }
 
         return newMap;
-    }
-
-    private static void updateDatabase(CommandResult commandResult) {
-        CommandStatus cmdStatus = new CommandStatus();
-        cmdStatus.setCommand(commandResult.getCommand());
-        cmdStatus.setExitCode(commandResult.getExitCode());
-        cmdStatus.setFinish(Timestamp.valueOf(commandResult.getFinish()));
-        cmdStatus.setStart(Timestamp.valueOf(commandResult.getStart()));
-        cmdStatus.setJobId(commandResult.getJobId());
-        cmdStatus.setStderr(commandResult.getStderr());
-        cmdStatus.setStdout(commandResult.getStdout());
-
-        Long id = createQuery().insert(commandStatus).populate(cmdStatus).executeWithKey(commandStatus.id);
-
-        commandResult.setId(id);
     }
 
     @Override

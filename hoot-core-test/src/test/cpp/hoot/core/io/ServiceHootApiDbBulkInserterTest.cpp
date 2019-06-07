@@ -61,12 +61,13 @@ public:
   QString userName()  { return QString("%1.ServiceHootApiDbBulkInserterTest").arg(_testName); }
 
   ServiceHootApiDbBulkInserterTest()
+    : HootTestFixture("test-files/io/ServiceHootApiDbBulkInserterTest/",
+                      "test-output/io/ServiceHootApiDbBulkInserterTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbBulkInserterTest");
   }
 
-  void setUpTest(const QString testName)
+  void setUpTest(const QString& testName)
   {
     _mapId = -1;
     _testName = testName;
@@ -94,10 +95,9 @@ public:
   void runPsqlDbOfflineTest()
   {
     setUpTest("runPsqlDbOfflineTest");
-    const QString outputDir = "test-output/io/ServiceHootApiDbBulkInserterTest";
 
     HootApiDbBulkInserter writer;
-    const QString outFile = outputDir + "/psql-offline-out.sql";
+    const QString outFile = _outputPath + "psql-offline-out.sql";
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -121,8 +121,8 @@ public:
     reader.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     reader.read(actualMap);
     reader.close();
-    const QString actualOutputFile = outputDir + "/psqlOffline-out.osm";
-    boost::shared_ptr<OsmMapWriter> actualMapWriter =
+    const QString actualOutputFile = _outputPath + "psqlOffline-out.osm";
+    std::shared_ptr<OsmMapWriter> actualMapWriter =
       OsmMapWriterFactory::createWriter(actualOutputFile);
     actualMapWriter->open(actualOutputFile);
     actualMapWriter->write(actualMap);
@@ -143,8 +143,7 @@ public:
 //    TestUtils::verifyStdMatchesOutputIgnoreDate(
 //      "test-files/io/ServiceHootApiDbBulkInserterTest/psql-offline.sql",
 //      outFile);
-    HOOT_FILE_EQUALS(
-      "test-files/io/ServiceHootApiDbBulkInserterTest/psqlOffline.osm", actualOutputFile);
+    HOOT_FILE_EQUALS(_inputPath + "psqlOffline.osm", actualOutputFile);
   }
 
 private:

@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/RndPertyTestCmdTest
+mkdir -p $HOOT_HOME/test-output/cmd/glacial/RndPertyTestCmdTest
 
 infile=$HOOT_HOME/test-files/DcGisRoads.osm
-outdir=$HOOT_HOME/test-output/cmd/slow/RndPertyTestCmdTest
+outdir=$HOOT_HOME/test-output/cmd/glacial/RndPertyTestCmdTest
 
 myCmd="hoot perty \
         -D perty.test.num.runs=1 \

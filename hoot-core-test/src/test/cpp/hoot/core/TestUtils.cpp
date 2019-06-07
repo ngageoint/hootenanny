@@ -40,7 +40,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/GetElementIdsVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -55,18 +55,20 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<TestUtils> TestUtils::_theInstance;
+std::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 const QString TestUtils::HOUSE_NUMBER_TAG_NAME = "addr:housenumber";
 const QString TestUtils::STREET_TAG_NAME = "addr:street";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME = "address";
 const QString TestUtils::FULL_ADDRESS_TAG_NAME_2 = "addr:full";
 
+const QString HootTestFixture::UNUSED_PATH = "";
+
 TestUtils::TestUtils()
 {
 }
 
-bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
+bool TestUtils::compareMaps(const QString& refPath, const QString& testPath)
 {
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -95,7 +97,8 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
   return result;
 }
 
-WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError, const QString& note)
+WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circularError,
+                            const QString& note)
 {
   WayPtr result(new Way(s, map->createNextWayId(), circularError));
   for (size_t i = 0; c[i].isNull() == false; i++)
@@ -111,6 +114,21 @@ WayPtr TestUtils::createWay(OsmMapPtr map, Status s, Coordinate c[], Meters circ
   }
   map->addWay(result);
   return result;
+}
+
+WayPtr TestUtils::createWay(OsmMapPtr map, geos::geom::Coordinate c[], Status status,
+                            Meters circularError, Tags tags)
+{
+  WayPtr way(new Way(status, map->createNextWayId(), circularError));
+  for (size_t i = 0; c[i].isNull() == false; i++)
+  {
+    NodePtr n(new Node(status, map->createNextNodeId(), c[i], circularError));
+    map->addNode(n);
+    way->addNode(n->getId());
+  }
+  way->setTags(tags);
+  map->addWay(way);
+  return way;
 }
 
 WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status,
@@ -164,14 +182,14 @@ ElementPtr TestUtils::getElementWithNote(OsmMapPtr map, QString note)
   return getElementWithTag(map, "note", note);
 }
 
-ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
-                                        const QString tagValue)
+ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString& tagKey,
+                                        const QString& tagValue)
 {
   TagCriterion tc(tagKey, tagValue);
-  set<ElementId> bag;
-  GetElementIdsVisitor v(bag);
+  UniqueElementIdVisitor v;
   FilteredVisitor fv(tc, v);
   map->visitRo(fv);
+  const set<ElementId> bag = v.getElementSet();
 
   if (bag.size() != 1)
   {
@@ -181,7 +199,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-boost::shared_ptr<TestUtils> TestUtils::getInstance()
+std::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {
@@ -268,8 +286,8 @@ QString TestUtils::toQuotedString(QString str)
   return result;
 }
 
-void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
-                                                 const QString outFilePath)
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath,
+                                                 const QString& outFilePath)
 {
   LOG_VART(stdFilePath);
   LOG_VART(outFilePath);

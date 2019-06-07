@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialOsmMapWriter.h"
 
@@ -37,7 +37,7 @@ PartialOsmMapWriter::PartialOsmMapWriter()
 {
 }
 
-void PartialOsmMapWriter::write(ConstOsmMapPtr map)
+void PartialOsmMapWriter::write(const ConstOsmMapPtr& map)
 {
   writePartial(map);
   finalizePartial();
@@ -69,18 +69,18 @@ void PartialOsmMapWriter::writePartial(const OsmMapPtr& map)
   writePartial((const ConstOsmMapPtr)map);
 }
 
-void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const Element>& e)
+void PartialOsmMapWriter::writePartial(const std::shared_ptr<const Element>& e)
 {
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
-    writePartial(boost::dynamic_pointer_cast<const Node>(e));
+    writePartial(std::dynamic_pointer_cast<const Node>(e));
     break;
   case ElementType::Way:
-    writePartial(boost::dynamic_pointer_cast<const Way>(e));
+    writePartial(std::dynamic_pointer_cast<const Way>(e));
     break;
   case ElementType::Relation:
-    writePartial(boost::dynamic_pointer_cast<const Relation>(e));
+    writePartial(std::dynamic_pointer_cast<const Relation>(e));
     break;
   default:
     throw HootException("Unexpected element type: " + e->getElementType().toString());

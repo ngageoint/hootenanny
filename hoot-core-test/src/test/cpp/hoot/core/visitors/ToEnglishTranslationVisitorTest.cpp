@@ -41,11 +41,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/visitors/ToEnglishTranslationVisitorTest";
-static const QString testOutputRoot =
-  "test-output/visitors/ToEnglishTranslationVisitorTest";
-
 class ToEnglishTranslationVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ToEnglishTranslationVisitorTest);
@@ -60,9 +55,10 @@ class ToEnglishTranslationVisitorTest : public HootTestFixture
 public:
 
   ToEnglishTranslationVisitorTest()
+    : HootTestFixture("test-files/visitors/ToEnglishTranslationVisitorTest/",
+                      "test-output/visitors/ToEnglishTranslationVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(testOutputRoot);
   }
 
   void runTranslateTest()
@@ -70,8 +66,8 @@ public:
     const QString testName = "runTranslateTest";
     _runTranslationTest(
       _getDefaultConfig(),
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
   void runNoSourceLangsTest()
@@ -84,15 +80,14 @@ public:
     {
       _runTranslationTest(
         conf,
-        testOutputRoot + "/" + testName + ".osm",
-        testInputRoot + "/" + testName + "-gold.osm");
+        _outputPath + testName + ".osm",
+        _inputPath + testName + "-gold.osm");
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT_EQUAL(
-      QString("No source languages populated.").toStdString(), exceptionMsg.toStdString());
+    HOOT_STR_EQUALS(QString("No source languages populated."), exceptionMsg);
   }
 
   void runIgnorePreTranslatedTagsTest()
@@ -102,8 +97,8 @@ public:
     conf.set("language.ignore.pre.translated.tags", true);
     _runTranslationTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
   void runNoTagKeysTest()
@@ -116,8 +111,8 @@ public:
     {
       _runTranslationTest(
         conf,
-        testOutputRoot + "/" + testName + ".osm",
-        testInputRoot + "/" + testName + "-gold.osm");
+        _outputPath + testName + ".osm",
+        _inputPath + testName + "-gold.osm");
     }
     catch (const HootException& e)
     {
@@ -133,8 +128,8 @@ public:
     conf.set("language.parse.names", true);
     _runTranslationTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
   void runNamesTestWithAdditionalTagKeys()
@@ -145,8 +140,8 @@ public:
     conf.set("language.tag.keys", "tag1;tag2");
     _runTranslationTest(
       conf,
-      testOutputRoot + "/" + testName + ".osm",
-      testInputRoot + "/" + testName + "-gold.osm");
+      _outputPath + testName + ".osm",
+      _inputPath + testName + "-gold.osm");
   }
 
 private:
@@ -171,11 +166,11 @@ private:
     return conf;
   }
 
-  void _runTranslationTest(Settings config, const QString outputFile, const QString goldFile)
+  void _runTranslationTest(const Settings& config, const QString& outputFile, const QString& goldFile)
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, testInputRoot + "/ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "ToEnglishTranslationVisitorTest.osm", false, Status::Unknown1);
 
     ToEnglishTranslationVisitor visitor;
     visitor.setConfiguration(config);

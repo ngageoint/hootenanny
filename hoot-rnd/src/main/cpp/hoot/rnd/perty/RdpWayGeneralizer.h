@@ -22,14 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RDP_WAY_GENERALIZER_H
 #define RDP_WAY_GENERALIZER_H
-
-// Boost Includes
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -76,14 +73,14 @@ public:
 
   RdpWayGeneralizer(double epsilon);
 
-  RdpWayGeneralizer(boost::shared_ptr<OsmMap> map, double epsilon);
+  RdpWayGeneralizer(const std::shared_ptr<OsmMap>& map, double epsilon);
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
     */
-  void generalize(boost::shared_ptr<Way> way);
+  void generalize(const std::shared_ptr<Way>& way);
 
   /**
     Generates a set of points that make up a generalized set of the input points
@@ -91,8 +88,8 @@ public:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  virtual QList<boost::shared_ptr<const Node> > getGeneralizedPoints(
-    const QList<boost::shared_ptr<const Node> >& wayPoints);
+  virtual QList<std::shared_ptr<const Node>> getGeneralizedPoints(
+    const QList<std::shared_ptr<const Node>>& wayPoints);
 
   /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
@@ -106,7 +103,7 @@ private:
 
   double _epsilon;
 
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
 
   /*
     Finds the perpendicular distance between an imaginary line drawn from the first point on a line
@@ -119,8 +116,8 @@ private:
     point for the imaginary line drawn directly from start to end point on the line to be reduced
     */
   double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-    const boost::shared_ptr<const Node> splitPoint, const boost::shared_ptr<const Node> lineToBeReducedStartPoint,
-    const boost::shared_ptr<const Node> lineToBeReducedEndPoint) const;
+    const std::shared_ptr<const Node> splitPoint, const std::shared_ptr<const Node> lineToBeReducedStartPoint,
+    const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
 };
 

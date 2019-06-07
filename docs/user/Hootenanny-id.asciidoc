@@ -17,7 +17,7 @@ This guide is intended as a general purpose reference to understand various comp
 
 === Accessing Hootenanny
 
-Hootenanny can be accessed from a web browser using the standard URL http://(your_servername):port/hootenanny-id/. The current version of Hootenanny iD is only supported in Chrome (recommended) and/or Chromium.
+Hootenanny can be accessed from a web browser using the standard URL http://<your_servername):port/hootenanny-id/. The current version of Hootenanny iD is supported in Chrome (recommended), Chromium, and Firefox.
 
 [[HootiD-UILayout]]
 .Hootenanny User Interface Layout. *A*: Hootenanny version info (click on Hootenanny). *B*: Manage/Return to Map toggle. *C*: Map tools for measuring, cropping, and editing features. *D*: Overview map available using `/`. *E*: Map navigation and background layer configuration tool bar (DigitalGlobe Global Basemap selected as background layer). *F*: Add Reference Dataset button. *G*: Add Secondary Dataset button. *H*: Layer directory structure with scrolling and resize options. *I*: Recently Used Layers dropdown lists most recent layers accessed. *J*: Layer color picker. *K* Add layer button (layer must be selected i.e. highlighted in yellow to add to map). *L*: Sidebar resizing. *M*: Hoot scale bar (meters or imperial). *N*: WGS84 degrees, minutes, seconds. *O*: Map View. Basemap Imagery is DigitalGlobe GlobalBasemap (GBM).
@@ -160,7 +160,7 @@ http://(hosted_imagery_service_name)/OSM/{zoom}/{x}/{y}.png
 .Background Settings in Hootenanny with the Custom Basemap URL options displayed.
 image::user/images/id/hoot_background_new.png[]
 
-NOTE: The DigitalGlobe GBM/EGD basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid UUID, you will need to edit the _dgservices.js_ file located in $TOMCAT8_HOME/webapps/hootenanny-id/js/id/services/ adding in your UUID account credentials for the egd/gbm_connectId = 'enteruuidhere' parameters.  You will also need to set dg.enabled = true.
+NOTE: The DigitalGlobe EVWHS basemap is not enabled by default due to user access restrictions. If an account has been set up with a valid Connect ID, you will need to edit the _dgservices.js_ file to set `evwhs_connectId = 'REPLACE_ME'` and rebuild the UI with `npm run production`.
 
 ==== Image Carousel
 
@@ -449,7 +449,7 @@ Hootenanny Installation Guide.  The documentation also describes how to disable 
 After Hootenanny has been configured with an OSM API database connection, follow these steps to conflate data from an OSM API database:
 
 * When an OSM API database is configured with Hootenanny, the first layer listed in the iD Editor layers list will always be named
-"OSM_API_DB_<database-name>".  Select this layer as the reference layer for your conflation job.  You will not see the data from the OSM API
+`OSM_API_DB_<database-name>`.  Select this layer as the reference layer for your conflation job.  You will not see the data from the OSM API
 database displayed on the iD Editor map due to a limitation described later in this section.
 * Select any other layer stored within Hootenanny as the secondary layer for the conflation job.  You should first verify that your OSM
 API database contains data within the AOI of your selected secondary dataset, or no data conflation will actually occur.
@@ -459,9 +459,9 @@ API database contains data within the AOI of your selected secondary dataset, or
 When you are ready to export your conflated layer back into your OSM API database:
 
 * Open the Hootenanny dataset export dialog either immediately after conflation completes from the left hand pane or by opening it from the
-"Manage"-->"Datasets" tab.
-* Select "OSM API Database" as the export file type.  NOTE: The translation selection is ignored, since the output will be OSM data.
-* Click the "Export" button.
+`Manage` -> `Datasets` tab.
+* Select `OSM API Database` as the export file type.  NOTE: The translation selection is ignored, since the output will be OSM data.
+* Click the `Export` button.
 
 Hootenanny will export an OSM changeset to the target OSM API database with the geospatial bounds of the original conflation
 job that is the difference between the data originally exported from the OSM API database for conflation and the
@@ -493,7 +493,7 @@ There exists no mechanism in Hootenanny's iD Editor to upload data directly into
 from the command line as explained in the "Hootenanny OSM API Database Conflation Testing Notes" section of the Hootenanny Developer's Guide.
 
 For more detailed information on the workflow involved with conflating data sourced from an OSM
-API database, see: https://github.com/ngageoint/hootenanny/wiki/MapEdit-Enhanced-Conflation-Workflow--(aka-%22Holy-Grail%22)
+API database, see: link:$$https://github.com/ngageoint/hootenanny/wiki/Enhanced-Conflation-Workflow-Initial-Protoype--(aka-%22Holy-Grail%22)---ARCHIVE$$[Holy-Grail]
 
 === Conflation Examples
 
@@ -961,3 +961,4 @@ used in subline matching. Values are in meters.
 * *Search Radius Waterway*: Search radius value to override the auto calculated radius. Waterway Auto Calc Search Radius must be unchecked to enter value.
 * *Waterway Rubber Sheet Minimum Ties*: Minimum tie points to use for rubber sheeting.
 * *Waterway Rubber Sheet Ref*: Provides a rubber sheet transform for moving input 2 towards input 1. If not enabled, both inputs are moved towards each other.
+

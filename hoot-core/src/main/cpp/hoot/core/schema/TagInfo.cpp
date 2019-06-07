@@ -28,18 +28,21 @@
 #include "TagInfo.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/OgrReader.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
 
-TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList keys, const bool keysOnly,
+TagInfo::TagInfo(const int tagValuesPerKeyLimit, const QStringList& keys, const bool keysOnly,
                  const bool caseSensitive, const bool exactKeyMatch) :
 _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
@@ -49,9 +52,32 @@ _exactKeyMatch(exactKeyMatch)
 {
 }
 
-QString TagInfo::getInfo(QString input)
+QString TagInfo::getInfo(const QStringList& inputs)
 {
-  LOG_VARD(input);
+  QString info = "{\n";
+
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    info += QString("  \"%1\":{\n").arg(QFileInfo(inputs.at(i)).fileName());
+
+    info += _getInfo(inputs.at(i));
+    info += "\n  }";
+
+    // Dont add a comma to the last dataset
+    if (i != (inputs.size() - 1))
+    {
+      info += ",\n";
+    }
+  }
+  info += "\n}";
+
+  return info;
+}
+
+QString TagInfo::_getInfo(const QString& input)
+{
+  QString inputInfo = input;
+  LOG_VARD(inputInfo);
   LOG_VART(_tagValuesPerKeyLimit);
   LOG_VART(_keys);
   LOG_VART(_keysOnly);
@@ -59,47 +85,44 @@ QString TagInfo::getInfo(QString input)
   LOG_VART(_exactKeyMatch);
   QString finalText;
 
-  boost::shared_ptr<OsmMapReader> reader =
+  std::shared_ptr<OsmMapReader> reader =
     OsmMapReaderFactory::createReader(
-      input, ConfigOptions().getReaderUseDataSourceIds(),
+      inputInfo, ConfigOptions().getReaderUseDataSourceIds(),
       Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
   //Using a different code path for the OGR inputs to handle the layer syntax.  There may be
   //a way to combine the two logic paths...not sure, though.
-  boost::shared_ptr<OgrReader> ogrReader =
-    boost::dynamic_pointer_cast<OgrReader>(reader);
+  std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
-    ogrReader->setTranslationFile(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+    ogrReader->setSchemaTranslationScript(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
 
     QStringList layers;
-    if (input.contains(";"))
+    if (inputInfo.contains(";"))
     {
-      QStringList list = input.split(";");
-      input = list.at(0);
+      QStringList list = inputInfo.split(";");
+      inputInfo = list.at(0);
       layers.append(list.at(1));
     }
     else
     {
-      layers = ogrReader->getFilteredLayerNames(input);
+      layers = ogrReader->getFilteredLayerNames(inputInfo);
     }
 
     if (layers.size() == 0)
     {
-      LOG_WARN("Could not find any valid layers to read from in " + input + ".");
+      LOG_WARN("Could not find any valid layers to read from in " + inputInfo + ".");
     }
 
     for (int i = 0; i < layers.size(); i++)
     {
+      LOG_DEBUG("Reading: " << inputInfo + " " << layers[i] << "...");
+
       TagInfoHash result;
-
-      LOG_DEBUG("Reading: " << input + " " << layers[i] << "...");
-
-      boost::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(input, layers[i]));
-
+      std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(inputInfo, layers[i]));
       while (iterator->hasNext())
       {
-        boost::shared_ptr<Element> e = iterator->next();
+        std::shared_ptr<Element> e = iterator->next();
 
         //        // Interesting problem: If there are no elements in the file, e == 0
         //        // Need to look at the ElementIterator.cpp file to fix this.
@@ -113,15 +136,12 @@ QString TagInfo::getInfo(QString input)
       }
 
       const QString tmpText = _printJSON(layers[i], result);
-
       // Skip empty layers
       if (tmpText == "")
       {
         continue;
       }
-
       finalText += tmpText;
-
       if (i != (layers.size() - 1))
       {
         finalText += ",\n";
@@ -134,16 +154,16 @@ QString TagInfo::getInfo(QString input)
     //needed for JSON data, then either those readers can implement PartialOsmMapReader or the
     //needed readed code can be manually added to this class.
 
-    if (!OsmMapReaderFactory::hasElementInputStream(input))
+    if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {
       throw HootException("Inputs to tag-values must be streamable.");
     }
 
-    LOG_DEBUG("Reading: " << input << "...");
+    LOG_DEBUG("Reading: " << inputInfo << "...");
 
-    reader->open(input);
-    boost::shared_ptr<ElementInputStream> streamReader =
-      boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    reader->open(inputInfo);
+    std::shared_ptr<ElementInputStream> streamReader =
+      std::dynamic_pointer_cast<ElementInputStream>(reader);
 
     TagInfoHash result;
     while (streamReader->hasMoreElements())
@@ -155,8 +175,8 @@ QString TagInfo::getInfo(QString input)
         _parseElement(e, result);
       }
     }
-    boost::shared_ptr<PartialOsmMapReader> partialReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    std::shared_ptr<PartialOsmMapReader> partialReader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();
@@ -168,7 +188,7 @@ QString TagInfo::getInfo(QString input)
   return finalText;
 }
 
-bool TagInfo::_tagKeysMatch(const QString tagKey) const
+bool TagInfo::_tagKeysMatch(const QString& tagKey) const
 {
   LOG_VART(tagKey);
   const Qt::CaseSensitivity caseSensitivity =
@@ -192,7 +212,7 @@ bool TagInfo::_tagKeysMatch(const QString tagKey) const
   return false;
 }
 
-void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
+void TagInfo::_parseElement(const ElementPtr& e, TagInfoHash& result)
 {
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
@@ -205,7 +225,7 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
     }
 
     // Drop Hoot metadata tags
-    if (it.key() == "source:ingest:datetime")
+    if (it.key() == MetadataTags::SourceIngestDateTime())
     {
       continue;
     }
@@ -219,7 +239,7 @@ void TagInfo::_parseElement(ElementPtr e, TagInfoHash& result)
   }
 }
 
-QString TagInfo::_printJSON(QString lName, TagInfoHash& data)
+QString TagInfo::_printJSON(const QString& lName, TagInfoHash& data)
 {
   QStringList attrKey = data.keys();
 

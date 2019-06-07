@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "KnnIteratorNd.h"
@@ -93,10 +93,10 @@ void KnnIteratorNd::_calculateNextNn()
     if (_knnLeafHeap.size() > 0)
     {
       ld = _knnLeafHeap.top();
-      while(_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end()) 
+      while (_knnLeafHeap.size() > 0 && _knnReturnedFids.find(ld.fid) != _knnReturnedFids.end())
       {       
         _knnLeafHeap.pop();  
-        if(_knnLeafHeap.size() > 0)
+        if (_knnLeafHeap.size() > 0)
           ld = _knnLeafHeap.top();
       }
 
@@ -134,9 +134,9 @@ void KnnIteratorNd::_calculateNextNn()
     
     if (currNode != NULL)
     {
-      if(currNode->isLeafNode())
+      if (currNode->isLeafNode())
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpId = currNode->getChildUserId(i);
@@ -152,7 +152,7 @@ void KnnIteratorNd::_calculateNextNn()
       }
       else
       {
-        for(int i=0; i<currNode->getChildCount(); i++)
+        for (int i=0; i<currNode->getChildCount(); i++)
         {
           const BoxInternalData& b = currNode->getChildEnvelope(i);
           tmpDistance = _calculateDistance(_knnPoint, b);
@@ -219,9 +219,9 @@ void KnnIteratorNd::_calculateNextNn()
 // 
 //     _knnSearchQueue.pop();
 // 
-//     if(currNode->isLeafNode())
+//     if (currNode->isLeafNode())
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double tmpDistance;
@@ -239,7 +239,7 @@ void KnnIteratorNd::_calculateNextNn()
 //     }
 //     else
 //     {
-//       for(int i=0; i<currNode->getChildCount(); i++)
+//       for (int i=0; i<currNode->getChildCount(); i++)
 //       {
 //         const BoxInternalData& b = currNode->getChildEnvelope(i);
 //         double d = _calculateDistance(_knnPoint, b);

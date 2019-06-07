@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-GOLD_DIR=test-files/cmd/glacial/ServiceStreamingApiDbTest
-OUTPUT_DIR=test-output/cmd/glacial/ServiceStreamingApiDbTest
+GOLD_DIR=test-files/cmd/glacial/serial/ServiceStreamingApiDbTest
+OUTPUT_DIR=test-output/cmd/glacial/serial/ServiceStreamingApiDbTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
@@ -73,7 +73,7 @@ hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped.osm $OUTPUT_DIR/Poi1-cropped-osmapid
 echo "hoot api db bounds --> ogr"
 echo ""
 hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=true test-files/conflate/point/Poi1.osm "$HOOT_DB_URL/Poi1"
-hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp --trans translations/Poi.js
+hoot convert $HOOT_OPTS -D schema.translation.script=translations/Poi.js -D convert.bounding.box=$BOUNDS "$HOOT_DB_URL/Poi1" $OUTPUT_DIR/Poi1-cropped-hootapidb.shp
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-hootapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-hootapidb-ogr.osm
 
@@ -81,7 +81,7 @@ echo "osm api db bounds --> ogr"
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $HOOT_OPTS test-files/conflate/point/Poi1.osm $OSM_API_DB_URL
-hoot convert $HOOT_OPTS -D convert.bounding.box=$BOUNDS $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp --trans translations/Poi.js
+hoot convert $HOOT_OPTS -D schema.translation.script=translations/Poi.js -D convert.bounding.box=$BOUNDS $OSM_API_DB_URL $OUTPUT_DIR/Poi1-cropped-osmapidb.shp
 hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-osmapidb/poi.shp $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 

@@ -934,9 +934,9 @@
         <nd ref="-165947"/>
         <nd ref="-165948"/>
         <nd ref="-126446"/>
-        <tag k="alt_name" v="15th St SW;Raoul Wallenberg Pl;Raoul Wallenberg Pl SW"/>
-        <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="RAOUL WALLENBERG PL SW"/>
+        <tag k="alt_name" v="15th St SW;Raoul Wallenberg Pl;Raoul Wallenberg Pl SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-14171"/>
@@ -1004,9 +1004,9 @@
         <nd ref="-126503"/>
         <nd ref="-126504"/>
         <nd ref="-170858"/>
-        <tag k="alt_name" v="Maine Ave SW"/>
-        <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="MAINE AVE SW"/>
+        <tag k="alt_name" v="Maine Ave SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-14169"/>
@@ -1019,13 +1019,14 @@
         <nd ref="-170974"/>
         <nd ref="-170973"/>
         <nd ref="-171311"/>
-        <tag k="name" v="Independence Ave SW"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Independence Ave SW"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-14167"/>
     </way>
     <way visible="true" id="-14165" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-170855"/>
         <nd ref="-83547"/>
         <nd ref="-114530"/>
         <nd ref="-114531"/>
@@ -1057,9 +1058,9 @@
         <nd ref="-114556"/>
         <nd ref="-114557"/>
         <nd ref="-170857"/>
-        <tag k="alt_name" v="Independence Ave SW"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+        <tag k="alt_name" v="Independence Ave SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-14165"/>
@@ -1072,9 +1073,9 @@
         <nd ref="-171308"/>
         <nd ref="-119100"/>
         <nd ref="-83547"/>
-        <tag k="alt_name" v="15th St SW;Raoul Wallenberg Pl SW"/>
-        <tag k="name" v="15TH ST SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="15TH ST SW"/>
+        <tag k="alt_name" v="15th St SW;Raoul Wallenberg Pl SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-14163"/>
@@ -1082,8 +1083,8 @@
     <way visible="true" id="-13554" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-126446"/>
         <nd ref="-170869"/>
-        <tag k="name" v="Maine Ave SW"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Maine Ave SW"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13554"/>
@@ -1109,8 +1110,8 @@
     <way visible="true" id="-13547" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170866"/>
         <nd ref="-171308"/>
-        <tag k="name" v="Independence Ave SW"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Independence Ave SW"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13547"/>
@@ -1118,9 +1119,9 @@
     <way visible="true" id="-13543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170868"/>
         <nd ref="-126446"/>
-        <tag k="alt_name" v="Raoul Wallenberg Pl SW;15th St SW"/>
-        <tag k="name" v="Raoul Wallenberg Pl"/>
         <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Raoul Wallenberg Pl"/>
+        <tag k="alt_name" v="Raoul Wallenberg Pl SW;15th St SW"/>
         <tag k="hoot:status" v="2"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13543"/>
@@ -1186,22 +1187,12 @@
         <nd ref="-126426"/>
         <nd ref="-126427"/>
         <nd ref="-170859"/>
-        <tag k="alt_name" v="Maine Ave SW"/>
-        <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="MAINE AVE SW"/>
+        <tag k="alt_name" v="Maine Ave SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13540"/>
-    </way>
-    <way visible="true" id="-13536" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-170855"/>
-        <nd ref="-83547"/>
-        <tag k="alt_name" v="Independence Ave SW"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="5"/>
-        <tag k="hoot:id" v="-13536"/>
     </way>
     <way visible="true" id="-13535" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-83547"/>
@@ -1243,9 +1234,9 @@
         <nd ref="-117986"/>
         <nd ref="-117987"/>
         <nd ref="-170854"/>
-        <tag k="alt_name" v="Independence Ave SW"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+        <tag k="alt_name" v="Independence Ave SW"/>
         <tag k="hoot:status" v="3"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13535"/>
@@ -1255,8 +1246,8 @@
         <nd ref="-136900"/>
         <nd ref="-136901"/>
         <nd ref="-170850"/>
-        <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13531"/>
@@ -1265,8 +1256,8 @@
         <nd ref="-170847"/>
         <nd ref="-126445"/>
         <nd ref="-126446"/>
-        <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
+        <tag k="name" v="MAINE AVE SW"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="5"/>
         <tag k="hoot:id" v="-13528"/>

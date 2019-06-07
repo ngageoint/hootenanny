@@ -45,8 +45,8 @@ class CentroidDistanceExtractor : public AbstractDistanceExtractor
 public:
   static std::string className() { return "hoot::CentroidDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
-    const boost::shared_ptr<const Element>& candidate) const override;
+  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
   virtual std::string getClassName() const { return CentroidDistanceExtractor::className(); }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NODEJS_H
 #define NODEJS_H
@@ -64,7 +64,6 @@ private:
   static void getY(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
   ConstNodePtr _constNode;
   NodePtr _node;
   static v8::Persistent<v8::Function> _constructor;

@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
 #include <QMultiHash>
@@ -49,7 +50,7 @@ class Way;
  * when conflating data that is mostly major roads with data that contains a lot of
  * neighborhood-level data.
  */
-class CornerSplitter : public OsmMapOperation, Configurable
+class CornerSplitter : public OsmMapOperation, Configurable, public OperationStatusInfo
 {
 public:
 
@@ -57,11 +58,11 @@ public:
 
   CornerSplitter();
 
-  CornerSplitter(boost::shared_ptr<OsmMap> map);
+  CornerSplitter(const std::shared_ptr<OsmMap>& map);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  static void splitCorners(boost::shared_ptr<OsmMap> map);
+  static void splitCorners(const std::shared_ptr<OsmMap>& map);
 
   void splitCorners();
 
@@ -71,7 +72,13 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
+  virtual QString getInitStatusMessage() const { return "Splitting sharp road corners..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Split " + QString::number(_numAffected) + " road corners"; }
+
 private:
+
   /**
    * @brief _splitRoundedCorners Split rounded corners in the middle just like a non-rounded corner
    */
@@ -86,7 +93,7 @@ private:
    */
   bool _splitWay(long wayId, long nodeIdx, long nodeId, bool sharpCorner = true);
   /** Pointer to the OsmMap */
-  boost::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _map;
   /** Vector of ways that are yet to be processed */
   std::vector<long> _todoWays;
   /** Threshold in degrees for splitting sharp corners */

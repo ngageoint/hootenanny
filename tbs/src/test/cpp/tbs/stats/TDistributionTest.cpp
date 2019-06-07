@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -74,8 +74,8 @@ public:
     boost::normal_distribution<> ndy;
     boost::uniform_real<> uni(0.0, 1.0);
 
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > vary(rng, ndy);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> vary(rng, ndy);
 
     uni(rng);
 
@@ -120,8 +120,8 @@ public:
     boost::normal_distribution<> ndy;
     boost::uniform_real<> uni(0.0, 1.0);
 
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > vary(rng, ndy);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> vary(rng, ndy);
 
     uni(rng);
 

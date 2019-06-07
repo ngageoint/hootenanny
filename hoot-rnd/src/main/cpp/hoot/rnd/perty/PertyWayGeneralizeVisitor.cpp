@@ -80,7 +80,7 @@ void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
   _generalizer.reset(new RdpWayGeneralizer(_map->shared_from_this(), _epsilon));
 }
 
-void PertyWayGeneralizeVisitor::visit(const boost::shared_ptr<Element>& element)
+void PertyWayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
 {
   if (element->getElementType() == ElementType::Way)
   {
@@ -96,7 +96,7 @@ void PertyWayGeneralizeVisitor::visit(const boost::shared_ptr<Element>& element)
     if (randomNum <= _wayGeneralizeProbability)
     {
       LOG_TRACE(logMsg);
-      _generalizer->generalize(boost::dynamic_pointer_cast<Way>(element));
+      _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
     }
     else
     {

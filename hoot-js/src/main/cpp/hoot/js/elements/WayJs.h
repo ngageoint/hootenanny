@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYJS_H
 #define WAYJS_H
@@ -43,6 +43,7 @@ namespace hoot
 class WayJs : public ElementJs
 {
 public:
+
   static void Init(v8::Handle<v8::Object> target);
 
   virtual ConstElementPtr getConstElement() const { return getConstWay(); }
@@ -54,13 +55,13 @@ public:
   static v8::Handle<v8::Object> New(WayPtr way);
 
 private:
+
   WayJs(ConstWayPtr w);
   WayJs();
   ~WayJs();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
   ConstWayPtr _constWay;
   WayPtr _way;
   static v8::Persistent<v8::Function> _constructor;

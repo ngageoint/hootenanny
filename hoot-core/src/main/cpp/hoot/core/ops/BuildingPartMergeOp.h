@@ -30,21 +30,28 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/algorithms/merging/BuildingPartPreMergeCollector.h>
 
 // TGS
 #include <tgs/DisjointSet/DisjointSetMap.h>
+
+// geos
+#include <geos/geom/Geometry.h>
 
 namespace __gnu_cxx
 {
 
 template<>
-  struct hash< boost::shared_ptr<hoot::Element> >
+  struct hash<std::shared_ptr<hoot::Element>>
   {
     size_t
-    operator()(const boost::shared_ptr<hoot::Element>& k) const
+    operator()(const std::shared_ptr<hoot::Element>& k) const
     { return (size_t)(k.get()); }
   };
 
@@ -52,9 +59,6 @@ template<>
 
 namespace hoot
 {
-
-class Relation;
-class OsmSchema;
 
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
@@ -77,68 +81,119 @@ class OsmSchema;
  * removed. It is also assumed that all buildings form closed polygons.
  *
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
+ *
+ * This class has been updated to process building parts in parallel. The bottleneck in the original
+ * merging logic haf mostly to do with the geometry calls to GEOS to check for building part
+ * containment within buildings, and to a lesser degree, the inserts into the disjoint set map for
+ * the building part groups. This class now collects all building parts beforehand and sends them
+ * off to threads for parallel processing. As of 3/15/19, this resulted in a ~78% performance
+ * increase when processing ~500K UFD buildings. The parallelization must occur at the building
+ * part level, and not at the building level, because a single building relation may have far more
+ * building parts than others, which would cause an imbalance with paralleization made at the
+ * building level.
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo
+class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
+  public Configurable
 {
 public:
 
   static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
-  BuildingPartMergeOp();
+  BuildingPartMergeOp(bool preserveTypes = false);
 
   virtual void apply(OsmMapPtr& map) override;
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
-
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  RelationPtr combineParts(const OsmMapPtr &map,
-    const std::vector< boost::shared_ptr<Element> >& parts);
+  /**
+   * Combines building parts into a building relation added to the map
+   *
+   * @param map the map to add the building relation to
+   * @param parts the building parts to combine
+   * @return the added building
+   */
+  RelationPtr combineBuildingParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
-  { return "Implicitly merges individual building parts into a single part"; }
+  { return "Merges individual building parts into a single building"; }
 
   virtual QString getInitStatusMessage() const { return "Merging building parts..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Processed " + QString::number(_numAffected) + " elements for building part merging."; }
+  {
+    return
+      "Merged " + StringUtils::formatLargeNumber(_numAffected) +
+      " building parts from " +
+      StringUtils::formatLargeNumber(_numBuildingGroupsMerged) + " valid building groups / " +
+      StringUtils::formatLargeNumber(_totalBuildingGroupsProcessed) + " total.";
+  }
+
+  void setThreadCount(int count) { _threadCount = count; }
+
+  int getTotalBuildingGroupsProcessed() const { return _totalBuildingGroupsProcessed; }
+  int getNumBuildingGroupsMerged() const { return _numBuildingGroupsMerged; }
+  void setPreserveTypes(bool preserve) { _preserveTypes = preserve; }
 
 private:
 
-  /// Used to keep track of which elements make up a building.
-  Tgs::DisjointSetMap< boost::shared_ptr<Element> > _ds;
+  // used to keep track of which elements make up a building
+  Tgs::DisjointSetMap<ElementPtr> _buildingPartGroups;
+
   OsmMapPtr _map;
+
+  // building tag keys that need to be ignored during merging
   std::set<QString> _buildingPartTagNames;
+  BuildingCriterion _buildingCrit;
+  std::shared_ptr<ElementConverter> _elementConverter;
 
-  void _addContainedWaysToGroup(
-    const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
-  void _addNeighborsToGroup(const WayPtr& w);
-  void _addNeighborsToGroup(const RelationPtr& r);
+  int _totalBuildingGroupsProcessed;
+  int _numBuildingGroupsMerged;
 
-  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+  int _threadCount;
 
-  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts);
+  // if true, building part type tags will be preserved in the combined building output
+  bool _preserveTypes;
 
-  /**
-   * Compares the given tags and determines if the two building parts could be part of the same
-   * builds. Returns true if they could be part of the same building.
+  void _init(OsmMapPtr& map);
+  void _initBuildingPartTagNames();
+
+  std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
+
+  /*
+   * Collects building parts and passes them off for parallel processing
    */
-  bool _compareTags(Tags t1, Tags t2);
+  void _preProcessBuildingParts();
 
-  /**
-   * Returns true if the nodes n1 and n2 appear in w in consecutive order.
+  /*
+   * Groups contained and neighboring building part with the buildings containing them
    */
-  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
+  QQueue<BuildingPartRelationship> _getBuildingPartPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartWayPreProcessingInput();
+  QQueue<BuildingPartRelationship> _getBuildingPartRelationPreProcessingInput();
 
-  /**
-   * Returns true if this way is a building, or part of a building through a relation.
+  /*
+   * Merges building parts grouped by the parallel processing
    */
-  bool _isBuildingPart(const WayPtr& w);
-  bool _isBuildingPart(const RelationPtr& r);
+  void _mergeBuildingParts();
+
+  /*
+   * Determines neighboring building parts for a building
+   */
+  std::set<long> _calculateNeighbors(const ConstWayPtr& way, const Tags& tags);
+
+  static bool _hasContiguousNodes(const ConstWayPtr& way, const long node1Id, const long node2Id);
+
+  /*
+   * Returns a similarity decision by scoring the non-building part tags between two tag sets
+   */
+  bool _compareTags(Tags t1, Tags te);
 };
 
 }

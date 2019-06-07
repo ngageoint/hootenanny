@@ -28,12 +28,12 @@
 #define SPLITLONGLINEARWAYSVISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
 // Std
-#include <string>
 #include <cassert>
+#include <string>
 
 namespace hoot
 {
@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::SplitLongLinearWaysVisitor"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   SplitLongLinearWaysVisitor();
 
@@ -56,7 +56,7 @@ public:
 
   virtual void setOsmMap(const OsmMap*) { assert(false); }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   unsigned int getMaxNumberOfNodes() const { return _maxNodesPerWay; }
 

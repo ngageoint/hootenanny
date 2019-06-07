@@ -27,10 +27,11 @@
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/WayJoiner1.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/algorithms/WayJoinerAdvanced.h>
+#include <hoot/core/algorithms/WayJoinerBasic.h>
 #include <hoot/core/algorithms/splitter/CornerSplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -47,13 +48,15 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST(runCornerSplitterTest);
   CPPUNIT_TEST(runIntersectionSplitterTest);
   CPPUNIT_TEST(runConflateTest);
+  CPPUNIT_TEST(runAdvancedConflateTest);
   CPPUNIT_TEST_SUITE_END();
 public:
 
   WayJoinerTest()
+    : HootTestFixture("test-files/algorithms/wayjoiner/",
+                      "test-output/algorithms/wayjoiner/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/algorithms/wayjoiner");
   }
 
   void runSimpleTest()
@@ -61,18 +64,18 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/wayjoiner/WayJoinerSimpleInput.osm", map);
+    reader.read(_inputPath + "WayJoinerSimpleInput.osm", map);
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerSimpleOutput.osm");
+    writer.write(map, _outputPath + "WayJoinerSimpleOutput.osm");
 
-    HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerSimpleOutput.osm",
-                     "test-files/algorithms/wayjoiner/WayJoinerSimpleExpected.osm");
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerSimpleOutput.osm",
+                     _inputPath + "WayJoinerSimpleExpected.osm");
   }
 
   void runCornerSplitterTest()
@@ -80,18 +83,18 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/wayjoiner/WayJoinerCornerSplitterInput.osm", map);
+    reader.read(_inputPath + "WayJoinerCornerSplitterInput.osm", map);
 
     CornerSplitter::splitCorners(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerCornerSplitterOutput.osm");
+    writer.write(map, _outputPath + "WayJoinerCornerSplitterOutput.osm");
 
-    HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerCornerSplitterOutput.osm",
-                     "test-files/algorithms/wayjoiner/WayJoinerCornerSplitterExpected.osm");
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerCornerSplitterOutput.osm",
+                     _inputPath + "WayJoinerCornerSplitterExpected.osm");
   }
 
   void runIntersectionSplitterTest()
@@ -99,18 +102,18 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/wayjoiner/WayJoinerIntersectionSplitterInput.osm", map);
+    reader.read(_inputPath + "WayJoinerIntersectionSplitterInput.osm", map);
 
     IntersectionSplitter::splitIntersections(map);
 
-    WayJoiner1::joinWays(map);
+    WayJoinerBasic::joinWays(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerIntersectionSplitterOutput.osm");
+    writer.write(map, _outputPath + "WayJoinerIntersectionSplitterOutput.osm");
 
-    HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerIntersectionSplitterOutput.osm",
-                     "test-files/algorithms/wayjoiner/WayJoinerIntersectionSplitterExpected.osm");
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerIntersectionSplitterOutput.osm",
+                     _inputPath + "WayJoinerIntersectionSplitterExpected.osm");
   }
 
   void runConflateTest()
@@ -134,10 +137,41 @@ public:
     writer.setIncludeCompatibilityTags(true);
     writer.setIncludeHootInfo(true);
     writer.setIncludePid(true);
-    writer.write(map, "test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm");
+    writer.write(map, _outputPath + "WayJoinerConflateOutput.osm");
 
-    HOOT_FILE_EQUALS("test-output/algorithms/wayjoiner/WayJoinerConflateOutput.osm",
-                     "test-files/algorithms/wayjoiner/WayJoinerConflateExpected.osm");
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerConflateOutput.osm",
+                     _inputPath + "WayJoinerConflateExpected.osm");
+  }
+
+  void runAdvancedConflateTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/ToyTestA.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/ToyTestB.osm", map);
+
+    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+
+    UnifyingConflator conflator;
+    Settings conf;
+    //  Use the Advanced way joiner
+    conf.set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
+    conflator.setConfiguration(conf);
+    conflator.apply(map);
+
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(true);
+    writer.setIncludeHootInfo(true);
+    writer.setIncludePid(true);
+    writer.write(map, _outputPath + "WayJoinerAdvancedConflateOutput.osm");
+
+    HOOT_FILE_EQUALS(_outputPath + "WayJoinerAdvancedConflateOutput.osm",
+                     _inputPath + "WayJoinerAdvancedConflateExpected.osm");
   }
 
 };

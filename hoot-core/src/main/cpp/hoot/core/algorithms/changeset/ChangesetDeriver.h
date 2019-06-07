@@ -48,7 +48,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~ChangesetDeriver();
 
@@ -69,6 +69,11 @@ public:
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }
+  int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
+  int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
+  int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
+  int getNumChanges() const
+  { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
 private:
 
@@ -83,10 +88,11 @@ private:
   long _numFromElementsParsed;
   long _numToElementsParsed;
   bool _allowDeletingReferenceFeatures;
+  QMap<Change::ChangeType, int> _changesByType;
 
 };
 
-typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
 
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RFEXTRACTORCLASSIFIER_H
 #define RFEXTRACTORCLASSIFIER_H
@@ -46,7 +46,7 @@ public:
 
   static std::string className() { return "hoot::RfExtractorClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   RfExtractorClassifier();
 
@@ -63,9 +63,9 @@ public:
 
 protected:
 
-  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
   QStringList _rfFactorLabels;
-  boost::shared_ptr<Tgs::RandomForest> _rf;
+  std::shared_ptr<Tgs::RandomForest> _rf;
 
   /**
    * Creates all the possible extractors for this classifier. Only the ones that are also listed
@@ -74,7 +74,7 @@ protected:
    */
   virtual void _createExtractors() const = 0;
 
-  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 };
 
 }

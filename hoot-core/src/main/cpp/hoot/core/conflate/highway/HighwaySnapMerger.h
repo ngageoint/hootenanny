@@ -47,12 +47,12 @@ public:
 
   static std::string className() { return "hoot::HighwaySnapMerger"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   HighwaySnapMerger();
   HighwaySnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -62,6 +62,10 @@ protected:
   // tags get removed from the constituent way members.
   bool _removeTagsFromWayMembers;
 
+  // Determines whether we add a custom tag to any multilinestring relation created during merging.
+  // This is useful for getting rid of them later, if necessary.
+  bool _markAddedMultilineStringRelations;
+
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -69,7 +73,7 @@ protected:
 
 private:
 
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   ReviewMarker _reviewMarker;
 
@@ -104,7 +108,7 @@ private:
   friend class HighwaySnapMergerTest;
 };
 
-typedef boost::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;
+typedef std::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;
 
 }
 

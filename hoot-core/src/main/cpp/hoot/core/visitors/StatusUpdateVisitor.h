@@ -36,6 +36,8 @@ namespace hoot
 
 /**
  * Sets the status on elements
+ *
+ * This really should be a ElementVisitor. See #2831.
  */
 class StatusUpdateVisitor : public ElementOsmMapVisitor, public Configurable
 {
@@ -48,7 +50,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 

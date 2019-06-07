@@ -42,14 +42,14 @@
 namespace hoot
 {
 
-bool IoUtils::isSupportedOsmFormat(const QString input)
+bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
   return inputLower.endsWith(".osm") || inputLower.endsWith(".osm.pbf") ||
          inputLower.startsWith("hootapidb://") || inputLower.startsWith("osmapidb://");
 }
 
-bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
+bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
 {
   LOG_VART(input);
   LOG_VART(allowDir);
@@ -85,7 +85,7 @@ bool IoUtils::isSupportedOgrFormat(const QString input, const bool allowDir)
   }
 }
 
-bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowDir)
+bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
   if (inputs.size() == 0)
   {
@@ -106,16 +106,15 @@ bool IoUtils::areSupportedOgrFormats(const QStringList inputs, const bool allowD
   return true;
 }
 
-void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaultStatus)
+void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus)
 {
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];
   if (OgrReader::isReasonablePath(justPath))
   {
     OgrReader reader;
-    Progress progress("OsmUtils");
     reader.setDefaultStatus(defaultStatus);
-    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map, progress);
+    reader.read(justPath, pathLayer.size() > 1 ? pathLayer[1] : "", map);
   }
   else
   {
@@ -123,8 +122,9 @@ void IoUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaul
   }
 }
 
-void IoUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
+void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
+  // We could pass a progress in here to get more granular write status feedback.
   OsmMapWriterFactory::write(map, path);
 }
 

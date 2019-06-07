@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPLISTENER_H
 #define OSMMAPLISTENER_H
+
+#include <memory>
 
 namespace hoot
 {
@@ -37,7 +39,7 @@ public:
 
   virtual ~OsmMapListener() {}
 
-  virtual boost::shared_ptr<OsmMapListener> clone() const = 0;
+  virtual std::shared_ptr<OsmMapListener> clone() const = 0;
 
   /**
    * Gets called before a node is replaced.

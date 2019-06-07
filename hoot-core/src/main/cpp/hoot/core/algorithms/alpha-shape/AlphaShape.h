@@ -22,19 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
 #define __ALPHASHAPE_H__
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Geos
+#include <geos/geom/Geometry.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/Geometry.h>
 
 // Qt
 #include <QString>
@@ -71,35 +68,35 @@ public:
 
   static std::string className() { return "hoot::AlphaShape"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   AlphaShape(double alpha);
 
-  boost::shared_ptr<geos::geom::Geometry> toGeometry();
+  std::shared_ptr<geos::geom::Geometry> toGeometry();
 
-  void insert(const std::vector< std::pair<double, double> >& points);
+  void insert(const std::vector<std::pair<double, double>>& points);
 
   QString toString();
 
-  boost::shared_ptr<OsmMap> toOsmMap();
+  std::shared_ptr<OsmMap> toOsmMap();
 
 private:
 
   double _alpha;
 
-  boost::shared_ptr<Tgs::DelaunayTriangulation> _dt;
-  std::set< std::pair<double, double> > _outsidePoint;
+  std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
+  std::set<std::pair<double, double>> _outsidePoint;
 
-  boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);
+  std::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face* face, const std::shared_ptr<OsmMap>& map);
 
-  boost::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
+  std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
   // The root group represents empty space
   // first level children represent filled space
   // second level children are empty
   // third filled
   // etc, alternating at each level between filled and empty
-  boost::shared_ptr<OsmMap> _groupFaces();
+  std::shared_ptr<OsmMap> _groupFaces();
 
   bool _isBoundary(const Tgs::Edge& e) const;
 
@@ -115,7 +112,7 @@ private:
 
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  boost::shared_ptr<geos::geom::Geometry> _validateGeometry(const boost::shared_ptr<geos::geom::Geometry>& g);
+  std::shared_ptr<geos::geom::Geometry> _validateGeometry(const std::shared_ptr<geos::geom::Geometry>& g);
 };
 
 }

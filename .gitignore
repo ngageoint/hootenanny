@@ -1,5 +1,5 @@
 hoot-services/src/main/resources/conf/local.conf
-plugins/config.js
+translations/config.js
 conf/core/ConfigOptions.json
 conf/services/conflationHoot2Ops.json
 [._]*.s[a-w][a-z]
@@ -97,17 +97,16 @@ missing
 Output.osm
 /output.osm
 /output.pgm
-plugins/ggdm30_schema.js
-plugins/tds40_full_schema.js
-plugins/tds61_full_schema.js
-plugins/ggdm30_full_schema.js
-plugins/mgcp_schema.js
-plugins/tds40_schema.js
-plugins/tds61_schema.js
-plugins/etds*_rules.js
-plugins/emgcp*_rules.js
-plugins/eggdm*_rules.js
-plugins-local
+translations/ggdm30_schema.js
+translations/tds40_full_schema.js
+translations/tds61_full_schema.js
+translations/ggdm30_full_schema.js
+translations/mgcp_schema.js
+translations/tds40_schema.js
+translations/tds61_schema.js
+translations/etds*_rules.js
+translations/emgcp*_rules.js
+translations/eggdm*_rules.js
 .qmake.stash
 translations-local
 **/*.pro.user*
@@ -172,6 +171,7 @@ coverage/
 userfiles/
 
 ###### hoot-services ignores
+hoot-services/.idea
 hoot-services/db.properties
 hoot-services/src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml
 hoot-services/src/main/resources/build.info

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmNetworkExtractor.h"
 
@@ -39,7 +39,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmNetworkExtractor::logWarnCount = 0;
+int OsmNetworkExtractor::logWarnCount = 0;
 
 class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {
@@ -131,7 +131,7 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
     if (LinearCriterion().isSatisfied(e) == false)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -180,14 +180,14 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
     if (e->getElementType() == ElementType::Way)
     {
       members.append(e);
-      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
       from = ElementId::node(w->getFirstNodeId());
       to = ElementId::node(w->getLastNodeId());
     }
     else if (e->getElementType() == ElementType::Relation)
     {
       members.append(e);
-      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
       if (_isContiguous(r))
       {

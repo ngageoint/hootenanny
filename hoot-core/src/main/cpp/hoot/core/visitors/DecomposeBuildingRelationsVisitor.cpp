@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DecomposeBuildingRelationsVisitor.h"
 
@@ -37,7 +37,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
+int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
 
@@ -49,7 +49,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    const boost::shared_ptr<Relation>& r = _map->getRelation(e->getId());
+    const std::shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == MetadataTags::RelationBuilding())
     {
       _decomposeBuilding(r);
@@ -57,7 +57,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_ptr<Relation> &r)
+void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr<Relation>& r)
 {
   Tags baseTags = r->getTags();
 
@@ -99,7 +99,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_p
     }
 
     // ok, we've got a building part. Recompose it as a building.
-    boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+    std::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
     t.addTags(e->getTags());

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -51,44 +51,46 @@ class OsmGeoJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runGenericGeoJsonTest);
   CPPUNIT_TEST(runObjectGeoJsonTest);
   CPPUNIT_TEST(runMultiObjectGeoJsonTest);
+  CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   OsmGeoJsonReaderTest()
+    : HootTestFixture("test-files/io/GeoJson/",
+                      "test-output/io/GeoJson/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/io/GeoJson");
   }
 
   void runAllDataTypesTest()
   {
-    runTest("test-files/io/GeoJson/AllDataTypes.geojson", "AllDataTypes.osm");
+    runTest("AllDataTypes.geojson", "AllDataTypes.osm");
   }
 
   void runDcTigerTest()
   {
-    runTest("test-files/io/GeoJson/DcTigerRoads.geojson", "DcTigerRoads.osm");
+    runTest("DcTigerRoads.geojson", "DcTigerRoads.osm");
   }
 
   void runBostonSubsetRoadBuildingTest()
   {
-    runTest("test-files/io/GeoJson/BostonSubsetRoadBuilding.geojson", "BostonSubsetRoadBuilding.osm");
+    runTest("BostonSubsetRoadBuilding.geojson", "BostonSubsetRoadBuilding.osm");
   }
 
   void runGenericGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/CensusUnitedStates.geojson", "CensusUnitedStates.osm");
+    runTest("CensusUnitedStates.geojson", "CensusUnitedStates.osm");
   }
 
   void runObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/SampleObjectsReader.geojson", "SampleObjectsReader.osm");
+    runTest("SampleObjectsReader.geojson", "SampleObjectsReader.osm");
   }
 
   void runMultiObjectGeoJsonTest()
   {
-    runTest("test-files/io/GeoJson/MultiObjectsReader.geojson", "MultiObjectsReader.osm");
+    runTest("MultiObjectsReader.geojson", "MultiObjectsReader.osm");
   }
 
   void runTest(const QString& input, const QString& output)
@@ -97,16 +99,35 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.open(input);
+    reader.open(_inputPath + input);
     reader.read(map);
 
     OsmXmlWriter writer;
-    writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+    writer.open(_outputPath + output);
     writer.write(map);
-    HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
-                     QString("test-output/io/GeoJson/%1").arg(output));
+    HOOT_FILE_EQUALS( _inputPath + output,
+                     _outputPath + output);
   }
 
+  void isSupportedTest()
+  {
+    OsmGeoJsonReader uut;
+    const QString overpassHost = ConfigOptions().getOverpassApiHost();
+
+    // The files passed in must actually exist in order for a postive match.
+    CPPUNIT_ASSERT(!uut.isSupported("test-files/nodes.json"));
+    CPPUNIT_ASSERT(uut.isSupported(_inputPath + "/AllDataTypes.geojson"));
+    CPPUNIT_ASSERT(!uut.isSupported("blah.geojson"));
+    // We skip Overpass urls to let the OsmJsonReader handle them.
+    CPPUNIT_ASSERT(!uut.isSupported("http://" + overpassHost));
+    CPPUNIT_ASSERT(!uut.isSupported("https://" + overpassHost));
+    // wrong scheme
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://" + overpassHost));
+    CPPUNIT_ASSERT(!uut.isSupported("ftp://blah"));
+    // Non-Overpass API url's with the correct scheme can point to anything for GeoJSON reading.
+    CPPUNIT_ASSERT(uut.isSupported("http://blah"));
+    CPPUNIT_ASSERT(uut.isSupported("https://blah"));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "slow");

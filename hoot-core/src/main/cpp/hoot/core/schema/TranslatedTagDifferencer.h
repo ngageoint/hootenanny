@@ -22,16 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TRANSLATEDTAGDIFFERENCER_H
 #define TRANSLATEDTAGDIFFERENCER_H
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // hoot
-#include <hoot/core/io/ScriptToOgrTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -74,7 +71,7 @@ public:
 private:
   QSet<QString> _ignoreList;
   QString _script;
-  mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  mutable std::shared_ptr<ScriptToOgrSchemaTranslator> _translator;
 
   class Comparison
   {
@@ -86,19 +83,19 @@ private:
 
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
-  std::vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
+  std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
     const ConstElementPtr& in) const;
 
   /**
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
-  boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+  std::shared_ptr<ScriptToOgrSchemaTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.
    */
-  static Tags _toTags(const hoot::ScriptToOgrTranslator::TranslatedFeature* tf);
+  static Tags _toTags(const hoot::ScriptToOgrSchemaTranslator::TranslatedFeature* tf);
 };
 
 }

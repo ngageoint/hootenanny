@@ -73,7 +73,6 @@ void ReplaceTagVisitor::setConfiguration(const Settings& conf)
     _matchKey = matchTagParts[0];
     _matchValue = matchTagParts[1];
 
-
     if (!replaceTag.contains("="))
     {
       throw IllegalArgumentException("Invalid replace tag: " + replaceTag);
@@ -100,7 +99,7 @@ void ReplaceTagVisitor::setReplaceTag(QString k, QString v)
   _replaceValue = v;
 }
 
-void ReplaceTagVisitor::visit(const boost::shared_ptr<Element>& e)
+void ReplaceTagVisitor::visit(const std::shared_ptr<Element>& e)
 {
   // Key and Value must match exactly. Then we replace.
   Tags::iterator it = e->getTags().find(_matchKey);

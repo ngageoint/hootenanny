@@ -22,25 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmJsonWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QBuffer>
@@ -51,7 +48,8 @@ using namespace boost;
 
 using namespace std;
 
-namespace hoot {
+namespace hoot
+{
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
@@ -82,7 +80,7 @@ QString OsmJsonWriter::markupString(const QString& str)
   }
 }
 
-void OsmJsonWriter::open(QString url)
+void OsmJsonWriter::open(const QString& url)
 {
   _fp.setFileName(url);
   if (!_fp.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -92,7 +90,7 @@ void OsmJsonWriter::open(QString url)
   _out = &_fp;
 }
 
-QString OsmJsonWriter::toString(ConstOsmMapPtr map)
+QString OsmJsonWriter::toString(const ConstOsmMapPtr& map)
 {
   QBuffer b;
   b.open(QBuffer::WriteOnly);
@@ -117,13 +115,13 @@ QString OsmJsonWriter::_typeName(ElementType e)
   }
 }
 
-void OsmJsonWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmJsonWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmJsonWriter::write(ConstOsmMapPtr map)
+void OsmJsonWriter::write(const ConstOsmMapPtr& map)
 {
   _map = map;
   if (_out->isWritable() == false)
@@ -193,7 +191,7 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
     _out->write(QString("\n").toUtf8());
 }
 
-bool OsmJsonWriter::_hasTags(ConstElementPtr e)
+bool OsmJsonWriter::_hasTags(const ConstElementPtr& e)
 {
   return e->getTags().size() > 0 ||
          e->getElementType() != ElementType::Node ||
@@ -219,10 +217,13 @@ void OsmJsonWriter::_writeTag(const QString& key, const QString& value, bool& fi
   }
 }
 
-void OsmJsonWriter::_writeTags(ConstElementPtr e)
+void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 {
+  ElementPtr eClone(e->clone());
+  _addExportTagsVisitor.visit(eClone);
+
   bool firstTag = true;
-  const Tags& tags = e->getTags();
+  const Tags& tags = eClone->getTags();
   if (tags.size() > 0)
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
@@ -233,19 +234,6 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
         value = value.replace("{", "").replace("}", "");
       _writeTag(key, value, firstTag);
     }
-  }
-
-  if (_writeHootFormat &&
-      (e->getElementType() != ElementType::Node || // turn this on when we start using node circularError.
-      (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0)))
-  {
-    _writeTag(MetadataTags::ErrorCircular(), QString::number(e->getCircularError(), 'g', _precision), firstTag);
-  }
-
-  if (_includeDebug)
-  {
-    _writeTag(MetadataTags::HootId(), QString::number(e->getId()), firstTag);
-    _writeTag(MetadataTags::HootStatus(), QString::number((int)e->getStatus().getEnum()), firstTag);
   }
 
   if (firstTag == false)

@@ -27,16 +27,17 @@
 #ifndef FINDNODESVISITOR_H
 #define FINDNODESVISITOR_H
 
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-
-// For convenience functions
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {
 
-// Used to get a vector of IDs for the nodes that satisfy the specified criterion
-class FindNodesVisitor : public ElementConstOsmMapVisitor
+/**
+ * Used to get a vector of IDs for the nodes that satisfy the specified criterion
+ */
+class FindNodesVisitor : public ConstElementVisitor
 {
 public:
 
@@ -44,9 +45,7 @@ public:
 
   FindNodesVisitor(ElementCriterion* pCrit);
 
-  void setOsmMap(const OsmMap* map) override { _map = map; }
-
-  void visit(const boost::shared_ptr<const Element>& e) override;
+  void visit(const std::shared_ptr<const Element>& e) override;
 
   // Get matching IDs
   std::vector<long> getIds() { return _nodeIds; }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TileBoundsCalculator.h"
@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int TileBoundsCalculator::logWarnCount = 0;
+int TileBoundsCalculator::logWarnCount = 0;
 
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {
@@ -84,7 +84,7 @@ void TileBoundsCalculator::_calculateMin()
   }
 }
 
-vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
+vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
 {
   size_t width = 1;
   vector<PixelBox> boxes;
@@ -128,7 +128,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     boxes = nextLayer;
   }
 
-  vector< vector<Envelope> > result;
+  vector<vector<Envelope>> result;
 
   long maxNodeCount = 0;
   long minNodeCount = LONG_MAX;
@@ -269,7 +269,7 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
   return best;
 }
 
-void TileBoundsCalculator::_countNode(const boost::shared_ptr<Node> &n)
+void TileBoundsCalculator::_countNode(const std::shared_ptr<Node> &n)
 {
   double x = n->getX();
   double y = n->getY();
@@ -456,7 +456,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
   }
 }
 
-void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map)
+void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
@@ -469,12 +469,12 @@ void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map)
   _exportImage(_min, "tmp/min.png");
 }
 
-void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
+void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
-    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
+    std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
     LOG_VARD(tempEnv->toString());
   }
   LOG_VART(_pixelSize);
@@ -504,7 +504,7 @@ void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r
   LOG_VART(nm.size());
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const boost::shared_ptr<Node>& n = it->second;
+    const std::shared_ptr<Node>& n = it->second;
     _countNode(n);
   }
 

@@ -57,7 +57,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
 
@@ -82,7 +81,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -102,7 +101,7 @@ public class ConflateCommandTest {
                                     "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
                                     "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                                     "hoot::NoInformationElementRemover\"]"));
-        assertTrue(command.contains("-D, hootapi.db.writer.job.id="));
+        assertTrue(command.contains("-D, job.id="));
 
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
         assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));
@@ -122,7 +121,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -138,7 +136,7 @@ public class ConflateCommandTest {
         assertNotNull(conflateCommand.getWorkDir());
         assertNotNull(conflateCommand.getCommand());
 
-        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        String expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_TYPE} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_TYPE"));
@@ -153,7 +151,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -161,7 +158,7 @@ public class ConflateCommandTest {
         debugLevel = "error";
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C RemoveReview2Pre.conf -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+        expectedCommand = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL} -C ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         assertEquals(expectedCommand, conflateCommand.getCommand());
 
         assertTrue(conflateCommand.getSubstitutionMap().containsKey("CONFLATION_ALGORITHM"));
@@ -175,7 +172,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
@@ -221,7 +217,6 @@ public class ConflateCommandTest {
         conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
-        conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
         conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);

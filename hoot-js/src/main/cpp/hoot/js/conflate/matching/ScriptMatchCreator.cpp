@@ -38,8 +38,6 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -50,12 +48,10 @@
 #include <QFileInfo>
 #include <qnumeric.h>
 
-// Boost
-#include <boost/bind.hpp>
-
 // Standard
 #include <deque>
-#include <math.h>
+#include <functional>
+#include <cmath>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -80,7 +76,7 @@ class ScriptMatchVisitor : public ConstElementVisitor
 public:
 
   ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-    ConstMatchThresholdPtr mt, boost::shared_ptr<PluginContext> script,
+    ConstMatchThresholdPtr mt, std::shared_ptr<PluginContext> script,
                      ElementCriterionPtr filter = ElementCriterionPtr()) :
     _map(map),
     _result(result),
@@ -104,7 +100,8 @@ public:
     _candidateDistanceSigma = getNumber(plugin, "candidateDistanceSigma", 0.0, 1.0);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius = getNumber(plugin, "searchRadius", -1.0, 15.0);
+    _customSearchRadius =
+      getNumber(plugin, "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
     LOG_VART(_customSearchRadius);
 
     Handle<Value> value = plugin->Get(toV8("getSearchRadius"));
@@ -128,7 +125,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  void checkForMatch(const boost::shared_ptr<const Element>& e)
+  void checkForMatch(const std::shared_ptr<const Element>& e)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
@@ -139,7 +136,7 @@ public:
     ConstOsmMapPtr map = getMap();
 
     // create an envlope around the e plus the search radius.
-    boost::shared_ptr<Envelope> env(e->getEnvelope(map));
+    std::shared_ptr<Envelope> env(e->getEnvelope(map));
     LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);
     env->expandBy(searchRadius);
@@ -206,7 +203,7 @@ public:
     return getPlugin(_script);
   }
 
-  static Local<Object> getPlugin(boost::shared_ptr<PluginContext> script)
+  static Local<Object> getPlugin(const std::shared_ptr<PluginContext>& script)
   {
     Isolate* current = v8::Isolate::GetCurrent();
     EscapableHandleScope handleScope(current);
@@ -311,7 +308,9 @@ public:
     func->Call(ToLocal(&plugin), argc, jsArgs);
 
     //this is meant to have been set externally in a js rules file
-    _customSearchRadius = getNumber(ToLocal(&plugin), "searchRadius", -1.0, 15.0);
+    _customSearchRadius =
+      getNumber(
+        ToLocal(&plugin), "searchRadius", -1.0, ConfigOptions().getCircularErrorDefaultValue());
 
     QFileInfo scriptFileInfo(_scriptPath);
     LOG_DEBUG(
@@ -324,13 +323,13 @@ public:
     _mapJs.Empty();
   }
 
-  boost::shared_ptr<HilbertRTree>& getIndex()
+  std::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
-      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that satisfy the isMatchCandidate
@@ -339,15 +338,15 @@ public:
       // will likely slow things down, but should give the same results.
       // An option in the future would be to support an "isIndexedFeature" or similar function
       // to speed the operation back up again.
-      boost::function<bool (ConstElementPtr e)> f =
-        boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-      boost::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
+      std::function<bool (ConstElementPtr)> f =
+        std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
+      std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
                              pC,
-                             boost::bind(&ScriptMatchVisitor::getSearchRadius, this, _1),
+                             std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
                              getMap());
 
       // Do the visiting
@@ -422,7 +421,7 @@ public:
 
 //    if (!matchCandidateCriterionStr.isEmpty())
 //    {
-//      boost::shared_ptr<ElementCriterion> matchCandidateCriterion;
+//      std::shared_ptr<ElementCriterion> matchCandidateCriterion;
 //      if (_matchCandidateCriterionCache.contains(matchCandidateCriterionStr))
 //      {
 //        LOG_TRACE("Getting " << matchCandidateCriterionStr << " from cache...");
@@ -502,7 +501,7 @@ public:
 private:
 
   // don't hold on to the map.
-  boost::weak_ptr<const OsmMap> _map;
+  std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
   vector<const Match*>& _result;
   set<ElementId> _empty;
@@ -512,7 +511,7 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
-  boost::shared_ptr<PluginContext> _script;
+  std::shared_ptr<PluginContext> _script;
   ElementCriterionPtr _filter;
   Persistent<Function> _getSearchRadius;
 
@@ -521,7 +520,7 @@ private:
   QMap<QString, ElementCriterionPtr> _matchCandidateCriterionCache;
 
   // Used for finding neighbors
-  boost::shared_ptr<HilbertRTree> _index;
+  std::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
@@ -649,7 +648,7 @@ vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
   return result;
 }
 
-boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
+std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
   const ConstOsmMapPtr& map)
 {
   if (!_cachedScriptVisitor.get() || _cachedScriptVisitor->getMap() != map)
@@ -692,7 +691,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   CreatorDescription result;
   result.experimental = true;
 
-  boost::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script(new PluginContext());
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope handleScope(current);
   Context::Scope context_scope(script->getContext(current));
@@ -734,7 +733,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 
-boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
+std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
@@ -762,12 +761,12 @@ boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 
     if (matchThreshold != -1.0 && missThreshold != -1.0 && reviewThreshold != -1.0)
     {
-      return boost::shared_ptr<MatchThreshold>(
+      return std::shared_ptr<MatchThreshold>(
         new MatchThreshold(matchThreshold, missThreshold, reviewThreshold));
     }
     else
     {
-      return boost::shared_ptr<MatchThreshold>(new MatchThreshold());
+      return std::shared_ptr<MatchThreshold>(new MatchThreshold());
     }
   }
   return _matchThreshold;

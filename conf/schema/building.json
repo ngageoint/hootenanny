@@ -158,8 +158,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=fort",
@@ -175,8 +174,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=garage",
@@ -184,8 +182,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=guardhouse",
@@ -197,8 +194,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=hospital",
@@ -210,8 +206,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=hotel",
@@ -229,8 +224,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "aliases": [
             "amenity=mosque"
@@ -268,8 +262,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=school",
@@ -285,8 +278,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=shrine",
@@ -325,7 +317,6 @@
     {
         "categories": [
             "poi",
-            "hgispoi",
             "multiuse"
         ],
         "isA": "building",
@@ -361,8 +352,7 @@
     },
     {
         "categories": [
-            "poi",
-            "hgispoi"
+            "poi"
         ],
         "isA": "building",
         "name": "building=transportation",

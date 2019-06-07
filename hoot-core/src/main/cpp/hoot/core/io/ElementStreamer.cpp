@@ -40,11 +40,15 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
 
-bool ElementStreamer::isStreamableIo(const QString input, const QString output)
+bool ElementStreamer::isStreamableIo(const QString& input, const QString& output)
 {
   QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
   if (writerName.trimmed().isEmpty())
@@ -69,7 +73,7 @@ bool ElementStreamer::isStreamableIo(const QString input, const QString output)
     !ConfigUtils::boundsOptionEnabled();
 }
 
-bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString output)
+bool ElementStreamer::areStreamableIo(const QStringList& inputs, const QString& output)
 {
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -77,21 +81,25 @@ bool ElementStreamer::areStreamableIo(const QStringList inputs, const QString ou
     {
       LOG_INFO(
         "Unable to stream I/O due to input: " << inputs.at(i).right(25) << " and/or output: " <<
-        output.right(25));
+        output.right(25) << ". Loading entire map...");
       return false;
     }
   }
   return true;
 }
 
-bool ElementStreamer::areValidStreamingOps(const QStringList ops)
+bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 {
+  LOG_VARD(ops);
   // add visitor/criterion operations if any of the convert ops are visitors.
   foreach (QString opName, ops)
   {
     if (!opName.trimmed().isEmpty())
     {
       // Can this be cleaned up?
+
+      const QString unstreamableMsg =
+        "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
@@ -100,7 +108,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to criterion op: " << opName);
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
@@ -111,7 +119,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
@@ -122,14 +130,14 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
         // when streaming we can't provide a reliable OsmMap.
         if (dynamic_cast<OsmMapConsumer*>(vis.get()) != 0)
         {
-          LOG_INFO("Unable to stream I/O due to visitor op: " << opName);
+          LOG_INFO(unstreamableMsg);
           return false;
         }
       }
       // OsmMapOperation isn't streamable.
       else
       {
-        LOG_INFO("Unable to stream I/O due to: " << opName);
+        LOG_INFO(unstreamableMsg);
         return false;
       }
     }
@@ -138,18 +146,14 @@ bool ElementStreamer::areValidStreamingOps(const QStringList ops)
   return true;
 }
 
-ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
-  boost::shared_ptr<OsmMapReader> reader, const QStringList ops)
+ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
+  ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  ElementInputStreamPtr filteredInputStream =
-    boost::dynamic_pointer_cast<ElementInputStream>(reader);
-
   if (ops.size() == 0)
   {
-    return filteredInputStream;
+    return streamToFilter;
   }
 
-  LOG_VARD(ops);
   foreach (QString opName, ops)
   {
     LOG_VARD(opName);
@@ -159,14 +163,14 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
 
       if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
       {
-        LOG_INFO("Filtering input with: " << opName << "...");
+        LOG_INFO("Initializing operation: " << opName << "...");
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
 
-        boost::shared_ptr<Configurable> critConfig;
+        std::shared_ptr<Configurable> critConfig;
         if (criterion.get())
         {
-          critConfig = boost::dynamic_pointer_cast<Configurable>(criterion);
+          critConfig = std::dynamic_pointer_cast<Configurable>(criterion);
         }
         LOG_VART(critConfig.get());
         if (critConfig.get())
@@ -174,17 +178,17 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           critConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementCriterionInputStream(filteredInputStream, criterion));
+        streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
       }
       else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
       {
-        LOG_INFO("Visiting input with: " << opName << "...");
+        LOG_INFO("Initializing operation: " << opName << "...");
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
 
-        boost::shared_ptr<Configurable> visConfig;
+        std::shared_ptr<Configurable> visConfig;
         if (visitor.get())
         {
-          visConfig = boost::dynamic_pointer_cast<Configurable>(visitor);
+          visConfig = std::dynamic_pointer_cast<Configurable>(visitor);
         }
         LOG_VART(visConfig.get());
         if (visConfig.get())
@@ -192,61 +196,69 @@ ElementInputStreamPtr ElementStreamer::_getFilteredInputStream(
           visConfig->setConfiguration(conf());
         }
 
-        filteredInputStream.reset(new ElementVisitorInputStream(filteredInputStream, visitor));
+        streamToFilter.reset(new ElementVisitorInputStream(streamToFilter, visitor));
       }
       else
       {
-        throw HootException("An unsupported operation was passed to a streaming conversion.");
+        throw HootException(
+          "An unsupported operation was passed to a streaming conversion: " + opName);
       }
     }
   }
 
-  return filteredInputStream;
+  return streamToFilter;
 }
 
-void ElementStreamer::stream(const QString input, const QString out, const QStringList convertOps)
+void ElementStreamer::stream(const QString& input, const QString& out, const QStringList& convertOps,
+                             Progress progress)
 {
-  stream(QStringList(input), out, convertOps);
+  stream(QStringList(input), out, convertOps, progress);
 }
 
-void ElementStreamer::stream(const QStringList inputs, const QString out,
-                             const QStringList convertOps)
+void ElementStreamer::stream(const QStringList& inputs, const QString& out,
+                             const QStringList& convertOps, Progress progress)
 {
-  boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
+  QElapsedTimer timer;
+  timer.start();
+
+  std::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::createWriter(out);
   writer->open(out);
-  boost::shared_ptr<ElementOutputStream> streamWriter =
-    boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-  boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+  std::shared_ptr<ElementOutputStream> streamWriter =
+    std::dynamic_pointer_cast<ElementOutputStream>(writer);
+  std::shared_ptr<PartialOsmMapWriter> partialWriter =
+    std::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
 
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
-    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
+    const QString message = "Streaming data conversion from " + in + " to " + out + "...";
+    // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+    // just an empty progress object, and we shouldn't log progress.
+    if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
+    {
+      progress.setFromRelative(
+        (float)i / (float)inputs.size(), Progress::JobState::Running, message);
+    }
+    else
+    {
+      LOG_STATUS(message);
+    }
 
-    boost::shared_ptr<OsmMapReader> reader =
+    std::shared_ptr<OsmMapReader> reader =
       OsmMapReaderFactory::createReader(
         in, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->open(in);
 
     // add visitor/criterion operations if any of the convert ops are visitors.
-    QStringList convertOpsToUse;
-    if (convertOps.isEmpty())
-    {
-      convertOpsToUse = ConfigOptions().getConvertOps();
-    }
-    else
-    {
-      convertOpsToUse = convertOps;
-    }
     LOG_VARD(convertOps);
-    ElementInputStreamPtr streamReader = _getFilteredInputStream(reader, convertOpsToUse);
+    ElementInputStreamPtr streamReader =
+      getFilteredInputStream(std::dynamic_pointer_cast<ElementInputStream>(reader), convertOps);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
-    boost::shared_ptr<PartialOsmMapReader> partialReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    std::shared_ptr<PartialOsmMapReader> partialReader =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();
@@ -257,6 +269,8 @@ void ElementStreamer::stream(const QStringList inputs, const QString out,
   {
     partialWriter->finalizePartial();
   }
+
+  LOG_INFO("Streaming element I/O took: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
 }
 
 }

@@ -49,7 +49,7 @@ function getDbSchema()
      return mgcp.getDbSchema();
 }
 
-// Get raw schema directly from plugins/schema
+// Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
      return mgcp.schema.getDbSchema();

@@ -45,7 +45,6 @@
 // Qt
 #include <QStringList>
 
-using namespace boost;
 using namespace std;
 using namespace v8;
 
@@ -84,21 +83,21 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
   OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
   op->getMapOp()->apply(map);
-  any result = op->getMapOp()->getResult();
+  boost::any result = op->getMapOp()->getResult();
 
   /// I'm sure there's a better way to do this...initially just supporting a small number of
   /// returned types here.
   if (result.type() == typeid(double))
   {
-    args.GetReturnValue().Set(Number::New(current, any_cast<double>(result)));
+    args.GetReturnValue().Set(Number::New(current, boost::any_cast<double>(result)));
   }
   else if (result.type() == typeid(int))
   {
-    args.GetReturnValue().Set(Number::New(current, any_cast<int>(result)));
+    args.GetReturnValue().Set(Number::New(current, boost::any_cast<int>(result)));
   }
   else if (result.type() == typeid(QString))
   {
-    args.GetReturnValue().Set(String::NewFromUtf8(current, any_cast<QString>(result).toLatin1().data()));
+    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()));
   }
   else
   {

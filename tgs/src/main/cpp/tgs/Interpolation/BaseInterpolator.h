@@ -28,7 +28,6 @@
 #define BASEINTERPOLATOR_H
 
 // Tgs
-#include <tgs/SharedPtr.h>
 #include <tgs/Interpolation/Interpolator.h>
 
 namespace Tgs
@@ -48,7 +47,7 @@ public:
 
   virtual void readInterpolator(QIODevice& is);
 
-  virtual void setData(const boost::shared_ptr<const DataFrame>& df);
+  virtual void setData(const std::shared_ptr<const DataFrame>& df);
 
   virtual void setDependentColumns(const std::vector<std::string>& labels);
 
@@ -65,12 +64,12 @@ protected:
 
   std::vector<int> _indColumns;
   std::vector<std::string> _indColumnsLabels;
-  mutable boost::shared_ptr<HilbertRTree> _index;
+  mutable std::shared_ptr<HilbertRTree> _index;
   std::vector<int> _depColumns;
   std::vector<std::string> _depColumnsLabels;
   // A temp variable used to return the result of interpolate()
   mutable std::vector<double> _result;
-  boost::shared_ptr<const DataFrame> _df;
+  std::shared_ptr<const DataFrame> _df;
   int _maxAllowedPerLoopOptimizationIterations;
   mutable int _iterations;
 

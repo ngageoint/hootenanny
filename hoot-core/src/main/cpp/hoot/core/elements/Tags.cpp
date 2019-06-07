@@ -45,6 +45,17 @@ namespace hoot
 QStringList Tags::_nameKeys;
 QStringList Tags::_pseudoNameKeys;
 
+Tags::Tags() :
+QHash<QString, QString>()
+{
+}
+
+Tags::Tags(const QString& key, const QString& value) :
+QHash<QString, QString>()
+{
+  set(key, value);
+}
+
 void Tags::addTags(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
@@ -53,12 +64,12 @@ void Tags::addTags(const Tags& t)
   }
 }
 
-void Tags::addNote(QString note)
+void Tags::addNote(const QString& note)
 {
   appendValue("note", note);
 }
 
-void Tags::appendValue(const QString kvp)
+void Tags::appendValue(const QString& kvp)
 {
   const QString errorMsg = "KVP: " + kvp + " should be of the format: key=value";
   if (!kvp.contains("="))
@@ -73,7 +84,7 @@ void Tags::appendValue(const QString kvp)
   appendValue(kvpParts[0].trimmed(), kvpParts[1].trimmed());
 }
 
-void Tags::appendValue(QString k, QString v)
+void Tags::appendValue(const QString& k, const QString& v)
 {
   QString oldV = value(k);
 
@@ -89,7 +100,7 @@ void Tags::appendValue(QString k, QString v)
   }
 }
 
-void Tags::appendValue(QString k, QStringList v)
+void Tags::appendValue(const QString& k, const QStringList& v)
 {
   QString oldV = value(k);
 
@@ -98,7 +109,7 @@ void Tags::appendValue(QString k, QStringList v)
   setList(k, l);
 }
 
-void Tags::appendValueIfUnique(QString k, QStringList v)
+void Tags::appendValueIfUnique(const QString& k, const QStringList& v)
 {
   QString oldV = value(k);
 
@@ -122,7 +133,7 @@ void Tags::appendValueIfUnique(QString k, QStringList v)
   }
 }
 
-void Tags::appendValueIfUnique(QString k, QString v)
+void Tags::appendValueIfUnique(const QString& k, const QString& v)
 {
   QString oldV = value(k);
 
@@ -602,7 +613,7 @@ bool Tags::dataOnlyEqual(const Tags& other) const
   return true;
 }
 
-Meters Tags::readMeters(QString key) const
+Meters Tags::readMeters(const QString& key) const
 {
   bool ok;
   // todo add support for ft suffix too.
@@ -744,7 +755,7 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   units = copyStr.replace(sRegExp, QString("")).trimmed();
 }
 
-bool Tags::hasAnyKvp(const QStringList kvps) const
+bool Tags::hasAnyKvp(const QStringList& kvps) const
 {
   for (int i = 0; i < kvps.size(); i++)
   {
@@ -772,7 +783,7 @@ bool Tags::hasAnyKvp(const QStringList kvps) const
   return false;
 }
 
-Tags Tags::kvpListToTags(const QStringList kvps)
+Tags Tags::kvpListToTags(const QStringList& kvps)
 {
   Tags tagsToReturn;
   for (int i = 0; i < kvps.size(); i++)

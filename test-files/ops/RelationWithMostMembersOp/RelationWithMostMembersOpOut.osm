@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59357915335" minlon="-104.80439776557" maxlat="39.59443603108" maxlon="-104.80391839146"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938153256600032" lon="-104.8043859776799991"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938213813499971" lon="-104.8041227148499956"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935791533499994" lon="-104.8041384320400056"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935791533499994" lon="-104.8043820483899964"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942240835099994" lon="-104.8043977655700019"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5944360310800008" lon="-104.8041462906300012"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942422504700033" lon="-104.8039183914600017"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5940363579800021" lon="-104.8041462906300012"/>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-8"/>
+        <nd ref="-7"/>
+        <nd ref="-6"/>
+        <nd ref="-5"/>
+        <nd ref="-8"/>
+        <tag k="note" v="jewelry"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-4"/>
+        <tag k="note" v="freddys"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-1" role="outer"/>
+        <member type="way" ref="-2" role="outer"/>
+        <tag k="shop" v="mall"/>
+        <tag k="note" v="jewelryandfreddys"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
+</osm>

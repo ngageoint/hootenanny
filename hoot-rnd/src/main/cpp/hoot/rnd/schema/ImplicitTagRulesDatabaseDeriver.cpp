@@ -37,7 +37,6 @@
 
 // Qt
 #include <QStringBuilder>
-#include <QRegExp>
 
 namespace hoot
 {
@@ -65,7 +64,7 @@ void ImplicitTagRulesDatabaseDeriver::setConfiguration(const Settings& conf)
   setWordIgnoreFile(confOptions.getImplicitTaggingDatabaseDeriverWordIgnoreFile());
 }
 
-void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, const QString output)
+void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString& input, const QString& output)
 {
   _validateInputs(input, output);
 
@@ -127,7 +126,7 @@ void ImplicitTagRulesDatabaseDeriver::deriveRulesDatabase(const QString input, c
   }
 }
 
-void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString input, const QString output)
+void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString& input, const QString& output)
 {
   ImplicitTagRulesSqliteWriter ruleWordPartWriter;
   ruleWordPartWriter.open(output);
@@ -135,7 +134,7 @@ void ImplicitTagRulesDatabaseDeriver::_writeRules(const QString input, const QSt
   ruleWordPartWriter.close();
 }
 
-void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const QString input,
+void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const QString& input,
   const int minOccurrencesThreshold)
 {
   LOG_INFO(
@@ -175,7 +174,7 @@ void ImplicitTagRulesDatabaseDeriver::_removeKvpsBelowOccurrenceThreshold(const 
   _thresholdedCountFile->close();
 }
 
-bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString word)
+bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString& word)
 {
   //If _useSchemaTagValuesForWordsOnly is activated, the word is not on the ignore list, and any
   //token in the name matches a OSM tag value parsed from the hoot schema, then the whole word is
@@ -202,7 +201,7 @@ bool ImplicitTagRulesDatabaseDeriver::_wordIsNotASchemaTagValue(const QString wo
   return wordNotASchemaTagValue;
 }
 
-void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString input, const QString output)
+void ImplicitTagRulesDatabaseDeriver::_validateInputs(const QString& input, const QString& output)
 {
   if (!input.endsWith(".implicitTagRules"))
   {
@@ -276,7 +275,7 @@ void ImplicitTagRulesDatabaseDeriver::_populateSchemaTagValues()
   LOG_VART(schemaTagValuesList);
 }
 
-void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString input)
+void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
 {
   LOG_INFO("Applying word/tag/rule filtering to output...");
 

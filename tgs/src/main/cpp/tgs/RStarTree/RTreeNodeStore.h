@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_STORE_H__
@@ -30,6 +30,7 @@
 
 // Standard Includes
 #include <list>
+#include <memory>
 
 #include <tgs/HashMap.h>
 #include <tgs/RStarTree/RTreeNode.h>
@@ -48,7 +49,7 @@ class TGS_EXPORT RTreeNodeStore
 {
 public:
 
-  RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps);
+  RTreeNodeStore(int dimensions, const std::shared_ptr<PageStore>& ps);
 
   ~RTreeNodeStore();
 
@@ -84,16 +85,15 @@ protected:
     RTreeNode * pNode;
   };
 
-  typedef HashMap< int, RecItem* > NodeMap;
+  typedef HashMap<int, RecItem*> NodeMap;
 
   // mutable cache
   NodeMap _availableNodes;
   int _dimensions;
-  boost::shared_ptr<PageStore> _storeSp;
+  std::shared_ptr<PageStore> _storeSp;
   /// pointer to the same thing as above, only faster. Zoom zoom!
   PageStore* _store;
 
- //  void _addNode(RTreeNode* node) const;
   void _addNode(RecItem * item, int key);
   mutable std::list<int>_nodesList;
 };

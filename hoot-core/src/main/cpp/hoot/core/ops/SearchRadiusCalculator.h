@@ -42,7 +42,7 @@ class OsmMap;
 
 /**
  * Calculates a conflation search radius using tie points from rubbersheeting.  If there
- * are not enough tie points to perform the calculation
+ * are not enough tie points to perform the calculation, the default search radius will be used.
  */
 class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {
@@ -52,7 +52,7 @@ public:
 
   SearchRadiusCalculator();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual boost::any getResult() override { boost::any result = _result; return result; }
 

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 
 namespace hoot
 {
@@ -53,7 +53,7 @@ bool TransliterateNameVisitor::isLatin(const QString& s)
   return true;
 }
 
-void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
+void TransliterateNameVisitor::visit(const std::shared_ptr<Element>& e)
 {
   QStringList names = e->getTags().getNames();
 
@@ -69,7 +69,8 @@ void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
   if (names.size() > 0)
   {
     // Should we be translating all of the names here?
-    e->getTags().addNote("Transliterated Name: " + DictionaryTranslator().toEnglish(names[0]));
+    e->getTags().addNote(
+      "Transliterated Name: " + ToEnglishDictionaryTranslator().toEnglish(names[0]));
     _numAffected++;
   }
 }

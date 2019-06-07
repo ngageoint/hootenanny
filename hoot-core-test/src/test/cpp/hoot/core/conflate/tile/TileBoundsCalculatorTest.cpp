@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -53,9 +53,10 @@ class TileBoundsCalculatorTest : public HootTestFixture
 public:
 
   TileBoundsCalculatorTest()
+    : HootTestFixture("test-files/conflate/tile/",
+                      "test-output/conflate/tile/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate");
   }
 
   void addEnvelope(OsmMapPtr map, Envelope& e, int tx, int ty)
@@ -101,7 +102,7 @@ public:
     uut.setSlop(0.10);
     uut.renderImage(map);
 
-    vector< vector<Envelope> > e = uut.calculateTiles();
+    vector<vector<Envelope>> e = uut.calculateTiles();
 
     OsmMapPtr bounds(new OsmMap());
 
@@ -114,10 +115,10 @@ public:
     }
 
     OsmXmlWriter writer;
-    writer.write(bounds, "test-output/conflate/TileBounds.osm");
+    writer.write(bounds, _outputPath + "TileBounds.osm");
 
-    HOOT_FILE_EQUALS("test-files/conflate/TileBounds.osm",
-                     "test-output/conflate/TileBounds.osm");
+    HOOT_FILE_EQUALS( _inputPath + "TileBounds.osm",
+                     _outputPath + "TileBounds.osm");
 
   }
 };

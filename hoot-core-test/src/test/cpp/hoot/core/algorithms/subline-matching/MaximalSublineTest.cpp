@@ -80,6 +80,8 @@ class MaximalSublineTest : public HootTestFixture
 public:
 
   MaximalSublineTest()
+    : HootTestFixture("test-files/algorithms/subline-matching/",
+                      "test-output/algorithms/subline-matching/")
   {
     setResetType(ResetAll);
   }
@@ -106,7 +108,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
-    boost::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
+    std::shared_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
 
     return map;
@@ -123,7 +125,7 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
+    reader.read(_inputPath + "MaximalSublineCircleTestIn.osm", map);
 
     double score;
 
@@ -161,7 +163,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
+    reader.read(_inputPath + "MaximalSublineTestIn.osm", map);
 
     MapProjector::projectToPlanar(map);
 
@@ -176,9 +178,8 @@ public:
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
     addEndNodes(map, m);
 
-    TestUtils::mkpath("test-output/algorithms/");
     MapProjector::projectToWgs84(map);
-    OsmXmlWriter().write(map, "test-output/algorithms/MaximalSublineJoinTestOut.osm");
+    OsmXmlWriter().write(map, _outputPath + "MaximalSublineJoinTestOut.osm");
   }
 
   void runDiagonalOffsetTest()
@@ -243,8 +244,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w52 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
-    WayPtr w812 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
+    WayPtr w52 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
+    WayPtr w812 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(25.08, 1.0471975511965976), 5);
 
@@ -267,8 +268,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
-    WayPtr w2 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
+    WayPtr w1 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr w2 = std::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
 
     //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);

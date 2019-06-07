@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -71,7 +71,7 @@ public:
     boost::minstd_rand rng;
     rng.seed(42);
     boost::normal_distribution<> ndx;
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
 
     int set1 = 10;
     int set2 = 20;
@@ -104,7 +104,7 @@ public:
     boost::minstd_rand rng;
     rng.seed(42);
     boost::normal_distribution<> ndx;
-    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > varx(rng, ndx);
+    boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> varx(rng, ndx);
 
     int set1 = 10;
     int set2 = 20;

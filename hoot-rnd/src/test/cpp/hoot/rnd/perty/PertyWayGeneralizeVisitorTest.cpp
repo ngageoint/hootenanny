@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
@@ -67,13 +67,15 @@ public:
   QMap<QString, OsmMapPtr> _inputMapCache;
 
   PertyWayGeneralizeVisitorTest()
+    : HootTestFixture("test-files/rnd/perty/PertyWayGeneralizeVisitorTest/",
+                      "test-output/rnd/perty/PertyWayGeneralizeVisitorTest/")
   {
     setResetType(ResetBasic);
   }
 
-  void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
-               const double generalizeProbability, const double epsilon, const QString outputFile,
-               const QString outputCompareFile, const bool enableDebugLogging = false)
+  void runTest(const QString& inputFile, const int randomNumberGeneratorSeed,
+               const double generalizeProbability, const double epsilon, const QString& outputFile,
+               const QString& outputCompareFile, const bool enableDebugLogging = false)
   {
     Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     if (enableDebugLogging)
@@ -121,8 +123,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, numWaysRemoved);
     LOG_VARD(numWaysRemoved);
 
-    QFileInfo outputFileInfo(outputFile);
-    TestUtils::mkpath(outputFileInfo.absolutePath());
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
     writer.write(map, outputFile);
@@ -138,100 +138,100 @@ public:
   void runTest1()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.1,
       5.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-1.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-1.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-1.osm");
   }
 
   void runTest2()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.5,
       5.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-2.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-2.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-2.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-2.osm");
   }
 
   void runTest3()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       1.0,
       5.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-3.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-3.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-3.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-3.osm");
   }
 
   void runTest4()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.1,
       10.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-4.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-4.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-4.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-4.osm");
   }
 
   void runTest5()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.5,
       10.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-5.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-5.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-5.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-5.osm");
   }
 
   void runTest6()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       1.0,
       10.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-6.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-6.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-6.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-6.osm");
   }
 
   void runTest7()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.1,
       50.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-7.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-7.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-7.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-7.osm");
   }
 
   void runTest8()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       0.5,
       50.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-8.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-8.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-8.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-8.osm");
   }
 
   void runTest9()
   {
     runTest(
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
       1,
       1.0,
       50.0,
-      "test-output/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-9.osm",
-      "test-files/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-out-9.osm");
+      _outputPath + "PertyWayGeneralizeVisitorTest-out-9.osm",
+      _inputPath + "PertyWayGeneralizeVisitorTest-out-9.osm");
   }
 };
 

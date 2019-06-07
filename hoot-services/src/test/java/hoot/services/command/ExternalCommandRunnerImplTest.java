@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
+import static org.junit.Assert.assertEquals;
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.util.HashMap;
@@ -36,10 +38,26 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ExternalCommandRunnerImplTest {
+    private static String original_HOME_FOLDER;
+
+    @BeforeClass
+    public static void oneTimeSetup() throws Exception {
+        original_HOME_FOLDER = HOME_FOLDER;
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", "/home/vagrant/hoot");
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+    }
 
     @Test
     public void exec() throws Exception {
@@ -82,10 +100,41 @@ public class ExternalCommandRunnerImplTest {
 
         String jobId = UUID.randomUUID().toString();
 
-        String command = "/tmp/hoot.sh conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} " +
+        String command = "/tmp/hoot.sh conflate --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} " +
                 "${INPUT2} ${OUTPUT} ${TIMESTAMP}";
 
         CommandResult result = runner.exec(command, substitutionMap, jobId,
                 this.getClass().getName(), FileUtils.getTempDirectory(), false);
     }
+
+    @Test
+    public void obfuscate() {
+
+        ExternalCommandRunnerImpl runner = new ExternalCommandRunnerImpl();
+
+        String test1 = "15:21:06.248 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting hootapidb://hoot:hoottest@localhost:5432/hoot/Merged_ToyTest_4a3300b3 to /home/vagrant/hoot/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...\n";
+        String expected1 = "Converting <hootapidb>/Merged_ToyTest_4a3300b3 to <path>/userfiles/tmp/ex_ee03a439891c4b6193a17599247f6a91/Merged_ToyTest_4a3300b3.osm...\n";
+        assertEquals(expected1, runner.obfuscateConsoleLog(test1));
+
+
+        String test2 = "20:14:57.252 INFO ...hoot/core/io/DataConverter.cpp( 184) Converting /home/vagrant/hoot/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to hootapidb://hoot:hoottest@localhost:5432/hoot/mapgeojson...\n";
+        String expected2 = "Converting <path>/userfiles/tmp/upload/78a9478d-0ee0-4517-abdf-756de217ad82/map.geojson to <hootapidb>/mapgeojson...\n";
+        assertEquals(expected2, runner.obfuscateConsoleLog(test2));
+
+
+        String test3 = "20:14:57.318 INFO ...ot/core/io/ElementStreamer.cpp( 80) Unable to stream I/O due to input: -756de217ad82/map.geojson and/or output: host:5432/hoot/mapgeojson";
+        String expected3 = "Unable to stream I/O due to input: -756de217ad82/map.geojson and/or output: host:5432/hoot/mapgeojson";
+        assertEquals(expected3, runner.obfuscateConsoleLog(test3));
+
+        String test4 = "14:13:54.011 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 3 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 4 / 17 to a merger...        14:13:54.012 INFO  ...conflate/UnifyingConflator.cpp( 248) Converting match set 5 / 17 to a merger...\n";
+        String expected4 = "Converting match set 3 / 17 to a merger...\nConverting match set 4 / 17 to a merger...\nConverting match set 5 / 17 to a merger...\n";
+        assertEquals(expected4, runner.obfuscateConsoleLog(test4));
+
+        String test5 = "17:48:57.817 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  83)  Applying operation: hoot::BuildingOutlineRemoveOp...\n";
+        String expected5 = " Applying operation: hoot::BuildingOutlineRemoveOp...\n";
+        assertEquals(expected5, runner.obfuscateConsoleLog(test5));
+
+//
+    }
+
 }

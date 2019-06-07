@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
   vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
-  boost::shared_ptr<Command> c;
+  std::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
     c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
@@ -89,12 +89,6 @@ int main(int argc, char *argv[])
       cerr << e.what() << endl;
       return -1;
     }
-  }
-  // Yep, a juvenile easter egg. :)
-  else if (QString(argv[1]) == "whoami")
-  {
-    cout << "Papa Smurf" << endl;
-    return 0;
   }
   else
   {

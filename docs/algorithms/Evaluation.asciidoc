@@ -26,9 +26,11 @@ The steps involved are as follows:
 The final score is a value of 0 to 1 and is calculated as the following equation where sigma denotes the sum of all pixels in the raster:
 
 [[Equation1]]
-.Equation 1
-
-image::algorithms/images/image003.png[scale="75"]
+.Completeness Score
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \frac{ \sum Absolute Difference }{ \sum Blurred 1 + \sum Blurred 2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The toy example in <<Equation1>> gives a score of 0.882.
 
@@ -56,12 +58,14 @@ As shown in <<IntRoutingScore>>, the cost surfaces (Time Surface 1 & Time Surfac
 5. Calculate the cost distance on the raster using a high cost of 5 seconds per meter. (Cost Time Surface 1 & 2)
 6. Calculate the Absolute Difference as the absolute value of the difference between Time Surface 1 & Time Surface 2.
 
-To convert the rasters into a score an equation similar to Equation 2 is used:
+To convert the rasters into a score an equation similar to this equation is used:
 
 [[Equation2]]
-.Equation 2
-
-image::algorithms/images/image006.png[scale="75"]
+.Routing Score
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\[ \frac{ \sum Absolute Difference }{ \sum Cost 1 + \sum Cost 2 } \]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 To get a reasonable representation of the entire image, the score is calculated 100 times, and the mean and 90% confidence interval are reported. In this case the score is 987 +/- 4.
 

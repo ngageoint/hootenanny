@@ -27,18 +27,19 @@
 #ifndef EXTRACTWAYSVISITOR_H
 #define EXTRACTWAYSVISITOR_H
 
-#include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ExtractWaysVisitor : public ElementConstOsmMapVisitor
+class ExtractWaysVisitor : public ConstElementVisitor
 {
 public:
 
   ExtractWaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
 
-  virtual void visit(const boost::shared_ptr<const Element>& e) override;
+  virtual void visit(const std::shared_ptr<const Element>& e) override;
 
   /**
    * Convenience method.

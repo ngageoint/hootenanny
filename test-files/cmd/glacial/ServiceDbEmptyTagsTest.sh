@@ -10,8 +10,8 @@ export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=ApiDbTes
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
-rm -rf test-output/cmd/ServiceDbEmptyTagTest
-mkdir -p test-output/cmd/ServiceDbEmptyTagTest
+rm -rf test-output/cmd/glacial/ServiceDbEmptyTagTest
+mkdir -p test-output/cmd/glacial/ServiceDbEmptyTagTest
 hoot conflate $HOOT_OPTS test-files/DcGisRoads.osm test-files/DcTigerRoads.osm $DB_URL/HootApiDbEmptyTagTest
 
 export MAP_ID=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "SELECT id FROM maps WHERE display_name='HootApiDbEmptyTagTest'"`

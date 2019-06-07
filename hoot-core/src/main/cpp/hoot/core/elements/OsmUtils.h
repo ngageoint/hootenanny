@@ -35,9 +35,6 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
-// Boost Includes
-#include <boost/shared_ptr.hpp>
-
 // GEOS
 #include <geos/geom/Coordinate.h>
 
@@ -64,8 +61,8 @@ public:
     @param nodeCollectionName
     @param nodes
     */
-  static void printNodes(const QString nodeCollectionName,
-                         const QList<boost::shared_ptr<const Node>>& nodes);
+  static void printNodes(const QString& nodeCollectionName,
+                         const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of node ID's for a collection of nodes
@@ -73,7 +70,7 @@ public:
     @param nodes a collection of nodes
     @return a collection of node ID's
     */
-  static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node>>& nodes);
+  static const QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of nodes given a collection of node ID's
@@ -82,8 +79,8 @@ public:
     @param map the map owning the nodes with the given ID's
     @return a collection of nodes
     */
-  static QList<boost::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
-                                                             boost::shared_ptr<const OsmMap> map);
+  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
+                                                           const std::shared_ptr<const OsmMap>& map);
 
   /**
     Converts a OSM node to a coordinate
@@ -91,7 +88,7 @@ public:
     @param node the node to convert
     @returns a coordinate
     */
-  static geos::geom::Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
+  static geos::geom::Coordinate nodeToCoord(const std::shared_ptr<const Node>& node);
 
   /**
     Converts OSM nodes to a coordinates
@@ -100,7 +97,7 @@ public:
     @returns coordinates
     */
   static QList<geos::geom::Coordinate> nodesToCoords(
-    const QList<boost::shared_ptr<const Node> >& nodes);
+    const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
     Converts a coordinate to an OSM node
@@ -109,8 +106,8 @@ public:
     @param map the map owning the node to be created
     @returns a node
     */
-  static boost::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
-                                                   boost::shared_ptr<const OsmMap> map);
+  static std::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
+                                                 const std::shared_ptr<const OsmMap>& map);
 
   /**
     Converts coordinates to OSM nodes
@@ -119,8 +116,8 @@ public:
     @param map the map owning the nodes to be created
     @returns nodes
     */
-  static QList<boost::shared_ptr<const Node> > coordsToNodes(
-    const QList<geos::geom::Coordinate>& coords, boost::shared_ptr<const OsmMap> map);
+  static QList<std::shared_ptr<const Node>> coordsToNodes(
+    const QList<geos::geom::Coordinate>& coords, const std::shared_ptr<const OsmMap>& map);
 
   /**
     Converts a 64-bit unsigned int timestamp (seconds from epoch) to a QString (utc zulu)
@@ -153,7 +150,7 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    */
-  template<class C> static bool contains(ConstOsmMapPtr map, int minCount = 1,
+  template<class C> static bool contains(const ConstOsmMapPtr& map, int minCount = 1,
                                          bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value) return false;
@@ -204,7 +201,7 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailedString(ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
    * Get a detailed string representing a relation's members
@@ -213,7 +210,7 @@ public:
    * @param map map owning the relation
    * @return a detailed relations members string
    */
-  static QString getRelationMembersDetailedString(ConstRelationPtr& relation,
+  static QString getRelationMembersDetailedString(const ConstRelationPtr& relation,
                                                   const ConstOsmMapPtr& map);
 
   /**
@@ -223,7 +220,7 @@ public:
    * @param map map owning the relation
    * @return a way ID
    */
-  static long getFirstWayIdFromRelation(ConstRelationPtr relation, const OsmMapPtr& map);
+  static long getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map);
 
   /**
    * Logs a detailed printout for an element
@@ -235,7 +232,7 @@ public:
    */
   static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
                                const Log::WarningLevel& logLevel = Log::Trace,
-                               const QString message = "");
+                               const QString& message = "");
 
   /**
    * Determines if two elements have conflicting one way street tags
@@ -244,7 +241,7 @@ public:
    * @param element2 the second element to examine
    * @return true if their one way tags conflict; false otherwise
    */
-  static bool oneWayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+  static bool oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if a way has an explicitly negative one way tag (oneway=no, etc.)
@@ -253,7 +250,7 @@ public:
    * @return true if the element contains a tag indicating it is not a one way street; false
    * otherwise
    */
-  static bool explicitlyNotAOneWayStreet(ConstElementPtr element);
+  static bool explicitlyNotAOneWayStreet(const ConstElementPtr& element);
 
   /**
    * Determines if two elements have conflicting name tags
@@ -262,7 +259,7 @@ public:
    * @param element2 the second element to examine
    * @return true if their name tags conflict; false otherwise
    */
-  static bool nameConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+  static bool nameConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if there are specific highway type conflicts between elements
@@ -272,7 +269,7 @@ public:
    * @return true if both have specific highway tags (other than highway=road) and they disagree;
    * false otherwise
    */
-  static bool nonGenericHighwayConflictExists(ConstElementPtr element1, ConstElementPtr element2);
+  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Returns the IDs of all ways containing an input node

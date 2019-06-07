@@ -281,13 +281,13 @@ ElementPtr MultiaryReviewCommand::_copyElement (ElementPtr e) const
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    return ElementPtr(new Node(*(boost::dynamic_pointer_cast<Node>(e))));
+    return ElementPtr(new Node(*(std::dynamic_pointer_cast<Node>(e))));
     break;
   case ElementType::Way:
-    return ElementPtr(new Way(*(boost::dynamic_pointer_cast<Way>(e))));
+    return ElementPtr(new Way(*(std::dynamic_pointer_cast<Way>(e))));
     break;
   case ElementType::Relation:
-    return ElementPtr(new Relation(*(boost::dynamic_pointer_cast<Relation>(e))));
+    return ElementPtr(new Relation(*(std::dynamic_pointer_cast<Relation>(e))));
     break;
   default:
     return ElementPtr();

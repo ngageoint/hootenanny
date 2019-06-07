@@ -49,7 +49,7 @@ public:
 
   void setMaxSize(int s) { _maxSize = s; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const
   { return "Splits name tags over 255 characters"; }

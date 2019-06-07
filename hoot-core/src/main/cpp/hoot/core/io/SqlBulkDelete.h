@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SQLBULKDELETE_H
 #define SQLBULKDELETE_H
@@ -45,7 +45,7 @@ class SqlBulkDelete : public BulkDelete
 {
 public:
 
-  SqlBulkDelete(QSqlDatabase& db, const QString tableName);
+  SqlBulkDelete(const QSqlDatabase& db, const QString& tableName);
 
   virtual ~SqlBulkDelete();
 

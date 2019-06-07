@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -111,7 +111,7 @@ public:
 
   static std::string className() { return "hoot::OsmJsonReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmJsonReader();
   virtual ~OsmJsonReader();
@@ -123,7 +123,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
   /**
    * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
@@ -131,7 +131,7 @@ public:
    *    http://overpass-api.de/api/interpreter?data=[out:json];way(35.2097,-120.6207,35.2241,-120.5955);out;
    * @param url
    */
-  virtual void open(QString url);
+  virtual void open(const QString& url) override;
 
   /**
    * @brief close close internal filehandle, if needed
@@ -144,21 +144,21 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * @brief setDefaultStatus Sets the default status to use for elements
    *        in the map
    * @param status
    */
-  virtual void setDefaultStatus(Status status) { _defaultStatus = status; }
+  virtual void setDefaultStatus(Status status) override { _defaultStatus = status; }
 
   /**
    * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
    *        from the data being read, or self-generate unique IDs
    * @param useDataSourceIds true to use source IDs
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -166,7 +166,7 @@ public:
    * @param jsonStr - input string
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromString(QString jsonStr);
+  virtual OsmMapPtr loadFromString(const QString& jsonStr);
 
   /**
    * @brief loadFromPtree - Builds a map from the supplied boost property tree
@@ -181,7 +181,7 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromFile(QString path);
+  virtual OsmMapPtr loadFromFile(const QString& path);
 
   /**
    * @brief getVersion Overpass API version, if that's where JSON comes from
@@ -222,12 +222,12 @@ public:
    */
   static void scrubBigInts(QString &jsonStr);
 
-  virtual QString supportedFormats() { return ".json"; }
+  virtual QString supportedFormats() override { return ".json"; }
 
   /**
    * Set the configuration for this object.
    */
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
 protected:
 
@@ -256,7 +256,7 @@ protected:
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
    */
-  void _loadJSON(QString jsonStr);
+  void _loadJSON(const QString& jsonStr);
 
   /**
    * @brief parseOverpassJson Traverses our property tree and adds

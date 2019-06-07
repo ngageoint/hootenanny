@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -52,13 +52,18 @@ class MergeNearbyNodesTest : public HootTestFixture
 
 public:
 
+    MergeNearbyNodesTest()
+      : HootTestFixture("test-files/",
+                        UNUSED_PATH)
+    {
+    }
+
     void runBasicTest()
     {
       OgrReader uut;
 
-      Progress progress("MergeNearbyNodesTest");
       OsmMapPtr map(new OsmMap());
-      uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       MapProjector::projectToOrthographic(map);
 

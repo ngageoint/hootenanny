@@ -30,11 +30,13 @@
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -53,31 +55,55 @@ Match()
 {
 }
 
+BuildingMatch::BuildingMatch(const ConstMatchThresholdPtr& mt) :
+Match(mt)
+{
+}
+
 BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map,
-                             boost::shared_ptr<const BuildingRfClassifier> rf,
+                             const std::shared_ptr<const BuildingRfClassifier>& rf,
                              const ElementId& eid1, const ElementId& eid2,
-                             ConstMatchThresholdPtr mt, bool reviewIfSecondaryFeatureNewer,
-                             QString dateTagKey, QString dateFormat) :
+                             const ConstMatchThresholdPtr& mt) :
 Match(mt),
 _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
 _explainText(""),
-_reviewIfSecondaryFeatureNewer(reviewIfSecondaryFeatureNewer),
-_dateTagKey(dateTagKey),
-_dateFormat(dateFormat)
+_reviewIfSecondaryFeatureNewer(ConfigOptions().getBuildingReviewIfSecondaryNewer()),
+_dateTagKey(ConfigOptions().getBuildingDateTagKey()),
+_dateFormat(ConfigOptions().getBuildingDateFormat()),
+_matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
 {  
   _p = _rf->classify(map, _eid1, _eid2);
 
-  ConstElementPtr element1 = map->getElement(eid1);
-  ConstElementPtr element2 = map->getElement(eid2);
+  ConstElementPtr element1 = map->getElement(_eid1);
+  ConstElementPtr element2 = map->getElement(_eid2);
+
+  OsmUtils::logElementDetail(element1, map, Log::Trace, "BuildingMatch: e1");
+  OsmUtils::logElementDetail(element2, map, Log::Trace, "BuildingMatch: e2");
 
   MatchType type = getType();
+  LOG_VART(type);
   QStringList description;
 
   if (type != MatchType::Match)
   { 
-    description = _getMatchDescription(map, type, element1, element2);
+    // If we have a review and one of the buildings completely contains the other (smaller
+    // overlap = 1), then let's convert to a match if the associted config options was enabled.
+    const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
+    LOG_VART(smallerOverlap);
+    if (type == MatchType::Review && _matchReviewsWithContainment && smallerOverlap == 1.0)
+    {
+      LOG_TRACE(
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked for review where one " <<
+        "building is completely contained inside of the other. Marking as a match...")
+      _p.clear();
+      _p.setMatchP(1.0);
+    }
+    else
+    {
+      description = _getMatchDescription(map, type, element1, element2);
+    }
   }
   else if (_reviewIfSecondaryFeatureNewer)
   {
@@ -90,10 +116,11 @@ _dateFormat(dateFormat)
   else
     _explainText = mt->getTypeDetail(_p);
   LOG_VART(toString());
+  LOG_VART(_explainText);
 }
 
-QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr element1,
-                                                                ConstElementPtr element2)
+QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
+                                                                const ConstElementPtr& element2)
 {
   LOG_VART(_dateTagKey);
   LOG_VART(_dateFormat);
@@ -165,14 +192,16 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(ConstElementPtr 
 }
 
 QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                                ConstElementPtr element1, ConstElementPtr element2)
+                                                const ConstElementPtr& element1,
+                                                const ConstElementPtr& element2)
 {
   QStringList description;
 
   //  Get the overlap
   const double overlap = OverlapExtractor().extract(*map, element1, element2);
+  LOG_VART(overlap);
 
-  //If the buildings aren't matched and they overlap at all, then make them be reviewed.
+  // If the buildings aren't matched and they overlap at all, then make them be reviewed.
   if (type == MatchType::Miss && overlap > 0.0)
   {
     _p.clear();
@@ -187,16 +216,20 @@ QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const
     else if (overlap >= 0.5)    description.append("Medium building overlap.");
     else if (overlap >= 0.25)   description.append("Small building overlap.");
     else                        description.append("Very little building overlap.");
+
     //  Next check the Angle Histogram
     const double angle = AngleHistogramExtractor(0.0).extract(*map, element1, element2);
+    LOG_VART(angle);
     if (angle >= 0.75)          description.append("Very similar building orientation.");
     else if (angle >= 0.5)      description.append("Similar building orientation.");
     else if (angle >= 0.25)     description.append("Semi-similar building orientation.");
     else                        description.append("Building orientation not similar.");
-    //  Finally the edge distance
+
+    //  Finally, the edge distance
     const double edge =
       EdgeDistanceExtractor(
         ValueAggregatorPtr(new QuantileAggregator(0.4))).extract(*map, element1, element2);
+    LOG_VART(edge);
     if (edge >= 90)             description.append("Building edges very close to each other.");
     else if (edge >= 70)        description.append("Building edges somewhat close to each other.");
     else                        description.append("Building edges not very close to each other.");
@@ -210,9 +243,9 @@ map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
   return _rf->getFeatures(m, _eid1, _eid2);
 }
 
-set< pair<ElementId, ElementId> > BuildingMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> BuildingMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
+  set<pair<ElementId, ElementId>> result;
   result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
   return result;
 }

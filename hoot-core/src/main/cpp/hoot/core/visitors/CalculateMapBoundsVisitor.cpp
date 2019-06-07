@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;
@@ -42,7 +42,7 @@ _envelope()
 {
 }
 
-void CalculateMapBoundsVisitor::visit(const boost::shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)
@@ -74,14 +74,14 @@ OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const OsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 
 geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
 {
   OGREnvelope envelope = getBounds(map);
-  boost::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
+  std::shared_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));
   return *e;
 }
 

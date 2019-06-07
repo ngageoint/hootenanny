@@ -95,7 +95,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("Building node R-Tree index");
   // 10 children - 368 - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _nodeTree.reset(new HilbertRTree(mps, 2));
 
   vector<Box> boxes;
@@ -141,9 +141,9 @@ void OsmMapIndex::_buildWayTree() const
   QTime t;
   t.start();
 
-  LOG_INFO("Building way R-Tree index");
+  LOG_INFO("Building way R-Tree index...");
   // 10 children - 368 - see #3054
-  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _wayTree.reset(new HilbertRTree(mps, 2));
 
   vector<Box> boxes;
@@ -162,7 +162,7 @@ void OsmMapIndex::_buildWayTree() const
   {
     ConstWayPtr w = it->second;
 
-    boost::shared_ptr<LineString> ls =
+    std::shared_ptr<LineString> ls =
       ElementConverter(_map.shared_from_this()).convertToLineString(w);
     const Envelope* e = ls->getEnvelopeInternal();
 
@@ -175,18 +175,18 @@ void OsmMapIndex::_buildWayTree() const
 
     if (count % 1000 == 0)
     {
-      PROGRESS_DEBUG("  Way R-Tree Index: " << count << " / " << ways.size() << "       ");
+      PROGRESS_DEBUG("Way R-Tree Index: " << count << " / " << ways.size() << "       ");
     }
   }
 
   _pendingWayInsert.clear();
   _pendingWayRemoval.clear();
 
-  LOG_DEBUG("  Bulk inserting Way R-Tree...");
+  LOG_DEBUG("Bulk inserting Way R-Tree...");
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("  Way R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_INFO("Way R-Tree index built in: " << StringUtils::secondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const
@@ -295,7 +295,8 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
   vector<long> result;
 
   // grab the geometry for the way that we're comparing all others against.
-  boost::shared_ptr<LineString> ls1 = ElementConverter(_map.shared_from_this()).convertToLineString(way);
+  std::shared_ptr<LineString> ls1 =
+    ElementConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -305,7 +306,8 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     ConstWayPtr n = it->second;
     if (n != 0 && nId != way->getId())
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
 
       if (d < buffer)
@@ -334,7 +336,8 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < bestDistance)
@@ -365,7 +368,8 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
     ConstWayPtr n = it->second;
     if (n != 0 && n->getNodeCount() > 1)
     {
-      boost::shared_ptr<LineString> ls2 = ElementConverter(_map.shared_from_this()).convertToLineString(n);
+      std::shared_ptr<LineString> ls2 =
+        ElementConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < buffer)
@@ -393,8 +397,8 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
 
   while (it.next())
   {
-    long wid = _mapToWayId(it.getId());
-    // if this way isn't pending removal.
+    const long wid = _mapToWayId(it.getId());
+    // if this way isn't pending removal
     if (_map.containsWay(wid))
     {
       result.push_back(wid);
@@ -404,7 +408,7 @@ vector<long> OsmMapIndex::findWays(const Envelope& e) const
   return result;
 }
 
-const boost::shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelationMap() const
+const std::shared_ptr<ElementToRelationMap>& OsmMapIndex::getElementToRelationMap() const
 {
   if (_elementToRelationMap == 0)
   {
@@ -420,7 +424,7 @@ const boost::shared_ptr<ElementToRelationMap> &OsmMapIndex::getElementToRelation
   return _elementToRelationMap;
 }
 
-boost::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
+std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
   if (_nodeToWayMap == 0)
   {
@@ -429,7 +433,7 @@ boost::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
   return _nodeToWayMap;
 }
 
-boost::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
+std::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 {
   if (_nodeTree == 0)
   {
@@ -487,7 +491,7 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   return result;
 }
 
-boost::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
+std::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
 {
   if (_wayTree == 0)
   {
@@ -495,7 +499,8 @@ boost::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   }
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); ++it)
+  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end();
+       ++it)
   {
     if (_map.containsWay(*it))
     {
@@ -525,7 +530,8 @@ void OsmMapIndex::_insertWay(long wid)
 
   Box b(2);
 
-  boost::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+  std::shared_ptr<LineString> ls =
+    ElementConverter(_map.shared_from_this()).convertToLineString(w);
   const Envelope* e = ls->getEnvelopeInternal();
 
   b.setBounds(0, e->getMinX() - _indexSlush, e->getMaxX() + _indexSlush);
@@ -593,7 +599,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
 
 void OsmMapIndex::removeNode(ConstNodePtr n)
 {
-  if (_nodeTree)
+  if (_nodeTree && n)
   {
     _pendingNodeRemoval.insert(n->getId());
     _pendingNodeInsert.erase(n->getId());

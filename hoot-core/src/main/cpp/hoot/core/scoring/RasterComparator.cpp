@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -50,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-RasterComparator::RasterComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
+RasterComparator::RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
       BaseComparator(map1, map2)
 {
 }
@@ -142,7 +142,7 @@ private:
   QMatrix& _m;
 };
 
-void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& image)
+void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& image)
 {
   QImage qImage(_width, _height, QImage::Format_ARGB32);
   QPainter pt(&qImage);
@@ -157,7 +157,7 @@ void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& imag
   QMatrix m = gp.createMatrix(pt.viewport(), _projectedBounds);
 
   PaintVisitor pv(map, gp, pt, m);
-  HighwayCriterion crit;
+  HighwayCriterion crit(map);
   FilteredVisitor v(crit, pv);
   map->visitRo(v);
 

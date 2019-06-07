@@ -54,7 +54,7 @@ public:
                          ElementCriterionPtr filter = ElementCriterionPtr());
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold,
-                         boost::shared_ptr<PoiPolygonRfClassifier> rf,
+                         std::shared_ptr<PoiPolygonRfClassifier> rf,
                          ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
@@ -64,11 +64,11 @@ public:
    *
    * @param e element to examine
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ConstElementPtr& e) override;
 
   bool isMatchCandidate(ConstElementPtr element);
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const override { return ""; }
 
   long getNumMatchCandidatesFound() const { return _numMatchCandidatesVisited; }
 
@@ -86,14 +86,14 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
-  boost::shared_ptr<Tgs::HilbertRTree> _polyIndex; // used for finding surrounding polys
+  std::shared_ptr<Tgs::HilbertRTree> _polyIndex; // used for finding surrounding polys
   std::deque<ElementId> _polyIndexToEid;
   std::set<ElementId> _surroundingPolyIds;
-  boost::shared_ptr<Tgs::HilbertRTree> _poiIndex; // used for finding surrounding poi's
+  std::shared_ptr<Tgs::HilbertRTree> _poiIndex; // used for finding surrounding poi's
   std::deque<ElementId> _poiIndexToEid;
   std::set<ElementId> _surroundingPoiIds;
 
-  boost::shared_ptr<PoiPolygonRfClassifier> _rf;
+  std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
   bool _enableAdvancedMatching;
   bool _enableReviewReduction;
@@ -108,13 +108,13 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
   ElementCriterionPtr _filter;
 
-  void _checkForMatch(const boost::shared_ptr<const Element>& e);
-  void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);
-  void _collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e);
-  Meters _getSearchRadius(const boost::shared_ptr<const Element>& e) const;
+  void _checkForMatch(const std::shared_ptr<const Element>& e);
+  void _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);
+  void _collectSurroundingPoiIds(const std::shared_ptr<const Element>& e);
+  Meters _getSearchRadius(const std::shared_ptr<const Element>& e) const;
 
-  boost::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
-  boost::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
+  std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
+  std::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
 
   ConstOsmMapPtr _getMap() { return _map; }
 };

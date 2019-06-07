@@ -45,7 +45,7 @@ RubberSheeter::RubberSheeter()
 {
 }
 
-void RubberSheeter::rubberSheet(const QString input1, const QString input2, const QString output)
+void RubberSheeter::rubberSheet(const QString& input1, const QString& input2, const QString& output)
 {
   OsmMapPtr map(new OsmMap());
   IoUtils::loadMap(map, input1, false, Status::Unknown1);

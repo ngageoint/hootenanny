@@ -46,7 +46,7 @@ public:
 
   static std::string className() { return "hoot::SublineStringMatcherJs"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static void Init(v8::Handle<v8::Object> target);
 

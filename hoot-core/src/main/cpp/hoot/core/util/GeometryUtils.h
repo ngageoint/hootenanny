@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -63,7 +63,7 @@ public:
 
   static std::string className() { return "hoot::GeometryUtils"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   static double MEAN_EARTH_RADIUS;
 
@@ -115,16 +115,16 @@ public:
    * envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return
+   * @return an envelope
    */
-  static geos::geom::Envelope envelopeFromConfigString(const QString boundsStr);
+  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
 
   /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
    * from an envelope
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return
+   * @return an envelope string
    */
   static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 

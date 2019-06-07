@@ -52,10 +52,10 @@ namespace hoot
  *   AF, AR, RU and US (http://download.geonames.org/export/dump/).  The test cases used only
  *   geonames POIs that contained alternate names to compare the original name against.  The
  *   first tests were run solely Skip-grams vs. Levenshtein and Skip-grams fared better on
- *   its own but when combined with other distance classes (TranslateStringDistance and
+ *   its own but when combined with other distance classes (ToEnglishTranslateStringDistance and
  *   MeanWordSetDistance) those results dropped off tremendously.  Since the Random Forest
  *   extractors apply both of those distances to Levenshtein, the test had to include them
- *   thus degrading and already degraded results.  So the TranslateStringDistance and
+ *   thus degrading and already degraded results.  So the ToEnglishTranslateStringDistance and
  *   MeanWordSetDistance classes were applied to both algorithms, counted, averaged, and
  *   reported.  Below is a sample of the data both before the two distance algorithms were
  *   applied and after:

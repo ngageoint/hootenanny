@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/rnd/visitors/AddExportTagsVisitor.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QFile>
@@ -59,12 +59,12 @@ public:
    *
    * "mic" stands for "multiary ingest changeset"
    */
-  virtual bool isSupported(QString url) override { return url.endsWith(".mic"); }
+  virtual bool isSupported(const QString& url) override { return url.endsWith(".mic"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(QString fileName) override;
+  virtual void open(const QString& fileName) override;
 
   /**
    * @see OsmChangeWriter
@@ -74,11 +74,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   QString getElementPayloadFormat() const { return _elementPayloadFormat; }
-  virtual void setElementPayloadFormat(const QString format) override;
+  virtual void setElementPayloadFormat(const QString& format) override;
 
 private:
 
-  boost::shared_ptr<QFile> _fp;
+  std::shared_ptr<QFile> _fp;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;

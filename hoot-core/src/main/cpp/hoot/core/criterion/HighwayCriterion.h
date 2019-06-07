@@ -27,7 +27,9 @@
 #ifndef HIGHWAYCRITERION_H
 #define HIGHWAYCRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -35,19 +37,26 @@ namespace hoot
 /**
  * A criterion that will either keep or remove road matches.
  */
-class HighwayCriterion : public ElementCriterion
+class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() {}
+  HighwayCriterion(ConstOsmMapPtr map) : _map(map) {}
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies roads"; }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

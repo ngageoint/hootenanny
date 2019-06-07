@@ -31,8 +31,8 @@
 #include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 #include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
-#include <hoot/rnd/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QFile>
@@ -58,12 +58,12 @@ public:
   /**
    * @see OsmChangeWriter
    */
-  virtual bool isSupported(QString url) override { return url.endsWith(".spark.1"); }
+  virtual bool isSupported(const QString& url) override { return url.endsWith(".spark.1"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(QString fileName) override;
+  virtual void open(const QString& fileName) override;
 
   void close();
 
@@ -74,12 +74,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setElementPayloadFormat(const QString format) override;
+  virtual void setElementPayloadFormat(const QString& format) override;
 
 private:
 
-  boost::shared_ptr<QFile> _addFile;
-  boost::shared_ptr<QFile> _deleteFile;
+  std::shared_ptr<QFile> _addFile;
+  std::shared_ptr<QFile> _deleteFile;
   SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;

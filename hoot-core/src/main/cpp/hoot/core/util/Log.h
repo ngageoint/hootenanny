@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOG_H
@@ -45,16 +45,11 @@
 #include <tgs/HashMap.h>
 #include <tgs/TgsException.h>
 
-#if HOOT_HAVE_LIBLOG4CXX
-# include <log4cxx/logger.h>
-#endif
-
 namespace hoot
 {
 
 /**
- * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
- * and I don't really need all the complicated goodies (Singleton).
+ * This class is here to abstract out the logging interface(Singleton).
  */
 class Log
 {
@@ -67,23 +62,39 @@ public:
   {
     None = 0,
     /**
-     * Used for logging variable states and other info for tracing code. You want to know the value
-     * of 'i'? Use trace.
+     * Used for logging variable states and other info for tracing code, often when inside loops.
+     * You want to know the value of 'i'? Use trace.
      */
     Trace = 500,
     /**
-     * Used for program state information that may be useful when debugging other parts of the code.
-     * E.g. noting the projection or bounds of a map.
+     * Used for program state information that may be useful when debugging parts of the code not
+     * inside a loop. E.g. noting the projection or bounds of a map.
      */
     Debug = 1000,
-    Verbose = 1500,
     /**
      * Status information that would be useful to a user while the application is running. E.g.
-     * completion of phases of processing, or the number of features being processed.
+     * the number of features being processed.
      */
     Info = 2000,
+    /**
+     * Information specific to a command job's status; This generally is only used with a Progress
+     * object and is a coarser log level than INFO.
+     */
+    Status = 2500,
+    /**
+     * Warn about anomalous situations, including input data encountered, that may cause logic to
+     * produce incorrect results. Be judicious about what is included here and use a warning
+     * message limit when possible.
+     */
     Warn = 3000,
+    /**
+     * Describes anomalous situations, including data encountered, that definitely will cause logic
+     * to produce incorrect results but is not fatal to the application.
+     */
     Error = 4000,
+    /**
+     * Describes an unrecoverable situation
+     */
     Fatal = 5000
   };
 
@@ -116,31 +127,30 @@ public:
   void log(WarningLevel level, const std::string& str);
 
   void log(WarningLevel level, const std::string& str, const std::string& filename,
-           const std::string &functionName, int lineNumber);
+    const std::string& prettyFunction, int lineNumber);
 
   void log(WarningLevel level, const QString& str, const QString& filename,
-    const QString& functionName, int lineNumber);
+    const QString& prettyFunction, int lineNumber);
 
   void progress(WarningLevel level, const std::string& str, const std::string& filename,
     const std::string& functionName, int lineNumber);
 
   void setLevel(WarningLevel l);
 
-  static unsigned int getWarnMessageLimit();
-
-#if HOOT_HAVE_LIBLOG4CXX
-  log4cxx::LoggerPtr _logger;
-#endif
+  static int getWarnMessageLimit();
 
   static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
 
   WarningLevel _level;
-  static boost::shared_ptr<Log> _theInstance;
-  static unsigned int _warnMessageLimit;
+  static std::shared_ptr<Log> _theInstance;
+  static int _warnMessageLimit;
+  bool _classFilterInitialized = false;
+  QStringList _classFilter;
 
   Log();
+  bool notFiltered(const std::string& prettyFunction);
 };
 
 /**
@@ -187,6 +197,7 @@ private:
     hoot::Log::getInstance().progress((level), ss_.str(), __FILE__, "", __LINE__); \
   }}
 
+#define PROGRESS_STATUS(str) { PROGRESS_LEVEL(hoot::Log::Status, str) }
 #define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
 #define PROGRESS_DEBUG(str) { PROGRESS_LEVEL(hoot::Log::Debug, str) }
 #define PROGRESS_TRACE(str) { PROGRESS_LEVEL(hoot::Log::Trace, str) }
@@ -194,19 +205,11 @@ private:
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VART(var) LOG_TRACE(#var << ": " << (var))
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
-#define LOG_VARV(var) LOG_VERBOSE(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))
 #define LOG_VARW(var) LOG_WARN(#var << ": " << (var))
 #define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))
 #define LOG_VAR(var) LOG_VARI(var)
 
-// The following macros will be defined by these includes. Using anything else could cause
-// portability issues.
-// LOG_LEVEL, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL
-#ifdef HOOT_HAVE_LIBLOG4CXX
-# include "LogLog4Cxx.h"
-#else
 # include "LogGeneric.h"
-#endif
 
 #endif // LOG_H

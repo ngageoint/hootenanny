@@ -144,7 +144,7 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
     element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));
 }
 
-boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
+std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
@@ -156,7 +156,7 @@ boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
   return _matchThreshold;
 }
 
-boost::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
+std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 {
   if (!_rf)
   {

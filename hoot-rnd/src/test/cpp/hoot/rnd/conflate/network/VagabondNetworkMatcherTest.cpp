@@ -50,6 +50,8 @@ class VagabondNetworkMatcherTest : public HootTestFixture
 public:
 
   VagabondNetworkMatcherTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      "test-output/conflate/network/")
   {
     setResetType(ResetAll);
   }
@@ -63,7 +65,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/VagabondNetworkMatcherTest-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
@@ -105,12 +107,12 @@ public:
     OsmNetworkExtractor one;
 
     ElementCriterionPtr c1(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown1)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown1)));
     one.setCriterion(c1);
     OsmNetworkPtr network1 = one.extractNetwork(map);
 
     ElementCriterionPtr c2(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown2)));
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
@@ -124,6 +126,15 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
+
+    // write final map and compare
+    DebugNetworkMapCreator().addDebugElements(map, uut->getAllEdgeScores(), uut->getAllVertexScores());
+    MapProjector::projectToWgs84(map);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    OsmMapWriterFactory::write(map, QString(_outputPath + "VagabondNetworkMatcherTestFinal.osm"));
+
+    HOOT_FILE_EQUALS(_inputPath + "VagabondNetworkMatcherTestExpected.osm",
+                    _outputPath + "VagabondNetworkMatcherTestFinal.osm");
   }
 };
 

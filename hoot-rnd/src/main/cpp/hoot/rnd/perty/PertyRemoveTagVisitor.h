@@ -28,7 +28,7 @@
 #define PERTY_REMOVE_TAG_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>
 
@@ -38,8 +38,7 @@ namespace hoot
 /**
  * A simple random tag remover
  */
-class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable
+class PertyRemoveTagVisitor : public ElementVisitor, public RngConsumer, public Configurable
 {
 public:
 
@@ -58,7 +57,7 @@ public:
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const boost::shared_ptr<Element>& e) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
 
@@ -72,7 +71,7 @@ private:
 
   double _p;
   boost::minstd_rand* _rng;
-  boost::shared_ptr<boost::minstd_rand> _localRng;
+  std::shared_ptr<boost::minstd_rand> _localRng;
 
   QStringList _exemptTagKeys;
   QStringList _replacementTagKeys;

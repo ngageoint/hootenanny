@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KNNWAYITERATOR_H
@@ -73,7 +73,7 @@ private:
   const std::vector<long>& _treeIdToWid;
 
   long _wayId;
-  boost::shared_ptr<geos::geom::LineString> _ls;
+  std::shared_ptr<geos::geom::LineString> _ls;
   const geos::geom::LineString* _lsFast;
 };
 

@@ -1,14 +1,17 @@
 #!/bin/bash
 set -e
 
+OUTPUT_DIR=test-output/cmd/slow/StatsFileTest
+
 # Test reading from files and producing stats.
 
 INPUT1=test-files/conflate/unified/AllDataTypesA.osm
 INPUT2=test-files/conflate/unified/AllDataTypesB.osm
-OUTPUT1=test-output/StatsAllDataTypesA.txt
-OUTPUT2=test-output/StatsAllDataTypes.json
+OUTPUT1=$OUTPUT_DIR/StatsAllDataTypesA.txt
+OUTPUT2=$OUTPUT_DIR/StatsAllDataTypes.json
 
-rm -f $OUTPUT1 $OUTPUT2
+rm -rf $OUTPUT_DIR
+mkdir -p $OUTPUT_DIR
 
 # Test the stats
 echo "****Quick Stats****"

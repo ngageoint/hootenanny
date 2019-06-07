@@ -27,9 +27,6 @@
 
 #include "OgrReader.h"
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
@@ -39,21 +36,22 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/PythonTranslator.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/PythonSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/Progress.h>
-#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDir>
@@ -71,13 +69,13 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OgrReader)
  * I've put this in the C++ to avoid too much header nastiness for the classes that use the
  * OgrReader.
  */
-class OgrReaderInternal
+class OgrReaderInternal : public ProgressReporter
 {
 public:
 
   static std::string className() { return "hoot::OgrReaderInternal"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OgrReaderInternal();
 
@@ -86,11 +84,20 @@ public:
   void close();
 
   /**
+   * @see ProgressReporter
+   */
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  /**
+   * @see ProgressReporter
+   */
+  virtual unsigned int getNumSteps() const { return 1; }
+
+  /**
    * See the associated configuration options text for details.
    */
-  boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
-  Meters getDefaultCircularError() const { return _circularError; }
+  Meters getDefaultCircularError() const { return _defaultCircularError; }
 
   Status getDefaultStatus() const { return _status; }
 
@@ -98,9 +105,9 @@ public:
 
   long getFeatureCount() const { return _featureCount; }
 
-  QStringList getLayersWithGeometry(const QString path) const;
+  QStringList getLayersWithGeometry(const QString& path) const;
 
-  void open(const QString path, QString layer);
+  void open(const QString& path, const QString& layer);
 
   QRegExp getNameFilter();
 
@@ -109,20 +116,21 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(OsmMapPtr map, Progress progress);
+  void read(const OsmMapPtr& map);
 
   /**
    * Reads the next feature into the given map.
    */
   void readNext(const OsmMapPtr& map);
 
-  void setDefaultCircularError(Meters circularError) { _circularError = circularError; }
+  void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
 
   void setDefaultStatus(Status s) { _status = s; }
 
   void setLimit(long limit) { _limit = limit; }
 
-  void setTranslationFile(QString translate) { _finalizeTranslate(); _translatePath = translate; }
+  void setSchemaTranslationScript(const QString& translate)
+  { _finalizeTranslate(); _translatePath = translate; }
 
   void initializePartial();
 
@@ -132,13 +140,11 @@ public:
 
   bool hasMoreElements();
 
-  boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
-  Progress streamGetProgress() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
 
-  Meters _circularError;
+  Meters _defaultCircularError;
   Status _status;
   OsmMapPtr _map;
   OGRLayer* _layer;
@@ -146,13 +152,12 @@ protected:
   long _count;
   long _featureCount;
   bool _useFileId;
-  boost::shared_ptr<GDALDataset> _dataSource;
+  std::shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
-  boost::shared_ptr<OGRSpatialReference> _wgs84;
-  boost::shared_ptr<ScriptTranslator> _translator;
-  long _streamFeatureCount;
+  std::shared_ptr<OGRSpatialReference> _wgs84;
+  std::shared_ptr<ScriptSchemaTranslator> _translator;
   QStringList _pendingLayers;
   bool _addSourceDateTime;
   QString _nodeIdFieldName;
@@ -167,6 +172,8 @@ protected:
   QHash<QString, QString> _strings;
 
   QString _translatePath;
+
+  Progress _progress;
 
   void _addFeature(OGRFeature* f);
 
@@ -190,11 +197,11 @@ protected:
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
    */
-  boost::shared_ptr<OGRSpatialReference> _fixProjection(boost::shared_ptr<OGRSpatialReference> srs);
+  std::shared_ptr<OGRSpatialReference> _fixProjection(std::shared_ptr<OGRSpatialReference> srs);
 
   void _initTranslate();
 
-  void _openLayer(QString path, QString layer);
+  void _openLayer(const QString& path, const QString& layer);
 
   void _openNextLayer();
 
@@ -215,6 +222,7 @@ protected:
 class OgrElementIterator : public ElementIterator
 {
 public:
+
   OgrElementIterator(OgrReaderInternal* d)
   {
     _d = d;
@@ -245,10 +253,10 @@ protected:
     {
       _addElement(_map->getWay(it->first));
     }
-
   }
 
 private:
+
   OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
@@ -259,7 +267,7 @@ OgrReader::OgrReader()
   _d = new OgrReaderInternal();
 }
 
-OgrReader::OgrReader(QString path)
+OgrReader::OgrReader(const QString& path)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -268,7 +276,7 @@ OgrReader::OgrReader(QString path)
   }
 }
 
-OgrReader::OgrReader(QString path, QString layer)
+OgrReader::OgrReader(const QString& path, const QString& layer)
 {
   _d = new OgrReaderInternal();
   if (isSupported(path) == true)
@@ -282,20 +290,30 @@ OgrReader::~OgrReader()
   delete _d;
 }
 
-ElementIterator* OgrReader::createIterator(QString path, QString layer) const
+void OgrReader::setProgress(Progress progress)
+{
+  if (_d == 0)
+  {
+    throw IllegalArgumentException(
+      "Internal reader must be initialized before setting progress on OgrReader.");
+  }
+  _d->setProgress(progress);
+}
+
+ElementIterator* OgrReader::createIterator(const QString& path, const QString& layer) const
 {
   OgrReaderInternal* d = new OgrReaderInternal();
   d->setDefaultCircularError(_d->getDefaultCircularError());
   d->setDefaultStatus(_d->getDefaultStatus());
-  d->setTranslationFile(_d->getTranslationFile());
+  d->setSchemaTranslationScript(_d->getTranslationFile());
   d->open(path, layer);
 
   return new OgrElementIterator(d);
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::shared_ptr<OGRSpatialReference> srs)
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(std::shared_ptr<OGRSpatialReference> srs)
 {
-  boost::shared_ptr<OGRSpatialReference> result;
+  std::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
@@ -352,7 +370,7 @@ boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::
   return result;
 }
 
-boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   return _d->getBoundingBoxFromConfig(s, srs);
@@ -361,10 +379,10 @@ boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& 
 /**
  * Returns a list of all layer names includeing those that don't have geometry.
  */
-QStringList OgrReader::getLayerNames(QString path)
+QStringList OgrReader::getLayerNames(const QString& path)
 {
   QStringList result;
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -382,7 +400,7 @@ QStringList OgrReader::getLayerNames(QString path)
 /**
  * Returns a filtered list of layer names that have geometry.
  */
-QStringList OgrReader::getFilteredLayerNames(const QString path)
+QStringList OgrReader::getFilteredLayerNames(const QString& path)
 {
   QRegExp filterStr = _d->getNameFilter();
   LOG_VART(filterStr.pattern());
@@ -390,7 +408,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VARD(allLayers);
+  LOG_VART(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -406,22 +424,22 @@ QStringList OgrReader::getFilteredLayerNames(const QString path)
   return result;
 }
 
-bool OgrReader::isReasonablePath(QString path)
+bool OgrReader::isReasonablePath(const QString& path)
 {
   return OgrUtilities::getInstance().isReasonableUrl(path);
 }
 
-long OgrReader::getFeatureCount(QString path, QString layer)
+long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 {
   _d->open(path, layer);
   _d->close();
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, OsmMapPtr map, Progress progress)
+void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
 {
   _d->open(path, layer);
-  _d->read(map, progress);
+  _d->read(map);
   _d->close();
 }
 
@@ -440,9 +458,9 @@ void OgrReader::setLimit(long limit)
   _d->setLimit(limit);
 }
 
-void OgrReader::setTranslationFile(QString translate)
+void OgrReader::setSchemaTranslationScript(const QString& translate)
 {
-  _d->setTranslationFile(translate);
+  _d->setSchemaTranslationScript(translate);
 }
 
 void OgrReader::initializePartial()
@@ -470,7 +488,7 @@ void OgrReader::finalizePartial()
   _elementsRead = 0;
 }
 
-bool OgrReader::isSupported(QString url)
+bool OgrReader::isSupported(const QString& url)
 {
   return isReasonablePath(url);
 }
@@ -480,22 +498,17 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
   _d->setUseDataSourceIds(useDataSourceIds);
 }
 
-void OgrReader::open(QString url)
+void OgrReader::open(const QString& url)
 {
   _d->open(url, "");
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReader::getProjection() const
 {
   return _d->getProjection();
 }
 
-Progress OgrReader::streamGetProgress() const
-{
-  return _d->streamGetProgress();
-}
-
-unsigned int OgrReaderInternal::logWarnCount = 0;
+int OgrReaderInternal::logWarnCount = 0;
 
 OgrReaderInternal::OgrReaderInternal()
 {
@@ -506,10 +519,9 @@ OgrReaderInternal::OgrReaderInternal()
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
-  _circularError = 15.0;
+  _defaultCircularError = ConfigOptions().getCircularErrorDefaultValue();
   _limit = -1;
   _featureCount = 0;
-  _streamFeatureCount = 0;
   _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
   _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
@@ -524,11 +536,11 @@ OgrReaderInternal::~OgrReaderInternal()
   }
 }
 
-QStringList OgrReaderInternal::getLayersWithGeometry(const QString path) const
+QStringList OgrReaderInternal::getLayersWithGeometry(const QString& path) const
 {
   QStringList result;
   LOG_DEBUG("Opening layers with geometry: " << path);
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
+  std::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   LOG_VART(count);
   for (int i = 0; i < count; i++)
@@ -607,7 +619,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   if (_addSourceDateTime)
   {
     // Add an ingest datetime tag
-    t.appendValue("source:ingest:datetime",
+    t.appendValue(MetadataTags::SourceIngestDateTime(),
                   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
   }
 
@@ -854,11 +866,11 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
-boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
+std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   ConfigOptions co(s);
-  boost::shared_ptr<Envelope> result;
+  std::shared_ptr<Envelope> result;
   QString bboxStrRaw = co.getOgrReaderBoundingBox();
   QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
@@ -884,27 +896,9 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
     key = ConfigOptions::getOgrReaderBoundingBoxLatlngKey();
   }
 
-  QStringList bbox = bboxStr.split(",");
-
-  if (bbox.size() != 4)
-  {
-    throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-  }
-
-  bool ok;
-  vector<double> bboxValues(4);
-  for (size_t i = 0; i < 4; i++)
-  {
-    bboxValues[i] = bbox[i].toDouble(&ok);
-    if (!ok)
-    {
-      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
-    }
-  }
-
   if (bboxStrRaw.isEmpty() == false)
   {
-    result.reset(new Envelope(bboxValues[0], bboxValues[2], bboxValues[1], bboxValues[3]));
+    result.reset(new Envelope(GeometryUtils::envelopeFromConfigString(bboxStr)));
   }
   else
   {
@@ -914,9 +908,27 @@ boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Se
         "box.");
     }
 
+    QStringList bbox = bboxStr.split(",");
+
+    if (bbox.size() != 4)
+    {
+      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+    }
+
+    bool ok;
+    vector<double> bboxValues(4);
+    for (size_t i = 0; i < 4; i++)
+    {
+      bboxValues[i] = bbox[i].toDouble(&ok);
+      if (!ok)
+      {
+        throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+      }
+    }
+
     result.reset(new Envelope());
-    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
-    boost::shared_ptr<OGRCoordinateTransformation> transform(
+    std::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+    std::shared_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
     for (int xi = 0; xi <= steps; xi++)
@@ -942,7 +954,7 @@ void OgrReaderInternal::_initTranslate()
   if (_translatePath != "" && _translator.get() == 0)
   {
     // Nice and short. Taken from TranslatedTagDifferencer
-    _translator.reset(ScriptTranslatorFactory::getInstance().createTranslator(_translatePath));
+    _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(_translatePath));
 
     if (_translator.get() == 0)
     {
@@ -951,12 +963,12 @@ void OgrReaderInternal::_initTranslate()
   }
 }
 
-void OgrReaderInternal::open(const QString path, QString layer)
+void OgrReaderInternal::open(const QString& path, const QString& layer)
 {
   _initTranslate();
 
   _path = path;
-  LOG_DEBUG("Opening data source for layer: " << layer);
+  LOG_TRACE("Opening data source for layer: " << layer);
   _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {
@@ -969,7 +981,7 @@ void OgrReaderInternal::open(const QString path, QString layer)
   LOG_VART(_pendingLayers);
 }
 
-void OgrReaderInternal::_openLayer(QString path, QString layer)
+void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
 {
   _path = path;
   _layerName = layer;
@@ -987,7 +999,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     throw HootException("Failed to identify source layer from data source.");
   }
 
-  boost::shared_ptr<OGRSpatialReference> sourceSrs;
+  std::shared_ptr<OGRSpatialReference> sourceSrs;
 
   if (_layer->GetSpatialRef())
   {
@@ -1012,7 +1024,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     }
   }
 
-  boost::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
+  std::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
   if (filter.get())
   {
     _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
@@ -1038,7 +1050,7 @@ void OgrReaderInternal::_openNextLayer()
 
 Meters OgrReaderInternal::_parseCircularError(Tags& t)
 {
-  Meters circularError = _circularError;
+  Meters circularError = _defaultCircularError;
 
   // parse the circularError out of the tags.
   if (t.contains(MetadataTags::ErrorCircular()))
@@ -1089,7 +1101,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
+void OgrReaderInternal::read(const OsmMapPtr& map)
 {
   _map = map;
   _count = 0;
@@ -1110,17 +1122,16 @@ void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
     f = 0;
 
     _count++;
-    if (_count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
     {
-      PROGRESS_INFO(
-        "\tRead from layer: " << _count << " / " << _featureCount << " features from layer: " <<
-        _layerName.toLatin1().data());
-    }
-
-    if (progress.getState() != "Pending")
-    {
-      progress.setFromRelative(
-        (double)_count / (double)_featureCount, "Running", false, "Reading ogr features" );
+      LOG_VART(_count);
+      LOG_VART(_featureCount);
+      LOG_VART(_layerName.toLatin1().data());
+      _progress.setFromRelative(
+        (float)_count / (float)_featureCount, Progress::JobState::Running,
+        "Read " + StringUtils::formatLargeNumber(_count) + " / " +
+        StringUtils::formatLargeNumber(_featureCount) + " features from layer: " +
+        _layerName.toLatin1().data(), true);
     }
   }
 }
@@ -1279,8 +1290,8 @@ bool OgrReaderInternal::hasMoreElements()
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ( (_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelations().end()) )
+  if ((_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelations().end()))
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
@@ -1316,30 +1327,17 @@ void OgrReaderInternal::populateElementMap()
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
-
-  _streamFeatureCount++;
 }
 
-boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
+std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
 {
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
 
   return wgs84;
-}
-
-Progress OgrReaderInternal::streamGetProgress() const
-{
-  Progress streamProgress("OGRReader");
-
-  const float floatCount = _streamFeatureCount;
-  const float percentComplete = floatCount / _featureCount * 100;
-  streamProgress.setPercentComplete( percentComplete );
-
-  return streamProgress;
 }
 
 QString OgrReaderInternal::_toWkt(OGRSpatialReference* srs)

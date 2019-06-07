@@ -45,14 +45,15 @@ using namespace std;
 namespace hoot
 {
 
-MultiLineStringSplitter::MultiLineStringSplitter()
+MultiLineStringSplitter::MultiLineStringSplitter(const bool markAddedMultilineStringRelations) :
+_markAddedMultilineStringRelations(markAddedMultilineStringRelations)
 {
 }
 
-boost::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
+std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFactory(
     const WaySublineCollection& string) const
 {
-  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
+  std::shared_ptr<FindNodesInWayFactory> nfPtr;
 
   set<ConstWayPtr, WayPtrCompare> ways;
   for (size_t i = 0; i < string.getSublines().size(); i++)
@@ -80,7 +81,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   ElementPtr result;
   vector<WayPtr> matches;
 
-  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
+  std::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {
     nfPtr = _createNodeFactory(string);
@@ -123,6 +124,10 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
         " member: " << matches[i]->getElementId());
       LOG_VART(matches[i]);
       r->addElement("", matches[i]);
+      if (_markAddedMultilineStringRelations)
+      {
+        r->getTags().set(MetadataTags::HootMultilineString(), "yes");
+      }
     }
     result = r;
     LOG_TRACE("Multilinestring split relation: " << result);
@@ -138,7 +143,7 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
-  boost::shared_ptr<FindNodesInWayFactory> nfPtr;
+  std::shared_ptr<FindNodesInWayFactory> nfPtr;
   if (nf == 0)
   {
     nfPtr = _createNodeFactory(string);

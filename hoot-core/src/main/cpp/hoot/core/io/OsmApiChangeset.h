@@ -31,6 +31,7 @@
 //  Qt
 #include <QList>
 #include <QString>
+#include <QTextStream>
 #include <QVector>
 #include <QXmlStreamReader>
 
@@ -38,9 +39,6 @@
 #include <array>
 #include <map>
 #include <vector>
-
-//  Boost
-#include <boost/shared_ptr.hpp>
 
 //  Hoot
 #include <hoot/core/io/OsmApiChangesetElement.h>
@@ -52,7 +50,7 @@ namespace hoot
 //  Forward declaration
 class ChangesetInfo;
 /** Helpful typedefs for pointers and vectors of maps */
-typedef boost::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
+typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
 typedef std::map<long, XmlElementPtr, osm_id_sort> XmlElementMap;
 typedef QVector<XmlElementMap> ChangesetTypeMap;
 
@@ -228,11 +226,11 @@ private:
   /**
    * @brief getChangeset Get all of the elements' XML for the given type
    * @param changeset Subset of the changeset to render
-   * @param id ID of the changeset
+   * @param changeset_id ID of the changeset
    * @param type Type of operation (create/modify/delete)
    * @return XML string for a particular
    */
-  QString getChangeset(ChangesetInfoPtr changeset, long id, ChangesetType type);
+  QString getChangeset(ChangesetInfoPtr changeset, long changeset_id, ChangesetType type);
   /**
    * @brief addNodes/Ways/Relations Add nodes/ways/relations of a type to the subset
    * @param changeset Subset of the changeset to add to
@@ -349,6 +347,28 @@ private:
    * @return True if the message matches and was parsed
    */
   bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
+  /**
+   * @brief matchesChangesetPreconditionFailure
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  bool matchesChangesetPreconditionFailure(const QString& hint,
+                                           long& member_id, ElementType::Type& member_type,
+                                           long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief getNodes/Ways/Relations Output node/way/relation text to the text stream
+   * @param changeset Pointer to the changeset to output
+   * @param ts TextStream to output the element to
+   * @param type Changeset type (create, modify, delete)
+   * @param changeset_id ID of the changeset to write to the element attribute
+   */
+  void getNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   XmlElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -69,6 +69,8 @@ class BuildingMatchCreatorTest : public HootTestFixture
 public:
 
   BuildingMatchCreatorTest()
+    : HootTestFixture("test-files/",
+                      UNUSED_PATH)
   {
     setResetType(ResetAll);
   }
@@ -85,10 +87,10 @@ public:
     bool result = false;
     for (size_t i = 0; i < matches.size(); i++)
     {
-      set< pair<ElementId, ElementId> > s = matches[i]->getMatchPairs();
+      set<pair<ElementId, ElementId>> s = matches[i]->getMatchPairs();
       if (matches[i]->getProbability() > 0.5)
       {
-        for (set< pair<ElementId, ElementId> >::const_iterator it = s.begin(); it != s.end(); ++it)
+        for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
         {
           if (it->first == eid1 && it->second == eid2)
           {
@@ -106,9 +108,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     LOG_VARD(targetWaysOnly);
@@ -137,7 +139,7 @@ public:
     BuildingMatchCreator uut;
     vector<const Match*> matches;
 
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -154,14 +156,14 @@ public:
     OsmMapPtr map(new OsmMap());
 
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyTestA.osm", map);
+    reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
@@ -186,7 +188,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -206,7 +208,7 @@ public:
     for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
       const Match* match = *it;
-      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+      std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);
       ElementId refId = matchPairs.begin()->first;
@@ -246,7 +248,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -274,7 +276,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -301,7 +303,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
 
     QString exceptionMsg("");
     try
@@ -323,7 +325,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -346,7 +348,7 @@ public:
 
     BuildingMatchCreator uut;
     vector<const Match*> matches;
-    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
@@ -367,7 +369,7 @@ public:
     for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
       const Match* match = *it;
-      std::set< std::pair<ElementId, ElementId> > matchPairs = match->getMatchPairs();
+      std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);
       ElementId refId = matchPairs.begin()->first;

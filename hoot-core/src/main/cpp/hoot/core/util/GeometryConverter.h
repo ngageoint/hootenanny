@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYCONVERTER_H
@@ -67,7 +67,7 @@ public:
 
   static std::string className() { return "hoot::GeometryConverter"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   GeometryConverter(const OsmMapPtr& map);
   GeometryConverter(const ConstOsmMapPtr& map);
@@ -90,7 +90,7 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  boost::shared_ptr<Element> convertGeometryCollection(const geos::geom::GeometryCollection* gc,
+  std::shared_ptr<Element> convertGeometryCollection(const geos::geom::GeometryCollection* gc,
     Status s, double circularError);
 
   /**
@@ -108,7 +108,7 @@ public:
    * @param circularError The circular error to assign to the newly created elements.
    * @return an OSM element
    */
-  boost::shared_ptr<Element> convertGeometryToElement(
+  std::shared_ptr<Element> convertGeometryToElement(
     const geos::geom::Geometry* g, Status s, double circularError);
 
   /**
@@ -133,7 +133,7 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  boost::shared_ptr<Element> convertMultiLineStringToElement(const geos::geom::MultiLineString* mls,
+  std::shared_ptr<Element> convertMultiLineStringToElement(const geos::geom::MultiLineString* mls,
     const OsmMapPtr& map, Status s, double circularError);
 
   /**
@@ -158,7 +158,7 @@ public:
    * @param circularError circular error of the returned element
    * @return an OSM element
    */
-  boost::shared_ptr<Element> convertPolygonToElement(const geos::geom::Polygon* polygon,
+  std::shared_ptr<Element> convertPolygonToElement(const geos::geom::Polygon* polygon,
     const OsmMapPtr& map, Status s, double circularError);
 
   /**
@@ -197,14 +197,14 @@ public:
   NodePtr convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map, Status s,
                              double circularError);
 
-  void setNodeFactory(boost::shared_ptr<NodeFactory> nf) { _nf = nf; }
+  void setNodeFactory(const std::shared_ptr<NodeFactory>& nf) { _nf = nf; }
 
 protected:
 
   NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
     double circularError);
 
-  boost::shared_ptr<NodeFactory> _nf;
+  std::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
   OsmMapPtr _map;
 };

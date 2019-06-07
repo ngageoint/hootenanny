@@ -52,66 +52,63 @@ class RemoveTagsVisitorTest : public HootTestFixture
 
 public:
 
+
+
   RemoveTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
+                      "test-output/visitors/RemoveTagsVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/visitors");
   }
 
   void runRemoveTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
     visitor.setNegateCriterion(false);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/RemoveTagsVisitorTest-runRemoveTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunRemoveTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/RemoveTagsVisitorTest-runRemoveTest.osm",
-      "test-output/visitors/RemoveTagsVisitorTest-runRemoveTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunRemoveTest.osm",
+                     _outputPath + "RunRemoveTest.osm");
   }
 
   void runFilterTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
     visitor.setNegateCriterion(false);
-    visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/RemoveTagsVisitorTest-runFilterTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/RemoveTagsVisitorTest-runFilterTest.osm",
-      "test-output/visitors/RemoveTagsVisitorTest-runFilterTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunFilterTest.osm",
+                     _outputPath + "RunFilterTest.osm");
   }
 
   void runNegatedFilterTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/RemoveTagsVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
     RemoveTagsVisitor visitor("key1", "key2");
     visitor.setNegateCriterion(true);
-    visitor.addCriterion(boost::shared_ptr<NodeCriterion>(new NodeCriterion()));
+    visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/RemoveTagsVisitorTest-runNegatedFilterTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/RemoveTagsVisitorTest-runNegatedFilterTest.osm",
-      "test-output/visitors/RemoveTagsVisitorTest-runNegatedFilterTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunNegatedFilterTest.osm",
+                     _outputPath + "RunNegatedFilterTest.osm");
   }
 };
 

@@ -33,7 +33,6 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 
@@ -43,7 +42,7 @@ MapCleaner::MapCleaner()
 {
 }
 
-void MapCleaner::apply(boost::shared_ptr<OsmMap> &map)
+void MapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
 }

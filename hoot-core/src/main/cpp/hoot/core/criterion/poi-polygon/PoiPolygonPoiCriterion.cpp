@@ -44,6 +44,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPoiCriterion)
 PoiPolygonPoiCriterion::PoiPolygonPoiCriterion() :
 _tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPoiTagIgnoreList())
 {
+  LOG_VART(_tagIgnoreList);
 }
 
 bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -76,7 +77,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
   {
-    if (_addressParser.hasAddress(*boost::dynamic_pointer_cast<const Node>(e)))
+    if (_addressParser.hasAddress(*std::dynamic_pointer_cast<const Node>(e)))
     {
       isPoi = true;
     }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "StringTokenizer.h"
@@ -38,7 +38,7 @@ StringTokenizer::StringTokenizer()
   setConfiguration(conf());
 }
 
-StringTokenizer::StringTokenizer(QString sepRegex) : _sep(sepRegex)
+StringTokenizer::StringTokenizer(const QString& sepRegex) : _sep(sepRegex)
 {
 }
 
@@ -63,7 +63,7 @@ void StringTokenizer::setConfiguration(const Settings& conf)
   _minSize = co.getTokenMinSize();
 }
 
-QStringList StringTokenizer::tokenize(const QString s) const
+QStringList StringTokenizer::tokenize(const QString& s) const
 {
   QStringList l = s.split(_sep, QString::SkipEmptyParts);
 

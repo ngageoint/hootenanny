@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
@@ -40,17 +40,18 @@ class ImplicitTagRulesSqliteWriterTest : public HootTestFixture
 public:
 
   ImplicitTagRulesSqliteWriterTest()
+    : HootTestFixture("test-files/io/ImplicitTagRulesSqliteWriterTest/",
+                      "test-output/io/ImplicitTagRulesSqliteWriterTest/")
   {
-    TestUtils::mkpath("test-output/io/ImplicitTagRulesSqliteWriterTest");
   }
 
   void runWriteTest()
   {
-    const QString outputFile = "test-output/io/ImplicitTagRulesSqliteWriterTest/rules-out.sqlite";
+    const QString outputFile = _outputPath + "rules-out.sqlite";
 
     ImplicitTagRulesSqliteWriter writer;
     writer.open(outputFile);
-    writer.write("test-files/io/ImplicitTagRulesSqliteWriterTest/ruleWordParts");
+    writer.write(_inputPath + "ruleWordParts");
     writer.close();
 
     _openDb(outputFile);
@@ -216,7 +217,7 @@ private:
 
   QSqlDatabase _db;
 
-  void _openDb( const QString path)
+  void _openDb(const QString& path)
   {
     if (!QSqlDatabase::contains(path))
     {

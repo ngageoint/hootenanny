@@ -47,16 +47,13 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace std;
 using namespace v8;
 
 namespace hoot
 {
 
-unsigned int SublineStringMatcherJs::logWarnCount = 0;
+int SublineStringMatcherJs::logWarnCount = 0;
 
 HOOT_JS_REGISTER(SublineStringMatcherJs)
 

@@ -9,7 +9,7 @@ cd $HOOT_HOME
 hoot version --debug
 
 # Run the tests that don't get hit by coverage
-make -sj`nproc` plugins-test
+make -sj`nproc` translations-test
 
 export HOOT_TEST_DIFF=--diff
 # Running glacial tests here because we're not sure core-coverage runs them

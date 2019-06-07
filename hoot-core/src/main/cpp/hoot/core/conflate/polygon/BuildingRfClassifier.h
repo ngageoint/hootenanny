@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGRFCLASSIFIER_H
 #define BUILDINGRFCLASSIFIER_H
@@ -39,6 +39,7 @@ namespace hoot
 class BuildingRfClassifier : public RfExtractorClassifier
 {
 public:
+
   BuildingRfClassifier();
 
 protected:
@@ -55,7 +56,6 @@ protected:
    * Create the best extractors found during experimentation.
    */
   void _createBestExtractors() const;
-
 };
 
 }

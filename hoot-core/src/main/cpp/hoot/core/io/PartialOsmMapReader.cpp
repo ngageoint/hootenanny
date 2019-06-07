@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialOsmMapReader.h"
 
@@ -36,13 +36,13 @@ PartialOsmMapReader::PartialOsmMapReader()
   _elementsRead = 0;
 }
 
-void PartialOsmMapReader::read(OsmMapPtr map)
+void PartialOsmMapReader::read(const OsmMapPtr& map)
 {
   readPartial(map);
   finalizePartial();
 }
 
-void PartialOsmMapReader::readPartial(OsmMapPtr map)
+void PartialOsmMapReader::readPartial(const OsmMapPtr& map)
 {
   _partialMap = map;
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FEATURECOUNTVISITOR_H
@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot
 {
@@ -50,7 +50,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   virtual QString getDescription() const
   { return "Counts the number of elements having at least one information tag"; }

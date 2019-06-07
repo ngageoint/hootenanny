@@ -84,6 +84,8 @@ void ReviewScoreCriterion::setConfiguration(const Settings& conf)
 
 bool ReviewScoreCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  QString status = "did not meet";
+  bool criterionMet = false;
   if (ReviewRelationCriterion::isSatisfied(e))
   {
     bool ok = false;
@@ -93,22 +95,38 @@ bool ReviewScoreCriterion::isSatisfied(const ConstElementPtr& e) const
     if (!ok || score > 1.0 || score < 0.0)
     {
       LOG_TRACE("Skipping invalid score: " << score << " for: " << e->getElementId() << "...");
-      return _invertThresholding ? true : false;
+      criterionMet = true ? _invertThresholding : false;
     }
-
-    LOG_TRACE("Filtering review: " << e->getElementId() << "...");
-    return
-      _invertThresholding ?
-        // inverted; handle boundary conditions
-        ((_minScoreThreshold == 0.0 && _maxScoreThreshold == 1.0) ||
-         (_minScoreThreshold == 0.0 && score == 0.0) ||
-         (_maxScoreThreshold == 1.0 && score == 1.0) ||
-         score < _minScoreThreshold ||
-         score > _maxScoreThreshold) :
-        // not inverted
-        (score >= _minScoreThreshold && score <= _maxScoreThreshold);
+    else
+    {
+      if (!_invertThresholding)
+      {
+        criterionMet = score >= _minScoreThreshold && score <= _maxScoreThreshold;
+      }
+      else
+      {
+        // boundary conditions
+        if ((_minScoreThreshold == 0.0 && _maxScoreThreshold == 1.0) ||
+            (_minScoreThreshold == 0.0 && score == 0.0) ||
+            (_maxScoreThreshold == 1.0 && score == 1.0))
+        {
+          criterionMet = false;
+        }
+        else
+        {
+          criterionMet = score < _minScoreThreshold || score > _maxScoreThreshold;
+        }
+      }
+    }
   }
-  return false;
+
+  if ((!_invertThresholding && criterionMet) || (_invertThresholding && !criterionMet))
+  {
+    status = "met";
+  }
+  LOG_TRACE("Review " << status << " criterion: " << e->getElementId() << "...");
+
+  return criterionMet;
 }
 
 }

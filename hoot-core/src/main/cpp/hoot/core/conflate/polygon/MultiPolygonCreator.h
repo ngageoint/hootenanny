@@ -35,6 +35,9 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LinearRing.h>
 
+// Standard
+#include <memory>
+
 namespace hoot
 {
 
@@ -69,7 +72,7 @@ public:
 
   static std::string className() { return "hoot::MultiPolygonCreator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
 
@@ -78,7 +81,7 @@ public:
    * geometry will be returned. Otherwise, a best effort will be made to return a reasonable
    * polygon.
    */
-  boost::shared_ptr<geos::geom::Geometry> createMultipolygon() const;
+  std::shared_ptr<geos::geom::Geometry> createMultipolygon() const;
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,6 +33,7 @@
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -57,41 +58,92 @@ class BuildingPartMergeOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(BuildingPartMergeOpTest);
   CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runToyMultithreadTest);
+  CPPUNIT_TEST(runPreserveTypesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  const QString inputPath = "test-files/ops/BuildingPartMergeOp/";
-  const QString outputPath = "test-output/ops/BuildingPartMergeOp/";
-
-  BuildingPartMergeOpTest()
+  BuildingPartMergeOpTest() :
+  HootTestFixture("test-files/ops/BuildingPartMergeOp/", "test-output/ops/BuildingPartMergeOp/")
   {
-    setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
+    setResetType(ResetAll);
   }
 
   void runToyTest()
   {
     OsmXmlReader reader;
-
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "ToyBuildings.osm", map);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
 
     BuildingPartMergeOp uut;
+    uut.setThreadCount(1);
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
-
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "ToyBuildings.osm");
-    HOOT_FILE_EQUALS(inputPath + "ToyBuildingsOutput.osm",
-                     outputPath + "ToyBuildings.osm");
+    writer.write(map, _outputPath + "runToyTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+    HOOT_FILE_EQUALS(_inputPath + "runToyTestOut.osm", _outputPath + "runToyTestOut.osm");
   }
 
+  void runToyMultithreadTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "ToyBuildings.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(2);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "runToyMultithreadTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(15L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(14, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumBuildingGroupsMerged());
+    HOOT_FILE_EQUALS(
+      _inputPath + "runToyTestOut.osm", _outputPath + "runToyMultithreadTestOut.osm");
+  }
+
+  void runPreserveTypesTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    const QString inputPath =
+      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+    reader.read(inputPath + "/Input1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + "/Input2.osm", map);
+
+    BuildingPartMergeOp uut;
+    uut.setThreadCount(1);
+    uut.setPreserveTypes(true);
+    conf().set(
+      ConfigOptions().getTagMergerDefaultKey(),
+      QString::fromStdString(OverwriteTag1Merger::className()));
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "runPreserveTypesTestOut.osm");
+
+    CPPUNIT_ASSERT_EQUAL(5L, uut.getNumAffected());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getTotalBuildingGroupsProcessed());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumBuildingGroupsMerged());
+    HOOT_FILE_EQUALS(
+      _inputPath + "runPreserveTypesTestOut.osm", _outputPath + "runPreserveTypesTestOut.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingPartMergeOpTest, "current");
 
 }

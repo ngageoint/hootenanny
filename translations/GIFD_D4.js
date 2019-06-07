@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016,2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //
 // Convert GIFD D4 to/from OSM+
 //
 
-hoot.require('gifd_d4');
+hoot.require('gifd_d4_core');
 hoot.require('gifd_d4_rules');
 hoot.require('config');
 hoot.require('translate');

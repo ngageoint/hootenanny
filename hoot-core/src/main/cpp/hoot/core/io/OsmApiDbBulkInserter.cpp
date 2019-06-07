@@ -50,7 +50,7 @@
 namespace hoot
 {
 
-unsigned int OsmApiDbBulkInserter::logWarnCount = 0;
+int OsmApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkInserter)
 
@@ -70,7 +70,7 @@ OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
   close();
 }
 
-bool OsmApiDbBulkInserter::isSupported(QString urlStr)
+bool OsmApiDbBulkInserter::isSupported(const QString& urlStr)
 {
   LOG_VART(urlStr);
   QUrl url(urlStr);
@@ -79,7 +79,7 @@ bool OsmApiDbBulkInserter::isSupported(QString urlStr)
   return urlStr.toLower().endsWith(".sql") || _database.isSupported(url);
 }
 
-void OsmApiDbBulkInserter::open(QString url)
+void OsmApiDbBulkInserter::open(const QString& url)
 {
   _outputUrl = url;
 
@@ -639,7 +639,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
 }
 
-void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName,
+void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString& tableName,
                                                          QString& recordLine)
 {
   LOG_TRACE("Updating ID offset for line: " << recordLine.left(25));
@@ -1124,8 +1124,8 @@ void OsmApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned l
 void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
                                       const ElementType::Type& elementType,
                                       const unsigned long dbId,
-                                      boost::shared_ptr<QFile> currentTableFile,
-                                      boost::shared_ptr<QFile> historicalTableFile)
+                                      const std::shared_ptr<QFile>& currentTableFile,
+                                      const std::shared_ptr<QFile>& historicalTableFile)
 {
   LOG_TRACE("Writing tags to stream...");
 
@@ -1236,7 +1236,7 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-  boost::shared_ptr<Tgs::BigMap<long, unsigned long> > knownElementMap;
+  std::shared_ptr<Tgs::BigMap<long, unsigned long>> knownElementMap;
 
   for (std::vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
        it != relationMembers.end(); ++it)
@@ -1305,7 +1305,7 @@ void OsmApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelati
   _writeStats.relationMembersWritten++;
 }
 
-void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header)
+void OsmApiDbBulkInserter::_createOutputFile(const QString& tableName, const QString& header)
 {
   QString msg = "Creating output file " + tableName;
   if (!header.trimmed().isEmpty())

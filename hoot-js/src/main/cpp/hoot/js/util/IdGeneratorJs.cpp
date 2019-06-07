@@ -50,8 +50,6 @@ using namespace v8;
 namespace hoot
 {
 
-using namespace boost;
-
 HOOT_JS_REGISTER(IdGeneratorJs)
 
 IdGeneratorJs::IdGeneratorJs(IdGeneratorPtr idGen)

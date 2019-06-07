@@ -28,8 +28,10 @@
 #define NAMEDOP_H
 
 // hoot
+#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // Qt
 #include <QStringList>
@@ -41,7 +43,7 @@ namespace hoot
  * Applies a list of named operations to the given map. The named operations must implement either
  * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
  */
-class NamedOp : public OsmMapOperation, public Configurable
+class NamedOp : public OsmMapOperation, public Configurable, public ProgressReporter
 {
 public:
 
@@ -50,16 +52,32 @@ public:
   NamedOp();
   NamedOp(QStringList namedOps);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const override { return ""; }
 
+  virtual void setProgress(Progress progress) override { _progress = progress; }
+  virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
+
 private:
 
   const Settings* _conf;
   QStringList _namedOps;
+  Progress _progress;
+
+  /*
+   * If an op is made of a list of other ops, then this will substitute those ops in from the list.
+   * This makes it easier to handle progress updates for ops. The only op that fits this case
+   * currently is MapCleaner. If more are created like MapCleaner, then we may want to rethink using
+   * this.
+   */
+  void _substituteForContainingOps();
+
+  QString _getInitMessage(const QString& message, 
+                          const std::shared_ptr<OperationStatusInfo>& statusInfo) const;
+  void _updateProgress(const int currentStep, const QString& message);
 };
 
 }

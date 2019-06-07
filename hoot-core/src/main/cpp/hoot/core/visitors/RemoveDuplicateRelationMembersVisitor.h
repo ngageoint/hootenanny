@@ -29,7 +29,7 @@
 #define REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
 
 // Hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
@@ -40,8 +40,7 @@ namespace hoot
  *
  * See notes on RelationData::_members.
  */
-class RemoveDuplicateRelationMembersVisitor : public ElementOsmMapVisitor,
-  public OperationStatusInfo
+class RemoveDuplicateRelationMembersVisitor : public ElementVisitor, public OperationStatusInfo
 {
 public:
 

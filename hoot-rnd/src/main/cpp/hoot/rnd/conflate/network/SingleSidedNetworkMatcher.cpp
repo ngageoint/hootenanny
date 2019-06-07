@@ -114,9 +114,9 @@ double SingleSidedNetworkMatcher::_calculateProbabilityOfMatch(ConstNetworkVerte
   return 1 - pOfWrong;
 }
 
-boost::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
+std::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
 {
-  return boost::shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
+  return std::shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> SingleSidedNetworkMatcher::getAllEdgeScores() const
@@ -206,7 +206,7 @@ void SingleSidedNetworkMatcher::_normalizeScores()
 {
   // normalize the scores based on each edge in the second input. The value can be less than 1.
   // The difference between 1 is implicitly the P(no match).
-  foreach(ConstNetworkEdgePtr e2, _edge2Scores.keys())
+  foreach (ConstNetworkEdgePtr e2, _edge2Scores.keys())
   {
     QList<EdgeLinkScorePtr> scores = _edge2Scores[e2];
     double sum = 0.0;
@@ -289,7 +289,7 @@ void SingleSidedNetworkMatcher::_seedVertexScores()
     ConstNetworkVertexPtr v2 = it.value();
 
     QList<ConstNetworkVertexPtr> matches = _details->getCandidateMatches(v2);
-    foreach(ConstNetworkVertexPtr v1, matches)
+    foreach (ConstNetworkVertexPtr v1, matches)
     {
       _vertex21Scores[v2][v1] = 1.0 / matches.size();
     }

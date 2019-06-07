@@ -45,9 +45,9 @@ namespace hoot
 {
 
 QString Log::LOG_WARN_LIMIT_REACHED_MESSAGE = "Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...";
-unsigned int Log::_warnMessageLimit = 0;
+int Log::_warnMessageLimit = 0;
 
-boost::shared_ptr<Log> Log::_theInstance = NULL;
+std::shared_ptr<Log> Log::_theInstance = NULL;
 
 void myLoggerFunction(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
@@ -107,7 +107,7 @@ Log::Log()
   CPLSetErrorHandler(cplErrorHandler);
 }
 
-unsigned int Log::getWarnMessageLimit()
+int Log::getWarnMessageLimit()
 {
   if (_warnMessageLimit == 0)
   {
@@ -135,6 +135,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   {
     return Info;
   }
+  if (l == "status")
+  {
+    return Status;
+  }
   if (l == "warn")
   {
     return Warn;
@@ -161,10 +165,10 @@ QString Log::getLevelString(WarningLevel l)
     return "TRACE";
   case Debug:
     return "DEBUG";
-  case Verbose:
-    return "VERBOSE";
   case Info:
     return "INFO";
+  case Status:
+    return "STATUS";
   case Warn:
     return "WARN";
   case Error:
@@ -177,10 +181,10 @@ QString Log::getLevelString(WarningLevel l)
 }
 
 void Log::log(WarningLevel level, const QString& str, const QString& filename,
-  const QString& functionName, int lineNumber)
+  const QString& prettyFunction, int lineNumber)
 {
   log(level, string(str.toUtf8().data()), string(filename.toUtf8().data()),
-      string(functionName.toUtf8().data()), lineNumber);
+      string(prettyFunction.toUtf8().data()), lineNumber);
 }
 
 string Log::ellipsisStr(const string& str, uint count)

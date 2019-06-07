@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_GEOJSON_READER_H
@@ -73,7 +73,7 @@ public:
    * @param url
    * @return
    */
-  virtual bool isSupported(QString url);
+  virtual bool isSupported(const QString& url) override;
 
   /**
    * @brief read Reads the data specified by the last call to open(...)
@@ -81,7 +81,7 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -89,7 +89,7 @@ public:
    * @param jsonStr - input string
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromString(QString jsonStr);
+  virtual OsmMapPtr loadFromString(const QString& jsonStr);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
@@ -97,9 +97,9 @@ public:
    * @param path - Path to file
    * @return Smart pointer to the OSM map
    */
-  virtual OsmMapPtr loadFromFile(QString path);
+  virtual OsmMapPtr loadFromFile(const QString& path);
 
-  virtual QString supportedFormats() { return ".geojson"; }
+  virtual QString supportedFormats() override { return ".geojson"; }
 
 private:
 
@@ -184,7 +184,7 @@ private:
    * @param item Property Tree (subtree)
    * @param element Element to which we will add the tags
    */
-  void _addTags(const boost::property_tree::ptree &item, ElementPtr element);
+  void _addTags(const boost::property_tree::ptree &item, const ElementPtr& element);
 
   /**
    * @brief _parseSubTags Reads tags that are objects or arrays into a JSON string
@@ -197,8 +197,10 @@ private:
    * @brief _roles List of roles for the current relation, saved for recursive relations
    */
   std::queue<std::string> _roles;
+
+  std::shared_ptr<geos::geom::Coordinate> ReadCoordinate(const boost::property_tree::ptree& coordsIt);
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_GEOJSON_READER_H

@@ -46,11 +46,11 @@ public:
 
   static std::string className() { return "hoot::WayCleaner"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   WayCleaner();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Cleans ways"; }
 

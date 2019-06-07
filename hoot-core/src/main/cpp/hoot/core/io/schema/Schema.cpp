@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Schema.h"
 
@@ -35,18 +35,18 @@ Schema::Schema()
 {
 }
 
-void Schema::addLayer(boost::shared_ptr<Layer> l)
+void Schema::addLayer(const std::shared_ptr<Layer>& l)
 {
   _layers.push_back(l);
   _layerNameMap[l->getName()] = _layers.size()-1;
 }
 
-boost::shared_ptr<const Layer> Schema::getLayer(size_t i) const
+std::shared_ptr<const Layer> Schema::getLayer(size_t i) const
 {
   return _layers[i];
 }
 
-boost::shared_ptr<const Layer> Schema::getLayer(QString name) const
+std::shared_ptr<const Layer> Schema::getLayer(const QString& name) const
 {
   std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
 
@@ -56,7 +56,7 @@ boost::shared_ptr<const Layer> Schema::getLayer(QString name) const
   throw IllegalArgumentException("Unable to find layer with name: " + name);
 }
 
-bool Schema::hasLayer(QString name) const
+bool Schema::hasLayer(const QString& name) const
 {
   std::map<QString, size_t>::const_iterator lit = _layerNameMap.find(name);
 

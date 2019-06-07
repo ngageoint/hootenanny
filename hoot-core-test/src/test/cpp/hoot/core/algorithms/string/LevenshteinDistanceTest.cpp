@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -60,7 +60,7 @@ public:
 
   QString te(const char* s)
   {
-    QString result = DictionaryTranslator().translateStreet(QString::fromUtf8(s));
+    QString result = ToEnglishDictionaryTranslator().translateStreet(QString::fromUtf8(s));
     return result;
   }
 

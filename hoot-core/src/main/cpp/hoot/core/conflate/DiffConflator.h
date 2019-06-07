@@ -35,12 +35,16 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/ops/Boundable.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // tgs
 #include <tgs/HashMap.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
@@ -74,7 +78,7 @@ class MatchThreshold;
  *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable
+    public Configurable, public ProgressReporter
 {
 public:
 
@@ -93,7 +97,7 @@ public:
    * @brief DiffConflator - Construct & set a match threshold
    * @param matchThreshold - Match threshold
    */
-  DiffConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
+  DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   ~DiffConflator();
 
@@ -173,16 +177,19 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString &output, bool separateOutput);
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
+
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual unsigned int getNumSteps() const { return 3; }
 
 private:
 
   OsmMapPtr _pMap;
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;
   bool _conflateTags = false;
 
@@ -201,6 +208,8 @@ private:
   // for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
+
+  Progress _progress;
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
@@ -235,11 +244,13 @@ private:
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);
 
-  boost::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
+  std::shared_ptr<ChangesetDeriver> _sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2);
 
   void _removeMatches(const Status& status);
 
   void _snapSecondaryRoadsBackToRef();
+
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

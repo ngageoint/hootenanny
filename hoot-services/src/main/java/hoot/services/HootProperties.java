@@ -76,13 +76,14 @@ public final class HootProperties {
     public static final String TRANSLATION_EXT_PATH;
     public static final String HOOTAPI_DB_NAME;
     public static final String HOOTAPI_DB_USER;
-    public static final String HOOTAPI_DB_PASSWORD;
+    public static final String HOOTAPI_DB_PWORD;
     public static final String HOOTAPI_DB_HOST;
     public static final String HOOTAPI_DB_PORT;
     public static final String HGIS_FILTER_SCRIPT;
     public static final String CONFLATE_SIZE_THRESHOLD;
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
+    public static final String HTTP_TIMEOUT;
     public static final String OSMAPI_DB_NAME;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
@@ -120,9 +121,26 @@ public final class HootProperties {
 
     private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
-    private static final String OSMAPI_DB_PASSWORD;
+    private static final String OSMAPI_DB_PWORD;
     private static final String OSMAPI_DB_HOST;
     private static final String OSMAPI_DB_PORT;
+
+    public static final String PUBLIC_OSMAPI_PULL_URL;
+    public static final String PUBLIC_OSMAPI_CAPABILITIES_URL;
+
+    public static final String PUBLIC_OVERPASS_URL;
+
+    public static final String RAILSPORT_PUSH_URL;
+    public static final String RAILSPORT_PULL_URL;
+    public static final String RAILSPORT_CAPABILITIES_URL;
+
+    private static final String PUBLIC_OSMAPI_URL;
+    private static final String PUBLIC_OSMAPI_VERSION;
+
+    private static final String RAILSPORT_PROTOCOL;
+    private static final String RAILSPORT_HOST;
+    private static final String RAILSPORT_PORT;
+    private static final String RAILSPORT_API_VERSION;
 
     public static final String OAUTH_REDIRECTURL;
     public static final String OAUTH_PROVIDERURL;
@@ -199,6 +217,7 @@ public final class HootProperties {
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
+        HTTP_TIMEOUT = getProperty("httpTimeout");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
@@ -258,17 +277,44 @@ public final class HootProperties {
         // They should be resolved just before being used to minimize any unintended exposure (f.e. logging).
         HOOTAPI_DB_NAME = "${HOOTAPI_DB_NAME}";
         HOOTAPI_DB_USER = "${HOOTAPI_DB_USER}";
-        HOOTAPI_DB_PASSWORD = "${HOOTAPI_DB_PASSWORD}";
+        HOOTAPI_DB_PWORD = "${HOOTAPI_DB_PASSWORD}";
         HOOTAPI_DB_HOST = "${HOOTAPI_DB_HOST}";
         HOOTAPI_DB_PORT = "${HOOTAPI_DB_PORT}";
         OSMAPI_DB_NAME = "${OSMAPI_DB_NAME}";
         OSMAPI_DB_USER = "${OSMAPI_DB_USER}";
-        OSMAPI_DB_PASSWORD = "${OSMAPI_DB_PASSWORD}";
+        OSMAPI_DB_PWORD = "${OSMAPI_DB_PASSWORD}";
         OSMAPI_DB_HOST = "${OSMAPI_DB_HOST}";
         OSMAPI_DB_PORT = "${OSMAPI_DB_PORT}";
 
-        HOOTAPI_DB_URL = "hootapidb://" + HOOTAPI_DB_USER + ":" + HOOTAPI_DB_PASSWORD + "@" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME;
-        OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PASSWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
+        HOOTAPI_DB_URL = "hootapidb://" + HOOTAPI_DB_USER + ":" + HOOTAPI_DB_PWORD + "@" + HOOTAPI_DB_HOST + ":" + HOOTAPI_DB_PORT + "/" + HOOTAPI_DB_NAME;
+        OSMAPI_DB_URL = "osmapidb://" + OSMAPI_DB_USER + ":" + OSMAPI_DB_PWORD + "@" + OSMAPI_DB_HOST + ":" + OSMAPI_DB_PORT + "/" + OSMAPI_DB_NAME;
+
+        // The base URL for pulling OSM data
+        PUBLIC_OSMAPI_URL = "${PUBLIC_OSMAPI_URL}";
+        PUBLIC_OSMAPI_VERSION = "${PUBLIC_OSMAPI_VERSION}";
+        PUBLIC_OSMAPI_PULL_URL = PUBLIC_OSMAPI_URL + "/api/" + PUBLIC_OSMAPI_VERSION;
+        PUBLIC_OSMAPI_CAPABILITIES_URL = PUBLIC_OSMAPI_URL + "/api/capabilities";
+
+        // The URL for the main Overpass server
+        PUBLIC_OVERPASS_URL = "${PUBLIC_OVERPASS_URL}";
+
+        // The OSM Rails Port that we are going to pull and push data to.
+        RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";
+        RAILSPORT_HOST = "${RAILSPORT_HOST}";
+        RAILSPORT_PORT = "${RAILSPORT_PORT}";
+        RAILSPORT_API_VERSION = "${RAILSPORT_API_VERSION}";
+
+        // Some sites don't need a port number
+        // This _should_ goto https at some stage
+        if (replaceSensitiveData(RAILSPORT_PORT).equals("XXX")) {
+            RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/capabilities";
+        } else {
+            RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
+        }
 
     }
 

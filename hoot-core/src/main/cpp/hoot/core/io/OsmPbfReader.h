@@ -28,9 +28,6 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
-// boost
-#include <boost/shared_ptr.hpp>
-
 // GDAL
 class OGRSpatialReference;
 
@@ -73,6 +70,7 @@ public:
   class BlobLocation
   {
   public:
+
     long headerOffset;
     long blobOffset;
     long blobSize;
@@ -84,7 +82,7 @@ public:
 
   static std::string className() { return "hoot::OsmPbfReader"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);
@@ -94,7 +92,7 @@ public:
    *
    * @param urlString URL of file to immediately attempt to open
    */
-  OsmPbfReader(const QString urlString);
+  OsmPbfReader(const QString& urlString);
 
   ~OsmPbfReader();
 
@@ -112,26 +110,26 @@ public:
   /**
    * Determines the reader's default element status
    */
-  virtual void setDefaultStatus(Status status) { _status = status; }
+  virtual void setDefaultStatus(Status status) override { _status = status; }
 
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useFileId = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useFileId = useDataSourceIds; }
 
-  virtual void setUseFileStatus(bool useFileStatus) { _useFileStatus = useFileStatus; }
+  virtual void setUseFileStatus(bool useFileStatus) override { _useFileStatus = useFileStatus; }
 
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
    * is called directly on the file.
    */
-  void read(QString path, OsmMapPtr map);
+  void read(const QString& path, const OsmMapPtr& map);
 
-  void parse(std::istream* strm, OsmMapPtr map);
+  void parse(std::istream* strm, const OsmMapPtr& map);
 
-  void parseBlob(BlobLocation& bl, std::istream* strm, OsmMapPtr map);
+  void parseBlob(BlobLocation& bl, std::istream* strm, const OsmMapPtr& map);
 
-  void parseBlob(long headerOffset, std::istream* strm, OsmMapPtr map);
+  void parseBlob(long headerOffset, std::istream* strm, const OsmMapPtr& map);
 
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the
@@ -145,27 +143,27 @@ public:
    */
   void setPermissive(bool permissive) { _permissive = permissive; }
 
-  virtual bool isSupported(QString urlStr);
+  virtual bool isSupported(const QString& urlStr) override;
 
-  virtual void open(QString urlStr);
+  virtual void open(const QString& urlStr) override;
 
   virtual void initializePartial();
   /**
    * The read command called after open.
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
-  virtual bool hasMoreElements();
+  virtual bool hasMoreElements() override;
 
-  virtual boost::shared_ptr<Element> readNextElement();
+  virtual std::shared_ptr<Element> readNextElement() override;
 
-  virtual void finalizePartial();
+  virtual void finalizePartial() override;
 
   void close();
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
@@ -177,18 +175,18 @@ public:
    * @param file input file to examine
    * @return true if the specified file is sorted by element type, then element ID; false otherwise
    */
-  bool isSorted(const QString file);
+  bool isSorted(const QString& file);
 
   virtual QString supportedFormats() { return ".osm.pbf"; }
 
 private:
 
-  Meters _circularError;
+  Meters _defaultCircularError;
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;
 
-  std::vector< boost::shared_ptr<hoot::Node> > _denseNodeTmp;
+  std::vector<std::shared_ptr<hoot::Node>> _denseNodeTmp;
 
   /// The last position of the pointer while reading data.
   long _lastPosition;
@@ -238,11 +236,11 @@ private:
   QString _urlStr;
   bool _firstPartialReadCompleted;
 
-  void _readFile(QString path, OsmMapPtr map);
+  void _readFile(const QString& path, const OsmMapPtr& map);
 
   void _init(bool useFileId);
 
-  void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
+  void _addTag(const std::shared_ptr<Element>& n, const QString& k, const QString& v);
 
   double _convertLon(long lon);
 
@@ -284,13 +282,13 @@ private:
 
   void _parseBlobHeader();
 
-  int _parseInt(QString s);
+  int _parseInt(const QString& s);
 
   void _parseOsmData();
 
   void _parseOsmHeader();
 
-  Status _parseStatus(QString s);
+  Status _parseStatus(const QString& s);
 
   void _parseTimestamp(const hoot::pb::Info& info, Tags& t);
 

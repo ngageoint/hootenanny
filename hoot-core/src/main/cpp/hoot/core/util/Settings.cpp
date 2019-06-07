@@ -53,9 +53,12 @@ using namespace std;
 namespace hoot
 {
 
+const QString Settings::BASE_CONFIG_OPTION_KEY = "base.config";
+
 class JsonLoader
 {
 public:
+
   JsonLoader(Settings* s) : _s(s)
   {
   }
@@ -112,13 +115,16 @@ private:
 
   void _loadTags(pt::ptree& tree)
   {
-    BOOST_FOREACH(pt::ptree::value_type& element, tree.get_child(""))
+    for (pt::ptree::value_type& element : tree.get_child(""))
     {
-      QString name = QString::fromUtf8(element.first.c_str());
+      const QString name = QString::fromUtf8(element.first.c_str());
+      LOG_VART(name);
       //  Skip comments
       if (name.startsWith("#"))
         continue;
-      if (!_s->hasKey(name))
+      // Ignore the base config option, as its used to load a base configuration file and is done
+      // elsewhere.
+      if (name != Settings::BASE_CONFIG_OPTION_KEY && !_s->hasKey(name))
       {
         throw HootException("Unknown JSON setting: (" + name + ")");
       }
@@ -128,7 +134,7 @@ private:
   }
 };
 
-boost::shared_ptr<Settings> Settings::_theInstance = NULL;
+std::shared_ptr<Settings> Settings::_theInstance = NULL;
 
 Settings::Settings() :
   _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
@@ -493,14 +499,14 @@ void Settings::parseCommonArguments(QStringList& args)
       Log::getInstance().setLevel(Log::Debug);
       args = args.mid(1);
     }
-    else if (args[0] == "--verbose")
-    {
-      Log::getInstance().setLevel(Log::Verbose);
-      args = args.mid(1);
-    }
     else if (args[0] == "--info")
     {
       Log::getInstance().setLevel(Log::Info);
+      args = args.mid(1);
+    }
+    else if (args[0] == "--status")
+    {
+      Log::getInstance().setLevel(Log::Status);
       args = args.mid(1);
     }
     else if (args[0] == "--warn")

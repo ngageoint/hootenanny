@@ -42,7 +42,6 @@
 // Qt
 #include <QStringList>
 
-using namespace boost;
 using namespace std;
 using namespace v8;
 

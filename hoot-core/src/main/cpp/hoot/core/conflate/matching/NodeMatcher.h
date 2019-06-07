@@ -29,15 +29,12 @@
 #define NODEMATCHER_H
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-
-// Boost
-#include <boost/shared_ptr.hpp>
+#include <hoot/core/util/Units.h>
 
 // Std
-#include <vector>
 #include <set>
+#include <vector>
 
 // Qt
 #include <QList>
@@ -54,7 +51,7 @@ public:
 
   static std::string className() { return "hoot::NodeMatcher"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   // exposed for white box testing.
   friend class NodeMatcherTest;
@@ -73,7 +70,7 @@ public:
    */
   double scorePair(long nid1, long nid2);
 
-  void setMap(const boost::shared_ptr<const OsmMap>& map) { _map = map; }
+  void setMap(const std::shared_ptr<const OsmMap>& map) { _map = map; }
 
   /**
    * Calculates the outbound heading for an node that intersects the given wids. The nid must be
@@ -97,18 +94,18 @@ public:
 
 private:
 
-  boost::shared_ptr<const OsmMap> _map;
+  std::shared_ptr<const OsmMap> _map;
   double _strictness;
   double _delta;
-  static QList<boost::shared_ptr<ElementCriterion>> _networkFeatureTypeCriterion;
+  static QList<std::shared_ptr<ElementCriterion>> _networkFeatureTypeCriterion;
 
   double _calculateAngleScore(const std::vector<Radians>& theta1,
                               const std::vector<Radians>& theta2, std::vector<bool>& exclude,
                               size_t depth, bool debug = false);
 };
 
-typedef boost::shared_ptr<NodeMatcher> NodeMatcherPtr;
-typedef boost::shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
+typedef std::shared_ptr<NodeMatcher> NodeMatcherPtr;
+typedef std::shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
 
 }
 

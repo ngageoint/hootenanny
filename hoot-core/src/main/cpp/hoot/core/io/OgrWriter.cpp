@@ -48,9 +48,9 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OgrOptions.h>
 #include <hoot/core/io/OgrUtilities.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/io/schema/FeatureDefinition.h>
@@ -73,7 +73,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OgrWriter::logWarnCount = 0;
+int OgrWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OgrWriter)
 
@@ -105,9 +105,6 @@ OgrWriter::OgrWriter():
 {
   setConfiguration(conf());
 
-  _textStatus = ConfigOptions().getWriterTextStatus();
-  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _includeCircularErrorTags = ConfigOptions().getWriterIncludeCircularErrorTags();
   _maxFieldWidth = -1; // We set this if we really need to.
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -117,7 +114,7 @@ OgrWriter::~OgrWriter()
 
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<Geometry> g)
+void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -153,7 +150,8 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
     {
       QByteArray vba = v.toString().toUtf8();
 
-      int fieldWidth = poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
+      int fieldWidth =
+        poFeature->GetFieldDefnRef(poFeature->GetFieldIndex(ba.constData()))->GetWidth();
 
       if (vba.length() > fieldWidth && fieldWidth > 0)
       {
@@ -180,7 +178,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
   }
 
   // convert the geometry.
-  boost::shared_ptr<GeometryCollection> gc = boost::dynamic_pointer_cast<GeometryCollection>(g);
+  std::shared_ptr<GeometryCollection> gc = std::dynamic_pointer_cast<GeometryCollection>(g);
   if (gc.get() != 0)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
@@ -197,7 +195,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f, const Geometry* g,
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const Geometry* g,
                                    OGRFeature* poFeature)
 {
   std::string wkt = g->toString();
@@ -235,7 +233,7 @@ void OgrWriter::close()
   _ds.reset();
 }
 
-void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
+void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
 {
   OGRLayer *poLayer;
 
@@ -305,12 +303,12 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     // Loop through the fields making sure that they exist in the output. Print a warning if
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
 
 
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
 
       if (poFDefn->GetFieldIndex(f->getName().toLatin1()) == -1)
       {
@@ -338,10 +336,10 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
     }
     _layers[layer->getName()] = poLayer;
 
-    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      std::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
       OGRFieldDefn oField(f->getName().toLatin1(), toOgrFieldType(f->getType()));
 
       // Fix the field length but only for Strings
@@ -386,7 +384,7 @@ OGRLayer* OgrWriter::_getLayer(const QString& layerName)
   return _layers[layerName];
 }
 
-bool OgrWriter::isSupported(QString url)
+bool OgrWriter::isSupported(const QString& url)
 {
   if (_scriptPath.isEmpty())
   {
@@ -405,10 +403,10 @@ void OgrWriter::initTranslator()
   if (_translator == 0)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
-         _scriptPath));
+    std::shared_ptr<ScriptSchemaTranslator> st(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(_scriptPath));
     st->setErrorTreatment(_strictChecking);
-    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(st);
   }
 
   if (!_translator)
@@ -432,7 +430,7 @@ void OgrWriter::createAllLayers()
   }
 }
 
-void OgrWriter::openOutput(QString url)
+void OgrWriter::openOutput(const QString& url)
 {
   try
   {
@@ -452,7 +450,7 @@ void OgrWriter::openOutput(QString url)
   }
 }
 
-void OgrWriter::open(QString url)
+void OgrWriter::open(const QString& url)
 {
   // Initialize our translator - this will load the schema
   initTranslator();
@@ -468,7 +466,7 @@ void OgrWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setCreateAllLayers(configOptions.getOgrWriterCreateAllLayers());
-  setScriptPath(configOptions.getOgrWriterScript());
+  setSchemaTranslationScript(configOptions.getOgrWriterScript());
   setPrependLayerName(configOptions.getOgrWriterPreLayerName());
 
   _appendData = configOptions.getOgrAppendData();
@@ -491,9 +489,9 @@ void OgrWriter::setConfiguration(const Settings& conf)
   }
 }
 
-boost::shared_ptr<Geometry> OgrWriter::_toMulti(boost::shared_ptr<Geometry> from)
+std::shared_ptr<Geometry> OgrWriter::_toMulti(const std::shared_ptr<Geometry>& from)
 {
-  boost::shared_ptr<Geometry> result;
+  std::shared_ptr<Geometry> result;
 
   switch (from->getGeometryTypeId())
   {
@@ -530,7 +528,7 @@ boost::shared_ptr<Geometry> OgrWriter::_toMulti(boost::shared_ptr<Geometry> from
   return result;
 }
 
-void OgrWriter::strictError(QString warning)
+void OgrWriter::strictError(const QString& warning)
 {
   if (_strictChecking == StrictOn)
   {
@@ -542,10 +540,10 @@ void OgrWriter::strictError(QString warning)
   }
 }
 
-void OgrWriter::write(ConstOsmMapPtr map)
+void OgrWriter::write(const ConstOsmMapPtr& map)
 {
-  ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
-    boost::dynamic_pointer_cast<const ElementProvider>(map)));
+  ElementProviderPtr provider(std::const_pointer_cast<ElementProvider>(
+    std::dynamic_pointer_cast<const ElementProvider>(map)));
 
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
@@ -583,8 +581,8 @@ void OgrWriter::write(ConstOsmMapPtr map)
  void OgrWriter::translateToFeatures(
           ElementProviderPtr& provider,
           const ConstElementPtr& e,
-          boost::shared_ptr<Geometry> &g, // output
-          std::vector<ScriptToOgrTranslator::TranslatedFeature> &tf) // output
+          std::shared_ptr<Geometry> &g, // output
+          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> &tf) // output
 {
   if (_translator.get() == 0)
   {
@@ -618,26 +616,7 @@ void OgrWriter::write(ConstOsmMapPtr map)
     LOG_TRACE("After conversion to geometry, element is now a " << g->getGeometryType() );
 
     Tags t = e->getTags();
-    if(_includeCircularErrorTags)
-    {
-      t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
-    }
-
-    if (_textStatus)
-    {
-      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
-    }
-    else
-    {
-      t[MetadataTags::HootStatus()] = e->getStatusString();
-    }
-
-    if (_includeDebug)
-    {
-      t[MetadataTags::HootId()] = QString::number(e->getId());
-    }
-
-    for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
+    for (Tags::const_iterator it = t.begin(); it != t.end(); ++it)
     {
       if (t[it.key()] == "")
       {
@@ -649,8 +628,9 @@ void OgrWriter::write(ConstOsmMapPtr map)
   }
 }
 
-void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
-                                        vector<ScriptToOgrTranslator::TranslatedFeature> tf)
+void OgrWriter::writeTranslatedFeature(
+  const std::shared_ptr<Geometry>& g,
+  const vector<ScriptToOgrSchemaTranslator::TranslatedFeature>& tf)
 {
   // only write the feature if it wasn't filtered by the translation script.
   for (size_t i = 0; i < tf.size(); i++)
@@ -664,11 +644,15 @@ void OgrWriter::writeTranslatedFeature(boost::shared_ptr<Geometry> g,
   }
 }
 
-void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& e)
+void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPtr& element)
 {
-  boost::shared_ptr<Geometry> g;
-  vector<ScriptToOgrTranslator::TranslatedFeature> tf;
-  translateToFeatures(provider, e, g, tf);
+  std::shared_ptr<Geometry> g;
+  vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
+
+  ElementPtr elementClone(element->clone());
+  _addExportTagsVisitor.visit(elementClone);
+
+  translateToFeatures(provider, elementClone, g, tf);
   writeTranslatedFeature(g, tf);
 }
 
@@ -676,7 +660,7 @@ void OgrWriter::finalizePartial()
 {
 }
 
-void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
+void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
 {
   LOG_TRACE("Writing node " << newNode->getId());
 
@@ -689,7 +673,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Node>& newNode)
   _writePartial(cacheProvider, newNode);
 }
 
-void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
+void OgrWriter::writePartial(const std::shared_ptr<const hoot::Way>& newWay)
 {
   LOG_TRACE("Writing way " << newWay->getId() );
 
@@ -733,7 +717,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   _writePartial(cacheProvider, newWay);
 }
 
-void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newRelation)
+void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRelation)
 {
   LOG_TRACE("Writing relation " << newRelation->getId());
 
@@ -876,7 +860,7 @@ void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned lo
 {
   _elementCache.reset();
   _elementCache =
-    boost::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
+    std::shared_ptr<ElementCache>(new ElementCacheLRU(maxNodes, maxWays, maxRelations));
 }
 
 }

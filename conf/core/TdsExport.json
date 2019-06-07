@@ -1,7 +1,7 @@
 {
   "#" : "Options to remove all to-be-reviewed elements after conflation",
   "conflate.post.ops": "hoot::RemoveElementsVisitor;$(conflate.post.ops)",
-  "remove.elements.visitor.element.criterion": "hoot::TagCriterion",
+  "remove.elements.visitor.element.criteria": "hoot::TagCriterion",
   "tag.filter.kvp": "hoot:review:source,2",
   "convert.ops": "$(convert.ops);hoot::SmallWayMerger",
   "small.way.merger.diff": "hoot::TranslatedTagDifferencer",

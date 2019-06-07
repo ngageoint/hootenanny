@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QStringList>
@@ -37,9 +38,9 @@ namespace hoot
 {
 
 /**
- * Filters out everything except the specified status.
+ * Identifies elements that contain a specified tag key
  */
-class TagKeyCriterion : public ElementCriterion
+class TagKeyCriterion : public ElementCriterion, public Configurable
 {
 public:
 
@@ -58,6 +59,8 @@ public:
 
   virtual QString getDescription() const
   { return "Identifies elements that contain a specified tag key"; }
+
+  virtual void setConfiguration(const Settings& conf);
 
 protected:
 

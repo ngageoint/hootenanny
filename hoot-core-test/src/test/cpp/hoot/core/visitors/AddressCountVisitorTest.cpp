@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
@@ -42,12 +42,18 @@ class AddressCountVisitorTest : public HootTestFixture
 
 public:
 
+  AddressCountVisitorTest()
+    : HootTestFixture("test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      _inputPath + "PoiPolygon2.osm",
       false,
       Status::Unknown1);
 

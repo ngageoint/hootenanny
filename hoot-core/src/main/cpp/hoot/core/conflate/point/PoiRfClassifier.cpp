@@ -53,7 +53,7 @@
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/language/TranslateStringDistance.h>
+#include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
@@ -70,7 +70,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int PoiRfClassifier::logWarnCount = 0;
+int PoiRfClassifier::logWarnCount = 0;
 
 PoiRfClassifier::PoiRfClassifier()
 {
@@ -207,14 +207,14 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new ExactStringDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new ExactStringDistance()))))))));
 
@@ -227,14 +227,14 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new LevenshteinDistance()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new LevenshteinDistance()))))))));
 
@@ -244,7 +244,7 @@ void PoiRfClassifier::_createAllExtractors()
                           StringDistancePtr(new MeanWordSetDistance(
                           StringDistancePtr(new LevenshteinDistance(a)))))));
     _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                          StringDistancePtr(new TranslateStringDistance(
+                          StringDistancePtr(new ToEnglishTranslateStringDistance(
                           StringDistancePtr(new MeanWordSetDistance(
                           StringDistancePtr(new LevenshteinDistance(a)))))))));
   }
@@ -258,14 +258,14 @@ void PoiRfClassifier::_createAllExtractors()
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new Soundex()))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MaxWordSetDistance(
                         StringDistancePtr(new Soundex()))))))));
   _extractors.push_back(FeatureExtractorPtr(new NameExtractor(
-                        StringDistancePtr(new TranslateStringDistance(
+                        StringDistancePtr(new ToEnglishTranslateStringDistance(
                         StringDistancePtr(new MeanWordSetDistance(
                         StringDistancePtr(new Soundex()))))))));
 }

@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
+QSqlQuery DbUtils::execNoPrepare(const QSqlDatabase& database, const QString& sql)
 {
   QSqlQuery q(database);
 
@@ -54,7 +54,7 @@ QSqlQuery DbUtils::execNoPrepare(QSqlDatabase& database, const QString sql)
   return q;
 }
 
-long DbUtils::getRowCount(const QSqlDatabase& database, const QString tableName)
+long DbUtils::getRowCount(const QSqlDatabase& database, const QString& tableName)
 {
   QSqlQuery query(database);
   if (!query.exec("SELECT COUNT(*) FROM " + tableName))
@@ -86,7 +86,7 @@ long DbUtils::getRowCount(const QSqlDatabase& database, const QString tableName)
   return result;
 }
 
-QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const QString tableName)
+QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const QString& tableName)
 {
   QStringList constraints;
 
@@ -115,17 +115,17 @@ QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const 
   return constraints;
 }
 
-void DbUtils::disableTableConstraints(QSqlDatabase& database, const QString tableName)
+void DbUtils::disableTableConstraints(const QSqlDatabase& database, const QString& tableName)
 {
   _modifyTableConstraints(database, tableName, true);
 }
 
-void DbUtils::enableTableConstraints(QSqlDatabase& database, const QString tableName)
+void DbUtils::enableTableConstraints(const QSqlDatabase& database, const QString& tableName)
 {
   _modifyTableConstraints(database, tableName, false);
 }
 
-void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tableName,
+void DbUtils::_modifyTableConstraints(const QSqlDatabase& database, const QString& tableName,
                                       const bool disable)
 {
   LOG_VART(database.isOpen());

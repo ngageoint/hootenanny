@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GeoNamesReader.h"
 
@@ -40,12 +40,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
-GeoNamesReader::GeoNamesReader()
+GeoNamesReader::GeoNamesReader() :
+_GEONAMESID(0),
+_LATITUDE(4),
+_LONGITUDE(5),
+_maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
+_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+_useDataSourceIds(false)
 {
-  _maxSaveMemoryStrings = 100000;
-  _circularError = 15.0;
-  _useDataSourceIds = false;
-
   _columns << "geonameid";
   _columns << "name";
   _columns << "asciiname";
@@ -66,10 +68,7 @@ GeoNamesReader::GeoNamesReader()
   _columns << "timezone";
   _columns << "modification_date";
 
-  _GEONAMESID = 0;
   _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
-  _LATITUDE = 4;
-  _LONGITUDE = 5;
 }
 
 void GeoNamesReader::close()
@@ -77,7 +76,7 @@ void GeoNamesReader::close()
   _fp.close();
 }
 
-boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
   {
@@ -91,16 +90,16 @@ bool GeoNamesReader::hasMoreElements()
   return !_fp.atEnd();
 }
 
-bool GeoNamesReader::isSupported(QString url)
+bool GeoNamesReader::isSupported(const QString& url)
 {
-  url = QDir().absoluteFilePath(url);
-  QFile f(url);
+  QString path = QDir().absoluteFilePath(url);
+  QFile f(path);
 
-  bool result = url.toLower().endsWith(".geonames") && f.exists();
+  bool result = path.toLower().endsWith(".geonames") && f.exists();
   return result;
 }
 
-void GeoNamesReader::open(QString url)
+void GeoNamesReader::open(const QString& url)
 {
   _fp.close();
   _fp.setFileName(QDir().absoluteFilePath(url));
@@ -150,7 +149,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _defaultCircularError));
 
   if (_columns.size() != fields.size())
   {

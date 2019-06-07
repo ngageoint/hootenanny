@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
@@ -45,10 +45,8 @@
 // Qt
 #include <QLibrary>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // System
+#include <memory>
 #include <sys/resource.h>
 
 // Tgs
@@ -62,7 +60,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<Hoot> Hoot::_theInstance;
+std::shared_ptr<Hoot> Hoot::_theInstance;
 
 Hoot::Hoot()
 {
@@ -149,7 +147,7 @@ void Hoot::loadLibrary(const QString& name)
 
 void Hoot::reinit()
 {
-  LOG_DEBUG("Hoot instance reinit...");
+  LOG_TRACE("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
@@ -159,7 +157,7 @@ void Hoot::reinit()
     rl.rlim_cur = max;
     setrlimit(RLIMIT_AS, &rl);
     getrlimit(RLIMIT_AS, &rl);
-    LOG_INFO("Set max memory usage to: " << rl.rlim_cur << "bytes.");
+    LOG_DEBUG("Set max memory usage to: " << rl.rlim_cur << "bytes.");
   }
 
   Log::getInstance().init();

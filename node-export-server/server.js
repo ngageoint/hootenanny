@@ -277,19 +277,21 @@ function doExport(req, res, hash, input) {
                     command += ' -D convert.ops=hoot::TranslationOp';
                     command += ' -D translation.script=translations/OSM_Ingest.js';
                 }
-                command += ' -D translation.override=' + overrideTags;
+                command += ' -D schema.translation.override=' + overrideTags;
             }
             if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp';
-                command += ' -D translation.script=' + config.schemas[req.params.schema];
-                command += ' -D translation.direction=toogr';
+                command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
+                command += ' -D schema.translation.direction=toogr';
                 // Set per schema config options
                 if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
             }
         } else {
             command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
-            if (overrideTags) command +=  ' -D translation.override=' + overrideTags;
+            command += ' -D convert.ops=hoot::TranslationOp';
+            command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
+            if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
@@ -298,7 +300,7 @@ function doExport(req, res, hash, input) {
             + outFile
             ;
 
-        if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
+        //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
         //used for testing to simulate hoot export
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';

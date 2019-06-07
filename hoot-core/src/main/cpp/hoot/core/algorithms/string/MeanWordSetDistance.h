@@ -31,9 +31,6 @@
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 

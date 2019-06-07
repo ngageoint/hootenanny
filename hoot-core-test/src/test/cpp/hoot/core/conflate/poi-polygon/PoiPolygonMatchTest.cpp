@@ -81,7 +81,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -101,7 +101,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -135,7 +135,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -155,7 +155,7 @@ public:
     n1->setX(-8);
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -189,7 +189,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -208,7 +208,7 @@ public:
     n1->setX(-5);
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -228,7 +228,7 @@ public:
     n1->setX(-7);
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -265,7 +265,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -287,7 +287,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -309,7 +309,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -333,7 +333,7 @@ public:
   {
     OsmMapPtr map;
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
 
     QString exceptionMsg1("");
     try
@@ -364,7 +364,7 @@ public:
   {
     OsmMapPtr map;
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
 
     QString exceptionMsg1("");
     try
@@ -395,7 +395,7 @@ public:
   {
     OsmMapPtr map;
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
 
     QString exceptionMsg1("");
     try
@@ -426,7 +426,7 @@ public:
   {
     OsmMapPtr map;
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
 
     QString exceptionMsg1("");
     try
@@ -457,7 +457,7 @@ public:
   {
     OsmMapPtr map;
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
 
     QString exceptionMsg1("");
     QStringList badKvp1;
@@ -546,7 +546,7 @@ public:
       n1->getTags()["source"] = "mySource:a";
 
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -569,7 +569,7 @@ public:
       n1->getTags()["source"] = "mySource:b";
 
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -610,7 +610,7 @@ public:
       n1->getTags()["source"] = "mySource:b";
 
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -633,7 +633,7 @@ public:
       n1->getTags()["source"] = "mySource1:a";
 
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -674,7 +674,7 @@ public:
       n1->getTags()["source"] = "mySource:a";
 
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -713,7 +713,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -733,7 +733,7 @@ public:
 
     {
       PoiPolygonMatch uut(
-        map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+        map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -765,7 +765,7 @@ public:
     map->addNode(n1);
 
     PoiPolygonMatch uut(
-      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
     uut.setEnableAdvancedMatching(false);
     uut.setEnableReviewReduction(true);
     uut.setMatchDistanceThreshold(0.0);
@@ -811,10 +811,31 @@ public:
 
     {
       n1->getTags()["name"] = "Honey Creek Mall";
+      n1->getTags()["shop"] = "mall";
 
       WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
       w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("building", "yes");
+      w1->getTags().set("shop", "mall");
+
+      uut.calculateMatch(w1->getElementId(), n1->getElementId());
+
+      LOG_VART(uut.getClassification());
+      HOOT_STR_EQUALS("match: 0 miss: 0 review: 1", uut.getClassification());
+      CPPUNIT_ASSERT(uut.explain().contains("Match involves a multi-use building"));
+
+      RecursiveElementRemover(w1->getElementId()).apply(map);
+    }
+
+    // shop=mall has now been added to the building category, so whereas previously it couldn't
+    // be considered a building without also having building=yes, now it can be considered a
+    // building with the tag alone.
+    {
+      n1->getTags()["name"] = "Honey Creek Mall";
+      n1->getTags()["shop"] = "mall";
+
+      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
+      w1->getTags()["name"] = "Honey Creek Mall";
       w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
@@ -878,21 +899,6 @@ public:
       w1->getTags()["name"] = "Staunton Elementary";
       w1->getTags().set("area", "yes");
       w1->getTags().set("building:use", "multipurpose");
-
-      uut.calculateMatch(w1->getElementId(), n1->getElementId());
-
-      HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
-      CPPUNIT_ASSERT(!uut.explain().contains("Match involves a multi-use building"));
-
-      RecursiveElementRemover(w1->getElementId()).apply(map);
-    }
-
-    {
-      n1->getTags()["name"] = "Honey Creek Mall";
-
-      WayPtr w1 = TestUtils::createWay(map, Status::Unknown1, c1, 5, "w1");
-      w1->getTags()["name"] = "Honey Creek Mall";
-      w1->getTags().set("shop", "mall");
 
       uut.calculateMatch(w1->getElementId(), n1->getElementId());
 

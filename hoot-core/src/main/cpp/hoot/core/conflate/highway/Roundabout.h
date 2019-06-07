@@ -22,14 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ROUNDABOUT_H
 #define ROUNDABOUT_H
 
+// Standard
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
+
+// Hoot
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -94,13 +97,13 @@ public:
    *               but this method does not add the node to the map explicitly.
    * @return - Pointer to the newly created node
    */
-  boost::shared_ptr<Node> getNewCenter(boost::shared_ptr<OsmMap> pMap);
+  NodePtr getNewCenter(OsmMapPtr pMap);
 
   /**
    * @brief getCenter - Gets the node set as the roundabout's center
    * @return - Node
    */
-  boost::shared_ptr<Node> getCenter(){ return _pCenterNode; }
+  NodePtr getCenter(){ return _pCenterNode; }
 
   /**
    * @brief makeRoundabout - Creates & populates a roundabout object using the
@@ -109,7 +112,7 @@ public:
    * @param pWay - The roundabout way
    * @return - A newly constructed roundabout object
    */
-  static boost::shared_ptr<Roundabout> makeRoundabout (const boost::shared_ptr<OsmMap> &pMap,
+  static std::shared_ptr<Roundabout> makeRoundabout (const OsmMapPtr &pMap,
                                                        WayPtr pWay);
 
   /**
@@ -118,14 +121,14 @@ public:
    *                           join up to.
    * @param pMap - map to operate on.
    */
-  void removeRoundabout(boost::shared_ptr<OsmMap> pMap);
+  void removeRoundabout(OsmMapPtr pMap);
 
   /**
    * @brief replaceRoundabout - Does its best to put the roundabout back in
    *                            place in the map.
    * @param pMap - The map to operate on.
    */
-  void replaceRoundabout(boost::shared_ptr<OsmMap> pMap);
+  void replaceRoundabout(OsmMapPtr pMap);
 
   /**
    * @brief handleCrossingWays - Finds ways that cross the roundabout,
@@ -135,7 +138,12 @@ public:
    *                             later on.
    * @param pMap - Map to operate upon.
    */
-  void handleCrossingWays(boost::shared_ptr<OsmMap> pMap);
+  void handleCrossingWays(OsmMapPtr pMap);
+
+  /**
+   * @brief overrideRoundabout
+   */
+  void overrideRoundabout() { _overrideStatus = true; }
 
 private:
 
@@ -157,11 +165,17 @@ private:
   // The temp ways that we add
   std::vector<ConstWayPtr> _tempWays;
 
+  //  Ways that should connect to the roundabout
+  std::vector<WayPtr> _connectingWays;
+
+  // For secondary roundabouts with no sibling, override the replacement
+  bool _overrideStatus;
+
 };
 
 // For convenience
-typedef boost::shared_ptr<Roundabout> RoundaboutPtr;
-typedef boost::shared_ptr<const Roundabout> ConstRoundaboutPtr;
+typedef std::shared_ptr<Roundabout> RoundaboutPtr;
+typedef std::shared_ptr<const Roundabout> ConstRoundaboutPtr;
 
 }
 

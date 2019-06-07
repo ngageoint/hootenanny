@@ -53,11 +53,11 @@ public:
 
   virtual void visit(const ElementPtr& e) override
   {
-    visit(boost::dynamic_pointer_cast<const Element>(e));
+    visit(std::dynamic_pointer_cast<const Element>(e));
   }
 };
 
-typedef boost::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
+typedef std::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
 
 }
 

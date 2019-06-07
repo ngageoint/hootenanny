@@ -44,13 +44,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/language/HootServicesLanguageDetectorClientTest";
-
-//see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-static const QString responseStr =
-  "{ \"detectorUsed\": \"TikaLanguageDetector\", \"detectedLangCode\": \"de\", \"sourceText\": \"wie%20alt%20bist%20du\", \"detectedLang\": \"German\", \"detectionConfidence\": \"medium\" }";
-
 class HootServicesLanguageDetectorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesLanguageDetectorClientTest);
@@ -61,21 +54,26 @@ class HootServicesLanguageDetectorClientTest : public HootTestFixture
 
 public:
 
+  HootServicesLanguageDetectorClientTest()
+    : HootTestFixture("test-files/language/HootServicesLanguageDetectorClientTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runRequestDataTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
-      FileUtils::readFully(
-        testInputRoot + "/runRequestDataTest").trimmed(),
-        uut->_getRequestData("text to detect").trimmed());
+      FileUtils::readFully(_inputPath + "runRequestDataTest").trimmed(),
+      uut->_getRequestData("text to detect").trimmed());
   }
 
   void runParseResponseTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
-    boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(responseStr);
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<boost::property_tree::ptree> response =
+      StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
     HOOT_STR_EQUALS("de", uut->_parseResponse(response, detectorUsed));
@@ -84,11 +82,11 @@ public:
 
   void runConfidenceTest()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
+    std::shared_ptr<HootServicesLanguageDetectorClient> uut = _getClient();
     uut->_minConfidence = LanguageDetectionConfidenceLevel::High;
 
-    boost::shared_ptr<boost::property_tree::ptree> response =
-      StringUtils::jsonStringToPropTree(responseStr);
+    std::shared_ptr<boost::property_tree::ptree> response =
+      StringUtils::jsonStringToPropTree(_responseStr);
 
     QString detectorUsed;
     HOOT_STR_EQUALS("", uut->_parseResponse(response, detectorUsed));
@@ -97,9 +95,17 @@ public:
 
 private:
 
-  boost::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
+  // see comment in StringUtilsTest::jsonParseTest about the formatting of this string
+  const QString _responseStr =
+    "{ \"detectorUsed\": \"TikaLanguageDetector\", "
+      "\"detectedLangCode\": \"de\", "
+      "\"sourceText\": \"wie%20alt%20bist%20du\", "
+      "\"detectedLang\": \"German\", "
+      "\"detectionConfidence\": \"medium\" }";
+
+  std::shared_ptr<HootServicesLanguageDetectorClient> _getClient()
   {
-    boost::shared_ptr<HootServicesLanguageDetectorClient> client(
+    std::shared_ptr<HootServicesLanguageDetectorClient> client(
       new HootServicesLanguageDetectorMockClient());
 
     Settings conf;

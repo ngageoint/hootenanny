@@ -49,14 +49,14 @@ class TagFilter
 
 public:
 
-  TagFilter(const QString key, const QString value,
+  TagFilter(const QString& key, const QString& value,
             const OsmSchemaCategory& category = OsmSchemaCategory::Empty);
 
   QString getKey() const { return _key; }
-  void setKey(QString key);
+  void setKey(const QString& key);
 
   QString getValue() const { return _value; }
-  void setValue(QString val);
+  void setValue(const QString& val);
 
   bool getAllowAliases() const { return _allowAliases; }
   void setAllowAliases(bool allow) { _allowAliases = allow; }

@@ -1,0 +1,39 @@
+{
+  "name": "hoot-nodejs",
+  "version": "0.0.3",
+  "description": "NodeJs scripts that invoke Hootenanny functions like translation",
+  "main": "TranslationServer.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "lodash": "4.17.11",
+    "artillery": "^1.6.0-22",
+    "istanbul": "~0.4.5",
+    "node-mocks-http": "^1.7.0",
+    "osmtogeojson": "~3.0.0-beta.2",
+    "xml2js": "~0.4.19",
+    "xmlbuilder": "^9.0.7",
+    "xmldom": "~0.1.27"
+  },
+  "scripts": {
+    "test": "mocha --reporter dot",
+    "load-test": "artillery run load_test/translation_server_load_test.yml",
+    "cover": "istanbul cover _mocha --"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ngageoint/hootenanny.git"
+  },
+  "keywords": [
+    "conflation",
+    "tag",
+    "translation"
+  ],
+  "author": "DigitalGlobe",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/ngageoint/hootenanny/issues"
+  }
+}

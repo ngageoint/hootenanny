@@ -29,7 +29,7 @@
 // Convert DNC to/from OSM+
 //
 
-hoot.require('dnc');
+hoot.require('dnc_core');
 hoot.require('dnc_rules');
 hoot.require('dnc_schema');
 hoot.require('config');

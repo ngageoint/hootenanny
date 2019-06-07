@@ -30,7 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAddressScoreExtractor.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
 
 // CPP Unit
@@ -297,11 +297,12 @@ public:
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.address.translate.to.english", "true");
-    settings.set("language.translation.translator", "hoot::DictionaryTranslator");
+    settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
     settings.set("poi.polygon.address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
-    boost::shared_ptr<DictionaryTranslator> dictTranslator =
-      boost::dynamic_pointer_cast<DictionaryTranslator>(AddressTranslator::_translator);
+    std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
+      std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
+        ToEnglishAddressTranslator::_translator);
     dictTranslator->setTokenizeInput(false);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

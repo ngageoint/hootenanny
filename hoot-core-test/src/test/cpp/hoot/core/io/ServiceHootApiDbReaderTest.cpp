@@ -80,12 +80,13 @@ public:
   { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(_testName); }
 
   ServiceHootApiDbReaderTest()
+    : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
+                      "test-output/io/ServiceHootApiDbReaderTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/io/ServiceHootApiDbReaderTest");
   }
 
-  void setUpTest(const QString testName)
+  void setUpTest(const QString& testName)
   {
     _mapId = -1;
     _testName = testName;
@@ -147,8 +148,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestInput.osm", false,
-      Status::Unknown1);
+      map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
@@ -639,7 +639,7 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
-    reader.setBoundingBox("-88.1,28.91,-88.0,28.89");
+    reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
     reader.read(map);
 
     //quick check to see if the element counts are off...consult the test output for more detail
@@ -663,11 +663,9 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(
-      map, "test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm");
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"),
-      TestUtils::readFile("test-output/io/ServiceHootApiDbReaderTest/runReadByBoundsTestOutput.osm"));
+    writer.write(map, _outputPath + "runReadByBoundsTestOutput.osm");
+    HOOT_FILE_EQUALS( _inputPath + "runReadByBoundsTestOutput.osm",
+                     _outputPath + "runReadByBoundsTestOutput.osm");
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds

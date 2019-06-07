@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VertexHausdorffDistance.h"
 
@@ -58,7 +58,7 @@ public:
 
   virtual void filter_ro(const Coordinate* c)
   {
-    boost::shared_ptr<Point> pt(GeometryFactory::getDefaultInstance()->createPoint(*c));
+    std::shared_ptr<Point> pt(GeometryFactory::getDefaultInstance()->createPoint(*c));
     double d = _g.distance(pt.get());
 
     if (d < 0)
@@ -88,7 +88,7 @@ private:
   const Geometry& _g;
 
   //this should be static, but there's no header file
-  unsigned int _logWarnCount;
+  int _logWarnCount;
 };
 
 VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geometry& g2)
@@ -98,7 +98,7 @@ VertexHausdorffDistance::VertexHausdorffDistance(const Geometry& g1, const Geome
 
 void VertexHausdorffDistance::compute(const Geometry& g1, const Geometry& g2)
 {
-  boost::shared_ptr<Geometry> g(GeometryUtils::validateGeometry(&g1));
+  std::shared_ptr<Geometry> g(GeometryUtils::validateGeometry(&g1));
   VertexHausdorffFilter filter(*g);
   g2.apply_ro(&filter);
   _distance = filter.getDistance();

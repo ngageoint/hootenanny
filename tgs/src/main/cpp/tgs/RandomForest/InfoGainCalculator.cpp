@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "InfoGainCalculator.h"
@@ -44,7 +44,7 @@ namespace Tgs
 
   double InfoGainCalculator::_calcLogFunc(double n)
   {
-    if(n < std::numeric_limits<double>::epsilon())
+    if (n < std::numeric_limits<double>::epsilon())
     {
       n = std::numeric_limits<double>::epsilon();
     }
@@ -71,7 +71,7 @@ namespace Tgs
 
     HashMap<std::string, int>::iterator itr;
 
-    for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+    for (itr = popMap.begin(); itr != popMap.end(); ++itr)
     {
       entSum += _calcLogFunc((double)itr->second / (double)indices.size()); 
     }
@@ -86,12 +86,12 @@ namespace Tgs
  
      //The split will be based on any difference between the value of 2 contiguous values
      //Note the miniumum split idx is always 1
-     for(unsigned int i = 1; i < indices.size(); i++)
+     for (unsigned int i = 1; i < indices.size(); i++)
      {
        double val1 = df.getDataVector(indices[i-1])[fIdx];
        double val2 = df.getDataVector(indices[i])[fIdx];
       //std::cout << "Potential Split " << i << " " << val1 << " " << val2 << std::endl;
-       if(fabs(val1 - val2) >= std::numeric_limits<double>::epsilon())
+       if (fabs(val1 - val2) >= std::numeric_limits<double>::epsilon())
        {
          splits.push_back(i);
        }
@@ -102,7 +102,7 @@ namespace Tgs
     std::vector<unsigned int> & indices, unsigned int & splitIdx, unsigned int & fIdx, 
     double & splitVal, double & purityDelta)
   {
-    if(!df.empty())
+    if (!df.empty())
     {
       //First find the class entropy
       double classEntropy = computeEntropyByClass(df, indices);
@@ -112,7 +112,7 @@ namespace Tgs
       infoGain.resize(fIndices.size());
       std::vector<unsigned int> splitIndices;
       splitIndices.resize(fIndices.size());
-      std::vector<std::vector<unsigned int> > sortedIndices;
+      std::vector<std::vector<unsigned int>> sortedIndices;
       sortedIndices.resize(fIndices.size());
 
       //Sort each indices set based on the factor values
@@ -121,7 +121,7 @@ namespace Tgs
       //of resorting indices on winning factor
       //
       //Note fIndices is the list of factor indices to consider
-      for(unsigned int i = 0; i < fIndices.size(); i++)
+      for (unsigned int i = 0; i < fIndices.size(); i++)
       {
         sortedIndices[i] = indices;                                  //Load up all the data vectors of interest
         df.sortIndicesOnFactorValue( sortedIndices[i], fIndices[i]); //Sort the data vectors by the factor values
@@ -131,10 +131,10 @@ namespace Tgs
       double maxGr = -1E10;
       unsigned int maxFactIdx = 0;
       unsigned int maxIdx = 0;
-      for(unsigned int j = 0; j < fIndices.size(); j++)
+      for (unsigned int j = 0; j < fIndices.size(); j++)
       {
         //std::cout << "IGC: " << infoGain[j] << " " << j << std::endl;
-        if(infoGain[j] > maxGr)
+        if (infoGain[j] > maxGr)
         {
           maxGr = infoGain[j];  //Get the max info gain ratio
           maxFactIdx = fIndices[j];
@@ -142,7 +142,7 @@ namespace Tgs
         }
       }
 
-      if(fabs(maxGr - -1E10) <= std::numeric_limits<double>::epsilon())
+      if (fabs(maxGr - -1E10) <= std::numeric_limits<double>::epsilon())
       {
         return false;
       }
@@ -195,7 +195,7 @@ namespace Tgs
       df.getClassPopulations(tmpIndices, popMap);
 
       entSum = 0.0;
-      for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+      for (itr = popMap.begin(); itr != popMap.end(); ++itr)
       {
         entSum += _calcLogFunc((double)itr->second / (double)(i + 1)); 
       }
@@ -214,7 +214,7 @@ namespace Tgs
 
       int tmpSize = indices.size() - i;
       entSum = 0.0;
-      for(itr = popMap.begin(); itr != popMap.end(); ++itr)
+      for (itr = popMap.begin(); itr != popMap.end(); ++itr)
       {
         entSum += _calcLogFunc((double)itr->second / (double)tmpSize); 
       }
@@ -224,15 +224,15 @@ namespace Tgs
     double maxIg = -1E20;
     unsigned int maxSplitIdx = 1;
     //Compute the class entropy per split
-    for(unsigned int i = 0; i < splits.size(); i++)
+    for (unsigned int i = 0; i < splits.size(); i++)
     {
 //       //Construct the left and right splits based on splits[i] (a split point within indices)
 //       std::vector<unsigned int> leftSplit;
 //       std::vector<unsigned int> rightSplit;
 // 
-//       for(unsigned int j = 0; j < indices.size(); j++)
+//       for (unsigned int j = 0; j < indices.size(); j++)
 //       {
-//         if(j < splits[i])
+//         if (j < splits[i])
 //         {
 //           leftSplit.push_back(indices[j]);
 //         }
@@ -279,7 +279,7 @@ namespace Tgs
       //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
       //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
-      if(infoGain > maxIg)
+      if (infoGain > maxIg)
       {
         maxIg = infoGain;
         maxSplitIdx = splits[i];
@@ -305,14 +305,14 @@ namespace Tgs
     double maxGr = -1E10;
     unsigned int maxSplitIdx = 0;
     //Compute the class entropy per split
-    for(unsigned int i = 0; i < splits.size(); i++)
+    for (unsigned int i = 0; i < splits.size(); i++)
     {
       std::vector<unsigned int> leftSplit;
       std::vector<unsigned int> rightSplit;
 
-      for(unsigned int j = 0; j < indices.size(); j++)
+      for (unsigned int j = 0; j < indices.size(); j++)
       {
-        if(j < splits[i])
+        if (j < splits[i])
         {
           leftSplit.push_back(indices[j]);
         }
@@ -329,7 +329,7 @@ namespace Tgs
       double infoGain = totalEntropy - splitEnt;
       double splitInfo = leftEnt + rightEnt;
 
-      if(splitInfo <= 0)
+      if (splitInfo <= 0)
       {
         splitInfo = 1E-10;
       }
@@ -339,7 +339,7 @@ namespace Tgs
       //std::cout << "left " << leftEnt << " right " << rightEnt << " split " << splitEnt << std::endl;
       //std::cout << "leftSize " << leftSplit.size() << " rightSize " << rightSplit.size() << std::endl;
 
-      if(gainRatio > maxGr)
+      if (gainRatio > maxGr)
       {
         maxGr = gainRatio;
         maxSplitIdx = splits[i];

@@ -30,9 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-
-// Boost
-#include <boost/shared_ptr.hpp>
+#include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
 #include <QFile>
@@ -67,14 +65,14 @@ public:
 
   OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
-  virtual bool isSupported(QString url) override { return url.toLower().endsWith(".json"); }
+  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".json"); }
 
   /**
    * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
    */
   static QString markupString(const QString& str);
 
-  virtual void open(QString url) override;
+  virtual void open(const QString& url) override;
 
   virtual void close() { if (_fp.isOpen()) { _fp.close(); } }
 
@@ -85,19 +83,21 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(ConstOsmMapPtr map, const QString& path);
+  void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(ConstOsmMapPtr map);
+  virtual void write(const ConstOsmMapPtr& map);
 
   /**
    * Very handy for testing.
    */
-  QString toString(ConstOsmMapPtr map);
+  QString toString(const ConstOsmMapPtr& map);
 
   /**
    * Allow the writer to write empty tags to JSON
    */
   void SetWriteEmptyTags(bool writeEmpty) { _writeEmptyTags = writeEmpty; }
+
+  void setIncludeCircularError(bool includeCircularError) { _addExportTagsVisitor.setIncludeCircularError( includeCircularError); }
 
   virtual QString supportedFormats() override { return ".json"; }
 
@@ -124,9 +124,14 @@ protected:
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
-  bool _hasTags(ConstElementPtr e);
+  bool _hasTags(const ConstElementPtr& e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
-  void _writeTags(ConstElementPtr e);
+  void _writeTags(const ConstElementPtr& e);
+
+private:
+
+  AddExportTagsVisitor _addExportTagsVisitor;
+
 };
 
 } // hoot

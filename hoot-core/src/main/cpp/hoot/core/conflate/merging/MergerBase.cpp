@@ -67,7 +67,7 @@ bool MergerBase::isValid(const ConstOsmMapPtr& map) const
   const PairsSet& pairs = _getPairs();
   LOG_VART(hoot::toString(pairs));
   // make sure the map contains all our elements and they aren't conflated.
-  for (set< pair<ElementId, ElementId> >::const_iterator it = pairs.begin();
+  for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
        it != pairs.end() && result; ++it)
   {
     LOG_VART(it->first);

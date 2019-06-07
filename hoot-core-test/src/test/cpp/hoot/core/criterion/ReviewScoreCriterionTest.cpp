@@ -109,13 +109,13 @@ public:
     uut2.setInvertThresholding(true);
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.0");
-    CPPUNIT_ASSERT(uut2.isSatisfied(reviewRelation));
+    CPPUNIT_ASSERT(!uut2.isSatisfied(reviewRelation));
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "0.1");
-    CPPUNIT_ASSERT(uut2.isSatisfied(reviewRelation));
+    CPPUNIT_ASSERT(!uut2.isSatisfied(reviewRelation));
 
     reviewRelation->getTags().set(MetadataTags::HootReviewScore(), "1.0");
-    CPPUNIT_ASSERT(uut2.isSatisfied(reviewRelation));
+    CPPUNIT_ASSERT(!uut2.isSatisfied(reviewRelation));
   }
 
   void invalidThresholdTest()

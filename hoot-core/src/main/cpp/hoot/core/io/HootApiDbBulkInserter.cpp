@@ -49,7 +49,7 @@
 namespace hoot
 {
 
-unsigned int HootApiDbBulkInserter::logWarnCount = 0;
+int HootApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbBulkInserter)
 
@@ -67,14 +67,14 @@ HootApiDbBulkInserter::~HootApiDbBulkInserter()
   close();
 }
 
-bool HootApiDbBulkInserter::isSupported(QString urlStr)
+bool HootApiDbBulkInserter::isSupported(const QString& urlStr)
 {
   LOG_VART(urlStr);
   QUrl url(urlStr);
   return _database.isSupported(url) && _copyBulkInsertActivated;
 }
 
-void HootApiDbBulkInserter::open(QString url)
+void HootApiDbBulkInserter::open(const QString& url)
 {
   _outputUrl = url;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -50,6 +50,8 @@ class TagRenameKeyVisitorTest : public HootTestFixture
 public:
 
   TagRenameKeyVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -61,11 +63,11 @@ public:
     TagRenameKeyVisitor visitor("source", "source_modified");
     map->visitRw(visitor);
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor1);
     CPPUNIT_ASSERT_EQUAL((long)0, (long)keyCountVisitor1->getStat());
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
     map->visitRo(*keyCountVisitor2);
     CPPUNIT_ASSERT_EQUAL((long)6, (long)keyCountVisitor2->getStat());
   }
@@ -77,7 +79,7 @@ private:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);
+    reader.read(_inputPath + "TagRenameKeyVisitorTest.osm", map);
     return map;
   }
 

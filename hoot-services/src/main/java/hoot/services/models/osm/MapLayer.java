@@ -41,9 +41,10 @@ public class MapLayer {
     private String name;
     private Timestamp date;
     private String lastAccessed;
-    private boolean canExportToOsmApiDb;
+    private boolean grail;
     private Boolean isPublic;
     private long userId;
+    private long folderId;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -82,12 +83,12 @@ public class MapLayer {
         this.date = new Timestamp(date.getTime());
     }
 
-    public boolean getCanExportToOsmApiDb() {
-        return canExportToOsmApiDb;
+    public boolean getGrail() {
+        return grail;
     }
 
-    public void setCanExportToOsmApiDb(boolean canExport) {
-        this.canExportToOsmApiDb = canExport;
+    public void setGrail(boolean canExport) {
+        this.grail = canExport;
     }
 
     public String getLastAccessed() {
@@ -103,5 +104,13 @@ public class MapLayer {
     }
     public void setPublicCol(Boolean publicCol) {
         this.isPublic = publicCol;
+    }
+
+    public long getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(long folderId) {
+        this.folderId = folderId;
     }
 }

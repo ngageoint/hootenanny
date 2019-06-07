@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Factory.h"
@@ -35,8 +35,6 @@
 // Standard Include
 #include <iostream>
 using namespace std;
-
-using namespace boost;
 
 namespace hoot
 {
@@ -51,14 +49,14 @@ Factory::~Factory()
 {
 }
 
-any Factory::constructObject(const std::string& name)
+boost::any Factory::constructObject(const std::string& name)
 {
   QMutexLocker locker(&_mutex);
   if (_creators.find(name) == _creators.end())
   {
     throw HootException("Could not find object to construct. (" + name + ")");
   }
-  boost::shared_ptr<ObjectCreator> c = _creators[name];
+  std::shared_ptr<ObjectCreator> c = _creators[name];
   locker.unlock();
 
   return c->create();
@@ -79,10 +77,10 @@ vector<std::string> Factory::getObjectNamesByBase(const std::string& baseName)
   vector<std::string> result;
 
   LOG_VART(baseName);
-  for (std::map<std::string, boost::shared_ptr<ObjectCreator> >::const_iterator it = _creators.begin();
+  for (std::map<std::string, std::shared_ptr<ObjectCreator>>::const_iterator it = _creators.begin();
        it != _creators.end(); ++it)
   {
-    boost::shared_ptr<ObjectCreator> c = it->second;
+    std::shared_ptr<ObjectCreator> c = it->second;
     //LOG_VART(c->getName());
     //LOG_VART(c->getBaseName());
     if (c->getBaseName() == baseName)
@@ -98,7 +96,7 @@ bool Factory::hasClass(const std::string& name)
   return _creators.find(name) != _creators.end();
 }
 
-void Factory::registerCreator(boost::shared_ptr<ObjectCreator> oc, bool baseClass)
+void Factory::registerCreator(const std::shared_ptr<ObjectCreator>& oc, bool baseClass)
 {
   QMutexLocker locker(&_mutex);
   if (baseClass == false && oc->getBaseName() == oc->getName())

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -35,6 +35,7 @@
 
 // STL
 #include <vector>
+#include <set>
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -76,8 +77,8 @@ public:
   long findNearestWay(geos::geom::Coordinate c) const;
 
   /**
-   * Should run in approximately O(lg(n)).
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Should run in approximately O(log(n)).
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
@@ -90,33 +91,33 @@ public:
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
-   * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
-   * Due to the buffer added to ways this is only efficient with a planar projection.
+   * Return all ways that intersect the given envelope. This runs in approximately O(log(n)) time.
+   * Due to the buffer added to ways, this is only efficient with a planar projection.
    */
   std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
   Meters getIndexSlush() const { return _indexSlush; }
 
-  boost::shared_ptr<NodeToWayMap> getNodeToWayMap() const;
+  std::shared_ptr<NodeToWayMap> getNodeToWayMap() const;
 
   /**
    * Returns a map that can tell you which relations an element is part of.
    */
-  const boost::shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
+  const std::shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
 
   /**
    * Unlike the way tree the node tree has no approximations built in.
    */
-  boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
+  std::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
-   * Get all the direct parents of a given element. This will not return grand parents, etc.
+   * Get all the direct parents of a given element. This will not return grandparents, etc.
    */
   std::set<ElementId> getParents(ElementId eid) const;
 
   const std::vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
-  boost::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
+  std::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
 
   /**
    * This gets called before an element changes. Between this call and the call to
@@ -136,7 +137,7 @@ public:
 
   /**
    * Checks that some of the existing indexes are consistent with the OsmMap backend. Any
-   * inconsitencies will either be logged as warnings or throw exceptions.
+   * inconsistencies will either be logged as warnings or throw exceptions.
    */
   bool validate() const;
 
@@ -154,11 +155,11 @@ private:
 
   mutable std::set<long> _pendingRelationChange;
 
-  mutable boost::shared_ptr<Tgs::HilbertRTree> _nodeTree;
-  mutable boost::shared_ptr<Tgs::HilbertRTree> _wayTree;
+  mutable std::shared_ptr<Tgs::HilbertRTree> _nodeTree;
+  mutable std::shared_ptr<Tgs::HilbertRTree> _wayTree;
 
-  mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
-  mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;
+  mutable std::shared_ptr<NodeToWayMap> _nodeToWayMap;
+  mutable std::shared_ptr<ElementToRelationMap> _elementToRelationMap;
 
   mutable std::vector<long> _treeIdToNid;
   mutable std::vector<long> _treeIdToWid;

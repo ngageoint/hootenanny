@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -36,7 +36,7 @@
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/index/metric-hybrid/FqTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/visitors/GetTagValuesVisitor.h>
+#include <hoot/core/visitors/UniqueTagValuesVisitor.h>
 
 // Qt
 #include <QStringList>
@@ -233,11 +233,11 @@ public:
   void runRandomQueryTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
+    OsmPbfReader(true).read("test-files/index/metric-hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;
-    GetTagValuesVisitor v1("name", bag, true);
-    GetTagValuesVisitor v2("alt_name", bag, true);
+    UniqueTagValuesVisitor v1("name", bag, true);
+    UniqueTagValuesVisitor v2("alt_name", bag, true);
     map->visitRo(v1);
     map->visitRo(v2);
 

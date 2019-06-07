@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOMFORESTUTILITIES_H
 #define RANDOMFORESTUTILITIES_H
@@ -41,7 +41,7 @@ namespace Tgs
   {
     std::vector<std::string> featureLabels;  //The feature labels matching each element in _dataVectors
     std::vector<std::string> classLabels;  //The ordered class labels
-    std::map<std::string, std::vector<std::vector<double> > > trainingVectors; //The data for each training vector
+    std::map<std::string, std::vector<std::vector<double>>> trainingVectors; //The data for each training vector
   };
 
   class RandomForestUtilities
@@ -58,7 +58,7 @@ namespace Tgs
      * @param splitPercentages the percentages values for splitting data (should be size of number of splits and final value should be 1.0)
      * @return sets of data vector indices by classes
      */
-    static std::vector<std::map<std::string, std::pair<unsigned int, unsigned int> > > createDataSets(
+    static std::vector<std::map<std::string, std::pair<unsigned int, unsigned int>>> createDataSets(
       RandomForestInputs rfInputs, std::vector<double> splitPercentages);
 
     /**
@@ -69,7 +69,7 @@ namespace Tgs
      * @return the trained random forest model
      */
     static RandomForestManager generateModel(RandomForestInputs & rfInputs, unsigned int numTrees,
-      std::map<std::string, std::pair<unsigned int, unsigned int> > & trainingRangeMap);
+      std::map<std::string, std::pair<unsigned int, unsigned int>> & trainingRangeMap);
 
     /**
      * @brief generateModel generates a multithreaded random forest model
@@ -80,7 +80,7 @@ namespace Tgs
      */
     static MultithreadedRandomForestManager generateMultithreadModel(RandomForestInputs & rfInputs,
       unsigned int numTrees,
-      std::map<std::string, std::pair<unsigned int, unsigned int> > & trainingRangeMap);
+      std::map<std::string, std::pair<unsigned int, unsigned int>> & trainingRangeMap);
 
     /**
      * @brief generateTrainingDataFromFile creates a random forest from a file containing labeled training data

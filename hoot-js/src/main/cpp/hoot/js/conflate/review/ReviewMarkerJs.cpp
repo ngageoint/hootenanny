@@ -75,7 +75,7 @@ void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)
 
   double score = toCpp<double>(args[4]);
 
-  vector<QString> choices = toCpp< vector<QString> >(args[5]);
+  vector<QString> choices = toCpp<vector<QString>>(args[5]);
 
   ReviewMarker().mark(osmMap, e, note, reviewType, score, choices);
 

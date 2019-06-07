@@ -47,14 +47,14 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int LargeWaySplitter::logWarnCount = 0;
+int LargeWaySplitter::logWarnCount = 0;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
 {
   _threshold = threshold;
 }
 
-void LargeWaySplitter::apply(boost::shared_ptr<OsmMap> map)
+void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -63,8 +63,8 @@ void LargeWaySplitter::apply(boost::shared_ptr<OsmMap> map)
   // go through each way
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    boost::shared_ptr<Way> w = it->second;
-    boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    std::shared_ptr<Way> w = it->second;
+    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     double len = ls->getLength();
     // if the way is larger than the threshold
     if (len > _threshold)
@@ -75,13 +75,13 @@ void LargeWaySplitter::apply(boost::shared_ptr<OsmMap> map)
   }
 }
 
-void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
+void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces)
 {
   double startLength = ElementConverter(_map).convertToLineString(way)->getLength();
   double pieceLength = startLength / (double)numPieces;
 
   // iteratively carve off pieceLength sized ways from the beginning
-  boost::shared_ptr<Way> tmp = way;
+  std::shared_ptr<Way> tmp = way;
   for (int i = 0; i < numPieces - 1; i++)
   {
     WayLocation wl(_map, tmp, pieceLength);
@@ -100,14 +100,14 @@ void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
     }
     else
     {
-      vector< boost::shared_ptr<Way> > pieces = WaySplitter::split(_map, tmp, wl);
+      vector<std::shared_ptr<Way>> pieces = WaySplitter::split(_map, tmp, wl);
       assert(pieces.size() == 2);
       tmp = pieces[1];
     }
   }
 }
 
-void LargeWaySplitter::splitWays(boost::shared_ptr<OsmMap> map, double threshold)
+void LargeWaySplitter::splitWays(const std::shared_ptr<OsmMap>& map, double threshold)
 {
   LargeWaySplitter a(threshold);
   a.apply(map);

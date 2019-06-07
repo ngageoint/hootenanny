@@ -31,11 +31,14 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,6 +62,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
@@ -67,7 +71,10 @@ import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
+import hoot.services.command.CommandResult;
+import hoot.services.models.db.Folders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 
 
 /**
@@ -182,6 +189,54 @@ public class DbUtils {
     }
 
     /**
+     * Creates a new folder under the parent directory
+     * if not already present and returns it's id
+     *
+     * @param folderName folder name
+     * @param parentId parent directory id that the folder will get linked to
+     */
+    public static Long createFolder(String folderName, Long parentId, Long userId, Boolean isPublic) {
+        Long folderId = getFolderByNameForUser(folderName, parentId, userId);
+
+        if (folderId == null) {
+            folderId = createQuery()
+                    .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
+                    .from()
+                    .fetchOne();
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+
+            createQuery()
+                    .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+                    .values(folderId, now, folderName, isPublic, userId, parentId).execute();
+        }
+
+        return folderId;
+    }
+
+    public static Long getFolderByNameForUser(String name, Long parentId, Long userId) {
+        SQLQuery<Long> sql = createQuery()
+                .select(folders.id)
+                .from(folders)
+                .where(folders.displayName.eq(name).and(folders.parentId.eq(parentId).and(folders.userId.eq(userId))));
+        return sql.fetchFirst();
+    }
+
+    public static void setFolderMapping(Long mapId, Long folderId) {
+        Long newId = createQuery()
+            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
+            .from()
+            .fetchOne();
+
+        createQuery()
+            .insert(folderMapMappings)
+            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+            .values(newId, mapId, folderId).execute();
+    }
+
+
+    /**
      * Sets the parent directory for the specified folder
      *
      * @param folderId folder id whos parent we are setting
@@ -261,6 +316,13 @@ public class DbUtils {
                 .set(Collections.singletonList(maps.tags),
                         Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
                 .execute();
+    }
+
+    public static boolean grailEligible(long inputId) {
+        Map<String, String> tags = getMapsTableTags(inputId);
+        String sourceInfo = tags.get("source");
+
+        return sourceInfo != null && sourceInfo.equals("rails");
     }
 
     /**
@@ -506,5 +568,158 @@ public class DbUtils {
         }
 
         return -1;
+    }
+
+    /**
+     * Inserts the command_status if it doesn't exist already, else update the stdout, stderr, and percent_complete for the command
+     * This function will also call updateJobProgress
+     * @param commandResult
+     */
+    public static void upsertCommandStatus(CommandResult commandResult) {
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection(); Statement dbQuery = conn.createStatement()) {
+            if(commandResult.getId() == null) {
+                String queryInsert = String.format(
+                        "INSERT INTO command_status(start, command, job_id, stdout, stderr, percent_complete) " +
+                        "VALUES('%s', '%s', '%s', '%s', '%s', '%d') ",
+                        commandResult.getStart(),
+                        commandResult.getCommand(),
+                        commandResult.getJobId(),
+                        commandResult.getStdout(),
+                        commandResult.getStderr(),
+                        commandResult.getPercentProgress());
+
+                dbQuery.executeUpdate(queryInsert, Statement.RETURN_GENERATED_KEYS);
+                queryResult = dbQuery.getGeneratedKeys();
+
+                if (queryResult.next()) {
+                    Long id = queryResult.getLong(1);
+                    commandResult.setId(id);
+                }
+            }
+            else {
+                String queryUpdate = String.format(
+                        "UPDATE command_status " +
+                        "SET stdout = '%s', stderr = '%s', percent_complete = '%d' " +
+                        "WHERE id=%d",
+                        commandResult.getStdout(), commandResult.getStderr(), commandResult.getPercentProgress(), commandResult.getId());
+
+                dbQuery.executeUpdate(queryUpdate);
+            }
+
+            updateJobProgress(commandResult.getJobId());
+
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+        catch(SQLException exc) {
+            logger.error(exc.getMessage());
+        }
+    }
+
+    /**
+     * Sets exit code and finish time for the specified command
+     * @param commandResult
+     */
+    public static void completeCommandStatus(CommandResult commandResult) {
+        try (Connection conn = getConnection(); Statement dbQuery = conn.createStatement()) {
+            String queryUpdate = String.format(
+                    "UPDATE command_status " +
+                    "SET exit_code = '%d', finish = '%s' " +
+                    "WHERE id=%d",
+                    commandResult.getExitCode(), commandResult.getFinish(), commandResult.getId());
+
+            dbQuery.executeUpdate(queryUpdate);
+
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
+        }
+        catch(SQLException exc) {
+            logger.error(exc.getMessage());
+        }
+    }
+
+    /**
+     * Updates the percent_complete for the job matching the specified jobId
+     * @param jobId
+     */
+    public static void updateJobProgress(String jobId) {
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection(); Statement dbQuery = conn.createStatement()) {
+            // Get count for commands that have completed
+            String completedCommandsQuery = String.format("SELECT count(*) AS total FROM command_status WHERE exit_code = 0 and job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(completedCommandsQuery);
+            int completedCount = -1;
+            if(queryResult.next()) {
+                completedCount = queryResult.getInt("total");
+            }
+
+            // Get current running commands percent completed
+            String currentCommandQuery = String.format("SELECT percent_complete AS percent FROM command_status WHERE exit_code is null and job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(currentCommandQuery);
+            int currentCommandPercent = -1;
+            if(queryResult.next()) {
+                currentCommandPercent = queryResult.getInt("percent");
+            }
+
+            // Get total number of commands for the job
+            String totalCommandsQuery = String.format("SELECT trackable_command_count AS total, percent_complete AS currentPercent FROM job_status WHERE job_id = '%s'", jobId);
+            queryResult = dbQuery.executeQuery(totalCommandsQuery);
+            int totalCommandCount = 0;
+            int oldProgress = 0;
+            if(queryResult.next()) {
+                totalCommandCount = queryResult.getInt("total");
+                oldProgress = queryResult.getInt("currentPercent");
+            }
+
+            // check that some value was returned that isnt the default. total command count must be > 0
+            if(completedCount > -1 && currentCommandPercent > -1 && totalCommandCount > 0) {
+                int currentJobProgress = (((completedCount * 100) + currentCommandPercent) / totalCommandCount);
+
+                // Helps avoid redundant sql updates
+                if(currentJobProgress != oldProgress) {
+                    String queryUpdate = String.format(
+                            "UPDATE job_status SET percent_complete = '%d' WHERE job_id = '%s'",
+                            currentJobProgress, jobId);
+
+                    dbQuery.executeUpdate(queryUpdate);
+
+                    if (!conn.getAutoCommit()) {
+                        conn.commit();
+                    }
+                }
+            }
+        }
+        catch(SQLException exc) {
+            logger.error(exc.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves the percent_complete for the job matching the specified jobId
+     * @param jobId
+     * @return
+     */
+    public static Integer getJobProgress(String jobId) {
+        int progress = 0;
+        ResultSet queryResult;
+
+        try (Connection conn = getConnection(); Statement dbQuery = conn.createStatement()) {
+            String queryUpdate = String.format("SELECT percent_complete AS percent_complete from job_status WHERE job_id = '%s'", jobId);
+
+            queryResult = dbQuery.executeQuery(queryUpdate);
+            if(queryResult.next()) {
+                progress = queryResult.getInt("percent_complete");
+            }
+        }
+        catch(SQLException exc) {
+            logger.error("ERROR HERE: " + exc.getMessage());
+        }
+
+        return progress;
     }
 }

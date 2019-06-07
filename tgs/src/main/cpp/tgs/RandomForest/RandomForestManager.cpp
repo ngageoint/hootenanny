@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RandomForestManager.h"
@@ -57,9 +57,9 @@ namespace Tgs
   {
     try
     {
-      for(unsigned int i = 0; i < (unsigned int)numForests; i++)
+      for (unsigned int i = 0; i < (unsigned int)numForests; i++)
       {
-        _rfList.push_back(boost::shared_ptr<RandomForest>(new RandomForest()));
+        _rfList.push_back(std::shared_ptr<RandomForest>(new RandomForest()));
       }
     }
     catch(const Exception & e)
@@ -74,11 +74,11 @@ namespace Tgs
     {
       _rfList.clear();
 
-      for(unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
+      for (unsigned int fIdx = 0; fIdx < (unsigned int)forestNodes.size(); fIdx++)
       {
         QDomElement forestElement = forestNodes.at(fIdx).toElement();
         _rfList.push_back(
-          boost::shared_ptr<RandomForest>(new RandomForest()));
+          std::shared_ptr<RandomForest>(new RandomForest()));
         _rfList.back()->importModel(forestElement);
       }
     }

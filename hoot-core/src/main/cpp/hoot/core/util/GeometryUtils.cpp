@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int GeometryUtils::logWarnCount = 0;
+int GeometryUtils::logWarnCount = 0;
 
 union DoubleCast
 {
@@ -195,7 +195,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    const int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
     if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
@@ -220,22 +220,14 @@ Geometry* GeometryUtils::validateGeometryCollection(
     delete result;
     result = tmp;
   }
-  //return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
   return result;
-
-//  vector<Geometry*>* children = new vector<Geometry*>();
-//  children->reserve(gc->getNumGeometries());
-//  for (size_t i = 0; i < gc->getNumGeometries(); i++)
-//  {
-//    children->push_back(validateGeometry(gc->getGeometryN(i)));
-//  }
-//  return GeometryFactory::getDefaultInstance()->createGeometryCollection(children);
 }
 
 Geometry* GeometryUtils::validateLineString(const LineString* ls)
 {
   // See JTS Secrets for details: http://2007.foss4g.org/presentations/view.php?abstract_id=115
-  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
+  std::shared_ptr<Point> p(
+    GeometryFactory::getDefaultInstance()->createPoint(ls->getCoordinateN(0)));
   return ls->Union(p.get());
 }
 
@@ -251,9 +243,9 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   // if the input polygon isn't valid.
   if (p->isValid() == false)
   {
-    boost::shared_ptr<Geometry> tmp;
-    // buffer it by zero to attempt to fix topology errors and store the result in an boost::shared_ptr
-    // that will self delete.
+    std::shared_ptr<Geometry> tmp;
+    // buffer it by zero to attempt to fix topology errors and store the result in an
+    // std::shared_ptr that will self delete.
     tmp.reset(p->buffer(0));
     // run the new geometry through the whole routine again just in case the type changed.
     result = validateGeometry(tmp.get());
@@ -265,8 +257,8 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   else
   {
     const LineString* oldShell = p->getExteriorRing();
-    boost::shared_ptr<LinearRing> oldLinearRing(GeometryFactory::getDefaultInstance()->createLinearRing(
-      *oldShell->getCoordinates()));
+    std::shared_ptr<LinearRing> oldLinearRing(
+      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());
@@ -298,42 +290,25 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
-Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
+Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
-  const QString errMsg = "Invalid envelope string: " + boundsStr;
-  if (boundsStr.contains(","))
+  const QString errorMsg = "Invalid envelope string: " + boundsStr;
+  const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
+  if (!boundsRegEx.exactMatch(boundsStr))
   {
-    const QStringList bboxParts = boundsStr.trimmed().split(",");
-    int size = bboxParts.size();
-    if (size == 4 || size == 5)
-    {
-      bool parseSuccess = true;
-      bool ok;
-      const double minLat = bboxParts[1].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double minLon = bboxParts[0].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double maxLat = bboxParts[3].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      const double maxLon = bboxParts[2].toDouble(&ok);
-      parseSuccess = parseSuccess && ok;
-      //  The fifth element, if it exists, can be ignored
-      if (!parseSuccess)
-      {
-        throw HootException(errMsg);
-      }
-      return Envelope(minLon, maxLon, minLat, maxLat);
-    }
-    else
-    {
-      throw HootException(errMsg);
-    }
+    throw HootException(errorMsg);
   }
-  else
+  const QStringList boundsParts = boundsStr.split(",");
+  assert(boundsParts.size() == 4);
+  if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
+       boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
   {
-    throw HootException(errMsg);
+    throw HootException(errorMsg);
   }
+  return
+    Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
+      boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
 }
 
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)

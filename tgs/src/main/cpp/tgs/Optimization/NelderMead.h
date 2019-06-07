@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2012 Sebastian Morr <sebastian@morr.cc>
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NELDERMEAD_H
 #define NELDERMEAD_H
@@ -46,14 +46,14 @@
 
 // Tgs
 #include <tgs/TgsException.h>
-#include <tgs/SharedPtr.h>
 #include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
 
 // Float vector with standard operations
-class Vector {
+class Vector
+{
 public:
     Vector()
     {
@@ -71,11 +71,13 @@ public:
       coords.push_back(c0);
     }
 
-    Vector(double c0, double c1) {
+    Vector(double c0, double c1)
+    {
         coords.push_back(c0);
         coords.push_back(c1);
     }
-    Vector(double c0, double c1, double c2) {
+    Vector(double c0, double c1, double c2)
+    {
         coords.push_back(c0);
         coords.push_back(c1);
         coords.push_back(c2);
@@ -89,75 +91,98 @@ public:
 
     // add more constructors when N gets > 3
 
-    double& operator[](int i) {
+    double& operator[](int i)
+    {
         return coords[i];
     }
-    double at(int i) const {
+    double at(int i) const
+    {
         return coords[i];
     }
-    int dimension() const {
+    int dimension() const
+    {
         return coords.size();
     }
-    void prepare(int size) {
-        for (int i=0; i<size; i++) {
+    void prepare(int size)
+    {
+        for (int i=0; i<size; i++)
+        {
             coords.push_back(0);
         }
     }
-    Vector operator+(Vector other) {
+    Vector operator+(Vector other)
+    {
         Vector result;
         result.prepare(dimension());
-        for (int i=0; i<dimension(); i++) {
+        for (int i=0; i<dimension(); i++)
+        {
             result[i] = coords[i] + other[i];
         }
         return result;
     }
-    void operator+=(Vector other) {
-        for (int i=0; i<dimension(); i++) {
+    void operator+=(Vector other)
+    {
+        for (int i=0; i<dimension(); i++)
+        {
             coords[i] += other[i];
         }
     }
-    Vector operator-(Vector other) {
+    Vector operator-(Vector other)
+    {
         Vector result;
         result.prepare(dimension());
-        for (int i=0; i<dimension(); i++) {
+        for (int i=0; i<dimension(); i++)
+        {
             result[i] = coords[i] - other[i];
         }
         return result;
     }
-    bool operator==(Vector other) {
-        if (dimension() != other.dimension()) {
+    bool operator==(Vector other)
+    {
+        if (dimension() != other.dimension())
+        {
             return false;
         }
-        for (int i=0; i<dimension(); i++) {
-            if (other[i] != coords[i]) {
+        for (int i=0; i<dimension(); i++)
+        {
+            if (other[i] != coords[i])
+            {
                 return false;
             }
         }
         return true;
     }
-    Vector operator*(double factor) {
+    Vector operator*(double factor)
+    {
         Vector result;
         result.prepare(dimension());
-        for (int i=0; i<dimension(); i++) {
+        for (int i=0; i<dimension(); i++)
+        {
             result[i] = coords[i]*factor;
         }
         return result;
     }
-    Vector operator/(double factor) {
+    Vector operator/(double factor)
+    {
         Vector result;
         result.prepare(dimension());
-        for (int i=0; i<dimension(); i++) {
+        for (int i=0; i<dimension(); i++)
+        {
             result[i] = coords[i]/factor;
         }
         return result;
     }
-    void operator/=(double factor) {
-        for (int i=0; i<dimension(); i++) {
+    void operator/=(double factor)
+    {
+        for (int i=0; i<dimension(); i++)
+        {
             coords[i] /= factor;
         }
     }
-    bool operator<(const Vector& other) const {
-        for (int i=0; i<dimension(); i++) {
+    bool operator<(const Vector& other) const
+    {
+        for (int i=0; i<dimension(); i++)
+        {
             if (at(i) < other.at(i))
                 return false;
             else if (at(i) > other.at(i))
@@ -165,9 +190,11 @@ public:
         }
         return false;
     }
-    double length() {
+    double length()
+    {
         double sum = 0;
-        for (int i=0; i<dimension(); i++) {
+        for (int i=0; i<dimension(); i++)
+        {
             sum += coords[i]*coords[i];
         }
         return pow(sum, 0.5);
@@ -181,7 +208,8 @@ private:
 };
 
 // This class stores known values for vectors. It throws unknown vectors.
-class ValueDB {
+class ValueDB
+{
 public:
   ValueDB() { }
 
@@ -216,7 +244,8 @@ private:
   std::map<Vector, double> values;
 };
 
-class NelderMead {
+class NelderMead
+{
 public:
 
   class VectorSort
@@ -308,8 +337,10 @@ public:
 
     return result;
   }
-  void insert(Vector vec) {
-      if (vectors.size() < dimension+1) {
+  void insert(Vector vec)
+  {
+      if (vectors.size() < dimension+1)
+      {
           vectors.push_back(vec);
       }
   }
@@ -320,18 +351,22 @@ public:
   {
     db.insert(vec, score);
 
-    if (vectors.size() < dimension+1) {
+    if (vectors.size() < dimension+1)
+    {
         vectors.push_back(vec);
     }
 
     // otherwise: optimize!
-    if (vectors.size() == dimension+1) {
-        while(!done()) {
+    if (vectors.size() == dimension+1)
+    {
+        while (!done())
+        {
           //cout << "count: " << count++ << endl;
           sort(vectors.begin(), vectors.end(), VectorSort(this));
             Vector cog; // center of gravity
             cog.prepare(dimension);
-            for (size_t i = 1; i<=dimension; i++) {
+            for (size_t i = 1; i<=dimension; i++)
+            {
                 cog += vectors[i];
             }
             cog /= dimension;
@@ -340,23 +375,32 @@ public:
             Vector second_worst = vectors[1];
             // reflect
             Vector reflected = cog + (cog - worst)*alpha;
-            if (f(reflected) > f(second_worst) && f(reflected) < f(best)) {
+            if (f(reflected) > f(second_worst) && f(reflected) < f(best))
+            {
                 vectors[0] = reflected;
-            } else if (f(reflected) > f(best)) {
+            } else if (f(reflected) > f(best))
+            {
                 // expand
                 Vector expanded = cog + (cog - worst)*gamma;
-                if (f(expanded) > f(reflected)) {
+                if (f(expanded) > f(reflected))
+                {
                     vectors[0] = expanded;
-                } else {
+                } else
+                {
                     vectors[0] = reflected;
                 }
-            } else {
+            } else
+            {
                 // contract
                 Vector contracted = cog + (cog - worst)*rho;
-                if (f(contracted) > f(worst)) {
+                if (f(contracted) > f(worst))
+                {
                     vectors[0] = contracted;
-                } else {
-                    for (size_t i=0; i<dimension; i++) {
+                }
+                else
+                {
+                    for (size_t i=0; i<dimension; i++)
+                    {
                         vectors[i] = best + (vectors[i] - best)*sigma;
                     }
                 }
@@ -366,17 +410,21 @@ public:
         // algorithm is terminating, output: simplex' center of gravity
         Vector cog;
         cog.prepare(dimension);
-        for (size_t i = 0; i<=dimension; i++) {
+        for (size_t i = 0; i<=dimension; i++)
+        {
             cog += vectors[i];
         }
         return cog/(dimension+1);
-    } else {
+    }
+    else
+    {
         // as long as we don't have enough vectors, request random ones,
         // with coordinates between 0 and 1. If you want other start vectors,
         // simply ignore these and use `step` on the vectors you want.
         Vector result;
         result.prepare(dimension);
-        for (size_t i = 0; i<dimension; ++i) {
+        for (size_t i = 0; i<dimension; ++i)
+        {
             result[i] = 0.001*(Tgs::Random::instance()->generateInt(1000));
         }
         return result;
@@ -404,7 +452,7 @@ private:
     return s;
   }
 
-  boost::shared_ptr<Function> _function;
+  std::shared_ptr<Function> _function;
   size_t dimension;
   double alpha, gamma, rho, sigma;
   double termination_distance;

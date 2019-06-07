@@ -25,9 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include <ogr_spatialref.h>
-#include <boost/shared_ptr.hpp>
-
 #include "ElementConverter.h"
 
 // GDAL
@@ -43,25 +40,25 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/NotImplementedException.h>
-#include <hoot/core/visitors/MultiLineStringVisitor.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/CollectionCriterion.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/visitors/MultiLineStringVisitor.h>
 
 // Qt
 #include <QString>
 #include <QStringList>
 
 // Standard
-#include <stdint.h>
+#include <cstdint>
 
 using namespace geos::geom;
 using namespace std;
@@ -73,12 +70,12 @@ ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
   _constProvider(provider),
   _spatialReference(provider->getProjection())
 {
-
 }
 
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
+  // TODO: turn this into an exception
   assert(MapProjector::isPlanar(_constProvider));
 
   // if the element is not a point and is not an area.
@@ -87,9 +84,8 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   // linear before it will assume it doesn't have a length.
   if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
   {
-    /// @optimize
-    // we don't really need to convert first, we can just loop through the nodes and sum up the
-    // distance.
+    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
+    // and sum up the distance.
     return convertToGeometry(e)->getLength();
   }
   else
@@ -98,17 +94,17 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(
-  const boost::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+  const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    return convertToGeometry(boost::dynamic_pointer_cast<const Node>(e));
+    return convertToGeometry(std::dynamic_pointer_cast<const Node>(e));
   case ElementType::Way:
-    return convertToGeometry(boost::dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
+    return convertToGeometry(std::dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
   case ElementType::Relation:
-    return convertToGeometry(boost::dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
+    return convertToGeometry(std::dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
     LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
@@ -116,17 +112,18 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(
 }
 
 
-boost::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
+std::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
 {
-  return boost::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
+  return
+    std::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
 {
   return convertToGeometry((ConstWayPtr)w);
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
                                                          bool throwError,
                                                          const bool statsFlag) const
 {
@@ -142,12 +139,12 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPt
   else
   {
     // we don't recognize this geometry type.
-    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
                                                                 bool throwError,
                                                                 const bool statsFlag) const
 {
@@ -162,23 +159,23 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelat
     MultiLineStringVisitor v;
     v.setElementProvider(_constProvider);
     e->visitRo(*_constProvider, v);
-    boost::shared_ptr<Geometry> result(v.createMultiLineString());
+    std::shared_ptr<Geometry> result(v.createMultiLineString());
     return result;
   }
   else
   {
     // we don't recognize this geometry type.
-    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr& r) const
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr& r) const
 {
   return convertToGeometry((ConstRelationPtr)r);
 }
 
-boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
+std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
@@ -186,8 +183,8 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
   {
     size = 2;
   }
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(size, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -202,12 +199,12 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
     cs->setAt(n->toCoordinate(), 1);
   }
 
-  boost::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
+  std::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
 
   return result;
 }
 
-boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
+std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   size_t size = ids.size();
@@ -224,11 +221,11 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
 
   if (size <= 3)
   {
-    return boost::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
+    return std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   }
 
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(size, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
 
   size_t i;
   for (i = 0; i < ids.size(); i++)
@@ -251,7 +248,8 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   // create the outer line
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
-  boost::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  std::shared_ptr<Polygon> result(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 
   return result;
 }
@@ -271,7 +269,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
   case ElementType::Way:
     {
-      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
       assert(w);
 
       if (statsFlag)
@@ -298,7 +296,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
   case ElementType::Relation:
     {
-      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
       assert(r);
 
       LinearCriterion linearCrit;

@@ -49,7 +49,7 @@ void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    RelationPtr relation = boost::dynamic_pointer_cast<Relation>(e);
+    RelationPtr relation = std::dynamic_pointer_cast<Relation>(e);
     const std::vector<RelationData::Entry>& members = relation->getMembers();
     if (members.size() > 1)
     {

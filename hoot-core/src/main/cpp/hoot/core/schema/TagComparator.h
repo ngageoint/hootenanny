@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAGCOMPARATOR_H
@@ -35,9 +35,6 @@
 // Qt
 #include <QString>
 #include <QSet>
-
-//  Boost
-#include <boost/shared_ptr.hpp>
 
 namespace hoot
 {
@@ -136,7 +133,7 @@ private:
 
   TagComparator();
 
-  static boost::shared_ptr<TagComparator> _theInstance;
+  static std::shared_ptr<TagComparator> _theInstance;
 
   void _addDefaults(Tags& t);
 

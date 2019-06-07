@@ -72,7 +72,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     }
 
     /*
-    The new Hoot "include" files are all under $HOOT_HOME/plugins & $HOOT_HOME/plugins_local
+    The new Hoot "include" files are all under $HOOT_HOME/translations & $HOOT_HOME/translations_local
     */
 
     const QString hootHome = QString(getenv("HOOT_HOME"));
@@ -82,7 +82,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     }
 
     Settings conf;
-    QStringList libPath = ConfigOptions(conf).getJavascriptTranslatorPath();
+    QStringList libPath = ConfigOptions(conf).getJavascriptSchemaTranslatorPath();
 
     QString scriptName = toCpp<QString>(args[0]);
     QString fullPath; // the final script path

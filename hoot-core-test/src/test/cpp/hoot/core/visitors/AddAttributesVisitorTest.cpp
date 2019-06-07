@@ -56,16 +56,17 @@ class AddAttributesVisitorTest : public HootTestFixture
 public:
 
   AddAttributesVisitorTest()
+    : HootTestFixture("test-files/visitors/AddAttributesVisitorTest/",
+                      "test-output/visitors/AddAttributesVisitorTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/visitors");
   }
 
   void runAddAttributesTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("version=1");
@@ -76,19 +77,17 @@ public:
     AddAttributesVisitor visitor(attributesToAdd);
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunAddAttributesTest.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm",
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunAddAttributesTest.osm",
+                     _outputPath + "RunAddAttributesTest.osm");
   }
 
   void runAddAttributesOnlyIfEmptyTest1()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest2.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest2.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("version=1");
@@ -102,19 +101,17 @@ public:
     //attributes, and all of the attributes in the input file are empty.
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunAddAttributesOnlyIfEmptyTest1.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm",
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest1.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunAddAttributesOnlyIfEmptyTest1.osm",
+                     _outputPath + "RunAddAttributesOnlyIfEmptyTest1.osm");
   }
 
   void runAddAttributesOnlyIfEmptyTest2()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest3.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest3.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("version=1");
@@ -128,19 +125,17 @@ public:
     //attributes, and none of the attributes in the input file are empty.
     map->visitRw(visitor);
 
-    OsmMapWriterFactory::write(map,
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "RunAddAttributesOnlyIfEmptyTest2.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm",
-      "test-output/visitors/AddAttributesVisitorTest-runAddAttributesOnlyIfEmptyTest2.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunAddAttributesOnlyIfEmptyTest2.osm",
+                     _outputPath + "RunAddAttributesOnlyIfEmptyTest2.osm");
   }
 
   void runAddInvalidAttributeKeyTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("blah=1");
@@ -163,7 +158,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("blah");
@@ -186,7 +181,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
     QStringList attributesToAdd;
     attributesToAdd.append("blah= ");
@@ -209,7 +204,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/visitors/AddAttributesVisitorTest.osm", false, Status::Unknown1);
+      map, _inputPath + "AddAttributesVisitorTest.osm", false, Status::Unknown1);
 
     AddAttributesVisitor visitor;
     QStringList attributesToAdd;

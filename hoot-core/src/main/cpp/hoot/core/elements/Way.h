@@ -27,21 +27,17 @@
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
 
-// Local
-#include <hoot/core/elements/WayData.h>
-#include <hoot/core/elements/Element.h>
-
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Geos
 #include <geos/geom/Envelope.h>
 
 // Hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/WayData.h>
 #include <hoot/core/util/HootException.h>
 
 // Standard
 #include <deque>
+#include <memory>
 
 namespace hoot
 {
@@ -64,6 +60,7 @@ public:
   virtual ~Way();
 
   void addNode(long id);
+  void insertNode(long index, long id);
 
   void addNodes(const std::vector<long>& ids);
 
@@ -99,21 +96,21 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const geos::geom::Envelope& getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
+  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node
@@ -199,7 +196,7 @@ public:
   long getPid() const { return _wayData->getPid(); }
   void setPid(long pid) { _wayData->setPid(pid); }
   void resetPid() { _wayData->setPid(WayData::PID_EMPTY); }
-  static long getPid(const boost::shared_ptr<const Way>& p, const boost::shared_ptr<const Way>& c);
+  static long getPid(const std::shared_ptr<const Way>& p, const std::shared_ptr<const Way>& c);
   static long getPid(long p, long c);
 
 protected:
@@ -212,7 +209,7 @@ protected:
 
 private:
 
-  boost::shared_ptr<WayData> _wayData;
+  std::shared_ptr<WayData> _wayData;
 
   /**
    * This envelope may be cached, but it also may not be exact.
@@ -220,15 +217,15 @@ private:
   mutable geos::geom::Envelope _cachedEnvelope;
 };
 
-typedef boost::shared_ptr<Way> WayPtr;
-typedef boost::shared_ptr<const Way> ConstWayPtr;
+typedef std::shared_ptr<Way> WayPtr;
+typedef std::shared_ptr<const Way> ConstWayPtr;
 
-inline bool operator<(WayPtr w1, WayPtr w2)
+inline bool operator<(const WayPtr& w1, const WayPtr& w2)
 {
   return w1->getElementId() < w2->getElementId();
 }
 
-inline bool operator<(ConstWayPtr w1, ConstWayPtr w2)
+inline bool operator<(const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   return w1->getElementId() < w2->getElementId();
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IMPLICITTAGRULESSQLITEREADER_H
@@ -55,7 +55,7 @@ public:
    *
    * @param url location of the database to open
    */
-  void open(const QString url);
+  void open(const QString& url);
 
   /**
    * Closes a Sqlite implicit tag rules database

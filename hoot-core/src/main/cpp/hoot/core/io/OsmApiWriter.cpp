@@ -169,7 +169,7 @@ bool OsmApiWriter::apply()
       if (_changeset.getProcessedCount() / (double)total * 100.0 >= progress + increment)
       {
         progress += increment;
-        PROGRESS_INFO("Upload progress: " << progress << "%");
+        _progress.set((float)progress, "Uploading changeset...");
       }
     }
   }
@@ -591,7 +591,7 @@ bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPt
   //  Can only work on changesets of size 1
   if (changeset->size() != 1)
     return false;
-  for(int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
+  for (int elementType = ElementType::Node; elementType < ElementType::Unknown; ++elementType)
   {
     //  Creates cannot be fixed with this method, skip them here
     for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)

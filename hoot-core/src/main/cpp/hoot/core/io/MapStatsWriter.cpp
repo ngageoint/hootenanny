@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
 // hoot
 #include <hoot/core/ops/CalculateStatsOp.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/IoUtils.h>
@@ -62,7 +62,7 @@ void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
   }
 }
 
-void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats,
+void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
                                       const QString& statsOutputFilePath)
 {
   try
@@ -112,7 +112,7 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats,
   }
 }
 
-void MapStatsWriter::writeStatsToText(QList<QList<SingleStat> > &stats,
+void MapStatsWriter::writeStatsToText(QList<QList<SingleStat>> &stats,
                                       const QString &statsOutputFilePath)
 {
   LOG_INFO("Writing stats to file: " << statsOutputFilePath);
@@ -146,8 +146,8 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   IoUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
-  QList< QList<SingleStat> > allStats;
-  boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  QList<QList<SingleStat>> allStats;
+  std::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
   cso->apply(map);
   allStats.append(cso->getStats());
 
@@ -169,7 +169,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
   }
 }
 
-QString MapStatsWriter::statsToString(QList< QList<SingleStat> >& stats, QString sep)
+QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString sep)
 {
   QStringList allStatNames;
 

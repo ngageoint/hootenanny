@@ -53,7 +53,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
   LOG_INFO("Merging areas...");
 
   // instantiate the script merger
-  boost::shared_ptr<PluginContext> script(new PluginContext());
+  std::shared_ptr<PluginContext> script(new PluginContext());
   v8::HandleScope handleScope(current);
   v8::Context::Scope context_scope(script->getContext(current));
   script->loadScript(ConfPath::search("Area.js", "rules"), "plugin");
@@ -83,11 +83,11 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
     {
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
-      std::set< std::pair< ElementId, ElementId> > matches;
+      std::set<std::pair<ElementId, ElementId>> matches;
       matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedWays;
+      std::vector<std::pair<ElementId, ElementId>> replacedWays;
       merger.apply(map, replacedWays);
       LOG_VART(replacedWays.size());
 
@@ -105,12 +105,12 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
     {
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 
-      std::set< std::pair< ElementId, ElementId> > matches;
+      std::set<std::pair<ElementId, ElementId>> matches;
       matches.insert(
         std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
-      std::vector< std::pair< ElementId, ElementId > > replacedRelations;
+      std::vector<std::pair<ElementId, ElementId>> replacedRelations;
       merger.apply(map, replacedRelations);
       LOG_VART(replacedRelations.size());
 

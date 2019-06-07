@@ -43,9 +43,6 @@
 namespace hoot
 {
 
-static const QString testInputRoot =
-  "test-files/language/HootServicesTranslatorClientTest";
-
 class HootServicesTranslatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(HootServicesTranslatorClientTest);
@@ -56,23 +53,39 @@ class HootServicesTranslatorClientTest : public HootTestFixture
 
 public:
 
+  HootServicesTranslatorClientTest()
+    : HootTestFixture("test-files/language/HootServicesTranslatorClientTest/",
+                      UNUSED_PATH)
+  {
+  }
+
   void runRequestDataTest()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
+    std::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(
-        testInputRoot + "/runRequestDataTest").trimmed(),
+        _inputPath + "runRequestDataTest").trimmed(),
         uut->_getRequestData("text to translate").trimmed());
   }
 
   void runParseResponseTest()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
+    std::shared_ptr<HootServicesTranslatorClient> uut = _getClient();
 
     //see comment in StringUtilsTest::jsonParseTest about the formatting of this string
-    const QString jsonStr = "{ \"translatedText\": \"How%20old%20are%20you\", \"performExhaustiveTranslationSearchWithNoDetection\": false, \"detectorUsed\": \"TikaLanguageDetector\", \"sourceLangCodes\": [ \"de\",\"es\" ], \"detectedLangCode\": \"de\", \"detectedLangAvailableForTranslation\": true, \"translator\": \"HootLanguageTranslator\", \"sourceText\": \"wie alt bist du\", \"detectedLang\": \"German\", \"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
-    boost::shared_ptr<boost::property_tree::ptree> response =
+    const QString jsonStr =
+        "{ \"translatedText\": \"How%20old%20are%20you\", "
+          "\"performExhaustiveTranslationSearchWithNoDetection\": false, "
+          "\"detectorUsed\": \"TikaLanguageDetector\", "
+          "\"sourceLangCodes\": [ \"de\",\"es\" ], "
+          "\"detectedLangCode\": \"de\", "
+          "\"detectedLangAvailableForTranslation\": true, "
+          "\"translator\": \"HootLanguageTranslator\", "
+          "\"sourceText\": \"wie alt bist du\", "
+          "\"detectedLang\": \"German\", "
+          "\"detectedLanguageOverridesSpecifiedSourceLanguages\": false }";
+    std::shared_ptr<boost::property_tree::ptree> response =
       StringUtils::jsonStringToPropTree(jsonStr);
     uut->_parseResponse(response);
 
@@ -106,9 +119,9 @@ public:
 
 private:
 
-  boost::shared_ptr<HootServicesTranslatorClient> _getClient()
+  std::shared_ptr<HootServicesTranslatorClient> _getClient()
   {
-    boost::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
+    std::shared_ptr<HootServicesTranslatorClient> client(new HootServicesTranslatorMockClient());
 
     Settings conf;
     conf.set("language.translation.translator", "hoot::HootServicesTranslatorClient");

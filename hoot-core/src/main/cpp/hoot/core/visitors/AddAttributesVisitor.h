@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDATTRIBUTESVISITOR_H
 #define ADDATTRIBUTESVISITOR_H
@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -39,7 +40,7 @@ namespace hoot
  * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public ElementVisitor, public Configurable
+class AddAttributesVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo
 {
 
 public:
@@ -49,7 +50,7 @@ public:
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -59,6 +60,11 @@ public:
   virtual QString getDescription() const
   { return "Adds one or more common OSM attributes to features"; }
 
+  virtual QString getInitStatusMessage() const { return "Adding attributes..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Added " + QString::number(_numAffected) + " attributes"; }
+
 private:
 
   //a semicolon delimited list of attributes of the form key=value
@@ -67,7 +73,7 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  ElementAttributeType::Type _getAttributeType(const QString attribute, QString& attributeValue);
+  ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue);
 };
 
 }

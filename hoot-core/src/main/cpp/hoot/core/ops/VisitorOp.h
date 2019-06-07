@@ -22,17 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITOROP_H
 #define VISITOROP_H
 
 // hoot
-#include <hoot/core/visitors/ElementVisitorConsumer.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/visitors/ElementVisitorConsumer.h>
 
 namespace hoot
 {
@@ -50,7 +47,7 @@ public:
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-  VisitorOp(const boost::shared_ptr<ConstElementVisitor>& v) { _visitor = v; }
+  VisitorOp(const ConstElementVisitorPtr& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.
@@ -59,13 +56,13 @@ public:
 
   virtual void addVisitor(const ConstElementVisitorPtr& e);
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual QString getDescription() const { return ""; }
 
 private:
 
-  boost::shared_ptr<ConstElementVisitor> _visitor;
+  std::shared_ptr<ConstElementVisitor> _visitor;
 };
 
 }

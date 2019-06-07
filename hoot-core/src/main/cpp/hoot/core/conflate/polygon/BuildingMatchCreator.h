@@ -65,13 +65,13 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) override;
 
-  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() override;
+  virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
 private:
 
   /// Don't use this directly. See below.
-  boost::shared_ptr<BuildingRfClassifier> _rf;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<BuildingRfClassifier> _rf;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
 
   QString _conflateMatchBuildingModel;
 
@@ -80,7 +80,7 @@ private:
   /**
    * The building model can be slow to load, this provides a lazy load.
    */
-  boost::shared_ptr<BuildingRfClassifier> _getRf();
+  std::shared_ptr<BuildingRfClassifier> _getRf();
 };
 
 }

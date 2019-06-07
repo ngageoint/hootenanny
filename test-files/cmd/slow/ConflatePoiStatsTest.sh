@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/ConflatePoiStatsTest
-STATS_OUT=test-output/cmd/ConflatePoiStatsTest/poi-out
+mkdir -p test-output/cmd/slow/ConflatePoiStatsTest
+STATS_OUT=test-output/cmd/slow/ConflatePoiStatsTest/poi-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 hoot conflate -D writer.include.debug.tags=true -D "match.creators=hoot::ScriptMatchCreator,PoiGeneric.js" -D "merger.creators=hoot::ScriptMergerCreator" test-files/dcpoi_clip.osm test-files/mapcruzinpoi_clip.osm $STATS_OUT.osm --stats > $STATS_OUT

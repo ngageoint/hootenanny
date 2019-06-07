@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLCHANGESETFILEWRITER_H
 #define OSMXMLCHANGESETFILEWRITER_H
@@ -69,7 +69,7 @@ public:
    * @param path Pathname for the output file(s)
    * @param cs Changeset provider to stream the changes from
    */
-  void write(QString path, ChangesetProviderPtr cs);
+  void write(const QString& path, const ChangesetProviderPtr& cs);
 
   /**
    * Set the configuration settings
@@ -99,7 +99,7 @@ private:
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
   //keeping track of these mappings unfortunately makes this writer memory bound
-  QMap<ElementType::Type, QMap<long, long> > _newElementIdMappings;
+  QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
@@ -107,7 +107,8 @@ private:
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
   void _writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
-  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
+  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r);
+  void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
 };

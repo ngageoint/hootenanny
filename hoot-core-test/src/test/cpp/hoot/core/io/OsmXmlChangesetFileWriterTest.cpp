@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -46,37 +46,34 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 public:
 
   OsmXmlChangesetFileWriterTest()
+    : HootTestFixture("test-files/io/OsmXmlChangesetFileWriterTest/",
+                      "test-output/io/OsmXmlChangesetFileWriterTest/")
   {
-    TestUtils::mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
   }
 
   void runSimpleTest()
   {
-    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    OsmXmlChangesetFileWriter().write(
-      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
+    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
 
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc"));
+    HOOT_FILE_EQUALS( _inputPath + "changeset.osc",
+                     _outputPath + "changeset.osc");
   }
 
   void runSplitTest()
   {
-    boost::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter writer;
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
     writer.write(
-      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc", changesetProvider);
+      _outputPath + "changeset.split.osc", changesetProvider);
 
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"));
-    HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"),
-      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"));
+    HOOT_FILE_EQUALS( _inputPath + "changeset.split.osc",
+                     _outputPath + "changeset.split.osc");
+    HOOT_FILE_EQUALS( _inputPath + "changeset-001.split.osc",
+                     _outputPath + "changeset-001.split.osc");
   }
 };
 

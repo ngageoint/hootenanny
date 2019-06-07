@@ -45,11 +45,11 @@ public:
   OsmApiDbReader();
   virtual ~OsmApiDbReader();
 
-  virtual void open(QString urlStr);
+  virtual void open(const QString& urlStr) override;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
-  virtual QString supportedFormats() { return "osmapidb://"; }
+  virtual QString supportedFormats() override { return "osmapidb://"; }
 
 protected:
 
@@ -57,7 +57,7 @@ protected:
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) override;
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) override;
 
-  virtual boost::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
+  virtual std::shared_ptr<ApiDb> _getDatabase() const override { return _database; }
 
 private:
 
@@ -66,11 +66,9 @@ private:
   friend class ServicesDbTestUtils;
   friend class ServiceWriteOsmSqlStatementsDriverTest;
 
-  boost::shared_ptr<OsmApiDb> _database;
+  std::shared_ptr<OsmApiDb> _database;
 
-  double _defaultCircularError;
-
-  void _parseAndSetTagsOnElement(ElementPtr element);
+  void _parseAndSetTagsOnElement(const ElementPtr& element);
 };
 
 }

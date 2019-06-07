@@ -3,8 +3,8 @@ set -e
 
 # Test the TDSv40 Translation
 
-inputDir=test-files/TDSv40
-outputDir=test-output/tdsv40_translation
+inputDir=test-files/cmd/slow/TDSv40
+outputDir=test-output/cmd/slow/tdsv40_translation
 
 TRANS=$HOOT_HOME/translations/TDSv40.js
 
@@ -23,7 +23,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 
 ##### Start Tests #####
 #  jam all of the shapefiles into one OSM file
-hoot convert $HOOT_OPT $inputDir/*.shp $outputDir/new_TDSv40.osm --trans $TRANS # > tmp/TDSv40_to_OSM.txt
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_TDSv40.osm # > tmp/TDSv40_to_OSM.txt
 
 # When the translation changes, uncomment this to update the OSM file
 #cp $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm
@@ -33,7 +33,7 @@ hoot diff $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff $outputDir/new_
 
 # Make shapefiles
 # NOTE: These are thematic.
-hoot convert --debug $outputDir/new_TDSv40.osm $outputDir".shp" --trans $TRANS # > tmp/TDSv40_toTDSv40.txt
+hoot convert --debug -D schema.translation.script=$TRANS $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
 
 ##################
 # More testing required to get this section of tests to work. In particular, createing two features from one is a problem

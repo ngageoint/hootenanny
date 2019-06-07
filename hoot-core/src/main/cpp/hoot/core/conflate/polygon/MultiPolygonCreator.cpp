@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiPolygonCreator.h"
 
@@ -54,7 +54,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MultiPolygonCreator::logWarnCount = 0;
+int MultiPolygonCreator::logWarnCount = 0;
 
 MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
   const ConstRelationPtr& r) :
@@ -74,7 +74,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
 
   vector<double> outerArea;
   // a vector of holes for each of the outer polygons.
-  vector< vector<Geometry*>* > holes;
+  vector<vector<Geometry*>*> holes;
   holes.resize(outers.size());
 
   outerArea.reserve(outers.size());
@@ -110,7 +110,7 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
       // containing polygon we've found so far.
       else if (polygonIndex == -1 || (outerArea[j] < outerArea[polygonIndex]))
       {
-        boost::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
+        std::shared_ptr<IntersectionMatrix> im(tmpPolygons[j]->relate(inners[i]));
         if (im->isContains())
         {
           contained = true;
@@ -181,7 +181,7 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
   }
 }
 
-boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
+std::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
   vector<LinearRing*> outers;
   _createRings(MetadataTags::RoleOuter(), outers);
@@ -199,7 +199,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 
   LOG_TRACE("After classify: Outers: " << outers.size() << "  Inners: " << inners.size());
 
-  boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
+  std::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
   // recursively add any child relation multipolygons.
   for (size_t i = 0; i < _r->getMembers().size(); i++)
@@ -211,7 +211,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
       {
-        boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
+        std::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
         {
           result.reset(result->Union(child.get()));
@@ -235,18 +235,18 @@ QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ri
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  boost::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
+  std::shared_ptr<Polygon> p1(gf.createPolygon(*ring1, noHoles));
 
   // It would be nice to do this in one call but "isWithin" doesn't seem to return anything.
-  boost::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
+  std::shared_ptr<IntersectionMatrix> im(p1->relate(ring2));
   if (im->isContains())
   {
     result = "outer";
   }
   else
   {
-    boost::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
-    boost::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
+    std::shared_ptr<Polygon> p2(gf.createPolygon(*ring2, noHoles));
+    std::shared_ptr<IntersectionMatrix> im2(p2->relate(ring1));
 
     if (im2->isContains())
     {
@@ -257,9 +257,9 @@ QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ri
   return result;
 }
 
-void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
-                                         std::vector<LinearRing *> &inners,
-                                         std::vector<LinearRing *> &outers) const
+void MultiPolygonCreator::_classifyRings(std::vector<LinearRing*>& noRole,
+                                         std::vector<LinearRing*>& inners,
+                                         std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
   if (noRole.size() == 0)
@@ -267,7 +267,9 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
     return;
   }
 
-  LOG_TRACE("Rings without a role: " << noRole.size() << "  Outers: " << outers.size() << "  Inners: " << inners.size());
+  LOG_TRACE(
+    "Rings without a role: " << noRole.size() << "  Outers: " << outers.size() << "  Inners: " <<
+    inners.size());
 
   // One polygon, no inners or outers
   if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
@@ -381,7 +383,7 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing *> &noRole,
   }
 }
 
-void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *> &rings) const
+void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>& rings) const
 {
   vector<ConstWayPtr> partials;
 
@@ -437,7 +439,7 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
 }
 
 void MultiPolygonCreator::_createRingsFromPartials(const vector<ConstWayPtr>& partials,
-  vector<LinearRing *> &rings) const
+  vector<LinearRing*>& rings) const
 {
   Tgs::DisjointSetMap<ConstWayPtr> ringSets;
 
@@ -468,11 +470,12 @@ void MultiPolygonCreator::_createRingsFromPartials(const vector<ConstWayPtr>& pa
 }
 
 void MultiPolygonCreator::_createSingleRing(const vector<ConstWayPtr>& partials,
-  vector<LinearRing *> &rings) const
+  vector<LinearRing*>& rings) const
 {
   deque<ConstWayPtr> orderedWays = _orderWaysForRing(partials);
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-      create((size_t)0, (size_t)2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(
+      (size_t)0, (size_t)2);
 
   for (size_t i = 0; i < orderedWays.size(); i++)
   {
@@ -511,7 +514,7 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
   vector<Geometry*> noHoles;
-  boost::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
+  std::shared_ptr<Polygon> p(gf.createPolygon(*innerRing, noHoles));
   if (p->getArea() <= 0.0)
   {
     return false;
@@ -540,8 +543,7 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
     ConstWayPtr w = partials[i];
 
     // if the ways are start to start or end to end
-    if (w->getNodeId(0) == firstId ||
-        w->getLastNodeId() == lastId)
+    if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
     {
       // this way needs to be reversed, but clone it first so we don't change any source data
       WayPtr cloned = WayPtr(new Way(*partials[i]));
@@ -630,8 +632,8 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
     return GeometryFactory::getDefaultInstance()->createLinearRing();
   }
 
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-                           create(size, 2);
+  CoordinateSequence* cs =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
 
   size_t i = 0;
   for (; i < ids.size(); i++)
@@ -654,6 +656,5 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
 
   return GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 }
-
 
 }

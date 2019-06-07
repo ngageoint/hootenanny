@@ -77,14 +77,14 @@ class BuildingMergerTest : public HootTestFixture
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
+  CPPUNIT_TEST(runManyToManyMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  BuildingMergerTest()
+  BuildingMergerTest() : HootTestFixture("test-files/", "test-output/conflate/polygon/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/conflate/polygon");
   }
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
@@ -121,14 +121,14 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
@@ -136,12 +136,12 @@ public:
     }
 
     BuildingMerger bm(pairs);
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     bm.apply(map, replaced);
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, "test-output/conflate/polygon/BuildingMergerTest-runMatchTest.osm");
+    writer.write(map, _outputPath + "BuildingMergerTest-runMatchTest.osm");
 
     HOOT_STR_EQUALS("[3]{(Way(-15), Way(-7)), (Way(-14), Way(-7)), (Way(-13), Way(-7))}", replaced);
   }
@@ -151,13 +151,13 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
+    reader.read(_inputPath + "conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
+    reader.read(_inputPath + "conflate/unified/AllDataTypesB.osm", map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
@@ -167,7 +167,7 @@ public:
     RemoveMissVisitor v(map, "Panera");
     map->visitRw(v);
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
 
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
@@ -214,7 +214,7 @@ public:
     OsmXmlWriter writer;
     writer.write(
       map,
-      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
+      _outputPath + "BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-true.osm");
     HOOT_STR_EQUALS(
       "[3]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-1), Relation(-1))}", replaced);
   }
@@ -233,8 +233,35 @@ public:
     OsmXmlWriter writer;
     writer.write(
       map,
-      "test-output/conflate/polygon/BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
+      _outputPath + "BuildingMergerTest-runKeepMoreComplexGeometryWhenAutoMergingTest-false.osm");
     HOOT_STR_EQUALS("[2]{(Way(-18), Way(-1)), (Way(-17), Way(-1))}", replaced);
+  }
+
+  void runManyToManyMergeTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmXmlReader reader;
+    const QString inputPath =
+      "test-files/cases/attribute/unifying/building-3136-many-to-many-auto-merge-1";
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(inputPath + "/Input1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(inputPath + "/Input2.osm", map);
+    MapProjector::projectToPlanar(map);
+
+    set<pair<ElementId, ElementId>> pairs = getPairsForManyToManyMergingTest();
+
+    BuildingMerger bm(pairs);
+    bm.setMergeManyToManyMatches(true);
+    vector<pair<ElementId, ElementId>> replaced;
+    bm.apply(map, replaced);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "BuildingMergerTest-runManyToManyMergeTest.osm");
+    HOOT_STR_EQUALS(
+      "[5]{(Way(-5), Relation(-1)), (Way(-4), Relation(-1)), (Way(-3), Relation(-1)), (Way(-2), Relation(-1)), (Way(-1), Relation(-1))}",
+      replaced);
   }
 
 private:
@@ -243,22 +270,34 @@ private:
   {
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ToyBuildingsTestA.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/ToyBuildingsTestB.osm", map);
+    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
     vector<long> wids2 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
     vector<long> wids3 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Maid-Rite");
     wids2.insert(wids2.end(), wids3.begin(), wids3.end());
-    set< pair<ElementId, ElementId> > pairs;
+    set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
     {
       pairs.insert(pair<ElementId, ElementId>(ElementId::way(wids1[0]), ElementId::way(wids2[i])));
     }
 
+    return pairs;
+  }
+
+  set<pair<ElementId, ElementId>> getPairsForManyToManyMergingTest() const
+  {
+    set<pair<ElementId, ElementId>> pairs;
+    // came up with this by tracing through the actual conflation of the data to see what was being
+    // passed into the merger after matching
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-5)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-4)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-2), ElementId::way(-3)));
+    pairs.insert(pair<ElementId, ElementId>(ElementId::way(-1), ElementId::way(-3)));
     return pairs;
   }
 };

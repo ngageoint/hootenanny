@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementCriterionJs.h"
 
@@ -38,9 +38,6 @@
 
 // Qt
 #include <QStringList>
-
-// Tgs
-#include <tgs/SharedPtr.h>
 
 using namespace std;
 using namespace v8;
@@ -68,8 +65,8 @@ void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
   ElementCriterionPtr other = ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->
       getCriterion();
 
-  boost::shared_ptr<ElementCriterionConsumer> consumer =
-    boost::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
+  std::shared_ptr<ElementCriterionConsumer> consumer =
+    std::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
 
   if (!consumer)
   {
@@ -129,8 +126,8 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
-
+  const QString className = str(args.This()->GetConstructorName());
+  LOG_VART(className);
   ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
   ElementCriterionJs* obj = new ElementCriterionJs(c);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>

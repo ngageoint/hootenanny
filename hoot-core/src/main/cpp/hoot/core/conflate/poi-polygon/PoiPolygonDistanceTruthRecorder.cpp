@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonDistanceTruthRecorder.h"
 
@@ -42,8 +42,8 @@ QMultiMap<QString, double> PoiPolygonDistanceTruthRecorder::_polyReviewRefIdsToD
 
 void PoiPolygonDistanceTruthRecorder::recordDistanceTruth(ConstElementPtr poi,
                                                           ConstElementPtr poly,
-                                                          const QString poiBestKvp,
-                                                          const QString polyBestKvp,
+                                                          const QString& poiBestKvp,
+                                                          const QString& polyBestKvp,
                                                           const double elementDistance)
 {
   //output feature distances for all feature types which fell within the match threshold
@@ -78,7 +78,7 @@ void PoiPolygonDistanceTruthRecorder::printMatchDistanceInfo()
 }
 
 
-void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString matchType,
+void PoiPolygonDistanceTruthRecorder::_printMatchDistanceInfo(const QString& matchType,
   const QMultiMap<QString, double>& distanceInfo)
 {
   foreach (QString type, distanceInfo.uniqueKeys())

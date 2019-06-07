@@ -55,9 +55,10 @@ class WayMatchStringMergerTest : public HootTestFixture
 public:
 
   WayMatchStringMergerTest()
+    : HootTestFixture("test-files/algorithms/WayMatchStringMergerTest/",
+                      "test-output/algorithms/WayMatchStringMergerTest/")
   {
     setResetType(ResetAll);
-    TestUtils::mkpath("test-output/algorithms/");
   }
 
   WayStringPtr createWayString1(OsmMapPtr map)
@@ -88,10 +89,10 @@ public:
     return str2;
   }
 
-  OsmMapPtr createTestMap(QString path = "test-files/algorithms/WayMatchStringMergerTest.osm")
+  OsmMapPtr createTestMap(QString filename)
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, path);
+    OsmMapReaderFactory::read(map, _inputPath + filename);
 
     MapProjector::projectToPlanar(map);
 
@@ -122,12 +123,12 @@ public:
 
   void runMergeNodeTest()
   {
-    OsmMapPtr map = createTestMap("test-files/algorithms/WayMatchStringMergerTestMergeNode.osm");
+    OsmMapPtr map = createTestMap("WayMatchStringMergerTestMergeNode.osm");
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
       createWayString2(map)));
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
@@ -141,23 +142,22 @@ public:
     uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
-    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
-    writer->write(map,
-      "test-output/algorithms/WayMatchStringMergerTestMergeNode.osm");
+    writer->write(map, _outputPath + "WayMatchStringMergerTestMergeNode.osm");
 
-    HOOT_FILE_EQUALS("test-files/algorithms/WayMatchStringMergerTestMergeNodeExpected.osm",
-      "test-output/algorithms/WayMatchStringMergerTestMergeNode.osm");
+    HOOT_FILE_EQUALS(_inputPath + "WayMatchStringMergerTestMergeNodeExpected.osm",
+                    _outputPath + "WayMatchStringMergerTestMergeNode.osm");
   }
 
   void runMergeTagsTest()
   {
-    OsmMapPtr map = createTestMap();
+    OsmMapPtr map = createTestMap("WayMatchStringMergerTest.osm");
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
       createWayString2(map)));
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
 
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
@@ -168,32 +168,30 @@ public:
     uut.setKeeperStatus(Status::Conflated);
 
     MapProjector::projectToWgs84(map);
-    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    std::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
-    writer->write(map,
-      "test-output/algorithms/WayMatchStringMergerTestMergeTags.osm");
+    writer->write(map, _outputPath + "WayMatchStringMergerTestMergeTags.osm");
 
-    HOOT_FILE_EQUALS("test-files/algorithms/WayMatchStringMergerTestMergeTagsExpected.osm",
-      "test-output/algorithms/WayMatchStringMergerTestMergeTags.osm");
+    HOOT_FILE_EQUALS(_inputPath + "WayMatchStringMergerTestMergeTagsExpected.osm",
+                    _outputPath + "WayMatchStringMergerTestMergeTags.osm");
   }
 
   void runSplitTest()
   {
-    OsmMapPtr map = createTestMap();
+    OsmMapPtr map = createTestMap("WayMatchStringMergerTest.osm");
 
     WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(createWayString1(map),
       createWayString2(map)));
 
-    vector< pair<ElementId, ElementId> > replaced;
+    vector<pair<ElementId, ElementId>> replaced;
     WayMatchStringMerger uut(map, mapping, replaced);
     WayMatchStringSplitter().applySplits(map, replaced, uut.getAllSublineMappings());
 
     MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map,
-      "test-output/algorithms/WayMatchStringMergerTestSplit.osm");
+    OsmMapWriterFactory::write(map, _outputPath + "WayMatchStringMergerTestSplit.osm");
 
-    HOOT_FILE_EQUALS("test-files/algorithms/WayMatchStringMergerTestSplitExpected.osm",
-      "test-output/algorithms/WayMatchStringMergerTestSplit.osm");
+    HOOT_FILE_EQUALS(_inputPath + "WayMatchStringMergerTestSplitExpected.osm",
+                    _outputPath + "WayMatchStringMergerTestSplit.osm");
   }
 
 };

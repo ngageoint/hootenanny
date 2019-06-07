@@ -39,9 +39,6 @@
 // Qt
 #include <QStringList>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 using namespace std;
 using namespace v8;
 
@@ -80,16 +77,17 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
-
+  const QString className = str(args.This()->GetConstructorName());
+  LOG_VART(className);
   ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
   ConstElementVisitor* constVis = dynamic_cast<ConstElementVisitor*>(vis);
   if (!constVis)
   {
     // We need to allow ElementVisitor as well. - #2831
     throw HootException(
-      QString("Only ConstElementVisitors may be used in Hootenanny Javascript.  Change your ") +
-      QString("ElementVisitor class to inherit from ConstElementVisitor or ElementOsmMapVisitor."));
+      QString("Only ConstElementVisitors may be used in Hootenanny Javascript. Tried to use: ") +
+      QString(className + "  Change your ElementVisitor class to inherit from ") +
+      ("ConstElementVisitor, ElementOsmMapVisitor, or ConstElementOsmMapVisitor."));
   }
   ElementVisitorJs* obj = new ElementVisitorJs(constVis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>

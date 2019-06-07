@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCOMPARATOR_H
 #define MATCHCOMPARATOR_H
@@ -55,7 +55,7 @@ public:
 
   static std::string className() { return "hoot::MatchComparator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   typedef QMultiMap<QString, ElementId> UuidToEid;
 
@@ -132,12 +132,12 @@ private:
   /**
    * Confusion matrix with [actual][expected]
    */
-  std::vector< std::vector<int> > _confusion;
+  std::vector<std::vector<int>> _confusion;
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
    */
-  QHash< QString, QHash<QString, QVariant> > _wrongBreakdown;
+  QHash<QString, QHash<QString, QVariant>> _wrongBreakdown;
 
   int _tp, _fp, _fn;
   bool _tagErrors;
@@ -154,7 +154,7 @@ private:
   void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2,
                       std::set<UuidPair>& matches, Tgs::DisjointSetMap<QString>& groups);
 
-  bool _debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
+  bool _debugLog(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& in,
     const ConstOsmMapPtr& conflated);
 
   void _findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated);
@@ -163,12 +163,12 @@ private:
   /**
    * Returns true if both these uuids are marked with needs review.
    */
-  bool _isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated);
+  bool _isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated);
 
   void _tagError(const OsmMapPtr& map, const QString &uuid, const QString& value);
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);
-  void _tagTestOutcome(const OsmMapPtr& map, const QString uuid, const QString expected,
-                       const QString actual);
+  void _tagTestOutcome(const OsmMapPtr& map, const QString& uuid, const QString& expected,
+                       const QString& actual);
   void _setElementWrongCounts(const ConstOsmMapPtr& map);
   void _setElementWrongCount(const ConstOsmMapPtr& map, const ElementType::Type& elementType);
 };

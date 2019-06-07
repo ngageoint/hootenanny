@@ -105,8 +105,3 @@ See docs/hootenanny-services-$(HOOT_VERSION)-javadoc.tar.gz for documentation fo
 web services code.  Consult the documentation for *Resource.java classes only for documentation on
 public Hootenanny web service API methods.
 
-
-
-
-
-

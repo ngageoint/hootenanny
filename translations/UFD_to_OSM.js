@@ -46,9 +46,11 @@ ufd = {
         ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
         ['F_CODE','AL045','facility','yes'], // Complex Outline - No FCODE, moving to AL010 Facility
         ['F_CODE','AL100','building','hut'], // Hut - NFDD AL099
+        ['F_CODE','AL135','populated_place:type','native_settlement'], // Native Settlement
+        ['F_CODE','AL209','populated_place:type','tent_dwellings'], // Tent Dwellings
         ['F_CODE','AL210','route:protection','yes'], // Snow Shed/Rock Shed - NFDD AL211
-        ['F_CODE','AM031','landuse','depot'], // Timber Yard - NFDD AM010
         ['F_CODE','AL240','man_made','tower'], // Tower (Non-Communication) - NFDD AL241
+        ['F_CODE','AM031','landuse','depot'], // Timber Yard - NFDD AM010
         ['F_CODE','AQ010','cableway','yes'], // Aerial Cableway Lines/Ski Lift Lines - NFDD AT041
         ['F_CODE','AQ020','pylon','yes'], // Aerial Cableway Pylon/Ski Pylon - NFDD AT042
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
@@ -91,12 +93,19 @@ ufd = {
         'DATECOLLEC':'source:creation_date', // From the data
         'IKO':'icao', // ICAO Designator
         'NAM':'name', // Name Category
+        'NAM1':'alt_name', // Secondary Name?
+        'NAM2':'name:two', // Not in the spec but in data
+        'NAM3':'name:three', // Not in the spec but in data
+        'NAM4':'name:four', // Not in the spec but in data
         'NFI':'gndb_id:2', // Named Feature Identifier
         'NFN':'gndb_id', // Name Identifier
+        'NM1':'alt_name', // Not in the spec but in data
+        'NM2':'name:two', // Not in the spec but in data
         'NM3':'name:three', // Name 3 (name of the political entity on one side of a boundary).
         'NM4':'name:four', // Name 4 (name of the political entity on the other side of the boundary).
         'OPERATOR':'source:operator_id', // Operator ID
         'EDITORNAME':'source:operator_id', // Operator ID - from the data
+        'GFID':'uuid', // This gets cleaned up in post processing
         'ORIG_SOURCE_DATE':'source:datetime',
         'ORIG_SOURCE_INFO':'source:description', // Originating Source Information
         'ORIGINATOR':'source:originator', // Agency that Supplied the Data
@@ -111,6 +120,7 @@ ufd = {
         'SEC_CLS_AUTH_DESC':'security:classification:non_standard_authority', // Non-standard Classification Authority
         'SEC_CLS_AUTH_MULT':'security:classification:multiple_authority', // Multiple Classification Authority Sources
         'TXT':'note', // Text
+        'TEXT_':'note', // Text
         'UPDATE_SOURCE_INFO':'source:update:description', // Update/Review Source Information
         'UPDATE_SOURCE_DATE':'source:update:datetime',
         'VDR':'source:datum:sounding:name', // Vertical Datum Record - ???
@@ -356,6 +366,7 @@ ufd = {
         ['BFC','House','building','residential'],
         ['BFC','17','building:multi_unit','yes'], // Multi Unit Dwelling
         ['BFC','Multi-Unit Dwelling','building:multi_unit','yes'], // Multi Unit Dwelling
+        ['BFC','Multi Unit Dwelling','building:multi_unit','yes'], // Multi Unit Dwelling
         ['BFC','18','building','cemetery_building'],
         ['BFC','Cemetery Building','building','cemetery_building'],
         ['BFC','19','building','farm'],
@@ -1217,6 +1228,7 @@ ufd = {
         ['LMC','Landmark','navigation:landmark','yes'], // Landmark
         ['LMC','2','navigation:landmark','no'], // Not a landmark
         ['LMC','Not a landmark','navigation:landmark','no'], // Not a landmark
+        ['LMC','Not a Landmark','navigation:landmark','no'], // Not a landmark
         ['LMC','997',undefined,undefined], // Unpopulated
 
         // LOC - Vertical Relative Location
@@ -1464,9 +1476,9 @@ ufd = {
         ['MST','7','missile','sa-4_ganef'], // SA4
         ['MST','SA4','missile','sa-4_ganef'], // SA4
         ['MST','8','missile','sa-5_gammon'], // SA5
-        ['MST','SA4','missile','sa-5_gammon'], // SA5
+        ['MST','SA5','missile','sa-5_gammon'], // SA5
         ['MST','9','missile','sa-6_gainful'], // SA6
-        ['MST','SA4','missile','sa-6_gainful'], // SA6
+        ['MST','SA6','missile','sa-6_gainful'], // SA6
         ['MST','999','missile','other'], // Other
         ['MST','Other','missile','other'], // Other
 
@@ -1559,6 +1571,8 @@ ufd = {
         ['ORIGINATING_SOURCE','Digital Topographic Data 4 (DTOP4)','source:name','digital_topographic_data_4_(dtop4)'], // Digital Topographic Data 4 (DTOP4)
         ['ORIGINATING_SOURCE','Digital Topographic Data 5 (DTOP5)','source:name','digital_topographic_data_5_(dtop5)'], // Digital Topographic Data 5 (DTOP5)
         ['ORIGINATING_SOURCE','Digital Vertical Obstruction File (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
+        ['ORIGINATING_SOURCE','DIGITAL VERTICAL OBSTRUCTION FILE (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
+        ['ORIGINATING_SOURCE','DVOF','source:name','digital_vertical_obstruction_file_(dvof)'], // Digital Vertical Obstruction File (DVOF)
         ['ORIGINATING_SOURCE','Digital Vertical Obstruction File (DVOF) - Digital Vertical Obstruction File (DVOF)','source:name','digital_vertical_obstruction_file_(dvof)'], // From data
         ['ORIGINATING_SOURCE','Foundation Feature Data (FFD)','source:name','foundation_feature_data_(ffd)'], // Foundation Feature Data (FFD)
         ['ORIGINATING_SOURCE','Foundation Feature Data/Relocatable Target Data (FFD/RTAD)','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
@@ -1569,6 +1583,7 @@ ufd = {
         ['ORIGINATING_SOURCE','Imagery (IKONOS)','source:name','imagery_(ikonos)'], // Imagery (IKONOS)
         ['ORIGINATING_SOURCE','Imagery (NTM)','source:name','imagery_(ntm)'], // Imagery (NTM)
         ['ORIGINATING_SOURCE','Imagery [NTM]','source:name','imagery_(ntm)'], // Imagery (NTM)
+        ['ORIGINATING_SOURCE','StereoNTM','source:name','imagery_(ntm)'], // From data
         ['ORIGINATING_SOURCE','Imagery (Other)','source:name','imagery_(other)'], // Imagery (Other)
         ['ORIGINATING_SOURCE','Interim Terrain Data (ITD)','source:name','interim_terrain_data_(itd)'], // Interim Terrain Data (ITD)
         ['ORIGINATING_SOURCE','Interim Vector Data (IVD)','source:name','interim_vector_data_(ivd)'], // Interim Vector Data (IVD)
@@ -1586,6 +1601,7 @@ ufd = {
         ['ORIGINATING_SOURCE','NIMA GIS Medical Facilities Database','source:name','nima_gis_medical_facilities_database'], // NIMA GIS Medical Facilities Database
         ['ORIGINATING_SOURCE','Native Data Source','source:name','native_data_source'], // Native Data Source
         ['ORIGINATING_SOURCE','Native Map Source','source:name','native_map_source'], // Native Map Source
+        ['ORIGINATING_SOURCE','NATIVE MAP SOURCE','source:name','native_map_source'], // Native Map Source
         ['ORIGINATING_SOURCE','Nominally Attributed Topographic Evaluation Map (NATE Map)','source:name','nominally_attributed_topographic_evaluation_map_(nate_map)'], //  Nominally Attributed Topographic Evaluation Map (NATE Map)
         ['ORIGINATING_SOURCE','Other','source:name','other'], // Other
         ['ORIGINATING_SOURCE','Planning Graphic','source:name','planning_graphic'], // Planning Graphic
@@ -1846,8 +1862,12 @@ ufd = {
         // ['RGC','0','gauge','unknown'],
         ['RGC','0',undefined,undefined],
         ['RGC','1','gauge:type','broad'],
+        ['RGC','Broad','gauge:type','broad'],
         ['RGC','2','gauge:type','narrow'],
+        ['RGC','Narrow','gauge:type','narrow'],
         ['RGC','3','gauge:type','standard'],
+        ['RGC','Normal (Country Specific)','gauge:type','standard'],
+        ['RGC','6','railway','monorail'], // Gauge = 0.5?
         ['RGC','6','railway','monorail'], // Gauge = 0.5?
         ['RGC','997',undefined,undefined], // In data, not in spec
 
@@ -2014,22 +2034,27 @@ ufd = {
 
         // SEC_CLASS - Security Classification
         // I'm pretty sure we are not going to see 99% of these
-        // Moved to Post Processing
-//         ['SEC_CLASS','01','security:classification','cosmic_top_secret-bohemia'], // COSMIC Top Secret-Bohemia
-//         ['SEC_CLASS','02','security:classification','cosmic_top_secret-balk'], // COSMIC Top Secret-Balk
-//         ['SEC_CLASS','03','security:classification','nato_secret'], // NATO Secret
-//         ['SEC_CLASS','04','security:classification','nato_secret-savate'], // NATO Secret-Savate
-//         ['SEC_CLASS','05','security:classification','nato_secret-avicula'], // NATO Secret-Avicula
-//         ['SEC_CLASS','06','security:classification','nato_confidential'], // NATO Confidential
-//         ['SEC_CLASS','07','security:classification','nato_restricted'], // NATO Restricted
-//         ['SEC_CLASS','08','security:classification','nato_unclassified'], // NATO Unclassified
-//         ['SEC_CLASS','09','security:classification','cosmic_top_secret_atom'], // COSMIC Top Secret Atom
-//         ['SEC_CLASS','10','security:classification','secret_atomal'], // Secret Atomal
-//         ['SEC_CLASS','11','security:classification','confidential_atomal'], // Confidential Atomal
-//         ['SEC_CLASS','C','security:classification','C'], // Confidential
-//         ['SEC_CLASS','S','security:classification','S'], // Secret
-//         ['SEC_CLASS','TS','security:classification','TS'], // Top Secret
-//         ['SEC_CLASS','U','security:classification','U'], // Unclassified
+        // Additional caveats added in Post Processing
+        ['SEC_CLASS','01','security:classification','TOP_SECRET'], // COSMIC Top Secret-Bohemia
+        ['SEC_CLASS','02','security:classification','TOP_SECRET'], // COSMIC Top Secret-Balk
+        ['SEC_CLASS','03','security:classification','TOP_SECRET'], // NATO Secret
+        ['SEC_CLASS','04','security:classification','SECRET'], // NATO Secret-Savate
+        ['SEC_CLASS','05','security:classification','SECRET'], // NATO Secret-Avicula
+        ['SEC_CLASS','06','security:classification','CONFIDENTIAL'], // NATO Confidential
+        ['SEC_CLASS','07','security:classification','RESTRICTED'], // NATO Restricted
+        ['SEC_CLASS','08','security:classification','UNCLASSIFIED'], // NATO Unclassified
+        ['SEC_CLASS','09','security:classification','TOP_SECRET'], // COSMIC Top Secret Atom
+        ['SEC_CLASS','10','security:classification','SECRET'], // Secret Atomal
+        ['SEC_CLASS','11','security:classification','CONFIDENTIAL'], // Confidential Atomal
+        ['SEC_CLASS','C','security:classification','CONFIDENTIAL'], // Confidential
+        ['SEC_CLASS','Confidential','security:classification','CONFIDENTIAL'], // Confidential
+        ['SEC_CLASS','S','security:classification','SECRET'], // Secret
+        ['SEC_CLASS','Secret','security:classification','SECRET'], // Secret
+        ['SEC_CLASS','TS','security:classification','TOP_SECRET'], // Top Secret
+        ['SEC_CLASS','Top Secret','security:classification','TOP_SECRET'], // Top Secret
+        ['SEC_CLASS','u','security:classification','UNCLASSIFIED'], // Unclassified
+        ['SEC_CLASS','U','security:classification','UNCLASSIFIED'], // Unclassified
+        ['SEC_CLASS','Unclassified','security:classification','UNCLASSIFIED'], // Unclassified
 
         // SEC_CLS_AUTHORITY - Classification Authority
         ['SEC_CLS_AUTHORITY','D_IMGPOL','security:classification:authority','D_IMGPOL'], // Classification Derived from Imagery Policy Series Classification Guide
@@ -2219,6 +2244,7 @@ ufd = {
         ['SPEC_ID','3KL-VMap-0','source:extraction_specification','3kl-vmap-0'], // 3KL-VMap-0
         ['SPEC_ID','3KM-VMap-1','source:extraction_specification','3km-vmap-1'], // 3KM-VMap-1
         ['SPEC_ID','3KU-UVMap','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
+        ['SPEC_ID','3KU-UVMAP','source:extraction_specification','3ku-uvmap'], // 3KU-UVMap
         ['SPEC_ID','3KD-UVMap','source:extraction_specification','3ku-uvmap'],
         ['SPEC_ID','4AA-ATC','source:extraction_specification','4aa-atc'], // 4AA-ATC
         ['SPEC_ID','4AC-JOG-R','source:extraction_specification','4ac-jog-r'], // 4AC-JOG-R
@@ -2266,12 +2292,12 @@ ufd = {
         ['SSC','Artificial Mountain','shape','artificial_mountain'], // Artificial Mountain
         ['SSC','22','shape','crescent'], // Crescent
         ['SSC','Crescent','shape','crescent'], // Crescent
-        ['SSC','23','shape','ferris_wheel'], // Ferris Wheel
-        ['SSC','Ferris Wheel','shape','ferris_wheel'], // Ferris Wheel
+        ['SSC','23','attraction','ferris_wheel'], // Ferris Wheel
+        ['SSC','Ferris Wheel','attraction','ferris_wheel'], // Ferris Wheel
         ['SSC','24','shape','enclosed'], // Enclosed
         ['SSC','Enclosed','shape','enclosed'], // Enclosed
-        ['SSC','25','shape','roller_coaster'], // Roller Coaster
-        ['SSC','Roller Coaster','shape','roller_coaster'], // Roller Coaster
+        ['SSC','25','attraction','roller_coaster'], // Roller Coaster
+        ['SSC','Roller Coaster','attraction','roller_coaster'], // Roller Coaster
         ['SSC','26','shape','lateral'], // Lateral
         ['SSC','Lateral','shape','lateral'], // Lateral
         ['SSC','27','shape','mounds'], // Mounds
@@ -2362,7 +2388,9 @@ ufd = {
         ['SSR','77','building:roof_shape','with_cupola'],
         ['SSR','With Cupola','building:roof_shape','with_cupola'],
         ['SSR','78','building:roof_shape','with_turret'],
+        ['SSR','With Turret','building:roof_shape','with_turret'],
         ['SSR','79','building:roof_shape','with_tower'],
+        ['SSR','With Tower','building:roof_shape','with_tower'],
         ['SSR','80','building:roof_shape','with_minaret'],
         ['SSR','With Minaret','building:roof_shape','with_minaret'],
         ['SSR','999','building:roof_shape','other'],
@@ -2438,8 +2466,11 @@ ufd = {
         // ['TST','0','cable:shape','unknown'], // Unknown
         ['TST','0',undefined,undefined], // Unknown
         ['TST','1','cable:shape','symmetric_catenary'], // Normal Suspension
+        ['TST','Normal Suspension','cable:shape','symmetric_catenary'], // Normal Suspension
         ['TST','2','cable:shape','mountain_catenary'], // Catenary (Over Mountains)
+        ['TST','Catenary (Over Mountains)','cable:shape','mountain_catenary'], // Catenary (Over Mountains)
         ['TST','3','cable:shape','overwater_catenary'], // Catenary (Over Water)
+        ['TST','Catenary (Over Water)','cable:shape','overwater_catenary'], // Catenary (Over Water)
         ['TST','998',undefined,undefined], // Not Applicable
         ['TST','999','cable:shape','other'], // Other
 
@@ -2581,35 +2612,7 @@ ufd = {
         ['UPDATE_SOURCE','Vector Map Lv2 (VMap2)','source:review_source:type','vector_map_lv2_(vmap2)'], // Vector Map Lv2 (VMap2)
         ['UPDATE_SOURCE','World Vector Shoreline Plus (WVSPlus)','source:review_source:type','world_vector_shoreline_plus_(wvsplus)'], // World Vector Shoreline Plus (WVSPlus)
 
-        // USE_ - Usage2 - WTF???
-        // ['USE_','0','raw:USE_','unknown'], // Unknown
-        ['USE_','0',undefined,undefined], // Unknown
-        ['USE_','4','controlling_authority:2','national'], // National
-        ['USE_','National','controlling_authority:2','national'], // National
-        ['USE_','5','controlling_authority:2','state'], // State
-        ['USE_','State','controlling_authority:2','state'], // State
-        ['USE_','6','controlling_authority:2','private'], // Private
-        ['USE_','Private','controlling_authority:2','private'], // Private
-        ['USE_','8','controlling_authority:2','military'], // Military
-        ['USE_','Military','controlling_authority:2','military'], // Military
-        ['USE_','20','use:2','closed'], // Closed
-        ['USE_','Closed','use:2','closed'], // Closed
-        ['USE_','21','use:2','restricted'], // Restricted
-        ['USE_','Restricted','use:2','restricted'], // Restricted
-        ['USE_','22','controlling_authority:2','joint_military/civilian'], // Joint Military/Civilian
-        ['USE_','Joint Military/Civilian','controlling_authority:2','joint_military/civilian'], // Joint Military/Civilian
-        ['USE_','23','controlling_authority:2','international'], // International
-        ['USE_','International','controlling_authority:2','international'], // International
-        ['USE_','50','use:2','limited'], // Limited
-        ['USE_','Limited','use:2','limited'], // Limited
-        ['USE_','155','use:2','prohibited_area'], // Prohibited Area
-        ['USE_','Prohibited Area','use:2','prohibited_area'], // Prohibited Area
-        ['USE_','158','use:2','reserved'], // Reserved
-        ['USE_','Reserved','use:2','reserved'], // Reserved
-        ['USE_','999','use:2','other'], // Other
-        ['USE_','Other','use:2','other'], // Other
-
-        // USG - Usage: This is just Ugly.
+        // USE_ / USG - Usage: This is just Ugly.
         // It is a combination of primary user, function, or controlling authority
         // ['USG','0','controlling_authority','unknown'],
         ['USG','0',undefined,undefined],
@@ -2718,6 +2721,7 @@ ufd = {
         ['USG','120','use','recreation'], // Recreational
         ['USG','Recreational','use','recreation'],
         ['USG','128','use','mixed_urban_or_built-up_land'], // Mixed Urban or built-up Land
+        ['USG','Mixed Urban or built-up Land','use','mixed_urban_or_built-up_land'], // Mixed Urban or built-up Land
         ['USG','130','use','transportation'],
         ['USG','Transportation','use','transportation'],
         ['USG','134','use','utilities_and_communication'], // Utilities and Communication
@@ -2966,6 +2970,287 @@ ufd = {
         ], // End one2one
     // ##### End of One2One Rules #####
 
+    // Mapping filenames to F_CODES. We need this since some datasets don't have an F_CODE attribute
+    // format: <output F_CODE> [<list of strings to try to match>]
+    fCodeMap : [
+        ['AA010',['aa010','mine_a','mine_p']],
+        ['AA012',['aa012','quarry_a','quarry_p']],
+        ['AA040',['aa040','rig_superstructure_p']],
+        ['AA050',['aa050','well_p']],
+        ['AA052',['aa052','oil_gas_field_a']],
+        ['AB000',['ab000','disposal_site_a']],
+        ['AB010',['ab010','scrap_yard_a','scrap_yard_p']],
+        ['AC000',['ac000','processing_treatment_plant_a']],
+        ['AC010',['ac010','blast_furnace_a','blast_furnace_p']],
+        ['AC020',['ac020','catalytic_cracker_p']],
+        ['AC030',['ac030','settling_basin_sludge_pond_a']],
+        ['AC040',['ac040','oil_gas_facilities_a','oil_gas_facilities_p']],
+        ['AD010',['ad010','power_plant_a']],
+        ['AD020',['ad020','solar_panels_l','solar_panels_p']],
+        ['AD030',['ad030','substation_a']],
+        ['AE010',['ae010','assembly_plant_a']],
+        ['AF010',['af010','chimney_smokestack_p']],
+        ['AF020',['af020','conveyor_l']],
+        ['AF030',['af030','cooling_tower_a','cooling_tower_p']],
+        ['AF040',['af040','crane_a','crane_p']],
+        ['AF070',['af070','flare_pipe_a','flare_pipe_p']],
+        ['AH050',['ah050','fortification_a','fortification_p']],
+        ['AH060',['ah060','underground_bunker_a','underground_bunker_p']],
+        ['AI020',['ai020','mobile_home_park_a']],
+        ['AJ030',['aj030','feedlot_stockyard_a']],
+        ['AJ050',['aj050','windmill_p']],
+        ['AJ051',['aj051','windmotor_p']],
+        ['AK020',['ak020','amusement_park_attraction_p','amusement_park_att_p']],
+        ['AK030',['ak030','amusement_park_a','amusement_park_p']],
+        ['AK040',['ak040','athletic_field_a']],
+        ['AK050',['ak050','tennis_courts_a']],
+        ['AK060',['ak060','campground_campsite_a']],
+        ['AK070',['ak070','drive_in_theater_a']],
+        ['AK090',['ak090','fairgrounds_a']],
+        ['AK100',['ak100','golf_course_a']],
+        ['AK101',['AK101','golf_driving_range_a']],
+        ['AK110',['ak110','grandstand_a']],
+        ['AK120',['ak120','park_a']],
+        ['AK130',['ak130','race_track_a','race_track_p']],
+        ['AK160',['ak160','stadium_amphi_a']],
+        ['AK170',['ak170','swimming_pool_a']],
+        ['AK180',['ak180','zoo_a']],
+        ['AK190',['ak190','fishing_pier_a','fishing_pier_l']],
+        ['AL012',['al012','archeological_site_a','archeological_site_p']],
+        ['AL015',['al015','building_a','building_p']],
+        ['AL018',['al018','build_superstr_add_a','build_superstr_add_l','build_superstr_add_p']],
+        ['AL019',['al019','shed_a']],
+        ['AL020',['al020','builtup_area_a','builtup_area_p']],
+        ['AL025',['al025','cairn_p']],
+        ['AL030',['al030','cemetery_a','cemetery_p']],
+        ['AL045',['al045','complex_outline_a']],
+        ['AL060',['al060','dragon_teeth_a','dragon_teeth_l']],
+        ['AL070',['al070','fence_l']],
+        ['AL080',['al080','gantry_l','gantry_p']],
+        ['AL100',['al100','hut_p']],
+        ['AL105',['al105','settlement_a','settlement_p']],
+        ['AL130',['al130','monument_a','monument_p']],
+        ['AL135',['al135','native_settlement_a']],
+        ['AL140',['al140','particle_accelerator_a']],
+        ['AL170',['al170','plaza_city_square_a']],
+        ['AL200',['al200','ruins_a','ruins_p']],
+        ['AL208',['al208','shanty_town_a']],
+        ['AL209',['al209','tent_dwellings_a']],
+        ['AL210',['al210','snow_shed_a','snow_shed_l','snow_shed_p']],
+        ['AL240',['al240','tower_noncomm_a','tower_noncomm_p']],
+        ['AL250',['al250','underground_dwelling_p']],
+        ['AL260',['al260','wall_l','walllines']],
+        ['AM010',['am010','depot_storage_a','depot_storage_p']],
+        ['AM020',['am020','grain_bin_silo_a','grain_bin_silo_p']],
+        ['AM030',['am030','grain_elevator_a','grain_elevator_p']],
+        ['AM031',['am031','timber_yard_a']],
+        ['AM040',['am040','mineral_pile_a','mineral_pile_p']],
+        ['AM060',['am060','storage_bunker_a','storage_bunker_p']],
+        ['AM070',['am070','tank_a','tank_p']],
+        ['AM080',['am080','water_tower_a','water_tower_p']],
+        ['AN010',['an010','railroad_l','railway_l']],
+        ['AN050',['an050','rr_siding_spur_l']],
+        ['AN060',['an060','rr_marshal_yard_a']],
+        ['AN075',['an075','rr_turntable_p','railroad_turntable_p']],
+        ['AP010',['ap010','trackl','track_l','carttrackl','cart_track','carttrack','cart_track_l']],
+        ['AP020',['ap020','interchange_l', 'interchangel']],
+        ['AP030',['ap030','roadnet','road_l','roadl','roadlines']],
+        ['AP040',['ap040','gate_l','gate_p']],
+        ['AP041',['ap041','barrier_a','barrier_l']], // XXX
+        ['AP050',['ap050','traill','trail_l']],
+        ['AQ010',['aq010','aerial_cableway_l','aerial_cableway_ski_lift_lines']],
+        ['AQ020',['aq020','aerial_cableway_pylon_p']],
+        ['AQ035',['aq035','sidewalk_l']],
+        ['AQ040',['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']],
+        ['AQ045',['aq045','bridge_span_l', 'bridge_span_p']],
+        ['AQ050',['aq050','bridge_superstructure_l','bridge_superstructure_p']],
+        ['AQ055',['aq055','bridge_pylon_p']],
+        ['AQ060',['aq060','control_tower_a','control_tower_p']],
+        ['AQ064',['aq064','causeway_a','causeway_l']],
+        ['AQ065',['aq065','culvert_l','culvert_p']],
+        ['AQ070',['aq070','ferry_crossing_l']],
+        ['AQ080',['aq080','ferry_site_p']],
+        ['AQ110',['aq110','mooring_mast_p']],
+        ['AQ113',['aq113','pipeline_pipe_l']],
+        ['AQ116',['aq116','pumping_station_a','pumping_station_p']],
+        ['AQ125',['aq125','station_misc_a','station_misc_p']],
+        ['AQ130',['aq130','tunnell','tunnel_l']],
+        ['AQ135',['aq135','vehicle_stopping_area_a']],
+        ['AQ140',['aq140','vehicle_storage_a']],
+        ['AT010',['at010','disk_dish_p']],
+        ['AT020',['at020','early_warning_radar_site_a','early_warning_radar_site_p']],
+        ['AT030',['at030','power_trans_line_l']],
+        ['AT040',['at040','power_trans_pylon_a','power_trans_pylon_p']],
+        ['AT045',['at045','radar_transmitter_p']],
+        ['AT050',['at050','comm_building_a','comm_building_p','communication_building_a','communication_building_p']],
+        ['AT060',['at060','telephone_line_l']],
+        ['AT070',['at070','telephone_pylon_p']],
+        ['AT080',['at080','comm_tower_p','communication_tower_p']],
+        ['BA010',['ba010','coastline_shoreline_l']],
+        ['BA023',['ba023','foreshore_precise_l']],
+        ['BA030',['ba030','island_a']],
+        ['BA040',['ba040','water_except_inland_a']],
+        ['BB005',['bb005','harbor_a']],
+        ['BB010',['bb010','anchorage_a']],
+        ['BB041',['bb041','breakwater_a','breakwater_l']],
+        ['BB043',['bb043','groin_a','groin_l']],
+        ['BB090',['bb090','drydock_a']],
+        ['BB110',['bb110','fish_traps_p']],
+        ['BB140',['bb140','jetty_a','jetty_l']],
+        ['BB190',['bb190','pier_wharf_quay_a','pier_wharf_quay_l']],
+        ['BB220',['bb220','maritime_ramp_a','maritime_ramp_l']],
+        ['BB230',['bb230','seawall_a','seawall_l']],
+        ['BB240',['bb240','slipway_a','slipway_l']],
+        ['BC010',['bc010','beacon_p']],
+        ['BC050',['bc050','lighthouse_a','lighthouse_p']],
+        ['BH010',['bh010','aqueduct_a','aqueduct_l','aqueduct_p']],
+        ['BH015',['bh015','bog_a']],
+        ['BH020',['bh020','canal_a','canal_l']],
+        ['BH030',['bh030','ditch_l','ditch_a']],
+        ['BH040',['bh040','filtration_beds_a']],
+        ['BH050',['bh050','fish_hatchery_a']],
+        ['BH060',['bh060','flume_l']],
+        ['BH070',['bh070','ford_l','ford_p']],
+        ['BH075',['bh075','fountain_a','fountain_p']],
+        ['BH077',['bh077','hummock_a']],
+        ['BH080',['bh080','lake_pond_a']],
+        ['BH090',['bh090','land_subject_to_inundation_a']],
+        ['BH110',['bh110','penstock_a','penstock_l']],
+        ['BH120',['bh120','rapids_l','rapids_p']],
+        ['BH130',['bh130','reservoir_a']],
+        ['BH135',['bh135','rice_field_a']],
+        ['BH140',['bh140','river_stream_a','river_stream_l']],
+        ['BH145',['bh145','river_vanish_point_p']],
+        ['BH150',['bh150','salt_pan_a']],
+        ['BH155',['bh155','salt_evaporator_a']],
+        ['BH160',['bh160','sebkha_a']],
+        ['BH165',['bh165','spillway_a','spillway_l','spillway_p']],
+        ['BH170',['bh170','spring_water_hole_p']],
+        ['BH171',['bh171','fire_hydrant_p']],
+        ['BH180',['bh180','waterfall_l','waterfall_p']],
+        ['BI010',['bi010','cistern_p']],
+        ['BI020',['bi020','dam_weir_a','dam_weir_p']],
+        ['BI030',['bi030','lock_a','lock_p']],
+        ['BI040',['bi040','sluice_gate_l','sluice_gate_p']],
+        ['BI050',['bi050','water_intake_tower_p']],
+        ['CA030',['ca030','spot_elevation_p']],
+        ['DA005',['da005','asphalt_lake_a']],
+        ['DA010',['da010','ground_surface_element_a']],
+        ['DB010',['db010','bluff_cliff_escarp_l']],
+        ['DB030',['db030','cave_p']],
+        ['DB060',['db060','crevice_a','crevice_l']],
+        ['DB070',['db070','cut_a','cut_l']],
+        ['DB090',['db090','embankment_fill_a','embankment_fill_l']],
+        ['DB110',['db110','fault_l']],
+        ['DB115',['db115','geothermal_feature_p']],
+        ['DB150',['db150','mountain_pass_p']],
+        ['DB170',['db170','sand_dunes_a']],
+        ['DB180',['db180','volcano_p']],
+        ['EA010',['ea010','cropland_a']],
+        ['EA020',['ea020','hedgerow_l']],
+        ['EA030',['ea030','nursery_p']],
+        ['EA040',['ea040','orchard_plantation_a']],
+        ['EA050',['ea050','vinyards_a']],
+        ['EA055',['ea055','hops_a']],
+        ['EB010',['eb010','grassland_a']],
+        ['EB020',['eb020','scrub_brush_bush_a']],
+        ['EC010',['ec010','bamboo_cane_a']],
+        ['EC020',['ec020','oasis_a','oasis_p']],
+        ['EC030',['ec030','trees_a','trees_l','trees_p']],
+        ['EC040',['ec040','cleared_way_a','cleared_way_l']],
+        ['ED010',['ed010','marsh_a']],
+        ['ED020',['ed020','swamp_a']],
+        ['EE010',['ee010','logging_area_a']],
+        ['FA000',['fa000','administrative_boundary_l']],
+        ['FA001',['fa001','administrative_area_a']],
+        ['FA015',['fa015','firing_range_a','firing_range_p']],
+        ['FA020',['fa020','armistice_line_l']],
+        ['FA100',['fa100','test_area_a']],
+        ['FA165',['fa165','training_area_a']],
+        ['GB005',['gb005','airport_airfield_a']],
+        ['GB010',['gb010','airport_lighting_p']],
+        ['GB015',['gb015','apron_hardstand_a']],
+        ['GB030',['gb030','heli_landing_pad_a','heli_landing_pad_p']],
+        ['GB035',['gb035','heliport_a']],
+        ['GB040',['gb040','launch_pad_p']],
+        ['GB045',['gb045','overrun_stopway_a']],
+        ['GB050',['gb050','revetment_a','revetment_l']],
+        ['GB055',['gb055','runway_a']],
+        ['GB065',['gb065','seaplane_base_a']],
+        ['GB075',['gb075','taxiway_a']],
+        ['SU001',['su001','military_base_a']],
+        ['SU002',['su002','subway_l']],
+        ['ZB020',['zb020','benchmark_p']],
+        ['ZB030',['zb030','boundary_monument_p']],
+        ['ZD019',['zd019','general_misc_feature_a','general_misc_feature_l','general_misc_feature_p']],
+        ['ZD020',['zd020','void_collection_area_a']],
+        ['ZD040',['zd040','named_location_p']],
+        ['ZD045',['zd045','text_description_a','text_description_l','text_description_p']],
+        ], // End fCodeMap
+
+    // This is the current lost of shortened and screwed up attribute names and what they should be.
+    swapList : {
+        'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
+        'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
+        'COMM_CPYRT':'COMM_CPYRT_NOTICE',
+        'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
+        'COMPLETENE':'COMPLETENESS_CODE',
+        'CREATION_D':'CREATION_DATE',
+        'MIN_':'MIN',
+        'ORIGINATIN':'ORIGINATING_SOURCE',
+        'ORIG_SOURC':'ORIG_SOURCE_DATE',
+        'ORIG_SOU_1':'ORIG_SOURCE_INFO',
+        'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
+        'RSTRN_DECL':'RSTRN_DECLASS',
+        'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
+        'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
+        'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
+        'RSTRN_RELE':'RSTRN_RELEASIBILITY',
+        'SEC_CD_CNT':'SEC_CD_CNTRL',
+        'SEC_CLASS_':'SEC_CLASS_SYS_ID',
+        'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
+        'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
+        'SEC_CLS__2':'SEC_CLS_AUTHORITY',
+        'UPDATE_S_1':'UPDATE_SOURCE_DATE',
+        'UPDATE_S_2':'UPDATE_SOURCE_INFO',
+        'UPDATE_SOU':'UPDATE_SOURCE',
+        'Z_VALUE_TY':'Z_VALUE_TYPE'
+        },
+
+    // List of data values to drop/ignore. Love the spelling of some of these
+    // 997 = Unpopulated
+    // 998 = Not Applicable
+    // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
+    ignoreList : { 'unknown':1,'unk':1,'n/a':1,'n_a':1,'-32768':1,'notapplicable':1,'not-applicable':1,'997':1, 
+                   '998':1,'unpopulated':1,'<Null>':1  },
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    unitList : { 'WD1':10 },
+
+
+    // ##### Utility Functions #####
+    findFCode: function(layerName)
+    {
+        // Funky but it makes life easier
+        var llayerName = layerName.toString().toLowerCase();
+
+        for (var row in ufd.fCodeMap)
+        {
+            for (var val in ufd.fCodeMap[row][1])
+            {
+                if (llayerName.match(ufd.fCodeMap[row][1][val]))
+                {
+                    // Debug
+                    // print('Match: ' + llayerName + ' with ' + ufd.fCodeMap[row][1][val])
+                    return ufd.fCodeMap[row][0];
+                }
+            }
+        }
+
+        // Default: Return null
+        return null;
+    },
+
 
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -2973,43 +3258,6 @@ ufd = {
         // This is a handy loop. We use it to:
         // 1) Remove all of the "No Information" and -999999 fields
         // 2) Fix the renameing of some fields
-
-        // This is the current lost of shortened and screwed up attribute names and what they should be.
-        var swapList = {
-            'ACE_EVAL_M':'ACE_EVAL_METHOD_CD',
-            'ALE_EVAL_M':'ALE_EVAL_METHOD_CD',
-            'COMM_CPYRT':'COMM_CPYRT_NOTICE',
-            'COMM_LIC_T':'COMM_LIC_TIER_NOTICE',
-            'COMPLETENE':'COMPLETENESS_CODE',
-            'CREATION_D':'CREATION_DATE',
-            'ORIGINATIN':'ORIGINATING_SOURCE',
-            'ORIG_SOURC':'ORIG_SOURCE_DATE',
-            'ORIG_SOU_1':'ORIG_SOURCE_INFO',
-            'RSTRN_DCLS':'RSTRN_DCLS_XMPT_CD',
-            'RSTRN_DECL':'RSTRN_DECLASS',
-            'RSTRN_DS_1':'RSTRN_DSEM_CTRL_NIC',
-            'RSTRN_DSEM':'RSTRN_DSEM_CTRL_IC',
-            'RSTRN_FORE':'RSTRN_FOREIGN_GOV',
-            'RSTRN_RELE':'RSTRN_RELEASIBILITY',
-            'SEC_CD_CNT':'SEC_CD_CNTRL',
-            'SEC_CLASS_':'SEC_CLASS_SYS_ID',
-            'SEC_CLS_AU':'SEC_CLS_AUTH_DESC',
-            'SEC_CLS__1':'SEC_CLS_AUTH_MULT',
-            'SEC_CLS__2':'SEC_CLS_AUTHORITY',
-            'UPDATE_S_1':'UPDATE_SOURCE_DATE',
-            'UPDATE_S_2':'UPDATE_SOURCE_INFO',
-            'UPDATE_SOU':'UPDATE_SOURCE',
-            'Z_VALUE_TY':'Z_VALUE_TYPE'
-        };
-
-        // List of data values to drop/ignore. Love the spelling of some of these
-        // 997 = Unpopulated
-        // 998 = Not Applicable
-        // 0 = Unknown BUT this can also be a valid value for some fields so we don't have it here
-        var ignoreList = { 'unknown':1, 'unk':1, 'n/a':1, 'n_a':1, '-32768':1,'not applicable':1, '997':1, '998':1 };
-
-        // Unit conversion. Some attributes are in centimetres, others in decimetres
-        var unitList = { 'WD1':10 };
 
         // make sure all columns are upper case. This simplifies translation.
         for (var col in attrs)
@@ -3022,7 +3270,7 @@ ufd = {
             attrValue = attrValue.replace(/\s/g, '');
 
             // Wipe out the useless values
-            if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+            if (attrs[col] == '' || attrValue in ufd.ignoreList || attrs[col] in ufd.ignoreList)
             {
                 delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
                 continue;
@@ -3037,18 +3285,35 @@ ufd = {
             }
 
             // Sort out units - if needed
-            if (col in unitList) attrs[col] = attrs[col] / unitList[col];
+            if (col in ufd.unitList) attrs[col] = attrs[col] / ufd.unitList[col];
 
             // Now see if we need to swap attr names
-            if (col in swapList)
+            if (col in ufd.swapList)
             {
-                // print('Swapped: ' + swapList[col]); // debug
-                attrs[swapList[col]] = attrs[col];
+                // Debug
+                // print('Swapped: ' + ufd.swapList[col]); // debug
+                attrs[ufd.swapList[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
-
         }
+
+        // USE_ and USG seem to be used in various ways depending on the dataset
+        if (attrs.USE_)
+        {
+            if (attrs.USE_ == '0')
+            {
+                delete attrs.USE_;
+            }
+            else
+            {
+                if (! attrs.USG)
+                {
+                    attrs.USG = attrs.USE_;
+                    delete attrs.USE_;
+                }
+            }
+        } // End attrs.USE_
 
         // Time to find an FCODE
         if (attrs.F_CODE)
@@ -3062,75 +3327,47 @@ ufd = {
         }
         else
         {
-            var fCodeMap = [
-                        ['AA050', ['aa050','well_p']], // Well
-                        ['AL015', ['al015','building_a','building_p']], // Building
-                        ['AL020', ['al020','builtup_area_a']], // Built up area
-                        ['AL030', ['al030','cemetery_a']], // Cemetary
-                        ['AL100', ['al100']], // Hut
-                        ['AL105', ['al105']], // Settlement
-                        ['AL130', ['al130','monument_a','monument_p']], // Memorial Monument
-                        ['AL200', ['al200','ruins_a']], // Ruins
-                        ['AN010', ['an010','railway_l']], // Railway
-                        ['AN050', ['an050','rr_siding_spur_l']], // Railway Sidetrack
-                        ['AN060', ['an060','rr_marshal_yard_a']], // Railway Yard
-                        ['AP010', ['ap010','trackl','track_l','cart_track','carttrack','cart_track_l']], // Cart Track
-                        ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
-                        ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
-                        ['AP050', ['ap050','traill','trail_l']], // Trail
-                        ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
-                        ['AQ045', ['aq045','bridge_span_l', 'bridge_span_p']], // Bridge Span
-                        ['AQ050', ['aq050','bridge_superstructure_p']], // Bridge Superstructure
-                        ['AQ055', ['aq055','bridge_pylon_p']], // Bridge Pylon
-                        ['AQ065', ['aq065','culvert_l']], // Culvert
-                        ['AQ113', ['aq113','pipeline_pipe_l']], // Pipeline
-                        ['AQ130', ['aq130','tunnell','tunnel_l']], // Tunnel
-                        ['AT050', ['at050','comm_building_a']], // Communication Building
-                        ['BH010', ['bh010','aqueduct_l']], // Aqueduct
-                        ['BH020', ['bh020','canal_a','canal_l']], // Canal
-                        ['BH030', ['bh030','ditch_l','ditch_a']], // Ditch
-                        ['BH070', ['bh070','ford_l','ford_p']], // Ford
-                        ['BH140', ['bh140', 'river_stream_a','river_stream_l']], // River
-                        ['DB070', ['db070']], // Cut
-                        ['DB150', ['db150']], // Mountain Pass
-                        ['ZD040', ['zd040','named_location_p']], // Annotated Location
-                    ]
-
-            // Funky but it makes life easier
-            var llayerName = layerName.toString().toLowerCase();
-
-            for (var row in fCodeMap)
-            {
-                for (var val in fCodeMap[row][1])
-                {
-                    if (llayerName.match(fCodeMap[row][1][val])) attrs.F_CODE = fCodeMap[row][0];
-                }
-            }
+            attrs.F_CODE = ufd.findFCode(layerName);
         } // End of Find an FCode
 
         // Names are a bit of a mess
+        // NAM vs NAM_ vs NM
         // Standards. We have them for a reason.
         if (!attrs.NAM)
         {
-            if (attrs.NAM_1)
+            for (var i in ['1','2','3','4','5'])
             {
-                attrs.NAM = attrs.NAM_1;
-                delete attrs.NAM_1;
+                if (attrs['NAM_' + i])
+                {
+                    attrs.NAM = attrs['NAM_' + i];
+                    delete attrs['NAM_' + i]
+                    break;
+                }
+
+                if (attrs['NAM' + i])
+                {
+                    attrs.NAM = attrs['NAM' + i];
+                    delete attrs['NAM' + i]
+                    break;
+                }
+                if (attrs['NM' + i])
+                {
+                    attrs.NAM = attrs['NM' + i];
+                    delete attrs['NM' + i]
+                    break;
+                }
             }
-            else if (attrs.NAM_2)
+        }
+
+        // Drop duplicate names
+        if (attrs.NAM)
+        {
+            for (var i in ['1','2','3','4','5'])
             {
-                attrs.NAM = attrs.NAM_2;
-                delete attrs.NAM_2;
-            }
-            else if (attrs.NAM_3)
-            {
-                attrs.NAM = attrs.NAM_3;
-                delete attrs.NAM_3;
-            }
-            else if (attrs.NAM_4)
-            {
-                attrs.NAM = attrs.NAM_4;
-                delete attrs.NAM_4;
+                if (attrs.NAM == attrs['NAM_' + i]) delete attrs['NAM_' + i]
+
+                if (attrs.NAM == attrs['NAM' + i]) delete attrs['NAM' + i]
+                if (attrs.NAM == attrs['NM' + i]) delete attrs['NM' + i]
             }
         }
 
@@ -3212,10 +3449,10 @@ ufd = {
 
         tags.source = 'ufd:' + layerName.toLowerCase();
 
-        // Add a UUID
-        if (attrs.GFID)
+        // Format or add a UUID
+        if (tags.uuid)
         {
-            tags.uuid = '{' + attrs.GFID + '}';
+            if (tags.uuid.slice[0,1] !== '{' && tags.uuid.slice[-1] !== '}') tags.uuid = '{' + tags.uuid + '}';
         }
         else
         {
@@ -3291,88 +3528,60 @@ ufd = {
         // If we have a Tower, Add a man_made tag
         if (tags['tower:type']) tags.man_made = 'tower';
 
+        // Lakes and other water features
+        if (tags.water && !(tags.natural)) tags.natural = 'water' 
+
+        // Amusement Park Attractions
+        // Artificial Mountain can be in multiple F_CODES
+        if (attrs.F_CODE == 'AK020' && tags.shape)
+        {
+            tags.attraction = tags.shape;
+            delete tags.shape;
+        }
+
         // Sort out security stuff - not pretty
         // I'm pretty sure we are not going to see 99% of these but they are in the spec
-        if (attrs.SEC_CLASS)
+        // The overall classification is added in the one2one rules
+        switch (attrs.SEC_CLASS)
         {
-            switch (attrs.SEC_CLASS)
-            {
+            case undefined: // Break early if no value
+                break;
+
             case '01': // COSMIC Top Secret-Bohemia
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC';
                 tags['security:classification:sci:non_us'] = 'BOHEMIA';
                 break;
 
             case '02': // COSMIC Top Secret-Balk
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC';
                 tags['security:classification:sci:non_us'] = 'BALK';
                 break;
 
-            case '03': // NATO Secret
-                tags['security:classification'] = 'SECRET'; // Secret
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '04': // NATO Secret-Savate
-                tags['security:classification'] = 'SECRET'; // Secret
                 tags['security:classification:nato'] = 'yes';
                 tags['security:classification:sci','SAVATE'];
                 break;
 
             case '05': // NATO Secret-Avicula
-                tags['security:classification'] = 'SECRET'; // Secret
                 tags['security:classification:nato'] = 'yes';
                 tags['security:classification:sci','AVICULA'];
                 break;
 
+            case '03': // NATO Secret
             case '06': // NATO Confidential
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '07': // NATO Restricted
-                tags['security:classification'] = 'RRESTRICTED'; // Restricted
-                tags['security:classification:nato'] = 'yes';
-                break;
-
             case '08': // NATO Unclassified
-                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
                 tags['security:classification:nato'] = 'yes';
                 break;
 
             case '09': // COSMIC Top Secret Atom
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
                 tags['security:classification:sci'] = 'COSMIC;ATOM';
                 break;
 
             case '10': // Secret Atomal
-                tags['security:classification'] = 'SECRET'; // Secret
-                tags['security:classification:sci:non_us'] = 'ATOMAL';
-                break;
-
             case '11': // Confidential Atomal
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
                 tags['security:classification:sci:non_us'] = 'ATOMAL';
                 break;
-
-            case 'TS':
-                tags['security:classification'] = 'TOP_SECRET'; // Top Secret
-                break;
-
-            case 'S':
-                tags['security:classification'] = 'SECRET'; // Secret
-                break;
-
-            case 'C':
-                tags['security:classification'] = 'CONFIDENTIAL'; // Confidential
-                break;
-
-            case 'U':
-            case 'Unclassified':
-                tags['security:classification'] = 'UNCLASSIFIED'; // Unclassified
-                break;
-            }
         } // End SEC_CLASS
 
         // Misc F_CODE fixes
@@ -3393,14 +3602,17 @@ ufd = {
                 break;
 
             case '26': // 1st order
+            case 'Primary/1st Order':
                 tags.admin_level = '4';
                 break;
 
             case '30': // 2nd order
+            case 'Secondary/2nd Order':
                 tags.admin_level = '6';
                 break;
 
             case '31': // 3rd order
+            case 'Tertiary/3rd Order':
                 tags.admin_level = '8';
                 break;
             }
@@ -3432,7 +3644,7 @@ function initialize()
         ufd.configIn.OgrAddUuid = config.getOgrAddUuid();
 
         // Get any changes
-        ufd.toChange = hoot.Settings.get("translation.override");
+        ufd.toChange = hoot.Settings.get("schema.translation.override");
     }
 
     // Set up the fcode translation rules. We need this due to clashes between the one2one and
@@ -3449,6 +3661,9 @@ function initialize()
     {
         ufd.one2one.push.apply(ufd.one2one,ufd.fcodeOne2oneIn);
         ufd.lookup = translate.createLookup(ufd.one2one);
+
+        // Debug:
+       // translate.dumpOne2OneLookup(ufd.lookup);
     }
 
 }

@@ -33,6 +33,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -89,9 +90,9 @@ QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
   return QList<NetworkVertexScorePtr>();
 }
 
-boost::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
+std::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
-  return boost::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
+  return std::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
 }
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)
@@ -209,8 +210,9 @@ void ConflictsNetworkMatcher::_sanityCheckRelationships()
     if (ctr % 100 == 0)
     {
       PROGRESS_INFO(
-        "Sanity checked " << ctr << " / " << total << " relationships. " << matchesRemoved <<
-        " matches removed.");
+        "Sanity checked " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(total) << " relationships. " <<
+        StringUtils::formatLargeNumber(matchesRemoved) << " matches removed.");
     }
   }
 }
@@ -326,7 +328,9 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
     if (count % 1000 == 0)
     {
       PROGRESS_INFO(
-        count << " / " << _edgeMatches->getAllMatches().size() << " match relationships processed.");
+        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(_edgeMatches->getAllMatches().size()) <<
+        " match relationships processed.");
     }
   }
 
@@ -409,7 +413,7 @@ void ConflictsNetworkMatcher::_iterateRank()
   const double partialHandicap = 0.5;
   EdgeScoreMap newScores;
   LOG_VART(_scores.size());
-  foreach(ConstEdgeMatchPtr em, _scores.keys())
+  foreach (ConstEdgeMatchPtr em, _scores.keys())
   {
     LOG_VART(em->containsPartial());
     LOG_VART(em->containsStub());
@@ -418,7 +422,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       em->containsPartial() || em->containsStub() ? _scores[em] * partialHandicap : _scores[em];
     double denominator = numerator;
 
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
       LOG_VART(r->getEdge()->containsPartial());
 
@@ -489,7 +493,7 @@ void ConflictsNetworkMatcher::_iterateSimple()
     double denominator = numerator;
     LOG_VART(numerator);
 
-    foreach(ConstMatchRelationshipPtr r, _matchRelationships[em])
+    foreach (ConstMatchRelationshipPtr r, _matchRelationships[em])
     {
       double childHandicap = pow(partialHandicap, r->getEdge()->countPartialMatches());
       LOG_VART(r->getEdge());
@@ -593,7 +597,9 @@ void ConflictsNetworkMatcher::_iterateSimple()
     count++;
     if (count % 1000 == 0)
     {
-      PROGRESS_INFO(count << " / " << total << " matches processed.");
+      PROGRESS_INFO(
+        StringUtils::formatLargeNumber(count) << " / " << StringUtils::formatLargeNumber(total) <<
+        " matches processed.");
     }
   }
 
@@ -705,6 +711,13 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     count++;
     if (count % 100 == 0)
     {
+      // Strangely, PROGRESS_INFO doesn't log one per line once StringUtils::formatLargeNumber gets
+      // added here...
+//      PROGRESS_INFO(
+//        StringUtils::formatLargeNumber(count) << " / " <<
+//        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed. " <<
+//        StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
+//        " duplicate edge matches removed.");
       PROGRESS_INFO(
         count << " / " << em.size() << " edge match scores processed. " <<
         finder.getNumSimilarEdgeMatches() << " duplicate edge matches removed.");

@@ -221,7 +221,7 @@ The precision of numeric values written to Attribute-Relation (.arff) files.
 === attribute.conflation.aggressive.highway.joining
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, allows Attribute Conflation to more aggressively rejoin ways with names and specific
 highway attribution into those with less specific highway attribution and no names.  Enabling this
@@ -280,6 +280,14 @@ Date format string used by the building date tag value.  See QDateTime::fromStri
 
 Tag key used by the building.review.if.secondary.newer configuration option.
 
+=== building.force.contained.match
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, a building pair has been flagged for review, and one member of the pair is contained
+completely inside the other, the pair will be matched instead.
+
 === building.keep.more.complex.geometry.when.auto.merging
 
 * Data Type: bool
@@ -301,6 +309,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== building.merge.many.to.many.matches
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, many to many building matches will result in a review. If true, they will all be merged
+together when matched.
+
 === building.miss.threshold
 
 * Data Type: double
@@ -320,6 +336,16 @@ See also:
 If true, when building outlines are updated the updater will remove the source building relations
 used to create the outline multipolygon relation.  If false, both source building relations and
 outline multipolygon relations will remain.
+
+=== building.part.merger.thread.count
+
+* Data Type: int
+* Default Value: `8`
+
+Number of threads used by BuildingPartMergerOp to process buildings.  A value of less than one
+allows Hootenanny to automatically determine the optimal thread count.  The default value
+corresponds to the default number of threads available on the Hootenanny VM and you may obtain
+better performance by changing the value when dealing with other environments.
 
 === building.review.if.secondary.newer
 
@@ -528,7 +554,9 @@ List of operations to run in the conflate command after data is conflated, but b
 * Data Type: list
 * Default Value:
 ** `hoot::BuildingOutlineRemoveOp`
+** `hoot::RemoveRoundabouts`
 ** `hoot::MapCleaner`
+** `hoot::CornerSplitter`
 
 Runs in the conflate command after data is loaded. 'hoot info --operators' displays information
 about the available operations.
@@ -706,6 +734,14 @@ Debugging: The filename to use when saving the debug map during conflation.
 If true, multiple debug maps will be generated during a conflation job.  The output path of the maps
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
+
+=== differential.remove.reference.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If false, when running Differential Conflation the reference elements will not be dropped from the
+output.
 
 === differential.snap.unconnected.roads
 
@@ -941,6 +977,63 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== geometry.modifier.rules.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/GeometryModifierRules.json`
+
+Path to a json file containing the actions, filters and arguments used for the
+hoot::GeometryModifierOp.
+
+==== Rule File Format
+-----
+{
+    "way_to_poly":    // Command: way_to_poly, collapse_poly, etc.
+                      // See implementations of GeometryModifierAction
+    {
+        "filter":     // Filter for limiting the elements to process. The modifier uses the
+                      // Feature Filtering logic as used for conflation (FeatureFiltering.asciidoc)
+        {
+            "must":
+            [
+                {
+                    "tag": "aeroway=runway"
+                }
+            ]
+        },
+        "arguments":  // Arguments specific to the selected command
+        {
+            "default_width_m": 10,
+            "width_tag_m" : "width"
+        }
+    },
+    "collapse_poly":  // Next command: all commands defined are processed in sequence
+    {
+        "filter":
+        {
+        "must":
+            [
+                {
+                    "tag": "building=yes"
+                }
+            ]
+        },
+        "arguments":
+        {
+            "max_area_in_m": 15000
+        }
+    }
+}
+-----
+
+=== geonames.reader.string.cache.size
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of parsed tag string values stored in an in-memory cache when reading
+GeoNames data.
+
 === hash.seed.zero
 
 * Data Type: bool
@@ -1115,15 +1208,6 @@ or deleted.  It also requires writing out temporary files, so extra disk space i
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
-=== hootapi.db.writer.job.id
-
-* Data Type: string
-* Default Value: ``
-
-This option allows the Hootenanny Web Services to pass in the ID of the currently executing command
-job.  Given that information, any Hootenanny API database writer invoked by the command will write
-the ID of the job's associated map to the job status table.
-
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string
@@ -1166,7 +1250,7 @@ of assigning IDs within OSM.
 Example Usage:
 
 ----
-hoot convert -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm --trans $HOOT_HOME/translations/Identity.js
+hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D id.generator=hoot::PositiveIdGenerator -D id.generator.node.start=100 -D id.generator.relation.start=200 -D id.generator.way.start=300 myinput.osm myoutput.osm
 ----
 
 === id.generator.node.start
@@ -1356,16 +1440,24 @@ are -1 or 1 up to the number of available processors.
 If true, all implicit taggers will translate element name words to English before querying the
 corresponding implicit tag rules database.
 
-=== javascript.translator.path
+=== javascript.schema.translator.path
 
 * Data Type: list
 * Default Value:
-** `${HOOT_TRANSLATE_PATH}`
-** `${HOOT_HOME}/plugins`
-** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/translations`
+** `${HOOT_HOME}/translations-local`
 ** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
+
+=== job.id
+
+* Data Type: string
+* Default Value: ``
+
+This option allows for passing in a job ID for the currently executing command. This is useful when
+trying to track multiple commands across a single job. When the Hootenanny API database is used
+for job output storage, the ID will be stored in the job status table of the associated map.
 
 === json.format.hootenanny
 
@@ -1650,6 +1742,23 @@ multiple source languages can have a large impact on translation performance due
 detection cost.  Separate list items with a ';' and surround in quotes when passing them in from
 the command line.
 
+=== language.translation.string.distance.tokenize
+
+* Data Type: bool
+* Default Value: `true`
+
+Set to true if the strings should be tokenized (split into words) before translating the values.
+Only applies if language.translation.translator is set to hoot::ToEnglishDictionaryTranslator.
+
+=== language.translation.string.distance.translate.all
+
+* Data Type: bool
+* Default Value: `true`
+
+If true and language.translation.translator is set to hoot::ToEnglishDictionaryTranslator, will attempt to
+retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
+translation is retrieved.
+
 === language.translation.translator
 
 * Data Type: string
@@ -1680,48 +1789,22 @@ details.  The "best" value varies depending on the input data as well as how the
 Absolute path to the directory where the libpostal library, used for address parsing, stores its
 data.
 
-=== log.format
+=== log.class.filter
 
 * Data Type: string
-* Default Value: `%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n`
+* Default Value: ``
 
-If available, uses the formatting as defined in
-https://svn.apache.org/repos/asf/logging/site/trunk/docs/log4cxx/apidocs/classlog4cxx_1_1_pattern_layout.html[log4cxx]
-to set the log format. If log4cxx isn't available then this has no effect.
-
-Some example format strings and the associated output are below:
-
------
-# Default log message with lots of information
-%d{HH:mm:ss.SSS} %-5p ...%.30F(%4L) %m%n
-12:36:03.565 INFO  ...conflate/UnifyingConflator.cpp( 154) Pre-constraining match count: 11
-
-# Log message w/ minimal information
-%-5p..%.20F(%3L) %m%n
-INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# Embed arbitrary strings in the log messages
-Foo: %m%n
-Foo: Pre-constraining match count: 11
-
-# Print out time elapsed in ms along w/ other info
-%6r %-5p..%.20F(%3L) %m%n
-   289 INFO ..nifyingConflator.cpp(154) Pre-constraining match count: 11
-
-# XML-ish log message. This allows parsing messages that span multiple lines,
-# but you aren't guaranteed that all output from hoot goes through the logging
-# mechanism.
-<message time='%d' level='%p' file='%F' line='%L'>%m</message>%n
-<message time='2014-10-28 13:09:35,339' level='INFO' file='src/main/cpp/hoot/core/conflate/UnifyingConflator.cpp' line='154'>Pre-constraining match count: 11</message>
------
+A semicolon delimited list of class names used for limiting the log output. Do not prepend class
+names with their namespace. An empty string (default) disables the filtering.
 
 === log.warn.message.limit
 
-* Data Type: double
+* Data Type: int
 * Default Value: `3`
 
-The maximum number of warn log messages that will be emittes per class before they are silenced.
-Not necessarily utilized by all parts of the application.
+The maximum number of warn log messages that will be emitted per class before they are silenced.
+A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
+A setting of -1 is useful for tests where you do not have granular enough logging control.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
@@ -2178,7 +2261,7 @@ intelligently use indexes, others will simply filter features after reading from
 Example Usage:
 
 ----
-hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm --trans translations/Identity.js
+hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm
 ----
 
 === ogr.reader.bounding.box.latlng
@@ -2221,13 +2304,13 @@ A comma separated list of possible names for X/longitude coordinate of a point. 
 a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix or
 *middle*. The values in the column must be floating point values.
 
-//=== ogr.reader.csv.zfield
+=== ogr.reader.csv.zfield
 
-//* Data Type: string
-//* Default Value: `Z,z`
+* Data Type: string
+* Default Value: `Z,z`
 
-//From the GDAL docs:
-//A comma separated list of possible names for Z/elevation coordinate of a point. Each name might
+From the GDAL docs:
+A comma separated list of possible names for Z/elevation coordinate of a point. Each name might
 be a pattern using the star character in starting and/or ending position. E.g.: prefix*, *suffix
 or *middle*. The values in the column must be floating point values.
 
@@ -2245,6 +2328,14 @@ This can sometimes be necessary when reading from a DB created with osm2pgsql. E
 ----
 hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
+
+=== ogr.reader.limit
+
+* Data Type: int
+* Default Value: `0`
+
+Optional maximum number of OGR features to read from an input file. This can be useful when
+debugging. A value < 1 indicates that there is no limit.
 
 === ogr.reader.node.id.field.name
 
@@ -2324,7 +2415,7 @@ this to true can be useful when conforming to strict specifications.
 * Data Type: string
 * Default Value: ``
 
-TODO: description
+Text prepended to a layer name when writing an OGR format.
 
 === ogr.writer.script
 
@@ -2458,6 +2549,14 @@ written if the value is not empty.
 
 If true, the OSM map writer will NOT write a file if the map is empty.
 The default is to write a file even if the map is empty.
+
+=== overpass.api.host
+
+* Data Type: string
+* Default Value: `overpass-api.de`
+
+Overpass API URL host name. Used by the JSON readers to distinguish Overpass JSON web sources from
+GeoJSON web sources.
 
 === perty.apply.rubber.sheet
 
@@ -2868,6 +2967,15 @@ is enabled, POI/Polygon conflation will use additional to English language trans
 address normalization.  Disable this only if libpostal's language translation is not adequate for
 your language translation needs.
 
+=== poi.polygon.allow.cross.conflation.merging
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, when a match found by Building Conflation involves the same feature in a match found by
+POI to Polygon Conflation, a review will be generated. If true, then that situation will result in
+a merge between all features involved in the Building and POI to Polygon conflation matches.
+
 === poi.polygon.auto.merge.many.poi.to.one.poly.matches
 
 * Data Type: bool
@@ -3165,14 +3273,13 @@ Sets that maximum angle that is still considered a power line match. Units in de
 
 A quantile value from 0.0 to 1.0 for the QuantileAggregator.
 
-=== progress.reporting.format
+=== progress.var.print.length.max
 
-* Data Type: string
-* Default Value: ``
+* Data Type: int
+* Default Value: `30`
 
-Sets the progress reporting format to the type specified for classes that support progress
-reporting.  Currently, 'json' is the only valid reporting format. If left blank, progress is not
-reported.
+Maximum length, in characters, allowed when logging a variable value during progress logging
+("--status"). Not honored by all progress logging.
 
 === railway.angle.sample.distance
 
@@ -3311,6 +3418,20 @@ have negative IDs.  Not honored by all readers.
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
+=== relation.with.most.members.op.member.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relation members.
+
+=== relation.with.most.members.op.relation.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The criterion used by RelationWithMostMembersOp to filter relations.
+
 === remove.attributes.visitor.types
 
 * Data Type: list
@@ -3328,13 +3449,23 @@ timestamp, user, uid, or version.
 Use this class for calculating the difference between element tags. If the difference is exactly
 0 then they'll be a candidate for merging.
 
-=== remove.elements.visitor.element.criterion
+=== remove.elements.visitor.chain.element.criteria
 
-* Data Type: string
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria,
+elements will be removed only if they satisfy all of the criteria.  If set to false, then only
+one of the specified criteria must be met in order to remove an element.
+
+=== remove.elements.visitor.element.criteria
+
+* Data Type: list
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to delete.  To pass in complex
-nested criteria, use the Hootenanny Javascript interface instead.
+One or more element criteria used for selecting elements to remove. Delimit names with '='. From
+the command line, names with ';' and surround the entire list in double quotes.
+E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 === remove.elements.visitor.recursive
 
@@ -3348,7 +3479,7 @@ Should the element remover remove the elements recursively?
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to delete.  To pass in complex
+The plugin name of an element criterion used to select tags to remove.  To pass in complex
 nested criterion, use the Hootenanny Javascript interface instead.
 
 === remove.tags.visitor.keys
@@ -3453,6 +3584,50 @@ If this configuration setting is set to true, then the first layer is treated as
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
 weighting is determined based on the circular error.
 
+=== schema.translation.direction
+
+* Data Type: string
+* Default Value: ``
+
+The optional direction that the translation script should translate in, used by the convert command,
+TranslationOp, and TranslationVisitor. Valid values are: `toogr` and `toosm`. `toogr` will translate
+in a direction appropriate for an OGR output. `toosm` will translate in a direction appropriate for
+an OSM output. The script specified by the schema.translation.script configuration option must be
+compatible with the translation direction chosen. If no translation direction is specified when
+translating with the convert command, the convert command will attempt to determine the correct
+direction and notify the user which direction was determined. If the convert command cannot
+determine the direction, it will use the `toosm` direction and also notify the user. The
+TranslationOp and TranslationVisitor used outside of the convert command will return an error if
+no direction was specified.
+
+=== schema.translation.override
+
+* Data Type: string
+* Default Value: ``
+
+Override the value of translated tags and attributes.
+
+VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either
+before or after the translation. E.g.
+* After attributes are translated to OSM+ tags during Import
+* Before OSM+ tags are translated to attributes on Export
+
+NOTE: This assumes that you know exactly what tags you want to modify/delete
+
+=== schema.translation.script
+
+* Data Type: string
+* Default Value: ``
+
+The script used by the TranslationVisitor and TranslationOp for schema translation. Required if
+converting to/from an OGR format.  Use either the base name of a Python translation file (without
+the .py extension) or the full path to a Javascript file (.js). If this configuration option is
+added to a call to the convert command and neither TranslationVisitor or TranslationOp is specified
+the convert command will add the translation operation as the first conversion operation. If you
+want the translation operation to occur in a different order, then you must explicitly specify
+it in convert.ops. For more information on translation files read the "Translation" section of the
+Hootenanny User Guide.
+
 === score.graph.debug.images
 
 * Data Type: bool
@@ -3521,9 +3696,9 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 === search.radius.railway
 
 * Data Type: double
-* Default Value: `15`
+* Default Value: `${search.radius.default}`
 
-The search radius to use when conflating railways.
+The search radius to use when conflating railways.  See `search.radius.default`.
 
 === search.radius.waterway
 
@@ -3574,6 +3749,17 @@ key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
 
 Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
 adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
+
+=== shape.file.writer.cols
+
+* Data Type: list
+* Default Value:
+** ``
+
+Optional list of keys to use for shape file output columns. Valid only when converting from OSM to
+shape file and cannot be used in combination with a translation.  If this option is not specified,
+then the list of columns will be automatically determined based on the most frequently populated
+tags.
 
 === small.way.merger.diff
 
@@ -3756,13 +3942,6 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
-=== tag.key.contains.criterion.text
-
-* Data Type: string
-* Default Value: ``
-
-Text that TagKeyContainsCriterion searches a match for.
-
 === tag.criterion.kvps
 
 * Data Type: list
@@ -3771,6 +3950,21 @@ Text that TagKeyContainsCriterion searches a match for.
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
 delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
+
+=== tag.key.contains.criterion.text
+
+* Data Type: string
+* Default Value: ``
+
+Text that TagKeyContainsCriterion uses to filter elements.
+
+=== tag.key.criterion.keys
+
+* Data Type: list
+* Default Value: ``
+
+Tag keys that TagKeyCriterion uses to filter elements. From the command line, delimit multiple
+key/value pairs with ';' and surround the entire list in double quotes.
 
 === tag.merger.default
 
@@ -3903,23 +4097,6 @@ Another useful option is `[\s-,';]+`. This will split on white space, or several
 punctuation. See http://doc.qt.io/qt-4.8/QRegExp.html for a useful list of regular expression
 options.
 
-=== translate.string.distance.tokenize
-
-* Data Type: bool
-* Default Value: `true`
-
-Set to true if the strings should be tokenized (split into words) before translating the values.
-Only applies if language.translation.translator is set to hoot::DictionaryTranslator.
-
-=== translate.string.distance.translate.all
-
-* Data Type: bool
-* Default Value: `true`
-
-If true and language.translation.translator is set to hoot::DictionaryTranslator, will attempt to
-retrieve multiple translations when scoring string comparisons.  Otherwise, only a single
-translation is retrieved.
-
 === translated.tag.differencer.ignore.list
 
 * Data Type: string
@@ -3945,42 +4122,13 @@ This differencer can be used with:
 * `small.way.merger.diff`
 * `remove.duplicate.areas.diff`
 
-=== translation.direction
-
-* Data Type: string
-* Default Value: `toosm`
-
-The direction that the translation script should translate. `toogr` will translate from OSM to OGR.
-`toosm` will translate from OSM to OGR. This is useful with the hoot::TranslationOp.
-
-=== translation.override
-
-* Data Type: string
-* Default Value: ``
-
-Override the value of translated tags and attributes.
-
-VERY IMPORTANT NOTE: The changes apply to ALL elements and are applied to the OSM+ tags either
-before or after the translation. E.g.
-* After attributes are translated to OSM+ tags during Import
-* Before OSM+ tags are translated to attributes on Export
-
-NOTE: This assumes that you know exactly what tags you want to modify/delete
-
-=== translation.script
-
-* Data Type: string
-* Default Value: ``
-
-The script used by the TranslationVisitor for translation.
-
 === transliteration.max.cache.size
 
 * Data Type: int
 * Default Value: `-1`
 
-The maximum size of the cache used by DictionaryTranslator for transliterations.  A cache size of -1
-disables the transliteration cache.
+The maximum size of the cache used by ToEnglishDictionaryTranslator for transliterations.  A cache
+size of -1 disables the transliteration cache.
 
 === unify.enable.optimal.constrained.matches
 
@@ -4111,9 +4259,13 @@ SampledAngleHistogramExtractor
 === way.joiner
 
 * Data Type: string
-* Default Value: `hoot::WayJoiner1`
+* Default Value: `hoot::WayJoinerBasic`
 
-The way joiner implementation to use to repair way splits after a conflation job.
+The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
+
+This operation can take on the following two options:
+* `hoot::WayJoinerBasic`
+* `hoot::WayJoinerAdvanced`
 
 === way.matcher.heading.delta
 

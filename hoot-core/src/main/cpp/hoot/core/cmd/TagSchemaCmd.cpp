@@ -22,18 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
+#include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
@@ -66,11 +63,11 @@ public:
       throw HootException(QString("%1 takes one optional parameter.").arg(getName()));
     }
 
-    // Great bit of code taken from TranslatedTagDifferencer.cpp
-    boost::shared_ptr<ScriptTranslator> uut(
-      ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+    // Great bit of code taken from TranslatedTagDifferencer
+    std::shared_ptr<ScriptSchemaTranslator> schemaPrinter(
+      ScriptSchemaTranslatorFactory::getInstance().createTranslator(printScript));
 
-    if (!uut)
+    if (!schemaPrinter)
     {
       throw HootException("Unable to find a valid translation format for: " + printScript);
     }

@@ -30,9 +30,6 @@
 // Local
 #include <hoot/core/elements/ElementData.h>
 
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Standard
 #include <vector>
 
@@ -56,6 +53,7 @@ public:
   virtual ~WayData();
 
   void addNode(long id) { _nodes.push_back(id); }
+  void insertNode(long index, long id ) { _nodes.insert(_nodes.begin() + index, id); }
 
   void clear();
 

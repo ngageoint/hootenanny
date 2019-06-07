@@ -28,48 +28,31 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
-#include <hoot/core/criterion/PowerLineCriterion.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NonConflatableCriterion)
 
-// Return true if not conflatable
+NonConflatableCriterion::NonConflatableCriterion()
+{
+}
+
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  //See if our type is known conflatable - return false
-  // This could probably be made cleaner by adding a "conflatable" property to criterion. - #2941
-  if (HighwayCriterion().isSatisfied(e))
-    return false;
-  else if (LinearWaterwayCriterion().isSatisfied(e))
-    return false;
-  else if (PoiCriterion().isSatisfied(e))
-    return false;
-  else if (BuildingCriterion().isSatisfied(e))
-    return false;
-  else if (RailwayCriterion().isSatisfied(e))
-    return false;
-  else if (PowerLineCriterion().isSatisfied(e))
-    return false;
-  else if (AreaCriterion().isSatisfied(e))
-    return false;
-  else if (PoiPolygonPoiCriterion().isSatisfied(e))
-    return false;
-  else if (PoiPolygonPolyCriterion().isSatisfied(e))
-    return false;
-
+  const QMap<QString, ElementCriterionPtr> conflatableCriteria =
+    ConflatableElementCriterion::getConflatableCriteria();
+  for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
+       itr != conflatableCriteria.end(); ++itr)
+  {
+    if (itr.value()->isSatisfied(e))
+    {
+      // It is something we can conflate.
+      return false;
+    }
+  }
   // It is not something we can conflate
   return true;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LongestCommonNodeString.h"
@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-LongestCommonNodeString::LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2)
+LongestCommonNodeString::LongestCommonNodeString(const std::shared_ptr<Way>& w1, const std::shared_ptr<Way>& w2)
 {
   _w1 = w1;
   _w2 = w2;
@@ -49,7 +49,7 @@ int LongestCommonNodeString::apply()
   _i1 = -1;
   _i2 = -1;
 
-  if(_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
+  if (_w1->getNodeCount() == 0 || _w2->getNodeCount() == 0)
   {
        return 0;
   }
@@ -62,17 +62,17 @@ int LongestCommonNodeString::apply()
   int *swap = 0;
   int maxSubstr = 0;
 
-  for(size_t i = 0; i< str1.size(); ++i)
+  for (size_t i = 0; i < str1.size(); ++i)
   {
-    for(size_t j = 0; j< str2.size(); ++j)
+    for (size_t j = 0; j < str2.size(); ++j)
     {
-      if(str1[i] != str2[j])
+      if (str1[i] != str2[j])
       {
         curr[j] = 0;
       }
       else
       {
-        if(i == 0 || j == 0)
+        if (i == 0 || j == 0)
         {
           curr[j] = 1;
         }
@@ -88,9 +88,9 @@ int LongestCommonNodeString::apply()
         }
       }
     }
-    swap=curr;
-    curr=prev;
-    prev=swap;
+    swap = curr;
+    curr = prev;
+    prev = swap;
   }
   delete [] curr;
   delete [] prev;

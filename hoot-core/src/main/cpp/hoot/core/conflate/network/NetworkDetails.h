@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::NetworkDetails"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
 
@@ -185,10 +185,10 @@ public:
 
 private:
 
-  boost::shared_ptr<HighwayClassifier> _classifier;
+  std::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
-  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
   double _maxStubLength;
 
@@ -205,7 +205,7 @@ private:
       WaySublineMatchStringPtr matches;
   };
 
-  QHash< ElementId, QHash<ElementId, SublineCache> > _sublineCache;
+  QHash<ElementId, QHash<ElementId, SublineCache>> _sublineCache;
 
   SublineCache _calculateSublineScore(ConstOsmMapPtr map, ConstWayPtr w1, ConstWayPtr w2) const;
 
@@ -229,8 +229,8 @@ private:
     const WaySublineCollection& ws) const;
 };
 
-typedef boost::shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef boost::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+typedef std::shared_ptr<NetworkDetails> NetworkDetailsPtr;
+typedef std::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

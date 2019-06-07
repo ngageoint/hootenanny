@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTATTRIBUTETYPE_H
 #define ELEMENTATTRIBUTETYPE_H
@@ -34,7 +34,8 @@
 // Qt
 #include <QString>
 
-namespace hoot {
+namespace hoot
+{
 
 /**
  * Represents common element properties that get serialized as XML attributes when writing to file.

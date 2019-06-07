@@ -81,7 +81,7 @@ public:
   /**
    * Returns the source's projection.
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const override;
+  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @brief hasMoreElements

@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTSTREAMER_H
 #define ELEMENTSTREAMER_H
 
+// Hoot
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QStringList>
@@ -53,9 +55,10 @@ public:
    * @param inputs data sources
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
+   * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QStringList inputs, const QString out,
-                     const QStringList convertOps = QStringList());
+  static void stream(const QStringList& inputs, const QString& out,
+                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
 
   /**
    * Streams a data source from input to output.
@@ -65,9 +68,10 @@ public:
    * @param input data source
    * @param out data destination
    * @param convertOps a list of map ops/visitors to perform against the data during conversion
+   * @param progress optional for tracking I/O job progress
    */
-  static void stream(const QString input, const QString out,
-                     const QStringList convertOps = QStringList());
+  static void stream(const QString& input, const QString& out,
+                     const QStringList& convertOps = QStringList(), Progress progress = Progress());
 
   /**
    * Determines whether both input and output are streamable data sources (associated
@@ -77,7 +81,7 @@ public:
    * @param output data destination
    * @return true if both formats are streamable; false otherwise
    */
-  static bool isStreamableIo(const QString input, const QString output);
+  static bool isStreamableIo(const QString& input, const QString& output);
 
   /**
    * Determines whether both inputs and output are streamable data sources (associated
@@ -87,7 +91,7 @@ public:
    * @param output data destination
    * @return true if all formats are streamable; false otherwise
    */
-  static bool areStreamableIo(const QStringList inputs, const QString output);
+  static bool areStreamableIo(const QStringList& inputs, const QString& output);
 
   /**
    * Return true if all the specified operations are valid streaming operations.
@@ -98,12 +102,17 @@ public:
    * @param ops
    * @return
    */
-  static bool areValidStreamingOps(const QStringList ops);
+  static bool areValidStreamingOps(const QStringList& ops);
 
-private:
-
-  static ElementInputStreamPtr _getFilteredInputStream(
-    boost::shared_ptr<OsmMapReader> reader, const QStringList ops);
+  /**
+   * Get an input stream set up to be filtered by operations
+   *
+   * @param streamToFilter the stream to be filtered
+   * @param ops a list of Hoot operation class names to use for inline filtering on the input stream
+   * @return an input stream
+   */
+  static ElementInputStreamPtr getFilteredInputStream(
+    ElementInputStreamPtr streamToFilter, const QStringList& ops);
 };
 
 }

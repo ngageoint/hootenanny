@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -54,14 +54,14 @@ public:
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(OsmMapPtr map);
+  virtual void read(const OsmMapPtr& map) override;
 
   /**
    * Reads all the entries in the OsmMap.
    *
    * The default read function reads nodes, ways, then relations.
    */
-  virtual void readPartial(OsmMapPtr map);
+  virtual void readPartial(const OsmMapPtr& map);
 
   /**
    * Perform any necessary initialization after the data source is opened.
@@ -93,7 +93,6 @@ protected:
   long _maxElementsPerMap;
   long _elementsRead;
   OsmMapPtr _partialMap;
-
 };
 
 }

@@ -41,16 +41,17 @@ ElementToRelationMap::ElementToRelationMap()
 {
 }
 
-void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_ptr<const Relation> &r)
+void ElementToRelationMap::addRelation(const OsmMap& map,
+                                       const std::shared_ptr<const Relation> &r)
 {
   class AddMemberVisitor : public ConstElementVisitor
   {
   public:
 
-    HashMap< ElementId, set<long> >& _mapping;
+    HashMap<ElementId, set<long>>& _mapping;
     long _rid;
 
-    AddMemberVisitor(HashMap< ElementId, set<long> >& mapping, long rid) : _mapping(mapping)
+    AddMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
     }
@@ -85,8 +86,8 @@ const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
   }
 }
 
-const set<long>& ElementToRelationMap::getRelationByElement(const boost::shared_ptr<const Element>& e)
-  const
+const set<long>& ElementToRelationMap::getRelationByElement(
+  const std::shared_ptr<const Element>& e) const
 {
   return getRelationByElement(e->getElementId());
 }
@@ -96,16 +97,17 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
   return getRelationByElement(e->getElementId());
 }
 
-void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r)
+void ElementToRelationMap::removeRelation(const OsmMap& map,
+                                          const std::shared_ptr<const Relation>& r)
 {
   class RemoveMemberVisitor : public ConstElementVisitor
   {
   public:
 
-    HashMap< ElementId, set<long> >& _mapping;
+    HashMap<ElementId, set<long>>& _mapping;
     long _rid;
 
-    RemoveMemberVisitor(HashMap< ElementId, set<long> >& mapping, long rid) : _mapping(mapping)
+    RemoveMemberVisitor(HashMap<ElementId, set<long>>& mapping, long rid) : _mapping(mapping)
     {
       _rid = rid;
     }
@@ -133,6 +135,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   class ContainsElementVisitor : public ConstElementVisitor
   {
   public:
+
     ContainsElementVisitor(const OsmMap& map, const ElementId& eid) :
       _eid(eid),
       _map(map)
@@ -153,6 +156,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     bool isFound() const { return _found; }
 
   private:
+
     ElementId _eid;
     const OsmMap& _map;
     bool _found;
@@ -161,6 +165,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
   class CheckVisitor : public ConstElementVisitor
   {
   public:
+
     CheckVisitor(const OsmMap& map, const ElementToRelationMap& mapping) :
       _map(map),
       _mapping(mapping),
@@ -189,7 +194,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();
-        const boost::shared_ptr<const Relation>& r = it->second;
+        const std::shared_ptr<const Relation>& r = it->second;
         ElementId childEid(type, id);
         if (inMappedRelation)
         {
@@ -232,11 +237,12 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     bool isGood() const { return _good; }
 
   private:
+
     const OsmMap& _map;
     const ElementToRelationMap& _mapping;
     bool _good;
     //this should be static, but there's no header file
-    unsigned int _logWarnCount;
+    int _logWarnCount;
   };
 
   CheckVisitor visitor(map, *this);

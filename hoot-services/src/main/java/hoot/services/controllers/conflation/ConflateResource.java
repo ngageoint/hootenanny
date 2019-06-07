@@ -48,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.job.JobType;
@@ -67,6 +68,9 @@ public class ConflateResource {
     @Autowired
     private UpdateTagsCommandFactory updateTagsCommandFactory;
 
+    @Autowired
+    private UpdateParentCommandFactory updateParentCommandFactory;
+
 
     /**
      * Conflate service operates like a standard ETL service. The conflate
@@ -83,6 +87,7 @@ public class ConflateResource {
      *     INPUT1: Conflation input 1
      *     INPUT2: Conflation input 2
      *     OUTPUT_NAME: Conflation operation output name
+     *     OUTPUT_FOLDER: Optional folder for DB outputs
      *     CONFLATION_TYPE: [Horizontal] | [Reference]
      *     REFERENCE_LAYER:
      *         The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
@@ -91,10 +96,6 @@ public class ConflateResource {
      *     COLLECT_STATS: true to collect conflation statistics
      *     ADV_OPTIONS: Advanced options list for hoot-core command
      *
-     *     GENERATE_REPORT: Not used.  true to generate conflation report
-     *     TIME_STAMP: Not used   Time stamp used in generated report if GENERATE_REPORT is true
-     *     USER_EMAIL: Not used.  Email address of the user requesting the conflation job
-     *     AUTO_TUNNING: Not used. Always false
      *
      * @return Job ID
      */
@@ -104,18 +105,16 @@ public class ConflateResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response conflate(ConflateParams params, @Context HttpServletRequest request,
                              @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+        Users user = Users.fromRequest(request);
 
         String jobId = UUID.randomUUID().toString();
 
         try {
             ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass(), user);
             InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, user.getId(), params, this.getClass());
+            InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, params.getOutputFolder(), params.getOutputName(), user, this.getClass());
 
-            Command[] workflow = { conflateCommand, updateTagsCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand, setFolderCommand };
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE));
         }

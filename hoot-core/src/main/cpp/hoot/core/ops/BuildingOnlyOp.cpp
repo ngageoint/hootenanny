@@ -37,8 +37,8 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReplaceTagVisitor.h>
 
-// bost
-#include <boost/function.hpp>
+// Standard
+#include <functional>
 
 using namespace std;
 
@@ -51,7 +51,7 @@ BuildingOnlyOp::BuildingOnlyOp()
 {
 }
 
-void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
+void BuildingOnlyOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -68,16 +68,17 @@ void BuildingOnlyOp::apply(boost::shared_ptr<OsmMap>& map)
   ReplaceTagVisitor replaceTagVtor("BUILDING", "yes", "building", "yes");
 
   // Setup a visitor to remove unwanted relations
-  boost::function<bool (ConstElementPtr e)> f =
-    boost::bind(&BuildingOnlyOp::_isBuildingRelation, this, _1);
-  boost::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
-  RemoveElementsVisitor removeEVisitor(pBuildingCrit);
+  std::function<bool (ConstElementPtr e)> f =
+    std::bind(&BuildingOnlyOp::_isBuildingRelation, this, placeholders::_1);
+  std::shared_ptr<ArbitraryCriterion> pBuildingCrit(new ArbitraryCriterion(f));
+  RemoveElementsVisitor removeEVisitor;
+  removeEVisitor.addCriterion(pBuildingCrit);
 
   // Visit the map once, execute all visitors on each element
   MultiVisitor multiVtor;
   multiVtor.addVisitor(&removeTagVtor);
-  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&replaceTagVtor));
-  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor *>(&removeEVisitor));
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor*>(&replaceTagVtor));
+  multiVtor.addVisitor(reinterpret_cast<ElementOsmMapVisitor*>(&removeEVisitor));
   map->visitRw(multiVtor);
 }
 

@@ -6,7 +6,7 @@
             "area"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "shop",
         "objectType": "tag"
     },
@@ -1477,7 +1477,8 @@
         "#": "Count in tag info is 30943 on 2015-09-01",
         "description": "A group of stores, typically associated jth a single building structure.",
 	"categories": [
-            "multiuse"
+            "multiuse",
+            "building"
         ],
         "isA": "shop",
         "name": "shop=mall",
@@ -2077,6 +2078,9 @@
     {
         "#": "Count in tag info is 220938 on 2015-09-01",
         "description": "A large store for groceries and other goods.",
+        "categories": [
+            "building"
+        ],
         "isA": "shop",
         "name": "shop=supermarket",
         "objectType": "tag",

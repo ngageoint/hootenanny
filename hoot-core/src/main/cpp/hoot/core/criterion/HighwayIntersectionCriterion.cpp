@@ -52,7 +52,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
@@ -62,7 +62,7 @@ bool HighwayIntersectionCriterion::isSatisfied(const ConstElementPtr& e) const
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     ConstWayPtr w = _map->getWay(*it);
-    if (HighwayCriterion().isSatisfied(w))
+    if (HighwayCriterion(_map).isSatisfied(w))
     {
       hwids.insert(*it);
     }

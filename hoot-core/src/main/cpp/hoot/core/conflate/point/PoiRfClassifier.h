@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIRFCLASSIFIER_H
 #define POIRFCLASSIFIER_H
@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::PoiRfClassifier"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   PoiRfClassifier();
 
@@ -62,18 +62,18 @@ public:
 
 private:
 
-  boost::shared_ptr<Tgs::RandomForest> _rf;
+  std::shared_ptr<Tgs::RandomForest> _rf;
   QStringList _rfFactorLabels;
-  std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  std::vector<std::shared_ptr<const FeatureExtractor>> _extractors;
 
   void _createAllExtractors();
   void _createTestExtractors();
 
-  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector<std::shared_ptr<const FeatureExtractor>>& _getExtractors() const;
 
 };
 
-typedef boost::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
+typedef std::shared_ptr<PoiRfClassifier> PoiRfClassifierPtr;
 
 }
 

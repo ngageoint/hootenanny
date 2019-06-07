@@ -63,7 +63,7 @@ CornerSplitter::CornerSplitter()
 {
 }
 
-CornerSplitter::CornerSplitter(boost::shared_ptr<OsmMap> map)
+CornerSplitter::CornerSplitter(const std::shared_ptr<OsmMap>& map)
   : _map(map),
     _cornerThreshold(ConfigOptions().getCornerSplitterThresholdDefaultValue()),
     _splitRounded(ConfigOptions().getCornerSplitterRoundedSplitDefaultValue()),
@@ -72,7 +72,7 @@ CornerSplitter::CornerSplitter(boost::shared_ptr<OsmMap> map)
 {
 }
 
-void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
+void CornerSplitter::splitCorners(const std::shared_ptr<OsmMap>& map)
 {
   CornerSplitter splitter(map);
   return splitter.splitCorners();
@@ -80,8 +80,10 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 
 void CornerSplitter::splitCorners()
 {
+  _numAffected = 0;
+
   // Get a list of ways (that look like roads) in the map
-  HighwayCriterion highwayCrit;
+  HighwayCriterion highwayCrit(_map);
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
     if (highwayCrit.isSatisfied(it->second))
@@ -138,7 +140,7 @@ void CornerSplitter::_splitRoundedCorners()
 {
   _todoWays.clear();
   //  Get a list of ways (that look like roads) in the map
-  HighwayCriterion highwayCriterion;
+  HighwayCriterion highwayCriterion(_map);
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
     if (highwayCriterion.isSatisfied(it->second))
@@ -242,22 +244,22 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
     //  Check the previous segment to ensure it is larger than the circular error before splitting
     if (nodeIdx == 1)
     {
-      boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      std::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx - 1), true);
-      boost::shared_ptr<LineString> sub(factory->createLineString(subline));
+      std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
     }
     //  Check the next segment to ensure it is larger than the circular error before splitting
     if (nodeIdx == (long)(pWay->getNodeCount() - 2))
     {
-      boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      std::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx + 1), true);
-      boost::shared_ptr<LineString> sub(factory->createLineString(subline));
+      std::shared_ptr<LineString> sub(factory->createLineString(subline));
       if (sub->getLength() <= pWay->getCircularError())
         return false;
     }
@@ -292,13 +294,14 @@ bool CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, bool sharp
     LOG_VART(_map->containsElement(splitWayId));
 
     //  Split was successful
+    _numAffected++;
     return true;
   }
   //  No splits were made
   return false;
 }
 
-void CornerSplitter::apply(boost::shared_ptr<OsmMap> &map)
+void CornerSplitter::apply(std::shared_ptr<OsmMap> &map)
 {
   splitCorners(map);
 }

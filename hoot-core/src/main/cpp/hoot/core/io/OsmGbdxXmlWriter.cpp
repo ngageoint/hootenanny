@@ -26,26 +26,23 @@
  */
 #include "OsmGbdxXmlWriter.h"
 
-// Boost
-using namespace boost;
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // Qt
 #include <QBuffer>
@@ -59,7 +56,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int OsmGbdxXmlWriter::logWarnCount = 0;
+int OsmGbdxXmlWriter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGbdxXmlWriter)
 
@@ -116,7 +113,7 @@ QString OsmGbdxXmlWriter::removeInvalidCharacters(const QString& s)
   return result;
 }
 
-void OsmGbdxXmlWriter::open(QString url)
+void OsmGbdxXmlWriter::open(const QString& url)
 {
 //  if (url.toLower().endsWith(".gxml"))
 //  {
@@ -210,7 +207,7 @@ QString OsmGbdxXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatX
 {
   OsmGbdxXmlWriter writer;
   writer.setFormatXml(formatXml);
-  // this will be deleted by the _fp boost::shared_ptr
+  // this will be deleted by the _fp std::shared_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
   if (!writer._fp->open(QIODevice::WriteOnly | QIODevice::Text))
@@ -236,13 +233,13 @@ QString OsmGbdxXmlWriter::_typeName(ElementType e)
   }
 }
 
-void OsmGbdxXmlWriter::write(ConstOsmMapPtr map, const QString& path)
+void OsmGbdxXmlWriter::write(const ConstOsmMapPtr& map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmGbdxXmlWriter::write(ConstOsmMapPtr map)
+void OsmGbdxXmlWriter::write(const ConstOsmMapPtr& map)
 {
   _writeNodes(map);
   _writeWays(map);
@@ -330,7 +327,7 @@ void OsmGbdxXmlWriter::_writeTags(const ConstElementPtr& element)
 //  // This is the next to fix.
 //  if (type == ElementType::Relation)
 //  {
-//    ConstRelationPtr relation = boost::dynamic_pointer_cast<const Relation>(element);
+//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
 //    if (relation->getType() != "")
 //    {
 //      _writer->writeStartElement("Got Relation");

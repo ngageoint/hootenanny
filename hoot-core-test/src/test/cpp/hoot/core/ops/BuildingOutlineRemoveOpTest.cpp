@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -51,13 +51,11 @@ class BuildingOutlineRemoveOpTest : public HootTestFixture
 
 public:
 
-  const QString inputPath = "test-files/ops/BuildingOutlineRemoveOp/";
-  const QString outputPath = "test-output/ops/BuildingOutlineRemoveOp/";
-
   BuildingOutlineRemoveOpTest()
+    : HootTestFixture("test-files/ops/BuildingOutlineRemoveOp/",
+                      "test-output/ops/BuildingOutlineRemoveOp/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outputPath);
   }
 
   void runSelfIntersectingRelationTest()
@@ -68,7 +66,7 @@ public:
 
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(inputPath + "SelfIntersectingRelationsIn.osm", map);
+    reader.read(_inputPath + "SelfIntersectingRelationsIn.osm", map);
 
     BuildingOutlineRemoveOp myOp;
     myOp.apply(map);
@@ -76,9 +74,9 @@ public:
     MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
-    writer.write(map, outputPath + "SelfIntersectingRelationsOut.osm");
-    HOOT_FILE_EQUALS(inputPath + "SelfIntersectingRelationsOut.osm",
-                     outputPath + "SelfIntersectingRelationsOut.osm");
+    writer.write(map, _outputPath + "SelfIntersectingRelationsOut.osm");
+    HOOT_FILE_EQUALS( _inputPath + "SelfIntersectingRelationsOut.osm",
+                     _outputPath + "SelfIntersectingRelationsOut.osm");
   }
 
 };

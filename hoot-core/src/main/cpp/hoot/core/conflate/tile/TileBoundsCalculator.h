@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TILEBOUNDSCALCULATOR_H
@@ -31,9 +31,6 @@
 
 // Hoot
 #include <hoot/core/util/OpenCv.h>
-
-// Boost
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QString>
@@ -71,7 +68,7 @@ public:
 
   static std::string className() { return "hoot::TileBoundsCalculator"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   /**
    * Specifies the index of a pixel. When specifying a bounding box this represents the lower left
@@ -148,11 +145,11 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  std::vector< std::vector<geos::geom::Envelope> > calculateTiles();
+  std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
 
-  void renderImage(boost::shared_ptr<OsmMap> map);
+  void renderImage(const std::shared_ptr<OsmMap>& map);
 
-  void renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
@@ -187,7 +184,7 @@ private:
 
   int _calculateSplitY(const PixelBox& b);
 
-  void _countNode(const boost::shared_ptr<Node>& n);
+  void _countNode(const std::shared_ptr<Node>& n);
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 

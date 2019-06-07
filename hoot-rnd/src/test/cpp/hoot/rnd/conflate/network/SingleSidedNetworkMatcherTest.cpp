@@ -50,6 +50,8 @@ class SingleSidedNetworkMatcherTest : public HootTestFixture
 public:
 
   SingleSidedNetworkMatcherTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      "test-output/conflate/network/")
   {
     setResetType(ResetAll);
   }
@@ -63,7 +65,7 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
+    OsmMapWriterFactory::write(copy, QString("tmp/SingleSidedNetworkMatcherTest-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
 
@@ -74,30 +76,8 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB1.osm", true,
-      Status::Unknown1);
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestB2.osm", false,
-      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/DcGisRoads.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "tmp/dcperb2.osm", false,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "tmp/sub1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "tmp/sub2.osm", false,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD1.osm", true,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyTestD2.osm", true,
-//      Status::Unknown2);
-
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/highway-009/Input1.osm", false,
-//      Status::Unknown1);
-//    OsmMapReaderFactory::read(map, "test-files/cases/hoot-rnd/network/highway-009/Input2.osm", false,
-//      Status::Unknown2);
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB1.osm", true, Status::Unknown1);
+    OsmMapReaderFactory::read(map, _inputPath + "ToyTestB2.osm", false, Status::Unknown2);
 
     MapCleaner().apply(map);
     MapProjector::projectToPlanar(map);
@@ -105,12 +85,12 @@ public:
     OsmNetworkExtractor one;
 
     ElementCriterionPtr c1(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown1)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown1)));
     one.setCriterion(c1);
     OsmNetworkPtr network1 = one.extractNetwork(map);
 
     ElementCriterionPtr c2(
-      new ChainCriterion(new HighwayCriterion(), new StatusCriterion(Status::Unknown2)));
+      new ChainCriterion(new HighwayCriterion(map), new StatusCriterion(Status::Unknown2)));
     one.setCriterion(c2);
     OsmNetworkPtr network2 = one.extractNetwork(map);
 
@@ -124,6 +104,15 @@ public:
       uut->iterate();
       writeDebugMap(map, *uut, i);
     }
+
+    // write final map and compare
+    DebugNetworkMapCreator().addDebugElements(map, uut->getAllEdgeScores(), uut->getAllVertexScores());
+    MapProjector::projectToWgs84(map);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
+    OsmMapWriterFactory::write(map, QString(_outputPath + "SingleSidedNetworkMatcherTestFinal.osm"));
+
+    HOOT_FILE_EQUALS(_inputPath + "SingleSidedNetworkMatcherTestExpected.osm",
+                    _outputPath + "SingleSidedNetworkMatcherTestFinal.osm");
   }
 };
 

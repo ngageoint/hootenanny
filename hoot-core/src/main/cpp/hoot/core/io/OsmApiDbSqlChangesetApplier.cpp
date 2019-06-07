@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlChangesetApplier.h"
 
@@ -65,7 +65,7 @@ void OsmApiDbSqlChangesetApplier::_initChangesetStats()
   _changesetStats.clear();
 }
 
-void OsmApiDbSqlChangesetApplier::write(const QString sql)
+void OsmApiDbSqlChangesetApplier::write(const QString& sql)
 {
   LOG_DEBUG("Executing changeset SQL queries against OSM API database...");
 
@@ -213,8 +213,8 @@ QString OsmApiDbSqlChangesetApplier::getChangesetStats() const
 }
 
 //This method may go away after #716.
-bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString boundsStr,
-                                                         const QString timeStr)
+bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsStr,
+                                                         const QString& timeStr)
 {
   LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
            " within " << boundsStr << " and created after " << timeStr << "...");
@@ -230,7 +230,7 @@ bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString boundsStr
       "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
   }
 
-  boost::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
+  std::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
     LOG_VARD(changesetItr->value(0).toLongLong());

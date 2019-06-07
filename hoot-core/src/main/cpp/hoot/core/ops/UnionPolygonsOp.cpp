@@ -32,6 +32,7 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -49,17 +50,17 @@ UnionPolygonsOp::UnionPolygonsOp()
   _combiner.reset(new UnionPolygonsVisitor());
 }
 
-void UnionPolygonsOp::apply(boost::shared_ptr<OsmMap>& map)
+void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
 
   map->visitRo(*_combiner);
-  boost::shared_ptr<Geometry> g = _combiner->getUnion();
+  std::shared_ptr<Geometry> g = _combiner->getUnion();
   LOG_VART(g.get());
 
   OsmMapPtr result(new OsmMap());
   GeometryConverter(result).convertGeometryToElement(
-    g.get(), Status::Unknown1, ElementData::CIRCULAR_ERROR_EMPTY);
+    g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
   map.reset(new OsmMap(result));
   LOG_VART(map.get());

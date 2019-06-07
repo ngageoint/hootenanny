@@ -35,10 +35,14 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/ops/stats/SingleStat.h>
+#include <hoot/core/info/SingleStat.h>
+#include <hoot/core/util/ProgressReporter.h>
 
 // tgs
 #include <tgs/HashMap.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
@@ -63,14 +67,14 @@ class ElementId;
  * works fine for now.
  */
 class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable
+    public Configurable, public ProgressReporter
 {
 public:
 
   static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
-  UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
+  UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
 
   ~UnifyingConflator();
 
@@ -93,25 +97,29 @@ public:
   /**
    * Set the factory to use when creating mergers. This method is likely only useful when testing.
    */
-  void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
+  void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   virtual QString getDescription() const
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
+  virtual void setProgress(Progress progress) { _progress = progress; }
+  virtual unsigned int getNumSteps() const { return 3; }
+
 private:
 
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
-  boost::shared_ptr<MatchThreshold> _matchThreshold;
-  boost::shared_ptr<MergerFactory> _mergerFactory;
+  std::shared_ptr<MatchThreshold> _matchThreshold;
+  std::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
   HashMap<ElementId, std::vector<Merger*>> _e2m;
   std::vector<const Match*> _matches;
   std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
   int _taskStatusUpdateInterval;
+  Progress _progress;
 
   void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
@@ -139,7 +147,7 @@ private:
   void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
     const OsmMapPtr &map);
 
-  void _replaceElementIds(const std::vector< std::pair<ElementId, ElementId> >& replaced);
+  void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -152,6 +160,8 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
   QString _matchSetToString(const MatchSet& matchSet) const;
+
+  void _updateProgress(const int currentStep, const QString message);
 };
 
 }

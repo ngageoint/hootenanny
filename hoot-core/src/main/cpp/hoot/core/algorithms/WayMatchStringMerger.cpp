@@ -38,7 +38,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int WayMatchStringMerger::logWarnCount = 0;
+int WayMatchStringMerger::logWarnCount = 0;
 
 QString WayMatchStringMerger::SublineMapping::toString() const
 {
@@ -52,7 +52,7 @@ QString WayMatchStringMerger::SublineMapping::toString() const
 }
 
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
-  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId> > &replaced) :
+  WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId>> &replaced) :
   _map(map),
   _mapping(mapping),
   _replaced(replaced)
@@ -367,7 +367,7 @@ void WayMatchStringMerger::replaceScraps()
   // Determine which bits in secondary will be replaced by bits in the primary. Once we have that
   // we can replace them all at once, delete them, and update the _replaced structure.
 
-  QMap< WayPtr, QList<ElementPtr> > w2ToW1;
+  QMap<WayPtr, QList<ElementPtr>> w2ToW1;
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
@@ -384,7 +384,7 @@ void WayMatchStringMerger::replaceScraps()
     w2ToW1[w2].append(w1);
   }
 
-  for (QMap< WayPtr, QList<ElementPtr> >::iterator it = w2ToW1.begin(); it != w2ToW1.end(); ++it)
+  for (QMap<WayPtr, QList<ElementPtr>>::iterator it = w2ToW1.begin(); it != w2ToW1.end(); ++it)
   {
     LOG_TRACE("Replacing: " << it.key() << " with value: " << it.value());
     _map->replace(it.key(), it.value());

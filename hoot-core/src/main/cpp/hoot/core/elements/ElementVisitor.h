@@ -31,11 +31,18 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
+// Standard
+#include <memory>
+
 namespace hoot
 {
 
 /**
  * Visits elements in a collection in a way that they can be modified.
+ *
+ * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this override
+ * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
+ * does not require it and you are not running in the conflate pipeline).
  */
 class ElementVisitor : public ApiEntityInfo
 {
@@ -55,7 +62,7 @@ protected:
   long _numProcessed;   // how many elements the operation processed total
 };
 
-typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;
+typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;
 
 }
 

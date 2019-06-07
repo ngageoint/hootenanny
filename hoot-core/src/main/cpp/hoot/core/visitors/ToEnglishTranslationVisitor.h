@@ -54,17 +54,17 @@ public:
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual void setConfiguration(const Settings& conf);
+  virtual void setConfiguration(const Settings& conf) override;
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Translates selected tag values to English"; }
 
-  virtual QString getInitStatusMessage() const
+  virtual QString getInitStatusMessage() const override
   { return "Translating tags to English..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   {
     return
       "Translated " + QString::number(_numTagTranslationsMade) + " tags to English on " +
@@ -73,7 +73,7 @@ public:
 
 protected:
 
-  boost::shared_ptr<ToEnglishTranslator> _translatorClient;
+  std::shared_ptr<ToEnglishTranslator> _translatorClient;
 
   QSet<QString> _tagKeys;
   QString _toTranslateTagKey;
@@ -95,7 +95,7 @@ protected:
    * @param toTranslateTagKey the key of the tag whose value is to be translated
    * @return true if a successul translation was made; false otherwise
    */
-  bool _translate(const ElementPtr& e, const QString toTranslateTagKey);
+  bool _translate(const ElementPtr& e, const QString& toTranslateTagKey);
 
 private:
 

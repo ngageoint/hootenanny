@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -86,7 +86,7 @@ public:
       configFilePath = args[6];
     }
 
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
+    std::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
     if (testType == "case")
     {
       fitnessFunction.reset(new CaseTestFitnessFunction(testsDir, configFilePath));

@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-unsigned int IndexedEdgeMatchSet::logWarnCount = 0;
+int IndexedEdgeMatchSet::logWarnCount = 0;
 
 IndexedEdgeMatchSet::IndexedEdgeMatchSet()
 {
@@ -133,9 +133,9 @@ void IndexedEdgeMatchSet::_removeVertexToMatchMapping(ConstEdgeStringPtr str,
   }
 }
 
-boost::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
+std::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 {
-  boost::shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
+  std::shared_ptr<IndexedEdgeLinks> result(new IndexedEdgeLinks());
   for (QHash<ConstEdgeMatchPtr, double>::const_iterator it = getAllMatches().begin();
        it != getAllMatches().end(); ++it)
   {
@@ -155,7 +155,7 @@ boost::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
 
     QSet<ConstEdgeMatchPtr> links = fromLinks | toLinks;
 
-    foreach(ConstEdgeMatchPtr other, links)
+    foreach (ConstEdgeMatchPtr other, links)
     {
       // if the other edge isn't part of this edge.
       if (other->overlaps(em) == false)
@@ -168,7 +168,7 @@ boost::shared_ptr<IndexedEdgeLinks> IndexedEdgeMatchSet::calculateEdgeLinks()
   return result;
 }
 
-boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
+std::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSet::clone() const
 {
   IndexedEdgeMatchSetPtr result(new IndexedEdgeMatchSet());
   result->_matches = _matches;
@@ -246,14 +246,14 @@ QSet<ConstEdgeMatchPtr> IndexedEdgeMatchSet::getMatchesThatOverlap(ConstEdgeMatc
 
   foreach (const EdgeString::EdgeEntry& ee, e->getString1()->getAllEdges())
   {
-    foreach(const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
+    foreach (const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
     {
       list.append(em);
     }
   }
   foreach (const EdgeString::EdgeEntry& ee, e->getString2()->getAllEdges())
   {
-    foreach(const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
+    foreach (const ConstEdgeMatchPtr em, _edgeToMatch[ee.getEdge()])
     {
       list.append(em);
     }

@@ -35,6 +35,9 @@
 // Standard
 #include <fstream>
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -47,7 +50,9 @@ public:
 
   static std::string className() { return "hoot::ConflateCmd"; }
 
-  ConflateCmd() {}
+  static const QString JOB_SOURCE;
+
+  ConflateCmd();
 
   virtual QString getName() const { return "conflate"; }
 
@@ -60,7 +65,12 @@ public:
 
 private:
 
-  void _updateConfigOptionsForAttributeConflation();
+  int _numTotalTasks;
+
+  void _updatePostConfigOptionsForAttributeConflation();
+
+  float _getJobPercentComplete(const int currentTaskNum) const;
+  float _getTaskWeight() const;
 };
 
 }

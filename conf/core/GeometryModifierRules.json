@@ -1,0 +1,67 @@
+{
+    "way_to_poly":
+    {
+        "filter":
+        {
+            "must":
+            [
+                {
+                    "tag": "aeroway=runway"
+                }
+            ]
+        },
+        "arguments":
+        {
+            "default_width_m": 10,
+            "width_tag_m" : "width"
+        }
+    },
+    "way_to_poly":
+    {
+        "filter":
+        {
+            "must":
+            [
+                {
+                    "tag": "aeroway=taxiway"
+                }
+            ]
+        },
+        "arguments":
+        {
+            "default_width_m": 5,
+            "width_tag_m" : "width"
+        }
+    },
+    "collapse_poly":
+    {
+        "filter":
+        {
+            "must":
+            [
+                {
+                    "tag": "building=yes"
+                }
+            ]
+        },        
+        "arguments":
+        {
+            "max_area_in_m": 15000
+        }
+    },
+    "way_to_intersection":
+    {
+        "filter":
+        {
+            "must":
+            [
+                {
+                    "tag": "bridge=yes"
+                }
+            ]
+        },
+        "arguments":
+        {
+        }
+    }
+}

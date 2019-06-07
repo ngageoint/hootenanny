@@ -50,7 +50,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MaximalSublineStringMatcher::logWarnCount = 0;
+int MaximalSublineStringMatcher::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(SublineStringMatcher, MaximalSublineStringMatcher)
 
@@ -101,7 +101,7 @@ void MaximalSublineStringMatcher::setHeadingDelta(Meters headingDelta)
   _configureSublineMatcher();
 }
 
-void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMatcher> sm)
+void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<SublineMatcher>& sm)
 {
   _sublineMatcher = sm;
   _configureSublineMatcher();
@@ -352,7 +352,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 
     if (MultiLineStringCriterion().isSatisfied(r) == false)
     {
@@ -373,7 +373,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   }
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
     if (w->getNodeCount() <= 1)
     {

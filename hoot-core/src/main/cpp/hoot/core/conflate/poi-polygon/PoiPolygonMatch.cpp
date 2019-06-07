@@ -50,7 +50,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Match, PoiPolygonMatch)
 
 QString PoiPolygonMatch::_matchName = "POI to Polygon";
-boost::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
+std::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
 long PoiPolygonMatch::matchesProcessed = 0;
 long PoiPolygonMatch::distanceMatches = 0;
@@ -72,12 +72,18 @@ Match()
 {
 }
 
+PoiPolygonMatch::PoiPolygonMatch(ConstMatchThresholdPtr threshold) :
+Match(threshold)
+{
+}
+
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-                                 boost::shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 std::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
 _map(map),
+_e1IsPoi(false),
 _matchEvidenceThreshold(3),
 _reviewEvidenceThreshold(1),
 _distance(-1.0),
@@ -232,11 +238,10 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   }
 }
 
-void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
-                                                        const ElementId& eid2)
+void PoiPolygonMatch::_categorizeElementsByGeometryType()
 {
-  ConstElementPtr e1 = _map->getElement(eid1);
-  ConstElementPtr e2 = _map->getElement(eid2);
+  ConstElementPtr e1 = _map->getElement(_eid1);
+  ConstElementPtr e2 = _map->getElement(_eid2);
 
   LOG_VART(_eid1);
   LOG_VART(e1->getTags().get("uuid"));
@@ -245,7 +250,6 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   LOG_VART(e2->getTags().get("uuid"));
   LOG_VART(e2->getTags());
 
-  _e1IsPoi = false;
   if (_poiCrit.isSatisfied(e1) && _polyCrit.isSatisfied(e2))
   {
     _poi = e1;
@@ -256,13 +260,14 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
   {
     _poi = e2;
     _poly = e1;
+    _e1IsPoi = false;
   }
   else
   {
     LOG_VART(e1->toString());
     LOG_VART(e2->toString());
-    throw IllegalArgumentException("Expected a POI & polygon, got: " + eid1.toString() + " " +
-                                   eid2.toString());
+    throw IllegalArgumentException("Expected a POI & polygon, got: " + _eid1.toString() + " " +
+                                   _eid2.toString());
   }
 }
 
@@ -286,13 +291,12 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   return false;
 }
 
-bool PoiPolygonMatch::_inputFeaturesHaveSameSource(const ElementId& eid1,
-                                                   const ElementId& eid2) const
+bool PoiPolygonMatch::_inputFeaturesHaveSameSource() const
 {
   LOG_VART(_disableSameSourceConflationMatchTagKeyPrefixOnly)
 
-  const QString e1SourceVal = _map->getElement(eid1)->getTags().get(_sourceTagKey).trimmed();
-  const QString e2SourceVal = _map->getElement(eid2)->getTags().get(_sourceTagKey).trimmed();
+  const QString e1SourceVal = _map->getElement(_eid1)->getTags().get(_sourceTagKey).trimmed();
+  const QString e2SourceVal = _map->getElement(_eid2)->getTags().get(_sourceTagKey).trimmed();
   LOG_VART(e1SourceVal);
   LOG_VART(e2SourceVal);
 
@@ -363,15 +367,17 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
+  _eid1 = eid1;
+  _eid2 = eid2;
 
   //if the options was activated to not conflate features with the same source tag, then exit
   //out with a miss now
-  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource(eid1, eid2))
+  if (_disableSameSourceConflation && _inputFeaturesHaveSameSource())
   {
     return;
   }
 
-  _categorizeElementsByGeometryType(eid1, eid2);
+  _categorizeElementsByGeometryType();
 
   //FOR REDUCING REVIEWS DURING REVIEW TYPE DEBUGGING ONLY!
 //  if (_skipForReviewTypeDebugging())
@@ -679,8 +685,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //runtime.  These requirements can possibly be removed at some point in the future, if proven
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets.  So, more investigation needs to be done to
-  //clean the school restriction up (see #1173).
+  //removing it scores dropped for other datasets...so not changing it for now.
   if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
       BuildingCriterion().isSatisfied(poly))
   {
@@ -717,10 +722,18 @@ void PoiPolygonMatch::resetMatchDistanceInfo()
   PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
 }
 
-set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
+set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
 {
-  set< pair<ElementId, ElementId> > result;
-  result.insert(pair<ElementId, ElementId>(_poi->getElementId(), _poly->getElementId()));
+  set<pair<ElementId, ElementId>> result;
+  // arbitrarily adding poi id first for consistency
+  if (_e1IsPoi)
+  {
+    result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  }
+  else
+  {
+    result.insert(pair<ElementId, ElementId>(_eid2, _eid1));
+  }
   return result;
 }
 
@@ -731,16 +744,37 @@ map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 
 QString PoiPolygonMatch::toString() const
 {
-  return
-    QString("PoiPolygonMatch %1 %2 P: %3, distance: %4, close match: %5, type score: %6, name score: %7, address score: %8")
-      .arg(_poi->getElementId().toString())
-      .arg(_poly->getElementId().toString())
-      .arg(_class.toString())
-      .arg(_distance)
-      .arg(_closeDistanceMatch)
-      .arg(_typeScore)
-      .arg(_nameScore)
-      .arg(_addressScore);
+  QString str =
+    "PoiPolygonMatch: POI: %1, Poly: %2, P: %3, distance: %4, close match: %5, type score: %6, ";
+  str += "name score: %7, address score: %8";
+  // arbitrarily adding poi id first for consistency
+  if (_e1IsPoi)
+  {
+    return
+      str
+        .arg(_eid1.toString())
+        .arg(_eid2.toString())
+        .arg(_class.toString())
+        .arg(_distance)
+        .arg(_closeDistanceMatch)
+        .arg(_typeScore)
+        .arg(_nameScore)
+        .arg(_addressScore);
+  }
+  // _poi and _poly may be null during certain tests
+  else
+  {
+    return
+      str
+        .arg(_eid2.toString())
+        .arg(_eid1.toString())
+        .arg(_class.toString())
+        .arg(_distance)
+        .arg(_closeDistanceMatch)
+        .arg(_typeScore)
+        .arg(_nameScore)
+        .arg(_addressScore);
+  }
 }
 
 }

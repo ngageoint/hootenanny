@@ -55,7 +55,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-unsigned int GeometryConverter::logWarnCount = 0;
+int GeometryConverter::logWarnCount = 0;
 
 GeometryConverter::GeometryConverter(const OsmMapPtr& map) :
 _constMap(map),
@@ -70,7 +70,7 @@ _constMap(map)
   assert(map.get());
 }
 
-boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
+std::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
   Status s, double circularError)
 {
   if (gc->getNumGeometries() > 1)
@@ -93,11 +93,11 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
   }
   else
   {
-    return boost::shared_ptr<Element>();
+    return std::shared_ptr<Element>();
   }
 }
 
-boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* g, Status s,
+std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* g, Status s,
   double circularError)
 {
   LOG_VART(g->getGeometryTypeId());
@@ -129,7 +129,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geo
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
-    return boost::shared_ptr<Element>();
+    return std::shared_ptr<Element>();
   }
 }
 NodePtr GeometryConverter::convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
@@ -158,7 +158,7 @@ WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
   return way;
 }
 
-boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(const MultiLineString* mls,
+std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(const MultiLineString* mls,
   const OsmMapPtr& map, Status s, double circularError)
 {
   if (mls->getNumGeometries() > 1)
@@ -196,13 +196,13 @@ RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon*
   return r;
 }
 
-boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygon* polygon,
+std::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
   // if the geometry is empty.
   if (polygon->isEmpty())
   {
-    return boost::shared_ptr<Element>();
+    return std::shared_ptr<Element>();
   }
   else if (polygon->getNumInteriorRing() == 0)
   {

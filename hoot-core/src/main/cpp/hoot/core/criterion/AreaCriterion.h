@@ -28,7 +28,7 @@
 #define AREACRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * A criterion that will either keep or remove areas.
  */
-class AreaCriterion : public ElementCriterion
+class AreaCriterion : public ConflatableElementCriterion
 {
 public:
 

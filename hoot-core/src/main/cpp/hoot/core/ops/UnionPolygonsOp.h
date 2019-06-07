@@ -40,8 +40,6 @@ class OsmMap;
 
 /**
  * A map operation making use of UnionPolyonsVisitor
- *
- * @todo We could possibly use a VisitorOp with UnionPolygonsVisitor for this instead.
  */
 class UnionPolygonsOp : public OsmMapOperation, public OperationStatusInfo
 {
@@ -51,7 +49,7 @@ public:
 
   UnionPolygonsOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map) override;
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
@@ -64,7 +62,7 @@ public:
 
 private:
 
-  boost::shared_ptr<UnionPolygonsVisitor> _combiner;
+  std::shared_ptr<UnionPolygonsVisitor> _combiner;
 };
 
 }

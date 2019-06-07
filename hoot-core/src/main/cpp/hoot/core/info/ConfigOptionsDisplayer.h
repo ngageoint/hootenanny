@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGOPTIONSDISPLAYER_H
@@ -56,12 +56,12 @@ public:
    * @param withDetails if true, displays details along with the option name; if false only
    * displays the option name
    */
-  static QString getOptionName(const QString optionName, const bool withDetails = false);
+  static QString getOptionName(const QString& optionName, const bool withDetails = false);
   
 private:
 
-  static QString _getAllConfigOptionsDetails(const QString optionName,
-                                             const QString configOptionsFile);
+  static QString _getAllConfigOptionsDetails(const QString& optionName,
+                                             const QString& configOptionsFile);
 };
 
 }

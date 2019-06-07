@@ -47,22 +47,24 @@ public:
 
   RemoveEmptyRelationsOp();
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(OsmMapPtr& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
   long getNumRemoved() const { return _numAffected; }
 
-  virtual QString getInitStatusMessage() const { return "Removing empty relations..."; }
+  virtual QString getInitStatusMessage() const override
+  { return "Removing empty relations..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " empty relations"; }
 
-  virtual QString getDescription() const { return "Removes relations with no members"; }
+  virtual QString getDescription() const override
+  { return "Removes relations with no members"; }
 
 private:
 
-  void _deleteEmptyRelations(OsmMapPtr& map, const bool reverseOrder);
+  void _deleteEmptyRelations(const OsmMapPtr& map, const bool reverseOrder);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -50,6 +50,8 @@ class KeepTagsVisitorTest : public HootTestFixture
 public:
 
   KeepTagsVisitorTest()
+    : HootTestFixture("test-files/visitors/",
+                      UNUSED_PATH)
   {
     setResetType(ResetBasic);
   }
@@ -64,7 +66,7 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    std::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
@@ -84,7 +86,7 @@ private:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);
+    reader.read(_inputPath + "TagRenameKeyVisitorTest.osm", map);
     return map;
   }
 

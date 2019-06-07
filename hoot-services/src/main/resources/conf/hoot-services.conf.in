@@ -58,7 +58,7 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 translationScriptPath=$(homeFolder)/translations
 
 # Translation extension install folder
-translationExtPath=$(homeFolder)/plugins-local/script/utp
+translationExtPath=$(homeFolder)/translations-local/script/utp
 
 # Supported basemap type extensions
 BasemapRasterExtensions=png,tif
@@ -85,7 +85,7 @@ translationServerPort=8094
 translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
-translationServerScript=/plugins/TranslationServer.js
+translationServerScript=/translations/TranslationServer.js
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
@@ -96,9 +96,11 @@ conflateSizeThreshold=200000000
 # Export size threshold
 exportSizeThreshold=400000000
 
+# HTTP remote request timeout (10 min)
+httpTimeout=600000
+
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
-
 
 # Config options asciidoc location
 configJsonPath=conf/core/ConfigOptions.json
@@ -140,7 +142,7 @@ ElementMergeServerPort=8096
 ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
-ElementMergeServerScript=/plugins/ElementMergeServer.js
+ElementMergeServerScript=/translations/ElementMergeServer.js
 
 # LANGUAGE TRANSLATION/DETECTION
 
@@ -172,8 +174,10 @@ openNlpLanguageDetectionModel=language-translation/langdetect-183.bin
 # and should land the user at index.html to complete the oAuth process.
 # This value works for the UI running separately with node:
 oauthRedirectURL=http://localhost:8080/login.html
-# This value works for the UI deployed by tomcat on vagrant:
-# oauthRedirectURL=http://localhost:8888/hootenanny-id
+# This value works for the Hoot2x UI deployed by tomcat on vagrant:
+# oauthRedirectURL=http://localhost:8888/hootenanny-id/login.html
+# This value works for the Hoot1 UI deployed by tomcat on vagrant:
+# oauthRedirectURL=http://localhost:8888/hootenanny-id-legacy/
 # This value works with hoot core OOB auth:
 # oauthRedirectURL=http://localhost:8888/hoot-services/out-of-band.html
 

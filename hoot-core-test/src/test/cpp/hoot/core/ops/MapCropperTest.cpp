@@ -71,6 +71,12 @@ class MapCropperTest : public HootTestFixture
 
 public:
 
+  MapCropperTest()
+    : HootTestFixture("test-files/ops/",
+                      UNUSED_PATH)
+  {
+  }
+
   OsmMapPtr genPoints(int seed)
   {
     Tgs::Random::instance()->seed(seed);
@@ -92,7 +98,7 @@ public:
   {
     OsmMapPtr map = genPoints(0);
 
-    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
@@ -100,7 +106,7 @@ public:
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
-      boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+      std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
       if (g->intersects(p.get()))
       {
         insideCount++;
@@ -125,7 +131,7 @@ public:
 
   void runSerializationTest()
   {
-    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     MapCropper pre(g, false);
@@ -140,7 +146,7 @@ public:
 
     stringstream ss2(ss.str());
     ObjectInputStream ois(ss2);
-    boost::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
+    std::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
     OsmMapPtr mapPost = genPoints(0);
     post->apply(mapPost);
 
@@ -185,7 +191,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -199,7 +205,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -213,7 +219,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -227,7 +233,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
 
     settings.clear();
@@ -241,14 +247,14 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid bounds passed to map cropper"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
     HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
   }
 
   void runMultiPolygonTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
+    OsmMapReaderFactory::read(map, _inputPath + "MultipolygonTest.osm", true);
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 
@@ -257,7 +263,7 @@ public:
     //compare relations
     const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1";
+    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       const RelationPtr& r = it->second;
@@ -271,7 +277,7 @@ public:
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       const WayPtr& w = it->second;
-      boost::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      std::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
       const Envelope& e = *(pl->getEnvelopeInternal());
       double area = pl->getArea();
       if (count == 0)

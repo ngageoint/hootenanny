@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Removes any tags with keys matching those passed to this visitor
+ *
+ * This really should be a ElementVisitor. See #2831.
  */
 class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
   public ElementCriterionConsumer, public OperationStatusInfo
@@ -47,17 +49,17 @@ public:
   static std::string className() { return "hoot::RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
-  explicit RemoveTagsVisitor(QString key);
-  RemoveTagsVisitor(QString key1, QString key2);
-  explicit RemoveTagsVisitor(QStringList keys);
+  explicit RemoveTagsVisitor(const QString& key);
+  RemoveTagsVisitor(const QString& key1, const QString& key2);
+  explicit RemoveTagsVisitor(const QStringList& keys);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   void setConfiguration(const Settings& conf);
 
-  void addKey(QString key);
+  void addKey(const QString& key);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getDescription() const { return "Removes tags by key"; }
 
@@ -76,12 +78,12 @@ public:
 private:
 
   QStringList _keys;
-  boost::shared_ptr<ElementCriterion> _criterion;
+  std::shared_ptr<ElementCriterion> _criterion;
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
   long _numTagsRemoved;
 
-  void _setCriterion(const QString criterionName);
+  void _setCriterion(const QString& criterionName);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -54,13 +54,18 @@ class OgrReaderTest : public HootTestFixture
 
 public:
 
+    OgrReaderTest()
+      : HootTestFixture("test-files/",
+                        UNUSED_PATH)
+    {
+    }
+
     void runBasicTest()
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
-      uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -80,7 +85,7 @@ public:
       Coordinate c2(1, 84);
 
       {
-        boost::shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
+        std::shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
 
         Settings s;
         // 15512.4m wide at the top
@@ -108,10 +113,9 @@ public:
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
-      uut.setTranslationFile("translations/cloudmade.js");
-      uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
+      uut.setSchemaTranslationScript("translations/cloudmade.js");
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -138,10 +142,9 @@ public:
     {
       OgrReader uut;
 
-      Progress progress("runBasicTest");
       OsmMapPtr map(new OsmMap());
-      uut.setTranslationFile("cloudmade");
-      uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
+      uut.setSchemaTranslationScript("cloudmade");
+      uut.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
@@ -164,8 +167,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(1, water);
     }
 
-    void runStreamHasMoreElementsTest(
-        void )
+    void runStreamHasMoreElementsTest()
     {
       OgrReader reader1;
 
@@ -173,11 +175,11 @@ public:
       CPPUNIT_ASSERT_EQUAL(reader1.hasMoreElements(), false);
 
       // Try to open invalid file
-      OgrReader reader2(QString("test-files/totalgarbage.osm.pbf"));
+      OgrReader reader2(_inputPath + "totalgarbage.osm.pbf");
       CPPUNIT_ASSERT_EQUAL(reader2.hasMoreElements(), false);
 
       // Open valid file
-      OgrReader reader3(QString("test-files/jakarta_raya_coastline.shp"));
+      OgrReader reader3(_inputPath + "jakarta_raya_coastline.shp");
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), true);
 
       // Close file and check again
@@ -185,14 +187,13 @@ public:
       CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
     }
 
-    void runStreamReadNextElementTest(
-        void )
+    void runStreamReadNextElementTest()
     {
-      OgrReader reader(QString("test-files/jakarta_raya_coastline.shp"));
+      OgrReader reader(_inputPath + "jakarta_raya_coastline.shp");
 
       // Iterate through all items
       int numberOfElements(0);
-      while ( reader.hasMoreElements() == true )
+      while (reader.hasMoreElements() == true)
       {
         ElementPtr tempElement = reader.readNextElement();
         numberOfElements++;

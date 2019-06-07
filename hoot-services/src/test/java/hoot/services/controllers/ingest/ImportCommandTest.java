@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -64,12 +64,12 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
+        options.add("schema.translation.script=" + translation);
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                                       etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
-        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -81,13 +81,10 @@ public class ImportCommandTest {
         assertEquals(1, ((List)importCommand.getSubstitutionMap().get("INPUTS")).size());
         assertTrue(((List)importCommand.getSubstitutionMap().get("INPUTS")).get(0).toString().endsWith("file.shp"));
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
-        assertTrue(importCommand.getSubstitutionMap().get("TRANSLATION_PATH").toString().endsWith(translation));
 
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                                           etlName, isNoneTranslation, debugLevel, SHP, caller, null);
-
-        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -119,12 +116,12 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
+        options.add("schema.translation.script=" + translation);
 
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, FGDB, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
-        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} ";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -136,13 +133,10 @@ public class ImportCommandTest {
         assertEquals(1, ((List)importCommand.getSubstitutionMap().get("INPUTS")).size());
         assertTrue(((List)importCommand.getSubstitutionMap().get("INPUTS")).get(0).toString().endsWith("file.gdb"));
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
-        assertTrue(importCommand.getSubstitutionMap().get("TRANSLATION_PATH").toString().endsWith(translation));
 
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, SHP, caller, null);
-
-        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -179,8 +173,7 @@ public class ImportCommandTest {
         ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME} --trans ${TRANSLATION_PATH}";
-        String hootConvertCommandNoTranslation = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -200,8 +193,6 @@ public class ImportCommandTest {
         isNoneTranslation = true;
         importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
-
-        assertEquals(hootConvertCommandNoTranslation, importCommand.getCommand());
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
@@ -237,7 +228,7 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("convert.ops=hoot::TranslationOp");
-        options.add("translation.script=" + "/" + translation);
+        options.add("schema.translation.script=" + "/" + translation);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
@@ -282,7 +273,7 @@ public class ImportCommandTest {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("convert.ops=hoot::TranslationOp");
-        options.add("translation.script=" + HOME_FOLDER + "/" + translation);
+        options.add("schema.translation.script=" + HOME_FOLDER + "/" + translation);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 

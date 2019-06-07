@@ -63,7 +63,7 @@ namespace hoot
  * Many, but not all, possible combinations of inputs are covered here.  The main functionality
  * we're not testing here in the merging of features through the js bindings workflow is the
  * conversion of the map arg from a nodejs object to a hoot object.  That gets tested by the element
- * merge service mocha plugin test, plugins/test/ElementMergerServer.js.
+ * merge service mocha plugin test, translations/test/ElementMergerServer.js.
  */
 class ElementMergerJsTest : public HootTestFixture
 {
@@ -123,17 +123,15 @@ class ElementMergerJsTest : public HootTestFixture
 
 public:
 
-  QString inDir = "test-files/js/conflate/ElementMergerJsTest";
-  QString outDir = "test-output/js/conflate/ElementMergerJsTest";
-
   ElementMergerJsTest()
+    : HootTestFixture("test-files/js/conflate/ElementMergerJsTest/",
+                      "test-output/js/conflate/ElementMergerJsTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath(outDir);
   }
 
-  void testMerge(const QString inFileName, const QString outFileName,
-                 const QString expectedExceptionMsgContains = "")
+  void testMerge(const QString& inFileName, const QString& outFileName,
+                 const QString& expectedExceptionMsgContains = "")
   {
     LOG_VART(inFileName);
     LOG_VART(outFileName);
@@ -143,12 +141,12 @@ public:
     try
     {
       OsmMapPtr map(new OsmMap());
-      OsmMapReaderFactory::read(map, true, true, inDir + "/" + inFileName);
+      OsmMapReaderFactory::read(map, true, true, _inputPath + inFileName);
 
       ElementMergerJs::_mergeElements(map, v8::Isolate::GetCurrent());
 
       MapProjector::projectToWgs84(map);
-      OsmMapWriterFactory::write(map, outDir + "/" + outFileName);
+      OsmMapWriterFactory::write(map, _outputPath + outFileName);
     }
     catch (const HootException& e)
     {
@@ -157,7 +155,7 @@ public:
 
     if (expectedExceptionMsgContains.isEmpty())
     {
-      HOOT_FILE_EQUALS(inDir + "/" + outFileName, outDir + "/" + outFileName);
+      HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
     }
     else
     {

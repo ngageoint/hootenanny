@@ -29,6 +29,7 @@
 #define __TGS__R_STAR_TREE_H__
 
 // Standard Includes
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -66,7 +67,7 @@ class TGS_EXPORT RStarTree
 {
 public:
 
-  RStarTree(boost::shared_ptr<PageStore> ps, int dimensions);
+  RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions);
 
   virtual ~RStarTree();
 
@@ -235,7 +236,7 @@ protected:
   double _p;
   RTreeNodeStore _store;
   Header* _headerStruct;
-  boost::shared_ptr<Page> _header;
+  std::shared_ptr<Page> _header;
   /// Levels that have been treated for overflow during this insert.
   std::set<int> _overflowedLevels;
 

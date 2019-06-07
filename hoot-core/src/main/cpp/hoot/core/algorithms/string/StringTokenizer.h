@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STRINGTOKENIZER_H
@@ -41,13 +41,13 @@ class StringTokenizer : public Configurable
 {
 public:
 
-  StringTokenizer(QString sepRegex);
+  StringTokenizer(const QString& sepRegex);
 
   StringTokenizer();
 
   void setConfiguration(const Settings& conf);
 
-  QStringList tokenize(const QString s) const;
+  QStringList tokenize(const QString& s) const;
 
 private:
 

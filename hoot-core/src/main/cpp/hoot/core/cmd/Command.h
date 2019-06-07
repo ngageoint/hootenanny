@@ -34,9 +34,6 @@
 // Standard
 #include <string>
 
-// Tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
 
@@ -93,8 +90,8 @@ public:
   virtual QString getType() const { return "core"; }
 };
 
-typedef boost::shared_ptr<Command> CommandPtr;
-typedef boost::shared_ptr<const Command> ConstCommandPtr;
+typedef std::shared_ptr<Command> CommandPtr;
+typedef std::shared_ptr<const Command> ConstCommandPtr;
 
 }
 

@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-HootApiDbSqlStatementFormatter::HootApiDbSqlStatementFormatter(const QString delimiter,
+HootApiDbSqlStatementFormatter::HootApiDbSqlStatementFormatter(const QString& delimiter,
                                                                const long mapId) :
 //let's just do this once at the beginning, since it could be expensive
 _dateString(QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz")),
@@ -48,7 +48,7 @@ _mapId(mapId)
   _initOutputFormatStrings(delimiter);
 }
 
-void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
+void HootApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& delimiter)
 {
   QString formatString = HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[HootApiDb::getChangesetsTableName(_mapId)] =
@@ -244,7 +244,7 @@ QString HootApiDbSqlStatementFormatter::elementToSqlString(const ConstElementPtr
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return nodeToSqlString(boost::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+      return nodeToSqlString(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
 
     case ElementType::Way:
       return wayToSqlString(elementId, changesetId, element->getTags());

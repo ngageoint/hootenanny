@@ -47,13 +47,13 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
   bool result = false;
   assert(matches.size() > 0);
 
-  std::set< pair<ElementId, ElementId> > eids;
+  std::set<pair<ElementId, ElementId>> eids;
 
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     const Match* m = *it;
-    set< pair<ElementId, ElementId> > s = m->getMatchPairs();
+    set<pair<ElementId, ElementId>> s = m->getMatchPairs();
     eids.insert(s.begin(), s.end());
   }
 

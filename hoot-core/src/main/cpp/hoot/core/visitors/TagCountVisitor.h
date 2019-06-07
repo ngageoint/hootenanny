@@ -22,14 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,8 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ConstElementVisitor, public SingleStatistic
+class TagCountVisitor : public ConstElementVisitor, public NumericStatistic,
+  public OperationStatusInfo
 {
 public:
 
@@ -46,18 +48,48 @@ public:
 
   TagCountVisitor();
 
+  virtual void visit(const ConstElementPtr& e) override;
+
+  virtual QString getDescription() const override { return "Calculates tag count statistics"; }
+
+  virtual QString getInitStatusMessage() const override
+  { return "Calculating tag count statistics..."; }
+
+  virtual QString getCompletedStatusMessage() const override
+  { return "Calculated tag count statistics for " + QString::number(_numAffected) + " elements"; }
+
+  virtual long numWithStat() const override { return _numAffected; }
+  virtual double getStat() const override { return _totalCount; }
+  virtual double getMin() const override { return _smallestCount; }
+  virtual double getMax() const override { return _largestCount; }
+  virtual double getAverage() const override
+  {
+    const double average = _numAffected == 0 ? 0.0 : _totalCount / _numAffected;
+    return average;
+  }
+
+  long numWithInformationStat() const { return _numInformationAffected; }
   long getInformationCount() const { return _informationCount; }
-
-  virtual double getStat() const { return _totalCount; }
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const { return "Counts element tags"; }
+  long getInformationMin() const { return _smallestInformationCount; }
+  long getInformationMax() const { return _largestInformationCount; }
+  double getInformationAverage() const
+  {
+    const double average =
+      _numInformationAffected == 0 ? 0.0 :
+        (double)_informationCount / (double)_numInformationAffected;
+    return average;
+  }
 
 private:
 
   long _totalCount;
+  long _smallestCount;
+  long _largestCount;
+
+  long _numInformationAffected;
   long _informationCount;
+  long _smallestInformationCount;
+  long _largestInformationCount;
 };
 
 }

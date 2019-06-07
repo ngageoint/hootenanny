@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -51,9 +51,10 @@ class RelationCircularRefRemoverTest : public HootTestFixture
 public:
 
   RelationCircularRefRemoverTest()
+    : HootTestFixture("test-files/ops/RelationCircularRefRemoverTest/",
+                      "test-output/ops/RelationCircularRefRemoverTest/")
   {
     setResetType(ResetBasic);
-    TestUtils::mkpath("test-output/ops/RelationCircularRefRemoverTest");
   }
 
   void runBasicTest()
@@ -62,22 +63,17 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read(
-      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-in.osm",
-      map);
+    reader.read(_inputPath + "RunBasicTestIn.osm", map);
 
     RelationCircularRefRemover uut;
     uut.apply(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(
-      map,
-      "test-output/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm");
+    writer.write(map, _outputPath + "RunBasicTestOut.osm");
 
-    HOOT_FILE_EQUALS(
-      "test-files/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm",
-      "test-output/ops/RelationCircularRefRemoverTest/RelationCircularRefRemoverTest-runBasicTest-out.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RunBasicTestOut.osm",
+                     _outputPath + "RunBasicTestOut.osm");
   }
 };
 

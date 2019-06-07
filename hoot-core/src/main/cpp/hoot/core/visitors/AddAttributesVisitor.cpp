@@ -53,15 +53,18 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _attributes = configOptions.getAddAttributesVisitorKvps();
+  LOG_VARD(_attributes);
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
+  LOG_VARD(_addOnlyIfEmpty);
 }
 
-void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
+void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _attributes.length(); i++)
   {
     QString attributeValue;
     const ElementAttributeType attrType = _getAttributeType(_attributes.at(i), attributeValue);
+    LOG_VART(attrType);
 
     bool ok = false;
     switch (attrType.getEnum())
@@ -75,6 +78,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
           LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+          _numAffected++;
         }
         break;
 
@@ -83,6 +87,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
         {
           e->setTimestamp(OsmUtils::fromTimeString(attributeValue));
           LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+          _numAffected++;
         }
         break;
 
@@ -92,6 +97,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
           e->setUser(attributeValue);
         }
         LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+        _numAffected++;
         break;
 
       case ElementAttributeType::Uid:
@@ -103,6 +109,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
           LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+          _numAffected++;
         }
         break;
 
@@ -115,6 +122,7 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
             throw IllegalArgumentException("Invalid attribute value: " + attributeValue);
           }
           LOG_TRACE("Added " << attrType.toString() << "=" << attributeValue);
+          _numAffected++;
         }
         break;
 
@@ -124,17 +132,19 @@ void AddAttributesVisitor::visit(const boost::shared_ptr<Element>& e)
   }
 }
 
-ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString attribute,
+ElementAttributeType::Type AddAttributesVisitor::_getAttributeType(const QString& attribute,
                                                                    QString& attributeValue)
 {
-  //LOG_VART(attribute);
+  LOG_VART(attribute);
   const QStringList attributeParts = attribute.split("=");
   if (attributeParts.size() != 2)
   {
     throw IllegalArgumentException("Invalid attribute: " + attribute);
   }
   const QString attributeName = attributeParts[0];
+  LOG_VART(attributeName);
   attributeValue = attributeParts[1].trimmed();
+  LOG_VART(attributeValue);
   if (attributeValue.isEmpty())
   {
     throw IllegalArgumentException("Invalid empty attribute.");

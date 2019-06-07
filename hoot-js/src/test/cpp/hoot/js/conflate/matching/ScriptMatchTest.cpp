@@ -50,12 +50,17 @@ namespace hoot
 class ScriptMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
-  // TODO: should this test be re-enabled?
-  //CPPUNIT_TEST(cacheTest);
+  CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  ScriptMatchTest()
+    : HootTestFixture("test-files/algorithms/js/",
+                      UNUSED_PATH)
+  {
+  }
 
   void conflictTest()
   {
@@ -63,14 +68,14 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/algorithms/js/ScriptMatchTest.osm",
+    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm",
       true);
     MapProjector::projectToPlanar(map);
 
     // create the test scenario in ScriptMatchTest
     // call ScriptMatch is consistent repeatedly.
 
-    boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
+    std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
     smc.setArguments(QStringList() << "LineStringGenericTest.js");

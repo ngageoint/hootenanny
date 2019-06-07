@@ -43,6 +43,12 @@ class OsmNetworkExtractorTest : public HootTestFixture
 
 public:
 
+  OsmNetworkExtractorTest()
+    : HootTestFixture("test-files/conflate/network/",
+                      UNUSED_PATH)
+  {
+  }
+
   /**
    * Extract a toy network and verify that the result is as expected.
    */
@@ -52,9 +58,9 @@ public:
 
     OsmMapPtr map(new OsmMap());
 
-    OsmMapReaderFactory::read(map, "test-files/conflate/network/ToyInput.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "ToyInput.osm");
 
-    ElementCriterionPtr c(new HighwayCriterion());
+    ElementCriterionPtr c(new HighwayCriterion(map));
     OsmNetworkExtractor uut;
     uut.setCriterion(c);
     OsmNetworkPtr network = uut.extractNetwork(map);

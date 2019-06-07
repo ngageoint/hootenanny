@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/conflate/stats/DataProducer.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/SingleStatistic.h>
+#include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -50,9 +50,9 @@ public:
 
   static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
-  MatchCandidateCountVisitor(const std::vector<boost::shared_ptr<MatchCreator>>& matchCreators);
+  MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
 
-  virtual void visit(const boost::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
   double getStat() const { return _totalCandidateCount; }
 
@@ -70,11 +70,11 @@ public:
 
 private:
 
-  QMap<QString, boost::shared_ptr<MatchCreator>> _matchCreatorsByName;
+  QMap<QString, std::shared_ptr<MatchCreator>> _matchCreatorsByName;
   long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator>>& matchCreators);
+  void _setupCreators(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
 };
 
 }

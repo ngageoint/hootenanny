@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CLOSEPOINTHASH_H
@@ -39,12 +39,13 @@ namespace hoot
 {
 
 /**
- * Creates a hash with the explicit purpose of finding that are within a predefined distance. This
- * is re-entrant, but not thread safe.
+ * Creates a hash with the explicit purpose of finding points which are within a predefined distance.
+ * This is re-entrant, but not thread safe.
  */
 class ClosePointHash
 {
 public:
+
   /**
    * @param distance - The maximimum distance that is still considered a match between two points.
    */
@@ -56,9 +57,12 @@ public:
   void addPoint(double x, double y, long id);
 
   /**
-   * Returns the ids of the current match. This may have more ids than actually match.
+   * Returns the ids of the current match during iteration. This may have more ids than actually match.
    */
   const std::vector<long>& getMatch();
+
+  // Returns all potential matches for a specific id, works outside of the iteration method.
+  std::vector<long> getMatchesFor(long id);
 
   /**
    * Returns true if there is another match in the hash. A match may be returned multiple times
@@ -70,6 +74,8 @@ public:
    * Resets the iterator to the beginning of the hash.
    */
   void resetIterator();
+
+  size_t size() const { return _bins.size(); }
 
 private:
 
@@ -88,8 +94,10 @@ private:
   double _distance;
   std::vector<long> _match;
 
-  HashMap< int64_t, std::vector<long> > _bins;
-  HashMap< int64_t, std::vector<long> >::const_iterator _it;
+  HashMap<int64_t, std::vector<long>> _bins;
+  HashMap<int64_t, std::vector<long>>::const_iterator _it;
+
+  HashMap<long, std::vector<int64_t>> _idTobin;
 
   int64_t _toBin(double x, double y);
 };

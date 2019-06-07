@@ -47,7 +47,7 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int MaximalSubline::logWarnCount = 0;
+int MaximalSubline::logWarnCount = 0;
 
 MaximalSubline::ThresholdMatchCriteria::ThresholdMatchCriteria(Meters maxDistance,
   Radians maxAngleDiff)
@@ -213,7 +213,7 @@ void MaximalSubline::_calculateSublineScores(const ConstOsmMapPtr& map, const Co
   }
 }
 
-vector< pair<WayLocation, WayLocation> > MaximalSubline::_discretizePointPairs(
+vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
   const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
   vector<WaySublineMatch>& rawSublineMatches)
 {
@@ -239,7 +239,7 @@ vector< pair<WayLocation, WayLocation> > MaximalSubline::_discretizePointPairs(
   const int count = min((w1Length - w1Offset) / _spacing, (w2Length - w2Offset) / _spacing) + 1;
   LOG_VART(count);
 
-  vector< pair<WayLocation, WayLocation> > result(count);
+  vector<pair<WayLocation, WayLocation>> result(count);
 
   LOG_TRACE("Calculating results...");
 
@@ -623,7 +623,7 @@ bool MaximalSubline::_rawSublinesTooSmall(const vector<WaySublineMatch>& rawSubl
 }
 
 cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const vector<int>& ends,
-                                                const vector< pair<WayLocation, WayLocation> >& pairs,
+                                                const vector<pair<WayLocation, WayLocation>>& pairs,
                                                 vector<int>& matchIndexes)
 {
   LOG_TRACE("Creating constraint matrix...");
@@ -679,7 +679,7 @@ cv::Mat MaximalSubline::_createConstraintMatrix(const vector<int>& starts, const
 
 void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch,
                                           const int matchIndex, const vector<double>& splits,
-                                          const vector< pair<WayLocation, WayLocation> >& pairs,
+                                          const vector<pair<WayLocation, WayLocation>>& pairs,
                                           const ConstOsmMapPtr& map, const ConstWayPtr& w1,
                                           const ConstWayPtr& w2, WayLocation& w1Start,
                                           WayLocation& w2Start)
@@ -726,7 +726,7 @@ void MaximalSubline::_calculateSnapStarts(const WaySublineMatch& rawSublineMatch
 }
 
 void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<double>& splits,
-                                        const vector< pair<WayLocation, WayLocation> >& pairs,
+                                        const vector<pair<WayLocation, WayLocation>>& pairs,
                                         const ConstOsmMapPtr& map, const ConstWayPtr& w1,
                                         const ConstWayPtr& w2, WayLocation& w1End,
                                         WayLocation& w2End)
@@ -768,7 +768,7 @@ void MaximalSubline::_calculateSnapEnds(const int matchIndex, const vector<doubl
 void MaximalSubline::_calculatePointPairMatches(const double way1CircularError,
                                                 const double way2CircularError,
                                                 const vector<WaySublineMatch>& rawSublineMatches,
-                                                const vector< pair<WayLocation, WayLocation> >& pairs,
+                                                const vector<pair<WayLocation, WayLocation>>& pairs,
                                                 cv::Mat& m, vector<int>& starts, vector<int>& ends)
 {
     LOG_TRACE("Calculating point pair matches...");
@@ -856,7 +856,7 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   ////
 
   // discretize the first line into a series of points.
-  vector< pair<WayLocation, WayLocation> > pairs;
+  vector<pair<WayLocation, WayLocation>> pairs;
   pairs = _discretizePointPairs(map, w1, w2, rawSublineMatches);
   LOG_VART(pairs.size());
   assert(pairs.size() > 0);

@@ -36,7 +36,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveUnknown1Visitor)
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveUnknown2Visitor)
 
-void RemoveUnknownVisitor::visit(const boost::shared_ptr<Element>& e)
+void RemoveUnknownVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (e->getStatus() == _status)
   {

@@ -87,7 +87,7 @@ public:
     factory.reset();
     factory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
 
-    boost::shared_ptr<MatchCreator> matchCreator = factory.getCreators()[0];
+    std::shared_ptr<MatchCreator> matchCreator = factory.getCreators()[0];
 
     MultiaryScoreCache cache(map, matchCreator);
 

@@ -52,7 +52,7 @@ public:
   EdgeMatch();
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
 
-  boost::shared_ptr<EdgeMatch> clone() const;
+  std::shared_ptr<EdgeMatch> clone() const;
 
   /**
    * Returns true if the specified edge is in either the first or second edge string.
@@ -62,7 +62,7 @@ public:
   /**
    * Returns true if string 1 & 2 in other are contained by string 1 & 2 of this.
    */
-  bool contains(const boost::shared_ptr<const EdgeMatch>& other) const;
+  bool contains(const std::shared_ptr<const EdgeMatch>& other) const;
 
   /**
    * Returns true if the specified vertex is in either the first or second edge string.
@@ -95,12 +95,12 @@ public:
    * Returns true if any of the edges in this edge match overlap with other. Overlapping vertices
    * are ignored.
    */
-  bool overlaps(const boost::shared_ptr<const EdgeMatch>& other) const;
+  bool overlaps(const std::shared_ptr<const EdgeMatch>& other) const;
 
   /**
    * Returns true if the matches have the same EdgeStrings, but possibly with different portions
    */
-  bool isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other) const;
+  bool isVerySimilarTo(const std::shared_ptr<const EdgeMatch>& other) const;
 
   /**
    * Reverse both edge strings that make up this EdgeMatch.
@@ -119,7 +119,7 @@ private:
 
   mutable uint _hash;
 
-  friend uint qHash(const boost::shared_ptr<const EdgeMatch>& em);
+  friend uint qHash(const std::shared_ptr<const EdgeMatch>& em);
 
   EdgeStringPtr _edges1, _edges2;
 
@@ -128,8 +128,8 @@ private:
   void _resetHash() const { _hash = 0; }
 };
 
-typedef boost::shared_ptr<EdgeMatch> EdgeMatchPtr;
-typedef boost::shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
+typedef std::shared_ptr<EdgeMatch> EdgeMatchPtr;
+typedef std::shared_ptr<const EdgeMatch> ConstEdgeMatchPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchPtr, ConstEdgeMatchPtr);

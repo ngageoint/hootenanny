@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WorstCircularErrorVisitor.h"
 
@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, WorstCircularErrorVisitor)
 
-void WorstCircularErrorVisitor::visit(const boost::shared_ptr<const Element>& e)
+void WorstCircularErrorVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   _worst = max(_worst, e->getCircularError());
 }
@@ -54,6 +54,16 @@ Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& ma
   WorstCircularErrorVisitor v;
   map->visitNodesRo(v);
   map->visitWaysRo(v);
+  return v.getWorstCircularError();
+}
+
+Meters WorstCircularErrorVisitor::getWorstCircularError(const std::vector<ElementPtr>& elements)
+{
+  WorstCircularErrorVisitor v;
+  for (vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    v.visit(*it);
+  }
   return v.getWorstCircularError();
 }
 

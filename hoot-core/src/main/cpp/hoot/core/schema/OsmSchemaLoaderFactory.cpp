@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmSchemaLoaderFactory.h"
@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-boost::shared_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
+std::shared_ptr<OsmSchemaLoaderFactory> OsmSchemaLoaderFactory::_theInstance;
 
 OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
 {
@@ -48,14 +48,14 @@ OsmSchemaLoaderFactory& OsmSchemaLoaderFactory::getInstance()
   return *_theInstance;
 }
 
-boost::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)
+std::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString url)
 {
   vector<std::string> names = Factory::getInstance().getObjectNamesByBase(
     OsmSchemaLoader::className());
 
   for (size_t i = 0; i < names.size(); ++i)
   {
-    boost::shared_ptr<OsmSchemaLoader> l(Factory::getInstance().constructObject<OsmSchemaLoader>(
+    std::shared_ptr<OsmSchemaLoader> l(Factory::getInstance().constructObject<OsmSchemaLoader>(
       names[i]));
 
     if (l->isSupported(url))

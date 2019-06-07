@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAG_DISTRIBUTION_H
@@ -55,7 +55,7 @@ public:
    * @param inputs one or more map files to examine
    * @return a mapping of tag value strings to occurrence counts
    */
-  std::map<QString, int> getTagCounts(const QStringList inputs);
+  std::map<QString, int> getTagCounts(const QStringList& inputs);
 
   /**
    * Returns a summary for tag count data
@@ -64,27 +64,41 @@ public:
    */
   QString getTagCountsString(const std::map<QString, int>& tagCounts);
 
-  void setTagKeys(const QStringList keys) { _tagKeys = keys; }
-  void setCriterionClassName(const QString name) { _criterionClassName = name; }
+  void setTagKeys(const QStringList& keys) { _tagKeys = keys; }
+  void setCriterionClassName(const QString& name) { _criterionClassName = name; }
   void setSortByFrequency(const bool sort) { _sortByFrequency = sort; }
   void setTokenize(const bool tokenize) { _tokenize = tokenize; }
   void setLimit(const int limit) { _limit = limit; }
 
 private:
 
+  // the tag keys to collect tag values distribution stats for
   QStringList _tagKeys;
+
+  // optional filtering crit
   QString _criterionClassName;
+
+  // if true, tag values sorted by decreasing frequency; otherwise sorted alphabetically
   bool _sortByFrequency;
+
+  // breaks up tag values into tokens
   bool _tokenize;
+
+  // max number of tag values to process per key
   int _limit;
+
+  // count of total tags processed for all keys
   long _total;
+
   int _taskStatusUpdateInterval;
   QRegExp _nonWord;
 
-  void _countTags(const QString input, std::map<QString, int>& tagCounts);
-  boost::shared_ptr<PartialOsmMapReader> _getReader(const QString input);
-  ElementInputStreamPtr _getFilteredInputStream(ElementInputStreamPtr inputStream);
+  void _countTags(const QString& input, std::map<QString, int>& tagCounts);
+  std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input);
+  ElementInputStreamPtr _getFilteredInputStream(const ElementInputStreamPtr& inputStream);
   ElementCriterionPtr _getCriterion();
+
+  QString _getPercentageStr(const double percentage) const;
 };
 
 }

@@ -26,12 +26,8 @@ CONFIG += rtti \
     precompile_header
 
 OTHER_FILES = \
-    $$files(../plugins/*.js, true) \
-    $$files(../plugins/*.py, true) \
     $$files(../translations/*.js, true) \
     $$files(../translations/*.py, true) \
-    $$files(../plugins-local/*.js, true) \
-    $$files(../plugins-local/*.py, true) \
     $$files(../translations-local/*.js, true) \
     $$files(../translations-local/*.py, true) \
     $$files(../rules/*.js, true) \
@@ -63,14 +59,6 @@ PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 
 SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)
-
-log4cxx {
-  SOURCES -= src/main/cpp/hoot/core/util/LogGeneric.cpp
-  HEADERS -= src/main/cpp/hoot/core/util/LogGeneric.h
-} else {
-  SOURCES -= src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
-  HEADERS -= src/main/cpp/hoot/core/util/LogLog4Cxx.h
-}
 
 DISTFILES += \
     ../sonar-project.properties

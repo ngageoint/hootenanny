@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::WayString"; }
 
-  static unsigned int logWarnCount;
+  static int logWarnCount;
 
   WayString();
 
@@ -105,8 +105,8 @@ private:
   WayLocation _changeToPreferred(int index, const WayLocation& wl, ElementId preferredEid) const;
 };
 
-typedef boost::shared_ptr<WayString> WayStringPtr;
-typedef boost::shared_ptr<const WayString> ConstWayStringPtr;
+typedef std::shared_ptr<WayString> WayStringPtr;
+typedef std::shared_ptr<const WayString> ConstWayStringPtr;
 
 }
 

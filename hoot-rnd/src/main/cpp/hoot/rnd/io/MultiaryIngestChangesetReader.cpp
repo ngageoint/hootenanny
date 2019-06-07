@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryIngestChangesetReader.h"
 
@@ -53,12 +53,12 @@ void MultiaryIngestChangesetReader::open(QString fileName)
   _file.setFileName(fileName);
   if (!_file.open(QIODevice::ReadOnly))
   {
-    throw HootException(QObject::tr("Error opening %1 for writing.").arg(fileName));
+    throw HootException(QObject::tr("Error opening %1 for reading.").arg(fileName));
   }
   LOG_DEBUG("Opened: " << fileName << ".");
 }
 
-boost::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProjection() const
+std::shared_ptr<OGRSpatialReference> MultiaryIngestChangesetReader::getProjection() const
 {
   if (!_wgs84)
   {

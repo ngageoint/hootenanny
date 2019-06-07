@@ -205,7 +205,7 @@ public:
 
       try
       {
-        boost::shared_ptr<LanguageInfoProvider> client;
+        std::shared_ptr<LanguageInfoProvider> client;
         client.reset(
           Factory::getInstance().constructObject<LanguageInfoProvider>(
             opts.getLanguageInfoProvider()));

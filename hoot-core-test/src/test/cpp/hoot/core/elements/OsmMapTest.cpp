@@ -84,20 +84,22 @@ class OsmMapTest : public HootTestFixture
 public:
 
   OsmMapTest()
+    : HootTestFixture("test-files/elements/",
+                      "test-output/elements/")
   {
     setResetType(ResetBasic);
   }
 
   void _checkKnnWayIterator(OsmMapPtr map)
   {
-    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    std::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     ElementConverter ec(map);
     const WayMap& ways = map->getWays();
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); ++itw)
     {
       const WayPtr& w = itw->second;
-      boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+      std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
       KnnWayIterator it(*map, w, tree.get(), map->getIndex().getTreeIdToWidMap());
 
       int count = 0;
@@ -172,8 +174,6 @@ public:
 
   void runAppendTest()
   {
-    TestUtils::mkpath("test-output");
-
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
 
@@ -190,9 +190,9 @@ public:
     MapProjector::projectToWgs84(mapA);
 
     OsmXmlWriter writer;
-    writer.write(mapA, "test-output/OsmMapAppendTest.osm");
-    HOOT_FILE_EQUALS("test-files/OsmMapAppendTest.osm",
-                     "test-output/OsmMapAppendTest.osm");
+    writer.write(mapA, _outputPath + "OsmMapAppendTest.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OsmMapAppendTest.osm",
+                     _outputPath + "OsmMapAppendTest.osm");
   }
 
   void runAppendDuplicateNodeTest()
@@ -410,7 +410,7 @@ public:
 
     MapProjector::projectToOrthographic(map);
 
-    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    std::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     for (int i = 0; i < 10; i++)
     {
