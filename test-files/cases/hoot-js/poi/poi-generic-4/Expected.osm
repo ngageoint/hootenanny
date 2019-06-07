@@ -2,41 +2,41 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.04808299999999" minlon="11.70201" maxlat="48.04809999999998" maxlon="11.7021625"/>
     <node visible="true" id="-3200104" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480999999999838" lon="11.7020099999999978">
-        <tag k="REF2" v="none"/>
-        <tag k="addr:language" v="GER"/>
+        <tag k="source" v="navteq"/>
+        <tag k="amenity" v="townhall"/>
         <tag k="addr:street" v="PFARRER-WENK-PLATZ"/>
-        <tag k="access" v="yes"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="name" v="RATHAUS HOHENBRUNN"/>
+        <tag k="uuid" v="{52820107}"/>
+        <tag k="language" v="GER"/>
         <tag k="phone" v="8102-8000"/>
         <tag k="addr:housenumber" v="1"/>
-        <tag k="language" v="GER"/>
-        <tag k="source" v="navteq"/>
-        <tag k="uuid" v="{52820107}"/>
-        <tag k="name" v="RATHAUS HOHENBRUNN"/>
-        <tag k="amenity" v="townhall"/>
+        <tag k="REF2" v="none"/>
+        <tag k="access" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-3200103" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480829999999912" lon="11.7021624999999982">
-        <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
-        <tag k="openGeoDB:license_plate_code" v="M"/>
-        <tag k="openGeoDB:community_identification_number" v="09184129"/>
+        <tag k="openGeoDB:name" v="Hohenbrunn"/>
+        <tag k="openGeoDB:postal_codes" v="85662"/>
+        <tag k="openGeoDB:is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
+        <tag k="openGeoDB:is_in_loc_id" v="225"/>
         <tag k="openGeoDB:telephone_area_code" v="08124"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Hohenbrunn"/>
+        <tag k="opengeodb:lat" v="48.0479938"/>
+        <tag k="openGeoDB:layer" v="6"/>
+        <tag k="openGeoDB:auto_update" v="population"/>
+        <tag k="REF1" v="00f002"/>
+        <tag k="place" v="village"/>
+        <tag k="openGeoDB:version" v="0.2.6.11 / 2007-12-04 / http://fa-technik.adfc.de/code/opengeodb/dump/"/>
+        <tag k="openGeoDB:loc_id" v="18494"/>
         <tag k="population" v="8569"/>
         <tag k="openGeoDB:sort_name" v="HOHENBRUNN"/>
-        <tag k="openGeoDB:is_in_loc_id" v="225"/>
-        <tag k="openGeoDB:is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
-        <tag k="openGeoDB:loc_id" v="18494"/>
-        <tag k="opengeodb:lon" v="11.7023783"/>
-        <tag k="name" v="Hohenbrunn"/>
-        <tag k="openGeoDB:version" v="0.2.6.11 / 2007-12-04 / http://fa-technik.adfc.de/code/opengeodb/dump/"/>
-        <tag k="openGeoDB:name" v="Hohenbrunn"/>
-        <tag k="openGeoDB:layer" v="6"/>
-        <tag k="openGeoDB:postal_codes" v="85662"/>
-        <tag k="REF1" v="00f002"/>
-        <tag k="openGeoDB:auto_update" v="population"/>
-        <tag k="openGeoDB:type" v="Gemeinde"/>
         <tag k="openGeoDB:population" v="8569"/>
-        <tag k="place" v="village"/>
-        <tag k="opengeodb:lat" v="48.0479938"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="openGeoDB:type" v="Gemeinde"/>
+        <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
+        <tag k="opengeodb:lon" v="11.7023783"/>
+        <tag k="openGeoDB:license_plate_code" v="M"/>
+        <tag k="openGeoDB:community_identification_number" v="09184129"/>
     </node>
 </osm>

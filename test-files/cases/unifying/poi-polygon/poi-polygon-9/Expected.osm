@@ -201,10 +201,10 @@
         <nd ref="-2861739"/>
         <nd ref="-2861737"/>
         <nd ref="-2861929"/>
-        <tag k="leisure" v="park"/>
-        <tag k="uuid" v="b"/>
         <tag k="area" v="yes"/>
         <tag k="name" v="Buena Vista Park"/>
+        <tag k="uuid" v="b"/>
+        <tag k="leisure" v="park"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2861953" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -214,10 +214,10 @@
         <nd ref="-2861729"/>
         <nd ref="-2861735"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="leisure" v="pitch"/>
-        <tag k="uuid" v="a;c"/>
         <tag k="name" v="Buena Vista Park Tennis Courts"/>
+        <tag k="uuid" v="a;c"/>
         <tag k="sport" v="tennis"/>
+        <tag k="leisure" v="pitch"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

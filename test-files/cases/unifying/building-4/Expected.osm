@@ -50,9 +50,10 @@
         <nd ref="-779"/>
         <nd ref="-772"/>
         <nd ref="-778"/>
-        <tag k="REF2" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="Target Pharmacy"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-798" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-771"/>
@@ -61,9 +62,10 @@
         <nd ref="-777"/>
         <nd ref="-778"/>
         <nd ref="-771"/>
-        <tag k="REF2" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="Target - Aurora South"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-797" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-770"/>
@@ -74,9 +76,10 @@
         <nd ref="-774"/>
         <nd ref="-775"/>
         <nd ref="-770"/>
-        <tag k="REF2" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="Target Grocery"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF2" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-796" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-659"/>
@@ -84,9 +87,10 @@
         <nd ref="-747"/>
         <nd ref="-769"/>
         <nd ref="-659"/>
-        <tag k="REF1" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="Target - South"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-771" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-749"/>
@@ -119,9 +123,10 @@
         <nd ref="-675"/>
         <nd ref="-677"/>
         <nd ref="-749"/>
-        <tag k="REF1" v="Target"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="Target"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-799" role="reviewee"/>
@@ -129,12 +134,12 @@
         <member type="way" ref="-797" role="reviewee"/>
         <member type="way" ref="-796" role="reviewee"/>
         <member type="way" ref="-771" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Building"/>
-        <tag k="hoot:review:members" v="5"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Merging multiple buildings from each data source is error prone and requires a human eye."/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Merging multiple buildings from each data source is error prone and requires a human eye."/>
+        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

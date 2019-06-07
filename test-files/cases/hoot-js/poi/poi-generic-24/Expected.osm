@@ -2,44 +2,44 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="30.03000218818" minlon="31.2618605" maxlat="30.03008199998" maxlon="31.26189299956"/>
     <node visible="true" id="-3692884" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300819999800019" lon="31.2618929995600006">
-        <tag k="source" v="mgcp"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="source:description" v="IKONOS - 1m resolution"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="error:circular" v="28.65"/>
+        <tag k="length" v="12"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="REF2" v="00216d"/>
+        <tag k="uuid" v="mgcp:eb2555cf-c470-11e2-b9a8-002481c154f7"/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="width" v="12"/>
+        <tag k="source:copyright" v="Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved."/>
+        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
         <tag k="source:date_time" v="2007-04-29"/>
-        <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="shape" v="unknown"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:abs_horiz_accuracy" v="25"/>
-        <tag k="source:copyright" v="Copyright 2013 by the Bundeswehr GeoInformation Office. All rights reserved."/>
-        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
-        <tag k="source:review_source_type" v="NA"/>
-        <tag k="source:description" v="IKONOS - 1m resolution"/>
-        <tag k="width" v="12"/>
-        <tag k="REF2" v="00216d"/>
-        <tag k="length" v="12"/>
-        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
-        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
-        <tag k="uuid" v="mgcp:eb2555cf-c470-11e2-b9a8-002481c154f7"/>
-        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="source" v="mgcp"/>
         <tag k="historic" v="monument"/>
-        <tag k="error:circular" v="28.65"/>
+        <tag k="shape" v="unknown"/>
     </node>
     <node visible="true" id="-3692883" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0300021881800028" lon="31.2618604999999974">
-        <tag k="REF1" v="00216d"/>
-        <tag k="artwork" v="statue"/>
         <tag k="name" v="ابراهيم باشا"/>
         <tag k="tourism" v="artwork"/>
         <tag k="name:en" v="Ibrahim Pasha"/>
+        <tag k="artwork" v="statue"/>
+        <tag k="REF1" v="00216d"/>
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-3692883" role="reviewee"/>
         <member type="node" ref="-3692884" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (9.4m) - very close together, similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Somewhat similar (9.4m) - very close together, similar POI type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

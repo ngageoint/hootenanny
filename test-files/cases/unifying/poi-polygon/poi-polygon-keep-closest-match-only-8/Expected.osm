@@ -27,8 +27,9 @@
         <nd ref="-88687"/>
         <nd ref="-88689"/>
         <nd ref="-88675"/>
-        <tag k="name" v="poly2"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-88691" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88659"/>
@@ -41,8 +42,9 @@
         <nd ref="-88673"/>
         <nd ref="-88659"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="alt_name" v="poi1"/>
-        <tag k="name" v="poly1"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly1"/>
+        <tag k="alt_name" v="poi1"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

@@ -2,32 +2,32 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.04327039999999" minlon="11.5177994" maxlat="48.04349999999999" maxlon="11.52006"/>
     <node visible="true" id="-3886602" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0434999999999945" lon="11.5200600000000009">
-        <tag k="REF2" v="none"/>
-        <tag k="addr:language" v="GER"/>
+        <tag k="source" v="navteq"/>
         <tag k="historic" v="monument"/>
         <tag k="addr:street" v="ZEILLERSTRASSE"/>
-        <tag k="access" v="yes"/>
-        <tag k="language" v="GER"/>
-        <tag k="source" v="navteq"/>
-        <tag k="uuid" v="{52818661}"/>
+        <tag k="addr:language" v="GER"/>
         <tag k="name" v="BURG GRÜNWALD"/>
+        <tag k="uuid" v="{52818661}"/>
+        <tag k="language" v="GER"/>
+        <tag k="REF2" v="none"/>
+        <tag k="access" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-3886601" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0432703999999902" lon="11.5177993999999995">
-        <tag k="REF1" v="004166"/>
         <tag k="historic" v="memorial"/>
         <tag k="name" v="St. Nepomuk"/>
+        <tag k="REF1" v="004166"/>
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-3886601" role="reviewee"/>
         <member type="node" ref="-3886602" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (170m) - similar POI type"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Somewhat similar (170m) - similar POI type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>
