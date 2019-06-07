@@ -68,7 +68,7 @@ class MapCropperTest : public HootTestFixture
   CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST(runMultiPolygonTest);
   CPPUNIT_TEST(runKeepFeaturesOnlyInBoundsTest);
-  CPPUNIT_TEST(runKeepCrossingFeaturesTest);
+  CPPUNIT_TEST(runDontSplitCrossingFeaturesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -301,7 +301,7 @@ public:
 
   }
 
-  void runKeepCrossingFeaturesTest()
+  void runDontSplitCrossingFeaturesTest()
   {
 
   }
