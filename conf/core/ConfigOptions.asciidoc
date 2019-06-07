@@ -732,14 +732,15 @@ of the bounds.
 * Data Type: bool
 * Default Value: `false`
 
-If true, will not break apart features crossing the crop bounds.
+If true, will not break apart features crossing the crop bounds. Ignored if crop.invert is enabled.
 
 === crop.keep.only.features.inside.bounds
 
 * Data Type: bool
 * Default Value: `false`
 
-If true, will throw out any features that do not fall completely within the crop bounds.
+If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
+crop.invert is enabled.
 
 === debug.maps.filename
 

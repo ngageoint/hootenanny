@@ -113,6 +113,43 @@ _numCrossingWaysRemoved(0)
 {
 }
 
+void MapCropper::setInvert(bool invert)
+{
+  _invert = invert;
+  // I don't think these options make sense when we're doing inverted cropping (maybe they do?),
+  // so let's leave them turned off if inverting is selected.
+  if (!_invert)
+  {
+    _keepOnlyFeaturesInsideBounds = false;
+    _keepEntireFeaturesCrossingBounds = false;
+  }
+}
+
+void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
+{
+  if (_invert || _keepOnlyFeaturesInsideBounds)
+  {
+    _keepEntireFeaturesCrossingBounds = false;
+  }
+  else
+  {
+    _keepEntireFeaturesCrossingBounds = keep;
+  }
+}
+
+void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
+{
+  if (_invert)
+  {
+    _keepOnlyFeaturesInsideBounds = false;
+  }
+  else
+  {
+    _keepOnlyFeaturesInsideBounds = keep;
+    _keepEntireFeaturesCrossingBounds = false;
+  }
+}
+
 void MapCropper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
@@ -121,20 +158,12 @@ void MapCropper::setConfiguration(const Settings& conf)
   {
     _envelope = GeometryUtils::envelopeFromConfigString(boundsStr);
     LOG_VARD(_envelope);
-    _invert = confOpts.getCropInvert();
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
-    // I don't think these options make sense when we're doing inverted cropping (maybe they do?),
-    // so let's leave them turned off if inverting is selected.
-    if (!_invert)
-    {
-      _keepEntireFeaturesCrossingBounds = confOpts.getCropKeepEntireFeaturesCrossingBounds();
-      _keepOnlyFeaturesInsideBounds = confOpts.getCropKeepOnlyFeaturesInsideBounds();
-      if (_keepOnlyFeaturesInsideBounds)
-      {
-        _keepEntireFeaturesCrossingBounds = false;
-      }
-    }
   }
+  setInvert(confOpts.getCropInvert());
+  setKeepEntireFeaturesCrossingBounds(confOpts.getCropKeepEntireFeaturesCrossingBounds());
+  setKeepOnlyFeaturesInsideBounds(confOpts.getCropKeepOnlyFeaturesInsideBounds());
+
   _statusUpdateInterval = confOpts.getTaskStatusUpdateInterval();
 }
 
@@ -337,8 +366,8 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
 }
 
-long MapCropper::_findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w,
-  const Coordinate& c)
+long MapCropper::_findNodeId(const std::shared_ptr<const OsmMap>& map,
+                             const std::shared_ptr<const Way>& w, const Coordinate& c)
 {
   long result = std::numeric_limits<long>::max();
   const std::vector<long>& nodeIds = w->getNodeIds();

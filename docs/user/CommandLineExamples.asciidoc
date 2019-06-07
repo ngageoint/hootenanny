@@ -490,6 +490,24 @@ See the User Guide for more details on command usage.
 -----
       
 ==== Utilities
+
+===== Crop a map while not splitting features that cross the bounds:
+
+-----
+    hoot crop -D crop.keep.entire.features.crossing.bounds=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
+-----
+
+===== Crop a map and keep only features completely inside the bounds:
+
+-----
+    hoot crop -D crop.keep.only.features.inside.bounds=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
+-----
+
+===== Crop a map in reverse and keep only features outside of the bounds:
+
+-----
+    hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
+-----
     
 ===== Sort data to the OSM standard that is too large to fit in memory:
 

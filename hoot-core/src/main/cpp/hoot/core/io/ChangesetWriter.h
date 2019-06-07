@@ -52,6 +52,13 @@ namespace hoot
  * operate over the entire map with data from both inputs (if there are two inputs). This requires
  * a different set of logic for convert ops handling when map consuming ops are present (with
  * in-memory sorting only).
+ *
+ * Everywhere we load data source element IDs are preserved. This is important for the changeset
+ * to be derived correctly. If there are any overlapping element IDs and a map consuming op is used,
+ * an error will occur. This is a limitation that we probably cannot overcome. In those situations,
+ * one of the datasets should have IDs renumbered with a convert op beforehand, if possible. We
+ * also could, at some point, make loading source IDs for datasets optional and could only be used
+ * on one of the datasets if writing a changeset back to authoritative store (e.g. OpenStreetMap).
  */
 class ChangesetWriter
 {

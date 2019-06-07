@@ -98,9 +98,9 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
-  void setInvert(bool invert) { _invert = invert; }
-  void setKeepEntireFeaturesCrossingBounds(bool keep) { _keepEntireFeaturesCrossingBounds = keep; }
-  void setKeepOnlyFeaturesInsideBounds(bool keep) { _keepOnlyFeaturesInsideBounds = keep; }
+  void setInvert(bool invert);
+  void setKeepEntireFeaturesCrossingBounds(bool keep);
+  void setKeepOnlyFeaturesInsideBounds(bool keep);
 
 private:
 
