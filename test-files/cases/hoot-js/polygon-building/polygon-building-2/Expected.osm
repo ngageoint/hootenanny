@@ -10,13 +10,13 @@
     <node visible="true" id="-2559" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648715411900000" lon="42.5459218490300017"/>
     <node visible="true" id="-2558" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648909615100000" lon="42.5457104141399967"/>
     <node visible="true" id="-2557" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3648210368600000" lon="42.5458087341999942">
-        <tag k="REF2" v="00011f"/>
         <tag k="source:name" v="IDP/City Graphic"/>
-        <tag k="operational_status" v="operational"/>
-        <tag k="security:classification" v="unclassified"/>
-        <tag k="building" v="yes"/>
         <tag k="amenity" v="police"/>
         <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="building" v="yes"/>
+        <tag k="operational_status" v="operational"/>
+        <tag k="REF2" v="00011f"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-2555" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3647638722800001" lon="42.5456756295800034"/>
@@ -30,14 +30,15 @@
         <nd ref="-2562"/>
         <nd ref="-2565"/>
         <tag k="building:levels" v="2"/>
-        <tag k="roof:shape" v="flat"/>
-        <tag k="condition" v="functional"/>
-        <tag k="height" v="9"/>
-        <tag k="security:classification" v="unclassified"/>
-        <tag k="building" v="yes"/>
-        <tag k="source:res_owner" v="USA"/>
         <tag k="amenity" v="police"/>
+        <tag k="roof:shape" v="flat"/>
         <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="source:res_owner" v="USA"/>
+        <tag k="building" v="yes"/>
+        <tag k="height" v="9"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2560" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2561"/>
@@ -46,14 +47,15 @@
         <nd ref="-2558"/>
         <nd ref="-2561"/>
         <tag k="building:levels" v="2"/>
-        <tag k="roof:shape" v="flat"/>
-        <tag k="condition" v="functional"/>
-        <tag k="height" v="9"/>
-        <tag k="security:classification" v="unclassified"/>
-        <tag k="building" v="yes"/>
-        <tag k="source:res_owner" v="USA"/>
         <tag k="amenity" v="police"/>
+        <tag k="roof:shape" v="flat"/>
         <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
+        <tag k="security:classification" v="unclassified"/>
+        <tag k="source:res_owner" v="USA"/>
+        <tag k="building" v="yes"/>
+        <tag k="height" v="9"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2559" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2555"/>
@@ -61,27 +63,28 @@
         <nd ref="-2551"/>
         <nd ref="-2549"/>
         <nd ref="-2555"/>
-        <tag k="REF2" v="00011f"/>
         <tag k="building" v="yes"/>
+        <tag k="REF2" v="00011f"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2559" role="reviewee"/>
         <member type="way" ref="-2560" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2559" role="reviewee"/>
         <member type="way" ref="-2561" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

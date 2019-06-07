@@ -11,9 +11,10 @@
         <nd ref="-688916"/>
         <nd ref="-688918"/>
         <nd ref="-688912"/>
-        <tag k="leisure" v="stadium"/>
-        <tag k="building" v="yes"/>
-        <tag k="uuid" v="A;B"/>
         <tag k="name" v="Broncos"/>
+        <tag k="uuid" v="A;B"/>
+        <tag k="building" v="yes"/>
+        <tag k="leisure" v="stadium"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

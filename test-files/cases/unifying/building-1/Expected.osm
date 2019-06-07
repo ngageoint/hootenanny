@@ -11,8 +11,9 @@
         <nd ref="-4264921"/>
         <nd ref="-4264919"/>
         <nd ref="-4264925"/>
-        <tag k="building" v="yes"/>
-        <tag k="uuid" v="B;D"/>
         <tag k="name" v="foo"/>
+        <tag k="uuid" v="B;D"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

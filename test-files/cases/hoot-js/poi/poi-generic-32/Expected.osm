@@ -2,19 +2,19 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="56.9183414" minlon="24.1733195" maxlat="56.91949000000001" maxlon="24.18586"/>
     <node visible="true" id="-561408" timestamp="1970-01-01T00:00:00Z" version="1" lat="56.9194900000000104" lon="24.1858600000000017">
-        <tag k="ele" v="12"/>
-        <tag k="alt_name" v="Dzelzcela Stacija Janavartis;Dzelzceļa Stacija Jāņavārtis;Janavarti;Jāņavārti;Pieturas Punkts Janavartis;Pieturas Punkts Jāņavārtis;Stacija Janavarti;Stacija Jāņavārti;Yanyavarti"/>
         <tag k="is_in:country_code" v="LV"/>
         <tag k="source" v="geonames"/>
-        <tag k="uuid" v="GeoNames.org:459481"/>
+        <tag k="ele" v="12"/>
         <tag k="name" v="Dzelzceļa Stacija Jāņavārti"/>
         <tag k="railway" v="station"/>
+        <tag k="uuid" v="GeoNames.org:459481"/>
+        <tag k="alt_name" v="Dzelzcela Stacija Janavartis;Dzelzceļa Stacija Jāņavārtis;Janavarti;Jāņavārti;Pieturas Punkts Janavartis;Pieturas Punkts Jāņavārtis;Stacija Janavarti;Stacija Jāņavārti;Yanyavarti"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-561407" timestamp="1970-01-01T00:00:00Z" version="1" lat="56.9183414000000027" lon="24.1733195000000016">
         <tag k="public_transport" v="stop_position"/>
-        <tag k="tram" v="yes"/>
         <tag k="name" v="Ķengaraga iela"/>
+        <tag k="tram" v="yes"/>
         <tag k="railway" v="tram_stop"/>
         <tag k="source:datetime" v="2014-07-19T14:55:53.000Z"/>
         <tag k="error:circular" v="15"/>

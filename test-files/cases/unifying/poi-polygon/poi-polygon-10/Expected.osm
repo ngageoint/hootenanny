@@ -64,14 +64,14 @@
         <nd ref="-61611"/>
         <nd ref="-61609"/>
         <nd ref="795"/>
-        <tag k="addr:full" v="8070 S BLACKSTONE PKWY"/>
-        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="height" v="37"/>
-        <tag k="addr:city" v="AURORA"/>
-        <tag k="building" v="Residential"/>
-        <tag k="addr:housenumber" v="8070"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="addr:housenumber" v="8070"/>
+        <tag k="addr:full" v="8070 S BLACKSTONE PKWY"/>
+        <tag k="height" v="37"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="122" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186">
@@ -88,15 +88,15 @@
         <nd ref="702"/>
         <nd ref="701"/>
         <nd ref="712"/>
-        <tag k="addr:full" v="8050 S BLACKSTONE PKWY"/>
-        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="height" v="37"/>
-        <tag k="addr:city" v="AURORA"/>
-        <tag k="building" v="Residential"/>
-        <tag k="addr:housenumber" v="8050"/>
-        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:housenumber" v="8050"/>
+        <tag k="addr:full" v="8050 S BLACKSTONE PKWY"/>
+        <tag k="height" v="37"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="125" timestamp="2017-10-22T16:59:54Z" version="1" changeset="186">
@@ -120,15 +120,15 @@
         <nd ref="749"/>
         <nd ref="748"/>
         <nd ref="766"/>
-        <tag k="addr:full" v="8060 S BLACKSTONE PKWY"/>
-        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="height" v="32"/>
-        <tag k="addr:city" v="AURORA"/>
-        <tag k="building" v="Residential"/>
-        <tag k="addr:housenumber" v="8060"/>
-        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:street" v="S BLACKSTONE PKWY"/>
         <tag k="addr:postcode" v="80016"/>
+        <tag k="building" v="Residential"/>
+        <tag k="addr:city" v="AURORA"/>
+        <tag k="source:datetime" v="2017-10-22T16:59:54Z"/>
+        <tag k="addr:housenumber" v="8060"/>
+        <tag k="addr:full" v="8060 S BLACKSTONE PKWY"/>
+        <tag k="height" v="32"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

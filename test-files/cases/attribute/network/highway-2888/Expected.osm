@@ -3585,7 +3585,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="28910"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-862" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-891"/>
@@ -3605,7 +3604,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="141.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-839" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-663"/>
@@ -3626,7 +3624,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="554.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-832" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-323"/>
@@ -3651,7 +3648,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="557.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-751" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-521"/>
@@ -3676,7 +3672,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="217.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-720" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-466"/>
@@ -3710,7 +3705,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="413.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-484" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-199"/>
@@ -3754,7 +3748,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="676.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-481" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-167"/>
@@ -3787,7 +3780,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="412.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-442" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1172"/>
@@ -3805,7 +3797,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="124.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-417" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1145"/>
@@ -3821,7 +3812,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="125.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-377" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-237"/>
@@ -3890,7 +3880,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="19486.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1172"/>
@@ -3910,7 +3899,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="156"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-363" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-31"/>
@@ -3943,7 +3931,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1341.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1097"/>
@@ -3960,7 +3947,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="67.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-184" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1099"/>
@@ -3976,7 +3962,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="31.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-183" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1102"/>
@@ -3997,7 +3982,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="138.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-182" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1159"/>
@@ -4016,7 +4000,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="413.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-181" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-925"/>
@@ -4045,7 +4028,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1710.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-180" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-898"/>
@@ -4062,7 +4044,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="125.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-179" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-999"/>
@@ -4072,7 +4053,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="143.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-178" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1037"/>
@@ -4088,7 +4068,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="657.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-177" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-998"/>
@@ -4111,7 +4090,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="458.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-176" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1084"/>
@@ -4133,7 +4111,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="108.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-175" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-891"/>
@@ -4158,7 +4135,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="112.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-174" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1082"/>
@@ -4179,7 +4155,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="890.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-173" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1029"/>
@@ -4211,7 +4186,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1118.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-172" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1088"/>
@@ -4241,7 +4215,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="643.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-171" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1024"/>
@@ -4259,7 +4232,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="22.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-169" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-988"/>
@@ -4292,7 +4264,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1254.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-168" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-291"/>
@@ -4311,7 +4282,6 @@
         <tag k="surface" v="paving_stones"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="64.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-167" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-995"/>
@@ -4328,7 +4298,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="188.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-166" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-669"/>
@@ -4362,7 +4331,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="3636"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-165" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1022"/>
@@ -4371,7 +4339,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="41.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-164" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1070"/>
@@ -4398,7 +4365,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1284"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-163" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-959"/>
@@ -4409,7 +4375,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="191.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-162" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1048"/>
@@ -4434,7 +4399,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="685.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-161" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1018"/>
@@ -4450,7 +4414,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="43.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-160" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-975"/>
@@ -4475,7 +4438,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="597"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-159" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-976"/>
@@ -4505,7 +4467,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="2836"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-158" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1114"/>
@@ -4546,7 +4507,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="353.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-157" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-968"/>
@@ -4565,7 +4525,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="666"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-156" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-949"/>
@@ -4583,7 +4542,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="87.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-155" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-921"/>
@@ -4629,7 +4587,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="12850.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-154" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-898"/>
@@ -4663,7 +4620,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="3546.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-153" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-893"/>
@@ -4681,7 +4637,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="141.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-152" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-895"/>
@@ -4698,7 +4653,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="54.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-150" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-201"/>
@@ -4715,7 +4669,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="35.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-149" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-297"/>
@@ -4739,7 +4692,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="69.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-148" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1176"/>
@@ -4765,7 +4717,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="238.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-147" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-763"/>
@@ -4788,7 +4739,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="263.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-146" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-217"/>
@@ -4812,7 +4762,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="182.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-145" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-862"/>
@@ -4821,7 +4770,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="66.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-144" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-987"/>
@@ -4842,7 +4790,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="132.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-143" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1099"/>
@@ -4864,7 +4811,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="68.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-142" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-21"/>
@@ -4887,7 +4833,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="617.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-141" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-828"/>
@@ -4906,7 +4851,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="62.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-140" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-19"/>
@@ -4933,7 +4877,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="900.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-139" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-822"/>
@@ -4945,7 +4888,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="217.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-138" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-822"/>
@@ -4956,7 +4898,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="83.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-137" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-763"/>
@@ -4974,7 +4915,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="68.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-136" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1176"/>
@@ -4991,7 +4931,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="68.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-135" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-560"/>
@@ -5014,7 +4953,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="128.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-134" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1106"/>
@@ -5028,7 +4966,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="201"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-132" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-807"/>
@@ -5037,7 +4974,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="55.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-131" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-924"/>
@@ -5056,7 +4992,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="137.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-130" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-372"/>
@@ -5088,7 +5023,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="623.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-129" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-66"/>
@@ -5117,7 +5051,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="2073.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-128" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-921"/>
@@ -5137,7 +5070,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="528.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-127" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-251"/>
@@ -5146,7 +5078,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="44.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-126" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-808"/>
@@ -5156,7 +5087,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="67.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-125" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-67"/>
@@ -5180,7 +5110,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="828.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-124" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-782"/>
@@ -5189,7 +5118,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="50.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-123" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-268"/>
@@ -5215,7 +5143,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1944.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-122" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-743"/>
@@ -5224,7 +5151,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="26.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-121" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-745"/>
@@ -5233,7 +5159,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="53.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-119" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-930"/>
@@ -5256,7 +5181,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="204.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-117" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-840"/>
@@ -5282,7 +5206,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="600.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-116" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-197"/>
@@ -5301,7 +5224,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="58.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-115" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1139"/>
@@ -5321,7 +5243,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="507.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-114" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-335"/>
@@ -5338,7 +5259,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="67.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-113" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-750"/>
@@ -5355,7 +5275,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="31.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-112" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1008"/>
@@ -5364,7 +5283,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="23.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-111" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-189"/>
@@ -5385,7 +5303,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="133.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-109" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1155"/>
@@ -5403,7 +5320,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="68.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-108" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-615"/>
@@ -5422,7 +5338,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="62.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-107" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-521"/>
@@ -5441,7 +5356,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="148.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-106" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-912"/>
@@ -5482,7 +5396,6 @@
         <tag k="surface" v="paving_stones"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="196.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-105" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-707"/>
@@ -5501,7 +5414,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="117.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-104" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-448"/>
@@ -5523,7 +5435,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="83.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-101" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-237"/>
@@ -5532,7 +5443,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="41.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-100" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-615"/>
@@ -5550,7 +5460,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="45.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-99" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-636"/>
@@ -5571,7 +5480,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="269.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-98" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-655"/>
@@ -5590,7 +5498,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="132.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-97" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-633"/>
@@ -5614,7 +5521,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="175.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-96" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-544"/>
@@ -5653,7 +5559,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="669.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-95" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-908"/>
@@ -5681,7 +5586,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="411.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-94" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-160"/>
@@ -5693,7 +5597,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="207.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-93" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-38"/>
@@ -5710,7 +5613,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="133.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-92" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1094"/>
@@ -5723,7 +5625,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="69.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-91" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-396"/>
@@ -5745,7 +5646,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="262.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-90" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1098"/>
@@ -5767,7 +5667,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="485.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-89" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1080"/>
@@ -5792,7 +5691,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="238"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-88" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-577"/>
@@ -5816,7 +5714,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="723.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-87" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-999"/>
@@ -5827,7 +5724,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="68.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-86" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-49"/>
@@ -5849,7 +5745,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="473.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-85" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-50"/>
@@ -5876,7 +5771,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="228.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-84" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1056"/>
@@ -5911,7 +5805,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="685"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-83" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-540"/>
@@ -5933,7 +5826,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="231.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-81" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-588"/>
@@ -5952,7 +5844,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="85.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-80" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-514"/>
@@ -5970,7 +5861,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="48.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-79" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-979"/>
@@ -5989,7 +5879,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="103.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-78" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-932"/>
@@ -6007,7 +5896,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="94.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-77" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-504"/>
@@ -6017,7 +5905,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="55.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-76" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-423"/>
@@ -6042,7 +5929,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="217.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-75" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-405"/>
@@ -6053,7 +5939,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="31.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-74" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-909"/>
@@ -6091,7 +5976,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="627"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-72" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-438"/>
@@ -6120,7 +6004,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="378.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-71" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-408"/>
@@ -6134,7 +6017,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="265"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-68" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-427"/>
@@ -6153,7 +6035,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="73.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-67" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1063"/>
@@ -6179,7 +6060,6 @@
         <tag k="surface" v="paving_stones"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1802.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-65" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1040"/>
@@ -6203,7 +6083,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="530.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-64" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-968"/>
@@ -6213,7 +6092,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="102.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-63" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-934"/>
@@ -6237,7 +6115,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="608.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-62" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1152"/>
@@ -6255,7 +6132,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="45.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-61" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1129"/>
@@ -6281,7 +6157,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="404.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-60" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-378"/>
@@ -6303,7 +6178,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="537.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-59" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-328"/>
@@ -6320,7 +6194,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="35.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-58" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1131"/>
@@ -6332,7 +6205,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="64.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-57" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-948"/>
@@ -6345,7 +6217,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="17.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-56" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-352"/>
@@ -6376,7 +6247,6 @@
         <tag k="surface" v="paving_stones"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="276.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-55" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-252"/>
@@ -6399,7 +6269,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="7586"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-54" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-345"/>
@@ -6420,7 +6289,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="85.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-52" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-105"/>
@@ -6448,7 +6316,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1908"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-50" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-876"/>
@@ -6459,7 +6326,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="147.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-49" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-313"/>
@@ -6478,7 +6344,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="411"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-48" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-7"/>
@@ -6495,7 +6360,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="1021.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-47" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1147"/>
@@ -6504,7 +6368,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="72.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-46" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-324"/>
@@ -6513,7 +6376,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="67.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-45" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-915"/>
@@ -6529,7 +6391,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="663.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-44" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-184"/>
@@ -6546,7 +6407,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="43.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-31"/>
@@ -6567,7 +6427,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="73.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-42" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-260"/>
@@ -6587,7 +6446,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="142.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-40" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-191"/>
@@ -6604,7 +6462,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="108.0"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-39" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-217"/>
@@ -6629,7 +6486,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="189.9"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-38" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-238"/>
@@ -6647,7 +6503,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="137.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-37" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-219"/>
@@ -6684,7 +6539,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1647.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-36" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-271"/>
@@ -6698,7 +6552,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="86.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1044"/>
@@ -6725,7 +6578,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="102.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-34" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-899"/>
@@ -6748,7 +6600,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="141"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-33" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-98"/>
@@ -6765,7 +6616,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="69.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-32" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-126"/>
@@ -6781,7 +6631,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="71.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-31" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-919"/>
@@ -6804,7 +6653,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1032.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-30" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-185"/>
@@ -6813,7 +6661,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="68.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-29" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-164"/>
@@ -6832,7 +6679,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="269.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-28" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-202"/>
@@ -6853,7 +6699,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1237.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-27" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-163"/>
@@ -6876,7 +6721,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="86.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-26" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-67"/>
@@ -6911,7 +6755,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="3865.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-156"/>
@@ -6922,7 +6765,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="272.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-954"/>
@@ -6950,7 +6792,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="403.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-143"/>
@@ -6960,7 +6801,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="60.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-120"/>
@@ -6975,7 +6815,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="283.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-18" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-141"/>
@@ -6996,7 +6835,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="822.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-128"/>
@@ -7014,7 +6852,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="276.4"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-154"/>
@@ -7028,7 +6865,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="1868"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-148"/>
@@ -7037,7 +6873,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="101.5"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-110"/>
@@ -7046,7 +6881,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="42.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1149"/>
@@ -7072,7 +6906,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="273"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-13"/>
@@ -7091,7 +6924,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="335.2"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-10" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-493"/>
@@ -7111,7 +6943,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="2674.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-93"/>
@@ -7132,7 +6963,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="50.7"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-87"/>
@@ -7158,7 +6988,6 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="796"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-94"/>
@@ -7174,7 +7003,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="21.3"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1112"/>
@@ -7184,7 +7012,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="68.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-139"/>
@@ -7210,7 +7037,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1230.1"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-964"/>
@@ -7239,7 +7065,6 @@
         <tag k="highway" v="road"/>
         <tag k="source:datetime" v="2019-01-24T18:58:28Z"/>
         <tag k="length" v="1833.6"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1145"/>
@@ -7278,7 +7103,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="20645.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-23"/>
@@ -7306,7 +7130,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="2682.8"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1151"/>
@@ -7329,6 +7152,5 @@
         <tag k="surface" v="paved"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="717"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>

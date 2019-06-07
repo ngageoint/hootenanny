@@ -2,26 +2,26 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.09572379999999" minlon="11.4977454" maxlat="48.09572379999999" maxlon="11.4977454"/>
     <node visible="true" id="-140961" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0957237999999876" lon="11.4977453999999994">
-        <tag k="leisure" v="sports_centre"/>
-        <tag k="addr:city" v="München"/>
-        <tag k="source" v="navteq"/>
-        <tag k="sport" v="10pin"/>
-        <tag k="building" v="public"/>
-        <tag k="language" v="GER"/>
-        <tag k="addr:housenumber" v="74"/>
-        <tag k="name" v="Hollywood Super Bowling"/>
-        <tag k="alt_name" v="HOLLYWOOD SUPER BOWLING"/>
-        <tag k="layer" v="1"/>
-        <tag k="website" v="http://hsb-muc.bowlingag.com"/>
         <tag k="addr:country" v="DE"/>
-        <tag k="REF1" v="0134fd"/>
-        <tag k="phone" v="+4989753921"/>
-        <tag k="REF2" v="0134fd"/>
         <tag k="addr:street" v="Forstenrieder Allee;FORSTENRIEDER ALLEE"/>
+        <tag k="alt_name" v="HOLLYWOOD SUPER BOWLING"/>
+        <tag k="website" v="http://hsb-muc.bowlingag.com"/>
+        <tag k="layer" v="1"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="addr:housenumber" v="74"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Hollywood Super Bowling"/>
+        <tag k="REF1" v="0134fd"/>
+        <tag k="REF2" v="0134fd"/>
+        <tag k="uuid" v="{52916756}"/>
+        <tag k="addr:city" v="München"/>
+        <tag k="language" v="GER"/>
+        <tag k="building" v="public"/>
         <tag k="addr:postcode" v="81476"/>
         <tag k="access" v="yes"/>
-        <tag k="uuid" v="{52916756}"/>
-        <tag k="addr:language" v="GER"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="phone" v="+4989753921"/>
+        <tag k="source" v="navteq"/>
+        <tag k="sport" v="10pin"/>
+        <tag k="leisure" v="sports_centre"/>
     </node>
 </osm>

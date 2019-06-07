@@ -2,50 +2,50 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.04804000000001" minlon="11.70149" maxlat="48.04808300000001" maxlon="11.7021625"/>
     <node visible="true" id="-3200104" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480400000000074" lon="11.7014899999999979">
-        <tag k="REF2" v="none"/>
-        <tag k="addr:language" v="GER"/>
+        <tag k="source" v="navteq"/>
         <tag k="addr:street" v="TAUFKIRCHNER STRASSE"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="name" v="HOHENBRUNN"/>
+        <tag k="uuid" v="{52900336}"/>
+        <tag k="language" v="GER"/>
+        <tag k="REF2" v="none"/>
         <tag k="access" v="yes"/>
         <tag k="poi" v="yes"/>
-        <tag k="language" v="GER"/>
-        <tag k="source" v="navteq"/>
-        <tag k="uuid" v="{52900336}"/>
-        <tag k="name" v="HOHENBRUNN"/>
         <tag k="error:circular" v="150"/>
     </node>
     <node visible="true" id="-3200103" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.0480830000000054" lon="11.7021624999999982">
-        <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
-        <tag k="openGeoDB:license_plate_code" v="M"/>
-        <tag k="openGeoDB:community_identification_number" v="09184129"/>
+        <tag k="openGeoDB:name" v="Hohenbrunn"/>
+        <tag k="openGeoDB:postal_codes" v="85662"/>
+        <tag k="openGeoDB:is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
+        <tag k="openGeoDB:is_in_loc_id" v="225"/>
         <tag k="openGeoDB:telephone_area_code" v="08124"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Hohenbrunn"/>
+        <tag k="opengeodb:lat" v="48.0479938"/>
+        <tag k="openGeoDB:layer" v="6"/>
+        <tag k="openGeoDB:auto_update" v="population"/>
+        <tag k="REF1" v="00f002"/>
+        <tag k="place" v="village"/>
+        <tag k="openGeoDB:version" v="0.2.6.11 / 2007-12-04 / http://fa-technik.adfc.de/code/opengeodb/dump/"/>
+        <tag k="openGeoDB:loc_id" v="18494"/>
         <tag k="population" v="8569"/>
         <tag k="openGeoDB:sort_name" v="HOHENBRUNN"/>
-        <tag k="openGeoDB:is_in_loc_id" v="225"/>
-        <tag k="openGeoDB:is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
-        <tag k="openGeoDB:loc_id" v="18494"/>
-        <tag k="opengeodb:lon" v="11.7023783"/>
-        <tag k="name" v="Hohenbrunn"/>
-        <tag k="openGeoDB:version" v="0.2.6.11 / 2007-12-04 / http://fa-technik.adfc.de/code/opengeodb/dump/"/>
-        <tag k="openGeoDB:name" v="Hohenbrunn"/>
-        <tag k="openGeoDB:layer" v="6"/>
-        <tag k="openGeoDB:postal_codes" v="85662"/>
-        <tag k="REF1" v="00f002"/>
-        <tag k="openGeoDB:auto_update" v="population"/>
-        <tag k="openGeoDB:type" v="Gemeinde"/>
         <tag k="openGeoDB:population" v="8569"/>
-        <tag k="place" v="village"/>
-        <tag k="opengeodb:lat" v="48.0479938"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="openGeoDB:type" v="Gemeinde"/>
+        <tag k="is_in" v="München,Oberbayern,Bayern,Bundesrepublik Deutschland,Europe"/>
+        <tag k="opengeodb:lon" v="11.7023783"/>
+        <tag k="openGeoDB:license_plate_code" v="M"/>
+        <tag k="openGeoDB:community_identification_number" v="09184129"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-3200103" role="reviewee"/>
         <member type="node" ref="-3200104" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (50m) - very similar names and generic type, generic type to place match"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Somewhat similar (50m) - very similar names and generic type, generic type to place match"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>
