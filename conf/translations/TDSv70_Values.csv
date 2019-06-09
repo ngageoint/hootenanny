@@ -19,6 +19,16 @@ VDT,groundLevel,A continuous surface over dry land and non-tidal waters (for exa
 VDT,wgs84Egm08,The geopotential surface defined by the World Geodetic System (WGS) 1984 EGM08 Earth Gravity Model that is closely associated with the mean ocean surface.
 VDT,other,"The attribute value is known, but is not currently a valid member of the attribute range.   [Description] The actual value may have been previously, or may become in the future, a valid member of the attribute range."
 ,,
+ZI026_CTUC,Cartographic Useability Range,
+ZI026_CTUC,2 = Open Interval,"The bounded open interval (minimumValue, maximumValue)."
+ZI026_CTUC,3 = Greater-than-or-equal to Less-than Interval,"The right half-open bounded interval [minimimValue, maximumValue)."
+ZI026_CTUC,4 = Greater-than to Less-than-or-equal Interval,"The left half-open bounded interval (minimimValue, maximumValue]."
+ZI026_CTUC,5 = Closed Interval,"The bounded interval [minimimValue, maximumValue]."
+ZI026_CTUC,6 = Greater-than Semi-interval,"The left half-open unbounded interval (minimumValue, +infinity)."
+ZI026_CTUC,7 = Greater-than or Equal Semi-interval,"The unbounded interval [minimumValue, +infinity)."
+ZI026_CTUC,8 = Less-than Semi-interval,"The right half-open unbounded interval (-infinity, maximumValue)."
+ZI026_CTUC,9 = Less-than or Equal Semi-interval,"The unbounded interval (-infinity, maximumValue]."
+,,
 ETS,Extraction Specification,
 ETS,tpc,MIL-T-89101: Tactical Pilotage Charts (TPC).
 ETS,onc,MIL-O-89102: Operational Navigation Charts (ONC).
@@ -487,21 +497,21 @@ ZI004_RCG,72 = Military Survey Department (United Arab Emirates),Military Survey
 ZI004_RCG,73 = Information Network Security Agency (Ethiopia),Information Network Security Agency (Ethiopia)
 ZI004_RCG,74 = Ministry of State for Defense (Kenya),Ministry of State for Defense (Kenya)
 ZI004_RCG,75 = El Instituto Nacional de Estadistica y Geografia (Mexico),El Instituto Nacional de Estadistica y Geografia (Mexico)
-ZI004_RCG,76 = Instituto Geogr&#xE1;fico Militar (Chile),Instituto Geogr&#xE1;fico Militar (Chile)
-ZI004_RCG,77 = Servicio Geogr&#xE1;fico Militar (Uruguay),Servicio Geogr&#xE1;fico Militar (Uruguay)
-ZI004_RCG,78 = Direcci&#xF3;n del Servicio Geogr&#xE1;fico Military (Paraguay),Direcci&#xF3;n del Servicio Geogr&#xE1;fico Military (Paraguay)
-ZI004_RCG,79 = Instituto Geogr&#xE1;fico Nacional (Peru),Instituto Geogr&#xE1;fico Nacional (Peru)
-ZI004_RCG,80 = Instituto Geogr&#xE1;fico Agust&#xED;n Codazzi (Colombia),Instituto Geogr&#xE1;fico Agust&#xED;n Codazzi (Colombia)
-ZI004_RCG,81 = Instituto Geogr&#xE1;fico y del Catastro Nacional (El Salvador),Instituto Geogr&#xE1;fico y del Catastro Nacional (El Salvador)
-ZI004_RCG,82 = Instituto Geogr&#xE1;fico Nacional (Guatemala),Instituto Geogr&#xE1;fico Nacional (Guatemala)
-ZI004_RCG,83 = Servicio Geogr&#xE1;fico Militar (Guatemala),Servicio Geogr&#xE1;fico Militar (Guatemala)
-ZI004_RCG,84 = Instituto Cartogr&#xE1;fico Militar (Dominican Republic),Instituto Cartogr&#xE1;fico Militar (Dominican Republic)
-ZI004_RCG,85 = Instituto Nicarag&#xFC;ense de Estudios Terretoriales (Nicaragua),Instituto Nicarag&#xFC;ense de Estudios Terretoriales (Nicaragua)
-ZI004_RCG,86 = Direcci&#xF3;n General de Registros Catastro y Geograf&#xED;a (Honduras),Direcci&#xF3;n General de Registros Catastro y Geograf&#xED;a (Honduras)
-ZI004_RCG,87 = Instituto Geogr&#xE1;fico Militar (Ecuador),Instituto Geogr&#xE1;fico Militar (Ecuador)
-ZI004_RCG,88 = Instituto Geogr&#xE1;fico Nacional Tommy Guardia (Panama),Instituto Geogr&#xE1;fico Nacional Tommy Guardia (Panama)
-ZI004_RCG,89 = Instituto Geogr&#xE1;fico Nacional (Argentina),Instituto Geogr&#xE1;fico Nacional (Argentina)
-ZI004_RCG,90 = Diretoria de Servi&#xE7;o Geogr&#xE1;fico (Brazil),Diretoria de Servi&#xE7;o Geogr&#xE1;fico (Brazil)
+ZI004_RCG,76 = instituto_geográfico_militar_(chile),Instituto Geográfico Militar (Chile)
+ZI004_RCG,77 = servicio_geográfico_militar_(uruguay),Servicio Geográfico Militar (Uruguay)
+ZI004_RCG,78 = dirección_del_servicio_geográfico_military_(paraguay),Dirección del Servicio Geográfico Military (Paraguay)
+ZI004_RCG,79 = instituto_geográfico_nacional_(peru),Instituto Geográfico Nacional (Peru)
+ZI004_RCG,80 = instituto_geográfico_agustín_codazzi_(colombia),Instituto Geográfico Agustín Codazzi (Colombia)
+ZI004_RCG,81 = instituto_geográfico_y_del_catastro_nacional_(el_salvador),Instituto Geográfico y del Catastro Nacional (El Salvador)
+ZI004_RCG,82 = instituto_geográfico_nacional_(guatemala),Instituto Geográfico Nacional (Guatemala)
+ZI004_RCG,83 = servicio_geográfico_militar_(guatemala),Servicio Geográfico Militar (Guatemala)
+ZI004_RCG,84 = instituto_cartográfico_militar_(dominican_republic),Instituto Cartográfico Militar (Dominican Republic)
+ZI004_RCG,85 = instituto_nicaragüense_de_estudios_terretoriales_(nicaragua),Instituto Nicaragüense de Estudios Terretoriales (Nicaragua)
+ZI004_RCG,86 = dirección_general_de_registros_catastro_y_geografía_(honduras),"Dirección General de Registros, Catastro, y Geografía (Honduras)"
+ZI004_RCG,87 = instituto_geográfico_militar_(ecuador),Instituto Geográfico Militar (Ecuador)
+ZI004_RCG,88 = instituto_geográfico_nacional_"tommy_guardia"_(panama),Instituto Geográfico Nacional "Tommy Guardia" (Panama)
+ZI004_RCG,89 = instituto_geográfico_nacional_(argentina),Instituto Geográfico Nacional (Argentina)
+ZI004_RCG,90 = diretoria_de_serviço_geográfico_(brazil),Diretoria de Serviço Geográfico (Brazil)
 ZI004_RCG,999 = Other,"The attribute value is known, but is not currently a valid member of the attribute range.   [Description] The actual value may have been previously, or may become in the future, a valid member of the attribute range."
 ,,
 ZI020_GE4,GENC Short URN-based Identifier,

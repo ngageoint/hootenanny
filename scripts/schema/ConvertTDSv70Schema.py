@@ -80,19 +80,22 @@ def printJavascript(schema,withDefs):
             if 'units' in schema[f]['columns'][k]:
                 print '                       units:"%s",' % (schema[f]['columns'][k]['units'])
 
+            if 'range' in schema[f]['columns'][k]:
+                print '                       range:"%s",' % (schema[f]['columns'][k]['range'])
+
             if 'func' in schema[f]['columns'][k]:
                 print '                       type:"enumeration",'
                 print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
 
-            elif schema[f]['columns'][k]['type'] == 'enumeration':
+            elif schema[f]['columns'][k]['type'] == 'Enumeration':
                 #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       type:"enumeration",'
                 print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
                     #print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
-                    print '                           { value:"%s", name:"%s" }, ' % (l['value'],l['name'])
+                    print '                           {value:"%s",name:"%s"},' % (l['value'],l['name'])
                 # print '                        ] // End of Enumerations '
                 print '                        ]'
 
@@ -133,10 +136,10 @@ def printFunctions(eList):
         for j in sorted(eList[i]['values'].keys(), key=asint):
             if num_vals == 1: # Are we at the last feature? yes = no trailing comma
                 #print '              { name:"%s", value:"%s" } ' % (eList[i]['values'][j],j)
-                print '              { value:"%s", name:"%s" } ' % (j,eList[i]['values'][j])
+                print '              {value:"%s",name:"%s"}' % (j,eList[i]['values'][j])
             else:
                 #print '              { name:"%s", value:"%s" }, ' % (eList[i]['values'][j],j)
-                print '              { value:"%s", name:"%s" }, ' % (j,eList[i]['values'][j])
+                print '              {value:"%s",name:"%s"},' % (j,eList[i]['values'][j])
                 num_vals -= 1
 
         print '             ];'
@@ -199,30 +202,52 @@ geo_list = {'T':'Table', 'C':'Line', 'S':'Area', 'P':'Point' }
 
 # Convert from the Spec into what Hoot understands
 dataType_list = {
-    # 'Boolean':'enumeration',
-    #'Codelist':'textEnumeration',
-    'CodeList':'enumeration',
-    # 'Codelist':'enumeration',
-    # 'CONSTRAINED_STRING':'String',
-    'Enumeration':'enumeration',
-    'LongInteger':'Integer',
-    # 'integer':'Integer',
+    'BasicEncyclopediaStrucText':'String',
+    'CodeList':'Enumeration',
+    'DateTimeStrucText':'String',
     'Double':'Real',
-    # 'Real':'Real',
-    # 'real':'Real',
-    'String':'String',
+    'Enumeration':'Enumeration',
+    'IcaoLocIndStrucText':'String',
     'LexicalText':'String',
-    'NonlexicalText':'String'
-    # 'StructuredText':'String'
+    # 'Local specification':'String',
+    'LongInteger':'Integer',
+    'NonlexicalText':'String',
+    'PropertyDfddAccessorStrucText':'String',
+    'ResClassificationStrucText':'String',
+    'ResDissemControlsStrucText':'String',
+    'ResNonIntelComMarkingsStrucText':'String',
+    'ResOwnerProducerStrucText':'String',
+    'RunwayDesigStrucText':'String',
+    'SpecifiedDomainValuesStrucText':'String',
+    'StructuredText':'String',
+    'textEnumeration':'textEnumeration',
+    'UniqueEntityIdentStrucText':'String',
+    'UniqueResourceIdentStrucText':'String',
+    'VerticalObstIdentifierStrucText':'String',
     }
 
 # The set of default values for datatypes
 default_list = {
-    'enumeration':'-999999',
-    'Integer':'-999999',
-    'Real':'-999999.0',
-    'String':'No Information',
-    'StructuredText':'noInformation',
+    'BasicEncyclopediaStrucText':'noInformation',
+    'CodeList':'noInformation',
+    'DateTimeStrucText':'noInformation',
+    'Double':'-999999.0',
+    'Enumeration':'-999999',
+    'IcaoLocIndStrucText':'noInformation',
+    'LexicalText':'No Information',
+    # 'Local specification':'No Information',
+    'LongInteger':'-999999',
+    'NonlexicalText':'No Information',
+    'PropertyDfddAccessorStrucText':'noInformation',
+    'ResClassificationStrucText':'noInformation',
+    'ResDissemControlsStrucText':'noInformation',
+    'ResNonIntelComMarkingsStrucText':'noInformation',
+    'ResOwnerProducerStrucText':'noInformation',
+    'RunwayDesigStrucText':'noInformation',
+    'SpecifiedDomainValuesStrucText':'noInformation',
+    'UniqueEntityIdentStrucText':'noInformation',
+    'UniqueResourceIdentStrucText':'noInformation',
+    'VerticalObstIdentifierStrucText':'noInformation',
     'textEnumeration':'noInformation'
 }
 
@@ -268,7 +293,7 @@ def processValues(fileName):
     tValues = {}
 
     for (fieldName,fieldValue,fieldDefinition) in reader:
-        print fieldName,fieldValue
+        # print fieldName,fieldValue
 
         if fieldName == '': # Empty feature/line
             continue
@@ -292,9 +317,10 @@ def processValues(fileName):
             tDef = fieldDefinition.replace("'","").replace("\"","").strip()
             tValues[fieldName]['values'][fieldValue] = tDef
 
-    for k in tValues:
-        print k
-        print tValues[k]
+    # Debug
+    # for k in tValues:
+    #     print k
+    #     print tValues[k]
 
     return tValues
 # End processValues
@@ -337,7 +363,7 @@ def processFile(fileName,enValues):
         # fDescription = fName[:-2].replace("_"," ").title()
 
         if fName not in tschema:  # New feature
-            print "Name:%s  fCode:%s  Geom:%s  Desc:%s" % (fName,fCode,fGeometry,fDescription)  # Debug
+            # print "Name:%s  fCode:%s  Geom:%s  Desc:%s" % (fName,fCode,fGeometry,fDescription)  # Debug
             tschema[fName] = {}
             tschema[fName]['name'] = fName
             tschema[fName]['fcode'] = fCode
@@ -366,17 +392,24 @@ def processFile(fileName,enValues):
                                                      'definition':fDefinition,
                                                      'optional':'R'
                                                    }
+            
+            if dataType == 'Local specification':
+                continue
 
-            # Simplify Structured Text 
-            if dataType.find('StrucText') > -1:
-                dataType = 'String'
+            tschema[fName]['columns'][aName]['type'] = dataType_list[dataType]
+            tschema[fName]['columns'][aName]['defValue'] = default_list[dataType]
 
-            if dataType in dataType_list:
-                aType = dataType_list[dataType]
-                if aType.find('numeration') > -1:
-                    tschema[fName]['columns'][aName]['enum'] = []
-            else:
-                # These are generally the codelists etc that gat made into functions in the schema
+            # AAARRRGGGHHH!!!!
+            if aName == 'ZI026_CTUC':
+                tschema[fName]['columns'][aName]['defValue'] = '5'
+                dataType = 'CodeList'
+
+            if dataType == 'Enumeration':
+                tschema[fName]['columns'][aName]['enum'] = []
+                continue
+
+            if dataType == 'CodeList':
+                # These are generally the codelists etc that get made into functions in the schema
                 funcName = aName
                 # ZI020_GE4, ZI020_GE42, ZI020_GE43,ZI020_GE44, all have the same lookup table.  
                 if aName.find('ZI020_GE4') > -1:
@@ -386,14 +419,14 @@ def processFile(fileName,enValues):
                 if aName == 'RCG':
                     funcName = 'ZI004_RCG'
 
-                print "  funcName: %s" % (funcName)
+                # print "  funcName: %s" % (funcName)
                 if funcName in enValues:
                     tschema[fName]['columns'][aName]['func'] = funcName
 
                     if enValues[funcName]['type'] == 'text':
-                        aType = 'textEnumeration'
+                        dataType = 'textEnumeration'
                     else:
-                        aType = 'enumeration'
+                        dataType = 'Enumeration'
 
                     # Now fill in the values
                     tschema[fName]['columns'][aName]['enum'] = []
@@ -403,12 +436,9 @@ def processFile(fileName,enValues):
                 else:
                     print "#### Missing dataType = " + dataType
 
-            tschema[fName]['columns'][aName]['type'] = aType
-            tschema[fName]['columns'][aName]['defValue'] = default_list[aType]
+            # tschema[fName]['columns'][aName]['type'] = dataType_list[dataType]
+            # tschema[fName]['columns'][aName]['defValue'] = default_list[dataType]
 
-            # AAARRRGGGHHH!!!!
-            if aName.find('CTUC') > -1:
-                tschema[fName]['columns'][aName]['defValue'] = '5'
 
             if aName == 'F_CODE':
                 tschema[fName]['columns'][aName]['defValue'] = ''
@@ -421,11 +451,15 @@ def processFile(fileName,enValues):
             if dataMeasure != '':
                 tschema[fName]['columns'][aName]['units'] = dataMeasure
 
+            # Check if we have a range for the attribute
+            if dataRange != '':
+                tschema[fName]['columns'][aName]['range'] = dataRange
+
 
             continue
         # End dataType
 
-        print 'aName',aName,'fieldValue:',fieldValue
+        # print 'aName',aName,'fieldValue:',fieldValue
 
         # Ugly repleated code for building FFN's
         if fieldValue == 'Hierarchical Enumerants':
@@ -434,8 +468,8 @@ def processFile(fileName,enValues):
                 fCode = 'AL013'
             # The lookup table is in the Values.csv
             tschema[fName]['columns'][aName]['func'] = fCode
-            tschema[fName]['columns'][aName]['type'] = 'enumeration'
-            tschema[fName]['columns'][aName]['defValue'] = default_list['enumeration']
+            tschema[fName]['columns'][aName]['type'] = 'Enumeration'
+            tschema[fName]['columns'][aName]['defValue'] = default_list['Enumeration']
             for i in enValues[fCode]['values']:
                 tschema[fName]['columns'][aName]['enum'].append({'name':enValues[fCode]['values'][i],'value':i})
 

@@ -97,7 +97,7 @@ def printCopyright():
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
  ////
@@ -173,7 +173,7 @@ def printFcodeAttrList(schema):
     for i in schema:
         if schema[i]['fcode'] not in tList:
             tList[schema[i]['fcode']] = []
-            for j in schema[i]['columns']:
+            for j in sorted(schema[i]['columns'].keys()):
                 tList[schema[i]['fcode']].append(schema[i]['columns'][j]['name'])
 
     #print '"FCODE","Name"'

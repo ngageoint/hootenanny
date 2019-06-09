@@ -2220,7 +2220,7 @@ tds40.rules = {
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
-    ['MCC','2','material','aluminum'], // Aluminum
+    ['MCC','2','material','aluminium'], // Aluminum
     ['MCC','5','material','asphalt'], // Asphalt
     ['MCC','7','material','bedrock'], // Bedrock
     ['MCC','8','material','boulders'], // Boulders
@@ -4283,6 +4283,8 @@ tds40.rules = {
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
+
+    ['MCC','2','material','aluminum'], // Aluminum
 
     // Fix up some of the Defaults
     // ['FFN','-999999','building','yes'], // Map to No Information

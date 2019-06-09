@@ -1000,8 +1000,8 @@ tds61.rules = {
     ['CRA','99','crane:type','container'], // Container Crane
     ['CRA','999','crane:type','other'], // Other
 
-    // ['CRM','-999999',undefined,undefined], // No Information
     // CRM - Crane Mobility Type
+    // ['CRM','-999999',undefined,undefined], // No Information
     ['CRM','1','crane:mobile','fixed'], // Fixed
     ['CRM','2','crane:mobile','travelling'], // Travelling
     ['CRM','3','crane:mobile','floating'], // Floating
@@ -1757,8 +1757,6 @@ tds61.rules = {
 
     // HZD - Geodetic Datum
     // ['HZD','noInformation',undefined,undefined], // No Information
-    ['HZD','other','source:datum:geodetic','other'], // Other
-    ['HZD','worldGeodeticSystem1984','source:datum:geodetic','world_geodetic_system_1984'], // The geodetic datum known as 'World Geodetic System 1984' and intended to be used globally.
     ['HZD','adindanBurkinaFaso','source:datum:geodetic','adindan_(burkina_faso)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Burkina Faso.
     ['HZD','adindanCameroon','source:datum:geodetic','adindan_(cameroon)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Cameroon.
     ['HZD','adindanEthiopia','source:datum:geodetic','adindan_(ethiopia)'], // The geodetic datum known as 'Adindan' and intended to be used only in the geographic region of Ethiopia.
@@ -1812,14 +1810,13 @@ tds61.rules = {
     ['HZD','campAreaAstroAntarctica','source:datum:geodetic','camp_area_astro_(camp_mcmurdo_area_antarctica)'], // The geodetic datum known as 'Camp Area Astro' and intended to be used only in the geographic region of Camp McMurdo Area, Antarctica.
     ['HZD','campoInchauspeArgentina','source:datum:geodetic','campo_inchauspe_(argentina)'], // The geodetic datum known as 'Campo Inchauspe' and intended to be used only in the geographic region of Argentina.
     ['HZD','cantonAstro1966PhoenixIs','source:datum:geodetic','canton_astro_1966_(phoenix_islands)'], // The geodetic datum known as 'Canton Astro 1966' and intended to be used only in the geographic region of Phoenix Islands.
-    ['HZD','capeSouthAfrica','source:datum:geodetic','cape_(south_africa)'], // The geodetic datum known as 'Cape' and intended to be used only in the geographic region of South Africa.
     ['HZD','capeCanaveralMeanValue','source:datum:geodetic','cape_canaveral_(mean_value)'], // The geodetic datum known as 'Cape Canaveral' and intended as a mean solution for the geographic region of Florida and the Bahama Islands.
+    ['HZD','capeSouthAfrica','source:datum:geodetic','cape_(south_africa)'], // The geodetic datum known as 'Cape' and intended to be used only in the geographic region of South Africa.
     ['HZD','carthageTunisia','source:datum:geodetic','carthage_(tunisia)'], // The geodetic datum known as 'Carthage' and intended to be used only in the geographic region of Tunisia.
     ['HZD','chatham1971NewZealand','source:datum:geodetic','chatham_1971_(chatham_island_new_zealand)'], // The geodetic datum known as 'Chatham 1971' and intended to be used only in the geographic region of Chatham Island, New Zealand.
     ['HZD','chuaAstroParaguay','source:datum:geodetic','chua_astro_(paraguay)'], // The geodetic datum known as 'Chua Astro' and intended to be used only in the geographic region of Paraguay.
     ['HZD','compensationGeoQuebec1977','source:datum:geodetic','compensation_geodetique_du_quebec_1977'], // The geodetic datum known as 'Compensation Geodetique du Quebec 1977' and whose geographic region of intended use is not specified.
     ['HZD','conakryPyramidGuinea','source:datum:geodetic','conakry_pyramid_of_the_service_geographique_(guinea)'], // The geodetic datum known as 'Conakry Pyramid of the Service Geographique' and intended to be used only in the geographic region of Guinea.
-    ['HZD','estonia1937','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // The geodetic datum known as 'Co-ordinate System 1937 of Estonia' and intended to be used only in the geographic region of Estonia.
     ['HZD','corregoAlegreBrazil','source:datum:geodetic','corrego_alegre_(brazil)'], // The geodetic datum known as 'Corrego Alegre' and intended to be used only in the geographic region of Brazil.
     ['HZD','dabolaGuinea','source:datum:geodetic','dabola_(guinea)'], // The geodetic datum known as 'Dabola' and intended to be used only in the geographic region of Guinea.
     ['HZD','dcs3LighthouseLesserAnt','source:datum:geodetic','dcs-3_lighthouse_saint_lucia_lesser_antilles'], // The geodetic datum known as 'DCS-3 Lighthouse, Saint Lucia, Lesser Antilles' and whose geographic region of intended use is not specified.
@@ -1829,6 +1826,8 @@ tds61.rules = {
     ['HZD','dominicaAstroM12LesserAnt','source:datum:geodetic','dominica_astro_m-12_dominica_lesser_antilles'], // The geodetic datum known as 'Dominica Astro M-12, Dominica, Lesser Antilles' and whose geographic region of intended use is not specified.
     ['HZD','dos1968GizoNewGeorgiaIs','source:datum:geodetic','dos_1968_(gizo_island_new_georgia_islands)'], // The geodetic datum known as 'DOS 1968' and intended to be used only in the geographic region of Gizo Island and the New Georgia Islands.
     ['HZD','easterIsland1967EasterIs','source:datum:geodetic','easter_island_1967_(easter_island)'], // The geodetic datum known as 'Easter Island 1967' and intended to be used only in the geographic region of Easter Island.
+    ['HZD','estonia1937','source:datum:geodetic','co-ordinate_system_1937_of_estonia'], // The geodetic datum known as 'Co-ordinate System 1937 of Estonia' and intended to be used only in the geographic region of Estonia.
+    ['HZD','etrs1989','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // The geodetic datum known as 'European Terrestrial Reference System 1989' and intended to be used only in the geographic region of ETRS89.
     ['HZD','european1950BritishIsles','source:datum:geodetic','european_1950_(british_isles)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of the British Isles to specifically encompass England, the Channel Islands, Ireland, Northern Ireland, Scotland, the Shetland Islands, and Wales.
     ['HZD','european1950Cyprus','source:datum:geodetic','european_1950_(cyprus)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Cyprus.
     ['HZD','european1950Egypt','source:datum:geodetic','european_1950_(egypt)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Egypt.
@@ -1845,7 +1844,6 @@ tds61.rules = {
     ['HZD','european1950Tunisia','source:datum:geodetic','european_1950_(tunisia)'], // The geodetic datum known as 'European 1950' and intended to be used only in the geographic region of Tunisia.
     ['HZD','european1950WesternEurope','source:datum:geodetic','european_1950_(western_europe)'], // The geodetic datum known as 'European 1950' and intended as a mean solution for a geographic region of Western Europe encompassing Austria, Denmark, France, Federal Republic of Germany, Netherlands, and Switzerland.
     ['HZD','european1979MeanValue','source:datum:geodetic','european_1979_(mean_value)'], // The geodetic datum known as 'European 1979' and intended as a mean solution for the geographic region of Austria, Finland, Netherlands, Norway, Spain, Sweden, and Switzerland.
-    ['HZD','etrs1989','source:datum:geodetic','european_terrestrial_reference_system_1989_(etrs89)'], // The geodetic datum known as 'European Terrestrial Reference System 1989' and intended to be used only in the geographic region of ETRS89.
     ['HZD','fortThomas1955LeewardIs','source:datum:geodetic','fort_thomas_1955_(nevis_st_kitts_leeward_islands)'], // The geodetic datum known as 'Fort Thomas 1955' and intended to be used only in the geographic region of Nevis, St Kitts, and the Leeward Islands.
     ['HZD','gan1970AdduAtoll','source:datum:geodetic','gan_1970_(addu_atoll_republic_of_maldives)'], // The geodetic datum known as 'Gan 1970' and intended to be used only in the geographic region of Addu Atoll, Republic of Maldives.
     ['HZD','gandajikaBaseZaire','source:datum:geodetic','gandajika_base_(zaire)'], // The geodetic datum known as 'Gandajika Base' and intended to be used only in the geographic region of Zaire.
@@ -1867,15 +1865,15 @@ tds61.rules = {
     ['HZD','hongKong1963HongKong','source:datum:geodetic','hong_kong_1963_(hong_kong)'], // The geodetic datum known as 'Hong Kong 1963' and intended to be used only in the geographic region of Hong Kong.
     ['HZD','hungarian1972','source:datum:geodetic','hungarian_1972'], // The geodetic datum known as 'Hungarian 1972' and whose geographic region of intended use is not specified.
     ['HZD','huTzuShan','source:datum:geodetic','hu-tzu-shan'], // The geodetic datum known as 'Hu-Tzu-Shan' and intended to be used only in the geographic region of Taiwan.
-    ['HZD','indianBangladesh','source:datum:geodetic','indian_(bangladesh)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Bangladesh.
-    ['HZD','indianIndiaNepal','source:datum:geodetic','indian_(india_and_nepal)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of India and Nepal.
-    ['HZD','indianPakistan','source:datum:geodetic','indian_(pakistan)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Pakistan.
-    ['HZD','indianThailandVietnam','source:datum:geodetic','indian_(thailand_and_vietnam)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Thailand and Vietnam.
     ['HZD','indian1954Thailand','source:datum:geodetic','indian_1954_(thailand)'], // The geodetic datum known as 'Indian 1954' and intended to be used only in the geographic region of Thailand.
     ['HZD','indian1960ConSonIsland','source:datum:geodetic','indian_1960_(con_son_island_(vietnam))'], // The geodetic datum known as 'Indian 1960 (Con Son Island)' and intended to be used only in the geographic region of Con Son Island (Vietnam).
     ['HZD','indian1960Vietnam','source:datum:geodetic','indian_1960_(vietnam:_near_16_degrees_north)'], // The geodetic datum known as 'Indian 1960' and intended to be used only in the geographic region of Vietnam near 16 degrees North.
     ['HZD','indian1975Thailand','source:datum:geodetic','indian_1975_(thailand)'], // The geodetic datum known as 'Indian 1975' and intended to be used only in the geographic region of Thailand.
     ['HZD','indian1975ThailandCycle1','source:datum:geodetic','indian_1975_(thailand)_-_cycle_1'], // The geodetic datum known as 'Indian 1975 - Cycle 1' and intended to be used only in the geographic region of Thailand.
+    ['HZD','indianBangladesh','source:datum:geodetic','indian_(bangladesh)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Bangladesh.
+    ['HZD','indianIndiaNepal','source:datum:geodetic','indian_(india_and_nepal)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of India and Nepal.
+    ['HZD','indianPakistan','source:datum:geodetic','indian_(pakistan)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Pakistan.
+    ['HZD','indianThailandVietnam','source:datum:geodetic','indian_(thailand_and_vietnam)'], // The geodetic datum known as 'Indian' and intended to be used only in the geographic region of Thailand and Vietnam.
     ['HZD','indonesian1974','source:datum:geodetic','indonesian_1974'], // The geodetic datum known as 'Indonesian 1974' and intended to be used only in the geographic region of Indonesia.
     ['HZD','ireland1965IrelandNorthern','source:datum:geodetic','ireland_1965_(ireland_and_northern_ireland)'], // The geodetic datum known as 'Ireland 1965' and intended to be used only in the geographic region of Ireland and Northern Ireland.
     ['HZD','ists061Astro1968GeorgiaIs','source:datum:geodetic','ists_061_astro_1968_(south_georgia_islands)'], // The geodetic datum known as 'ISTS 061 Astro 1968' and intended to be used only in the geographic region of the South Georgia Islands.
@@ -1955,11 +1953,12 @@ tds61.rules = {
     ['HZD','oldHawaiianOahuIsland','source:datum:geodetic','old_hawaiian_(oahu)'], // The geodetic datum known as 'Old Hawaiian' and intended to be used only in the geographic region of Oahu.
     ['HZD','oman','source:datum:geodetic','oman_(oman)'], // The geodetic datum known as 'Oman' and intended to be used only in the geographic region of Oman.
     ['HZD','ordnanceSurvGB1936England','source:datum:geodetic','ordnance_survey_g.b._1936_(england)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England.
-    ['HZD','ordnanceSurvGB1936ScotWale','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England, the Isle of Man, and Wales.
     ['HZD','ordnanceSurvGB1936MeanVal','source:datum:geodetic','ordnance_survey_g.b._1936_(mean_value)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended as a mean solution for the geographic region of England, the Isle of Man, Scotland, Shetland, and Wales.
     ['HZD','ordnanceSurvGB1936ScotShet','source:datum:geodetic','ordnance_survey_g.b._1936_(scotland_and_shetland_islands)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Scotland and the Shetland Islands.
+    ['HZD','ordnanceSurvGB1936ScotWale','source:datum:geodetic','ordnance_survey_g.b._1936_(england_isle_of_man_and_wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of England, the Isle of Man, and Wales.
     ['HZD','ordnanceSurvGB1936Wales','source:datum:geodetic','ordnance_survey_g.b._1936_(wales)'], // The geodetic datum known as 'Ordnance Survey G.B. 1936' and intended to be used only in the geographic region of Wales.
     ['HZD','osloObservatoryOld','source:datum:geodetic','oslo_observatory_(old)_norway'], // The geodetic datum known as 'Oslo Observatory (Old)' and intended to be used only in the geographic region of Norway.
+    ['HZD','other','source:datum:geodetic','other'], // Other
     ['HZD','padangBaseWestEnd','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)'], // The geodetic datum known as 'Padang Base West End' and intended to be used only in the geographic region of Sumatra, Indonesia.
     ['HZD','padangBaseWestEndZeroMerid','source:datum:geodetic','padang_base_west_end_(sumatra_indonesia)_with_zero_meridian_djakarta'], // The geodetic datum known as 'Padang Base West End' whose zero meridian is set at Djakarta and is intended to be used only in the geographic region of Sumatra, Indonesia.
     ['HZD','palestine1928','source:datum:geodetic','palestine_1928_(israel_jordan)'], // The geodetic datum known as 'Palestine 1928' and intended to be used only in the geographic region of Israel and Jordan.
@@ -2004,6 +2003,7 @@ tds61.rules = {
     ['HZD','seBasePortoSanto','source:datum:geodetic','se_base_(porto_santo)_(porto_santo_and_madeira_islands)'], // The geodetic datum known as 'SE Base Porto Santo' and intended to be used only in the geographic region of Porto Santo and the Madeira Islands.
     ['HZD','selvagemGrande1938Salvage','source:datum:geodetic','selvagem_grande_1938_(salvage_islands)'], // The geodetic datum known as 'Selvagem Grande 1938' and intended to be used only in the geographic region of the Salvage Islands.
     ['HZD','sierraLeone1960','source:datum:geodetic','sierra_leone_1960'], // The geodetic datum known as 'Sierra Leone 1960' and intended to be used only in the geographic region of Sierra Leone.
+    ['HZD','sirgas','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // The geodetic datum known as 'South American Geocentric Reference System' and intended to be used only in the geographic region of South America.
     ['HZD','sJtsk','source:datum:geodetic','s-jtsk'], // The geodetic datum known as 'S-JTSK' and intended to be used in the geographic region of the Czech Republic and Slovakia.
     ['HZD','southAfricanSouthAfrica','source:datum:geodetic','south_african_(south_africa)'], // The geodetic datum known as 'South African' and intended to be used only in the geographic region of South Africa.
     ['HZD','southAmerican1969Argentina','source:datum:geodetic','south_american_1969_(argentina)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Argentina.
@@ -2019,15 +2019,14 @@ tds61.rules = {
     ['HZD','southAmerican1969Peru','source:datum:geodetic','south_american_1969_(peru)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Peru.
     ['HZD','southAmerican1969Trinidad','source:datum:geodetic','south_american_1969_(trinidad_and_tobago)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Trinidad and Tobago.
     ['HZD','southAmerican1969Venezuela','source:datum:geodetic','south_american_1969_(venezuela)'], // The geodetic datum known as 'South American 1969' and intended to be used only in the geographic region of Venezuela.
-    ['HZD','sirgas','source:datum:geodetic','south_american_geocentric_reference_system_(sirgas)'], // The geodetic datum known as 'South American Geocentric Reference System' and intended to be used only in the geographic region of South America.
     ['HZD','southAsiaSingapore','source:datum:geodetic','south_asia_(southeast_asia_singapore)'], // The geodetic datum known as 'South Asia' and intended to be used only in the geographic region of Southeast Asia and Singapore.
     ['HZD','sovietGeodeticSystem1985','source:datum:geodetic','soviet_geodetic_system_1985'], // The geodetic datum known as 'Soviet Geodetic System 1985' and intended to be used only in the geographic region of the former Soviet Union.
     ['HZD','sovietGeodeticSystem1990','source:datum:geodetic','soviet_geodetic_system_1990'], // The geodetic datum known as 'Soviet Geodetic System 1990' and intended to be used only in the geographic region of the former Soviet Union.
-    ['HZD','stPierreetMiquelon1950','source:datum:geodetic','st._pierre_et_miquelon_1950'], // The geodetic datum known as 'St. Pierre et Miquelon 1950' and whose geographic region of intended use is not specified.
     ['HZD','stockholm1938Sweden','source:datum:geodetic','stockholm_1938_(sweden)'], // The geodetic datum known as 'Stockholm 1938' and intended to be used only in the geographic region of Sweden.
+    ['HZD','stPierreetMiquelon1950','source:datum:geodetic','st._pierre_et_miquelon_1950'], // The geodetic datum known as 'St. Pierre et Miquelon 1950' and whose geographic region of intended use is not specified.
     ['HZD','sydneyObservatoryNewSouth','source:datum:geodetic','sydney_observatory_new_south_wales_australia'], // The geodetic datum known as 'Sydney Observatory, New South Wales, Australia' and whose geographic region of intended use is not specified.
-    ['HZD','tananariveObservatory1925','source:datum:geodetic','tananarive_observatory_1925'], // The geodetic datum known as 'Tananarive Observatory 1925' and intended to be used only in the geographic region of Madagascar.
     ['HZD','tananariveObs1925ZerMerPar','source:datum:geodetic','tananarive_observatory_1925_with_zero_meridian_paris'], // The geodetic datum known as 'Tananarive Observatory 1925' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Madagascar.
+    ['HZD','tananariveObservatory1925','source:datum:geodetic','tananarive_observatory_1925'], // The geodetic datum known as 'Tananarive Observatory 1925' and intended to be used only in the geographic region of Madagascar.
     ['HZD','timbalai1948BruneiMalaysia','source:datum:geodetic','timbalai_1948_(brunei_and_east_malaysia_-_sarawak_and_sabah)'], // The geodetic datum known as 'Timbalai 1948' and intended to be used only in the geographic region of Brunei and East Malaysia (Sarawak and Sabah).
     ['HZD','timbalai1968','source:datum:geodetic','timbalai_1968'], // The geodetic datum known as 'Timbalai 1968' and whose geographic region of intended use is not specified.
     ['HZD','tokyoJapan','source:datum:geodetic','tokyo_(japan)'], // The geodetic datum known as 'Tokyo' and intended to be used only in the geographic region of Japan.
@@ -2042,11 +2041,12 @@ tds61.rules = {
     ['HZD','voirol1875ZeroMeridParis','source:datum:geodetic','voirol_1875_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1875' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
     ['HZD','voirol1960Algeria','source:datum:geodetic','voirol_1960_algeria'], // The geodetic datum known as 'Voirol 1960' and intended to be used only in the geographic region of Algeria.
     ['HZD','voirol1960ZeroMeridParis','source:datum:geodetic','voirol_1960_algeria_with_zero_meridian_paris'], // The geodetic datum known as 'Voirol 1960' whose zero meridian is set at Paris and is intended to be used only in the geographic region of Algeria.
-    ['HZD','wakeIslandAstro1952','source:datum:geodetic','wake_island_astro_1952'], // The geodetic datum known as 'Wake Island 1952' which is based on astronomic observations and is intended to be used only in the geographic region of the Wake Atoll.
     ['HZD','wakeEniwetok1960MarshallIs','source:datum:geodetic','wake-eniwetok_1960_(marshall_islands)'], // The geodetic datum known as 'Wake-Eniwetok 1960' and intended to be used only in the geographic region of the Marshall Islands.
+    ['HZD','wakeIslandAstro1952','source:datum:geodetic','wake_island_astro_1952'], // The geodetic datum known as 'Wake Island 1952' which is based on astronomic observations and is intended to be used only in the geographic region of the Wake Atoll.
     ['HZD','worldGeodeticSystem1960','source:datum:geodetic','world_geodetic_system_1960'], // The geodetic datum known as 'World Geodetic System 1960' and intended to be used globally.
     ['HZD','worldGeodeticSystem1966','source:datum:geodetic','world_geodetic_system_1966'], // The geodetic datum known as 'World Geodetic System 1966' and intended to be used globally.
     ['HZD','worldGeodeticSystem1972','source:datum:geodetic','world_geodetic_system_1972'], // The geodetic datum known as 'World Geodetic System 1972' and intended to be used globally.
+    ['HZD','worldGeodeticSystem1984','source:datum:geodetic','world_geodetic_system_1984'], // The geodetic datum known as 'World Geodetic System 1984' and intended to be used globally.
     ['HZD','yacareUruguay','source:datum:geodetic','yacare_(uruguay)'], // The geodetic datum known as 'Yacare' and intended to be used only in the geographic region of Uruguay.
     ['HZD','zanderijSurinam','source:datum:geodetic','zanderij_(surinam)'], // The geodetic datum known as 'Zanderij' and intended to be used only in the geographic region of Surinam.
 
@@ -2100,7 +2100,7 @@ tds61.rules = {
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
-    ['MCC','2','material','aluminum'], // Aluminum
+    ['MCC','2','material','aluminium'], // Aluminum
     ['MCC','5','material','asphalt'], // Asphalt
     ['MCC','7','material','bedrock'], // Bedrock
     ['MCC','8','material','boulders'], // Boulders
@@ -3259,7 +3259,6 @@ tds61.rules = {
 
     // ZI001_SRT - Source Information : Source Type
     // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
-    // ['ZI001_SRT','noInformation',undefined,undefined], // No Information
     ['ZI001_SRT','other','source:non_spatial_source:type','other'], // Other
     ['ZI001_SRT','commercial','source:non_spatial_source:type','commercial_data'], // Commercial Data
     ['ZI001_SRT','deLormeDigitalAtlasEarth','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
@@ -3967,6 +3966,8 @@ tds61.rules = {
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
+
+    ['MCC','2','material','aluminum'], // Aluminum
 
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM

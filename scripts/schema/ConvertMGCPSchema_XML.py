@@ -425,7 +425,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    xmlDoc = minidom.parse(args.xmlFile)
+    # Apparently, reding to a string and then parseing is quicker
+    if args.xmlFile.endswith(".gz"):
+        infile =  gzip.open(args.xmlFile, 'rb')
+    else:
+        infile = open(args.xmlFile, 'rb')
+
+    content = infile.read()
+
+    # xmlDoc = minidom.parse(args.xmlFile)
+    xmlDoc = minidom.parseString(content)
 
     schema = {}
 

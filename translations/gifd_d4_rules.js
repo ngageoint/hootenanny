@@ -2276,7 +2276,7 @@ gifd.rules = {
 
        // MCC - Material Composition Category
        ['MCC','0','material','unknown'], // Unknown
-       ['MCC','2','material','aluminum'], // Aluminum
+       ['MCC','2','material','aluminium'], // Aluminum
        ['MCC','4','material','ash'], // Ash
        ['MCC','5','material','asphalt'], // Asphalt
        ['MCC','7','material','bedrock'], // Bedrock
@@ -2330,7 +2330,7 @@ gifd.rules = {
        ['MCC','80','material','quartz'], // Quartz
        ['MCC','81','material','radiolaria'], // Radiolaria
        ['MCC','83','material','reinforced_concrete'], // Reinforced Concrete
-       ['MCC','84','material','rock/rocky'], // Rock/Rocky
+       ['MCC','84','material','rock'], // Rock/Rocky
        ['MCC','88','material','sand'], // Sand
        ['MCC','90','material','schist'], // Schist
        ['MCC','92','material','scoria'], // Scoria
