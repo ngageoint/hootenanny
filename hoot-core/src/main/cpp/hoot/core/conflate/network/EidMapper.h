@@ -33,6 +33,7 @@ namespace hoot
 class EidMapper
 {
 public:
+
   /**
    * Map from one eid to another. This is most useful when EIDs are replaced during the merge
    * process.

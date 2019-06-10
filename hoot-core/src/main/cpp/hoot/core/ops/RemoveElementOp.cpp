@@ -31,12 +31,9 @@
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveElementOp)
 
 RemoveElementOp::RemoveElementOp(bool doCheck):
   _doCheck(doCheck)

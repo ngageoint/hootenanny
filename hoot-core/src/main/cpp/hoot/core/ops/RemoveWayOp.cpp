@@ -27,7 +27,6 @@
 #include "RemoveWayOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
@@ -36,8 +35,6 @@ using namespace std;
 
 namespace hoot
 {
-
-HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveWayOp)
 
 RemoveWayOp::RemoveWayOp(bool removeFully) :
 _wayIdToRemove(-std::numeric_limits<int>::max()),
