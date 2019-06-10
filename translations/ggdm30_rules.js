@@ -3913,7 +3913,7 @@ ggdm30.rules = {
 
     // PYM - Pylon Material
     // ['PYM','-999999',undefined,undefined], // No Information
-    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
     ['PYM','5','tower:material','metal'], // Metal
@@ -4473,7 +4473,7 @@ ggdm30.rules = {
     ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
     ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
     ['STP','15','soil:type','pt:peat'], // PT: Peat
-    ['STP','17','soil:type','ml-cl:silt,_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+    ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
     ['STP','18','soil:type','evaporite'], // Evaporite
     ['STP','99','soil:type','not_evaluated'], // Not Evaluated
     ['STP','999','soil:type','other'], // Other
@@ -4829,7 +4829,7 @@ ggdm30.rules = {
     // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
     ['VCM','4','material:vertical','concrete'], // Concrete
     ['VCM','5','material:vertical','fibreglass'], // Fibreglass
@@ -4876,7 +4876,7 @@ ggdm30.rules = {
     // ['VDT','-999999',undefined,undefined], // No Information
     ['VDT','1','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
     ['VDT','2','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
-    ['VDT','3','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','3','source:datum:vertical','mean_sea_level'], // Mean Sea Level (MSL)
     ['VDT','4','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
     ['VDT','5','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
     ['VDT','6','source:datum:vertical','ground_level'], // Ground Level
@@ -6210,7 +6210,13 @@ ggdm30.rules = {
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
 
-    ['MCC','2','material','aluminum'], // Aluminium
+    ['MCC','2','material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
     ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
     ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
     ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)

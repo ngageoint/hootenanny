@@ -189,7 +189,7 @@ tds70.rules = {
     'NOS':'bridge:span_count', // Span Count
     'NPL':'cables', // Parallel Line Count: See AT005
     'OHC':'max_clearance', // Overhead Clearance
-    'PFD':'raw:PFD', // Predominant Feature Depth
+    'PFD':'depth:predominant', // Predominant Feature Depth
     'PFH':'height:feature', // Predominant Feature Height
     'PVH':'height:vegetation', // Predominant Vegetation Height
     'PWA':'depth', // Predominant Water Depth
@@ -204,13 +204,13 @@ tds70.rules = {
     'UBC':'bridge:under_clearance', // Underbridge Clearance
     'VCS':'safe_clearance:vertical', // Vertical Clearance, Safe
     'VTI':'trafficability_impact', // Vegetation Trafficability Impact
-    'WBD':'raw:WBD', // Waterbody Depth
+    // 'WBD':'raw:WBD', // Waterbody Depth See PWA
     'WD3':'width:gap', // Terrain Gap Width
     'WDU':'width:interior_useable', // Usable Width
     'WID':'width', // Width
     'WOC':'width:crest', // Dam Crest Width
     'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
-    'ZI017_GAW':'raw:ZI017_GAW', // Track Information : Railway Gauge
+    'ZI017_GAW':'gauge', // Track Information : Railway Gauge
     'ZI026_CTUL':'cartographic_scale:lower', // Feature Metadata : Cartographic Usability Range <lower value>
     'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>
     'ZVA':'ele', // Aerodrome Elevation
@@ -237,27 +237,27 @@ tds70.rules = {
     ['AMA','999','attraction','other'], // Other
 
     // AMB - Special Administrative Unit
-    // ['AMB','-999999',undefined,undefined], // noInformation
-    ['AMB','1','raw:AMB','lease_area'], // Lease Area
-    ['AMB','2','raw:AMB','concession_area'], // Concession Area
-    ['AMB','3','raw:AMB','free_trade_zone'], // Free Trade Zone
-    ['AMB','4','raw:AMB','economic_region'], // Economic Region
-    ['AMB','5','raw:AMB','postal_district'], // Postal District
-    ['AMB','6','raw:AMB','census_district'], // Census District
-    ['AMB','7','raw:AMB','water_management_district'], // Water Management District
-    ['AMB','8','raw:AMB','congressional_district'], // Congressional District
-    ['AMB','9','raw:AMB','environmental_protection_agency_region'], // Environmental Protection Agency Region
-    ['AMB','10','raw:AMB','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
-    ['AMB','11','raw:AMB','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
-    ['AMB','12','raw:AMB','native_american_reservation'], // Native American Reservation
-    ['AMB','13','raw:AMB','radiological_assistance_program_region'], // Radiological Assistance Program Region
-    ['AMB','14','raw:AMB','federal_aviation_administration_region'], // Federal Aviation Administration Region
-    ['AMB','15','raw:AMB','army_corps_of_engineers_district'], // Army Corps of Engineers District
-    ['AMB','16','raw:AMB','army_corps_of_engineers_division'], // Army Corps of Engineers Division
-    ['AMB','17','raw:AMB','coast_guard_sector'], // Coast Guard Sector
-    ['AMB','18','raw:AMB','border_patrol_sector'], // Border Patrol Sector
-    ['AMB','19','raw:AMB','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
-    ['AMB','20','raw:AMB','fbi_resident_agency_district'], // FBI Resident Agency District
+    // ['AMB','-999999',undefined,undefined], // No Information
+    ['AMB','1','administrative_unit:type','lease_area'], // Lease Area
+    ['AMB','2','administrative_unit:type','concession_area'], // Concession Area
+    ['AMB','3','administrative_unit:type','free_trade_zone'], // Free Trade Zone
+    ['AMB','4','administrative_unit:type','economic_region'], // Economic Region
+    ['AMB','5','administrative_unit:type','postal_district'], // Postal District
+    ['AMB','6','administrative_unit:type','census_district'], // Census District
+    ['AMB','7','administrative_unit:type','water_management_district'], // Water Management District
+    ['AMB','8','administrative_unit:type','congressional_district'], // Congressional District
+    ['AMB','9','administrative_unit:type','environmental_protection_agency_region'], // Environmental Protection Agency Region
+    ['AMB','10','administrative_unit:type','federal_emergency_management_agency_region'], // Federal Emergency Management Agency Region
+    ['AMB','11','administrative_unit:type','federal_energy_regulatory_commission_region'], // Federal Energy Regulatory Commission Region
+    ['AMB','12','administrative_unit:type','native_american_reservation'], // Native American Reservation
+    ['AMB','13','administrative_unit:type','radiological_assistance_program_region'], // Radiological Assistance Program Region
+    ['AMB','14','administrative_unit:type','federal_aviation_administration_region'], // Federal Aviation Administration Region
+    ['AMB','15','administrative_unit:type','army_corps_of_engineers_district'], // Army Corps of Engineers District
+    ['AMB','16','administrative_unit:type','army_corps_of_engineers_division'], // Army Corps of Engineers Division
+    ['AMB','17','administrative_unit:type','coast_guard_sector'], // Coast Guard Sector
+    ['AMB','18','administrative_unit:type','border_patrol_sector'], // Border Patrol Sector
+    ['AMB','19','administrative_unit:type','fbi_field_office_jurisdiction'], // FBI Field Office Jurisdiction
+    ['AMB','20','administrative_unit:type','fbi_resident_agency_district'], // FBI Resident Agency District
 
     // APT - Airfield Use
     // ['APT','-999999',undefined,undefined], // No Information
@@ -333,30 +333,30 @@ tds70.rules = {
     ['ASO','16','aeronautical_service_status','navaid_frequency_out-of-service'], // NAVAID Frequency Out-of-service
     ['ASO','17','aeronautical_service_status','navaid_partial_service'], // NAVAID Partial Service
 
-    // ASU - Aerodrome Movement Area Surface Composition
+    // ASU - Aerodrome Movement Area Surface Composition - See ZI019_ASU
     // ['ASU','-999999',undefined,undefined], // noInformation
-    ['ASU','1','raw:ASU','asphalt'], // Asphalt
-    ['ASU','2','raw:ASU','bituminous_mix'], // Bituminous Mix
-    ['ASU','3','raw:ASU','brick'], // Brick
-    ['ASU','4','raw:ASU','clay'], // Clay
-    ['ASU','5','raw:ASU','concrete'], // Concrete
-    ['ASU','6','raw:ASU','coral'], // Coral
-    ['ASU','7','raw:ASU','earthen'], // Earthen
-    ['ASU','8','raw:ASU','gravel'], // Gravel
-    ['ASU','9','raw:ASU','ice'], // Ice
-    ['ASU','10','raw:ASU','landing_mat'], // Landing Mat
-    ['ASU','11','raw:ASU','laterite'], // Laterite
-    ['ASU','12','raw:ASU','macadam'], // Macadam
-    ['ASU','13','raw:ASU','membrane'], // Membrane
-    ['ASU','14','raw:ASU','non-bituminous_mix'], // Non-bituminous Mix
-    ['ASU','15','raw:ASU','pierced_steel_planking'], // Pierced Steel Planking
-    ['ASU','16','raw:ASU','sand'], // Sand
-    ['ASU','17','raw:ASU','snow'], // Snow
-    ['ASU','18','raw:ASU','stone'], // Stone
-    ['ASU','19','raw:ASU','water'], // Water
-    ['ASU','20','raw:ASU','wood'], // Wood
-    ['ASU','21','raw:ASU','asphalt_over_concrete'], // Asphalt Over Concrete
-    ['ASU','999','raw:ASU','other'], // Other
+    // ['ASU','1','raw:ASU','asphalt'], // Asphalt
+    // ['ASU','2','raw:ASU','bituminous_mix'], // Bituminous Mix
+    // ['ASU','3','raw:ASU','brick'], // Brick
+    // ['ASU','4','raw:ASU','clay'], // Clay
+    // ['ASU','5','raw:ASU','concrete'], // Concrete
+    // ['ASU','6','raw:ASU','coral'], // Coral
+    // ['ASU','7','raw:ASU','earthen'], // Earthen
+    // ['ASU','8','raw:ASU','gravel'], // Gravel
+    // ['ASU','9','raw:ASU','ice'], // Ice
+    // ['ASU','10','raw:ASU','landing_mat'], // Landing Mat
+    // ['ASU','11','raw:ASU','laterite'], // Laterite
+    // ['ASU','12','raw:ASU','macadam'], // Macadam
+    // ['ASU','13','raw:ASU','membrane'], // Membrane
+    // ['ASU','14','raw:ASU','non-bituminous_mix'], // Non-bituminous Mix
+    // ['ASU','15','raw:ASU','pierced_steel_planking'], // Pierced Steel Planking
+    // ['ASU','16','raw:ASU','sand'], // Sand
+    // ['ASU','17','raw:ASU','snow'], // Snow
+    // ['ASU','18','raw:ASU','stone'], // Stone
+    // ['ASU','19','raw:ASU','water'], // Water
+    // ['ASU','20','raw:ASU','wood'], // Wood
+    // ['ASU','21','raw:ASU','asphalt_over_concrete'], // Asphalt Over Concrete
+    // ['ASU','999','raw:ASU','other'], // Other
 
     // ASU2 - Aerodrome Movement Area Surface Composition [2]
     // ASU3 - Aerodrome Movement Area Surface Composition [3]
@@ -390,44 +390,44 @@ tds70.rules = {
 
     // ATY - Airspace Type
     // ['ATY','-999999',undefined,undefined], // noInformation
-    ['ATY','1','raw:ATY','air_defense_identification_zone'], // Air Defense Identification Zone
-    ['ATY','2','raw:ATY','airway'], // Airway
-    ['ATY','3','raw:ATY','alert_area'], // Alert Area
-    ['ATY','4','raw:ATY','altimeter_setting_region'], // Altimeter Setting Region
-    ['ATY','5','raw:ATY','amc_manageable_danger_area'], // AMC Manageable Danger Area
-    ['ATY','6','raw:ATY','amc_manageable_restricted_area'], // AMC Manageable Restricted Area
-    ['ATY','7','raw:ATY','control_area'], // Control Area
-    ['ATY','8','raw:ATY','control_sector'], // Control Sector
-    ['ATY','9','raw:ATY','control_zone'], // Control Zone
-    ['ATY','10','raw:ATY','cross_border_area'], // Cross Border Area
-    ['ATY','11','raw:ATY','danger_area'], // Danger Area
-    ['ATY','12','raw:ATY','flight_peripheral_zone'], // Flight Peripheral Zone
-    ['ATY','13','raw:ATY','area_minimum_altitude'], // Area Minimum Altitude
-    ['ATY','14','raw:ATY','oceanic_control_area'], // Oceanic Control Area
-    ['ATY','15','raw:ATY','prohibited_area'], // Prohibited Area
-    ['ATY','16','raw:ATY','restricted_area'], // Restricted Area
-    ['ATY','17','raw:ATY','temporary_segregated_area'], // Temporary Segregated Area
-    ['ATY','18','raw:ATY','temporary_reserved_area'], // Temporary Reserved Area
-    ['ATY','19','raw:ATY','terminal_control_area'], // Terminal Control Area
-    ['ATY','20','raw:ATY','upper_control_area'], // Upper Control Area
-    ['ATY','21','raw:ATY','upper_flight_information_region'], // Upper Flight Information Region
-    ['ATY','22','raw:ATY','lower_traffic_area'], // Lower Traffic Area
-    ['ATY','23','raw:ATY','advisory_area'], // Advisory Area
-    ['ATY','24','raw:ATY','upper_advisory_area'], // Upper Advisory Area
-    ['ATY','25','raw:ATY','military_aerodrome_traffic_zone'], // Military Aerodrome Traffic Zone
-    ['ATY','26','raw:ATY','aerodrome_traffic_zone'], // Aerodrome Traffic Zone
-    ['ATY','27','raw:ATY','military_terminal_control_area'], // Military Terminal Control Area
-    ['ATY','28','raw:ATY','standard_pressure_region'], // Standard Pressure Region
-    ['ATY','29','raw:ATY','reduced_co-ordination_area'], // Reduced Co-ordination Area
-    ['ATY','30','raw:ATY','french_peripheral_zone'], // French Peripheral Zone
-    ['ATY','31','raw:ATY','warning_area'], // Warning Area
-    ['ATY','32','raw:ATY','german_night_low_flying_system'], // German Night Low Flying System
-    ['ATY','33','raw:ATY','german_deconfliction_line'], // German Deconfliction Line
-    ['ATY','34','raw:ATY','german_low_flying_areas'], // German Low Flying Areas
-    ['ATY','35','raw:ATY','special_rules_zone'], // Special Rules Zone
-    ['ATY','36','raw:ATY','military_operations_area'], // Military Operations Area
-    ['ATY','41','raw:ATY','no-fly_area'], // No-fly Area
-    ['ATY','999','raw:ATY','other'], // Other
+    ['ATY','1','airspace:type','air_defense_identification_zone'], // Air Defense Identification Zone
+    ['ATY','2','airspace:type','airway'], // Airway
+    ['ATY','3','airspace:type','alert_area'], // Alert Area
+    ['ATY','4','airspace:type','altimeter_setting_region'], // Altimeter Setting Region
+    ['ATY','5','airspace:type','amc_manageable_danger_area'], // AMC Manageable Danger Area
+    ['ATY','6','airspace:type','amc_manageable_restricted_area'], // AMC Manageable Restricted Area
+    ['ATY','7','airspace:type','control_area'], // Control Area
+    ['ATY','8','airspace:type','control_sector'], // Control Sector
+    ['ATY','9','airspace:type','control_zone'], // Control Zone
+    ['ATY','10','airspace:type','cross_border_area'], // Cross Border Area
+    ['ATY','11','airspace:type','danger_area'], // Danger Area
+    ['ATY','12','airspace:type','flight_peripheral_zone'], // Flight Peripheral Zone
+    ['ATY','13','airspace:type','area_minimum_altitude'], // Area Minimum Altitude
+    ['ATY','14','airspace:type','oceanic_control_area'], // Oceanic Control Area
+    ['ATY','15','airspace:type','prohibited_area'], // Prohibited Area
+    ['ATY','16','airspace:type','restricted_area'], // Restricted Area
+    ['ATY','17','airspace:type','temporary_segregated_area'], // Temporary Segregated Area
+    ['ATY','18','airspace:type','temporary_reserved_area'], // Temporary Reserved Area
+    ['ATY','19','airspace:type','terminal_control_area'], // Terminal Control Area
+    ['ATY','20','airspace:type','upper_control_area'], // Upper Control Area
+    ['ATY','21','airspace:type','upper_flight_information_region'], // Upper Flight Information Region
+    ['ATY','22','airspace:type','lower_traffic_area'], // Lower Traffic Area
+    ['ATY','23','airspace:type','advisory_area'], // Advisory Area
+    ['ATY','24','airspace:type','upper_advisory_area'], // Upper Advisory Area
+    ['ATY','25','airspace:type','military_aerodrome_traffic_zone'], // Military Aerodrome Traffic Zone
+    ['ATY','26','airspace:type','aerodrome_traffic_zone'], // Aerodrome Traffic Zone
+    ['ATY','27','airspace:type','military_terminal_control_area'], // Military Terminal Control Area
+    ['ATY','28','airspace:type','standard_pressure_region'], // Standard Pressure Region
+    ['ATY','29','airspace:type','reduced_co-ordination_area'], // Reduced Co-ordination Area
+    ['ATY','30','airspace:type','french_peripheral_zone'], // French Peripheral Zone
+    ['ATY','31','airspace:type','warning_area'], // Warning Area
+    ['ATY','32','airspace:type','german_night_low_flying_system'], // German Night Low Flying System
+    ['ATY','33','airspace:type','german_deconfliction_line'], // German Deconfliction Line
+    ['ATY','34','airspace:type','german_low_flying_areas'], // German Low Flying Areas
+    ['ATY','35','airspace:type','special_rules_zone'], // Special Rules Zone
+    ['ATY','36','airspace:type','military_operations_area'], // Military Operations Area
+    ['ATY','41','airspace:type','no-fly_area'], // No-fly Area
+    ['ATY','999','airspace:type','other'], // Other
 
     // AWP - Aeronautical Obstacle Light Present
     // ['AWP','-999999',undefined,undefined], // No Information
@@ -472,12 +472,12 @@ tds70.rules = {
 
     // BAL - BGN Administrative Level
     // ['BAL','-999999',undefined,undefined], // noInformation
-    ['BAL','1','raw:BAL','first-order'], // First-order
-    ['BAL','2','raw:BAL','second-order'], // Second-order
-    ['BAL','3','raw:BAL','third-order'], // Third-order
-    ['BAL','4','raw:BAL','fourth-order'], // Fourth-order
-    ['BAL','5','raw:BAL','undifferentiated'], // Undifferentiated
-    ['BAL','999','raw:BAL','other'], // Other
+    ['BAL','1','administrative_subdivision','first-order'], // First-order
+    ['BAL','2','administrative_subdivision','second-order'], // Second-order
+    ['BAL','3','administrative_subdivision','third-order'], // Third-order
+    ['BAL','4','administrative_subdivision','fourth-order'], // Fourth-order
+    ['BAL','5','administrative_subdivision','undifferentiated'], // Undifferentiated
+    ['BAL','999','administrative_subdivision','other'], // Other
 
     // BAT - Barrier Top Type
     // ['BAT','-999999',undefined,undefined], // No Information
@@ -2026,13 +2026,13 @@ tds70.rules = {
     ['OWO','1000','waterway:overhead_obstruction','no'],
     ['OWO','1001','waterway:overhead_obstruction','yes'],
 
-    // PBY - By-product
+    // PBY - By-product See ZI014_PBY
     // ['PBY','-999999',undefined,undefined], // noInformation
-    ['PBY','8','raw:PBY','refuse'], // Refuse
-    ['PBY','15','raw:PBY','slag'], // Slag
-    ['PBY','16','raw:PBY','sludge'], // Sludge
-    ['PBY','17','raw:PBY','spoil'], // Spoil
-    ['PBY','999','raw:PBY','other'], // Other
+    // ['PBY','8','raw:PBY','refuse'], // Refuse
+    // ['PBY','15','raw:PBY','slag'], // Slag
+    // ['PBY','16','raw:PBY','sludge'], // Sludge
+    // ['PBY','17','raw:PBY','spoil'], // Spoil
+    // ['PBY','999','raw:PBY','other'], // Other
 
     // PBY2 - By-product [2]
     // PBY3 - By-product [3]
@@ -2085,17 +2085,17 @@ tds70.rules = {
     ['PRM','1000','permanent','no'],
     ['PRM','1001','permanent','yes'],
 
-    // PRW - Raw Material
+    // PRW - Raw Material See ZI014_PRW
     // ['PRW','-999999',undefined,undefined], // noInformation
-    ['PRW','12','raw:PRW','coal'], // Coal
-    ['PRW','14','raw:PRW','coke'], // Coke
-    ['PRW','34','raw:PRW','gravel'], // Gravel
-    ['PRW','54','raw:PRW','ore'], // Ore
-    ['PRW','67','raw:PRW','salt'], // Salt
-    ['PRW','68','raw:PRW','sand'], // Sand
-    ['PRW','84','raw:PRW','stone'], // Stone
-    ['PRW','154','raw:PRW','sulphur'], // Sulphur
-    ['PRW','999','raw:PRW','other'], // Other
+    // ['PRW','12','raw:PRW','coal'], // Coal
+    // ['PRW','14','raw:PRW','coke'], // Coke
+    // ['PRW','34','raw:PRW','gravel'], // Gravel
+    // ['PRW','54','raw:PRW','ore'], // Ore
+    // ['PRW','67','raw:PRW','salt'], // Salt
+    // ['PRW','68','raw:PRW','sand'], // Sand
+    // ['PRW','84','raw:PRW','stone'], // Stone
+    // ['PRW','154','raw:PRW','sulphur'], // Sulphur
+    // ['PRW','999','raw:PRW','other'], // Other
 
     // PRW2 - Raw Material [2]
     // PRW3 - Raw Material [3]
@@ -2127,7 +2127,7 @@ tds70.rules = {
 
     // PYM - Pylon Material
     // ['PYM','-999999',undefined,undefined], // No Information
-    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
     ['PYM','5','tower:material','metal'], // Metal
@@ -2499,7 +2499,7 @@ tds70.rules = {
     ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
     ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
     ['STP','15','soil:type','pt:peat'], // PT: Peat
-    ['STP','17','soil:type','ml-cl:silt,_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+    ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
     ['STP','18','soil:type','evaporite'], // Evaporite
     ['STP','99','soil:type','not_evaluated'], // Not Evaluated
     ['STP','999','soil:type','other'], // Other
@@ -2721,7 +2721,7 @@ tds70.rules = {
     // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
     ['VCM','4','material:vertical','concrete'], // Concrete
     ['VCM','5','material:vertical','fibreglass'], // Fibreglass
@@ -2757,7 +2757,7 @@ tds70.rules = {
     // ['VDT','noInformation',undefined,undefined], // No Information
     ['VDT','other','source:datum:vertical','other'], // Other
     ['VDT','groundLevel','source:datum:vertical','ground_level'], // Ground Level
-    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level'], // Mean Sea Level (MSL)
     ['VDT','navd88','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
     ['VDT','ngvd29','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
     ['VDT','wgs84','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
@@ -2918,13 +2918,13 @@ tds70.rules = {
     ['YSU','998','military:service','not_applicable'], // Not Applicable
     ['YSU','999','military:service','other'], // Other
 
-    // YWQ - Water Potability
+    // YWQ - Water Potability See ZI024_YWQ
     // ['YWQ','-999999',undefined,undefined], // noInformation
-    ['YWQ','1','raw:YWQ','potable'], // Potable
-    ['YWQ','2','raw:YWQ','treatable'], // Treatable
-    ['YWQ','3','raw:YWQ','contaminated'], // Contaminated
-    ['YWQ','4','raw:YWQ','nonpotable'], // Nonpotable
-    ['YWQ','999','raw:YWQ','other'], // Other
+    // ['YWQ','1','raw:YWQ','potable'], // Potable
+    // ['YWQ','2','raw:YWQ','treatable'], // Treatable
+    // ['YWQ','3','raw:YWQ','contaminated'], // Contaminated
+    // ['YWQ','4','raw:YWQ','nonpotable'], // Nonpotable
+    // ['YWQ','999','raw:YWQ','other'], // Other
 
     // ZHBH_TEC - Hydrographic Base Height : Sounding Metadata : Bathymetric Measurement Technique
     // ['ZHBH_TEC','-999999',undefined,undefined], // noInformation
@@ -3183,6 +3183,8 @@ tds70.rules = {
     ['ZI014_PBY','13','by_product','sewage'], // Sewage
     ['ZI014_PBY','15','by_product','slag'], // Slag
     ['ZI014_PBY','999','by_product','other'], // Other
+    ['ZI014_PBY','16','by_product','sludge'], // Sludge from PBY
+    ['ZI014_PBY','17','by_product','spoil'], // Spoil From PBY
 
     // ZI014_PBY2 - Manufacturing Information : By-product [2]
     // ZI014_PBY3 - Manufacturing Information : By-product [3]
@@ -3286,6 +3288,7 @@ tds70.rules = {
     ['ZI014_PRW','29','raw_material','gold'], // Gold
     ['ZI014_PRW','30','raw_material','grain'], // Grain
     ['ZI014_PRW','33','raw_material','plant_material'], // Plant Material
+    ['ZI014_PRW','34','raw_material','gravel'], // Gravel From PRW
     ['ZI014_PRW','38','raw_material','ice'], // Ice
     ['ZI014_PRW','39','raw_material','iron'], // Iron
     ['ZI014_PRW','41','raw_material','lead'], // Lead
@@ -3299,10 +3302,13 @@ tds70.rules = {
     ['ZI014_PRW','60','raw_material','plastic'], // Plastic
     ['ZI014_PRW','64','raw_material','radioactive_material'], // Radioactive Material
     ['ZI014_PRW','66','raw_material','rubber'], // Rubber
+    ['ZI014_PRW','67','raw_material','salt'], // Salt From PRW
+    ['ZI014_PRW','68','raw_material','sand'], // Sand From PRW
     ['ZI014_PRW','75','raw_material','sewage'], // Sewage
     ['ZI014_PRW','78','raw_material','silver'], // Silver
     ['ZI014_PRW','79','raw_material','snow'], // Snow
     ['ZI014_PRW','83','raw_material','steel'], // Steel
+    ['ZI014_PRW','84','raw_material','stone'], // Stone From PRW
     ['ZI014_PRW','85','raw_material','sugar'], // Sugar
     ['ZI014_PRW','87','raw_material','textile'], // Textile
     ['ZI014_PRW','90','raw_material','tobacco'], // Tobacco
@@ -3312,7 +3318,10 @@ tds70.rules = {
     ['ZI014_PRW','97','raw_material','wood'], // Wood
     ['ZI014_PRW','99','raw_material','zinc'], // Zinc
     ['ZI014_PRW','118','raw_material','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
+    ['ZI014_PRW','154','raw_material','sulphur'], // Sulphur From PRW
     ['ZI014_PRW','999','raw_material','other'], // Other
+
+
 
     // ZI014_PRW2 - Manufacturing Information : Raw Material [2]
     // ZI014_PRW3 - Manufacturing Information : Raw Material [3]
@@ -3558,13 +3567,13 @@ tds70.rules = {
     ['ZI037_RFA','22','building','retreat'], // Retreat
     ['ZI037_RFA','999','building:religious','other'], // Other
 
-    // ZI071_FFN - Cave Information : Feature Function
+    // ZI071_FFN - Cave Information : Feature Function See FFN
     // ['ZI071_FFN','-999999',undefined,undefined], // noInformation
-    ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
-    ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
-    ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
-    ['ZI071_FFN','930','raw:ZI071_FFN','religious_activities'], // Religious Activities
-    ['ZI071_FFN','999','raw:ZI071_FFN','other'], // Other
+    // ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
+    // ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
+    // ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
+    // ['ZI071_FFN','930','raw:ZI071_FFN','religious_activities'], // Religious Activities
+    // ['ZI071_FFN','999','raw:ZI071_FFN','other'], // Other
 
     // ZI071_FFN2 - Cave Information : Feature Function [2]
     // ZI071_FFN3 - Cave Information : Feature Function [3]
@@ -3677,7 +3686,12 @@ tds70.rules = {
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
 
-    ['MCC','2','material','aluminium'], // Aluminum
+    ['MCC','2','material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
     ['ZI004_RCG','28','attribution','defence_imagery_and_geospatial_organisation_(australia)'], // Defence Imagery and Geospatial Organisation (Australia)
     ['ZI004_RCG','36','attribution','joint_geography_bureau_(france)'], // Joint Geography Bureau (France)
     ['ZI004_RCG','39','attribution','mapping_service_(hungary)'], // Mapping Service (Hungary)

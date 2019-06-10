@@ -2362,7 +2362,7 @@ tds61.rules = {
 
     // PYM - Pylon Material
     // ['PYM','-999999',undefined,undefined], // No Information
-    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
     ['PYM','5','tower:material','metal'], // Metal
@@ -2805,7 +2805,7 @@ tds61.rules = {
     ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
     ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
     ['STP','15','soil:type','pt:peat'], // PT: Peat
-    ['STP','17','soil:type','ml-cl:silt,_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+    ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
     ['STP','18','soil:type','evaporite'], // Evaporite
     ['STP','99','soil:type','not_evaluated'], // Not Evaluated
     ['STP','999','soil:type','other'], // Other
@@ -3051,7 +3051,7 @@ tds61.rules = {
     // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
     ['VCM','4','material:vertical','concrete'], // Concrete
     ['VCM','5','material:vertical','fibreglass'], // Fibreglass
@@ -3464,7 +3464,7 @@ tds61.rules = {
     // ZI014_PPO - Manufacturing Information : Product
     // ['ZI014_PPO','-999999',undefined,undefined], // No Information
     ['ZI014_PPO','1','product','aircraft'], // Aircraft
-    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminium'], // Aluminum
     ['ZI014_PPO','3','product','ammunition'], // Ammunition
     ['ZI014_PPO','4','product','asphalt'], // Asphalt
     ['ZI014_PPO','5','product','motor_vehicle'], // Motor Vehicle
@@ -3582,7 +3582,7 @@ tds61.rules = {
 
     // ZI014_PRW - Manufacturing Information : Raw Material -- Includes codes from PRW
     // ['ZI014_PRW','-999999',undefined,undefined], // No Information
-    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminium'], // Aluminum
     ['ZI014_PRW','2','raw_material','asphalt'], // Asphalt
     ['ZI014_PRW','5','raw_material','bauxite'], // Bauxite
     ['ZI014_PRW','9','raw_material','cement'], // Cement
@@ -3968,6 +3968,12 @@ tds61.rules = {
     ['ZI014_PPO','83','product','fuel'], // Close...
 
     ['MCC','2','material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
 
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
