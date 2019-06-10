@@ -565,6 +565,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   // see similar note in _convertToOgr
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
+  LOG_VARD(_convertOps);
 
   // The ordering for these added ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
