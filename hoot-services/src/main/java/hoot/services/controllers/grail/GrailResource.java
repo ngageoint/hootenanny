@@ -209,7 +209,7 @@ public class GrailResource {
         try {
             workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
         } catch (UnavailableException ex) {
-            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
         // Pull secondary data from the Public Overpass API
@@ -692,7 +692,7 @@ public class GrailResource {
         try {
             workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
         } catch (UnavailableException ex) {
-            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
         // Write the data to the hoot db
