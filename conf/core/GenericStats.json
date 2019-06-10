@@ -1,15 +1,15 @@
 {
     "quick":
     [
-        {"name":"Nodes", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
-        {"name":"Ways", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
-        {"name":"Relations", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" },
-        {"name":"Minimum Node ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
-        {"name":"Maximum Node ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::NodeTypeCriterion", "StatCall":"Stat" },
-        {"name":"Minimum Way ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
-        {"name":"Maximum Way ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::WayTypeCriterion", "StatCall":"Stat" },
-        {"name":"Minimum Relation ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" },
-        {"name":"Maximum Relation ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::RelationTypeCriterion", "StatCall":"Stat" }
+        {"name":"Nodes", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::NodeCriterion", "StatCall":"Stat" },
+        {"name":"Ways", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::WayCriterion", "StatCall":"Stat" },
+        {"name":"Relations", "visitor":"hoot::ElementCountVisitor", "criterion":"hoot::RelationCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Node ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::NodeCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Node ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::NodeCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Way ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::WayCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Way ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::WayCriterion", "StatCall":"Stat" },
+        {"name":"Minimum Relation ID", "visitor":"hoot::MinIdVisitor", "criterion":"hoot::RelationCriterion", "StatCall":"Stat" },
+        {"name":"Maximum Relation ID", "visitor":"hoot::MaxIdVisitor", "criterion":"hoot::RelationCriterion", "StatCall":"Stat" }
     ],
     "slow":
     [
