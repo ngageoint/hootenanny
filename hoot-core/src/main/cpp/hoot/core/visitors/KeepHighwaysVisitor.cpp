@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 
@@ -53,7 +53,7 @@ void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
     {
       if (_map->getIndex().getParents(e->getElementId()).size() == 0)
       {
-        RemoveRelationOp::removeRelation(_map->shared_from_this(), id);
+        RemoveRelationByEid::removeRelation(_map->shared_from_this(), id);
       }
     }
     else

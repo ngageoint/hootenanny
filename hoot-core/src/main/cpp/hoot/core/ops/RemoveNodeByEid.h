@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVENODEOP_H
-#define REMOVENODEOP_H
+#ifndef REMOVENODEBYEID_H
+#define REMOVENODEBYEID_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -35,14 +35,14 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveNodeOp class removes the specified node from a map. If
+ * @brief The RemoveNodeByEid class removes the specified node from a map. If
  * doCheck is true, a check will be made to make sure the node is not
  * part of any way before it is removed.
  *
  * If removeFully is true, the node will be removed from all relations,
  * then removed from the map.
  */
-class RemoveNodeOp : public OsmMapOperation
+class RemoveNodeByEid : public OsmMapOperation
 {
 public:
 
@@ -50,19 +50,19 @@ public:
    * @brief className the the class name as a string
    * @return the name of the class
    */
-  static std::string className() { return "hoot::RemoveNodeOp"; }
+  static std::string className() { return "hoot::RemoveNodeByEid"; }
   std::string getClassName() const { return className(); }
 
   /**
-   * @brief RemoveNodeOp Removes a node from a map
+   * @brief RemoveNodeByEid Removes a node from a map
    * @param doCheck check to make sure node doesn't belong to a way
    * @param removeFully makes sure node is removed from all ways, relations in the map.
    *                    Using removeFully 'overrides' the use of doCheck.
    */
-  RemoveNodeOp(bool doCheck = true, bool removeFully = false);
+  RemoveNodeByEid(bool doCheck = true, bool removeFully = false);
 
   /**
-   * @brief RemoveNodeOp Removes a node from a map
+   * @brief RemoveNodeByEid Removes a node from a map
    * @param nId Node to remove
    * @param doCheck check to make sure node doesn't belong to a way
    * @param removeFully makes sure node is removed from all ways, relations in the map
@@ -70,7 +70,8 @@ public:
    * @param removeOnlyUnused only removes nodes that aren't a part of a way
    *                         doCheck must be true and removeFully false
    */
-  RemoveNodeOp(long nId, bool doCheck = true, bool removeFully = false, bool removeOnlyUnused = false);
+  RemoveNodeByEid(long nId, bool doCheck = true, bool removeFully = false,
+                  bool removeOnlyUnused = false);
 
   /**
    * @brief apply Peform the op on the given map
@@ -124,4 +125,4 @@ private:
 
 }
 
-#endif // REMOVENODEOP_H
+#endif // REMOVENODEBYEID_H

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveWayOp.h"
+#include "RemoveWayByEid.h"
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
@@ -36,19 +36,19 @@ using namespace std;
 namespace hoot
 {
 
-RemoveWayOp::RemoveWayOp(bool removeFully) :
+RemoveWayByEid::RemoveWayByEid(bool removeFully) :
 _wayIdToRemove(-std::numeric_limits<int>::max()),
 _removeFully(removeFully)
 {
 }
 
-RemoveWayOp::RemoveWayOp(long wId, bool removeFully) :
+RemoveWayByEid::RemoveWayByEid(long wId, bool removeFully) :
 _wayIdToRemove(wId),
 _removeFully(removeFully)
 {
 }
 
-void RemoveWayOp::_removeWay(OsmMapPtr& map, long wId)
+void RemoveWayByEid::_removeWay(OsmMapPtr& map, long wId)
 {
   LOG_VART(wId);
   if (map->_ways.find(wId) != map->_ways.end())
@@ -59,7 +59,7 @@ void RemoveWayOp::_removeWay(OsmMapPtr& map, long wId)
   }
 }
 
-void RemoveWayOp::_removeWayFully(OsmMapPtr& map, long wId)
+void RemoveWayByEid::_removeWayFully(OsmMapPtr& map, long wId)
 {
   // copy the set because we may modify it later.
   set<long> rid =
@@ -74,11 +74,11 @@ void RemoveWayOp::_removeWayFully(OsmMapPtr& map, long wId)
   VALIDATE(map->validate());
 }
 
-void RemoveWayOp::apply(OsmMapPtr& map)
+void RemoveWayByEid::apply(OsmMapPtr& map)
 {
   if (_wayIdToRemove == -std::numeric_limits<int>::max())
   {
-    throw IllegalArgumentException("No way ID specified for RemoveWayOp.");
+    throw IllegalArgumentException("No way ID specified for RemoveWayByEid.");
   }
 
   if (_removeFully)
@@ -87,17 +87,17 @@ void RemoveWayOp::apply(OsmMapPtr& map)
     _removeWay(map, _wayIdToRemove);
 }
 
-void RemoveWayOp::removeWay(OsmMapPtr map, long wId)
+void RemoveWayByEid::removeWay(OsmMapPtr map, long wId)
 {
   LOG_VART(wId);
-  RemoveWayOp wayRemover(wId);
+  RemoveWayByEid wayRemover(wId);
   wayRemover.apply(map);
 }
 
-void RemoveWayOp::removeWayFully(OsmMapPtr map, long wId)
+void RemoveWayByEid::removeWayFully(OsmMapPtr map, long wId)
 {
   LOG_VART(wId);
-  RemoveWayOp wayRemover(wId, true);
+  RemoveWayByEid wayRemover(wId, true);
   wayRemover.apply(map);
 }
 

@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -85,7 +85,7 @@ void RemoveWaysByBoundsOp::_removeWays()
       // if the way envelope doesn't intersect the given envelope.
       if (_envelope.intersects(e) == false)
       {
-        RemoveWayOp::removeWay(_map, w->getId());
+        RemoveWayByEid::removeWay(_map, w->getId());
         _numAffected++;
       }
     }
@@ -94,7 +94,7 @@ void RemoveWaysByBoundsOp::_removeWays()
       // if the way envelope intersects the given envelope.
       if (_envelope.intersects(e) == true)
       {
-        RemoveWayOp::removeWay(_map, w->getId());
+        RemoveWayByEid::removeWay(_map, w->getId());
         _numAffected++;
       }
     }

@@ -49,8 +49,8 @@ using namespace geos::operation::buffer;
 #include <hoot/core/criterion/DistanceNodeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -291,7 +291,7 @@ std::shared_ptr<OsmMap> DualWaySplitter::splitAll()
 
   //  Remove the un-needed nodes from the original way that aren't part of any other way now
   for (unordered_set<long>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-    RemoveNodeOp::removeNode(_result, *it, true);
+    RemoveNodeByEid::removeNode(_result, *it, true);
 
   _result.reset();
   return result;
@@ -472,7 +472,7 @@ void DualWaySplitter::_splitWay(long wid)
     _nodes.insert(*it);
   }
 
-  RemoveWayOp::removeWay(_result, wid);
+  RemoveWayByEid::removeWay(_result, wid);
 
   // add the results to the map
   _result->addWay(_left);

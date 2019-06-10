@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveRelationOp.h"
+#include "RemoveRelationByEid.h"
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
@@ -36,21 +36,21 @@ using namespace std;
 namespace hoot
 {
 
-RemoveRelationOp::RemoveRelationOp() :
+RemoveRelationByEid::RemoveRelationByEid() :
 _rIdToRemove(-std::numeric_limits<int>::max())
 {
 }
 
-RemoveRelationOp::RemoveRelationOp(long rId):
+RemoveRelationByEid::RemoveRelationByEid(long rId):
 _rIdToRemove(rId)
 {
 }
 
-void RemoveRelationOp::apply(OsmMapPtr& map)
+void RemoveRelationByEid::apply(OsmMapPtr& map)
 {
   if (_rIdToRemove == -std::numeric_limits<int>::max())
   {
-    throw IllegalArgumentException("No relation ID specified for RemoveRelationOp.");
+    throw IllegalArgumentException("No relation ID specified for RemoveRelationByEid.");
   }
 
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
@@ -75,9 +75,9 @@ void RemoveRelationOp::apply(OsmMapPtr& map)
   }
 }
 
-void RemoveRelationOp::removeRelation(OsmMapPtr map, long rId)
+void RemoveRelationByEid::removeRelation(OsmMapPtr map, long rId)
 {
-  RemoveRelationOp relationRemover(rId);
+  RemoveRelationByEid relationRemover(rId);
   relationRemover.apply(map);
 }
 

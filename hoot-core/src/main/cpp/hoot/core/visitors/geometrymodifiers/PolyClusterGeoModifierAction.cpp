@@ -31,8 +31,8 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
 #include <hoot/core/util/GeometryConverter.h>
@@ -419,14 +419,14 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
       // remove polys
       foreach (long wayId, cluster)
       {
-        RemoveWayOp::removeWayFully(_pMap, wayId);
+        RemoveWayByEid::removeWayFully(_pMap, wayId);
         _polyByWayId[wayId];
       }
 
       // remove nodes
       foreach (long nodeId, nodeIds)
       {
-        RemoveNodeOp removeOp(nodeId, true, false, true);
+        RemoveNodeByEid removeOp(nodeId, true, false, true);
         removeOp.apply(_pMap);
       }
     }

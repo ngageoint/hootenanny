@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -444,19 +444,19 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    RemoveWayOp::removeWay(
+    RemoveWayByEid::removeWay(
       map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(
+    RemoveWayByEid::removeWay(
       map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(
+    RemoveWayByEid::removeWay(
       map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(
+    RemoveWayByEid::removeWay(
       map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }

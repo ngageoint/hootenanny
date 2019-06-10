@@ -32,7 +32,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace std;
 
@@ -97,7 +97,7 @@ void KeepNodesVisitor::visit(const ConstElementPtr& e)
     // if it was used, clean up the temporary parent relation.
     if (r)
     {
-      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+      RemoveRelationByEid::removeRelation(_map->shared_from_this(), r->getId());
     }
   }
 }

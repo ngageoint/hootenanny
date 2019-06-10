@@ -28,9 +28,9 @@
 #include "RemoveElementByEid.h"
 
 // hoot
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 
 namespace hoot
 {
@@ -51,17 +51,17 @@ void RemoveElementByEid::apply(OsmMapPtr& map)
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {
     // Remove node fully (Removes node from relations & ways, then removes node from map)
-    RemoveNodeOp removeNode(_eIdToRemove.getId(), _doCheck, true);
+    RemoveNodeByEid removeNode(_eIdToRemove.getId(), _doCheck, true);
     removeNode.apply(map);
   }
   else if (ElementType::Way == _eIdToRemove.getType().getEnum())
   {
-    RemoveWayOp removeWay(_eIdToRemove.getId(), _doCheck);
+    RemoveWayByEid removeWay(_eIdToRemove.getId(), _doCheck);
     removeWay.apply(map);
   }
   else if (ElementType::Relation == _eIdToRemove.getType().getEnum())
   {
-    RemoveRelationOp removeRelation(_eIdToRemove.getId());
+    RemoveRelationByEid removeRelation(_eIdToRemove.getId());
     removeRelation.apply(map);
   }
   else

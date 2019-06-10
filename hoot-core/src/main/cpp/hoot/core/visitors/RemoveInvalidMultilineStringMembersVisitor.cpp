@@ -30,7 +30,7 @@
 //  hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
 using namespace geos::geom;
@@ -121,7 +121,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
         element->setTags(merged);
         r->removeElement(id);
       }
-      RemoveRelationOp::removeRelation(map, r->getId());
+      RemoveRelationByEid::removeRelation(map, r->getId());
     }
   }
 }

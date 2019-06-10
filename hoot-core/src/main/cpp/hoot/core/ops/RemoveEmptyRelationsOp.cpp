@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 // Qt
 #include <QList>
@@ -92,7 +92,7 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
 
   for (QList<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
   {
-    RemoveRelationOp::removeRelation(map, *it);
+    RemoveRelationByEid::removeRelation(map, *it);
     _numAffected++;
   }
 }

@@ -39,7 +39,7 @@
 #include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveElementOp.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -515,7 +515,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   if (containsNode(oldId))
   {
-    RemoveNodeOp::removeNodeNoCheck(shared_from_this(), oldId);
+    RemoveNodeByEid::removeNodeNoCheck(shared_from_this(), oldId);
   }
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));

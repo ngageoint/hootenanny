@@ -34,7 +34,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -124,7 +124,7 @@ public:
         const Tags& t = w->getTags();
         if (t[MetadataTags::Ref1()] != "Target" && t[MetadataTags::Ref2()] != "Target")
         {
-          RemoveWayOp::removeWay(map, it->first);
+          RemoveWayByEid::removeWay(map, it->first);
         }
       }
     }

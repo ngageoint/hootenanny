@@ -34,7 +34,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
@@ -73,7 +73,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     ElementIdsVisitor::findElementsByTag(
       pMap, ElementType::Node, MetadataTags::HootSpecial(), "roundabout_center");
   foreach (long id, centers)
-    RemoveNodeOp::removeNode(pMap, id, true);
+    RemoveNodeByEid::removeNode(pMap, id, true);
 }
 
 void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
