@@ -26,8 +26,13 @@
  */
 #include "UniqueNamesVisitor.h"
 
+// hoot
+#include <hoot/core/util/Factory.h>
+
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ElementVisitor, UniqueNamesVisitor)
 
 void UniqueNamesVisitor::visit(const ConstElementPtr& e)
 {

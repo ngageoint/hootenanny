@@ -32,11 +32,14 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateAreaForStatsVisitor)
 
 Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 {
