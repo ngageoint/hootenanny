@@ -32,7 +32,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/criterion/WayCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {

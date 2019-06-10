@@ -45,7 +45,7 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
