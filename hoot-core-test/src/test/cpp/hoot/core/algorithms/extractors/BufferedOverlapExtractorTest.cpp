@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -114,8 +114,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> r1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
-    vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
+    vector<long> r1 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
+    vector<long> r2 = WayIdsVisitor::findWaysByTag(map, "name", "Target Grocery");
 
     const ConstWayPtr w = map->getWay(r1[0]);
     const ConstWayPtr w1 = map->getWay(r2[0]);

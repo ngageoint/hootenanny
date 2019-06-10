@@ -33,8 +33,8 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
-#include <hoot/core/visitors/FindNodesVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/NodeIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -92,10 +92,10 @@ public:
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(
       PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0])));
+        map->getNode(NodeIdsVisitor::findNodesByTag(map, "name", "foo")[0])));
     CPPUNIT_ASSERT(
       !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0])));
+        map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "foo")[0])));
 
     OsmXmlReader reader;
     map.reset(new OsmMap());
@@ -104,7 +104,7 @@ public:
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
       !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0])));
+        map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0])));
   }
 };
 

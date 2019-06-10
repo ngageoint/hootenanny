@@ -37,7 +37,7 @@
 #include <hoot/core/ops/DuplicateWayRemover.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -103,7 +103,7 @@ public:
 
     //create a non matching text tag between two of the ways that will be examined
     map->getWay(
-      FindWaysVisitor::findWaysByTag(
+      WayIdsVisitor::findWaysByTag(
         map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
@@ -132,7 +132,7 @@ public:
 
     //create a non matching text tag between two of the ways that will be examined
     map->getWay(
-      FindWaysVisitor::findWaysByTag(
+      WayIdsVisitor::findWaysByTag(
         map, "name", "Constitution Ave NW")[0])->getTags()
         .set("email", "blah");
 

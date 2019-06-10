@@ -35,7 +35,7 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 using namespace geos::geom;
 
@@ -73,8 +73,8 @@ public:
   {
     OsmMapPtr map = createTestMap();
     ElementConverter ec(map);
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     {
       WaySubline uut(WayLocation(map, w1, 0), WayLocation(map, w1, 5));

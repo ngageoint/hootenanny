@@ -56,8 +56,8 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/FindNodesVisitor.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/NodeIdsVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -271,7 +271,7 @@ std::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   _result = result;
 
   TagCriterion tagCrit("divider", "yes");
-  vector<long> wayIds = FindWaysVisitor::findWays(_result, &tagCrit);
+  vector<long> wayIds = WayIdsVisitor::findWays(_result, &tagCrit);
 
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
@@ -350,10 +350,8 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way
   std::shared_ptr<NotCriterion> notInnerCrit(new NotCriterion(new DistanceNodeCriterion(centerNodeC, _splitSize * .99)));
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
-  vector<long> nids = FindNodesVisitor::findNodes(_result,
-                                                  &chainCrit,
-                                                  centerNodeC,
-                                                  _splitSize * 1.02);
+  vector<long> nids =
+    NodeIdsVisitor::findNodes(_result, &chainCrit, centerNodeC, _splitSize * 1.02);
 
   Radians bestAngle = std::numeric_limits<Radians>::max();
   long bestNid = numeric_limits<long>::max();
@@ -386,7 +384,7 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way
 
 void DualWaySplitter::_splitIntersectingWays(long nid)
 {
-  std::vector<long> wids = FindWaysVisitor::findWaysByNode(_result, nid);
+  std::vector<long> wids = WayIdsVisitor::findWaysByNode(_result, nid);
 
   if (wids.size() == 1)
   {

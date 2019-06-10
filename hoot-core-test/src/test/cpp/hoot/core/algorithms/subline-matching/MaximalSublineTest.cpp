@@ -48,7 +48,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 // Standard
 #include <string>
@@ -132,8 +132,8 @@ public:
     MapProjector::projectToPlanar(map);
 
     {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+      WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0]);
+      WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "2")[0]);
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10.0, M_PI / 2.0), 10.0);
 
@@ -146,8 +146,8 @@ public:
     }
 
     {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+      WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0]);
+      WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "2")[0]);
       w1->reverseOrder();
 
       MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 2.0), 40.0);
@@ -167,7 +167,7 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, "note", "trail");
+    std::vector<long> wids = WayIdsVisitor::findWaysByTag(map, "note", "trail");
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
 
@@ -414,7 +414,7 @@ public:
       MapProjector::projectToPlanar(map);
 
       {
-        WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "0")[0]);
+        WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "0")[0]);
         WayPtr w2 = map->getWay(-6);
 
         MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 2.0), 10);
@@ -431,7 +431,7 @@ public:
 
       // this one is backwards and shouldn't result in a match.
       {
-        WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+        WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "2")[0]);
         WayPtr w2 = map->getWay(-7);
 
         MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(10, M_PI / 2), 10);

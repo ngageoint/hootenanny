@@ -24,56 +24,49 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDWAYSVISITOR_H
-#define FINDWAYSVISITOR_H
+#ifndef NODEIDSVISITOR_H
+#define NODEIDSVISITOR_H
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {
 
-class ElementCriterion;
-
-// Used to get a vector of IDs for the ways that satisfy
-// the specified criterion
-class FindWaysVisitor : public ConstElementVisitor
+/**
+ * Used to get a vector of IDs for the nodes that satisfy the specified criterion
+ */
+class NodeIdsVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::FindWaysVisitor"; }
+  static std::string className() { return "hoot::NodeIdsVisitor"; }
 
-  FindWaysVisitor(ElementCriterion* pCrit);
+  NodeIdsVisitor(ElementCriterion* pCrit);
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
-  std::vector<long> getIds() { return _wayIds; }
+  // Get matching IDs
+  std::vector<long> getIds() { return _nodeIds; }
 
-  // Convenience method for finding ways that match the given criterion
-  static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
 
-  static std::vector<long> findWays(const ConstOsmMapPtr& map,
-                                    ElementCriterion* pCrit,
-                                    ConstWayPtr refWay,
-                                    Meters maxDistance,
-                                    bool addError);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
 
-  // Convenience method for finding ways that contain the given node
-  static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+  // Convenience method for finding nodes that contain the given tag
+  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key,
+                                          const QString& value);
 
-  // Convenience method for finding ways that contain the given tag
-  static std::vector<long> findWaysByTag(const ConstOsmMapPtr& map,
-                                         const QString& key,
-                                         const QString& value);
-
-  virtual QString getDescription() const { return "Returns the way IDs visited"; }
+  virtual QString getDescription() const { return "Collects the node IDs visited"; }
 
 private:
 
-  std::vector<long> _wayIds;
+  std::vector<long> _nodeIds;
   ElementCriterion * _pCrit;
 };
 
 }
 
-#endif // FINDWAYSVISITOR_H
+#endif // NODEIDSVISITOR_H

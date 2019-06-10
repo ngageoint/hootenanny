@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -68,8 +68,8 @@ public:
   void simpleFrechet()
   {
     OsmMapPtr map = createTestMapSimple();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     FrechetDistance fd_simple(map, w1, w2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, fd_simple.distance(), 0.01);
@@ -78,8 +78,8 @@ public:
   void tailFrechet()
   {
     OsmMapPtr map = createTailMap();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -183,8 +183,8 @@ public:
     };
 
     OsmMapPtr map = createTestMapHomologous();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -230,8 +230,8 @@ public:
     };
 
     OsmMapPtr map = createTestMapPartial();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -281,8 +281,8 @@ public:
     };
 
     OsmMapPtr map = createTestSplitMap();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
+    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 

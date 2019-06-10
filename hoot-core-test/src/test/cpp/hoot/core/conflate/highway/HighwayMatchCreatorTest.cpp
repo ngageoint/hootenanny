@@ -39,7 +39,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 namespace hoot
 {
@@ -72,7 +72,7 @@ public:
 
     CPPUNIT_ASSERT(
       !uut.isMatchCandidate(
-        map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
+        map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
@@ -80,7 +80,7 @@ public:
     MapProjector::projectToPlanar(map);
 
     CPPUNIT_ASSERT(
-      uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+      uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 
 };

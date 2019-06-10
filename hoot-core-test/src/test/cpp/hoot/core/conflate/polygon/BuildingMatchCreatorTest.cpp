@@ -37,7 +37,7 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/WayIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -77,7 +77,7 @@ public:
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
   {
-    std::vector<long> wids = FindWaysVisitor::findWaysByTag(map, key, value);
+    std::vector<long> wids = WayIdsVisitor::findWaysByTag(map, key, value);
     CPPUNIT_ASSERT_EQUAL((size_t)1, wids.size());
     return map->getWay(wids[0]);
   }
@@ -159,14 +159,14 @@ public:
     reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
-    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
+    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "Panera Bread")[0]), map));
 
     map.reset(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
 
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 
   void runReviewIfSecondaryNewerTest()

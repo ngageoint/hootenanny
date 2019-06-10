@@ -25,69 +25,76 @@
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "FindNodesVisitor.h"
+#include "WayIdsVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ContainsNodeCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
-using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
 
-FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
+WayIdsVisitor::WayIdsVisitor (ElementCriterion* pCrit):
   _pCrit(pCrit)
 {
 }
 
-void FindNodesVisitor::visit(const std::shared_ptr<const Element>& e)
+void WayIdsVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if (e->getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Way)
   {
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
     if (_pCrit->isSatisfied(e))
     {
-      _nodeIds.push_back(e->getId());
+      _wayIds.push_back(e->getId());
     }
   }
 }
 
+
 // Convenience method for finding ways that match the given criterion
-vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
-                                         ElementCriterion* pCrit)
+vector<long> WayIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit)
 {
-  FindNodesVisitor v(pCrit);
-  map->visitNodesRo(v);
+  WayIdsVisitor v(pCrit);
+  map->visitWaysRo(v);
   return v.getIds();
 }
 
-vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
-                                         ElementCriterion* pCrit,
-                                         const Coordinate& refCoord,
-                                         Meters maxDistance)
+vector<long> WayIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                       ConstWayPtr refWay, Meters maxDistance, bool addError)
 {
-  vector<long> close = map->getIndex().findNodes(refCoord, maxDistance);
+  vector<long> close = map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
   vector<long> result;
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const ConstNodePtr& n = map->getNode(close[i]);
-    if (pCrit->isSatisfied(n))
-      result.push_back(n->getId());
+    const ConstWayPtr& w = map->getWay(close[i]);
+    if (pCrit->isSatisfied(w))
+      result.push_back(w->getId());
   }
 
   return result;
 }
 
-// Convenience method for finding nodes that contain the given tag
-vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
-                                              const QString& key,
-                                              const QString& value)
+// Convenience method for finding ways that contain the given node
+vector<long> WayIdsVisitor::findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
+{
+  ContainsNodeCriterion crit(nodeId);
+  WayIdsVisitor v(&crit);
+  map->visitWaysRo(v);
+  return v.getIds();
+}
+
+// Convenience method for finding ways that contain the given tag
+vector<long> WayIdsVisitor::findWaysByTag(const ConstOsmMapPtr& map, const QString& key,
+                                            const QString& value)
 {
   TagCriterion crit(key, value);
-  FindNodesVisitor v(&crit);
-  map->visitNodesRo(v);
+  WayIdsVisitor v(&crit);
+  map->visitWaysRo(v);
   return v.getIds();
 }
 
 }
-
