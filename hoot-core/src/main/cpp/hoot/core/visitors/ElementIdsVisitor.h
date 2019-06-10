@@ -53,17 +53,18 @@ public:
   static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
                                         ElementCriterion* pCrit);
 
-  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
-                                        ElementCriterion* pCrit,
-                                        const geos::geom::Coordinate& refCoord, Meters maxDistance,
-                                        bool addError);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
+
+  static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                    ConstWayPtr refWay, Meters maxDistance, bool addError);
 
   // Convenience method for finding nodes that contain the given tag
   static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);
 
-  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+  static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
 
@@ -72,6 +73,14 @@ private:
   std::vector<long> _elementIds;
   ElementType _elementType;
   ElementCriterion* _pCrit;
+
+  static std::vector<long> _findCloseNodes(const ConstOsmMapPtr& map,
+                                           const geos::geom::Coordinate& refCoord,
+                                           Meters maxDistance);
+  static std::vector<long> _findCloseWays(const ConstOsmMapPtr& map, ConstWayPtr refWay,
+                                          Meters maxDistance, bool addError);
+  static std::vector<long> _findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                         const std::vector<long>& closeElementIds);
 };
 
 }

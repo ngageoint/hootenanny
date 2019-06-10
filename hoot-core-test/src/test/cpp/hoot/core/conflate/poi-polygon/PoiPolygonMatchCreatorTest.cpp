@@ -112,7 +112,8 @@ public:
         map->getNode(
           ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "name", "foo")[0]), map));
     CPPUNIT_ASSERT(
-      uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+      uut.isMatchCandidate(
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
     map.reset(new OsmMap());
@@ -120,7 +121,8 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
-      !uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0]), map));
+      !uut.isMatchCandidate(
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]), map));
   }
 };
 

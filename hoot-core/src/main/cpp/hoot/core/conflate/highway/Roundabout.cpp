@@ -36,7 +36,7 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -386,7 +386,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           endpoint = node2;
         //  If the way doesn't exist anymore because of splitting, find the ways with the right endpoint
         std::vector<long> waysWithNode =
-          WayIdsVisitor::findWaysByNode(pMap, endpoint->getId());
+          ElementIdsVisitor::findWaysByNode(pMap, endpoint->getId());
         if (waysWithNode.size() < 1)
           continue;
 

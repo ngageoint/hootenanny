@@ -38,7 +38,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -81,8 +81,10 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    vector<long> r1 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
-    vector<long> r2 = WayIdsVisitor::findWaysByTag(map, "name", "Target Grocery");
+    vector<long> r1 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "Target");
+    vector<long> r2 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Target Grocery");
 
     ConstWayPtr w1 = map->getWay(r1[0]);
     ConstWayPtr w2 = map->getWay(r2[0]);
@@ -116,8 +118,8 @@ public:
 
     EdgeDistanceExtractor uut2(ValueAggregatorPtr(new RmseAggregator()));
 
-    vector<long> r1 = WayIdsVisitor::findWaysByTag(map, "note", "1");
-    vector<long> r2 = WayIdsVisitor::findWaysByTag(map, "note", "b");
+    vector<long> r1 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1");
+    vector<long> r2 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "b");
 
     ConstWayPtr w1 = map->getWay(r1[0]);
     ConstWayPtr w2 = map->getWay(r2[0]);
@@ -125,8 +127,8 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.50153, uut2.distance(*map, w1, w2), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.978273, uut2.extract(*map, w1, w2), 0.01);
 
-    vector<long> r3 = WayIdsVisitor::findWaysByTag(map, "note", "25");
-    vector<long> r4 = WayIdsVisitor::findWaysByTag(map, "note", "z");
+    vector<long> r3 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "25");
+    vector<long> r4 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "z");
 
     ConstWayPtr w3 = map->getWay(r3[0]);
     ConstWayPtr w4 = map->getWay(r4[0]);

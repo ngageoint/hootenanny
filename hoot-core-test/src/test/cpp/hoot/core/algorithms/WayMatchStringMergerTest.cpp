@@ -36,7 +36,6 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace std;
@@ -112,7 +111,7 @@ public:
 
   WayPtr getWay(OsmMapPtr map, QString note)
   {
-    vector<long> vids = WayIdsVisitor::findWaysByTag(map, "note", note);
+    vector<long> vids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", note);
     if (vids.size() != 1)
     {
       throw HootException(QString("Expected to find 1 way, but found %1 - %2").arg(vids.size()).

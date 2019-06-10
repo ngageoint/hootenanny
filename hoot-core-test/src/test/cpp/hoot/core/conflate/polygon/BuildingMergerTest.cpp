@@ -54,7 +54,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -89,7 +89,7 @@ public:
 
   ConstWayPtr getWay(ConstOsmMapPtr map, const QString& key, const QString& value)
   {
-    std::vector<long> wids = WayIdsVisitor::findWaysByTag(map, key, value);
+    std::vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, key, value);
     CPPUNIT_ASSERT_EQUAL((size_t)1, wids.size());
     return map->getWay(wids[0]);
   }
@@ -126,8 +126,10 @@ public:
     reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
-    vector<long> wids1 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
-    vector<long> wids2 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Target");
+    vector<long> wids1 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "Target");
+    vector<long> wids2 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "Target");
     set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
@@ -155,8 +157,10 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read(_inputPath + "conflate/unified/AllDataTypesB.osm", map);
 
-    vector<long> wids1 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
-    vector<long> wids2 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
+    vector<long> wids1 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "Panera");
+    vector<long> wids2 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "Panera");
     set<pair<ElementId, ElementId>> pairs;
 
     for (size_t i = 0; i < wids2.size(); i++)
@@ -275,9 +279,12 @@ private:
     reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
-    vector<long> wids1 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Panera");
-    vector<long> wids2 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Panera");
-    vector<long> wids3 = WayIdsVisitor::findWaysByTag(map, MetadataTags::Ref2(), "Maid-Rite");
+    vector<long> wids1 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "Panera");
+    vector<long> wids2 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "Panera");
+    vector<long> wids3 =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "Maid-Rite");
     wids2.insert(wids2.end(), wids3.begin(), wids3.end());
     set<pair<ElementId, ElementId>> pairs;
 

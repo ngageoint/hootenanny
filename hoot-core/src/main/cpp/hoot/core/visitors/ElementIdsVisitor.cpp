@@ -74,30 +74,41 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
-vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
-                                             const ElementType& elementType,
-                                             ElementCriterion* pCrit, const Coordinate& refCoord,
-                                             Meters maxDistance, bool addError)
+vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
+                                                const Coordinate& refCoord, Meters maxDistance)
 {
-  vector<long> close;
-  if (elementType == ElementType::Node)
-  {
-    close = map->getIndex().findNodes(refCoord, maxDistance);
-  }
-  else
-  {
-    close = map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
-  }
+  return map->getIndex().findNodes(refCoord, maxDistance);
+}
 
+vector<long> ElementIdsVisitor::_findCloseWays(const ConstOsmMapPtr& map,
+                                               ConstWayPtr refWay, Meters maxDistance, bool addError)
+{
+  return map->getIndex().findWayNeighbors(refWay, maxDistance, addError);
+}
+
+vector<long> ElementIdsVisitor::_findElements(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                              const vector<long>& closeElementIds)
+{
   vector<long> result;
-  for (size_t i = 0; i < close.size(); i++)
+  for (size_t i = 0; i < closeElementIds.size(); i++)
   {
-    const ConstElementPtr& e = map->getElement(ElementId(elementType, close[i]));
+    const ConstElementPtr& e = map->getElement(ElementId(ElementType::Node, closeElementIds[i]));
     if (pCrit->isSatisfied(e))
       result.push_back(e->getId());
   }
-
   return result;
+}
+
+vector<long> ElementIdsVisitor::findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                          const Coordinate& refCoord, Meters maxDistance)
+{
+  return _findElements(map, pCrit, map->getIndex().findNodes(refCoord, maxDistance));
+}
+
+vector<long> ElementIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
+                                         ConstWayPtr refWay, Meters maxDistance, bool addError)
+{
+  return _findElements(map, pCrit, map->getIndex().findWayNeighbors(refWay, maxDistance, addError));
 }
 
 // Convenience method for finding elements that contain the given tag

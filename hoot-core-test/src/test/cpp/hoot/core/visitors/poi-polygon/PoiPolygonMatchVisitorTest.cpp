@@ -104,7 +104,7 @@ public:
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
       !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "1")[0])));
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0])));
   }
 };
 

@@ -45,7 +45,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt
 #include <QTime>
@@ -276,10 +276,12 @@ public:
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
-    relation->addElement("", mapA->getWay(WayIdsVisitor::findWaysByTag(mapA, "note", "1")[0]));
+    relation->addElement(
+      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapA->addRelation(relation);
     RelationPtr duplicatedRelation(new Relation(Status::Unknown1, -1, 15.0));
-    duplicatedRelation->addElement("", mapA->getWay(WayIdsVisitor::findWaysByTag(mapA, "note", "1")[0]));
+    duplicatedRelation->addElement(
+      "", mapA->getWay(ElementIdsVisitor::findElementsByTag(mapA, ElementType::Way, "note", "1")[0]));
     mapB->addRelation(duplicatedRelation);
 
     QString exceptionMsg;
@@ -442,16 +444,20 @@ public:
     // force it to build the tree before we start removing nodes.
     map->getIndex().getWayTree();
 
-    RemoveWayOp::removeWay(map, WayIdsVisitor::findWaysByTag(map, "note", "0")[0]);
+    RemoveWayOp::removeWay(
+      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "0")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(map, WayIdsVisitor::findWaysByTag(map, "note", "1")[0]);
+    RemoveWayOp::removeWay(
+      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(map, WayIdsVisitor::findWaysByTag(map, "note", "2")[0]);
+    RemoveWayOp::removeWay(
+      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
     _checkKnnWayIterator(map);
 
-    RemoveWayOp::removeWay(map, WayIdsVisitor::findWaysByTag(map, "note", "3")[0]);
+    RemoveWayOp::removeWay(
+      map, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0]);
     _checkKnnWayIterator(map);
   }
 

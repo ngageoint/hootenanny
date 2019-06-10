@@ -270,7 +270,7 @@ std::shared_ptr<OsmMap> DualWaySplitter::splitAll()
   _result = result;
 
   TagCriterion tagCrit("divider", "yes");
-  vector<long> wayIds = WayIdsVisitor::findWays(_result, &tagCrit);
+  vector<long> wayIds = ElementIdsVisitor::findElements(_result, ElementType::Way, &tagCrit);
 
   bool todoLogged = false;
   for (size_t i = 0; i < wayIds.size(); i++)
@@ -350,8 +350,7 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
   vector<long> nids =
-    ElementIdsVisitor::findElements(
-      _result, ElementType::Node, &chainCrit, centerNodeC, _splitSize * 1.02);
+    ElementIdsVisitor::findNodes(_result, &chainCrit, centerNodeC, _splitSize * 1.02);
 
   Radians bestAngle = std::numeric_limits<Radians>::max();
   long bestNid = numeric_limits<long>::max();
@@ -384,7 +383,7 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way
 
 void DualWaySplitter::_splitIntersectingWays(long nid)
 {
-  std::vector<long> wids = WayIdsVisitor::findWaysByNode(_result, nid);
+  std::vector<long> wids = ElementIdsVisitor::findWaysByNode(_result, nid);
 
   if (wids.size() == 1)
   {

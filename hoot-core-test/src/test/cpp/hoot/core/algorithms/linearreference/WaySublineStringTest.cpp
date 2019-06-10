@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
 
@@ -72,9 +72,10 @@ public:
   void runTest()
   {
     OsmMapPtr map = createTestMap();
-    WayPtr w1 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(WayIdsVisitor::findWaysByTag(map, "note", "w2")[0]);
-
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     {
       WaySublineCollection uut;
