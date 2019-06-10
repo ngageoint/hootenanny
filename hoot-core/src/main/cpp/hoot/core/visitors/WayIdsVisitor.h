@@ -66,7 +66,7 @@ public:
                                          const QString& key,
                                          const QString& value);
 
-  virtual QString getDescription() const { return "Returns the way IDs visited"; }
+  virtual QString getDescription() const { return "Collects the way IDs visited"; }
 
 private:
 

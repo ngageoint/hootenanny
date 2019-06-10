@@ -67,7 +67,7 @@ var processFile = function(inputFile) {
 
         // Translate the file from the input format to OSM if input is not osm format
         if (tran.length > 0 ) {
-            new hoot.TranslationOp({"schema.translation.script":tran}).apply(map);
+            new hoot.SchemaTranslationOp({"schema.translation.script":tran}).apply(map);
         }
 
         var buildingPolygonCount = 0;

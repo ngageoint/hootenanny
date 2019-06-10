@@ -83,7 +83,7 @@ class ImportCommand extends ExternalCommand {
         options.add("api.db.email=" + user.getEmail());
 
         //if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
-            //options.add("convert.ops=hoot::TranslationOp");
+            //options.add("convert.ops=hoot::SchemaTranslationOp");
             //options.add("schema.translation.script=" + translationPath);
         //}
 

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "TranslationVisitor.h"
+#include "SchemaTranslationVisitor.h"
 
 #include <vector>
 
@@ -48,14 +48,14 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TranslationVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslationVisitor)
 
-TranslationVisitor::TranslationVisitor() :
+SchemaTranslationVisitor::SchemaTranslationVisitor() :
 _toOgr(false)
 {
 }
 
-void TranslationVisitor::setConfiguration(const Settings& conf)
+void SchemaTranslationVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions c(conf);
 
@@ -69,7 +69,7 @@ void TranslationVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_toOgr);
 }
 
-void TranslationVisitor::setTranslationDirection(QString direction)
+void SchemaTranslationVisitor::setTranslationDirection(QString direction)
 {
   LOG_VARD(direction);
   if (direction.toLower() == "toogr")
@@ -86,7 +86,7 @@ void TranslationVisitor::setTranslationDirection(QString direction)
   }
 }
 
-void TranslationVisitor::setTranslationScript(QString path)
+void SchemaTranslationVisitor::setTranslationScript(QString path)
 {
   LOG_VARD(path);
   _translator.reset(ScriptSchemaTranslatorFactory::getInstance().createTranslator(path));
@@ -101,7 +101,7 @@ void TranslationVisitor::setTranslationScript(QString path)
   }
 }
 
-void TranslationVisitor::visit(const ElementPtr& e)
+void SchemaTranslationVisitor::visit(const ElementPtr& e)
 {
   if (e.get() && e->getTags().getNonDebugCount() > 0)
   {

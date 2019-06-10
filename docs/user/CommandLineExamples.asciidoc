@@ -307,7 +307,7 @@ See the User Guide for more details on command usage.
 ===== Translate features to a schema before conflating them:
 
 -----
-    hoot conflate -D conflate.pre.ops="hoot::TranslationOp" \
+    hoot conflate -D conflate.pre.ops="hoot::SchemaTranslationOp" \
       -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
 -----
       

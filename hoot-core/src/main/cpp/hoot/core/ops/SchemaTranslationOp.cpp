@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TranslationOp.h"
+#include "SchemaTranslationOp.h"
 
 // hoot
 #include <hoot/core/util/Exception.h>
@@ -35,18 +35,18 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, TranslationOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, SchemaTranslationOp)
 
-TranslationOp::TranslationOp()
+SchemaTranslationOp::SchemaTranslationOp()
 {
 }
 
-void TranslationOp::apply(std::shared_ptr<OsmMap> &map)
+void SchemaTranslationOp::apply(std::shared_ptr<OsmMap> &map)
 {
   map->visitRw(_translator);
 }
 
-void TranslationOp::setConfiguration(const Settings& conf)
+void SchemaTranslationOp::setConfiguration(const Settings& conf)
 {
   _translator.setConfiguration(conf);
 }

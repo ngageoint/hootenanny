@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TRANSLATIONOP_H
-#define TRANSLATIONOP_H
+#ifndef SCHEMATRANSLATIONVISITOR_H
+#define SCHEMATRANSLATIONVISITOR_H
 
-// hoot
-#include <hoot/core/ops/OsmMapOperation.h>
+// Hoot
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 // Qt
@@ -39,42 +40,45 @@
 namespace hoot
 {
 
+class ScriptToOgrSchemaTranslator;
+
 /**
- * Applies a translation to an entire map. If doing a translation via the convert command, consider
- * using TranslationVisitor instead if memory is a concern, as it does not require the whole map
- * to be read into memory at once.
+ * Translates elements that are passed to the visitor.
  */
-class TranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class SchemaTranslationVisitor : public ElementVisitor, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::TranslationOp"; }
+  static std::string className() { return "hoot::SchemaTranslationVisitor"; }
 
-  TranslationOp();
-
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
-
-  void setConfiguration(const Settings& conf);
+  SchemaTranslationVisitor();
 
   /**
-   * Set the path to the translation script.
+   * @see Configurable
    */
-  void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
+  virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const { return _translator.getDescription(); }
+  void setTranslationScript(QString path);
+  void setTranslationDirection(QString direction);
+
+  virtual void visit(const ElementPtr& e);
+
+  virtual QString getDescription() const { return "Translates features to a schema"; }
 
   virtual QString getInitStatusMessage() const
-  { return _translator.getInitStatusMessage(); }
+  { return "Translating features to a schema..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return _translator.getCompletedStatusMessage(); }
+  { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
 private:
 
-  TranslationVisitor _translator;
+  ScriptSchemaTranslatorPtr _translator;
+  ScriptToOgrSchemaTranslator* _ogrTranslator;
   bool _toOgr;
 };
 
 }
 
-#endif // TRANSLATIONOP_H
+#endif // SCHEMATRANSLATIONVISITOR_H

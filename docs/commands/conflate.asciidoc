@@ -61,7 +61,7 @@ hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \
   output.osm
 
 # Translate features to a schema before conflating them
-hoot conflate -D conflate.pre.ops="hoot::TranslationOp" \
+hoot conflate -D conflate.pre.ops="hoot::SchemaTranslationOp" \
   -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
   
 # Align a second map towards a first map before conflating them
