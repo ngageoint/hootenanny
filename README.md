@@ -96,7 +96,7 @@ new hoot.UnifyingConflator().apply(map)
 hoot.saveMap(map, "output.osm");
 ```
 
-# [Additional Feature Summary](https://github.com/ngageoint/hootenanny/tree/master/docs/user/AdditionalFeatureSummary.asciidoc)
+# [Additional Feature Summary](https://github.com/ngageoint/hootenanny/tree/master/docs/user/AdditionalFeatureSummary.md)
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
