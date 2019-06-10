@@ -44,7 +44,6 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
@@ -200,10 +199,10 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     output.right(_printLengthMax) + "...");
 
   // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
-  // writing do their translations inline (don't use SchemaTranslationOp or SchemaTranslationVisitor),
-  // and OGR reading support for layer names, conversions involving OGR data must follow a separate
-  // logic path from non-OGR data. It would be nice at some point to be able to do everything
-  // generically from within the _convert method.
+  // writing do their translations inline (don't use SchemaTranslationVisitor), and OGR reading
+  // support for layer names, conversions involving OGR data must follow a separate logic path
+  // from non-OGR data. It would be nice at some point to be able to do everything generically
+  // from within the _convert method.
 
   // We require that a translation be present when converting to OGR, the translation direction be
   // to OGR or unspecified, and that only one input is specified.
@@ -389,7 +388,6 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
   // Translation for going to OGR is always required and happens in the writer itself. It is not to
   // be done with convert ops, so let's ignore any translation ops that were specified.
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
@@ -563,7 +561,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   reader.setSchemaTranslationScript(_translation);
 
   // see similar note in _convertToOgr
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
@@ -654,8 +651,7 @@ void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
     //a previous check was done to make sure both a translation and export cols weren't specified
     assert(!_shapeFileColumnsSpecified());
 
-    if (!_convertOps.contains(QString::fromStdString(SchemaTranslationOp::className())) &&
-        !_convertOps.contains(QString::fromStdString(SchemaTranslationVisitor::className())))
+    if (!_convertOps.contains(QString::fromStdString(SchemaTranslationVisitor::className())))
     {
       // If a translation script was specified but not the translation op, we'll add auto add the op
       // as the first conversion operation. If the caller wants the translation done after some
@@ -664,20 +660,13 @@ void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
       // streamable it won't matter anyway.
       _convertOps.prepend(QString::fromStdString(SchemaTranslationVisitor::className()));
     }
-    else if (_convertOps.contains(QString::fromStdString(SchemaTranslationOp::className())))
-    {
-      // replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
-      _convertOps.replaceInStrings(
-        QString::fromStdString(SchemaTranslationOp::className()),
-        QString::fromStdString(SchemaTranslationVisitor::className()));
-    }
     LOG_VARD(_convertOps);
 
     // If the translation direction wasn't specified, try to guess it.
     if (_translationDirection.isEmpty())
     {
       _translationDirection = _outputFormatToTranslationDirection(output);
-      // This gets read by the TranslationVisitor and cannot be empty.
+      // This gets read by the SchemaTranslationVisitor and cannot be empty.
       conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
     }
   }

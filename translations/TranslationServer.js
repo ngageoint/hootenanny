@@ -51,37 +51,37 @@ var fcodeLookup = {
 
 var translationsMap = {
     toogr: {
-        TDSv40: new hoot.SchemaTranslationOp({
+        TDSv40: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
             'schema.translation.direction': 'toogr'
         }),
-        TDSv61: new hoot.SchemaTranslationOp({
+        TDSv61: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
             'schema.translation.direction': 'toogr'
         }),
-        MGCP: new hoot.SchemaTranslationOp({
+        MGCP: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
             'schema.translation.direction': 'toogr'
         }),
-        GGDMv30: new hoot.SchemaTranslationOp({
+        GGDMv30: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
             'schema.translation.direction': 'toogr'
         })
     },
     toosm: {
-        TDSv40: new hoot.SchemaTranslationOp({
+        TDSv40: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
             'schema.translation.direction': 'toosm'
         }),
-        TDSv61: new hoot.SchemaTranslationOp({
+        TDSv61: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
             'schema.translation.direction': 'toosm'
         }),
-        MGCP: new hoot.SchemaTranslationOp({
+        MGCP: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
             'schema.translation.direction': 'toosm'
         }),
-        GGDMv30: new hoot.SchemaTranslationOp({
+        GGDMv30: new hoot.SchemaTranslationVisitor({
             'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
             'schema.translation.direction': 'toosm'
         })

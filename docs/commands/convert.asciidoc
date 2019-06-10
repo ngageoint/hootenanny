@@ -27,8 +27,6 @@ If the `convert.ops` configuration option is included, then all the specified op
 to the map, in order, before writing the result to the output. If a schema translation script is
 specified in schema.translation.script a SchemaTranslationVisitor is automatically added to the
 convert operations, so explicitly specifying it is unnecessary but will not cause problems.
-The +convert+ command will always attempt to use a SchemaTranslationVisitor instead of
-SchemaTranslationOp to support streaming I/O.
 
 example:
 --------------------------------------
@@ -55,7 +53,7 @@ examples:
 # All of these do the same thing:
 
 # every option specified
-hoot convert -D convert.ops=hoot::SchemaTranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+hoot convert -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
 # translation onvert op not specified; gets automatically added
 hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
