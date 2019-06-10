@@ -34,7 +34,6 @@ QString PermuteGridCalculator::toString()
 {
   return "_D: " + QString::number(_D) + ", _gridSpacing: " +
     QString::number(_gridSpacing) + ", _seed: " + QString::number(_seed) +
-    ", _sigmaRx: " + QString::number(_sigmaRx) + ", _sigmaRy: " + QString::number(_sigmaRy) +
     ", _sigmaSx: " + QString::number(_sigmaSx) + ", _sigmaSy: " + QString::number(_sigmaSy);
 }
 

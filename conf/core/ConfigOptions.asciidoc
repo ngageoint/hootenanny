@@ -2657,22 +2657,6 @@ The probability that a name will be modified.
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 'hoot info --operators | grep Perty' displays information about the available operations.
 
-=== perty.random.error.x
-
-* Data Type: double
-* Default Value: `0`
-
-The sigma rx parameter for PERTY (random error in X). This is only relevant when perty.algorithm
-is set to FullCovariance.
-
-=== perty.random.error.y
-
-* Data Type: double
-* Default Value: `0`
-
-The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm
-is set to FullCovariance.
-
 === perty.remove.random.probability
 
 * Data Type: double
