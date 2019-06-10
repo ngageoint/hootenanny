@@ -56,8 +56,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/NodeIdsVisitor.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -351,7 +350,8 @@ void DualWaySplitter::_reconnectEnd(long centerNodeId, const std::shared_ptr<Way
   ChainCriterion chainCrit(outerCrit, notInnerCrit);
 
   vector<long> nids =
-    NodeIdsVisitor::findNodes(_result, &chainCrit, centerNodeC, _splitSize * 1.02);
+    ElementIdsVisitor::findElements(
+      _result, ElementType::Node, &chainCrit, centerNodeC, _splitSize * 1.02);
 
   Radians bestAngle = std::numeric_limits<Radians>::max();
   long bestNid = numeric_limits<long>::max();

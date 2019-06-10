@@ -33,8 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
-#include <hoot/core/visitors/NodeIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -92,10 +91,11 @@ public:
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(
       PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getNode(NodeIdsVisitor::findNodesByTag(map, "name", "foo")[0])));
+        map->getNode(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "name", "foo")[0])));
     CPPUNIT_ASSERT(
       !PoiPolygonMatchVisitor(map, result).isMatchCandidate(
-        map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "foo")[0])));
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "foo")[0])));
 
     OsmXmlReader reader;
     map.reset(new OsmMap());

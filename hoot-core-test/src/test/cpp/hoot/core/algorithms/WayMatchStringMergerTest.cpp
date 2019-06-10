@@ -37,7 +37,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/WayIdsVisitor.h>
-#include <hoot/core/visitors/NodeIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace std;
 
@@ -101,7 +101,7 @@ public:
 
   NodePtr getNode(OsmMapPtr map, QString note)
   {
-    vector<long> nids = NodeIdsVisitor::findNodesByTag(map, "note", note);
+    vector<long> nids = ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "note", note);
     if (nids.size() != 1)
     {
       throw HootException(QString("Expected to find 1 node, but found %1 - %2").arg(nids.size()).

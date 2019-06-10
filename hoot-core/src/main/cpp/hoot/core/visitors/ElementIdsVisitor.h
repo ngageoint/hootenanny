@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NODEIDSVISITOR_H
-#define NODEIDSVISITOR_H
+#ifndef ELEMENT_IDS_VISITOR_H
+#define ELEMENT_IDS_VISITOR_H
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -35,38 +35,45 @@ namespace hoot
 {
 
 /**
- * Used to get a vector of IDs for the nodes that satisfy the specified criterion
+ * Used to get a collection of IDs for the elements that satisfy the specified criterion
  */
-class NodeIdsVisitor : public ConstElementVisitor
+class ElementIdsVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::NodeIdsVisitor"; }
+  static std::string className() { return "hoot::ElementIdsVisitor"; }
 
-  NodeIdsVisitor(ElementCriterion* pCrit);
+  ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
 
   void visit(const std::shared_ptr<const Element>& e) override;
 
   // Get matching IDs
-  std::vector<long> getIds() { return _nodeIds; }
+  std::vector<long> getIds() { return _elementIds; }
 
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
+                                        ElementCriterion* pCrit);
 
-  static std::vector<long> findNodes(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
-                                     const geos::geom::Coordinate& refCoord, Meters maxDistance);
+  static std::vector<long> findElements(const ConstOsmMapPtr& map, const ElementType& elementType,
+                                        ElementCriterion* pCrit,
+                                        const geos::geom::Coordinate& refCoord, Meters maxDistance,
+                                        bool addError);
 
   // Convenience method for finding nodes that contain the given tag
-  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map, const QString& key,
-                                          const QString& value);
+  static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
+                                             const ElementType& elementType, const QString& key,
+                                             const QString& value);
 
-  virtual QString getDescription() const { return "Collects the node IDs visited"; }
+  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+
+  virtual QString getDescription() const { return "Collects the element IDs visited"; }
 
 private:
 
-  std::vector<long> _nodeIds;
-  ElementCriterion * _pCrit;
+  std::vector<long> _elementIds;
+  ElementType _elementType;
+  ElementCriterion* _pCrit;
 };
 
 }
 
-#endif // NODEIDSVISITOR_H
+#endif // ELEMENT_IDS_VISITOR_H

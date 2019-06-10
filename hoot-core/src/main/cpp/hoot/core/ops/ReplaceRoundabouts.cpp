@@ -38,7 +38,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/NodeIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -70,7 +70,8 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
 
   //  Clean up any roundabout centers that didn't clean themselves up earlier
   std::vector<long> centers =
-    NodeIdsVisitor::findNodesByTag(pMap, MetadataTags::HootSpecial(), "roundabout_center");
+    ElementIdsVisitor::findElementsByTag(
+      pMap, ElementType::Node, MetadataTags::HootSpecial(), "roundabout_center");
   foreach (long id, centers)
     RemoveNodeOp::removeNode(pMap, id, true);
 }

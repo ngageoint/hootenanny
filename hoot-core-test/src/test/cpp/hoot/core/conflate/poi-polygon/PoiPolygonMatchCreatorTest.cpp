@@ -33,8 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/NodeIdsVisitor.h>
-#include <hoot/core/visitors/WayIdsVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -110,7 +109,8 @@ public:
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(
-        map->getNode(NodeIdsVisitor::findNodesByTag(map, "name", "foo")[0]), map));
+        map->getNode(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Node, "name", "foo")[0]), map));
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(map->getWay(WayIdsVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
