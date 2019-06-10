@@ -30,7 +30,7 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/FindNodesVisitor.h>
+#include <hoot/core/visitors/NodeIdsVisitor.h>
 
 namespace hoot
 {
@@ -76,9 +76,9 @@ public:
 
     HOOT_STR_EQUALS("Truncated tag key/value pairs for 2 elements", v.getCompletedStatusMessage());
 
-    NodePtr n1 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node1")[0]);
-    NodePtr n2 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node2")[0]);
-    NodePtr n3 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node3")[0]);
+    NodePtr n1 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node1")[0]);
+    NodePtr n2 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node2")[0]);
+    NodePtr n3 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node3")[0]);
 
     CPPUNIT_ASSERT_EQUAL(38, n1->getTags()["uuid"].length());
     CPPUNIT_ASSERT_EQUAL(38, n2->getTags()["uuid"].length());
@@ -112,9 +112,9 @@ public:
 
     HOOT_STR_EQUALS("Truncated tag key/value pairs for 2 elements", v.getCompletedStatusMessage());
 
-    NodePtr n1 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node1")[0]);
-    NodePtr n2 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node2")[0]);
-    NodePtr n3 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node3")[0]);
+    NodePtr n1 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node1")[0]);
+    NodePtr n2 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node2")[0]);
+    NodePtr n3 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node3")[0]);
 
     CPPUNIT_ASSERT_EQUAL(20, n1->getTags()[MetadataTags::SourceDateTime()].length());
     CPPUNIT_ASSERT_EQUAL(20, n2->getTags()[MetadataTags::SourceDateTime()].length());
@@ -147,9 +147,9 @@ public:
 
     HOOT_STR_EQUALS("Truncated tag key/value pairs for 1 elements", v.getCompletedStatusMessage());
 
-    NodePtr n1 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node1")[0]);
-    NodePtr n2 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node2")[0]);
-    NodePtr n3 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node3")[0]);
+    NodePtr n1 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node1")[0]);
+    NodePtr n2 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node2")[0]);
+    NodePtr n3 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node3")[0]);
 
     //  value.length() == 53
     CPPUNIT_ASSERT_EQUAL(53, n1->getTags()["some_key"].length());
@@ -177,8 +177,8 @@ public:
 
     HOOT_STR_EQUALS("Truncated tag key/value pairs for 1 elements", v.getCompletedStatusMessage());
 
-    NodePtr n1 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node1")[0]);
-    NodePtr n2 = map->getNode(FindNodesVisitor::findNodesByTag(map, "note", "node2")[0]);
+    NodePtr n1 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node1")[0]);
+    NodePtr n2 = map->getNode(NodeIdsVisitor::findNodesByTag(map, "note", "node2")[0]);
 
     CPPUNIT_ASSERT_EQUAL(250, n1->getTags()["some_key"].length());
     CPPUNIT_ASSERT_EQUAL(255, n2->getTags()["some_key"].length());

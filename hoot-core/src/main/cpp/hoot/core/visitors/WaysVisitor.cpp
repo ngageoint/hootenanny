@@ -40,11 +40,10 @@ void WaysVisitor::visit(const std::shared_ptr<const Element>& e)
   }
 }
 
-vector<ConstWayPtr> WaysVisitor::extractWays(const ConstOsmMapPtr& map,
-                                                    const ConstElementPtr& e)
+vector<ConstWayPtr> WaysVisitor::extractWays(const ConstOsmMapPtr& map,const ConstElementPtr& e)
 {
   vector<ConstWayPtr> result;
-  ExtractWaysVisitor v(result);
+  WaysVisitor v(result);
 
   e->visitRo(*map, v);
   return result;

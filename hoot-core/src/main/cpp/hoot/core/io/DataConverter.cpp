@@ -661,7 +661,7 @@ void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
       // other op, then they need to explicitly add it to the op list. Always adding the visitor
       // instead of the op, bc its streamable. However, if any other ops in the group aren't
       // streamable it won't matter anyway.
-      _convertOps.prepend(QString::fromStdString(TranslationVisitor::className()));
+      _convertOps.prepend(QString::fromStdString(SchemaTranslationVisitor::className()));
     }
     else if (_convertOps.contains(QString::fromStdString(SchemaTranslationOp::className())))
     {

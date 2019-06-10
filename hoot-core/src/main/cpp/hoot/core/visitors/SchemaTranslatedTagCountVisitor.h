@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SCHEMASchemaTranslatedTagCountVisitor_H
-#define SCHEMASchemaTranslatedTagCountVisitor_H
+#ifndef SCHEMATRANSLATEDTAGCOUNTVISITOR_H
+#define SCHEMATRANSLATEDTAGCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
@@ -40,15 +40,15 @@ class ScriptToOgrSchemaTranslator;
 class ScriptSchemaTranslator;
 class Schema;
 
-class SchemaSchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::SchemaSchemaTranslatedTagCountVisitor"; }
+  static std::string className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
-  SchemaSchemaTranslatedTagCountVisitor() {}
-  SchemaSchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
+  SchemaTranslatedTagCountVisitor() {}
+  SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
 
   long getPopulatedCount() const { return _populatedCount; }
 
@@ -80,4 +80,4 @@ private:
 
 }
 
-#endif // SCHEMASchemaTranslatedTagCountVisitor_H
+#endif // SCHEMATRANSLATEDTAGCOUNTVISITOR_H
