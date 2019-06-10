@@ -38,7 +38,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
