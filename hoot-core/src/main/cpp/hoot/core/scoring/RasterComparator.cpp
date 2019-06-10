@@ -38,7 +38,7 @@
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/visitors/WaysVisitor.h>
 
 // Qt
 #include <QDebug>
@@ -124,7 +124,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    vector<ConstWayPtr> ways = ExtractWaysVisitor::extractWays(_map, e);
+    vector<ConstWayPtr> ways = WaysVisitor::extractWays(_map, e);
 
     for (size_t i = 0; i < ways.size(); i++)
     {

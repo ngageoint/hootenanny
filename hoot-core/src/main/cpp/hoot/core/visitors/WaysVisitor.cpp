@@ -24,18 +24,30 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ExtractNodesVisitor.h"
+#include "WaysVisitor.h"
+
+using namespace std;
 
 namespace hoot
 {
 
-void ExtractNodesVisitor::visit(const std::shared_ptr<const Element>& e)
+void WaysVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-  if (e->getElementType() == ElementType::Node)
+  if (e->getElementType() == ElementType::Way)
   {
-    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-    _n.append(n);
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+    _w.push_back(w);
   }
+}
+
+vector<ConstWayPtr> WaysVisitor::extractWays(const ConstOsmMapPtr& map,
+                                                    const ConstElementPtr& e)
+{
+  vector<ConstWayPtr> result;
+  ExtractWaysVisitor v(result);
+
+  e->visitRo(*map, v);
+  return result;
 }
 
 }

@@ -22,36 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef EXTRACTNODESVISITOR_H
-#define EXTRACTNODESVISITOR_H
+#ifndef WAYSVISITOR_H
+#define WAYSVISITOR_H
 
-// hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/Node.h>
-
-// Qt
-#include <QList>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ExtractNodesVisitor : public ConstElementVisitor
+class WaysVisitor : public ConstElementVisitor
 {
 public:
 
-  ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
+  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
 
-  virtual void visit(const std::shared_ptr<const Element>& e);
+  virtual void visit(const std::shared_ptr<const Element>& e) override;
 
-  virtual QString getDescription() const { return "Returns the node IDs visited"; }
+  /**
+   * Convenience method.
+   */
+  static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Collects the ways visited"; }
 
 private:
 
-  QList<ConstNodePtr>& _n;
+  std::vector<ConstWayPtr>& _w;
 };
 
 }
 
-#endif // EXTRACTNODESVISITOR_H
+#endif // WAYSVISITOR_H

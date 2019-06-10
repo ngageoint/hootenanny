@@ -24,35 +24,18 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef EXTRACTWAYSVISITOR_H
-#define EXTRACTWAYSVISITOR_H
-
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
+#include "NodesVisitor.h"
 
 namespace hoot
 {
 
-class ExtractWaysVisitor : public ConstElementVisitor
+void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-public:
-
-  ExtractWaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
-
-  virtual void visit(const std::shared_ptr<const Element>& e) override;
-
-  /**
-   * Convenience method.
-   */
-  static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
-
-  virtual QString getDescription() const { return "Returns the way IDs visited"; }
-
-private:
-
-  std::vector<ConstWayPtr>& _w;
-};
-
+  if (e->getElementType() == ElementType::Node)
+  {
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+    _n.append(n);
+  }
 }
 
-#endif // EXTRACTWAYSVISITOR_H
+}
