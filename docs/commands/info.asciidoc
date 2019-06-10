@@ -11,8 +11,10 @@ Only one of the following options can be passed to the command:
 
 * +--cleaning-operations+      - Displays operations configured for cleaning map data
 * +--config-options+           - Displays available configuration options
-* +--conflate-post-operations+ - Displays operations configured to run after a conflation job
-* +--conflate-pre-operations+  - Displays operations configured to run before a conflation job
+* +--conflate-post-operations+ - Displays operations configured by default to run after a conflation job (can be customized via the
+                                 `conflate.post.ops` configuration option)
+* +--conflate-pre-operations+  - Displays operations configured by default to run before a conflation job (can be customized via the
+                                 `conflate.pre.ops` configuration option)
 * +--feature-extractors+       - Displays available feature extractors used in conflation model building
 * +--formats+                  - Displays supported data input/output formats
 * +--languages+                - Displays information about translatable/detectable spoken languages
