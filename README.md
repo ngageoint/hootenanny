@@ -15,13 +15,21 @@ _Conflation_:
 
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
 
-Hootenanny is developed under the open source General Public License (GPL) and maintained on the National Geospatial-Intelligence Agency’s (NGA) GitHub [site](https://github.com/ngageoint/hootenanny). 
-
 # Goals
 * Automatically combine geospatial features for decision making
 * Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
+
+# Conflatable Feature Types
+* Area polygons
+* Building polygons
+* Points of Interest (POIs)
+* Transportation polylines (roads and railways)
+* Utility polylines (power lines)
+* Waterway polylines
+
+Additional feature types can be made conflatable quickly via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
 # Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
 ## Default
@@ -35,27 +43,7 @@ no changes are made to A's geometry.
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
 available to customize the conflation workflows.
 
-# Conflatable Feature Types
-* Area polygons
-* Building polygons
-* Points of Interest (POIs)
-* Transportation polylines (roads and railways)
-* Utility polylines (power lines)
-* Waterway polylines
-
-Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-
-# Conflation Algorithms
-* [Area](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#area-to-area-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AreaToAreaConflation.asciidoc)) - Area Conflation uses a machine learning based approach implemented with [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-* [Building](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#building-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/BuildingConflation.asciidoc)) - Building Conflation uses a machine learning based approach.
-* [POI](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#poi-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/PoiToPoiConflation.asciidoc)) - POI Conflation uses a machine learning based approach implemented with [Generic Point Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-* [POI to Polygon](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#poi-to-polygon-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/PoiToPolygonConflation.asciidoc)) - POI to Polygon Conflation uses a rules based approach. 
-* [Power Line](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/GenericLineConflation.asciidoc#power-line-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#power-line-conflation)) - Power Line Conflation uses a machine learning based approach implemented with [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-* Railway - Railway Conflation uses a machine learning based approach implemented with [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
-* [Road](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/RoadConflation.asciidoc#road-conflation)
-  * [2nd Generation (aka Unifying)](https://github.com/ngageoint/hootenanny/blob/develop/docs/algorithms/UnifyingConflation.asciidoc) - This algorithm uses machine learning techniques based on manually matched training data to match roads.
-  * [Network](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/NetworkConflation.asciidoc) - This algorithm uses a graph theory based approach to match roads.
-* [Waterway](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/GenericLineConflation.asciidoc#river-conflation) ([Detail](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#river-conflation)) - Waterway Conflation uses a machine learning based approach implemented with [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
+# [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
@@ -65,7 +53,9 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * OSM 
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
-Users are also able to define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations).
+Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations).
+
+# [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
 # Additional Feature Summary
 In addition to conflating maps together, Hootenanny can also:
@@ -94,8 +84,6 @@ In addition to conflating maps together, Hootenanny can also:
 * Translate feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
 
-# [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
-
 # Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
@@ -106,7 +94,8 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 # Command Line Interface
-[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.
+[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available to aid
+in custom scripting of conflation capabilities.
 
 Example:
 
@@ -116,6 +105,8 @@ hoot conflate input1.osm input2.osm output.osm
 ```
 
 [More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
+
+The command line often exposes additional functionalities not available from the web user interface.
 
 # Programming Language Bindings
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
@@ -154,15 +145,4 @@ hoot.saveMap(map, "output.osm");
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
 * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
 
-# Redistribution
-Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt
-
-All pull requests contributions to this project will be released under the GNU General Public License 3.0. Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
-
-Licensed under the GNU General Public License v3.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.gnu.org/copyleft/gpl.html.
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-Imagery provided by permission from DigitalGlobe. Users are responsible for complying with terms of use for data and imagery they use in conjunction with Hootenanny. Specifically, the must properly protect and comply with all legal, copyright, and licensing terms.
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+# [Redistribution](https://github.com/ngageoint/hootenanny/blob/master/docs/Redistribution.md)
