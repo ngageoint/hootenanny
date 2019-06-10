@@ -120,7 +120,6 @@ private:
   void _removeNodeNoCheck(OsmMapPtr& map, long nId);
   void _removeNode(OsmMapPtr& map, long nId);
   void _removeNodeFully(OsmMapPtr& map, long nId);
-
 };
 
 }

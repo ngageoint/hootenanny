@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
@@ -48,7 +48,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 
     if (BuildingCriterion().isSatisfied(ee->getTags(), type) == false)
     {
-      RemoveElementOp::removeElementNoCheck(_map->shared_from_this(), e->getElementId());
+      RemoveElementByEid::removeElementNoCheck(_map->shared_from_this(), e->getElementId());
     }
   }
 }

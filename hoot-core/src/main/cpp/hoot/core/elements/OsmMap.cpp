@@ -426,7 +426,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
       r->replaceElement(from, to);
     }
 
-    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+    RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -472,7 +472,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 
     //  Don't remove the element if it is being replaced by itself
     if (!elem.contains(from->getId()))
-      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+      RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 

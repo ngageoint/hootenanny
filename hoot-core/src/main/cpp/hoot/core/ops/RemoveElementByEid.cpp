@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "RemoveElementOp.h"
+#include "RemoveElementByEid.h"
 
 // hoot
 #include <hoot/core/ops/RemoveNodeOp.h>
@@ -35,18 +35,18 @@
 namespace hoot
 {
 
-RemoveElementOp::RemoveElementOp(bool doCheck):
-  _doCheck(doCheck)
+RemoveElementByEid::RemoveElementByEid(bool doCheck) :
+_doCheck(doCheck)
 {
 }
 
-RemoveElementOp::RemoveElementOp(ElementId eId, bool doCheck):
-  _eIdToRemove(eId),
-  _doCheck(doCheck)
+RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck) :
+_eIdToRemove(eId),
+_doCheck(doCheck)
 {
 }
 
-void RemoveElementOp::apply(OsmMapPtr& map)
+void RemoveElementByEid::apply(OsmMapPtr& map)
 {
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {
@@ -70,15 +70,15 @@ void RemoveElementOp::apply(OsmMapPtr& map)
   }
 }
 
-void RemoveElementOp::removeElement(OsmMapPtr map, ElementId eId)
+void RemoveElementByEid::removeElement(OsmMapPtr map, ElementId eId)
 {
-  RemoveElementOp elementRemover(eId);
+  RemoveElementByEid elementRemover(eId);
   elementRemover.apply(map);
 }
 
-void RemoveElementOp::removeElementNoCheck(OsmMapPtr map, ElementId eId)
+void RemoveElementByEid::removeElementNoCheck(OsmMapPtr map, ElementId eId)
 {
-  RemoveElementOp elementRemover(eId, false);
+  RemoveElementByEid elementRemover(eId, false);
   elementRemover.apply(map);
 }
 

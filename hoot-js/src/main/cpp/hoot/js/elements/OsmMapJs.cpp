@@ -29,7 +29,7 @@
 #include "OsmMapJs.h"
 
 // hoot
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/elements/ElementIdJs.h>
@@ -237,7 +237,7 @@ void OsmMapJs::removeElement(const FunctionCallbackInfo<Value>& args)
 
   ElementId eid = toCpp<ElementId>(args[0]);
 
-  RemoveElementOp::removeElement(obj->getMap(), eid);
+  RemoveElementByEid::removeElement(obj->getMap(), eid);
 
   args.GetReturnValue().SetUndefined();
 }

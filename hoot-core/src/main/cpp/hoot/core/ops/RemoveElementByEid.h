@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEELEMENTOP_H
-#define REMOVEELEMENTOP_H
+#ifndef REMOVEELEMENTBYEID_H
+#define REMOVEELEMENTBYEID_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveElementOp class removes an element from a map.
+ * @brief The RemoveElementByEid class removes an element from a map.
  *
  * Removes an element from a map. First, we will check to see if the
  * element exists as part of other elements in the map. If it does, the
@@ -47,7 +47,7 @@ namespace hoot
  * If you would like to remove an element and all its children then
  * see RecursiveElementRemover.
  */
-class RemoveElementOp : public OsmMapOperation
+class RemoveElementByEid : public OsmMapOperation
 {
 public:
 
@@ -55,22 +55,22 @@ public:
    * @brief className gets the name of the class
    * @return class name string
    */
-  static std::string className() { return "hoot::RemoveElementOp"; }
+  static std::string className() { return "hoot::RemoveElementByEid"; }
 
   /**
-   * @brief RemoveElementOp removes an element from the map
+   * @brief RemoveElementByEid removes an element from the map
    * @param doCheck passed down to RemoveNode, RemoveWay, RemoveRelation
    *                to indicate if we should check to see if the element
    *                exists as a component of another element
    */
-  RemoveElementOp(bool doCheck = true);
+  RemoveElementByEid(bool doCheck = true);
 
   /**
-   * @brief RemoveElementOp removes an element from the map
+   * @brief RemoveElementByEid removes an element from the map
    * @param eId ID of element to remove
    * @param doCheck check to see if element belongs to another element
    */
-  RemoveElementOp(ElementId eId, bool doCheck = true);
+  RemoveElementByEid(ElementId eId, bool doCheck = true);
 
   /**
    * @brief apply performs the removal operation
@@ -113,7 +113,8 @@ public:
    */
   static void removeElementNoCheck(OsmMapPtr map, ElementId eId);
 
-  virtual QString getDescription() const override { return "Removes a single element by element ID"; }
+  virtual QString getDescription() const override
+  { return "Removes a single element by element ID"; }
 
 private:
 
@@ -124,4 +125,4 @@ private:
 
 }
 
-#endif // REMOVEELEMENTOP_H
+#endif // REMOVEELEMENTBYEID_H
