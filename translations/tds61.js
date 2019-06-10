@@ -225,7 +225,7 @@ tds61 = {
         newSchema = translate.addReviewFeature(newSchema);
 
         // Debug:
-        // translate.dumpSchema(newSchema);
+        translate.dumpSchema(newSchema);
 
         return newSchema;
 

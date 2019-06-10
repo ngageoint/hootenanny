@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -48,32 +48,13 @@ tds70 = {
         // Add empty "extra" feature layers if needed
         if (config.getOgrNoteExtra() == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
 
-     /*
-        // This has been removed since we no longer have text enumerations in the schema
-
-        // Go go through the Schema and fix/add attributes
-        for (var i=0, slen = tds70.rawSchema.length; i < slen; i++)
-        {
-            // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
-            // We convert these to plain String types and avoid having to handle String enumerations
-            for (var j=0, clen = tds70.rawSchema[i].columns.length; j < clen; j++)
-            {
-                // exploit the Object and avoid a Switch :-)
-                if (tds70.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
-                {
-                    tds70.rawSchema[i].columns[j].type = "String";
-                    delete tds70.rawSchema[i].columns[j].enumerations;
-                }
-            } // End For tds70.rawSchema.columns.length
-        } // End For tds70.rawSchema.length
-     */
-
         // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
         tds70.AttrLookup = translate.makeAttrLookup(tds70.rawSchema);
 
         // Debug:
-        // print("tds70.AttrLookup");
-        // translate.dumpLookup(tds70.AttrLookup);
+        print("tds70.AttrLookup");
+        translate.dumpLookup(tds70.AttrLookup);
+        print("##########");
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds70.rawSchema
@@ -208,8 +189,9 @@ tds70 = {
         tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
 
         // Debug:
-        // print("tdsAttrLookup");
-        // translate.dumpLookup(tdsAttrLookup);
+        print("tdsAttrLookup");
+        translate.dumpLookup(tdsAttrLookup);
+        print('##########');
 
         // Add the ESRI Feature Dataset name to the schema
         //  newSchema = translate.addFdName(newSchema,'TDS');
@@ -225,7 +207,9 @@ tds70 = {
         newSchema = translate.addReviewFeature(newSchema);
 
         // Debug:
+        // print('New Schema:');
         // translate.dumpSchema(newSchema);
+        // print('##########');
 
         return newSchema;
 
@@ -238,6 +222,9 @@ tds70 = {
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
         var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+
+print('Validate: ' + attrs.F_CODE);
+print('Validate: ' + attrList);
 
         var othList = {};
 
@@ -360,6 +347,7 @@ tds70 = {
         {
             if (tds70.rawSchema[i].fcode == attrs.F_CODE && tds70.rawSchema[i].geom == geometryType)
             {
+                print('Got Feature:' + tds70.rawSchema[i].name);
                 feature = tds70.rawSchema[i];
                 break;
             }
@@ -2307,7 +2295,7 @@ tds70 = {
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            tds70.toChange = hoot.Settings.get("translation.override");
+            tds70.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2341,7 +2329,6 @@ tds70 = {
                 tds70.ge4Lookup[tds70.rules.ge4List[i]] = i;
             }
         }
-
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
         if (tds70.fcodeLookup == undefined)
@@ -2375,7 +2362,6 @@ tds70 = {
 //                 }
 //             }
         } // End tds70.lookup Undefined
-
         // Override values if appropriate
         translate.overrideValues(tags,tds70.toChange);
 
@@ -2409,7 +2395,6 @@ tds70 = {
         // NOTE: This deletes tags as they are used
         if (tds70.configOut.OgrDebugDumptags == 'true')
         {
-            print('Before fcodelookup');
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         }

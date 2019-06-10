@@ -142,7 +142,7 @@ def readFeatures(xmlDoc,funcList):
         tSchema[featureName]['name'] = featureName
         tSchema[featureName]['geom'] = geoList[featureName[-1]]
         tSchema[featureName]['desc'] = ''
-        tSchema[featureName]['description'] = ''
+        # tSchema[featureName]['description'] = ''
         tSchema[featureName]['columns'] = {}
 
         # Debug

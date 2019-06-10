@@ -274,32 +274,7 @@ tds70.rules = {
     ['APT','999','aeroway:use','other'], // Other
 
     // APT2 - Airfield Use [2]
-    // ['APT2','-999999',undefined,undefined], // noInformation
-    // ['APT2','1','raw:APT2','major_airfield'], // Major Airfield
-    // ['APT2','2','raw:APT2','minor_airfield'], // Minor Airfield
-    // ['APT2','3','raw:APT2','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
-    // ['APT2','5','raw:APT2','glider_site'], // Glider Site
-    // ['APT2','6','raw:APT2','ultralight_site'], // Ultralight Site
-    // ['APT2','7','raw:APT2','hang_glider_site'], // Hang Glider Site
-    // ['APT2','8','raw:APT2','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
-    // ['APT2','12','raw:APT2','emergency'], // Emergency
-    // ['APT2','13','raw:APT2','parascending_site'], // Parascending Site
-    // ['APT2','16','raw:APT2','search_and_rescue_airfield'], // Search and Rescue Airfield
-    // ['APT2','999','raw:APT2','other'], // Other
-
     // APT3 - Airfield Use [3]
-    // ['APT3','-999999',undefined,undefined], // noInformation
-    // ['APT3','1','raw:APT3','major_airfield'], // Major Airfield
-    // ['APT3','2','raw:APT3','minor_airfield'], // Minor Airfield
-    // ['APT3','3','raw:APT3','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
-    // ['APT3','5','raw:APT3','glider_site'], // Glider Site
-    // ['APT3','6','raw:APT3','ultralight_site'], // Ultralight Site
-    // ['APT3','7','raw:APT3','hang_glider_site'], // Hang Glider Site
-    // ['APT3','8','raw:APT3','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
-    // ['APT3','12','raw:APT3','emergency'], // Emergency
-    // ['APT3','13','raw:APT3','parascending_site'], // Parascending Site
-    // ['APT3','16','raw:APT3','search_and_rescue_airfield'], // Search and Rescue Airfield
-    // ['APT3','999','raw:APT3','other'], // Other
 
     // APU - Apron Usage
     // ['APU','-999999',undefined,undefined], // No Information
@@ -320,40 +295,7 @@ tds70.rules = {
     ['APU','999','apron:use','other'], // Other
 
     // APU2 - Apron Usage [2]
-    // ['APU2','-999999',undefined,undefined], // noInformation
-    // ['APU2','1','raw:APU2','parking'], // Parking
-    // ['APU2','2','raw:APU2','loading_and/or_unloading'], // Loading and/or Unloading
-    // ['APU2','3','raw:APU2','fuelling'], // Fuelling
-    // ['APU2','4','raw:APU2','transient'], // Transient
-    // ['APU2','5','raw:APU2','compass_rose'], // Compass Rose
-    // ['APU2','6','raw:APU2','engine_run_up'], // Engine Run Up
-    // ['APU2','7','raw:APU2','maintenance'], // Maintenance
-    // ['APU2','8','raw:APU2','alert'], // Alert
-    // ['APU2','9','raw:APU2','firing-in'], // Firing-In
-    // ['APU2','10','raw:APU2','hot_refuelling'], // Hot Refuelling
-    // ['APU2','11','raw:APU2','weapon_loading'], // Weapon Loading
-    // ['APU2','12','raw:APU2','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
-    // ['APU2','13','raw:APU2','ins_alignment'], // INS Alignment
-    // ['APU2','14','raw:APU2','decontamination'], // Decontamination
-    // ['APU2','999','raw:APU2','other'], // Other
-
     // APU3 - Apron Usage [3]
-    // ['APU3','-999999',undefined,undefined], // noInformation
-    // ['APU3','1','raw:APU3','parking'], // Parking
-    // ['APU3','2','raw:APU3','loading_and/or_unloading'], // Loading and/or Unloading
-    // ['APU3','3','raw:APU3','fuelling'], // Fuelling
-    // ['APU3','4','raw:APU3','transient'], // Transient
-    // ['APU3','5','raw:APU3','compass_rose'], // Compass Rose
-    // ['APU3','6','raw:APU3','engine_run_up'], // Engine Run Up
-    // ['APU3','7','raw:APU3','maintenance'], // Maintenance
-    // ['APU3','8','raw:APU3','alert'], // Alert
-    // ['APU3','9','raw:APU3','firing-in'], // Firing-In
-    // ['APU3','10','raw:APU3','hot_refuelling'], // Hot Refuelling
-    // ['APU3','11','raw:APU3','weapon_loading'], // Weapon Loading
-    // ['APU3','12','raw:APU3','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
-    // ['APU3','13','raw:APU3','ins_alignment'], // INS Alignment
-    // ['APU3','14','raw:APU3','decontamination'], // Decontamination
-    // ['APU3','999','raw:APU3','other'], // Other
 
     // APY - Apron Type
     // ['APY','-999999',undefined,undefined], // No Information
@@ -2134,239 +2076,9 @@ tds70.rules = {
     // POS2 - Power Source [2]
     // POS3 - Power Source [3]
 
-    // PPO - Product
-    // ['PPO','-999999',undefined,undefined], // noInformation
-    ['PPO','1','raw:PPO','aircraft'], // Aircraft
-    ['PPO','3','raw:PPO','ammunition'], // Ammunition
-    ['PPO','8','raw:PPO','basalt'], // Basalt
-    ['PPO','9','raw:PPO','bauxite'], // Bauxite
-    ['PPO','11','raw:PPO','bivalve_mollusc'], // Bivalve Mollusc
-    ['PPO','13','raw:PPO','brick'], // Brick
-    ['PPO','15','raw:PPO','cement'], // Cement
-    ['PPO','16','raw:PPO','chemical'], // Chemical
-    ['PPO','17','raw:PPO','clay'], // Clay
-    ['PPO','18','raw:PPO','coal'], // Coal
-    ['PPO','19','raw:PPO','cobbles'], // Cobbles
-    ['PPO','21','raw:PPO','coke'], // Coke
-    ['PPO','26','raw:PPO','copper'], // Copper
-    ['PPO','29','raw:PPO','crustacean'], // Crustacean
-    ['PPO','30','raw:PPO','cultivated_shellfish'], // Cultivated Shellfish
-    ['PPO','33','raw:PPO','diamond'], // Diamond
-    ['PPO','34','raw:PPO','diatomaceous_earth'], // Diatomaceous Earth
-    ['PPO','35','raw:PPO','dolomite'], // Dolomite
-    ['PPO','37','raw:PPO','electric_power'], // Electric Power
-    ['PPO','38','raw:PPO','explosive'], // Explosive
-    ['PPO','39','raw:PPO','fish'], // Fish
-    ['PPO','45','raw:PPO','gas'], // Gas
-    ['PPO','46','raw:PPO','petrol'], // Petrol
-    ['PPO','48','raw:PPO','gold'], // Gold
-    ['PPO','50','raw:PPO','granite'], // Granite
-    ['PPO','53','raw:PPO','gravel'], // Gravel
-    ['PPO','58','raw:PPO','iron'], // Iron
-    ['PPO','59','raw:PPO','lead'], // Lead
-    ['PPO','60','raw:PPO','lime'], // Lime
-    ['PPO','61','raw:PPO','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-    ['PPO','62','raw:PPO','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-    ['PPO','63','raw:PPO','lumber'], // Lumber
-    ['PPO','65','raw:PPO','manganese'], // Manganese
-    ['PPO','66','raw:PPO','marble'], // Marble
-    ['PPO','72','raw:PPO','mussels'], // Mussels
-    ['PPO','77','raw:PPO','oysters'], // Oysters
-    ['PPO','83','raw:PPO','petroleum'], // Petroleum
-    ['PPO','85','raw:PPO','porphyry'], // Porphyry
-    ['PPO','88','raw:PPO','pumice'], // Pumice
-    ['PPO','89','raw:PPO','quartz'], // Quartz
-    ['PPO','90','raw:PPO','radioactive_material'], // Radioactive Material
-    ['PPO','93','raw:PPO','rock'], // Rock
-    ['PPO','95','raw:PPO','salt'], // Salt
-    ['PPO','96','raw:PPO','sand'], // Sand
-    ['PPO','97','raw:PPO','sandstone'], // Sandstone
-    ['PPO','101','raw:PPO','sewage'], // Sewage
-    ['PPO','105','raw:PPO','silver'], // Silver
-    ['PPO','110','raw:PPO','stone'], // Stone
-    ['PPO','116','raw:PPO','timber'], // Timber
-    ['PPO','117','raw:PPO','tobacco'], // Tobacco
-    ['PPO','118','raw:PPO','travertine'], // Travertine
-    ['PPO','120','raw:PPO','uranium'], // Uranium
-    ['PPO','122','raw:PPO','water'], // Water
-    ['PPO','126','raw:PPO','zinc'], // Zinc
-    ['PPO','130','raw:PPO','chalk'], // Chalk
-    ['PPO','146','raw:PPO','heating_steam_and/or_water'], // Heating Steam and/or Water
-    ['PPO','149','raw:PPO','brine'], // Brine
-    ['PPO','151','raw:PPO','chromium'], // Chromium
-    ['PPO','152','raw:PPO','nickel'], // Nickel
-    ['PPO','153','raw:PPO','tin'], // Tin
-    ['PPO','158','raw:PPO','pottery'], // Pottery
-    ['PPO','159','raw:PPO','charcoal'], // Charcoal
-    ['PPO','160','raw:PPO','milled_grain'], // Milled Grain
-    ['PPO','161','raw:PPO','coalbed_methane'], // Coalbed Methane
-    ['PPO','162','raw:PPO','natural_gas_condensate'], // Natural Gas Condensate
-    ['PPO','163','raw:PPO','helium'], // Helium
-    ['PPO','164','raw:PPO','hydrothermal_fluid'], // Hydrothermal Fluid
-    ['PPO','170','raw:PPO','beverage'], // Beverage
-    ['PPO','173','raw:PPO','fluorite'], // Fluorite
-    ['PPO','204','raw:PPO','phosphate'], // Phosphate
-    ['PPO','214','raw:PPO','biodiesel'], // Biodiesel
-    ['PPO','224','raw:PPO','vanadium'], // Vanadium
-    ['PPO','283','raw:PPO','mica'], // Mica
-    ['PPO','339','raw:PPO','selenium'], // Selenium
-    ['PPO','999','raw:PPO','other'], // Other
-
+    // PPO - Product - See ZI014_PPO
     // PPO2 - Product [2]
-    // ['PPO2','-999999',undefined,undefined], // noInformation
-    ['PPO2','1','raw:PPO2','aircraft'], // Aircraft
-    ['PPO2','3','raw:PPO2','ammunition'], // Ammunition
-    ['PPO2','8','raw:PPO2','basalt'], // Basalt
-    ['PPO2','9','raw:PPO2','bauxite'], // Bauxite
-    ['PPO2','11','raw:PPO2','bivalve_mollusc'], // Bivalve Mollusc
-    ['PPO2','13','raw:PPO2','brick'], // Brick
-    ['PPO2','15','raw:PPO2','cement'], // Cement
-    ['PPO2','16','raw:PPO2','chemical'], // Chemical
-    ['PPO2','17','raw:PPO2','clay'], // Clay
-    ['PPO2','18','raw:PPO2','coal'], // Coal
-    ['PPO2','19','raw:PPO2','cobbles'], // Cobbles
-    ['PPO2','21','raw:PPO2','coke'], // Coke
-    ['PPO2','26','raw:PPO2','copper'], // Copper
-    ['PPO2','29','raw:PPO2','crustacean'], // Crustacean
-    ['PPO2','30','raw:PPO2','cultivated_shellfish'], // Cultivated Shellfish
-    ['PPO2','33','raw:PPO2','diamond'], // Diamond
-    ['PPO2','34','raw:PPO2','diatomaceous_earth'], // Diatomaceous Earth
-    ['PPO2','35','raw:PPO2','dolomite'], // Dolomite
-    ['PPO2','37','raw:PPO2','electric_power'], // Electric Power
-    ['PPO2','38','raw:PPO2','explosive'], // Explosive
-    ['PPO2','39','raw:PPO2','fish'], // Fish
-    ['PPO2','45','raw:PPO2','gas'], // Gas
-    ['PPO2','46','raw:PPO2','petrol'], // Petrol
-    ['PPO2','48','raw:PPO2','gold'], // Gold
-    ['PPO2','50','raw:PPO2','granite'], // Granite
-    ['PPO2','53','raw:PPO2','gravel'], // Gravel
-    ['PPO2','58','raw:PPO2','iron'], // Iron
-    ['PPO2','59','raw:PPO2','lead'], // Lead
-    ['PPO2','60','raw:PPO2','lime'], // Lime
-    ['PPO2','61','raw:PPO2','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-    ['PPO2','62','raw:PPO2','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-    ['PPO2','63','raw:PPO2','lumber'], // Lumber
-    ['PPO2','65','raw:PPO2','manganese'], // Manganese
-    ['PPO2','66','raw:PPO2','marble'], // Marble
-    ['PPO2','72','raw:PPO2','mussels'], // Mussels
-    ['PPO2','77','raw:PPO2','oysters'], // Oysters
-    ['PPO2','83','raw:PPO2','petroleum'], // Petroleum
-    ['PPO2','85','raw:PPO2','porphyry'], // Porphyry
-    ['PPO2','88','raw:PPO2','pumice'], // Pumice
-    ['PPO2','89','raw:PPO2','quartz'], // Quartz
-    ['PPO2','90','raw:PPO2','radioactive_material'], // Radioactive Material
-    ['PPO2','93','raw:PPO2','rock'], // Rock
-    ['PPO2','95','raw:PPO2','salt'], // Salt
-    ['PPO2','96','raw:PPO2','sand'], // Sand
-    ['PPO2','97','raw:PPO2','sandstone'], // Sandstone
-    ['PPO2','101','raw:PPO2','sewage'], // Sewage
-    ['PPO2','105','raw:PPO2','silver'], // Silver
-    ['PPO2','110','raw:PPO2','stone'], // Stone
-    ['PPO2','116','raw:PPO2','timber'], // Timber
-    ['PPO2','117','raw:PPO2','tobacco'], // Tobacco
-    ['PPO2','118','raw:PPO2','travertine'], // Travertine
-    ['PPO2','120','raw:PPO2','uranium'], // Uranium
-    ['PPO2','122','raw:PPO2','water'], // Water
-    ['PPO2','126','raw:PPO2','zinc'], // Zinc
-    ['PPO2','130','raw:PPO2','chalk'], // Chalk
-    ['PPO2','146','raw:PPO2','heating_steam_and/or_water'], // Heating Steam and/or Water
-    ['PPO2','149','raw:PPO2','brine'], // Brine
-    ['PPO2','151','raw:PPO2','chromium'], // Chromium
-    ['PPO2','152','raw:PPO2','nickel'], // Nickel
-    ['PPO2','153','raw:PPO2','tin'], // Tin
-    ['PPO2','158','raw:PPO2','pottery'], // Pottery
-    ['PPO2','159','raw:PPO2','charcoal'], // Charcoal
-    ['PPO2','160','raw:PPO2','milled_grain'], // Milled Grain
-    ['PPO2','161','raw:PPO2','coalbed_methane'], // Coalbed Methane
-    ['PPO2','162','raw:PPO2','natural_gas_condensate'], // Natural Gas Condensate
-    ['PPO2','163','raw:PPO2','helium'], // Helium
-    ['PPO2','164','raw:PPO2','hydrothermal_fluid'], // Hydrothermal Fluid
-    ['PPO2','170','raw:PPO2','beverage'], // Beverage
-    ['PPO2','173','raw:PPO2','fluorite'], // Fluorite
-    ['PPO2','204','raw:PPO2','phosphate'], // Phosphate
-    ['PPO2','214','raw:PPO2','biodiesel'], // Biodiesel
-    ['PPO2','224','raw:PPO2','vanadium'], // Vanadium
-    ['PPO2','283','raw:PPO2','mica'], // Mica
-    ['PPO2','339','raw:PPO2','selenium'], // Selenium
-    ['PPO2','999','raw:PPO2','other'], // Other
-
     // PPO3 - Product [3]
-    // ['PPO3','-999999',undefined,undefined], // noInformation
-    ['PPO3','1','raw:PPO3','aircraft'], // Aircraft
-    ['PPO3','3','raw:PPO3','ammunition'], // Ammunition
-    ['PPO3','8','raw:PPO3','basalt'], // Basalt
-    ['PPO3','9','raw:PPO3','bauxite'], // Bauxite
-    ['PPO3','11','raw:PPO3','bivalve_mollusc'], // Bivalve Mollusc
-    ['PPO3','13','raw:PPO3','brick'], // Brick
-    ['PPO3','15','raw:PPO3','cement'], // Cement
-    ['PPO3','16','raw:PPO3','chemical'], // Chemical
-    ['PPO3','17','raw:PPO3','clay'], // Clay
-    ['PPO3','18','raw:PPO3','coal'], // Coal
-    ['PPO3','19','raw:PPO3','cobbles'], // Cobbles
-    ['PPO3','21','raw:PPO3','coke'], // Coke
-    ['PPO3','26','raw:PPO3','copper'], // Copper
-    ['PPO3','29','raw:PPO3','crustacean'], // Crustacean
-    ['PPO3','30','raw:PPO3','cultivated_shellfish'], // Cultivated Shellfish
-    ['PPO3','33','raw:PPO3','diamond'], // Diamond
-    ['PPO3','34','raw:PPO3','diatomaceous_earth'], // Diatomaceous Earth
-    ['PPO3','35','raw:PPO3','dolomite'], // Dolomite
-    ['PPO3','37','raw:PPO3','electric_power'], // Electric Power
-    ['PPO3','38','raw:PPO3','explosive'], // Explosive
-    ['PPO3','39','raw:PPO3','fish'], // Fish
-    ['PPO3','45','raw:PPO3','gas'], // Gas
-    ['PPO3','46','raw:PPO3','petrol'], // Petrol
-    ['PPO3','48','raw:PPO3','gold'], // Gold
-    ['PPO3','50','raw:PPO3','granite'], // Granite
-    ['PPO3','53','raw:PPO3','gravel'], // Gravel
-    ['PPO3','58','raw:PPO3','iron'], // Iron
-    ['PPO3','59','raw:PPO3','lead'], // Lead
-    ['PPO3','60','raw:PPO3','lime'], // Lime
-    ['PPO3','61','raw:PPO3','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-    ['PPO3','62','raw:PPO3','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-    ['PPO3','63','raw:PPO3','lumber'], // Lumber
-    ['PPO3','65','raw:PPO3','manganese'], // Manganese
-    ['PPO3','66','raw:PPO3','marble'], // Marble
-    ['PPO3','72','raw:PPO3','mussels'], // Mussels
-    ['PPO3','77','raw:PPO3','oysters'], // Oysters
-    ['PPO3','83','raw:PPO3','petroleum'], // Petroleum
-    ['PPO3','85','raw:PPO3','porphyry'], // Porphyry
-    ['PPO3','88','raw:PPO3','pumice'], // Pumice
-    ['PPO3','89','raw:PPO3','quartz'], // Quartz
-    ['PPO3','90','raw:PPO3','radioactive_material'], // Radioactive Material
-    ['PPO3','93','raw:PPO3','rock'], // Rock
-    ['PPO3','95','raw:PPO3','salt'], // Salt
-    ['PPO3','96','raw:PPO3','sand'], // Sand
-    ['PPO3','97','raw:PPO3','sandstone'], // Sandstone
-    ['PPO3','101','raw:PPO3','sewage'], // Sewage
-    ['PPO3','105','raw:PPO3','silver'], // Silver
-    ['PPO3','110','raw:PPO3','stone'], // Stone
-    ['PPO3','116','raw:PPO3','timber'], // Timber
-    ['PPO3','117','raw:PPO3','tobacco'], // Tobacco
-    ['PPO3','118','raw:PPO3','travertine'], // Travertine
-    ['PPO3','120','raw:PPO3','uranium'], // Uranium
-    ['PPO3','122','raw:PPO3','water'], // Water
-    ['PPO3','126','raw:PPO3','zinc'], // Zinc
-    ['PPO3','130','raw:PPO3','chalk'], // Chalk
-    ['PPO3','146','raw:PPO3','heating_steam_and/or_water'], // Heating Steam and/or Water
-    ['PPO3','149','raw:PPO3','brine'], // Brine
-    ['PPO3','151','raw:PPO3','chromium'], // Chromium
-    ['PPO3','152','raw:PPO3','nickel'], // Nickel
-    ['PPO3','153','raw:PPO3','tin'], // Tin
-    ['PPO3','158','raw:PPO3','pottery'], // Pottery
-    ['PPO3','159','raw:PPO3','charcoal'], // Charcoal
-    ['PPO3','160','raw:PPO3','milled_grain'], // Milled Grain
-    ['PPO3','161','raw:PPO3','coalbed_methane'], // Coalbed Methane
-    ['PPO3','162','raw:PPO3','natural_gas_condensate'], // Natural Gas Condensate
-    ['PPO3','163','raw:PPO3','helium'], // Helium
-    ['PPO3','164','raw:PPO3','hydrothermal_fluid'], // Hydrothermal Fluid
-    ['PPO3','170','raw:PPO3','beverage'], // Beverage
-    ['PPO3','173','raw:PPO3','fluorite'], // Fluorite
-    ['PPO3','204','raw:PPO3','phosphate'], // Phosphate
-    ['PPO3','214','raw:PPO3','biodiesel'], // Biodiesel
-    ['PPO3','224','raw:PPO3','vanadium'], // Vanadium
-    ['PPO3','283','raw:PPO3','mica'], // Mica
-    ['PPO3','339','raw:PPO3','selenium'], // Selenium
-    ['PPO3','999','raw:PPO3','other'], // Other
 
     // PRM - Permanent
     // ['PRM','-999999',undefined,undefined], // No Information
@@ -4221,27 +3933,10 @@ tds70.rules = {
 
     // ##### Start of closureList #####
     closureList : {
-
-
-    'AQTC':['AQTL','AQTU'],
-    'AYRC':['AYRL','AYRU'],
-    'BPWHAC':['BPWHAL','BPWHAU'],
-    'BPWHBC':['BPWHBL','BPWHBU'],
-    'BPWSAC':['BPWSAL','BPWSAU'],
-    'BPWSBC':['BPWSBL','BPWSBU'],
-    'BWVCAC':['BWVCAL','BWVCAU'],
-    'BWVCBC':['BWVCBL','BWVCBU'],
-    'DMBC':['DMBL','DMBU'],
-    'DPAC':['DPAL','DPAU'],
     'GSGCHC':['GSGCHL','GSGCHU'],
     'GSGCLC':['GSGCLL','GSGCLU'],
-    'PWAC':['PWAL','PWAU'],
     'RMWC':['RMWL','RMWU'],
-    'SDCC':['SDCL','SDCU'],
-    'SDSC':['SDSL','SDSU'],
     'SGCC':['SGCL','SGCU'],
-    'TSCC':['TSCL','TSCU'],
-    'WDAC':['WDAL','WDAU'],
     'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
     },
     // ##### End of closureList #####
@@ -4259,11 +3954,6 @@ tds70.rules = {
     'ZI002_UFI':'UFI',
     'ZI025_WLE':'WLE',
     'ZI032_GUG':'GUG',
-
-
-
-
-
     'HYP':'ZI024_HYP',
     // 'LEN_':'LZN',
     'PFD':'PWA',
@@ -4292,9 +3982,6 @@ tds70.rules = {
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG', 'UFI':'ZI002_UFI'},
     'AT005':{'WLE':'ZI025_WLE'},
     'BD100':{'WLE':'ZI025_WLE'},
-
-
-
     'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
     'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
@@ -4329,23 +4016,16 @@ tds70.rules = {
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
     txtLength : {
-    'BA000_VDR':80, 'BEN':15, 'BRN':24, 'CID':20, 'CUD':20, 'ETZ':24, 'F_CODE':5, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'IKO':14, 'MDE':20, 'NA8':80, 'PDA':14, 'PSE':14, 'RIN_RTN':24, 'RIN_RTN2':24, 'RIN_RTN3':24, 'RTN':24, 'RTN2':24,
-    'RTN3':24, 'SAX_RS3':14, 'SAX_RS4':14, 'SAX_RS6':14, 'SAX_RX1':254, 'SAX_RX2':254, 'SAX_RX5':254, 'SAX_RX6':254,
-    'SAX_RX7':254, 'SAX_RX8':14, 'SAX_RY1':254, 'SAX_RY2':254, 'SSE':14, 'UFI':254, 'URI':254, 'VCS_VCR':132, 'VOI':14,
-    'WPI':14, 'ZI001_SDV':20, 'ZI001_VSD':20, 'ZI002_UFI':254, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_FNA3':200,
-    'ZI005_NFN':18, 'ZI005_NFN2':18, 'ZI005_NFN3':18, 'ZI026T_UFI':254, 'ZI027T_UFI':254, 'ZI028_UFI':254, 'ZI031S_URI':254,
-    'ZI031T_URI':254, 'ZI039S_UFI':254, 'ZI039T_UFI':254, 'ZSAX_RS0':14,
-    'ZSAX_RX0':254, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    'BA000_VDR':80,'BEN':15,'BRN':24,'CID':20,'ETZ':24,'GB052_RIDH':14,'GB052_RIDL':14,'IKO':14,'MDE':20,'NA8':80,
+    'RIN_RTN':24,'RIN_RTN2':24,'RIN_RTN3':24,'UFI':254,'URI':254,'VOI':14,'WPI':14,'ZI001_SDV':20,'ZI001_VSD':20,
+    'ZI002_UFI':254,'ZI005_FNA':200,'ZI005_FNA2':200,'ZI005_NFN':18,'ZI005_NFN2':18,'ZSAX_RS0':14,'ZSAX_RX0':254,
+    'ZSAX_RX3':254, 'ZSAX_RX4':254
     },
     // ##### End of txtLength #####
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export
-    intList : [
-    'BC040_LCN', 'BC040_LVN', 'BNF', 'DEV', 'DZC', 'LC1', 'LC2', 'LC3', 'LC4', 'LTN', 'NOS', 'NPL', 'ZI026_CTUL',
-    'ZI026_CTUU'
-    ],
+    intList : ['BNF','DEV','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','ZI026_CTUL','ZI026_CTUU'],
     // ##### End of intList #####
 
     // ##### Start of ge4List #####
@@ -4639,838 +4319,505 @@ tds70.rules = {
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
-    'PAA010':'IndustryPnt', // Industry
-    'AAA010':'IndustrySrf', // Industry
-    'LAA011':'IndustryCrv', // Industry
-    'PAA020':'IndustryPnt', // Industry
-    'AAA020':'IndustrySrf', // Industry
-    'PAA040':'IndustryPnt', // Industry
-    'AAA040':'IndustrySrf', // Industry
-    'PAA045':'IndustryPnt', // Industry
-    'AAA052':'IndustrySrf', // Industry
-    'PAA054':'IndustryPnt', // Industry
-    'PAB000':'IndustryPnt', // Industry
-    'AAB000':'IndustrySrf', // Industry
-    'AAB010':'IndustrySrf', // Industry
-    'PAB021':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAB040':'IndustrySrf', // Industry
-    'PAB507':'IndustryPnt', // Industry
-    'AAB507':'IndustrySrf', // Industry
-    'PAC010':'IndustryPnt', // Industry
-    'AAC010':'IndustrySrf', // Industry
-    'PAC020':'IndustryPnt', // Industry
-    'AAC020':'IndustrySrf', // Industry
-    'AAC030':'IndustrySrf', // Industry
-    'PAC040':'IndustryPnt', // Industry
-    'AAC040':'IndustrySrf', // Industry
-    'PAC060':'IndustryPnt', // Industry
-    'AAC060':'IndustrySrf', // Industry
-    'PAC507':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAC507':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD010':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD020':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD020':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD025':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD025':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD030':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD030':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD041':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD041':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD050':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD050':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD055':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD055':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAD060':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAD060':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAF010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'LAF020':'IndustryCrv', // Industry
-    'PAF030':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAF030':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAF040':'IndustryPnt', // Industry
-    'AAF040':'IndustrySrf', // Industry
-    'PAF050':'IndustryPnt', // Industry
-    'LAF050':'IndustryCrv', // Industry
-    'PAF060':'StructurePnt', // Structure
-    'AAF060':'StructureSrf', // Structure
-    'PAF070':'IndustryPnt', // Industry
-    'PAF080':'IndustryPnt', // Industry
-    'AAG030':'FacilitySrf', // Facility
-    'AAG040':'FacilitySrf', // Facility
-    'PAG050':'StructurePnt', // Structure
-    'LAH025':'MilitaryCrv', // Military
-    'AAH025':'MilitarySrf', // Military
-    'PAH055':'MilitaryPnt', // Military
-    'AAH055':'MilitarySrf', // Military
-    'PAH060':'MilitaryPnt', // Military
-    'AAH060':'MilitarySrf', // Military
-    'PAH070':'TransportationGroundPnt', // Transportation - Ground
-    'AAI020':'SettlementSrf', // Settlement
-    'AAI021':'SettlementSrf', // Settlement
-    'PAI030':'SettlementPnt', // Settlement
-    'AAI030':'SettlementSrf', // Settlement
-    'PAJ030':'AgriculturePnt', // Agriculture
-    'AAJ030':'AgricultureSrf', // Agriculture
-    'PAJ050':'AgriculturePnt', // Agriculture
-    'AAJ050':'AgricultureSrf', // Agriculture
-    'PAJ051':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAJ055':'IndustryPnt', // Industry
-    'AAJ055':'IndustrySrf', // Industry
-    'PAJ080':'AgriculturePnt', // Agriculture
-    'AAJ080':'AgricultureSrf', // Agriculture
-    'PAJ085':'AgriculturePnt', // Agriculture
-    'AAJ085':'AgricultureSrf', // Agriculture
-    'PAJ110':'AgriculturePnt', // Agriculture
-    'AAJ110':'AgricultureSrf', // Agriculture
-    'PAK020':'RecreationPnt', // Recreation
-    'LAK020':'RecreationCrv', // Recreation
-    'AAK020':'RecreationSrf', // Recreation
-    'PAK030':'RecreationPnt', // Recreation
-    'AAK030':'RecreationSrf', // Recreation
-    'PAK040':'RecreationPnt', // Recreation
-    'AAK040':'RecreationSrf', // Recreation
-    'PAK060':'RecreationPnt', // Recreation
-    'AAK060':'RecreationSrf', // Recreation
-    'AAK061':'RecreationSrf', // Recreation
-    'AAK070':'RecreationSrf', // Recreation
-    'PAK080':'RecreationPnt', // Recreation
-    'LAK080':'RecreationCrv', // Recreation
-    'AAK090':'RecreationSrf', // Recreation
-    'AAK100':'RecreationSrf', // Recreation
-    'AAK101':'RecreationSrf', // Recreation
-    'PAK110':'RecreationPnt', // Recreation
-    'AAK110':'RecreationSrf', // Recreation
-    'AAK120':'CultureSrf', // Culture
-    'PAK121':'CulturePnt', // Culture
-    'AAK121':'CultureSrf', // Culture
-    'LAK130':'RecreationCrv', // Recreation
-    'AAK130':'RecreationSrf', // Recreation
-    'PAK150':'RecreationPnt', // Recreation
-    'LAK150':'RecreationCrv', // Recreation
-    'LAK155':'RecreationCrv', // Recreation
-    'AAK155':'RecreationSrf', // Recreation
-    'PAK160':'RecreationPnt', // Recreation
-    'AAK160':'RecreationSrf', // Recreation
-    'PAK161':'RecreationPnt', // Recreation
-    'PAK164':'RecreationPnt', // Recreation
-    'AAK164':'RecreationSrf', // Recreation
-    'PAK170':'RecreationPnt', // Recreation
-    'AAK170':'RecreationSrf', // Recreation
-    'PAK180':'RecreationPnt', // Recreation
-    'AAK180':'RecreationSrf', // Recreation
-    'PAL010':'FacilityPnt', // Facility
-    'AAL010':'FacilitySrf', // Facility
-    'PAL011':'FacilityPnt', // Facility
-    'AAL011':'FacilitySrf', // Facility
-    'PAL012':'CulturePnt', // Culture
-    'AAL012':'CultureSrf', // Culture
-    'PAL013':'StructurePnt', // Structure
-    'AAL013':'StructureSrf', // Structure
-    'PAL014':'StructurePnt', // Structure
-    'AAL014':'StructureSrf', // Structure
-    'PAL017':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAL018':'StructurePnt', // Structure
-    'LAL018':'StructureCrv', // Structure
-    'AAL018':'StructureSrf', // Structure
-    'PAL019':'StructurePnt', // Structure
-    'AAL019':'StructureSrf', // Structure
-    'PAL020':'SettlementPnt', // Settlement
-    'AAL020':'SettlementSrf', // Settlement
-    'PAL025':'CulturePnt', // Culture
-    'PAL030':'CulturePnt', // Culture
-    'AAL030':'CultureSrf', // Culture
-    'PAL036':'CulturePnt', // Culture
-    'AAL036':'CultureSrf', // Culture
-    'LAL060':'MilitaryCrv', // Military
-    'AAL060':'MilitarySrf', // Military
-    'AAL065':'MilitarySrf', // Military
-    'LAL070':'StructureCrv', // Structure
-    'PAL073':'StructurePnt', // Structure
-    'PAL080':'StructurePnt', // Structure
-    'LAL080':'StructureCrv', // Structure
-    'PAL099':'StructurePnt', // Structure
-    'AAL099':'StructureSrf', // Structure
-    'PAL105':'SettlementPnt', // Settlement
-    'AAL105':'SettlementSrf', // Settlement
-    'PAL110':'StructurePnt', // Structure
-    'PAL120':'MilitaryPnt', // Military
-    'AAL120':'MilitarySrf', // Military
-    'PAL130':'CulturePnt', // Culture
-    'LAL130':'CultureCrv', // Culture
-    'AAL130':'CultureSrf', // Culture
-    'LAL140':'StructureCrv', // Structure
-    'AAL140':'StructureSrf', // Structure
-    'PAL142':'StructurePnt', // Structure
-    'AAL142':'StructureSrf', // Structure
-    'PAL155':'TransportationGroundPnt', // Transportation - Ground
-    'LAL155':'TransportationGroundCrv', // Transportation - Ground
-    'PAL165':'TransportationGroundPnt', // Transportation - Ground
-    'PAL170':'RecreationPnt', // Recreation
-    'AAL170':'RecreationSrf', // Recreation
-    'AAL175':'CultureSrf', // Culture
-    'AAL180':'CultureSrf', // Culture
-    'LAL195':'TransportationGroundCrv', // Transportation - Ground
-    'AAL195':'TransportationGroundSrf', // Transportation - Ground
-    'PAL200':'CulturePnt', // Culture
-    'AAL200':'CultureSrf', // Culture
-    'PAL201':'CulturePnt', // Culture
-    'AAL201':'CultureSrf', // Culture
-    'PAL208':'SettlementPnt', // Settlement
-    'AAL208':'SettlementSrf', // Settlement
-    'PAL211':'TransportationGroundPnt', // Transportation - Ground
-    'LAL211':'TransportationGroundCrv', // Transportation - Ground
-    'AAL211':'TransportationGroundSrf', // Transportation - Ground
-    'PAL241':'StructurePnt', // Structure
-    'AAL241':'StructureSrf', // Structure
-    'PAL250':'StructurePnt', // Structure
-    'LAL260':'StructureCrv', // Structure
-    'PAL270':'AgriculturePnt', // Agriculture
-    'AAL270':'AgricultureSrf', // Agriculture
-    'PAL351':'AeronauticPnt', // Aeronautic
-    'AAL351':'AeronauticSrf', // Aeronautic
-    'PAL371':'StructurePnt', // Structure
-    'AAL371':'StructureSrf', // Structure
-    'PAL375':'MilitaryPnt', // Military
-    'AAL375':'MilitarySrf', // Military
-    'PAL376':'MilitaryPnt', // Military
-    'AAL376':'MilitarySrf', // Military
-    'PAL510':'AeronauticPnt', // Aeronautic
-    'PAM010':'StoragePnt', // Storage
-    'AAM010':'StorageSrf', // Storage
-    'PAM011':'StoragePnt', // Storage
-    'AAM011':'StorageSrf', // Storage
-    'PAM020':'AgriculturePnt', // Agriculture
-    'AAM020':'AgricultureSrf', // Agriculture
-    'PAM030':'StoragePnt', // Storage
-    'AAM030':'StorageSrf', // Storage
-    'PAM040':'IndustryPnt', // Industry
-    'AAM040':'IndustrySrf', // Industry
-    'PAM060':'MilitaryPnt', // Military
-    'AAM060':'MilitarySrf', // Military
-    'PAM065':'StoragePnt', // Storage
-    'AAM065':'StorageSrf', // Storage
-    'PAM070':'StoragePnt', // Storage
-    'AAM070':'StorageSrf', // Storage
-    'PAM071':'StoragePnt', // Storage
-    'AAM071':'StorageSrf', // Storage
-    'PAM075':'StoragePnt', // Storage
-    'AAM075':'StorageSrf', // Storage
-    'PAM080':'StoragePnt', // Storage
-    'AAM080':'StorageSrf', // Storage
-    'LAN010':'TransportationGroundCrv', // Transportation - Ground
-    'LAN050':'TransportationGroundCrv', // Transportation - Ground
-    'AAN060':'TransportationGroundSrf', // Transportation - Ground
-    'PAN075':'TransportationGroundPnt', // Transportation - Ground
-    'AAN075':'TransportationGroundSrf', // Transportation - Ground
-    'PAN076':'TransportationGroundPnt', // Transportation - Ground
-    'AAN076':'TransportationGroundSrf', // Transportation - Ground
-    'PAN085':'TransportationGroundPnt', // Transportation - Ground
-    'LAP010':'TransportationGroundCrv', // Transportation - Ground
-    'PAP020':'TransportationGroundPnt', // Transportation - Ground
-    'LAP030':'TransportationGroundCrv', // Transportation - Ground
-    'AAP030':'TransportationGroundSrf', // Transportation - Ground
-    'PAP033':'TransportationGroundPnt', // Transportation - Ground
-    'PAP040':'TransportationGroundPnt', // Transportation - Ground
-    'LAP040':'TransportationGroundCrv', // Transportation - Ground
-    'PAP041':'TransportationGroundPnt', // Transportation - Ground
-    'LAP041':'TransportationGroundCrv', // Transportation - Ground
-    'LAP050':'TransportationGroundCrv', // Transportation - Ground
-    'AAP055':'TransportationGroundSrf', // Transportation - Ground
-    'PAP056':'TransportationGroundPnt', // Transportation - Ground
-    'AAP056':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ035':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ040':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ040':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ040':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ045':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ045':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ045':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ050':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ050':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ055':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ056':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ056':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ056':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ059':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ059':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ060':'AeronauticPnt', // Aeronautic
-    'AAQ060':'AeronauticSrf', // Aeronautic
-    'PAQ062':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ063':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ063':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ065':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ065':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ068':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ068':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ070':'TransportationWaterCrv', // Transportation - Water
-    'LAQ075':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ080':'TransportationWaterPnt', // Transportation - Water
-    'AAQ080':'TransportationWaterSrf', // Transportation - Water
-    'PAQ095':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ110':'AeronauticPnt', // Aeronautic
-    'PAQ111':'TransportationWaterPnt', // Transportation - Water
-    'LAQ113':'UtilityInfrastructureCrv', // Utility Infrastructure
-    'PAQ114':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAQ115':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAQ116':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAQ116':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PAQ118':'TransportationGroundPnt', // Transportation - Ground
-    'LAQ120':'TransportationGroundCrv', // Transportation - Ground
-    'PAQ125':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ125':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ130':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ130':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ135':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ135':'TransportationGroundSrf', // Transportation - Ground
-    'AAQ140':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ141':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ141':'TransportationGroundSrf', // Transportation - Ground
-    'LAQ150':'StructureCrv', // Structure
-    'AAQ150':'StructureSrf', // Structure
-    'LAQ151':'TransportationGroundCrv', // Transportation - Ground
-    'AAQ151':'TransportationGroundSrf', // Transportation - Ground
-    'PAQ160':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ161':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ162':'TransportationGroundPnt', // Transportation - Ground
-    'PAQ170':'TransportationGroundPnt', // Transportation - Ground
-    'AAQ170':'TransportationGroundSrf', // Transportation - Ground
-    'LAT005':'UtilityInfrastructureCrv', // Utility Infrastructure
-    'PAT010':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT011':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT012':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'AAT012':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'LAT041':'TransportationGroundCrv', // Transportation - Ground
-    'PAT042':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'PAT045':'FacilityPnt', // Facility
-    'AAT045':'FacilitySrf', // Facility
-    'LBA010':'PhysiographyCrv', // Physiography
-    'PBA030':'PhysiographyPnt', // Physiography
-    'ABA030':'PhysiographySrf', // Physiography
-    'ABA040':'HydrographySrf', // Hydrography
-    'ABB005':'PortorHarbourSrf', // Port or Harbour
-    'PBB009':'PortorHarbourPnt', // Port or Harbour
-    'ABB009':'PortorHarbourSrf', // Port or Harbour
-    'LBB081':'PortorHarbourCrv', // Port or Harbour
-    'ABB081':'PortorHarbourSrf', // Port or Harbour
-    'LBB082':'PortorHarbourCrv', // Port or Harbour
-    'ABB082':'PortorHarbourSrf', // Port or Harbour
-    'ABB090':'PortorHarbourSrf', // Port or Harbour
-    'PBB110':'HydrographyPnt', // Hydrography
-    'ABB110':'HydrographySrf', // Hydrography
-    'ABB199':'PortorHarbourSrf', // Port or Harbour
-    'PBB201':'PortorHarbourPnt', // Port or Harbour
-    'ABB201':'PortorHarbourSrf', // Port or Harbour
-    'PBB241':'PortorHarbourPnt', // Port or Harbour
-    'ABB241':'PortorHarbourSrf', // Port or Harbour
-    'PBC050':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'ABC050':'HydrographicAidtoNavigationSrf', // Hydrographic Aid to Navigation
-    'PBC070':'HydrographicAidtoNavigationPnt', // Hydrographic Aid to Navigation
-    'PBD100':'PortorHarbourPnt', // Port or Harbour
-    'ABD100':'PortorHarbourSrf', // Port or Harbour
-    'PBD115':'HydrographyPnt', // Hydrography
-    'ABD115':'HydrographySrf', // Hydrography
-    'PBD140':'HydrographyPnt', // Hydrography
-    'ABD140':'HydrographySrf', // Hydrography
-    'PBD181':'HydrographyPnt', // Hydrography
-    'LBH010':'HydrographyCrv', // Hydrography
-    'ABH010':'HydrographySrf', // Hydrography
-    'PBH012':'HydrographyPnt', // Hydrography
-    'ABH015':'VegetationSrf', // Vegetation
-    'LBH020':'TransportationWaterCrv', // Transportation - Water
-    'ABH020':'TransportationWaterSrf', // Transportation - Water
-    'LBH030':'HydrographyCrv', // Hydrography
-    'ABH030':'HydrographySrf', // Hydrography
-    'ABH040':'IndustrySrf', // Industry
-    'PBH051':'AgriculturePnt', // Agriculture
-    'ABH051':'AgricultureSrf', // Agriculture
-    'LBH065':'HydrographyCrv', // Hydrography
-    'PBH070':'TransportationGroundPnt', // Transportation - Ground
-    'LBH070':'TransportationGroundCrv', // Transportation - Ground
-    'ABH070':'TransportationGroundSrf', // Transportation - Ground
-    'PBH075':'CulturePnt', // Culture
-    'ABH075':'CultureSrf', // Culture
-    'ABH077':'VegetationSrf', // Vegetation
-    'PBH082':'HydrographyPnt', // Hydrography
-    'ABH082':'HydrographySrf', // Hydrography
-    'ABH090':'HydrographySrf', // Hydrography
-    'LBH100':'HydrographyCrv', // Hydrography
-    'ABH100':'HydrographySrf', // Hydrography
-    'LBH110':'HydrographyCrv', // Hydrography
-    'ABH116':'SubterraneanSrf', // Subterranean
-    'PBH120':'HydrographyPnt', // Hydrography
-    'LBH120':'HydrographyCrv', // Hydrography
-    'ABH120':'HydrographySrf', // Hydrography
-    'ABH135':'AgricultureSrf', // Agriculture
-    'LBH140':'HydrographyCrv', // Hydrography
-    'ABH140':'HydrographySrf', // Hydrography
-    'PBH145':'HydrographyPnt', // Hydrography
-    'ABH150':'PhysiographySrf', // Physiography
-    'PBH155':'IndustryPnt', // Industry
-    'ABH155':'IndustrySrf', // Industry
-    'ABH160':'PhysiographySrf', // Physiography
-    'LBH165':'HydrographyCrv', // Hydrography
-    'ABH165':'HydrographySrf', // Hydrography
-    'PBH170':'HydrographyPnt', // Hydrography
-    'ABH170':'HydrographySrf', // Hydrography
-    'PBH180':'HydrographyPnt', // Hydrography
-    'LBH180':'HydrographyCrv', // Hydrography
-    'PBH220':'UtilityInfrastructurePnt', // Utility Infrastructure
-    'ABH220':'UtilityInfrastructureSrf', // Utility Infrastructure
-    'PBH230':'HydrographyPnt', // Hydrography
-    'ABH230':'HydrographySrf', // Hydrography
-    'ABI005':'PortorHarbourSrf', // Port or Harbour
-    'PBI006':'TransportationWaterPnt', // Transportation - Water
-    'LBI006':'TransportationWaterCrv', // Transportation - Water
-    'ABI006':'TransportationWaterSrf', // Transportation - Water
-    'PBI010':'HydrographyPnt', // Hydrography
-    'PBI020':'HydrographyPnt', // Hydrography
-    'LBI020':'HydrographyCrv', // Hydrography
-    'ABI020':'HydrographySrf', // Hydrography
-    'PBI030':'TransportationWaterPnt', // Transportation - Water
-    'LBI030':'TransportationWaterCrv', // Transportation - Water
-    'ABI030':'TransportationWaterSrf', // Transportation - Water
-    'PBI040':'HydrographyPnt', // Hydrography
-    'LBI040':'HydrographyCrv', // Hydrography
-    'PBI044':'HydrographyPnt', // Hydrography
-    'LBI044':'HydrographyCrv', // Hydrography
-    'ABI044':'HydrographySrf', // Hydrography
-    'PBI045':'TransportationWaterPnt', // Transportation - Water
-    'LBI045':'TransportationWaterCrv', // Transportation - Water
-    'PBI050':'HydrographyPnt', // Hydrography
-    'ABI050':'HydrographySrf', // Hydrography
-    'LBI060':'HydrographyCrv', // Hydrography
-    'PBI070':'HydrographyPnt', // Hydrography
-    'ABJ020':'PhysiographySrf', // Physiography
-    'ABJ030':'PhysiographySrf', // Physiography
-    'LBJ031':'PhysiographyCrv', // Physiography
-    'ABJ031':'PhysiographySrf', // Physiography
-    'LBJ040':'PhysiographyCrv', // Physiography
-    'PBJ060':'PhysiographyPnt', // Physiography
-    'ABJ065':'PhysiographySrf', // Physiography
-    'ABJ080':'PhysiographySrf', // Physiography
-    'ABJ099':'PhysiographySrf', // Physiography
-    'ABJ100':'PhysiographySrf', // Physiography
-    'ABJ110':'VegetationSrf', // Vegetation
-    'LCA010':'HypsographyCrv', // Hypsography
-    'PCA030':'HypsographyPnt', // Hypsography
-    'ADA005':'PhysiographySrf', // Physiography
-    'ADA010':'PhysiographySrf', // Physiography
-    'LDB010':'PhysiographyCrv', // Physiography
-    'ADB028':'SubterraneanSrf', // Subterranean
-    'PDB029':'PhysiographyPnt', // Physiography
-    'LDB061':'PhysiographyCrv', // Physiography
-    'ADB061':'PhysiographySrf', // Physiography
-    'LDB070':'PhysiographyCrv', // Physiography
-    'LDB071':'PhysiographyCrv', // Physiography
-    'ADB080':'PhysiographySrf', // Physiography
-    'LDB090':'PhysiographyCrv', // Physiography
-    'ADB090':'PhysiographySrf', // Physiography
-    'LDB100':'PhysiographyCrv', // Physiography
-    'LDB110':'PhysiographyCrv', // Physiography
-    'PDB115':'PhysiographyPnt', // Physiography
-    'ADB115':'PhysiographySrf', // Physiography
-    'PDB150':'PhysiographyPnt', // Physiography
-    'PDB160':'PhysiographyPnt', // Physiography
-    'ADB160':'PhysiographySrf', // Physiography
-    'ADB170':'PhysiographySrf', // Physiography
-    'PDB180':'PhysiographyPnt', // Physiography
-    'ADB180':'PhysiographySrf', // Physiography
-    'LDB190':'PhysiographyCrv', // Physiography
-    'ADB211':'PhysiographySrf', // Physiography
-    'AEA010':'AgricultureSrf', // Agriculture
-    'LEA020':'VegetationCrv', // Vegetation
-    'AEA030':'AgricultureSrf', // Agriculture
-    'AEA031':'CultureSrf', // Culture
-    'AEA040':'AgricultureSrf', // Agriculture
-    'AEA050':'AgricultureSrf', // Agriculture
-    'AEA055':'AgricultureSrf', // Agriculture
-    'AEB010':'VegetationSrf', // Vegetation
-    'AEB020':'VegetationSrf', // Vegetation
-    'AEB070':'VegetationSrf', // Vegetation
-    'PEC005':'VegetationPnt', // Vegetation
-    'AEC010':'AgricultureSrf', // Agriculture
-    'LEC015':'VegetationCrv', // Vegetation
-    'AEC015':'VegetationSrf', // Vegetation
-    'PEC020':'PhysiographyPnt', // Physiography
-    'AEC020':'PhysiographySrf', // Physiography
-    'LEC040':'VegetationCrv', // Vegetation
-    'AEC040':'VegetationSrf', // Vegetation
-    'AEC060':'VegetationSrf', // Vegetation
-    'AED010':'VegetationSrf', // Vegetation
-    'AED020':'VegetationSrf', // Vegetation
-    'AEE010':'VegetationSrf', // Vegetation
-    'AEE030':'PhysiographySrf', // Physiography
-    'PFA012':'CulturePnt', // Culture
-    'AFA012':'CultureSrf', // Culture
-    'PFA015':'MilitaryPnt', // Military
-    'AFA015':'MilitarySrf', // Military
-    'AFA100':'MilitarySrf', // Military
-    'PFA165':'MilitaryPnt', // Military
-    'AFA165':'MilitarySrf', // Military
-    'AFA210':'CultureSrf', // Culture
-    'PGB005':'AeronauticPnt', // Aeronautic
-    'AGB005':'AeronauticSrf', // Aeronautic
-    'AGB015':'AeronauticSrf', // Aeronautic
-    'PGB030':'AeronauticPnt', // Aeronautic
-    'AGB030':'AeronauticSrf', // Aeronautic
-    'PGB035':'AeronauticPnt', // Aeronautic
-    'AGB035':'AeronauticSrf', // Aeronautic
-    'PGB040':'AeronauticPnt', // Aeronautic
-    'AGB040':'AeronauticSrf', // Aeronautic
-    'AGB045':'AeronauticSrf', // Aeronautic
-    'LGB050':'MilitaryCrv', // Military
-    'AGB055':'AeronauticSrf', // Aeronautic
-    'PGB065':'AeronauticPnt', // Aeronautic
-    'AGB065':'AeronauticSrf', // Aeronautic
-    'AGB070':'AeronauticSrf', // Aeronautic
-    'LGB075':'AeronauticCrv', // Aeronautic
-    'AGB075':'AeronauticSrf', // Aeronautic
-    'PGB230':'AeronauticPnt', // Aeronautic
-    'AGB230':'AeronauticSrf', // Aeronautic
-    'PGB250':'AeronauticPnt', // Aeronautic
-    'AGB250':'AeronauticSrf', // Aeronautic
-    'AIA040':'BoundarySrf', // Boundary
-    'PSU001':'MilitaryPnt', // Military
-    'ASU001':'MilitarySrf', // Military
-    'ASU004':'MilitarySrf', // Military
-    'LSU030':'MilitaryCrv', // Military
-    'PZB030':'BoundaryPnt', // Boundary
-    'PZB050':'HypsographyPnt', // Hypsography
-    'AZD020':'InformationSrf', // Information
-    'PZD040':'InformationPnt', // Information
-    'PZD045':'InformationPnt', // Information
-    'LZD045':'InformationCrv', // Information
-    'AZD045':'InformationSrf', // Information
-    'PZD070':'HydrographyPnt', // Hydrography
-    'AZD070':'HydrographySrf', // Hydrography
-    'AZI031':'ResourceSrf', // Resource
-    'AZI039':'MetadataSrf' // Metadata
+    'AAA010':'IndustrySrf', // EXTRACTION_MINE_S
+    'AAA020':'IndustrySrf', // MINE_SHAFT_SUPERSTRUCTURE_S
+    'AAA040':'IndustrySrf', // RIG_S
+    'AAA052':'IndustrySrf', // HYDROCARBONS_FIELD_S
+    'AAB000':'IndustrySrf', // DISPOSAL_SITE_S
+    'AAB010':'IndustrySrf', // RECYCLING_SITE_S
+    'AAB040':'IndustrySrf', // AERATION_BASIN_S
+    'AAC010':'IndustrySrf', // BLAST_FURNACE_S
+    'AAC020':'IndustrySrf', // CATALYTIC_CRACKER_S
+    'AAC030':'IndustrySrf', // SETTLING_POND_S
+    'AAC060':'IndustrySrf', // INDUSTRIAL_FURNACE_S
+    'AAD010':'UtilityInfrastructureSrf', // ELECTRIC_POWER_STATION_S
+    'AAD020':'UtilityInfrastructureSrf', // SOLAR_PANEL_S
+    'AAD025':'UtilityInfrastructureSrf', // SOLAR_FARM_S
+    'AAD030':'UtilityInfrastructureSrf', // POWER_SUBSTATION_S
+    'AAD060':'UtilityInfrastructureSrf', // WIND_FARM_S
+    'AAF030':'UtilityInfrastructureSrf', // COOLING_TOWER_S
+    'AAG030':'FacilitySrf', // SHOPPING_COMPLEX_S
+    'AAH025':'MilitarySrf', // ENGINEERED_EARTHWORK_S
+    'AAH055':'MilitarySrf', // FORTIFIED_BUILDING_S
+    'AAH060':'MilitarySrf', // UNDERGROUND_BUNKER_S
+    'AAI020':'SettlementSrf', // CARAVAN_PARK_S
+    'AAI021':'SettlementSrf', // MANUFACTURED_HOME_PARK_S
+    'AAJ030':'AgricultureSrf', // HOLDING_PEN_S
+    'AAJ050':'AgricultureSrf', // WINDMILL_S
+    'AAJ055':'IndustrySrf', // WATER_MILL_S
+    'AAJ085':'AgricultureSrf', // BARN_S
+    'AAJ110':'AgricultureSrf', // GREENHOUSE_S
+    'AAK020':'RecreationSrf', // AMUSEMENT_PARK_ATTRACTION_S
+    'AAK030':'RecreationSrf', // AMUSEMENT_PARK_S
+    'AAK040':'RecreationSrf', // SPORTS_GROUND_S
+    'AAK060':'RecreationSrf', // CAMP_SITE_S
+    'AAK070':'RecreationSrf', // DRIVE_IN_THEATRE_S
+    'AAK090':'RecreationSrf', // FAIRGROUND_S
+    'AAK100':'RecreationSrf', // GOLF_COURSE_S
+    'AAK101':'RecreationSrf', // GOLF_DRIVING_RANGE_S
+    'AAK110':'RecreationSrf', // GRANDSTAND_S
+    'AAK120':'CultureSrf', // PARK_S
+    'AAK130':'RecreationSrf', // RACETRACK_S
+    'AAK160':'RecreationSrf', // STADIUM_S
+    'AAK164':'RecreationSrf', // AMPHITHEATRE_S
+    'AAK170':'RecreationSrf', // SWIMMING_POOL_S
+    'AAK180':'RecreationSrf', // ZOO_S
+    'AAL010':'FacilitySrf', // FACILITY_S
+    'AAL011':'FacilitySrf', // INSTALLATION_S
+    'AAL012':'CultureSrf', // ARCHEOLOGICAL_SITE_S
+    'AAL013':'StructureSrf', // BUILDING_S
+    'AAL014':'StructureSrf', // NON_BUILDING_STRUCTURE_S
+    'AAL018':'StructureSrf', // BUILDING_SUPERSTRUCTURE_S
+    'AAL019':'StructureSrf', // SHED_S
+    'AAL020':'SettlementSrf', // BUILT_UP_AREA_S
+    'AAL030':'CultureSrf', // CEMETERY_S
+    'AAL036':'CultureSrf', // TOMB_S
+    'AAL060':'MilitarySrf', // DRAGONS_TEETH_S
+    'AAL065':'MilitarySrf', // MINEFIELD_S
+    'AAL099':'StructureSrf', // HUT_S
+    'AAL105':'SettlementSrf', // SETTLEMENT_S
+    'AAL130':'CultureSrf', // MEMORIAL_MONUMENT_S
+    'AAL140':'StructureSrf', // PARTICLE_ACCELERATOR_S
+    'AAL142':'StructureSrf', // ASTRONOMICAL_OBSERVATORY_S
+    'AAL170':'RecreationSrf', // PUBLIC_SQUARE_S
+    'AAL175':'CultureSrf', // COURTYARD_S
+    'AAL200':'CultureSrf', // RUINS_S
+    'AAL208':'SettlementSrf', // SHANTY_TOWN_S
+    'AAL211':'TransportationGroundSrf', // TRANS_ROUTE_PROTECT_STRUCT_S
+    'AAL241':'StructureSrf', // TOWER_S
+    'AAL270':'AgricultureSrf', // INDUSTRIAL_FARM_S
+    'AAL351':'AeronauticSrf', // SPACE_FACILITY_S
+    'AAL375':'MilitarySrf', // CASTLE_S
+    'AAL376':'MilitarySrf', // CASTLE_COMPLEX_S
+    'AAM010':'StorageSrf', // STORAGE_DEPOT_S
+    'AAM020':'AgricultureSrf', // GRAIN_STORAGE_STRUCTURE_S
+    'AAM030':'StorageSrf', // GRAIN_ELEVATOR_S
+    'AAM040':'IndustrySrf', // MINERAL_PILE_S
+    'AAM060':'MilitarySrf', // SURFACE_BUNKER_S
+    'AAM065':'StorageSrf', // MUNITION_STORAGE_FACILITY_S
+    'AAM070':'StorageSrf', // STORAGE_TANK_S
+    'AAM071':'StorageSrf', // TANK_FARM_S
+    'AAM075':'StorageSrf', // FUEL_STORAGE_FACILITY_S
+    'AAM080':'StorageSrf', // WATER_TOWER_S
+    'AAN060':'TransportationGroundSrf', // RAILWAY_YARD_S
+    'AAN075':'TransportationGroundSrf', // RAILWAY_TURNTABLE_S
+    'AAN076':'TransportationGroundSrf', // ROUNDHOUSE_S
+    'AAQ040':'TransportationGroundSrf', // BRIDGE_S
+    'AAQ045':'TransportationGroundSrf', // BRIDGE_SPAN_S
+    'AAQ060':'AeronauticSrf', // CONTROL_TOWER_S
+    'AAQ063':'TransportationGroundSrf', // CAUSEWAY_STRUCTURE_S
+    'AAQ068':'TransportationGroundSrf', // TRANSPORTATION_BLOCK_S
+    'AAQ080':'TransportationWaterSrf', // FERRY_STATION_S
+    'AAQ116':'UtilityInfrastructureSrf', // PUMPING_STATION_S
+    'AAQ125':'TransportationGroundSrf', // TRANSPORTATION_STATION_S
+    'AAQ130':'TransportationGroundSrf', // TUNNEL_S
+    'AAQ135':'TransportationGroundSrf', // ROADSIDE_REST_AREA_S
+    'AAQ140':'TransportationGroundSrf', // VEHICLE_LOT_S
+    'AAQ141':'TransportationGroundSrf', // PARKING_GARAGE_S
+    'AAQ150':'StructureSrf', // STAIR_S
+    'AAQ151':'TransportationGroundSrf', // ARCADE_S
+    'AAQ170':'TransportationGroundSrf', // MOTOR_VEHICLE_STATION_S
+    'AAT012':'UtilityInfrastructureSrf', // AERIAL_FARM_S
+    'AAT045':'FacilitySrf', // RADAR_STATION_S
+    'ABA023':'ForeshoreSrf', // FORESHORE_S
+    'ABA030':'PhysiographySrf', // ISLAND_S
+    'ABA040':'HydrographySrf', // TIDAL_WATER_S
+    'ABB005':'PortHarbourSrf', // HARBOUR_S
+    'ABB009':'PortHarbourSrf', // PORT_S
+    'ABB010':'AnchorageSrf', // ANCHORAGE_S
+    'ABB081':'PortHarbourSrf', // SHORELINE_CONSTRUCTION_S
+    'ABB082':'PortHarbourSrf', // SHORELINE_RAMP_S
+    'ABB090':'PortHarbourSrf', // DRY_DOCK_S
+    'ABB199':'PortHarbourSrf', // FLOATING_DRY_DOCK_S
+    'ABC050':'HydroAidNavigationSrf', // LIGHTHOUSE_S
+    'ABD061':'AquaticVegetationSrf', // AQUATIC_VEGETATION_S
+    'ABD100':'PortHarbourSrf', // STRUCTURAL_PILE_S
+    'ABD115':'HydrographySrf', // OFFSHORE_CONSTRUCTION_S
+    'ABD120':'ReefSrf', // REEF_S
+    'ABH010':'HydrographySrf', // AQUEDUCT_S
+    'ABH015':'VegetationSrf', // BOG_S
+    'ABH020':'TransportationWaterSrf', // NAVIGABLE_CANAL_S
+    'ABH030':'HydrographySrf', // DITCH_S
+    'ABH040':'IndustrySrf', // WATER_TREATMENT_BED_S
+    'ABH050':'MaricultureSiteSrf', // MARICULTURE_SITE_S
+    'ABH051':'AgricultureSrf', // FISH_FARM_FACILITY_S
+    'ABH075':'CultureSrf', // FOUNTAIN_S
+    'ABH077':'VegetationSrf', // HUMMOCK_S
+    'ABH082':'HydrographySrf', // INLAND_WATERBODY_S
+    'ABH090':'HydrographySrf', // LAND_SUBJECT_TO_INUNDATION_S
+    'ABH120':'HydrographySrf', // RAPIDS_S
+    'ABH135':'AgricultureSrf', // RICE_FIELD_S
+    'ABH140':'HydrographySrf', // RIVER_S
+    'ABH150':'PhysiographySrf', // SALT_FLAT_S
+    'ABH155':'IndustrySrf', // SALT_EVAPORATOR_S
+    'ABH160':'PhysiographySrf', // SABKHA_S
+    'ABH165':'HydrographySrf', // SPILLWAY_S
+    'ABH230':'HydrographySrf', // WATER_WELL_S
+    'ABI005':'PortHarbourSrf', // VESSEL_LIFT_S
+    'ABI006':'TransportationWaterSrf', // SHIP_ELEVATOR_S
+    'ABI020':'HydrographySrf', // DAM_S
+    'ABI030':'TransportationWaterSrf', // LOCK_S
+    'ABI044':'HydrographySrf', // FLOOD_CONTROL_STRUCTURE_S
+    'ABI050':'HydrographySrf', // WATER_INTAKE_TOWER_S
+    'ABJ020':'PhysiographySrf', // MORAINE_S
+    'ABJ030':'PhysiographySrf', // GLACIER_S
+    'ABJ031':'PhysiographySrf', // CREVASSE_S
+    'ABJ065':'IceShelfSrf', // ICE_SHELF_S
+    'ABJ080':'PolarIceSrf', // POLAR_ICE_S
+    'ABJ099':'IceCapSrf', // ICE_CAP_S
+    'ABJ100':'PhysiographySrf', // SNOW_ICE_FIELD_S
+    'ABJ110':'VegetationSrf', // TUNDRA_S
+    'ADA005':'PhysiographySrf', // ASPHALT_LAKE_S
+    'ADA010':'PhysiographySrf', // SOIL_SURFACE_REGION_S
+    'ADB061':'PhysiographySrf', // CREVICE_S
+    'ADB090':'PhysiographySrf', // EMBANKMENT_S
+    'ADB115':'PhysiographySrf', // GEOTHERMAL_OUTLET_S
+    'ADB160':'PhysiographySrf', // ROCK_FORMATION_S
+    'ADB170':'PhysiographySrf', // SAND_DUNES_S
+    'ADB180':'PhysiographySrf', // VOLCANO_S
+    'AEA010':'AgricultureSrf', // CROP_LAND_S
+    'AEA030':'AgricultureSrf', // PLANT_NURSERY_S
+    'AEA040':'AgricultureSrf', // ORCHARD_S
+    'AEA050':'AgricultureSrf', // VINEYARD_S
+    'AEA055':'AgricultureSrf', // HOP_FIELD_S
+    'AEB010':'VegetationSrf', // GRASSLAND_S
+    'AEB020':'VegetationSrf', // THICKET_S
+    'AEB070':'VegetationSrf', // BRUSH_S
+    'AEC010':'AgricultureSrf', // CANE_S
+    'AEC015':'VegetationSrf', // FOREST_S
+    'AEC020':'PhysiographySrf', // OASIS_S
+    'AEC040':'VegetationSrf', // CLEARED_WAY_S
+    'AEC060':'VegetationSrf', // FOREST_CLEARING_S
+    'AED010':'VegetationSrf', // MARSH_S
+    'AED020':'VegetationSrf', // SWAMP_S
+    'AEE010':'VegetationSrf', // LOGGING_SITE_S
+    'AFA002':'GeopoliticalEntitySrf', // GEOPOLITICAL_ENTITY_S
+    'AFA003':'AdministrativeBoundarySrf', // ADMINISTRATIVE_DIVISION_S
+    'AFA015':'MilitarySrf', // FIRING_RANGE_S
+    'AFA100':'MilitarySrf', // TEST_SITE_S
+    'AFA165':'MilitarySrf', // TRAINING_SITE_S
+    'AFA210':'CultureSrf', // CONSERVATION_AREA_S
+    'AGA005':'AirspaceSrf', // AIRSPACE_S
+    'AGB005':'AeronauticSrf', // LAND_AERODROME_S
+    'AGB015':'AeronauticSrf', // APRON_S
+    'AGB030':'AeronauticSrf', // HELIPAD_S
+    'AGB035':'AeronauticSrf', // HELIPORT_S
+    'AGB040':'AeronauticSrf', // LAUNCH_PAD_S
+    'AGB045':'AeronauticSrf', // STOPWAY_S
+    'AGB055':'AeronauticSrf', // RUNWAY_S
+    'AGB065':'AeronauticSrf', // WATER_AERODROME_S
+    'AGB070':'AeronauticSrf', // SEAPLANE_RUN_S
+    'AGB075':'AeronauticSrf', // TAXIWAY_S
+    'AGB230':'AeronauticSrf', // AIRCRAFT_HANGAR_S
+    'AGB250':'AeronauticSrf', // HARDENED_AIRCRAFT_SHELTER_S
+    'ASU001':'MilitarySrf', // MILITARY_INSTALLATION_S
+    'AZD020':'InformationSrf', // VOID_COLLECTION_AREA_S
+    'AZD045':'InformationSrf', // ANNOTATED_LOCATION_S
+    'AZI031':'ResourceSrf', // DATASET_S
+    'AZI039':'MetadataSrf', // ENTITY_COLLECTION_METADATA_S
+    'LAA011':'IndustryCrv', // SHEAR_WALL_C
+    'LAF020':'IndustryCrv', // CONVEYOR_C
+    'LAH025':'MilitaryCrv', // ENGINEERED_EARTHWORK_C
+    'LAK020':'RecreationCrv', // AMUSEMENT_PARK_ATTRACTION_C
+    'LAK130':'RecreationCrv', // RACETRACK_C
+    'LAK150':'RecreationCrv', // SKI_JUMP_C
+    'LAL018':'StructureCrv', // BUILDING_SUPERSTRUCTURE_C
+    'LAL060':'MilitaryCrv', // DRAGONS_TEETH_C
+    'LAL070':'StructureCrv', // FENCE_C
+    'LAL130':'CultureCrv', // MEMORIAL_MONUMENT_C
+    'LAL140':'StructureCrv', // PARTICLE_ACCELERATOR_C
+    'LAL155':'TransportationGroundCrv', // OVERHEAD_OBSTRUCTION_C
+    'LAL211':'TransportationGroundCrv', // TRANS_ROUTE_PROTECT_STRUCT_C
+    'LAL260':'StructureCrv', // WALL_C
+    'LAN010':'TransportationGroundCrv', // RAILWAY_C
+    'LAN050':'TransportationGroundCrv', // RAILWAY_SIDETRACK_C
+    'LAP010':'TransportationGroundCrv', // CART_TRACK_C
+    'LAP030':'TransportationGroundCrv', // ROAD_C
+    'LAP040':'TransportationGroundCrv', // GATE_C
+    'LAP041':'TransportationGroundCrv', // VEHICLE_BARRIER_C
+    'LAP050':'TransportationGroundCrv', // TRAIL_C
+    'LAQ035':'TransportationGroundCrv', // SIDEWALK_C
+    'LAQ040':'TransportationGroundCrv', // BRIDGE_C
+    'LAQ045':'TransportationGroundCrv', // BRIDGE_SPAN_C
+    'LAQ063':'TransportationGroundCrv', // CAUSEWAY_STRUCTURE_C
+    'LAQ065':'TransportationGroundCrv', // CULVERT_C
+    'LAQ070':'TransportationWaterCrv', // FERRY_CROSSING_C
+    'LAQ075':'TransportationGroundCrv', // ICE_ROUTE_C
+    'LAQ113':'UtilityInfrastructureCrv', // PIPELINE_C
+    'LAQ130':'TransportationGroundCrv', // TUNNEL_C
+    'LAQ150':'StructureCrv', // STAIR_C
+    'LAQ151':'TransportationGroundCrv', // ARCADE_C
+    'LAT005':'UtilityInfrastructureCrv', // CABLE_C
+    'LAT041':'TransportationGroundCrv', // CABLEWAY_C
+    'LBA010':'PhysiographyCrv', // LAND_WATER_BOUNDARY_C
+    'LBB081':'PortHarbourCrv', // SHORELINE_CONSTRUCTION_C
+    'LBB082':'PortHarbourCrv', // SHORELINE_RAMP_C
+    'LBD120':'ReefCrv', // REEF_C
+    'LBE010':'DepthCurveCrv', // DEPTH_CURVE_C
+    'LBH010':'HydrographyCrv', // AQUEDUCT_C
+    'LBH020':'TransportationWaterCrv', // NAVIGABLE_CANAL_C
+    'LBH030':'HydrographyCrv', // DITCH_C
+    'LBH065':'HydrographyCrv', // WATER_RACE_C
+    'LBH070':'TransportationGroundCrv', // FORD_C
+    'LBH100':'HydrographyCrv', // MOAT_C
+    'LBH110':'HydrographyCrv', // PENSTOCK_C
+    'LBH120':'HydrographyCrv', // RAPIDS_C
+    'LBH140':'HydrographyCrv', // RIVER_C
+    'LBH165':'HydrographyCrv', // SPILLWAY_C
+    'LBH180':'HydrographyCrv', // WATERFALL_C
+    'LBI006':'TransportationWaterCrv', // SHIP_ELEVATOR_C
+    'LBI020':'HydrographyCrv', // DAM_C
+    'LBI030':'TransportationWaterCrv', // LOCK_C
+    'LBI040':'HydrographyCrv', // SLUICE_GATE_C
+    'LBI044':'HydrographyCrv', // FLOOD_CONTROL_STRUCTURE_C
+    'LBI045':'TransportationWaterCrv', // BASIN_GATE_C
+    'LBJ031':'PhysiographyCrv', // CREVASSE_C
+    'LBJ040':'PhysiographyCrv', // ICE_CLIFF_C
+    'LCA010':'HypsographyCrv', // ELEVATION_CONTOUR_C
+    'LDB010':'PhysiographyCrv', // STEEP_TERRAIN_FACE_C
+    'LDB061':'PhysiographyCrv', // CREVICE_C
+    'LDB070':'PhysiographyCrv', // CUT_C
+    'LDB071':'PhysiographyCrv', // CUT_LINE_C
+    'LDB090':'PhysiographyCrv', // EMBANKMENT_C
+    'LDB100':'PhysiographyCrv', // ESKER_C
+    'LDB110':'PhysiographyCrv', // GEOLOGIC_FAULT_C
+    'LEA020':'VegetationCrv', // HEDGEROW_C
+    'LEC015':'VegetationCrv', // FOREST_C
+    'LEC040':'VegetationCrv', // CLEARED_WAY_C
+    'LFA000':'AdministrativeBoundaryCrv', // ADMINISTRATIVE_BOUNDARY_C
+    'LFA091':'GeophysicalDataTrackLineCrv', // GEOPHYSICAL_DATA_TRACK_LINE_C
+    'LFA110':'InternationalDateLineCrv', // INTERNATIONAL_DATE_LINE_C
+    'LGB050':'MilitaryCrv', // DEFENSIVE_REVETMENT_C
+    'LGB075':'AeronauticCrv', // TAXIWAY_C
+    'LZC050':'IsogonicLineCrv', // ISOGONIC_LINE_C
+    'LZD045':'InformationCrv', // ANNOTATED_LOCATION_C
+    'PAA010':'IndustryPnt', // EXTRACTION_MINE_P
+    'PAA020':'IndustryPnt', // MINE_SHAFT_SUPERSTRUCTURE_P
+    'PAA040':'IndustryPnt', // RIG_P
+    'PAA054':'IndustryPnt', // NON_WATER_WELL_P
+    'PAB000':'IndustryPnt', // DISPOSAL_SITE_P
+    'PAC010':'IndustryPnt', // BLAST_FURNACE_P
+    'PAC020':'IndustryPnt', // CATALYTIC_CRACKER_P
+    'PAC060':'IndustryPnt', // INDUSTRIAL_FURNACE_P
+    'PAD010':'UtilityInfrastructurePnt', // ELECTRIC_POWER_STATION_P
+    'PAD020':'UtilityInfrastructurePnt', // SOLAR_PANEL_P
+    'PAD025':'UtilityInfrastructurePnt', // SOLAR_FARM_P
+    'PAD030':'UtilityInfrastructurePnt', // POWER_SUBSTATION_P
+    'PAD060':'UtilityInfrastructurePnt', // WIND_FARM_P
+    'PAF010':'UtilityInfrastructurePnt', // SMOKESTACK_P
+    'PAF020':'IndustryPnt', // CONVEYOR_P
+    'PAF030':'UtilityInfrastructurePnt', // COOLING_TOWER_P
+    'PAF040':'IndustryPnt', // CRANE_P
+    'PAF070':'IndustryPnt', // FLARE_PIPE_P
+    'PAF080':'IndustryPnt', // HOPPER_P
+    'PAH055':'MilitaryPnt', // FORTIFIED_BUILDING_P
+    'PAH060':'MilitaryPnt', // UNDERGROUND_BUNKER_P
+    'PAH070':'TransportationGroundPnt', // CHECKPOINT_P
+    'PAJ030':'AgriculturePnt', // HOLDING_PEN_P
+    'PAJ050':'AgriculturePnt', // WINDMILL_P
+    'PAJ051':'UtilityInfrastructurePnt', // WIND_TURBINE_P
+    'PAJ055':'IndustryPnt', // WATER_MILL_P
+    'PAJ085':'AgriculturePnt', // BARN_P
+    'PAJ110':'AgriculturePnt', // GREENHOUSE_P
+    'PAK020':'RecreationPnt', // AMUSEMENT_PARK_ATTRACTION_P
+    'PAK030':'RecreationPnt', // AMUSEMENT_PARK_P
+    'PAK040':'RecreationPnt', // SPORTS_GROUND_P
+    'PAK060':'RecreationPnt', // CAMP_SITE_P
+    'PAK080':'RecreationPnt', // OUTDOOR_THEATRE_SCREEN_P
+    'PAK110':'RecreationPnt', // GRANDSTAND_P
+    'PAK150':'RecreationPnt', // SKI_JUMP_P
+    'PAK160':'RecreationPnt', // STADIUM_P
+    'PAK161':'RecreationPnt', // SCOREBOARD_P
+    'PAK164':'RecreationPnt', // AMPHITHEATRE_P
+    'PAK170':'RecreationPnt', // SWIMMING_POOL_P
+    'PAK180':'RecreationPnt', // ZOO_P
+    'PAL010':'FacilityPnt', // FACILITY_P
+    'PAL012':'CulturePnt', // ARCHEOLOGICAL_SITE_P
+    'PAL013':'StructurePnt', // BUILDING_P
+    'PAL014':'StructurePnt', // NON_BUILDING_STRUCTURE_P
+    'PAL018':'StructurePnt', // BUILDING_SUPERSTRUCTURE_P
+    'PAL019':'StructurePnt', // SHED_P
+    'PAL020':'SettlementPnt', // BUILT_UP_AREA_P
+    'PAL025':'CulturePnt', // CAIRN_P
+    'PAL030':'CulturePnt', // CEMETERY_P
+    'PAL036':'CulturePnt', // TOMB_P
+    'PAL080':'StructurePnt', // GANTRY_P
+    'PAL099':'StructurePnt', // HUT_P
+    'PAL105':'SettlementPnt', // SETTLEMENT_P
+    'PAL110':'StructurePnt', // LIGHT_SUPPORT_STRUCTURE_P
+    'PAL130':'CulturePnt', // MEMORIAL_MONUMENT_P
+    'PAL142':'StructurePnt', // ASTRONOMICAL_OBSERVATORY_P
+    'PAL155':'TransportationGroundPnt', // OVERHEAD_OBSTRUCTION_P
+    'PAL165':'TransportationGroundPnt', // PIPELINE_CROSSING_POINT_P
+    'PAL200':'CulturePnt', // RUINS_P
+    'PAL211':'TransportationGroundPnt', // TRANS_ROUTE_PROTECT_STRUCT_P
+    'PAL241':'StructurePnt', // TOWER_P
+    'PAL250':'StructurePnt', // UNDERGROUND_DWELLING_P
+    'PAL270':'AgriculturePnt', // INDUSTRIAL_FARM_P
+    'PAL351':'AeronauticPnt', // SPACE_FACILITY_P
+    'PAL375':'MilitaryPnt', // CASTLE_P
+    'PAL376':'MilitaryPnt', // CASTLE_COMPLEX_P
+    'PAL510':'AeronauticPnt', // TETHERED_BALLOON_P
+    'PAM010':'StoragePnt', // STORAGE_DEPOT_P
+    'PAM020':'AgriculturePnt', // GRAIN_STORAGE_STRUCTURE_P
+    'PAM030':'StoragePnt', // GRAIN_ELEVATOR_P
+    'PAM040':'IndustryPnt', // MINERAL_PILE_P
+    'PAM060':'MilitaryPnt', // SURFACE_BUNKER_P
+    'PAM065':'StoragePnt', // MUNITION_STORAGE_FACILITY_P
+    'PAM070':'StoragePnt', // STORAGE_TANK_P
+    'PAM071':'StoragePnt', // TANK_FARM_P
+    'PAM075':'StoragePnt', // FUEL_STORAGE_FACILITY_P
+    'PAM080':'StoragePnt', // WATER_TOWER_P
+    'PAN075':'TransportationGroundPnt', // RAILWAY_TURNTABLE_P
+    'PAN076':'TransportationGroundPnt', // ROUNDHOUSE_P
+    'PAP020':'TransportationGroundPnt', // ROAD_INTERCHANGE_P
+    'PAP033':'TransportationGroundPnt', // ENGINEERED_TURNAROUND_SITE_P
+    'PAP040':'TransportationGroundPnt', // GATE_P
+    'PAP041':'TransportationGroundPnt', // VEHICLE_BARRIER_P
+    'PAQ040':'TransportationGroundPnt', // BRIDGE_P
+    'PAQ045':'TransportationGroundPnt', // BRIDGE_SPAN_P
+    'PAQ055':'TransportationGroundPnt', // BRIDGE_TOWER_P
+    'PAQ060':'AeronauticPnt', // CONTROL_TOWER_P
+    'PAQ065':'TransportationGroundPnt', // CULVERT_P
+    'PAQ068':'TransportationGroundPnt', // TRANSPORTATION_BLOCK_P
+    'PAQ080':'TransportationWaterPnt', // FERRY_STATION_P
+    'PAQ095':'TransportationGroundPnt', // TUNNEL_MOUTH_P
+    'PAQ110':'AeronauticPnt', // MOORING_MAST_P
+    'PAQ116':'UtilityInfrastructurePnt', // PUMPING_STATION_P
+    'PAQ118':'TransportationGroundPnt', // SHARP_CURVE_P
+    'PAQ125':'TransportationGroundPnt', // TRANSPORTATION_STATION_P
+    'PAQ135':'TransportationGroundPnt', // ROADSIDE_REST_AREA_P
+    'PAQ141':'TransportationGroundPnt', // PARKING_GARAGE_P
+    'PAQ170':'TransportationGroundPnt', // MOTOR_VEHICLE_STATION_P
+    'PAT010':'UtilityInfrastructurePnt', // DISH_AERIAL_P
+    'PAT012':'UtilityInfrastructurePnt', // AERIAL_FARM_P
+    'PAT042':'UtilityInfrastructurePnt', // PYLON_P
+    'PAT045':'FacilityPnt', // RADAR_STATION_P
+    'PBB009':'PortHarbourPnt', // PORT_P
+    'PBB010':'AnchoragePnt', // ANCHORAGE_P
+    'PBB080':'DolphinPnt', // DOLPHIN_P
+    'PBC040':'MaritimeNavigationLightPnt', // MARITIME_NAVIGATION_LIGHT_P
+    'PBC050':'HydroAidNavigationPnt', // LIGHTHOUSE_P
+    'PBD100':'PortHarbourPnt', // STRUCTURAL_PILE_P
+    'PBD115':'HydrographyPnt', // OFFSHORE_CONSTRUCTION_P
+    'PBD120':'ReefPnt', // REEF_P
+    'PBD130':'HazardousRockPnt', // HAZARDOUS_ROCK_P
+    'PBD180':'WreckPnt', // WRECK_P
+    'PBD181':'HydrographyPnt', // HULK_P
+    'PBG010':'WaterMovementDataLocationPnt', // WATER_MOVEMENT_DATA_LOCATION_P
+    'PBH012':'HydrographyPnt', // QANAT_SHAFT_P
+    'PBH050':'MaricultureSitePnt', // MARICULTURE_SITE_P
+    'PBH051':'AgriculturePnt', // FISH_FARM_FACILITY_P
+    'PBH070':'TransportationGroundPnt', // FORD_P
+    'PBH075':'CulturePnt', // FOUNTAIN_P
+    'PBH082':'HydrographyPnt', // INLAND_WATERBODY_P
+    'PBH120':'HydrographyPnt', // RAPIDS_P
+    'PBH145':'HydrographyPnt', // VANISHING_POINT_P
+    'PBH155':'IndustryPnt', // SALT_EVAPORATOR_P
+    'PBH170':'HydrographyPnt', // NATURAL_POOL_P
+    'PBH180':'HydrographyPnt', // WATERFALL_P
+    'PBH230':'HydrographyPnt', // WATER_WELL_P
+    'PBI006':'TransportationWaterPnt', // SHIP_ELEVATOR_P
+    'PBI010':'HydrographyPnt', // CISTERN_P
+    'PBI020':'HydrographyPnt', // DAM_P
+    'PBI030':'TransportationWaterPnt', // LOCK_P
+    'PBI040':'HydrographyPnt', // SLUICE_GATE_P
+    'PBI044':'HydrographyPnt', // FLOOD_CONTROL_STRUCTURE_P
+    'PBI045':'TransportationWaterPnt', // BASIN_GATE_P
+    'PBI050':'HydrographyPnt', // WATER_INTAKE_TOWER_P
+    'PBJ060':'PhysiographyPnt', // ICE_PEAK_P
+    'PCA030':'HypsographyPnt', // SPOT_ELEVATION_P
+    'PDB029':'PhysiographyPnt', // CAVE_MOUTH_P
+    'PDB115':'PhysiographyPnt', // GEOTHERMAL_OUTLET_P
+    'PDB150':'PhysiographyPnt', // MOUNTAIN_PASS_P
+    'PDB160':'PhysiographyPnt', // ROCK_FORMATION_P
+    'PDB180':'PhysiographyPnt', // VOLCANO_P
+    'PEC005':'VegetationPnt', // TREE_P
+    'PEC020':'PhysiographyPnt', // OASIS_P
+    'PFA015':'MilitaryPnt', // FIRING_RANGE_P
+    'PFA165':'MilitaryPnt', // TRAINING_SITE_P
+    'PGA033':'AeroRadioNavInstallationPnt', // AERONAUTICAL_RADIO_NAVIGATION_INSTALLATION_P
+    'PGA036':'VhfOmniRadioBeaconPnt', // VHF_OMNI_RADIO_BEACON_P
+    'PGA037':'TacticalAirNavAidBeaconPnt', // TACTICAL_AIR_NAVIGATION_AID_BEACON_P
+    'PGA038':'NonDirectionalRadioBeaconPnt', // NONDIRECTIONAL_RADIO_BEACON_P
+    'PGA041':'DistanceMeasuringEquipmentPnt', // DISTANCE_MEASURING_EQUIPMENT_P
+    'PGB005':'AeronauticPnt', // LAND_AERODROME_P
+    'PGB013':'AerodromeBeaconPnt', // AERODROME_BEACON_P
+    'PGB030':'AeronauticPnt', // HELIPAD_P
+    'PGB035':'AeronauticPnt', // HELIPORT_P
+    'PGB040':'AeronauticPnt', // LAUNCH_PAD_P
+    'PGB065':'AeronauticPnt', // WATER_AERODROME_P
+    'PGB230':'AeronauticPnt', // AIRCRAFT_HANGAR_P
+    'PGB250':'AeronauticPnt', // HARDENED_AIRCRAFT_SHELTER_P
+    'PSU001':'MilitaryPnt', // MILITARY_INSTALLATION_P
+    'PZB030':'BoundaryPnt', // BOUNDARY_MONUMENT_P
+    'PZB050':'HypsographyPnt', // SURVEY_POINT_P
+    'PZD015':'PointofChangePnt', // POINT_OF_CHANGE_P
+    'PZD040':'InformationPnt', // NAMED_LOCATION_P
+    'PZD045':'InformationPnt', // ANNOTATED_LOCATION_P
     }, // End of thematicGroupList
     // ##### End of Thematic Group Rules #####
 
     // ##### Start of ESRI FCSubtype Rules #####
     subtypeList : {
-    'AA010':'100001', // Extraction Mine
-    'AA011':'100002', // Shear Wall
-    'AA020':'100003', // Mine Shaft Superstructure
-    'AA040':'100004', // Rig
-    'AA045':'100696', // Borehole
-    'AA052':'100006', // Hydrocarbons Field
-    'AA054':'155023', // Non-water Well
-    'AB000':'100007', // Disposal Site
-    'AB010':'100008', // Recycling Site
-    'AB021':'100009', // Liquid Diffuser
-    'AB040':'100010', // Aeration Basin
-    'AB507':'177962', // Waste Heap
-    'AC010':'100012', // Blast-furnace
-    'AC020':'100013', // Catalytic Cracker
-    'AC030':'100014', // Settling Pond
-    'AC040':'100015', // Hydrocarbon Products Facility
-    'AC060':'100016', // Industrial Furnace
-    'AC507':'134665', // Sewage Treatment Plant
-    'AD010':'100018', // Electric Power Station
-    'AD020':'100019', // Solar Panel
-    'AD025':'100020', // Solar Farm
-    'AD030':'100021', // Power Substation
-    'AD041':'100022', // Nuclear Reactor Containment
-    'AD050':'100023', // Heating Facility
-    'AD055':'100697', // Cooling Facility
-    'AD060':'100687', // Wind Farm
-    'AF010':'100025', // Smokestack
-    'AF020':'100026', // Conveyor
-    'AF030':'100028', // Cooling Tower
-    'AF040':'100029', // Crane
-    'AF050':'100030', // Excavating Machine
-    'AF060':'100031', // Engine Test Cell
-    'AF070':'100032', // Flare Pipe
-    'AF080':'100033', // Hopper
-    'AG030':'100034', // Shopping Complex
-    'AG040':'100035', // Office Park
-    'AG050':'121638', // Billboard
-    'AH025':'132596', // Engineered Earthwork
-    'AH055':'132626', // Fortified Building
-    'AH060':'100038', // Underground Bunker
-    'AH070':'100039', // Checkpoint
-    'AI020':'100040', // Caravan Park
-    'AI021':'133168', // Manufactured Home Park
-    'AI030':'100041', // Camp
-    'AJ030':'100043', // Holding Pen
-    'AJ050':'100044', // Windmill
-    'AJ051':'100045', // Wind Turbine
-    'AJ055':'100046', // Water Mill
-    'AJ080':'100049', // Stable
-    'AJ085':'100691', // Barn
-    'AJ110':'100052', // Greenhouse
-    'AK020':'100053', // Amusement Park Attraction
-    'AK030':'100054', // Amusement Park
-    'AK040':'100055', // Sports Ground
-    'AK060':'100057', // Camp-site
-    'AK061':'100058', // Picnic Site
-    'AK070':'100059', // Drive-in Theatre
-    'AK080':'100060', // Outdoor Theatre Screen
-    'AK090':'100061', // Fairground
-    'AK100':'100062', // Golf Course
-    'AK101':'100063', // Golf Driving Range
-    'AK110':'100064', // Grandstand
-    'AK120':'100065', // Park
-    'AK121':'100066', // Lookout
-    'AK130':'100069', // Racetrack
-    'AK150':'100072', // Ski-jump
-    'AK155':'100073', // Ski-run
-    'AK160':'154703', // Stadium
-    'AK161':'121747', // Scoreboard
-    'AK164':'100074', // Amphitheatre
-    'AK170':'100077', // Swimming Pool
-    'AK180':'100078', // Zoo
-    'AL010':'100080', // Facility
-    'AL011':'100081', // Installation
-    'AL012':'100082', // Archeological Site
-    'AL013':'100083', // Building
-    'AL014':'100084', // Non-building Structure
-    'AL017':'100086', // Fire Hydrant
-    'AL018':'100087', // Building Superstructure
-    'AL019':'100088', // Shed
-    'AL020':'100089', // Built-up Area
-    'AL025':'100091', // Cairn
-    'AL030':'100092', // Cemetery
-    'AL036':'100094', // Tomb
-    'AL060':'100096', // Dragon's Teeth
-    'AL065':'100097', // Minefield
-    'AL070':'100098', // Fence
-    'AL073':'100099', // Flagpole
-    'AL080':'100101', // Gantry
-    'AL099':'100103', // Hut
-    'AL105':'100104', // Settlement
-    'AL110':'100105', // Light Support Structure
-    'AL120':'100106', // Missile Site
-    'AL130':'100108', // Memorial Monument
-    'AL140':'100110', // Particle Accelerator
-    'AL142':'100111', // Astronomical Observatory
-    'AL155':'100112', // Overhead Obstruction
-    'AL165':'100113', // Pipeline Crossing Point
-    'AL170':'100114', // Public Square
-    'AL175':'100688', // Courtyard
-    'AL180':'100689', // Retail Stand
-    'AL195':'100115', // Ramp
-    'AL200':'100116', // Ruins
-    'AL201':'100117', // Interest Site
-    'AL208':'100118', // Shanty Town
-    'AL211':'130921', // Transportation Route Protection Structure
-    'AL241':'100122', // Tower
-    'AL250':'100123', // Underground Dwelling
-    'AL260':'100124', // Wall
-    'AL270':'100129', // Industrial Farm
-    'AL351':'100126', // Space Facility
-    'AL371':'180086', // Manor House
-    'AL375':'100128', // Castle
-    'AL376':'132642', // Castle Complex
-    'AL510':'100130', // Tethered Balloon
-    'AM010':'100131', // Storage Depot
-    'AM011':'100132', // Shipping Container
-    'AM020':'100133', // Grain Storage Structure
-    'AM030':'100134', // Grain Elevator
-    'AM040':'100136', // Mineral Pile
-    'AM060':'100137', // Surface Bunker
-    'AM065':'100138', // Munition Storage Facility
-    'AM070':'100139', // Storage Tank
-    'AM071':'100140', // Tank Farm
-    'AM075':'100141', // Fuel Storage Facility
-    'AM080':'100142', // Water Tower
-    'AN010':'100143', // Railway
-    'AN050':'100144', // Railway Sidetrack
-    'AN060':'100145', // Railway Yard
-    'AN075':'100146', // Railway Turntable
-    'AN076':'100147', // Roundhouse
-    'AN085':'100149', // Railway Signal
-    'AP010':'100150', // Cart Track
-    'AP020':'100151', // Road Interchange
-    'AP030':'100152', // Road
-    'AP033':'179969', // Engineered Turnaround Site
-    'AP040':'100154', // Gate
-    'AP041':'100155', // Vehicle Barrier
-    'AP050':'100156', // Trail
-    'AP055':'179906', // Tank Trail
-    'AP056':'180006', // Tank Crossing
-    'AQ035':'100159', // Sidewalk
-    'AQ040':'100161', // Bridge
-    'AQ045':'100162', // Bridge Span
-    'AQ050':'100163', // Bridge Superstructure
-    'AQ055':'100164', // Bridge Tower
-    'AQ056':'100165', // Bridge Pier
-    'AQ059':'131083', // Transportation Route Characteristic Change
-    'AQ060':'100167', // Control Tower
-    'AQ062':'100168', // Crossing
-    'AQ063':'130381', // Causeway Structure
-    'AQ065':'100170', // Culvert
-    'AQ068':'100171', // Transportation Block
-    'AQ070':'100172', // Ferry Crossing
-    'AQ075':'100173', // Ice Route
-    'AQ080':'100174', // Ferry Station
-    'AQ095':'100176', // Tunnel Mouth
-    'AQ110':'100177', // Mooring Mast
-    'AQ111':'100178', // Prepared Watercourse Crossing
-    'AQ113':'100179', // Pipeline
-    'AQ114':'100180', // Storm Drain
-    'AQ115':'100181', // Utility Cover
-    'AQ116':'100182', // Pumping Station
-    'AQ118':'100183', // Sharp Curve
-    'AQ120':'100185', // Steep Grade
-    'AQ125':'100186', // Transportation Station
-    'AQ130':'100187', // Tunnel
-    'AQ135':'100188', // Roadside Rest Area
-    'AQ140':'100189', // Vehicle Lot
-    'AQ141':'100190', // Parking Garage
-    'AQ150':'100191', // Stair
-    'AQ151':'100192', // Arcade
-    'AQ160':'100194', // Traffic Light
-    'AQ161':'100195', // Street Lamp
-    'AQ162':'100196', // Street Sign
-    'AQ170':'100197', // Motor Vehicle Station
-    'AT005':'100199', // Cable
-    'AT010':'100200', // Dish Aerial
-    'AT011':'100201', // Aerial
-    'AT012':'100202', // Aerial Farm
-    'AT041':'100206', // Cableway
-    'AT042':'100558', // Pylon
-    'AT045':'100207', // Radar Station
-    'BA010':'100212', // Land Water Boundary
-    'BA030':'100217', // Island
-    'BA040':'100218', // Tidal Water
-    'BB005':'100222', // Harbour
-    'BB009':'100223', // Port
-    'BB081':'100231', // Shoreline Construction
-    'BB082':'100232', // Shoreline Ramp
-    'BB090':'100233', // Dry Dock
-    'BB110':'100236', // Fish Weir
-    'BB199':'100243', // Floating Dry Dock
-    'BB201':'100244', // Small Craft Facility
-    'BB241':'100245', // Shipyard
-    'BC050':'100253', // Lighthouse
-    'BC070':'100256', // Light Vessel
-    'BD100':'100271', // Structural Pile
-    'BD115':'100272', // Offshore Construction
-    'BD140':'100277', // Snag
-    'BD181':'100279', // Hulk
-    'BH010':'100295', // Aqueduct
-    'BH012':'131749', // Qanat Shaft
-    'BH015':'100296', // Bog
-    'BH020':'100297', // Canal
-    'BH030':'100298', // Ditch
-    'BH040':'100299', // Water Treatment Bed
-    'BH051':'191951', // Fish Farm Facility
-    'BH065':'131810', // Water Race
-    'BH070':'100302', // Ford
-    'BH075':'100303', // Fountain
-    'BH077':'100304', // Hummock
-    'BH082':'130384', // Inland Waterbody
-    'BH090':'100307', // Land Subject to Inundation
-    'BH100':'100309', // Moat
-    'BH110':'100310', // Penstock
-    'BH116':'154640', // Aquifer
-    'BH120':'100311', // Rapids
-    'BH135':'100313', // Rice Field
-    'BH140':'100314', // River
-    'BH145':'100315', // Vanishing Point
-    'BH150':'100316', // Salt Flat
-    'BH155':'100317', // Salt Evaporator
-    'BH160':'100318', // Sabkha
-    'BH165':'100319', // Spillway
-    'BH170':'100320', // Natural Pool
-    'BH180':'100321', // Waterfall
-    'BH220':'100325', // Waterwork
-    'BH230':'100326', // Water Well
-    'BI005':'100328', // Vessel Lift
-    'BI006':'132749', // Ship Elevator
-    'BI010':'100329', // Cistern
-    'BI020':'100330', // Dam
-    'BI030':'100331', // Lock
-    'BI040':'100334', // Sluice Gate
-    'BI044':'131207', // Flood Control Structure
-    'BI045':'131206', // Basin Gate
-    'BI050':'100337', // Water Intake Tower
-    'BI060':'100338', // Fish Ladder
-    'BI070':'100339', // Gauging Station
-    'BJ020':'100340', // Moraine
-    'BJ030':'100341', // Glacier
-    'BJ031':'100342', // Crevasse
-    'BJ040':'100343', // Ice Cliff
-    'BJ060':'100344', // Ice Peak
-    'BJ065':'100345', // Ice Shelf
-    'BJ080':'100347', // Polar Ice
-    'BJ099':'100348', // Ice-cap
-    'BJ100':'100349', // Snow Field and/or Ice-field
-    'BJ110':'100350', // Tundra
-    'CA010':'100353', // Elevation Contour
-    'CA030':'100355', // Spot Elevation
-    'DA005':'100356', // Asphalt Lake
-    'DA010':'100358', // Soil Surface Region
-    'DB010':'100362', // Steep Terrain Face
-    'DB028':'154959', // Cave Chamber
-    'DB029':'154961', // Cave Mouth
-    'DB061':'100365', // Crevice
-    'DB070':'100366', // Cut
-    'DB071':'192101', // Cut Line
-    'DB080':'100367', // Depression
-    'DB090':'100368', // Embankment
-    'DB100':'100369', // Esker
-    'DB110':'100370', // Geologic Fault
-    'DB115':'100371', // Geothermal Outlet
-    'DB150':'100372', // Mountain Pass
-    'DB160':'100373', // Rock Formation
-    'DB170':'100374', // Sand Dunes
-    'DB180':'100375', // Volcano
-    'DB190':'100377', // Volcanic Dyke
-    'DB211':'100379', // Landslide Mass
-    'EA010':'100380', // Crop Land
-    'EA020':'100381', // Hedgerow
-    'EA030':'100382', // Plant Nursery
-    'EA031':'100383', // Botanic Garden
-    'EA040':'100384', // Orchard
-    'EA050':'100385', // Vineyard
-    'EA055':'100386', // Hop Field
-    'EB010':'100387', // Grassland
-    'EB020':'100388', // Thicket
-    'EB070':'100390', // Brush
-    'EC005':'100392', // Tree
-    'EC010':'100393', // Cane
-    'EC015':'130380', // Forest
-    'EC020':'100394', // Oasis
-    'EC040':'100396', // Cleared Way
-    'EC060':'100398', // Forest Clearing
-    'ED010':'100399', // Marsh
-    'ED020':'100400', // Swamp
-    'EE010':'100401', // Logging Site
-    'EE030':'100403', // Desert
-    'FA012':'100409', // Contaminated Region
-    'FA015':'100410', // Firing Range
-    'FA100':'100414', // Test Site
-    'FA165':'100416', // Training Site
-    'FA210':'100417', // Conservation Area
-    'GB005':'100436', // Land Aerodrome
-    'GB015':'100438', // Apron
-    'GB030':'100441', // Helipad
-    'GB035':'100442', // Heliport
-    'GB040':'100443', // Launch Pad
-    'GB045':'100444', // Stopway
-    'GB050':'100446', // Defensive Revetment
-    'GB055':'100448', // Runway
-    'GB065':'100452', // Water Aerodrome
-    'GB070':'100453', // Seaplane Run
-    'GB075':'100454', // Taxiway
-    'GB230':'100456', // Aircraft Hangar
-    'GB250':'100457', // Hardened Aircraft Shelter
-    'IA040':'100458', // Land Parcel
-    'SU001':'100462', // Military Installation
-    'SU004':'170162', // Cantonment Area
-    'SU030':'180061', // Installation Boundary
-    'ZB030':'100465', // Boundary Monument
-    'ZB050':'177997', // Survey Point
-    'ZD020':'100473', // Void Collection Area
-    'ZD040':'100475', // Named Location
-    'ZD045':'100476', // Annotated Location
-    'ZD070':'164755', // Water Measurement Location
-    'ZI031':'121591', // Dataset
-    'ZI039':'132721', // Entity Collection Metadata
+'AA010':'100001','AA011':'100002','AA020':'100003','AA040':'100004','AA052':'100006',
+'AA054':'155023','AB000':'100007','AB010':'100008','AB040':'100010','AC010':'100012',
+'AC020':'100013','AC030':'100014','AC060':'100016','AD010':'100018','AD020':'100019',
+'AD025':'100020','AD030':'100021','AD060':'100687','AF010':'100025','AF020':'100026',
+'AF030':'100028','AF040':'100029','AF070':'100032','AF080':'100033','AG030':'100034',
+'AH025':'132596','AH055':'132626','AH060':'100038','AH070':'100039','AI020':'100040',
+'AI021':'133168','AJ030':'100043','AJ050':'100044','AJ051':'100045','AJ055':'100046',
+'AJ085':'100691','AJ110':'100052','AK020':'100053','AK030':'100054','AK040':'100055',
+'AK060':'100057','AK070':'100059','AK080':'100060','AK090':'100061','AK100':'100062',
+'AK101':'100063','AK110':'100064','AK120':'100065','AK130':'100069','AK150':'100072',
+'AK160':'154703','AK161':'121747','AK164':'100074','AK170':'100077','AK180':'100078',
+'AL010':'100080','AL011':'100081','AL012':'100082','AL013':'100083','AL014':'100084',
+'AL018':'100087','AL019':'100088','AL020':'100089','AL025':'100091','AL030':'100092',
+'AL036':'100094','AL060':'100096','AL065':'100097','AL070':'100098','AL080':'100101',
+'AL099':'100103','AL105':'100104','AL110':'100105','AL130':'100108','AL140':'100110',
+'AL142':'100111','AL155':'100112','AL165':'100113','AL170':'100114','AL175':'100688',
+'AL200':'100116','AL208':'100118','AL211':'130921','AL241':'100122','AL250':'100123',
+'AL260':'100124','AL270':'100129','AL351':'100126','AL375':'100128','AL376':'132642',
+'AL510':'100130','AM010':'100131','AM020':'100133','AM030':'100134','AM040':'100136',
+'AM060':'100137','AM065':'100138','AM070':'100139','AM071':'100140','AM075':'100141',
+'AM080':'100142','AN010':'100143','AN050':'100144','AN060':'100145','AN075':'100146',
+'AN076':'100147','AP010':'100150','AP020':'100151','AP030':'100152','AP033':'179969',
+'AP040':'100154','AP041':'100155','AP050':'100156','AQ035':'100159','AQ040':'100161',
+'AQ045':'100162','AQ055':'100164','AQ060':'100167','AQ063':'130381','AQ065':'100170',
+'AQ068':'100171','AQ070':'100172','AQ075':'100173','AQ080':'100174','AQ095':'100176',
+'AQ110':'100177','AQ113':'100179','AQ116':'100182','AQ118':'100183','AQ125':'100186',
+'AQ130':'100187','AQ135':'100188','AQ140':'100189','AQ141':'100190','AQ150':'100191',
+'AQ151':'100192','AQ170':'100197','AT005':'100199','AT010':'100200','AT012':'100202',
+'AT041':'100206','AT042':'100558','AT045':'100207','BA010':'100212','BA023':'100215',
+'BA030':'100217','BA040':'100218','BB005':'100222','BB009':'100223','BB010':'100224',
+'BB080':'100230','BB081':'100231','BB082':'100232','BB090':'100233','BB199':'100243',
+'BC040':'800668','BC050':'100253','BD061':'100692','BD100':'100271','BD115':'100272',
+'BD120':'100301','BD130':'100306','BD180':'100278','BD181':'100279','BE010':'100310',
+'BG010':'100323','BH010':'100295','BH012':'131749','BH015':'100296','BH020':'100297',
+'BH030':'100298','BH040':'100299','BH050':'114168','BH051':'191951','BH065':'131810',
+'BH070':'100302','BH075':'100303','BH077':'100304','BH082':'130384','BH090':'100307',
+'BH100':'100309','BH110':'100310','BH120':'100311','BH135':'100313','BH140':'100314',
+'BH145':'100315','BH150':'100316','BH155':'100317','BH160':'100318','BH165':'100319',
+'BH170':'100320','BH180':'100321','BH230':'100326','BI005':'100328','BI006':'132749',
+'BI010':'100329','BI020':'100330','BI030':'100331','BI040':'100334','BI044':'131207',
+'BI045':'131206','BI050':'100337','BJ020':'100340','BJ030':'100341','BJ031':'100342',
+'BJ040':'100343','BJ060':'100344','BJ065':'100345','BJ080':'100347','BJ099':'100348',
+'BJ100':'100349','BJ110':'100350','CA010':'100353','CA030':'100355','DA005':'100356',
+'DA010':'100358','DB010':'100362','DB029':'154961','DB061':'100365','DB070':'100366',
+'DB071':'192101','DB090':'100368','DB100':'100369','DB110':'100370','DB115':'100371',
+'DB150':'100372','DB160':'100373','DB170':'100374','DB180':'100375','EA010':'100380',
+'EA020':'100381','EA030':'100382','EA040':'100384','EA050':'100385','EA055':'100386',
+'EB010':'100387','EB020':'100388','EB070':'100390','EC005':'100392','EC010':'100393',
+'EC015':'130380','EC020':'100394','EC040':'100396','EC060':'100398','ED010':'100399',
+'ED020':'100400','EE010':'100401','FA000':'100405','FA002':'100406','FA003':'100407',
+'FA015':'100410','FA091':'100413','FA100':'100414','FA110':'800591','FA165':'100416',
+'FA210':'100417','GA005':'800078','GA033':'500002','GA036':'801161','GA037':'801074',
+'GA038':'800786','GA041':'800291','GB005':'100436','GB013':'114580','GB015':'100438',
+'GB030':'100441','GB035':'100442','GB040':'100443','GB045':'100444','GB050':'100446',
+'GB055':'100448','GB065':'100452','GB070':'100453','GB075':'100454','GB230':'100456',
+'GB250':'100457','SU001':'100462','ZB030':'100465','ZB050':'177997','ZC050':'800597',
+'ZD015':'100578','ZD020':'100473','ZD040':'100475','ZD045':'100476','ZI031':'121591',
+'ZI039':'132721' 
     }, // End of subtypeList
     // ##### End of ESRI FCSubtype Rules #####
 

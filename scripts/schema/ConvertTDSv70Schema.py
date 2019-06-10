@@ -371,6 +371,7 @@ def processFile(fileName,enValues):
             tschema[fName]['definition'] = fDefinition + ' ' + fMoreText
             tschema[fName]['geom'] = fGeometry
             tschema[fName]['columns'] = {}
+            tschema[fName]['columns']['F_CODE'] = { 'name':'F_CODE','desc':"Feature Code",'type':'String','optional':'R','defValue':'','length':'5'}
 
         # If no field name, no need to continue
         if fieldName == '':
@@ -424,9 +425,9 @@ def processFile(fileName,enValues):
                     tschema[fName]['columns'][aName]['func'] = funcName
 
                     if enValues[funcName]['type'] == 'text':
-                        dataType = 'textEnumeration'
-                    else:
-                        dataType = 'Enumeration'
+                        tschema[fName]['columns'][aName]['type'] = 'textEnumeration'
+                    # else:
+                    #     dataType = 'Enumeration'
 
                     # Now fill in the values
                     tschema[fName]['columns'][aName]['enum'] = []
@@ -435,10 +436,6 @@ def processFile(fileName,enValues):
 
                 else:
                     print "#### Missing dataType = " + dataType
-
-            # tschema[fName]['columns'][aName]['type'] = dataType_list[dataType]
-            # tschema[fName]['columns'][aName]['defValue'] = default_list[dataType]
-
 
             if aName == 'F_CODE':
                 tschema[fName]['columns'][aName]['defValue'] = ''
