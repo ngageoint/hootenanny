@@ -126,6 +126,7 @@ tds70.rules = {
     'RIN_RTN2':'ref:2', // Route Identification [2] <route designation>
     'RIN_RTN3':'ref:3', // Route Identification [3] <route designation>
     'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
+    'GLOBALID':'uuid:global', // Not sure where this comes from. It is in the sample data 
     'URI':'source:ref', // Unique Resource Identifier
     'VOI':'aeroway:obstruction', // Vertical Obstruction Identifier
     'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
@@ -3602,28 +3603,40 @@ tds70.rules = {
     one2oneIn : [
     // To account for an "error" in the TDSv61 sample GDB
     ['ZI001_VSC','Stereoscopic Imagery','source:vertical_source:type','stereoscopic_imagery'],
+
     ['ZI001_SRT','NTM Imagery','source:non_spatial_source:type','ntm_imagery'],
 
-    // ['ZI016_ROC','-999999',undefined,undefined], // No Information
-    ['ZI016_ROC','1','surface','ground'], // Unimproved
-    ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
-    ['ZI016_ROC','3','surface','unpaved'], // Flexible Pavement
-    ['ZI016_ROC','4','surface','gravel'], // Aggregate
-    ['ZI016_ROC','5','surface','macadam'], // Macadam
-    ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
-    ['ZI016_ROC','7','surface','paved'], // Rigid Pavement
-    ['ZI016_ROC','8','surface','concrete'], // Concrete
-    ['ZI016_ROC','9','surface','asphalt'], // Asphalt
-    ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
-    ['ZI016_ROC','11','surface','cobblestone'], // Cobble-stone
-    ['ZI016_ROC','12','surface','brick'], // Brick
-    ['ZI016_ROC','13','surface','metal'], // Metal
-    ['ZI016_ROC','14','surface','wood'], // Wood
-    ['ZI016_ROC','15','surface','corduroy'], // rough hewn logs...  // Corduroy
-    ['ZI016_ROC','16','surface','wood_plank'], // Wood Plank
-    ['ZI016_ROC','17','surface','ice'], // Ice
-    ['ZI016_ROC','18','surface','snow'], // Snow
-    ['ZI016_ROC','999','surface','other'], // Other
+    // Difference of opinion between the Spec and the ESRI FGDB for some of these.
+    // ZI001_SRT - Source : Source Type
+    // ['ZI001_SRT','-999999',undefined,undefined], // No Information
+    ['ZI001_SRT','2','source:non_spatial_source:type','aafif'], // AAFIF
+    ['ZI001_SRT','7','source:non_spatial_source:type','cib1'], // CIB1
+    ['ZI001_SRT','9','source:non_spatial_source:type','quickbird_imagery'], // QuickBird Imagery
+    ['ZI001_SRT','10','source:non_spatial_source:type','dnc'], // DNC
+    ['ZI001_SRT','21','source:non_spatial_source:type','dvof'], // DVOF
+    ['ZI001_SRT','22','source:non_spatial_source:type','ffd'], // FFD
+    ['ZI001_SRT','25','source:non_spatial_source:type','geonames'], // GeoNames
+    ['ZI001_SRT','26','source:non_spatial_source:type','gps'], // GPS
+    ['ZI001_SRT','28','source:non_spatial_source:type','ikonos_imagery'], // Ikonos Imagery
+    ['ZI001_SRT','29','source:non_spatial_source:type','ntm_imagery'], // NTM Imagery
+    ['ZI001_SRT','30','source:non_spatial_source:type','imagery'], // Imagery
+    ['ZI001_SRT','31','source:non_spatial_source:type','itd'], // ITD
+    ['ZI001_SRT','32','source:non_spatial_source:type','ivd'], // IVD
+    ['ZI001_SRT','43','source:non_spatial_source:type','midb'], // MIDB
+    ['ZI001_SRT','60','source:non_spatial_source:type','uvmap'], // UVMap
+    ['ZI001_SRT','61','source:non_spatial_source:type','vitd'], // VITD
+    ['ZI001_SRT','64','source:non_spatial_source:type','vmap_2'], // VMap 2
+    ['ZI001_SRT','108','source:non_spatial_source:type','navteq_data'], // NAVTEQ Data
+    ['ZI001_SRT','159','source:non_spatial_source:type','commercial_data'], // Commercial Data
+    ['ZI001_SRT','160','source:non_spatial_source:type','open_source_information'], // Open Source Information
+    ['ZI001_SRT','165','source:non_spatial_source:type','dafif'], // DAFIF
+    ['ZI001_SRT','166','source:non_spatial_source:type','delorme_digital_atlas_of_the_earth_(dae)'], // DeLorme Digital Atlas of the Earth (DAE)
+    ['ZI001_SRT','167','source:non_spatial_source:type','military_map_data'], // Military Map Data
+    ['ZI001_SRT','168','source:non_spatial_source:type','non-military_map'], // Non-military Map
+    ['ZI001_SRT','169','source:non_spatial_source:type','operations_data'], // Operations Data
+    ['ZI001_SRT','170','source:non_spatial_source:type','sac'], // SAC
+    ['ZI001_SRT','171','source:non_spatial_source:type','tomtom_data'], // TomTom Data
+    ['ZI001_SRT','999','source:non_spatial_source:type','other'], // Other
 
     ], // End one2oneIn
 
